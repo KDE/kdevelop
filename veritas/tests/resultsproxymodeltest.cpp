@@ -45,53 +45,10 @@ void ResultsProxyModelTest::cleanup()
     if (source) delete source;
 }
 
-// test command
-void ResultsProxyModelTest::default_()
-{
-    KVERIFY(proxy->isActive());
-    KOMPARE(Veritas::AllStates, proxy->filter());
-    // all columns are disabled by default ...
-    assertRowFiltered(0);
-    assertRowFiltered(1);
-}
-
-// test command
-void ResultsProxyModelTest::deactivate()
-{
-    setAllColumnsEnabled();
-    proxy->setActive(false);
-
-    assertRowFiltered(0);
-    assertRowFiltered(1);
-}
-
-// test command
-void ResultsProxyModelTest::enableColumns()
-{
-    setAllColumnsEnabled(); // evrything should get through
-
-    assertRowContains(0, "00", "01", "02"); // row 0
-    assertRowContains(1, "10", "11", "12"); // row 1
-}
-
-//test command
-void ResultsProxyModelTest::disableColumn()
-{
-    // disable column 1
-    QBitArray cols(3);
-    cols.setBit(0);
-    cols.clearBit(1);
-    cols.setBit(2);
-    proxy->setEnabledColumns(cols);
-
-    assertRowContains(0, "00", QVariant(), "02"); // row 0
-    assertRowContains(1, "10", QVariant(), "12"); // row 1
-}
-
 //test command
 void ResultsProxyModelTest::filter()
 {
-    setAllColumnsEnabled();
+//    setAllColumnsEnabled();
     proxy->setFilter(Veritas::RunFatal); // show only these
 
     // resultsmodel row zero has 'RunSuccess' so should be filtered
@@ -106,21 +63,13 @@ void ResultsProxyModelTest::assertRowFiltered(int row)
     assertRowContains(row, QVariant(), QVariant(), QVariant());
 }
 
-// helper
-void ResultsProxyModelTest::setAllColumnsEnabled()
-{
-    QBitArray cols(3);
-    cols.setBit(0);
-    cols.setBit(1);
-    cols.setBit(2);
-    proxy->setEnabledColumns(cols);
-}
-
-// hecker
+// checker
 void ResultsProxyModelTest::assertDataAt(int row, int column, const QVariant& expected)
 {
     QVariant actual = proxy->data(proxy->index(row, column), Qt::DisplayRole);
-    KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
+    QString failMsg =
+        QString("Wrong result data at row %1, column %2").arg(row).arg(column);
+    KOMPARE_MSG(expected, actual, failMsg);
 }
 
 // checker

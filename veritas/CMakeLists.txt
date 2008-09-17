@@ -12,7 +12,6 @@ set(veritas_SRCS
     testrunnertoolview.cpp
     utils.cpp
     selectionstore.cpp
-    mvc/proxymodelcommon.cpp
     mvc/resultsmodel.cpp
     mvc/resultsproxymodel.cpp
     mvc/runnermodel.cpp

@@ -26,12 +26,18 @@ using Veritas::Test;
 using Veritas::TestState;
 using Veritas::TestResult;
 
-const int Test::s_columnCount = 5;
+const int Test::s_columnCount = 4;
+
+Test* Test::createRoot()
+{
+    QList<QVariant> rootData;
+    // 4 blank column data to make sure children also get that much columns
+    return new Test(rootData << "" << "" << "" << "");
+}
 
 Test::Test(const QList<QVariant>& data, Test* parent)
     : QObject(parent),
       m_itemData(data),
-      m_state(Veritas::NoResult),
       m_result(new TestResult)
 {
     // Make sure this item has as many columns as the parent.
@@ -49,7 +55,6 @@ Test::Test(const QList<QVariant>& data, Test* parent)
 Test::Test(const QString& name, Test* parent)
     : QObject(parent),
       m_name(name),
-      m_state(Veritas::NoResult),
       m_result(new TestResult)
 {
     // Make sure this item has as many columns as the parent.
@@ -126,12 +131,6 @@ int Test::row() const
     return 0;
 }
 
-int Test::columnCount() const
-{
-    Q_ASSERT(m_itemData.count() == s_columnCount);
-    return s_columnCount;
-}
-
 QVariant Test::data(int column) const
 {
     if (column == 0) {
@@ -147,7 +146,7 @@ void Test::setData(int column, const QVariant& value)
 {
     if (column == 0) {
         m_name = value.toString();
-    } else if (column > 0 && column < columnCount()) {
+    } else if (column > 0 && column < s_columnCount ) {
         m_itemData.replace(column, value.toString());
     }
 }
@@ -175,15 +174,7 @@ void Test::unCheck()
 
 TestState Test::state() const
 {
-    return m_state;
-}
-
-void Test::setState(TestState result)
-{
-    m_state = result;
-    if (m_result) {
-        m_result->setState(result);
-    }
+    return m_result->state();
 }
 
 TestResult* Test::result() const
@@ -196,20 +187,18 @@ void Test::setResult(TestResult* res)
     if (m_result) delete m_result;
     m_result = res;
     if (res) {
-        setData(2, res->message());
-        setData(3, res->file().pathOrUrl());
-        setData(4, res->line());
-        setState(res->state());
+        setData(1, res->message());
+        setData(2, res->file().pathOrUrl());
+        setData(3, res->line());
     }
 }
 
 void Test::clear()
 {
     // Initialize columns except column 0 which contains the item name.
-    for (int i = 1; i < columnCount(); i++) {
+    for (int i = 1; i < s_columnCount; i++) {
         setData(i, "");
     }
-    setState(Veritas::NoResult);
     if (m_result) delete m_result;
     m_result = new TestResult;
 }

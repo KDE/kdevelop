@@ -39,8 +39,6 @@ using Veritas::RunnerModelTest;
 
 Q_DECLARE_METATYPE(QModelIndex)
 
-#define TEST_COLUMN_COUNT 5
-
 void RunnerModelTest::init()
 {
     model = createRunnerModelStub(false);
@@ -55,7 +53,7 @@ void RunnerModelTest::cleanup()
 void RunnerModelTest::default_()
 {
     KOMPARE(0, model->rowCount());
-    KOMPARE(0, model->columnCount());
+    KOMPARE(1, model->columnCount());
     KVERIFY(!model->isRunning());
     KOMPARE(Veritas::AllStates, model->expectedResults());
 }
@@ -67,14 +65,8 @@ void RunnerModelTest::appendResults()
 
     // size check
     KOMPARE(2, model->rowCount());
-    KOMPARE(TEST_COLUMN_COUNT, model->columnCount());
+    KOMPARE(1, model->columnCount());
 
-    // verify column headers
-    assertColumnHeader(model->col0Caption, 0);
-    assertColumnHeader(model->col1Caption, 1);
-    assertColumnHeader(model->col2Caption, 2);
-
-    // should contain the right stuff
     verifyRowContent(0);
     verifyRowContent(1);
 }
@@ -130,11 +122,6 @@ void RunnerModelTest::errorHandling()
     KOMPARE(0, model->flags(QModelIndex()));
 
     KOMPARE(QModelIndex(), model->parent(QModelIndex()));
-
-    KOMPARE(illegal, model->headerData(0, Qt::Vertical, Qt::DisplayRole));
-    KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::CheckStateRole));
-    model->decapitate();
-    KOMPARE(illegal, model->headerData(0, Qt::Horizontal, Qt::DisplayRole));
 }
 
 //test command
@@ -173,17 +160,12 @@ void RunnerModelTest::assertSignalValue(QSignalSpy* spy, int expected)
 }
 
 // helper
-void RunnerModelTest::assertColumnHeader(const QVariant& expected, int index)
-{
-    KOMPARE_MSG(expected, model->headerData(index, Qt::Horizontal), "Incorrect column header caption");
-}
-
-// helper
 void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
     QVariant actual = model->data(model->index(row, column), Qt::DisplayRole);
     //qDebug() << "actual >" << actual << "< ; expected >" << expected << "<";
-    KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected));
+    KOMPARE_MSG(expected, actual, 
+        QString("Expected: %1 at row %2 & col %3").arg(QTest::toString(expected)).arg(row).arg(column));
 }
 
 // helper
@@ -191,11 +173,9 @@ void RunnerModelTest::verifyRowContent(int index)
 {
     QString rowStr = QString::number(index);
     assertDataAt(rowStr + '0', index, 0);
-    assertDataAt(rowStr + '1', index, 1);
-    assertDataAt(rowStr + '2', index, 2);
 
     KOMPARE(0, model->rowCount(model->index(index, 0))); // no children
-    KOMPARE(TEST_COLUMN_COUNT, model->columnCount(model->index(index, 0)));
+    KOMPARE(1, model->columnCount(model->index(index, 0)));
 
 }
 

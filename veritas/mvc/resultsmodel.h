@@ -36,8 +36,7 @@ class Test;
  *        non-hierarchical list.
  *
  * This class stores the results of runner items. Actually not the
- * result values of type Veritas::RunnerResult but runner item
- * indexes are kept.
+ * results but runner item indexes are kept.
  *
  * \sa \ref results_model and \ref runner_item_index
  */

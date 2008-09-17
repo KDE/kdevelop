@@ -71,11 +71,6 @@ class Utils
 public: // Operations
 
     /*!
-     * Returns the width of the columns in the \a view.
-     */
-    static QList<int> columnSizes(QTreeView* view);
-
-    /*!
      * Returns the icon that represents \a result which must be a
      * Veritas::RunnerResult value.
      */

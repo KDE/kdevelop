@@ -70,6 +70,10 @@ public Q_SLOTS:
 
 public: // Operations
 
+    /*! Factory method that constructs a blank root test. Always use
+     *  this method to construct test-tree roots. */
+    static Test* createRoot();
+
     /*!
      * Constructs a test item with the given \a parent and the
      * \a data associated with each column. Ensures that number of
@@ -120,15 +124,12 @@ public: // Operations
     /*! Recursively lift check state */
     void unCheck();
 
-    int columnCount() const;
-
     QVariant data(int column) const; // TODO might want to get rid of this
     void setData(int column, const QVariant& value);
 
     /*! The overall state of the test.
      * This can be NotRun, RunSuccess, RunError (among others) */
     TestState state() const;
-    void setState(TestState result);
     void setResult(TestResult* res);
     TestResult* result() const;
 
@@ -166,7 +167,7 @@ private: // Attributes
     QMap<QString, Test*> m_childMap;
     QModelIndex m_index;
     QString m_name;
-    TestState m_state;
+
     TestResult* m_result;
     bool m_isChecked;
     static const int s_columnCount;

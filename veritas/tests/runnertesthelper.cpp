@@ -70,9 +70,9 @@ void RunnerTestHelper::checkResultItem(int num, const QStringList& item)
     QAbstractItemModel* results = m_window->resultsView()->model();
 
     KOMPARE(item[0], results->data(results->index(num, 0))); // test name
-    KOMPARE(item[1], results->data(results->index(num, 2))); // failure message
-    KOMPARE(item[2], results->data(results->index(num, 3))); // filename
-    KOMPARE(item[3], results->data(results->index(num, 4))); // line number
+    KOMPARE(item[1], results->data(results->index(num, 1))); // failure message
+    KOMPARE(item[2], results->data(results->index(num, 2))); // filename
+    KOMPARE(item[3], results->data(results->index(num, 3))); // line number
 }
 
 void RunnerTestHelper::nrofMessagesEquals(int num)

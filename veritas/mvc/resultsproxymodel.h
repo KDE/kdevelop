@@ -22,7 +22,6 @@
 #ifndef VERITAS_RESULTSPROXYMODEL_H
 #define VERITAS_RESULTSPROXYMODEL_H
 
-#include "veritas/mvc/proxymodelcommon.h"
 #include "veritas/testresult.h"
 #include "../veritasexport.h"
 
@@ -36,22 +35,9 @@ class Test;
 
 class ResultsModel;
 
-/*!
- * \brief The ResultsProxyModel class provides support for sorting and
- *        filtering data passed between ResultsModel and a view.
- *
- * When the model is set to inactive no data is returned at all. When a
- * column of the model is disabled, no data is returned for that column.
- *
- * Row filtering is based on the result for a particular row. Rows with
- * a Veritas::RunException result are never filtered out.
- *
- * \sa \ref views
- */
-class VERITAS_EXPORT ResultsProxyModel : public QSortFilterProxyModel,
-                          public ProxyModelCommon
+class VERITAS_EXPORT ResultsProxyModel : public QSortFilterProxyModel
 {
-    Q_OBJECT
+Q_OBJECT
 
 public: // Operations
 
@@ -65,12 +51,6 @@ public: // Operations
      * Destroys this results proxy model.
      */
     ~ResultsProxyModel();
-
-    /*!
-     * Returns the data stored under the given \a role for the item
-     * referred to by \a index.
-     */
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
     /*!
      * Returns the active filter. Is a combination of OR'ed

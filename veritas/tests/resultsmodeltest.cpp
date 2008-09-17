@@ -162,8 +162,7 @@ void ResultsModelTest::assertColumnHeader(const QVariant& expected, int index)
 void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int column)
 {
     QVariant actual = m_model->data(m_model->index(row, column), Qt::DisplayRole);
-    KOMPARE_MSG(expected, actual, QString("Expected: ") + QTest::toString(expected) +
-                                  " actual " + QTest::toString(actual));
+    KOMPARE(expected, actual);
 }
 
 // helper

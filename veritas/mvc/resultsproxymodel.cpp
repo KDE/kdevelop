@@ -24,8 +24,6 @@
 #include "veritas/testresult.h"
 #include "veritas/test.h"
 
-#include <KDebug>
-
 using Veritas::Test;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
@@ -37,17 +35,6 @@ ResultsProxyModel::ResultsProxyModel(QObject* parent,  int filter)
 ResultsProxyModel::~ResultsProxyModel()
 {}
 
-QVariant ResultsProxyModel::data(const QModelIndex& index, int role) const
-{
-    if (!index.isValid()) {
-        return QVariant();
-    }
-    if (!isColumnEnabled(index.column())) {
-        return QVariant();
-    }
-    return QSortFilterProxyModel::data(index, role);
-}
-
 int ResultsProxyModel::filter() const
 {
     return m_filter;
@@ -55,8 +42,7 @@ int ResultsProxyModel::filter() const
 
 void ResultsProxyModel::setFilter(int filter)
 {
-    if (m_filter != filter) {
-        // Update only when not same filter.
+    if (m_filter != filter) { // Update only when not same filter.
         m_filter = filter;
         resetTestFilter();
         reset();
@@ -79,10 +65,6 @@ bool isIndirectParent(Test* parent, Test* child)
 bool ResultsProxyModel::filterAcceptsRow(int source_row,
         const QModelIndex& source_parent) const
 {
-    // No data when proxy model is inactive.
-    if (!isActive()) {
-        return false;
-    }
     int result = model()->result(source_row);
     if ((result & m_filter) || (result == Veritas::RunException)) {
         if (!m_testFilter) return true;

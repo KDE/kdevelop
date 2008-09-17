@@ -99,19 +99,18 @@ void RunnerModel::uncheckAll()
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
+    Q_ASSERT(index.column() == 0);
+
     switch(role) {
     case Qt::TextAlignmentRole :
         return int(Qt::AlignLeft | Qt::AlignTop);
     case Qt::DisplayRole :
-        return testFromIndex(index)->data(index.column());
+        return testFromIndex(index)->name();
     case Qt::TextColorRole :
         return testFromIndex(index)->isChecked() ?
                 Qt::black :
                 Qt::lightGray;
     case Qt::DecorationRole :
-        if (index.column() != 0) {
-            return QVariant();
-        }
         if (index.child(0, 0).isValid()) { // not a leaf test
             return computeIconFromChildState(testFromIndex(index));
         } else { // a leaf test
@@ -198,20 +197,7 @@ Qt::ItemFlags RunnerModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant RunnerModel::headerData(int section, Qt::Orientation orientation,
-                                 int role) const
-{
-    if (!m_rootItem) {
-        return QVariant();
-    }
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
-        return m_rootItem->data(section);
-    }
-    return QVariant();
-}
-
-QModelIndex RunnerModel::index(int row, int column,
-                               const QModelIndex& parent) const
+QModelIndex RunnerModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!m_rootItem || row < 0 || column < 0) {
         return QModelIndex();
@@ -260,13 +246,8 @@ int RunnerModel::rowCount(const QModelIndex& parent) const
 
 int RunnerModel::columnCount(const QModelIndex& parent) const
 {
-    if (!m_rootItem) {
-        return 0;
-    }
-    if (parent.isValid()) {
-        return testFromIndex(parent)->columnCount();
-    }
-    return m_rootItem->columnCount();
+    Q_UNUSED(parent);
+    return 1;
 }
 
 void RunnerModel::countItems()
@@ -370,7 +351,7 @@ void RunnerModel::runItems()
     initCounters();
     if (!rootItem()) return;
     m_isRunning = true;
-    clearItem(index(0, 0));  // Remove all results.
+    clearTree();
     if (m_executor) delete m_executor;
 
     m_executor = new TestExecutor;
@@ -417,7 +398,6 @@ void RunnerModel::initItemConnect(QModelIndex current)
             initItemConnect(current.child(0, 0));
         }
         Test* item = testFromIndex(current);
-        //kDebug() << "Connecting item with runnermodel: " << item->data(0).toString();
         connect(item, SIGNAL(started(QModelIndex)),   this, SLOT(postItemStarted(QModelIndex)));
         connect(item, SIGNAL(finished(QModelIndex)), this, SLOT(postItemCompleted(QModelIndex)));
         current = current.sibling(current.row() + 1, 0);
@@ -429,49 +409,42 @@ void RunnerModel::setExpectedResults(int expectedResults)
     m_expectedResults = expectedResults;
 }
 
-void RunnerModel::clearItem(const QModelIndex& index)
+namespace {
+struct ClearTest
 {
-    QModelIndex currentIndex = index;
-    while (currentIndex.isValid()) {
-        if (currentIndex.child(0, 0).isValid()) {
-            clearItem(currentIndex.child(0, 0));
-        }
-        Test* item = testFromIndex(currentIndex);
-        item->clear();
-        QModelIndex lastIndex = this->index(currentIndex.row(),
-                                            item->columnCount() - 1);
-        emit dataChanged(currentIndex, lastIndex);
-        currentIndex = currentIndex.sibling(currentIndex.row() + 1, 0);
-    }
+    void operator()(Veritas::Test* test) { test->clear(); }
+};
+}
+
+void RunnerModel::clearTree()
+{
+    if (!m_rootItem) return;
+    ClearTest ct;
+    traverseTree(m_rootItem, ct);
 }
 
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     if (!isRunning()) return;
     Test* item = testFromIndex(index);
-    // Update result counters and provide default result type string if not
-    // set in the item itself.
+    // Update result counters
     switch (item->state()) {
     case Veritas::RunSuccess:
-        setResultText(item, i18n("Success"));
         m_numSuccess++;
         emit numSuccessChanged(m_numSuccess);
         break;
 
     case Veritas::RunError:
-        setResultText(item, i18n("Error"));
         m_numErrors++;
         emit numErrorsChanged(m_numErrors);
         break;
 
     case Veritas::RunFatal:
-        setResultText(item, i18n("Fatal"));
         m_numFatals++;
         emit numFatalsChanged(m_numFatals);
         break;
 
     case Veritas::RunException:
-        setResultText(item, i18n("Exception"));
         m_numExceptions++;
         emit numExceptionsChanged(m_numExceptions);
         break;
@@ -481,7 +454,7 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
     emit numCompletedChanged(m_numStarted);
     emit itemCompleted(index);
-    QModelIndex lastIndex = this->index(index.row(), item->columnCount() - 1);
+    QModelIndex lastIndex = this->index(index.row(), 4);
     emit dataChanged(index, lastIndex);
 }
 
@@ -491,12 +464,4 @@ void RunnerModel::postItemStarted(QModelIndex index)
     emit itemStarted(index);
     m_numStarted++;
     emit numStartedChanged(m_numStarted);
-}
-
-void RunnerModel::setResultText(Test* item, const QString& text) const
-{
-    // Set result text in column 1 but without overwriting an existing text.
-    if (item->data(1).toString().trimmed().isEmpty()) {
-        item->setData(1, text);
-    }
 }

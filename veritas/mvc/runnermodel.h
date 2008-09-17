@@ -81,11 +81,6 @@ public:
      * checkable, all other columns are read only.*/
     Qt::ItemFlags flags(const QModelIndex& index) const;
 
-    /*! Returns the data for the given \a role and \a section in the
-     * header with the specified \a orientation. */
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
-
     /*! Returns the index of the item in the model specified by the
      *  given \a row, \a column and \a parent index. */
     QModelIndex index(int row, int column,
@@ -212,13 +207,8 @@ private Q_SLOTS:
 private:  // Operations
     void initItemConnect(QModelIndex current);
 
-    /*! Helper method to recursively clear all runner items. Starts
-     *  with the runner item referred to by \a index. */
-    void clearItem(const QModelIndex& index);
-
-    /*! Sets the textual representation for the execution result in
-     *  \a item to \a text. An existing text isn't overwritten. */
-    void setResultText(Test* item, const QString& text) const;
+    /*! Helper method to recursively clear all test item in the tree. */
+    void clearTree();
 
     /*! helper for runItems() */
     void initCounters();

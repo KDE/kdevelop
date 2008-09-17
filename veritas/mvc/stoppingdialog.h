@@ -87,9 +87,7 @@ private: // Operations
 private: // Attributes
 
     Ui::StoppingDialog *ui;
-
     RunnerModel* m_model;
-
     bool m_shouldClose;
 };
 

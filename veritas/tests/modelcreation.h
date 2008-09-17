@@ -47,9 +47,7 @@ public:
 
 public slots:
     int run() {
-        if (child(0)) {
-            setState(Veritas::NoResult);  // Have nothing to do as a parent
-        } else {
+        if (!child(0)) {  // Have nothing to do as a parent
             signalStarted();
             if (!m_result) {
                 // do not interfere when result was set from the outside
@@ -57,12 +55,10 @@ public slots:
             }
             setData(1, QString::number(row()) + QString("_1"));
             setData(2, QString::number(row()) + QString("_2"));
-            //setState(m_state);
             m_result->setState(m_state);
             setResult(m_result);
             signalFinished();
         }
-        kDebug() << "EXECUTED " << name();
         executedItems.push_back(row());
         emit executionFinished();
         return state();
@@ -109,13 +105,21 @@ public:
         QList<QVariant> columnData;
         columnData << "00" << "01" << "02";
         item1 = new TestStub(columnData, root);
-        item1->setState(Veritas::RunSuccess);
+        TestResult* tr = new TestResult;
+        tr->setMessage("01");
+        tr->setFile(KUrl("02"));
+        tr->setState(Veritas::RunSuccess);
+        item1->setResult(tr);
         root->addChild(item1);
 
         columnData.clear();
         columnData << "10" << "11" << "12";
         item2 = new TestStub(columnData, root);
-        item2->setState(Veritas::RunFatal);
+        tr = new TestResult;
+        tr->setState(Veritas::RunFatal);
+        tr->setMessage("11");
+        tr->setFile(KUrl("12"));
+        item2->setResult(tr);
         root->addChild(item2);
     }
 

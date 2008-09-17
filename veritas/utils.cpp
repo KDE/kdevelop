@@ -32,24 +32,12 @@
 namespace Veritas
 {
 
-QList<int> Utils::columnSizes(QTreeView* view)
-{
-    QList<int> sizes;
-
-    for (int i = 0; i < view->header()->count(); i++) {
-        sizes.append(view->columnWidth(i));
-    }
-
-    return sizes;
-}
-
 namespace {
 bool g_init = false;
 QVariant g_failIcon;
 QVariant g_notRunIcon;
 QVariant g_successIcon;
 }
-
 
 QVariant Utils::resultIcon(int result)
 {

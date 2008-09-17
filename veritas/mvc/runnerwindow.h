@@ -47,25 +47,12 @@ class VerboseManager;
 class ResultsWidget;
 
 /*!
- * \brief The RunnerWindow class defines the Veritas main window.
+ * \brief The RunnerWindow class defines the Veritas main toolwindow
  *
  * The RunnerWindow class presents a RunnerModel and its ResultsModel
  * in appropriate views to the user and provides commands for their
- * manipulation. Runner items can be executed. Their results can be
- * filtered and sorted.
- *
- * The current implementation doesn't expect that a previously set
- * model gets replaced by another one. Nevertheless the code tries
- * to catch up such a situation by smoothly removing a previous model.
- * But problems could arise for example when there are still items
-*  executed in the thread of the model to be replaced.
- *
- * GUI internal synchronization is employed to prevent from user
- * interactions interfere with the ongoing item execution.
- *
- * \sa \ref main_window
+ * manipulation. Runner items can be executed.
  */
-
 class VERITAS_EXPORT RunnerWindow : public QWidget
 {
 Q_OBJECT
@@ -79,8 +66,8 @@ public: // Operations
     ~RunnerWindow();
 
     /*! Sets the RunnerModel which holds the test-tree
-        @note takes ownership. on succeeding calls the previous model will
-        be deleted */
+     *  @note takes ownership. on succeeding calls the previous model will
+     *  be deleted */
     void setModel(RunnerModel* model);
 
     /*! Accessors for Runner model & view.
@@ -164,7 +151,6 @@ private: // Operations
 
     // helpers for setModel(RunnerModel*)
     void stopPreviousModel();
-    void initVisibleColumns(RunnerModel* model);
     void connectItemStatistics(RunnerModel* model);
     void initProxyModels(RunnerModel* model);
     void connectProgressIndicators(RunnerModel* model);
@@ -204,14 +190,14 @@ private: // Operations
     void setRedBar() const;
     void setGreenBar() const;
 
-private: // Attributes
+private:
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
     ResultsWidget* m_results;
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     VerboseManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
     QMap<KDevelop::IProject*, QAction*> m_project2action;
-    QTime m_stopWatch;
+    QTime m_stopWatch;                 // times test-runs, shown in the gui
 };
 
 } // namespace

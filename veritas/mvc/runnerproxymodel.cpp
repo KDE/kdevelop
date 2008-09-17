@@ -30,9 +30,4 @@ RunnerProxyModel::RunnerProxyModel(QObject* parent)
 RunnerProxyModel::~RunnerProxyModel()
 {}
 
-QVariant RunnerProxyModel::data(const QModelIndex& index, int role) const
-{
-    return QSortFilterProxyModel::data(index,role);
-}
-
 #include "runnerproxymodel.moc"

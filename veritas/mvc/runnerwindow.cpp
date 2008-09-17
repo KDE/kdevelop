@@ -301,36 +301,6 @@ void RunnerWindow::initProxyModels(RunnerModel* model)
 }
 
 // helper for setModel(RunnerModel*)
-void RunnerWindow::initVisibleColumns(RunnerModel* model)
-{
-    // Get the relevant column count.
-    int columnCount = model->columnCount();
-
-    // Set the defaults for enabled and thus visible columns.
-    QBitArray enabledRunnerColumns(columnCount);
-    QBitArray enabledResultsColumns(columnCount, true);
-
-    for (int i = 0; i < 2; i++) {
-        if (i < columnCount) {
-            runnerView()->showColumn(i);
-            enabledRunnerColumns[i] = true;
-        }
-    }
-    for (int i = 1; i < columnCount; i++) {
-        // hide all but the first runner columns
-        runnerView()->hideColumn(i);
-    }
-    for (int i = 0; i < columnCount; i++) {
-        resultsView()->showColumn(i);
-    }
-    enabledResultsColumns[1] = 0;
-    resultsView()->hideColumn(1);
-
-    // Set the defaults in the proxy models.
-    resultsProxyModel()->setEnabledColumns(enabledResultsColumns);
-}
-
-// helper for setModel(RunnerModel*)
 void RunnerWindow::connectItemStatistics(RunnerModel* model)
 {
     // Item statistics.
@@ -371,7 +341,6 @@ void RunnerWindow::setModel(RunnerModel* model)
         return;
     }
     initProxyModels(model);
-    initVisibleColumns(model);
 
     // Very limited user interaction without data.
     if (model->rowCount() < 1) {

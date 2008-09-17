@@ -47,8 +47,6 @@ public slots:
 
 using Veritas::TestFake;
 
-#define TEST_COLUMN_COUNT 5
-
 void TestTest::init()
 {
     columns = QList<QVariant>();
@@ -68,7 +66,6 @@ void TestTest::cleanup()
 void TestTest::simpleRoot()
 {
     assertNrofChildren(root, 0);
-    assertNrofColumns(root, TEST_COLUMN_COUNT);
     assertDefaultResult(root);
     KVERIFY_MSG(root->isChecked(), "Not selected. Item should be enabled by default");
     KOMPARE_MSG(0, root->row(), "No parent so should surely be the first row");
@@ -95,12 +92,10 @@ void TestTest::accessIllegalColumn()
 // test command
 void TestTest::resetValue()
 {
-    root->setState(Veritas::NoResult);
     root->clear();
     QVariant empty = "";
 
     assertDefaultResult(root);
-    assertNrofColumns(root, TEST_COLUMN_COUNT);
     KOMPARE(empty, root->data(1));
     KOMPARE(empty, root->data(2));
 }
@@ -121,8 +116,6 @@ void TestTest::appendChildren()
     assertNrofChildren(child2, 0);
     KOMPARE(root, child1->parent());
     KOMPARE(root, child2->parent());
-    assertNrofColumns(child1, TEST_COLUMN_COUNT);
-    assertNrofColumns(child2, TEST_COLUMN_COUNT);
     KOMPARE(0, child1->row());
     KOMPARE(1, child2->row());
     KOMPARE("child2", child2->name());
@@ -139,13 +132,6 @@ void TestTest::assertNrofChildren(TestFake* item, int nrof)
 {
     int actual = item->childCount();
     KOMPARE_MSG(nrof, actual, QString("Incorrect number of child items; ") + toString(nrof, actual));
-}
-
-// helper
-void TestTest::assertNrofColumns(TestFake* item, int nrof)
-{
-    int actual = item->columnCount();
-    KOMPARE_MSG(nrof, actual, QString("Not the right number of columns; ") + toString(nrof, actual));
 }
 
 // helper

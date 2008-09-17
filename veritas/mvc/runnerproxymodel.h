@@ -22,7 +22,6 @@
 #ifndef VERITAS_RUNNERPROXYMODEL_H
 #define VERITAS_RUNNERPROXYMODEL_H
 
-#include "veritas/mvc/proxymodelcommon.h"
 #include "../veritasexport.h"
 
 #include <QSortFilterProxyModel>
@@ -34,8 +33,7 @@ namespace Veritas
  * \brief The RunnerProxyModel class provides support for sorting and
  *        filtering data passed between RunnerModel and a view.
  *
- * It is currently not used, but will probably be in the near
- * future. Most likely for a regex-test filter box.
+ *  Currently nothing is being filtered.
  */
 class VERITAS_EXPORT RunnerProxyModel : public QSortFilterProxyModel
 {
@@ -44,15 +42,6 @@ Q_OBJECT
 public:
     RunnerProxyModel(QObject* parent);
     ~RunnerProxyModel();
-
-    /*! Returns the data stored under the given \a role for the item
-     * referred to by \a index. */
-    QVariant data(const QModelIndex& index, int role) const;
-
-private:
-    // Copy and assignment not supported.
-    RunnerProxyModel(const RunnerProxyModel&);
-    RunnerProxyModel& operator=(const RunnerProxyModel&);
 };
 
 } // namespace

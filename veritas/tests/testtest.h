@@ -45,7 +45,6 @@ private slots:
 
 private:
     void assertNrofChildren(TestFake*, int nrof);
-    void assertNrofColumns(TestFake*, int nrof);
     void assertDefaultResult(TestFake*);
 
 private:

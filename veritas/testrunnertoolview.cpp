@@ -95,8 +95,8 @@ TestViewData::TestViewData(QObject* parent)
         d(new TestViewDataPrivate)
 {
     QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
-    << i18n("File Name") << i18n("Line Number");
+    resultHeaders << i18n("Test") << i18n("Message")
+    << i18n("File") << i18n("Line");
     d->resultsModel = new ResultsModel(resultHeaders, this);
     d->window = new RunnerWindow(d->resultsModel);
 

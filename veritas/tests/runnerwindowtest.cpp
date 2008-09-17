@@ -47,8 +47,8 @@ void RunnerWindowTest::init()
     model = createRunnerModelStub(false);
     model->fill2();
     QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
-                  << i18n("File Name") << i18n("Line Number");
+    resultHeaders << i18n("Test") << i18n("Message")
+                  << i18n("File") << i18n("Line");
     window = new RunnerWindow(new ResultsModel(resultHeaders));
     window->setModel(model);
     //window->show();

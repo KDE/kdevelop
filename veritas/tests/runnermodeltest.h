@@ -46,7 +46,6 @@ private slots:
     void updateViewLastItem();
 
 private:
-    void assertColumnHeader(const QVariant& expected, int index);
     void assertDataAt(const QVariant& expected, int row, int column);
     void verifyRowContent(int index);
     void assertSignalValue(QSignalSpy* spy, int expected);

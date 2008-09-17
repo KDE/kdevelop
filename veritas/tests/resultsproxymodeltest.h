@@ -35,17 +35,11 @@ class ResultsProxyModelTest : public QObject
 private slots:
     void init();
     void cleanup();
-
-    void default_();
-    void deactivate();
-    void enableColumns();
-    void disableColumn();
     void filter();
 
 private:
     void assertDataAt(int row, int column, const QVariant& expected);
     void assertRowFiltered(int row);
-    void setAllColumnsEnabled();
     void assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3);
 
 private:
