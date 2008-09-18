@@ -687,7 +687,7 @@ public:
   }
 
   ContextBuilder* builder;
-  bool result;
+  bool result; //Will be true when this should be an expression, else false.
   SimpleCursor cursor;
 
   void visitPostfixExpression(PostfixExpressionAST* node)
