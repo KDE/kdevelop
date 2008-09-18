@@ -42,7 +42,34 @@ QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier)
   return identifier;
 }
 
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth) {
+QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefix, QString file, KUrl::List includePaths, KUrl currentPath, IndexedDeclaration decl, uint argumentHintDepth) {
+  QList<KDevelop::CompletionTreeItemPointer> ret;
+  //We have found a potential declaration. Now find the shortest include path.
+  QString shortestDirective;
+  bool isRelativeToCurrentDir = false;
+  foreach(KUrl includePath, includePaths) {
+    QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
+    
+    if(shortestDirective.isEmpty() || relative.length() < shortestDirective.length()) {
+      shortestDirective = relative;
+      if(shortestDirective.startsWith("./"))
+        shortestDirective = shortestDirective.mid(2);
+      
+      isRelativeToCurrentDir = includePath.equals( currentPath );
+    }
+  }
+  if(!shortestDirective.isEmpty()) {
+    if(isRelativeToCurrentDir)
+      shortestDirective = "\"" + shortestDirective + "\"";
+    else
+      shortestDirective = "<" + shortestDirective + ">";
+    
+    ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, argumentHintDepth));
+  }
+  return ret;
+}
+
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool namespaceAllowed) {
   
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type(), context->topContext());
   
@@ -109,40 +136,27 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     const IndexedDeclaration* declarations;
     uint declarationCount;
     QualifiedIdentifier id = prefix + identifier;
-//     kDebug() << "trying" << id.toString();
+
     PersistentSymbolTable::self().declarations( id, declarationCount, declarations );
     for(uint a = 0; a < declarationCount; ++a) {
       Declaration* decl = declarations[a].declaration();
       if(decl && !decl->isForwardDeclaration()) {
-        //We have found a potential declaration. Now find the shortest include path.
-        QString shortestDirective;
-        bool isRelativeToCurrentDir = false;
         QString file(decl->topContext()->url().toUrl().path());
-        foreach(KUrl includePath, includePaths) {
-          
-          QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
-//           kDebug() << "base" << includePath.path() << "file" << file << "relative" << relative << "current shortest:" << shortestDirective;
+        ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth);
+      }
+    }
+  }
+  if(ret.isEmpty() && namespaceAllowed) {
+    foreach(QualifiedIdentifier prefix, prefixes) {
+      prefix.setExplicitlyGlobal(false);
+      const IndexedDUContext* contexts;
+      uint contextCount;
+      QualifiedIdentifier id = prefix + identifier;
 
-//           kDebug() << "lengths" << relative.length() << shortestDirective.length();
-          
-          if(shortestDirective.isEmpty() || relative.length() < shortestDirective.length()) {
-//             kDebug() << "win";
-            shortestDirective = relative;
-            if(shortestDirective.startsWith("./"))
-              shortestDirective = shortestDirective.mid(2);
-            
-            isRelativeToCurrentDir = includePath.equals( currentPath );
-          }
-        }
-        if(!shortestDirective.isEmpty()) {
-          if(isRelativeToCurrentDir)
-            shortestDirective = "\"" + shortestDirective + "\"";
-          else
-            shortestDirective = "<" + shortestDirective + ">";
-          
-          ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, DeclarationPointer(decl), argumentHintDepth));
-          
-        }
+      PersistentSymbolTable::self().contexts( id, contextCount, contexts );
+      for(uint a = 0; a < contextCount; ++a) {
+        QString file = contexts[a].indexedTopContext().url().str();
+        ret += itemsForFile(identifier.toString() + " " + displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth);
       }
     }
   }
@@ -156,14 +170,14 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
-  if(!m_decl)
-    return QVariant();
-  
   switch (role) {
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return QVariant(true);
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(m_decl, TopDUContextPointer(m_decl->topContext()));
+      if(!m_decl.data())
+        return QVariant();
+      
+      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(DeclarationPointer(m_decl.data()), TopDUContextPointer(m_decl.data()->topContext()));
       model->addNavigationWidget(this, nav);
 
        QVariant v;
@@ -175,12 +189,17 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
         case KTextEditor::CodeCompletionModel::Prefix:
             return i18n("Add") +  " #include " + m_addedInclude + " " + i18n("for");
         case KTextEditor::CodeCompletionModel::Name: {
-          return m_displayTextPrefix + m_decl->toString();
+          if(!m_decl.data())
+            return m_displayTextPrefix;
+          else
+            return m_displayTextPrefix + m_decl.data()->toString();
         }
       }
       break;
     case KTextEditor::CodeCompletionModel::ItemSelected:
     {
+      if(!m_decl.data())
+        return QVariant();
       return QVariant( Cpp::NavigationWidget::shortDescription(m_decl.data()) );
     }
   }
