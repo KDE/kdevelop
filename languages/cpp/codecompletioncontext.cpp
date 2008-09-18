@@ -702,6 +702,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     QString totalExpression = m_expression + "::" + m_followingText.trimmed();
     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
   }
+  
+  if(items.isEmpty() && (memberAccessOperation() == StaticMemberChoose || memberAccessOperation() == MemberChoose || memberAccessOperation() == MemberAccess || memberAccessOperation() == ArrowMemberAccess)) {
+    kDebug() << "doing missing-include completion for" << m_expression;
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0);
+  }
 
   return items;
 }

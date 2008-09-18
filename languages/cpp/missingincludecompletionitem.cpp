@@ -21,7 +21,9 @@
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/delayedtype.h>
+#include <language/duchain/types/identifiedtype.h>
 #include "cppduchain/navigationwidget.h"
+#include "cppduchain/typeutils.h"
 #include "cpplanguagesupport.h"
 #include "cppcodecompletionmodel.h"
 #include <klocale.h>
@@ -42,7 +44,7 @@ QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier)
 
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth) {
   
-  AbstractType::Ptr type = expressionResult.type.type();
+  AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type());
   
   //Collect all visible "using namespace" imports
   QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier );
@@ -69,11 +71,16 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     if(delayed)
       //Remove all template parameters, because the symbol-table doesn't know about those
       identifier = removeTemplateParameters(delayed->identifier());
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    if(idType) {
+      identifier = removeTemplateParameters(idType->qualifiedIdentifier());
+    }
   }else{
     //expression probably contains a part that needs to be resolved
     
     if(expression.contains(".") || expression.contains("->")) {
       ///@todo Check if parts of the expression are unresolved, like in "unresolvedClass.callFunction"
+      kDebug() << "doing nothing with expression" << expression;
     }else{
       kDebug() << "looking up" << expression << "as qualified identifier";
       identifier = removeTemplateParameters(QualifiedIdentifier(expression));
