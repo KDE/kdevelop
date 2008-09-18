@@ -400,16 +400,20 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
+    KUrl::List parseList;
     if (d->parseAllProjectSources) {
         // Add the project files to the background parser to be parsed.
-        KUrl::List urlList;
         QList<ProjectFileItem*> files = project->files();
         foreach ( ProjectFileItem* file, files )
-        {
-            urlList.append( file->url() );
-        }
-        Core::self()->languageController()->backgroundParser()->addDocumentList( urlList );
+            parseList.append( file->url() );
+    }else{
+        // Add all currently open files that belong to the project to the background-parser,
+        // since more information may be available for parsing them now(Like include-paths).
+        foreach(IDocument* document, Core::self()->documentController()->openDocuments())
+            if(!project->filesForUrl(document->url()).isEmpty())
+                parseList.append(document->url());
     }
+    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList );
 
     return true;
 }
