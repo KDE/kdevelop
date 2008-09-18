@@ -58,6 +58,7 @@ const QString QTestOutputParser::c_file("file");
 const QString QTestOutputParser::c_line("line");
 const QString QTestOutputParser::c_pass("pass");
 const QString QTestOutputParser::c_skip("skip");
+const QString QTestOutputParser::c_qfatal("qfatal");
 const QString QTestOutputParser::c_message("Message");
 const QString QTestOutputParser::c_fail("fail");
 const QString QTestOutputParser::c_initTestCase("initTestCase");
@@ -184,7 +185,7 @@ void QTestOutputParser::go()
     // incrementally by recovering from previous errors. It remembers
     // the state it was in and starts where it left off.
     switch (m_state) {
-        case Message: {
+        case Message: { // this is not right, need to differentiate between skip & qfatal
             processMessage();
             goto TestFunctionLabel;
         } case Failure: {
@@ -202,18 +203,13 @@ void QTestOutputParser::go()
     m_buzzy = false;
 }
 
-bool QTestOutputParser::doingOK() const
-{
-    return (!m_result || m_result->state() == Veritas::NoResult 
-                      || m_result->state() == Veritas::RunSuccess);
-}
-
 bool QTestOutputParser::fixtureFailed(const QString& cmd)
 {
     if (cmd != c_initTestCase && cmd != c_cleanupTestCase) {
         return false;
     } else {
-        return !doingOK();
+        return m_result->state() != Veritas::NoResult &&
+               m_result->state() != Veritas::RunSuccess;
     }
 }
 
@@ -244,10 +240,33 @@ void QTestOutputParser::processMessage()
     if (type == c_skip) {
         m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());
+        m_result->setState(Veritas::RunInfo);
         while (!atEnd() && !isEndElement_(c_description)) {
             readNext();
             if (isCDATA()) {
                 m_result->setMessage(text().toString() + " (skipped)");
+            }
+        }
+    } else if (type == c_qfatal) {
+        m_result->setState(Veritas::RunFatal);
+        // Q_ASSERT   "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
+        // Q_ASSERT_X "<Description><![CDATA[ASSERT failure in command: \"message\", file /path/to/file.cpp, line 66]]></Description>\n"
+        while (!atEnd() && !isEndElement_(c_description)) {
+            readNext();
+            if (isCDATA()) {
+                QString cdata = text().toString();
+                int lineStart = cdata.lastIndexOf(", line ");
+                int lineEnd = lineStart+7;
+                int fileStart = cdata.lastIndexOf(" in file ");
+                int fileEnd = fileStart + 9;
+                int file2Start = cdata.lastIndexOf(", file ");
+                if (file2Start > fileStart) {
+                    fileStart = file2Start;
+                    fileEnd = file2Start + 7;
+                }
+                m_result->setFile(KUrl(cdata.mid(fileEnd, lineStart - fileEnd)));
+                m_result->setLine(cdata.mid(lineEnd).toInt());
+                m_result->setMessage(cdata.mid(0, fileStart));
             }
         }
     } else {
@@ -293,6 +312,7 @@ void QTestOutputParser::fillResult()
     if (type == c_pass) {
         setSuccess();
     } else if (type == c_fail) {
+        if (m_result->state() == Veritas::RunFatal) return;
         m_result->setState(Veritas::RunError);
         m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());
@@ -303,7 +323,9 @@ void QTestOutputParser::fillResult()
 
 void QTestOutputParser::setSuccess()
 {
-    m_result->setState(Veritas::RunSuccess);
+    if (m_result->state() != Veritas::RunInfo) {
+        m_result->setState(Veritas::RunSuccess);
+    }
 }
 
 void QTestOutputParser::setFailure()

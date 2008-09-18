@@ -428,7 +428,7 @@ void QTestOutputParserTest::skipSingle()
         QTEST_FOOTER_XML;
     initParser(input, m_caze);
     createTestCommand(m_command1Info, m_caze, "command");
-    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "skipCommand (skipped)");
+    setExpectedResult(m_command1Info, Veritas::RunInfo, "/path/to/file.cpp", 8, "skipCommand (skipped)");
 
     m_parser->go();
 
@@ -453,7 +453,61 @@ void QTestOutputParserTest::skipAll()
     initParser(input, m_caze);
 
     createTestCommand(m_command1Info, m_caze, "command");
-    setExpectedResult(m_command1Info, Veritas::RunSuccess, "/path/to/file.cpp", 8, "skipCommand (skipped)");
+    setExpectedResult(m_command1Info, Veritas::RunInfo, "/path/to/file.cpp", 8, "skipCommand (skipped)");
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    checkResult(m_command1Info);
+}
+
+// test command
+void QTestOutputParserTest::qassert()
+{
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"command\">\n"
+        "<Message type=\"qfatal\" file=\"\" line=\"0\">\n"
+            "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
+        "</Message>\n"
+        "<Incident type=\"fail\" file=\"Unknown file\" line=\"0\">\n"
+            "<Description><![CDATA[Received a fatal error.]]></Description>\n"
+        "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+
+    createTestCommand(m_command1Info, m_caze, "command");
+    setExpectedResult(m_command1Info, Veritas::RunFatal, "/path/to/file.cpp", 66, "ASSERT: \"condition\"");
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    checkResult(m_command1Info);
+}
+
+// test command
+void QTestOutputParserTest::qassertx()
+{
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"command\">\n"
+        "<Message type=\"qfatal\" file=\"\" line=\"0\">\n"
+            "<Description><![CDATA[ASSERT failure in command: \"message in file\", file /path/to/file.cpp, line 66]]></Description>\n"
+        "</Message>\n"
+        "<Incident type=\"fail\" file=\"Unknown file\" line=\"0\">\n"
+            "<Description><![CDATA[Received a fatal error.]]></Description>\n"
+        "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+
+    createTestCommand(m_command1Info, m_caze, "command");
+    setExpectedResult(m_command1Info, Veritas::RunFatal, "/path/to/file.cpp", 66, "ASSERT failure in command: \"message in file\"");
 
     m_parser->go();
 

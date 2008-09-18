@@ -52,6 +52,8 @@ private slots:
     void doubleFailure();
     void skipSingle();
     void skipAll();
+    void qassert();
+    void qassertx();
 
 private:
     struct TestInfo;

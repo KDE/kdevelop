@@ -367,10 +367,8 @@ void QTestRunnerTest::tdd_expectedFailure()
 }
 
 // command
-void QTestRunnerTest::tdd_skip()
+void QTestRunnerTest::skip()
 {
-    TDD_TODO;
-
     QByteArray regXML =
         "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
         "<root dir=\"\">\n"
@@ -386,13 +384,16 @@ void QTestRunnerTest::tdd_skip()
     m_runner->runTests();
 
     QStringList result1, result2;
-    result1 << "command" << "skipCommand" << "skip.cpp" << "8";
-    result2 << "commandData(row1)" << "skipCommandData" << "skip.cpp" << "13";
+    KUrl file(__FILE__);
+    file = file.upUrl();
+    file.addPath("suite1/skip.cpp");
+    result1 << "command" << "skipCommand (skipped)" << file.path() << "8";
+    result2 << "commandData" << "skipDataCommand (skipped)" << file.path() << "13";
     m_runner->verifyResultItems(QList<QStringList>() << result1 << result2);
 
     QMap<QString, Veritas::TestState> states;
-    states["suite1/skip/command"] = Veritas::RunSuccess;
-    states["suite1/skip/commandData"] = Veritas::RunSuccess;
+    states["suite1/skip/command"] = Veritas::RunInfo;
+    states["suite1/skip/commandData"] = Veritas::RunInfo;
     m_runner->verifyTestStates(states, root);
 }
 

@@ -44,7 +44,7 @@ private slots:
     void segFault();
     void tdd_multipleFailuresSingleCommand();
     void tdd_expectedFailure();
-    void tdd_skip();
+    void skip();
 
 private:
     void assertAllFilesClosed(Veritas::Test*);

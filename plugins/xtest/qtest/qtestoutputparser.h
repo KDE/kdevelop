@@ -88,7 +88,6 @@ private:
     inline bool isStartElement_(const QString& elem);
     inline bool isEndElement_(const QString& elem);
     inline bool fixtureFailed(const QString&);
-    inline bool doingOK() const;
 
     void deleteResult();
     void newResult();
@@ -115,6 +114,7 @@ private:    // some xml constants
     static const QString c_line;
     static const QString c_pass;
     static const QString c_fail;
+    static const QString c_qfatal;
     static const QString c_skip;
     static const QString c_initTestCase;
     static const QString c_cleanupTestCase;

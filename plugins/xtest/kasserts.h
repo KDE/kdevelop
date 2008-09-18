@@ -24,7 +24,7 @@
 #define QXQTEST_KASSERTS_H
 
 #include <QtTest/QtTest>
-#include <KDebug>
+#include <KUrl>
 
 namespace QTest
 {
@@ -36,6 +36,10 @@ template<> inline char* toString(const QFileInfo& fi)
 template<> inline char* toString(const QVariant& va)
 {
     return qstrdup(va.toString().toLatin1().constData());
+}
+template<> inline char* toString(const KUrl& url)
+{
+    return qstrdup(url.path().toLatin1().constData());
 }
 
 } // namespace QTest

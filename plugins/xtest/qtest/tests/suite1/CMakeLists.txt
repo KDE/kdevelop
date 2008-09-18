@@ -24,3 +24,6 @@ add_fake_test(segFault)
 add_fake_test(multipleFailuresSingleCommand)
 add_fake_test(expectedFailure)
 add_fake_test(dataTest)
+add_fake_test(qassert)
+add_fake_test(qassertx)
+
