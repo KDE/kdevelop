@@ -64,7 +64,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     prefixes << namespaceScope.mid(a); //Also search within enclosing namespaces
   
   QList<KDevelop::CompletionTreeItemPointer> ret;
-  
+
   QualifiedIdentifier identifier;
   if(type) {
     DelayedType::Ptr delayed = type.cast<DelayedType>();
@@ -102,7 +102,6 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   
   KUrl::List includePaths = CppLanguageSupport::self()->findIncludePaths(currentUrl, 0);
   includePaths.prepend(currentPath);
-  kDebug() << "using include-path:" << includePaths;
   
   ///Search the persistent symbol table
   foreach(QualifiedIdentifier prefix, prefixes) {
@@ -118,10 +117,16 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
         //We have found a potential declaration. Now find the shortest include path.
         QString shortestDirective;
         bool isRelativeToCurrentDir = false;
-        QString file(decl->topContext()->url().str());
+        QString file(decl->topContext()->url().toUrl().path());
         foreach(KUrl includePath, includePaths) {
-          QString relative = KUrl::relativePath( includePath.path(), file );
+          
+          QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
+//           kDebug() << "base" << includePath.path() << "file" << file << "relative" << relative << "current shortest:" << shortestDirective;
+
+//           kDebug() << "lengths" << relative.length() << shortestDirective.length();
+          
           if(shortestDirective.isEmpty() || relative.length() < shortestDirective.length()) {
+//             kDebug() << "win";
             shortestDirective = relative;
             if(shortestDirective.startsWith("./"))
               shortestDirective = shortestDirective.mid(2);
