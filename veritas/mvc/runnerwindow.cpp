@@ -102,7 +102,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     ResultsProxyModel* rproxy = new ResultsProxyModel(this);
     rproxy->setSourceModel(rmodel);
-    int filter = Veritas::RunError | Veritas::RunFatal;
+    int filter = Veritas::RunError | Veritas::RunFatal | Veritas::RunInfo;
     rproxy->setFilter(filter); // also updates the view
     resultsView()->setModel(rproxy);
 

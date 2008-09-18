@@ -35,18 +35,19 @@ namespace Veritas
 
 enum TestState
 {
-    NoResult      = 0,  //!< No result available, item not run yet.
-    RunSuccess    = 1,  //!< Item completed successfully.
-    RunError      = 2,  //!< Item completed with an error.
-    RunFatal      = 4,  //!< Item completed with a fatal error.
-    RunException  = 8   //!< Item not completed due to an unhandled error.
+    NoResult      = 0,  //!< No result available, not run
+    RunSuccess    = 1,
+    RunError      = 2,
+    RunFatal      = 4,
+    RunException  = 8,
+    RunInfo       = 16
 };
 
-const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunException;
+const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunException | RunInfo;
 
 class TestResultPrivate;
 
-/*! Holds state, descriptive message and location of a single Test */
+/*! Holds state, descriptive message and location */
 class VERITAS_EXPORT TestResult
 {
 public:

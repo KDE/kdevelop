@@ -51,6 +51,7 @@ private slots:
     void newModel();
     void clickRunnerResults();
     void progressBarMaxedOutAfterRun();
+    void infoResultShown();
 
 private:
     void expandSome();

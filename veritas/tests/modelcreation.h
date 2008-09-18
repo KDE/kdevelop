@@ -52,10 +52,10 @@ public slots:
             if (!m_result) {
                 // do not interfere when result was set from the outside
                 m_result = new TestResult;
+                m_result->setState(m_state);
             }
             setData(1, QString::number(row()) + QString("_1"));
             setData(2, QString::number(row()) + QString("_2"));
-            m_result->setState(m_state);
             setResult(m_result);
             signalFinished();
         }

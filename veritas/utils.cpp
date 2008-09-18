@@ -49,6 +49,7 @@ QVariant Utils::resultIcon(int result)
     }
     switch (result) {
     case Veritas::RunSuccess:
+    case Veritas::RunInfo:
         return g_successIcon;
     case Veritas::NoResult:
         return g_notRunIcon;

@@ -295,4 +295,18 @@ void RunnerWindowTest::progressBarMaxedOutAfterRun()
     KOMPARE(bar->maximum(), bar->value());
 }
 
+// command
+void RunnerWindowTest::infoResultShown()
+{
+    TestResult* res = new TestResult;
+    res->setMessage("FooBar");
+    res->setState(Veritas::RunInfo);
+    model->child11->m_result = res;
+    runAllTests();
+
+    QModelIndex i = m_resultsProxy->index(0,0);
+    KOMPARE("child11", i.data(Qt::DisplayRole));
+    KOMPARE("FooBar", i.sibling(0,1).data(Qt::DisplayRole));
+}
+
 QTEST_KDEMAIN(RunnerWindowTest, GUI)
