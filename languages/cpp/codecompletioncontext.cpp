@@ -705,7 +705,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
   
   if(items.isEmpty() && (memberAccessOperation() == StaticMemberChoose || memberAccessOperation() == MemberChoose || memberAccessOperation() == MemberAccess || memberAccessOperation() == ArrowMemberAccess)) {
     kDebug() << "doing missing-include completion for" << m_expression;
-    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0);
+    items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, memberAccessOperation() == StaticMemberChoose);
   }
 
   return items;

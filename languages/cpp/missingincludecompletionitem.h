@@ -24,7 +24,7 @@
 
 class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem {
 public:
-  MissingIncludeCompletionItem(QString addedInclude, QString displayTextPrefix, KDevelop::DeclarationPointer decl, int argumentHintDepth) : m_addedInclude(addedInclude), m_displayTextPrefix(displayTextPrefix), m_decl(decl), m_argumentHintDepth(argumentHintDepth) {
+  MissingIncludeCompletionItem(QString addedInclude, QString displayTextPrefix, KDevelop::IndexedDeclaration decl, int argumentHintDepth) : m_addedInclude(addedInclude), m_displayTextPrefix(displayTextPrefix), m_decl(decl), m_argumentHintDepth(argumentHintDepth) {
   }
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
@@ -38,11 +38,11 @@ public:
 
   int m_argumentHintDepth;
   QString m_addedInclude, m_displayTextPrefix;
-  KDevelop::DeclarationPointer m_decl;
+  KDevelop::IndexedDeclaration m_decl;
 };
 
 ///DUChain must be locked
 ///@param displayTextPrefix may be needed so the created items pass a specific filtering in the completion-list
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0);
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0, bool namespaceAllowed = false);
 
 #endif

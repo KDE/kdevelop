@@ -141,6 +141,8 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     for(uint a = 0; a < declarationCount; ++a) {
       Declaration* decl = declarations[a].declaration();
       if(decl && !decl->isForwardDeclaration()) {
+        if(context->topContext()->imports(decl->topContext(), SimpleCursor::invalid()))
+          continue;
         QString file(decl->topContext()->url().toUrl().path());
         ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth);
       }
@@ -155,6 +157,8 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
 
       PersistentSymbolTable::self().contexts( id, contextCount, contexts );
       for(uint a = 0; a < contextCount; ++a) {
+        if(contexts[a].indexedTopContext().isLoaded() && context->topContext()->imports(contexts[a].indexedTopContext().data(), SimpleCursor::invalid()))
+          continue;
         QString file = contexts[a].indexedTopContext().url().str();
         ret += itemsForFile(identifier.toString() + " " + displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth);
       }
