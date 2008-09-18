@@ -44,7 +44,7 @@ QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier)
 
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth) {
   
-  AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type());
+  AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type(), context->topContext());
   
   //Collect all visible "using namespace" imports
   QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier );
@@ -102,6 +102,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   
   KUrl::List includePaths = CppLanguageSupport::self()->findIncludePaths(currentUrl, 0);
   includePaths.prepend(currentPath);
+  kDebug() << "using include-path:" << includePaths;
   
   ///Search the persistent symbol table
   foreach(QualifiedIdentifier prefix, prefixes) {
