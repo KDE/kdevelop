@@ -79,6 +79,7 @@ private slots:
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();
+  void testTypedefUnsignedInt();
   void testTemplateDependentClass();
   void testTemplateFunctions();
   void testTypedefUses();

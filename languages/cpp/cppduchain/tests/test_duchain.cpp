@@ -609,7 +609,7 @@ void TestDUChain::testDeclareStruct()
   {
     QByteArray method("struct { short i; } instance;");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -1562,12 +1562,26 @@ void TestDUChain::testBaseClasses() {
   release(top);
 }
 
+void TestDUChain::testTypedefUnsignedInt() {
+  QByteArray method("typedef long unsigned int MyInt; MyInt v;");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QVERIFY(top->localDeclarations()[0]->abstractType());
+  QVERIFY(top->localDeclarations()[1]->abstractType());
+  QCOMPARE(top->localDeclarations()[0]->abstractType()->toString(), QString("long unsigned int"));
+  QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("long unsigned int"));
+}
+
 void TestDUChain::testTypedef() {
   QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { }");
 
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 3);
 
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));

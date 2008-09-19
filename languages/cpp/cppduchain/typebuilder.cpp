@@ -346,7 +346,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     integral->setModifiers(modifiers);
     openedType = true;
     openType(integral);
-
+    
   } else if (node->name) {
     openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
   }
@@ -390,7 +390,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
           openedType = true;
 
           AbstractType::Ptr type = decl->abstractType();
-          if(type && type->modifiers() != modifiers)
+          if(type && modifiers && type->modifiers() != modifiers)
             type->setModifiers(modifiers); //The type-system automatically copies the type while changing, so we don't create any problems here.
 
           openType(type);

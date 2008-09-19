@@ -72,7 +72,8 @@ protected:
 
   ///Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.
-  bool openTypeFromName(NameAST* name, uint modifiers, bool needClass = false);
+  ///@param modifiers If this is nonzero, the returned type will have those modifiers assigned(In AbstractType::modifiers())
+  bool openTypeFromName(NameAST* name, uint modifiers = 0, bool needClass = false);
 
   bool lastTypeWasInstance() const;
 
