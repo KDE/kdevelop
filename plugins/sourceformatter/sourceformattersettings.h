@@ -42,6 +42,8 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 {
 		Q_OBJECT
 
+	typedef QHash<QString, QHash<QString, QString> > StyleHash;
+
 	public:
 		SourceFormatterSettings(QWidget *parent, const QVariantList &args);
 		virtual ~SourceFormatterSettings();
@@ -91,7 +93,8 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		KMimeType::Ptr m_currentMimeType;
 		QString m_previewText;
 		QString m_currentLang;
+		StyleHash m_currentStyles;
 };
 
 #endif // SOURCEFORMATTERSETTINGS_H
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

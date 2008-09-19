@@ -82,7 +82,7 @@ SourceFormatterManager::languageSupportForMimeType(const QString &name)
 
 	QList<KDevelop::IPlugin*> list = controller->allPluginsForExtension("ILanguageSupport", constraints);
 	foreach(KDevelop::IPlugin *p, list)
-	return p;
+		return p;
 
 	return 0;
 }
@@ -212,7 +212,7 @@ void SourceFormatterManager::setActiveLanguage(const QString &lang, QString plug
 		kDebug() << "Cannot find a suitable plugin for language " << lang << endl;
 
 	// update the plugin entry in config
-	m_rootConfigGroup.group(lang).writeEntry("Plugin", plugin);
+// 	m_rootConfigGroup.group(lang).writeEntry("Plugin", plugin);
 	m_activeConfigGroup = m_rootConfigGroup.group(lang).group(plugin);
 	m_currentLang = lang;
 
@@ -246,7 +246,6 @@ QString SourceFormatterManager::mimeTypeForLanguage(const QString &lang)
 void SourceFormatterManager::loadConfig()
 {
 	// reload config that may have been modified by config dialog
-	m_rootConfigGroup.config()->reparseConfiguration();
 	m_currentPlugins.clear();
 	m_currentLang.clear();
 
@@ -266,14 +265,24 @@ void SourceFormatterManager::loadConfig()
 
 void SourceFormatterManager::saveConfig()
 {
+	// save current plugins
+	QHash<QString, ISourceFormatter*>::const_iterator it = m_currentPlugins.constBegin();
+	for (; it != m_currentPlugins.constEnd(); ++it) {
+		ISourceFormatter *f = it.value();
+		if(f) {
+			QString pluginName = f->name();
+			m_rootConfigGroup.group(it.key()).writeEntry("Plugin", pluginName);
+		}
+	}
+
 	m_rootConfigGroup.writeEntry("ModelinesEnabled", m_modelinesEnabled);
 	m_rootConfigGroup.sync();
 }
 
-QString SourceFormatterManager::currentStyle()
+QString SourceFormatterManager::currentStyle() const
 {
-//     return m_currentStyles[m_currentLang];
-	return m_activeConfigGroup.readEntry("Style", "");
+    return m_currentStyle;
+// 	return m_activeConfigGroup.readEntry("Style", "");
 }
 
 void SourceFormatterManager::setCurrentStyle(const QString &style)
@@ -290,7 +299,8 @@ void SourceFormatterManager::setCurrentStyle(const QString &style)
 	} else // predefined style
 		m_currentPlugins[m_currentLang]->setStyle(style);
 
-	m_activeConfigGroup.writeEntry("Style", style);
+	m_currentStyle = style;
+// 	m_activeConfigGroup.writeEntry("Style", style);
 }
 
 void SourceFormatterManager::saveStyle(const QString &name, const QString &content)
@@ -392,3 +402,6 @@ void SourceFormatterManager::setModelinesEnabled(bool enable)
 }
 
 #include "sourceformattermanager.moc"
+
+// kate: indent-mode cstyle; space-indent off; tab-width 4;
+

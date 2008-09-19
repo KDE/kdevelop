@@ -33,6 +33,8 @@ namespace KDevelop
 	class IPlugin;
 }
 
+typedef QHash<QString, QList<KDevelop::IPlugin*> > IPluginHash;
+
 /** \short A singleton class managing all source formatter plugins
  */
 class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
@@ -87,6 +89,7 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		* The current style for this plugin is applied.
 		*/
 		void setActiveLanguage(const QString &lang, QString plugin = QString());
+		QString activeLanguage() const { return m_currentLang; }
 
 		/** Reloads the config from the config file. It just clears any stored config
 		* and reparse the config file (ie discarding any non saved change).
@@ -98,13 +101,13 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		/** \return the config group corresponding to the current language and plugin
 		* (where styles are saved).
 		*/
-		KConfigGroup configGroup() {
+		KConfigGroup configGroup() const {
 			return m_activeConfigGroup;
 		}
 
 		/** \return the current style for the currently active language and plugin.
 		*/
-		QString currentStyle();
+		QString currentStyle() const;
 		/** Sets the style used by the current plugin (and language).
 		* \arg style can be the name of a predefined style or a custom style.
 		* It will be loaded from config file if necessary and applied to the source formatter.
@@ -130,7 +133,7 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 		*/
 		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime);
 		void setModelinesEnabled(bool enable);
-		bool modelinesEnabled() {
+		bool modelinesEnabled() const {
 			return m_modelinesEnabled;
 		}
 
@@ -156,10 +159,11 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 	private:
 		static SourceFormatterManager *m_instance;
 		// all availables plugins and languages
-		QHash<QString, QList<KDevelop::IPlugin*> > m_plugins;
+		IPluginHash m_plugins;
 		QHash<QString, QString> m_languages;
 		// currently selected plugins, styles and languages
 		QHash<QString, ISourceFormatter*> m_currentPlugins;
+		QString m_currentStyle;
 		KConfigGroup m_rootConfigGroup;
 		KConfigGroup m_activeConfigGroup;
 		QString m_currentLang;
@@ -169,4 +173,4 @@ class KDEVPLATFORMUTIL_EXPORT SourceFormatterManager : public QObject
 
 #endif // SOURCEFORMATTERMANAGER_H
 
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

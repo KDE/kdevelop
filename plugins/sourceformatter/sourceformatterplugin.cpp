@@ -92,28 +92,12 @@ SourceFormatterPlugin::~SourceFormatterPlugin()
 void SourceFormatterPlugin::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
 {
 	KTextEditor::Document *textDoc = doc->textDocument();
-// 	QString oldSpaceIndent;
-// 	QString indentWithTabs;
-// 	if(formatter->indentationType() == ISourceFormatter::IndentWithTabs)
-// 		indentWithTabs = "on";
-// 	else
-// 		indentWithTabs = "off";
 
-// 	KTextEditor::VariableInterface *iface =
-// 		qobject_cast<KTextEditor::VariableInterface*>(textDoc);
-// 	if(iface) {
-// 		oldSpaceIndent = iface->variable("space-indent");
-// 		emit iface->variableChanged(textDoc, "space-indent", indentWithTabs);
-// 	}
-	
 	KTextEditor::Cursor cursor = doc->cursorPosition();
 	QString text = formatter->formatSource(textDoc->text(), mime);
 	text = SourceFormatterManager::self()->addModelineForCurrentLang(text, mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
-	
-// 	if(iface)
-// 		iface->variableChanged(textDoc, "space-indent", oldSpaceIndent);
 }
 
 void SourceFormatterPlugin::beautifySource()
@@ -160,7 +144,7 @@ void SourceFormatterPlugin::beautifySource()
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
 		doc->textDocument()->replaceText(view->selectionRange(), output);
-	} else 
+	} else
 		formatDocument(doc, formatter, mime);
 }
 
@@ -326,4 +310,4 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 }
 
 #include "sourceformatterplugin.moc"
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

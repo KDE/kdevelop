@@ -144,6 +144,20 @@ void SourceFormatterSettings::load()
 
 void SourceFormatterSettings::save()
 {
+	// save current styles
+	KConfigGroup group = SourceFormatterManager::self()->configGroup().parent().parent();
+	StyleHash::const_iterator it = m_currentStyles.constBegin();
+	for (; it != m_currentStyles.constEnd(); ++it) {
+		QHash<QString, QString> hash = it.value();
+		QString lang = it.key();
+		kDebug() << "Saving lang " << lang << " hash " << hash << endl;
+		QHash<QString, QString>::const_iterator it2 = hash.constBegin();
+		for (; it2 != hash.constEnd(); ++it2) {
+			kDebug() << "Saving lang " << lang << " plugin " << it2.key() << " style = " << it2.value() << endl;
+			group.group(lang).group(it2.key()).writeEntry("Style", it2.value());
+		}
+	}
+
 	SourceFormatterManager::self()->setModelinesEnabled(chkKateModelines->isChecked());
 	SourceFormatterManager::self()->saveConfig();
 }
@@ -166,8 +180,15 @@ void SourceFormatterSettings::languagesStylesChanged(int idx)
 	populateStyleList();
 
 	// reload current style
-	QString currentStyle = SourceFormatterManager::self()->currentStyle();
+// 	QString currentStyle = SourceFormatterManager::self()->currentStyle();
+	ISourceFormatter *f = SourceFormatterManager::self()->activeFormatter();
+	QString currentStyle;
+	if(f)
+		currentStyle = m_currentStyles[m_currentLang][f->name()];
+	if(currentStyle.isEmpty())
+		currentStyle = SourceFormatterManager::self()->currentStyle();
 	kDebug() << "Trying to select " << currentStyle << endl;
+
 	int selectedRow = 0;
 	for (int i = 0; i < listStyles->count(); ++i) {
 		QListWidgetItem *item = listStyles->item(i);
@@ -207,17 +228,19 @@ void SourceFormatterSettings::currentStyleChanged(QListWidgetItem *current, QLis
 {
 	if (!current)
 		return;
+	SourceFormatterManager *manager = SourceFormatterManager::self();
 
 	QString styleName = current->data(STYLE_ROLE).toString();
-	SourceFormatterManager::self()->setCurrentStyle(styleName);
+	manager->setCurrentStyle(styleName);
+	// save current style
+	QHash<QString, QString> &hash = m_currentStyles[manager->activeLanguage()];
+	if(manager->activeFormatter())
+		hash[manager->activeFormatter()->name()] = styleName;
+
 	if (listStyles->currentRow() < m_numberOfPredefinedStyles) {
-		// it is a predefined style
-//         m_currentFormatter->setStyle(styleName);
 		btnDelStyle->setEnabled(false);
 		btnEditStyle->setEnabled(false);
 	} else {
-//         QString content = SourceFormatterManager::self()->loadStyle(styleName);
-//         m_currentFormatter->setStyle(QString(), content);
 		btnDelStyle->setEnabled(true);
 		btnEditStyle->setEnabled(true);
 	}
@@ -269,6 +292,7 @@ void SourceFormatterSettings::addStyle()
 		addItemInStyleList(caption, name, true);
 		listStyles->setCurrentRow(listStyles->count() - 1);
 	}
+
 	changed();
 }
 
@@ -279,7 +303,8 @@ void SourceFormatterSettings::editStyle()
 		return;
 	QString styleName = item->data(STYLE_ROLE).toString();
 
-	QString content = SourceFormatterManager::self()->configGroup().readEntry(styleName);
+	SourceFormatterManager *manager = SourceFormatterManager::self();
+	QString content = manager->configGroup().readEntry(styleName);
 	EditStyleDialog dialog(m_currentFormatter, m_currentMimeType, content);
 	if (dialog.exec() == QDialog::Accepted)
 		SourceFormatterManager::self()->saveStyle(styleName, dialog.content());
@@ -341,6 +366,7 @@ void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QStri
 	kDebug() << "lang = " << lang << " plugin = " << plugin << endl;
 	SourceFormatterManager *manager = SourceFormatterManager::self();
 	manager->setActiveLanguage(lang, plugin);
+
 	m_currentFormatter = manager->activeFormatter();
 	m_currentMimeType = KMimeType::mimeType(manager->mimeTypeForLanguage(lang));
 	m_previewText = m_currentFormatter->previewText(m_currentMimeType);
@@ -350,4 +376,4 @@ void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QStri
 }
 
 #include "sourceformattersettings.moc"
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;
