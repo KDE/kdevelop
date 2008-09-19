@@ -56,6 +56,7 @@ class KDEVPLATFORMUTIL_EXPORT SettingsWidget : public QWidget
 		* needs to be updated. \arg text is the text that will be shown in the
 		* editor. One might want to show different text
 		* according to the different pages shown in the widget.
+		* Text should already be formatted.
 		*/
 		void previewTextChanged(const QString &text);
 };
@@ -144,4 +145,4 @@ KDEV_DECLARE_EXTENSION_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatte
 Q_DECLARE_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatter")
 
 #endif // ISOURCEFORMATTER_H
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

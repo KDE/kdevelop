@@ -91,7 +91,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 {
 	m_document->setReadWrite(true);
 	if (m_sourceFormatter)
-		m_document->setText(m_sourceFormatter->formatSource(text, m_mimeType));
+		m_document->setText(text);
 	m_document->setReadWrite(false);
 }
 
@@ -103,4 +103,4 @@ QString EditStyleDialog::content()
 }
 
 #include "editstyledialog.moc"
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;
