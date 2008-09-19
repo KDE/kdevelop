@@ -123,7 +123,7 @@ void ConstantIntegralType::setValueInternal<qint64>(qint64 value) {
 
 template<>
 void ConstantIntegralType::setValueInternal<quint64>(quint64 value) {
-  if((modifiers() & UnsignedModifier))
+  if(!(modifiers() & UnsignedModifier))
     kDebug() << "setValue(unsigned) called on not unsigned type";
   d_func_dynamic()->m_value = (qint64)value;
 }
