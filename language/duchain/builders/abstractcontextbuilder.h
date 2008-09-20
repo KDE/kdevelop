@@ -386,6 +386,12 @@ protected:
   }
 
   /**
+   * sets the context on the node, needs to be re-implemented in
+   * subclasses
+   */
+  virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
+  
+  /**
    * Delete the DUContext which is associated with the given \a node,
    * and remove the association.
    *
