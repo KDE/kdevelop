@@ -221,7 +221,7 @@ protected:
    * \param node AST node to associate
    * \param context DUContext to associate
    */
-  virtual void setContextOnNode( T* node, DUContext* context ) = 0;
+  virtual void 	setContextOnNode( T* node, DUContext* context ) = 0;
 
   /**
    * Retrieve an associated DUContext from the given \a node.  Used on second and
@@ -384,12 +384,6 @@ protected:
 
       return contextFromNode( node );
   }
-
-  /**
-   * sets the context on the node, needs to be re-implemented in
-   * subclasses
-   */
-  virtual void setContextOnNode( T* node, DUContext* ctx ) = 0;
   
   /**
    * Delete the DUContext which is associated with the given \a node,
