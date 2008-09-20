@@ -32,6 +32,7 @@
 #include "../test.h"
 
 using Veritas::RunnerTestHelper;
+using Veritas::Test;
 
 RunnerTestHelper::RunnerTestHelper()
     : m_window(0), m_show(false)

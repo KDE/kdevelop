@@ -42,6 +42,7 @@ using Veritas::VerboseManager;
 using Veritas::VerboseToggle;
 using Veritas::Test;
 using Veritas::RunnerModel;
+using Veritas::OverlayButton;
 
 VerboseManager::VerboseManager(QAbstractItemView* parent) :
     OverlayManager(parent)

@@ -42,6 +42,7 @@ using Veritas::SelectionToggle;
 using Veritas::Test;
 using Veritas::RunnerModel;
 using Veritas::OverlayManager;
+using Veritas::OverlayButton;
 
 SelectionManager::SelectionManager(QAbstractItemView* parent) :
     OverlayManager(parent)
