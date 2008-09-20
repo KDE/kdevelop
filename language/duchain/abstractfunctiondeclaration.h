@@ -102,10 +102,10 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
   
   private:
   virtual const AbstractFunctionDeclarationData* data() const {
-    return static_cast<const Data*>(Base::d_func());
+    return reinterpret_cast<const AbstractFunctionDeclarationData*>(Base::d_func());
   }
   virtual AbstractFunctionDeclarationData* dynamicData() {
-    return static_cast<Data*>(Base::d_func_dynamic());
+    return reinterpret_cast<AbstractFunctionDeclarationData*>(Base::d_func_dynamic());
   }
 };
 

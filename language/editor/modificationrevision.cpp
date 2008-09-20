@@ -23,7 +23,21 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
+
+#if defined(Q_OS_WIN)
+#include <hash_map>
+#else
 #include <ext/hash_map>
+#endif
+
+namespace std {
+#if defined(Q_OS_WIN)
+  using namespace stdext;
+#else
+  using namespace __gnu_cxx;
+#endif
+}
+
 
 #include "editorintegrator.h"
 #include "hashedstring.h"

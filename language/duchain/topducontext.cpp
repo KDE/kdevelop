@@ -20,7 +20,12 @@
 #include "topducontext.h"
 
 #include <limits>
+
+#if defined(Q_OS_WIN)
+#include <hash_map>
+#else
 #include <ext/hash_map>
+#endif
 
 #include <QThread>
 
@@ -51,7 +56,11 @@ using namespace KTextEditor;
 const uint visibilityCachingMargin = 10;
 
 namespace std {
+#if defined(Q_OS_WIN)
+  using namespace stdext;
+#else
   using namespace __gnu_cxx;
+#endif
 }
 
 namespace KDevelop

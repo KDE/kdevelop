@@ -21,6 +21,7 @@
 #define INTEGRALTYPE_H
 
 #include "abstracttype.h"
+#include "typesystemdata.h"
 
 namespace KDevelop
 {
