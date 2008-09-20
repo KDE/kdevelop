@@ -131,7 +131,7 @@ QString IDVCSexecutor::curBranch(const QString &repository)
     return QString();
 }
 
-QStringList IDVCSexecutor::IDVCSexecutor::branches(const QString &repository) 
+QStringList IDVCSexecutor::branches(const QString &repository) 
 {
     Q_UNUSED(repository)
     return QStringList();
