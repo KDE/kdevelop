@@ -41,6 +41,7 @@
 #include "projectbuildsetmodel.h"
 
 #include "ui_projectbuildsetwidget.h"
+#include <QHeaderView>
 
 ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
                                               QWidget* parent )
@@ -61,6 +62,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
              this, SLOT( removeItems() ) );
 
 
+    m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),

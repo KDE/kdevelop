@@ -64,6 +64,12 @@
      <property name="horizontalScrollMode" >
       <enum>QAbstractItemView::ScrollPerPixel</enum>
      </property>
+     <property name="showGrid" >
+      <bool>false</bool>
+     </property>
+     <property name="gridStyle" >
+      <enum>Qt::NoPen</enum>
+     </property>
     </widget>
    </item>
   </layout>
