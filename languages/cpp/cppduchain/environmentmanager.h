@@ -16,15 +16,7 @@
 
 #include <map>
 #include <QtCore/qglobal.h>
-#ifdef Q_CC_MSVC
-    #include <hash_map>
-    #include <hash_set>
-#else
-    #include <ext/hash_set>
-    #include <ext/hash_map>
-#endif
 
-#include "hashedstringset.h"
 #include <QtCore/QDateTime>
 #include <QtCore/QList>
 #include <QtCore/QMap>

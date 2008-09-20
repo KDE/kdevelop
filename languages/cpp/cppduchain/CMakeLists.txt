@@ -23,7 +23,6 @@ set(kdevcppduchain_LIB_SRCS
     cpptypes.cpp
     dumptypes.cpp
     environmentmanager.cpp
-    hashedstringset.cpp
     cppduchain.cpp
     templateparameterdeclaration.cpp
     cppducontext.cpp
@@ -50,7 +49,7 @@ set(kdevcppduchain_LIB_SRCS
 #       to the plugin target
 
 kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
-target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cppparser ${KDE4_KTEXTEDITOR_LIBS} kdev4cpprpp)
+target_link_libraries(kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_UTIL_LIBRARY} kdev4cppparser ${KDE4_KTEXTEDITOR_LIBS} kdev4cpprpp)
 install(TARGETS kdev4cppduchain ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
