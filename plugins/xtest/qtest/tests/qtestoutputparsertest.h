@@ -31,15 +31,19 @@ namespace QTest {
 class QTestCase;
 class QTestCommand;
 class QTestOutputParser;
-namespace Test {
 
-// TODO this test is far from sufficient.
-//      need to add some slow-updating XML chunks
-//      to test the recover stuff. maybe with a random test.
 /*! @unitundertest QTest::QTestOutputParser */
 class QTestOutputParserTest : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
+
+public slots:
+    /*! Generates random test input and chops this into random pieces.
+     *  These pieces are iterativly fed to a QTestOutputParser. 
+     *
+     *  It is not executed as part of the standard suite but through a
+     *  seperate executable, see parserstresstest.cpp */
+    void startRandomTest();
 
 private slots:
     void initTestCase();
@@ -66,7 +70,7 @@ private:
     // custom assertions
     void assertParsed(TestInfo& testInfo);
     void assertResult(const Veritas::TestResult& expected, const Veritas::TestResult& actual);
-    void assertResult(Veritas::TestResult* expected, Veritas::TestResult* actual);
+    void assertResult(Veritas::TestResult* expected, Veritas::TestResult* actual, const QString&);
     void checkResult(TestInfo& testInfo);
 
     // creation methods
@@ -79,6 +83,12 @@ private:
     void setExpectedFailure(TestInfo& tInfo);
     void setExpectedResult(TestInfo& tInfo, Veritas::TestState state,
                            QString filepath, int lineNumber, QString msg);
+
+    // random-stress test helpers
+    void generateRandomInput(int maxCommands, QByteArray& qtestXmlOutput, QList<TestInfo*>&, QTestCase*&);
+    void runRandomCommand(const QList<QByteArray>& input, QTestCase*);
+    void qassertResult(Veritas::TestResult* expected, Veritas::TestResult* actual, const QString&);
+    void verifyRandomResults(QList<TestInfo*>& expected);
 
 private:
     QTestOutputParser* m_parser;
@@ -101,8 +111,13 @@ private:
     TestInfo m_command2Info;
 
     QBuffer* m_buffer;
+
+    enum AssertType { QTestAssert, QAssertAssert };
+    AssertType m_assertType;
+    QList<QByteArray> m_pieces; // current random test input
+    QString m_randomTestType;
 };
 
-}}
+}
 
 #endif // QXQTEST_QTESTOUTPUTPARSERTEST

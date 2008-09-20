@@ -81,6 +81,8 @@ private:
     void iterateTestFunctions();
     void processTestFunction();
     void processMessage();
+    void processQAssert();
+    void processQSkip();
     void fillResult();
     void setFailure();
     void setSuccess();
@@ -95,7 +97,7 @@ private:
 
 private:
     // remember state to continue parsing
-    enum State { Main = 0, TestFunction = 1, Failure = 2, Message = 3 };
+    enum State { Main = 0, TestFunction = 1, Failure = 2, Message = 3, QSkip = 4, QAssert = 5 };
     State m_state;
     bool m_buzzy;
     Veritas::TestResult* m_result;

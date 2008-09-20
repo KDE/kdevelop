@@ -185,13 +185,15 @@ void QTestOutputParser::go()
     // incrementally by recovering from previous errors. It remembers
     // the state it was in and starts where it left off.
     switch (m_state) {
-        case Message: { // this is not right, need to differentiate between skip & qfatal
-            processMessage();
+        case QSkip: {
+            processQSkip();
+            goto TestFunctionLabel;
+        } case QAssert: {
+            processQAssert();
             goto TestFunctionLabel;
         } case Failure: {
             setFailure();
-        } case TestFunction: {
-            TestFunctionLabel:
+        } case TestFunction: TestFunctionLabel: {
             processTestFunction();
         } case Main: {
             iterateTestFunctions();
@@ -231,7 +233,50 @@ void QTestOutputParser::iterateTestFunctions()
             emit done();
         }
     }
-    //kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+    kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
+}
+
+void QTestOutputParser::processQSkip()
+{
+    while (!atEnd() && !isEndElement_(c_description)) {
+        readNext();
+        if (isCDATA()) {
+            m_result->setMessage(text().toString() + " (skipped)");
+        }
+    }
+
+    if (isEndElement_(c_description)) {
+        m_state = TestFunction;
+    }
+}
+
+void QTestOutputParser::processQAssert()
+{
+    // Q_ASSERT   "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
+    // Q_ASSERT_X "<Description><![CDATA[ASSERT failure in command: \"message\", file /path/to/file.cpp, line 66]]></Description>\n"
+
+    while (!atEnd() && !isEndElement_(c_description)) {
+        readNext();
+        if (isCDATA()) {
+            QString cdata = text().toString();
+            int lineStart = cdata.lastIndexOf(", line ");
+            int lineEnd = lineStart+7;
+            int fileStart = cdata.lastIndexOf(" in file ");
+            int fileEnd = fileStart + 9;
+            int file2Start = cdata.lastIndexOf(", file ");
+            if (file2Start > fileStart) {
+                fileStart = file2Start;
+                fileEnd = file2Start + 7;
+            }
+            m_result->setFile(KUrl(cdata.mid(fileEnd, lineStart - fileEnd)));
+            m_result->setLine(cdata.mid(lineEnd).toInt());
+            m_result->setMessage(cdata.mid(0, fileStart));
+        }
+    }
+
+    if (isEndElement_(c_description)) {
+        m_state = TestFunction;
+    }
 }
 
 void QTestOutputParser::processMessage()
@@ -241,42 +286,13 @@ void QTestOutputParser::processMessage()
         m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());
         m_result->setState(Veritas::RunInfo);
-        while (!atEnd() && !isEndElement_(c_description)) {
-            readNext();
-            if (isCDATA()) {
-                m_result->setMessage(text().toString() + " (skipped)");
-            }
-        }
+        m_state = QSkip;
+        processQSkip();
     } else if (type == c_qfatal) {
         m_result->setState(Veritas::RunFatal);
-        // Q_ASSERT   "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
-        // Q_ASSERT_X "<Description><![CDATA[ASSERT failure in command: \"message\", file /path/to/file.cpp, line 66]]></Description>\n"
-        while (!atEnd() && !isEndElement_(c_description)) {
-            readNext();
-            if (isCDATA()) {
-                QString cdata = text().toString();
-                int lineStart = cdata.lastIndexOf(", line ");
-                int lineEnd = lineStart+7;
-                int fileStart = cdata.lastIndexOf(" in file ");
-                int fileEnd = fileStart + 9;
-                int file2Start = cdata.lastIndexOf(", file ");
-                if (file2Start > fileStart) {
-                    fileStart = file2Start;
-                    fileEnd = file2Start + 7;
-                }
-                m_result->setFile(KUrl(cdata.mid(fileEnd, lineStart - fileEnd)));
-                m_result->setLine(cdata.mid(lineEnd).toInt());
-                m_result->setMessage(cdata.mid(0, fileStart));
-            }
-        }
-    } else {
-        m_state = TestFunction;
+        m_state = QAssert;
+        processQAssert();
     }
-
-    if (isEndElement_(c_description)) {
-        m_state = TestFunction;
-    }
-
 }
 
 void QTestOutputParser::processTestFunction()
@@ -284,7 +300,6 @@ void QTestOutputParser::processTestFunction()
     while (!atEnd() && !isEndElement_(c_testfunction)) {
         readNext();
         if (isStartElement_(c_message)) {
-            m_state = Message;
             processMessage();
         }
         if (isStartElement_(c_incident)) {

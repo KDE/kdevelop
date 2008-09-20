@@ -2,7 +2,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
         ${XtestPlugin_SOURCE_DIR}/qtest
-        ${XtestPlugin_SOURCE_DIR})
+        ${XtestPlugin_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR})
 
 macro(kdev_add_test test_EXEC)
     set(test_SRCS ${ARGN})
@@ -16,7 +17,7 @@ macro(kdev_add_test test_EXEC)
         kdevqtest)
 endmacro(kdev_add_test)
 
-kdev_add_test(ut-qtestoutputparser "qtestoutputparsertest.cpp")
+kdev_add_test(ut-qtestoutputparser qtestoutputparsertest.cpp outputparsertestmain.cpp)
 kdev_add_test(ut-qtestcase "qtestcasetest.cpp")
 kdev_add_test(ut-qtestcommand "qtestcommandtest.cpp")
 kdev_add_test(ut-qtestsuite "qtestsuitetest.cpp")
@@ -37,3 +38,12 @@ target_link_libraries(qtestrunner
         ${KDE4_KDEUI_LIBS}
         ${KDEVPLATFORM_VERITAS_LIBRARY}
         kdevqtest)
+
+add_executable(parserstresstest parserstresstest.cpp qtestoutputparsertest.cpp)
+qt4_automoc( qtestoutputparsertest.cpp )
+target_link_libraries(parserstresstest
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTTEST_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${KDEVPLATFORM_VERITAS_LIBRARY}
+    kdevqtest)
