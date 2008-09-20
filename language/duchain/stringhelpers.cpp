@@ -289,6 +289,94 @@ QString clearStrings( QString str, QChar /*replacement*/ ) {
   return str;
 }
 
+
+static inline bool isWhite( QChar c ) {
+  return c.isSpace();
+}
+void rStrip( const QString& str, QString& from ) {
+  if( str.isEmpty() ) return;
+
+  int i = 0;
+  int ip = from.length();
+  int s = from.length();
+
+  for( int a = s-1; a >= 0; a-- ) {
+      if( isWhite( from[a] ) ) {
+          continue;
+      } else {
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
+      }
+  }
+
+  if( ip != (int)from.length() ) from = from.left( ip );
+}
+
+void strip( const QString& str, QString& from ) {
+  if( str.isEmpty() ) return;
+
+  int i = 0;
+  int ip = 0;
+  int s = from.length();
+
+  for( int a = 0; a < s; a++ ) {
+      if( isWhite( from[a] ) ) {
+          continue;
+      } else {
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a+1;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
+      }
+  }
+
+  if( ip ) from = from.mid( ip );
+}
+
+QString formatComment( const QString& comment ) {
+  QString ret;
+  int i = 0;
+
+  if( i > 1 ) {
+      ret = comment.mid( i );
+  } else {
+      ///remove the star in each line
+      QStringList lines = comment.split( "\n", QString::KeepEmptyParts );
+
+      if( lines.isEmpty() ) return ret;
+
+      QStringList::iterator it = lines.begin();
+      QStringList::iterator eit = lines.end();
+
+      if( it != lines.end() ) {
+
+          for( ; it != eit; ++it ) {
+              strip( "//", *it );
+              strip( "**", *it );
+              rStrip( "/**", *it );
+          }
+
+          if( lines.front().trimmed().isEmpty() )
+              lines.pop_front();
+
+          if( !lines.isEmpty() && lines.back().trimmed().isEmpty() )
+              lines.pop_back();
+      }
+
+      ret = lines.join( "\n" );
+  }
+
+  return ret;
+}
+
 ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(new ParamIteratorPrivate)
 {
   d->m_source = source;
