@@ -63,8 +63,8 @@
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
 
-using KDevelop::DistributedVersionControlPlugin;
-
+namespace KDevelop
+{
 
 //class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
@@ -543,6 +543,8 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 //     emit jobFinished(_checkoutJob); //couses crash!
 }
 
+}
+
 //-----------------------------------------------------------------------------------
 
 
@@ -561,6 +563,5 @@ QString KDevDVCSViewFactory::id() const
 {
          return "org.kdevelop.DVCSview";
 }
-
 
 #endif
