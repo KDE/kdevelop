@@ -44,7 +44,7 @@ public:
     {}
 
     void insertRow( const QString& state, const KUrl& url,
-                    const KStatefulBrush &foregroundColor = KStatefulBrush(QBrush(Qt::black)),
+                    const KStatefulBrush &foregroundColor = KStatefulBrush(KColorScheme::View, KColorScheme::NormalText),
                     Qt::CheckState checkstate = Qt::Checked)
     {
         QStringList strings;
@@ -136,8 +136,8 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
     {
         QVariant varlist = job->fetchResults();
 
-        KStatefulBrush deletedRed(QBrush(Qt::red));
-        KStatefulBrush newGreen(QBrush(Qt::green));
+        KStatefulBrush deletedRed(KColorScheme::View, KColorScheme::NegativeText);
+        KStatefulBrush newGreen(KColorScheme::View, KColorScheme::ActiveText);
 
         foreach( QVariant var, varlist.toList() )
         {
