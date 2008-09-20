@@ -75,7 +75,9 @@ RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
     connect(preferencesDialog->buttonNewTarget, SIGNAL(clicked(bool)), SLOT(newRunConfig()));
     connect(preferencesDialog->buttonDeleteTarget, SIGNAL(clicked(bool)), SLOT(deleteRunConfig()));
 
+#ifdef __GNUC__
 #warning TODO: switch to stacked widget and mulitple RunSettings-es.
+#endif
 }
 
 RunPreferences::~RunPreferences( )
