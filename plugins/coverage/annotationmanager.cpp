@@ -38,6 +38,9 @@ using KTextEditor::AnnotationViewInterface;
 using Veritas::AnnotationManager;
 using Veritas::AnnotationModel;
 
+namespace Veritas
+{
+
 AnnotationManager::AnnotationManager(QObject* parent)
     : QObject(parent)
 {
@@ -55,7 +58,7 @@ AnnotationManager::~AnnotationManager()
 
 void AnnotationManager::connectKDocWithTextDoc(KDevelop::IDocument* doc)
 {
-    if (not m_docs.contains(doc)) return;
+    if (!m_docs.contains(doc)) return;
     Q_ASSERT(doc->isTextDocument());
     KTextEditor::Document* tdoc = doc->textDocument();
     Q_ASSERT_X(tdoc, "AnnotationManager::watch()", "doc->textDoc() null.");
@@ -79,12 +82,12 @@ void AnnotationManager::watch(IDocument* doc)
 
 void AnnotationManager::fixAnnotation(KTextEditor::Document* doc, KTextEditor::View* view)
 {
-    if (not m_textDocUrls.contains(doc)) {
+    if (!m_textDocUrls.contains(doc)) {
         kDebug() << "Shouldn't happen, got a doc for which no url was registered.";
         return;
     }
     KUrl url = m_textDocUrls[doc];
-    if (not m_files.contains(url)) {
+    if (!m_files.contains(url)) {
         kDebug() << "No CoveredFile data available for " << url;
         return;
     }
@@ -99,14 +102,14 @@ void AnnotationManager::fixAnnotation(KTextEditor::Document* doc, KTextEditor::V
 
 void AnnotationManager::stopWatching(IDocument* doc)
 {
-    if (not m_docs.contains(doc)) return;
+    if (!m_docs.contains(doc)) return;
     m_docs.removeOne(doc);
     KTextEditor::Document* tdoc = doc->textDocument();
     Q_ASSERT(tdoc);
     tdoc->disconnect(this);
     foreach(KTextEditor::View* view, tdoc->views()) {
         AnnotationViewInterface* anno = qobject_cast<AnnotationViewInterface*>(view);
-        if (not anno) continue;
+        if (!anno) continue;
         anno->setAnnotationBorderVisible(0);
         anno->setAnnotationModel(0);
     }
@@ -142,6 +145,8 @@ void AnnotationManager::addCoverageData(CoveredFile* f)
             cf->setCallCount(line, count + curcc[line]);
         }
     }
+}
+
 }
 
 #include "annotationmanager.moc"

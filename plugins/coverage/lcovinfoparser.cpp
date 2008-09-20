@@ -53,7 +53,7 @@ namespace
 
 inline bool firstTwoCharsEqual(const char* one, char* two)
 {
-    return not qstrncmp(one, two, 2);
+    return !qstrncmp(one, two, 2);
 }
 
 }
@@ -138,9 +138,9 @@ QList<CoveredFile*> LcovInfoParser::go()
 // end_of_record
 
     Q_ASSERT(m_sourceDev);
-    if (not m_sourceDev->isOpen()) {
+    if (!m_sourceDev->isOpen()) {
         m_sourceDev->open(QIODevice::ReadOnly);
-        if (not m_sourceDev->isOpen()) {
+        if (!m_sourceDev->isOpen()) {
             kError() << "Failed to open lcov info file for reading.";
             return QList<CoveredFile*>();
         }
