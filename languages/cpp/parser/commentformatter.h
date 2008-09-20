@@ -34,18 +34,12 @@ class ParseSession;
 
 class KDEVCPPPARSER_EXPORT CommentFormatter {
     public:
-    static QString formatComment( const QString& comment );
     ///Processes the comment represented by the given token-number within the parse-session's token-stream
     static QString formatComment( size_t token, const ParseSession* session );
 
     ///Processes the list of comments represented by the given token-number within the parse-session's token-stream
     static QString formatComment( const ListNode<size_t>* node, const ParseSession* session );
   private:
-    static inline bool isWhite( QChar c ) {
-        return c.isSpace();
-    }
-    static void rStrip( const QString& str, QString& from );
-    static void strip( const QString& str, QString& from );
 };
 
 #endif
