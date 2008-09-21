@@ -59,6 +59,7 @@ public:
     TypeDouble,
     TypeWchar_t,
     TypeString,
+    TypeMixed,
     TypeLanguageSpecific = 200
   };
 

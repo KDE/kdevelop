@@ -104,6 +104,12 @@ QString IntegralType::toString() const
     case TypeVoid:
       name = "void";
       break;
+    case TypeMixed:
+      name = "mixed";
+      break;
+    case TypeString:
+      name = "string";
+      break;
     default:
       name = "<unknown>";
       break;
