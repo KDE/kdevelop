@@ -170,7 +170,7 @@ const QString ResultsHeader::col0 = "col0";
 const QString ResultsHeader::col1 = "col1";
 const QString ResultsHeader::col2 = "col2";
 
-inline ResultsModel* createResultsModelStub()
+inline QPair<ResultsModel*,RunnerModelStub*> createResultsModelStub()
 {
     QStringList header;
     header << ResultsHeader::col0 << ResultsHeader::col1 << ResultsHeader::col2;
@@ -181,7 +181,7 @@ inline ResultsModel* createResultsModelStub()
     model->addResult(runnerModel->index(0, 0)); // invoke slot
     model->addResult(runnerModel->index(1, 0)); // invoke slot
 
-    return model;
+    return qMakePair(model, runnerModel);
 }
 
 }

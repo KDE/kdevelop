@@ -34,7 +34,9 @@ using Veritas::ResultsProxyModelTest;
 
 void ResultsProxyModelTest::init()
 {
-    source = createResultsModelStub();
+    QPair<ResultsModel*,RunnerModelStub*> models = createResultsModelStub();
+    source = models.first;
+    runnerModel = models.second;
     proxy  = new ResultsProxyModel(source);
     proxy->setSourceModel(source);
 }
@@ -43,6 +45,8 @@ void ResultsProxyModelTest::cleanup()
 {
     if (proxy)  delete proxy;
     if (source) delete source;
+//    delete runnerModel->root;
+    delete runnerModel;
 }
 
 //test command

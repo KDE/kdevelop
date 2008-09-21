@@ -27,6 +27,7 @@
 namespace Veritas {
 class ResultsModel;
 class ResultsProxyModel;
+class RunnerModelStub;
 
 class ResultsProxyModelTest : public QObject
 {
@@ -43,8 +44,9 @@ private:
     void assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3);
 
 private:
-    Veritas::ResultsModel* source;
-    Veritas::ResultsProxyModel* proxy;
+    ResultsModel* source;
+    ResultsProxyModel* proxy;
+    RunnerModelStub* runnerModel;
 };
 
 }

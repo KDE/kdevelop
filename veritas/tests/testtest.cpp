@@ -192,6 +192,8 @@ void TestTest::reparent()
     Test* parent = new Test("parent", 0);
     test->setParent(parent);
     KOMPARE(parent, test->parent());
+
+    delete parent;
 }
 
 QTEST_KDEMAIN(TestTest, NoGUI)

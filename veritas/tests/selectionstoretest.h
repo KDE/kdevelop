@@ -27,6 +27,9 @@
 namespace Veritas
 {
 
+class SelectionStore;
+class Test;
+
 /*! @unitundertest SelectionStore */
 class SelectionStoreTest : public QObject
 {
@@ -43,6 +46,10 @@ private slots:
     void saveRecursive();
     void restoreRecursive();
     void ignoreRoot();
+
+private:
+    SelectionStore* m_store;
+    Test* m_root;
 };
 
 }

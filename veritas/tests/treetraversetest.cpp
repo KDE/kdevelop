@@ -61,6 +61,8 @@ void TreeTraverseTest::simpleTree()
     QVERIFY(v.visited.contains(root));
     QVERIFY(v.visited.contains(child1));
     QVERIFY(v.visited.contains(child2));
+
+    delete root;
 }
 
 QTEST_MAIN( TreeTraverseTest )

@@ -165,7 +165,7 @@ void RunnerModelTest::assertDataAt(const QVariant& expected, int row, int column
     QVariant actual = model->data(model->index(row, column), Qt::DisplayRole);
     //qDebug() << "actual >" << actual << "< ; expected >" << expected << "<";
     KOMPARE_MSG(expected, actual, 
-        QString("Expected: %1 at row %2 & col %3").arg(QTest::toString(expected)).arg(row).arg(column));
+        QString("Expected: %1 at row %2 & col %3").arg(expected.toString()).arg(row).arg(column));
 }
 
 // helper

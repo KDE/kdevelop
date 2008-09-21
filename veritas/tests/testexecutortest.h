@@ -29,6 +29,7 @@ class QSignalSpy;
 
 namespace Veritas {
 class Test;
+class TestStub;
 class TestExecutor;
 
 class TestExecutorTest : public QObject
@@ -55,10 +56,16 @@ private:
     void assertRunTwice(QSignalSpy*, Test*);
     void assertNotRun(QSignalSpy*, Test*);
     void assertAllDone();
+    QSignalSpy* createSpy(Test* t);
+    TestStub* createEnabledTest(const QString& name, Test* parent, QSignalSpy*& s);
+    TestStub* createTest(const QString& name, Test* parent, QSignalSpy*& s);
+    TestStub* createDeselectedTest(const QString& name, Test* parent, QSignalSpy*& s);
 
 private:
     TestExecutor* m_executor;
     QSignalSpy* m_allDoneSpy;
+    Test* root;
+    QList<QSignalSpy*> m_garbage;
 };
 
 }

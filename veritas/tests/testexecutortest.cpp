@@ -36,7 +36,7 @@ using Veritas::Test;
 using Veritas::TestExecutor;
 using Veritas::TestExecutorTest;
 
-namespace
+namespace Veritas
 {
 
 class TestStub : public Test
@@ -50,7 +50,10 @@ public:
     bool m_shouldRun;
 };
 
-} // end anonymous namespace
+}
+
+using Veritas::TestStub;
+
 
 void TestExecutorTest::initTestCase()
 {
@@ -61,6 +64,8 @@ void TestExecutorTest::init()
 {
     m_executor = new TestExecutor;
     m_allDoneSpy = new QSignalSpy(m_executor, SIGNAL(allDone()));
+    root = 0;
+    m_garbage.clear();
 }
 
 void TestExecutorTest::assertAllDone()
@@ -72,14 +77,18 @@ void TestExecutorTest::cleanup()
 {
     delete m_allDoneSpy;
     delete m_executor;
+    if (root) delete root;
+    qDeleteAll(m_garbage);
 }
 
-QSignalSpy* createSpy(Test* t)
+QSignalSpy* TestExecutorTest::createSpy(Test* t)
 {
-    return new QSignalSpy(t, SIGNAL(executionFinished()));
+    QSignalSpy* s = new QSignalSpy(t, SIGNAL(executionFinished()));
+    m_garbage << s;
+    return s;
 }
 
-TestStub* createEnabledTest(const QString& name, Test* parent, QSignalSpy*& s)
+TestStub* TestExecutorTest::createEnabledTest(const QString& name, Test* parent, QSignalSpy*& s)
 {
     TestStub* test = new TestStub(name, parent);
     if (parent) parent->addChild(test);
@@ -88,7 +97,7 @@ TestStub* createEnabledTest(const QString& name, Test* parent, QSignalSpy*& s)
     return test;
 }
 
-TestStub* createTest(const QString& name, Test* parent, QSignalSpy*& s)
+TestStub* TestExecutorTest::createTest(const QString& name, Test* parent, QSignalSpy*& s)
 {
     TestStub* test = new TestStub(name, parent);
     if (parent) parent->addChild(test);
@@ -123,7 +132,7 @@ void TestExecutorTest::rootOnly()
 {
     // setup
     QSignalSpy* s;
-    Test* root = createEnabledTest("Root", 0, s);
+    root = createEnabledTest("Root", 0, s);
     m_executor->setRoot(root);
 
     // exercise
@@ -142,7 +151,7 @@ void TestExecutorTest::noneShouldRun()
     //      child11
 
     // setup
-    TestStub *root, *child, *child11;
+    TestStub *child, *child11;
     QSignalSpy *rs, *cs, *c11s;
 
     root    = createTest("root", 0, rs);
@@ -170,7 +179,7 @@ void TestExecutorTest::levelOneAggregate()
     //      child12
 
     // setup
-    TestStub *root, *child, *child11, *child12;
+    TestStub *child, *child11, *child12;
     QSignalSpy *rs, *cs, *c11s, *c12s;
 
     root    = createTest("root", 0, rs);
@@ -200,7 +209,7 @@ void TestExecutorTest::levelTwoAggregate()
     //         child3
 
     // setup
-    TestStub *root, *child1, *child2, *child3;
+    TestStub *child1, *child2, *child3;
     QSignalSpy *rs, *c1s, *c2s, *c3s;
 
     root    = createTest("root", 0, rs);
@@ -232,7 +241,7 @@ void TestExecutorTest::multipleAggregates()
     //      child21 [should run]
 
     // setup
-    TestStub *root, *child1, *child11, *child12, *child2, *child21;
+    TestStub *child1, *child11, *child12, *child2, *child21;
     QSignalSpy *rs, *c1s, *c11s, *c12s, *c2s, *c21s;
 
     root    = createTest("root", 0, rs);
@@ -268,7 +277,7 @@ void TestExecutorTest::unbalancedAggregates()
     //      child22 [should run]
 
     // setup
-    TestStub *root, *child1, *child2, *child21, *child22;
+    TestStub *child1, *child2, *child21, *child22;
     QSignalSpy *rs, *c1s, *c2s, *c21s, *c22s;
 
     root    = createTest("root", 0, rs);
@@ -291,7 +300,7 @@ void TestExecutorTest::unbalancedAggregates()
     assertAllDone();
 }
 
-TestStub* createDeselectedTest(const QString& name, Test* parent, QSignalSpy*& s)
+TestStub* TestExecutorTest::createDeselectedTest(const QString& name, Test* parent, QSignalSpy*& s)
 {
     TestStub* t = createEnabledTest(name, parent, s);
     t->unCheck();
@@ -307,7 +316,7 @@ void TestExecutorTest::noneSelected()
     //      child21
 
     // setup
-    TestStub *root, *child1, *child11, *child2, *child21;
+    TestStub *child1, *child11, *child2, *child21;
     QSignalSpy *rs, *c1s, *c2s, *c11s, *c21s;
 
     root    = createTest("root", 0, rs);
@@ -340,7 +349,7 @@ void TestExecutorTest::deselectedTests()
     //   child4 [should run]
 
     // setup
-    TestStub *root, *child1, *child2, *child3, *child4;
+    TestStub *child1, *child2, *child3, *child4;
     QSignalSpy *rs, *c1s, *c2s, *c3s, *c4s;
 
     root    = createTest("root", 0, rs);
@@ -374,7 +383,7 @@ void TestExecutorTest::runTwice()
     //      child21 [should run]
 
     // setup
-    TestStub *root, *child1, *child11, *child12, *child2, *child21;
+    TestStub *child1, *child11, *child12, *child2, *child21;
     QSignalSpy *rs, *c1s, *c11s, *c12s, *c2s, *c21s;
 
     root    = createTest("root", 0, rs);
