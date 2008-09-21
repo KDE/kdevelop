@@ -92,6 +92,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     setGreenBar();
     ui()->progressRun->setTextVisible(false);
     ui()->progressRun->show();
+    addProjectMenu();
 
     // Disable user interaction while there is no data.
     enableItemActions(false);
@@ -139,8 +140,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     connect(runnerView(),  SIGNAL(clicked(QModelIndex)),
             SLOT(expandOrCollapse(QModelIndex)));
-
-    addProjectMenu();
 
     const char* whatsthis = "xTest runner. First select a project from the rightmost dropdown box. Next, load the test tree by clicking on the green circular arrow icon. Run your tests with a click on the leftmost green arrow icon.";
     setWhatsThis( i18n(whatsthis) );
@@ -364,6 +363,7 @@ void RunnerWindow::setModel(RunnerModel* model)
     enableTestSync(true);
     m_verbose->makeConnections();
     m_selection->makeConnections();
+    runnerView()->resizeColumnToContents(0);
 }
 
 
@@ -642,6 +642,8 @@ void RunnerWindow::disableControlsBeforeRunning()
     enableItemActions(false);
 
     m_ui->actionStop->setEnabled(true);
+    m_projectPopup->setEnabled(false);
+    m_ui->actionReload->setEnabled(false);
     runnerView()->setCursor(QCursor(Qt::BusyCursor));
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::NoSelection);
@@ -652,15 +654,18 @@ void RunnerWindow::disableControlsBeforeRunning()
 
 void RunnerWindow::enableControlsAfterRunning() const
 {
-    enableItemActions(true);               // Enable user interaction.
+    enableItemActions(true);
 
     m_ui->actionStop->setDisabled(true);
+    m_ui->actionReload->setEnabled(true);
+    m_projectPopup->setEnabled(true);
     runnerView()->setCursor(QCursor());
     runnerView()->setFocus();
     runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
     resultsView()->setSelectionMode(QAbstractItemView::SingleSelection);
     enableTestSync(true);
     enableResultSync(true);
+
 }
 
 void RunnerWindow::enableItemActions(bool enable) const
