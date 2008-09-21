@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/testrunnertoolview.h"
+#include "veritas/itestrunner.h"
 
 #include <KAboutData>
 #include <KDebug>
@@ -61,15 +61,15 @@ using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::ResultsModel;
 using Veritas::VerboseManager;
-using Veritas::TestViewData;
+using Veritas::ITestRunner;
 
 namespace Veritas
 {
 
-class TestViewDataPrivate
+class ITestRunnerPrivate
 {
 public:
-    TestViewDataPrivate();
+    ITestRunnerPrivate();
     RunnerWindow* window;
     IProject* selectedProject;
     Sublime::View *resultsView;
@@ -78,7 +78,7 @@ public:
     Test* previousRoot;
 };
 
-TestViewDataPrivate::TestViewDataPrivate()
+ITestRunnerPrivate::ITestRunnerPrivate()
         : window(0),
         selectedProject(0),
         resultsView(0),
@@ -88,11 +88,11 @@ TestViewDataPrivate::TestViewDataPrivate()
 
 } // namespace
 
-using Veritas::TestViewDataPrivate;
+using Veritas::ITestRunnerPrivate;
 
-TestViewData::TestViewData(QObject* parent)
+ITestRunner::ITestRunner(QObject* parent)
         : QObject(parent),
-        d(new TestViewDataPrivate)
+        d(new ITestRunnerPrivate)
 {
     QStringList resultHeaders;
     resultHeaders << i18n("Test") << i18n("Message")
@@ -104,7 +104,7 @@ TestViewData::TestViewData(QObject* parent)
             this, SLOT(setupToolView(Veritas::Test*)));
 }
 
-void TestViewData::setupToolView(Veritas::Test* root)
+void ITestRunner::setupToolView(Veritas::Test* root)
 {
     if (!root) { kDebug() << "root null"; return; }
     if (d->previousRoot) {
@@ -122,24 +122,24 @@ void TestViewData::setupToolView(Veritas::Test* root)
     if (!d->resultsView) spawnResultsView();
 }
 
-TestViewData::~TestViewData()
+ITestRunner::~ITestRunner()
 {
     delete d;
 }
 
-QWidget* TestViewData::resultsWidget()
+QWidget* ITestRunner::resultsWidget()
 {
     return d->window->resultsWidget();
 }
 
-void TestViewData::removeResultsView()
+void ITestRunner::removeResultsView()
 {
     if (d->resultsView && d->resultsArea) {
         d->resultsArea->removeToolView(d->resultsView);
     }
 }
 
-QWidget* TestViewData::runnerWidget()
+QWidget* ITestRunner::runnerWidget()
 {
     IProjectController* ipc = ICore::self()->projectController();
     foreach(IProject* proj, ipc->projects()) {
@@ -164,17 +164,17 @@ QWidget* TestViewData::runnerWidget()
 }
 
 /*! TODO rename this a bit. just make reload() pure virtual instead of registerTests */
-void TestViewData::reload()
+void ITestRunner::reload()
 {
     registerTests(); // implemented by concrete plugins
 }
 
-IProject* TestViewData::project() const
+IProject* ITestRunner::project() const
 {
     return d->selectedProject;
 }
 
-void TestViewData::setSelected(QAction* action)
+void ITestRunner::setSelected(QAction* action)
 {
     kDebug() << action->data().value<IProject*>();
     d->selectedProject = action->data().value<IProject*>();
@@ -197,7 +197,7 @@ public:
 class ResultsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    ResultsViewFactory(const QString& id, TestViewData *runner): m_runner(runner), m_id(id) {}
+    ResultsViewFactory(const QString& id, ITestRunner *runner): m_runner(runner), m_id(id) {}
 
     virtual QWidget* create(QWidget *parent = 0) {
         Q_UNUSED(parent);
@@ -230,7 +230,7 @@ public:
     }
 
 private:
-    TestViewData *m_runner;
+    ITestRunner *m_runner;
     QString m_id;
 };
 
@@ -275,7 +275,7 @@ public:
     bool found;
 };
 
-void TestViewData::spawnResultsView()
+void ITestRunner::spawnResultsView()
 {
     // only allow a single view.
     IUiController* uic = ICore::self()->uiController();
@@ -312,4 +312,4 @@ void TestViewData::spawnResultsView()
     fac->viewCreated(d->resultsView);
 }
 
-#include "testrunnertoolview.moc"
+#include "itestrunner.moc"

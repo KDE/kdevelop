@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_TESTRUNNERTOOLVIEW_H
-#define VERITAS_TESTRUNNERTOOLVIEW_H
+#ifndef VERITAS_ITESTRUNNER_H
+#define VERITAS_ITESTRUNNER_H
 
 #include "interfaces/iplugin.h"
 #include "veritas/veritasexport.h"
@@ -30,17 +30,21 @@ namespace KDevelop { class IProject; }
 namespace Veritas
 {
 class Test;
-class TestViewDataPrivate;
+class ITestRunnerPrivate;
 
-/*! Test runner toolview data and assorted operations. This
- * is intended to be subclasses by concrete framework runner
- * implementations, eg QTestViewData, CppUnitViewData etc . */
-class VERITAS_EXPORT TestViewData : public QObject
+/*! Abstract test runner. A test runner is composed of 2 toolviews:
+ *  (i)  a runner-toolview which contains the test-tree 
+ *  (ii) a results-toolview that holds test status information,
+ *       for example failure message, location and so on.
+ *
+ *  This is intended to be implemented by 
+ *  concrete runners, for examples see kdevelop/plugins/xtest/qtest. */
+class VERITAS_EXPORT ITestRunner : public QObject
 {
 Q_OBJECT
 public:
-    TestViewData(QObject*);
-    virtual ~TestViewData();
+    ITestRunner(QObject*);
+    virtual ~ITestRunner();
 
     /*! Create a new test runner widget
         Call this in your toolview factory's create() member. */
@@ -70,9 +74,9 @@ private Q_SLOTS:
 
 private:
     void spawnResultsView();
-    TestViewDataPrivate* const d;
+    ITestRunnerPrivate* const d;
 };
 
 }
 
-#endif // VERITAS_TESTRUNNER_H
+#endif // VERITAS_ITESTRUNNER_H
