@@ -129,8 +129,7 @@ private Q_SLOTS:
     /*! Exectues the items in the model. */
     void runItems();
 
-    /*! Stops item execution. If first stopping attempt isn't successful
-     * the StoppingDialog is shown */
+    /*! Stops test execution. */
     void stopItems();
 
     void jumpToSource(const QItemSelection& selected, const QItemSelection& deselected);

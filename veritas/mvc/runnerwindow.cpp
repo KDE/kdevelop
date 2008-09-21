@@ -30,7 +30,6 @@
 #include "veritas/mvc/runnermodel.h"
 #include "veritas/mvc/runnerproxymodel.h"
 #include "veritas/mvc/selectionmanager.h"
-#include "veritas/mvc/stoppingdialog.h"
 #include "veritas/mvc/verbosemanager.h"
 #include "veritas/mvc/verbosetoggle.h"
 #include "veritas/mvc/selectiontoggle.h"
@@ -621,20 +620,10 @@ void RunnerWindow::runItems()
 
 void RunnerWindow::stopItems()
 {
+    if (!runnerModel()) return;
     m_ui->actionStop->setDisabled(true);
-    QCoreApplication::processEvents();  // Disable command immediately
-
-    // Stopping is done in a dialog which shows itself only when
-    // it takes several attempts to succeed (if ever).
-    StoppingDialog dlg(this, runnerModel());
-    int r = dlg.exec();
-    if (r == QDialog::Accepted) {
-        enableControlsAfterRunning();
-        return;
-    }
-    // Give a chance for another stop request.
-    m_ui->actionStop->setEnabled(true);
-    ui()->progressRun->setValue(ui()->progressRun->maximum());
+    runnerModel()->stopItems();
+    enableControlsAfterRunning();
 }
 
 void RunnerWindow::disableControlsBeforeRunning()

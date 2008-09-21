@@ -18,7 +18,6 @@ set(veritas_SRCS
     mvc/runnermodel.cpp
     mvc/runnerproxymodel.cpp
     mvc/runnerwindow.cpp
-    mvc/stoppingdialog.cpp
     mvc/selectionmanager.cpp
     mvc/selectiontoggle.cpp
     mvc/verbosemanager.cpp
@@ -30,8 +29,7 @@ set(veritas_SRCS
     #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
-    mvc/runnerwindow.ui
-    mvc/stoppingdialog.ui)
+    mvc/runnerwindow.ui)
 
 qt4_add_resources(veritas_SRCS
     resources/qxrunner.qrc)
