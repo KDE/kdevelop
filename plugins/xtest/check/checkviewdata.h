@@ -21,12 +21,12 @@
 #ifndef CHECK_CHECKVIEWDATA_H
 #define CHECK_CHECKVIEWDATA_H
 
-#include <veritas/testrunnertoolview.h>
+#include <veritas/itestrunner.h>
 
 namespace Veritas { class Test; }
 
 /*! Assorted check toolview data and operation */
-class CheckViewData : public Veritas::TestViewData
+class CheckViewData : public Veritas::ITestRunner
 {
 Q_OBJECT
 public:

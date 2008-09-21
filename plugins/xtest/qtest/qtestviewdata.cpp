@@ -46,7 +46,7 @@ using namespace KDevelop;
 using namespace QTest;
 
 QTestViewData::QTestViewData(QObject* parent)
-    : Veritas::TestViewData(parent),
+    : Veritas::ITestRunner(parent),
       m_settings(0),
       m_lock(false)
 {

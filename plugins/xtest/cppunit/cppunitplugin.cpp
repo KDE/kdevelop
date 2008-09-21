@@ -31,7 +31,6 @@
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
 #include <veritas/test.h>
-#include <veritas/testrunnertoolview.h>
 #include "register.h"
 
 #include <QFile>
@@ -47,7 +46,6 @@ using KDevelop::IProject;
 using KDevelop::IProjectController;
 
 using Veritas::Test;
-using Veritas::TestViewData;
 
 using CppUnit::TestRoot;
 using CppUnit::TestSuite;

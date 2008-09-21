@@ -21,7 +21,6 @@
 #ifndef CHECK_CHECKPLUGIN
 #define CHECK_CHECKPLUGIN
 
-#include <veritas/testrunnertoolview.h>
 #include <QVariantList>
 #include <interfaces/iplugin.h>
 #include "../itestframework.h"

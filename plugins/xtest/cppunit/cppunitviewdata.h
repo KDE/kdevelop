@@ -21,13 +21,13 @@
 #ifndef CPPUNIT_CPPUNITVIEWDATA_H
 #define CPPUNIT_CPPUNITVIEWDATA_H
 
-#include <veritas/testrunnertoolview.h>
+#include <veritas/itestrunner.h>
 #include "qxcppunitexport.h"
 
 namespace Veritas { class Test; }
 
 /*! Assorted test runner operations and data */
-class QXCPPUNIT_EXPORT CppUnitViewData : public Veritas::TestViewData
+class QXCPPUNIT_EXPORT CppUnitViewData : public Veritas::ITestRunner
 {
 Q_OBJECT
 public:

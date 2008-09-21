@@ -30,7 +30,7 @@ using namespace KDevelop;
 using namespace Veritas;
 using namespace CppUnit;
 
-CppUnitViewData::CppUnitViewData(QObject* parent) : TestViewData(parent)
+CppUnitViewData::CppUnitViewData(QObject* parent) : ITestRunner(parent)
 {
     m_id = CppUnitViewData::id;
     CppUnitViewData::id += 1;

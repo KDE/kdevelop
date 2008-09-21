@@ -22,7 +22,6 @@
 #define CPPUNIT_CPPUNITPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <veritas/testrunnertoolview.h>
 #include "../itestframework.h"
 #include <QVariantList>
 

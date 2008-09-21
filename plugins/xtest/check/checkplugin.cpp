@@ -20,8 +20,6 @@
 
 #include "checkplugin.h"
 
-#include <veritas/testrunnertoolview.h>
-
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <ksharedconfig.h>
@@ -46,7 +44,6 @@ using KDevelop::IProject;
 using KDevelop::IProjectController;
 
 using Veritas::Test;
-using Veritas::TestViewData;
 
 using Check::TestRoot;
 using Check::TestSuite;
