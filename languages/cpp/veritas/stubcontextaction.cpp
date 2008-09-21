@@ -126,7 +126,7 @@ void StubContextAction::appendTo(ContextMenuExtension& menu, Context* context)
     STOP_IF(context->type() != Context::EditorContext);
 
     EditorContext* ec = dynamic_cast<EditorContext*>(context);
-    STOP_IF(not ec);
+    STOP_IF(!ec);
 
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
@@ -135,7 +135,7 @@ void StubContextAction::appendTo(ContextMenuExtension& menu, Context* context)
     STOP_IF(dcl->kind() != Declaration::Type);
 
     ClassDeclaration* clazz = dynamic_cast<ClassDeclaration*>(dcl);
-    STOP_IF(not clazz);
+    STOP_IF(!clazz);
 
     m_clazz = clazz;
     menu.addAction(ContextMenuExtension::ExtensionGroup, m_constructStub);

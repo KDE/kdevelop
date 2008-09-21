@@ -137,7 +137,7 @@ void UUTContextAction::appendTo(ContextMenuExtension& menu, Context* context)
     Q_ASSERT(m_createImplementation); Q_ASSERT(m_constructor);
     STOP_IF(context->type() != Context::EditorContext);
     EditorContext* ec = dynamic_cast<EditorContext*>(context);
-    STOP_IF(not ec);
+    STOP_IF(!ec);
 
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
