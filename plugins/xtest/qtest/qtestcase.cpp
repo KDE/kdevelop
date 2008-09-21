@@ -59,7 +59,7 @@ QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* pare
 
 void QTestCase::removeFile(const QString& filePath)
 {
-    if (not filePath.isNull()) {
+    if (!filePath.isNull()) {
         QFile::remove(filePath);
     }
 }

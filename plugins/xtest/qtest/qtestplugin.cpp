@@ -307,7 +307,7 @@ ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
 void QTestPlugin::openVerbose(Test* t)
 {
     QTestCase* caze = dynamic_cast<QTestCase*>(t);
-    if (not caze) return;
+    if (!caze) return;
     kDebug() << "loadVerboseOutput.";
     QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
     ICore::self()->runController()->registerJob(job);
