@@ -79,7 +79,9 @@ bool KDEVCPPDUCHAIN_EXPORT importsContext( const QList<LineContextPair>& lineCon
 ///Removes @param context from the list
 void KDEVCPPDUCHAIN_EXPORT removeContext( QList<LineContextPair>& lineContexts, TopDUContext* context );
 
-typedef KDevelop::AbstractContextBuilder<AST, NameAST> ContextBuilderBase;
+class ContextBuilderBase : public KDevelop::AbstractContextBuilder<AST, NameAST>
+{
+};
 
 /**
  * A class which iterates the AST to identify contexts.

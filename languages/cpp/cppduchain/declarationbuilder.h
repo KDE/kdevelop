@@ -35,7 +35,9 @@ namespace Cpp {
 class ClassDeclaration;
 }
 
-typedef KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder> DeclarationBuilderBase;
+class DeclarationBuilderBase : public KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder>
+{
+};
 
 /**
  * A class which iterates the AST to extract definitions of types.
