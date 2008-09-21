@@ -1,10 +1,11 @@
+#include "moneytest.h"
+#include "money.h"
+
 #include <kdevelop/veritas/cppunitwrapper.h>
 
 #include <cppunit/TestCaller.h>
 #include <cppunit/TestSuite.h>
 
-#include "money.h"
-#include "moneytest.h"
 
 using namespace std;
 using namespace CppUnit;

@@ -194,7 +194,7 @@ QTestPlugin::~QTestPlugin()
 void QTestPlugin::removeAllResultsViews()
 {
     QString docId("org.kdevelop.QTestResultsView");
-    for (int i = 0; i < QTestViewData::id + 1; i++) {
+    for (int i = 0; i < QTestViewData::id + 1; ++i) {
         removeResultsView(docId);
     }
 }

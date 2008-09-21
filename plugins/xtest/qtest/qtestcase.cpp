@@ -151,7 +151,7 @@ void QTestCase::processError(QProcess::ProcessError error)
             message = i18n("Failed to read from test executable.");
             break;
         case QProcess::UnknownError:
-            message = i18n("Unkown error occured.");
+            message = i18n("Unknown error occurred.");
             break;
     }
     signalStarted();
@@ -281,7 +281,7 @@ void setLDLibDir(KProcess* qTestExe, ISettings* settings)
         }
     }
     QString newLDLib = cmakeLibDir.path();
-    if (!currentLDLib.isEmpty()) newLDLib += ":" + currentLDLib;
+    if (!currentLDLib.isEmpty()) newLDLib += ':' + currentLDLib;
     qTestExe->setEnv("LD_LIBRARY_PATH", newLDLib);
     kDebug() << newLDLib;
 #endif

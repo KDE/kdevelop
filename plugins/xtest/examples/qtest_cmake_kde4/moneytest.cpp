@@ -15,12 +15,11 @@
 * 02110-1301, USA.
 */
 
+#include "moneytest.h"
+#include "money.h"
 
 #include <qtest_kde.h>
 #include <KDebug>
-
-#include "money.h"
-#include "moneytest.h"
 
 void MoneyTest::create()
 {

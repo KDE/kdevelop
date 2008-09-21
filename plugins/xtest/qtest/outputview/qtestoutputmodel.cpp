@@ -97,14 +97,14 @@ QModelIndex QTestOutputModel::previousHighlightIndex(const QModelIndex& currentI
 
 void QTestOutputModel::appendOutputs(const QStringList &lines)
 {
-    foreach(QString line, lines) {
+    foreach(const QString& line, lines) {
         appendRow(new QStandardItem(line));
     }
 }
 
 void QTestOutputModel::appendErrors(const QStringList &lines)
 {
-    foreach(QString line, lines) {
+    foreach(const QString& line, lines) {
         appendRow(new QStandardItem(line));
     }
 }

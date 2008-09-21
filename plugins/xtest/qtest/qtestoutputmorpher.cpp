@@ -155,7 +155,7 @@ void QTestOutputMorpher::processMessage(const QByteArray& cmdName)
     if (type.count() && type[0] != 'Q') {
         type.prepend('Q');
     }
-    for (int i=type.count(); i<7; i++) {
+    for (int i=type.count(); i<7; ++i) {
         type.append(" ");
     }
     QByteArray description;

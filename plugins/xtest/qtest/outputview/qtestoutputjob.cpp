@@ -78,7 +78,7 @@ void QTestOutputJob::outputFile(const KUrl& path)
     QStringList lines;
     while (!f.atEnd()) {
         lines.clear();
-        for (int i=0; i<1000 && !f.atEnd(); i++) {
+        for (int i=0; i<1000 && !f.atEnd(); ++i) {
             QString line = f.readLine();
             line.chop(1);
             lines.append(line);

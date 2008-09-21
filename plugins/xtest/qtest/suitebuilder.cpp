@@ -75,7 +75,7 @@ QString SuiteBuilder::suiteNameOneUp(const KUrl& suiteUrl)
         dir = dir.upUrl();
     }
     KUrl up = dir.upUrl();
-    return up.fileName() + "-" + dir.fileName();
+    return up.fileName() + '-' + dir.fileName();
 }
 
 void SuiteBuilder::addSuiteName(const KUrl& exeUrl)
