@@ -19,7 +19,7 @@ system("export LD_LIBRARY_PATH="+root+"lib/:$LD_LIBRARY_PATH")
 def garbage(line):
     ''' filter for valgridn output'''
     return not line.startswith('<unknown program name>') and \
-	   not line.startswith('profiling:')
+           not line.startswith('profiling:')
 
 def memcheck(test):
     ''' run valgrind-memcheck on test in testdir. return xml output as string '''
@@ -34,7 +34,7 @@ def xml_child_data(dom,tag):
     elem = dom.getElementsByTagName(tag)
     val = None
     if len(elem) != 0:
-	val = elem[0].firstChild.data
+        val = elem[0].firstChild.data
     return val
 
 class Frame:
@@ -61,40 +61,40 @@ class Frame:
             out += " (" + self.sfile + ":" + self.sline + ")"
         #if self.obj:
             #out += "\t" + self.obj + "\n"
-	out += "\n"
+        out += "\n"
         return out
 
 class BackTrace:
     ''' valgrind memcheck stack trace '''
     def __init__(self, errordom):
-	self.dom = errordom
-	self.kind = self.dom.getElementsByTagName('kind')[0].firstChild.data
-	stack = self.dom.getElementsByTagName('frame')
+        self.dom = errordom
+        self.kind = self.dom.getElementsByTagName('kind')[0].firstChild.data
+        stack = self.dom.getElementsByTagName('frame')
         self.stack = []
         for frame in stack:
-	    if xml_child_data(frame, 'fn'): # filter anonymous frames out
-		self.stack.append(Frame(frame))
-	self.what = xml_child_data(self.dom, 'what')
+            if xml_child_data(frame, 'fn'): # filter anonymous frames out
+                self.stack.append(Frame(frame))
+        self.what = xml_child_data(self.dom, 'what')
 
     def is_definitely_lost(self):
-	return self.kind == u'Leak_DefinitelyLost'
+        return self.kind == u'Leak_DefinitelyLost'
 
     def is_qtest(self):
-	is_interesting = False
-	for frame in self.stack:
-	    if frame.func:
-		if frame.func.find("QTest") != -1 or frame.func.find("Veritas") != -1:
-		    is_interesting = True
-	    if frame.sfile:
-		if frame.sfile.find("xtest") != -1 or frame.sfile.find("veritas") != -1:
-		    is_interesting = True
-	return is_interesting
+        is_interesting = False
+        for frame in self.stack:
+            if frame.func:
+                if frame.func.find("QTest") != -1 or frame.func.find("Veritas") != -1:
+                    is_interesting = True
+            if frame.sfile:
+                if frame.sfile.find("xtest") != -1 or frame.sfile.find("veritas") != -1:
+                    is_interesting = True
+        return is_interesting
 
     def __str__(self):
-	out = self.what + "\n"
-	for frame in self.stack:
-	    out += str(frame)
-	return out
+        out = self.what + "\n"
+        for frame in self.stack:
+            out += str(frame)
+        return out
 
 def parse_errors(out):
     ''' extract the interesting memcheck errors from the xml-string input 'out'.
@@ -103,9 +103,9 @@ def parse_errors(out):
     errors = xmldoc.getElementsByTagName('error')
     errors_ = []
     for error in errors:
-	bt = BackTrace(error)
-	if bt.is_definitely_lost() and bt.is_qtest():
-	    errors_.append(bt)
+        bt = BackTrace(error)
+        if bt.is_definitely_lost() and bt.is_qtest():
+            errors_.append(bt)
     return errors_
     
 ################### ENTRY ####################################################
@@ -122,14 +122,14 @@ for test in tests:
     out = memcheck(test)
     errors = parse_errors(out)
     if len(errors) == 0:
-	print "OK"
+        print "OK"
     else:
-	found_error = True
-	log = open(test+".memcheck", 'w')
-	for trace in errors:
+        found_error = True
+        log = open(test+".memcheck", 'w')
+        for trace in errors:
             log.write(str(trace))
             log.write("---------------------------------------------------\n")
         log.close()
-	print "NOK (see " + test + ".memcheck)"
+        print "NOK (see " + test + ".memcheck)"
 
 if found_error: exit(-1)
