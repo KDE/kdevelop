@@ -161,6 +161,9 @@ QString stateToString(Veritas::TestState state)
     case Veritas::RunException:
         str = "RunException";
         break;
+    case Veritas::RunInfo:
+        str = "RunInfo";
+        break;
     }
     return str;
 }
