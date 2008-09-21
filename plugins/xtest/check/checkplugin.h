@@ -23,7 +23,7 @@
 
 #include <QVariantList>
 #include <interfaces/iplugin.h>
-#include "../itestframework.h"
+#include <veritas/itestframework.h>
 
 class CheckRunnerViewFactory;
 
@@ -38,6 +38,7 @@ Q_INTERFACES(Veritas::ITestFramework)
 public:
     explicit CheckPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CheckPlugin();
+    Veritas::ITestRunner* createRunner() const { return 0; }
 
 private:
     CheckRunnerViewFactory* m_factory;

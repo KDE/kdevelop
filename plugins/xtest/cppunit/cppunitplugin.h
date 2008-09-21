@@ -22,7 +22,7 @@
 #define CPPUNIT_CPPUNITPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include "../itestframework.h"
+#include <veritas/itestframework.h>
 #include <QVariantList>
 
 class CppUnitRunnerViewFactory;
@@ -37,6 +37,7 @@ Q_INTERFACES(Veritas::ITestFramework)
 public:
     explicit CppUnitPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CppUnitPlugin();
+    Veritas::ITestRunner* createRunner() const { return 0; }
 
 private:
     CppUnitRunnerViewFactory* m_factory;

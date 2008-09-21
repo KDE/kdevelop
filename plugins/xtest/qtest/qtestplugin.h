@@ -24,8 +24,7 @@
 #include <KUrl>
 #include <QMap>
 #include <QVariantList>
-#include "../itestframework.h"
-
+#include <veritas/itestframework.h>
 #include <interfaces/iplugin.h>
 
 class QTestRunnerViewFactory;
@@ -59,6 +58,7 @@ private slots:
     void openVerbose(Veritas::Test*);
     void maybeRemoveResultsView(Sublime::View*);
     void fixMovedResultsView(Sublime::View*);
+    Veritas::ITestRunner* createRunner() const { return 0; }
 
 private:
     void removeAllResultsViews();
