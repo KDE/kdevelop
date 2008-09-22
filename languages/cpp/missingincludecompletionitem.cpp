@@ -64,7 +64,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefi
     else
       shortestDirective = "<" + shortestDirective + ">";
     
-    ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, argumentHintDepth));
+    ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, (int)argumentHintDepth));
   }
   return ret;
 }
