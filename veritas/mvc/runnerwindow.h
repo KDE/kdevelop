@@ -119,10 +119,6 @@ private Q_SLOTS:
     void syncTestWithResult(const QItemSelection& selected,
                                   const QItemSelection& deselected) const;
 
-    /*! Ensures that the view which has the focus shows a focus rect
-     * in the row referred to by \a index */
-    void ensureFocusRect(const QModelIndex& index);
-
     /*! Ensures that the highlighted row in every view is visible. */
     void scrollToHighlightedRows() const;
 

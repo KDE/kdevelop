@@ -200,13 +200,6 @@ void RunnerWindow::initItemStatistics()
 // helper for RunnerWindow(...)
 void RunnerWindow::connectFocusStuff()
 {
-    // Fine tuning of the focus rect handling because there should
-    // always be a focus rect visible in the views.
-    connect(runnerView(),  SIGNAL(clicked(const QModelIndex&)),
-            SLOT(ensureFocusRect(const QModelIndex&)));
-    connect(resultsView(), SIGNAL(clicked(const QModelIndex&)),
-            SLOT(ensureFocusRect(const QModelIndex&)));
-
     // To keep the views synchronized when there are highlighted rows
     // which get clicked again..
     connect(runnerView(),  SIGNAL(pressed(const QModelIndex&)),
@@ -459,10 +452,6 @@ void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
     QModelIndex resultIndex = resultsModel()->mapFromTestIndex(testItemIndex);
     QModelIndex viewIndex = resultsProxyModel()->mapFromSource(resultIndex);
 
-    // At least there should be a current but not necessarily highlighted result
-    // in order to see the focus rect when the results view gets the focus.
-    //ensureCurrentResult();
-
     QModelIndex filterIndex;
     if (resultIndex.isValid() && viewIndex.isValid()) {
         resultsView()->clearSelection();
@@ -519,43 +508,6 @@ void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
     scrollToHighlightedRows(); // Make the row in every tree view visible
     // and expand corresponding parents.
     enableTestSync(true);      // Enable selection handler again.
-}
-
-void RunnerWindow::ensureFocusRect(const QModelIndex&  index)
-{
-    QTreeView* treeView;
-    if (runnerView()->hasFocus()) {
-        treeView = runnerView();
-    } else {
-        treeView = resultsView();
-    }
-    if (treeView->selectionMode() == QAbstractItemView::NoSelection) {
-        return;     // No relevance when selections not allowed.
-    }
-
-    // Focus rect is there when column entry not empty.
-    QString data = index.data().toString();
-    if (!data.trimmed().isEmpty()) {
-        return;
-    }
-    if (index.column() == 0) {
-        return; // No relevance when column 0 is empty.
-    }
-
-    // Tree views are already synchronized.
-    enableTestSync(false);
-    enableResultSync(false);
-
-    treeView->clearSelection(); // This ensures that there is a focus rect.
-
-    QItemSelectionModel* selectionModel = treeView->selectionModel();
-    selectionModel->setCurrentIndex(index.sibling(index.row(), 0),
-                                    QItemSelectionModel::Select |
-                                    QItemSelectionModel::Rows);
-
-    // Enable selection handlers again.
-    enableTestSync(true);
-    enableResultSync(true);
 }
 
 void RunnerWindow::displayElapsed() const
