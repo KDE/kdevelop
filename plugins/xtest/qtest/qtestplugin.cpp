@@ -46,11 +46,9 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <shell/core.h>
 #include <shell/documentcontroller.h>
-#include <sublime/controller.h>
-#include <sublime/area.h>
-#include <sublime/view.h>
-#include <sublime/document.h>
 #include <veritas/test.h>
+#include <veritas/itestrunner.h>
+#include <veritas/testtoolviewfactory.h>
 
 #include "qtestcase.h"
 #include "xmlregister.h"
@@ -67,44 +65,7 @@ K_EXPORT_PLUGIN(QTestPluginFactory("kdevqtest"))
 
 using namespace KDevelop;
 using namespace QTest;
-using namespace Sublime;
 using namespace Veritas;
-
-class QTestRunnerViewFactory: public KDevelop::IToolViewFactory
-{
-public:
-    QTestRunnerViewFactory(QTestPlugin *plugin): m_plugin(plugin) {}
-
-    virtual QWidget* create(QWidget *parent) {
-        QTestViewData* d = new QTestViewData(0);
-        QObject::connect(d, SIGNAL(openVerbose(Veritas::Test*)),
-                         m_plugin, SLOT(openVerbose(Veritas::Test*)));
-        QWidget* runner = d->runnerWidget();
-        QObject::connect(runner, SIGNAL(destroyed(QObject*)),
-                          d, SLOT(deleteLater()));
-        return runner;
-    }
-
-    virtual Qt::DockWidgetArea defaultPosition() {
-        return Qt::LeftDockWidgetArea;
-    }
-
-    virtual QString id() const {
-        return "org.kdevelop.QTestPlugin";
-    }
-
-    virtual void viewCreated(Sublime::View* view) {
-        m_plugin->m_tools[view] = QTestViewData::id-1;
-    }
-
-    QList<QAction*> toolBarActions(QWidget* viewWidget) const {
-        return viewWidget->actions();
-    }
-
-private:
-    QTestPlugin *m_plugin;
-};
-
 
 QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
         : IPlugin(QTestPluginFactory::componentData(), parent),
@@ -113,92 +74,31 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
 
-    m_factory = new QTestRunnerViewFactory(this);
-    core()->uiController()->addToolView(QString("QTest Runner"), m_factory);
+    m_factory = new Veritas::TestToolViewFactory(this);
+    core()->uiController()->addToolView(name() + " Runner", m_factory);
     setXMLFile("kdevqtest.rc");
-
-    Sublime::Controller* c = ICore::self()->uiController()->controller();
-    connect(c, SIGNAL(aboutToRemoveToolView(Sublime::View*)),
-            this, SLOT(maybeRemoveResultsView(Sublime::View*)));
-    connect(c, SIGNAL(toolViewMoved(Sublime::View*)),
-            this, SLOT(fixMovedResultsView(Sublime::View*)));
 }
 
-void QTestPlugin::fixMovedResultsView(Sublime::View* v)
+QString QTestPlugin::name() const
 {
-    maybeRemoveResultsView(v);
-    if (m_tools.contains(v)) {
-        m_tools[v] = QTestViewData::id;
-    }
-
+    static QString s_name("QTest");
+    return s_name;
 }
 
-class ResultsViewFinder
+Veritas::ITestRunner* QTestPlugin::createRunner()
 {
-public:
-    ResultsViewFinder(const QString& id) : m_id(id), found(false) {}
-    Area::WalkerMode operator()(View *view, Sublime::Position position) {
-        Document* doc = view->document();
-        if (doc->documentSpecifier().startsWith(m_id)) {
-            found = true;
-            m_view = view;
-            return Area::StopWalker;
-        } else {
-            return Area::ContinueWalker;
-        }
-    }
-    QString m_id;
-    bool found;
-    View* m_view;
-};
-
-void QTestPlugin::removeResultsView(const QString& docId)
-{
-    IUiController* uic = Core::self()->uiController();
-    Sublime::Controller* sc = uic->controller();
-    sc->disconnect(this);
-    QList<Area*> as = sc->allAreas();
-    foreach(Area* a, as) {
-        ResultsViewFinder rvf(docId);
-        a->walkToolViews(rvf, Sublime::AllPositions);
-        if (rvf.found) {
-            kDebug() << docId;
-            a->removeToolView(rvf.m_view);
-        }
-    }
-    connect(sc, SIGNAL(aboutToRemoveToolView(Sublime::View*)),
-             this, SLOT(maybeRemoveResultsView(Sublime::View*)));
-    connect(sc, SIGNAL(toolViewMoved(Sublime::View*)),
-            this, SLOT(fixMovedResultsView(Sublime::View*)));
-}
-
-void QTestPlugin::maybeRemoveResultsView(Sublime::View* v)
-{
-    kDebug() << v;
-    if (m_tools.contains(v)) {
-        QString docId("org.kdevelop.QTestResultsView");
-        docId += QString::number(m_tools[v]);
-        removeResultsView(docId);
-    }
+    return new QTestViewData(this);
 }
 
 QTestPlugin::~QTestPlugin()
 {
-    removeAllResultsViews();
+    delete m_factory;
+
 //    int nrofLeaks =0;
 //    QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
 //    kDebug() << "QTestOutputParser leaked" << nrofLeaks << "Veritas::TestResult's";
 //    QTestOutputParser::fto_resetResultMemoryLeakStats();
 }
-
-void QTestPlugin::removeAllResultsViews()
-{
-    QString docId("org.kdevelop.QTestResultsView");
-    for (int i = 0; i < QTestViewData::id + 1; ++i) {
-        removeResultsView(docId);
-    }
-}
-
 
 void QTestPlugin::newQTest()
 {
@@ -302,15 +202,6 @@ ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
     connect(action, SIGNAL(triggered()), this, SLOT(newQTest()));
     cm.addAction(ContextMenuExtension::ExtensionGroup, action);
     return cm;
-}
-
-void QTestPlugin::openVerbose(Test* t)
-{
-    QTestCase* caze = dynamic_cast<QTestCase*>(t);
-    if (!caze) return;
-    kDebug() << "loadVerboseOutput.";
-    QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
-    ICore::self()->runController()->registerJob(job);
 }
 
 #include "qtestplugin.moc"

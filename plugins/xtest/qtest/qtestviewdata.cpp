@@ -23,6 +23,8 @@
 #include "kdevregister.h"
 #include "qtestsuite.h"
 #include "config/qtestsettings.h"
+#include "outputview/qtestoutputjob.h"
+#include "outputview/qtestoutputdelegate.h"
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -45,10 +47,11 @@ using namespace Veritas;
 using namespace KDevelop;
 using namespace QTest;
 
-QTestViewData::QTestViewData(QObject* parent)
-    : Veritas::ITestRunner(parent),
+QTestViewData::QTestViewData(ITestFramework* framework)
+    : Veritas::ITestRunner(framework),
       m_settings(0),
-      m_lock(false)
+      m_lock(false),
+      m_delegate(new QTestOutputDelegate(this))
 {
     m_id = QTestViewData::id;
     QTestViewData::id += 1;
@@ -128,5 +131,13 @@ QString QTestViewData::fetchRegXML()
 }
 
 int QTestViewData::id = 0;
+
+void QTestViewData::openVerbose(Veritas::Test* t)
+{
+    QTestCase* caze = dynamic_cast<QTestCase*>(t);
+    if (!caze) return;
+    QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
+    ICore::self()->runController()->registerJob(job);
+}
 
 #include "qtestviewdata.moc"

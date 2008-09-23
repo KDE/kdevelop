@@ -31,6 +31,7 @@
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
 #include <veritas/test.h>
+#include <veritas/testtoolviewfactory.h>
 #include "register.h"
 
 #include <QFile>
@@ -53,40 +54,29 @@ using CppUnit::TestSuite;
 K_PLUGIN_FACTORY(CppUnitPluginFactory, registerPlugin<CppUnitPlugin>();)
 K_EXPORT_PLUGIN(CppUnitPluginFactory("kdevcppunit"))
 
-class CppUnitRunnerViewFactory: public KDevelop::IToolViewFactory
-{
-    public:
-        CppUnitRunnerViewFactory(CppUnitPlugin *plugin): m_plugin(plugin) {}
-
-        virtual QWidget* create(QWidget *parent = 0) {
-            CppUnitViewData* d = new CppUnitViewData(parent);
-            return d->runnerWidget();
-        }
-
-        virtual Qt::DockWidgetArea defaultPosition() {
-            return Qt::LeftDockWidgetArea;
-        }
-
-        virtual QString id() const {
-            return "org.kdevelop.CppUnitPlugin";
-        }
-
-    private:
-        CppUnitPlugin *m_plugin;
-};
-
-
-
 CppUnitPlugin::CppUnitPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CppUnitPluginFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
-    m_factory = new CppUnitRunnerViewFactory(this);
+    m_factory = new Veritas::TestToolViewFactory(this);
     core()->uiController()->addToolView("CppUnit Runner", m_factory);
     setXMLFile("kdevcppunit.rc");
 }
 
 CppUnitPlugin::~CppUnitPlugin()
-{}
+{
+    delete m_factory;
+}
+
+QString CppUnitPlugin::name() const
+{
+    static QString s_name("CppUnit");
+    return s_name;
+}
+
+Veritas::ITestRunner* CppUnitPlugin::createRunner()
+{
+    return new CppUnitViewData(this);
+}
 
 #include "cppunitplugin.moc"

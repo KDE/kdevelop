@@ -25,9 +25,7 @@
 #include <interfaces/iplugin.h>
 #include <veritas/itestframework.h>
 
-class CheckRunnerViewFactory;
-
-namespace Veritas { class Test; }
+namespace Veritas { class TestToolViewFactory; }
 
 /*! Test runner plugin for the Check C unit testing framework */
 class CheckPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -38,11 +36,11 @@ Q_INTERFACES(Veritas::ITestFramework)
 public:
     explicit CheckPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CheckPlugin();
-    Veritas::ITestRunner* createRunner() const { return 0; }
+    virtual Veritas::ITestRunner* createRunner();
+    virtual QString name() const;
 
 private:
-    CheckRunnerViewFactory* m_factory;
-
+    Veritas::TestToolViewFactory* m_factory;
 };
 
 #endif // CHECK_CHECKPLUGIN

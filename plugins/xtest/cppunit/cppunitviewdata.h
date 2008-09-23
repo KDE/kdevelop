@@ -24,14 +24,14 @@
 #include <veritas/itestrunner.h>
 #include "qxcppunitexport.h"
 
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class ITestFramework; }
 
 /*! Assorted test runner operations and data */
 class QXCPPUNIT_EXPORT CppUnitViewData : public Veritas::ITestRunner
 {
 Q_OBJECT
 public:
-    CppUnitViewData(QObject* parent);
+    CppUnitViewData(Veritas::ITestFramework* framework);
     virtual ~CppUnitViewData();
     void registerTests();
     QString fetchExe();
@@ -39,6 +39,10 @@ public:
 
     int m_id;
     static int id; // used to get unique names.
+
+protected Q_SLOTS:
+    virtual void openVerbose(Veritas::Test*) {}
+
 };
 
 

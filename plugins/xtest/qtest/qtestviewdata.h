@@ -24,22 +24,27 @@
 #include <veritas/itestrunner.h>
 #include "qxqtestexport.h"
 
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class ITestFramework; }
 namespace QTest { class ISettings; }
+class QTestOutputDelegate;
 
 /*! Assorted qtest runner toolview data and operations */
 class QXQTEST_EXPORT QTestViewData : public Veritas::ITestRunner
 {
 Q_OBJECT
 public:
-    QTestViewData(QObject* parent);
+    QTestViewData(Veritas::ITestFramework* framework);
     virtual ~QTestViewData();
     void registerTests();
     QString fetchBuildRoot();
     virtual QString resultsViewId();
     QString fetchRegXML();
+
     int m_id;
     static int id; // used to get unique names.
+
+protected Q_SLOTS:
+    virtual void openVerbose(Veritas::Test*);
 
 private slots:
     void resetLock();
@@ -47,6 +52,7 @@ private slots:
 private:
     QTest::ISettings* m_settings;
     bool m_lock;
+    QTestOutputDelegate* m_delegate;
 };
 
 #endif

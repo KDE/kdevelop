@@ -26,7 +26,7 @@
 #include <QVariantList>
 
 class CppUnitRunnerViewFactory;
-namespace Veritas { class Test; }
+namespace Veritas { class TestToolViewFactory; }
 
 /*! Makes the CppUnit runner available */
 class CppUnitPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -37,10 +37,11 @@ Q_INTERFACES(Veritas::ITestFramework)
 public:
     explicit CppUnitPlugin(QObject* parent, const QVariantList & = QVariantList());
     virtual ~CppUnitPlugin();
-    Veritas::ITestRunner* createRunner() const { return 0; }
+    virtual Veritas::ITestRunner* createRunner();
+    virtual QString name() const;
 
 private:
-    CppUnitRunnerViewFactory* m_factory;
+    Veritas::TestToolViewFactory* m_factory;
 };
 
 #endif // CPPUNIT_CPPUNITPLUGIN_H

@@ -20,6 +20,7 @@
 #ifndef MONEYTEST_H
 #define MONEYTEST_H
 
+#include <cppunit/Test.h>
 #include <cppunit/TestFixture.h>
 
 class MoneyTest : public CppUnit::TestFixture

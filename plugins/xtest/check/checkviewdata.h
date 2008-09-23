@@ -23,20 +23,24 @@
 
 #include <veritas/itestrunner.h>
 
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class ITestFramework; }
 
 /*! Assorted check toolview data and operation */
 class CheckViewData : public Veritas::ITestRunner
 {
 Q_OBJECT
 public:
-    CheckViewData(QObject* parent);
+    CheckViewData(Veritas::ITestFramework* framework);
     virtual ~CheckViewData();
     void registerTests();
     QString fetchExe();
     virtual QString resultsViewId();
     int m_id;
     static int id; // used to get unique names.
+
+protected Q_SLOTS:
+    virtual void openVerbose(Veritas::Test*) {}
+
 };
 
 #endif

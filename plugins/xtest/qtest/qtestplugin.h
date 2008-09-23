@@ -27,7 +27,6 @@
 #include <veritas/itestframework.h>
 #include <interfaces/iplugin.h>
 
-class QTestRunnerViewFactory;
 class QTestOutputDelegate;
 
 namespace KDevelop
@@ -38,8 +37,7 @@ class ProjectFolderItem;
 class IProject;
 }
 
-namespace Sublime { class View; }
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class TestToolViewFactory; }
 
 /*! Makes the QTestRunner toolview available */
 class QTestPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -51,21 +49,14 @@ public:
     explicit QTestPlugin(QObject* parent, const QVariantList& = QVariantList());
     virtual ~QTestPlugin();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    QMap<Sublime::View*, int> m_tools;
+    virtual QString name() const;
+    Veritas::ITestRunner* createRunner();
 
 private slots:
     void newQTest();
-    void openVerbose(Veritas::Test*);
-    void maybeRemoveResultsView(Sublime::View*);
-    void fixMovedResultsView(Sublime::View*);
-    Veritas::ITestRunner* createRunner() const { return 0; }
 
 private:
-    void removeAllResultsViews();
-    void removeResultsView(const QString& docId);
-
-private:
-    QTestRunnerViewFactory* m_factory;
+    Veritas::TestToolViewFactory* m_factory;
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
     KDevelop::IProject* m_proj;

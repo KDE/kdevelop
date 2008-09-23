@@ -30,7 +30,7 @@ using namespace KDevelop;
 using namespace Veritas;
 using namespace Check;
 
-CheckViewData::CheckViewData(QObject* parent) : Veritas::ITestRunner(parent)
+CheckViewData::CheckViewData(Veritas::ITestFramework* framework) : Veritas::ITestRunner(framework)
 {
     m_id = CheckViewData::id;
     CheckViewData::id += 1;

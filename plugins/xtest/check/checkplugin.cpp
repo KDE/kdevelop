@@ -19,6 +19,7 @@
  */
 
 #include "checkplugin.h"
+#include <veritas/testtoolviewfactory.h>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -51,39 +52,29 @@ using Check::TestSuite;
 K_PLUGIN_FACTORY(CheckPluginFactory, registerPlugin<CheckPlugin>();)
 K_EXPORT_PLUGIN(CheckPluginFactory("kdevcheck"))
 
-
-class CheckRunnerViewFactory: public KDevelop::IToolViewFactory
-{
-    public:
-        CheckRunnerViewFactory(CheckPlugin *plugin): m_plugin(plugin) {}
-
-        virtual QWidget* create(QWidget *parent = 0) {
-            CheckViewData* d = new CheckViewData(parent);
-            return d->runnerWidget();
-        }
-
-        virtual Qt::DockWidgetArea defaultPosition() {
-            return Qt::LeftDockWidgetArea;
-        }
-
-        virtual QString id() const {
-            return "org.kdevelop.CheckPlugin";
-        }
-
-    private:
-        CheckPlugin *m_plugin;
-};
-
 CheckPlugin::CheckPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CheckPluginFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
-    m_factory = new CheckRunnerViewFactory(this);
-    core()->uiController()->addToolView("Check Runner", m_factory);
+    m_factory = new Veritas::TestToolViewFactory(this);
+    core()->uiController()->addToolView(name() + " Runner", m_factory);
     setXMLFile("kdevcheck.rc");
 }
 
 CheckPlugin::~CheckPlugin()
-{}
+{
+    delete m_factory;
+}
+
+QString CheckPlugin::name() const
+{
+    static QString s_name("Check");
+    return s_name;
+}
+
+Veritas::ITestRunner* CheckPlugin::createRunner()
+{
+    return new CheckViewData(this);
+}
 
 #include "checkplugin.moc"
