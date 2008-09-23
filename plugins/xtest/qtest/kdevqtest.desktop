@@ -16,6 +16,7 @@ Comment[pt]=Execução de testes do QTestLib
 Comment[pt_BR]=Execução de testes do QTestLib
 Comment[sv]=Testkörning för QTestLib
 Comment[uk]=Засіб запуску QTestLib
+Comment[x-test]=xxQTestLib test runnerxx
 Comment[zh_TW]=QTestLib 測試執行者
 
 Name=QTest runner
@@ -32,6 +33,7 @@ Name[pt]=Execução do QTest
 Name[pt_BR]=Execução do QTest
 Name[sv]=Körning för QTest
 Name[uk]=Засіб запуску QTest
+Name[x-test]=xxQTest runnerxx
 Name[zh_TW]=Qtest 執行者
 GenericName=Unit test runner
 GenericName[de]=Unittest ausführen

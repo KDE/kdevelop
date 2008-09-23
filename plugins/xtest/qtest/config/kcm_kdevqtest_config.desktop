@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=QTest
+Name[x-test]=xxQTestxx
 Comment=QTest settings
 Comment[de]=QTest-Einstellungen
 Comment[el]=Ρυθμίσεις QTest
@@ -25,4 +26,5 @@ Comment[pt]=Configuração do QTest
 Comment[pt_BR]=Configuração do QTest
 Comment[sv]=Inställningar av QTest
 Comment[uk]=Параметри QTest
+Comment[x-test]=xxQTest settingsxx
 Comment[zh_TW]=QTest 設定
