@@ -22,26 +22,34 @@
 #define VERITAS_ITESTFRAMEWORK_H
 
 #include <interfaces/iextension.h>
-#include "itestrunner.h"
 #include "veritasexport.h"
 
 namespace Veritas
 {
+class ITestRunner;
+class Test;
 
-/*! An extension interface for test frameworks. Plugins that implement this
+/*! An extension interface for (xUnit) test frameworks. Plugins that implement this
  *  will have access to the veritas runner & result toolview.
  *
  *  For examples see the qtest, check or cppunit implementations in
  *  kdevelop/plugins/xtest */
+class ITestFrameworkPrivate;
 class VERITAS_EXPORT ITestFramework
 {
 public:
     ITestFramework();
     virtual ~ITestFramework();
 
-    /*! Factory method that constructs a test runner. To be implemented 
-     *  by concrete frameworks. */
-    virtual ITestRunner* createRunner() const = 0; // TODO currently not used
+    /*! Single word that describes the framework. eg 'QTest', 'CppUnit' */
+    virtual QString name() const = 0;
+
+    /*! Factory method that constructs a test runner. To be implemented
+     *  by concrete frameworks. @see Veritas::ITestRunner */
+    virtual ITestRunner* createRunner() = 0;
+
+private:
+    ITestFrameworkPrivate* const d;
 };
 
 }

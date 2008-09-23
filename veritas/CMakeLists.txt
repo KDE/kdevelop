@@ -13,6 +13,8 @@ set(veritas_SRCS
     itestframework.cpp
     utils.cpp
     selectionstore.cpp
+    testtoolviewfactory.cpp
+    toolviewdata.cpp
     mvc/resultsmodel.cpp
     mvc/resultsproxymodel.cpp
     mvc/runnermodel.cpp
@@ -55,5 +57,6 @@ install(FILES
     testresult.h
     itestrunner.h
     itestframework.h
+    testtoolviewfactory.h
     tests/runnertesthelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )

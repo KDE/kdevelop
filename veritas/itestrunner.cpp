@@ -19,6 +19,8 @@
  */
 
 #include "veritas/itestrunner.h"
+#include "veritas/itestframework.h"
+#include "veritas/toolviewdata.h"
 
 #include <KAboutData>
 #include <KDebug>
@@ -62,14 +64,19 @@ using Veritas::RunnerWindow;
 using Veritas::ResultsModel;
 using Veritas::VerboseManager;
 using Veritas::ITestRunner;
+using Veritas::ITestFramework;
 
-namespace Veritas
-{
-
-class ITestRunnerPrivate
+class ITestRunner::Private
 {
 public:
-    ITestRunnerPrivate();
+    Private() :
+        window(0),
+        selectedProject(0),
+        resultsView(0),
+        resultsArea(0),
+        previousRoot(0)
+    {}
+
     RunnerWindow* window;
     IProject* selectedProject;
     Sublime::View *resultsView;
@@ -78,25 +85,19 @@ public:
     Test* previousRoot;
 };
 
-ITestRunnerPrivate::ITestRunnerPrivate()
-        : window(0),
-        selectedProject(0),
-        resultsView(0),
-        resultsArea(0),
-        previousRoot(0)
-{}
-
-} // namespace
-
-using Veritas::ITestRunnerPrivate;
-
-ITestRunner::ITestRunner(QObject* parent)
-        : QObject(parent),
-        d(new ITestRunnerPrivate)
+ITestRunner::ITestRunner(ITestFramework* framework)
+    : QObject(0), d(new ITestRunner::Private)
 {
+    if (framework) {
+        Q_ASSERT(g_toolViewStore.contains(framework));
+        ToolViewData& tvd = g_toolViewStore[framework];
+        tvd.runner2id[this] = tvd.runnerToolCounter;
+        tvd.runnerToolCounter++;
+    }
+
     QStringList resultHeaders;
     resultHeaders << i18n("Test") << i18n("Message")
-    << i18n("File") << i18n("Line");
+                  << i18n("File") << i18n("Line");
     d->resultsModel = new ResultsModel(resultHeaders, this);
     d->window = new RunnerWindow(d->resultsModel);
 
@@ -157,7 +158,7 @@ QWidget* ITestRunner::runnerWidget()
             this, SLOT(reload()));
 
     connect(d->window->verboseManager(), SIGNAL(openVerbose(Veritas::Test*)),
-            this, SIGNAL(openVerbose(Veritas::Test*)));
+            this, SLOT(openVerbose(Veritas::Test*)));
     reload();
     return d->window;
 

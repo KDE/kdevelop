@@ -26,24 +26,27 @@
 
 class QWidget;
 namespace KDevelop { class IProject; }
+namespace Sublime { class View; }
 
 namespace Veritas
 {
 class Test;
-class ITestRunnerPrivate;
+class ITestFramework;
 
-/*! Abstract test runner. A test runner is composed of 2 toolviews:
- *  (i)  a runner-toolview which contains the test-tree 
+/*! Abstract test runner. A test runner has of 2 kdevelop toolviews:
+ *  (i)  a runner-toolview which contains the test-tree
  *  (ii) a results-toolview that holds test status information,
  *       for example failure message, location and so on.
  *
- *  This is intended to be implemented by 
- *  concrete runners, for examples see kdevelop/plugins/xtest/qtest. */
+ * ITestRunner objects belong to an ITestFramework (plugin). One single
+ * framework can have multiple ITestRunners active at the same time.
+ *
+ *  for example implementations see kdevelop/plugins/xtest/qtest. */
 class VERITAS_EXPORT ITestRunner : public QObject
 {
 Q_OBJECT
 public:
-    ITestRunner(QObject*);
+    ITestRunner(ITestFramework*);
     virtual ~ITestRunner();
 
     /*! Create a new test runner widget
@@ -62,8 +65,10 @@ protected:
     KDevelop::IProject* project() const;
     virtual QString resultsViewId() = 0;
 
+protected Q_SLOTS:
+    virtual void openVerbose(Test*) = 0;
+
 Q_SIGNALS:
-    void openVerbose(Veritas::Test*);
     void registerFinished(Veritas::Test* root);
 
 private Q_SLOTS:
@@ -74,7 +79,9 @@ private Q_SLOTS:
 
 private:
     void spawnResultsView();
-    ITestRunnerPrivate* const d;
+
+    class Private;
+    Private* const d;
 };
 
 }
