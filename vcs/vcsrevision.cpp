@@ -171,7 +171,7 @@ QString VcsRevision::prettyValue() const
 
 }
 
-uint qHash( const KDevelop::VcsRevision& rev)
+uint VcsRevision::qHash( const KDevelop::VcsRevision& rev)
 {
     return rev.revisionValue().toULongLong();
 }

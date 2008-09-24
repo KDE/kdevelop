@@ -134,8 +134,6 @@ private:
     class VcsLocationPrivate* d;
 };
 
-}
-
 inline uint qHash( const KDevelop::VcsLocation& loc )
 {
     if( loc.type() == KDevelop::VcsLocation::LocalLocation )
@@ -152,6 +150,8 @@ inline bool operator==( const KDevelop::VcsLocation& lhs, const KDevelop::VcsLoc
     return( lhs.type() == rhs.type()
             && lhs.repositoryServer() == rhs.repositoryServer()
             && lhs.localUrl() == rhs.localUrl() );
+}
+
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsLocation )

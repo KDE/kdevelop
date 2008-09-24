@@ -84,8 +84,4 @@ KDEVPLATFORMLANGUAGE_EXPORT inline uint qHash( const KDevelop::HashedString& str
 }
 }
 
-// KDEVPLATFORMLANGUAGE_EXPORT inline uint qHash( const KDevelop::HashedString& str ) {
-//   return str.hash();
-// }
-
 #endif

@@ -161,12 +161,13 @@ private:
     class VcsRevisionPrivate* const d;
 };
 
+KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
+
 }
 
 Q_DECLARE_METATYPE(KDevelop::VcsRevision)
 Q_DECLARE_METATYPE(KDevelop::VcsRevision::RevisionSpecialType)
 
-KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
 
 
 #endif
