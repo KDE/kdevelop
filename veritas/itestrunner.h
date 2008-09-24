@@ -63,7 +63,6 @@ protected:
     virtual void registerTests() = 0;
 
     KDevelop::IProject* project() const;
-    virtual QString resultsViewId() = 0;
 
 protected Q_SLOTS:
     virtual void openVerbose(Test*) = 0;

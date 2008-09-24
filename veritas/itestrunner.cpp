@@ -83,17 +83,27 @@ public:
     Sublime::Area *resultsArea;
     ResultsModel *resultsModel;
     Test* previousRoot;
+    ITestFramework* framework;
+    ITestRunner* self;
+
+    QString resultsViewId() const {
+        Q_ASSERT(g_toolViewStore.contains(framework));
+        ToolViewData& tvd = g_toolViewStore[framework];
+        int id = tvd.runner2id[self];
+        return QString("org.kdevelop.%1ResultsView%2").arg(framework->name()).arg(id);
+    }
+
 };
 
 ITestRunner::ITestRunner(ITestFramework* framework)
     : QObject(0), d(new ITestRunner::Private)
 {
-    if (framework) {
-        Q_ASSERT(g_toolViewStore.contains(framework));
-        ToolViewData& tvd = g_toolViewStore[framework];
-        tvd.runner2id[this] = tvd.runnerToolCounter;
-        tvd.runnerToolCounter++;
-    }
+    d->self = this;
+    d->framework = framework;
+    Q_ASSERT(g_toolViewStore.contains(framework));
+    ToolViewData& tvd = g_toolViewStore[framework];
+    tvd.runner2id[this] = tvd.runnerToolCounter;
+    tvd.runnerToolCounter++;
 
     QStringList resultHeaders;
     resultHeaders << i18n("Test") << i18n("Message")
@@ -282,7 +292,7 @@ void ITestRunner::spawnResultsView()
     IUiController* uic = ICore::self()->uiController();
     Sublime::Controller* ctr = uic->controller();
     foreach(Area* a, ctr->allAreas()) {
-        ResultsViewFinder rvf(this->resultsViewId());
+        ResultsViewFinder rvf(d->resultsViewId());
         a->walkToolViews(rvf, Sublime::AllPositions);
         if (rvf.found) {
             kDebug() << "Not adding twice, found a resultsview for this runner.";
@@ -295,7 +305,7 @@ void ITestRunner::spawnResultsView()
     //uic->addToolView("Test Results", new ResultsViewFactory(resultsViewId(), this));
 
     // this is bad. might want to make this available in IUiController
-    ResultsViewFactory* fac = new ResultsViewFactory(resultsViewId(), this);
+    ResultsViewFactory* fac = new ResultsViewFactory(d->resultsViewId(), this);
     QList<Sublime::MainWindow*> mws = ctr->mainWindows();
     if (mws.isEmpty() || !mws[0]) {
         kDebug() << "No mainwindow not adding results view.";
