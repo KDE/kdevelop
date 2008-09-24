@@ -43,9 +43,7 @@
 
 using KDevelop::IProject;
 using KDevelop::IProjectController;
-
-using Veritas::Test;
-
+using Veritas::TestToolViewFactory;
 using Check::TestRoot;
 using Check::TestSuite;
 
@@ -56,14 +54,13 @@ CheckPlugin::CheckPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CheckPluginFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
-    m_factory = new Veritas::TestToolViewFactory(this);
-    core()->uiController()->addToolView(name() + " Runner", m_factory);
+    TestToolViewFactory* factory = new TestToolViewFactory(this);
+    core()->uiController()->addToolView(name() + " Runner", factory);
     setXMLFile("kdevcheck.rc");
 }
 
 CheckPlugin::~CheckPlugin()
 {
-    delete m_factory;
 }
 
 QString CheckPlugin::name() const

@@ -58,14 +58,13 @@ CppUnitPlugin::CppUnitPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CppUnitPluginFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
-    m_factory = new Veritas::TestToolViewFactory(this);
-    core()->uiController()->addToolView("CppUnit Runner", m_factory);
+    Veritas::TestToolViewFactory* factory = new Veritas::TestToolViewFactory(this);
+    core()->uiController()->addToolView("CppUnit Runner", factory);
     setXMLFile("kdevcppunit.rc");
 }
 
 CppUnitPlugin::~CppUnitPlugin()
 {
-    delete m_factory;
 }
 
 QString CppUnitPlugin::name() const

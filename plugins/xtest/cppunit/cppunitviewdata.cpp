@@ -32,8 +32,6 @@ using namespace CppUnit;
 
 CppUnitViewData::CppUnitViewData(ITestFramework* framework) : ITestRunner(framework)
 {
-    m_id = CppUnitViewData::id;
-    CppUnitViewData::id += 1;
 }
 
 CppUnitViewData::~CppUnitViewData() {}
@@ -55,12 +53,5 @@ QString CppUnitViewData::fetchExe()
     KConfigGroup group(cfg.data(), "CppUnit");
     return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
-
-QString CppUnitViewData::resultsViewId()
-{
-    return QString("org.kdevelop.CppUnitResultsView") + QString::number(m_id);
-}
-
-int CppUnitViewData::id = 0;
 
 #include "cppunitviewdata.moc"

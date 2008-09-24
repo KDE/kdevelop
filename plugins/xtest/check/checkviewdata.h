@@ -34,9 +34,6 @@ public:
     virtual ~CheckViewData();
     void registerTests();
     QString fetchExe();
-    virtual QString resultsViewId();
-    int m_id;
-    static int id; // used to get unique names.
 
 protected Q_SLOTS:
     virtual void openVerbose(Veritas::Test*) {}

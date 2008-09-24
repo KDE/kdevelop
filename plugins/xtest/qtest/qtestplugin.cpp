@@ -74,8 +74,8 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
 {
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
 
-    m_factory = new Veritas::TestToolViewFactory(this);
-    core()->uiController()->addToolView(name() + " Runner", m_factory);
+    TestToolViewFactory* factory = new TestToolViewFactory(this);
+    core()->uiController()->addToolView(name() + " Runner", factory);
     setXMLFile("kdevqtest.rc");
 }
 
@@ -92,8 +92,6 @@ Veritas::ITestRunner* QTestPlugin::createRunner()
 
 QTestPlugin::~QTestPlugin()
 {
-    delete m_factory;
-
 //    int nrofLeaks =0;
 //    QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
 //    kDebug() << "QTestOutputParser leaked" << nrofLeaks << "Veritas::TestResult's";

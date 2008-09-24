@@ -25,10 +25,6 @@
 #include <veritas/itestframework.h>
 #include <QVariantList>
 
-class CppUnitRunnerViewFactory;
-namespace Veritas { class TestToolViewFactory; }
-
-/*! Makes the CppUnit runner available */
 class CppUnitPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
 {
 Q_OBJECT
@@ -39,9 +35,6 @@ public:
     virtual ~CppUnitPlugin();
     virtual Veritas::ITestRunner* createRunner();
     virtual QString name() const;
-
-private:
-    Veritas::TestToolViewFactory* m_factory;
 };
 
 #endif // CPPUNIT_CPPUNITPLUGIN_H

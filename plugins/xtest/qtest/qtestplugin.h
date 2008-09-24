@@ -37,7 +37,7 @@ class ProjectFolderItem;
 class IProject;
 }
 
-namespace Veritas { class Test; class TestToolViewFactory; }
+namespace Veritas { class Test; }
 
 /*! Makes the QTestRunner toolview available */
 class QTestPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -56,7 +56,6 @@ private slots:
     void newQTest();
 
 private:
-    Veritas::TestToolViewFactory* m_factory;
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
     KDevelop::IProject* m_proj;

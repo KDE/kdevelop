@@ -37,11 +37,7 @@ public:
     virtual ~QTestViewData();
     void registerTests();
     QString fetchBuildRoot();
-    virtual QString resultsViewId();
     QString fetchRegXML();
-
-    int m_id;
-    static int id; // used to get unique names.
 
 protected Q_SLOTS:
     virtual void openVerbose(Veritas::Test*);

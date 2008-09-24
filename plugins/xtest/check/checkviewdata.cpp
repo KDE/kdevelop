@@ -31,10 +31,7 @@ using namespace Veritas;
 using namespace Check;
 
 CheckViewData::CheckViewData(Veritas::ITestFramework* framework) : Veritas::ITestRunner(framework)
-{
-    m_id = CheckViewData::id;
-    CheckViewData::id += 1;
-}
+{}
 
 CheckViewData::~CheckViewData() {}
 
@@ -54,11 +51,5 @@ QString CheckViewData::fetchExe()
     KConfigGroup group(cfg.data(), "Check");
     return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
-
-QString CheckViewData::resultsViewId()
-{
-    return QString("org.kdevelop.CheckResultsView") + QString::number(m_id);
-}
-int CheckViewData::id = 0;
 
 #include "checkviewdata.moc"

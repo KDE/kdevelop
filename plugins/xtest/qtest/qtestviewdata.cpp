@@ -53,8 +53,6 @@ QTestViewData::QTestViewData(ITestFramework* framework)
       m_lock(false),
       m_delegate(new QTestOutputDelegate(this))
 {
-    m_id = QTestViewData::id;
-    QTestViewData::id += 1;
 }
 
 QTestViewData::~QTestViewData()
@@ -114,11 +112,6 @@ QString QTestViewData::fetchBuildRoot()
     return man->buildDirectory(pfi).pathOrUrl();
 }
 
-QString QTestViewData::resultsViewId()
-{
-    return QString("org.kdevelop.QTestResultsView") + QString::number(m_id);
-}
-
 // should be moved to xmlregister
 QString QTestViewData::fetchRegXML()
 {
@@ -129,8 +122,6 @@ QString QTestViewData::fetchRegXML()
     KConfigGroup group(cfg.data(), "QTest");
     return KUrl(group.readEntry("Test Registration")).pathOrUrl();
 }
-
-int QTestViewData::id = 0;
 
 void QTestViewData::openVerbose(Veritas::Test* t)
 {

@@ -38,9 +38,6 @@ public:
     virtual ~CheckPlugin();
     virtual Veritas::ITestRunner* createRunner();
     virtual QString name() const;
-
-private:
-    Veritas::TestToolViewFactory* m_factory;
 };
 
 #endif // CHECK_CHECKPLUGIN
