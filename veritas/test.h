@@ -44,6 +44,8 @@ namespace Veritas
  * can introduce structure in this test tree, but this
  * is not a must.
  *
+ * Test loosely implements the Composite pattern.
+ *
  * eg
  * TestSuite
  *   TestCase
