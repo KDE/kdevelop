@@ -325,6 +325,8 @@ void RunnerWindow::connectProgressIndicators(RunnerModel* model)
 
 void RunnerWindow::setModel(RunnerModel* model)
 {
+    m_verbose->reset();
+    m_selection->reset();
     stopPreviousModel();
     if (!model || model->columnCount() < 1) {
         // No user interaction without a model or a model without columns.

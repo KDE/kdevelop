@@ -44,6 +44,7 @@ private slots:
     void errorHandling();
     void countItems();
     void updateViewLastItem();
+    void dataChangedSignalsOnRun();
 
 private:
     void assertDataAt(const QVariant& expected, int row, int column);

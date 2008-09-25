@@ -454,8 +454,11 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
     emit numCompletedChanged(m_numStarted);
     emit itemCompleted(index);
-    QModelIndex lastIndex = this->index(index.row(), 4);
-    emit dataChanged(index, lastIndex);
+    while (index.isValid()) {
+        emit dataChanged(index, index);
+        index = index.parent(); // the parent changed as well, since parent state is deduced 
+                                // from the state of it's children
+    }
 }
 
 void RunnerModel::postItemStarted(QModelIndex index)

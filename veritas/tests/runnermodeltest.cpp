@@ -33,6 +33,7 @@
 
 using Veritas::RunnerModel;
 using Veritas::Test;
+using Veritas::TestStub;
 using Veritas::createRunnerModelStub;
 using Veritas::RunnerModelStub;
 using Veritas::RunnerModelTest;
@@ -108,6 +109,58 @@ void RunnerModelTest::runItems()
     }
 
     foreach(QSignalSpy* spy, spies) delete spy;
+}
+
+namespace
+{
+Test* takeTestFromSpy(QSignalSpy* spy)
+{
+    return static_cast<Test*>(spy->takeFirst()[0].value<QModelIndex>().internalPointer());
+}
+
+/*! Fill the model with the test tree:
+ *  root
+ *   `- parent
+ *        `- child 
+ *  Only the child test is set to be run. */
+void fillModel(RunnerModel* model)
+{
+    TestStub* root = new TestStub("root", 0);
+    root->m_shouldRun = false;
+    TestStub* parent = new TestStub("parent", root);
+    parent->m_shouldRun = false;
+    root->addChild(parent);
+    TestStub* child = new TestStub("child", parent);
+    child->m_shouldRun = true;
+    parent->addChild(child);
+    model->setRootItem(root);
+}
+}
+
+//command
+void RunnerModelTest::dataChangedSignalsOnRun()
+{
+    bool fill = false;
+    RunnerModelStub* model = new RunnerModelStub(fill);
+    fillModel(model); // adds a test named 'parent' and a child-test named 'child'.
+
+    QSignalSpy* dataChanged = new QSignalSpy(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+    model->runItems();
+
+    // dataChanged must have been emitted with both the parent's and the child's index
+    // the child since it has been run
+    // the parent since it's state will have changed after the child has been run.
+
+    KOMPARE(2, dataChanged->count());
+
+    Test* emitted1 = takeTestFromSpy(dataChanged);
+    Test* emitted2 = takeTestFromSpy(dataChanged);
+    QStringList actualNames = QStringList() << emitted1->name() << emitted2->name();
+
+    KVERIFY(actualNames.contains("child"));
+    KVERIFY(actualNames.contains("parent"));
+
+    delete model;
 }
 
 //test command
