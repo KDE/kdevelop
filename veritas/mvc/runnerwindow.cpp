@@ -584,6 +584,7 @@ void RunnerWindow::runItems()
     disableControlsBeforeRunning();
     resultsModel()->clear();
     runnerModel()->clearTree();
+    runnerView()->viewport()->update(); // the icons have changed
     runnerModel()->initCounters();
 
     if (m_executor) delete m_executor;
