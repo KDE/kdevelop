@@ -53,6 +53,7 @@ private:
 
     void fillRows();
     void setUpResultSpies(QMap<QString, QSignalSpy*>& spies);
+    void executeItems(RunnerModel* model);
 
 private:
     RunnerModelStub* model;

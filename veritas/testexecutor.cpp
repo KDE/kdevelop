@@ -102,6 +102,7 @@ void TestExecutor::cleanup()
 {
     DisconnectTest dt;
     traverseTree(m_root, dt);
+    m_root = 0;
 }
 
 void TestExecutor::fixLast(Test* last)

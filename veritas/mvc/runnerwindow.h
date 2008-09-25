@@ -45,6 +45,7 @@ class ResultsProxyModel;
 class SelectionManager;
 class VerboseManager;
 class ResultsWidget;
+class TestExecutor;
 
 /*!
  * \brief The RunnerWindow class defines the Veritas main toolwindow
@@ -91,6 +92,9 @@ public: // Operations
     QWidget* resultsWidget() const;
 
     void resetProgressBar() const;
+
+Q_SIGNALS:
+    void runCompleted() const;
 
 public Q_SLOTS:
 
@@ -193,6 +197,8 @@ private:
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
     QMap<KDevelop::IProject*, QAction*> m_project2action;
     QTime m_stopWatch;                 // times test-runs, shown in the gui
+    TestExecutor* m_executor;
+    mutable bool m_isRunning;
 };
 
 } // namespace

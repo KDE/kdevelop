@@ -27,9 +27,11 @@
 #include <qtest_kde.h>
 
 #include "../test.h"
+#include "../testexecutor.h"
 
 #include "kasserts.h"
 #include "modelcreation.h"
+
 
 using Veritas::RunnerModel;
 using Veritas::Test;
@@ -55,7 +57,6 @@ void RunnerModelTest::default_()
 {
     KOMPARE(0, model->rowCount());
     KOMPARE(1, model->columnCount());
-    KVERIFY(!model->isRunning());
     KOMPARE(Veritas::AllStates, model->expectedResults());
 }
 
@@ -91,26 +92,6 @@ void RunnerModelTest::flags()
     KOMPARE((Qt::ItemIsEnabled | Qt::ItemIsSelectable), model->flags(model->index(0, 2)));
 }
 
-// test command
-void RunnerModelTest::runItems()
-{
-    QMap<QString, QSignalSpy*> spies;
-    spies["startedC"] = new QSignalSpy(model, SIGNAL(numStartedChanged(int)));
-    setUpResultSpies(spies);
-
-    model->runItems(); 
-
-    QMapIterator<QString, QSignalSpy*> it(spies);
-    while (it.hasNext()) {
-        it.next();
-        QSignalSpy* spy = it.value();
-        KOMPARE_MSG(1, spy->size(), "No signal emitted for " + it.key());
-        QCOMPARE(QVariant(0), spy->takeFirst().at(0));
-    }
-
-    foreach(QSignalSpy* spy, spies) delete spy;
-}
-
 namespace
 {
 Test* takeTestFromSpy(QSignalSpy* spy)
@@ -137,6 +118,40 @@ void fillModel(RunnerModel* model)
 }
 }
 
+// helper
+void RunnerModelTest::executeItems(RunnerModel* model)
+{
+    TestExecutor* exec = new TestExecutor;
+    exec->setRoot(model->rootItem());
+    QSignalSpy s(exec, SIGNAL(allDone()));
+    exec->go();
+    Q_ASSERT(s.count() == 1);
+    delete exec;
+}
+
+// test command
+void RunnerModelTest::runItems()
+{
+    QMap<QString, QSignalSpy*> spies;
+    spies["startedC"] = new QSignalSpy(model, SIGNAL(numStartedChanged(int)));
+    setUpResultSpies(spies);
+    fillModel(model);
+
+    executeItems(model);
+
+    assertSignalValue(spies.take("startedC"), 1);
+    assertSignalValue(spies.take("successC"), 1);
+
+    QMutableMapIterator<QString, QSignalSpy*> it(spies);
+    while(it.hasNext()) {
+        it.next();
+        QSignalSpy* spy = it.value();
+        QString description = it.key();
+        it.remove();
+        KOMPARE_MSG(0, spy->size(), description);
+    }
+}
+
 //command
 void RunnerModelTest::dataChangedSignalsOnRun()
 {
@@ -145,7 +160,7 @@ void RunnerModelTest::dataChangedSignalsOnRun()
     fillModel(model); // adds a test named 'parent' and a child-test named 'child'.
 
     QSignalSpy* dataChanged = new QSignalSpy(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
-    model->runItems();
+    executeItems(model);
 
     // dataChanged must have been emitted with both the parent's and the child's index
     // the child since it has been run

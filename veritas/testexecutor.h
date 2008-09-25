@@ -39,11 +39,11 @@ public:
     virtual ~TestExecutor();
 
     /*! The root of the test tree 
-    @note Clients must set this before go(). */
+    @note Clients must initialize a root before *each* go(). */
     void setRoot(Test* root);
 
     /*! Initialize and start execution of user selected tests in the test
-     *  tree */
+     *  tree. */
     void go();
 
     /*! Soft stop, will not start the next executable in the chain */

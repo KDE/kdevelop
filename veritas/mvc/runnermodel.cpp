@@ -69,8 +69,6 @@ RunnerModel::RunnerModel(QObject* parent)
     m_numExceptions = 0;
 
     m_rootItem = 0;
-    m_executor = 0;
-    m_isRunning = false;
     setExpectedResults(Veritas::AllStates);
     //ModelTest* tm = new ModelTest(this);
 
@@ -81,9 +79,7 @@ RunnerModel::RunnerModel(QObject* parent)
 
 RunnerModel::~RunnerModel()
 {
-    if (m_executor) m_executor->stop();
     if (m_rootItem) delete m_rootItem;
-    if (m_executor) delete m_executor;
 }
 
 void RunnerModel::checkAll()
@@ -345,40 +341,6 @@ void RunnerModel::initCounters()
 
 }
 
-void RunnerModel::runItems()
-{
-    if (isRunning()) return; // do not start while buzzy
-    initCounters();
-    if (!rootItem()) return;
-    m_isRunning = true;
-    clearTree();
-    if (m_executor) delete m_executor;
-
-    m_executor = new TestExecutor;
-    m_executor->setRoot(rootItem());
-    connect(m_executor, SIGNAL(allDone()), this, SLOT(allDone()));
-
-    m_executor->go();
-}
-
-void RunnerModel::allDone()
-{
-    m_isRunning = false;
-    emit allItemsCompleted();
-}
-
-bool RunnerModel::stopItems()
-{
-    if (m_executor) m_executor->stop();
-    allDone();
-    return true;
-}
-
-bool RunnerModel::isRunning() const
-{
-    return m_isRunning;
-}
-
 Test* RunnerModel::rootItem() const
 {
     return m_rootItem;
@@ -425,7 +387,6 @@ void RunnerModel::clearTree()
 
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
-    if (!isRunning()) return;
     Test* item = testFromIndex(index);
     // Update result counters
     switch (item->state()) {
@@ -463,7 +424,6 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
 void RunnerModel::postItemStarted(QModelIndex index)
 {
-    if (!isRunning()) return;
     emit itemStarted(index);
     m_numStarted++;
     emit numStartedChanged(m_numStarted);

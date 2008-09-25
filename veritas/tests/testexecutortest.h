@@ -51,6 +51,8 @@ private slots:
     void deselectedTests();
     void runTwice();
 
+    void stopNoRoot();
+
 private:
     void assertRun(QSignalSpy*, Test*);
     void assertRunTwice(QSignalSpy*, Test*);

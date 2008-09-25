@@ -102,21 +102,9 @@ public:
      * combination of OR'ed Veritas::RunnerResult values. */
     int expectedResults() const;
 
-    /*! Removes previous results and starts runner item execution.
-     *  Forces attached views to update. */
-    void runItems();
-
-    /*! Tries to stop item execution. Returns true if successful,
-     *  otherwise false. Must probably be called several times until
-     *  stopping succeeds. */
-    bool stopItems();
-
     /*! Fires itemCompleted() for every result contained in the results
      *  model. Forces attached views to update. */
     void emitItemResults();
-
-    /*! Returns true if runner items are currently being executed. */
-    bool isRunning() const;
 
     QVariant computeIconFromChildState(Test*) const;
 
@@ -135,6 +123,15 @@ public:
 
     /*! Uncheck all items in the test tree */
     void uncheckAll();
+
+    /*! Recursively clear all test items in the model. */
+    void clearTree();
+
+    /*! Returns the root item or 0 if no root item exists. */
+    Test* rootItem() const;
+
+    /*! helper for runItems() */
+    void initCounters();
 
 Q_SIGNALS:
     /*! Emitted when the runner item referred to by
@@ -196,22 +193,8 @@ public Q_SLOTS:
      *  counter values with the actual counts. */
     void countItems();
 
-protected: // Operations
-
-    /*! Returns the root item or 0 if no root item exists. */
-    Test* rootItem() const;
-
-private Q_SLOTS:
-    void allDone();
-
 private:  // Operations
     void initItemConnect(QModelIndex current);
-
-    /*! Helper method to recursively clear all test item in the tree. */
-    void clearTree();
-
-    /*! helper for runItems() */
-    void initCounters();
 
     // Copy and assignment not supported.
     RunnerModel(const RunnerModel&);
@@ -222,8 +205,6 @@ private:  // Constants
 
 private:  // Attributes
     Test* m_rootItem;
-    TestExecutor* m_executor;
-    bool m_isRunning;
     QModelIndex m_startedItemIndex;
     int m_expectedResults;
 
@@ -235,8 +216,6 @@ private:  // Attributes
     int m_numErrors;
     int m_numFatals;
     int m_numExceptions;
-
-    QModelIndex m_nextInterestingIndex;
 };
 
 

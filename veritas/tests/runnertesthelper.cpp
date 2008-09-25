@@ -109,8 +109,8 @@ void RunnerTestHelper::runTests()
     }
 
     bool gotSignal = QTest::kWaitForSignal(
-        m_window->runnerModel(),
-        SIGNAL(allItemsCompleted()),
+        m_window,
+        SIGNAL(runCompleted()),
         2000);
     QVERIFY2(gotSignal, "Timeout while waiting for runner items to complete execution");
 }

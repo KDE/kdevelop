@@ -407,6 +407,7 @@ void TestExecutorTest::runTwice()
     c2s  = createSpy(child2);
     c21s = createSpy(child21);
 
+    m_executor->setRoot(root);
     m_executor->go();
     QTest::qWait(50);
 
@@ -417,6 +418,12 @@ void TestExecutorTest::runTwice()
     assertNotRun(c1s, child1);
     assertNotRun(c2s, child2);
     assertNotRun(rs,  root);
+}
+
+void TestExecutorTest::stopNoRoot()
+{
+    // the test-executor has not been initialized with a root test.
+    m_executor->stop(); // shouldn't crash
 }
 
 #include "testexecutortest.moc"

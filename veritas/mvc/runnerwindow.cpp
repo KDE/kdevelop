@@ -25,14 +25,15 @@
 
 #include "interfaces/iproject.h"
 
-#include "veritas/mvc/resultsmodel.h"
-#include "veritas/mvc/resultsproxymodel.h"
-#include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/runnerproxymodel.h"
-#include "veritas/mvc/selectionmanager.h"
-#include "veritas/mvc/verbosemanager.h"
-#include "veritas/mvc/verbosetoggle.h"
-#include "veritas/mvc/selectiontoggle.h"
+#include "resultsmodel.h"
+#include "resultsproxymodel.h"
+#include "runnermodel.h"
+#include "runnerproxymodel.h"
+#include "selectionmanager.h"
+#include "verbosemanager.h"
+#include "verbosetoggle.h"
+#include "selectiontoggle.h"
+#include "../testexecutor.h"
 
 #include <ktexteditor/cursor.h>
 #include "interfaces/icore.h"
@@ -71,6 +72,7 @@ using Veritas::RunnerProxyModel;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 using Veritas::VerboseManager;
+using Veritas::TestExecutor;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
 {
@@ -78,7 +80,7 @@ const Ui::RunnerWindow* RunnerWindow::ui() const
 }
 
 RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags flags)
-        : QWidget(parent, flags)
+        : QWidget(parent, flags), m_executor(0), m_isRunning(false)
 {
     initVeritasResource();
     m_ui = new Ui::RunnerWindow;
@@ -257,6 +259,10 @@ RunnerWindow::~RunnerWindow()
     // Deleting the model is left to the owner of the model instance.
     if (m_selection) delete m_selection;
     if (m_verbose) delete m_verbose;
+    if (m_executor) {
+        m_executor->stop();
+        delete m_executor;
+    }
     if (runnerModel()) delete runnerModel();
     delete m_ui;
 }
@@ -266,7 +272,7 @@ void RunnerWindow::stopPreviousModel()
 {
     RunnerModel* prevModel = runnerModel();
     if (prevModel) {
-        prevModel->stopItems();
+        if (m_executor) m_executor->stop();
 
         RunnerProxyModel* m1 = runnerProxyModel();
         runnerView()->setModel(0);
@@ -371,9 +377,12 @@ void RunnerWindow::displayProgress(int numItems) const
 
 void RunnerWindow::displayCompleted() const
 {
+    if (!m_isRunning) return;
     ui()->progressRun->setValue(ui()->progressRun->maximum());
     enableControlsAfterRunning();
     displayElapsed();
+    m_isRunning = false;
+    emit runCompleted();
 }
 
 void RunnerWindow::displayNumTotal(int numItems) const
@@ -562,6 +571,11 @@ void RunnerWindow::scrollToHighlightedRows() const
 
 void RunnerWindow::runItems()
 {
+    if (m_isRunning || !runnerModel()->rootItem()) {
+        return;
+    }
+    m_isRunning = true;
+
     m_stopWatch.start();
     setGreenBar();
     displayNumCompleted(0);
@@ -569,15 +583,25 @@ void RunnerWindow::runItems()
 
     disableControlsBeforeRunning();
     resultsModel()->clear();
-    runnerModel()->runItems();
+    runnerModel()->clearTree();
+    runnerModel()->initCounters();
+
+    if (m_executor) delete m_executor;
+    m_executor = new TestExecutor;
+    m_executor->setRoot(runnerModel()->rootItem());
+    connect(m_executor, SIGNAL(allDone()), SLOT(displayCompleted()));
+
+    m_executor->go();
 }
 
 void RunnerWindow::stopItems()
 {
-    if (!runnerModel()) return;
+    if (!runnerModel() || !m_isRunning) return;
     m_ui->actionStop->setDisabled(true);
-    runnerModel()->stopItems();
+    if (m_executor) m_executor->stop();
+    displayCompleted();
     enableControlsAfterRunning();
+    m_isRunning = false;
 }
 
 void RunnerWindow::disableControlsBeforeRunning()
