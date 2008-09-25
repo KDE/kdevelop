@@ -149,7 +149,7 @@ see the <link linkend="commands">Command Reference</link>.</para>
     <formalpara><title>Usual Actions</title>
     <para>It provides the usual undo/redo and cut/copy/paste actions. Furthermore it allows to select text blocks in various ways.</para></formalpara>
     <formalpara><title>Search and Replace</title>
-    <para>There is a very powerful search facilitiy available on the <guimenu>Edit</guimenu> menu. In addition to the usual search and replace actions limited to the the current document you may as well conduct global search and replace actions. This allows to work on all files of the project in a single turn.</para></formalpara>
+    <para>There is a very powerful search facilitiy available on the <guimenu>Edit</guimenu> menu. In addition to the usual search and replace actions limited to the current document you may as well conduct global search and replace actions. This allows to work on all files of the project in a single turn.</para></formalpara>
     <formalpara><title>Advanced Text Edit</title>
     <para>There are provisions to reformat the current document and to automatically complete partially typed texts in various ways.</para></formalpara>
   </listitem>

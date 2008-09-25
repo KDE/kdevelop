@@ -451,7 +451,7 @@ namespace GDBDebugger
             KPassivePopup *pop = new KPassivePopup(table_);
             pop->setPopupStyle(KPassivePopup::Boxed);
             pop->setAutoDelete(true);
-            // FIXME: the the icon, too.
+            // FIXME: the icon, too.
             pop->setView("", msg);
             pop->setTimeout(-1);
             pop->show(p);

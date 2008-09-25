@@ -78,7 +78,7 @@ It may look like this:
 \verbinclude khello/khello
 
 The application wizard looks into this file to get
-    - the information where to integrate the plugin into the the listview (<code>Category=</code>)
+    - the information where to integrate the plugin into the listview (<code>Category=</code>)
     - the name (<code>Name=</code>) and the comment (<code>Comment=</code>)
     - the preview image (<code>Icon=</code>)
     - and the file templates the project uses (<code>FileTemplates=</code>).
