@@ -155,7 +155,7 @@ struct TopDUContext::AliasChainElement {
     }
   }
 
-  //Computes the identifier represented by this chain element(generally the the identifiers across the "previous" chain reversed
+  //Computes the identifier represented by this chain element(generally the identifiers across the "previous" chain reversed
   //Returns an invalid identifier if the to be constructed identifier doesn't exist in the identifier repository
   QualifiedIdentifier qualifiedIdentifier() const {
     KDevVarLengthArray<QualifiedIdentifier> identifiers;

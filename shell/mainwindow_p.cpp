@@ -145,7 +145,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
 void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
 {
-    /* We're informed the the QWidget for the active view that is also
+    /* We're informed the QWidget for the active view that is also
        KXMLGUIclient is dying.  KXMLGUIFactory will not like deleted
        clients, really.  Unfortunately, there's nothing we can do
        at this point. For example, KateView derives from QWidget and

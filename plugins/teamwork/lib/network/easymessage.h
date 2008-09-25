@@ -25,7 +25,7 @@ Declares a complete Message named "Name", derived from "Parent", and also derive
 That Data-structure should implement a classic boost "template<class Archive> void serialize( Archive& arch )"-function,
 and should have a default-constructor to create the structure while loading.
 Also it can have a normal constructor with arbitrary count of arguments. That Argument-count must be given in the last
-macro-parameter called "paramSplitPosition". Then, all parameters given to the function-constructor up the the specified count will
+macro-parameter called "paramSplitPosition". Then, all parameters given to the function-constructor up to the specified count will
 be given to the Data-constructor, and all other parameters to the Parent.
 Unlike the rest of the messaging-system, the Data-structure may use the standard boost-serialization versioning-system.
  
