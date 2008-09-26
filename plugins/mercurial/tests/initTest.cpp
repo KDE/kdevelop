@@ -33,69 +33,56 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include "../hgexecutor.h"
 
-#define HGTEST_DIR1            "kdevHg_testdir"
-#define HGTEST_BASEDIR         "/tmp/kdevHg_testdir/"
-#define HG_REPO                HGTEST_BASEDIR".hg"
-#define HGTEST_BASEDIR2        "/tmp/kdevHg_testdir2/"
-#define HG_TESTFILE_NAME       "testfile"
+const QString tempDir = QDir::tempPath();
+const QString hgTest_BaseDir(tempDir + "/kdevHg_testdir/");
+const QString hgTest_BaseDir2(tempDir + "/kdevHg_testdir2/");
+const QString hgRepo(hgTest_BaseDir + ".hg");
+const QString hgTest_FileName("testfile");
 
-//TODO: bugs, this test didn't notice:
-//* git commit home/... wasn't notice
 // test for isValidDirectory is required!!!
 
 void HgInitTest::initTestCase()
 {
     m_proxy = new HgExecutor;
-
-    // If the basedir for this cvs test exists from a 
-    // previous run; remove it...
-    if ( QFileInfo(HGTEST_BASEDIR).exists() )
-//         KIO::Job * job = KIO::del( KUrl(QString(HGTEST_BASEDIR) );
-        KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR)), 0);
-    if ( QFileInfo(HGTEST_BASEDIR2).exists() )
-        KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR2)), 0);
+    removeTempDirs();
 
     // Now create the basic directory structure
-    QDir tmpdir("/tmp");
-    tmpdir.mkdir(HGTEST_BASEDIR);
-    tmpdir.mkdir(HGTEST_BASEDIR2);
+    QDir tmpdir(tempDir);
+    tmpdir.mkdir(hgTest_BaseDir);
+    tmpdir.mkdir(hgTest_BaseDir2);
 }
 
 void HgInitTest::cleanupTestCase()
 {
     delete m_proxy;
-
-   if ( QFileInfo(HGTEST_BASEDIR).exists() )
-       KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR)), 0);
-   if ( QFileInfo(HGTEST_BASEDIR2).exists() )
-       KIO::NetAccess::del(KUrl(QString(HGTEST_BASEDIR2)), 0);
+    removeTempDirs();
 }
 
 void HgInitTest::repoInit()
 {
     // make job that creates the local repository
-    DVCSjob* j = m_proxy->init(KUrl(HGTEST_BASEDIR));
+    DVCSjob* j = m_proxy->init(KUrl(hgTest_BaseDir));
     QVERIFY( j );
 
     // try to start the job
     QVERIFY( j->exec() );
 
     //check if the CVSROOT directory in the new local repository exists now
-    QVERIFY( QFileInfo(QString(HG_REPO)).exists() );
+    QVERIFY( QFileInfo(QString(hgRepo)).exists() );
 }
 
 void HgInitTest::addFiles()
 {
     //we start it after repoInit, so we still have empty hg repo
     //First let's create a file
-    QFile f(HGTEST_BASEDIR""HG_TESTFILE_NAME);
+    QFile f(hgTest_BaseDir + hgTest_FileName);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "HELLO WORLD";
     }
     f.flush();
 
-    DVCSjob* j = m_proxy->add(QString(HGTEST_BASEDIR), KUrl::List(QStringList(HG_TESTFILE_NAME)));
+    DVCSjob* j = m_proxy->add(QString(hgTest_BaseDir), KUrl::List(QStringList(hgTest_FileName)));
     QVERIFY( j );
 
     // try to start the job
@@ -103,15 +90,15 @@ void HgInitTest::addFiles()
 
     //since we added the file to the empty repository, .hg/dirstate should exist
     //TODO: maybe other method should be used
-    QString testfile(HG_REPO"/dirstate");
+    QString testfile(hgRepo + "/dirstate");
     QVERIFY( QFileInfo(testfile).exists() );
 }
 
 void HgInitTest::commitFiles()
 {
     //we start it after addFiles, so we just have to commit
-    DVCSjob* j = m_proxy->commit(QString(HGTEST_BASEDIR), QString("KDevelop's Test commit"),
-                                KUrl::List(QStringList(HG_TESTFILE_NAME)));
+    DVCSjob* j = m_proxy->commit(QString(hgTest_BaseDir), QString("KDevelop's Test commit"),
+                                KUrl::List(QStringList(hgTest_FileName)));
     QVERIFY( j );
 
     // try to start the job
@@ -119,7 +106,7 @@ void HgInitTest::commitFiles()
 
     //since we commited the file to the "pure" repository, .hg/store/data/HG_TESTFILE_NAME.i should exist
     //TODO: maybe other method should be used
-    QString headRefName(HG_REPO"/store/data/"HG_TESTFILE_NAME".i");
+    QString headRefName(hgRepo + "/store/data/" + hgTest_FileName + ".i");
     QVERIFY( QFileInfo(headRefName).exists() );
 
     QString firstCommit;
@@ -134,7 +121,7 @@ void HgInitTest::commitFiles()
     QVERIFY(firstCommit!="");
 
     //let's try to change the file and test "hg commit -A"
-    QFile f(HGTEST_BASEDIR""HG_TESTFILE_NAME);
+    QFile f(hgTest_BaseDir + hgTest_FileName);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "Just another HELLO WORLD";
@@ -142,7 +129,7 @@ void HgInitTest::commitFiles()
     f.flush();
 
     //Since KJob uses delete later we don't care about deleting pld *j
-    j = m_proxy->commit(QString(HGTEST_BASEDIR), QString("KDevelop's Test commit2"),KUrl::List(QStringList("-A")));
+    j = m_proxy->commit(QString(hgTest_BaseDir), QString("KDevelop's Test commit2"),KUrl::List(QStringList("-A")));
     QVERIFY( j );
 
     // try to start the job
@@ -163,14 +150,14 @@ void HgInitTest::commitFiles()
 void HgInitTest::cloneRepository()
 {
     // make job that clones the local repository, created in the previous test
-    DVCSjob* j = m_proxy->clone(KUrl(HGTEST_BASEDIR), KUrl(HGTEST_BASEDIR2));
+    DVCSjob* j = m_proxy->clone(KUrl(hgTest_BaseDir), KUrl(hgTest_BaseDir2));
     QVERIFY( j );
 
     // try to start the job
     QVERIFY( j->exec() );
 
     //check if the .hg directory in the new local repository exists now
-    QVERIFY( QFileInfo(QString(HGTEST_BASEDIR2"kdevHg_testdir/.hg/")).exists() );
+    QVERIFY( QFileInfo(QString(hgTest_BaseDir2 + "kdevHg_testdir/.hg/")).exists() );
 }
 
 void HgInitTest::testInitAndCommit()
@@ -179,6 +166,16 @@ void HgInitTest::testInitAndCommit()
     addFiles();
     commitFiles();
     cloneRepository();
+}
+
+void HgInitTest::removeTempDirs()
+{
+    if (QFileInfo(hgTest_BaseDir).exists() )
+        if (!KIO::NetAccess::del(KUrl(QString(hgTest_BaseDir)), 0) )
+            qDebug() << "KIO::NetAccess::del(" << hgTest_BaseDir << ") returned false";
+    if (QFileInfo(hgTest_BaseDir2).exists() )
+        if (!KIO::NetAccess::del(KUrl(QString(hgTest_BaseDir2)), 0) )
+            qDebug() << "KIO::NetAccess::del(" << hgTest_BaseDir2 << ") returned false";
 }
 
 QTEST_KDEMAIN(HgInitTest, GUI)

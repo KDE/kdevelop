@@ -34,51 +34,45 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include "../gitexecutor.h"
 
-#define GITTEST_DIR1                    "kdevGit_testdir"
-#define GITTEST_BASEDIR_NO_TR_SLASH     "/tmp/kdevGit_testdir"
-#define GITTEST_BASEDIR                 "/tmp/kdevGit_testdir/"
-#define GIT_REPO                        GITTEST_BASEDIR".git"
-#define GITTEST_BASEDIR2                "/tmp/kdevGit_testdir2/"
-
-#define GIT_SRC_DIR                     GITTEST_BASEDIR"src/"
-#define GIT_TESTFILE_NAME               "testfile"
-#define GIT_TESTFILE_NAME2              "foo"
-#define GIT_TESTFILE_NAME3              "bar"
+const QString tempDir = QDir::tempPath();
+const QString GitTestDir1("kdevGit_testdir");
+const QString gitTest_BaseDir(tempDir + "/kdevGit_testdir/");
+const QString gitTest_BaseDirNoTrSlash(tempDir + "/kdevGit_testdir");
+const QString gitTest_BaseDir2(tempDir + "/kdevGit_testdir2/");
+const QString gitRepo(gitTest_BaseDir + ".git");
+const QString gitSrcDir(gitTest_BaseDir + "src/");
+const QString gitTest_FileName("testfile");
+const QString gitTest_FileName2("foo");
+const QString gitTest_FileName3("bar");
 
 
 void GitInitTest::initTestCase()
 {
     m_proxy = new GitExecutor;
-
-    // If the basedir for this cvs test exists from a 
-    // previous run; remove it...
-    if ( QFileInfo(GITTEST_BASEDIR).exists() )
-        KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR)), 0);
-    if ( QFileInfo(GITTEST_BASEDIR2).exists() )
-        KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR2)), 0);
+    removeTempDirs();
 
     // Now create the basic directory structure
-    QDir tmpdir("/tmp");
-    tmpdir.mkdir(GITTEST_BASEDIR);
-    tmpdir.mkdir(GIT_SRC_DIR);
-    tmpdir.mkdir(GITTEST_BASEDIR2);
+    QDir tmpdir(tempDir);
+    tmpdir.mkdir(gitTest_BaseDir);
+    tmpdir.mkdir(gitSrcDir);
+    tmpdir.mkdir(gitTest_BaseDir2);
 }
 
 void GitInitTest::cleanupTestCase()
 {
     delete m_proxy;
 
-   if ( QFileInfo(GITTEST_BASEDIR).exists() )
-       KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR)), 0);
-   if ( QFileInfo(GITTEST_BASEDIR2).exists() )
-       KIO::NetAccess::del(KUrl(QString(GITTEST_BASEDIR2)), 0);
+   if ( QFileInfo(gitTest_BaseDir).exists() )
+       KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0);
+   if ( QFileInfo(gitTest_BaseDir2).exists() )
+       KIO::NetAccess::del(KUrl(gitTest_BaseDir2), 0);
 }
 
 void GitInitTest::repoInit()
 {
     kDebug() << "Trying to init repo";
     // make job that creates the local repository
-    DVCSjob* j = m_proxy->init(KUrl(GITTEST_BASEDIR));
+    DVCSjob* j = m_proxy->init(KUrl(gitTest_BaseDir));
     QVERIFY( j );
 
 
@@ -87,15 +81,15 @@ void GitInitTest::repoInit()
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //check if the CVSROOT directory in the new local repository exists now
-    QVERIFY( QFileInfo(QString(GIT_REPO)).exists() );
+    QVERIFY( QFileInfo(gitRepo).exists() );
 
     //check if isValidDirectory works
-    QVERIFY(m_proxy->isValidDirectory(KUrl(GITTEST_BASEDIR)));
+    QVERIFY(m_proxy->isValidDirectory(KUrl(gitTest_BaseDir)));
     //and for non-git dir, I hope nobody has /tmp under git
     QVERIFY(!m_proxy->isValidDirectory(KUrl("/tmp")));
 
     //we have nothing, so ouput should be empty
-    j = m_proxy->gitRevParse(QString(GIT_REPO), QStringList(QString("--branches")));
+    j = m_proxy->gitRevParse(gitRepo, QStringList(QString("--branches")));
     QVERIFY(j->exec());
     QString out = j->output();
     QVERIFY(j->output().isEmpty());
@@ -106,14 +100,14 @@ void GitInitTest::addFiles()
     kDebug() << "Adding files to the repo";
 
     //we start it after repoInit, so we still have empty git repo
-    QFile f(GITTEST_BASEDIR""GIT_TESTFILE_NAME);
+    QFile f(gitTest_BaseDir + gitTest_FileName);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "HELLO WORLD";
     }
     f.flush();
     f.close();
-    f.setFileName(GITTEST_BASEDIR""GIT_TESTFILE_NAME2);
+    f.setFileName(gitTest_BaseDir + gitTest_FileName2);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "No, bar()!";
@@ -122,31 +116,31 @@ void GitInitTest::addFiles()
     f.close();
 
     //test git-status exitCode (see DVCSjob::setExitCode). It will be 1, but job should be marked as Succeeded
-    DVCSjob* j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    DVCSjob* j = m_proxy->status(gitTest_BaseDir, KUrl::List(), 0, 0);
     QVERIFY( j );
     QVERIFY(!j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     // /tmp/kdevGit_testdir/ and kdevGit_testdir
     //add always should use relative path to the any directory of the repository, let's check:
-    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_DIR1))));
+    j = m_proxy->add(gitTest_BaseDir, KUrl::List(QStringList(GitTestDir1)));
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     // /tmp/kdevGit_testdir/ and testfile
-    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
+    j = m_proxy->add(gitTest_BaseDir, KUrl::List(QStringList(gitTest_FileName)));
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //repository path without trailing slash
-    j = m_proxy->add(QString(GITTEST_BASEDIR_NO_TR_SLASH), KUrl::List(QStringList(QString(GIT_TESTFILE_NAME))));
+    j = m_proxy->add(gitTest_BaseDirNoTrSlash, KUrl::List(QStringList(gitTest_FileName)));
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
-    f.setFileName(GIT_SRC_DIR""GIT_TESTFILE_NAME3);
+    f.setFileName(gitSrcDir + gitTest_FileName3);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "No, foo()! It's bar()!";
@@ -155,33 +149,33 @@ void GitInitTest::addFiles()
     f.close();
 
     //test git-status exitCode again
-    j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    j = m_proxy->status(gitTest_BaseDir, KUrl::List(), 0, 0);
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //repository path without trailing slash and a file in a parent directory
     // /tmp/repo  and /tmp/repo/src/bar
-    j = m_proxy->add(QString(GITTEST_BASEDIR_NO_TR_SLASH), KUrl::List(QStringList(QString(GIT_SRC_DIR""GIT_TESTFILE_NAME3))));
+    j = m_proxy->add(gitTest_BaseDirNoTrSlash, KUrl::List(QStringList(gitSrcDir + gitTest_FileName3)));
     QVERIFY( j );
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //let's use absolute path, because it's used in ContextMenus
-    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(QString(GITTEST_BASEDIR""GIT_TESTFILE_NAME2))));
+    j = m_proxy->add(gitTest_BaseDir, KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName2)));
     QVERIFY(j);
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //Now let's create several files and try "git add file1 file2 file3"
-    f.setFileName(GITTEST_BASEDIR"file1");
+    f.setFileName(gitTest_BaseDir + "file1");
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "file1";
     }
     f.flush();
     f.close();
-    f.setFileName(GITTEST_BASEDIR"file2");
+    f.setFileName(gitTest_BaseDir + "file2");
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "file2";
@@ -191,7 +185,7 @@ void GitInitTest::addFiles()
     QStringList multipleFiles;
     multipleFiles<<"file1";
     multipleFiles<<"file2";
-    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(multipleFiles));
+    j = m_proxy->add(gitTest_BaseDir, KUrl::List(multipleFiles));
     QVERIFY(j);
     QVERIFY(j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
@@ -200,14 +194,14 @@ void GitInitTest::addFiles()
 void GitInitTest::commitFiles()
 {
     kDebug() << "\nListing variables with KProcess\n";
-    DVCSjob* j_var = m_proxy->var(QString(GITTEST_BASEDIR));
+    DVCSjob* j_var = m_proxy->var(gitTest_BaseDir);
     QVERIFY(j_var->exec() );
     QVERIFY(j_var->status() == KDevelop::VcsJob::JobSucceeded);
 
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     ///TODO: if "" is ok?
-    DVCSjob* j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("Test commit"));
+    DVCSjob* j = m_proxy->commit(gitTest_BaseDir, QString("Test commit"));
     QVERIFY( j );
 
     // try to start the job
@@ -215,29 +209,29 @@ void GitInitTest::commitFiles()
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //test git-status exitCode one more time.
-    j = m_proxy->status(QString(GITTEST_BASEDIR), KUrl::List(), 0, 0);
+    j = m_proxy->status(gitTest_BaseDir, KUrl::List(), 0, 0);
     QVERIFY( j );
     QVERIFY(!j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
     //since we commited the file to the "pure" repository, .git/refs/heads/master should exist
     //TODO: maybe other method should be used
-    QString headRefName(GIT_REPO"/refs/heads/master");
+    QString headRefName(gitRepo + "/refs/heads/master");
     QVERIFY( QFileInfo(headRefName).exists() );
 
     //Test the results of the "git add"
     DVCSjob* jobLs = new DVCSjob(0);
     jobLs->clear();
-    jobLs->setDirectory(QString(GITTEST_BASEDIR));
+    jobLs->setDirectory(gitTest_BaseDir);
     *jobLs<<"git-ls-tree"<<"--name-only"<<"-r"<<"HEAD";
     if (jobLs) {
         QVERIFY(jobLs->exec() );
         QVERIFY(jobLs->status() == KDevelop::VcsJob::JobSucceeded);
 
         QStringList files = jobLs->output().split("\n");
-        QVERIFY(files.contains(QString(GIT_TESTFILE_NAME)));
-        QVERIFY(files.contains(QString(GIT_TESTFILE_NAME2)));
-        QVERIFY(files.contains(QString("src/"GIT_TESTFILE_NAME3)));
+        QVERIFY(files.contains(gitTest_FileName));
+        QVERIFY(files.contains(gitTest_FileName2));
+        QVERIFY(files.contains("src/" + gitTest_FileName3));
     }
 
     QString firstCommit;
@@ -253,7 +247,7 @@ void GitInitTest::commitFiles()
 
     kDebug() << "Committing one more time";
     //let's try to change the file and test "git commit -a"
-    QFile f(GITTEST_BASEDIR""GIT_TESTFILE_NAME);
+    QFile f(gitTest_BaseDir + gitTest_FileName);
     if(f.open(QIODevice::WriteOnly)) {
         QTextStream input( &f );
         input << "Just another HELLO WORLD";
@@ -261,14 +255,14 @@ void GitInitTest::commitFiles()
     f.flush();
 
     //add changes
-    j = m_proxy->add(QString(GITTEST_BASEDIR), KUrl::List(QStringList(GIT_TESTFILE_NAME)));
+    j = m_proxy->add(gitTest_BaseDir, KUrl::List(QStringList(gitTest_FileName)));
     QVERIFY( j );
 
     // try to start the job
     QVERIFY( j->exec() );
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
-    j = m_proxy->commit(QString(GITTEST_BASEDIR), QString("KDevelop's Test commit2"));
+    j = m_proxy->commit(gitTest_BaseDir, QString("KDevelop's Test commit2"));
     QVERIFY( j );
 
     // try to start the job
@@ -291,14 +285,14 @@ void GitInitTest::commitFiles()
 // {
 //     kDebug() << "Do not clone people, clone Git repos!";
 //     // make job that clones the local repository, created in the previous test
-//     DVCSjob* j = m_proxy->clone(KUrl(GITTEST_BASEDIR), KUrl(GITTEST_BASEDIR2));
+//     DVCSjob* j = m_proxy->clone(KUrl(gitTest_BaseDir), KUrl(gitTest_BaseDir2));
 //     QVERIFY( j );
 // 
 //     // try to start the job
 //     QVERIFY( j->exec() );
 // 
 //     //check if the .git directory in the new local repository exists now
-//     QVERIFY( QFileInfo(QString(GITTEST_BASEDIR2"kdevGit_testdir/.git/")).exists() );
+//     QVERIFY( QFileInfo(QString(gitTest_BaseDir2"kdevGit_testdir/.git/")).exists() );
 // }
 
 void GitInitTest::testInit()
@@ -318,37 +312,37 @@ void GitInitTest::testCommit()
 
 void GitInitTest::testBranching()
 {
-    DVCSjob* j = m_proxy->branch(GITTEST_BASEDIR);
+    DVCSjob* j = m_proxy->branch(gitTest_BaseDir);
     QVERIFY(j);
     QVERIFY(j->exec());
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 
-    QString curBranch = m_proxy->curBranch(GITTEST_BASEDIR);
+    QString curBranch = m_proxy->curBranch(gitTest_BaseDir);
     QCOMPARE(curBranch, QString("master"));
 
     QString newBranch("new");
-    j = m_proxy->branch(GITTEST_BASEDIR, QString("master"), newBranch);
+    j = m_proxy->branch(gitTest_BaseDir, QString("master"), newBranch);
     QVERIFY(j);
     QVERIFY(j->exec());
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
-    QVERIFY(m_proxy->branches(GITTEST_BASEDIR).contains(newBranch));
+    QVERIFY(m_proxy->branches(gitTest_BaseDir).contains(newBranch));
 
-    j = m_proxy->checkout(GITTEST_BASEDIR, newBranch);
+    j = m_proxy->checkout(gitTest_BaseDir, newBranch);
     QVERIFY(j);
     QVERIFY(j->exec());
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
-    QCOMPARE(m_proxy->curBranch(GITTEST_BASEDIR), newBranch);
+    QCOMPARE(m_proxy->curBranch(gitTest_BaseDir), newBranch);
 
-    j = m_proxy->branch(GITTEST_BASEDIR, QString("master"), QString(), QStringList("-D"));
+    j = m_proxy->branch(gitTest_BaseDir, QString("master"), QString(), QStringList("-D"));
     QVERIFY(j);
     QVERIFY(j->exec());
     QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
-    QVERIFY(!m_proxy->branches(GITTEST_BASEDIR).contains(QString("master")));
+    QVERIFY(!m_proxy->branches(gitTest_BaseDir).contains(QString("master")));
 }
 
 void GitInitTest::revHistory()
 {
-    QList<DVCScommit> commits = m_proxy->getAllCommits(GITTEST_BASEDIR);
+    QList<DVCScommit> commits = m_proxy->getAllCommits(gitTest_BaseDir);
     QVERIFY(!commits.isEmpty());
     QStringList logMessages;
     for(int i = 0; i < commits.count(); ++i)
@@ -361,6 +355,16 @@ void GitInitTest::revHistory()
     QVERIFY(commits[1].getCommit().contains(QRegExp("^\\w{,40}$")));
     QVERIFY(commits[0].getCommit().contains(QRegExp("^\\w{,40}$")));
     QVERIFY(commits[0].getParents()[0].contains(QRegExp("^\\w{,40}$")));
+}
+
+void GitInitTest::removeTempDirs()
+{
+    if (QFileInfo(gitTest_BaseDir).exists() )
+        if (!KIO::NetAccess::del(KUrl(gitTest_BaseDir), 0) )
+            qDebug() << "KIO::NetAccess::del(" << gitTest_BaseDir << ") returned false";
+    if (QFileInfo(gitTest_BaseDir2).exists() )
+        if (!KIO::NetAccess::del(KUrl(gitTest_BaseDir2), 0) )
+            qDebug() << "KIO::NetAccess::del(" << gitTest_BaseDir2 << ") returned false";
 }
 
 QTEST_KDEMAIN(GitInitTest, GUI)

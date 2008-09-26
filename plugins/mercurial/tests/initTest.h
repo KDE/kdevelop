@@ -46,6 +46,7 @@ class HgInitTest: public QObject
 
     private:
         HgExecutor* m_proxy;
+        void removeTempDirs();
 };
 
 #endif

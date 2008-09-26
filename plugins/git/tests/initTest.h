@@ -52,6 +52,7 @@ class GitInitTest: public QObject
 
     private:
         GitExecutor* m_proxy;
+        void removeTempDirs();
 };
 
 #endif

@@ -47,6 +47,7 @@ class BzrInitTest: public QObject
 
     private:
         BzrExecutor* m_proxy;
+        void removeTempDirs();
 };
 
 #endif
