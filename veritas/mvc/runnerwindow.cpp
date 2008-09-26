@@ -107,6 +107,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     int filter = Veritas::RunError | Veritas::RunFatal | Veritas::RunInfo;
     rproxy->setFilter(filter); // also updates the view
     resultsView()->setModel(rproxy);
+    m_results->setResizeMode();
 
     m_selection = new SelectionManager(runnerView());
     SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
@@ -136,8 +137,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
         "image: none;"
         "border-image: none"
         "}");
-
-    resultsView()->header()->setResizeMode(QHeaderView::Interactive);
 
     connect(runnerView(),  SIGNAL(clicked(QModelIndex)),
             SLOT(expandOrCollapse(QModelIndex)));

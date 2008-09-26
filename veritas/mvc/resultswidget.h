@@ -32,6 +32,7 @@ public:
     ResultsWidget(QWidget* parent=0);
     virtual ~ResultsWidget();
 
+    void setResizeMode();
     QTreeView* tree();
 };
 

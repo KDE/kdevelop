@@ -1,9 +1,5 @@
 <RCC>
     <qresource prefix="/icons" >
-        <file>collapsed.png</file>
-        <file>expanded.png</file>
-        <file>item_run.png</file>
-        <file>play.png</file>
         <file>qxrunner_16x16.png</file>
         <file>qxrunner_24x24.png</file>
         <file>qxrunner_64x64.png</file>
