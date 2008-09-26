@@ -685,7 +685,12 @@ void insertGarbage(QList<QByteArray>& input)
 }
 }
 
-void QTestOutputParserTest::startRandomTest()
+void QTestOutputParserTest::setQuiet(bool quiet)
+{
+    m_quiet = quiet;
+}
+
+void QTestOutputParserTest::randomValidXML()
 {
     cout << "------------- OutputParser Random Stress Test  -------------" << endl;
     srand(time(0));
@@ -704,8 +709,10 @@ void QTestOutputParserTest::startRandomTest()
             m_pieces = chopInPieces(input, nrofPieces);
             runRandomCommand(m_pieces, caze);
             verifyRandomResults(expected);
-            cout << ".";
-            cout.flush();
+            if (!m_quiet) {
+                cout << ".";
+                cout.flush();
+            }
             count++;
 
             delete caze;
@@ -715,9 +722,17 @@ void QTestOutputParserTest::startRandomTest()
 
     cout << "\n" << count << " tests succesful!" << endl;
     cout << "------------- OutputParser Random Stress Test  -------------" << endl;
-    cout << "------------- OutputParser Random Garbage Test -------------" << endl;
+    QCoreApplication::quit();
+}
 
-    count = 0;
+void QTestOutputParserTest::randomGarbageXML()
+{
+    cout << "------------- OutputParser Random Garbage Test -------------" << endl;
+    srand(time(0));
+
+    int count = 0;
+    m_assertType = QAssertAssert;
+
     for (int nrofPieces=1; nrofPieces<31; nrofPieces++) {
         for (int i=0; i<10000; i++) {
             m_randomTestType = "[pieces:" + QString::number(nrofPieces) + ";cycle:" + QString::number(i) + "]\n";
@@ -730,8 +745,10 @@ void QTestOutputParserTest::startRandomTest()
             m_pieces = chopInPieces(input, nrofPieces);
             insertGarbage(m_pieces);
             runRandomCommand(m_pieces, caze);
-            cout << ".";
-            cout.flush();
+            if (!m_quiet) {
+                cout << ".";
+                cout.flush();
+            }
             count++;
 
             delete caze;

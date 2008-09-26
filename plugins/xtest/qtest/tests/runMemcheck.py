@@ -1,20 +1,12 @@
 #!/usr/bin/python
-# run valgrind's memory error checker on all tests
+# run valgrind's memory error checker on all tests.
+# only leaks related to QTest / Veritas are shown
+#
 
 from os import system
 from sys import exit, stdout
 from subprocess import Popen, PIPE
 from xml.dom.minidom import parse, parseString
-
-tests=['qtest-ut-casebuilder', \
-       'qtest-ut-qtestcase', 'qtest-ut-qtestcommand', \
-       'qtest-ut-qtestoutputmorpher', 'qtest-ut-qtestoutputparser', \
-       'qtest-ut-qtestregister', 'qtest-ut-qtestsuite', \
-       'qtest-ut-suitebuilder' ] # , 'qtest-it-qtestrunnertest']
-
-root='/home/nix/KdeDev/kdevelop/build/'
-testdir=root + 'plugins/xtest/qtest/tests/'
-system("export LD_LIBRARY_PATH="+root+"lib/:$LD_LIBRARY_PATH")
 
 def garbage(line):
     ''' filter for valgridn output'''
@@ -23,7 +15,7 @@ def garbage(line):
 
 def memcheck(test):
     ''' run valgrind-memcheck on test in testdir. return xml output as string '''
-    proc = Popen(["valgrind", "--tool=memcheck", "--leak-check=full", "--xml=yes", testdir + test], stdout=PIPE, stderr=PIPE)
+    proc = Popen(["valgrind", "--tool=memcheck", "--leak-check=full", "--xml=yes", test], stdout=PIPE, stderr=PIPE)
     proc.wait()
     out = proc.stderr.readlines()
     out = filter(garbage, out)
@@ -107,29 +99,58 @@ def parse_errors(out):
         if bt.is_definitely_lost() and bt.is_qtest():
             errors_.append(bt)
     return errors_
-    
-################### ENTRY ####################################################
 
-print ">> running valgrind memcheck"
-all = len(tests)
-curr = 1
-found_error = False
-for test in tests:
-    print str(curr) + "/" + str(all) + " " + test + "\t",
-    if len(test) < 20: print "\t",
-    stdout.flush()
-    curr+=1
-    out = memcheck(test)
+def run_all_tests():
+    tests=['qtest-ut-casebuilder', \
+       'qtest-ut-qtestcase', 'qtest-ut-qtestcommand', \
+       'qtest-ut-qtestoutputmorpher', 'qtest-ut-qtestoutputparser', \
+       'qtest-ut-qtestregister', 'qtest-ut-qtestsuite', \
+       'qtest-ut-suitebuilder' ] # , 'qtest-it-qtestrunnertest']
+
+    root='/home/nix/KdeDev/kdevelop/build/'
+    testdir=root + 'plugins/xtest/qtest/tests/'
+    system("export LD_LIBRARY_PATH="+root+"lib/:$LD_LIBRARY_PATH")
+
+    print ">> running valgrind memcheck"
+    all = len(tests)
+    curr = 1
+    found_error = False
+    for test in tests:
+        print str(curr) + "/" + str(all) + " " + test + "\t",
+        if len(test) < 20: print "\t",
+        stdout.flush()
+        curr+=1
+        out = memcheck(testdir + test)
+        errors = parse_errors(out)
+        if len(errors) == 0:
+            print "OK"
+        else:
+            found_error = True
+            log = open(test+".memcheck", 'w')
+            for trace in errors:
+                log.write(str(trace))
+                log.write("---------------------------------------------------\n")
+            log.close()
+            print "NOK (see " + test + ".memcheck)"
+    if found_error: exit(-1)
+
+def run_single_test(exe_name):
+    print ">> running valgrind memcheck on " + exe_name
+    system("export LD_LIBRARY_PATH="+sys.argv[2]+"/lib/:$LD_LIBRARY_PATH")
+    out = memcheck(exe_name)
     errors = parse_errors(out)
     if len(errors) == 0:
-        print "OK"
+        print "PASS"
+        exit(0)
     else:
-        found_error = True
-        log = open(test+".memcheck", 'w')
         for trace in errors:
-            log.write(str(trace))
-            log.write("---------------------------------------------------\n")
-        log.close()
-        print "NOK (see " + test + ".memcheck)"
+            print trace,
+            print "---------------------------------------------------"
+        exit(-1)
 
-if found_error: exit(-1)
+################### ENTRY ####################################################
+
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) == 1: run_all_tests()
+    else: run_single_test(sys.argv[1])

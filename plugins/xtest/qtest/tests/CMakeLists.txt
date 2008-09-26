@@ -47,3 +47,20 @@ target_link_libraries(parserstresstest
     ${QT_QTCORE_LIBRARY}
     ${KDEVPLATFORM_VERITAS_LIBRARY}
     kdevqtest)
+
+add_test(qtest-fuzz-validxml ${CMAKE_CURRENT_BINARY_DIR}/parserstresstest valid --quiet)
+add_test(qtest-fuzz-garbagexml ${CMAKE_CURRENT_BINARY_DIR}/parserstresstest garbage --quiet)
+
+macro(qtest_add_mem_test test_EXEC)
+    add_test(qtest-mem-${test_EXEC}
+        ${CMAKE_CURRENT_SOURCE_DIR}/runMemcheck.py ${CMAKE_CURRENT_BINARY_DIR}/qtest-ut-${test_EXEC} ${CMAKE_BINARY_DIR})
+endmacro(qtest_add_mem_test)
+
+qtest_add_mem_test(qtestoutputparser)
+qtest_add_mem_test(qtestcase)
+qtest_add_mem_test(qtestcommand)
+qtest_add_mem_test(qtestsuite)
+qtest_add_mem_test(qtestregister)
+qtest_add_mem_test(qtestoutputmorpher)
+qtest_add_mem_test(suitebuilder)
+qtest_add_mem_test(casebuilder)

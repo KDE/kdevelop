@@ -36,8 +36,23 @@ void msgHandler(QtMsgType type, const char * msg)
     }
 }
 
+void usage(char** argv)
+{
+        cout << "QTestoutputparser stress test. Generates random XML data and feeds this piece by piece to a parser.\n"
+             << "available commands:\n"
+             << "valid    - valid qtest-xml, with result verification.\n"
+             << "garbage  - qtest-xml interwoven with random garbage.\n\n"
+             << "usage " << argv[0] << " [valid|garbage]" << endl;
+        exit(-1);
+}
+
 int main(int argc, char** argv)
 {
+    if (argc == 1) usage(argv);
+    QString test(argv[1]);
+    if (test != "valid" && test != "garbage") usage(argv);
+    bool quiet = (argc == 3 && !strcmp(argv[2], "--quiet"));
+
     QCoreApplication app(argc, argv);
     qRegisterMetaType<QModelIndex>("QModelIndex");
     qInstallMsgHandler(msgHandler);
@@ -46,7 +61,12 @@ int main(int argc, char** argv)
     timer->setSingleShot(true);
     timer->setInterval(1);
     QTest::QTestOutputParserTest* pst = new QTest::QTestOutputParserTest;
-    QObject::connect(timer, SIGNAL(timeout()), pst, SLOT(startRandomTest()));
+    pst->setQuiet(quiet);
+    if (test == "valid") {
+        QObject::connect(timer, SIGNAL(timeout()), pst, SLOT(randomValidXML()));
+    } else if (test == "garbage") {
+        QObject::connect(timer, SIGNAL(timeout()), pst, SLOT(randomGarbageXML()));
+    }
     timer->start();
     return app.exec();
 }

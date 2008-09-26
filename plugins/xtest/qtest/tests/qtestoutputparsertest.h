@@ -36,6 +36,9 @@ class QTestOutputParser;
 class QTestOutputParserTest : public QObject
 {
 Q_OBJECT
+public:
+    /*! If @p quiet is true, the random tests will not print progress indication (dots)*/
+    void setQuiet(bool quiet);
 
 public slots:
     /*! Generates random test input and chops this into random pieces.
@@ -43,7 +46,11 @@ public slots:
      *
      *  It is not executed as part of the standard suite but through a
      *  seperate executable, see parserstresstest.cpp */
-    void startRandomTest();
+    void randomValidXML();
+
+    /*! Alike startRandomTest() but this feeds random XML with randomly 
+     *  placed bits of garbages in between. */
+    void randomGarbageXML();
 
 private slots:
     void initTestCase();
@@ -116,6 +123,7 @@ private:
     AssertType m_assertType;
     QList<QByteArray> m_pieces; // current random test input
     QString m_randomTestType;
+    bool m_quiet; // only used by random tests
 };
 
 }
