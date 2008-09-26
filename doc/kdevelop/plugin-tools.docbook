@@ -228,10 +228,10 @@ in the future.</para>
 
 <para>
 This plugin expands abbreviations into frequently used code snippets. It is
-activated by pressing <keycombo><keycap>Ctrl</keycap>
+activated by pressing <keycombo action="simul">&Ctrl;
 <keycap>Space</keycap></keycombo>. For example, when you enter
 <literal>"ife"</literal> into a C++ in the editor and press
-<keycombo><keycap>Ctrl</keycap><keycap>Space</keycap></keycombo>, you obtain
+<keycombo action="simul">&Ctrl;<keycap>Space</keycap></keycombo>, you obtain
 an <literal>if-else</literal> code template and save some key strokes. The set
 of supported abbreviations depends on the programming language of the edited
 file. For example, for PHP you will obviously be interested in other code
