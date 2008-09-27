@@ -24,7 +24,7 @@
 #include "kasserts.h"
 #include "modelcreation.h"
 
-#include "../mvc/runnerproxymodel.h"
+#include "../internal/runnerproxymodel.h"
 
 using Veritas::RunnerProxyModel;
 using Veritas::createRunnerModelStub;

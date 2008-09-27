@@ -26,9 +26,9 @@
 #include "kasserts.h"
 
 #include "ui_runnerwindow.h"
-#include "../mvc/resultsmodel.h"
-#include "../mvc/runnermodel.h"
-#include "../mvc/runnerwindow.h"
+#include "../internal/resultsmodel.h"
+#include "../internal/runnermodel.h"
+#include "../internal/runnerwindow.h"
 #include "../test.h"
 
 using Veritas::RunnerTestHelper;

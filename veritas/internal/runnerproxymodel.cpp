@@ -19,7 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/mvc/runnerproxymodel.h"
+#include "runnerproxymodel.h"
 
 using Veritas::RunnerProxyModel;
 

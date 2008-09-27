@@ -22,7 +22,7 @@
 
 #include <qtest_kde.h>
 
-#include "../mvc/resultsproxymodel.h"
+#include "../internal/resultsproxymodel.h"
 
 #include "kasserts.h"
 #include "modelcreation.h"

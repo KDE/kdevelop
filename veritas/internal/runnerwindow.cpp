@@ -19,7 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/mvc/runnerwindow.h"
+#include "runnerwindow.h"
 
 #include "ui_runnerwindow.h"
 
@@ -40,7 +40,7 @@
 #include "interfaces/idocumentcontroller.h"
 
 #include "veritas/utils.h"
-#include "mvc/resultswidget.h"
+#include "resultswidget.h"
 
 #include <QMessageBox>
 #include <QCloseEvent>

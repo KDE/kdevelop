@@ -15,23 +15,23 @@ set(veritas_SRCS
     selectionstore.cpp
     testtoolviewfactory.cpp
     toolviewdata.cpp
-    mvc/resultsmodel.cpp
-    mvc/resultsproxymodel.cpp
-    mvc/runnermodel.cpp
-    mvc/runnerproxymodel.cpp
-    mvc/runnerwindow.cpp
-    mvc/selectionmanager.cpp
-    mvc/selectiontoggle.cpp
-    mvc/verbosemanager.cpp
-    mvc/verbosetoggle.cpp
-    mvc/overlaymanager.cpp
-    mvc/overlaytoggle.cpp
-    mvc/resultswidget.cpp
+    internal/resultsmodel.cpp
+    internal/resultsproxymodel.cpp
+    internal/runnermodel.cpp
+    internal/runnerproxymodel.cpp
+    internal/runnerwindow.cpp
+    internal/selectionmanager.cpp
+    internal/selectiontoggle.cpp
+    internal/verbosemanager.cpp
+    internal/verbosetoggle.cpp
+    internal/overlaymanager.cpp
+    internal/overlaytoggle.cpp
+    internal/resultswidget.cpp
     tests/runnertesthelper.cpp)
     #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
-    mvc/runnerwindow.ui)
+    internal/runnerwindow.ui)
 
 qt4_add_resources(veritas_SRCS
     resources/qxrunner.qrc)

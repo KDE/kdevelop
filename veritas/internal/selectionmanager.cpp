@@ -18,13 +18,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "veritas/mvc/selectionmanager.h"
+#include "selectionmanager.h"
 
 #include "veritas/test.h"
 #include "veritas/utils.h"
 
-#include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/selectiontoggle.h"
+#include "runnermodel.h"
+#include "selectiontoggle.h"
 
 #include <KIconEffect>
 

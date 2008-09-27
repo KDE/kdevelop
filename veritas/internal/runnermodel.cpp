@@ -19,7 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/mvc/runnermodel.h"
+#include "runnermodel.h"
 
 #include "veritas/test.h"
 #include "veritas/testexecutor.h"

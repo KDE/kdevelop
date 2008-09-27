@@ -26,10 +26,10 @@
 
 #include "modelcreation.h"
 
-#include "../mvc/runnerproxymodel.h"
-#include "../mvc/runnerwindow.h"
-#include "../mvc/runnermodel.h"
-#include "../mvc/resultsproxymodel.h"
+#include "../internal/runnerproxymodel.h"
+#include "../internal/runnerwindow.h"
+#include "../internal/runnermodel.h"
+#include "../internal/resultsproxymodel.h"
 
 using Veritas::RunnerWindow;
 using Veritas::Test;

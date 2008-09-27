@@ -18,16 +18,27 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/itestrunner.h"
-#include "veritas/itestframework.h"
-#include "veritas/toolviewdata.h"
+// veritas
+#include "itestrunner.h"
+#include "itestframework.h"
+#include "toolviewdata.h"
+#include "test.h"
+#include "selectionstore.h"
+#include "ui_runnerwindow.h"
 
+#include "internal/runnermodel.h"
+#include "internal/resultsmodel.h"
+#include "internal/runnerwindow.h"
+#include "internal/verbosemanager.h"
+
+// Qt - KDE
 #include <KAboutData>
 #include <KDebug>
 #include <KSelectAction>
 #include <QDockWidget>
 #include <QWidget>
 
+// kdevelop
 #include "interfaces/icore.h"
 #include "interfaces/iproject.h"
 #include "interfaces/iprojectcontroller.h"
@@ -37,13 +48,6 @@
 #include "sublime/mainwindow.h"
 #include "sublime/tooldocument.h"
 #include "sublime/view.h"
-#include "veritas/test.h"
-#include "veritas/mvc/runnermodel.h"
-#include "veritas/mvc/resultsmodel.h"
-#include "veritas/mvc/runnerwindow.h"
-#include "veritas/mvc/verbosemanager.h"
-#include "ui_runnerwindow.h"
-#include "selectionstore.h"
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 

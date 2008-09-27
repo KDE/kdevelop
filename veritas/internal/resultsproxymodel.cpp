@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/mvc/resultsproxymodel.h"
-#include "veritas/mvc/resultsmodel.h"
+#include "resultsproxymodel.h"
+#include "resultsmodel.h"
 #include "veritas/testresult.h"
 #include "veritas/test.h"
 

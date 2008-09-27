@@ -27,8 +27,8 @@
 #include <KDebug>
 
 #include "../test.h"
-#include "../mvc/resultsmodel.h"
-#include "../mvc/runnermodel.h"
+#include "../internal/resultsmodel.h"
+#include "../internal/runnermodel.h"
 
 #include "kasserts.h"
 #include "modelcreation.h"
