@@ -1066,7 +1066,7 @@ bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         {
             m_append=true;
         }
-        if(func.arguments.count()>(2+m_append))
+        if(func.arguments.count()>(1+m_append))
             return false;
     }
     return true;
@@ -1090,7 +1090,7 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.name.toLower() != "file" || func.arguments.count()<2)
         return false;
 
-    QString type = func.arguments.first().value.toUpper();
+    QString type = func.arguments.first().value;
     int min_args=-1;
     if(type=="WRITE") {
        m_type = WRITE;
@@ -1131,7 +1131,8 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     } else if(type=="DOWNLOADS") {
         m_type = DOWNLOAD;
         min_args=3;
-    }
+    } else
+        return false;
 
     if(func.arguments.count()<min_args)
         return false;
@@ -1878,9 +1879,7 @@ void IncludeAst::writeBack( QString& ) const
 
 bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "include" )
-        return false;
-    if ( func.arguments.size() < 1 || func.arguments.size() > 4 )
+    if ( func.name.toLower() != "include" || (func.arguments.isEmpty() || func.arguments.size() > 4))
         return false;
 
     m_includeFile = func.arguments[0].value;
@@ -1903,7 +1902,7 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             nextIsResult=true;
     }
 
-    return true;
+    return !m_includeFile.isEmpty();
 }
 
  IncludeDirectoriesAst::IncludeDirectoriesAst()
@@ -2425,7 +2424,7 @@ bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     for ( it = func.arguments.begin() + 1; it != itEnd; ++it )
         m_knownArgs.append( it->value );
 
-    return true;
+    return !m_macroName.isEmpty();
 }
 
 FunctionAst::FunctionAst()
@@ -2804,7 +2803,7 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     //FORCE was used without CACHE, then there's a problem.
     if ( func.arguments.last().value == "CACHE" ||
          ( argSize > 1 && func.arguments[argSize - 2].value == "CACHE" ) ||
-         m_forceStoring && !m_storeInCache )
+         (m_forceStoring && !m_storeInCache) )
     {
         return false;
     }
@@ -3671,6 +3670,7 @@ bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 WriteFileAst::WriteFileAst()
+    : m_append(false)
 {
 }
 
@@ -3688,14 +3688,15 @@ bool WriteFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     m_filename=func.arguments[0].value;
     m_message=func.arguments[1].value;
-    if(func.arguments.count()>=3)
+    
+    if(func.arguments.count()>2)
     {
         if(func.arguments[2].value=="APPEND")
         {
             m_append=true;
         }
-        if(func.arguments.count()>(3+m_append))
-            return false;
+            if(func.arguments.count()>(2+m_append))
+                return false;
     }
     return true;
 }

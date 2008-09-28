@@ -286,6 +286,7 @@ CMAKE_END_AST_CLASS( ExecuteProcessAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExportLibraryDepsAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER(QString, const QString&, file, File)
 CMAKE_ADD_AST_MEMBER(bool, bool, append, Append)
 CMAKE_END_AST_CLASS( ExportLibraryDepsAst )

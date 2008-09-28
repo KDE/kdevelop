@@ -946,6 +946,7 @@ void CMakeAstTest::testExecProgramBadParse_data()
 
 
 #define TDD_TODO QSKIP("No data available yet", SkipSingle)
+#define TDD_TOIMPL QSKIP("Command not implemented yet", SkipSingle)
 
 void CMakeAstTest::testExecuteProcessGoodParse()
 {
@@ -1050,9 +1051,8 @@ void CMakeAstTest::testExportLibraryDepsBadParse_data()
     func2.name = "foo_foo_bar";
 
     QStringList argList1, argList2;
-    argList1 << "dep_file";
-    argList2 = argList1;
-    argList2 << "APPEND";
+    argList1 << "dep_file" << "lalala";
+    argList2 << "dep_file";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
@@ -1177,16 +1177,12 @@ void CMakeAstTest::testFileBadParse_data()
     args[10] << "GLOB" << "MY_VAR" << "RELATIVE"; //no path
     
     args[11] << "glob" << "MY_VAR" << "*.cpp"; //uppercase required
-    args[12] << "GLOB" << "MY_VAR" << "relative" << "/path/to/something"
-               << "*.cpp"; //uppercase required
 
     //recursive glob
     args[13] << "GLOB_RECURSE"; //no variable
     args[14] << "GLOB_RECURSE" << "MY_VAR" << "RELATIVE"; //no path
 
     args[15] << "glob_recurse" << "MY_VAR" << "*.cpp"; //uppercase required
-    args[16] << "GLOB_RECURSE" << "MY_VAR" << "relative" << "/path/to/something"
-            << "*.cpp"; //uppercase required
 
     //remove command
     args[17] << "REMOVE"; //nothing to remove
@@ -1224,7 +1220,7 @@ void CMakeAstTest::testFileBadParse_data()
     for ( int i = 0; i < NUM_TESTDATA; i++)
     {
         funcs[i].addArguments( args[i] );
-        QTest::newRow( qPrintable(QString::number(i)) ) << funcs[i];
+        QTest::newRow( qPrintable(QString("%1. %2").arg(i).arg(args[i].isEmpty() ? "?" : args[i].first())) ) << funcs[i];
     }
 
 }
@@ -1433,25 +1429,15 @@ void CMakeAstTest::testFindProgramBadParse_data()
     
     QTest::addColumn<CMakeFunctionDesc>("function");
     
-    CMakeFunctionDesc l1;
-    l1.name = "";
-    l1.addArguments(QStringList() << "MY_VAR" << "file");
-    QTest::newRow ("no function name") << l1;
-
     CMakeFunctionDesc l;
-    l.name = "find_program";
+    l.name = "";
     l.addArguments(QStringList() << "MY_VAR" << "file");
-    QTest::newRow("not enough parameters") << l;
+    QTest::newRow ("no function name") << l;
 
     l.arguments.clear();
+    l.name = "find_program";
     l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "PATHS" << "location1" << "location2");
     QTest::newRow("no names") << l;
-
-    l.arguments.clear();
-    l.addArguments(QStringList() << "MY_VAR" << "NAMES" << "file1" << "file2"
-            << "PATHS"
-            << "PATH_SUFFIXES" << "modules" << "NO_CMAKE_PATH");
-    QTest::newRow("no paths") << l;
 }
 
 
@@ -3622,6 +3608,7 @@ void CMakeAstTest::testVtkMakeInstantiatorBadParse_data()
 
 void CMakeAstTest::testVtkWrapJavaGoodParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapJavaAst* ast = new VtkWrapJavaAst();
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -3656,6 +3643,7 @@ void CMakeAstTest::testVtkWrapJavaGoodParse_data()
 
 void CMakeAstTest::testVtkWrapJavaBadParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapJavaAst* ast = new VtkWrapJavaAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -3699,6 +3687,7 @@ void CMakeAstTest::testVtkWrapJavaBadParse_data()
 
 void CMakeAstTest::testVtkWrapPythonGoodParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapPythonAst* ast = new VtkWrapPythonAst();
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -3733,6 +3722,7 @@ void CMakeAstTest::testVtkWrapPythonGoodParse_data()
 
 void CMakeAstTest::testVtkWrapPythonBadParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapPythonAst* ast = new VtkWrapPythonAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -3776,6 +3766,7 @@ void CMakeAstTest::testVtkWrapPythonBadParse_data()
 
 void CMakeAstTest::testVtkWrapTclGoodParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapTclAst* ast = new VtkWrapTclAst();
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -3829,6 +3820,7 @@ void CMakeAstTest::testVtkWrapTclGoodParse_data()
 
 void CMakeAstTest::testVtkWrapTclBadParse()
 {
+    TDD_TOIMPL;
     QFETCH( CMakeFunctionDesc, function );
     VtkWrapTclAst* ast = new VtkWrapTclAst();
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -3958,7 +3950,7 @@ void CMakeAstTest::testWriteFileBadParse_data()
     funcs[NUM_TESTDATA - 1].name = "wrong_name";
     
     args[0] << "myfile.txt";
-    args[1] << "myfile.txt" << "APPEND"; //append but no message
+//     args[1] << "myfile.txt" << "APPEND"; //append but no message. Should not crash, "append" is the message.
     args[NUM_TESTDATA - 1] << "myfile.txt" << "\"this is also my message\"" << "APPEND";
     
     QTest::addColumn<CMakeFunctionDesc>( "function" );
@@ -3966,7 +3958,7 @@ void CMakeAstTest::testWriteFileBadParse_data()
     for ( int i = 0; i < NUM_TESTDATA; i++)
     {
         funcs[i].addArguments( args[i] );
-        QTest::newRow( qPrintable(QString::number(i)) ) << funcs[i];
+        QTest::newRow( qPrintable(QString("%1. %2").arg(i).arg(args[i].join(" "))) ) << funcs[i];
     }
 }
 
