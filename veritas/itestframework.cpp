@@ -19,7 +19,7 @@
  */
 
 #include "itestframework.h"
-#include "toolviewdata.h"
+#include "internal/toolviewdata.h"
 #include "internal/itestframework_p.h"
 
 using Veritas::ITestFramework;

@@ -21,8 +21,8 @@
 
 #include "resultsmodel.h"
 
-#include "veritas/test.h"
-#include "veritas/utils.h"
+#include "../test.h"
+#include "utils.h"
 #include "tests/common/modeltest.h"
 
 #include <KDebug>

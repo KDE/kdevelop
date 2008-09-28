@@ -21,7 +21,7 @@
 #include "testtoolviewfactory.h"
 #include "itestframework.h"
 #include "itestrunner.h"
-#include "toolviewdata.h"
+#include "internal/toolviewdata.h"
 
 #include <sublime/view.h>
 

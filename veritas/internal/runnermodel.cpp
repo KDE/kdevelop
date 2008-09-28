@@ -21,9 +21,9 @@
 
 #include "runnermodel.h"
 
-#include "veritas/test.h"
-#include "veritas/testexecutor.h"
-#include "veritas/utils.h"
+#include "../test.h"
+#include "testexecutor.h"
+#include "utils.h"
 #include "tests/common/modeltest.h"
 
 #include <QColor>
