@@ -1,7 +1,7 @@
 /*
  * KDevelop xUnit test support
  *
- * Copyright 2008 Manuel Breugelmans
+ * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -47,7 +47,7 @@ namespace
       - virtual
       - not private
       - not a Qt meta function */
-QStringList blackList(QString("metaObject,qt_metacast,qt_metacall").split(","));
+QStringList blackList(QString("metaObject,qt_metacast,qt_metacall").split(','));
 ClassFunctionDeclaration* filterMemberFunction(Declaration* decl)
 {
     ClassFunctionDeclaration* fdcl = dynamic_cast<ClassFunctionDeclaration*>(decl);
@@ -81,8 +81,8 @@ QString stubNameFor(ClassDeclaration* clazz)
     eg: class FooStub { int m_foo; int foo() { return m_foo; } }; */
 void insertFakeMember(const QString& member, MethodSkeleton& ms, ClassSkeleton& cs, ConstructorSkeleton& constr)
 {
-    ms.setBody("return " + member + ";");
-    cs.addMember(ms.returnType() + " " + member);
+    ms.setBody("return " + member + ';');
+    cs.addMember(ms.returnType() + ' ' + member);
     constr.addInitializer(member + "(0)");
 }
 
@@ -103,7 +103,7 @@ ClassSkeleton StubConstructor::morph(ClassDeclaration* clazz)
     ClassSkeleton cs; cs.setName(stubName);
     cs.addSuper(clazz->identifier().toString());
     ConstructorSkeleton constr; constr.setName(stubName);
-    MethodSkeleton destr; destr.setName("~" + stubName);
+    MethodSkeleton destr; destr.setName('~' + stubName);
 
     ClassFunctionDeclaration* function;
     foreach(Declaration* dcl, clazz->internalContext()->localDeclarations()) {

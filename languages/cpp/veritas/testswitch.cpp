@@ -1,7 +1,7 @@
 /*
  * KDevelop xUnit test support
  *
- * Copyright 2008 Manuel Breugelmans
+ * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -254,7 +254,7 @@ QString extractArgumentFromDocs(const QString& key, const QString& comment)
     int i = comment.indexOf(key);
     if (i==-1) return QString();
     QString rest = comment.mid(i + 1 + QString(key).count()); // +1 is for space
-    QStringList spl = rest.split(" ", QString::SkipEmptyParts);
+    QStringList spl = rest.split(' ', QString::SkipEmptyParts);
     rest = spl[0];
     if (rest.contains("\n") || rest.contains("*")) {
         return QString();

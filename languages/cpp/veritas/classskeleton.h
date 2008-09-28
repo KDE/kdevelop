@@ -1,6 +1,6 @@
 /*
  * KDevelop xUnit test support
- * Copyright 2008 Manuel Breugelmans
+ * Copyright 2008 Manuel Breugelmans  <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,8 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VERITAS_STUBCLASS_INCLUDED_H
-#define VERITAS_STUBCLASS_INCLUDED_H
+#ifndef VERITAS_CLASSSKELETON_INCLUDED_H
+#define VERITAS_CLASSSKELETON_INCLUDED_H
 
 #include <QtCore/QString>
 #include "veritascppexport.h"
@@ -73,4 +73,4 @@ private:
 
 }
 
-#endif // VERITAS_STUBCLASS_INCLUDED_H
+#endif // VERITAS_CLASSSKELETON_INCLUDED_H

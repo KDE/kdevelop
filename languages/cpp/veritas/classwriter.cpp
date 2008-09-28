@@ -69,7 +69,7 @@ void writeMethod(const MethodSkeleton& mtd, QTextStream& str)
 {
     str << indent() << "virtual " << mtd.returnType() 
         << " " << mtd.name() << mtd.arguments() << " {\n";
-    foreach(QString line, mtd.body().split("\n", QString::SkipEmptyParts)) {
+    foreach(const QString& line, mtd.body().split('\n', QString::SkipEmptyParts)) {
         str << indent() << indent() << line << "\n";
     }
     str << indent() << "}\n";

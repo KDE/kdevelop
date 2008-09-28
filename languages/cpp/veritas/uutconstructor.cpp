@@ -180,7 +180,7 @@ void normalize(QString& text)
         return;
     }
     text = text.left(pos);
-    if (text.startsWith(".")) {
+    if (text.startsWith('.')) {
         text = text.mid(1, -1);
     } else if (text.startsWith("->")) {
         text = text.mid(2, -1);
@@ -259,7 +259,7 @@ QString extractArguments(QString& text, DUContext* ctx)
         }
         int lastBrace = text.indexOf(')');
         args += serializeTypeFromExpression(text.mid(prev, lastBrace), ctx);
-        args += ")";
+        args += ')';
         return args;
     }
 }

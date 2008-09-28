@@ -29,7 +29,7 @@ Steps:
   5/ A dialog box will appear. Provide a filename
      This file will contain the generated code
   6/ Hit ok.
-  7/ Stub is generated and focussed.
+  7/ Stub is generated and focused.
 */
 class Foo
 {
