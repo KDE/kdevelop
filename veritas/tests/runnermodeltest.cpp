@@ -27,7 +27,7 @@
 #include <qtest_kde.h>
 
 #include "../test.h"
-#include "../testexecutor.h"
+#include "../internal/testexecutor.h"
 
 #include "kasserts.h"
 #include "modelcreation.h"
@@ -149,6 +149,7 @@ void RunnerModelTest::runItems()
         QString description = it.key();
         it.remove();
         KOMPARE_MSG(0, spy->size(), description);
+        delete spy;
     }
 }
 
@@ -176,6 +177,7 @@ void RunnerModelTest::dataChangedSignalsOnRun()
     KVERIFY(actualNames.contains("parent"));
 
     delete model;
+    delete dataChanged;
 }
 
 //test command

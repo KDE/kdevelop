@@ -23,8 +23,8 @@
 
 #include <QMap>
 #include <sublime/view.h>
-#include "itestrunner.h"
-#include "itestframework.h"
+#include "../itestrunner.h"
+#include "../itestframework.h"
 
 namespace Veritas
 {

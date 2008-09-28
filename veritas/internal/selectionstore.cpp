@@ -19,7 +19,7 @@
  */
 
 #include "selectionstore.h"
-#include "test.h"
+#include "../test.h"
 #include "utils.h"
 #include <KDebug>
 

@@ -22,7 +22,7 @@
 #define VERITAS_TESTEXECUTOR_H
 
 #include <QtCore/QObject>
-#include "veritasexport.h"
+#include "../veritasexport.h"
 
 namespace Veritas
 {

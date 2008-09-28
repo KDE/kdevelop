@@ -19,18 +19,12 @@
  * 02110-1301, USA.
  */
 
-/*!
- * \file  utils.h
- *
- * \brief Declares class Utils.
- */
-
 #ifndef VERITAS_UTILS_H
 #define VERITAS_UTILS_H
 
 #include <QList>
-#include "veritasexport.h"
-#include "test.h"
+#include "../veritasexport.h"
+#include "../test.h"
 
 class QTreeView;
 class QVariant;

@@ -23,7 +23,7 @@
 #include <QtTest/QTest>
 
 #include "../test.h"
-#include "../selectionstore.h"
+#include "../internal/selectionstore.h"
 #include "kasserts.h"
 
 using Veritas::SelectionStoreTest;

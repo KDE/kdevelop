@@ -36,7 +36,12 @@ ResultsWidget::ResultsWidget(QWidget* parent)
     header()->setStretchLastSection(false);
     header()->setMovable(false);
     header()->setClickable(false);
-    setResizeMode();
+
+    tree()->setStyleSheet(
+        "QTreeView::branch{"
+        "image: none;"
+        "border-image: none"
+        "}");
 }
 
 ResultsWidget::~ResultsWidget()

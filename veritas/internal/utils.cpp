@@ -19,8 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/utils.h"
-#include "veritas/test.h"
+#include "utils.h"
 
 #include <QTreeView>
 #include <QHeaderView>

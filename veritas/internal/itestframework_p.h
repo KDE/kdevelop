@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,27 +18,32 @@
  * 02110-1301, USA.
  */
 
-
-#ifndef QTEST_TREETRAVERSETEST_H_INCLUDED
-#define QTEST_TREETRAVERSETEST_H_INCLUDED
+#ifndef VERITAS_INTERNAL_ITESTFRAMEWORK_P_H
+#define VERITAS_INTERNAL_ITESTFRAMEWORK_P_H
 
 #include <QtCore/QObject>
+
+namespace Sublime { class View; }
 
 namespace Veritas
 {
 
-class TreeTraverseTest : public QObject
+class ITestFramework;
+class ITestFrameworkPrivate : public QObject
 {
 Q_OBJECT
-private slots:
-    void init();
-    void cleanup();
+public:
+    ITestFrameworkPrivate();
+    ITestFramework* self;
 
-    void simpleTree();
-    void nill();
-    void rootOnly();
+private:
+    void removeResultsView(const QString& docId);
+
+private slots:
+    void fixMovedResultsView(Sublime::View* v);
+    void maybeRemoveResultsView(Sublime::View* v);
 };
 
 }
 
-#endif // QTEST_TREETRAVERSETEST_H_INCLUDED
+#endif // VERITAS_INTERNAL_ITESTFRAMEWORK_P_H

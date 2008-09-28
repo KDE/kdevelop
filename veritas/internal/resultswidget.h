@@ -22,16 +22,21 @@
 #define VERITAS_RESULTSWIDGET_H
 
 #include <QTreeView>
+#include "../veritasexport.h"
 
 namespace Veritas
 {
 
-class ResultsWidget : public QTreeView
+class VERITAS_EXPORT ResultsWidget : public QTreeView
 {
 public:
     ResultsWidget(QWidget* parent=0);
     virtual ~ResultsWidget();
 
+    /*! WARNING Since recently, Qt asserts if no model with the right 
+     *  number of of columns (4 in this case) has been set.
+     *  So _first_ initialize a resultsmodel on this widget's QTreeView 
+     *  or crash. */
     void setResizeMode();
     QTreeView* tree();
 };

@@ -8,13 +8,13 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 set(veritas_SRCS
     test.cpp
     testresult.cpp
-    testexecutor.cpp
+    internal/testexecutor.cpp
     itestrunner.cpp
     itestframework.cpp
-    utils.cpp
-    selectionstore.cpp
+    internal/utils.cpp
+    internal/selectionstore.cpp
     testtoolviewfactory.cpp
-    toolviewdata.cpp
+    internal/toolviewdata.cpp
     internal/resultsmodel.cpp
     internal/resultsproxymodel.cpp
     internal/runnermodel.cpp
@@ -27,6 +27,7 @@ set(veritas_SRCS
     internal/overlaymanager.cpp
     internal/overlaytoggle.cpp
     internal/resultswidget.cpp
+    internal/itestframework_p.cpp
     tests/runnertesthelper.cpp)
     #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 

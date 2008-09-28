@@ -18,27 +18,24 @@
  * 02110-1301, USA.
  */
 
-
-#ifndef QTEST_TREETRAVERSETEST_H_INCLUDED
-#define QTEST_TREETRAVERSETEST_H_INCLUDED
+#ifndef QTEST_RESULTSWIDGETTEST_H_INCLUDED
+#define QTEST_RESULTSWIDGETTEST_H_INCLUDED
 
 #include <QtCore/QObject>
 
 namespace Veritas
 {
 
-class TreeTraverseTest : public QObject
+class ResultsWidgetTest : public QObject
 {
 Q_OBJECT
 private slots:
     void init();
     void cleanup();
 
-    void simpleTree();
-    void nill();
-    void rootOnly();
+    void construct();
 };
 
 }
 
-#endif // QTEST_TREETRAVERSETEST_H_INCLUDED
+#endif // QTEST_RESULTSWIDGETTEST_H_INCLUDED

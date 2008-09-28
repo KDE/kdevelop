@@ -19,7 +19,7 @@
  */
 
 #include "testexecutor.h"
-#include "test.h"
+#include "../test.h"
 
 #include <QtGlobal>
 #include <KDebug>

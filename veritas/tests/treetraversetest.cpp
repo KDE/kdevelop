@@ -21,7 +21,7 @@
 #include "treetraversetest.h"
 #include <QtTest/QTest>
 
-#include "../utils.h"
+#include "../internal/utils.h"
 #include "../test.h"
 
 using Veritas::TreeTraverseTest;
@@ -63,6 +63,22 @@ void TreeTraverseTest::simpleTree()
     QVERIFY(v.visited.contains(child2));
 
     delete root;
+}
+
+void TreeTraverseTest::nill()
+{
+    Visit v;
+    traverseTree(0, v);
+    QVERIFY(v.visited.isEmpty());
+}
+
+void TreeTraverseTest::rootOnly()
+{
+    Visit v;
+    Test* root = new Test("root", 0);
+    traverseTree(root, v);
+    QCOMPARE(1, v.visited.count());
+    QCOMPARE(root, v.visited[0]);
 }
 
 QTEST_MAIN( TreeTraverseTest )

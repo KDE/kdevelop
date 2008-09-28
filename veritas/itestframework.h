@@ -27,7 +27,6 @@
 namespace Veritas
 {
 class ITestRunner;
-class Test;
 
 /*! An extension interface for (xUnit) test frameworks. Plugins that implement this
  *  will have access to the veritas runner & result toolview.

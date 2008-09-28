@@ -21,7 +21,7 @@
 #include "selectionmanager.h"
 
 #include "veritas/test.h"
-#include "veritas/utils.h"
+#include "utils.h"
 
 #include "runnermodel.h"
 #include "selectiontoggle.h"

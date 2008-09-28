@@ -33,13 +33,13 @@
 #include "verbosemanager.h"
 #include "verbosetoggle.h"
 #include "selectiontoggle.h"
-#include "../testexecutor.h"
+#include "testexecutor.h"
 
 #include <ktexteditor/cursor.h>
 #include "interfaces/icore.h"
 #include "interfaces/idocumentcontroller.h"
 
-#include "veritas/utils.h"
+#include "utils.h"
 #include "resultswidget.h"
 
 #include <QMessageBox>
@@ -128,11 +128,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_ui->actionUnselectAll->setIcon(deselect);
 
     runnerView()->setStyleSheet(
-        "QTreeView::branch{"
-        "image: none;"
-        "border-image: none"
-        "}");
-    resultsView()->setStyleSheet(
         "QTreeView::branch{"
         "image: none;"
         "border-image: none"
@@ -278,8 +273,8 @@ void RunnerWindow::stopPreviousModel()
         runnerView()->reset();
         delete m1;
 
-        resultsView()->reset();
         resultsModel()->clear();
+        m_results->setResizeMode();
         prevModel->disconnect();
         delete prevModel;
     }
@@ -333,18 +328,14 @@ void RunnerWindow::setModel(RunnerModel* model)
     m_verbose->reset();
     m_selection->reset();
     stopPreviousModel();
-    if (!model || model->columnCount() < 1) {
-        // No user interaction without a model or a model without columns.
+    if (!model) {
+        // No user interaction without a model or an empty one
         enableItemActions(false);
         return;
     }
     initProxyModels(model);
-
-    // Very limited user interaction without data.
-    if (model->rowCount() < 1) {
+    if (model->rowCount() == 0) {
         enableItemActions(false);
-        m_ui->actionColumns->setEnabled(true);
-        m_ui->actionSettings->setEnabled(true);
         return;
     }
     connectItemStatistics(model);

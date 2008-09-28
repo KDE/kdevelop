@@ -6,9 +6,8 @@ from sys import exit, stdout
 from subprocess import Popen, PIPE
 from xml.dom.minidom import parse, parseString
 
-tests=['veritas-ut-proxymodelcommon', \
-       'veritas-ut-resultsmodel', 'veritas-ut-resultsproxymodel', \
-       'veritas-ut-runnermodel', 'veritas-ut-runnerproxymodel', \
+tests=['veritas-ut-resultsmodel', 'veritas-ut-resultsproxymodel', \
+       'veritas-ut-runnermodel', \
        'veritas-ut-selectionstoretest', 'veritas-ut-test', \
        'veritas-ut-testexecutor', 'veritas-ut-treetraverse' ]
 

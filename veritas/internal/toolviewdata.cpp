@@ -1,5 +1,5 @@
-/* KDevelop xUnit plugin
- *
+/*
+ * This file is part of KDevelop
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -18,34 +18,10 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_SELECTIONSTORE_H
-#define VERITAS_SELECTIONSTORE_H
-
-#include <QSet>
-#include "veritasexport.h"
+#include <QMap>
+#include "toolviewdata.h"
 
 namespace Veritas
 {
-class Test;
-
-/*! Store select state of a test tree. Used to retrieve this state after reload
-    @unittest Veritas::SelectionStoreTest */
-class VERITAS_EXPORT SelectionStore
-{
-public:
-    void saveState(Test* test);
-    void saveTree(Test* root);
-
-    bool wasDeselected(Test* test);
-    void restoreTree(Test* root);
-
-private:
-    QString serialize(Test*) const;
-
-private:
-    QSet<QString> m_deselected; // serialized name of deselected tests
-};
-
+QMap<ITestFramework*, ToolViewData> g_toolViewStore;
 }
-
-#endif // VERITAS_SELECTIONSTORE_H

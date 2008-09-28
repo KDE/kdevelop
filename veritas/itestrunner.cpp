@@ -21,9 +21,9 @@
 // veritas
 #include "itestrunner.h"
 #include "itestframework.h"
-#include "toolviewdata.h"
+#include "internal/toolviewdata.h"
 #include "test.h"
-#include "selectionstore.h"
+#include "internal/selectionstore.h"
 #include "ui_runnerwindow.h"
 
 #include "internal/runnermodel.h"

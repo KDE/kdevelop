@@ -30,7 +30,7 @@
 #include "kasserts.h"
 
 #include "../test.h"
-#include "../testexecutor.h"
+#include "../internal/testexecutor.h"
 
 using Veritas::Test;
 using Veritas::TestExecutor;
