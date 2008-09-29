@@ -147,7 +147,7 @@ UUTConstructor::UUTConstructor()
 UUTConstructor::~UUTConstructor()
 {}
 
-void UUTConstructor::setDocumentAccess(DocumentAccess* docAccess)
+void UUTConstructor::setDocumentAccess(Veritas::DocumentAccess* docAccess)
 {
     Q_ASSERT(!m_docAccess);
     m_docAccess = docAccess;
