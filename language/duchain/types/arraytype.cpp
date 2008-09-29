@@ -74,9 +74,7 @@ int ArrayType::dimension () const
 
 void ArrayType::setDimension(int dimension)
 {
-  kDebug() << "setting dimension" << dimension;
   d_func_dynamic()->m_dimension = dimension;
-  kDebug() << "dimension" << d_func()->m_dimension;
 }
 
 AbstractType::Ptr ArrayType::elementType () const
