@@ -76,7 +76,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeFactory {
  * to instantiate.
  */
 template<class T, class Data>
-class KDEVPLATFORMLANGUAGE_EXPORT TypeFactory : public AbstractTypeFactory {
+class TypeFactory : public AbstractTypeFactory {
   public:
   AbstractType* create(AbstractTypeData* data) const {
 /*    if(!m_reUseTypes.isEmpty()) {
@@ -189,7 +189,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
 ///
 /// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
 template<class T, class Data>
-struct KDEVPLATFORMLANGUAGE_EXPORT TypeSystemRegistrator {
+struct TypeSystemRegistrator {
   TypeSystemRegistrator() {
     TypeSystem::self().registerTypeClass<T, Data>();
   }

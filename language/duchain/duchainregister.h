@@ -42,7 +42,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
 
 ///Never use this directly, use the REGISTER_DUCHAIN_ITEM macro instead.
 template<class T, class Data>
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemFactory : public DUChainBaseFactory {
+class DUChainItemFactory : public DUChainBaseFactory {
   public:
   DUChainBase* create(DUChainBaseData* data) const {
     return new T(*static_cast<Data*>(data));
@@ -147,7 +147,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
 ///
 /// Just use the REGISTER_TYPE(YourTypeClass) macro in your code, and you're done.
 template<class T, class Data>
-struct KDEVPLATFORMLANGUAGE_EXPORT DUChainItemRegistrator {
+struct DUChainItemRegistrator {
   DUChainItemRegistrator() {
     DUChainItemSystem::self().registerTypeClass<T, Data>();
   }

@@ -115,6 +115,7 @@ uint ConstantIntegralType::hash() const
 }
 
 template<>
+KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<qint64>(qint64 value) {
   if((modifiers() & UnsignedModifier))
     kDebug() << "setValue(signed) called on unsigned type";
@@ -122,6 +123,7 @@ void ConstantIntegralType::setValueInternal<qint64>(qint64 value) {
 }
 
 template<>
+KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<quint64>(quint64 value) {
   if(!(modifiers() & UnsignedModifier))
     kDebug() << "setValue(unsigned) called on not unsigned type";
@@ -129,6 +131,7 @@ void ConstantIntegralType::setValueInternal<quint64>(quint64 value) {
 }
 
 template<>
+KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<float>(float value) {
   if(dataType() != TypeFloat)
     kDebug() << "setValue(float) called on non-float type";
@@ -136,6 +139,7 @@ void ConstantIntegralType::setValueInternal<float>(float value) {
 }
 
 template<>
+KDEVPLATFORMLANGUAGE_EXPORT
 void ConstantIntegralType::setValueInternal<double>(double value) {
   if(dataType() != TypeDouble)
     kDebug() << "setValue(double) called on non-double type";

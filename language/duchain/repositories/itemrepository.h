@@ -180,7 +180,7 @@ class ExampleRequestItem {
 };
 
 template<class Item, class ItemRequest, class DynamicData>
-class KDEVPLATFORMLANGUAGE_EXPORT Bucket {
+class Bucket {
   enum {
     AdditionalSpacePerItem = DynamicData::Size + 2
   };
@@ -872,7 +872,7 @@ struct ReferenceCounting {
 ///                   This can be used to implement reference-counting, @see ReferenceCounting
 ///@param threadSafe Whether class access should be thread-safe
 template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, unsigned int targetBucketHashSize = 524288>
-class KDEVPLATFORMLANGUAGE_EXPORT ItemRepository : public AbstractItemRepository {
+class ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
   
