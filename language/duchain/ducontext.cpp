@@ -291,6 +291,7 @@ void DUContextDynamicData::disableLocalDeclarationsHash()
 
 bool DUContextDynamicData::needsLocalDeclarationsHash()
 {
+  ///@todo Do this again, it brings a large performance boost
   //For now disable the hash, until we make sure that all declarations needed for the hash are loaded first
   //including those in propagating sub-contexts.
   //Then, also make sure that we create the declaration hash after loading if needed
