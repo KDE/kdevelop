@@ -121,7 +121,12 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     
     //Fill with zeroes for now, will be initialized on-demand
     target.m_contexts.resize(contextDataOffsets.size());
+    target.m_fastContexts = target.m_contexts.data();
+    target.m_fastContextsSize = target.m_contexts.size();
+    
     target.m_declarations.resize(declarationDataOffsets.size());
+    target.m_fastDeclarations = target.m_declarations.data();
+    target.m_fastDeclarationsSize = target.m_declarations.size();
     
     target.m_onDisk = true;
     
@@ -145,16 +150,16 @@ void TopDUContextDynamicData::store() {
     if(m_topContext->d_ptr->m_dynamic)
       someThingChanged = true;
     
-    for(int a = 0; a < m_contexts.size(); ++a) {
-      if(m_contexts[a] && m_contexts[a]->d_ptr->m_dynamic)
+    for(int a = 0; a < m_fastContextsSize; ++a) {
+      if(m_fastContexts[a] && m_fastContexts[a]->d_ptr->m_dynamic)
         someThingChanged = true;
       
       if(someThingChanged)
         break;
     }
 
-    for(int a = 0; a < m_declarations.size(); ++a) {
-      if(m_declarations[a] && m_declarations[a]->d_ptr->m_dynamic)
+    for(int a = 0; a < m_fastDeclarationsSize; ++a) {
+      if(m_fastDeclarations[a] && m_fastDeclarations[a]->d_ptr->m_dynamic)
         someThingChanged = true;
       
       if(someThingChanged)
@@ -173,9 +178,9 @@ void TopDUContextDynamicData::store() {
     QList<ArrayWithPosition> oldDatas = m_data; //Keep the old data alive until everything is stored into a new data structure
     
     //Load all lazy declarations/contexts
-    for(int a = 0; a < m_contexts.size(); ++a)
+    for(int a = 0; a < m_fastContextsSize; ++a)
       getContextForIndex(a+1); //Load the context
-    for(int a = 0; a < m_declarations.size(); ++a)
+    for(int a = 0; a < m_fastDeclarationsSize; ++a)
       getDeclarationForIndex(a+1); //Load the declaration
     
     //We don't need these structures any more, since we have loaded all the declarations/contexts, and m_data
@@ -200,28 +205,28 @@ void TopDUContextDynamicData::store() {
     QVector<ItemDataInfo> contextDataOffsets;
     QVector<ItemDataInfo> declarationDataOffsets;
     
-    for(int a = 0; a < m_contexts.size(); ++a) {
-      if(!m_contexts[a]) {
+    for(int a = 0; a < m_fastContextsSize; ++a) {
+      if(!m_fastContexts[a]) {
         contextDataOffsets << ItemDataInfo();
       } else {
-        contextDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_contexts[a]->parentContext()).localIndex());
-        m_contexts[a]->aboutToSave();
-        saveDUChainItem(m_data, *m_contexts[a], currentDataOffset);
+        contextDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_fastContexts[a]->parentContext()).localIndex());
+        m_fastContexts[a]->aboutToSave();
+        saveDUChainItem(m_data, *m_fastContexts[a], currentDataOffset);
         
         //Normally the m_inSymbolTable property is initialized with false, but we want to preserve it when saving to disk
-//        static_cast<DUContextData*>((DUChainBaseData*)(data.data() + contextDataOffsets.back()))->m_inSymbolTable = m_contexts[a]->d_func()->m_inSymbolTable;
+//        static_cast<DUContextData*>((DUChainBaseData*)(data.data() + contextDataOffsets.back()))->m_inSymbolTable = m_fastContexts[a]->d_func()->m_inSymbolTable;
         
-        //Q_ASSERT(data.size() == contextDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_contexts[a]->d_func()));
+        //Q_ASSERT(data.size() == contextDataOffsets.back() + DUChainItemSystem::self().dynamicSize(*m_fastContexts[a]->d_func()));
       }
     }
     
-    for(int a = 0; a < m_declarations.size(); ++a) {
-      if(!m_declarations[a]) {
+    for(int a = 0; a < m_fastDeclarationsSize; ++a) {
+      if(!m_fastDeclarations[a]) {
         declarationDataOffsets << ItemDataInfo();
       } else {
-        declarationDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_declarations[a]->context()).localIndex());
-        m_declarations[a]->aboutToSave();
-        saveDUChainItem(m_data, *m_declarations[a], currentDataOffset);
+        declarationDataOffsets << ItemDataInfo(currentDataOffset, LocalIndexedDUContext(m_fastDeclarations[a]->context()).localIndex());
+        m_fastDeclarations[a]->aboutToSave();
+        saveDUChainItem(m_data, *m_fastDeclarations[a], currentDataOffset);
         
         //Normally the m_inSymbolTable property is initialized with false, but we want to preserve it when saving to disk
 //        static_cast<DeclarationData*>((DUChainBaseData*)(data.data() + declarationDataOffsets.back()))->m_inSymbolTable = m_declarations[a]->d_func()->m_inSymbolTable;
@@ -251,7 +256,9 @@ void TopDUContextDynamicData::store() {
 uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary) {
   if(!temporary) {
     m_declarations.append(decl);
-    return m_declarations.size();
+    m_fastDeclarations = m_declarations.data();
+    m_fastDeclarationsSize = m_declarations.size();
+    return m_fastDeclarationsSize;
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryDeclarations.append(decl);
@@ -261,9 +268,9 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
 
 bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size()))
+    if(index == 0 || index > uint(m_fastDeclarationsSize))
       return false;
-    return (bool)m_declarations[index-1];
+    return (bool)m_fastDeclarations[index-1];
   }else{
     return true;
   }
@@ -273,9 +280,9 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
   if(index < (0xffffffff/2)) {
     if(index == 0)
       return true;
-    if(index > uint(m_contexts.size()))
+    if(index > uint(m_fastContextsSize))
       return false;
-    return (bool)m_contexts[index-1];
+    return (bool)m_fastContexts[index-1];
   }else{
     return true;
   }
@@ -283,13 +290,13 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
 
 Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size()))
+    if(index == 0 || index > uint(m_fastDeclarationsSize))
       return 0;
     else {
       uint realIndex = index-1;
-      if(!m_declarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
-        m_declarations[realIndex] = dynamic_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_declarationDataOffsets[realIndex].dataOffset)));
-        if(!m_declarations[realIndex]) {
+      if(!m_fastDeclarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
+        m_fastDeclarations[realIndex] = dynamic_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_declarationDataOffsets[realIndex].dataOffset)));
+        if(!m_fastDeclarations[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
           kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(m_data.first().first.constData() + m_declarationDataOffsets[realIndex].dataOffset))->classId;
@@ -297,11 +304,11 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
         }else{
           DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
           Q_ASSERT(context); //If this triggers, the context has been deleted without deleting its contained declarations
-          m_declarations[realIndex]->rebuildDynamicData(context, index);
+          m_fastDeclarations[realIndex]->rebuildDynamicData(context, index);
         }
       }
       
-      return m_declarations[realIndex];
+      return m_fastDeclarations[realIndex];
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
@@ -316,11 +323,11 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
   uint index = decl->m_indexInTopContext;
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > uint(m_declarations.size()))
+    if(index == 0 || index > uint(m_fastDeclarationsSize))
       return;
     else {
-      Q_ASSERT(m_declarations[index-1] == decl);
-      m_declarations[index-1] = 0;
+      Q_ASSERT(m_fastDeclarations[index-1] == decl);
+      m_fastDeclarations[index-1] = 0;
       
       if(index-1 < (uint)m_declarationDataOffsets.size())
         m_declarationDataOffsets[index-1] = ItemDataInfo();
@@ -340,7 +347,9 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
 uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool temporary) {
   if(!temporary) {
     m_contexts.append(decl);
-    return m_contexts.size();
+    m_fastContexts = m_contexts.data();
+    m_fastContextsSize = m_contexts.size();
+    return m_fastContextsSize;
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryContexts.append(decl);
@@ -353,25 +362,25 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
     return m_topContext;
   
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > uint(m_contexts.size()))
+    if(index == 0 || index > uint(m_fastContextsSize))
       return 0;
     else {
       uint realIndex = index-1;
       
-      if(!m_contexts[realIndex] && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
+      if(!m_fastContexts[realIndex] && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
         //Construct the context, and eventuall its parent first
-        m_contexts[realIndex] = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset)));
-        if(!m_contexts[realIndex]) {
+        m_fastContexts[realIndex] = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset)));
+        if(!m_fastContexts[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
           kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset))->classId;
           Q_ASSERT(0);
         }else{
-          m_contexts[realIndex]->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
+          m_fastContexts[realIndex]->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
         }
       }
       
-      return m_contexts[realIndex];
+      return m_fastContexts[realIndex];
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
@@ -387,11 +396,11 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   uint index = decl->m_dynamicData->m_indexInTopContext;
   if(index < (0xffffffff/2)) {
     
-    if(index == 0 || index > uint(m_contexts.size()))
+    if(index == 0 || index > uint(m_fastContextsSize))
       return;
     else {
-      Q_ASSERT(m_contexts[index-1] == decl);
-      m_contexts[index-1] = 0;
+      Q_ASSERT(m_fastContexts[index-1] == decl);
+      m_fastContexts[index-1] = 0;
       
       if(index-1 < (uint)m_contextDataOffsets.size())
         m_contextDataOffsets[index-1] = ItemDataInfo();
