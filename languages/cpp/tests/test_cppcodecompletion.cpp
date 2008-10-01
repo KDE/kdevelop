@@ -267,19 +267,19 @@ void TestCppCodeCompletion::testTypeConversion() {
     QVERIFY(test);
 
     Cpp::TypeConversion conv(context->topContext());
-    QVERIFY(!conv.implicitConversion(test->returnType(), Heinz, false));
-    QVERIFY(!conv.implicitConversion(Heinz, test->returnType(), false));
-    QVERIFY(!conv.implicitConversion(test->returnType(), n, false));
-    QVERIFY(!conv.implicitConversion(n, test->returnType(), false));
+    QVERIFY(!conv.implicitConversion(test->returnType()->indexed(), Heinz->indexed(), false));
+    QVERIFY(!conv.implicitConversion(Heinz->indexed(), test->returnType()->indexed(), false));
+    QVERIFY(!conv.implicitConversion(test->returnType()->indexed(), n->indexed(), false));
+    QVERIFY(!conv.implicitConversion(n->indexed(), test->returnType()->indexed(), false));
   }
   //lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
     Cpp::TypeConversion conv(context->topContext());
-    QVERIFY( !conv.implicitConversion(Honk, Heinz) );
-    QVERIFY( conv.implicitConversion(Honk, typeInt) ); //Honk has operator int()
-    QVERIFY( conv.implicitConversion(Honk, Erna) ); //Erna has constructor that takes Honk
-    QVERIFY( !conv.implicitConversion(Erna, Heinz) );
+    QVERIFY( !conv.implicitConversion(Honk->indexed(), Heinz->indexed()) );
+    QVERIFY( conv.implicitConversion(Honk->indexed(), typeInt->indexed()) ); //Honk has operator int()
+    QVERIFY( conv.implicitConversion(Honk->indexed(), Erna->indexed()) ); //Erna has constructor that takes Honk
+    QVERIFY( !conv.implicitConversion(Erna->indexed(), Heinz->indexed()) );
 
     ///@todo reenable once base-classes are parsed correctly
     //QVERIFY( conv.implicitConversion(B, A) ); //B is based on A, so there is an implicit copy-constructor that creates A from B
