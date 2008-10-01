@@ -330,6 +330,14 @@ public:
   Identifier identifier() const;
 
   /**
+   * Access this declaration's \a identifier.
+   *
+   * \return this declaration's identifier in indexed form. This is faster than identifier(), because it
+   *         equals the internal representation. Use this for example to do equality-comparison.
+   */
+  IndexedIdentifier indexedIdentifier() const;
+  
+  /**
    * Determine the global qualified identifier of this declaration.
    *
    * \note This function is expensive, equalQualifiedIdentifier() is preferred if you

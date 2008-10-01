@@ -196,6 +196,12 @@ Identifier Declaration::identifier( ) const
   return d_func()->m_identifier.identifier();
 }
 
+IndexedIdentifier Declaration::indexedIdentifier( ) const
+{
+  //ENSURE_CAN_READ Commented out for performance reasons
+  return d_func()->m_identifier;
+}
+
 LocalIndexedDeclaration::LocalIndexedDeclaration(Declaration* decl) {
   if(!decl)
     m_declarationIndex = 0;

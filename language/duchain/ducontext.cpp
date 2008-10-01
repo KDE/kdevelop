@@ -664,6 +664,7 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
 
 void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
+  IndexedIdentifier indexedIdentifier(identifier);
   {
      QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
@@ -706,7 +707,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
       DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
       while(it) {
         Declaration* declaration = *it;
-        if(declaration->identifier() == identifier) {
+        if(declaration->indexedIdentifier() == indexedIdentifier) {
           Declaration* checked = checker.check(declaration);
           if(checked)
               ret.append(checked);
@@ -921,6 +922,8 @@ bool DUContext::parentContextOf(DUContext* context) const
 
 QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier) const
 {
+  IndexedIdentifier indexedIdentifier(identifier);
+  
   ENSURE_CAN_READ
   QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
@@ -936,7 +939,7 @@ QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier
     DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
     while(it) {
       Declaration* decl = *it;
-      if(decl->identifier() == identifier)
+      if(decl->indexedIdentifier() == indexedIdentifier)
         ret << decl;
       ++it;
     }
