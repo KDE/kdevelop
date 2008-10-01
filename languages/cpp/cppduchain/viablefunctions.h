@@ -78,10 +78,10 @@ namespace Cpp {
     };
 
     ///Returns a list of structures that describe the conversion needed for each parameter of the function
-    const QList<ParameterConversion>& parameterConversions() const;
+    const KDevVarLengthArray<ParameterConversion>& parameterConversions() const;
 
     private:
-    QList<ParameterConversion> m_parameterConversions;
+    KDevVarLengthArray<ParameterConversion> m_parameterConversions;
     KDevelop::DeclarationPointer m_declaration;
     KDevelop::TopDUContextPointer m_topContext;
     TypePtr<KDevelop::FunctionType> m_type;

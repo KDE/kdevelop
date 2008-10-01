@@ -67,8 +67,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
     bool first = true;
     int num = 0;
 
-    const QList<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
-    QList<Cpp::ViableFunction::ParameterConversion>::const_iterator parameterConversion = conversions.begin();
+    const KDevVarLengthArray<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
+    uint parameterConversion = 0;
 
     foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
       if (first)
@@ -89,12 +89,12 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         doHighlight = true;
         doFormat = QTextFormat( QTextFormat::CharFormat );
 
-        if( parameterConversion != conversions.end() ) {
+        if( parameterConversion != conversions.size() ) {
           //Interpolate the color
           quint64 badMatchColor = 0xff7777ff; //Full blue
           quint64 goodMatchColor = 0xff77ff77; //Full green
 
-          uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-(*parameterConversion).rank) + goodMatchColor*(*parameterConversion).rank)/Cpp::MaximumConversionResult;
+          uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-conversions[parameterConversion].rank) + goodMatchColor*(conversions[parameterConversion]).rank)/Cpp::MaximumConversionResult;
 
           doFormat.setBackground( QBrush(totalColor) );
 

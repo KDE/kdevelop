@@ -56,20 +56,23 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   if( !isValid() || !m_topContext )
     return;
   Q_ASSERT(m_funDecl);
-  if( params.parameters.size() + m_funDecl->defaultParametersSize() < m_type->arguments().size() && !partial )
+  
+  uint functionArgumentCount = m_type->indexedArgumentsSize();
+  
+  if( params.parameters.size() + m_funDecl->defaultParametersSize() < functionArgumentCount && !partial )
     return; //Not enough parameters + default-parameters
-  if( params.parameters.size() > m_type->arguments().size() )
+  if( params.parameters.size() > functionArgumentCount )
     return; //Too many parameters
 
   m_parameterCountMismatch = false;
   //Match all parameters against the argument-type
-  QList<AbstractType::Ptr> arguments = m_type->arguments();
-  QList<AbstractType::Ptr>::const_iterator argumentIt = arguments.begin();
+  const IndexedType* arguments = m_type->indexedArguments();
+  const IndexedType* argumentIt = arguments;
 
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     TypeConversion conv(m_topContext.data());
     ParameterConversion c;
-    c.rank = conv.implicitConversion(AbstractType::Ptr((*it).type), (*argumentIt), (*it).lValue, m_noUserDefinedConversion );
+    c.rank = conv.implicitConversion( (*it).type, argumentIt->type(), (*it).lValue, m_noUserDefinedConversion );
     c.baseConversionLevels = conv.baseConversionLevels();
     m_parameterConversions << c;
     ++argumentIt;
@@ -90,20 +93,18 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
 
   //Is one of our conversions worse than one of the other function's?
 
-  QList<ParameterConversion>::const_iterator myConversions = m_parameterConversions.begin();
-  QList<ParameterConversion>::const_iterator otherConversions = other.m_parameterConversions.begin();
+  uint minParams = m_parameterConversions.size();
+  if(other.m_parameterConversions.size() < minParams)
+    minParams = other.m_parameterConversions.size();
 
   bool hadBetterConversion = false;
-  while( myConversions != m_parameterConversions.end() && otherConversions != other.m_parameterConversions.end() )
-  {
-    if( *myConversions < *otherConversions )
+  for(int a = 0; a < minParams; ++a) {
+
+    if( m_parameterConversions[a] < other.m_parameterConversions[a] )
       return false; //All this function's conversions must not be worse then the other function one's
 
-    if( *otherConversions < *myConversions )
+    if( other.m_parameterConversions[a] < m_parameterConversions[a] )
       hadBetterConversion = true;
-
-    ++myConversions;
-    ++otherConversions;
   }
 
   ///@todo any special measures when parameter-counts differ?
@@ -126,8 +127,8 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
 bool ViableFunction::isViable() const {
   if( !isValid() || m_parameterCountMismatch ) return false;
 
-  for( QList<ParameterConversion>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
-    if( !(*it).rank )
+  for( int a = 0; a < m_parameterConversions.size(); ++a )
+    if( !m_parameterConversions[a].rank )
       return false;
 
   return true;
@@ -135,9 +136,9 @@ bool ViableFunction::isViable() const {
 
 uint ViableFunction::worstConversion() const {
   uint ret = (uint)-1;
-  for( QList<ParameterConversion>::const_iterator it = m_parameterConversions.begin(); it != m_parameterConversions.end(); ++it )
-    if( (uint) (*it).rank < ret )
-      ret *= (*it).rank;
+  for( int a = 0; a < m_parameterConversions.size(); ++a )
+    if( (uint) m_parameterConversions[a].rank < ret )
+      ret *= m_parameterConversions[a].rank;
 
   if( ret == (uint)-1 )
     return 0;
@@ -145,6 +146,6 @@ uint ViableFunction::worstConversion() const {
     return ret;
 }
 
-const QList<ViableFunction::ParameterConversion>& ViableFunction::parameterConversions() const {
+const KDevVarLengthArray<ViableFunction::ParameterConversion>& ViableFunction::parameterConversions() const {
   return m_parameterConversions;
 }

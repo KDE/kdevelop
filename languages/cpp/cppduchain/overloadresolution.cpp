@@ -43,7 +43,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
     QList<Declaration*> declarations = m_context->findLocalDeclarations(m_context->localScopeIdentifier().last(), KDevelop::SimpleCursor(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions);
 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
-      if( (*it)->abstractType() )
+      if( (*it)->indexedType() )
       {
         FunctionType::Ptr function = (*it)->abstractType().cast<FunctionType>();
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>(*it);
