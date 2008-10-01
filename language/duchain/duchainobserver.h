@@ -52,59 +52,6 @@ public:
   /// Destructor.
   virtual ~DUChainObserver();
 
-#if 0
-  // This code was too slow, firing way too many notifications.  Needs rethinking.
-
-  enum Modification {
-    Addition /**< Something was added to the duchain */,
-    Removal  /**< Something was removed to the duchain */,
-    Change   /**< Something was changed in the duchain */,
-    Deletion /**< Something was deleted in the duchain */
-  };
-
-  enum Relationship {
-    // Context
-    ParentContext           /**< related object is the parent context */,
-    ChildContexts           /**< related object is a child context  */,
-    ImportedParentContexts  /**< related object is an imported parent context  */,
-    ImportedChildContexts   /**< related object is an imported child context  */,
-    LocalDeclarations       /**< related object is a local declaration */,
-    LocalDefinitions        /**< related object is a local definition */,
-    UsingNamespaces         /**< related object uses namespaces */,
-    ContextType             /**< related object is a context type */,
-
-    // Context + Declaration
-    Uses                    /**< related object is a use */,
-    Identifier              /**< related object is an identifier */,
-
-    // Declaration
-    DataType                /**< the related object is a datatype */,
-    ForwardDeclarations     /**< the related object is a forward declaration */,
-
-    // Declaration + Definition + Use
-    Context                 /**< the related object is context */,
-
-    // Declaration + Definition
-    DefinitionRelationship  /**< the related object definition */,
-
-    // Use
-    DeclarationRelationship /**< the related object is a declaration */,
-
-    // All
-    NotApplicable           /**< the related object is no applicable */
-  };
-
-Q_SIGNALS:
-  void contextChanged(KDevelop::DUContextPointer context, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-
-  void declarationChanged(KDevelop::DeclarationPointer declaration, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-
-  void definitionChanged(KDevelop::DefinitionPointer definition, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-
-  void useChanged(KDevelop::UsePointer use, KDevelop::DUChainObserver::Modification change, KDevelop::DUChainObserver::Relationship relationship, KDevelop::DUChainBasePointer relatedObject);
-
-#endif
-
 Q_SIGNALS:
   void branchAdded(KDevelop::DUContextPointer context);
   void branchModified(KDevelop::DUContextPointer context);
