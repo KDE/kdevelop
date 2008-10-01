@@ -59,7 +59,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   item.setData(&target);
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_onDisk(false), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_fastContexts(0), m_fastContextsSize(0) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false) {
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
@@ -262,7 +262,7 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryDeclarations.append(decl);
-    return 0xffffffff - m_temporaryDeclarations.size();
+    return 0x0fffffff - m_temporaryDeclarations.size(); //We always keep the highest bit at zero
   }
 }
 
@@ -312,7 +312,7 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0xffffffff - index;
+    index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(m_temporaryDeclarations.size()))
       return 0;
     else
@@ -334,7 +334,7 @@ void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0xffffffff - index;
+    index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(m_temporaryDeclarations.size()))
       return;
     else {
@@ -353,7 +353,7 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
     m_temporaryContexts.append(decl);
-    return 0xffffffff - m_temporaryContexts.size();
+    return 0x0fffffff - m_temporaryContexts.size(); //We always keep the highest bit at zero
   }
 }
 
@@ -366,7 +366,7 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
       return 0;
     else {
       uint realIndex = index-1;
-      const DUContext** fastContextsPos = m_fastContexts + realIndex;
+      DUContext** fastContextsPos = (m_fastContexts + realIndex);
       if(*fastContextsPos) //Shortcut, because this is the most common case
         return *fastContextsPos;
       
@@ -387,7 +387,7 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0xffffffff - index;
+    index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(m_temporaryContexts.size()))
       return 0;
     else
@@ -410,7 +410,7 @@ void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
-    index = 0xffffffff - index;
+    index = 0x0fffffff - index; //We always keep the highest bit at zero
     if(index == 0 || index > uint(m_temporaryContexts.size()))
       return;
     else {
