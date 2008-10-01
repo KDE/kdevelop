@@ -61,6 +61,7 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
   
   //We will have some caching in TopDUContext until this objects lifetime is over
   TopDUContext::Cache cache(topContext);
+  Cpp::TypeConversionCacheEnabler enableConversionCache;
   
   KTextEditor::Cursor cursorPosition = view->cursorPosition();
   QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.

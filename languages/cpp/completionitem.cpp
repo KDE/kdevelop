@@ -64,7 +64,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     bool haveArguments = false;
-    if( m_declaration && m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->arguments().count() )
+    if( m_declaration && m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->indexedArgumentsSize() )
       haveArguments = true;
     //Need to have a paren behind
     QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
@@ -217,11 +217,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         {
           Cpp::CodeCompletionContext::Function f( contextItem.completionContext->functions()[contextItem.listOffset] );
 
-          if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->arguments().count() > f.matchedArguments ) {
+          if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > f.matchedArguments ) {
             Cpp::TypeConversion conv(model->currentTopContext().data());
 
             ///@todo fill the lvalue-ness correctly
-            int quality = ( conv.implicitConversion( effectiveType(dec), f.function.declaration()->type<FunctionType>()->arguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
+            int quality = ( conv.implicitConversion( effectiveType(dec)->indexed(), f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
             return QVariant(quality);
           }else{
             //kDebug(9007) << "MatchQuality requested with invalid match-context";

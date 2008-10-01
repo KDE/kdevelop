@@ -23,13 +23,58 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
 #include <typeinfo>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <qthread.h>
 
 
 using namespace Cpp;
 using namespace KDevelop;
 using namespace TypeUtils;
 
+struct ImplicitConversionParams {
+  IndexedType from, to;
+  bool fromLValue, noUserDefinedConversion;
+  
+  bool operator==(const ImplicitConversionParams& rhs) const {
+    return from == rhs.from && to == rhs.to && fromLValue == rhs.fromLValue && noUserDefinedConversion == rhs.noUserDefinedConversion;
+  }
+};
+
+uint qHash(const ImplicitConversionParams& params) {
+  return (params.from.hash() * 36109 + params.to.hash()) * (params.fromLValue ? 111 : 53) * (params.noUserDefinedConversion ? 317293 : 1);
+}
+
+namespace Cpp {
+struct TypeConversionCache {
+    QHash<ImplicitConversionParams, int> m_implicitConversionResults;
+/*    QHash<QPair<IndexedType, IndexedType>, uint> m_standardConversionResults;
+    QHash<QPair<IndexedType, IndexedType>, uint> m_userDefinedConversionResults;*/
+//     QHash<QPair<IndexedType, IndexedType>, bool> m_isPublicBaseCache;
+};
+}
+
+QHash<Qt::HANDLE, TypeConversionCache*> typeConversionCaches;
+
+void TypeConversion::startCache() {
+  DUChainWriteLocker lock(DUChain::lock());
+  typeConversionCaches[QThread::currentThreadId()] = new TypeConversionCache;
+}
+
+void TypeConversion::stopCache() {
+  DUChainWriteLocker lock(DUChain::lock());
+  Q_ASSERT(typeConversionCaches.contains(QThread::currentThreadId()));
+  delete typeConversionCaches[QThread::currentThreadId()];
+  typeConversionCaches.remove(QThread::currentThreadId());
+}
+
 TypeConversion::TypeConversion(const TopDUContext* topContext) : m_topContext(topContext) {
+
+  QHash<Qt::HANDLE, TypeConversionCache*>::iterator it = typeConversionCaches.find(QThread::currentThreadId());
+  if(it != typeConversionCaches.end())
+    m_cache = *it;
+  else
+    m_cache = 0;
 }
 
 
@@ -66,70 +111,100 @@ TypeConversion::~TypeConversion() {
  *  - an ellipsis conversion sequence
  *
  * */
-uint TypeConversion::implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool noUserDefinedConversion ) {
+uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, bool fromLValue, bool noUserDefinedConversion ) {
   m_baseConversionLevels = 0;
 
+  int conv = 0;
+  
+  ImplicitConversionParams params;
+  params.from = _from;
+  params.to = _to;
+  params.fromLValue = fromLValue;
+  params.noUserDefinedConversion = noUserDefinedConversion;
+  
+  if(m_cache) {
+    QHash<ImplicitConversionParams, int>::const_iterator it = m_cache->m_implicitConversionResults.find(params);
+    if(it != m_cache->m_implicitConversionResults.end())
+      return *it;
+  }
+  
+  AbstractType::Ptr to = _to.type();
+  AbstractType::Ptr from = _from.type();
+  
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
-    return 0;
-  }
-  //kDebug(9007) << "Checking conversion from " << from->toString() << " to " << to->toString();
-  ReferenceType::Ptr fromReference = from.cast<ReferenceType>();
-  if( fromReference )
-    fromLValue = true;
+    goto ready;
+  }else{
+    
+    //kDebug(9007) << "Checking conversion from " << from->toString() << " to " << to->toString();
+    ReferenceType::Ptr fromReference = from.cast<ReferenceType>();
+    if( fromReference )
+      fromLValue = true;
 
-  ///iso c++ draft 13.3.3.1.4 reference-binding, modeled roughly
-  ReferenceType::Ptr toReference = to.cast<ReferenceType>();
-  if( toReference ) {
-    if( (toReference->modifiers() & AbstractType::ConstModifier) || (toReference->modifiers() & AbstractType::ConstModifier) == isConstant(from) && fromLValue ) {
-      ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
-      //Either identity-conversion:
-      if( identityConversion( realType(from, m_topContext), realType(toReference.cast<AbstractType>(), m_topContext) ) )
-        return ExactMatch + 2*ConversionRankOffset;
-      //Or realType(toReference) is a public base-class of realType(fromReference)
-      CppClassType::Ptr fromClass = realType(from, m_topContext).cast<CppClassType>();
-      CppClassType::Ptr toClass = realType(to, m_topContext).cast<CppClassType>();
+    ///iso c++ draft 13.3.3.1.4 reference-binding, modeled roughly
+    ReferenceType::Ptr toReference = to.cast<ReferenceType>();
+    if( toReference ) {
+      if( (toReference->modifiers() & AbstractType::ConstModifier) || (toReference->modifiers() & AbstractType::ConstModifier) == isConstant(from) && fromLValue ) {
+        ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
+        //Either identity-conversion:
+        if( identityConversion( realType(from, m_topContext), realType(toReference.cast<AbstractType>(), m_topContext) ) ) {
+          conv = ExactMatch + 2*ConversionRankOffset;
+          goto ready;
+        }
+        //Or realType(toReference) is a public base-class of realType(fromReference)
+        CppClassType::Ptr fromClass = realType(from, m_topContext).cast<CppClassType>();
+        CppClassType::Ptr toClass = realType(to, m_topContext).cast<CppClassType>();
 
-      if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) )
-        return ExactMatch + 2*ConversionRankOffset;
-    }
+        if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) ) {
+          conv = ExactMatch + 2*ConversionRankOffset;
+          goto ready;
+        }
+      }
 
-    //We cannot directly create a reference, but maybe there is a user-defined conversion that creates a compatible reference, as in iso c++ 13.3.3.1.4.1
-    if( !noUserDefinedConversion ) {
-      if( int rank = userDefinedConversion( from, to, fromLValue, true ) ) {
-        return rank + ConversionRankOffset;
+      //We cannot directly create a reference, but maybe there is a user-defined conversion that creates a compatible reference, as in iso c++ 13.3.3.1.4.1
+      if( !noUserDefinedConversion ) {
+        if( int rank = userDefinedConversion( from, to, fromLValue, true ) ) {
+          conv = rank + ConversionRankOffset;
+          goto ready;
+        }
+      }
+
+      if( toReference->modifiers() & AbstractType::ConstModifier ) {
+        //For constant references, the compiler can create a temporary object holding the converted value. So just forget whether the types are references.
+        conv = implicitConversion( realType(from, m_topContext)->indexed(), realType(to, m_topContext)->indexed(), fromLValue );
+        goto ready;
       }
     }
 
-    if( toReference->modifiers() & AbstractType::ConstModifier ) {
-      //For constant references, the compiler can create a temporary object holding the converted value. So just forget whether the types are references.
-      return implicitConversion( realType(from, m_topContext), realType(to, m_topContext), fromLValue );
-    }
-  }
+    {
+      int tempConv = 0;
 
-  int conv = 0;
-  int tempConv = 0;
+      //This is very simplified, see iso c++ draft 13.3.3.1
 
-  //This is very simplified, see iso c++ draft 13.3.3.1
+      if( (tempConv = standardConversion(from,to)) ) {
+        tempConv += 2*ConversionRankOffset;
+        if( tempConv > conv )
+          conv = tempConv;
+      }
 
-  if( (tempConv = standardConversion(from,to)) ) {
-    tempConv += 2*ConversionRankOffset;
-    if( tempConv > conv )
-      conv = tempConv;
-  }
-
-  if( !noUserDefinedConversion ) {
-    if( (tempConv = userDefinedConversion(from, to, fromLValue)) ) {
-      tempConv += ConversionRankOffset;
-      if( tempConv > conv )
+      if( !noUserDefinedConversion ) {
+        if( (tempConv = userDefinedConversion(from, to, fromLValue)) ) {
+          tempConv += ConversionRankOffset;
+          if( tempConv > conv )
+            conv = tempConv;
+        }
+      }
+      
+      if( (tempConv = ellipsisConversion(from, to)) && tempConv > conv )
         conv = tempConv;
     }
   }
 
-  if( (tempConv = ellipsisConversion(from, to)) && tempConv > conv )
-    conv = tempConv;
-
-
+  ready:
+  
+  if(m_cache)
+    m_cache->m_implicitConversionResults.insert(params, conv);
+  
   return conv;
 }
 

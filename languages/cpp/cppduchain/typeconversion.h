@@ -23,9 +23,12 @@
 #include <qcontainerfwd.h>
 
 #include <language/duchain/types/abstracttype.h>
+#include <language/duchain/types/indexedtype.h>
 #include <util/kdevvarlengtharray.h>
 
 #include "cppduchainexport.h"
+#include <QMap>
+#include <QPair>
 
 namespace KDevelop {
   class TopDUContext;
@@ -35,10 +38,9 @@ namespace KDevelop {
 
 namespace Cpp {
 using namespace KDevelop;
-/**
- * Class that is responsible for finding out whether one type can be converted to another.It should also do some caching.
- *
-**/
+
+  class TypeConversionCache;
+
   enum ConversionCategories {
     LValueTransformationCategory = 1,
     QualificationAdjustmentCategory = 2,
@@ -76,7 +78,7 @@ using namespace KDevelop;
 class KDEVCPPDUCHAIN_EXPORT TypeConversion {
   public:
     ///topContext is needed to resolve forward-declarations
-    TypeConversion(const KDevelop::TopDUContext* topContext);
+    TypeConversion(const KDevelop::TopDUContext* topContext );
     virtual ~TypeConversion();
     /**
      * An implicit conversion sequence is a sequence of conversions used to convert an argument in a function call to the type of the corresponding parameter of the function being called. (iso c++ draft 13.3.3.1)
@@ -89,7 +91,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * @return Whether there is an implicit conversion sequence available. 0 when no conversion is possible, else a positive number. The higher it is, the better the conversion. Maximum should be MaximumConversionResult
      **/
 
-    uint implicitConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue = true, bool noUserDefinedConversion = false );
+    uint implicitConversion( IndexedType from, IndexedType to, bool fromLValue = true, bool noUserDefinedConversion = false );
 
     /**
      * Returns the count of steps by which a class needed to be converted to it's base-class during the last implicit conversion.
@@ -106,6 +108,9 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
 
 
   private:
+    static void startCache();
+    static void stopCache();
+    
     /**iso c++ draft 13.3.3.1.2
      *
      * @param secondConversionIsIdentity Whether the second standard-conversion should be an identity-conversion or derived-to-base-conversion
@@ -131,6 +136,19 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
     //Used to store the count of steps by which a class needed to be converted to it's base-class
     int m_baseConversionLevels;
     const TopDUContext* m_topContext;
+    TypeConversionCache* m_cache;
+    friend class TypeConversionCacheEnabler;
+};
+
+///Use this to temporaily enable type-conversion caching
+///@warning The duchain must not be locked while construction and destruction of this object!
+struct TypeConversionCacheEnabler {
+  TypeConversionCacheEnabler() {
+    TypeConversion::startCache();
+  }
+  ~TypeConversionCacheEnabler() {
+    TypeConversion::stopCache(); 
+  }
 };
 
 }

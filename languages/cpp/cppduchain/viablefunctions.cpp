@@ -69,10 +69,11 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   const IndexedType* arguments = m_type->indexedArguments();
   const IndexedType* argumentIt = arguments;
 
+  TypeConversion conv(m_topContext.data());
+  
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
-    TypeConversion conv(m_topContext.data());
     ParameterConversion c;
-    c.rank = conv.implicitConversion( (*it).type, argumentIt->type(), (*it).lValue, m_noUserDefinedConversion );
+    c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );
     c.baseConversionLevels = conv.baseConversionLevels();
     m_parameterConversions << c;
     ++argumentIt;

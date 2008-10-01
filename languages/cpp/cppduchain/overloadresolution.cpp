@@ -49,9 +49,9 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>(*it);
         //Q_ASSERT();
 
-        if( functionDeclaration && functionDeclaration->isConstructor() )
+        if( functionDeclaration /*&& functionDeclaration->isConstructor()*/ ) //Test not needed, because name == classname
         {
-          if( function->arguments().size() >= params.parameters.size() )
+          if( function->indexedArgumentsSize() >= params.parameters.size() )
           {
             if( !implicit || !functionDeclaration->isExplicit() )
               goodDeclarations << *it;
@@ -216,8 +216,8 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     return declaration;
   }
 
-  const QList<AbstractType::Ptr>& arguments( functionType->arguments() );
-  if(params.parameters.count() > arguments.count())
+  const IndexedType* arguments( functionType->indexedArguments() );
+  if(params.parameters.count() > functionType->indexedArgumentsSize())
     return declaration;
 
   //templateContext contains the template-parameters that we need to find instantiations for
@@ -235,7 +235,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     return declaration; //All parameters already have a type assigned
 
   for( int a = 0; a < params.parameters.count(); a++ )
-    matchParameterTypes(params.parameters[a].type, arguments[a], instantiatedParameters);
+    matchParameterTypes(params.parameters[a].type, arguments[a].type(), instantiatedParameters);
 
   bool allInstantiated = true;
   for( QMap<IndexedString, AbstractType::Ptr>::const_iterator it = instantiatedParameters.begin(); it != instantiatedParameters.end(); ++it )
