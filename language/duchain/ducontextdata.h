@@ -160,94 +160,100 @@ public:
   //Iterates through all visible declarations within a given context, including the ones propagated from sub-contexts
   struct VisibleDeclarationIterator {
     
+    struct StackEntry {
+      StackEntry() : data(0), item(0), endItem(0), nextChild(0) {
+      }
+      
+      DUContextDynamicData* data;
+      const LocalIndexedDeclaration* item;
+      const LocalIndexedDeclaration* endItem;
+      uint nextChild;
+    };
+    
     VisibleDeclarationIterator(DUContextDynamicData* data) {
-      currentData.append(data);
-      currentItem.append(data->m_context->d_func()->m_localDeclarations());
-      currentEndItem.append(currentItem.back() + data->m_context->d_func()->m_localDeclarationsSize());
+      current.data = data;
+      current.item = data->m_context->d_func()->m_localDeclarations();
+      current.endItem = current.item + data->m_context->d_func()->m_localDeclarationsSize();
+      current.nextChild = 0;
       toValidPosition();
     }
     
     Declaration* operator*() const {
-      return currentItem.back()->data(currentData.back()->m_topContext);
+      return current.item->data(current.data->m_topContext);
     }
     
     VisibleDeclarationIterator& operator++() {
-      Q_ASSERT(!currentItem.isEmpty());
-      Q_ASSERT(currentItem.size() == currentData.size());
-      Q_ASSERT(currentEndItem.size() == currentData.size());
-      ++currentItem.back();
+      ++current.item;
       toValidPosition();
       return *this;
     }
     
     operator bool() const {
-      return !currentData.isEmpty();
+      return (bool)current.data;
     }
     
-    //Moves the cursor to the next valid position, from an invalid one(currentPos.back() == currentData->declarationCount())
+    //Moves the cursor to the next valid position, from an invalid one(currentPos.back() == current.data->declarationCount())
     void toValidPosition() {
-      if(currentItem.back() == currentEndItem.back()) {
-        const DUContextData* data = currentData.back()->m_context->d_func();
-        
-        //Check if we can proceed into a propagating child-context
-        uint childContextCount = data->m_childContextsSize();
-        const LocalIndexedDUContext* childContexts = data->m_childContexts();
-        
-        for(unsigned int a = 0; a < childContextCount; ++a) {
-          DUContext* child = childContexts[a].data(currentData.back()->m_topContext);
-          if(child->d_func()->m_propagateDeclarations) {
-            contextIndexInParent.append(a);
-            currentData.append(child->m_dynamicData);
-            currentItem.append(child->d_func()->m_localDeclarations());
-            currentEndItem.append(currentItem.back() + child->d_func()->m_localDeclarationsSize());
-            toValidPosition();
-            return;
-          }
-        }
-        upwards:
-        //Check if the parent has a follower child context
-        currentItem.pop_back();
-        currentEndItem.pop_back();
-        currentData.pop_back();
-        while(!contextIndexInParent.isEmpty() && contextIndexInParent.back() == currentData.back()->m_context->d_func()->m_childContextsSize()) {
-          currentData.pop_back();
-          currentItem.pop_back();
-          currentEndItem.pop_back();
-          contextIndexInParent.pop_back();
-        }
-        
-        Q_ASSERT(!contextIndexInParent.isEmpty() || currentData.isEmpty());
-        
-        if(!contextIndexInParent.isEmpty()) {
-          //We've found a next child that we can iterate into
-          data = currentData.back()->m_context->d_func();
+      if(current.item == current.endItem) {
+        {
+          const DUContextData* data = current.data->m_context->d_func();
+          
+          //Check if we can proceed into a propagating child-context
           uint childContextCount = data->m_childContextsSize();
           const LocalIndexedDUContext* childContexts = data->m_childContexts();
-
-          for(unsigned int a = contextIndexInParent.back(); a < childContextCount; ++a) {
-            if(childContexts[a].data(currentData.back()->m_topContext)->d_func()->m_propagateDeclarations) {
-              contextIndexInParent.back() = a+1;
-              DUContext* child = childContexts[a].data(currentData.back()->m_topContext);
-              currentData.append(child->m_dynamicData);
-              currentItem.append(child->d_func()->m_localDeclarations());
-              currentEndItem.append(currentItem.back() + child->d_func()->m_localDeclarationsSize());
+          
+          for(unsigned int a = 0; a < childContextCount; ++a) {
+            DUContext* child = childContexts[a].data(current.data->m_topContext);
+            if(child->d_func()->m_propagateDeclarations) {
+              current.nextChild = a+1;
+              stack.append(current);
+              current.data = child->m_dynamicData;
+              current.item = child->d_func()->m_localDeclarations();
+              current.endItem = current.item + child->d_func()->m_localDeclarationsSize();
+              current.nextChild = 0;
               toValidPosition();
               return;
             }
           }
-          contextIndexInParent.pop_back();
-        }else{
+        }
+        upwards:
+        //Go up and into the next valid context
+        if(stack.isEmpty()) {
+          current = StackEntry();
           return;
         }
+
+        current = stack.back();
+        stack.pop_back();
+
+        const DUContextData* data = current.data->m_context->d_func();
+        uint childContextCount = data->m_childContextsSize();
+        const LocalIndexedDUContext* childContexts = data->m_childContexts();
+
+        for(unsigned int a = current.nextChild; a < childContextCount; ++a) {
+          DUContext* child = childContexts[a].data(current.data->m_topContext);
+          
+          if(child->d_func()->m_propagateDeclarations) {
+
+            current.nextChild = a+1;
+            stack.append(current);
+            
+            current.data = child->m_dynamicData;
+            current.item = child->d_func()->m_localDeclarations();
+            current.endItem = current.item + child->d_func()->m_localDeclarationsSize();
+            current.nextChild = 0;
+            toValidPosition();
+            return;
+          }
+        }
+          
         goto upwards;
       }
     }
     
-    KDevVarLengthArray<DUContextDynamicData*> currentData; //Current data that is being iterated through, if inHash is false
-    KDevVarLengthArray<const LocalIndexedDeclaration*> currentItem;
-    KDevVarLengthArray<const LocalIndexedDeclaration*> currentEndItem;
-    
-    KDevVarLengthArray<uint> contextIndexInParent;
+    StackEntry current;
+
+    KDevVarLengthArray<StackEntry> stack;
   };
   
   /**
