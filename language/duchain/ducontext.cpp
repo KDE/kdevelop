@@ -1746,9 +1746,4 @@ DUContext* DUContext::Import::context() const {
 
 }
 
-KDevelop::DUContext::SearchItem::PtrList& operator<<(KDevelop::DUContext::SearchItem::PtrList& list, const KDevelop::DUContext::SearchItem::Ptr& item) {
-  list.append(item);
-  return list;
-}
-
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -113,6 +113,11 @@ public:
                 return a;
         return -1;
     }
+    
+    inline KDevVarLengthArray& operator<<(const T &t) {
+        append(t);
+        return *this;
+    }
 
     inline void append(const T &t) {
         const int idx = s++;
