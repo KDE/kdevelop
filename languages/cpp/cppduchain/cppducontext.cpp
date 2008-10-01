@@ -90,10 +90,10 @@ void FindDeclaration::closeQualifiedIdentifier() {
     } else {
       ExpressionEvaluationResult res;
       if( !s.result.isEmpty() ) {
-        res.allDeclarationsList().clear();
+        res.allDeclarations.clear();
         foreach(DeclarationPointer decl, s.result)
           if(decl)
-            res.allDeclarationsList().append(decl->id()); ///@todo prevent unneeded conversions here
+            res.allDeclarations.append(decl->id()); ///@todo prevent unneeded conversions here
         if(s.result[0]) {
           if(s.result[0]->abstractType())
             res.type = s.result[0]->abstractType()->indexed();

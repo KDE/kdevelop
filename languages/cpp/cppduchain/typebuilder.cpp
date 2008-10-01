@@ -168,8 +168,8 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       res = parser.evaluateType( node->expression, editor()->parseSession() );
 
       //Delay the type-resolution of template-parameters
-      if( res.allDeclarationsSize() ) {
-        Declaration* decl = res.allDeclarations()[0].getDeclaration(currentContext()->topContext());
+      if( res.allDeclarations.size() ) {
+        Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
         if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
           delay = true;
       }

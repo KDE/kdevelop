@@ -71,7 +71,7 @@ QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
   return ret;
 }
 
-QList<Declaration*> convert( const DeclarationId* decls, uint count, TopDUContext* top ) {
+QList<Declaration*> convert( const QList<DeclarationId>& decls, uint count, TopDUContext* top ) {
   QList<Declaration*> ret;
   for(int a = 0; a < count; ++a) {
     Declaration* d = decls[a].getDeclaration(top);
@@ -415,10 +415,10 @@ void CodeCompletionContext::processFunctionCallAccess() {
   } else {
     ///Simply take all the declarations that were found by the expression-parser
 
-    helper.setFunctions(convert(m_expressionResult.allDeclarations(), m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
+    helper.setFunctions(convert(m_expressionResult.allDeclarations, m_expressionResult.allDeclarationsSize(), m_duContext->topContext()));
 
     if(m_expressionResult.allDeclarationsSize()) {
-      Declaration* decl = m_expressionResult.allDeclarations()[0].getDeclaration(m_duContext->topContext());
+      Declaration* decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());
       if(decl)
         m_functionName = decl->identifier().toString();
     }

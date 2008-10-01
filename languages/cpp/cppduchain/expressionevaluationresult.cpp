@@ -27,12 +27,6 @@
 
 namespace Cpp {
 
-  ///@todo remove this again
-KDevelop::ItemRepository<ExpressionEvaluationResult, AppendedListItemRequest<ExpressionEvaluationResult> > expressionEvaluationResultRepository("Expression Evaluation Result Repository");
-const uint standardExpressionEvaluationResultIndex( expressionEvaluationResultRepository.index( ExpressionEvaluationResult() ) );
-
-DEFINE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId)
-
 TypeIdentifier ExpressionEvaluationResult::identifier() const {
   static TypeIdentifier noIdentifier("(no type)");
 
@@ -51,20 +45,6 @@ TypeIdentifier ExpressionEvaluationResult::identifier() const {
     return noIdentifier;
 }
 
-IndexedExpressionEvaluationResult::IndexedExpressionEvaluationResult(uint index) : m_index(index) {
-}
-
-IndexedExpressionEvaluationResult::IndexedExpressionEvaluationResult() : m_index(standardExpressionEvaluationResultIndex) {
-}
-
-const ExpressionEvaluationResult& IndexedExpressionEvaluationResult::result() const {
-  return *expressionEvaluationResultRepository.itemFromIndex(m_index);
-}
-
-IndexedExpressionEvaluationResult ExpressionEvaluationResult::indexed() const {
-  return IndexedExpressionEvaluationResult( expressionEvaluationResultRepository.index( *this ) );
-}
-
 QString ExpressionEvaluationResult::toString() const {
   if( DUChain::lock()->currentThreadHasReadLock() )
     return QString(isLValue() ? "lvalue " : "") + QString(isInstance ? "instance " : "") + (type.type() ? type.type()->toString() : QString("(no type)"));
@@ -75,7 +55,7 @@ QString ExpressionEvaluationResult::toString() const {
 
 unsigned int ExpressionEvaluationResult::hash() const {
   uint ret = ((type.hash() + (isInstance ? 1 : 0) * 101) + instanceDeclaration.hash()) * 73;
-  FOREACH_FUNCTION(const DeclarationId& id, allDeclarations)
+  foreach(const DeclarationId& id, allDeclarations)
       ret *= (id.hash() * 37);
 
   return ret;
@@ -92,35 +72,26 @@ QString ExpressionEvaluationResult::toShortString() const
 }
 
 ExpressionEvaluationResult::~ExpressionEvaluationResult() {
-  freeAppendedLists();
 }
 
 ExpressionEvaluationResult::ExpressionEvaluationResult() : isInstance(false) {
-  initializeAppendedLists();
 }
 
 ExpressionEvaluationResult::ExpressionEvaluationResult(const ExpressionEvaluationResult& rhs) {
-  initializeAppendedLists();
-  copyListsFrom(rhs);
-
   type = rhs.type;
   isInstance = rhs.isInstance;
   instanceDeclaration = rhs.instanceDeclaration;
+  allDeclarations = rhs.allDeclarations;
 }
 
 bool ExpressionEvaluationResult::operator==(const ExpressionEvaluationResult& rhs) const {
-    if(!listsEqual(rhs))
-      return false;
-
-    return type == rhs.type && isInstance == rhs.isInstance && instanceDeclaration == rhs.instanceDeclaration;
+    return type == rhs.type && isInstance == rhs.isInstance && instanceDeclaration == rhs.instanceDeclaration && allDeclarations == rhs.allDeclarations;
 }
 
 
 ExpressionEvaluationResult& ExpressionEvaluationResult::operator=(const ExpressionEvaluationResult& rhs) {
-  copyListsFrom(rhs);
-
+  allDeclarations = rhs.allDeclarations;
   type = rhs.type;
-
   isInstance = rhs.isInstance;
   instanceDeclaration = rhs.instanceDeclaration;
   return *this;

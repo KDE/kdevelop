@@ -33,28 +33,6 @@ class QString;
 
 namespace Cpp {
 using namespace KDevelop;
-KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(ExpressionEvaluationResult, allDeclarations, DeclarationId)
-
-class ExpressionEvaluationResult;
-
-class KDEVCPPDUCHAIN_EXPORT IndexedExpressionEvaluationResult {
-  public:
-    IndexedExpressionEvaluationResult();
-    IndexedExpressionEvaluationResult(uint index);
-
-    const ExpressionEvaluationResult& result() const;
-
-    uint hash() const {
-      return m_index;
-    }
-
-    bool operator==(const IndexedExpressionEvaluationResult& rhs) const {
-      return m_index == rhs.m_index;
-    }
-
-  private:
-    uint m_index;
-};
 
 class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
   public:
@@ -68,20 +46,21 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     bool isInstance; ///Whether the result of this expression is an instance(as it normally should be)
     DeclarationId instanceDeclaration; ///If this expression is an instance of some type, this either contains the declaration of the instance, or the type
 
-    ///Returns the indexed version of this evalation result(eventually it is put into a repository)
-    IndexedExpressionEvaluationResult indexed() const;
-
     static size_t classSize() {
       return sizeof(ExpressionEvaluationResult);
     }
 
-    START_APPENDED_LISTS(ExpressionEvaluationResult)
     ///This list contains the declarations found for the item evaluated.
-    ///@todo Eventually get rid of this list somehow
-    APPENDED_LIST_FIRST(ExpressionEvaluationResult, DeclarationId, allDeclarations);
+    QList<DeclarationId> allDeclarations;
 
-    END_APPENDED_LISTS(ExpressionEvaluationResult, allDeclarations);
-
+    uint allDeclarationsSize() const {
+      return allDeclarations.size();
+    }
+    
+    QList<DeclarationId>& allDeclarationsList() {
+      return allDeclarations;
+    }
+    
     ///@return whether the result is an lvalue
     bool isLValue() const {
       return isInstance && (instanceDeclaration.isValid() || type.type().cast<ReferenceType>());
@@ -96,10 +75,6 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
 
     unsigned int hash() const;
 
-    unsigned int itemSize() const {
-      return dynamicSize();
-    }
-    
     ///Duchain must be read-locked
     TypeIdentifier identifier() const;
 

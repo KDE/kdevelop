@@ -92,7 +92,7 @@ extern QMutex cppDuContextInstantiationsMutex;
           State s;
           s.expressionResult = result;
           s.result.clear();
-          FOREACH_FUNCTION(const DeclarationId& decl, result.allDeclarations)
+          foreach(const DeclarationId& decl, result.allDeclarations)
           s.result << DeclarationPointer( decl.getDeclaration(const_cast<TopDUContext*>(topContext())) );
           
           m_states << s;

@@ -150,7 +150,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   
   foreach(DeclarationPointer decl, v.lastDeclarations())
     if(decl)
-      ret.allDeclarationsList().append(decl->id());
+      ret.allDeclarations.append(decl->id());
   return ret;
 }
 
