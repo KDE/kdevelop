@@ -63,6 +63,9 @@ namespace KDevelop {
 
     void removeItem(const IndexedString& file, const IndexedQualifiedIdentifier& id);
 
+    ///Updates the kind for the given item. The item must already be in the symbol table.
+    void updateItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind);
+    
     ///Retrieves all the global identifiers for a file-name in an efficient way.
     ///@param count A reference that will be filled with the count of retrieved items
     ///@param items A reference to a pointer, that will represent the array of items.

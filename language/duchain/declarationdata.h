@@ -57,7 +57,6 @@ public:
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
   bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
-
 };
 
 }

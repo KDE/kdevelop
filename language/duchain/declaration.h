@@ -503,8 +503,10 @@ private:
    *
    * \note You do not have to implement this for your language if you are not going to use it(the du-chain itself does not and should not depend on it).
     * */
-   virtual Declaration* clonePrivate() const;
+  virtual Declaration* clonePrivate() const;
 
+  void updateCodeModel();
+   
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
 
   friend class DUContext;

@@ -819,9 +819,14 @@ struct Locker { //This is a dummy that does nothing
   }
 };
 template<>
-struct Locker<true> : public QMutexLocker {
-  Locker(QMutex* mutex) : QMutexLocker(mutex) {
+struct Locker<true> {
+  Locker(QMutex* mutex) : m_mutex(mutex) {
+    m_mutex->lock();
   }
+  ~Locker() {
+    m_mutex->unlock();
+  }
+  QMutex* m_mutex;
 };
 
 struct NoDynamicData {

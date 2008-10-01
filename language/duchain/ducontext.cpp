@@ -1125,12 +1125,23 @@ void DUContext::setType(ContextType type)
 {
   ENSURE_CAN_WRITE
 
-  bool wasInSymbolTable = inSymbolTable();
-  setInSymbolTable(false);
+  bool wasNamespaceInCodeModel = d_func()->m_inSymbolTable && d_func()->m_contextType == DUContext::Namespace && d_func()->m_scopeIdentifier.isValid();
 
   d_func_dynamic()->m_contextType = type;
 
-  setInSymbolTable(wasInSymbolTable);
+  bool shouldBeNamespaceInCodeModel = d_func()->m_inSymbolTable && d_func()->m_contextType == DUContext::Namespace && d_func()->m_scopeIdentifier.isValid();
+  
+  if(wasNamespaceInCodeModel && shouldBeNamespaceInCodeModel) {
+    //We're fine
+  }else if(!wasNamespaceInCodeModel && shouldBeNamespaceInCodeModel) {
+    //Add
+    QualifiedIdentifier id(scopeIdentifier(true));
+    CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
+  }else if(wasNamespaceInCodeModel && !shouldBeNamespaceInCodeModel) {
+    //Remove
+    QualifiedIdentifier id(scopeIdentifier(true));
+    CodeModel::self().removeItem(url(), id);
+  }
 
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }

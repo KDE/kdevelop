@@ -299,10 +299,6 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(Declaration);
 
-  bool wasInSymbolTable = d->m_inSymbolTable;
-
-  setInSymbolTable(false);
-
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Removal, DUChainObserver::DataType);
 
@@ -310,8 +306,6 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
-
-  setInSymbolTable(wasInSymbolTable);
 }
 
 Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/)
@@ -574,6 +568,34 @@ bool Declaration::inSymbolTable() const
   return d->m_inSymbolTable;
 }
 
+CodeModelItem::Kind kindForDeclaration(Declaration* decl) {
+  CodeModelItem::Kind kind = CodeModelItem::Unknown;
+  
+  if(decl->isFunctionDeclaration()) {
+    kind = CodeModelItem::Function;
+  }
+  
+  if(decl->kind() == Declaration::Type && decl->type<StructureType>())
+    kind = CodeModelItem::Class;
+  
+  if(kind == CodeModelItem::Unknown && decl->kind() == Declaration::Instance)
+    kind = CodeModelItem::Variable;
+  
+  if(decl->isForwardDeclaration())
+    kind = (CodeModelItem::Kind)(kind | CodeModelItem::ForwardDeclaration);
+  
+  return kind;
+}
+
+void Declaration::updateCodeModel()
+{
+  DUCHAIN_D(Declaration);
+  if(!d->m_identifier.isEmpty() && d->m_inSymbolTable) {
+    QualifiedIdentifier id(qualifiedIdentifier());
+    CodeModel::self().updateItem(url(), id, kindForDeclaration(this));
+  }
+}
+
 void Declaration::setInSymbolTable(bool inSymbolTable)
 {
   DUCHAIN_D_DYNAMIC(Declaration);
@@ -582,22 +604,7 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().addDeclaration(id, this);
       
-      CodeModelItem::Kind kind = CodeModelItem::Unknown;
-      
-      if(this->isFunctionDeclaration()) {
-        kind = CodeModelItem::Function;
-      }
-      
-      if(this->kind() == Type && type<StructureType>())
-        kind = CodeModelItem::Class;
-      
-      if(kind == CodeModelItem::Unknown && this->kind() == Instance)
-        kind = CodeModelItem::Variable;
-      
-      if(isForwardDeclaration())
-        kind = (CodeModelItem::Kind)(kind | CodeModelItem::ForwardDeclaration);
-        
-      CodeModel::self().addItem(url(), id, kind);
+      CodeModel::self().addItem(url(), id, kindForDeclaration(this));
     }
   
     else if(d->m_inSymbolTable && !inSymbolTable) {

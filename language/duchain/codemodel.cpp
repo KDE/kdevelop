@@ -190,6 +190,36 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
   Q_ASSERT(d->m_repository.findIndex(request));
 }
 
+void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
+{
+  ifDebug( kDebug() << file.str() << id.identifier().toString() << kind; )
+    
+  if(!id.isValid())
+    return;
+  CodeModelRepositoryItem item;
+  item.file = file;
+  CodeModelRequestItem request(item);
+  
+  uint index = d->m_repository.findIndex(item);
+  
+  if(index) {
+    //Check whether the item is already in the mapped list, else copy the list into the new created item
+    const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
+    uint itemsSize = oldItem->itemsSize();
+    const KDevelop::CodeModelItem* items = oldItem->items();
+    
+    for(uint a = 0; a < itemsSize; ++a) {
+      if(items[a].id == id) {
+        CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
+        const_cast<CodeModelItem*>(editableItem->items())[a].kind = kind;
+        return; //Already there
+      }
+    }
+  }
+  
+  Q_ASSERT(0); //The updated item as not in the symbol table!
+}
+
 void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIdentifier& id)
 //void CodeModel::removeDeclaration(const QualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
