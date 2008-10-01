@@ -76,6 +76,8 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     uint declCount = 0;
     PersistentSymbolTable::self().declarations(id, declCount, decls);
     
+    const QSet<uint>* recursiveImportIndices = top ? &top->recursiveImportIndices() : 0;
+    
     for(uint a = 0; a < declCount; ++a) {
       const IndexedDeclaration& iDecl(decls[a]);
       
@@ -83,7 +85,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       if((!top && !DUChain::self()->isInMemory(iDecl.topContextIndex())))
         continue;
       
-      if(!top || top->ownIndex() == iDecl.topContextIndex() || top->recursiveImportIndices().contains(iDecl.topContextIndex())) {
+      if(!top || top->ownIndex() == iDecl.topContextIndex() || recursiveImportIndices->contains(iDecl.topContextIndex())) {
         Declaration* decl = iDecl.data();
         if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
           //Hit
