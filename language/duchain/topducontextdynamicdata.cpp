@@ -267,7 +267,7 @@ uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool t
 }
 
 bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     if(index == 0 || index > uint(m_fastDeclarationsSize))
       return false;
     return (bool)m_fastDeclarations[index-1];
@@ -277,7 +277,7 @@ bool TopDUContextDynamicData::isDeclarationForIndexLoaded(uint index) const {
 }
 
 bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     if(index == 0)
       return true;
     if(index > uint(m_fastContextsSize))
@@ -289,7 +289,7 @@ bool TopDUContextDynamicData::isContextForIndexLoaded(uint index) const {
 }
 
 Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     if(index == 0 || index > uint(m_fastDeclarationsSize))
       return 0;
     else {
@@ -322,7 +322,7 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
 
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl) {
   uint index = decl->m_indexInTopContext;
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     if(index == 0 || index > uint(m_fastDeclarationsSize))
       return;
     else {
@@ -359,12 +359,12 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
 
 DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
   
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     if(index == 0)
       return m_topContext;
-    if(index > uint(m_fastContextsSize))
+    if(index > uint(m_fastContextsSize)) {
       return 0;
-    else {
+    } else {
       uint realIndex = index-1;
       DUContext** fastContextsPos = (m_fastContexts + realIndex);
       if(*fastContextsPos) //Shortcut, because this is the most common case
@@ -397,7 +397,7 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
 
 void TopDUContextDynamicData::clearContextIndex(DUContext* decl) {
   uint index = decl->m_dynamicData->m_indexInTopContext;
-  if(index < (0xffffffff/2)) {
+  if(index < (0x0fffffff/2)) {
     
     if(index == 0 || index > uint(m_fastContextsSize))
       return;
