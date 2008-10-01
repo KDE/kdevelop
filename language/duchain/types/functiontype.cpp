@@ -123,6 +123,16 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
   return ret;
 }
 
+const IndexedType* FunctionType::indexedArguments() const
+{
+  return d_func()->m_arguments();
+}
+
+uint FunctionType::indexedArgumentsSize() const
+{
+  return d_func()->m_argumentsSize();
+}
+
 void FunctionType::accept0 (TypeVisitor *v) const
 {
   TYPE_D(FunctionType);
