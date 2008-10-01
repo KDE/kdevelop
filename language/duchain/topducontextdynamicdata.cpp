@@ -358,29 +358,32 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
 }
 
 DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
-  if(!index)
-    return m_topContext;
   
   if(index < (0xffffffff/2)) {
-    if(index == 0 || index > uint(m_fastContextsSize))
+    if(index == 0)
+      return m_topContext;
+    if(index > uint(m_fastContextsSize))
       return 0;
     else {
       uint realIndex = index-1;
+      const DUContext** fastContextsPos = m_fastContexts + realIndex;
+      if(*fastContextsPos) //Shortcut, because this is the most common case
+        return *fastContextsPos;
       
-      if(!m_fastContexts[realIndex] && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
+      if(!*fastContextsPos && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
         //Construct the context, and eventuall its parent first
-        m_fastContexts[realIndex] = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset)));
-        if(!m_fastContexts[realIndex]) {
+        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset)));
+        if(!*fastContextsPos) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
           kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(m_data.first().first.constData() + m_contextDataOffsets[realIndex].dataOffset))->classId;
           Q_ASSERT(0);
         }else{
-          m_fastContexts[realIndex]->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
+          (*fastContextsPos)->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
         }
       }
       
-      return m_fastContexts[realIndex];
+      return *fastContextsPos;
     }
   }else{
     QMutexLocker lock(&m_temporaryDataMutex);
