@@ -59,7 +59,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   item.setData(&target);
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_onDisk(false) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_onDisk(false), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_fastContexts(0), m_fastContextsSize(0) {
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
