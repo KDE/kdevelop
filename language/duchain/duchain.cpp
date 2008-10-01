@@ -584,23 +584,24 @@ IndexedString DUChain::urlForIndex(uint index) const {
 
 TopDUContext* DUChain::chainForIndex(uint index) const {
 
-  if(sdDUChainPrivate->m_destroyed)
+  DUChainPrivate* p = (sdDUChainPrivate.operator->());
+  if(p->m_destroyed)
     return 0;
 
-  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+  QMutexLocker l(&p->m_chainsMutex);
 
-  QHash<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
-  if(it != sdDUChainPrivate->m_chainsByIndex.end())
+  QHash<uint, TopDUContext*>::const_iterator it = p->m_chainsByIndex.find(index);
+  if(it != p->m_chainsByIndex.end())
     return *it;
   else {
 
     l.unlock();
     QSet<uint> loaded;
-    sdDUChainPrivate->loadChain(index, loaded);
+    p->loadChain(index, loaded);
     l.relock();
 
-    it = sdDUChainPrivate->m_chainsByIndex.find(index);
-    if(it != sdDUChainPrivate->m_chainsByIndex.end())
+    it = p->m_chainsByIndex.find(index);
+    if(it != p->m_chainsByIndex.end())
       return *it;
     else
       return 0;
