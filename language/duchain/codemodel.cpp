@@ -132,14 +132,17 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
       ifDebug( kDebug() << "found index" << index << "count:" << oldItem->itemsSize(); )
     int freePlace = -1;
-    for(uint a = 0; a < oldItem->itemsSize(); ++a) {
-      ifDebug( kDebug() << "id at" << a << oldItem->items()[a].id.identifier().toString(); )
-      if(oldItem->items()[a].id == id) {
+    uint itemsSize = oldItem->itemsSize();
+    const KDevelop::CodeModelItem* items = oldItem->items();
+    
+    for(uint a = 0; a < itemsSize; ++a) {
+      ifDebug( kDebug() << "id at" << a << items[a].id.identifier().toString(); )
+      if(items[a].id == id) {
         CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
         ++const_cast<CodeModelItem*>(editableItem->items())[a].referenceCount;
         const_cast<CodeModelItem*>(editableItem->items())[a].kind = kind;
         return; //Already there
-      }else if(freePlace == -1 && !oldItem->items()[a].id.isValid()) {
+      }else if(freePlace == -1 && !items[a].id.isValid()) {
         freePlace = (int)a; //Remember an unused position where we can insert the item
         ifDebug( kDebug() << "found free place at" << freePlace; )
       }
@@ -204,30 +207,33 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     uint freeItemCount = 0;
     
     CodeModelRepositoryItem* oldItem = d->m_repository.dynamicItemFromIndex(index);
-    for(uint a = 0; a < oldItem->itemsSize(); ++a) {
+    uint itemsSize = oldItem->itemsSize();
+    KDevelop::CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
+    
+    for(uint a = 0; a < itemsSize; ++a) {
       if(oldItem->items()[a].id == id) {
         
-        --const_cast<CodeModelItem*>(oldItem->items())[a].referenceCount;
+        --items[a].referenceCount;
         ifDebug( kDebug() << "reduced reference-count for" << id.identifier().toString() << "to" << oldItem->items()[a].referenceCount; )
         
-        if(!oldItem->items()[a].referenceCount) {
-          const_cast<CodeModelItem*>(oldItem->items())[a].id = IndexedQualifiedIdentifier();
+        if(!items[a].referenceCount) {
+          items[a].id = IndexedQualifiedIdentifier();
           ifDebug( kDebug() << "marking index" << a << "as free"; )
         }
       }
-      if(!oldItem->items()[a].id.isValid()) {
+      if(!items[a].id.isValid()) {
         ++freeItemCount;
       }
     }
-    if(freeItemCount == oldItem->itemsSize()) {
+    if(freeItemCount == itemsSize) {
       ifDebug( kDebug() << "no items left, deleting"; )
       d->m_repository.deleteItem(index);
     }else if(freeItemCount > 10) {
         ifDebug( kDebug() << "resizing to make smaller"; )
         
-        for(uint a = 0; a < oldItem->itemsSize(); ++a)
-          if(oldItem->items()[a].id.isValid())
-            item.itemsList().append(oldItem->items()[a]);
+        for(uint a = 0; a < itemsSize; ++a)
+          if(items[a].id.isValid())
+            item.itemsList().append(items[a]);
         
         d->m_repository.deleteItem(index);
         ifDebug( kDebug() << "creating new entry with" << item.itemsSize() << "entries"; )
