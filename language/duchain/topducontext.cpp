@@ -1329,7 +1329,11 @@ void TopDUContext::clearUsedDeclarationIndices() {
 
 Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex) const {
   ENSURE_CAN_READ
-  if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
+  if(declarationIndex & (1<<31)) {
+    //We use the highest bit to mark direct indices into the local declarations
+    declarationIndex &= (0xffffffff - (1<<31)); //unset the highest bit
+    return m_dynamicData->getDeclarationForIndex(declarationIndex);
+  }else if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
     return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
   else
     return 0;
@@ -1341,11 +1345,22 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   }else{
     ENSURE_CAN_READ
   }
+  
+  if(declaration->topContext() == this) {
+    uint index = declaration->ownIndex();
+    Q_ASSERT(!(index & (1<<31)));
+    return (int)(index | (1<<31)); //We don't put context-local declarations into the list, that's a waste. We just use the mark them with the highest bit.
+  }
+  
   DeclarationId id(declaration->id());
 
   int index = -1;
-  for(unsigned int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
-    if(d_func()->m_usedDeclarationIds()[a] == id) {
+  
+  uint size = d_func()->m_usedDeclarationIdsSize();
+  const DeclarationId* ids = d_func()->m_usedDeclarationIds();
+  
+  for(unsigned int a = 0; a < size; ++a)
+    if(ids[a] == id) {
       index = a;
       break;
     }
