@@ -32,8 +32,8 @@
 #include "../../languageexport.h"
 
 //#define DEBUG_ITEMREPOSITORY_LOADING
-#define ifDebugInfiniteRecursion(x) x
-//#define ifDebugInfiniteRecursion(x)
+// #define ifDebugInfiniteRecursion(x) x
+#define ifDebugInfiniteRecursion(x)
 
 // #define ifDebugLostSpace(x) x
 #define ifDebugLostSpace(x)
@@ -328,7 +328,7 @@ class Bucket {
     
     //Tries to get the index within this bucket, or returns zero. Will put the item into the bucket if there is room.
     //Created indices will never begin with 0xffff____, so you can use that index-range for own purposes.
-    unsigned short index(const ItemRequest& request, const DynamicData* dynamic) {
+    unsigned short index(const ItemRequest& request, const DynamicData* dynamic, unsigned int itemSize) {
       m_lastUsed = 0;
       
       unsigned short localHash = request.hash() % m_objectMapSize;
@@ -347,7 +347,7 @@ class Bucket {
 
       m_changed = true;
 
-      unsigned int totalSize = request.itemSize() + AdditionalSpacePerItem;
+      unsigned int totalSize = itemSize + AdditionalSpacePerItem;
       //If this triggers, your item is too big.
       Q_ASSERT(totalSize < ItemRepositoryBucketSize);
       
@@ -466,7 +466,7 @@ class Bucket {
 #endif
       
       Q_ASSERT(itemFromIndex(insertedAt)->hash() == request.hash());
-      Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == request.itemSize());
+      Q_ASSERT(itemFromIndex(insertedAt)->itemSize() == itemSize);
       
       if(dynamic)
         itemFromIndex(insertedAt, dynamic);
@@ -933,12 +933,11 @@ class ItemRepository : public AbstractItemRepository {
     ThisLocker lock(&m_mutex);
     
     unsigned int hash = request.hash();
+    unsigned int size = request.itemSize();
     
     short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
     short unsigned int previousPreviousBucketNumber = 0;
-    
-    short unsigned int size = request.itemSize();
     
     uint useBucket = m_currentBucket;
     bool pickedBucketInChain = false; //Whether a bucket was picked for re-use that already is in the hash chain
@@ -981,6 +980,7 @@ class ItemRepository : public AbstractItemRepository {
       //Try finding an existing bucket with deleted space to store the data into
       for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
         Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+
         if(bucketPtr->canAllocateItem(size)) {
           //The item fits into the bucket.
           useBucket = m_freeSpaceBuckets[a];
@@ -1012,7 +1012,7 @@ class ItemRepository : public AbstractItemRepository {
         bucketPtr = m_fastBuckets[useBucket];
       }
       Q_ASSERT(!bucketPtr->findIndex(request, 0));
-      unsigned short indexInBucket = bucketPtr->index(request, dynamic);
+      unsigned short indexInBucket = bucketPtr->index(request, dynamic, size);
       
       if(indexInBucket) {
         if(!(*bucketHashPosition)) {
