@@ -26,12 +26,8 @@
 #include <QtCore/QHash>
 #include <QtCore/QStack>
 #include <QTime>
+#include <util/google/dense_hash_map>
 
-#if defined(Q_OS_WIN)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
 
 // Uncomment the following to turn on verbose locking information
 //#define DUCHAIN_LOCK_VERBOSE_OUTPUT
@@ -72,6 +68,7 @@ public:
     m_writer = 0;
     m_writerRecursion = 0;
     m_totalReaderRecursion = 0;
+    m_readers.set_empty_key(0); //Assuming that no thread can ever have handle zero
     m_readersEnd = m_readers.end(); //This is used to speedup currentThreadHasReadLock()
   }
 
@@ -118,7 +115,7 @@ public:
   int m_totalReaderRecursion; ///How often is the chain read-locked recursively by all readers? Should be sum of all m_reader values
 
   ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
-  typedef std::hash_map<Qt::HANDLE,int> ReaderMap; //Faster than QHash
+  typedef google::dense_hash_map<Qt::HANDLE, int> ReaderMap;
   ReaderMap m_readers;
   DUChainLockPrivate::ReaderMap::const_iterator m_readersEnd; //Must always be updated when a new reader was added
 
