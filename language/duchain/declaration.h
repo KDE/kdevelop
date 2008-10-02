@@ -448,6 +448,7 @@ public:
    * This is only valid when the declaration is not a specialization (specialization() returns 0), and if it is not anonymous in its context.
    *
    * \note for this to be valid, allocateOwnIndex() must have been called first.
+   * \note the highest big of the index is always zero!
    * \returns the index of the declaration within its TopDUContext.
    */
   uint ownIndex() const;
