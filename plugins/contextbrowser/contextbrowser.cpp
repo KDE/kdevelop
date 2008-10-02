@@ -107,7 +107,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   m_updateTimer->setSingleShot(true);
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
 
-  LAction* previousContext = actions->addAction("previous_context");
+  KAction* previousContext = actions->addAction("previous_context");
   previousContext->setText( i18n("&Previous Context") );
   previousContext->setShortcut( Qt::META | Qt::Key_Left );
   connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
