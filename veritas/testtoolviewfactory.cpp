@@ -52,6 +52,7 @@ TestToolViewFactory::~TestToolViewFactory()
 
 QWidget* TestToolViewFactory::create(QWidget *parent)
 {
+    Q_UNUSED(parent);
     ITestRunner* runner = d->framework->createRunner();
     QWidget* runnerWidget = runner->runnerWidget();
     QObject::connect(runnerWidget, SIGNAL(destroyed(QObject*)),

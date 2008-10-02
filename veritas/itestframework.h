@@ -22,10 +22,15 @@
 #define VERITAS_ITESTFRAMEWORK_H
 
 #include <interfaces/iextension.h>
+#include <QVariantList>
 #include "veritasexport.h"
+
+
+namespace KDevelop { class ProjectConfigSkeleton; }
 
 namespace Veritas
 {
+
 class ITestRunner;
 
 /*! An extension interface for (xUnit) test frameworks. Plugins that implement this
@@ -43,13 +48,34 @@ public:
     /*! Single word that describes the framework. eg 'QTest', 'CppUnit' */
     virtual QString name() const = 0;
 
-    /*! Factory method that constructs a test runner. To be implemented
+    /*! Factory method which constructs a test runner. To be implemented
      *  by concrete frameworks. @see Veritas::ITestRunner */
     virtual ITestRunner* createRunner() = 0;
+
+    /*! Factory method which constructs a configuration widget for this framework.
+     *  Implementations should both create the widget and set the current configuration
+     *  values in this widget. If null is returned, no extra config widget is present.
+     *  Caller takes ownership. */
+    virtual QWidget* createConfigWidget() { return 0; }
+
+    /*! Framework specific configuration. */
+    virtual KDevelop::ProjectConfigSkeleton* configSkeleton(const QVariantList& args) { Q_UNUSED(args); return 0; }
 
 private:
     ITestFrameworkPrivate* const d;
 };
+
+/*! Initialize a ProjectConfigSkeleton [the template parameter] */
+template <typename T>
+void initializeProjectConfig(const QVariantList& args) {
+    // NOTE does not quite belong here.
+    Q_ASSERT( args.count() > 3 );
+    T::instance( args.at(0).toString() );
+    T::self()->setDeveloperTempFile( args.at(0).toString() );
+    T::self()->setProjectTempFile( args.at(1).toString() );
+    T::self()->setProjectFileUrl( args.at(2).toString() );
+    T::self()->setDeveloperFileUrl( args.at(3).toString() );
+}
 
 }
 
