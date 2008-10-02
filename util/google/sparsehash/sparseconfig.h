@@ -5,7 +5,7 @@
 #define GOOGLE_NAMESPACE ::google
 
 /* the location of <hash_fun.h>/<stl_hash_fun.h> */
-#define HASH_FUN_H <hash_fun.h>
+#define HASH_FUN_H "hash_fun.h"
 
 /* the location of <hash_map> */
 #define HASH_MAP_H <ext/hash_map>
