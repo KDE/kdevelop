@@ -1,5 +1,4 @@
 add_subdirectory(tests)
-add_subdirectory(config)
 
 #
 # TODO install qxcppunit headers
