@@ -8,6 +8,7 @@ set(kdevplatformutil_LIB_SRCS
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
     sourceformattermanager.cpp
+    useswidget.cpp
     interfaces/isourceformatter.cpp
 )
 
@@ -31,9 +32,25 @@ install( FILES
     environmentgrouplist.h
     pushvalue.h
     kdevvarlengtharray.h
+    useswidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
     
 install( FILES
     interfaces/isourceformatter.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/interfaces)
 
+install( FILES
+    google/dense_hash_map
+    google/dense_hash_set
+    google/sparse_hash_map
+    google/sparse_hash_set
+    google/sparsetable
+    google/type_traits.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google)
+
+install( FILES
+    google/sparsehash/densehashtable.h
+    google/sparsehash/sparseconfig.h
+    google/sparsehash/sparseconfig_windows.h
+    google/sparsehash/sparsehashtable.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google/sparsehash )
