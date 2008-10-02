@@ -197,7 +197,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     KAction* newClassAction = actions->addAction("code_new_class");
     newClassAction->setText( i18n("Create &New Class") );
-    newClassAction->setShortcut( Qt::META + Qt::CTRL + Qt::Key_C );
     connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
 
     Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
