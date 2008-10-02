@@ -292,7 +292,7 @@ TestSwitch::~TestSwitch()
 void TestSwitch::connectAction(KActionCollection* col)
 {
     if (m_actionConnected) return;
-    QAction* a = col->addAction("switch_test_unitundertest");
+    KAction* a = col->addAction("switch_test_unitundertest");
     a->setText( i18n("&Switch Test/Unit Under Test") );
     a->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_R );
     connect(a, SIGNAL(triggered()),
