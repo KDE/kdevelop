@@ -448,42 +448,42 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 
     KActionCollection* actions = actionCollection();
 
-    QAction* quickOpen = actions->addAction("quick_open");
+    KAction* quickOpen = actions->addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 
-    QAction* quickOpenFile = actions->addAction("quick_open_file");
+    KAction* quickOpenFile = actions->addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
-    QAction* quickOpenClass = actions->addAction("quick_open_class");
+    KAction* quickOpenClass = actions->addAction("quick_open_class");
     quickOpenClass->setText( i18n("Quick Open &Class") );
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
-    QAction* quickOpenFunction = actions->addAction("quick_open_function");
+    KAction* quickOpenFunction = actions->addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    QAction* quickOpenDeclaration = actions->addAction("quick_open_jump_declaration");
+    KAction* quickOpenDeclaration = actions->addAction("quick_open_jump_declaration");
     quickOpenDeclaration->setText( i18n("Jump to Declaration") );
     quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
     connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
 
-    QAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
+    KAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
     quickOpenDefinition->setText( i18n("Jump to Definition") );
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
 
-    QAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
+    KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
     quickOpenNavigate->setText( i18n("Navigate Declaration") );
     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
 
-    QAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
+    KAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
