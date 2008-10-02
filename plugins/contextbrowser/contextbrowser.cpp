@@ -107,22 +107,22 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   m_updateTimer->setSingleShot(true);
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
 
-  QAction* previousContext = actions->addAction("previous_context");
+  LAction* previousContext = actions->addAction("previous_context");
   previousContext->setText( i18n("&Previous Context") );
   previousContext->setShortcut( Qt::META | Qt::Key_Left );
   connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
 
-  QAction* nextContext = actions->addAction("next_context");
+  KAction* nextContext = actions->addAction("next_context");
   nextContext->setText( i18n("&Next Context") );
   nextContext->setShortcut( Qt::META | Qt::Key_Right );
   connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
 
-  QAction* previousUse = actions->addAction("previous_use");
+  KAction* previousUse = actions->addAction("previous_use");
   previousUse->setText( i18n("&Previous Use") );
   previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
   connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
 
-  QAction* nextUse = actions->addAction("next_use");
+  KAction* nextUse = actions->addAction("next_use");
   nextUse->setText( i18n("&Next Use") );
   nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
   connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
