@@ -383,7 +383,25 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
-        
+      
+        {
+          //Prevent recursion that may cause a crash
+          IndexedString indexedFile(includedFile);
+          PreprocessJob* current = this;
+          while(current) {
+            if(current->parentJob()->document() == indexedFile) {
+              KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
+              p->setSource(KDevelop::Problem::Preprocessor);
+              p->setDescription(i18n("File was included recursively from within itself: %1", fileName ));
+              p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
+              p->setLocationStack(parentJob()->includeStack());
+              parentJob()->addPreprocessorProblem(p);
+              return 0;
+            }
+            current = current->parentJob()->parentPreprocessor();
+          }
+        }
+      
         if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
           //We are finding a file that was not in the include-path last time
           //All following contexts need to be updated, because they may contain references to missing declarations
