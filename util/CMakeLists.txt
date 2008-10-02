@@ -8,7 +8,6 @@ set(kdevplatformutil_LIB_SRCS
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
     sourceformattermanager.cpp
-    useswidget.cpp
     interfaces/isourceformatter.cpp
 )
 
@@ -32,7 +31,6 @@ install( FILES
     environmentgrouplist.h
     pushvalue.h
     kdevvarlengtharray.h
-    useswidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
     
 install( FILES
