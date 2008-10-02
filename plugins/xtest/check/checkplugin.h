@@ -38,6 +38,7 @@ public:
     virtual ~CheckPlugin();
     virtual Veritas::ITestRunner* createRunner();
     virtual QString name() const;
+    virtual QWidget* createConfigWidget() { return 0; }
 };
 
 #endif // CHECK_CHECKPLUGIN

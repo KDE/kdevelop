@@ -24,6 +24,8 @@
 #include <QInputDialog>
 #include <QIODevice>
 #include <QDir>
+#include <QCheckBox>
+#include <QVBoxLayout>
 #include <QMessageBox>
 
 #include <KAction>
@@ -53,12 +55,13 @@
 #include "qtestcase.h"
 #include "xmlregister.h"
 #include "kdevregister.h"
-#include "qtestsettings.h"
 #include "qtestviewdata.h"
 #include "qtestoutputparser.h"
 #include "outputview/qtestoutputdelegate.h"
 #include "outputview/qtestoutputjob.h"
 
+#include "config/qtestsettings.h"
+#include "config/qtestconfig.h"
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
 K_EXPORT_PLUGIN(QTestPluginFactory("kdevqtest"))
@@ -88,6 +91,33 @@ QString QTestPlugin::name() const
 Veritas::ITestRunner* QTestPlugin::createRunner()
 {
     return new QTestViewData(this);
+}
+
+QWidget* QTestPlugin::createConfigWidget()
+{
+    QWidget* cfg = new QWidget;
+    QCheckBox* v2 = new QCheckBox();
+    v2->setObjectName("kcfg_printAsserts");
+    v2->setText(i18n("Print each QVERIFY/QCOMPARE"));
+    v2->setCheckState(QTestConfig::printAsserts() ? Qt::Checked : Qt::Unchecked);
+
+    QCheckBox* vs = new QCheckBox();
+    vs->setObjectName("kcfg_printSignals");
+    vs->setText(i18n("Print every singal emitted"));
+    vs->setCheckState(QTestConfig::printSignals() ? Qt::Checked : Qt::Unchecked);
+
+    QVBoxLayout* l = new QVBoxLayout(cfg);
+    l->addWidget(vs);
+    l->addWidget(v2);
+    l->addStretch();
+
+    return cfg;
+}
+
+KDevelop::ProjectConfigSkeleton* QTestPlugin::configSkeleton(const QVariantList& args)
+{
+    Veritas::initializeProjectConfig<QTestConfig>(args);
+    return QTestConfig::self();
 }
 
 QTestPlugin::~QTestPlugin()

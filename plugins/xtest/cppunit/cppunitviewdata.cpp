@@ -39,19 +39,24 @@ CppUnitViewData::~CppUnitViewData() {}
 void CppUnitViewData::registerTests()
 {
     Register<TestRoot, TestSuite> reg;
-    reg.addFromExe(QFileInfo(fetchExe()));
-    reg.rootItem()->setExecutable(fetchExe());
+    KUrl testExe = KUrl(fetchExe());
+    if (testExe.isEmpty()) {
+        return; // TODO failure message
+    }
+    reg.addFromExe(testExe);
+    reg.rootItem()->setExecutable(testExe.path());
     emit registerFinished(reg.rootItem());
 }
 
 QString CppUnitViewData::fetchExe()
 {
-    if (project() == 0) {
-        return "";
-    }
+    if (project() == 0) return QString();
     KSharedConfig::Ptr cfg = project()->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CppUnit");
-    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
+    KConfigGroup group(cfg.data(), "Veritas");
+    QStringList executables;
+    executables = group.readEntry<QStringList>("executables", executables);
+    if (executables.isEmpty()) return QString();
+    return executables[0];
 }
 
 #include "cppunitviewdata.moc"

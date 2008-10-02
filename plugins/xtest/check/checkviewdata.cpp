@@ -1,4 +1,4 @@
-/* KDevelop xUnit plugin
+    /* KDevelop xUnit plugin
  *
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
@@ -38,18 +38,26 @@ CheckViewData::~CheckViewData() {}
 void CheckViewData::registerTests()
 {
     Register<TestRoot, TestSuite> reg;
-    reg.addFromExe(QFileInfo(fetchExe()));
-    reg.rootItem()->setExecutable(fetchExe());
+    QString testExe = fetchExe();
+    if (testExe.isEmpty()) {
+        return; // TODO failure message
+    }
+    reg.addFromExe(KUrl(testExe));
+    reg.rootItem()->setExecutable(testExe);
     emit registerFinished(reg.rootItem());
 }
 
 QString CheckViewData::fetchExe()
 {
-    if (project() == 0)
-        return "";
+    if (project() == 0) return QString();
     KSharedConfig::Ptr cfg = project()->projectConfiguration();
-    KConfigGroup group(cfg.data(), "Check");
-    return KUrl(group.readEntry("Test Registration")).pathOrUrl();
+    KConfigGroup group(cfg.data(), "Veritas");
+    QStringList executables;
+    executables = group.readEntry("executables", executables);
+    if (executables.isEmpty()) {
+        return QString();
+    }
+    return executables[0];
 }
 
 #include "checkviewdata.moc"

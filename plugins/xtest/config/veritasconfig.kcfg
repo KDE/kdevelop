@@ -5,12 +5,5 @@
   <group name="Veritas">
     <entry name="executables" key="executables" type="UrlList" />
     <entry name="framework" key="framework" type="String" />
-    <entry name="qtest_printasserts" key="qtest_printasserts" type="Bool">
-        <default>false</default>
-    </entry>
-    <entry name="qtest_printsignals" key="qtest_printsignals" type="Bool">
-        <default>false</default>
-    </entry>
-
   </group>
 </kcfg>

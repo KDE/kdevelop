@@ -1,0 +1,24 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_veritassettings
+X-KDE-FactoryName=kcm_kdev_veritassettings
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Test
+Name[x-test]=xxTestxx
+Comment=Configure Test settings
+Comment[el]=Ρυθμίσεις Test
+Comment[gl]=Configuración de Test
+Comment[nds]=Test-Instellen
+Comment[pt]=Configuração do Test
+Comment[pt_BR]=Configuração do Test
+Comment[sv]=Inställningar av Test
+Comment[uk]=Параметри Test
+Comment[x-test]=xxConfigure Test settingsxx
+Comment[zh_TW]=Test 設定

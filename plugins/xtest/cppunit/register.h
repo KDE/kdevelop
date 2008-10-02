@@ -52,6 +52,7 @@ public:
 
     void addFromXml(QIODevice*);
     void addFromExe(const QFileInfo& exe);
+    void addFromExe(const KUrl& exe);
     TestRoot* rootItem();
     void setRootDir(const QString& root);
     void setExecutable(const QFileInfo& exe);
@@ -121,6 +122,15 @@ void Register<R,S>::addFromExe(const QFileInfo& exe)
 {
     KProcess* proc = new KProcess;
     setExecutable(exe);
+    execute(proc);
+    addFromXml(proc);
+}
+
+template<typename R, typename S>
+void Register<R,S>::addFromExe(const KUrl& exe)
+{
+    KProcess* proc = new KProcess;
+    setExecutable(QFileInfo(exe.path()));
     execute(proc);
     addFromXml(proc);
 }

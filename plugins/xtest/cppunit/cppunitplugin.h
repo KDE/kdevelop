@@ -35,6 +35,7 @@ public:
     virtual ~CppUnitPlugin();
     virtual Veritas::ITestRunner* createRunner();
     virtual QString name() const;
+    virtual QWidget* createConfigWidget() { return 0; }
 };
 
 #endif // CPPUNIT_CPPUNITPLUGIN_H

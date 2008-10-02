@@ -23,6 +23,7 @@
 
 #include <KUrl>
 #include <QMap>
+#include <QLabel>
 #include <QVariantList>
 #include <veritas/itestframework.h>
 #include <interfaces/iplugin.h>
@@ -50,7 +51,10 @@ public:
     virtual ~QTestPlugin();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     virtual QString name() const;
-    Veritas::ITestRunner* createRunner();
+    virtual Veritas::ITestRunner* createRunner();
+
+    virtual QWidget* createConfigWidget();
+    virtual KDevelop::ProjectConfigSkeleton* configSkeleton(const QVariantList& args);
 
 private slots:
     void newQTest();

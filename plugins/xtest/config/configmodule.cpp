@@ -28,17 +28,37 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
-#include "../itestframework.h"
+#include <veritas/itestframework.h>
+
 #include "configwidget.h"
 
 using KDevelop::ICore;
 using KDevelop::IPlugin;
 using KDevelop::IPluginController;
+using KDevelop::ProjectConfigSkeleton;
 using Veritas::ConfigModule;
 using Veritas::ITestFramework;
 
 K_PLUGIN_FACTORY(VeritasConfigFactory, registerPlugin<Veritas::ConfigModule>(); )
-K_EXPORT_PLUGIN(VeritasConfigFactory("kcm_kdevveritas_config"))
+K_EXPORT_PLUGIN(VeritasConfigFactory("kcm_kdev_veritassettings"))
+
+namespace
+{
+QList<ITestFramework*> fetchTestFrameworks()
+{
+    QList<ITestFramework*> frameworks;
+    ICore* core = ICore::self();
+    IPluginController* pc = core->pluginController();
+    QList<IPlugin*> testPlugins = pc->allPluginsForExtension("org.kdevelop.ITestFramework");
+
+    foreach(IPlugin* plugin, testPlugins) {
+        ITestFramework* tf = qobject_cast<ITestFramework*>(plugin);
+        Q_ASSERT(tf);
+        frameworks << tf;
+    }
+    return frameworks;
+}
+}
 
 ConfigModule::ConfigModule(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<VeritasConfig>(VeritasConfigFactory::componentData(), parent, args)
@@ -47,20 +67,74 @@ ConfigModule::ConfigModule(QWidget* parent, const QVariantList& args)
     m_widget = new ConfigWidget;
     l->addWidget(m_widget);
 
-    ICore* core = ICore::self();
-    IPluginController* pc = core->pluginController();
-    QList<IPlugin*> plugs = pc->allPluginsForExtension("org.kdevelop.ITestFramework");
-    foreach(IPlugin* xframe, plugs) {
-        KPluginInfo i = pc->pluginInfo(xframe);
-        kDebug() << i.service()->genericName();
-    }
+    QList<ITestFramework*> frameworks = fetchTestFrameworks();
+    initWidgetFrameworkSelectionBox(frameworks);
+    initFrameworkSpecificConfigs(frameworks, args);
 
+    connect(m_widget, SIGNAL(frameworkSelected(QString)), SLOT(setDetailsWidgetFor(QString)));
+    connect(m_widget, SIGNAL(frameworkSelected(QString)), SLOT(changed()));
+    connect(m_widget, SIGNAL(changed()), SLOT(changed()));
     addConfig(VeritasConfig::self(), this);
+
     load();
 }
 
 ConfigModule::~ConfigModule()
 {
+}
+
+void ConfigModule::save()
+{
+    VeritasConfig::setExecutables(m_widget->executables());
+    VeritasConfig::setFramework(m_widget->currentFramework());
+    VeritasConfig::self()->writeConfig();
+    ProjectKCModule<VeritasConfig>::save();
+}
+
+void ConfigModule::load()
+{
+    KUrl::List currentTestExes = m_widget->executables();
+    foreach(const KUrl& testExe, VeritasConfig::executables()) {
+        if (!currentTestExes.contains(testExe)) {
+            m_widget->addTestExecutableField(testExe);
+        }
+    }
+    if (m_widget->numberOfTestExecutableFields() == 0) {
+        m_widget->addTestExecutableField();
+    }
+    ProjectKCModule<VeritasConfig>::load();
+    m_widget->setCurrentFramework(VeritasConfig::framework());
+    setDetailsWidgetFor(VeritasConfig::framework());
+}
+
+void ConfigModule::initWidgetFrameworkSelectionBox(const QList<ITestFramework*>& frameworks)
+{
+    foreach(ITestFramework* tf, frameworks) {
+        m_widget->appendFramework(tf->name());
+    }
+}
+
+void ConfigModule::initFrameworkSpecificConfigs(const QList<ITestFramework*>& frameworks, const QVariantList& args)
+{
+    foreach(ITestFramework* tf, frameworks) {
+        ProjectConfigSkeleton* pcs = tf->configSkeleton(args);
+        if (!pcs) continue;
+        QWidget* w = tf->createConfigWidget();
+        Q_ASSERT(w); // when a framework has an additional configSkeleton
+                     // it should also return a valid widget
+        addConfig(pcs, w);
+        m_specificWidgetFor[tf->name()] = w;
+    }
+}
+
+void ConfigModule::setDetailsWidgetFor(const QString& frameworkName)
+{
+    if (m_specificWidgetFor.contains(frameworkName)) {
+        m_widget->setDetailsWidget(m_specificWidgetFor[frameworkName]);
+    } else {
+        m_widget->setDetailsWidget(0);
+        kDebug() << "No framework specific config widget registered for" << frameworkName;
+    }
 }
 
 #include "configmodule.moc"

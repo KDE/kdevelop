@@ -25,7 +25,9 @@
 
 namespace Veritas
 {
+class ConfigWidget;
 
+/*! @unitundertest Veritas::ConfigWidget */
 class ConfigWidgetTest : public QObject
 {
 Q_OBJECT
@@ -34,7 +36,30 @@ private slots:
     void cleanup();
 
     void construct();
-    void expandDetails();
+    void detailsWidgetHiddenByDefault();
+    void expandDetailsWidget();
+    void collapseDetailsWidget();
+
+    void noTestExeFieldShownByDefault();
+    void addTestExeField();
+    void addTwoTestExeFields();
+    void removeFirstTestExeField();
+    void removeSecondTestExeField();
+    void removeAllTestExeFieldsThenReAdd();
+
+    void noFrameworksComboBoxByDefault();
+    void singleFrameworkComboBox();
+    void multipleFrameworksComboBox();
+
+    void executableContents();
+
+private:
+    void assertDetailsCollapsed();
+    void assertDetailsExpanded();
+    void assertTestExeFieldsShown(int numberOf);
+
+private:
+    ConfigWidget* m_config;
 };
 
 }

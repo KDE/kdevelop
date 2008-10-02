@@ -1,10 +1,7 @@
 add_subdirectory(tests)
-add_subdirectory(config)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
-
-include_directories(config)
 
 set(kdevqtest_SRCS
     qtestoutputparser.cpp
@@ -42,6 +39,7 @@ target_link_libraries(kdevqtest
 install(TARGETS kdevqtest ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 set(kdevqtestview_SRCS qtestplugin.cpp)
+kde4_add_kcfg_files(kdevqtestview_SRCS config/qtestconfig.kcfgc)
 qt4_automoc(${kdevqtestview_SRCS})
 kde4_add_plugin(kdevqtestview ${kdevqtestview_SRCS})
 target_link_libraries(kdevqtestview
