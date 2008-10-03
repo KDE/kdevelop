@@ -11,7 +11,7 @@ The CVS plugin is separated into three part.
    invoke the different CVS actions.
    This class serves as a dispatcher. It takes the urls and options 
    for the requested CVS action and passes them to the CvsProxy (#2)
-   to get a CvsJob returned. After starting, the job's result() singal
+   to get a CvsJob returned. After starting, the job's result() signal
    gets connected either directly to CvsMainView (#3) or to a custom
    output view.
 
