@@ -45,6 +45,7 @@
 #include <kcmultidialog.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -57,7 +58,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(ValgrindFactory, registerPlugin<ValgrindPlugin>(); )
-K_EXPORT_PLUGIN(ValgrindFactory("kdevvalgrind"))
+K_EXPORT_PLUGIN(ValgrindFactory(KAboutData("kdevvalgrind","kdevvalgrind", ki18n("Valgrind"), "0.1", ki18n("Support for running valgrind"), KAboutData::License_GPL)))
 
 class ValgrindWidgetFactory : public KDevelop::IToolViewFactory
 {

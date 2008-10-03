@@ -17,6 +17,7 @@
 #include <interfaces/iplugincontroller.h>
 #include "imakebuilder.h"
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
 #include <interfaces/context.h>
@@ -42,7 +43,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CustomMakeSupportFactory, registerPlugin<CustomMakeManager>(); )
-K_EXPORT_PLUGIN(CustomMakeSupportFactory("kdevcustommakemanager"))
+K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kdevcustommakemanager", ki18n("Custom Makefile Manager"), "0.1", ki18n("Support for managing custom makefile projects"), KAboutData::License_GPL)))
 
 class CustomMakeManager::Private
 {

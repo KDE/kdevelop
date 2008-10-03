@@ -20,7 +20,9 @@
 
 #include "astyle_plugin.h"
 
-#include <KGenericFactory>
+#include <KPluginLoader>
+#include <KPluginFactory>
+#include <KAboutData>
 
 #include "astyle_formatter.h"
 #include "astyle_stringiterator.h"
@@ -29,7 +31,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(AStyleFactory, registerPlugin<AStylePlugin>();)
-K_EXPORT_PLUGIN(AStyleFactory("kdevastyle"))
+K_EXPORT_PLUGIN(AStyleFactory(KAboutData("kdevastyle","kdevastyle", ki18n("Astyle Formatter"), "0.1", ki18n("A formatting tool using astyle"), KAboutData::License_GPL)))
 
 AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
 		: IPlugin(AStyleFactory::componentData(), parent)

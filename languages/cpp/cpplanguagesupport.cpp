@@ -39,6 +39,7 @@
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kio/netaccess.h>
 #include <kparts/part.h>
@@ -145,7 +146,7 @@ Declaration* definitionForCursorDeclaration(const KDevelop::SimpleCursor& cursor
 
 
 K_PLUGIN_FACTORY(KDevCppSupportFactory, registerPlugin<CppLanguageSupport>(); )
-K_EXPORT_PLUGIN(KDevCppSupportFactory("kdevcppsupport"))
+K_EXPORT_PLUGIN(KDevCppSupportFactory(KAboutData("kdevcppsupport","kdevcppsupport", ki18n("C++ Support"), "0.1", ki18n("Support for C++ Language"), KAboutData::License_GPL)))
 
 CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*args*/ )
     : KDevelop::IPlugin( KDevCppSupportFactory::componentData(), parent ),

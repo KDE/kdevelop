@@ -19,13 +19,17 @@
 
 #include "indent_plugin.h"
 
-#include <KGenericFactory>
+#include <KPluginLoader>
+#include <KPluginFactory>
+#include <KAboutData>
+#include <QTextStream>
+#include <KDebug>
 #include <KProcess>
 
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(IndentFactory, registerPlugin<IndentPlugin>();)
-K_EXPORT_PLUGIN(IndentFactory("kdevindent"))
+K_EXPORT_PLUGIN(IndentFactory(KAboutData("kdevindent","kdevindent", ki18n("Indent Formatter"), "0.1", ki18n("A formatter using indent"), KAboutData::License_GPL)))
 
 IndentPlugin::IndentPlugin(QObject *parent, const QVariantList&)
 		: IPlugin(IndentFactory::componentData(), parent)

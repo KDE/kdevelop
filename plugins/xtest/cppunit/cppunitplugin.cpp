@@ -21,6 +21,7 @@
 #include "cppunitplugin.h"
 
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <ksharedconfig.h>
 
@@ -52,7 +53,7 @@ using CppUnit::TestRoot;
 using CppUnit::TestSuite;
 
 K_PLUGIN_FACTORY(CppUnitPluginFactory, registerPlugin<CppUnitPlugin>();)
-K_EXPORT_PLUGIN(CppUnitPluginFactory("kdevcppunit"))
+K_EXPORT_PLUGIN(CppUnitPluginFactory(KAboutData("kdevcppunit","kdevcppunit", ki18n("CppUnit test"), "0.1", ki18n("Support running CppUnit tests"), KAboutData::License_GPL)))
 
 CppUnitPlugin::CppUnitPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CppUnitPluginFactory::componentData(), parent)

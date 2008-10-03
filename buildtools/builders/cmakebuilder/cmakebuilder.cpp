@@ -41,6 +41,7 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
@@ -55,7 +56,7 @@
 #define CMAKE_COMMAND "cmake"
 
 K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
-K_EXPORT_PLUGIN(CMakeBuilderFactory("kdevcmakebuilder"))
+K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"), "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),

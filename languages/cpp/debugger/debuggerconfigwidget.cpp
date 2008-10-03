@@ -19,7 +19,8 @@
 
 #include <kurlrequester.h>
 
-#include <kgenericfactory.h>
+#include <KPluginLoader>
+#include <KPluginFactory>
 #include <KConfigDialogManager>
 
 #include "debuggerconfig.h"

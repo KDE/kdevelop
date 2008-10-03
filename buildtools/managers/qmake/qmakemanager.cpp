@@ -37,6 +37,7 @@
 #include <interfaces/iproject.h>
 #include "iqmakebuilder.h"
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kdebug.h>
 #include <project/projectmodel.h>
@@ -47,7 +48,7 @@
 #include "qmakemkspecs.h"
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
-K_EXPORT_PLUGIN(QMakeSupportFactory("kdevqmakemanager"))
+K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData("kdevqmakemanager","kdevqmakemanager", ki18n("QMake Manager"), "0.1", ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager::QMakeProjectManager( QObject* parent,
                               const QVariantList& )

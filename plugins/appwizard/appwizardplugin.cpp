@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 #include <kmacroexpander.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kactioncollection.h>
 #include <kmimetype.h>
@@ -68,7 +69,7 @@ K_PLUGIN_FACTORY(AppWizardFactory,
     dirs->addResourceType("appimportfiles", "data", "kdevappwizard/importfiles/");
     setComponentData(compData);
 )
-K_EXPORT_PLUGIN(AppWizardFactory("kdevappwizard"))
+K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     :KDevelop::IPlugin(AppWizardFactory::componentData(), parent)

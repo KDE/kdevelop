@@ -37,7 +37,7 @@
 #include <interfaces/iuicontroller.h>
 
 K_PLUGIN_FACTORY(KDevDocumentViewFactory, registerPlugin<KDevDocumentViewPlugin>(); )
-K_EXPORT_PLUGIN(KDevDocumentViewFactory("kdevdocumentview"))
+K_EXPORT_PLUGIN(KDevDocumentViewFactory(KAboutData("kdevdocumentview","kdevdocumentview", ki18n("Document View"), "0.1", ki18n("A list of opened documents"), KAboutData::License_GPL)))
 
 class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 {

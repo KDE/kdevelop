@@ -42,6 +42,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 #include <project/projectmodel.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
@@ -72,7 +73,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
-K_EXPORT_PLUGIN(CMakeSupportFactory("kdevcmakemanager"))
+K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmakemanager", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
 {

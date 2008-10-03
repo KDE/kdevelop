@@ -20,6 +20,7 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -41,7 +42,7 @@
 #include <project/projectmodel.h>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
-K_EXPORT_PLUGIN(GrepViewFactory("kdevgrepview"))
+K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )

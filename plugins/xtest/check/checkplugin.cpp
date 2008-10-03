@@ -22,6 +22,7 @@
 #include <veritas/testtoolviewfactory.h>
 
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <ksharedconfig.h>
 
@@ -48,7 +49,7 @@ using Check::TestRoot;
 using Check::TestSuite;
 
 K_PLUGIN_FACTORY(CheckPluginFactory, registerPlugin<CheckPlugin>();)
-K_EXPORT_PLUGIN(CheckPluginFactory("kdevcheck"))
+K_EXPORT_PLUGIN(CheckPluginFactory(KAboutData("kdevcheck","kdevcheck", ki18n("Check Test"), "0.1", ki18n("Support for running check unit tests"), KAboutData::License_GPL)))
 
 CheckPlugin::CheckPlugin(QObject* parent, const QVariantList &)
         : IPlugin(CheckPluginFactory::componentData(), parent)

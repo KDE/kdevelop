@@ -45,6 +45,7 @@
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <KToolBar>
 #include <KDialog>
 #include <kwindowsystem.h>
@@ -86,7 +87,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
-K_EXPORT_PLUGIN(CppDebuggerFactory("kdevcppdebugger"))
+K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevcppdebugger","kdevcppdebugger", ki18n("C++ Debugger"), "0.1", ki18n("Support for running C++ apps in GDB"), KAboutData::License_GPL)))
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory

@@ -39,6 +39,7 @@
 #include <QtGui/QKeySequence>
 
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -52,7 +53,7 @@
 #include "makejob.h"
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
-K_EXPORT_PLUGIN(MakeBuilderFactory("kdevmakebuilder"))
+K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
 
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)

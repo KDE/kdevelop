@@ -50,7 +50,7 @@
 #include "internals/qdesigner_integration_p.h"
 
 K_PLUGIN_FACTORY(QtDesignerPluginFactory, registerPlugin<QtDesignerPlugin>(); )
-K_EXPORT_PLUGIN(QtDesignerPluginFactory("kdevqtdesigner"))
+K_EXPORT_PLUGIN(QtDesignerPluginFactory(KAboutData("kdevqtdesigner","kdevqtdesigner", ki18n("Qt Designer"), "0.1", ki18n("A GUI form designer for the Qt toolkit"), KAboutData::License_GPL)))
 
 class QtDesignerDocumentFactory : public KDevelop::IDocumentFactory
 {
