@@ -17,11 +17,11 @@ class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE KDevelop::DUContext* context() const { return wrapped->context(); }
 		Q_SCRIPTABLE KDevelop::DUContext* data() const { return wrapped->data(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedDUContext& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDUContext& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
-		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
 	private:
 		KDevelop::IndexedDUContext* wrapped;
@@ -37,9 +37,9 @@ class KrossKDevelopLocalIndexedDUContext : public QObject, public Kross::Wrapper
 		Q_SCRIPTABLE KDevelop::DUContext* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::LocalIndexedDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
-		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDUContext& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
 	private:
 		KDevelop::LocalIndexedDUContext* wrapped;
@@ -144,7 +144,7 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 
 		Q_SCRIPTABLE bool operator==(const KDevelop::DUContext::Import& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* context() const { return wrapped->context(); }
-		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		typedef KDevelop::SimpleCursor KDevelopSimpleCursor;
 		Q_PROPERTY(KDevelopSimpleCursor  position READ getposition WRITE setposition SCRIPTABLE true)
 		Q_SCRIPTABLE void setposition(const KDevelopSimpleCursor  val) { wrapped->position=val; }

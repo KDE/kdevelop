@@ -19,11 +19,11 @@ class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInt
 		Q_SCRIPTABLE KDevelop::Declaration* declaration() const { return wrapped->declaration(); }
 		Q_SCRIPTABLE KDevelop::Declaration* data() const { return wrapped->data(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
-		Q_SCRIPTABLE int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
 	private:
 		KDevelop::IndexedDeclaration* wrapped;
@@ -38,10 +38,10 @@ class KrossKDevelopLocalIndexedDeclaration : public QObject, public Kross::Wrapp
 
 		Q_SCRIPTABLE KDevelop::Declaration* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::LocalIndexedDeclaration& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDeclaration& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
 	private:
 		KDevelop::LocalIndexedDeclaration* wrapped;
@@ -72,7 +72,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDeclarationIsDefinition(bool x0) { wrapped->setDeclarationIsDefinition(x0); }
 		Q_SCRIPTABLE bool isTypeAlias() const { return wrapped->isTypeAlias(); }
 		Q_SCRIPTABLE void setIsTypeAlias(bool x0) { wrapped->setIsTypeAlias(x0); }
-		Q_SCRIPTABLE KDevelop::Declaration* specialize(int x0, const KDevelop::TopDUContext* x1) { return wrapped->specialize(x0, x1); }
+		Q_SCRIPTABLE KDevelop::Declaration* specialize(unsigned int x0, const KDevelop::TopDUContext* x1) { return wrapped->specialize(x0, x1); }
 		Q_SCRIPTABLE KDevelop::DUContext* internalContext() const { return wrapped->internalContext(); }
 		Q_SCRIPTABLE void setInternalContext(KDevelop::DUContext* x0) { wrapped->setInternalContext(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* logicalInternalContext(const KDevelop::TopDUContext* x0) const { return wrapped->logicalInternalContext(x0); }
@@ -85,6 +85,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::IndexedType indexedType() const { return wrapped->indexedType(); }
 		Q_SCRIPTABLE void setIdentifier(const KDevelop::Identifier& x0) { wrapped->setIdentifier(x0); }
 		Q_SCRIPTABLE KDevelop::Identifier identifier() const { return wrapped->identifier(); }
+		Q_SCRIPTABLE KDevelop::IndexedIdentifier indexedIdentifier() const { return wrapped->indexedIdentifier(); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier qualifiedIdentifier() const { return wrapped->qualifiedIdentifier(); }
 		Q_SCRIPTABLE bool equalQualifiedIdentifier(const KDevelop::Declaration* x0) const { return wrapped->equalQualifiedIdentifier(x0); }
 		Q_SCRIPTABLE KDevelop::Declaration::Kind kind() const { return wrapped->kind(); }
@@ -98,10 +99,10 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QString toString() const { return wrapped->toString(); }
 		Q_SCRIPTABLE QMap< KDevelop::IndexedString, QList< KDevelop::SimpleRange > > uses() const { return wrapped->uses(); }
 		Q_SCRIPTABLE QList< KTextEditor::SmartRange* > smartUses() const { return wrapped->smartUses(); }
-		Q_SCRIPTABLE int additionalIdentity() const { return wrapped->additionalIdentity(); }
-		Q_SCRIPTABLE int specialization() const { return wrapped->specialization(); }
+		Q_SCRIPTABLE unsigned int additionalIdentity() const { return wrapped->additionalIdentity(); }
+		Q_SCRIPTABLE unsigned int specialization() const { return wrapped->specialization(); }
 		Q_SCRIPTABLE KDevelop::DeclarationId id(bool x0=false) const { return wrapped->id(x0); }
-		Q_SCRIPTABLE int ownIndex() const { return wrapped->ownIndex(); }
+		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE void clearOwnIndex() { wrapped->clearOwnIndex(); }
 		Q_SCRIPTABLE void allocateOwnIndex() { wrapped->allocateOwnIndex(); }
 		Q_SCRIPTABLE KDevelop::Declaration* clone() const { return wrapped->clone(); }

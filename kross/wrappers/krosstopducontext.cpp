@@ -21,7 +21,7 @@ class KrossKDevelopReferencedTopDUContext : public QObject, public Kross::Wrappe
 		Q_SCRIPTABLE bool operator==(const KDevelop::ReferencedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::ReferencedTopDUContext& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* operator->() const { return wrapped->operator->(); }
-		Q_SCRIPTABLE int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
 	private:
 		KDevelop::ReferencedTopDUContext* wrapped;
 };
@@ -37,7 +37,7 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool isLoaded() const { return wrapped->isLoaded(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator!=(x0); }
-		Q_SCRIPTABLE int index() const { return wrapped->index(); }
+		Q_SCRIPTABLE unsigned int index() const { return wrapped->index(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 	private:
 		KDevelop::IndexedTopDUContext* wrapped;
@@ -57,7 +57,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void deleteSelf() { wrapped->deleteSelf(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* sharedDataOwner() const { return wrapped->sharedDataOwner(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
-		Q_SCRIPTABLE int ownIndex() const { return wrapped->ownIndex(); }
+		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::ParsingEnvironmentFile > parsingEnvironmentFile() const { return wrapped->parsingEnvironmentFile(); }
 		Q_SCRIPTABLE bool deleting() const { return wrapped->deleting(); }
