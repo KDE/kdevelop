@@ -103,7 +103,7 @@ QWidget* QTestPlugin::createConfigWidget()
 
     QCheckBox* vs = new QCheckBox();
     vs->setObjectName("kcfg_printSignals");
-    vs->setText(i18n("Print every singal emitted"));
+    vs->setText(i18n("Print every signal emitted"));
     vs->setCheckState(QTestConfig::printSignals() ? Qt::Checked : Qt::Unchecked);
 
     QVBoxLayout* l = new QVBoxLayout(cfg);
