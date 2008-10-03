@@ -63,7 +63,7 @@
 
 #include <cstddef>
 
-_GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
+namespace __gnu_cxx {
 
   using std::size_t;
 
@@ -167,6 +167,6 @@ _GLIBCXX_BEGIN_NAMESPACE(__gnu_cxx)
       { return __x; }
     };
 
-_GLIBCXX_END_NAMESPACE
+}
 
 #endif
