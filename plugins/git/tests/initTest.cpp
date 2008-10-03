@@ -223,7 +223,7 @@ void GitInitTest::commitFiles()
     DVCSjob* jobLs = new DVCSjob(0);
     jobLs->clear();
     jobLs->setDirectory(gitTest_BaseDir);
-    *jobLs<<"git-ls-tree"<<"--name-only"<<"-r"<<"HEAD";
+    *jobLs<<"git"<<"ls-tree"<<"--name-only"<<"-r"<<"HEAD";
     if (jobLs) {
         QVERIFY(jobLs->exec() );
         QVERIFY(jobLs->status() == KDevelop::VcsJob::JobSucceeded);
@@ -279,6 +279,11 @@ void GitInitTest::commitFiles()
 
     QVERIFY(secondCommit!="");
     QVERIFY(firstCommit != secondCommit);
+
+    j = m_proxy->log(KUrl());
+    QVERIFY( j );
+    QVERIFY( j->exec() );
+    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 }
 
 // void GitInitTest::cloneRepository()
