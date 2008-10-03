@@ -96,11 +96,12 @@ void ImportProject::accept()
         importProject(tmp);
     }
 
-    QDialog::accept();
 
     kDebug(9010) << "OPENING PROJECT: " << projectUrl;
 
     m_plugin->core()->projectController()->openProject(projectUrl);
+
+    QDialog::accept();
 }
 
 void ImportProject::importProject(QFile& file)
