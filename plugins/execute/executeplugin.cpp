@@ -29,13 +29,14 @@
 #include <kdebug.h>
 #include <kjob.h>
 #include <kmessagebox.h>
+#include <kaboutdata.h>
 
 #include <util/environmentgrouplist.h>
 
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevExecuteFactory, registerPlugin<ExecutePlugin>(); )
-K_EXPORT_PLUGIN(KDevExecuteFactory("kdevexecute"))
+K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18n("Execute support"), "0.1", ki18n("Allows running of native apps"), KAboutData::License_GPL)))
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)

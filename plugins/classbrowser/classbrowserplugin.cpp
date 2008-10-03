@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 
 #include "interfaces/icore.h"
 #include "interfaces/iuicontroller.h"
@@ -44,7 +45,7 @@
 #include "classtree.h"
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
-K_EXPORT_PLUGIN(KDevClassBrowserFactory("kdevclassbrowser"))
+K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("Browser for all known classes"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 

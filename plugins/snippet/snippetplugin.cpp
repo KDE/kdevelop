@@ -12,6 +12,7 @@
 
 #include <klocale.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -25,7 +26,7 @@
 #include "snippetcompletionmodel.h"
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
-K_EXPORT_PLUGIN(SnippetFactory("kdevsnippet"))
+K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
 
 class SnippetViewFactory: public KDevelop::IToolViewFactory{
 public:

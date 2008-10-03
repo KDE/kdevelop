@@ -36,6 +36,7 @@
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <kparts/mainwindow.h>
@@ -86,7 +87,7 @@ public:
 };
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
-K_EXPORT_PLUGIN(KDevQuickOpenFactory("kdevquickopen"))
+K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("Quickly open resources like files, classes, methods"), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();

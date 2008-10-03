@@ -26,6 +26,7 @@
 #include <kpluginloader.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
+#include <kaboutdata.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
@@ -33,7 +34,7 @@
 #include "filemanager.h"
 
 K_PLUGIN_FACTORY(KDevFileManagerFactory, registerPlugin<KDevFileManagerPlugin>(); )
-K_EXPORT_PLUGIN(KDevFileManagerFactory("kdevfilemanager"))
+K_EXPORT_PLUGIN(KDevFileManagerFactory(KAboutData("kdevfilemanager","kdevfilemanager",ki18n("File Manager"), "0.1", ki18n("Browse the filesystem"), KAboutData::License_GPL)))
 
 
 class KDevFileManagerViewFactory: public KDevelop::IToolViewFactory{

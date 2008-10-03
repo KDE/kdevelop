@@ -33,6 +33,7 @@
 #include <ktexteditor/smartinterface.h>
 #include <KTextEditor/TextHintInterface>
 #include <kactioncollection.h>
+#include <kaboutdata.h>
 #include <kdebug.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -84,7 +85,7 @@ private:
 };
 
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
-K_EXPORT_PLUGIN(ContextBrowserFactory("kdevcontextbrowser"))
+K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevcontextbrowser",ki18n("Context Browser"), "0.1", ki18n("Shows information for the current context"), KAboutData::License_GPL)))
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)

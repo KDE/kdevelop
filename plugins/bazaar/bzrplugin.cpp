@@ -22,6 +22,7 @@
 
 #include <KPluginFactory>
 #include <KPluginLoader>
+#include <KAboutData>
 #include <klocalizedstring.h>
 
 #include <interfaces/icore.h>
@@ -30,8 +31,9 @@
 
 #include "bzrexecutor.h"
 
+
 K_PLUGIN_FACTORY(KDevBzrFactory, registerPlugin<BzrPlugin>(); )
-K_EXPORT_PLUGIN(KDevBzrFactory("kdevbzr"))
+K_EXPORT_PLUGIN(KDevBzrFactory(KAboutData("kdevbzr","kdevbzr", ki18n("Bazaar Plugin"), "0.1", ki18n("Bazaar version control system support"), KAboutData::License_GPL, ki18n("Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>") ) ) )
 
 BzrPlugin::BzrPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, KDevBzrFactory::componentData())

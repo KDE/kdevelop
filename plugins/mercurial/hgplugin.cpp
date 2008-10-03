@@ -22,6 +22,7 @@
 
 #include <KPluginFactory>
 #include <KPluginLoader>
+#include <kaboutdata.h>
 #include <klocalizedstring.h>
 
 #include <interfaces/icore.h>
@@ -31,7 +32,7 @@
 #include "hgexecutor.h"
 
 K_PLUGIN_FACTORY(KDevHgFactory, registerPlugin<HgPlugin>(); )
-K_EXPORT_PLUGIN(KDevHgFactory("kdevhg"))
+K_EXPORT_PLUGIN(KDevHgFactory(KAboutData("kdevhg","kdevhg", ki18n("Mercurial"), "0.1", ki18n("Support for Mercurial version control systems"), KAboutData::License_GPL)))
 
 HgPlugin::HgPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, KDevHgFactory::componentData())

@@ -34,6 +34,7 @@
 #include <kaboutdata.h>
 #include <kiconloader.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -45,7 +46,7 @@
 KDevTeamworkPlugin* KDevTeamworkPlugin::m_self = 0;
 
 K_PLUGIN_FACTORY(KDevTeamworkFactory, registerPlugin<KDevTeamworkPlugin>(); )
-K_EXPORT_PLUGIN(KDevTeamworkFactory("kdevteamwork"))
+K_EXPORT_PLUGIN(KDevTeamworkFactory(KAboutData("kdevteamwork","kdevteamwork", ki18n("Teamwork"), "0.1", ki18n("Collaboration support"), KAboutData::License_GPL)))
 
 
 class KDevTeamworkViewFactory : public KDevelop::IToolViewFactory

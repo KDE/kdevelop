@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <kparts/partmanager.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <kaboutdata.h>
 #include <ktexteditor/variableinterface.h>
 #include <KApplication>
 #include <KConfig>
@@ -57,7 +58,7 @@ Boston, MA 02110-1301, USA.
 #include <util/sourceformattermanager.h>
 
 K_PLUGIN_FACTORY(SourceFormatterFactory, registerPlugin<SourceFormatterPlugin>();)
-K_EXPORT_PLUGIN(SourceFormatterFactory("kdevsourceformatter"))
+K_EXPORT_PLUGIN(SourceFormatterFactory(KAboutData("kdevsourceformatter","kdevsourceformatter", ki18n("Source Formatting"), "0.1", ki18n("Gui to re-format source code"), KAboutData::License_GPL)))
 
 SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList &)
 		: KDevelop::IPlugin(SourceFormatterFactory::componentData(), parent)

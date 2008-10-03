@@ -16,6 +16,7 @@
 #include <QMenu>
 
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -54,7 +55,8 @@
 #include <language/duchain/duchain.h>
 
 K_PLUGIN_FACTORY(KDevVcsCommonFactory, registerPlugin<KDevVcsCommonPlugin>(); )
-K_EXPORT_PLUGIN(KDevVcsCommonFactory("kdevvcscommon"))
+K_EXPORT_PLUGIN(KDevVcsCommonFactory(KAboutData("kdevvcscommon","kdevvcscommon", ki18n("Common VCS"), "0.1", ki18n("Common VCS operations"), KAboutData::License_GPL)))
+
 
 KDevVcsCommonPlugin::KDevVcsCommonPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevVcsCommonFactory::componentData(), parent)

@@ -20,6 +20,7 @@
 #include <kparts/part.h>
 #include <kparts/partmanager.h>
 #include <kparts/mainwindow.h>
+#include <kaboutdata.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/markinterface.h>
 #include <kpluginfactory.h>
@@ -76,7 +77,7 @@
 #include "svncheckoutmetadatawidget.h"
 
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>(); )
-K_EXPORT_PLUGIN(KDevSvnFactory("kdevsubversion"))
+K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion","kdevsubversion", ki18n("Subversion"), "0.1", ki18n("Support for Subversion version control systems"), KAboutData::License_GPL)))
 
 KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)

@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <kaboutdata.h>
 
 #include <QDir>
 #include <QExtensionFactory>
@@ -38,7 +39,7 @@
 #include <QRegExp>
 
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
-K_EXPORT_PLUGIN(GenericSupportFactory("kdevgenericmanager"))
+K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
 class GenericProjectManagerPrivate
 {

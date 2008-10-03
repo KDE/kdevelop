@@ -30,6 +30,7 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kaboutdata.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kactioncollection.h>
@@ -46,7 +47,7 @@
 #include "toolviewdata.h"
 
 K_PLUGIN_FACTORY(StandardOutputViewFactory, registerPlugin<StandardOutputView>(); )
-K_EXPORT_PLUGIN(StandardOutputViewFactory("kdevstandardoutputview"))
+K_EXPORT_PLUGIN(StandardOutputViewFactory(KAboutData("kdevstandardoutputview","kdevstandardoutputview",ki18n("Output View"), "0.1", ki18n("Provides toolviews for presenting the output of running apps"), KAboutData::License_GPL)))
 
 
 class OutputViewFactory : public KDevelop::IToolViewFactory{

@@ -12,6 +12,7 @@
 #include "kdevkonsoleviewplugin.h"
 
 #include <kgenericfactory.h>
+#include <kaboutdata.h>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
@@ -31,7 +32,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 }
 
 K_PLUGIN_FACTORY(KonsoleViewFactory, registerPlugin<KDevKonsoleViewPlugin>( QString(), &createKonsoleView ); )
-K_EXPORT_PLUGIN(KonsoleViewFactory("kdevkonsoleview"))
+K_EXPORT_PLUGIN(KonsoleViewFactory(KAboutData("kdevkonsoleview","kdevkonsoleview", ki18n("Konsole"), "0.1", ki18n("Embedded Terminal support"), KAboutData::License_GPL)))
 
 class KDevKonsoleViewFactory: public KDevelop::IToolViewFactory{
 public:

@@ -23,6 +23,7 @@
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <klocalizedstring.h>
+#include <kaboutdata.h>
 #include <QDebug>
 
 #include <interfaces/icore.h>
@@ -36,7 +37,7 @@
 #include "gitexecutor.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
-K_EXPORT_PLUGIN(KDevGitFactory("kdevgit"))
+K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData())

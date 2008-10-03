@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 
 #include <KTextEditor/Document>
@@ -45,7 +46,7 @@
 #include "problemwidget.h"
 
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
-K_EXPORT_PLUGIN(KDevProblemReporterFactory("kdevproblemreporter"))
+K_EXPORT_PLUGIN(KDevProblemReporterFactory(KAboutData("kdevproblemreporter","kdevproblemreporter", ki18n("Problem Reporter"), "0.1", ki18n("Shows errors in source code"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 
