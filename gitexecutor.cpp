@@ -89,7 +89,8 @@ DVCSjob* GitExecutor::init(const KUrl &directory)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory.toLocalFile(), GitExecutor::Init) ) {
-        *job << "git-init";
+        *job << "git";
+        *job << "init";
         return job;
     }
     if (job) delete job;
@@ -100,7 +101,8 @@ DVCSjob* GitExecutor::clone(const KUrl &repository, const KUrl directory)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory.toLocalFile(), GitExecutor::Init) ) {
-        *job << "git-clone";
+        *job << "git";
+        *job << "clone";
         *job << repository.path();
 //         addFileList(job, repository.path(), directory); //TODO it's temp, should work only with local repos
         return job;
@@ -132,7 +134,8 @@ DVCSjob* GitExecutor::commit(const QString& repository,
     Q_UNUSED(args)
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-commit";
+        *job << "git";
+        *job << "commit";
         ///In args you may find url, not only comd-line args in this case.
 /*        foreach(KUrl arg, args)
             *job<<KUrl::relativeUrl(repository + QDir::separator(), arg);*/
@@ -149,7 +152,8 @@ DVCSjob* GitExecutor::remove(const QString& repository, const KUrl::List &files)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-rm";
+        *job << "git";
+        *job << "rm";
         addFileList(job, files);
         return job;
     }
@@ -204,7 +208,8 @@ DVCSjob* GitExecutor::var(const QString & repository)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-var";
+        *job << "git";
+        *job << "var";
         *job << "-l";
         return job;
     }
@@ -226,7 +231,8 @@ DVCSjob* GitExecutor::checkout(const QString &repository, const QString &branch)
     ///TODO Check if the branch exists. or send only existed branch names here!
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-checkout";
+        *job << "git";
+        *job << "checkout";
         *job << branch;
         return job;
     }
@@ -239,7 +245,8 @@ DVCSjob* GitExecutor::branch(const QString &repository, const QString &basebranc
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-branch";
+        *job << "git";
+        *job << "branch";
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
             *job << args;
@@ -257,7 +264,8 @@ DVCSjob* GitExecutor::reset(const QString &repository, const QStringList &args, 
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-reset";
+        *job << "git";
+        *job << "reset";
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
             *job << args;
@@ -272,7 +280,8 @@ DVCSjob* GitExecutor::lsFiles(const QString &repository, const QStringList &args
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-ls-files";
+        *job << "git";
+        *job << "ls-files";
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
             *job << args;
@@ -351,7 +360,8 @@ QList<QVariant> GitExecutor::getModifiedFiles(const QString &directory)
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory) )
-        *job << "git-diff-files";
+        *job << "git";
+        *job << "diff-files";
     if (job)
         job->exec();
     QStringList output;
@@ -393,7 +403,8 @@ QList<QVariant> GitExecutor::getCachedFiles(const QString &directory)
         DVCSjob* job = new DVCSjob(vcsplugin);
         if (prepareJob(job, directory) )
         {
-            *job << "git-mktree";
+            *job << "git";
+            *job << "mktree";
             job->setStandardInputFile("/dev/null");
         }
         if (job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
@@ -403,7 +414,7 @@ QList<QVariant> GitExecutor::getCachedFiles(const QString &directory)
         shaArg<<"HEAD";
     job = new DVCSjob(vcsplugin);
     if (prepareJob(job, directory) )
-        *job << "git-diff-index" << "--cached" << shaArg;
+        *job << "git" << "diff-index" << "--cached" << shaArg;
     if (job)
         job->exec();
     QStringList output;
@@ -717,7 +728,8 @@ DVCSjob* GitExecutor::gitRevParse(const QString &repository, const QStringList &
 
         job->clear();
         job->setDirectory(workDir);
-        *job << "git-rev-parse";
+        *job << "git";
+        *job << "rev-parse";
         foreach(const QString &arg, args)
             *job << arg;
         return job;
@@ -730,7 +742,8 @@ DVCSjob* GitExecutor::gitRevList(const QString &repository, const QStringList &a
 {
     DVCSjob* job = new DVCSjob(vcsplugin);
     if (prepareJob(job, repository) ) {
-        *job << "git-rev-list";
+        *job << "git";
+        *job << "rev-list";
         foreach(const QString &arg, args)
             *job << arg;
         return job;
