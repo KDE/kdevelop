@@ -201,15 +201,6 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( action->text() );
     action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
-    KStandardAction::keyBindings( m_mainWindow->guiFactory(), SLOT(
-                            configureShortcuts() ), actionCollection() );
-
-    action = KStandardAction::configureToolbars(
-                 this, SLOT( configureToolbars() ),
-                 actionCollection() );
-    action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you configure toolbars." ) ) );
-
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
