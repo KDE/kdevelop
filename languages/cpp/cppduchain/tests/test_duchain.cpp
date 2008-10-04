@@ -2413,8 +2413,6 @@ struct TestContext {
 
 void TestDUChain::testImportStructure()
 {
-  return;
-  
   clock_t startClock = clock();
   ///Maintains a naive import-structure along with a real top-context import structure, and allows comparing both.
   int cycles = 5;
