@@ -433,6 +433,17 @@ QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const
     return items;
 }
 
+QList<ProjectFolderItem*> Project::foldersForUrl(const KUrl& url) const
+{
+    QList<ProjectFolderItem*> items;
+    foreach(ProjectBaseItem* item,  d->itemsForUrl( url ) )
+    {
+        if( item->type() == ProjectBaseItem::Folder )
+            items << dynamic_cast<ProjectFolderItem*>( item );
+    }
+    return items;
+}
+
 int Project::fileCount() const
 {
     QList<ProjectFileItem*> files;

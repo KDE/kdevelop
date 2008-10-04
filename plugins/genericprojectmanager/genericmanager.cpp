@@ -33,6 +33,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kaboutdata.h>
+#include <kdirwatch.h>
 
 #include <QDir>
 #include <QExtensionFactory>
@@ -52,6 +53,8 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
+    m_watch = new KDirWatch( this );
+    connect(m_watch, SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
 }
 
 GenericProjectManager::~GenericProjectManager()
@@ -168,6 +171,7 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
 {
     KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     projectRoot->setProjectRoot(true);
+    m_watch->addDir(project->folder().path(), KDirWatch::WatchSubDirs);
     return projectRoot;
 }
 
@@ -177,6 +181,17 @@ bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )
     KDevelop::ICore::self()->runController()->registerJob( importJob );
     return true;
 }
+
+void GenericProjectManager::dirty( const QString &fileName )
+{
+    foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects() ) {
+        foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl( KUrl(fileName) ) ) {
+            kDebug() << "reloading item" << item->url().path();
+            parse(item);
+        }
+    }
+}
+
 
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )

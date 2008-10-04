@@ -71,6 +71,7 @@ public:
     virtual QList<ProjectFileItem*> files() const;
 
     virtual QList<ProjectFileItem*> filesForUrl( const KUrl& ) const;
+    virtual QList<ProjectFolderItem*> foldersForUrl(const KUrl& ) const;
 
     QString projectTempFile() const;
     QString developerTempFile() const;

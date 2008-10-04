@@ -112,6 +112,9 @@ public:
     /** Get all items corresponding to the @p file url */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
 
+    /** Get all items corresponding to the @p folder url */
+    Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
+
     /** Make the model to reload */
     Q_SCRIPTABLE virtual void reloadModel() = 0;
 //     virtual KUrl projectConfigFile() const = 0;

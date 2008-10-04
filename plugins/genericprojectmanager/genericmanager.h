@@ -26,6 +26,7 @@
 class QFileInfo;
 class QStringList;
 class KUrl;
+class KDirWatch;
 template <typename T> class QList;
 namespace KDevelop
 {
@@ -79,6 +80,9 @@ Q_SIGNALS:
 
 private:
     bool isValid( const QFileInfo &fileName, const QStringList &includes, const QStringList &excludes ) const;
+    KDirWatch* m_watch;
+private Q_SLOTS:
+    void dirty( const QString &fileName );
 
 private:
     struct GenericProjectManagerPrivate* const d;
