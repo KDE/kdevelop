@@ -280,10 +280,6 @@ void GitInitTest::commitFiles()
     QVERIFY(secondCommit!="");
     QVERIFY(firstCommit != secondCommit);
 
-    j = m_proxy->log(KUrl());
-    QVERIFY( j );
-    QVERIFY( j->exec() );
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
 }
 
 // void GitInitTest::cloneRepository()

@@ -25,12 +25,13 @@
 
 #include "dvcsjob.h"
 
-#include <QFile>
-#include <QList>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtCore/QStringList>
 
-#include <QStringList>
-#include <KDebug>
-#include <KLocale>
+#include <KDE/KDebug>
+#include <KDE/KLocale>
 
 #include <util/processlinemaker.h>
 #include <interfaces/iplugin.h>
@@ -87,6 +88,8 @@ void DVCSjob::setServer(const QString& server)
 
 void DVCSjob::setDirectory(const QString& directory)
 {
+    qDebug() << "\nDir is: " << directory;
+    Q_ASSERT_X(QFileInfo(directory).isAbsolute(), "setWorkingDirectory", "Empty string or relative path for working dir");
     d->directory = directory;
 }
 

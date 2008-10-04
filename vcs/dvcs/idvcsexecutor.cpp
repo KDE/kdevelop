@@ -47,6 +47,12 @@ bool IDVCSexecutor::prepareJob(DVCSjob* job, const QString& repository, enum Req
         return false;
     }
 
+    if (!QFileInfo(repository).isAbsolute())
+    {
+        //We don't want to have empty or non-absolute pathes for working dir
+        return false;
+    }
+
     // clear commands and args from a possible previous run
     job->clear();
 
