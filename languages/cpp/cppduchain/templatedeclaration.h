@@ -181,7 +181,7 @@ namespace Cpp {
       
       DeclarationId id(bool forceDirect) const;
       
-      Declaration* specialize(uint specialization, const TopDUContext* topContext);
+      Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance);
     
     private:
       virtual TemplateDeclarationData* dynamicTemplateData() = 0;
@@ -246,8 +246,8 @@ namespace Cpp {
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
-    virtual Declaration* specialize(uint specialization, const TopDUContext* topContext) {
-      return TemplateDeclaration::specialize(specialization, topContext);
+    virtual Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
+      return TemplateDeclaration::specialize(specialization, topContext, upDistance);
     }
     
     virtual uint specialization() const {

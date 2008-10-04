@@ -221,43 +221,5 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
   return ret;
 }
 
-DUContext* applyActiveSpecializations(KDevelop::DUContext* context, TopDUContext* source, QList<KDevelop::DUContext*> appendChain) {
-  if(!context)
-  return 0;
-  if(Declaration* declaration = context->owner()) {
-    uint specialization = SpecializationStore::self().get(declaration->id());
-    if(specialization) {
-      InstantiationInformation info( IndexedInstantiationInformation(specialization).information() );
-      Declaration* specializedDeclaration = declaration->specialize(specialization, source);
-      DUContext* currentContext = specializedDeclaration->internalContext();
-      if(!currentContext) {
-        kWarning() << "failure: Cannot activate specializations, specialization did not have an internal context:" << specializedDeclaration->toString();
-        return appendChain.isEmpty() ? context : appendChain.back();
-      }
-      Q_ASSERT(currentContext);
-      
-      for(int a = 0; a < appendChain.size(); ++a) {
-        InstantiationInformation nextInfo;
-        nextInfo.previousInstantiationInformation = info.indexed().index();
-        info = nextInfo;
-        CppDUContext<KDevelop::DUContext>* ctx = dynamic_cast<CppDUContext<KDevelop::DUContext>* >(appendChain[a]);
-        Q_ASSERT(ctx);
-        currentContext = ctx->instantiate(info, source);
-      if(!currentContext) {
-        kWarning() << "failure: Cannot activate specializations, specialization did not have an internal context:" << specializedDeclaration->toString();
-        return appendChain.isEmpty() ? context : appendChain.back();
-      }
-      }
-      return currentContext;
-    }
-  }
-  if(context->parentContext()) {
-    appendChain.prepend(context);
-    return applyActiveSpecializations(context->parentContext(), source, appendChain);
-  }
-  
-  return appendChain.isEmpty() ? context : appendChain.back();
-}
-
 }
 

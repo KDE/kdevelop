@@ -494,7 +494,24 @@ class CppDUContext : public BaseContext {
       //If the parent context is a class context, we should even search it from an import
       return !(flags & DUContext::InImportedParentContext) || (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class);
     }
-    
+
+    virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
+      if(specialization == 0)
+        return this;
+      else {
+        InstantiationInformation information = IndexedInstantiationInformation( specialization ).information();
+        
+        //Add empty elements until the specified depth
+        for(int a = 0; a < upDistance; ++a) {
+          InstantiationInformation nextInformation;
+          nextInformation.previousInstantiationInformation = information.indexed().index();
+          information = nextInformation;
+        }
+        
+        return instantiate(information, topContext);
+      }
+    }
+
     DUContext* instantiate(InstantiationInformation info, const TopDUContext* source) {
       if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
         return this;

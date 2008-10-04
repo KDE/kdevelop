@@ -345,11 +345,21 @@ TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m
 TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0), m_specializedFrom(0) {
 }
 
-Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUContext* topContext) {
+Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
   if(specialization == 0)
     return dynamic_cast<Declaration*>(this);
-  else
-    return instantiate(IndexedInstantiationInformation( specialization ).information(), topContext);
+  else {
+    InstantiationInformation information = IndexedInstantiationInformation( specialization ).information();
+    
+    //Add empty elements until the specified depth
+    for(int a = 0; a < upDistance; ++a) {
+      InstantiationInformation nextInformation;
+      nextInformation.previousInstantiationInformation = information.indexed().index();
+      information = nextInformation;
+    }
+    
+    return instantiate(information, topContext);
+  }
 }
 
 uint TemplateDeclaration::specialization() const {

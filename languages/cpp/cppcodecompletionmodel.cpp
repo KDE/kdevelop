@@ -59,6 +59,7 @@
 #include "cppcodecompletionworker.h"
 #include "cpplanguagesupport.h"
 #include <language/editor/modificationrevision.h>
+#include <language/duchain/specializationstore.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -100,7 +101,7 @@ void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, 
 
     DUContextPointer thisContext;
     {
-      thisContext = Cpp::applyActiveSpecializations(top->findContextAt(SimpleCursor(range.start())), top);
+      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
 
        kDebug(9007) << "context is set to" << thisContext.data();
         if( thisContext ) {
