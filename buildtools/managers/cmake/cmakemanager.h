@@ -104,6 +104,8 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
+    virtual bool reload(KDevelop::ProjectBaseItem*);
+
     static QStringList guessCMakeModulesDirectories(const QString& cmakeBin);
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );

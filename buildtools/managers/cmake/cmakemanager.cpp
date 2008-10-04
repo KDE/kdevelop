@@ -523,6 +523,22 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     return folderList;
 }
 
+bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
+{
+    CMakeFolderItem* folderItem = dynamic_cast<CMakeFolderItem*>(item);
+    if (folderItem) {
+        if (item == item->project()->projectItem()) {
+            item->project()->reloadModel();
+        } else {
+            QStandardItem *parent = folderItem->parent();
+            CMakeFolderItem* fi = new CMakeFolderItem( folderItem->project(), folderItem->url().toLocalFile(), parent);
+            parent->removeRow(folderItem->row());
+            reimport(fi);
+        }
+    }
+    return true;
+}
+
 QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 {
     return m_targets;
