@@ -231,6 +231,7 @@ void Project::reloadModel()
                                 i18n("Could not open project") );
             return;
         }
+        d->topItem->setIcon();
         model->appendRow(d->topItem);
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
