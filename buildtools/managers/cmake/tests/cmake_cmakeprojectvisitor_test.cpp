@@ -173,4 +173,99 @@ void CMakeProjectVisitorTest::testRun()
 
 }
 
+void CMakeProjectVisitorTest::init()
+{
+    m_someCMakeLists = "foo_file_tmp_";
+}
+
+// helper
+CMakeProjectVisitor* CMakeProjectVisitorTest::setupVisitor()
+{
+    MacroMap* mm = new MacroMap;
+    VariableMap* vm = new VariableMap;
+    CacheValues* val = new CacheValues;
+    CMakeProjectVisitor* vtor = new CMakeProjectVisitor(m_someCMakeLists, m_fakeContext);
+    vtor->setVariableMap(vm);
+    vtor->setMacroMap(mm);
+    vtor->setCacheValues(val);
+    return vtor;
+}
+
+// helper
+CMakeFileContent CMakeProjectVisitorTest::setupFileContent(const QString& content)
+{
+    QFile file(m_someCMakeLists);
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    Q_ASSERT(file.isOpen());
+    QTextStream out(&file);
+    out << content;
+    file.close();
+    CMakeFileContent code = CMakeListsParser::readCMakeFile(m_someCMakeLists);
+    file.remove();
+    Q_ASSERT(code.count()!=0);
+    return code;
+}
+
+void CMakeProjectVisitorTest::assertTestFound(CMakeProjectVisitor* visitor, const QString& targetName)
+{
+    QVERIFY(visitor->targets().contains(targetName));
+    QCOMPARE(CMakeProjectVisitor::Test, visitor->targetType(targetName));
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_addExeInFront()
+{
+    QString content(
+        "add_test(foo foo.exe)\n"
+        "add_executable(foo foo.cpp)\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->targets().count());
+    assertTestFound(vtor, "foo");
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_addExeAfter()
+{
+    QString content(
+        "add_executable(foo foo.cpp)\n"
+        "add_test(foo foo.exe)\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->targets().count());
+    assertTestFound(vtor, "foo");
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_multiple()
+{
+    QString content(
+        "add_executable(foo foo.cpp)\n"
+        "add_test(foo foo.exe)\n"
+        "\n"
+        "add_test(zoo zoo.exe)\n"
+        "add_executable(zoo zoo.cpp)\n"
+        "\n"
+        "add_executable(moo moo.cpp)\n"
+        "add_test(moo moo.exe)\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(3, vtor->targets().count());
+    assertTestFound(vtor, "foo");
+    assertTestFound(vtor, "zoo");
+    assertTestFound(vtor, "moo");
+}
+
 #include "cmake_cmakeprojectvisitor_test.moc"

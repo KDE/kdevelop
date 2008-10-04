@@ -1033,7 +1033,6 @@ void CMakeAstTest::testExportLibraryDepsGoodParse_data()
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "good 1" ) << func1;
     QTest::newRow( "good 2" ) << func2;
- 
 }
 
 void CMakeAstTest::testExportLibraryDepsBadParse()

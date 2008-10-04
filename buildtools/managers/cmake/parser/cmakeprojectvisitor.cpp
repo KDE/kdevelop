@@ -224,7 +224,11 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
 
 void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
 {
-    m_targetsType[id]=t;
+    if (!m_targetsType.contains(id) || m_targetsType[id] != Test)
+    {
+        m_targetsType[id]=t;
+    }
+
     VisitorState p;
     QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
     QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();

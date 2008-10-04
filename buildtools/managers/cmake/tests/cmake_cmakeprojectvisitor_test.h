@@ -22,7 +22,11 @@
 #define CMAKECMAKEPROJECTVISITORTEST_H
 
 #include <QtTest/QtTest>
+#include <QString>
 #include <language/duchain/topducontext.h>
+#include "cmakelistsparser.h"
+
+class CMakeProjectVisitor;
 
 class CMakeProjectVisitorTest : public QObject
 {
@@ -35,11 +39,24 @@ private slots:
     void testVariables();
     void testVariables_data();
 
+    void init();
+
     void testRun();
     void testRun_data();
 
+    void addTest_addExeInFront();
+    void addTest_addExeAfter();
+    void addTest_multiple();
+
+private:
+    // helpers
+    CMakeProjectVisitor* setupVisitor();
+    CMakeFileContent setupFileContent(const QString& content);
+    void assertTestFound(CMakeProjectVisitor* visitor, const QString& targetName);
+
 private:
     KDevelop::TopDUContext* m_fakeContext;
+    QString m_someCMakeLists;
 };
 
 #endif
