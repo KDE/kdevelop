@@ -125,6 +125,7 @@ public:
      */
     virtual KDevelop::ProjectFolderItem *import(KDevelop::IProject *project);
 
+    virtual bool reload(KDevelop::ProjectBaseItem*) { return false; }
     /**
      * Add a folder to the project
      *

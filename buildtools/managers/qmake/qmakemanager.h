@@ -80,6 +80,8 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* );
 
+    virtual bool reload(KDevelop::ProjectBaseItem*) { return false; }
+
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }
 
