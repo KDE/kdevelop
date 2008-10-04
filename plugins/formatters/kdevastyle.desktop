@@ -14,6 +14,7 @@ Comment[pt_BR]=Um 'plugin' de formatação do código-fonte, com base num conjun
 Comment[sv]=Ett insticksprogram för formatering av källkod enligt en angiven uppsättning regler
 Comment[uk]=Додаток для форматування коду у відповідності до вказаного набору правил
 Comment[x-test]=xxA plugin for formatting of sourcecode according to a specified set of rulesxx
+Comment[zh_CN]=一个根据指定规则设定格式化源代码的插件
 Comment[zh_TW]=根據指定的規則排列程式源碼的外掛程式
 Name=KDevAStyle
 Name[da]=KDevelop en stil
@@ -32,6 +33,7 @@ GenericName[pt_BR]='Plugin' do AStyle
 GenericName[sv]=Astil-insticksprogram
 GenericName[uk]=Додаток AStyle
 GenericName[x-test]=xxAStyle Pluginxx
+GenericName[zh_CN]=AStyle 插件
 GenericName[zh_TW]=AStyle 外掛程式
 
 ServiceTypes=KDevelop/Plugin

@@ -11,4 +11,10 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Test
+Name[gl]=Proba
+Name[pt]=Teste
+Name[pt_BR]=Teste
+Name[uk]=Тест
 Comment=Configure Test settings
+Comment[gl]=Configura os parámetros da proba
+Comment[uk]=Налаштувати параметри тесту
