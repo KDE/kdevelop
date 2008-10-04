@@ -83,8 +83,11 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
             file = ".";
         else
             file = url.path();
-        args << file;
-        kDebug() << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
+        if (!file.isEmpty())
+	{
+            args << file;
+            kDebug() << "url is: " << url << "job->getDirectory(): " << job->getDirectory() << " file is: " << file;
+	}
     }
 
     *job << args;
