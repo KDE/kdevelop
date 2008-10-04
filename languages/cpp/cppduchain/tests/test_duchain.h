@@ -115,9 +115,15 @@ private slots:
   void testConst();
 
   void testSymbolTableValid();
-  
+
   void testCStruct();
   void testCStruct2();
+
+  void testVirtualMemberFunction();
+  void testNonVirtualMemberFunction();
+  void testMultipleVirtual();
+  void testMixedVirtualNormal();
+
 
 public:
   enum DumpArea {

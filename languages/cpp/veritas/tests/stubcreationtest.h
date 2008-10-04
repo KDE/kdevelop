@@ -47,6 +47,7 @@ private slots:
     void nonVirtualMethod();
     void privateMethod();
     void signal();
+    void signalWithEmptyPublic();
 
 private:
     ClassSkeleton createStubClassFrom(const QByteArray&);

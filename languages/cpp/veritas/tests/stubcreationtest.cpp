@@ -174,6 +174,19 @@ void StubCreationTest::signal()
     KVERIFY(actual.methods().isEmpty());
 }
 
+void StubCreationTest::signalWithEmptyPublic()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "signals: void foo();\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    KVERIFY(actual.methods().isEmpty());
+}
+
 
 /////////////////////////// helpers //////////////////////////////////////////
 

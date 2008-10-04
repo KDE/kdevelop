@@ -39,7 +39,10 @@ public:
     virtual int foo(char);
 };
 
-/*! Non-virtual nor signals nor private methods are not stubbed. */
+/*! Non-virtual nor signals nor private methods are stubbed.
+ *  NOTE this is currently broken but used to ran @GSOC
+ *       both the public & signal method ARE stubbed now ...
+ *       looks like a regression in duchain */
 class Bar
 {
 public:
