@@ -136,9 +136,6 @@ DVCSjob* GitExecutor::commit(const QString& repository,
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "commit";
-        ///In args you may find url, not only comd-line args in this case.
-/*        foreach(KUrl arg, args)
-            *job<<KUrl::relativeUrl(repository + QDir::separator(), arg);*/
         *job << "-m";
         //Note: the message is quoted somewhere else, so if we quote here then we have quotes in the commit log
         *job << message;
@@ -191,13 +188,11 @@ void GitExecutor::status_slot(DVCSjob *statusJob)
 
 DVCSjob* GitExecutor::log(const KUrl& url)
 {
-    QFileInfo info(url.toLocalFile());
-
     DVCSjob* job = new DVCSjob(vcsplugin);
-    if (prepareJob(job, info.absolutePath()) ) {
+    if (prepareJob(job, url.path()) ) {
         *job << "git";
         *job << "log";
-        *job << info.fileName();
+        addFileList(job, url);
         return job;
     }
     if (job) delete job;
