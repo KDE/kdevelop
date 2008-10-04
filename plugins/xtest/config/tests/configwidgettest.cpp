@@ -23,22 +23,12 @@
 #include <qtest_kde.h>
 #include "../../kasserts.h"
 #include "../configwidget.h"
+#include "fakedetailswidget.h"
 #include <QLabel>
 #include <KUrlRequester>
 
 using Veritas::ConfigWidgetTest;
 using Veritas::ConfigWidget;
-
-namespace
-{
-class FakeDetailsWidget : public QLabel
-{
-Q_OBJECT
-public:
-    FakeDetailsWidget() { setText("ALLO_WORLD"); }
-    virtual ~FakeDetailsWidget() {}
-};
-}
 
 void ConfigWidgetTest::init()
 {
@@ -234,4 +224,4 @@ void ConfigWidgetTest::executableContents()
 
 QTEST_KDEMAIN( ConfigWidgetTest, GUI )
 #include "configwidgettest.moc"
-#include "moc_configwidgettest.cpp"
+

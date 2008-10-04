@@ -14,4 +14,4 @@ macro(kdev_add_test test_EXEC)
         kdevqtest)
 endmacro(kdev_add_test)
 
-kdev_add_test(ut-configwidget configwidgettest.cpp ../configwidget.cpp)
+kdev_add_test(ut-configwidget configwidgettest.cpp ../configwidget.cpp fakedetailswidget.cpp)
