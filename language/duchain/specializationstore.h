@@ -24,6 +24,9 @@
 
 namespace KDevelop {
   class DeclarationId;
+  class Declaration;
+  class DUContext;
+  class TopDUContext;
   
   /**
    * This class allows dynamic management of "current" specializations for declarations.
@@ -51,6 +54,25 @@ namespace KDevelop {
        * Clears all registered specializations
        */
       void clear();
+      
+      /**
+       * Applies the known specializations for the given declaration using the Declaration::specialize() function.
+       * If no specializations are known, the original declaration is returned.
+       * @param declaration The declaration to specialize
+       * @param source The top-context from where to start searching
+       * @param recursive Whether parent-contexts should be checked for known specializations, and those applied.
+       *                  This is a bit more expensive then just doing a local check.
+       */
+      KDevelop::Declaration* applySpecialization(KDevelop::Declaration* declaration, KDevelop::TopDUContext* source, bool recursive = true);
+      /**
+       * Applies the known specializations for the given context using the DUContext::specialize() function.
+       * If no specializations are known, returns the original context.
+       * @param context The context to specialize
+       * @param source The top-context from where to start searching
+       * @param recursive Whether parent-contexts should be checked for known specializations, and those applied.
+       *                  This is a bit more expensive then just doing a local check.
+       */
+      DUContext* applySpecialization(KDevelop::DUContext* context, KDevelop::TopDUContext* source, bool recursive = true);
       
     private:
       SpecializationStore();

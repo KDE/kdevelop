@@ -308,7 +308,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
-Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/)
+Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/)
 {
   return this;
 }

@@ -44,6 +44,7 @@
 #include "contextbrowser.h"
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/specializationstore.h>
 
 const int maxHistoryLength = 30;
 
@@ -286,10 +287,12 @@ void ContextController::updateDeclarationListBox(DUContext* context) {
         virtual bool accept(Declaration* decl) {
             if(decl->range().isEmpty())
                 return false;
-            
+                
             if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class)) {
-                FunctionType::Ptr function = decl->type<FunctionType>();
-                QString text = decl->qualifiedIdentifier().toString();
+                Declaration* specialDecl = SpecializationStore::self().applySpecialization(decl, decl->topContext());
+
+                FunctionType::Ptr function = specialDecl->type<FunctionType>();
+                QString text = specialDecl->qualifiedIdentifier().toString();
                 if(function)
                     text += function->partToString(KDevelop::FunctionType::SignatureArguments);
 

@@ -724,7 +724,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
        uint count;
        const IndexedDeclaration* declarations;
        PersistentSymbolTable::self().declarations(id, count, declarations);
-       for(int a = 0; a < count; ++a) {
+       for(uint a = 0; a < count; ++a) {
          if(declarations[a].topContextIndex() == top->ownIndex()) {
            Declaration* decl = LocalIndexedDeclaration(declarations[a].localIndex()).data(top);
            if(decl) {
@@ -1214,6 +1214,10 @@ bool DUContext::inDUChain() const {
 
   TopDUContext* top = topContext();
   return top && top->inDuChain();
+}
+
+DUContext* DUContext::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/) {
+  return this;
 }
 
 SimpleCursor DUContext::importPosition(const DUContext* target) const

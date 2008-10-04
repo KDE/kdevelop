@@ -52,6 +52,7 @@
 #include <language/backgroundparser/parsejob.h>
 #include "contextbrowserview.h"
 #include <language/duchain/uses.h>
+#include <language/duchain/specializationstore.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -388,7 +389,7 @@ void ContextBrowserPlugin::showContextView(View* view, const SimpleCursor& posit
     foreach(ContextBrowserView* contextView, m_views) {
       if(masterWidget(contextView) == masterWidget(view)) {
         contextView->updateHistory(ctx, position);
-        contextView->setContext(ctx);
+        contextView->setContext(SpecializationStore::self().applySpecialization(ctx, ctx->topContext()));
       }
     }
 }

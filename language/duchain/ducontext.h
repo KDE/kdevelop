@@ -376,6 +376,16 @@ public:
   virtual bool inDUChain() const;
 
   /**
+   * Retrieve the context which is specialized with the given \a specialization as seen from the given \a topContext.
+   *
+   * \param specialization the specialization index (see DeclarationId)
+   * \param topContext the top context to search from
+   * \param upDistance upwards distance in the context-structure of the 
+   *                   given specialization-info. This allows specializing children.
+   * */
+  virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance = 0);
+  
+  /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position, with the given type \a dataType.
    * In fact, only items are returned that are declared BEFORE that position.

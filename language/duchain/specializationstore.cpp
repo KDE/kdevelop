@@ -18,6 +18,7 @@
 
 #include "specializationstore.h"
 #include "declarationid.h"
+#include "ducontext.h"
 
 namespace KDevelop {
 
@@ -53,6 +54,60 @@ void SpecializationStore::clear(DeclarationId declaration) {
 
 void SpecializationStore::clear() {
   m_specializations.clear();
+}
+
+Declaration* SpecializationStore::applySpecialization(KDevelop::Declaration* declaration, KDevelop::TopDUContext* source, bool recursive) {
+  if(!declaration)
+    return 0;
+  
+  uint specialization = get(declaration->id());
+  if(specialization)
+    return declaration->specialize(specialization, source);
+
+  if(declaration->context() && recursive) {
+    
+    //Find a parent that has a specialization, and specialize this with the info and required depth
+    int depth = 0;
+    DUContext* ctx = declaration->context();
+    uint specialization = 0;
+    while(ctx && !specialization) {
+      if(ctx->owner())
+        specialization = get(ctx->owner()->id());
+      ++depth;
+      ctx = ctx->parentContext();
+    }
+    
+    if(specialization)
+      return declaration->specialize(specialization, source, depth);
+  }
+  
+  return declaration;
+}
+
+DUContext* SpecializationStore::applySpecialization(KDevelop::DUContext* context, KDevelop::TopDUContext* source, bool recursive) {
+  if(!context)
+    return 0;
+  
+  if(Declaration* declaration = context->owner())
+    return applySpecialization(declaration, source, recursive)->internalContext();
+  
+  if(context->parentContext() && recursive) {
+    //Find a parent that has a specialization, and specialize this with the info and required depth
+    int depth = 0;
+    DUContext* ctx = context->parentContext();
+    uint specialization = 0;
+    while(ctx && !specialization) {
+      if(ctx->owner())
+        specialization = get(ctx->owner()->id());
+      ++depth;
+      ctx = ctx->parentContext();
+    }
+    
+    if(specialization)
+      return context->specialize(specialization, source, depth);
+  }
+  
+  return context;
 }
 
 }

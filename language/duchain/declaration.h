@@ -207,12 +207,14 @@ public:
   void setIsTypeAlias(bool typeAlias);
 
   /**
-   * Retrieve the declaration which is specialized with the given \a specialization index in the given \a topContext.
+   * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)
-   * \param topContext the top context to search in
+   * \param topContext the top context to search from
+   * \param upDistance upwards distance in the context-structure of the 
+   *                   given specialization-info. This allows specializing children.
    * */
-  virtual Declaration* specialize(uint specialization, const TopDUContext* topContext);
+  virtual Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance = 0);
 
   /**
    * Retrieve the context that is opened by this declaration, if one exists.
