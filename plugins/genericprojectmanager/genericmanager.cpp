@@ -22,7 +22,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <language/duchain/indexedstring.h>
+#include <project/importprojectjob.h>
 
 #include <kdebug.h>
 #include <kpluginloader.h>
@@ -96,6 +98,23 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
     QStringList excludes = filtersConfig.readEntry("Excludes", QStringList());
 
+    for ( int j = 0; j < item->rowCount(); ++j ) {
+        if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
+            KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
+            QFileInfo fileInfo(f->url().path());
+            if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
+                item->removeRow(j);
+                j--;
+            }
+        } else if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
+            KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
+            QFileInfo fileInfo(f->url().path());
+            if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
+                item->removeRow(j);
+                j--;
+            }
+        }
+    }
     for ( int i = 0; i < entries.count(); ++i )
     {
         QFileInfo fileInfo = entries.at( i );
@@ -107,24 +126,56 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
         else if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
                   && fileInfo.fileName() != QLatin1String( ".." ) )
         {
-            KDevelop::ProjectFolderItem *folder = new KDevelop::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+            KDevelop::ProjectFolderItem *folder = 0;
+            for ( int j = 0; j < item->rowCount(); ++j ) {
+                if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
+                    KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
+                    if ( f->url() == fileInfo.absoluteFilePath() ) {
+                        folder = f;
+                        break;
+                    }
+                }
+            }
+            if ( ! folder ) {
+                folder = new KDevelop::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+            }
             folder_list.append( folder );
         }
         else if ( fileInfo.isFile() )
         {
-             new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
-             item->project()->addToFileSet( KDevelop::IndexedString( fileInfo.absoluteFilePath() ) );
+            bool found = false;
+            for ( int j = 0; j < item->rowCount(); ++j ) {
+                if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
+                    KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
+                    if ( f->url() == fileInfo.absoluteFilePath() ) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if ( ! found ) {
+                new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
+                item->project()->addToFileSet( KDevelop::IndexedString( fileInfo.absoluteFilePath() ) );
+            }
         }
     }
 
     return folder_list;
 }
 
+
 KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
     KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     projectRoot->setProjectRoot(true);
     return projectRoot;
+}
+
+bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )
+{
+    KDevelop::ImportProjectJob* importJob = new KDevelop::ImportProjectJob( item, this );
+    KDevelop::ICore::self()->runController()->registerJob( importJob );
+    return true;
 }
 
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,

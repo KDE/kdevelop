@@ -136,6 +136,13 @@ public:
     virtual bool renameFolder(ProjectFolderItem* oldFolder,
                               const KUrl& newFolder ) = 0;
 
+    /**
+     * Reload an item in the project
+     *
+     * Reloads the item specified by @p item
+     */
+    virtual bool reload(ProjectBaseItem* item) = 0;
+
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<ProjectBaseItem*> &dom, KDialogBase *dialog);
 

@@ -62,6 +62,7 @@ public:
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
     virtual KDevelop::ProjectFolderItem *import( KDevelop::IProject *project );
+    virtual bool reload(KDevelop::ProjectBaseItem* item);
 
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);

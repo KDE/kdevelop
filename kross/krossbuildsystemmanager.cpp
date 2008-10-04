@@ -83,6 +83,11 @@ QList<KDevelop::ProjectFolderItem*> KrossBuildSystemManager::parse( KDevelop::Pr
     return folders;
 }
 
+bool KrossBuildSystemManager::reload(KDevelop::ProjectBaseItem */*item*/)
+{
+    return false;
+}
+
 KDevelop::IProjectBuilder* KrossBuildSystemManager::builder(KDevelop::ProjectFolderItem*) const
 {
     return 0;

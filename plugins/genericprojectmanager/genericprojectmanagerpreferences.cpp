@@ -28,6 +28,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <project/projectmodel.h>
 
 #include "genericprojectmanagersettings.h"
 #include "ui_genericprojectmanagersettings.h"
@@ -69,7 +70,7 @@ void GenericProjectManagerPreferences::save()
         }
     }
     if (project && project->projectFileManager()) {
-        project->reloadModel();
+        project->projectFileManager()->reload(project->projectItem());
     }
 }
 

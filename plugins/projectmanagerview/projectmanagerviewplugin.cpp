@@ -181,6 +181,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             closeProjectsAdded = true;
         }
 
+        if ( item->folder() )
+        {
+            KAction* reload = new KAction( i18n( "Reload" ), this );
+            connect( reload, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, reload );
+        }
+
     }
 //     if( items.count() == 1 )
 //     {
@@ -402,6 +409,13 @@ void ProjectManagerViewPlugin::projectConfiguration( )
     }
 }
 
+void ProjectManagerViewPlugin::reloadFromContextMenu( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        item->project()->projectFileManager()->reload(item);
+    }
+}
 
 #include "projectmanagerviewplugin.moc"
 
