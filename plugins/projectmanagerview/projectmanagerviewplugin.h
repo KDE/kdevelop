@@ -71,6 +71,8 @@ protected Q_SLOTS:
     void addItemsFromContextMenuToBuildset();
     void projectConfiguration();
     void reloadFromContextMenu();
+    void createFolderFromContextMenu();
+    void createFileFromContextMenu();
 
 private:
     void executeBuild( KDevelop::ProjectBaseItem* );

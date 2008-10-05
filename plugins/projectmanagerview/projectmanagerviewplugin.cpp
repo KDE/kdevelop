@@ -20,12 +20,16 @@
 #include "projectmanagerviewplugin.h"
 
 #include <QtCore/QList>
+#include <QtGui/QInputDialog>
 
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-
+#include <kmessagebox.h>
+#include <kio/netaccess.h>
+#include <kparts/mainwindow.h>
+#include <ksavefile.h>
 #include <kparts/componentfactory.h>
 
 #include <project/projectmodel.h>
@@ -183,9 +187,17 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 
         if ( item->folder() )
         {
-            KAction* reload = new KAction( i18n( "Reload" ), this );
-            connect( reload, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, reload );
+            KAction* action = new KAction( i18n( "Create File" ), this );
+            connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+
+            action = new KAction( i18n( "Create Folder" ), this );
+            connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+
+            action = new KAction( i18n( "Reload" ), this );
+            connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
 
     }
@@ -416,6 +428,56 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
         item->project()->projectFileManager()->reload(item);
     }
 }
+
+void ProjectManagerViewPlugin::createFolderFromContextMenu( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        if ( item->folder() ) {
+            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+            QString name = QInputDialog::getText ( window,
+                                i18n ( "Create Folder" ), i18n ( "Folder Name" ) );
+            if (!name.isEmpty()) {
+                KUrl url = item->folder()->url();
+                url.addPath( name );
+                if ( !KIO::NetAccess::mkdir( url, window ) ) {
+                    KMessageBox::error( window, i18n( "Can't create folder." ) );
+                    continue;
+                }
+                item->project()->projectFileManager()->addFolder( url, item->folder() );
+            }
+        }
+    }
+}
+
+void ProjectManagerViewPlugin::createFileFromContextMenu( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        if ( item->folder() ) {
+            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+            QString name = QInputDialog::getText ( window,
+                                i18n ( "Create File" ), i18n ( "File Name" ) );
+            if (!name.isEmpty()) {
+                KUrl url = item->folder()->url();
+                url.addPath( name );
+
+                KSaveFile file(url.path());
+                if ( ! file.open() ) {
+                    KMessageBox::error( window, i18n( "Can't create file." ) );
+                    continue;
+                }
+                file.finalize();
+                file.close();
+
+                item->project()->projectFileManager()->addFile( url, item->folder() );
+                ICore::self()->documentController()->openDocument( url );
+            }
+        }
+    }
+}
+
+
 
 #include "projectmanagerviewplugin.moc"
 
