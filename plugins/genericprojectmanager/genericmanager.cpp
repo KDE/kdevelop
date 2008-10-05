@@ -53,8 +53,6 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
-    m_watch = new KDirWatch( this );
-    connect(m_watch, SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
 }
 
 GenericProjectManager::~GenericProjectManager()
@@ -171,7 +169,9 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
 {
     KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     projectRoot->setProjectRoot(true);
-    m_watch->addDir(project->folder().path(), KDirWatch::WatchSubDirs);
+    m_watchers[project] = new KDirWatch( project );
+    connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
+    m_watchers[project]->addDir(project->folder().path(), KDirWatch::WatchSubDirs);
     return projectRoot;
 }
 

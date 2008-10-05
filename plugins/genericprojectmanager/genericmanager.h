@@ -80,7 +80,7 @@ Q_SIGNALS:
 
 private:
     bool isValid( const QFileInfo &fileName, const QStringList &includes, const QStringList &excludes ) const;
-    KDirWatch* m_watch;
+    QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
 private Q_SLOTS:
     void dirty( const QString &fileName );
 
