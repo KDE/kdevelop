@@ -55,7 +55,6 @@ namespace Veritas
  * application specific work.
  *
  */
-// TODO d-pointer
 // TODO Factually there are 3 kinds of tests
 //        -> aggregates without associated executable
 //        -> aggregates with exe
@@ -119,30 +118,20 @@ public: // Operations
     /*! Fetch all leafs of this test in the test tree. */
     QList<Test*> leafs() const;
 
-    /*! Is this item checked by the user in the tree-runnerview? */
-    bool isChecked() const;
-    /*! Check this test and all its children */
-    void check();
-    /*! Recursively lift check state */
-    void unCheck();
-
-    QVariant data(int column) const; // TODO might want to get rid of this
-    void setData(int column, const QVariant& value);
-
     /*! The overall state of the test.
      * This can be NotRun, RunSuccess, RunError (among others) */
     TestState state() const;
     void setResult(TestResult* res);
     TestResult* result() const;
 
-    /*! Reset the TestResult */
-    void clear();
-
-    void setIndex(const QModelIndex& index); // TODO should be removed
-    QModelIndex index() const;
-
     void signalStarted();
     void signalFinished();
+
+    /*! Contains methods that are only to be used inside the library.
+     *  This nested class is not exported nor is the header installed.
+     *  Sole purpose is to hide stuff from the outside. */
+    class Internal;
+    Internal* internal();
 
 Q_SIGNALS:
     /*! Implementor needs to emit this when an aggregate
@@ -157,22 +146,13 @@ Q_SIGNALS:
      * finished. */
     void finished(QModelIndex);
 
-private: // Operations
+private:
+    friend class Internal;
+    Internal* const d;
 
     // Copy and assignment not supported.
     Test(const Test&);
     Test& operator=(const Test&);
-
-private: // Attributes
-    QList<QVariant> m_itemData;
-    QList<Test*> m_children;
-    QMap<QString, Test*> m_childMap;
-    QModelIndex m_index;
-    QString m_name;
-
-    TestResult* m_result;
-    bool m_isChecked;
-    static const int s_columnCount;
 };
 
 } // namespace

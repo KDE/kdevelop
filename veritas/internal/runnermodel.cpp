@@ -22,6 +22,7 @@
 #include "runnermodel.h"
 
 #include "../test.h"
+#include "test_p.h"
 #include "testexecutor.h"
 #include "utils.h"
 #include "tests/common/modeltest.h"
@@ -84,12 +85,12 @@ RunnerModel::~RunnerModel()
 
 void RunnerModel::checkAll()
 {
-    if (m_rootItem) m_rootItem->check();
+    if (m_rootItem) m_rootItem->internal()->check();
 }
 
 void RunnerModel::uncheckAll()
 {
-    if (m_rootItem) m_rootItem->unCheck();
+    if (m_rootItem) m_rootItem->internal()->unCheck();
 }
 
 QVariant RunnerModel::data(const QModelIndex& index, int role) const
@@ -103,7 +104,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
     case Qt::DisplayRole :
         return testFromIndex(index)->name();
     case Qt::TextColorRole :
-        return testFromIndex(index)->isChecked() ?
+        return testFromIndex(index)->internal()->isChecked() ?
                 Qt::black :
                 Qt::lightGray;
     case Qt::DecorationRole :
@@ -180,8 +181,6 @@ void RunnerModel::updateView(const QModelIndex& index)
     while (bottomRight.child(0, 0).isValid()) {
         bottomRight = bottomRight.child(rowCount(bottomRight) - 1, 0);
     }
-    kDebug() << testFromIndex(index)->data(0).toString() << " -> "
-             << testFromIndex(bottomRight)->data(0).toString();
     emit dataChanged(index, bottomRight);
 }
 
@@ -206,8 +205,8 @@ QModelIndex RunnerModel::index(int row, int column, const QModelIndex& parent) c
     }
     Test* childItem = parentItem->child(row);
     if (childItem) {
-        childItem->setIndex(createIndex(row, column, childItem));
-        return childItem->index();
+        childItem->internal()->setIndex(createIndex(row, column, childItem));
+        return childItem->internal()->index();
     }
     return QModelIndex();
 }
@@ -222,8 +221,8 @@ QModelIndex RunnerModel::parent(const QModelIndex& index) const
     if (parentItem == m_rootItem) {
         return QModelIndex();
     }
-    parentItem->setIndex(createIndex(parentItem->row(), 0, parentItem));
-    return parentItem->index();
+    parentItem->internal()->setIndex(createIndex(parentItem->row(), 0, parentItem));
+    return parentItem->internal()->index();
 }
 
 int RunnerModel::rowCount(const QModelIndex& parent) const
@@ -267,7 +266,7 @@ void RunnerModel::countItems()
         }
         Test* item = testFromIndex(currentIndex);    // Have an item.
         numTotal++;
-        if (item->isChecked() && !hasChildren(currentIndex)) {
+        if (item->internal()->isChecked() && !hasChildren(currentIndex)) {
             m_numSelected++;
         }
         switch (item->state()) {
@@ -374,7 +373,7 @@ void RunnerModel::setExpectedResults(int expectedResults)
 namespace {
 struct ClearTest
 {
-    void operator()(Veritas::Test* test) { test->clear(); }
+    void operator()(Veritas::Test* test) { test->internal()->clear(); }
 };
 }
 

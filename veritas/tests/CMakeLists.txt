@@ -8,10 +8,8 @@ macro(kdev_add_test test_EXEC)
     kde4_add_unit_test(veritas-${test_EXEC} ${test_SRCS})
     target_link_libraries(veritas-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
-        ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}
-        ${KDEVPLATFORM_VERITAS_LIBRARY}
-        kdevqtest)
+        kdevplatformveritas)
 endmacro(kdev_add_test)
 
 kdev_add_test(ut-test testtest.cpp)

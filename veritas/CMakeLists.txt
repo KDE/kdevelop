@@ -28,6 +28,7 @@ set(veritas_SRCS
     internal/overlaytoggle.cpp
     internal/resultswidget.cpp
     internal/itestframework_p.cpp
+    internal/test_p.cpp
     tests/runnertesthelper.cpp # Actual tests of concrete frameworks use these.
     tests/testutils.cpp)       # eg QTestRunnerTest, CppUnitRunnerTest
                                # Before ui_* and other internals were installed

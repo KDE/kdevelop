@@ -23,6 +23,7 @@
 
 #include "../internal/runnermodel.h"
 #include "../internal/resultsmodel.h"
+#include "../internal/test_p.h"
 #include "../test.h"
 #include <KDebug>
 
@@ -54,8 +55,8 @@ public slots:
                 m_result = new TestResult;
                 m_result->setState(m_state);
             }
-            setData(1, QString::number(row()) + QString("_1"));
-            setData(2, QString::number(row()) + QString("_2"));
+            internal()->setData(1, QString::number(row()) + QString("_1"));
+            internal()->setData(2, QString::number(row()) + QString("_2"));
             setResult(m_result);
             signalFinished();
         }

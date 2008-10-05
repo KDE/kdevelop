@@ -20,6 +20,7 @@
 
 #include "testexecutor.h"
 #include "../test.h"
+#include "test_p.h"
 
 #include <QtGlobal>
 #include <KDebug>
@@ -57,7 +58,7 @@ public:
 
 void SetupChain::operator()(Test* current)
 {
-    if (!(current->shouldRun() && current->isChecked())) {
+    if (!(current->shouldRun() && current->internal()->isChecked())) {
         return;           // only run if is an exe and selected
     }
     if (!m_previous) { // first test in the chain.

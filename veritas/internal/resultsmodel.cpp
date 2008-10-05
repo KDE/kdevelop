@@ -22,6 +22,7 @@
 #include "resultsmodel.h"
 
 #include "../test.h"
+#include "test_p.h"
 #include "utils.h"
 #include "tests/common/modeltest.h"
 
@@ -67,7 +68,7 @@ QVariant ResultsModel::data(const QModelIndex& index, int role) const
         return int(Qt::AlignLeft | Qt::AlignTop);
     case Qt::DisplayRole:
         item = itemFromIndex(m_testItemIndexes.at(index.row()));
-        return item->data(index.column());
+        return item->internal()->data(index.column());
     case Qt::DecorationRole:
         if (index.column() == 0) {
             item = itemFromIndex(m_testItemIndexes.at(index.row()));

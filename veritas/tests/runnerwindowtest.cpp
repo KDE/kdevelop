@@ -20,9 +20,8 @@
 
 #include "runnerwindowtest.h"
 
-#include <qtest_kde.h>
 #include <KDebug>
-#include <kasserts.h>
+#include "testutils.h"
 
 #include "modelcreation.h"
 
@@ -30,6 +29,7 @@
 #include "../internal/runnerwindow.h"
 #include "../internal/runnermodel.h"
 #include "../internal/resultsproxymodel.h"
+#include "../internal/test_p.h"
 
 using Veritas::RunnerWindow;
 using Veritas::Test;
@@ -79,17 +79,17 @@ void RunnerWindowTest::checkAllItems(checkMemberFun f)
 // helper
 bool RunnerWindowTest::isSelected(TestStub* item)
 {
-    return item->isChecked();
+    return item->internal()->isChecked();
 }
 
 // helper
 void RunnerWindowTest::selectSome()
 {
-    model->item1->check();
-    model->child11->check();
-    model->child12->unCheck();
-    model->item2->unCheck();
-    model->child21->check();
+    model->item1->internal()->check();
+    model->child11->internal()->check();
+    model->child12->internal()->unCheck();
+    model->item2->internal()->unCheck();
+    model->child21->internal()->check();
 }
 
 // command
@@ -106,7 +106,7 @@ void RunnerWindowTest::selectAll()
 // helper
 bool RunnerWindowTest::isNotSelected(TestStub* item)
 {
-    return !item->isChecked();
+    return !item->internal()->isChecked();
 }
 
 // command
@@ -121,7 +121,7 @@ void RunnerWindowTest::unselectAll()
 // helper
 bool RunnerWindowTest::isExpanded(TestStub* item)
 {
-    QModelIndex i = m_proxy->mapFromSource(item->index());
+    QModelIndex i = m_proxy->mapFromSource(item->internal()->index());
     return m_view->isExpanded(i);
 }
 
@@ -144,7 +144,7 @@ void RunnerWindowTest::expandAll()
 // helper
 bool RunnerWindowTest::isCollapsed(TestStub* item)
 {
-    QModelIndex i = m_proxy->mapFromSource(item->index());
+    QModelIndex i = m_proxy->mapFromSource(item->internal()->index());
     return !m_view->isExpanded(i);
 }
 

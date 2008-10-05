@@ -19,12 +19,11 @@
  */
 
 #include "testtest.h"
-#include <qtest_kde.h>
 #include <QString>
-
-#include "kasserts.h"
+#include "testutils.h"
 
 #include "../test.h"
+#include "../internal/test_p.h"
 
 using Veritas::Test;
 using Veritas::TestTest;
@@ -67,7 +66,7 @@ void TestTest::simpleRoot()
 {
     assertNrofChildren(root, 0);
     assertDefaultResult(root);
-    KVERIFY_MSG(root->isChecked(), "Not selected. Item should be enabled by default");
+    KVERIFY_MSG(root->internal()->isChecked(), "Not selected. Item should be enabled by default");
     KOMPARE_MSG(0, root->row(), "No parent so should surely be the first row");
     KOMPARE(NULL, root->parent());
     KOMPARE("", root->name());
@@ -76,28 +75,28 @@ void TestTest::simpleRoot()
 // test command
 void TestTest::multipleColumns()
 {
-    KOMPARE(column1, root->data(0));
-    KOMPARE(column2, root->data(1));
-    KOMPARE(column3, root->data(2));
+    KOMPARE(column1, root->internal()->data(0));
+    KOMPARE(column2, root->internal()->data(1));
+    KOMPARE(column3, root->internal()->data(2));
 }
 
 // test command
 void TestTest::accessIllegalColumn()
 {
-    root->data(-1);
-    root->data(3);
-    root->data(10);
+    root->internal()->data(-1);
+    root->internal()->data(3);
+    root->internal()->data(10);
 }
 
 // test command
 void TestTest::resetValue()
 {
-    root->clear();
+    root->internal()->clear();
     QVariant empty = "";
 
     assertDefaultResult(root);
-    KOMPARE(empty, root->data(1));
-    KOMPARE(empty, root->data(2));
+    KOMPARE(empty, root->internal()->data(1));
+    KOMPARE(empty, root->internal()->data(2));
 }
 
 // test command

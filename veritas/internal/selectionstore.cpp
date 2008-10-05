@@ -20,6 +20,7 @@
 
 #include "selectionstore.h"
 #include "../test.h"
+#include "test_p.h"
 #include "utils.h"
 #include <KDebug>
 
@@ -47,7 +48,7 @@ public:
         Q_ASSERT(m_store);
         kDebug() << t->name() << m_store->wasDeselected(t);
         if (m_store->wasDeselected(t)) {
-            t->unCheck();
+            t->internal()->unCheck();
         }
     }
     SelectionStore* m_store;
@@ -58,7 +59,7 @@ public:
 void SelectionStore::saveState(Test* test)
 {
     Q_ASSERT(test);
-    if (!test->isChecked()) {
+    if (!test->internal()->isChecked()) {
         m_deselected << serialize(test);
     }
 }

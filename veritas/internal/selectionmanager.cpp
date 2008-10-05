@@ -21,6 +21,7 @@
 #include "selectionmanager.h"
 
 #include "veritas/test.h"
+#include "test_p.h"
 #include "utils.h"
 
 #include "runnermodel.h"
@@ -64,7 +65,7 @@ void SelectionManager::slotEntered(const QModelIndex& index)
     if (index.isValid()) {
         Test* t = index2Test(index);
         Q_ASSERT(t);
-        button()->setChecked(t->isChecked());
+        button()->setChecked(t->internal()->isChecked());
     }
     OverlayManager::slotEntered(index);
 }
@@ -74,7 +75,7 @@ void SelectionManager::setItemSelected(bool selected)
 {
     const QModelIndex index = button()->index();
     if (index.isValid()) {
-        selected ? index2Test(index)->check() : index2Test(index)->unCheck();
+        selected ? index2Test(index)->internal()->check() : index2Test(index)->internal()->unCheck();
         QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(view()->model());
         RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
         runnerModel->updateView(proxyModel->mapToSource(index));

@@ -30,6 +30,7 @@
 #include "kasserts.h"
 
 #include "../test.h"
+#include "../internal/test_p.h"
 #include "../internal/testexecutor.h"
 
 using Veritas::Test;
@@ -303,7 +304,7 @@ void TestExecutorTest::unbalancedAggregates()
 TestStub* TestExecutorTest::createDeselectedTest(const QString& name, Test* parent, QSignalSpy*& s)
 {
     TestStub* t = createEnabledTest(name, parent, s);
-    t->unCheck();
+    t->internal()->unCheck();
     return t;
 }
 

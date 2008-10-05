@@ -20,13 +20,12 @@
  */
 
 #include "veritas/test.h"
+#include "internal/test_p.h"
 #include <KDebug>
 
 using Veritas::Test;
 using Veritas::TestState;
 using Veritas::TestResult;
-
-const int Test::s_columnCount = 4;
 
 Test* Test::createRoot()
 {
@@ -37,42 +36,45 @@ Test* Test::createRoot()
 
 Test::Test(const QList<QVariant>& data, Test* parent)
     : QObject(parent),
-      m_itemData(data),
-      m_result(new TestResult)
+      d(new Internal(this))
 {
+    d->result = new TestResult;
+    d->itemData = data;
     // Make sure this item has as many columns as the parent.
-    for (int i= m_itemData.count(); i < s_columnCount; i++) {
-        m_itemData << "";
+    for (int i= d->itemData.count(); i < Internal::columnCount; i++) {
+        d->itemData << "";
     }
     if (!data.empty()) {
-        m_name = data.value(0).toString();
+        d->name = data.value(0).toString();
     } else {
-        m_name.clear();
+        d->name.clear();
     }
-    check();
+    d->check();
 }
 
 Test::Test(const QString& name, Test* parent)
     : QObject(parent),
-      m_name(name),
-      m_result(new TestResult)
+      d(new Internal(this))
 {
+    d->name = name;
+    d->result = new TestResult;
     // Make sure this item has as many columns as the parent.
-    for (int i=0; i < s_columnCount; i++) {
-        m_itemData << QString();
+    for (int i=0; i < Internal::columnCount; i++) {
+        d->itemData << QString();
     }
-    check();
+    d->check();
 }
 
 QString Test::name() const
 {
-    return m_name;
+    return d->name;
 }
 
 Test::~Test()
 {
-    delete m_result;
-    qDeleteAll(m_children);
+    delete d->result;
+    qDeleteAll(d->children);
+    delete d;
 }
 
 int Test::run()
@@ -85,15 +87,6 @@ bool Test::shouldRun() const
     return false;
 }
 
-void Test::setIndex(const QModelIndex& index)
-{
-    m_index = index;
-}
-QModelIndex Test::index() const
-{
-    return m_index;
-}
-
 Test* Test::parent() const
 {
     return qobject_cast<Test*>(QObject::parent());
@@ -101,112 +94,61 @@ Test* Test::parent() const
 
 Test* Test::child(int row) const
 {
-    return m_children.value(row);
+    return d->children.value(row);
 }
 
 Test* Test::childNamed(const QString& name) const
 {
-    if (!m_childMap.contains(name))
+    if (!d->childMap.contains(name))
         return 0;
-    return m_childMap[name];
+    return d->childMap[name];
 }
 
 void Test::addChild(Test* item)
 {
     Test* t = qobject_cast<Test*>(item);
-    m_children.append(t);
-    m_childMap[t->name()] = t;
+    d->children.append(t);
+    d->childMap[t->name()] = t;
 }
 
 int Test::childCount() const
 {
-    return m_children.count();
+    return d->children.count();
 }
 
 int Test::row() const
 {
     if (parent()) {
-        return parent()->m_children.indexOf(const_cast<Test*>(this));
+        return parent()->d->children.indexOf(const_cast<Test*>(this));
     }
     return 0;
 }
 
-QVariant Test::data(int column) const
-{
-    if (column == 0) {
-        return name();
-    } else {
-        return m_itemData.value(column);
-    }
-    // Note: QList provides sensible default values if the column
-    // number is out of range.
-}
-
-void Test::setData(int column, const QVariant& value)
-{
-    if (column == 0) {
-        m_name = value.toString();
-    } else if (column > 0 && column < s_columnCount ) {
-        m_itemData.replace(column, value.toString());
-    }
-}
-
-bool Test::isChecked() const
-{
-    return m_isChecked;
-}
-
-void Test::check()
-{
-    m_isChecked = true;
-    foreach (Test* child, m_children) {
-        child->check();
-    }
-}
-
-void Test::unCheck()
-{
-    m_isChecked = false;
-    foreach (Test* child, m_children) {
-        child->unCheck();
-    }
-}
-
 TestState Test::state() const
 {
-    return m_result->state();
+    return d->result->state();
 }
 
 TestResult* Test::result() const
 {
-    return m_result;
+    return d->result;
 }
 
 void Test::setResult(TestResult* res)
 {
-    if (m_result) delete m_result;
-    m_result = res;
+    if (d->result) delete d->result;
+    d->result = res;
     if (res) {
-        setData(1, res->message());
-        setData(2, res->file().pathOrUrl());
-        setData(3, res->line());
+        d->setData(1, res->message());
+        d->setData(2, res->file().pathOrUrl());
+        d->setData(3, res->line());
     }
-}
-
-void Test::clear()
-{
-    // Initialize columns except column 0 which contains the item name.
-    for (int i = 1; i < s_columnCount; i++) {
-        setData(i, "");
-    }
-    if (m_result) delete m_result;
-    m_result = new TestResult;
 }
 
 QList<Test*> Test::leafs() const
 {
     QList<Test*> l;
-    foreach(Test* t, m_children) {
+    foreach(Test* t, d->children) {
         if (t->childCount() == 0) {
             l.append(t);
         } else {
@@ -218,15 +160,18 @@ QList<Test*> Test::leafs() const
 
 void Test::signalStarted()
 {
-    Q_ASSERT(index().isValid());
-    emit started(index());
+    emit started(d->index());
 }
 
 void Test::signalFinished()
 {
-    Q_ASSERT(index().isValid());
-    emit finished(index());
+    emit finished(d->index());
 }
 
+
+Veritas::Test::Internal* Test::internal()
+{
+    return d;
+}
 
 #include "test.moc"
