@@ -70,7 +70,6 @@ namespace QMake
         public:
             StatementAST( AST* parent, AST::Type type );
             ~StatementAST();
-            ValueAST* identifier;
     };
 
 
@@ -98,6 +97,7 @@ namespace QMake
             explicit AssignmentAST( AST* parent );
             ~AssignmentAST();
 
+            ValueAST* identifier;
             ValueAST* op;
             QList<ValueAST*> values;
     };
@@ -116,6 +116,7 @@ namespace QMake
         public:
             explicit FunctionCallAST( AST* parent );
             ~FunctionCallAST();
+            ValueAST* identifier;
             QList<ValueAST*> args;
     };
 
@@ -125,6 +126,7 @@ namespace QMake
         public:
             explicit SimpleScopeAST( AST* parent );
             ~SimpleScopeAST();
+            ValueAST* identifier;
     };
 
     class KDEVQMAKEPARSER_EXPORT OrAST : public ScopeAST

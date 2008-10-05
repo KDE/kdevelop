@@ -31,6 +31,19 @@
 namespace QMake
 {
 
+void setIdentifierForStatement( StatementAST* stmt, ValueAST* val )
+{
+    if( OrAST* orop = dynamic_cast<OrAST*>( stmt ) ) {
+        setIdentifierForStatement( orop->scopes.at(0), val );
+    } else if( AssignmentAST* assign = dynamic_cast<AssignmentAST*>( stmt ) ) {
+        assign->identifier = val;
+    } else if( FunctionCallAST* funcall = dynamic_cast<FunctionCallAST*>( stmt ) ) {
+        funcall->identifier = val;
+    } else if( SimpleScopeAST* simple = dynamic_cast<SimpleScopeAST*>( stmt ) ) {
+        simple->identifier = val;
+    }
+}
+
 BuildASTVisitor::BuildASTVisitor(Parser* parser, ProjectAST* project)
     : m_parser(parser)
 {
@@ -93,16 +106,20 @@ void BuildASTVisitor::visitScope( ScopeAst *node )
     if( node->orOperator )
     {
         OrAST* orast = createAst<OrAST>( node, aststack.top() );
+        qDebug() << "created orast:" << orast;
         if( node->functionArguments )
         {
             FunctionCallAST* ast = createAst<FunctionCallAST>( node, orast );
             aststack.push( ast );
+            qDebug() << "creating function call as first or-op" << ast;
             visitNode( node->functionArguments );
+            qDebug() << "function call done";
             aststack.pop();
             orast->scopes.append( ast );
         }else
         {
             SimpleScopeAST* simple = createAst<SimpleScopeAST>( node, orast );
+            qDebug() << "creating simple scope as first or-op";
             orast->scopes.append( simple );
         }
         aststack.push(orast);
@@ -157,15 +174,21 @@ void BuildASTVisitor::visitStatement( StatementAst *node )
     if( !node->isNewline )
     {
         StatementAST* stmt = stackPop<StatementAST>();
+        qDebug() << "got statement ast, setting value" << stmt;
         ValueAST* val = createAst<ValueAST>(node, stmt);
+        qDebug() << "created value ast:" << val;
         val->value = getTokenString( node->id );
+        qDebug() << "set value" << val << val->value;
         setPositionForToken( node->id, val );
         if( node->isExclam )
         {
+                qDebug() << "found exclam";
             val->value = '!'+val->value;
         }
-        stmt->identifier = val;
+        setIdentifierForStatement( stmt, val );
+
         ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
+        qDebug() << "scope:" << scope;
         scope->statements.append(stmt);
     }
 }

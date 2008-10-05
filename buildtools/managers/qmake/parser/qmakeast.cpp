@@ -39,22 +39,22 @@ ValueAST::ValueAST( AST* parent )
 {}
 
 StatementAST::StatementAST( AST* parent, AST::Type type )
-        : AST( parent, type ), identifier(0)
+        : AST( parent, type )
 {}
 
 StatementAST::~StatementAST( )
 {
-    delete identifier;
-    identifier = 0;
 }
 
 
 AssignmentAST::AssignmentAST( AST* parent )
-        : StatementAST( parent, AST::Assignment )
+        : StatementAST( parent, AST::Assignment ), identifier(0)
 {}
 
 AssignmentAST::~AssignmentAST()
 {
+    delete identifier;
+    identifier = 0;
     qDeleteAll( values );
     values.clear();
     delete op;
@@ -72,12 +72,14 @@ ScopeBodyAST::~ScopeBodyAST()
 
 
 FunctionCallAST::FunctionCallAST( AST* parent )
-        : ScopeAST( parent, AST::FunctionCall )
+        : ScopeAST( parent, AST::FunctionCall ), identifier(0)
 {}
 
 
 FunctionCallAST::~FunctionCallAST()
 {
+    delete identifier;
+    identifier = 0;
     qDeleteAll( args );
     args.clear();
 }
@@ -111,11 +113,14 @@ ScopeAST::~ScopeAST()
 }
 
 SimpleScopeAST::SimpleScopeAST( AST* parent )
-        : ScopeAST( parent, AST::SimpleScope )
+        : ScopeAST( parent, AST::SimpleScope ), identifier(0)
 {}
 
 SimpleScopeAST::~SimpleScopeAST()
-{}
+{
+    delete identifier;
+    identifier = 0;
+}
 
 }
 

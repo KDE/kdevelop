@@ -74,7 +74,13 @@ void classname::funcname()\
 
 #define TESTFUNCNAME( scopeast, funcname ) \
     QVERIFY( scopeast ); \
-    QVERIFY( scopeast->identifier->value == funcname );
+    if( QMake::SimpleScopeAST* simpleast = dynamic_cast<QMake::SimpleScopeAST*>( scopeast ) ) \
+    { \
+        QVERIFY( simpleast->identifier->value == funcname );\
+    } else if( QMake::FunctionCallAST* funast = dynamic_cast<QMake::FunctionCallAST*>( scopeast ) ) \
+    { \
+        QVERIFY( funast->identifier->value == funcname );\
+    }
 
 #define TESTSCOPENAME( scopeast, scopename ) \
     QVERIFY( scopeast ); \
@@ -84,7 +90,13 @@ void classname::funcname()\
     for( int i = 0; i < funclist.size(); i++) \
     {\
         QVERIFY( i < scopeast->scopes.count() );\
-        QVERIFY( scopeast->scopes.at(i)->identifier->value == funclist.at(i) );\
+        if( QMake::SimpleScopeAST* simpleast = dynamic_cast<QMake::SimpleScopeAST*>( scopeast->scopes.at(i) ) ) \
+        { \
+            QVERIFY( simpleast->identifier->value == funclist.at(i) );\
+        } else if( QMake::FunctionCallAST* funast = dynamic_cast<QMake::FunctionCallAST*>( scopeast->scopes.at(i) ) ) \
+        { \
+            QVERIFY( funast->identifier->value == funclist.at(i) );\
+        } \
     }
 
 #define TESTSCOPEBODY( scope, teststmts, stmtcount ) \
@@ -92,6 +104,28 @@ void classname::funcname()\
     QVERIFY( scope->body->statements.count() == stmtcount ); \
     matchScopeBodies(scope->body->statements, teststmts);
 
+#define TESTSCOPEAST( scope, testscope ) \
+    QVERIFY( scope ); \
+    QVERIFY( testscope ); \
+    QMake::SimpleScopeAST* simple = dynamic_cast<QMake::SimpleScopeAST*>( scope ); \
+    QMake::SimpleScopeAST* testsimple = dynamic_cast<QMake::SimpleScopeAST*>( scope ); \
+    QMake::FunctionCallAST* fun = dynamic_cast<QMake::FunctionCallAST*>( scope ); \
+    QMake::FunctionCallAST* testfun = dynamic_cast<QMake::FunctionCallAST*>( scope ); \
+    QVERIFY( ( simple && testsimple ) || ( fun && testfun ) ); \
+    if( simple ) \
+    { \
+        QVERIFY( simple->identifier->value == testsimple->identifier->value ); \
+    } else \
+    { \
+        QVERIFY( fun->identifier->value == testfun->identifier->value ); \
+    }
+
+#define TESTOROPAST(orop,testorop) \
+    for(int i = 0; i < orop->scopes.count(); i++ ) \
+    { \
+        QVERIFY( i < testorop->scopes.count() ); \
+        TESTSCOPEAST( orop->scopes.at(i), testorop->scopes.at(i) ) \
+    }
 
 void matchScopeBodies( QList<QMake::StatementAST*>,
                              QList<QMake::StatementAST*> );

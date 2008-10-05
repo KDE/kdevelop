@@ -58,12 +58,7 @@ void matchScopeBodies( QList<QMake::StatementAST*> realbody,
 
             }else if( orop && testorop )
             {
-                for(int i = 0; i < orop->scopes.count(); i++ )
-                {
-                    QVERIFY( i < testorop->scopes.count() );
-                    TESTFUNCNAME( orop->scopes.at(i),
-                                testorop->scopes.at(i)->identifier->value )
-                }
+                TESTOROPAST( orop, testorop )
             }
             QVERIFY( ( scope->body && testscope->body )
                         || ( !scope->body && !testscope->body ) );
