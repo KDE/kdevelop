@@ -92,31 +92,7 @@ Q_DECLARE_METATYPE(QModelIndex)
 
 #include <QSignalSpy>
 
-//////////////// HELPER CLASSES //////////////////////////////////////////////
-
-namespace
-{
-// sole purpose of this is to get a valid QModelIndex.
-class FakeModel : public QAbstractListModel
-{
-    public:
-        int rowCount(const QModelIndex&) const {
-            return 1;
-        }
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const {
-            Q_UNUSED(index);
-            Q_UNUSED(role);
-            return QVariant("owk");
-        }
-        QModelIndex index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const {
-            Q_UNUSED(parent);
-            QModelIndex i = createIndex(row, column, test);
-            test->setIndex(i);
-            return i;
-        }
-        Veritas::Test* test;
-};
-}
+//////////////// HELPERS /////////////////////////////////////////////////////
 
 namespace QTest
 {
@@ -193,11 +169,6 @@ QTestCase* QTestOutputParserTest::createTestCase(TestInfo& cInfo)
     cInfo.test = caze;
     cInfo.finished = new QSignalSpy(caze, SIGNAL(finished(QModelIndex)));
     cInfo.started  = new QSignalSpy(caze, SIGNAL(started(QModelIndex)));
-
-    FakeModel* fm = new FakeModel;
-    fm->test = caze;
-    QModelIndex index = fm->index(0);
-    delete fm;
     return caze;
 }
 
@@ -208,11 +179,6 @@ void QTestOutputParserTest::createTestCommand(TestInfo& cInfo, QTestCase* parent
     parent->addChild(cInfo.test);
     cInfo.started  = new QSignalSpy(cInfo.test, SIGNAL(started(QModelIndex)));
     cInfo.finished = new QSignalSpy(cInfo.test, SIGNAL(finished(QModelIndex)));
-
-    FakeModel* fm = new FakeModel;
-    fm->test = cInfo.test;
-    QModelIndex index = fm->index(0);
-    delete fm;
 }
 
 // fixture setup helper
@@ -769,8 +735,7 @@ using Veritas::Test;
 // custom assertion
 void QTestOutputParserTest::checkResult(TestInfo& testInfo)
 {
-    QModelIndex i = testInfo.finished->first().value(0).value<QModelIndex>();
-    Veritas::Test* test = static_cast<Veritas::Test*>(i.internalPointer());
+    Veritas::Test* test = testInfo.test;
     TestResult* actual = test->result();
     TestResult* expected = testInfo.result;
     assertResult(expected, actual, test->name());
@@ -818,21 +783,6 @@ void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
         Q_ASSERT_GOT_SIGNAL(started, test);
         Q_ASSERT_GOT_SIGNAL(completed, test);
     } else { Q_ASSERT(0); }
-
-    QModelIndex i1 = completed->first().value(0).value<QModelIndex>();
-    QModelIndex i2 = started->first().value(0).value<QModelIndex>();
-
-    if (m_assertType == QTestAssert) {
-        KOMPARE(test, static_cast<Veritas::Test*>(i1.internalPointer()));
-        KOMPARE(test, static_cast<Veritas::Test*>(i2.internalPointer()));
-    } else if (m_assertType == QAssertAssert) {
-        Test* startedTest = static_cast<Veritas::Test*>(i1.internalPointer());
-        Test* complTest = static_cast<Veritas::Test*>(i2.internalPointer());
-        QString testName = test->name();
-        Q_ASSERT(startedTest); Q_ASSERT(complTest);
-        Q_ASSERT_EQUALS(test->name(), startedTest->name(), started name);
-        Q_ASSERT_EQUALS(test->name(), complTest->name(), completed name);
-    }
 }
 
 void QTestOutputParserTest::assertResult(TestResult* expected, TestResult* actual, const QString& name)
