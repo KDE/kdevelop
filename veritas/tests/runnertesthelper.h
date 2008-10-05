@@ -72,6 +72,7 @@ public:
 
 private slots:
     void triggerRunAction();
+    void dummy();
 
 private:
     void verifyTest(const QVariant& expected, int lvl0, int lvl1, int lvl2);

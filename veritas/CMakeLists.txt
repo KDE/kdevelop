@@ -28,7 +28,10 @@ set(veritas_SRCS
     internal/overlaytoggle.cpp
     internal/resultswidget.cpp
     internal/itestframework_p.cpp
-    tests/runnertesthelper.cpp)
+    tests/runnertesthelper.cpp # Actual tests of concrete frameworks use these.
+    tests/testutils.cpp)       # eg QTestRunnerTest, CppUnitRunnerTest
+                               # Before ui_* and other internals were installed
+                               # to make this possible, which is bad.
     #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS

@@ -18,12 +18,11 @@
  */
 
 #include "runnertesthelper.h"
+#include "testutils.h"
 
 #include <QModelIndex>
 #include <QTimer>
 #include <QAbstractItemModel>
-#include <qtest_kde.h>
-#include "kasserts.h"
 
 #include "ui_runnerwindow.h"
 #include "../internal/resultsmodel.h"
@@ -44,6 +43,7 @@ void RunnerTestHelper::initializeGUI()
     resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
                   << i18n("File Name") << i18n("Line Number");
     m_window = new RunnerWindow(new ResultsModel(resultHeaders));
+    connect(m_window, SIGNAL(runCompleted()), SLOT(dummy()), Qt::QueuedConnection); // force this in the event loop
 }
 
 void RunnerTestHelper::cleanupGUI()
@@ -95,23 +95,20 @@ void RunnerTestHelper::setShowWidget(bool show)
     m_show = show;
 }
 
+void RunnerTestHelper::dummy()
+{}
+
 void RunnerTestHelper::runTests()
 {
-    QTimer* t = new QTimer();
-    t->setSingleShot(true);
-    t->setInterval(10);
-    connect(t, SIGNAL(timeout()), this, SLOT(triggerRunAction()));
-    t->start();
+    KDevSignalSpy* spy = new KDevSignalSpy(m_window, SIGNAL(runCompleted()), Qt::QueuedConnection);
+    triggerRunAction();
+    bool gotSignal = spy->wait(2000);
 
     if (m_show) {
         m_window->show();
         QTest::qWait(5000);
     }
 
-    bool gotSignal = QTest::kWaitForSignal(
-        m_window,
-        SIGNAL(runCompleted()),
-        2000);
     QVERIFY2(gotSignal, "Timeout while waiting for runner items to complete execution");
 }
 

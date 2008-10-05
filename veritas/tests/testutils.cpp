@@ -18,10 +18,41 @@
  * 02110-1301, USA.
  */
 
-#ifndef QXQTEST_KASSERTS_H
-#define QXQTEST_KASSERTS_H
-
-#include <QtTest/QtTest>
 #include "testutils.h"
 
-#endif // QXQTEST_KASSERTS_H
+#include <QTimer>
+#include <QEventLoop>
+
+using Veritas::KDevSignalSpy;
+
+KDevSignalSpy::KDevSignalSpy(QObject *obj, const char *signal, Qt::ConnectionType ct)
+    : QObject(0), m_obj(obj), m_emitted(false)
+{
+    m_timer = new QTimer(this);
+    m_loop = new QEventLoop(this);
+    connect(obj, signal, this, SLOT(signalEmitted()), ct);
+}
+
+bool KDevSignalSpy::wait(int timeout)
+{
+    Q_ASSERT(!m_loop->isRunning()); Q_ASSERT(!m_timer->isActive());
+
+    m_emitted = false;
+    if (timeout > 0) {
+        connect(m_timer, SIGNAL(timeout()), m_loop, SLOT(quit()));
+        m_timer->setSingleShot(true);
+        m_timer->start(timeout);
+    }
+    m_loop->exec();
+
+    return m_emitted;
+}
+
+void KDevSignalSpy::signalEmitted()
+{
+    m_emitted = true;
+    disconnect(m_obj, 0, this, 0);
+    m_timer->stop();
+    m_loop->quit();
+}
+
