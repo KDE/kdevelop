@@ -462,6 +462,11 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
                 KUrl url = item->folder()->url();
                 url.addPath( name );
 
+                if (KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, window )) {
+                    KMessageBox::error( window, i18n( "This file exists allready." ) );
+                    continue;
+                }
+
                 KSaveFile file(url.path());
                 if ( ! file.open() ) {
                     KMessageBox::error( window, i18n( "Can't create file." ) );
