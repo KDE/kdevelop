@@ -35,11 +35,11 @@
 #include <kaboutdata.h>
 #include <kdirwatch.h>
 
-#include <QDir>
-#include <QExtensionFactory>
-#include <QFile>
-#include <QFileInfo>
-#include <QRegExp>
+#include <QtCore/QDir>
+#include <QtDesigner/QExtensionFactory>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
 
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
@@ -161,6 +161,8 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
         }
     }
 
+    m_watchers[item->project()]->addDir(item->url().path(), KDirWatch::WatchDirOnly);
+
     return folder_list;
 }
 
@@ -171,7 +173,6 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
     projectRoot->setProjectRoot(true);
     m_watchers[project] = new KDirWatch( project );
     connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
-    m_watchers[project]->addDir(project->folder().path(), KDirWatch::WatchSubDirs);
     return projectRoot;
 }
 
