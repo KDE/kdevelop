@@ -463,7 +463,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
                 url.addPath( name );
 
                 if (KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, window )) {
-                    KMessageBox::error( window, i18n( "This file exists allready." ) );
+                    KMessageBox::error( window, i18n( "This file exists already." ) );
                     continue;
                 }
 
