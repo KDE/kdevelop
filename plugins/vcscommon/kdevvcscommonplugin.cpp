@@ -208,14 +208,17 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
         KDevelop::CodeContext* codectx = dynamic_cast<KDevelop::CodeContext*>( context );
         if( codectx )
         {
-            KDevelop::DUChainReadLocker l(KDevelop::DUChain::lock());
-            if (codectx->item()) {
-                KUrl url = codectx->item()->url().toUrl();
-                KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
-                if( plugin )
-                {
-                    m_ctxUrls[plugin].append( url );
+            KUrl url;
+            {
+                KDevelop::DUChainReadLocker l(KDevelop::DUChain::lock());
+                if (codectx->item()) {
+                    KUrl url = codectx->item()->url().toUrl();
                 }
+            }
+            KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
+            if( plugin )
+            {
+                m_ctxUrls[plugin].append( url );
             }
         }
     }
