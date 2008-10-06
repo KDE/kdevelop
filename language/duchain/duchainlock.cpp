@@ -73,7 +73,7 @@ public:
   }
 
   /**
-   * Returns true if ther is no reader that is not this thread.
+   * Returns true if there is no reader that is not this thread.
    * */
   bool haveOtherReaders() const {
     ///Since m_totalReaderRecursion is the sum of all reader-recursions, it will be same if either there is no reader at all, or if this thread is the only reader.
