@@ -88,8 +88,6 @@ void DVCSjob::setServer(const QString& server)
 
 void DVCSjob::setDirectory(const QString& directory)
 {
-    qDebug() << "\nDir is: " << directory;
-    Q_ASSERT_X(QFileInfo(directory).isAbsolute(), "setWorkingDirectory", "Empty string or relative path for working dir");
     d->directory = directory;
 }
 
@@ -156,6 +154,13 @@ void DVCSjob::start()
     if( !d->directory.isEmpty() ) {
         kDebug() << "Working directory:" << d->directory;
         d->childproc->setWorkingDirectory(d->directory);
+    }
+    else 
+    {
+        d->failed = true;
+        emitResult(); //KJob
+        emit resultsReady(this); //VcsJob
+        return;
     }
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
