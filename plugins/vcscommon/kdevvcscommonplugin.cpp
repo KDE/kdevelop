@@ -215,10 +215,13 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
                     KUrl url = codectx->item()->url().toUrl();
                 }
             }
-            KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
-            if( plugin )
+            if (!url.path().isEmpty())
             {
-                m_ctxUrls[plugin].append( url );
+                KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
+                if( plugin )
+                {
+                    m_ctxUrls[plugin].append( url );
+                }
             }
         }
     }
