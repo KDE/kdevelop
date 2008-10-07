@@ -218,7 +218,6 @@ void QTestRunnerTest::nonterminatedXMLOutput()
         "</root>\n";
     Veritas::Test* root = fetchRoot(regXML);
 
-    RunnerTestHelper* m_runner = new RunnerTestHelper;
     m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests(); // should not timeout
@@ -238,7 +237,6 @@ void QTestRunnerTest::nonexistantTestExe()
         "</root>\n";
     Veritas::Test* root = fetchRoot(regXML);
 
-    RunnerTestHelper* m_runner = new RunnerTestHelper;
     m_runner->initializeGUI();
     m_runner->setRoot(root);
     m_runner->runTests(); // should not timeout
