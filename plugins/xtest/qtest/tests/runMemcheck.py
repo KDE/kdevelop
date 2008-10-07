@@ -1,9 +1,11 @@
 #!/usr/bin/python
+#!/usr/bin/python
 # run valgrind's memory error checker on all tests.
-# only leaks related to QTest / Veritas are shown
+# filter uninteresting errors and known false positives
+# eg staticly initialized memory from libraries like libfontconfig
 #
 
-from os import system
+from os import system, remove
 from sys import exit, stdout
 from subprocess import Popen, PIPE
 from xml.dom.minidom import parse, parseString
@@ -11,15 +13,19 @@ from xml.dom.minidom import parse, parseString
 def garbage(line):
     ''' filter for valgridn output'''
     return not line.startswith('<unknown program name>') and \
-           not line.startswith('profiling:')
+           not line.startswith('profiling:') and \
+           line.find('</valgrindoutput>') # problem is that valgrind erroneously puts multiple of these end-document entries if processes are spawned _inside_ the exe under investigation
 
 def memcheck(test):
     ''' run valgrind-memcheck on test in testdir. return xml output as string '''
-    proc = Popen(["valgrind", "--tool=memcheck", "--leak-check=full", "--xml=yes", test], stdout=PIPE, stderr=PIPE)
-    proc.wait()
-    out = proc.stderr.readlines()
+    #proc = Popen("valgrind --tool=memcheck --leak-check=full --xml=yes " + test, stdout=PIPE, stderr=PIPE, shell=True, executable="/bin/bash")
+    #proc.wait()
+    #out = proc.stderr.readlines()
+    system("valgrind --tool=memcheck --leak-check=full --xml=yes --num-callers=75 " + test + " 1>/dev/null 2>.memcheck.tmp")
+    out = open(".memcheck.tmp").readlines()
+    remove(".memcheck.tmp")
     out = filter(garbage, out)
-    return ''.join(out)
+    return ''.join(out) + "\n</valgrindoutput>\n"
 
 def xml_child_data(dom,tag):
     ''' extract child data for tag. return None if not found'''
@@ -77,6 +83,12 @@ class BackTrace:
             if frame.func:
                 if frame.func.find("QTest") != -1 or frame.func.find("Veritas") != -1:
                     is_interesting = True
+                if frame.func.find('XRegisterIMInstantiateCallback') != -1:
+                    return False # X-related static memory allocation, no leak
+                if frame.func.find('FcDefaultSubstitute') != -1:
+                    return False # something Qt-Font related, not interested in this
+                if frame.func.find('__nss_database_lookup') != -1:
+                    return False # more crap
             if frame.sfile:
                 if frame.sfile.find("xtest") != -1 or frame.sfile.find("veritas") != -1:
                     is_interesting = True
@@ -101,11 +113,12 @@ def parse_errors(out):
     return errors_
 
 def run_all_tests():
-    tests=['qtest-ut-casebuilder', \
-       'qtest-ut-qtestcase', 'qtest-ut-qtestcommand', \
-       'qtest-ut-qtestoutputmorpher', 'qtest-ut-qtestoutputparser', \
-       'qtest-ut-qtestregister', 'qtest-ut-qtestsuite', \
-       'qtest-ut-suitebuilder' ] # , 'qtest-it-qtestrunnertest']
+    tests=['qtest-unit-casebuilder', \
+       'qtest-unit-qtestcase', 'qtest-ut-qtestcommand', \
+       'qtest-unit-qtestoutputmorpher', 'qtest-unit-qtestoutputparser', \
+       'qtest-unit-qtestregister', 'qtest-unit-qtestsuite', \
+       'qtest-unit-suitebuilder', 'qtest-sys-qtestrunnertest']
+    tests=['qtest-it-qtestrunnertest']
 
     root='/home/nix/KdeDev/kdevelop/build/'
     testdir=root + 'plugins/xtest/qtest/tests/'
@@ -137,16 +150,24 @@ def run_all_tests():
 def run_single_test(exe_name):
     print ">> running valgrind memcheck on " + exe_name
     system("export LD_LIBRARY_PATH="+sys.argv[2]+"/lib/:$LD_LIBRARY_PATH")
-    out = memcheck(exe_name)
-    errors = parse_errors(out)
-    if len(errors) == 0:
-        print "PASS"
-        exit(0)
-    else:
-        for trace in errors:
-            print trace,
-            print "---------------------------------------------------"
-        exit(-1)
+    count = 0
+    import xml
+    while count < 5:
+        try:
+            out = memcheck(exe_name)
+            errors = parse_errors(out)
+            if len(errors) == 0:
+                print "PASS"
+                exit(0)
+            else:
+                for trace in errors:
+                    print trace,
+                    print "---------------------------------------------------"
+                exit(-1)
+        except xml.parsers.expat.ExpatError:
+            print "Valgrind fooked up, retry"
+            count += 1
+            pass
 
 ################### ENTRY ####################################################
 

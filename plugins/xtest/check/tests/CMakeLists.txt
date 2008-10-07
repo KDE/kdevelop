@@ -18,7 +18,7 @@ macro(kdev_add_test test_EXEC)
         kdevcheck)
 endmacro(kdev_add_test)
 
-kdev_add_test(it-checkrunnertest checkrunnertest.cpp)
+kdev_add_test(sys-checkrunnertest checkrunnertest.cpp)
 
 add_executable(emptysuite fake_emptysuite.cpp)
 target_link_libraries(emptysuite ${QT_QTCORE_LIBRARY} ${CHECK_LIBRARY})

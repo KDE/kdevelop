@@ -664,7 +664,7 @@ void QTestOutputParserTest::randomValidXML()
     int count = 0;
     m_assertType = QAssertAssert;
     for (int nrofPieces=1; nrofPieces<31; nrofPieces++) {
-        for (int i=0; i<10000; i++) {
+        for (int i=0; i<1000; i++) {
             m_randomTestType = "[pieces:" + QString::number(nrofPieces) + ";cycle:" + QString::number(i) + "]\n";
             QByteArray input;
             QTestCase* caze;
@@ -700,7 +700,7 @@ void QTestOutputParserTest::randomGarbageXML()
     m_assertType = QAssertAssert;
 
     for (int nrofPieces=1; nrofPieces<31; nrofPieces++) {
-        for (int i=0; i<10000; i++) {
+        for (int i=0; i<1000; i++) {
             m_randomTestType = "[pieces:" + QString::number(nrofPieces) + ";cycle:" + QString::number(i) + "]\n";
             QByteArray input;
             QTestCase* caze;
