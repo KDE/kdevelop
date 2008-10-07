@@ -79,6 +79,8 @@ void TreeTraverseTest::rootOnly()
     traverseTree(root, v);
     QCOMPARE(1, v.visited.count());
     QCOMPARE(root, v.visited[0]);
+
+    delete root;
 }
 
 QTEST_MAIN( TreeTraverseTest )

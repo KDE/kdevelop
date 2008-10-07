@@ -93,7 +93,8 @@ void SelectionToggle::enterEvent(QEvent* event)
 void SelectionToggle::setIconOverlay(bool checked)
 {
     const char* icon = 0;
-    icon = checked ? "list-remove" : "list-add";
+    if (checked) icon = "list-remove";
+    else         icon = "list-add";
     m_icon = KIconLoader::global()->loadIcon(icon,
                                              KIconLoader::NoGroup,
                                              KIconLoader::SizeSmall);

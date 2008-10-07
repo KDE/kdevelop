@@ -634,9 +634,6 @@ void RunnerWindow::enableItemActions(bool enable) const
     m_ui->actionUnselectAll->setEnabled(enable);
     m_ui->actionExpandAll->setEnabled(enable);
     m_ui->actionCollapseAll->setEnabled(enable);
-    m_ui->actionMinimalUpdate->setEnabled(enable);
-    m_ui->actionColumns->setEnabled(enable);
-    m_ui->actionSettings->setEnabled(enable);
 }
 
 void RunnerWindow::enableTestSync(bool enable) const

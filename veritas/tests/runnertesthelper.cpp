@@ -42,13 +42,14 @@ void RunnerTestHelper::initializeGUI()
     QStringList resultHeaders;
     resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
                   << i18n("File Name") << i18n("Line Number");
-    m_window = new RunnerWindow(new ResultsModel(resultHeaders));
-    connect(m_window, SIGNAL(runCompleted()), SLOT(dummy()), Qt::QueuedConnection); // force this in the event loop
+    m_resultsModel = new ResultsModel(resultHeaders);
+    m_window = new RunnerWindow(m_resultsModel);
 }
 
 void RunnerTestHelper::cleanupGUI()
 {
     if (m_window) delete m_window;
+    if (m_resultsModel) delete m_resultsModel;
 }
 
 void RunnerTestHelper::setRoot(Test* root)
@@ -95,14 +96,12 @@ void RunnerTestHelper::setShowWidget(bool show)
     m_show = show;
 }
 
-void RunnerTestHelper::dummy()
-{}
-
 void RunnerTestHelper::runTests()
 {
     KDevSignalSpy* spy = new KDevSignalSpy(m_window, SIGNAL(runCompleted()), Qt::QueuedConnection);
     triggerRunAction();
     bool gotSignal = spy->wait(2000);
+    delete spy;
 
     if (m_show) {
         m_window->show();

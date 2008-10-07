@@ -30,7 +30,7 @@ class RunnerWindow;
 class RunnerModel;
 class RunnerProxyModel;
 class ResultsProxyModel;
-
+class ResultsModel;
 class RunnerModelStub;
 class TestStub;
 
@@ -75,6 +75,7 @@ private:
     Veritas::RunnerProxyModel* m_proxy;
     Veritas::ResultsProxyModel* m_resultsProxy;
     QTreeView* m_view;
+    ResultsModel* m_resultsModel;
 };
 
 }

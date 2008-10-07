@@ -29,6 +29,7 @@ namespace Veritas
 
 class Test;
 class RunnerWindow;
+class ResultsModel;
 
 /*! This starts a testrunner-gui for a given test-tree. After a run a set
  *  of verification methods can be used to check expectations.
@@ -72,7 +73,6 @@ public:
 
 private slots:
     void triggerRunAction();
-    void dummy();
 
 private:
     void verifyTest(const QVariant& expected, int lvl0, int lvl1, int lvl2);
@@ -81,6 +81,7 @@ private:
 
 private:
     RunnerWindow* m_window;
+    ResultsModel* m_resultsModel;
     bool m_show;
 };
 

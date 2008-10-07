@@ -49,7 +49,8 @@ void RunnerWindowTest::init()
     QStringList resultHeaders;
     resultHeaders << i18n("Test") << i18n("Message")
                   << i18n("File") << i18n("Line");
-    window = new RunnerWindow(new ResultsModel(resultHeaders));
+    m_resultsModel = new ResultsModel(resultHeaders);
+    window = new RunnerWindow(m_resultsModel);
     window->setModel(model);
     //window->show();
     m_ui = window->ui();
@@ -64,6 +65,7 @@ void RunnerWindowTest::cleanup()
 {
     m_ui->actionExit->trigger();
     if (window) delete window;
+    if (m_resultsModel) delete m_resultsModel;
 }
 
 // helper

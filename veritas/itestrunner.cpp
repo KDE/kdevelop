@@ -81,6 +81,10 @@ public:
         previousRoot(0)
     {}
 
+    ~Private() {
+        delete resultsModel;
+    }
+
     RunnerWindow* window;
     IProject* selectedProject;
     Sublime::View *resultsView;
