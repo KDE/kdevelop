@@ -72,7 +72,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDeclarationIsDefinition(bool x0) { wrapped->setDeclarationIsDefinition(x0); }
 		Q_SCRIPTABLE bool isTypeAlias() const { return wrapped->isTypeAlias(); }
 		Q_SCRIPTABLE void setIsTypeAlias(bool x0) { wrapped->setIsTypeAlias(x0); }
-		Q_SCRIPTABLE KDevelop::Declaration* specialize(unsigned int x0, const KDevelop::TopDUContext* x1) { return wrapped->specialize(x0, x1); }
+		Q_SCRIPTABLE KDevelop::Declaration* specialize(unsigned int x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
 		Q_SCRIPTABLE KDevelop::DUContext* internalContext() const { return wrapped->internalContext(); }
 		Q_SCRIPTABLE void setInternalContext(KDevelop::DUContext* x0) { wrapped->setInternalContext(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* logicalInternalContext(const KDevelop::TopDUContext* x0) const { return wrapped->logicalInternalContext(x0); }

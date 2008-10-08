@@ -26,6 +26,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool removeFile(KDevelop::ProjectFileItem* x0) { return wrapped->removeFile(x0); }
 		Q_SCRIPTABLE bool renameFile(KDevelop::ProjectFileItem* x0, const KUrl& x1) { return wrapped->renameFile(x0, x1); }
 		Q_SCRIPTABLE bool renameFolder(KDevelop::ProjectFolderItem* x0, const KUrl& x1) { return wrapped->renameFolder(x0, x1); }
+		Q_SCRIPTABLE bool reload(KDevelop::ProjectBaseItem* x0) { return wrapped->reload(x0); }
 	private:
 		KDevelop::IProjectFileManager* wrapped;
 };

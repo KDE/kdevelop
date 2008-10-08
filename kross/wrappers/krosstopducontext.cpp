@@ -49,8 +49,12 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 	Q_ENUMS(Flags)
 	Q_FLAGS(Flags NoFlags ProxyContextFlag AnyFlag UpdatingContext LastFlag)
 
+	Q_ENUMS(Features)
+	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses)
+
 	public:
 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, ProxyContextFlag=KDevelop::TopDUContext::ProxyContextFlag, AnyFlag=KDevelop::TopDUContext::AnyFlag, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
+		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -70,9 +74,13 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE bool imports(const KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1) const { return wrapped->imports(x0, x1); }
 		Q_SCRIPTABLE void importTrace(const KDevelop::TopDUContext* x0, KDevVarLengthArray< KDevelop::ImportTraceItem, 40 >& x1) const { wrapped->importTrace(x0, x1); }
 		Q_SCRIPTABLE KDevVarLengthArray< KDevelop::ImportTraceItem, 40 > importTrace(const KDevelop::TopDUContext* x0) const { return wrapped->importTrace(x0); }
+		Q_SCRIPTABLE KDevelop::TopDUContext::Features features() const { return wrapped->features(); }
+		Q_SCRIPTABLE void setFeatures(KDevelop::TopDUContext::Features x0) { wrapped->setFeatures(x0); }
 		Q_SCRIPTABLE int indexForUsedDeclaration(KDevelop::Declaration* x0, bool x1=true) { return wrapped->indexForUsedDeclaration(x0, x1); }
 		Q_SCRIPTABLE KDevelop::Declaration* usedDeclarationForIndex(unsigned int x0) const { return wrapped->usedDeclarationForIndex(x0); }
 		Q_SCRIPTABLE void clearUsedDeclarationIndices() { wrapped->clearUsedDeclarationIndices(); }
+		Q_SCRIPTABLE KDevelop::IndexedString language() const { return wrapped->language(); }
+		Q_SCRIPTABLE void setLanguage(KDevelop::IndexedString x0) { wrapped->setLanguage(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Flags flags() const { return wrapped->flags(); }
 		Q_SCRIPTABLE void setFlags(KDevelop::TopDUContext::Flags x0) { wrapped->setFlags(x0); }
 		Q_SCRIPTABLE void addImportedParentContext(KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor(), bool x2=false, bool x3=false) { wrapped->addImportedParentContext(x0, x1, x2, x3); }
