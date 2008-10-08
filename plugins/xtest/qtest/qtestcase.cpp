@@ -52,6 +52,8 @@ QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* pare
           m_timer(new QTimer(this)),
           m_parserTimeout(new QTimer(this))
 {
+    setSelectionToggle(true);
+    setVerboseToggle(true);
     m_parserTimeout->setSingleShot(true);
     m_parserTimeout->setInterval(150);
     connect(m_parserTimeout, SIGNAL(timeout()), SLOT(closeOutputFile()));
@@ -129,6 +131,13 @@ void QTestCase::setProcess(KProcess* proc)
             SLOT(morphXmlToText()));
     connect(m_proc, SIGNAL(error(QProcess::ProcessError)),
             SLOT(processError(QProcess::ProcessError)));
+}
+
+void QTestCase::kill()
+{
+    if (!m_proc) return;
+    m_proc->kill();
+    closeOutputFile();
 }
 
 void QTestCase::processError(QProcess::ProcessError error)

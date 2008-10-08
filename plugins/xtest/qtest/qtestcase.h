@@ -54,8 +54,9 @@ public:
     QTestCommand* child(int i) const;
     QFileInfo executable();
 
-    int run();
-    bool shouldRun() const;
+    virtual int run();
+    virtual void kill();
+    virtual bool shouldRun() const;
 
     /*! Client classes should instantiate a KProcess.
         QTestCase takes ownership.

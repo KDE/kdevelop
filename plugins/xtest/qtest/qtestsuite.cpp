@@ -28,7 +28,9 @@ using Veritas::Test;
 
 QTestSuite::QTestSuite(const QString& name, const QFileInfo& path, Test* parent)
     : Test(name, parent), m_path(path)
-{}
+{
+    setSelectionToggle(true);
+}
 
 QTestSuite::~QTestSuite()
 {}
