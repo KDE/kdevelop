@@ -22,7 +22,7 @@ This is your everyday interface. Now we want to construct
 a stub class skeleton for the virtual methods.
 
 Steps:
-  1/ Move your cursor to the first 'Foo'
+  1/ Point your mouse cursor to the first 'Foo'
   2/ Notice the neat code highlighting
   3/ Right click to spawn a context menu 
   4/ Choose ``Generate Stub Class'' 
@@ -39,10 +39,8 @@ public:
     virtual int foo(char);
 };
 
-/*! Non-virtual nor signals nor private methods are stubbed.
- *  NOTE this is currently broken but used to ran @GSOC
- *       both the public & signal method ARE stubbed now ...
- *       looks like a regression in duchain */
+/*! Only virtual methods are stubbed. No code is generated 
+ *  for non-virtual, signals nor for private methods. */
 class Bar
 {
 public:
