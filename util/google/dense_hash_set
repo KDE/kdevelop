@@ -88,7 +88,11 @@
 #ifndef _DENSE_HASH_SET_H_
 #define _DENSE_HASH_SET_H_
 
-#include <google/sparsehash/sparseconfig.h>
+#if defined(Q_OS_WIN)
+#include "sparsehash/sparseconfig_windows.h"
+#else
+#include "sparsehash/sparseconfig.h"
+#endif
 #include <stdio.h>                   // for FILE * in read()/write()
 #include <algorithm>                 // for the default template args
 #include <functional>                // for equal_to

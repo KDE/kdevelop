@@ -51,7 +51,11 @@
 #ifndef BASE_TYPE_TRAITS_H_
 #define BASE_TYPE_TRAITS_H_
 
-#include <util/google/sparsehash/sparseconfig.h>
+#if defined(Q_OS_WIN)
+#include "sparsehash/sparseconfig_windows.h"
+#else
+#include "sparsehash/sparseconfig.h"
+#endif
 #include <utility>                  // For pair
 
 _START_GOOGLE_NAMESPACE_
