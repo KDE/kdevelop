@@ -63,7 +63,8 @@ protected:
   virtual void visitTemplateParameter(TemplateParameterAST *);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
-  virtual void visitInitializer(InitializerAST *node);
+  virtual void createTypeForInitializer(InitializerAST *node);
+  virtual void closeTypeForInitializer(InitializerAST *node);
 
   bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
 

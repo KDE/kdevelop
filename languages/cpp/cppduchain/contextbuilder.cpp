@@ -813,6 +813,12 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   m_importedParentContexts.clear();
 }
 
+void ContextBuilder::createTypeForInitializer(InitializerAST */*node*/) {
+}
+
+void ContextBuilder::closeTypeForInitializer(InitializerAST */*node*/) {
+}
+
 void ContextBuilder::createTypeForDeclarator(DeclaratorAST */*node*/) {
 }
 
@@ -822,7 +828,10 @@ void ContextBuilder::closeTypeForDeclarator(DeclaratorAST */*node*/) {
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   m_currentInitializer = node->initializer;
-  visitDeclarator(node->declarator);
+  if(node->declarator)
+    visitDeclarator(node->declarator);
+  if(node->initializer)
+    visitInitializer(node->initializer);
   m_currentInitializer = 0;
 }
 
@@ -837,7 +846,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   createTypeForDeclarator(node);
   
   if(m_currentInitializer) //Needs to be visited now, so the type-builder can use the initializer to build a constant integral tyoe
-    visit(m_currentInitializer); 
+    createTypeForInitializer(m_currentInitializer); 
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext)) {
     DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
@@ -852,6 +861,9 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   visit(node->exception_spec);
   //END Finished with default visitor
 
+  if(m_currentInitializer)
+    closeTypeForInitializer(m_currentInitializer);
+  
   closeTypeForDeclarator(node);
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext))

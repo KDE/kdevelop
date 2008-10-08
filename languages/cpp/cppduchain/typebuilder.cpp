@@ -357,7 +357,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
-void TypeBuilder::visitInitializer(InitializerAST *node) {
+void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
   if(integral && (integral->modifiers() & AbstractType::ConstModifier) && node->initializer_clause && node->initializer_clause->expression) {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
@@ -396,10 +396,13 @@ void TypeBuilder::visitInitializer(InitializerAST *node) {
       openDelayedType(id, node, DelayedType::Delayed);
       openedType = true;
     }
+    
     if(openedType)
       closeType();
   }
-  TypeBuilderBase::visitInitializer(node);
+}
+
+void TypeBuilder::closeTypeForInitializer(InitializerAST */*node*/) {
 }
 
 bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {

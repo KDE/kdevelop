@@ -182,6 +182,8 @@ protected:
   virtual void visitTryBlockStatement(TryBlockStatementAST*);
   virtual void visitCatchStatement(CatchStatementAST*);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
+  virtual void createTypeForInitializer(InitializerAST *node);
+  virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
 
