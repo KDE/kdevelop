@@ -585,6 +585,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
 
   if(currentContext()->type() == DUContext::Class) {
     ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
+     DUChainWriteLocker lock(DUChain::lock());
     fun->setAccessPolicy(currentAccessPolicy());
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
@@ -1166,13 +1167,15 @@ void DeclarationBuilder::applyStorageSpecifiers()
 
 void DeclarationBuilder::applyFunctionSpecifiers()
 {
+  DUChainWriteLocker lock(DUChain::lock());
+  AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration());
+  if(!function)
+    return;
   if (!m_functionSpecifiers.isEmpty() && m_functionSpecifiers.top() != 0) {
-    AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration());
-    Q_ASSERT(function);
-
-    DUChainWriteLocker lock(DUChain::lock());
 
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
+  }else{
+    function->setFunctionSpecifiers((AbstractFunctionDeclaration::FunctionSpecifiers)0);
   }
 }
 
