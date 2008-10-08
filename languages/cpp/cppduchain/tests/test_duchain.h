@@ -40,6 +40,7 @@ namespace KDevelop
 class Declaration;
 class TopDUContext;
 class SimpleCursor;
+class ClassFunctionDeclaration;
 }
 
 class TestDUChain : public QObject
@@ -124,6 +125,10 @@ private slots:
   void testMultipleVirtual();
   void testMixedVirtualNormal();
 
+  void testMemberFunctionModifiers();
+
+private:
+  void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 
 public:
   enum DumpArea {

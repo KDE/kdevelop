@@ -730,6 +730,69 @@ void TestDUChain::testNonVirtualMemberFunction()
   }
 }
 
+/*! Extract memberfunction from @p topcontext in the @p nrofClass 'th class
+ *  declaration. Assert that it is named @p expectedName. Fill the outputparameter
+ *  @p memberFun */
+#define FETCH_MEMBER_FUNCTION(nrofClass, topcontext, expectedName, memberFun) \
+{ \
+    QVERIFY(top);\
+    DUContext* clazzCtx = top->childContexts()[nrofClass]; \
+    QCOMPARE(1, clazzCtx->localDeclarations().count()); \
+    Declaration* member = clazzCtx->localDeclarations()[0]; \
+    memberFun = dynamic_cast<ClassFunctionDeclaration*>(member); \
+    QVERIFY(memberFun); \
+    QCOMPARE(QString(expectedName), memberFun->toString()); \
+} (void)(0)
+
+void TestDUChain::testMemberFunctionModifiers()
+{
+  { // Function modifiers are kind of russian roulette :-)
+      QByteArray text("class FuBarr { void foo(); };\n"
+                      "class ZooLoo { void bar(); };\n\n"
+                      "class MooFoo \n { public: void loo(); };\n"
+                      "class GooRoo { void baz(); };\n"
+                      "class PooYoo { \n void zoo(); };\n");
+      TopDUContext* top = parse(text, DumpAll);
+      DUChainWriteLocker lock(DUChain::lock());
+
+      ClassFunctionDeclaration *foo, *bar, *loo, *baz, *zoo; // filled below
+      FETCH_MEMBER_FUNCTION(0, top, "void foo ()", foo);
+      FETCH_MEMBER_FUNCTION(1, top, "void bar ()", bar);
+      FETCH_MEMBER_FUNCTION(2, top, "void loo ()", loo);
+      FETCH_MEMBER_FUNCTION(3, top, "void baz ()", baz);
+      FETCH_MEMBER_FUNCTION(4, top, "void zoo ()", zoo);
+
+      assertNoMemberFunctionModifiers(foo); // fails, actual modifiers: constant
+      assertNoMemberFunctionModifiers(bar); // fails, actual modifiers: virtual, constant
+      assertNoMemberFunctionModifiers(loo); // fails, actual modifiers: explicit, constant
+      assertNoMemberFunctionModifiers(baz); // fails, actual modifiers: virtual, explicit, constant
+      assertNoMemberFunctionModifiers(zoo); // fails, actual modifiers: virtual, explicit, inline, constnat
+
+      // NOTE this problem affects autocompletion and the code browser (+ veritas stubgeneration)
+      //      both show modifiers that are completly off, at least on my setup
+
+      release(top);
+  }
+}
+
+void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memberFun)
+{
+    AbstractType::Ptr t(memberFun->abstractType());
+    Q_ASSERT(t);
+    bool isConstant = t & AbstractType::ConstModifier;
+    bool isVolatile = t & AbstractType::VolatileModifier;
+
+    kDebug() << memberFun->toString() << "virtual?"  << memberFun->isVirtual()
+                                      << "explicit?" << memberFun->isExplicit()
+                                      << "inline?"   << memberFun->isInline()
+                                      << "constant?" << isConstant
+                                      << "volatile?" << isVolatile;
+    QVERIFY(!memberFun->isVirtual());
+    QVERIFY(!memberFun->isExplicit());
+    QVERIFY(!memberFun->isInline());
+    QVERIFY(!isConstant);
+    QVERIFY(!isVolatile);
+}
 
 void TestDUChain::testDeclareStruct()
 {
