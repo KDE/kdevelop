@@ -259,34 +259,55 @@ void RunnerWindowTest::printModel(const QModelIndex& mi, int lvl)
 // command
 void RunnerWindowTest::clickRunnerResults()
 {
-    model->child11->m_state = Veritas::RunError;
+    model->child11->m_state = Veritas::RunSuccess;
+    model->child12->m_state = Veritas::RunError;
     model->child21->m_state = Veritas::RunError;
 
     runAllTests();
 
-    // fake a click on  the second root test.
-    // this is expected to filter all but the result of
-    // child21.
     // r0
-    //   -child10
-    //   -child11 [failed]
-    // r1 <- clicked
+    //   -child11
+    //   -child12 [failed]
+    // r1
     //   -child21 [failed]
+
+    // select r1 in the runner-tree
+    // since child21 has failed this item's result should now be shown in
+    // the resultsview. All other results are expected to be filtered
     QModelIndex i = m_proxy->index(1,0);
     m_view->selectionModel()->select(i, QItemSelectionModel::Select);
+    assertResultsProxyShowsOnly("child21");
 
-    // since the 2nd item in the runnertree was set to fail,
-    // and we selected it's parent this should be the only
-    // item currently visible in the resultsview.
-    QModelIndex result21 = m_resultsProxy->index(0,0);
-    KVERIFY_MSG(result21.isValid(), 
+    // now select child12.
+    // the results view should have been reset and show only child12's result item
+    i = m_proxy->index(0,0).child(1,0);
+    m_view->selectionModel()->select(i, QItemSelectionModel::Select);
+    assertResultsProxyShowsOnly("child12");
+
+    // now select child11
+    // since this test did pass, the results view should be empty
+    i = m_proxy->index(0,0).child(0,0);
+    m_view->selectionModel()->select(i, QItemSelectionModel::Select);
+    assertResultsProxyShowsNothing();
+}
+
+void RunnerWindowTest::assertResultsProxyShowsOnly(const QString& itemData)
+{
+    QModelIndex result = m_resultsProxy->index(0,0);
+    KVERIFY_MSG(result.isValid(), 
         "Was expecting to find something in the resultsview, "
         "however it is empty (filtered).");
-    //QTest::qWait(5000);
     KVERIFY_MSG(!m_resultsProxy->index(1,0).isValid(),
         "Resultsview should contain only a single item.");
-    KOMPARE("child21", m_resultsProxy->data(result21));
+    KOMPARE(itemData, m_resultsProxy->data(result));
+}
 
+void RunnerWindowTest::assertResultsProxyShowsNothing()
+{
+    QModelIndex first = m_resultsProxy->index(0,0);
+    KVERIFY_MSG(!first.isValid(),
+        QString("Was expecting an empty resultiew but index(0,0) is valid. data: %1").
+            arg(m_resultsProxy->data(first).toString()));
 }
 
 // command

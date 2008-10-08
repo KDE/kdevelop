@@ -50,6 +50,8 @@ Test::Test(const QList<QVariant>& data, Test* parent)
         d->name.clear();
     }
     d->check();
+    d->needVerboseToggle = false;
+    d->needSelectionToggle = false;
 }
 
 Test::Test(const QString& name, Test* parent)
@@ -63,11 +65,36 @@ Test::Test(const QString& name, Test* parent)
         d->itemData << QString();
     }
     d->check();
+    d->needVerboseToggle = false;
+    d->needSelectionToggle = false;
 }
 
 QString Test::name() const
 {
     return d->name;
+}
+
+void Test::kill()
+{}
+
+bool Test::needVerboseToggle() const
+{
+    return d->needVerboseToggle;
+}
+
+void Test::setVerboseToggle(bool enabled)
+{
+    d->needVerboseToggle = enabled;
+}
+
+bool Test::needSelectionToggle() const
+{
+    return d->needSelectionToggle;
+}
+
+void Test::setSelectionToggle(bool enabled)
+{
+    d->needSelectionToggle = enabled;
 }
 
 Test::~Test()

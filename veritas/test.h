@@ -63,6 +63,8 @@ namespace Veritas
 class VERITAS_EXPORT Test : public QObject
 {
 Q_OBJECT
+Q_PROPERTY(bool verboseToggle READ needVerboseToggle WRITE setVerboseToggle)
+Q_PROPERTY(bool selectionToggle READ needSelectionToggle WRITE setSelectionToggle)
 
 public Q_SLOTS:
 
@@ -70,6 +72,11 @@ public Q_SLOTS:
     virtual int run();
 
 public: // Operations
+
+    bool needVerboseToggle() const;
+    void setVerboseToggle(bool);
+    bool needSelectionToggle() const;
+    void setSelectionToggle(bool);
 
     /*! Factory method that constructs a blank root test. Always use
      *  this method to construct test-tree roots. */
@@ -92,6 +99,10 @@ public: // Operations
         eg because it is a test container (suite).
         Implement this in a subclass. Default to not run. */
     virtual bool shouldRun() const;
+
+    /*! Performs a hard stop if test was running, to be implemented by
+     *  concrete tests. */
+    virtual void kill();
 
     /*! Identifies this test. Also shown in the runnerview-tree */
     QString name() const;

@@ -49,6 +49,7 @@ VerboseToggle::VerboseToggle(QWidget* parent) :
             this, SLOT(setIconOverlay()));
     connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
             this, SLOT(refreshIcon()));
+    setToolTip(i18nc("@info:tooltip", "Verbose Output"));
 }
 
 VerboseToggle::~VerboseToggle()
@@ -79,13 +80,12 @@ void VerboseToggle::enterEvent(QEvent* event)
         m_fadingTimeLine->stop();
     }
     m_fadingValue = 255;
-    i18nc("@info:tooltip", "Verbose Output");
     update();
 }
 
 bool VerboseToggle::shouldShow(Test* t)
 {
-    return t && t->shouldRun();
+    return t!=0 && t->needVerboseToggle();
 }
 
 void VerboseToggle::setIconOverlay()

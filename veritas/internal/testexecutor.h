@@ -34,6 +34,7 @@ class Test;
 class VERITAS_EXPORT TestExecutor : public QObject
 {
 Q_OBJECT
+
 public:
     TestExecutor();
     virtual ~TestExecutor();

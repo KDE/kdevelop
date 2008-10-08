@@ -40,7 +40,7 @@ using Veritas::Test;
 
 bool SelectionToggle::shouldShow(Test* t)
 {
-    return t != 0;
+    return t != 0 && t->needSelectionToggle();
 }
 
 SelectionToggle::SelectionToggle(QWidget* parent) :

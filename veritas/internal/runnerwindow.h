@@ -54,6 +54,7 @@ class TestExecutor;
  * in appropriate views to the user and provides commands for their
  * manipulation. Runner items can be executed.
  */
+// TODO this is starting to smell like a GOD class. fix it
 class VERITAS_EXPORT RunnerWindow : public QWidget
 {
 Q_OBJECT

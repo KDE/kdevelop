@@ -68,6 +68,9 @@ private:
     void runAllTests();
     void printModel(const QModelIndex& mi, int);
 
+    void assertResultsProxyShowsOnly(const QString& itemData);
+    void assertResultsProxyShowsNothing();
+
 private:
     Veritas::RunnerWindow* window;
     Veritas::RunnerModelStub* model;

@@ -65,6 +65,8 @@ private:
     QMap<QString, Test*> childMap;
     QList<Test*> children;
     QList<QVariant> itemData;
+    bool needVerboseToggle;
+    bool needSelectionToggle;
 
     static const int columnCount;
 };

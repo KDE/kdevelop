@@ -40,6 +40,7 @@
 #include "interfaces/idocumentcontroller.h"
 
 #include "utils.h"
+#include "test_p.h"
 #include "resultswidget.h"
 
 #include <QMessageBox>
@@ -73,6 +74,7 @@ using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 using Veritas::VerboseManager;
 using Veritas::TestExecutor;
+using Veritas::Test;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
 {
@@ -176,11 +178,33 @@ void RunnerWindow::rmProjectFromPopup(IProject* proj)
     }
 }
 
+namespace
+{
+/*! functor that counts the selected leaf tests */
+class SelectedLeafCount
+{
+public:
+    SelectedLeafCount() : result(0) {}
+    void operator()(Test* t) {
+        if ((t->childCount() == 0) && t->internal()->isChecked()) {
+            result++;
+        }
+    }
+    int result;
+};
+
+}
+
 void RunnerWindow::resetProgressBar() const
 {
     ui()->progressRun->setValue(0);
     ui()->progressRun->update();
-    if (ui()->progressRun->maximum() == 0) {
+    if (runnerModel()) {
+        SelectedLeafCount slf;
+        traverseTree(runnerModel()->rootItem(), slf);
+        if (slf.result == 0) slf.result++; // 0 results in an indeterminate progressbar, not good
+        ui()->progressRun->setMaximum(slf.result);
+    } else {
         ui()->progressRun->setMaximum(1);
     }
 }
@@ -437,43 +461,29 @@ void RunnerWindow::displayNumExceptions(int numItems) const
     if (numItems > 0) setRedBar();
 }
 
+namespace
+{
+inline Test* testFromIndex(const QModelIndex& index)
+{
+    return static_cast<Test*>(index.internalPointer());
+}
+}
+
 void RunnerWindow::syncResultWithTest(const QItemSelection& selected,
                                       const QItemSelection& deselected) const
 {
     Q_UNUSED(deselected);
     QModelIndexList indexes = selected.indexes();
-    // Do nothing when there are no results or no runner item is selected.
     if (indexes.count() < 1 || !runnerProxyModel()->index(0, 0).isValid()) {
-        return;
+        return; // Do nothing when there are no results or no runner item is selected.
     }
+
     enableResultSync(false); // Prevent circular reaction
-
-    // Get the results model index that corresponds to the runner item index.
-    QModelIndex testItemIndex = runnerProxyModel()->mapToSource(indexes.first());
-    QModelIndex resultIndex = resultsModel()->mapFromTestIndex(testItemIndex);
-    QModelIndex viewIndex = resultsProxyModel()->mapFromSource(resultIndex);
-
-    QModelIndex filterIndex;
-    if (resultIndex.isValid() && viewIndex.isValid()) {
-        resultsView()->clearSelection();
-        resultsView()->setCurrentIndex(viewIndex);
-        scrollToHighlightedRows();
-        filterIndex = testItemIndex.parent();
-    } else if (!resultIndex.isValid()) {
-        filterIndex = testItemIndex;
-    }
-
-    if (filterIndex.isValid()) {
-        Test* t = static_cast<Test*>(filterIndex.internalPointer());
+    QModelIndex testIndex = runnerProxyModel()->mapToSource(indexes.first());
+    if (testIndex.isValid()) {
+        Test* t = testFromIndex(testIndex);
         resultsProxyModel()->setTestFilter(t);
     }
-
-    if (!resultIndex.isValid()) {
-        kDebug() << "Failed to find result item for runner stuff";
-    } else if (!viewIndex.isValid()) {
-        kDebug() << "Looks like result is being filtered";
-    }
-
     enableResultSync(true);
 }
 

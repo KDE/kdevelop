@@ -74,6 +74,18 @@ void SetupChain::operator()(Test* current)
     m_previous = current;
 }
 
+/*! functor which aborts a test */
+class KillTest
+{
+public:
+    void operator()(Test* t);
+};
+
+void KillTest::operator()(Test* t)
+{
+    t->kill();
+}
+
 } // end anonymous namespace
 
 
@@ -96,7 +108,10 @@ void TestExecutor::go()
 
 void TestExecutor::stop()
 {
+    Test* root = m_root;
     cleanup();
+    KillTest kt;
+    traverseTree(root, kt);
 }
 
 void TestExecutor::cleanup()
