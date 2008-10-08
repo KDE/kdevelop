@@ -22,7 +22,6 @@ set(veritas_SRCS
     internal/runnerwindow.cpp
     internal/selectionmanager.cpp
     internal/selectiontoggle.cpp
-    internal/verbosemanager.cpp
     internal/verbosetoggle.cpp
     internal/overlaymanager.cpp
     internal/overlaytoggle.cpp

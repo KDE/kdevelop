@@ -44,9 +44,11 @@ class RunnerProxyModel;
 class ResultsModel;
 class ResultsProxyModel;
 class SelectionManager;
-class VerboseManager;
+class VerboseToggle;
 class ResultsWidget;
+class OverlayManager;
 class TestExecutor;
+class Test;
 
 /*!
  * \brief The RunnerWindow class defines the Veritas main toolwindow
@@ -90,16 +92,17 @@ public: // Operations
     const Ui::RunnerWindow* ui() const;
     KSelectAction* projectPopup() const;
 
-    VerboseManager* verboseManager() const;
     QWidget* resultsWidget() const;
 
     void resetProgressBar() const;
 
 Q_SIGNALS:
     void runCompleted() const;
+    void openVerbose(Veritas::Test*);
 
 public Q_SLOTS:
 
+    void emitOpenVerbose();
     void addProjectToPopup(KDevelop::IProject*);
     void rmProjectFromPopup(KDevelop::IProject*);
 
@@ -197,12 +200,13 @@ private:
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
     ResultsWidget* m_results;
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
-    VerboseManager* m_verbose;
+    OverlayManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
     QMap<KDevelop::IProject*, QAction*> m_project2action;
     QTime m_stopWatch;                 // times test-runs, shown in the gui
     TestExecutor* m_executor;
     mutable bool m_isRunning;
+    VerboseToggle* m_verboseToggle;
 };
 
 } // namespace

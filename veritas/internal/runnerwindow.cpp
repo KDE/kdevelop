@@ -30,7 +30,6 @@
 #include "runnermodel.h"
 #include "runnerproxymodel.h"
 #include "selectionmanager.h"
-#include "verbosemanager.h"
 #include "verbosetoggle.h"
 #include "selectiontoggle.h"
 #include "testexecutor.h"
@@ -72,7 +71,6 @@ using Veritas::RunnerModel;
 using Veritas::RunnerProxyModel;
 using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
-using Veritas::VerboseManager;
 using Veritas::TestExecutor;
 using Veritas::Test;
 
@@ -114,9 +112,10 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_selection = new SelectionManager(runnerView());
     SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
     m_selection->setButton(selectionToggle);
-    m_verbose = new VerboseManager(runnerView());
-    VerboseToggle* verboseToggle = new VerboseToggle(runnerView()->viewport());
-    m_verbose->setButton(verboseToggle);
+    m_verbose = new OverlayManager(runnerView());
+    m_verboseToggle = new VerboseToggle(runnerView()->viewport());
+    connect(m_verboseToggle, SIGNAL(clicked(bool)),SLOT(emitOpenVerbose()));
+    m_verbose->setButton(m_verboseToggle);
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
@@ -144,6 +143,17 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
     runnerView()->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+void RunnerWindow::emitOpenVerbose()
+{
+    const QModelIndex index = m_verboseToggle->index();
+    if (index.isValid()) {
+        Test* t = m_verbose->index2Test(index);
+        if (t) {
+            emit openVerbose(t);
+        }
+    }
 }
 
 // helper for RunnerWindow(...)
@@ -761,7 +771,3 @@ ResultsProxyModel* RunnerWindow::resultsProxyModel() const
     return qobject_cast<ResultsProxyModel*>(resultsView()->model());
 }
 
-VerboseManager* RunnerWindow::verboseManager() const
-{
-    return m_verbose;
-}

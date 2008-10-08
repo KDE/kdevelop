@@ -48,13 +48,13 @@ public:
 
     /*! @note mandatory */
     void setButton(OverlayButton*);
+    Test* index2Test(const QModelIndex&) const;
 
 public slots:
     void reset();
 
 protected:
     QAbstractItemView* view() const;
-    Test* index2Test(const QModelIndex&) const;
     OverlayButton* button() const;
 
 protected slots:

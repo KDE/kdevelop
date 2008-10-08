@@ -29,7 +29,6 @@
 #include "internal/runnermodel.h"
 #include "internal/resultsmodel.h"
 #include "internal/runnerwindow.h"
-#include "internal/verbosemanager.h"
 
 // Qt - KDE
 #include <KAboutData>
@@ -66,7 +65,6 @@ using Veritas::Test;
 using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::ResultsModel;
-using Veritas::VerboseManager;
 using Veritas::ITestRunner;
 using Veritas::ITestFramework;
 
@@ -175,7 +173,7 @@ QWidget* ITestRunner::runnerWidget()
     connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
-    connect(d->window->verboseManager(), SIGNAL(openVerbose(Veritas::Test*)),
+    connect(d->window, SIGNAL(openVerbose(Veritas::Test*)),
             this, SLOT(openVerbose(Veritas::Test*)));
     reload();
     return d->window;
