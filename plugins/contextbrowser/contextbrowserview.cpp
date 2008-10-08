@@ -124,7 +124,7 @@ void ContextController::comboItemActivated(int index)
                 c = activated->range().start;
                 if(activated->internalContext() && activated->internalContext()->url() == u) {
                     c = activated->internalContext()->range().start;
-                    if(c.line+1 >= activated->internalContext()->range().end.line)
+                    if(c.line+1 <= activated->internalContext()->range().end.line)
                         c = SimpleCursor(c.line+1, 0); //Move more into the body
                 }
             }
