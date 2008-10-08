@@ -318,6 +318,14 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         
         if (it != d->m_documents.end() && it.value() != qMakePair(priority, features)) {
             //Update the stored priority
+            //Only allow upgrading
+            if(it.value().first < priority)
+                priority = it.value().first; //The stored priority is better, use that one
+            
+            if(it.value().second > features)
+                features = it.value().second; //If the stored features are better, use those
+            
+            //Update features + priority
             d->m_documentsForPriority[it.value().first].remove(url);
             d->m_documents[url] = qMakePair(priority, features);
             d->m_documentsForPriority[priority].insert(url);
