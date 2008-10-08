@@ -97,7 +97,20 @@ QList<ILanguage*> LanguageController::activeLanguages()
 
 ILanguage *LanguageController::language(const QString &name) const
 {
-    return d->languages[name];
+    if(d->languages.contains(name))
+        return d->languages[name];
+    else{
+        ILanguage* ret = 0;
+        QStringList constraints;
+        constraints << QString("'%1' in [X-KDevelop-Language]").arg(name);
+        QList<IPlugin*> supports = Core::self()->pluginController()->
+            allPluginsForExtension("ILanguageSupport", constraints);
+        if(!supports.isEmpty()) {
+            ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
+            ret = languageSupport->language();
+        }
+        return ret;
+    }
 }
 
 QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
