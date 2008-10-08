@@ -684,8 +684,7 @@ void TestDUChain::testMixedVirtualNormal()
 
 void TestDUChain::testNonVirtualMemberFunction()
 {
-  { // NOTE this fails currently, but used to run until after GSOC.
-    //      started to fail a week (or two) before the auto-runs.
+  {
     QByteArray text("class Foo \n { public: void bar(); };\n");
     TopDUContext* top = parse(text, DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
@@ -729,14 +728,11 @@ void TestDUChain::testMemberFunctionModifiers()
       FETCH_MEMBER_FUNCTION(3, top, "void baz ()", baz);
       FETCH_MEMBER_FUNCTION(4, top, "void zoo ()", zoo);
 
-      assertNoMemberFunctionModifiers(foo); // fails, actual modifiers: constant
-      assertNoMemberFunctionModifiers(bar); // fails, actual modifiers: virtual, constant
-      assertNoMemberFunctionModifiers(loo); // fails, actual modifiers: explicit, constant
-      assertNoMemberFunctionModifiers(baz); // fails, actual modifiers: virtual, explicit, constant
-      assertNoMemberFunctionModifiers(zoo); // fails, actual modifiers: virtual, explicit, inline, constnat
-
-      // NOTE this problem affects autocompletion and the code browser (+ veritas stubgeneration)
-      //      both show modifiers that are completly off, at least on my setup
+      assertNoMemberFunctionModifiers(foo); // actual modifiers: constant
+      assertNoMemberFunctionModifiers(bar); // actual modifiers: virtual, constant
+      assertNoMemberFunctionModifiers(loo); // actual modifiers: explicit, constant
+      assertNoMemberFunctionModifiers(baz); // actual modifiers: virtual, explicit, constant
+      assertNoMemberFunctionModifiers(zoo); // actual modifiers: virtual, explicit, inline, constnat
 
       release(top);
   }
@@ -746,8 +742,8 @@ void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memb
 {
     AbstractType::Ptr t(memberFun->abstractType());
     Q_ASSERT(t);
-    bool isConstant = t & AbstractType::ConstModifier;
-    bool isVolatile = t & AbstractType::VolatileModifier;
+    bool isConstant = t->modifiers() & AbstractType::ConstModifier;
+    bool isVolatile = t->modifiers() & AbstractType::VolatileModifier;
 
     kDebug() << memberFun->toString() << "virtual?"  << memberFun->isVirtual()
                                       << "explicit?" << memberFun->isExplicit()
