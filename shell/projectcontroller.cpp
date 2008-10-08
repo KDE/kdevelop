@@ -421,7 +421,8 @@ bool ProjectController::projectImportingFinished( IProject* project )
             }
         }
     }
-    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList );
+    //Add low-priority parse jobs, with only the minimum parsed information
+    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::VisibleDeclarationsAndContexts, 10000 );
 
     return true;
 }
