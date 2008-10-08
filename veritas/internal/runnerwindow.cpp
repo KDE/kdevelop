@@ -93,8 +93,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     connectFocusStuff();
     setGreenBar();
-    ui()->progressRun->setTextVisible(false);
-    ui()->progressRun->show();
+    progressBar()->setTextVisible(false);
+    progressBar()->show();
     addProjectMenu();
 
     // Disable user interaction while there is no data.
@@ -197,15 +197,15 @@ public:
 
 void RunnerWindow::resetProgressBar() const
 {
-    ui()->progressRun->setValue(0);
-    ui()->progressRun->update();
+    progressBar()->setValue(0);
+    progressBar()->update();
     if (runnerModel()) {
         SelectedLeafCount slf;
         traverseTree(runnerModel()->rootItem(), slf);
         if (slf.result == 0) slf.result++; // 0 results in an indeterminate progressbar, not good
-        ui()->progressRun->setMaximum(slf.result);
+        progressBar()->setMaximum(slf.result);
     } else {
-        ui()->progressRun->setMaximum(1);
+        progressBar()->setMaximum(1);
     }
 }
 
@@ -384,15 +384,15 @@ void RunnerWindow::setModel(RunnerModel* model)
 void RunnerWindow::displayProgress(int numItems) const
 {
     // Display only when there are selected items
-    if (ui()->progressRun->maximum() > 0) {
-        ui()->progressRun->setValue(numItems);
+    if (progressBar()->maximum() > 0) {
+        progressBar()->setValue(numItems);
     }
 }
 
 void RunnerWindow::displayCompleted() const
 {
     if (!m_isRunning) return;
-    ui()->progressRun->setValue(ui()->progressRun->maximum());
+    progressBar()->setValue(progressBar()->maximum());
     enableControlsAfterRunning();
     displayElapsed();
     m_isRunning = false;
@@ -418,8 +418,7 @@ void RunnerWindow::displayNumCompleted(int numItems) const
 
 void RunnerWindow::setGreenBar() const
 {
-    QProgressBar* bar = ui()->progressRun;
-    bar->setStyleSheet(
+    progressBar()->setStyleSheet(
         QString("QProgressBar {"
             "border: 1px solid grey;"
             "border-radius: 2px;"
@@ -433,8 +432,7 @@ void RunnerWindow::setGreenBar() const
 
 void RunnerWindow::setRedBar() const
 {
-    QProgressBar* bar = ui()->progressRun;
-    bar->setStyleSheet(
+    progressBar()->setStyleSheet(
         QString("QProgressBar {"
             "border: 1px solid grey;"
             "border-radius: 2px;"
@@ -449,6 +447,11 @@ void RunnerWindow::setRedBar() const
 void RunnerWindow::displayNumErrors(int numItems) const
 {
     if (numItems > 0) setRedBar();
+}
+
+QProgressBar* RunnerWindow::progressBar() const
+{
+    return ui()->progressRun;
 }
 
 void RunnerWindow::displayNumFatals(int numItems) const

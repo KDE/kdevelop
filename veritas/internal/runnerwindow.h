@@ -34,6 +34,7 @@ namespace Ui { class RunnerWindow;}
 class QAction;
 class QItemSelection;
 class QAction;
+class QProgressBar;
 class KSelectAction;
 
 namespace Veritas
@@ -189,6 +190,8 @@ private: // Operations
     void displayElapsed() const;
     void setRedBar() const;
     void setGreenBar() const;
+
+    QProgressBar* progressBar() const;
 
 private:
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
