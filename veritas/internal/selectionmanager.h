@@ -21,28 +21,20 @@
 #ifndef VERITAS_SELECTIONMANAGER_H
 #define VERITAS_SELECTIONMANAGER_H
 
-#include "veritas/test.h"
 #include <QObject>
 #include "overlaymanager.h"
 
 class QAbstractItemView;
 class QModelIndex;
-class QAbstractButton;
-class QItemSelection;
 
 namespace Veritas
 {
 
-class SelectionToggle;
-class Test;
-
-/**
- * @brief Allows to select and deselect items for the single-click mode.
- *
- * Whenever an item is hovered by the mouse, a toggle button is shown
- * which allows to select/deselect the current item.
- * @todo move common parts with verbosemanager
- */
+/*! Whenever a test-item is hovered by the mouse in the runner tree,
+ *  a toggle button is shown. This allows the user to select/deselect that
+ *  specific test and it's children. A deselected test is excluded from the
+ *  test run. Individual Veritas::Test's must set the needSelectionToggle property
+ *  if they want such a button. */
 class SelectionManager : public OverlayManager
 {
     Q_OBJECT

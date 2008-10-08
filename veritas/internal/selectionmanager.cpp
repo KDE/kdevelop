@@ -20,28 +20,15 @@
 
 #include "selectionmanager.h"
 
-#include "veritas/test.h"
+#include "../test.h"
 #include "test_p.h"
-#include "utils.h"
+#include "overlaytoggle.h"
 
-#include "runnermodel.h"
-#include "selectiontoggle.h"
-
-#include <KIconEffect>
-
-#include <QAbstractButton>
 #include <QAbstractItemView>
-#include <QAbstractProxyModel>
 #include <QModelIndex>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRect>
-#include <QTimeLine>
 
 using Veritas::SelectionManager;
-using Veritas::SelectionToggle;
 using Veritas::Test;
-using Veritas::RunnerModel;
 using Veritas::OverlayManager;
 using Veritas::OverlayButton;
 
@@ -51,8 +38,7 @@ SelectionManager::SelectionManager(QAbstractItemView* parent) :
 
 void SelectionManager::setButton(OverlayButton* button)
 {
-    connect(button, SIGNAL(clicked(bool)),
-            SLOT(setItemSelected(bool)));
+    connect(button, SIGNAL(clicked(bool)), SLOT(setItemSelected(bool)));
     OverlayManager::setButton(button);
 }
 
@@ -76,9 +62,6 @@ void SelectionManager::setItemSelected(bool selected)
     const QModelIndex index = button()->index();
     if (index.isValid()) {
         selected ? index2Test(index)->internal()->check() : index2Test(index)->internal()->unCheck();
-        QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(view()->model());
-        RunnerModel* runnerModel = static_cast<RunnerModel*>(proxyModel->sourceModel());
-        runnerModel->updateView(proxyModel->mapToSource(index));
         view()->viewport()->update();
     }
     emit selectionChanged();
