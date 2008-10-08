@@ -406,8 +406,8 @@ void RunnerWindow::displayNumTotal(int numItems) const
 
 void RunnerWindow::displayNumSelected(int numItems) const
 {
-    if (numItems == 0) { numItems++;}
-    ui()->progressRun->setMaximum(numItems);
+    if (numItems == 0) numItems++;
+    resetProgressBar();
 }
 
 void RunnerWindow::displayNumCompleted(int numItems) const
