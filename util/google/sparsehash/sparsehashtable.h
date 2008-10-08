@@ -105,7 +105,11 @@
 // Hashtable class, used to implement the hashed associative containers
 // hash_set and hash_map.
 
-#include <google/sparsehash/sparseconfig.h>
+#if defined(Q_OS_WIN)
+#include "sparsehash/sparseconfig_windows.h"
+#else
+#include "sparsehash/sparseconfig.h"
+#endif
 #include <assert.h>
 #include <algorithm>              // For swap(), eg
 #include <iterator>               // for facts about iterator tags
