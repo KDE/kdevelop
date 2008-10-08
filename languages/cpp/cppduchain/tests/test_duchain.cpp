@@ -384,18 +384,22 @@ void TestDUChain::testArrayType()
 {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray method("int i[3];");
+  QByteArray method("const unsigned int ArraySize = 3; int i[ArraySize];");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 0);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
-  Declaration* defI = top->localDeclarations().first();
+  kDebug() << top->localDeclarations()[0]->abstractType()->toString();
+  QVERIFY(top->localDeclarations()[0]->uses().size());
+  QVERIFY(top->localDeclarations()[0]->type<ConstantIntegralType>());
+  
+  Declaration* defI = top->localDeclarations().last();
   QCOMPARE(defI->identifier(), Identifier("i"));
   QCOMPARE(findDeclaration(top, defI->identifier()), defI);
 
@@ -676,47 +680,10 @@ void TestDUChain::testMixedVirtualNormal()
     QVERIFY(!baz->isVirtual());
     release(top);
   }
-
-  {
-    QByteArray text("class Foo { public: void bar(); virtual void baz(); }; \n");
-    TopDUContext* top = parse(text, DumpAll);
-    DUChainWriteLocker lock(DUChain::lock());
-
-    ClassFunctionDeclaration *bar, *baz; // filled by assert macro below
-    ASSERT_TWO_MEMBER_FUNCTIONS_IN(top, bar, baz);
-    QVERIFY(!bar->isVirtual());
-    QVERIFY(baz->isVirtual());
-    release(top);
-  }
-
-  {
-    QByteArray text("class Foo \n { public: void bar(); virtual void baz(); }; \n");
-    TopDUContext* top = parse(text, DumpAll);
-    DUChainWriteLocker lock(DUChain::lock());
-
-    ClassFunctionDeclaration *bar, *baz; // filled by assert macro below
-    ASSERT_TWO_MEMBER_FUNCTIONS_IN(top, bar, baz);
-    QVERIFY(!bar->isVirtual());
-    QVERIFY(baz->isVirtual());
-    release(top);
-  }
-
-
 }
 
 void TestDUChain::testNonVirtualMemberFunction()
 {
-  {
-    QByteArray text("class Foo { public: void bar(); };\n");
-    TopDUContext* top = parse(text, DumpAll);
-    DUChainWriteLocker lock(DUChain::lock());
-
-    ClassFunctionDeclaration* memberFun; // filled by assert macro below
-    ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
-    QVERIFY(!memberFun->isVirtual());
-    release(top);
-  }
-
   { // NOTE this fails currently, but used to run until after GSOC.
     //      started to fail a week (or two) before the auto-runs.
     QByteArray text("class Foo \n { public: void bar(); };\n");

@@ -164,6 +164,7 @@ protected:
   virtual void visitTemplateDeclaration(TemplateDeclarationAST *);
 
   // Normal overridden visitors
+  virtual void visitInitDeclarator(InitDeclaratorAST *node);
   virtual void visitDeclarator(DeclaratorAST *node);
   virtual void visitNamespace(NamespaceAST *);
   virtual void visitEnumSpecifier(EnumSpecifierAST* node);
@@ -216,6 +217,7 @@ protected:
 
   QList<KDevelop::DUContext*> m_importedParentContexts;
   QStack< QList<DUContext*> > m_tryParentContexts;
+  InitializerAST* m_currentInitializer;
 };
 
 #endif // CONTEXTBUILDER_H

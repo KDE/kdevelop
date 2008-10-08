@@ -34,10 +34,6 @@ typedef KDevelop::AbstractTypeBuilder<AST, NameAST, ContextBuilder> TypeBuilderB
 
 /**
  * Create types from an AST tree.
- *
- * \note This builder overrides visitDeclarator, in order to support
- * array types; parent classes will not have
- * their visitDeclarator function called.
  */
 class KDEVCPPDUCHAIN_EXPORT TypeBuilder: public TypeBuilderBase
 {
@@ -67,6 +63,7 @@ protected:
   virtual void visitTemplateParameter(TemplateParameterAST *);
   virtual void createTypeForDeclarator(DeclaratorAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
+  virtual void visitInitializer(InitializerAST *node);
 
   bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
 

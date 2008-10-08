@@ -105,6 +105,7 @@ ContextBuilder::ContextBuilder ()
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
   , m_onlyComputeVisible(false)
+  , m_currentInitializer(0)
 {
 }
 
@@ -113,6 +114,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
   , m_onlyComputeVisible(false)
+  , m_currentInitializer(0)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
@@ -122,6 +124,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
   , m_onlyComputeVisible(false)
+  , m_currentInitializer(0)
 {
   setEditor(editor, false);
 }
@@ -816,8 +819,14 @@ void ContextBuilder::createTypeForDeclarator(DeclaratorAST */*node*/) {
 void ContextBuilder::closeTypeForDeclarator(DeclaratorAST */*node*/) {
 }
 
-void ContextBuilder::visitDeclarator(DeclaratorAST *node)
+void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
+  m_currentInitializer = node->initializer;
+  visitDeclarator(node->declarator);
+  m_currentInitializer = 0;
+}
+
+void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
   //BEGIN Copied from default visitor
   visit(node->sub_declarator);
   visitNodes(this, node->ptr_ops);
@@ -826,6 +835,9 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node)
   //END Finished with first part of default visitor
 
   createTypeForDeclarator(node);
+  
+  if(m_currentInitializer) //Needs to be visited now, so the type-builder can use the initializer to build a constant integral tyoe
+    visit(m_currentInitializer); 
 
   if (node->parameter_declaration_clause && (compilingContexts() || node->parameter_declaration_clause->ducontext)) {
     DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
@@ -835,6 +847,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node)
   }
 
   //BEGIN Copied from default visitor
+  visitNodes(this, node->array_dimensions);
   visit(node->parameter_declaration_clause);
   visit(node->exception_spec);
   //END Finished with default visitor

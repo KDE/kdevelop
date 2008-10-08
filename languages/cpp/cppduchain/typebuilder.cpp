@@ -357,6 +357,51 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     closeType();
 }
 
+void TypeBuilder::visitInitializer(InitializerAST *node) {
+  IntegralType::Ptr integral = lastType().cast<IntegralType>();
+  if(integral && (integral->modifiers() & AbstractType::ConstModifier) && node->initializer_clause && node->initializer_clause->expression) {
+    //Parse the expression, and create a CppConstantIntegralType, since we know the value
+    Cpp::ExpressionParser parser;
+
+    bool openedType = false;
+    Cpp::ExpressionEvaluationResult res;
+
+    bool delay = false;
+    ///@todo This is nearly a copy of visitEnumerator, merge it
+    if(!delay) {
+      DUChainReadLocker lock(DUChain::lock());
+      node->initializer_clause->expression->ducontext = currentContext();
+      res = parser.evaluateType( node->initializer_clause->expression, editor()->parseSession() );
+
+      //Delay the type-resolution of template-parameters
+      if( res.allDeclarations.size() ) {
+        Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
+        if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
+          delay = true;
+      }
+
+      if ( !delay && res.isValid() && res.isInstance ) {
+        openType( res.type.type() );
+        openedType = true;
+      }
+    }
+    if( delay || !openedType ) {
+      QString str;
+      ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
+      str += stringFromSessionTokens( editor()->parseSession(), node->initializer_clause->expression->start_token, node->initializer_clause->expression->end_token );
+
+      QualifiedIdentifier id( str.trimmed() );
+      id.setIsExpression( true );
+
+      openDelayedType(id, node, DelayedType::Delayed);
+      openedType = true;
+    }
+    if(openedType)
+      closeType();
+  }
+  TypeBuilderBase::visitInitializer(node);
+}
+
 bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {
   QualifiedIdentifier id = identifierForNode(name);
 
