@@ -789,7 +789,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d_func_dynamic()->setClassId(this);
-  d->m_hasUses = false;
+  d->m_features = VisibleDeclarationsAndContexts;
   d->m_deleting = false;
   m_local->m_file = ParsingEnvironmentFilePointer(file);
   setInSymbolTable(true);
@@ -828,15 +828,14 @@ void TopDUContext::deleteSelf() {
   delete dynamicData;
 }
 
-
-void TopDUContext::setHasUses(bool hasUses)
+TopDUContext::Features TopDUContext::features() const
 {
-  d_func_dynamic()->m_hasUses = hasUses;
+  return d_func()->m_features;
 }
 
-bool TopDUContext::hasUses() const
+void TopDUContext::setFeatures(Features features)
 {
-  return d_func()->m_hasUses;
+  d_func_dynamic()->m_features = features;
 }
 
 void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
@@ -1317,6 +1316,14 @@ void TopDUContext::setFlags(Flags f) {
 bool TopDUContext::isOnDisk() const {
   ///@todo Change this to releasingToDisk, and only enable it while saving a top-context to disk.
   return m_dynamicData->isOnDisk();
+}
+
+IndexedString TopDUContext::language() const {
+  return d_func()->m_language;
+}
+
+void TopDUContext::setLanguage(IndexedString language) {
+  d_func_dynamic()->m_language = language;
 }
 
 void TopDUContext::clearUsedDeclarationIndices() {

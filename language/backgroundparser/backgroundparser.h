@@ -35,6 +35,7 @@
 
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
+#include <language/duchain/topducontext.h>
 
 class QMutex;
 
@@ -134,13 +135,27 @@ public Q_SLOTS:
 
     /**
      * Queues up the @p url to be parsed.
+     * @p features The minimum features that should be computed for this top-context
+     * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
      */
-    void addDocument(const KUrl& url);
+    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0);
+
+    
+    /**
+     * Adds a parse-job that updates the given top-context so it has at least the given features.
+     *@p notifyReady An optional pointer to a QObject that should contain a slot 
+     *                   "void topContextUpdated(KDevelop::ReferencedTopDUContext topContext)"
+     *                   that will be invoked once the top-context is updated, using a qeuued connection.
+     * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
+     */
+//     void addUpdateJob(ReferencedTopDUContext topContext, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, QObject* notifyWhenReady = 0, int priority = 0);
 
     /**
      * Queues up the list of @p urls to be parsed.
+     * @p features The minimum features that should be computed for these top-contexts
+     * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
      */
-    void addDocumentList(const KUrl::List& urls);
+    void addDocumentList(const KUrl::List& urls, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0);
 
     /**
      * Removes the @p url from the queue.

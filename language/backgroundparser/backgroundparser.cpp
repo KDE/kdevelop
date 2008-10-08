@@ -98,15 +98,13 @@ public:
     void parseDocumentsInternal()
     {
         kDebug(9505) << "BackgroundParser::parseDocumentsInternal";
-        // First create the jobs, then enqueue them, because they may
-        // need to access each other for generating dependencies.
         
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
         QList<ParseJob*> jobs;
         QHashIterator<KUrl, DocumentChangeTracker*> it = m_delayedParseJobs;
         while (it.hasNext()) {
-            ParseJob* job = createParseJob(it.next().key());
+            ParseJob* job = createParseJob(it.next().key(), TopDUContext::AllDeclarationsContextsAndUses);
             if (job) {
                 job->setChangedRanges(it.value()->changedRanges());
                 jobs.append(job);
@@ -117,42 +115,36 @@ public:
         qDeleteAll(m_delayedParseJobs);
         m_delayedParseJobs.clear();
 
-        for (QMap<KUrl, bool>::Iterator it = m_documents.begin();
-             it != m_documents.end(); ++it)
+        for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
+             it1 != m_documentsForPriority.end(); ++it1 )
         {
-            // When a document is scheduled for parsing while it is being parsed, it will be parsed
-            // again once the job finished, but not now.
-            if (m_parseJobs.contains(it.key()) ) {
-                kDebug(9505) << "skipping" << it.key() << "because it is already being parsed";
-                continue;
-            }
+            for(QSet<KUrl>::Iterator it = it1.value().begin(); it != it1.value().end();) {
+                //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
+                if(this->m_parseJobs.size() + jobs.size() > (m_threads*2)+1)
+                    break;
+                
+                // When a document is scheduled for parsing while it is being parsed, it will be parsed
+                // again once the job finished, but not now.
+                if (m_parseJobs.contains(*it) ) {
+                    ++it;
+                    continue;
+                }
 
-            kDebug(9505) << "adding document" << it.key();
-            KUrl url = it.key();
-            bool &p = it.value();
-            if (p) {
-                ParseJob* job = createParseJob(url);
-                if (job)
+                kDebug(9505) << "creating parse-job" << *it;
+                ParseJob* job = createParseJob(*it, m_documents[*it].second);
+                if(job)
                     jobs.append(job);
-
-                p = false; // Don't parse for next time.
+                
+                m_documents.remove(*it);
+                it = it1.value().erase(it);
+                --m_maxParseJobs; //We have added one when putting the document into m_documents
             }
         }
 
         // Ok, enqueueing is fine because m_parseJobs contains all of the jobs now
 
-        foreach (ParseJob* job, jobs) {
-            kDebug(9505) << "Enqueue" << job;
+        foreach (ParseJob* job, jobs)
             m_weaver.enqueue(job);
-        }
-
-        for (QMap<KUrl, bool>::Iterator it = m_documents.begin(); it != m_documents.end();) {
-            if (*it) {
-                ++it;
-            } else {
-                m_documents.erase(it++);
-            }
-        }
 
         m_parser->updateProgressBar();
 
@@ -161,7 +153,7 @@ public:
             emit m_parser->hideProgress();
     }
 
-    ParseJob* createParseJob(const KUrl& url)
+    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features)
     {
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
@@ -170,6 +162,7 @@ public:
                 continue; // Language part did not produce a valid ParseJob.
             }
 
+            job->setMinimumFeatures(features);
             job->setBackgroundParser(m_parser);
 
             QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
@@ -240,8 +233,9 @@ public:
     int m_delay;
     int m_threads;
 
-    // A list of known documents, and whether they are due to be parsed or not
-    QMap<KUrl, bool> m_documents;
+    // A list of known documents, and their priority
+    QMap<KUrl, QPair<int, TopDUContext::Features> > m_documents;
+    QMap<int, QSet<KUrl> > m_documentsForPriority;
     // Current parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
     QHash<KUrl, DocumentChangeTracker*> m_delayedParseJobs;
@@ -306,19 +300,36 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
     updateProgressBar();
 }
 
-void BackgroundParser::addDocument(const KUrl& url)
+// void BackgroundParser::addUpdateJob(ReferencedTopDUContext topContext, TopDUContext::Features features, QObject* notifyWhenReady, int priority)
+// {
+//     QMutexLocker lock(&d->m_mutex);
+//     {
+//     }
+// }
+
+void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority)
 {
-    kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
+//     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
     QMutexLocker lock(&d->m_mutex);
     {
         Q_ASSERT(url.isValid());
-
-        QMap<KUrl, bool>::const_iterator it = d->m_documents.find(url);
-        if (it == d->m_documents.end() || (*it) == false) {
-            kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
-            d->m_documents[url] = true;
+        
+        QMap<KUrl, QPair<int, TopDUContext::Features> >::const_iterator it = d->m_documents.find(url);
+        
+        if (it != d->m_documents.end() && it.value() != qMakePair(priority, features)) {
+            //Update the stored priority
+            d->m_documentsForPriority[it.value().first].remove(url);
+            d->m_documents[url] = qMakePair(priority, features);
+            d->m_documentsForPriority[priority].insert(url);
+        }
+        
+        if (it == d->m_documents.end()) {
+//             kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
+            d->m_documents[url] = qMakePair(priority, features);
+            d->m_documentsForPriority[priority].insert(url);
+            ++d->m_maxParseJobs; //So the progress-bar waits for this document
         } else {
-            kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
+//             kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
         }
 
         if (!d->m_timer.isActive()) {
@@ -327,19 +338,10 @@ void BackgroundParser::addDocument(const KUrl& url)
     }
 }
 
-void BackgroundParser::addDocumentList(const KUrl::List &urls)
+void BackgroundParser::addDocumentList(const KUrl::List &urls, TopDUContext::Features features, int priority)
 {
-    QMutexLocker lock(&d->m_mutex);
-
-    foreach (KUrl url, urls) {
-        Q_ASSERT(url.isValid());
-
-        d->m_documents[url] = true;
-    }
-
-    if (!d->m_timer.isActive()) {
-        d->m_timer.start();
-    }
+    foreach (KUrl url, urls)
+        addDocument(url, features, priority);
 }
 
 void BackgroundParser::removeDocument(const KUrl &url)
@@ -348,7 +350,11 @@ void BackgroundParser::removeDocument(const KUrl &url)
 
     Q_ASSERT(url.isValid());
 
-    d->m_documents.remove(url);
+    if(d->m_documents.contains(url)) {
+        d->m_documentsForPriority[d->m_documents[url].first].remove(url);
+        d->m_documents.remove(url);
+        --d->m_maxParseJobs;
+    }
 }
 
 void BackgroundParser::parseDocuments()

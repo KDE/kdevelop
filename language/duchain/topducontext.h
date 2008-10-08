@@ -237,9 +237,15 @@ public:
     UpdatingContext = 4,
     LastFlag
   };
-
-  bool hasUses() const;
-  void setHasUses(bool hasUses);
+  
+  enum Features {
+    VisibleDeclarationsAndContexts = 0, //Standard: The top-context should only contain publically accessible declarations and contexts
+    AllDeclarationsAndContexts = 2, //The top-context should also contain non-public declarations and contexts, but no uses
+    AllDeclarationsContextsAndUses = 4 + AllDeclarationsAndContexts //The top-context should contain uses and all declarations + contexts
+  };
+  
+  Features features() const;
+  void setFeatures(Features);
 
   /**
    * Retrieves or creates a local index that is to be used for referencing the given @param declaration
@@ -266,6 +272,13 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
+  ///Returns the language for this top-context. If the string is empty, the language is unkown.
+  IndexedString language() const;
+  
+  ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
+  ///in order to load the language using ILanguageController.
+  void setLanguage(IndexedString language);
+  
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */

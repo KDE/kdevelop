@@ -59,6 +59,7 @@ struct ParseJobPrivate
         , revisionToken(-1)
         , abortRequested( false )
         , aborted( false )
+        , features( TopDUContext::VisibleDeclarationsAndContexts )
     {
     }
 
@@ -78,6 +79,7 @@ struct ParseJobPrivate
 
     volatile bool abortRequested : 1;
     bool aborted : 1;
+    TopDUContext::Features features;
 };
 
 ParseJob::ParseJob( const KUrl &url,
@@ -99,6 +101,16 @@ IndexedString ParseJob::document() const
 bool ParseJob::success() const
 {
     return !d->aborted;
+}
+
+void ParseJob::setMinimumFeatures(TopDUContext::Features features)
+{
+    d->features = features;
+}
+
+TopDUContext::Features ParseJob::minimumFeatures() const
+{
+    return d->features;
 }
 
 void ParseJob::setDuChain(ReferencedTopDUContext duChain)

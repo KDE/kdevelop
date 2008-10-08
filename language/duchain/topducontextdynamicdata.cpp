@@ -109,6 +109,10 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     
     QByteArray data = file.readAll();
     DUChainBaseData* topData = (DUChainBaseData*)data.constData();
+    IndexedString language = static_cast<TopDUContextData*>(topData)->m_language;
+    if(!language.isEmpty()) {
+      ///@todo Load the language if it isn't loaded yet, problem: We're possibly not in the foreground thread!
+    }
     
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     Q_ASSERT(ret); //If this triggers, the top-context type is not registered. Most probably it means that the specific language-support is not loaded.

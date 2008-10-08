@@ -62,14 +62,11 @@ public:
     if (top) {
       DUChainWriteLocker lock(DUChain::lock());
       top->clearUsedDeclarationIndices();
-      if(top->hasUses())
+      if(top->features() & TopDUContext::AllDeclarationsContextsAndUses)
         LanguageSpecificUseBuilderBase::setRecompiling(true);
     }
 
     LanguageSpecificUseBuilderBase::supportBuild(node);
-
-    if (top)
-      top->setHasUses(true);
   }
 
 protected:

@@ -29,6 +29,7 @@
 
 #include "../duchain/indexedstring.h"
 #include "documentchangetracker.h"
+#include <language/duchain/topducontext.h>
 
 namespace KDevelop
 {
@@ -90,6 +91,12 @@ public:
     /// Overridden to set the DependencyPolicy on subjobs.
     Q_SCRIPTABLE virtual void addJob(Job* job);
 
+    /// Set the minimum features the resulting top-context should have
+    Q_SCRIPTABLE void setMinimumFeatures(TopDUContext::Features features);
+    
+    /// Minimum set of features the resulting top-context should have
+    Q_SCRIPTABLE TopDUContext::Features minimumFeatures() const;
+    
     /**
      * Attempt to add \a dependency as a dependency of \a actualDependee, which must
      * be a subjob of this job, or null (in which case, the dependency is added

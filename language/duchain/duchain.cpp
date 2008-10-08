@@ -748,6 +748,17 @@ QList<KUrl> DUChain::documents() const
   return ret;
 }
 
+/*Q_SCRIPTABLE bool DUChain::updateContext(TopDUContext* topContext, TopDUContext::Features minFeatures, QObject* notifyReady) const
+{
+  if( (topContext->features() & minFeatures) != minFeatures || (topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->needsUpdate()) ) {
+    ICore::self()->languageController()->backgroundParser()->addUpdateJob(topContext, minFeatures, notifyReady);
+    return true;
+  }else{
+    //No update needed, or we don't know since there's no ParsingEnvironmentFile attached
+    return false;
+  }
+}*/
+  
 void DUChain::documentActivated(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
@@ -822,9 +833,9 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
     }
 
     if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()))
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
+      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }else{
-    ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
+    ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }
 }
 

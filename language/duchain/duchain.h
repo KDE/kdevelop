@@ -61,6 +61,20 @@ public:
   Q_SCRIPTABLE QList<TopDUContext*> allChains() const;
 
   /**
+   * Makes sure the given top-context is up-to-date, and has at least the given features.
+   * This may trigger a parsing in background, so a QObject can be given that will be notified
+   * asyonchronously once the update is ready.
+   *
+   * @param topContext The context to update
+   * @param features The requested features
+   * @param notifyReady An optional pointer to a QObject that should contain a slot
+   *                    "void topContextUpdated(KDevelop::ReferencedTopDUContext topContext)" that will
+   *                    be invoked once the top-context is updated, using a qeuued connection.
+   * @return Whether an update was scheduled. If false is returned, the top-context is already up-to-date, and has the needed features.
+   */
+//   Q_SCRIPTABLE bool updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0) const;
+  
+  /**
    * Return any chain for the given document
    * If available, the version accepting IndexedString should be used instead of this, for performance reasons.
    * When no fitting chain is in memory, one may be loaded from disk.

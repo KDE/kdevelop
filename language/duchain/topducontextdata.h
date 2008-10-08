@@ -41,9 +41,10 @@ public:
   TopDUContextData(const TopDUContextData& rhs) :DUContextData(rhs), m_deleting(false) {
     initializeAppendedLists();
     copyListsFrom(rhs);
-    m_hasUses = rhs.m_hasUses;
+    m_features = rhs.m_features;
     m_flags = rhs.m_flags;
     m_url = rhs.m_url;
+    m_language = rhs.m_language;
     m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
   }
   ~TopDUContextData() {
@@ -52,10 +53,12 @@ public:
   
   TopDUContext::Flags m_flags;
 
-  bool m_hasUses  : 1;
+  TopDUContext::Features m_features;
+  
   bool m_deleting : 1; ///@todo remove
 
   IndexedString m_url;
+  IndexedString m_language;
 
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
