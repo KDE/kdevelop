@@ -1011,6 +1011,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
     while(it) {
       Declaration* decl = *it;
+        
       if ( decl && (!position.isValid() || decl->range().start <= position) )
         definitions << qMakePair(decl, currentDepth);
       ++it;
@@ -1041,7 +1042,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
   }
 
   if (searchInParents && parentContext())                            ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-    parentContext()->mergeDeclarationsInternal(definitions, position, hadContexts, source, true, currentDepth+1);
+    parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, true, currentDepth+1);
 }
 
 void DUContext::deleteLocalDeclarations()
