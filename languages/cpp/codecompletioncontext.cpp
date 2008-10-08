@@ -46,6 +46,13 @@
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
+#ifdef TEST_COMPLETION
+//Stub implementation that does nothing
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool namespaceAllowed) {
+  return QList<KDevelop::CompletionTreeItemPointer>();
+}
+#endif
+
 //Whether the list of argument-hints should contain all overloaded versions of operators.
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
@@ -593,7 +600,7 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
   return static_cast<CodeCompletionContext*>(KDevelop::CodeCompletionContext::parentContext());
 }
 
-#ifndef TEST_COMPLETION
+// #ifndef TEST_COMPLETION
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort) {
     LOCKDUCHAIN;
@@ -614,7 +621,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         if( !containers.isEmpty() ) {
           QSet<DUContext*> had;
           foreach(DUContext* ctx, containers) {
-            if(had.contains(ctx)) ///@todo why do we need this
+            if(had.contains(ctx)) //We need this so we don't process the same container twice
               continue;
             had.insert(ctx);
 
@@ -764,7 +771,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   foreach( const DeclarationDepthPair& decl, oldDecls )
     if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration())
       decls << decl;
-
+  
   decls = Cpp::hideOverloadedDeclarations(decls);
 
   foreach( const DeclarationDepthPair& decl, decls )
@@ -812,6 +819,5 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   }
 }
 
-#endif
 
 }

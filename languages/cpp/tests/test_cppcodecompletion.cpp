@@ -45,6 +45,7 @@
 #include "codecompletioncontext.h"
 #include "cpppreprocessenvironment.h"
 #include "cppduchain/classdeclaration.h"
+#include <qstandarditemmodel.h>
 
 using namespace KTextEditor;
 
@@ -151,6 +152,39 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   if (ret.count())
     return ret.first();
   return 0;
+}
+
+void TestCppCodeCompletion::testPrivateVariableCompletion() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray test = "class C {void test() {}; int i; };";
+
+  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(context->childContexts().count(), 1);
+  DUContext* CContext = context->childContexts()[0];
+  QCOMPARE(CContext->type(), DUContext::Class);
+  QCOMPARE(CContext->childContexts().count(), 2);
+  QCOMPARE(CContext->localDeclarations().count(), 2);
+  DUContext* testContext = CContext->childContexts()[1];
+  QCOMPARE(testContext->type(), DUContext::Other );
+  QVERIFY(testContext->owner());
+  QCOMPARE(testContext->localScopeIdentifier(), QualifiedIdentifier("test"));
+  lock.unlock();
+  Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(testContext), "; ", QString()) );
+  bool abort = false;
+  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+  
+  QList <Item > items = cptr->completionItems(context->range().end, abort);
+  QStandardItemModel fakeModel;
+  foreach(Item i, items) {
+    NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
+    QVERIFY(decItem);
+    kDebug() << decItem->declaration()->toString();
+    kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+  }
+  
+  QCOMPARE(items.count(), 3); //C, test, and i
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

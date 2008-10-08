@@ -67,6 +67,7 @@ private slots:
   void testInclude();
   void testTypeConversion();
   void testCompletionContext();
+  void testPrivateVariableCompletion();
   void testUpdateChain();
   void testHeaderSections();
   void cleanupTestCase();

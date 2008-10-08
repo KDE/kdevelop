@@ -209,9 +209,7 @@ namespace Cpp {
 
       QList<Function> m_functions;
 
-#ifndef TEST_COMPLETION
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
-#endif
   };
 }
 
