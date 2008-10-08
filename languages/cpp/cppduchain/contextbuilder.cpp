@@ -104,6 +104,7 @@ ContextBuilder::ContextBuilder ()
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_onlyComputeVisible(false)
 {
 }
 
@@ -111,6 +112,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_onlyComputeVisible(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
@@ -119,8 +121,13 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_onlyComputeVisible(false)
 {
   setEditor(editor, false);
+}
+
+void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
+  m_onlyComputeVisible = onlyVisible;
 }
 
 void ContextBuilder::setEditor(CppEditorIntegrator* editor, bool ownsEditorIntegrator)
@@ -250,6 +257,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
 
       topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), SimpleRange(), const_cast<Cpp::EnvironmentFile*>(file.data()));
       topLevelContext->setType(DUContext::Global);
+      topLevelContext->setLanguage(IndexedString("C++"));
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
@@ -321,6 +329,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
       topLevelContext->setSmartRange(editor()->topRange(iface, CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
+      topLevelContext->setLanguage(IndexedString("C++"));
       DUChain::self()->addDocumentChain(topLevelContext);
     }
 
@@ -538,26 +547,28 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   }
   visitFunctionDeclaration(node);
 
-  m_openingFunctionBody = functionName;
+  if(!m_onlyComputeVisible) { //If we only compute the publically visible, we don't need to go into function bodies
+    m_openingFunctionBody = functionName;
 
-  if (node->constructor_initializers && node->function_body) {
-    //Since we put the context around the context for the compound statement, it also gets the local scope identifier.
-    openContext(node->constructor_initializers, node->function_body, DUContext::Other, m_openingFunctionBody); //The constructor initializer context
-    addImportedContexts();
+    
+    if (node->constructor_initializers && node->function_body) {
+      //Since we put the context around the context for the compound statement, it also gets the local scope identifier.
+      openContext(node->constructor_initializers, node->function_body, DUContext::Other, m_openingFunctionBody); //The constructor initializer context
+      addImportedContexts();
+      m_openingFunctionBody = QualifiedIdentifier();
+    }
+    // Otherwise, the context is created in the function body visit
+
+    visit(node->constructor_initializers);
+    visit(node->function_body);
     m_openingFunctionBody = QualifiedIdentifier();
+
+    if (node->constructor_initializers) {
+      closeContext();
+    }
   }
-  // Otherwise, the context is created in the function body visit
-
-  visit(node->constructor_initializers);
-  visit(node->function_body);
-  m_openingFunctionBody = QualifiedIdentifier();
-
-  if (node->constructor_initializers) {
-    closeContext();
-  }
-
+  
   visit(node->win_decl_specifiers);
-
   // If still defined, not needed
   m_importedParentContexts.clear();
 }

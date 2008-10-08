@@ -128,6 +128,8 @@ public:
 
   inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
 
+  void setOnlyComputeVisible(bool onlyVisible);
+
 protected:
   virtual KDevelop::QualifiedIdentifier identifierForNode(NameAST* id);
   virtual void startVisiting( AST* node );
@@ -204,6 +206,8 @@ protected:
   int m_templateDeclarationDepth;
 
   QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
+
+  bool m_onlyComputeVisible;
 
 #ifdef DEBUG_CONTEXT_RANGES
   void checkRanges();

@@ -110,6 +110,9 @@ public:
      * */
     Cpp::EnvironmentFile* contentEnvironmentFile();
 
+    void setKeepEverything(bool);
+    bool keepEverything() const;
+    
     ///Set this to true if the existing du-chain of the parsed file should be left as it is, without updating.
     void setKeepDuchain(bool b);
     bool keepDuchain() const;
@@ -144,7 +147,6 @@ public:
     void setWasUpdated(const KDevelop::DUContext* context);
 
     const QSet<const KDevelop::DUContext*>& updated() const;
-    bool needUses() const;
 
     //Can be called to indicate that an included file was parsed
     void includedFileParsed();
@@ -182,7 +184,7 @@ private:
     mutable bool m_includePathsComputed;
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KUrl::List m_includePathUrls; //Only a master-job has this set
-    bool m_keepDuchain;
+    bool m_keepDuchain, m_keepEverything;
     QStack<DocumentCursor> m_includeStack;
     QSet<const KDevelop::DUContext*> m_updated;
     int m_parsedIncludes;

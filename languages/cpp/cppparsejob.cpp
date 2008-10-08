@@ -133,6 +133,14 @@ bool CPPParseJob::keepDuchain() const {
     return m_keepDuchain;
 }
 
+void CPPParseJob::setKeepEverything(bool b) {
+    m_keepEverything = b;
+}
+
+bool CPPParseJob::keepEverything() const {
+    return m_keepEverything;
+}
+
 void CPPParseJob::includedFileParsed() {
   ++m_parsedIncludes;
   const int estimateIncludes = 450;
@@ -309,11 +317,6 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
     }
 }
 
-bool CPPParseJob::needUses() const
-{
-  return !wasReadFromDisk();
-}
-
 void CPPInternalParseJob::run()
 {
     kDebug( 9007 ) << "===-- PARSING --===> "
@@ -455,6 +458,11 @@ void CPPInternalParseJob::run()
       }
 
       DeclarationBuilder declarationBuilder(&editor);
+
+      if(parentJob()->minimumFeatures() == TopDUContext::VisibleDeclarationsAndContexts && (!contentContext || contentContext->features() == TopDUContext::VisibleDeclarationsAndContexts))
+        declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
+        
+      
       contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
 
       contentEnvironmentFile->setTopContext(contentContext.data());
@@ -524,7 +532,7 @@ void CPPInternalParseJob::run()
       }
 
       if (!parentJob()->abortRequested()) {
-        if (parentJob()->needUses() || (updatingContentContext && updatingContentContext->hasUses())) {
+        if (contentContext->features() == TopDUContext::AllDeclarationsContextsAndUses || parentJob()->minimumFeatures() == TopDUContext::AllDeclarationsContextsAndUses) {
             parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
             UseBuilder useBuilder(&editor);
@@ -540,10 +548,11 @@ void CPPInternalParseJob::run()
           }
         }
       }
-
+      
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
           DUChainWriteLocker l(DUChain::lock());
+          contentContext->setFeatures((TopDUContext::Features) (contentContext->features() | parentJob()->minimumFeatures()) );
           contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
       }
 
