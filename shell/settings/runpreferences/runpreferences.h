@@ -69,10 +69,6 @@ private:
     QStackedLayout* stacked;
     QList<TargetProperties*> m_targetWidgets;
     
-    int m_currentRunTarget;
-    QString m_currentRunTargetName;
-    bool m_deletingCurrentRunTarget;
-    QStringList m_runTargets;
     QVariantList m_args;
     
     QString m_projectFile;

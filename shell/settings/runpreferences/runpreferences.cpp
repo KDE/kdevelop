@@ -77,8 +77,6 @@ class TargetProperties : public QWidget
 
 RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( RunPreferencesFactory::componentData(), parent, args )
-    , m_currentRunTarget(0)
-    , m_deletingCurrentRunTarget(false)
     , m_args(args)
     , m_config(KSharedConfig::openConfig(m_args[0].toString(), KConfig::SimpleConfig))
 {
@@ -90,8 +88,6 @@ RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
     
     stacked= new QStackedLayout(m_configUi->targetSpecific);
     
-    m_projectFile=args.at(2).toString();
-
     connect(m_configUi->targetCombo, SIGNAL(activated(int)), stacked, SLOT(setCurrentIndex(int)));
     connect(m_configUi->buttonNewTarget, SIGNAL(clicked(bool)), SLOT(newRunConfig()));
     connect(m_configUi->buttonDeleteTarget, SIGNAL(clicked(bool)), SLOT(deleteRunConfig()));
@@ -103,20 +99,20 @@ void RunPreferences::save()
 {
     KCModule::save();
 
-    m_runTargets.clear();
+    QStringList runTargets;
     for (int i = 0; i < m_configUi->targetCombo->count(); ++i)
-        m_runTargets << m_configUi->targetCombo->itemText(i);
+        runTargets << m_configUi->targetCombo->itemText(i);
 
     KConfigGroup group(m_config, "Run Options");
-    group.writeEntry("Run Targets", m_runTargets);
+    group.writeEntry("Run Targets", runTargets);
 }
 
 void RunPreferences::load()
 {
     KConfigGroup group(m_config, "Run Options");
-    m_runTargets = group.readEntry("Run Targets", QStringList());
+    QStringList runTargets = group.readEntry("Run Targets", QStringList());
 
-    foreach(const QString& target, m_runTargets)
+    foreach(const QString& target, runTargets)
     {
         addTarget(target);
     }
@@ -134,11 +130,8 @@ void RunPreferences::newRunConfig()
 
 void RunPreferences::deleteRunConfig()
 {
-    m_deletingCurrentRunTarget = true;
-
     int currentIndex = m_configUi->targetCombo->currentIndex();
     removeTarget(currentIndex);
-    m_deletingCurrentRunTarget = false;
 }
 
 void RunPreferences::addTarget(const QString& name)
