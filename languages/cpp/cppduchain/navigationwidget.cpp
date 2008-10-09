@@ -326,9 +326,9 @@ class NavigationContext : public KShared {
 
         AbstractType::Ptr t(m_declaration->abstractType());
         if( t ) {
-          if( t & AbstractType::ConstModifier )
+          if( t->modifiers() & AbstractType::ConstModifier )
             details << "constant";
-          if( t & AbstractType::VolatileModifier )
+          if( t->modifiers() & AbstractType::VolatileModifier )
             details << "volatile";
         }
 

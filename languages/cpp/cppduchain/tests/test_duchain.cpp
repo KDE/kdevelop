@@ -712,12 +712,18 @@ void TestDUChain::testNonVirtualMemberFunction()
 
 void TestDUChain::testMemberFunctionModifiers()
 {
-  { // Function modifiers are kind of russian roulette :-)
+  // NOTE this only verifies
+  //      {no member function modifiers in code} => {no modifiers in duchain}
+  // it does not check that (but probably should, with all permutations ;))
+  //      {member function modifiers in code} => {exactly the same modifiers in duchain}
+  //      {illegal combinations, eg explicit not on a constructor} => {error/warning}
+  {
       QByteArray text("class FuBarr { void foo(); };\n"
                       "class ZooLoo { void bar(); };\n\n"
                       "class MooFoo \n { public: void loo(); };\n"
                       "class GooRoo { void baz(); };\n"
-                      "class PooYoo { \n void zoo(); };\n");
+                      "class PooYoo { \n void zoo(); };\n"); 
+      // at one point extra '\n' characters would affect these modifiers.
       TopDUContext* top = parse(text, DumpAll);
       DUChainWriteLocker lock(DUChain::lock());
 
@@ -728,14 +734,15 @@ void TestDUChain::testMemberFunctionModifiers()
       FETCH_MEMBER_FUNCTION(3, top, "void baz ()", baz);
       FETCH_MEMBER_FUNCTION(4, top, "void zoo ()", zoo);
 
-      assertNoMemberFunctionModifiers(foo); // actual modifiers: constant
-      assertNoMemberFunctionModifiers(bar); // actual modifiers: virtual, constant
-      assertNoMemberFunctionModifiers(loo); // actual modifiers: explicit, constant
-      assertNoMemberFunctionModifiers(baz); // actual modifiers: virtual, explicit, constant
-      assertNoMemberFunctionModifiers(zoo); // actual modifiers: virtual, explicit, inline, constnat
+      assertNoMemberFunctionModifiers(foo);
+      assertNoMemberFunctionModifiers(bar);
+      assertNoMemberFunctionModifiers(loo);
+      assertNoMemberFunctionModifiers(baz);
+      assertNoMemberFunctionModifiers(zoo);
 
       release(top);
   }
+
 }
 
 void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memberFun)
@@ -744,17 +751,20 @@ void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memb
     Q_ASSERT(t);
     bool isConstant = t->modifiers() & AbstractType::ConstModifier;
     bool isVolatile = t->modifiers() & AbstractType::VolatileModifier;
+    bool isStatic = t->modifiers() & AbstractType::StaticModifier;
 
     kDebug() << memberFun->toString() << "virtual?"  << memberFun->isVirtual()
                                       << "explicit?" << memberFun->isExplicit()
                                       << "inline?"   << memberFun->isInline()
                                       << "constant?" << isConstant
-                                      << "volatile?" << isVolatile;
+                                      << "volatile?" << isVolatile
+                                      << "static?"   << isStatic;
     QVERIFY(!memberFun->isVirtual());
     QVERIFY(!memberFun->isExplicit());
     QVERIFY(!memberFun->isInline());
     QVERIFY(!isConstant);
     QVERIFY(!isVolatile);
+    QVERIFY(!isStatic);
 }
 
 void TestDUChain::testDeclareStruct()
