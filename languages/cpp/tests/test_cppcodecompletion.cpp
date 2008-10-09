@@ -185,6 +185,45 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   }
   
   QCOMPARE(items.count(), 3); //C, test, and i
+
+  lock.lock();
+  release(context);
+}
+
+void TestCppCodeCompletion::testUnnamedNamespace() {
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("namespace {int a;} namespace { int b; };");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
+
+  lock.unlock();
+  Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString()) );
+  bool abort = false;
+  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+  
+  QList <Item > items = cptr->completionItems(top->range().end, abort);
+  QStandardItemModel fakeModel;
+  foreach(Item i, items) {
+    NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
+    QVERIFY(decItem);
+    kDebug() << decItem->declaration()->toString();
+    kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+  }
+  
+  QCOMPARE(items.count(), 2); //C, test, and i
+  
+  lock.lock();
+  release(top);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

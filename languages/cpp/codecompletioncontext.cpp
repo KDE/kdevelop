@@ -742,6 +742,11 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   typedef QPair<Declaration*, int> DeclarationDepthPair;
 
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
+  
+  //Collect the contents of unnamed namespaces
+  QList<DUContext*> unnamed = m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(), position);
+  foreach(DUContext* ns, unnamed)
+    decls += ns->allDeclarations(position, m_duContext->topContext(), false);
 
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts

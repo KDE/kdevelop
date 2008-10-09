@@ -1224,25 +1224,6 @@ void TestDUChain::testSearchAcrossNamespace2()
   release(top);
 }
 
-void TestDUChain::testUnnamedNamespace() {
-  TEST_FILE_PARSE_ONLY
-
-  //                 0         1         2         3         4         5         6         7
-  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("namespace {int a;} namespace { int b; };");
-
-  TopDUContext* top = parse(method, DumpAll);
-
-  DUChainWriteLocker lock(DUChain::lock());
-
-  QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 2);
-  QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
-  QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
-
-  release(top);
-}
-
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 
@@ -1517,6 +1498,8 @@ void TestDUChain::testFunctionDefinition2() {
     QCOMPARE(top->childContexts()[1]->range().start.column, 20);
     QCOMPARE(top->childContexts()[1]->range().end.column, 20);
 
+    QVERIFY(!top->childContexts()[2]->inSymbolTable());
+    
     release(top);
   }
   {
