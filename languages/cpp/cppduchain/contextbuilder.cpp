@@ -449,8 +449,6 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 
     if (node->namespace_name)
       identifier.push(QualifiedIdentifier(editor()->tokenToString(node->namespace_name)));
-    else
-      identifier.push(Identifier::unique(0));
   }
 
   openContext(node, DUContext::Namespace, identifier);

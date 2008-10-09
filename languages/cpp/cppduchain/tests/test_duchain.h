@@ -114,6 +114,7 @@ private slots:
   void testDeclareSubClass();
   void testDeclarationId();
   void testConst();
+  void testUnnamedNamespace();
 
   void testSymbolTableValid();
 
