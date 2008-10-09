@@ -41,6 +41,9 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
+typedef QPair<QString, IProject*> Target;
+Q_DECLARE_METATYPE(Target);
+
 class RunController::RunControllerPrivate
 {
 public:
@@ -50,7 +53,7 @@ public:
 
     QHash<KJob*, KAction*> jobs;
     KActionMenu* stopAction;
-    KSelectAction* defaultTargetAction;
+    KSelectAction* currentTargetAction;
 };
 
 RunController::RunController(QObject *parent)
@@ -103,45 +106,53 @@ void RunController::setupActions()
     ac->addAction("run_stop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
 
-    d->defaultTargetAction = new KSelectAction( i18n("Default Run Target"), this);
-    d->defaultTargetAction->setToolTip(i18n("Current Run Target"));
-    d->defaultTargetAction->setWhatsThis(i18n("<b>Run Target</b><p>Select which target to run when run is invoked."));
-    ac->addAction("run_default_target", d->defaultTargetAction);
+    d->currentTargetAction = new KSelectAction( i18n("Current Run Target"), this);
+    d->currentTargetAction->setToolTip(i18n("Current Run Target"));
+    d->currentTargetAction->setWhatsThis(i18n("<b>Run Target</b><p>Select which target to run when run is invoked."));
+    ac->addAction("run_default_target", d->currentTargetAction);
 
-    bool first = true;
     foreach (IProject* project, Core::self()->projectController()->projects()) {
-        QAction* action = d->defaultTargetAction->addAction(i18n("Default for project '%1'", project->name()));
-        action->setData(QVariant::fromValue(static_cast<void*>(project)));
-
-        if (first) {
-            // TODO save this setting
-            action->setChecked(true);
-            first = false;
-        }
+        slotProjectOpened(project);
     }
 
-    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )), this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )), this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+    if(!d->currentTargetAction->actions().isEmpty())
+        d->currentTargetAction->actions().first()->setChecked(true);
+    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
+            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
+            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+}
+
+QAction* KDevelop::RunController::addTarget(KDevelop::IProject * project, const QString& targetName)
+{
+    QAction* action = d->currentTargetAction->addAction(i18n("%1 : %2", project->name(), targetName));
+    action->setData(qVariantFromValue<Target>(Target(targetName, project)));
+    return action;
 }
 
 void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
-    QAction* action = d->defaultTargetAction->addAction(i18n("Default for project '%1'", project->name()));
-    action->setData(QVariant::fromValue(static_cast<void*>(project)));
+    KConfigGroup group(project->projectConfiguration(), "Run Options");
+    QStringList runTargets = group.readEntry("Run Targets", QStringList());
 
-    if (!d->defaultTargetAction->currentAction())
-        action->setChecked(true);
+    QAction* a=0;
+    foreach(const QString& target, runTargets) {
+        a=addTarget(project, target);
+    }
+    
+    if(a)
+        a->setChecked(true);
 }
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
-    foreach (QAction* action, d->defaultTargetAction->actions()) {
-        if (project == qvariant_cast<void*>(action->data())) {
+    foreach (QAction* action, d->currentTargetAction->actions()) {
+        if (project == qvariant_cast<Target>(action->data()).second) {
             bool wasSelected = action->isChecked();
             delete action;
             if (wasSelected)
-                if (!d->defaultTargetAction->actions().isEmpty())
-                    d->defaultTargetAction->actions().first()->setChecked(true);
+                if (!d->currentTargetAction->actions().isEmpty())
+                    d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
 }
@@ -154,24 +165,30 @@ void RunController::slotExecute()
 IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
-    QAction* projectAction = d->defaultTargetAction->currentAction();
+    QAction* projectAction = d->currentTargetAction->currentAction();
+    Target data=qvariant_cast<Target>(projectAction->data());
     if (projectAction)
-        project = static_cast<IProject*>(qvariant_cast<void*>(projectAction->data()));
-
+        project = data.second;
+    
     IRun run;
-
     if (!project)
         return run;
+    
+    QString targetName=data.first;
 
-    KConfigGroup group(project->projectConfiguration(), "Run Options" );
+    KConfigGroup group(project->projectConfiguration(), targetName+"-Run Options" );
 
-    run.setExecutable(group.readEntry( "Executable", "" ));
-    run.setWorkingDirectory(group.readEntry( "Working Directory", "" ));
+    run.setExecutable(group.readEntry( "Executable", QString()));
+    run.setWorkingDirectory(group.readEntry( "Working Directory", QString()));
     QString arg=group.readEntry( "Arguments", QString() );
     if(!arg.isEmpty())
         run.setArguments(QStringList(arg));
     run.setInstrumentor("default");
 
+    //NOTE: I think this should be dealt by the build system manager or not be dealt at all
+    //in case we did, we would need some connection between the executable
+    //running and the target in the buildsystem.
+    
     if (group.readEntry("Compile Before Execution", false))
     {
         if (group.readEntry("Install Before Execution", false))
@@ -199,10 +216,11 @@ IRun KDevelop::RunController::defaultRun() const
 
 IRunProvider * KDevelop::RunController::findProvider(const QString & instrumentor)
 {
-    foreach (IPlugin* i, Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IRunProvider", QStringList()))
-        if (KDevelop::IRunProvider* provider = i->extension<KDevelop::IRunProvider>())
-            if (provider->instrumentorsProvided().contains(instrumentor))
+    foreach (IPlugin* i, Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IRunProvider", QStringList())) {
+        KDevelop::IRunProvider* provider = i->extension<KDevelop::IRunProvider>();
+        if (provider && provider->instrumentorsProvided().contains(instrumentor))
                 return provider;
+    }
 
     return 0;
 }
@@ -329,7 +347,7 @@ KDevelop::RunJob::RunJob(RunController* controller, const IRun & run)
 void KDevelop::RunJob::start()
 {
     if (m_run.instrumentor().isEmpty()) {
-        setErrorText(i18n("No run target was selected. Please select a default run target in the Run menu."));
+        setErrorText(i18n("No run target was selected. Please select a run target in the Run menu."));
         setError(ErrorInvalidTarget);
         emitResult();
         return;

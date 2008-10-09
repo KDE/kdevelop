@@ -75,6 +75,7 @@ private Q_SLOTS:
     void slotKillJob();
 
 private:
+    QAction* addTarget(KDevelop::IProject * project, const QString& targetName);
     void setupActions();
     void checkState();
 
