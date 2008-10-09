@@ -97,9 +97,9 @@
 // hash_set and hash_map.
 
 #if defined(Q_OS_WIN)
-#include "sparsehash/sparseconfig_windows.h"
+#include "sparseconfig_windows.h"
 #else
-#include "sparsehash/sparseconfig.h"
+#include "sparseconfig.h"
 #endif
 #include <assert.h>
 #include <stdlib.h>             // for abort()
