@@ -2,6 +2,7 @@
  *
  * Copyright 2006  Matt Rogers <mattr@kde.org>
  * Copyright 2007-2008 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008  Aleix Pol <aleixpol@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,23 +23,25 @@
 #ifndef KDEVRUNPREFERENCES_H
 #define KDEVRUNPREFERENCES_H
 
-#include <project/projectkcmodule.h>
-
-#include <kurl.h>
-#include <kstandarddirs.h>
+#include <KCModule>
+#include <KUrl>
+#include <KStandardDirs>
+#include <KConfig>
 
 class KConfigDialogManager;
 class RunSettings;
+class QComboBox;
+class QStackedLayout;
+class QVBoxLayout;
+class TargetProperties;
+class QPushButton;
 
-namespace Ui
-{
-class RunSettings;
-}
+namespace Ui { class RunConfig; }
 
 namespace KDevelop
 {
 
-class RunPreferences : public ProjectKCModule<RunSettings>
+class RunPreferences : public KCModule
 {
     Q_OBJECT
 public:
@@ -57,18 +60,23 @@ public:
 private Q_SLOTS:
     void newRunConfig();
     void deleteRunConfig();
-    void runConfigSelected(int index);
-    void runConfigRenamed(const QString& newName);
 
 private:
-    bool configNameValid(const QString& name);
-
-    Ui::RunSettings *preferencesDialog;
-    KConfigDialogManager* m_manager;
+    void addTarget(const QString& name);
+    void removeTarget(int index);
+    
+    Ui::RunConfig* m_configUi;
+    QStackedLayout* stacked;
+    QList<TargetProperties*> m_targetWidgets;
+    
     int m_currentRunTarget;
     QString m_currentRunTargetName;
     bool m_deletingCurrentRunTarget;
     QStringList m_runTargets;
+    QVariantList m_args;
+    
+    QString m_projectFile;
+    KSharedConfig::Ptr m_config;
 };
 
 }

@@ -1,16 +1,6 @@
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/sublime
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/project
-    ${CMAKE_SOURCE_DIR}/project/interfaces
-    ${CMAKE_SOURCE_DIR}/language
-    ${CMAKE_SOURCE_DIR}/language/editor
-    ${CMAKE_SOURCE_DIR}/language/backgroundparser
-    ${CMAKE_SOURCE_DIR}/language/interfaces
-    ${CMAKE_SOURCE_DIR}/shell
-    ${CMAKE_SOURCE_DIR}/util
 )
 
 ########### UI settings
@@ -88,17 +78,18 @@ install( FILES kcm_kdev_projectsettings.desktop DESTINATION ${SERVICES_INSTALL_D
 ########### Run Options
 
 set( runsettings_cfg_SRCS
-    runpreferences.cpp
+    runpreferences/runpreferences.cpp
+    runpreferences/runconfig.cpp
 )
 
 set( runsettings_cfg_UI
-    runsettings.ui
+    runpreferences/runsettings.ui
+    runpreferences/runconfig.ui
 )
 
 kde4_add_ui_files( runsettings_cfg_SRCS ${runsettings_cfg_UI} )
-kde4_add_kcfg_files( runsettings_cfg_SRCS runconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_runsettings ${runsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatformutil kdevplatformproject)
+target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatformutil kdevplatformproject kdevplatforminterfaces)
 
 install( TARGETS kcm_kdev_runsettings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_runsettings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
