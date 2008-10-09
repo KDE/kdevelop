@@ -27,6 +27,7 @@
 #include <util/kdevvarlengtharray.h>
 
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 /**
  * Returns the character BEHIND the found comment
@@ -934,7 +935,7 @@ void Lexer::scan_EOF()
 void Lexer::scan_invalid_input()
 {
   KDevelop::Problem p = createProblem();
-  p.setDescription("invalid input");
+  p.setDescription(i18n("invalid input: %1", KDevelop::IndexedString(*cursor.current).str()));
   control->reportProblem(p);
 
   ++cursor;
@@ -947,7 +948,7 @@ KDevelop::Problem Lexer::createProblem() const
   KDevelop::Problem p; // ### fill me
 
   KDevelop::SimpleCursor position = session->positionAt(index - 1);
-
+  p.setSource(KDevelop::Problem::Lexer);
   p.setFinalLocation(KDevelop::DocumentRange(session->url().str(), KTextEditor::Range(position.textCursor(), 1))); ///@todo prevent conversion
 
   return p;

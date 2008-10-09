@@ -501,7 +501,6 @@ void CPPInternalParseJob::run()
 
         foreach( KDevelop::ProblemPointer p, control.problems() ) {
           p->setLocationStack(parentJob()->includeStack());
-          p->setSource(KDevelop::Problem::Lexer);
           contentContext->addProblem(p);
         }
       }
