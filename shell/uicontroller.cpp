@@ -187,7 +187,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
     // the KCM's changes its settings and it works
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
                                     main, "loadSettings" );
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
+    KSettings::Dispatcher::registerComponent( Core::self()->componentData(),
                                     main, "loadSettings" );
 
     addMainWindow(main);

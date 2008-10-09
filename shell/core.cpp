@@ -49,7 +49,8 @@ namespace KDevelop {
 Core *Core::m_self = 0;
 
 struct CorePrivate {
-    CorePrivate(Core *core): m_core(core), m_cleanedUp(false)
+    CorePrivate(Core *core): m_core(core), m_cleanedUp(false),
+        m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), "1.0", ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) )
     {
     }
 
@@ -115,7 +116,8 @@ struct CorePrivate {
     QPointer<DocumentController> documentController;
     QPointer<RunController> runController;
     QPointer<SessionController> sessionController;
-
+ 
+    KComponentData m_componentData;
     Core *m_core;
     bool m_cleanedUp;
     Core::Setup m_mode;
@@ -169,6 +171,11 @@ void Core::cleanup()
     }
 
     d->m_cleanedUp = true;
+}
+
+KComponentData Core::componentData() const
+{
+    return d->m_componentData;
 }
 
 IUiController *Core::uiController()

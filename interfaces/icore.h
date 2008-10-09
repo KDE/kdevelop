@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 
+class KComponentData;
 
 namespace KParts
 {
@@ -96,6 +97,9 @@ public:
 
     /** @return the active session */
     Q_SCRIPTABLE virtual KDevelop::ISession *activeSession() = 0;
+
+    /** @return the component data of the framework, different from the main component which is created by the application */
+    virtual KComponentData componentData() const = 0;
 
 protected:
     ICore(QObject *parent = 0);

@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "environmentgrouplist.h"
 #include <ksettings/dispatcher.h>
 #include <kglobal.h>
+#include <interfaces/icore.h>
 #include <kcomponentdata.h>
 
 namespace KDevelop
@@ -32,9 +33,7 @@ class EnvironmentSelectionWidgetPrivate
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     : KComboBox( parent ), d( new EnvironmentSelectionWidgetPrivate )
 {
-    KComponentData data( "kdevplatform", "kdevplatform",
-                         KComponentData::SkipMainComponentRegistration );
-    KSettings::Dispatcher::registerComponent( data, this, "updateEnvGroup" );
+    KSettings::Dispatcher::registerComponent( ICore::self()->componentData(), this, "updateEnvGroup" );
     KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(), this, "updateEnvGroup" );
 
 }

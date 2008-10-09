@@ -67,6 +67,8 @@ public:
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
 
+    virtual KComponentData componentData() const;
+
     /// The following methods may only be used within the shell.
 
     /** @return ui controller */
