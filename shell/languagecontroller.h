@@ -45,7 +45,7 @@ public:
     /** @copydoc ILanguageController::languageForUrl() */
     virtual QList<ILanguage*> languagesForUrl(const KUrl &url);
     /** @copydoc ILanguageController::backgroundParser() */
-    virtual BackgroundParser *backgroundParser() const;
+    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
 
 private:
     Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
