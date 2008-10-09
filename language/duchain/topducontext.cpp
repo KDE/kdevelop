@@ -1142,8 +1142,7 @@ struct TopDUContext::FindContextsAcceptor {
     uint declsCount = 0;
 
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    if(!id.isEmpty())
-      PersistentSymbolTable::self().contexts(id, declsCount, decls);
+    PersistentSymbolTable::self().contexts(id, declsCount, decls);
 
     for(uint a = 0; a < declsCount; ++a) {
 

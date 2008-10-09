@@ -559,11 +559,13 @@ DUContext::~DUContext( )
 
   if(!top->deleting() || !top->isOnDisk()) {
     QualifiedIdentifier id(scopeIdentifier(true));
-    PersistentSymbolTable::self().removeContext(id, this);
+    if(d->m_inSymbolTable) {
+      PersistentSymbolTable::self().removeContext(id, this);
 
-    //We put namespaces into the code-model
-    if(d->m_contextType == DUContext::Namespace)
-      CodeModel::self().removeItem(url(), id);
+      //We put namespaces into the code-model
+      if(d->m_contextType == DUContext::Namespace)
+        CodeModel::self().removeItem(url(), id);
+    }
     
     if(d->m_owner.declaration())
       d->m_owner.declaration()->setInternalContext(0);
@@ -1543,7 +1545,6 @@ bool DUContext::inSymbolTable() const
 
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
-  if(d_func()->m_scopeIdentifier.isValid()) {
     if(!d_func()->m_inSymbolTable && inSymbolTable) {
       QualifiedIdentifier id(scopeIdentifier(true));
       PersistentSymbolTable::self().addContext(id, this);
@@ -1558,7 +1559,6 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
       if(d_func()->m_contextType == DUContext::Namespace)
         CodeModel::self().removeItem(url(), id);
     }
-  }
 
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
 }
