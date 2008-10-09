@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Icon=kdevelop
+Exec=blubb
+Comment=Gcov C(++) coverage
+
+Name=Code coverage report
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevcoverage
+X-KDE-PluginInfo-Name=coverageplugin
+X-KDE-PluginInfo-Author=Manuel Breugelmans
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=LGPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement
+X-KDevelop-IRequired=org.kdevelop.IOutputView
