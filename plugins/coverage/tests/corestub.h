@@ -21,6 +21,7 @@
 #define TESTFAKES_CORESTUB_H
 
 #include "interfaces/icore.h"
+#include <KComponentData>
 
 namespace KDevelop
 {
@@ -79,6 +80,10 @@ public:
     }
     virtual KDevelop::ISession* activeSession() {
         return m_session;
+    }
+
+    virtual KComponentData componentData() const {
+        return KGlobal::mainComponent();
     }
 
     // inject whatever it is you want.
