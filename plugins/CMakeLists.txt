@@ -14,7 +14,6 @@ macro_optional_add_subdirectory(cvs)
 add_subdirectory(classbrowser)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
-add_subdirectory(coverage)
 add_subdirectory(sourceformatter)
 
 macro_optional_find_package(Commoncpp)
