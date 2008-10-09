@@ -80,6 +80,7 @@ struct ParseJobPrivate
     volatile bool abortRequested : 1;
     bool aborted : 1;
     TopDUContext::Features features;
+    QString contentsFromEditor;
 };
 
 ParseJob::ParseJob( const KUrl &url,
@@ -136,7 +137,11 @@ bool ParseJob::contentsAvailableFromEditor()
         if (iface) {
             QMutexLocker smartLock(iface->smartMutex());
             d->revisionToken = EditorIntegrator::saveCurrentRevision(doc);
-}
+
+            // You must have called contentsAvailableFromEditor, it sets state
+
+            d->contentsFromEditor = doc->text();
+        }
     }
 
     return true;
@@ -149,15 +154,7 @@ int ParseJob::revisionToken() const
 
 QString ParseJob::contentsFromEditor()
 {
-    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(d->document.str()));
-    if( !doc )
-        return QString();
-
-    // You must have called contentsAvailableFromEditor, it sets state
-    QMutexLocker l(changeMutex());
-    rangeChangesFinalised();
-
-    return doc->text();
+    return d->contentsFromEditor;
 }
 
 int ParseJob::priority() const
