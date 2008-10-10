@@ -162,6 +162,43 @@ void RunController::slotExecute()
     execute(defaultRun());
 }
 
+QStringList splitArguments(const QString& args)
+{
+    QStringList ret;
+    bool inQuotes=false, scaping=false;
+    for(int i=0; i<args.size(); i++)
+    {
+        if(i==0) ret += QString();
+        
+        if(scaping)
+        {
+            ret.last() += args[i];
+            scaping=false;
+        }
+        else switch(args[i].toAscii())
+        {
+            case '\\':
+                scaping=true;
+                break;
+            case '\"':
+                inQuotes=!inQuotes;
+                break;
+            case ' ':
+                if(inQuotes)
+                    ret.last() += args[i];
+                else
+                    ret += QString();
+                
+                break;
+            default:
+                ret.last() += args[i];
+                break;
+        }
+        
+    }
+    return ret;
+}
+
 IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
@@ -180,9 +217,7 @@ IRun KDevelop::RunController::defaultRun() const
 
     run.setExecutable(group.readEntry( "Executable", QString()));
     run.setWorkingDirectory(group.readEntry( "Working Directory", QString()));
-    QString arg=group.readEntry( "Arguments", QString() );
-    if(!arg.isEmpty())
-        run.setArguments(QStringList(arg));
+    run.setArguments(splitArguments(group.readEntry( "Arguments", QString() )));
     run.setInstrumentor("default");
 
     //NOTE: I think this should be dealt by the build system manager or not be dealt at all
