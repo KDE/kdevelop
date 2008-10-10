@@ -43,7 +43,7 @@ Boston, MA 02110-1301, USA.
 using namespace KDevelop;
 
 typedef QPair<QString, IProject*> Target;
-Q_DECLARE_METATYPE(Target);
+Q_DECLARE_METATYPE(Target)
 
 class RunController::RunControllerPrivate
 {
