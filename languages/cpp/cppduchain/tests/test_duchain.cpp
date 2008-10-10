@@ -2792,6 +2792,15 @@ void TestDUChain::testConst()
     QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().trimmed(), QString("B< A* const >"));
     release(top);
   }
+  {
+    QByteArray method("class A; A* a = const_cast<A*>(bla);");
+
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().size(), 2);
+    release(top);
+  }
 }
 
 void TestDUChain::testDeclarationId()

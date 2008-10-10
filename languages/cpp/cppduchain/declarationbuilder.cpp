@@ -57,7 +57,6 @@
 
 #include "cppdebughelper.h"
 
-//#define DEBUG_UPDATE_MATCHING
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -83,13 +82,13 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false)
 {
   setEditor(editor, false);
 }
@@ -200,6 +199,10 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 {
+  if(m_ignoreDeclarators) {
+    DeclarationBuilderBase::visitDeclarator(node);
+    return;
+  }
   //need to make backup because we may temporarily change it
   ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
 
@@ -906,6 +909,14 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     }
     closeDeclaration();
   }
+}
+
+void DeclarationBuilder::visitTypeId(TypeIdAST * typeId)
+{
+  //TypeIdAST contains a declarator, but that one does not declare anything
+  PushValue<bool> disableDeclarators(m_ignoreDeclarators, true);
+  
+  DeclarationBuilderBase::visitTypeId(typeId);
 }
 
 void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)
