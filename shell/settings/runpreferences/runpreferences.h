@@ -27,6 +27,7 @@
 #include <KUrl>
 #include <KStandardDirs>
 #include <KConfig>
+#include <QSet>
 
 class KConfigDialogManager;
 class RunSettings;
@@ -68,6 +69,7 @@ private:
     Ui::RunConfig* m_configUi;
     QStackedLayout* stacked;
     QList<TargetProperties*> m_targetWidgets;
+    QSet<QString> commitDeleteGroups;
     
     QVariantList m_args;
     

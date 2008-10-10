@@ -54,7 +54,7 @@ class TargetProperties : public QWidget
 {
     public:
         TargetProperties(const QVariantList& args, const QString& targetName, RunPreferences* parent=0)
-            : QWidget(parent), m_targetName(targetName)
+            : QWidget(parent)
         {
             preferencesDialog.setupUi(this);
             
@@ -69,7 +69,6 @@ class TargetProperties : public QWidget
             preferencesDialog.kcfg_workingDirectory->setMode(KFile::Directory);
         }
         
-        QString m_targetName;
         Ui::RunSettings preferencesDialog;
         RunSettings* m_settings;
         KConfigDialogManager* m_manager;
@@ -105,6 +104,13 @@ void RunPreferences::save()
 
     KConfigGroup group(m_config, "Run Options");
     group.writeEntry("Run Targets", runTargets);
+    
+    foreach(const QString& groupName, commitDeleteGroups)
+    {
+        KConfigGroup delGroup(m_config, groupName);
+        delGroup.deleteGroup();
+    }
+    commitDeleteGroups.clear();
 }
 
 void RunPreferences::load()
@@ -116,13 +122,14 @@ void RunPreferences::load()
     {
         addTarget(target);
     }
+    commitDeleteGroups.clear();
 }
 
 void RunPreferences::newRunConfig()
 {
     AskTargetName ask(this);
     int i = ask.exec();
-    if(i==QDialog::Accepted && m_configUi->targetCombo->findText(ask.name())>=0)
+    if(i==QDialog::Accepted && m_configUi->targetCombo->findText(ask.name())<0)
     {
         addTarget(ask.name());
     }
@@ -131,32 +138,48 @@ void RunPreferences::newRunConfig()
 void RunPreferences::deleteRunConfig()
 {
     int currentIndex = m_configUi->targetCombo->currentIndex();
-    removeTarget(currentIndex);
+    if(currentIndex>=0)
+        removeTarget(currentIndex);
 }
 
 void RunPreferences::addTarget(const QString& name)
 {
     Q_ASSERT(!name.isEmpty());
-    qDebug() << "addingggggg" << name;
+    kDebug() << "adding target" << name;
     TargetProperties* target= new TargetProperties(m_args, name, this);
     stacked->addWidget(target);
     m_configUi->targetCombo->addItem(name);
     m_targetWidgets.append(target);
     target->m_manager = addConfig( target->m_settings, target);
     m_configUi->targetCombo->setFocus(Qt::MouseFocusReason);
+    m_configUi->buttonDeleteTarget->setEnabled(true);
+    
+    stacked->setCurrentIndex(m_configUi->targetCombo->count()-1);
+    m_configUi->targetCombo->setCurrentIndex(m_configUi->targetCombo->count()-1);
+    commitDeleteGroups.remove(name);
+    Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
+    Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
 }
 
 void RunPreferences::removeTarget(int index)
 {
     Q_ASSERT(index>=0 && index<m_configUi->targetCombo->count());
     
+    kDebug() << "removing target" << index << m_configUi->targetCombo->currentText();
+    qDebug() << "rrrrrrrr" << m_targetWidgets.count() << m_configUi->targetCombo->count() << stacked->count();
     TargetProperties* t=m_targetWidgets.takeAt(index);
+    stacked->setCurrentIndex(0);
     stacked->takeAt(index);
     m_configUi->targetCombo->setCurrentIndex(0);
     m_configUi->targetCombo->removeItem(index);
     
-    KConfigGroup group(t->m_settings->config(), t->m_settings->currentGroup());
-    group.deleteGroup();
+    commitDeleteGroups += t->m_settings->currentGroup();
+    
+    if(m_configUi->targetCombo->count()==0)
+        m_configUi->buttonDeleteTarget->setEnabled(false);
+    delete t;
+    Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
+    Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
 }
 
 #include "runpreferences.moc"
