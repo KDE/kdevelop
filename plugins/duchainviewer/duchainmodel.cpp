@@ -527,8 +527,6 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
       KTemporaryFile tempFile;
 
       {
-        DUChainReadLocker readLock(DUChain::lock());
-
         QString suffix = (dynamic_cast<TopDUContext*>(ctx) ?
                             static_cast<TopDUContext*>(ctx)->url().str()
                             : ctx->localScopeIdentifier().toString());
@@ -538,15 +536,15 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
         suffix += ".temp.dot";
         tempFile.setSuffix( suffix );
 
-
-        if( tempFile.open() ) {
-          DumpDotGraph dump;
-          tempFile.write( dump.dotGraph( ctx ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
-        } else {
+        if( !tempFile.open() ) {
           readLock.unlock();
           KMessageBox::error(0, i18n("Cannot create temporary file \"%1\" with suffix \"%2\"", tempFile.fileName(), suffix));
+          return;
         }
+        DumpDotGraph dump;
+        tempFile.write( dump.dotGraph( ctx ).toLocal8Bit() ); //Shorten if it is a top-context, because it would become too much output
       }
+
       tempFile.setAutoRemove(false);
       QString fileName = tempFile.fileName();
       tempFile.close();
