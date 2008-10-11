@@ -22,6 +22,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
+//TODO: add jobTypes for every DVCSjob!
+
 #include "gitexecutor.h"
 
 #include <QtCore/QFileInfo>
