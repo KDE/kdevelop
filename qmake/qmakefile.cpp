@@ -258,7 +258,11 @@ QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
 
 QString QMakeFile::resolveToSingleFileName( const QString& file ) const
 {
-    return resolveFileName( file ).first();
+    QStringList l = resolveFileName( file );
+    if(l.isEmpty())
+        return QString();
+    else
+        return l.first();
 }
 
 QStringList QMakeFile::resolveFileName( const QString& file ) const
