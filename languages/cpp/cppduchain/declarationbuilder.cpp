@@ -434,6 +434,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
         {
           // Match
           declaration = dynamic_cast<T*>(dec);
+          declaration->setRange(translated);
           break;
         }
       }
