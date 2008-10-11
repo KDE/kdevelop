@@ -139,6 +139,14 @@ void ContextBuilder::setEditor(CppEditorIntegrator* editor, bool ownsEditorInteg
   m_nameCompiler = new NameCompiler(editor->parseSession());
 }
 
+void addImportedParentContextSafely(DUContext* context, DUContext* import) {
+  if(import->imports(context)) {
+    kDebug() << "prevented endless recursive import";
+  }else{
+    context->addImportedParentContext(import);
+  }
+}
+
 KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode(NameAST* id)
 {
   return identifierForNode(id, 0);
@@ -203,7 +211,11 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
 
   if(import) {
     DUChainWriteLocker lock(DUChain::lock());
-    currentContext()->addImportedParentContext(import);
+    if(import->imports(currentContext())) {
+      kDebug() << "prevented endless recursive import";
+    }else{
+      addImportedParentContextSafely(currentContext(), import);
+    }
   }
 }
 
@@ -468,7 +480,7 @@ void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
   Declaration* idDecl = 0;
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
-    currentContext()->addImportedParentContext( idDecl->logicalInternalContext(0) );
+    addImportedParentContextSafely(currentContext(), idDecl->logicalInternalContext(0) );
   } else if( !baseClass.cast<DelayedType>() ) {
     kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
   }
@@ -499,8 +511,8 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
     nc.run(node->name);
     id = nc.identifier();
   }
-
-  openContext(node, DUContext::Class, id.isEmpty() ? QualifiedIdentifier() : QualifiedIdentifier(id.last()) );
+  
+  openContext(node, editor()->findRangeForContext(node->name ? node->name->end_token : node->start_token, node->end_token), DUContext::Class, id.isEmpty() ? QualifiedIdentifier() : QualifiedIdentifier(id.last()) );
   addImportedContexts(); //eventually add template-context
 
   if(!node->name) {
@@ -874,7 +886,7 @@ void ContextBuilder::addImportedContexts()
     DUChainWriteLocker lock(DUChain::lock());
 
     foreach (DUContext* imported, m_importedParentContexts)
-      currentContext()->addImportedParentContext(imported);
+      addImportedParentContextSafely(currentContext(), imported);
 
     //Move on the internal-context of Declarations/Definitions
     foreach( DUContext* importedContext, m_importedParentContexts )  {

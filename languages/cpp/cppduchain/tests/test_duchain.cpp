@@ -1060,6 +1060,8 @@ void TestDUChain::testDeclareClass()
   QCOMPARE(defClassA->uses().count(), 1);
   QCOMPARE(defClassA->uses().begin()->count(), 2);
   QVERIFY(defClassA->type<CppClassType>());
+  QVERIFY(defClassA->internalContext());
+  QCOMPARE(defClassA->internalContext()->range().start.column, 8); //The class-context should start directly behind the name
 //   QVERIFY(function);
 //   QCOMPARE(function->returnType(), typeVoid);
 //   QCOMPARE(function->arguments().count(), 1);
