@@ -557,6 +557,7 @@ void DUChainModel::doubleClicked ( const QModelIndex & index ) {
         KProcess proc2;
         proc2 << "dotty" << fileName;
         if( !proc2.startDetached() ) {
+          readLock.unlock();
           KMessageBox::error(0, i18n("Could not open %1 with kgraphviewer or dotty.", fileName));
         }
       }
