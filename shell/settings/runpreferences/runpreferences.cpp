@@ -67,6 +67,7 @@ class TargetProperties : public QWidget
             EnvironmentGroupList env( m_settings->config() );
             preferencesDialog.kcfg_environment->addItems( env.groups() );
             preferencesDialog.kcfg_workingDirectory->setMode(KFile::Directory);
+            preferencesDialog.kcfg_environment->setCurrentIndex(0);
         }
         
         Ui::RunSettings preferencesDialog;
@@ -177,7 +178,7 @@ void RunPreferences::removeTarget(int index)
     
     if(m_configUi->targetCombo->count()==0)
         m_configUi->buttonDeleteTarget->setEnabled(false);
-    delete t;
+//     delete t;
     Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
     Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
 }
