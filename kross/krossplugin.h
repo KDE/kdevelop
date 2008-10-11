@@ -51,7 +51,6 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
         QList<KrossToolViewFactory*> m_toolFactories;
         Kross::Action* action;
 
-        KrossBuildSystemManager* m_script;
         KUrl m_pluginDir;
 };
 
