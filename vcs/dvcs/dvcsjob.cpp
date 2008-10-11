@@ -38,11 +38,11 @@
 
 struct DVCSjobPrivate
 {
-    DVCSjobPrivate() : isRunning(false), commMode(KProcess::SeparateChannels), vcsplugin(0)
+    DVCSjobPrivate() : commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
         childproc = new KProcess;
         lineMaker = new KDevelop::ProcessLineMaker( childproc );
-        failed = false;
+        isRunning = failed = wasStarted = false;
     }
 
     ~DVCSjobPrivate() {
@@ -57,10 +57,11 @@ struct DVCSjobPrivate
     QString     server;
     QString     directory;
     bool        isRunning;
+    bool        wasStarted;
+    bool        failed;
     QStringList outputLines;
     KProcess::OutputChannelMode commMode;
     KDevelop::IPlugin* vcsplugin;
-    bool        failed;
 };
 
 DVCSjob::DVCSjob(KDevelop::IPlugin* parent)
@@ -79,6 +80,9 @@ void DVCSjob::clear()
     d->childproc->clearEnvironment();
     d->command.clear();
     d->outputLines.clear();
+    d->server.clear();
+    d->directory.clear();
+    d->isRunning = d->failed = d->wasStarted = false;
 }
 
 void DVCSjob::setServer(const QString& server)
@@ -151,17 +155,22 @@ void DVCSjob::setExitStatus(const bool exitStatus)
 
 void DVCSjob::start()
 {
-    if( !d->directory.isEmpty() ) {
-        kDebug() << "Working directory:" << d->directory;
-        d->childproc->setWorkingDirectory(d->directory);
-    }
-    else 
+    Q_ASSERT_X(!d->isRunning, "DVCSjob::start", "Another proccess was started using this job class");
+    d->wasStarted = true;
+
+    //do not allow to run commands in the application's working dir
+    //TODO: change directory to KUrl, check if it's a relative path
+    if(d->directory.isEmpty() ) 
     {
         d->failed = true;
-        emitResult(); //KJob
-        emit resultsReady(this); //VcsJob
+        setError(UserDefinedError);
+        jobIsReady();
         return;
     }
+
+    kDebug() << "Working directory:" << d->directory;
+    d->childproc->setWorkingDirectory(d->directory);
+
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
@@ -180,6 +189,8 @@ void DVCSjob::start()
     d->childproc->setOutputChannelMode( d->commMode );
     d->childproc->setProgram( d->command );
     d->childproc->setEnvironment(QProcess::systemEnvironment());
+    //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
+    d->childproc->waitForStarted();
     d->childproc->start();
 }
 
@@ -195,7 +206,6 @@ void DVCSjob::cancel()
 
 void DVCSjob::slotProcessError( QProcess::ProcessError err )
 {
-    Q_UNUSED(err)
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
 
@@ -203,13 +213,39 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
 
     //NOTE: some DVCS commands can use stderr...
     d->failed = true;
-    setError( d->childproc->exitCode() );
-    setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
-    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << err << d->childproc->exitCode();
 
-    emit readyForParsing(this); //let parsers to set status
-    emitResult(); //KJob
-    emit resultsReady(this); //VcsJob
+    //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
+    //and if exec is used, exec will return true and thet is wrong!
+    setError(UserDefinedError);
+    setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
+
+    QString errorValue;
+    //if trolls add Q_ENUMS for QProcess, then we can use better solution than switch:
+    //QMetaObject::indexOfEnumerator(char*), QLatin1String(QMetaEnum::valueToKey())...
+    switch (err)
+    {
+    case QProcess::FailedToStart:
+        errorValue = "FailedToStart";
+        break;
+    case QProcess::Crashed:
+        errorValue = "Crashed";
+        break;
+    case QProcess::Timedout:
+        errorValue = "Timedout";
+        break;
+    case QProcess::WriteError:
+        errorValue = "WriteErro";
+        break;
+    case QProcess::ReadError:
+        errorValue = "ReadError";
+        break;
+    case QProcess::UnknownError:
+        errorValue = "UnknownError";
+        break;
+    }
+    kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
+                                                     << "Exit code is:" << d->childproc->exitCode();
+    jobIsReady();
 }
 
 void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
@@ -222,13 +258,14 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
         //NOTE some dvcs commands use status to show changes. Git-status returns 1 if there are updates
         d->failed = true;
-        setError( exitCode );
+        //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
+        //and if exec is used, exec will return true and thet is wrong!
+        setError(UserDefinedError);
         setErrorText( i18n("Process exited with status %1", exitCode) );
     }
 
-    emit readyForParsing(this); //let parsers to set status
-    emitResult(); //KJob
-    emit resultsReady(this); //VcsJob
+    kDebug() << "we are ready";
+    jobIsReady();
 }
 
 void DVCSjob::slotReceivedStdout(const QStringList& output)
@@ -251,13 +288,12 @@ void DVCSjob::slotReceivedStderr(const QStringList& output)
 
 KDevelop::VcsJob::JobStatus DVCSjob::status() const
 {
-    if (d->isRunning)
-        return KDevelop::VcsJob::JobRunning;
-
-    //TODO: Actually we don't set d->failed now, see comments for "d->failed = "
+    if (!d->wasStarted)
+        return KDevelop::VcsJob::JobNotStarted;
     if (d->failed)
         return KDevelop::VcsJob::JobFailed;
-
+    if (d->isRunning)
+        return KDevelop::VcsJob::JobRunning;
     return KDevelop::VcsJob::JobSucceeded;
 }
 
@@ -265,3 +301,12 @@ KDevelop::IPlugin* DVCSjob::vcsPlugin() const
 {
     return d->vcsplugin;
 }
+
+void DVCSjob::jobIsReady()
+{
+    emit readyForParsing(this); //let parsers to set status
+    emitResult(); //KJob
+    emit resultsReady(this); //VcsJob
+}
+
+KProcess* DVCSjob::getChildproc() {return d->childproc;}

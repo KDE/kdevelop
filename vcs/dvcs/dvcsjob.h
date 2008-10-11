@@ -47,7 +47,6 @@ class DVCSjobPrivate;
  * DVCSjob* job = new DVCSjob(vcsplugin);
  * if (job)
  * {
- *     job->clear();
  *     job->setDirectory(workDir);
  *     *job << "git-rev-parse";
  *     foreach(const QString &arg, args) // *job << args can be used instead!
@@ -106,6 +105,7 @@ public:
 
     /**
      * Sets working directory.
+     * @param directory Should contain only absolute path. Relative path or "" (working dir) are depricated and will make job failed.
      * @note In DVCS plugins directory variable is used to get relative pathes.
      */
     void setDirectory(const QString& directory);
@@ -201,6 +201,8 @@ public:
      */
     virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
+    
+    KProcess *getChildproc();
 
 public Q_SLOTS:
     /**
@@ -223,6 +225,7 @@ private Q_SLOTS:
     void slotReceivedStderr(const QStringList&);
 
 private:
+    void jobIsReady();
     DVCSjobPrivate* const d;
     QVariant results;
 };
