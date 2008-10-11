@@ -160,6 +160,8 @@ void RunPreferences::addTarget(const QString& name)
     commitDeleteGroups.remove(name);
     Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
     Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
+    
+    emit changed(true);
 }
 
 void RunPreferences::removeTarget(int index)
@@ -181,6 +183,8 @@ void RunPreferences::removeTarget(int index)
 //     delete t;
     Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
     Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
+    
+    emit changed(true);
 }
 
 #include "runpreferences.moc"
