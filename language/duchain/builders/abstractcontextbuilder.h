@@ -459,6 +459,35 @@ protected:
   /**
    * Open a context, and create / update it if necessary.
    *
+   * \param node The range to associate with the context.
+   * \param range A custom range which the context should encompass.
+   * \param type The type of context to open.
+   * \param identifier The identifier for this context
+   * \returns the opened context.
+   */
+  DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, QualifiedIdentifier id)
+  {
+    if (m_compilingContexts) {
+#ifdef DEBUG_UPDATE_MATCHING
+      kDebug() << "opening custom context";
+#endif
+      DUContext* ret = openContextInternal(range, type, id);
+      setContextOnNode( node, ret );
+      return ret;
+
+    } else {
+      openContext( contextFromNode(node) );
+      {
+        LockedSmartInterface iface = editor()->smart();
+        editor()->setCurrentRange(iface, currentContext()->smartRange());
+      }
+      return currentContext();
+    }
+  }
+
+  /**
+   * Open a context, and create / update it if necessary.
+   *
    * \param rangeNode The range which encompasses the context.
    * \param type The type of context to open.
    * \param identifier The identifier which corresponds to the context.
