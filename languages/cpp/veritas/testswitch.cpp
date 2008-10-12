@@ -313,7 +313,7 @@ TopDUContext* TestSwitch::documentContextFor(const KUrl& url)
     DUChain* chainStore = DUChain::self();
     TopDUContext* docCtx = chainStore->chainForDocument(url, env);
     delete env;
-    if(docCtx && docCtx->flags() & TopDUContext::ProxyContextFlag) {
+    if(docCtx && docCtx->parsingEnvironmentFile() && docCtx->parsingEnvironmentFile()->isProxyContext()) {
         if(!docCtx->importedParentContexts().isEmpty()) {
             docCtx = dynamic_cast<TopDUContext*>(docCtx->importedParentContexts().first().context());
         }

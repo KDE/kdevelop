@@ -138,7 +138,7 @@ class MacroSet;
 
 DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
 
-struct EnvironmentFileData : public KDevelop::DUChainBaseData {
+struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     EnvironmentFileData() {
       m_contentStartLine = 0;
       m_strings = 0;
@@ -153,7 +153,7 @@ struct EnvironmentFileData : public KDevelop::DUChainBaseData {
       m_allModificationTimes = 0;
       m_includePaths = 0;
     }
-    EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::DUChainBaseData(rhs) {
+    EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::ParsingEnvironmentFileData(rhs) {
       m_url = rhs.m_url;
       m_modificationTime = rhs.m_modificationTime;
       m_strings = rhs.m_strings; //String-set

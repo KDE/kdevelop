@@ -22,14 +22,18 @@
 #include <QObject>
 #include <QPointer>
 #include <KSharedPtr>
-#include <ktextbrowser.h>
 #include <language/duchain/duchainpointer.h>
 #include "includeitem.h"
 #include <language/interfaces/quickopendataprovider.h>
 #include "cppduchainexport.h"
+#include <ktextbrowser.h>
 
 class QWidget;
 class QTextBrowser;
+
+namespace KDevelop {
+  class UsesWidget;
+}
 
 namespace rpp {
   class pp_macro;
@@ -43,7 +47,7 @@ namespace Cpp {
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * The duchain must be read-locked for most operations
    * */
-  class KDEVCPPDUCHAIN_EXPORT NavigationWidget : public KTextBrowser, public KDevelop::QuickOpenEmbeddedWidgetInterface {
+  class KDEVCPPDUCHAIN_EXPORT NavigationWidget : public QWidget, public KDevelop::QuickOpenEmbeddedWidgetInterface {
     Q_OBJECT
     public:
       /**
@@ -99,8 +103,9 @@ namespace Cpp {
 
       KDevelop::TopDUContextPointer m_topContext;
       
-      QPointer<QTextBrowser> m_browser;
+      QPointer<KTextBrowser> m_browser;
       KDevelop::DeclarationPointer m_declaration;
+      KDevelop::UsesWidget* m_usesWidget;
   };
 }
 

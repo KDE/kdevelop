@@ -117,6 +117,48 @@ void PreprocessJob::run()
 
     QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
+    rpp::pp preprocessor(this);
+    m_pp = &preprocessor;
+
+    //Eventually initialize the environment with the parent-environment to get its macros
+    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_firstEnvironmentFile );
+
+    //If we are included from another preprocessor, copy its macros
+    if( parentJob()->parentPreprocessor() ) {
+        m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
+    } else {
+        //Insert standard-macros
+        KDevelop::ParsingEnvironment* standardEnv = createStandardEnvironment();
+        m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
+        delete standardEnv;
+    }
+    
+    KDevelop::ParsingEnvironmentFilePointer updatingEnvironmentFile;
+    
+    {
+        ///Find a context that can be updated, and eventually break processing right here, if we notice we don't need to update
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
+        
+        updatingEnvironmentFile = KDevelop::ParsingEnvironmentFilePointer( KDevelop::DUChain::self()->environmentFileForDocument(parentJob()->document(), m_currentEnvironment, (bool)m_secondEnvironmentFile) );
+        
+        if(!parentJob()->parentPreprocessor() && updatingEnvironmentFile) {
+          //Chekc whether we need to run at all, or whether the file is already up to date
+          if((updatingEnvironmentFile->features() & parentJob()->minimumFeatures()) == parentJob()->minimumFeatures()) {
+            KUrl localPath(parentJob()->document().toUrl());
+            localPath.setFileName(QString());
+            Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
+            Q_ASSERT(cppEnv);
+            bool needsUpdate = CppLanguageSupport::self()->needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, parentJob()->includePathUrls());
+            
+            if(!needsUpdate) {
+              parentJob()->setNeedsUpdate(false);
+              return;
+            }
+          }
+        }
+    }
+    
+    
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
 
@@ -192,27 +234,13 @@ void PreprocessJob::run()
     if( parentJob()->masterJob() == parentJob() )
         parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
 
-    rpp::pp preprocessor(this);
-    m_pp = &preprocessor;
-
-    //Eventually initialize the environment with the parent-environment to get its macros
-    m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_firstEnvironmentFile );
-
-    //If we are included from another preprocessor, copy its macros
-    if( parentJob()->parentPreprocessor() ) {
-        m_currentEnvironment->swapMacros( parentJob()->parentPreprocessor()->m_currentEnvironment );
-    } else {
-        //Insert standard-macros
-        KDevelop::ParsingEnvironment* standardEnv = createStandardEnvironment();
-        m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
-        delete standardEnv;
-    }
-
     {
         ///Find a context that can be updated
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-      
-        KDevelop::ReferencedTopDUContext updating( KDevelop::DUChain::self()->chainForDocument(parentJob()->document(), m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag) );
+        
+        KDevelop::ReferencedTopDUContext updating;
+        if(updatingEnvironmentFile)
+          updating = updatingEnvironmentFile->topContext();
 
         if(m_secondEnvironmentFile)
           parentJob()->setUpdatingProxyContext( updating ); //The content-context to be updated will be searched later
@@ -225,10 +253,10 @@ void PreprocessJob::run()
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
             //Must be true, because we explicity passed the flag to chainForDocument
-            Q_ASSERT((parentJob()->updatingProxyContext()->flags() & KDevelop::TopDUContext::ProxyContextFlag));
+            Q_ASSERT((parentJob()->updatingProxyContext()->parsingEnvironmentFile()->isProxyContext()));
         }
     }
-
+    
     preprocessor.setEnvironment( m_currentEnvironment );
 
     preprocessor.environment()->enterBlock(parentJob()->masterJob()->parseSession()->macros);
@@ -310,12 +338,11 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
-        KDevelop::ReferencedTopDUContext content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, KDevelop::TopDUContext::NoFlags);
+        KDevelop::ReferencedTopDUContext content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false, true);
 
         m_currentEnvironment->disableIdentityOffsetRestriction();
 
         if(content) {
-            Q_ASSERT(!(content->flags() & KDevelop::TopDUContext::ProxyContextFlag));
             //We have found a content-context that we can use
             parentJob()->setUpdatingContentContext(content);
 
@@ -416,7 +443,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
-            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, m_secondEnvironmentFile ? KDevelop::TopDUContext::ProxyContextFlag : KDevelop::TopDUContext::AnyFlag);
+            includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment )

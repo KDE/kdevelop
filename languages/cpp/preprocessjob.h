@@ -95,5 +95,7 @@ private:
     rpp::pp* m_pp;
 };
 
+KDevelop::ParsingEnvironment* createStandardEnvironment();
+
 #endif
 

@@ -266,10 +266,10 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   QStringList::ConstIterator it;
   for ( it = candidates.begin(); it != candidates.end(); ++it )
   {
-    kDebug( 9007 ) << "Trying " << ( *it ) << endl;
+//     kDebug( 9007 ) << "Trying " << ( *it ) << endl;
     if ( QFileInfo( *it ).exists() )
     {
-      kDebug( 9007 ) << "using: " << *it << endl;
+//       kDebug( 9007 ) << "using: " << *it << endl;
       return * it;
     }
   }
@@ -807,7 +807,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
       top = candidates[0];
   }
 
-  if(top && (top->flags() & TopDUContext::ProxyContextFlag) && !allowProxyContext)
+  if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !allowProxyContext)
   {
     if(!top->importedParentContexts().isEmpty())
     {
@@ -891,7 +891,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 
-  Q_ASSERT(!(ctx->flags() & TopDUContext::ProxyContextFlag));
+  Q_ASSERT(!(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()));
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
 

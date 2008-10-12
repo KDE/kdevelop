@@ -154,6 +154,9 @@ public:
     //Sets local progress for this exact file
     void setLocalProgress(float progress, QString text);
     
+    void setNeedsUpdate(bool needs);
+    bool needsUpdate() const;
+    
 private:
     friend class PreprocessJob; //So it can access includePaths()
     //Only use from within the background thread, and make sure no mutexes are locked when calling it
@@ -190,6 +193,7 @@ private:
     int m_parsedIncludes;
     mutable QMutex m_waitForIncludePathsMutex;
     mutable QWaitCondition m_waitForIncludePaths;
+    bool m_needsUpdate;
 };
 
 class CPPInternalParseJob : public ThreadWeaver::Job

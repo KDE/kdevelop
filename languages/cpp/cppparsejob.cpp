@@ -111,7 +111,8 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_readFromDisk( false ),
         m_includePathsComputed( false ),
         m_keepDuchain( false ),
-        m_parsedIncludes( 0 )
+        m_parsedIncludes( 0 ),
+        m_needsUpdate( true )
 {
     if( !m_parentPreprocessor ) {
         addJob(m_preprocessJob = new PreprocessJob(this));
@@ -153,6 +154,14 @@ void CPPParseJob::includedFileParsed() {
 
 void CPPParseJob::setLocalProgress(float _progress, QString text) {
   emit progress(this, 0.8+_progress*0.2, text);
+}
+
+void CPPParseJob::setNeedsUpdate(bool needs) {
+  m_needsUpdate = needs;
+}
+
+bool CPPParseJob::needsUpdate() const {
+  return m_needsUpdate;
 }
 
 void CPPParseJob::parseForeground() {
@@ -309,7 +318,7 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 
 ///If @param ctx is a proxy-context, returns the target-context. Else returns ctx. @warning du-chain must be locked
 LineContextPair contentFromProxy(LineContextPair ctx) {
-    if( ctx.context->flags() & TopDUContext::ProxyContextFlag ) {
+    if( ctx.context->parsingEnvironmentFile() && ctx.context->parsingEnvironmentFile()->isProxyContext() ) {
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
         return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context()), ctx.sourceLine );
     }else{
@@ -319,6 +328,10 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 
 void CPPInternalParseJob::run()
 {
+    if(!parentJob()->parentPreprocessor() && !parentJob()->needsUpdate()) {
+      kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
+      return;
+    }
     kDebug( 9007 ) << "===-- PARSING --===> "
     << parentJob()->document().str();
 
@@ -552,6 +565,8 @@ void CPPInternalParseJob::run()
       {
           DUChainWriteLocker l(DUChain::lock());
           contentContext->setFeatures((TopDUContext::Features) (contentContext->features() | parentJob()->minimumFeatures()) );
+          if(proxyContext)
+            proxyContext->setFeatures(contentContext->features());
           contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
       }
 

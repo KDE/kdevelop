@@ -249,6 +249,10 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
 KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
+  Cpp::EnvironmentFile* filePtr = const_cast<Cpp::EnvironmentFile*>(file.data() );
+  
+  filePtr->setIsProxyContext(true);
+  
   editor()->setCurrentUrl(file->url());
 
   TopDUContext* topLevelContext = 0;
@@ -264,20 +268,16 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
-      cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
-
-      DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
+      DUChain::self()->updateContextEnvironment( topLevelContext, filePtr );
     } else {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
-      topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), SimpleRange(), const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), SimpleRange(), filePtr);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setLanguage(IndexedString("C++"));
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
-
-      cppContext->setFlags((TopDUContext::Flags)(cppContext->flags() | TopDUContext::ProxyContextFlag));
 
       DUChain::self()->addDocumentChain(topLevelContext);
     }
@@ -299,9 +299,9 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
 {
   setCompilingContexts(true);
 
-  if(updateContext && (updateContext->flags() & TopDUContext::ProxyContextFlag)) {
+  if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
     kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
-    updateContext->setFlags((TopDUContext::Flags)( updateContext->flags() & (~TopDUContext::ProxyContextFlag))); //It is possible to upgrade a proxy-context to a content-context
+    updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
   }
 
   editor()->setCurrentUrl(file->url());
@@ -311,7 +311,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext;
 
-    if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->flags() & TopDUContext::ProxyContextFlag))
+    if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->parsingEnvironmentFile() && topLevelContext->parsingEnvironmentFile()->isProxyContext()))
       if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure
         kWarning() << *topLevelContext->smartRange() << "erroneously has a parent range" << *topLevelContext->smartRange()->parentRange();
         Q_ASSERT(false);
