@@ -1,9 +1,9 @@
 project(krosssupport)
+add_subdirectory(xmltokross)
 
 #Aleix's note: please, don't add it yet until I can commit everything (involving the uiless shell)
 option(GENERATE_INTERFACES "Generate kross interfaces at compile-time? You need kdevcpp to use it" OFF)
 if(GENERATE_INTERFACES)
-    add_subdirectory(xmltokross)
     get_directory_property(include_DIRS INCLUDE_DIRECTORIES)
     
     get_directory_property(inclist INCLUDE_DIRECTORIES)
