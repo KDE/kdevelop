@@ -28,45 +28,6 @@
 
 #include <vcs/dvcs/dvcsjob.h>
 
-void DVCSjobTest::testJob()
-{
-//     QTimer *timer = new QTimer(this);
-//     connect(timer, SIGNAL(timeout()), this, SLOT(DVCSjobTest()));
-//     timer->start(500);
-
-    DVCSjob* job = new DVCSjob(0);
-    QVERIFY(job);
-    QVERIFY(job->status() == DVCSjob::JobNotStarted);
-
-    //makes sence for bug 172309. With default (true) we have crash, with false — dead lock
-    //should be removed after we fix the problem
-//     job->setAutoDelete(false);
-
-    //try the command like "echo -n test"
-    //should fail, because command and arg are in one string. We can change opearator<<(QString) to split,
-    //but it will be a wrong style to work with jobs.
-    const QString echoCommand("echo -n test");
-    *job << echoCommand;
-    job->setDirectory("/tmp"); //working directory ("") is depricated by DVCSjob
-    QVERIFY(!job->exec());
-    QVERIFY(job->status() == DVCSjob::JobFailed);
-    QCOMPARE(job->dvcsCommand(), echoCommand);
-
-    //check our clear() method. It's simple, but having bugs here is dangerous
-    job->clear();
-    QVERIFY(job);
-    QVERIFY(!job->isRunning());
-    QVERIFY(job->status() == DVCSjob::JobNotStarted);
-    QVERIFY(job->fetchResults().isNull());
-    QVERIFY(job->getChildproc());
-    QCOMPARE(job->dvcsCommand(), QString());
-    QCOMPARE(job->getDirectory(), QString());
-    QCOMPARE(job->output(), QString());
-
-    QTest::qWait(100000);
-
-}
-
 void DVCSjobTest::checkDVCS()
 {
     qDebug() << "check!!!";
