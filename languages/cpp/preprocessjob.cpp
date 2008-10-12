@@ -141,7 +141,7 @@ void PreprocessJob::run()
         
         updatingEnvironmentFile = KDevelop::ParsingEnvironmentFilePointer( KDevelop::DUChain::self()->environmentFileForDocument(parentJob()->document(), m_currentEnvironment, (bool)m_secondEnvironmentFile) );
         
-        if(!parentJob()->parentPreprocessor() && updatingEnvironmentFile) {
+        if(parentJob()->masterJob() == parentJob() && updatingEnvironmentFile) {
           //Chekc whether we need to run at all, or whether the file is already up to date
           if((updatingEnvironmentFile->features() & parentJob()->minimumFeatures()) == parentJob()->minimumFeatures()) {
             KUrl localPath(parentJob()->document().toUrl());

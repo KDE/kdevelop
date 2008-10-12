@@ -328,8 +328,12 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 
 void CPPInternalParseJob::run()
 {
-    if(!parentJob()->parentPreprocessor() && !parentJob()->needsUpdate()) {
+    if(!parentJob()->needsUpdate()) {
       kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
+      return;
+    }
+    if(!parentJob()->contentEnvironmentFile()) {
+      kDebug( 9007 ) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document().str();
       return;
     }
     kDebug( 9007 ) << "===-- PARSING --===> "
