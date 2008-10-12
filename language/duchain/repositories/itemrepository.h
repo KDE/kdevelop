@@ -351,7 +351,8 @@ class Bucket {
       //If this triggers, your item is too big.
       Q_ASSERT(totalSize < ItemRepositoryBucketSize);
       
-      if(totalSize > m_available) {
+      //The second condition is needed, else we can get problems with zero-length items and an overflow in insertedAt to zero
+      if(totalSize > m_available || (!itemSize && totalSize == m_available)) {
         //Try finding the smallest freed item that can hold the data
         unsigned short currentIndex = m_largestFreeItem;
         unsigned short previousIndex = 0;
