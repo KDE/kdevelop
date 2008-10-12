@@ -201,7 +201,7 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     }
     
     if(request.itemSize() > (1<<15)) {
-      kWarning() << "too many declarations for id" << id.identifier().toString() << item.declarationsSize() << "ignoring new one";
+      kWarning() << "too many declarations for id" << id.identifier().toString() << item.declarationsSize() << "ignoring new one from" << declaration.indexedTopContext().url().str();
       return;
     }
     
@@ -284,7 +284,7 @@ void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, con
     }
     
     if(request.itemSize() > (1<<15)) {
-      kWarning() << "too many contexts for id" << id.identifier().toString() << item.contextsSize() << "ignoring new one";
+      kWarning() << "too many contexts for id" << id.identifier().toString() << item.contextsSize() << "ignoring new one from" << context.indexedTopContext().url().str();
       return;
     }
     d->m_contexts.deleteItem(index);
