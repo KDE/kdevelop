@@ -150,6 +150,7 @@ template<>
 SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartInterface& iface, const KTextEditor::Range & range, KTextEditor::SmartRange::InsertBehaviors insertBehavior )
 {
   SmartRange* ret = iface->newSmartRange(range, 0, insertBehavior);
+  Q_ASSERT(ret->insertBehavior() == insertBehavior);
 
   KTextEditor::Cursor rangeStart = ret->start();
   KTextEditor::Cursor rangeEnd = ret->end();
@@ -158,6 +159,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartI
 
     SmartRange* currentRange = dynamic_cast<SmartRange*>(m_currentRangeStack.top());
     Q_ASSERT(currentRange);
+  #ifdef HACK_RANGE_CONSISTENCY
 
     QList<SmartRange*> importList;
 
@@ -238,6 +240,7 @@ SmartRange* EditorIntegratorPrivate::createRange<SmartRange>( const LockedSmartI
       Q_ASSERT(ret->contains(**it));
       (*it)->setParentRange(ret);
     }
+    #endif
 
     ///Normal case:
     ret->setParentRange( currentRange );
