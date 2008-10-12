@@ -58,11 +58,6 @@ void DVCSjobTest::testJob()
     QCOMPARE(job->getDirectory(), QString());
     QCOMPARE(job->output(), QString());
 
-
-    //try to execute pure job, should fail, but not crash.
-    //also let's look on deleteLater bahaviour, it can crash us.
-    QVERIFY(!job->exec()); //Oops, we forgot to set the command, right?
-    QVERIFY(job->status() == DVCSjob::JobFailed);
 }
 
 
