@@ -333,6 +333,7 @@ void CPPInternalParseJob::run()
       return;
     }
     if(!parentJob()->contentEnvironmentFile()) {
+      //May happen when the file could not be opened or similar
       kDebug( 9007 ) << "===-- Problem: Preprocessor did not create environment-file, skipping --===> " << parentJob()->document().str();
       return;
     }
