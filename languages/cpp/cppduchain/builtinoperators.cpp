@@ -51,10 +51,13 @@ struct ConstantBinaryExpressionEvaluator {
         endValue = left->ConstantIntegralType::value<Type>() - right->ConstantIntegralType::value<Type>();
       break;
       case '*':
-        endValue = left->ConstantIntegralType::value<Type>() * right->ConstantIntegralType::value<Type>();
+          endValue = left->ConstantIntegralType::value<Type>() * right->ConstantIntegralType::value<Type>();
       break;
       case '/':
-        endValue = left->ConstantIntegralType::value<Type>() / right->ConstantIntegralType::value<Type>();
+        if(right->ConstantIntegralType::value<Type>())
+          endValue = left->ConstantIntegralType::value<Type>() / right->ConstantIntegralType::value<Type>();
+        else
+          kDebug() << "bad division operator" << left->ConstantIntegralType::value<Type>() << "/" << right->ConstantIntegralType::value<Type>();
       break;
       case '=':
         endValue = right->ConstantIntegralType::value<Type>();
@@ -93,7 +96,10 @@ struct ConstantBinaryExpressionEvaluator {
   void evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
     switch( tokenKind ) {
       case '%':
-        endValue = left->ConstantIntegralType::value<Type>() % right->ConstantIntegralType::value<Type>();
+        if(right->ConstantIntegralType::value<Type>())
+          endValue = left->ConstantIntegralType::value<Type>() % right->ConstantIntegralType::value<Type>();
+        else
+          kDebug() << "bad modulo operator" << left->ConstantIntegralType::value<Type>() << "%" << right->ConstantIntegralType::value<Type>();
       break;
       case '^':
         endValue = left->ConstantIntegralType::value<Type>() ^ right->ConstantIntegralType::value<Type>();
