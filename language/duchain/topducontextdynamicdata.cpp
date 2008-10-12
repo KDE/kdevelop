@@ -115,6 +115,10 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     }
     
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
+    if(!ret) {
+      kWarning() << "Cannot load a top-context, the requered language-support is probably not loaded";
+      return 0;
+    }
     Q_ASSERT(ret); //If this triggers, the top-context type is not registered. Most probably it means that the specific language-support is not loaded.
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
