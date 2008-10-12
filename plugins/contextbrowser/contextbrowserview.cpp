@@ -327,6 +327,10 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
             updateDeclarationListBox(context);
 
     if (isPreviousEntry(context, position)) {
+        if(m_nextHistoryIndex) {
+            HistoryEntry& he = m_history[m_nextHistoryIndex-1];
+            he.setCursorPosition(position);
+        }
         return;
     } else { // Append new history entry
         //To have a more useful history, do not duplicate items in it, so remove old occurences of the same context
