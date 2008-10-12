@@ -163,9 +163,8 @@ void DVCSjob::start()
     //TODO: change directory to KUrl, check if it's a relative path
     if(d->directory.isEmpty() ) 
     {
-        d->failed = true;
-        setError(UserDefinedError);
-        jobIsReady();
+        kDebug() << "No working directory specified for DVCS command";
+        slotProcessError(QProcess::UnknownError);
         return;
     }
 
@@ -256,16 +255,10 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
     d->isRunning = false;
 
-    if (exitStatus != QProcess::NormalExit || exitCode != 0) {
-        //NOTE some dvcs commands use status to show changes. Git-status returns 1 if there are updates
-        d->failed = true;
-        //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
-        //and if exec is used, exec will return true and thet is wrong!
-        setError(UserDefinedError);
-        setErrorText( i18n("Process exited with status %1", exitCode) );
-    }
+    if (exitStatus != QProcess::NormalExit || exitCode != 0)
+        slotProcessError(QProcess::UnknownError);
 
-    kDebug() << "we are ready";
+    kDebug() << "process has finished with no errors";
     jobIsReady();
 }
 
