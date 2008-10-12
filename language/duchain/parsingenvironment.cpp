@@ -18,9 +18,19 @@
 
 #include "parsingenvironment.h"
 #include "topducontext.h"
+#include "duchainregister.h"
 
 namespace KDevelop
 {
+// REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
+
+TopDUContext::Features ParsingEnvironmentFile::features() const {
+  return d_func()->m_features;
+}
+
+void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
+  d_func_dynamic()->m_features = features;
+}
 
 ParsingEnvironment::ParsingEnvironment() {
 }
@@ -28,7 +38,8 @@ ParsingEnvironment::ParsingEnvironment() {
 ParsingEnvironment::~ParsingEnvironment() {
 }
 
-ParsingEnvironmentFile::ParsingEnvironmentFile() : DUChainBase(SimpleRange::invalid()) {
+ParsingEnvironmentFile::ParsingEnvironmentFile() : DUChainBase(*new ParsingEnvironmentFileData()) {
+  d_func_dynamic()->setClassId(this);
 }
 
 TopDUContext* ParsingEnvironmentFile::topContext() const {
@@ -38,7 +49,7 @@ TopDUContext* ParsingEnvironmentFile::topContext() const {
 ParsingEnvironmentFile::~ParsingEnvironmentFile() {
 }
 
-ParsingEnvironmentFile::ParsingEnvironmentFile(DUChainBaseData& data) : DUChainBase(data) {
+ParsingEnvironmentFile::ParsingEnvironmentFile(ParsingEnvironmentFileData& data) : DUChainBase(data) {
 }
 
 int ParsingEnvironment::type() const {
@@ -47,6 +58,14 @@ int ParsingEnvironment::type() const {
 
 int ParsingEnvironmentFile::type() const {
   return StandardParsingEnvironment;
+}
+
+bool ParsingEnvironmentFile::isProxyContext() const {
+  return d_func()->m_isProxyContext;
+}
+
+void ParsingEnvironmentFile::setIsProxyContext(bool is) {
+  d_func_dynamic()->m_isProxyContext = is;
 }
 
 } //KDevelop

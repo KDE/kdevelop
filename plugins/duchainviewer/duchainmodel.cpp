@@ -53,7 +53,7 @@ using namespace KDevelop;
 
 ///When the context is a proxy-context, returns the assigned content-context.
 TopDUContext* getRealContext(TopDUContext* ctx) {
-  if(ctx && ctx->flags() & TopDUContext::ProxyContextFlag && !ctx->importedParentContexts().isEmpty())
+  if(ctx && ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext() && !ctx->importedParentContexts().isEmpty())
     return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].context());
   else
     return ctx;

@@ -119,7 +119,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       QString file( topCtx->parsingEnvironmentFile()->url().str() );
 
       KUrl url = KUrl(file);
-      if(topCtx->flags() & TopDUContext::ProxyContextFlag)
+      if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
         url.addPath("_[proxy]_");
       
       //Find the context this one is derived from. If there is one, connect it with a line, and shorten the url.
@@ -137,7 +137,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     } else {
       label = "unknown file";
     }
-    if(topCtx->flags() & TopDUContext::ProxyContextFlag)
+    if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
       label = "Proxy-context " + label;
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();

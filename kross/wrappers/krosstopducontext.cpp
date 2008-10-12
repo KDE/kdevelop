@@ -53,7 +53,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses)
 
 	public:
-		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, ProxyContextFlag=KDevelop::TopDUContext::ProxyContextFlag, AnyFlag=KDevelop::TopDUContext::AnyFlag, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
+// 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, ProxyContextFlag=KDevelop::TopDUContext::ProxyContextFlag, AnyFlag=KDevelop::TopDUContext::AnyFlag, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
 		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }

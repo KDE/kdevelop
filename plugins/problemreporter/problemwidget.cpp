@@ -49,6 +49,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainobserver.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
@@ -89,13 +90,13 @@ void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUCon
   hadContexts.insert(context);
 
   allProblems += context->problems();
-  bool isProxy = context->flags() & TopDUContext::ProxyContextFlag;
+  bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
   foreach(DUContext::Import ctx, context->importedParentContexts()) {
     TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context());
     if(topCtx) {
       //If we are starting at a proxy-context, only recurse into other proxy-contexts,
       //because those contain the problems.
-      if(!isProxy || (topCtx->flags() & TopDUContext::ProxyContextFlag))
+      if(!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
         collectProblems(allProblems, topCtx, hadContexts);
     }
   }

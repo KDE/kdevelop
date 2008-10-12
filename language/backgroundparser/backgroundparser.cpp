@@ -394,9 +394,8 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         ++d->m_doneParseJobs;
         updateProgressBar();
 
-        //It may be needed to reparse some files that were changed during parsing. 
-        if (!d->m_timer.isActive())
-            d->m_timer.start();
+        //Continue creating more parse-jobs
+        QMetaObject::invokeMethod(this, "parseDocuments", Qt::QueuedConnection);
     }
 }
 

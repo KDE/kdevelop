@@ -28,6 +28,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/parsingenvironment.h>
 #include <project/projectmodel.h>
 
 using namespace KDevelop;
@@ -89,7 +90,7 @@ QWidget* ProjectFileData::expandingWidget() const {
   
   QList<KDevelop::TopDUContext*> contexts = KDevelop::DUChain::self()->chainsForDocument(u);
   foreach( KDevelop::TopDUContext* ctx, contexts )
-    if( !(ctx->flags() & KDevelop::TopDUContext::ProxyContextFlag) )
+    if( !(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()) )
       chosen = ctx;
 
   

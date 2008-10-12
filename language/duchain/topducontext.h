@@ -216,26 +216,10 @@ public:
   
   enum Flags {
     NoFlags = 0,
-    /**
-     * A language-specific flag used by C++ to mark one context as a proxy of another.
-     * If this flag is set on a context, the first imported context should be used for any computations
-     * like searches, listing, etc. instead of using this context.
-     *
-     * The problems should be stored within the proxy-contexts, and optionally there may be
-     * any count of imported proxy-contexts imported behind the content-context(This can be used for tracking problems)
-     *
-     * Note: This flag does not directly change the behavior of the language-independent du-chain.
-     */
-    ProxyContextFlag = 1,
-    /**
-     * Placeholder used in searching-functions, when the flag should simply be ignored.
-     * */
-    AnyFlag=2,
-    /**
-     * Can be used by language parts to mark contexts they currently update(for their internal usage)
-     * */
-    UpdatingContext = 4,
-    LastFlag
+    ///Can be used by language parts to mark contexts they currently update(for their internal usage)
+    UpdatingContext = 1,
+    ///You can define own language-dependent flags behind this flag
+    LastFlag = 2
   };
   
   enum Features {

@@ -30,6 +30,7 @@
 #include "../editor/hashedstring.h"
 #include "../languageexport.h"
 #include "duchainbase.h"
+#include "topducontext.h"
 
 namespace KDevelop
 {
@@ -85,6 +86,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
     virtual int type() const;
 };
 
+///The data class used for storing. Use this as base-class of your custom data classes for classes derived from
+///ParsingEnvironmentFile
+class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBaseData {
+  public:
+  ParsingEnvironmentFileData() : m_isProxyContext(false), m_features(TopDUContext::VisibleDeclarationsAndContexts) {
+  }
+  bool m_isProxyContext;
+  TopDUContext::Features m_features;
+};
+
 /**
  * This represents all information about a specific parsed file that is needed
  * to match the file to a parsing-environment.
@@ -99,7 +110,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
   public:
     virtual ~ParsingEnvironmentFile();
     ParsingEnvironmentFile();
-    ParsingEnvironmentFile(DUChainBaseData& data);
+    ParsingEnvironmentFile(ParsingEnvironmentFileData& data);
 
     ///@see ParsingEnvironmentType
     virtual int type() const;
@@ -110,9 +121,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///Should return the indexed version of the top-context
     virtual KDevelop::IndexedTopDUContext indexedTopContext() const = 0;
     
-    /**
-     * Should return a correctly filled ModificationRevision of the source it was created from.
-     * */
+    ///Should return a correctly filled ModificationRevision of the source it was created from.
     virtual ModificationRevision modificationRevision() const = 0;
 
     ///Should return whether this file matches into the given environment
@@ -120,6 +129,31 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
 
     ///Should use language-specific information to decide whether the top-context that has this data attached needs to be reparsed
     virtual bool needsUpdate() const = 0;
+    
+    /**
+     * A language-specific flag used by C++ to mark one context as a proxy of another.
+     * If this flag is set on a context, the first imported context should be used for any computations
+     * like searches, listing, etc. instead of using this context.
+     *
+     * The problems should be stored within the proxy-contexts, and optionally there may be
+     * any count of imported proxy-contexts imported behind the content-context(This can be used for tracking problems)
+     *
+     * Note: This flag does not directly change the behavior of the language-independent du-chain.
+     */
+    bool isProxyContext() const;
+    
+    ///Sets the flag
+    void setIsProxyContext(bool);
+    
+    ///The features of the attached top-context. They are automatically replicated here by the top-context, so they
+    ///are accessible even without the top-context loaded.
+    TopDUContext::Features features() const;
+    
+    DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile);
+    
+  private:
+    friend class TopDUContext;
+    void setFeatures(TopDUContext::Features);
 };
 
 typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;

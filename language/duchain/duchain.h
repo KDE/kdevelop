@@ -37,6 +37,7 @@ class IdentifiedFile;
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
 class ParsingEnvironmentFile;
+typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 class Definitions;
 class Uses;
 
@@ -98,21 +99,31 @@ public:
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * When no fitting chain is in memory, one may be loaded from disk.
-   * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
-   *              Else a context will be searched that exactly matches the given flags.
+   * @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * When no fitting chain is in memory, one may be loaded from disk.
-   * @param flags If this is TopDUContext::AnyFlag, context-flags will be ignored while searching.
-   *              Else a context will be searched that exactly matches the given flags.
+   * @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
    *
    * Prefer this over the KUrl version.
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags = TopDUContext::AnyFlag) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;
 
+  /**
+   * Find the environment-file of a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
+   * When no fitting chain is in memory, one may be loaded from disk.
+   *
+   * This should be preferred over chainForDocument when only the environment-info is needed, because the TopDUContext is not loaded in this function.
+   * 
+   ** @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
+   *
+   * Prefer this over the KUrl version.
+   * */
+  Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;  
+  
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;
 

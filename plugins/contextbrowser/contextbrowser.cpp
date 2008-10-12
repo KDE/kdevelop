@@ -47,6 +47,7 @@
 #include <language/duchain/use.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/duchain/parsingenvironment.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/backgroundparser/parsejob.h>
@@ -492,7 +493,7 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
 {
   if(!ctx)
     return;
-  if(dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->flags() & TopDUContext::ProxyContextFlag && !ctx->importedParentContexts().isEmpty())
+  if(dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile() && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()->isProxyContext() && !ctx->importedParentContexts().isEmpty())
     return registerAsRangeWatcher(ctx->importedParentContexts()[0].context());
 
   foreach(Declaration* decl, ctx->localDeclarations())

@@ -691,31 +691,39 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
   return chains;
 }
 
-TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
-  return chainForDocument( IndexedString(document), environment, flags );
+TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
+  return chainForDocument( IndexedString(document), environment, onlyProxyContexts, noProxyContexts );
 }
-TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, TopDUContext::Flags flags ) const {
+
+ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
 
   if(sdDUChainPrivate->m_destroyed)
-    return 0;
+    return ParsingEnvironmentFilePointer();
 
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   QList< ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
   QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
   while(it != list.constEnd()) {
-    if(*it && (*it)->matchEnvironment(environment)) {
-      TopDUContext* ctx = (*it)->topContext();
-      if(ctx && (flags == TopDUContext::AnyFlag || ctx->flags() == flags))
-        return ctx;
-      else if(!ctx) {
-        kDebug() << "could not get context from environment-information for" << document.str();
-      }
+    if(*it && (*it)->matchEnvironment(environment) && (!onlyProxyContexts || (*it)->isProxyContext()) && (!noProxyContexts || !(*it)->isProxyContext())) {
+      return *it;
     }
     ++it;
   }
 
-  return 0;
+  return ParsingEnvironmentFilePointer();
+}
+
+TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
+
+  if(sdDUChainPrivate->m_destroyed)
+    return 0;
+  ParsingEnvironmentFilePointer envFile = environmentFileForDocument(document, environment, onlyProxyContexts, noProxyContexts);
+  if(envFile) {
+    return envFile->topContext();
+  }else{
+    return 0;
+  }
 }
 
 DUChainObserver* DUChain::notifier()
@@ -857,7 +865,6 @@ void DUChain::aboutToQuit()
   sdDUChainPrivate->clear();
   sdDUChainPrivate->m_destroyed = true;
 }
-
 
 uint DUChain::newTopContextIndex() {
   static QAtomicInt& currentId( globalItemRepositoryRegistry().getCustomCounter("Top-Context Counter", 1) );

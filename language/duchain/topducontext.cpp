@@ -836,10 +836,18 @@ TopDUContext::Features TopDUContext::features() const
 void TopDUContext::setFeatures(Features features)
 {
   d_func_dynamic()->m_features = features;
+  
+  //Replicate features to ParsingEnvironmentFile
+  if(parsingEnvironmentFile())
+    parsingEnvironmentFile()->setFeatures(features);
 }
 
 void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
+  
+  //Replicate features to ParsingEnvironmentFile
+  if(file)
+    file->setFeatures(d_func()->m_features);
 }
 
 ///Decides whether the cache contains a valid list of visible declarations for the given hash.
