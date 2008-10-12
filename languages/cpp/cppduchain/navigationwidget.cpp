@@ -51,8 +51,6 @@
 #include "parser/rpp/chartools.h"
 #include "parser/rpp/macrorepository.h"
 #include "classdeclaration.h"
-#include <util/useswidget.h>
-#include <qboxlayout.h>
 
 using namespace KDevelop;
 using namespace rpp;
@@ -541,6 +539,20 @@ class NavigationContext : public KShared {
               makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
             }
           }
+
+          QMap<IndexedString, QList<SimpleRange> > uses = m_declaration->logicalDeclaration(m_topContext.data())->uses();
+
+          if(!uses.isEmpty()) {
+            m_currentText += labelHighlight(i18n("<br />Uses:<br />"));
+            for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+              m_currentText += " " + Qt::escape(KUrl(it.key().str()).fileName()) + "<br />";
+              foreach(const SimpleRange& range, *it) {
+                m_currentText += "  ";
+                makeLink( QString("%1").arg(range.start.line+1), QString("%1").arg(::qHash(range) + it.key().hash()), NavigationAction(KUrl(it.key().str()), range.start.textCursor()) );
+              }
+              m_currentText += "<br/>";
+            }
+          }
         }
         //m_currentText += "<br />";
       }
@@ -550,10 +562,6 @@ class NavigationContext : public KShared {
       m_currentText += "</small></small></p></body></html>";
 
       return m_currentText;
-    }
-    
-    DeclarationPointer declaration() const {
-      return m_declaration;
     }
   protected:
     DeclarationPointer m_declaration;
@@ -743,8 +751,6 @@ NavigationContextPointer NavigationContext::execute(NavigationAction& action)
           else*/
             cursor = action.decl->range().textRange().start();
         }
-        
-        action.decl->activateSpecialization();
 
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
         QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
@@ -930,7 +936,7 @@ private:
   QString m_body;
 };
 
-NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext), m_declaration(declaration), m_usesWidget(0)
+NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext), m_declaration(declaration)
 {
   initBrowser(400);
 
@@ -940,7 +946,7 @@ NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDe
   setContext( m_startContext );
 }
 
-NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext), m_usesWidget(0) {
+NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(topContext) {
   initBrowser(200);
 
 //The first context is registered so it is kept alive by the shared-pointer mechanism
@@ -949,7 +955,7 @@ NavigationWidget::NavigationWidget(const IncludeItem& includeItem, KDevelop::Top
   setContext( m_startContext );
 }
 
-NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& preprocessedBody, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(0), m_usesWidget(0) {
+NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& preprocessedBody, const QString& htmlPrefix, const QString& htmlSuffix) : m_topContext(0) {
   initBrowser(200);
 
 //The first context is registered so it is kept alive by the shared-pointer mechanism
@@ -959,22 +965,15 @@ NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& pr
 }
 
 void NavigationWidget::initBrowser(int height) {
-  m_browser = new KTextBrowser;
-  
-  m_browser->setOpenLinks(false);
-  m_browser->setOpenExternalLinks(false);
+  setOpenLinks(false);
+  setOpenExternalLinks(false);
   resize(height, 100);
-  m_browser->setNotifyClick(true);
+  setNotifyClick(true);
 
-  QVBoxLayout* layout = new QVBoxLayout;
-  layout->addWidget(m_browser);
-  setLayout(layout);
-  
   connect( this, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
 }
 
 NavigationWidget::~NavigationWidget() {
-  delete m_usesWidget;
 }
 
 void NavigationWidget::setContext(NavigationContextPointer context)
@@ -984,21 +983,11 @@ void NavigationWidget::setContext(NavigationContextPointer context)
 }
 
 void NavigationWidget::update() {
-  setUpdatesEnabled(false);
   Q_ASSERT( m_context );
-  int scrollPos = m_browser->verticalScrollBar()->value();
-  m_browser->setHtml( m_context->html() );
-  
-  delete m_usesWidget;
-  m_usesWidget = 0;
-  
-  if(m_context->declaration()) {
-    m_usesWidget = new KDevelop::UsesWidget(m_context->declaration().data());
-    layout()->addWidget(m_usesWidget);
-  }
-  m_browser->verticalScrollBar()->setValue(scrollPos);
-  m_browser->scrollToAnchor("selectedItem");
-  setUpdatesEnabled(true);
+  int scrollPos = verticalScrollBar()->value();
+  setHtml( m_context->html() );
+  verticalScrollBar()->setValue(scrollPos);
+  scrollToAnchor("selectedItem");
 }
 
 void NavigationWidget::anchorClicked(const QUrl& url) {
@@ -1027,11 +1016,11 @@ void NavigationWidget::accept() {
 }
 
 void NavigationWidget::up() {
-  m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepSub );
+  verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepSub );
 }
 
 void NavigationWidget::down() {
-  m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepAdd );
+  verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepAdd );
 }
 
 QString NavigationWidget::shortDescription(KDevelop::Declaration* declaration) {
