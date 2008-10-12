@@ -559,7 +559,7 @@ DUContext::~DUContext( )
 
   if(!top->deleting() || !top->isOnDisk()) {
     QualifiedIdentifier id(scopeIdentifier(true));
-    if(d->m_inSymbolTable) {
+    if(d->m_inSymbolTable && parentContext()) {
       PersistentSymbolTable::self().removeContext(id, this);
 
       //We put namespaces into the code-model
@@ -1545,19 +1545,20 @@ bool DUContext::inSymbolTable() const
 
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
-    if(!d_func()->m_inSymbolTable && inSymbolTable) {
-      QualifiedIdentifier id(scopeIdentifier(true));
-      PersistentSymbolTable::self().addContext(id, this);
+    if(parentContext()) {
+      if(!d_func()->m_inSymbolTable && inSymbolTable) {
+        QualifiedIdentifier id(scopeIdentifier(true));
+        PersistentSymbolTable::self().addContext(id, this);
 
-      if(d_func()->m_contextType == DUContext::Namespace)
-        CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
-      
-    }else if(d_func()->m_inSymbolTable && !inSymbolTable) {
-      QualifiedIdentifier id(scopeIdentifier(true));
-      PersistentSymbolTable::self().removeContext(id, this);
-      
-      if(d_func()->m_contextType == DUContext::Namespace)
-        CodeModel::self().removeItem(url(), id);
+        if(d_func()->m_contextType == DUContext::Namespace)
+          CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
+      }else if(d_func()->m_inSymbolTable && !inSymbolTable) {
+        QualifiedIdentifier id(scopeIdentifier(true));
+        PersistentSymbolTable::self().removeContext(id, this);
+        
+        if(d_func()->m_contextType == DUContext::Namespace)
+          CodeModel::self().removeItem(url(), id);
+      }
     }
 
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
