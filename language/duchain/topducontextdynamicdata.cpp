@@ -119,7 +119,9 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
       kWarning() << "Cannot load a top-context, the requered language-support is probably not loaded";
       return 0;
     }
-    Q_ASSERT(ret); //If this triggers, the top-context type is not registered. Most probably it means that the specific language-support is not loaded.
+    
+    //Disable the updating flag on loading. Sometimes it may be set when the context was saved while it was updated
+    ret->setFlags( (TopDUContext::Flags) (ret->flags() & (~TopDUContext::UpdatingContext)) );
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
     target.m_data.clear();
