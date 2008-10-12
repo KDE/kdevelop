@@ -40,13 +40,15 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/irun.h>
+#include <interfaces/iruncontroller.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <project/projectmodel.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
-#include <interfaces/context.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/dumpchain.h>
@@ -110,7 +112,6 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
 
-    m_clickedItem=0;
     m_highlight = new CMakeHighlighting(this);
     {
         DUChainWriteLocker lock(DUChain::lock());
@@ -472,6 +473,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                         targetItem = new CMakeTestTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
                         break;
                 }
+                QString targetName=t;
+                if(v.targetHasProperty(t, "OUTPUT_NAME"))
+                    targetName=v.targetProperty(t, "OUTPUT_NAME");
+                targetItem->setData(t);
 
                 foreach( const QString & sFile, dependencies )
                 {
@@ -572,6 +577,13 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
         newList.append(KUrl(s));
     }
     return newList;
+}
+
+KUrl CMakeProjectManager::targetUrl(KDevelop::ProjectTargetItem* target) const
+{
+    KUrl ret=buildDirectory(target);
+    ret.addPath(target->data().toString());
+    return ret;
 }
 
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
@@ -799,20 +811,38 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
     if( items.isEmpty() )
         return IPlugin::contextMenuExtension( context );
 
+    m_clickedItems = items;
     ContextMenuExtension menuExt;
     if(items.count()==1 && dynamic_cast<DUChainAttatched*>(items.first()))
     {
-        m_clickedItem = items.first();
         KAction* action = new KAction( i18n( "Jump to target definition" ), this );
         connect( action, SIGNAL( triggered() ), this, SLOT( jumpToDeclaration() ) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
+    
+    QStringList targets;
+    foreach(KDevelop::ProjectBaseItem* item, items)
+    {
+        KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
+        if(t && (dynamic_cast<KDevelop::ProjectTestTargetItem*>(t) || dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)))
+        {
+            targets.append(t->text());
+        }
+    }
+    
+    if(!targets.isEmpty())
+    {
+        KAction* action = new KAction( i18n( "Run '%1'", targets.join(", ")), this );
+        connect( action, SIGNAL( triggered() ), this, SLOT( runTargets() ) );
+        menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+    }
+    
     return menuExt;
 }
 
 void CMakeProjectManager::jumpToDeclaration()
 {
-    DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItem);
+    DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItems.first());
     if(du)
     {
         KTextEditor::Cursor c;
@@ -827,6 +857,24 @@ void CMakeProjectManager::jumpToDeclaration()
         }
         
         ICore::self()->documentController()->openDocument(url, c);
+    }
+}
+
+void CMakeProjectManager::runTargets()
+{
+    kDebug(9042) << "run targets " << m_clickedItems;
+    foreach(KDevelop::ProjectBaseItem* item, m_clickedItems)
+    {
+        KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
+        if(t && (dynamic_cast<KDevelop::ProjectTestTargetItem*>(t) || dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)))
+        {
+            kDebug(9032) << "Running target: " << t->text() << targetUrl(t);
+            IRun r;
+            r.setExecutable(targetUrl(t).toLocalFile());
+            r.setInstrumentor("default");
+            
+            ICore::self()->runController()->execute(r);
+        }
     }
 }
 

@@ -194,6 +194,18 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
     return 1;
 }
 
+int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
+{
+    foreach(const QString& tname, targetProps->targets())
+    {
+        foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
+        {
+            m_targetProperties[tname][t.first] += t.second;
+        }
+    }
+    return 1;
+}
+
 int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
     kDebug(9042) << "adding subdirectory" << subd->sourceDir();

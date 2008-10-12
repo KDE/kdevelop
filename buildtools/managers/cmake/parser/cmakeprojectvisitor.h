@@ -84,6 +84,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const SetAst * );
         virtual int visit( const ForeachAst * );
         virtual int visit( const ProjectAst * );
+        virtual int visit( const SetTargetPropsAst * );
         virtual int visit( const StringAst * );
         virtual int visit( const SubdirsAst * );
         virtual int visit( const TryCompileAst * );
@@ -109,7 +110,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
         QStringList targetDependencies(const QString & target) const;
         QStringList includeDirectories() const { return m_includeDirectories; }
-        
+        QString targetProperty(const QString& targetName, const QString &propName) const
+            { return m_targetProperties[targetName][propName]; }
+        bool targetHasProperty(const QString& targetName, const QString &propName) const
+            { return m_targetProperties[targetName].contains(propName); }
+            
         int walk(const CMakeFileContent& fc, int line);
         
         enum VariableType { NoVar, CMake, ENV };
@@ -134,6 +139,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
     private:
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
 
+        typedef QMap<QString, QString> TargetProperties;
         struct VisitorState
         {
             const CMakeFileContent* code;
@@ -157,6 +163,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QMap<QString, QStringList> m_generatedFiles;
         QMap<QString, KDevelop::IndexedDeclaration> m_declarationsPerTarget;
         QMap<QString, TargetType> m_targetsType;
+        QMap<QString, TargetProperties> m_targetProperties;
         
         QStack< VisitorState > m_backtrace;
         QString m_root;

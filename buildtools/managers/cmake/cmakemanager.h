@@ -75,6 +75,7 @@ public:
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
+    virtual KUrl targetUrl(KDevelop::ProjectTargetItem* ) const;
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */,
             KDevelop::ProjectFolderItem* /*parent*/ ) { return false; }
@@ -123,6 +124,7 @@ public slots:
     void dirtyFile(const QString& file);
 
     void jumpToDeclaration();
+    void runTargets();
 
 private:
     static QString guessCMakeShare(const QString& cmakeBin);
@@ -153,7 +155,7 @@ private:
     QList<KDevelop::ProjectTargetItem*> m_targets;
     KDevelop::ReferencedTopDUContext m_buildstrapContext;
     
-    KDevelop::ProjectBaseItem *m_clickedItem;
+    QList<KDevelop::ProjectBaseItem*> m_clickedItems;
 };
 
 #endif
