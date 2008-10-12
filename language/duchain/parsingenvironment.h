@@ -149,7 +149,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///are accessible even without the top-context loaded.
     TopDUContext::Features features() const;
     
-    DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile);
+    DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
     
   private:
     friend class TopDUContext;
