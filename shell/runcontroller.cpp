@@ -203,12 +203,17 @@ QStringList splitArguments(const QString& args)
 IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
+    IRun run;
+    
     QAction* projectAction = d->currentTargetAction->currentAction();
+    
+    if(!projectAction)
+        return run;
+    
     Target data=qvariant_cast<Target>(projectAction->data());
     if (projectAction)
         project = data.second;
     
-    IRun run;
     if (!project)
         return run;
     
