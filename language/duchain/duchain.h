@@ -200,7 +200,6 @@ private Q_SLOTS:
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void aboutToQuit();
-  void cleanup();
 private:
   /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
   /// Do this to prevent KDevelop from unloading a top-context that you plan to use. Don't forget calling unReferenceToContext again,
