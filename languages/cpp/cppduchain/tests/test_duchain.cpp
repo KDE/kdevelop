@@ -515,7 +515,6 @@ void TestDUChain::testEnum()
   QByteArray method("enum Enum { Value1 = 5 //Comment\n, value2 //Comment1\n }; enum Enum2 { Value21, value22 = 0x02 }; union { int u1; float u2; };");
 
   TopDUContext* top = parse(method, DumpNone);
-
 /*  {
   DUChainWriteLocker lock(DUChain::lock());
     Declaration* decl = findDeclaration(top, QualifiedIdentifier("Value1"));
@@ -532,6 +531,10 @@ void TestDUChain::testEnum()
   QCOMPARE(top->localDeclarations().count(), 3);
   QCOMPARE(top->childContexts().count(), 3);
 
+  ///@todo Test for the enum ranges and fix them, they overlap
+  kDebug() << top->childContexts()[0]->range().textRange();
+  kDebug() << top->localDeclarations()[0]->range().textRange();
+  
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
   Declaration* enumDecl = decl;
   QVERIFY(decl);
