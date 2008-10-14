@@ -37,6 +37,7 @@
 
 // #define ifDebugLostSpace(x) x
 #define ifDebugLostSpace(x)
+#define DEBUG_INCORRECT_DELETE
 
 ///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
 ///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
@@ -118,6 +119,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     QList<AbstractItemRepository*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
     KLockFile::Ptr m_lock;
+    mutable QMutex m_mutex;
 };
 
 ///The global item-repository registry that is used by default
@@ -559,6 +561,19 @@ class Bucket {
       
       Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
       ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
+#ifdef DEBUG_INCORRECT_DELETE
+      //Make sure the item cannot be found any more
+      {
+        unsigned short localHash = hash % m_objectMapSize;
+        unsigned short currentIndex = m_objectMap[localHash];
+        
+        while(currentIndex && currentIndex != index) {
+          previousIndex = currentIndex;
+          currentIndex = followerIndex(currentIndex);
+        }
+        Q_ASSERT(!currentIndex); //The item must not be found
+      }
+#endif
     }
     
     inline const Item* itemFromIndex(unsigned short index) const {
