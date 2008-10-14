@@ -206,6 +206,8 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     }
     
     d->m_declarations.deleteItem(index);
+    uint stillExistingIndex = d->m_declarations.findIndex(request);
+    Q_ASSERT(!stillExistingIndex);
   }
 
   //This inserts the changed item
