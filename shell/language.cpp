@@ -81,7 +81,7 @@ QMutex *Language::parseMutex(QThread *thread) const
 
 void Language::lockAllParseMutexes()
 {
-    d->mutexMutex.lock();
+    QMutexLocker lock(&d->mutexMutex);
 
     QList<QMutex*> waitForLock;
 
@@ -93,21 +93,18 @@ void Language::lockAllParseMutexes()
         waitForLock.append(it.value());
     }
 
-    // Work through the stragglers
-    foreach (QMutex* mutex, waitForLock) {
+    lock.unlock();
+    // Work through the stragglers. mutexMutex must be unlocked, else we deadlock.
+    foreach (QMutex* mutex, waitForLock)
         mutex->lock();
-    }
 }
 
 void Language::unlockAllParseMutexes()
 {
-    QHashIterator<QThread*, QMutex*> it = d->parseMutexes;
-    while (it.hasNext()) {
-        it.next();
-        it.value()->unlock();
-    }
-
-    d->mutexMutex.unlock();
+    QMutexLocker lock(&d->mutexMutex);
+    
+    foreach(QMutex* mutex, d->parseMutexes)
+        mutex->unlock();
 }
 
 void Language::threadFinished()
