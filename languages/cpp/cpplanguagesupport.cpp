@@ -794,7 +794,8 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
 {
   DUChainReadLocker lock(DUChain::lock());
   const ParsingEnvironment* env = standardEnvironment();
-  KDevelop::TopDUContext* top = KDevelop::DUChain::self()->chainForDocument(url, env);
+  KDevelop::TopDUContext* top;
+  top = KDevelop::DUChain::self()->chainForDocument(url, env, Cpp::EnvironmentManager::isSimplifiedMatching());
 
   if( !top ) {
     //kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";
