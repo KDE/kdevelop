@@ -392,6 +392,8 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_declarationCtrl = new DeclarationController();
     m_contextCtrl = new ContextController(this);
     
+    m_allowLockedUpdate = false;
+    
     QHBoxLayout* buttons = new QHBoxLayout;
     m_lockButton = new QToolButton();
     m_lockButton->setCheckable(true);
