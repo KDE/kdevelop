@@ -92,12 +92,14 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
     DVCSjobTest tester;
-    QTimer *timer = new QTimer;
-    QObject::connect(timer, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
-    timer->start(1);
-    QTimer *timer2 = new QTimer;
-    QObject::connect(timer2, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
-    timer2->start(2);
+    QTimer::singleShot(200, &tester, SLOT(checkDVCS()));
+    tester.checkDVCS();
+//    QTimer *timer = new QTimer;
+//    QObject::connect(timer, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
+//    timer->start(1000);
+//    QTimer *timer2 = new QTimer;
+//    QObject::connect(timer2, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
+//    timer2->start(2);
     return app.exec();
 }
 
