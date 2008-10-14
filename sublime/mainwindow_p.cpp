@@ -106,7 +106,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 {
     recreateCentralWidget();
 
-    QAction* action = new AreaSelectionAction(this, controller);
+    KAction* action = new AreaSelectionAction(this, controller);
     m_mainWindow->actionCollection()->addAction("switch_area", action);
 }
 

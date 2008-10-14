@@ -142,11 +142,11 @@ private:
     QVector<QString> areaIds_;
 };
 
-class AreaSelectionAction : public QWidgetAction
+class AreaSelectionAction : public KAction
 {
 public:
     AreaSelectionAction(MainWindowPrivate* parent, Controller* controller)
-    : QWidgetAction(parent), window_(parent->m_mainWindow),
+    : KAction(parent), window_(parent->m_mainWindow),
       controller_(controller) {}
 
     QWidget* createWidget(QWidget* parent);
