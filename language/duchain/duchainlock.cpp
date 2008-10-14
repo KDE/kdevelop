@@ -23,6 +23,7 @@
 #include <unistd.h>
 #include <QtCore/QThread>
 #include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 #include <QtCore/QHash>
 #include <QtCore/QStack>
 #include <QTime>
@@ -114,6 +115,8 @@ public:
   int m_writerRecursion; ///How often is the chain write-locked by the writer?
   int m_totalReaderRecursion; ///How often is the chain read-locked recursively by all readers? Should be sum of all m_reader values
 
+  QWaitCondition m_waitForWriter;
+
   ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
   typedef google::dense_hash_map<Qt::HANDLE, int> ReaderMap;
   ReaderMap m_readers;
@@ -157,28 +160,17 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
   kDebug(9505) << "DUChain read lock requested by thread:" << QThread::currentThreadId();
 #endif
-
   if(timeout == 0)
-    timeout = 40000;
-  
-  QMutexLocker lock(&d->m_mutex);
+    timeout = 60000;
 
-  unsigned int currentTime = 0;
+  d->m_mutex.lock();
+
   bool locked = false;
 
-  unsigned int sleepTime = 10000;
-  unsigned int cycles = (timeout*1000)/sleepTime;
-  // 10 second timeout...
-  while ( (d->m_writer && d->m_writer != QThread::currentThreadId()) && currentTime <= cycles) {
-    lock.unlock();
-    usleep(sleepTime);
-    currentTime++;
-    lock.relock();
-#ifdef DEBUG_LOG_BACKTRACE
-    d->auditTime(); //Search for deadlocks
-#endif
-  }
-
+  QTime startTime = QTime::currentTime();
+  while((d->m_writer && d->m_writer != QThread::currentThreadId()) && (uint)startTime.msecsTo(QTime::currentTime()) < timeout)
+    d->m_waitForWriter.wait(&d->m_mutex, timeout);
+  
   if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
     DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
     if ( it != d->m_readers.end() ) {
@@ -202,6 +194,7 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 #endif
   }
 
+  d->m_mutex.unlock();
   return locked;
 }
 
@@ -272,12 +265,10 @@ bool DUChainLock::lockForWrite(uint timeout)
 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  unsigned int currentTime = 0;
   bool locked = false;
+  uint currentTime = 0;
 
-  ///@todo use some wake-up queue instead of sleeping
-  // 10 second timeout...
-  
+  //We cannot use m_waitForWriterForWriter here, because we also have to wait for other readers to finish
   while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < timeout) {
     lock.unlock();
     usleep(10000);
@@ -314,6 +305,7 @@ void DUChainLock::releaseWriteLock()
   if( !d->m_writerRecursion )
     d->m_writer = 0;
 
+  d->m_waitForWriter.wakeAll();
 #ifdef DEBUG_LOCK_TIMING
   d->auditTime();
 #endif
