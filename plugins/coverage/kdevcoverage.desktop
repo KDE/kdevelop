@@ -3,6 +3,7 @@ Type=Service
 Icon=kdevelop
 Exec=blubb
 Comment=Gcov C(++) coverage
+Comment[nds]=Gcov-C(++)-Afdecken
 Comment[pt]=Cobertura do Gcov C(++)
 Comment[pt_BR]=Cobertura do Gcov C(++)
 Comment[sv]=Gcov C(++)-täckningsverktyg
@@ -10,6 +11,7 @@ Comment[uk]=Покриття Gcov C(++)
 Comment[zh_TW]=Gcov C/C++ 範圍
 
 Name=Code coverage report
+Name[nds]=Kodeafdeck-Bericht
 Name[pt]=Relatório de cobertura do código
 Name[pt_BR]=Relatório de cobertura do código
 Name[sv]=Kodtäckningsstöd
