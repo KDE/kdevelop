@@ -78,6 +78,7 @@ install( FILES kcm_kdev_projectsettings.desktop DESTINATION ${SERVICES_INSTALL_D
 ########### Run Options
 
 set( runsettings_cfg_SRCS
+    runpreferences/projectitemlineedit.cpp
     runpreferences/runpreferences.cpp
     runpreferences/runconfig.cpp
 )
