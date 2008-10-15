@@ -56,6 +56,6 @@ namespace KDevelop {
             IndexedDeclaration m_declaration;
             bool m_showingUses;
     };
-};
+}
 
 #endif
