@@ -32,6 +32,7 @@ install( FILES
     environmentgrouplist.h
     pushvalue.h
     kdevvarlengtharray.h
+    useswidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
     
 install( FILES
