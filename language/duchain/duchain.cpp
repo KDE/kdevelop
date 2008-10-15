@@ -175,7 +175,7 @@ class DUChainPrivate
 {
   class CleanupThread : public QThread {
     public:
-      CleanupThread(DUChainPrivate* data) : m_data(data), m_stopRunning(false) {
+      CleanupThread(DUChainPrivate* data) : m_stopRunning(false), m_data(data) {
       }
       
       void stopThread() {
@@ -224,7 +224,6 @@ public:
     m_cleanup->stopThread();
     delete m_cleanup;
     delete instance;
-    delete m_cleanup;
   }
 
   void clear() {
