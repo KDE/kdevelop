@@ -16,6 +16,19 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
+      <widget class="QLabel" name="label" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text" >
+        <string>Run Targets:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QComboBox" name="targetCombo" />
      </item>
      <item>

@@ -73,6 +73,7 @@ private Q_SLOTS:
     void slotProjectOpened(KDevelop::IProject* project);
     void slotProjectClosing(KDevelop::IProject* project);
     void slotKillJob();
+    void slotConfigurationChanged();
 
 private:
     QAction* addTarget(KDevelop::IProject * project, const QString& targetName);

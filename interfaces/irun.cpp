@@ -31,6 +31,7 @@ class IRun::IRunPrivate : public QSharedData
         KUrl executable, workingDirectory;
         QString instrumentor, environmentKey;
         QStringList arguments, instrumentorArguments;
+        QList<ProjectBaseItem*> compilationDependencies;
 };
 
 IRun::IRun()
@@ -131,6 +132,16 @@ void IRun::setInstrumentorArguments(const QStringList & arguments)
 void IRun::clearInstrumentorArguments()
 {
     d->instrumentorArguments.clear();
+}
+
+QList<ProjectBaseItem*> IRun::compilationDependencies() const
+{
+	return d->compilationDependencies;
+}
+
+void IRun::setCompilationDependencies(const QList<ProjectBaseItem*>& deps)
+{
+	d->compilationDependencies=deps;
 }
 
 #include "irun.moc"

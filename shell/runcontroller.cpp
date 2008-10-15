@@ -31,8 +31,13 @@ Boston, MA 02110-1301, USA.
 #include <KLocale>
 #include <KDebug>
 #include <KColorScheme>
+#include <KCompositeJob>
 #include <interfaces/iproject.h>
+#include <interfaces/idocumentcontroller.h>
 #include <outputview/ioutputview.h>
+#include <project/projectmodel.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include "core.h"
 #include "plugincontroller.h"
@@ -70,11 +75,72 @@ RunController::RunController(QObject *parent)
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
+class ExecuteCompositeJob : public KCompositeJob
+{
+    public:
+        ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs) : KCompositeJob(parent)
+        {
+            qDebug() << "execute composite" << jobs;
+            foreach(KJob* job, jobs) {
+                addSubjob(job);
+            }
+        }
+        
+    public slots:
+        virtual void start()
+        {
+            slotResult(0);
+        }
+        
+        void slotResult(KJob* job)
+        {
+            kDebug() << "finished: "<< job;
+            if(job)
+                KCompositeJob::slotResult(job);
+            
+            if(hasSubjobs())
+            {
+                if(!job || job->error()==0) {
+                    kDebug() << "remaining: " << subjobs().count() << subjobs();
+                    KJob* nextJob=subjobs().first();
+                    nextJob->start();
+                }
+            } else {
+                emitResult();
+            }    
+        }
+};
+
 KJob* RunController::execute(const IRun & run)
 {
-    RunJob* job = new RunJob(this, run);
-    registerJob(job);
-    return job;
+    if(!run.compilationDependencies().isEmpty())
+        ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
+    
+    QList<KJob*> jobs;
+    foreach(ProjectBaseItem* item, run.compilationDependencies())
+    {
+        IProject* project = item->project();
+        if (!project)
+            return 0;
+
+        ProjectFolderItem* prjitem = project->projectItem();
+        IPlugin* fmgr = project->managerPlugin();
+        IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
+        IProjectBuilder* builder;
+        if( mgr )
+        {
+            builder=mgr->builder( prjitem );
+        }
+        
+        KJob* buildJob=builder->build( item );
+        jobs.append(buildJob);
+    }
+    
+    jobs.append(new RunJob(this, run));
+    ExecuteCompositeJob* ecj=new ExecuteCompositeJob(this, jobs);
+    ecj->setObjectName(jobs.last()->objectName());
+    registerJob(ecj);
+    return ecj;
 }
 
 RunController::~ RunController()
@@ -158,6 +224,19 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
     }
 }
 
+void KDevelop::RunController::slotConfigurationChanged()
+{
+    kDebug() << "updating runcontroller configuration";
+    //if we could check what project changed we wouldn't need to regenerate everything
+    foreach (QAction* action, d->currentTargetAction->actions()) {
+        delete action;
+    }
+    
+    foreach (IProject* project, Core::self()->projectController()->projects()) {
+        slotProjectOpened(project);
+    }
+}
+
 void RunController::slotExecute()
 {
     execute(defaultRun());
@@ -200,6 +279,26 @@ QStringList splitArguments(const QString& args)
     return ret;
 }
 
+//Copied from projectitemlineedit.cpp
+QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofetch)
+{
+    if(tofetch.isEmpty())
+        return QModelIndex();
+    
+    QModelIndex current=model->index(0,0, QModelIndex());
+    
+    foreach(const QString& currentName, tofetch)
+    {
+        QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
+        
+        if(l.count()>0)
+            current = model->index(0,0, l.first());
+        else
+            current = QModelIndex();
+    }
+    return current;
+}
+
 IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
@@ -207,12 +306,11 @@ IRun KDevelop::RunController::defaultRun() const
     
     QAction* projectAction = d->currentTargetAction->currentAction();
     
-    if(!projectAction)
-        return run;
-    
-    Target data=qvariant_cast<Target>(projectAction->data());
-    if (projectAction)
+    Target data;
+    if (projectAction) {
+        data=qvariant_cast<Target>(projectAction->data());
         project = data.second;
+    }
     
     if (!project)
         return run;
@@ -221,37 +319,34 @@ IRun KDevelop::RunController::defaultRun() const
 
     KConfigGroup group(project->projectConfiguration(), targetName+"-Run Options" );
 
-    run.setExecutable(group.readEntry( "Executable", QString()));
-    run.setWorkingDirectory(group.readEntry( "Working Directory", QString()));
-    run.setArguments(splitArguments(group.readEntry( "Arguments", QString() )));
-    run.setInstrumentor("default");
-
-    //NOTE: I think this should be dealt by the build system manager or not be dealt at all
-    //in case we did, we would need some connection between the executable
-    //running and the target in the buildsystem.
-    
-    if (group.readEntry("Compile Before Execution", false))
+    QString exec=group.readEntry("Executable", QString());
+    if(exec.isEmpty())
     {
-        if (group.readEntry("Install Before Execution", false))
-        {
-            if (group.readEntry("Super User Install", false))
-            {
-                ;// TODO: sudo make install
-            } else
-            {
-                ;// TODO: make install
-            }
-        } else
-        {
-            ;// TODO: make
-        }
+        QString target=group.readEntry("Run Item", QString());
+        #warning implement me! give a way to retrieve the exec url from the buildtool
     }
-
+    run.setExecutable(exec);
+    run.setWorkingDirectory(group.readEntry("Working Directory", QString()));
+    run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
     if (group.readEntry("Start In Terminal", false))
-    {
-        ;// TODO: start in terminal rather than output view
-    }
+        // TODO: start in terminal rather than output view
+        #warning Implement a Konsole instrumentor
+        run.setInstrumentor("konsole");
+    else
+        run.setInstrumentor("default");
+    
+    QStringList compileItems=group.readEntry("Compile Items", QStringList());
 
+    QList<ProjectBaseItem*> comp;
+    ProjectModel *model=ICore::self()->projectController()->projectModel();
+    foreach(const QString& it, compileItems)
+    {
+        QModelIndex idx=pathToIndex(model, it.split('/'));
+        ProjectBaseItem *it=model->item(idx);
+        comp += it;
+    }
+    run.setCompilationDependencies(comp);
+    
     return run;
 }
 

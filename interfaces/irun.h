@@ -29,6 +29,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
+class ProjectBaseItem;
 
 /**
  * This class holds all properties which specify a run session.
@@ -120,6 +121,22 @@ public:
      * Clear all arguments.
      */
     void clearInstrumentorArguments();
+
+    /**
+     * Set the project items that should be compiled before executing
+     */
+    void setCompilationDependencies(const QList<ProjectBaseItem*>& c);
+
+    /**
+     * Clear all compilation dependencies.
+     */
+    void clearCompilationDependencies();
+
+    /**
+     * The requested compilation dependencies
+     */
+    QList<ProjectBaseItem*> compilationDependencies() const;
+
 
 private:
     class IRunPrivate;
