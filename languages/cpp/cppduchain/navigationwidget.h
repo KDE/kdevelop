@@ -27,6 +27,7 @@
 #include "includeitem.h"
 #include <language/interfaces/quickopendataprovider.h>
 #include "cppduchainexport.h"
+#include "util/useswidget.h"
 
 class QWidget;
 class QTextBrowser;
@@ -101,6 +102,7 @@ namespace Cpp {
       
       QPointer<QTextBrowser> m_browser;
       KDevelop::DeclarationPointer m_declaration;
+      KDevelop::UsesWidget* m_usesWidget;
   };
 }
 

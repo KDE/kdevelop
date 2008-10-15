@@ -964,7 +964,7 @@ void NavigationWidget::initBrowser(int height) {
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
   resize(height, 100);
-  m_browser->setNotifyClick(true);
+  //m_browser->setNotifyClick(true);
 
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(m_browser);
