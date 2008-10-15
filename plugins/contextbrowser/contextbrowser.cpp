@@ -74,7 +74,7 @@ public:
 
     virtual Qt::DockWidgetArea defaultPosition()
     {
-        return Qt::LeftDockWidgetArea;
+        return Qt::BottomDockWidgetArea;
     }
 
     virtual QString id() const
