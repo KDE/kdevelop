@@ -40,6 +40,7 @@
 #include "../backgroundparser/backgroundparser.h"
 
 #include "topducontext.h"
+#include "topducontextdata.h"
 #include "topducontextdynamicdata.h"
 #include "parsingenvironment.h"
 #include "declaration.h"
@@ -384,12 +385,12 @@ public:
     storeAllInformation(); //Puts environment-information into a repository
 
     //We don't need to increase the reference-count, since the cleanup-mutex is locked
-    QVector<TopDUContext*> allLoadedContexts;
+    QSet<TopDUContext*> workOnContexts;
       
     for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
-      allLoadedContexts << (*it).second;
+      workOnContexts << (*it).second;
     
-    foreach(TopDUContext* context, allLoadedContexts) {
+    foreach(TopDUContext* context, workOnContexts) {
       
       context->m_dynamicData->store();
       
@@ -403,36 +404,70 @@ public:
     }
 
       //Unload all top-contexts that don't have a reference-count and that are not imported by a referenced one
-      QSet<TopDUContext*> referenced;
-      foreach(TopDUContext* context, m_referenceCounts.keys())
-        addRecursiveImports(referenced, context);
 
       QSet<IndexedString> unloadedNames;
-
-      QVector<uint> unloadContexts;
+      bool unloadedOne = true;
       
-      for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it) {
-        TopDUContext* context = (*it).second;
-        if(!referenced.contains(context)) {
-          //Unload the context, it's not referenced or imported by a referenced context
-//           kDebug(9505) << "unloading a top-context for" << context->url().str();
-          unloadedNames.insert(context->url());
-          unloadContexts << (*it).first;
+      bool unloadAllUnreferenced = !retries;
+      
+      //Now unload contexts, but only ones that are not imported by any other currently loaded context
+      //The complication: Since during the lock-break new references may be added, we must never keep
+      //the du-chain in an invalid state. Thus we can only unload contexts that are not imported by any
+      //currently loaded contexts. In case of loops, we have to unload everything at once.
+      while(unloadedOne) {
+        unloadedOne = false;
+        int hadUnloadable = 0;
+      
+        unloadContexts:
+        
+        foreach(TopDUContext* unload, workOnContexts) {
+          
+          bool hasReference = false;
+          
+          //Test if the context is imported by a referenced one
+          foreach(TopDUContext* context, m_referenceCounts.keys())
+            if(context == unload || context->imports(unload, SimpleCursor())) {
+              workOnContexts.remove(unload);
+              hasReference = true;
+            }
+          
+          if(!hasReference)
+            ++hadUnloadable; //We have found a context that is not referenced
+          else
+            continue; //This context is referenced
+          
+          bool isImportedByLoaded = false;
+          
+          FOREACH_FUNCTION(IndexedDUContext ctx, unload->d_func()->m_importers)
+            if(ctx.indexedTopContext().isLoaded())
+              isImportedByLoaded = true;
+          
+          //If we unload a context that is imported by other contexts, we create a bad loaded state
+          if(isImportedByLoaded && !unloadAllUnreferenced)
+            continue;
+          
+          unloadedNames.insert(unload->url());
+          instance->removeDocumentChain(unload);
+          workOnContexts.remove(unload);
+          unloadedOne = true;
+  
+          if(!unloadAllUnreferenced) {
+            //Eventually give other threads a chance to access the duchain
+            writeLock.unlock();
+            //Sleep to give the other threads a realistic chance to get a read-lock in between
+            usleep(500);
+            writeLock.lock();
+          }
+        }
+        if(hadUnloadable && !unloadedOne) {
+          Q_ASSERT(!unloadAllUnreferenced);
+          //This can happen in case of loops. We have o unload everything at one time.
+          kDebug(9505) << "found" << hadUnloadable << "unloadable contexts, but could not unload separately. Unloading atomically.";
+          unloadAllUnreferenced = true;
+          goto unloadContexts;
         }
       }
       
-      foreach(uint unload, unloadContexts) {
-        instance->removeDocumentChain(m_chainsByIndex[unload]);
-
-        if(retries) {
-          //Eventually give other threads a chance to access the duchain
-          writeLock.unlock();
-          //Sleep to give the other threads a realistic chance to get a read-lock in between
-          usleep(500);
-          writeLock.lock();
-        }
-      }
-
       foreach(IndexedString unloaded, unloadedNames) {
         if(!m_chainsByUrl.contains(unloaded))
           //No more top-contexts with the url are loaded, so also unload the environment-info
