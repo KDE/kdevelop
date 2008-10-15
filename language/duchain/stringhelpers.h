@@ -85,6 +85,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
      * Example: When "<>:" is given, ParamIterator will only parse the first identifier of a c++ scope
      * */
     ParamIterator( QString parens, QString source, int start = 0);
+    ~ParamIterator();
 
     ParamIterator& operator ++();
 

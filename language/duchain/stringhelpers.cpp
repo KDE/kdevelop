@@ -377,6 +377,11 @@ QString formatComment( const QString& comment ) {
   return ret;
 }
 
+ParamIterator::~ParamIterator()
+{
+  delete d;
+}
+
 ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(new ParamIteratorPrivate)
 {
   d->m_source = source;
