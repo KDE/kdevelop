@@ -1,5 +1,6 @@
 /* This  is part of KDevelop
     Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -435,11 +436,7 @@ public:
           else
             continue; //This context is referenced
           
-          bool isImportedByLoaded = false;
-          
-          FOREACH_FUNCTION(IndexedDUContext ctx, unload->d_func()->m_importers)
-            if(ctx.indexedTopContext().isLoaded())
-              isImportedByLoaded = true;
+          bool isImportedByLoaded = !unload->loadedImporters().isEmpty();
           
           //If we unload a context that is imported by other contexts, we create a bad loaded state
           if(isImportedByLoaded && !unloadAllUnreferenced)

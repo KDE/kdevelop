@@ -292,6 +292,9 @@ public:
   
   virtual QVector<DUContext*> importers() const;
   
+  ///Returns all currently loade importers
+  virtual QList<DUContext*> loadedImporters() const;
+  
   virtual SimpleCursor importPosition(const DUContext* target) const;
   
   class CacheData;

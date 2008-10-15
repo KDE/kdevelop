@@ -1227,6 +1227,12 @@ QVector<DUContext*> TopDUContext::importers() const
   return QVector<DUContext*>::fromList( m_local->m_directImporters.toList() );
 }
 
+QList<DUContext*> TopDUContext::loadedImporters() const
+{
+  ENSURE_CAN_READ
+  return m_local->m_directImporters.toList();
+}
+
 QVector<DUContext::Import> TopDUContext::importedParentContexts() const
 {
   ENSURE_CAN_READ
