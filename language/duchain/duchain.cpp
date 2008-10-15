@@ -330,8 +330,9 @@ public:
 
   ///Stores all environment-information
   ///Also makes sure that all information that stays is referenced, so it stays alive.
-  void storeAllInformation() {
-    QMutexLocker l(&m_chainsMutex);
+  ///@param atomic If this is false, the write-lock will be released time by time
+  void storeAllInformation(bool atomic, DUChainWriteLocker& locker) {
+//     QMutexLocker l(&m_chainsMutex);
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
     foreach(IndexedString url, urls) {
       storeInformation(url);
@@ -342,6 +343,10 @@ public:
         m_environmentInfo.itemFromIndex(index);
       }else{
         kDebug(9505) << "Did not find stored item for" << url.str() << "count:" << m_fileEnvironmentInformations.values(url);
+      }
+      if(!atomic) {
+        locker.unlock();
+        locker.lock();
       }
     }
   }
@@ -382,7 +387,7 @@ public:
     
     QTime startTime = QTime::currentTime();
 
-    storeAllInformation(); //Puts environment-information into a repository
+    storeAllInformation(!retries, writeLock); //Puts environment-information into a repository
 
     //We don't need to increase the reference-count, since the cleanup-mutex is locked
     QSet<TopDUContext*> workOnContexts;
