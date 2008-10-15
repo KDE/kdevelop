@@ -39,6 +39,15 @@
 #define ifDebugLostSpace(x)
 #define DEBUG_INCORRECT_DELETE
 
+//Makes sure that all items stay reachable through the basic hash
+// #define DEBUG_ITEM_REACHABILITY
+
+#ifdef DEBUG_ITEM_REACHABILITY
+#define ENSURE_REACHABLE(bucket) Q_ASSERT(allItemsReachable(bucket));
+#else
+#define ENSURE_REACHABLE(bucket)
+#endif
+
 ///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
 ///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
 ///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
@@ -508,6 +517,45 @@ class Bucket {
       return false;
     }
     
+    struct ClashVisitor {
+      ClashVisitor(int _hash, int _modulo) : result(0), hash(_hash), modulo(_modulo) {
+      }
+      bool operator()(const Item* item) {
+        if((item->hash() % modulo) == (hash % modulo))
+          result = item;
+        
+        return true;
+      }
+      const Item* result;
+      uint hash, modulo;
+    };
+    
+    //A version of hasClashingItem that visits all items naively without using any assumptions.
+    //This was used to debug hasClashingItem, but should not be used otherwise.
+    bool hasClashingItemReal(uint hash, uint modulo) {
+      
+      m_lastUsed = 0;
+      
+      ClashVisitor visitor(hash, modulo);
+      visitAllItems<ClashVisitor>(visitor);
+      return (bool)visitor.result;
+    }
+    
+    //Returns whether the given item is reachabe within this bucket, through its hash.
+    bool itemReachable(const Item* item, uint hash) const {
+      
+      unsigned short localHash = hash % m_objectMapSize;
+      unsigned short currentIndex = m_objectMap[localHash];
+      
+      while(currentIndex) {
+        if(itemFromIndex(currentIndex) == item)
+          return true;
+        
+        currentIndex = followerIndex(currentIndex);
+      }
+      return false;
+    }
+    
     template<class Visitor>
     bool visitItemsWithHash(Visitor& visitor, uint hash, unsigned short bucketIndex) const {
       m_lastUsed = 0;
@@ -919,6 +967,7 @@ class ItemRepository : public AbstractItemRepository {
     m_freeSpaceBucketsSize = 0;
     m_fastBuckets = m_buckets.data();
     m_bucketCount = m_buckets.size();
+    m_bucketHashSize = bucketHashSize;
     
     m_firstBucketForHash = new short unsigned int[bucketHashSize];
     memset(m_firstBucketForHash, 0, bucketHashSize * sizeof(short unsigned int));
@@ -951,7 +1000,7 @@ class ItemRepository : public AbstractItemRepository {
     unsigned int hash = request.hash();
     unsigned int size = request.itemSize();
     
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
     short unsigned int previousPreviousBucketNumber = 0;
     
@@ -990,7 +1039,7 @@ class ItemRepository : public AbstractItemRepository {
       }
     }
     
-    m_metaDataChanged = true; ///@todo Better tracking of whether the data has changed
+    m_metaDataChanged = true;
 
     if(!pickedBucketInChain && useBucket == m_currentBucket) {
       //Try finding an existing bucket with deleted space to store the data into
@@ -1027,19 +1076,20 @@ class ItemRepository : public AbstractItemRepository {
         initializeBucket(useBucket);
         bucketPtr = m_fastBuckets[useBucket];
       }
+      
+      ENSURE_REACHABLE(useBucket);
       Q_ASSERT(!bucketPtr->findIndex(request, 0));
+      
       unsigned short indexInBucket = bucketPtr->index(request, dynamic, size);
       
       if(indexInBucket) {
+        ++m_statItemCount;
+        
         if(!(*bucketHashPosition)) {
           Q_ASSERT(!previousBucketNumber);
           (*bucketHashPosition) = useBucket;
-        }
-        
-        ++m_statItemCount;
-
-        //Set the follower pointer in the earlier bucket for the hash
-        if(!pickedBucketInChain && previousBucketNumber && previousBucketNumber != useBucket) {
+          ENSURE_REACHABLE(useBucket);
+        } else if(!pickedBucketInChain && previousBucketNumber && previousBucketNumber != useBucket) {
           //Should happen rarely
           ++m_statBucketHashClashes;
 
@@ -1059,6 +1109,9 @@ class ItemRepository : public AbstractItemRepository {
             Q_ASSERT(m_buckets[previousBucketNumber]->nextBucketForHash(hash) == 0);
             
             m_buckets[previousBucketNumber]->setNextBucketForHash(hash, useBucket);
+            ENSURE_REACHABLE(useBucket);
+            ENSURE_REACHABLE(previousBucketNumber);
+            
             ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, useBucket));)
           } else if(intersect.first) {
             ifDebugInfiniteRecursion(Q_ASSERT(bucketForIndex(intersect.first)->nextBucketForHash(hash) == intersect.second);)
@@ -1071,7 +1124,12 @@ class ItemRepository : public AbstractItemRepository {
             ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(useBucket, hash, intersect.first));)
             
             bucketForIndex(intersect.first)->setNextBucketForHash(hash, useBucket);
+            
+            ENSURE_REACHABLE(useBucket);
+            ENSURE_REACHABLE(intersect.second);
+            
             ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, useBucket));)
+            ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, intersect.second));)
           } else {
             //State: intersect.first == 0 && intersect.second != 0. This means that whole compleet
             //chain opened by *bucketHashPosition with the hash-value is also following useBucket,
@@ -1079,7 +1137,13 @@ class ItemRepository : public AbstractItemRepository {
 
             ifDebugInfiniteRecursion(Q_ASSERT(!walkBucketLinks(*bucketHashPosition, hash, useBucket));)
             ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(useBucket, hash, *bucketHashPosition));)
+            unsigned short oldStart = *bucketHashPosition;
+            
             *bucketHashPosition = useBucket;
+            
+            ENSURE_REACHABLE(useBucket);
+            ENSURE_REACHABLE(oldStart);
+            Q_UNUSED(oldStart);
           }
         }
         
@@ -1110,7 +1174,7 @@ class ItemRepository : public AbstractItemRepository {
     
     unsigned int hash = request.hash();
     
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
     
     while(previousBucketNumber) {
@@ -1151,7 +1215,7 @@ class ItemRepository : public AbstractItemRepository {
 
     unsigned int hash = itemFromIndex(index)->hash();
     
-    short unsigned int* bucketHashPosition = m_firstBucketForHash + ((hash * 1234271) % bucketHashSize);
+    short unsigned int* bucketHashPosition = m_firstBucketForHash + (hash % bucketHashSize);
     short unsigned int previousBucketNumber = *bucketHashPosition;
 
     Q_ASSERT(previousBucketNumber);
@@ -1215,15 +1279,26 @@ class ItemRepository : public AbstractItemRepository {
     /**
      * Now check whether the link previousBucketNumber -> bucket is still needed.
      */
-    return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
+    //return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
     if(previousBucketNumber == 0) {
       //The item is directly in the m_firstBucketForHash hash
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
       Q_ASSERT(*bucketHashPosition == bucket);
+      unsigned short previous = bucket;
       while(!bucketPtr->hasClashingItem(hash, bucketHashSize))
       {
+//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, bucketHashSize));
+        
         unsigned short next = bucketPtr->nextBucketForHash(hash);
+        ENSURE_REACHABLE(next);
+        ENSURE_REACHABLE(previous);
+        
         *bucketHashPosition = next;
+        
+        ENSURE_REACHABLE(previous);
+        ENSURE_REACHABLE(next);
+        
+        previous = next;
         
         if(next) {
           bucketPtr = m_fastBuckets[next];
@@ -1239,12 +1314,17 @@ class ItemRepository : public AbstractItemRepository {
       }
     }else{
       if(!bucketPtr->hasClashingItem(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize)) {
+//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize));
         ///Debug: Check for infinite recursion
         walkBucketLinks(*bucketHashPosition, hash);
         
         Q_ASSERT(previousBucketPtr->nextBucketForHash(hash) == bucket);
         
+        ENSURE_REACHABLE(bucket);
+        
         previousBucketPtr->setNextBucketForHash(hash, bucketPtr->nextBucketForHash(hash));
+        
+        ENSURE_REACHABLE(bucket);
         
         ///Debug: Check for infinite recursion
         Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, bucketPtr->nextBucketForHash(hash)));
@@ -1252,8 +1332,10 @@ class ItemRepository : public AbstractItemRepository {
         Q_ASSERT(bucketPtr->nextBucketForHash(hash) != previousBucketNumber);
       }
     }
+    
+    ENSURE_REACHABLE(bucket);
   }
-
+  
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
   ///or the equals(..) function. That would completely destroy the consistency.
   ///@param index The index. It must be valid(match an existing item), and nonzero.
@@ -1353,7 +1435,7 @@ class ItemRepository : public AbstractItemRepository {
   void visitItemsWithHash(Visitor& visitor, uint hash) const {
     ThisLocker lock(&m_mutex);
     
-    short unsigned int bucket = *(m_firstBucketForHash + ((hash * 1234271) % bucketHashSize));
+    short unsigned int bucket = *(m_firstBucketForHash + (hash % bucketHashSize));
     
     while(bucket) {
       
@@ -1622,6 +1704,51 @@ class ItemRepository : public AbstractItemRepository {
     m_firstBucketForHash = 0;
   }
 
+  struct AllItemsReachableVisitor {
+    AllItemsReachableVisitor(ItemRepository* rep) : repository(rep) {
+    }
+    
+    bool operator()(const Item* item) {
+      return repository->itemReachable(item);
+    }
+    
+    ItemRepository* repository;
+  };
+  
+  //Returns whether the given item is reachable through its hash
+  bool itemReachable(const Item* item) const {
+    uint hash = item->hash();
+    
+    short unsigned int bucket = *(m_firstBucketForHash + (hash % bucketHashSize));
+    
+    while(bucket) {
+      
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+      if(!bucketPtr) {
+        initializeBucket(bucket);
+        bucketPtr = m_fastBuckets[bucket];
+      }
+      
+      if(bucketPtr->itemReachable(item, hash))
+        return true;
+
+      bucket = bucketPtr->nextBucketForHash(hash);
+    }
+    
+    return false;
+  }
+  
+  //Returns true if all items in the given bucket are reachable through their hashes
+  bool allItemsReachable(unsigned short bucket) {
+    if(!bucket)
+      return true;
+    
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(bucket);
+    
+    AllItemsReachableVisitor visitor(this);
+    return bucketPtr->visitAllItems(visitor);
+  }
+  
   inline void initializeBucket(unsigned int bucketNumber) const {
     Q_ASSERT(bucketNumber);
     if(!m_fastBuckets[bucketNumber]) {
@@ -1686,6 +1813,7 @@ class ItemRepository : public AbstractItemRepository {
   mutable Bucket<Item, ItemRequest, DynamicData>** m_fastBuckets; //For faster access
   mutable uint m_bucketCount;
   uint m_statBucketHashClashes, m_statItemCount;
+  unsigned int m_bucketHashSize;
   //Maps hash-values modulo 1<<bucketHashSizeBits to the first bucket such a hash-value appears in
   short unsigned int* m_firstBucketForHash;
   
