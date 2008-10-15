@@ -31,17 +31,22 @@
 
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/iproject.h>
 #include <util/environmentgrouplist.h>
 #include <shell/core.h>
 #include <QDialogButtonBox>
 #include <QStackedLayout>
 #include <QComboBox>
+#include <QCompleter>
+#include <KUrl>
+#include <ksettings/dispatcher.h>
 
 #include "runconfig.h"
 #include "asktargetname.h"
+#include "projectitemlineedit.h"
 #include "ui_runsettings.h"
 #include "ui_runconfig.h"
 
@@ -50,30 +55,104 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(RunPreferencesFactory, registerPlugin<RunPreferences>();)
 K_EXPORT_PLUGIN(RunPreferencesFactory("kcm_kdev_runsettings"))
 
-class TargetProperties : public QWidget
+TargetProperties::TargetProperties(const QVariantList& args, const QString& targetName, QWidget* parent)
+    : QWidget(parent), args0(args[0].toString()), groupPrefix(targetName)
 {
-    public:
-        TargetProperties(const QVariantList& args, const QString& targetName, RunPreferences* parent=0)
-            : QWidget(parent)
-        {
-            preferencesDialog.setupUi(this);
-            
-            m_settings=new RunSettings(targetName, args.at(0).toString() );
-            m_settings->setDeveloperTempFile( args.at(0).toString() );
-            m_settings->setProjectTempFile( args.at(1).toString() );
-            m_settings->setProjectFileUrl( args.at(2).toString() );
-            m_settings->setDeveloperFileUrl( args.at(3).toString() );
+    preferencesDialog = new Ui::RunSettings;
+    preferencesDialog->setupUi(this);
+    
+    m_settings=new RunSettings(targetName, args.at(0).toString() );
+    m_settings->setDeveloperTempFile( args.at(0).toString() );
+    m_settings->setProjectTempFile( args.at(1).toString() );
+    m_settings->setProjectFileUrl( args.at(2).toString() );
+    m_settings->setDeveloperFileUrl( args.at(3).toString() );
 
-            EnvironmentGroupList env( m_settings->config() );
-            preferencesDialog.kcfg_environment->addItems( env.groups() );
-            preferencesDialog.kcfg_workingDirectory->setMode(KFile::Directory);
-            preferencesDialog.kcfg_environment->setCurrentIndex(0);
-        }
+    EnvironmentGroupList env( m_settings->config() );
+    preferencesDialog->kcfg_environment->addItems( env.groups() );
+    preferencesDialog->kcfg_workingDirectory->setMode(KFile::Directory);
+    preferencesDialog->addCompilationProjectItem->setIcon(KIcon("list-add"));
+    preferencesDialog->addCompilationProjectItem->setText(QString());
+    preferencesDialog->removeCompilationProjectItem->setIcon(KIcon("list-remove"));
+    preferencesDialog->removeCompilationProjectItem->setText(QString());
+    preferencesDialog->executableWidget->setVisible(false);
+    
+    QAbstractItemModel* model=ICore::self()->projectController()->projectModel();
+    preferencesDialog->compilationProjectItem->setCompleter(new ProjectItemCompleter(model, this));
+    preferencesDialog->kcfg_runItem->setCompleter(new ProjectItemCompleter(model, this));
+    connect(preferencesDialog->compilationProjectItem, SIGNAL(correctnessChanged(bool)),
+            preferencesDialog->addCompilationProjectItem, SLOT(setEnabled(bool)));
+    
+    connect(preferencesDialog->addCompilationProjectItem, SIGNAL(clicked()), this, SLOT(slotAddCompileTarget()));
+    connect(preferencesDialog->removeCompilationProjectItem, SIGNAL(clicked()), this, SLOT(removeCompileTarget()));
+    
+}
+
+TargetProperties::~TargetProperties()
+{
+    delete preferencesDialog;
+}
+
+void TargetProperties::save() const
+{
+    QStringList itemsFound;
+    for(int i=0; i<preferencesDialog->compileItems->count(); i++)
+    {
+        QListWidgetItem* it=preferencesDialog->compileItems->item(i);
+        itemsFound += it->text();
+    }
+    
+    KSharedConfig::Ptr config(KSharedConfig::openConfig(args0, KConfig::SimpleConfig));
+    KConfigGroup group(config, groupPrefix+QLatin1String( "-Run Options" ));
+    if(itemsFound.isEmpty())
+        group.deleteEntry("Compile Items");
+    else
+        group.writeEntry("Compile Items", itemsFound);
+}
+
+void TargetProperties::load()
+{
+    KSharedConfig::Ptr config(KSharedConfig::openConfig(args0, KConfig::SimpleConfig));
+    KConfigGroup group(config, groupPrefix+QLatin1String( "-Run Options" ));
+    QStringList ci=group.readEntry("Compile Items", QStringList());
+    
+    foreach(const QString& item, ci)
+    {
+        addCompileTarget(item);
+    }
+}
+
+void TargetProperties::slotAddCompileTarget()
+{
+    addCompileTarget(preferencesDialog->compilationProjectItem->text());
+}
+
+void TargetProperties::addCompileTarget(const QString& name)
+{
+    QList<QListWidgetItem*> its=preferencesDialog->compileItems->findItems(name, Qt::MatchExactly);
+    QListWidgetItem* it;
+    
+    if(its.isEmpty()) {
+        it=new QListWidgetItem(name);
+        preferencesDialog->compileItems->addItem(it);
+        preferencesDialog->removeCompilationProjectItem->setEnabled(true);
         
-        Ui::RunSettings preferencesDialog;
-        RunSettings* m_settings;
-        KConfigDialogManager* m_manager;
-};
+        emit changed(true);
+    } else
+        it=its.first();
+    it->setSelected(true);
+}
+
+void TargetProperties::removeCompileTarget()
+{
+    kDebug() << "removiiiiiiiing" << preferencesDialog->compileItems->currentRow();
+    int curr=preferencesDialog->compileItems->currentRow();
+    if(curr>=0)
+    {
+        delete preferencesDialog->compileItems->takeItem(curr);
+        preferencesDialog->removeCompilationProjectItem->setEnabled(preferencesDialog->compileItems->count()>0);
+        emit changed(true);
+    }
+}
 
 RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( RunPreferencesFactory::componentData(), parent, args )
@@ -91,6 +170,10 @@ RunPreferences::RunPreferences( QWidget *parent, const QVariantList &args )
     connect(m_configUi->targetCombo, SIGNAL(activated(int)), stacked, SLOT(setCurrentIndex(int)));
     connect(m_configUi->buttonNewTarget, SIGNAL(clicked(bool)), SLOT(newRunConfig()));
     connect(m_configUi->buttonDeleteTarget, SIGNAL(clicked(bool)), SLOT(deleteRunConfig()));
+    
+    KSettings::Dispatcher::registerComponent(RunPreferencesFactory::componentData(),
+                                             ICore::self()->runController(), SLOT(slotConfigurationChanged()));
+//     emit changed();
 }
 
 RunPreferences::~RunPreferences( ) { delete m_configUi; }
@@ -112,6 +195,11 @@ void RunPreferences::save()
         delGroup.deleteGroup();
     }
     commitDeleteGroups.clear();
+    
+    foreach(TargetProperties* p, m_targetWidgets)
+    {
+        p->save();
+    }
 }
 
 void RunPreferences::load()
@@ -124,6 +212,11 @@ void RunPreferences::load()
         addTarget(target);
     }
     commitDeleteGroups.clear();
+    
+    foreach(TargetProperties* p, m_targetWidgets)
+    {
+        p->load();
+    }
 }
 
 void RunPreferences::newRunConfig()
@@ -154,12 +247,18 @@ void RunPreferences::addTarget(const QString& name)
     target->m_manager = addConfig( target->m_settings, target);
     m_configUi->targetCombo->setFocus(Qt::MouseFocusReason);
     m_configUi->buttonDeleteTarget->setEnabled(true);
+    if(!target->preferencesDialog->kcfg_executable->url().isEmpty())
+    {
+        target->preferencesDialog->execRadio->setChecked(true);
+    }
     
     stacked->setCurrentIndex(m_configUi->targetCombo->count()-1);
     m_configUi->targetCombo->setCurrentIndex(m_configUi->targetCombo->count()-1);
     commitDeleteGroups.remove(name);
     Q_ASSERT(m_targetWidgets.count()==m_configUi->targetCombo->count() && m_targetWidgets.count()==stacked->count());
     Q_ASSERT(m_configUi->targetCombo->currentIndex()==stacked->currentIndex());
+    
+    connect(target, SIGNAL(changed(bool)), this, SIGNAL(changed(bool)));
     
     emit changed(true);
 }
@@ -169,7 +268,6 @@ void RunPreferences::removeTarget(int index)
     Q_ASSERT(index>=0 && index<m_configUi->targetCombo->count());
     
     kDebug() << "removing target" << index << m_configUi->targetCombo->currentText();
-    qDebug() << "rrrrrrrr" << m_targetWidgets.count() << m_configUi->targetCombo->count() << stacked->count();
     TargetProperties* t=m_targetWidgets.takeAt(index);
     stacked->setCurrentIndex(0);
     stacked->takeAt(index);

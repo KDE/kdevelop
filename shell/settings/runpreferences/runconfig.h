@@ -87,24 +87,6 @@ class RunSettings : public KDevelop::ProjectConfigSkeleton
 
 
     /**
-      Get Compile Before Execution
-    */
-//     static
-//     bool autocompile()
-//     {
-//       return self()->mAutocompile;
-//     }
-
-    /**
-      Get Item object corresponding to autocompile()
-    */
-    ItemBool *autocompileItem()
-    {
-      return mAutocompileItem;
-    }
-
-
-    /**
       Get Install Before Execution
     */
 //     static
@@ -116,10 +98,10 @@ class RunSettings : public KDevelop::ProjectConfigSkeleton
     /**
       Get Item object corresponding to autoinstall()
     */
-    ItemBool *autoinstallItem()
-    {
-      return mAutoinstallItem;
-    }
+//     ItemBool *autoinstallItem()
+//     {
+//       return mAutoinstallItem;
+//     }
 
 
     /**
@@ -134,10 +116,10 @@ class RunSettings : public KDevelop::ProjectConfigSkeleton
     /**
       Get Item object corresponding to autosu()
     */
-    ItemBool *autosuItem()
-    {
-      return mAutosuItem;
-    }
+//     ItemBool *autosuItem()
+//     {
+//       return mAutosuItem;
+//     }
 
 
     /**
@@ -159,28 +141,29 @@ class RunSettings : public KDevelop::ProjectConfigSkeleton
 
     RunSettings(const QString& prefix, const QString& arg);
   protected:
-    friend class RunSettingsHelper;
-
-
     // Run Options
     KUrl mExecutable;
     QString mEnvironment;
     QString mArguments;
     KUrl mWorkingDirectory;
-    bool mAutocompile;
-    bool mAutoinstall;
-    bool mAutosu;
+//     bool mAutocompile;
+//     bool mAutoinstall;
+//     bool mAutosu;
     bool mStartinterminal;
+    QString mRunItem;
+    int mBeforeExec;
 
   private:
     ItemUrl *mExecutableItem;
     ItemString *mEnvironmentItem;
     ItemString *mArgumentsItem;
     ItemUrl *mWorkingDirectoryItem;
-    ItemBool *mAutocompileItem;
-    ItemBool *mAutoinstallItem;
-    ItemBool *mAutosuItem;
+//     ItemBool *mAutocompileItem;
+//     ItemBool *mAutoinstallItem;
+//     ItemBool *mAutosuItem;
     ItemBool *mStartinterminalItem;
+    ItemString* mRunItemItem;
+    ItemInt* mBeforeExecItem;
 };
 
 #endif

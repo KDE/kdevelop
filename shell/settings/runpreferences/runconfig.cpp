@@ -18,7 +18,7 @@ RunSettings::RunSettings(const QString& groupPrefix,  const QString& config  )
   mExecutableItem = new KConfigSkeleton::ItemUrl( currentGroup(), QLatin1String( "Executable" ), mExecutable );
   mExecutableItem->setLabel( i18n("Executable") );
   addItem( mExecutableItem, QLatin1String( "executable" ) );
-  mEnvironmentItem = new KConfigSkeleton::ItemString( currentGroup(), QLatin1String( "Environment" ), mEnvironment );
+  mEnvironmentItem = new KConfigSkeleton::ItemString( currentGroup(), QLatin1String( "Environment" ), mEnvironment, "default" );
   mEnvironmentItem->setLabel( i18n("Environment") );
   addItem( mEnvironmentItem, QLatin1String( "environment" ) );
   mArgumentsItem = new KConfigSkeleton::ItemString( currentGroup(), QLatin1String( "Arguments" ), mArguments );
@@ -27,18 +27,25 @@ RunSettings::RunSettings(const QString& groupPrefix,  const QString& config  )
   mWorkingDirectoryItem = new KConfigSkeleton::ItemUrl( currentGroup(), QLatin1String( "Working Directory" ), mWorkingDirectory );
   mWorkingDirectoryItem->setLabel( i18n("Working Directory") );
   addItem( mWorkingDirectoryItem, QLatin1String( "workingDirectory" ) );
-  mAutocompileItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Compile Before Execution" ), mAutocompile, false );
-  mAutocompileItem->setLabel( i18n("Compile Before Execution") );
-  addItem( mAutocompileItem, QLatin1String( "autocompile" ) );
-  mAutoinstallItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Install Before Execution" ), mAutoinstall, false );
-  mAutoinstallItem->setLabel( i18n("Install Before Execution") );
-  addItem( mAutoinstallItem, QLatin1String( "autoinstall" ) );
-  mAutosuItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Super User Install" ), mAutosu, false );
-  mAutosuItem->setLabel( i18n("Super User Install") );
-  addItem( mAutosuItem, QLatin1String( "autosu" ) );
+//   mAutocompileItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Compile Before Execution" ), mAutocompile, false );
+//   mAutocompileItem->setLabel( i18n("Compile Before Execution") );
+//   addItem( mAutocompileItem, QLatin1String( "autocompile" ) );
+//   mAutoinstallItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Install Before Execution" ), mAutoinstall, false );
+//   mAutoinstallItem->setLabel( i18n("Install Before Execution") );
+//   addItem( mAutoinstallItem, QLatin1String( "autoinstall" ) );
+//   mAutosuItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Super User Install" ), mAutosu, false );
+//   mAutosuItem->setLabel( i18n("Super User Install") );
+//   addItem( mAutosuItem, QLatin1String( "autosu" ) );
   mStartinterminalItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Start In Terminal" ), mStartinterminal, false );
   mStartinterminalItem->setLabel( i18n("Start In Terminal") );
   addItem( mStartinterminalItem, QLatin1String( "startinterminal" ) );
+  mBeforeExecItem = new KConfigSkeleton::ItemInt( currentGroup(), QLatin1String( "Before Execute" ), mBeforeExec, 0);
+  mBeforeExecItem->setLabel( i18n("Before Execute") );
+  addItem( mBeforeExecItem, QLatin1String( "beforeExec" ) );
+  
+  mRunItemItem = new KConfigSkeleton::ItemString( currentGroup(), QLatin1String( "Run Item" ), mRunItem, QString() );
+  mRunItemItem->setLabel( i18n("Item to run") );
+  addItem( mRunItemItem, QLatin1String( "runItem" ) );
   readConfig();
 }
 

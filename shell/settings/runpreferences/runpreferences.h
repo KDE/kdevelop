@@ -34,13 +34,39 @@ class RunSettings;
 class QComboBox;
 class QStackedLayout;
 class QVBoxLayout;
-class TargetProperties;
 class QPushButton;
 
-namespace Ui { class RunConfig; }
+namespace Ui { class RunConfig;
+               class RunSettings; }
 
 namespace KDevelop
 {
+    
+class TargetProperties : public QWidget
+{
+    Q_OBJECT
+    public:
+        TargetProperties(const QVariantList& args, const QString& targetName, QWidget* parent=0);
+        ~TargetProperties();
+        
+        void save() const;
+        void load();
+        
+        Ui::RunSettings* preferencesDialog;
+        RunSettings* m_settings;
+        KConfigDialogManager* m_manager;
+    private slots:
+        void slotAddCompileTarget();
+        void removeCompileTarget();
+    signals:
+        void changed(bool);
+        
+    private:
+        void addCompileTarget(const QString& name);
+        QString args0;
+        QString groupPrefix;
+};
+
 
 class RunPreferences : public KCModule
 {
@@ -57,7 +83,8 @@ public:
         return KUrl::fromPath(
                    KStandardDirs::locate( "data", "kdevelop/data.kdev4" ) );
     }
-
+signals:
+        void changed(bool);
 private Q_SLOTS:
     void newRunConfig();
     void deleteRunConfig();
