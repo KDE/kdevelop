@@ -1215,11 +1215,11 @@ class ItemRepository : public AbstractItemRepository {
     /**
      * Now check whether the link previousBucketNumber -> bucket is still needed.
      */
+    return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
     if(previousBucketNumber == 0) {
       //The item is directly in the m_firstBucketForHash hash
       //Put the next item in the nextBucketForHash chain into m_firstBucketForHash that has a hash clashing in that array.
       Q_ASSERT(*bucketHashPosition == bucket);
-      return; ///@todo Find out what this problem is about. If we don't return here, some items become undiscoverable through hashes after some time
       while(!bucketPtr->hasClashingItem(hash, bucketHashSize))
       {
         unsigned short next = bucketPtr->nextBucketForHash(hash);
