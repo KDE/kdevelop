@@ -60,6 +60,9 @@
 #include <qmutex.h>
 #include <unistd.h>
 
+Q_DECLARE_METATYPE(KDevelop::IndexedString);
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext);
+Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext);
 
 //Additional "soft" cleanup steps that are done before the actual cleanup.
 //During "soft" cleanup, the consistency is not guaranteed. The repository is
@@ -215,7 +218,10 @@ public:
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
     qRegisterMetaType<Problem>("KDevelop::Problem");
-
+    qRegisterMetaType<KDevelop::IndexedString>("KDevelop::IndexedString");
+    qRegisterMetaType<KDevelop::IndexedTopDUContext>("KDevelop::IndexedTopDUContext");
+    qRegisterMetaType<KDevelop::ReferencedTopDUContext>("KDevelop::ReferencedTopDUContext");
+    
     notifier = new DUChainObserver();
     instance = new DUChain();
     m_cleanup = new CleanupThread(this);
@@ -1049,6 +1055,17 @@ void DUChain::refCountDown(TopDUContext* top) {
 
 void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
   emit declarationSelected(decl);
+}
+
+void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady) const {
+  TopDUContext* standardContext = DUChainUtils::standardContextForUrl(document.toUrl());
+  if(standardContext && standardContext->parsingEnvironmentFile() && !standardContext->parsingEnvironmentFile()->needsUpdate() && (standardContext->features() & minFeatures) == minFeatures) {
+    if(notifyReady)
+    QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, document), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
+  }else{
+    ///Start a parse-job for the given document
+    ICore::self()->languageController()->backgroundParser()->addDocument(document.toUrl(), minFeatures, 1, notifyReady);
+  }
 }
 
 }

@@ -30,6 +30,7 @@
 #include "../duchain/indexedstring.h"
 #include "documentchangetracker.h"
 #include <language/duchain/topducontext.h>
+#include <QPointer>
 
 namespace KDevelop
 {
@@ -73,6 +74,14 @@ public:
     /// \returns the indexed url of the document to be parsed.
     Q_SCRIPTABLE KDevelop::IndexedString document() const;
 
+    /**
+    * Sets a list of QObjects that should contain a slot
+    * "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
+    * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
+    * The given top-context may be invalid if the update failed.
+    */
+    Q_SCRIPTABLE void setNotifyWhenReady(QList<QPointer<QObject> > notify);
+    
     /// Sets the du-context that was created by this parse-job
     Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);
     /// Returns the set du-context, or zero of none was set.

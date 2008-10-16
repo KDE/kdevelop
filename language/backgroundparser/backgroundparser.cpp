@@ -68,6 +68,7 @@ public:
         m_threads = 1;
         m_doneParseJobs = 0;
         m_maxParseJobs = 0;
+        m_neededPriority = BackgroundParser::WorstPriority;
 
         ThreadWeaver::setDebugLevel(true, 1);
 
@@ -104,7 +105,7 @@ public:
         QList<ParseJob*> jobs;
         QHashIterator<KUrl, DocumentChangeTracker*> it = m_delayedParseJobs;
         while (it.hasNext()) {
-            ParseJob* job = createParseJob(it.next().key(), TopDUContext::AllDeclarationsContextsAndUses);
+            ParseJob* job = createParseJob(it.next().key(), TopDUContext::AllDeclarationsContextsAndUses, QList<QPointer<QObject> >());
             if (job) {
                 job->setChangedRanges(it.value()->changedRanges());
                 jobs.append(job);
@@ -118,6 +119,9 @@ public:
         for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
         {
+            if(it1.key() > m_neededPriority)
+                break; //The priority is not good enough to be processed right now
+            
             for(QSet<KUrl>::Iterator it = it1.value().begin(); it != it1.value().end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
                 if(this->m_parseJobs.size() + jobs.size() > (m_threads*2)+1)
@@ -131,7 +135,7 @@ public:
                 }
 
                 kDebug(9505) << "creating parse-job" << *it;
-                ParseJob* job = createParseJob(*it, m_documents[*it].second);
+                ParseJob* job = createParseJob(*it, m_documents[*it].features, m_documents[*it].notifyWhenReady);
                 if(job)
                     jobs.append(job);
                 
@@ -153,7 +157,7 @@ public:
             emit m_parser->hideProgress();
     }
 
-    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features)
+    ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
     {
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
@@ -164,6 +168,7 @@ public:
 
             job->setMinimumFeatures(features);
             job->setBackgroundParser(m_parser);
+            job->setNotifyWhenReady(notifyWhenReady);
 
             QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
@@ -233,8 +238,15 @@ public:
     int m_delay;
     int m_threads;
 
+    struct DocumentParsePlan {
+        DocumentParsePlan(int _priority = 0, TopDUContext::Features _features = TopDUContext::VisibleDeclarationsAndContexts) : priority(_priority), features(_features) {
+        }
+        int priority;
+        TopDUContext::Features features;
+        QList<QPointer<QObject> > notifyWhenReady;
+    };
     // A list of known documents, and their priority
-    QMap<KUrl, QPair<int, TopDUContext::Features> > m_documents;
+    QMap<KUrl, DocumentParsePlan > m_documents;
     QMap<int, QSet<KUrl> > m_documentsForPriority;
     // Current parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
@@ -250,6 +262,7 @@ public:
     int m_maxParseJobs;
     int m_doneParseJobs;
     QMap<KDevelop::ParseJob*, float> m_jobProgress;
+    int m_neededPriority; //The minimum priority needed for processed jobs
 };
 
 
@@ -307,33 +320,38 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 //     }
 // }
 
-void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority)
+void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady)
 {
 //     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
     QMutexLocker lock(&d->m_mutex);
     {
         Q_ASSERT(url.isValid());
         
-        QMap<KUrl, QPair<int, TopDUContext::Features> >::const_iterator it = d->m_documents.find(url);
+        BackgroundParserPrivate::DocumentParsePlan plan(priority, features);
         
-        if (it != d->m_documents.end() && it.value() != qMakePair(priority, features)) {
+        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::const_iterator it = d->m_documents.find(url);
+        
+        if (it != d->m_documents.end()) {
             //Update the stored priority
             //Only allow upgrading
-            if(it.value().first < priority)
-                priority = it.value().first; //The stored priority is better, use that one
             
-            if(it.value().second > features)
-                features = it.value().second; //If the stored features are better, use those
+            if(it.value().priority < plan.priority)
+                plan.priority = it.value().priority; //The stored priority is better, use that one
+            
+            if(it.value().features > plan.features)
+                plan.features = it.value().features; //If the stored features are better, use those
+            
+            plan.notifyWhenReady +=  it.value().notifyWhenReady;
             
             //Update features + priority
-            d->m_documentsForPriority[it.value().first].remove(url);
-            d->m_documents[url] = qMakePair(priority, features);
+            d->m_documentsForPriority[it.value().priority].remove(url);
+            d->m_documents[url] = plan;
             d->m_documentsForPriority[priority].insert(url);
         }
         
         if (it == d->m_documents.end()) {
 //             kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
-            d->m_documents[url] = qMakePair(priority, features);
+            d->m_documents[url] = plan;
             d->m_documentsForPriority[priority].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         } else {
@@ -359,7 +377,7 @@ void BackgroundParser::removeDocument(const KUrl &url)
     Q_ASSERT(url.isValid());
 
     if(d->m_documents.contains(url)) {
-        d->m_documentsForPriority[d->m_documents[url].first].remove(url);
+        d->m_documentsForPriority[d->m_documents[url].priority].remove(url);
         d->m_documents.remove(url);
         --d->m_maxParseJobs;
     }
@@ -397,6 +415,24 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         //Continue creating more parse-jobs
         QMetaObject::invokeMethod(this, "parseDocuments", Qt::QueuedConnection);
     }
+}
+
+void BackgroundParser::disableProcessing()
+{
+    setNeededPriority(BestPriority);
+}
+
+void BackgroundParser::enableProcessing()
+{
+    setNeededPriority(WorstPriority);
+}
+
+void BackgroundParser::setNeededPriority(int priority)
+{
+    QMutexLocker lock(&d->m_mutex);
+    d->m_neededPriority = priority;
+    if(!d->m_timer.isActive())
+        d->m_timer.start();
 }
 
 void BackgroundParser::suspend()

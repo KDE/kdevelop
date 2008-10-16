@@ -81,6 +81,7 @@ struct ParseJobPrivate
     bool aborted : 1;
     TopDUContext::Features features;
     QString contentsFromEditor;
+    QList<QPointer<QObject> > notify;
 };
 
 ParseJob::ParseJob( const KUrl &url,
@@ -91,6 +92,11 @@ ParseJob::ParseJob( const KUrl &url,
 
 ParseJob::~ParseJob()
 {
+    typedef QPointer<QObject> QObjectPointer;
+    foreach(QObjectPointer p, d->notify)
+        if(p)
+            QMetaObject::invokeMethod(p, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
+    
     delete d;
 }
 
@@ -229,6 +235,11 @@ void ParseJob::abortJob()
     d->aborted = true;
     setFinished(true);
 }
+
+void ParseJob::setNotifyWhenReady(QList<QPointer<QObject> > notify) {
+    d->notify = notify;
+}
+
 
 }
 

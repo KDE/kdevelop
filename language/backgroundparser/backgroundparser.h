@@ -63,6 +63,12 @@ public:
 
     virtual QString statusName() const;
 
+    enum {
+        BestPriority = -10000,  ///Best possible job-priority. No jobs should actually have this.
+        NormalPriority = 0,     ///Standard job-priority. This priority is used for parse-jobs caused by document-editing/opening.
+        WorstPriority = 100000  ///Worst possible job-priority.
+    };
+    
     /**
      * Abort or dequeue all current running jobs with the specified @p parent.
      */
@@ -137,18 +143,12 @@ public Q_SLOTS:
      * Queues up the @p url to be parsed.
      * @p features The minimum features that should be computed for this top-context
      * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
+     * @param notifyReady An optional pointer to a QObject that should contain a slot
+     *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
+     *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
+     *                    may be invalid if the update failed.
      */
-    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0);
-
-    
-    /**
-     * Adds a parse-job that updates the given top-context so it has at least the given features.
-     *@p notifyReady An optional pointer to a QObject that should contain a slot 
-     *                   "void topContextUpdated(KDevelop::ReferencedTopDUContext topContext)"
-     *                   that will be invoked once the top-context is updated, using a qeuued connection.
-     * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
-     */
-//     void addUpdateJob(ReferencedTopDUContext topContext, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, QObject* notifyWhenReady = 0, int priority = 0);
+    void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0);
 
     /**
      * Queues up the list of @p urls to be parsed.
@@ -169,6 +169,17 @@ public Q_SLOTS:
 
     void updateProgressBar();
 
+    ///Disables processing for all jobs that have a worse priority than @param priority
+    ///This can be used to temporarily limit the processing to only the most important jobs.
+    ///To only enable processing for important jobs, call setNeededPriority(0).
+    ///This should only be used to temporarily alter the processing. A progress-bar
+    ///will still be shown for the not yet processed jobs.
+    void setNeededPriority(int priority);
+    ///Disables all processing of new jobs, equivalent to setNeededPriority(BestPriority)
+    void disableProcessing();
+    ///Enables all processing of new jobs, equivalent to setNeededPriority(WorstPriority)
+    void enableProcessing();
+    
 protected:
     void loadSettings(bool projectIsLoaded);
     void saveSettings(bool projectIsLoaded);
