@@ -44,7 +44,7 @@ namespace Cpp {
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
    * The duchain must be read-locked for most operations
    * */
-  class KDEVCPPDUCHAIN_EXPORT NavigationWidget : public KTextBrowser, public KDevelop::QuickOpenEmbeddedWidgetInterface {
+  class KDEVCPPDUCHAIN_EXPORT NavigationWidget : public QWidget, public KDevelop::QuickOpenEmbeddedWidgetInterface {
     Q_OBJECT
     public:
       /**
