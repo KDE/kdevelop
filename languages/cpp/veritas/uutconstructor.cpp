@@ -157,7 +157,7 @@ void UUTConstructor::setDocumentAccess(Veritas::DocumentAccess* docAccess)
 
 QString UUTConstructor::enoughText(const KUrl& url, const KDevelop::SimpleCursor& cursor) const
 {
-    SimpleCursor ahead(cursor.line+4, 0); // though luck if you smear a use over more then 3 lines.
+    SimpleCursor ahead(cursor.line+4, 0); // though luck if you smear a use over more than 3 lines.
     //SimpleCursor ahead(cursor.line, cursor.column+10);
     SimpleRange farEnough(cursor, ahead);
     QString txt = m_docAccess->text(url, farEnough);
