@@ -37,6 +37,7 @@
 
 using namespace KDevelop;
 
+///@todo Implement a proper duchain based shortening-scheme, and use it throughout the completion
 //If this is true, the return-values of argument-hints will be just written as "..." if they are too long
 const bool shortenArgumentHintReturnValues = true;
 const int maximumArgumentHintReturnValueLength = 30;
