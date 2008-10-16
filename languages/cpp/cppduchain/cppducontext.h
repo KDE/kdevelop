@@ -351,7 +351,7 @@ class CppDUContext : public BaseContext {
               if(decl->context() != m_instantiatedFrom) {
                 //The declaration has been propagated up from a sub-context like an enumerator, add more empty instantiation informations
                 InstantiationInformation i;
-                i.previousInstantiationInformation = memberInstantiationInformation.indexed().index(); //Currently we don't propagate higher then 1 level
+                i.previousInstantiationInformation = memberInstantiationInformation.indexed().index(); //Currently we don't propagate higher than 1 level
                 copy = templateDecl->instantiate(i, source);
               }else{
                 copy = templateDecl->instantiate(memberInstantiationInformation, source);

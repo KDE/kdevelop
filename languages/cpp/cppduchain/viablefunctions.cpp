@@ -102,7 +102,7 @@ bool ViableFunction::isBetter( const ViableFunction& other ) const {
   for(int a = 0; a < minParams; ++a) {
 
     if( m_parameterConversions[a] < other.m_parameterConversions[a] )
-      return false; //All this function's conversions must not be worse then the other function one's
+      return false; //All this function's conversions must not be worse than the other function one's
 
     if( other.m_parameterConversions[a] < m_parameterConversions[a] )
       hadBetterConversion = true;

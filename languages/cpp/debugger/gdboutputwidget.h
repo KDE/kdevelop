@@ -90,7 +90,7 @@ private:
         updateTimer_ is running. */
     void showLine(const QString& line);
 
-    /** Makes 'l' no longer then 'max_size' by
+    /** Makes 'l' no longer than 'max_size' by
         removing excessive elements from the top.
     */
     void trimList(QStringList& l, int max_size);

@@ -108,7 +108,7 @@ namespace GDBDebugger
                     this,
                     "<b>Not enough format specifiers</b>"
                     "<p>The number of format specifiers in the custom format "
-                    "string is less then the number of expressions. Either remove "
+                    "string is less than the number of expressions. Either remove "
                     "some expressions or edit the format string.",
                     "Not enough format specifiers");
             }
