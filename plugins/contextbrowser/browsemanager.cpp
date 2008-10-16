@@ -116,10 +116,9 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if(keyEvent && keyEvent->key() == browseKey) {
         if(!m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
             m_browsingByKey = true;
-            if(!m_browsing) {
+            if(!m_browsing)
                 m_controller->browseButton()->setChecked(true);
-                m_browsing = false;
-            }
+            
         } else if(m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) {
             m_browsingByKey = false;
             if(!m_browsing)
@@ -223,6 +222,8 @@ void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
 }
 
 void BrowseManager::setBrowsing(bool enabled) {
+    if(m_browsingByKey)
+        return;
     if(enabled == m_browsing)
         return;
     m_browsing = enabled;
