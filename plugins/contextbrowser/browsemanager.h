@@ -23,6 +23,10 @@
 #define BROWSEMANAGER_H
 
 #include <QObject>
+#include <QCursor>
+#include <QMap>
+#include <QPointer>
+
 class QWidget;
 
 namespace KTextEditor {
@@ -71,12 +75,18 @@ class BrowseManager : public QObject {
             private:
             BrowseManager* m_manager;
         };
+        
+        void resetChangedCursor();
+        void setHandCursor(QWidget* widget);
+        
         //Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
         virtual bool eventFilter(QObject * watched, QEvent * event) ;
         ContextController* m_controller;
         bool m_browsing;
         Watcher m_watcher;
+        //Maps widgets to their previously set cursors
+        QMap<QPointer<QWidget>, QCursor> m_oldCursors;
 };
 
 #endif

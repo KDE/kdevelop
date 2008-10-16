@@ -111,52 +111,73 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if(mouseEvent) {
-        if(mouseEvent->button() == Qt::LeftButton && mouseEvent->type() == QEvent::MouseButtonPress) {
-            KTextEditor::CoordinatesToCursorInterface* iface = dynamic_cast<KTextEditor::CoordinatesToCursorInterface*>(view);
-            if(!iface) {
-                kDebug() << "Update kdelibs for the browsing-mode to work";
-                return false;
+        KTextEditor::CoordinatesToCursorInterface* iface = dynamic_cast<KTextEditor::CoordinatesToCursorInterface*>(view);
+        if(!iface) {
+            kDebug() << "Update kdelibs for the browsing-mode to work";
+            return false;
+        }
+        
+        QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
+        
+        KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
+        if(textCursor.isValid()) {
+            SmartInterface* iface = dynamic_cast<SmartInterface*>(view->document());
+            if (!iface) return false;
+
+            KUrl viewUrl = view->document()->url();
+            QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+
+            QPair<KUrl, KDevelop::SimpleCursor> jumpTo;
+
+            //Step 1: Look for a special language object(Macro, included header, etc.)
+            foreach( ILanguage* language, languages) {
+                jumpTo = language->languageSupport()->specialLanguageObjectJumpCursor(viewUrl, SimpleCursor(textCursor));
+                if(jumpTo.first.isValid() && jumpTo.second.isValid())
+                    break; //Found a special object to jump to
             }
-            
-            QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
-            
-            KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
-            if(textCursor.isValid()) {
-                SmartInterface* iface = dynamic_cast<SmartInterface*>(view->document());
-                if (!iface) return false;
 
-                KUrl viewUrl = view->document()->url();
-                QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
-
-                QPair<KUrl, KDevelop::SimpleCursor> jumpTo;
-
-                //Step 1: Look for a special language object(Macro, included header, etc.)
-                foreach( ILanguage* language, languages) {
-                    jumpTo = language->languageSupport()->specialLanguageObjectJumpCursor(viewUrl, SimpleCursor(textCursor));
-                    if(jumpTo.first.isValid() && jumpTo.second.isValid())
-                        break; //Found a special object to jump to
+            //Step 2: Look for a declaration/use
+            if(!jumpTo.first.isValid() || !jumpTo.second.isValid()) {
+                Declaration* foundDeclaration = 0;
+                KDevelop::DUChainReadLocker lock( DUChain::lock() );
+                foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
+                
+                if( foundDeclaration ) {
+                    jumpTo.first = foundDeclaration->url().toUrl();
+                    jumpTo.second = foundDeclaration->range().start;
                 }
-
-                //Step 2: Look for a declaration/use
-                if(!jumpTo.first.isValid() || !jumpTo.second.isValid()) {
-                    Declaration* foundDeclaration = 0;
-                    KDevelop::DUChainReadLocker lock( DUChain::lock() );
-                    foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
-                    
-                    if( foundDeclaration ) {
-                        jumpTo.first = foundDeclaration->url().toUrl();
-                        jumpTo.second = foundDeclaration->range().start;
-                    }
-                }
-                if(jumpTo.first.isValid() && jumpTo.second.isValid()) {
+            }
+            if(jumpTo.first.isValid() && jumpTo.second.isValid()) {
+                if(mouseEvent->button() == Qt::LeftButton && mouseEvent->type() == QEvent::MouseButtonPress) {
                     ICore::self()->documentController()->openDocument(jumpTo.first, jumpTo.second.textCursor());
                     event->accept();
                     return true;
+                }else if(mouseEvent->type() == QEvent::MouseMove) {
+                    //Make the cursor a "hand"
+                    setHandCursor(widget);
+                    return false;
                 }
             }
         }
+        resetChangedCursor();
     }
     return false;
+}
+
+void BrowseManager::resetChangedCursor() {
+    for(QMap<QPointer<QWidget>, QCursor>::iterator it = m_oldCursors.begin(); it != m_oldCursors.end(); ++it) {
+        if(it.key())
+            it.key()->setCursor(*it);
+    }
+    
+    m_oldCursors.clear();
+}
+
+void BrowseManager::setHandCursor(QWidget* widget) {
+    if(m_oldCursors.contains(widget))
+        return; //Nothing to do
+    m_oldCursors[widget] = widget->cursor();
+    widget->setCursor(QCursor(Qt::PointingHandCursor));
 }
 
 void BrowseManager::applyEventFilter(QWidget* object, bool install) {

@@ -264,7 +264,7 @@ void ContextController::HistoryEntry::setCursorPosition(const KDevelop::SimpleCu
     }
 }
 
-bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position) {
+bool ContextController::isPreviousEntry(KDevelop::DUContext* context, const KDevelop::SimpleCursor& /*position*/) {
     if (m_nextHistoryIndex == 0) return false;
     Q_ASSERT(m_nextHistoryIndex <= m_history.count());
     HistoryEntry& he = m_history[m_nextHistoryIndex-1];
