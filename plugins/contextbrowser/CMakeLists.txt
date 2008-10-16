@@ -7,6 +7,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9524 )
 set(kdevcontextbrowser_PART_SRCS
     contextbrowser.cpp
     contextbrowserview.cpp
+    browsemanager.cpp
 )
 
 kde4_add_plugin(kdevcontextbrowser ${kdevcontextbrowser_PART_SRCS})

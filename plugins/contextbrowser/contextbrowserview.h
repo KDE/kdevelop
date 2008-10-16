@@ -34,6 +34,7 @@ class QToolButton;
 class QCheckBox;
 class QMenu;
 class KComboBox;
+class BrowseManager;
 
 class ContextController;     // declared below
 class DeclarationController; // declared below
@@ -89,9 +90,11 @@ class ContextController : public QObject {
 
         QToolButton* previousButton() const;
         QToolButton* nextButton() const;
-        QToolButton* resetButton() const;
+        QToolButton* browseButton() const;
         KComboBox* currentContextBox() const;
 
+        ContextBrowserView* view() const;
+        
         struct HistoryEntry {
             //Duchain must be locked
             HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
@@ -113,7 +116,6 @@ class ContextController : public QObject {
         void nextMenuAboutToShow();
         void previousMenuAboutToShow();
         void actionTriggered();
-        void resetHistory();
     private Q_SLOTS:
         void comboItemActivated(int index);
     private:
@@ -133,10 +135,11 @@ class ContextController : public QObject {
         QToolButton *m_nextButton;
         QMenu* m_previousMenu, *m_nextMenu;
         ContextBrowserView* m_view;
-        QToolButton *m_resetButton;
+        QToolButton *m_browseButton;
         KComboBox* m_currentContextBox;
         QList<KDevelop::IndexedDeclaration> m_listDeclarations;
         KDevelop::IndexedString m_listUrl;
+        BrowseManager* m_browseManager;
 };
 
 // Handles Declaration related operations for ContextBrowserView

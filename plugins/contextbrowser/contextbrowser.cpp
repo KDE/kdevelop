@@ -285,7 +285,7 @@ void ContextBrowserPlugin::changeHighlight( View* view, KDevelop::Declaration* d
       changeHighlight( def->smartRange(), highlight, false, mouseHighlight );
 }
 
-QWidget* masterWidget(QWidget* w) {
+static QWidget* masterWidget(QWidget* w) {
   while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
     w = qobject_cast<QWidget*>(w->parent());
   return w;

@@ -45,6 +45,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/specializationstore.h>
+#include "browsemanager.h"
 
 const int maxHistoryLength = 30;
 
@@ -58,7 +59,13 @@ QToolButton* ContextController::nextButton() const {
     return m_nextButton;
 }
 
+QToolButton* ContextController::browseButton() const {
+    return m_browseButton;
+}
+
 ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIndex(0), m_view(view) {
+    m_browseManager = new BrowseManager(this);
+    
     m_previousButton = new QToolButton();
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_previousButton->setIcon(KIcon("go-previous"));
@@ -77,27 +84,24 @@ ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIn
     connect(m_nextButton, SIGNAL(clicked(bool)), this, SLOT(historyNext()));
     connect(m_nextMenu, SIGNAL(aboutToShow()), this, SLOT(nextMenuAboutToShow()));
 
-    m_resetButton = new QToolButton();
-    m_resetButton->setIcon(KIcon("view-refresh"));
-    connect(m_resetButton, SIGNAL(clicked(bool)),this, SLOT(resetHistory()));
+    m_browseButton = new QToolButton();
+    m_browseButton->setIcon(KIcon("games-hint"));
+    m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
+    m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
+    m_browseButton->setCheckable(true);
+    connect(m_browseButton, SIGNAL(clicked(bool)), m_browseManager, SLOT(setBrowsing(bool)));
 
     m_currentContextBox = new KComboBox();
     m_currentContextBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(m_currentContextBox, SIGNAL(activated(int)), this, SLOT(comboItemActivated(int)));
 }
 
-QToolButton* ContextController::resetButton() const {
-    return m_resetButton;
+ContextBrowserView* ContextController::view() const {
+    return m_view;
 }
 
 KComboBox* ContextController::currentContextBox() const {
     return m_currentContextBox;
-}
-
-void ContextController::resetHistory() {
-    m_nextHistoryIndex = 0;
-    m_history.clear();
-    updateButtonState();
 }
 
 ContextController::~ContextController() {
@@ -404,7 +408,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     buttons->addWidget(m_contextCtrl->previousButton());
     buttons->addWidget(m_contextCtrl->currentContextBox());
     buttons->addWidget(m_contextCtrl->nextButton());
-    buttons->addWidget(m_contextCtrl->resetButton());
+    buttons->addWidget(m_contextCtrl->browseButton());
     buttons->addStretch();
     buttons->addWidget(m_lockButton);
 

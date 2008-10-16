@@ -1,0 +1,82 @@
+/*
+  * This file is part of KDevelop
+ *
+ * Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#ifndef BROWSEMANAGER_H
+#define BROWSEMANAGER_H
+
+#include <QObject>
+class QWidget;
+
+namespace KTextEditor {
+    class View;
+    class Document;
+}
+
+namespace KDevelop {
+    class IDocument;
+}
+
+class EditorViewWatcher : QObject {
+    Q_OBJECT
+    public:
+    ///@param sameWindow If this is true, only views that are child of the same window as the given widget are registered
+    EditorViewWatcher(QWidget* sameWindow = 0);
+    QList<KTextEditor::View*> allViews();
+    private:
+    ///Called for every added view. Reimplement this to catch them.
+    virtual void viewAdded(KTextEditor::View*);
+    
+    private slots:
+    void viewDestroyed(QObject* view);
+    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
+    void documentCreated( KDevelop::IDocument* document );
+    private:
+    void addViewInternal(KTextEditor::View* view);
+    QList<KTextEditor::View*> m_views;
+    QWidget* m_childrenOf;
+};
+
+class ContextController;
+
+class BrowseManager : public QObject {
+    Q_OBJECT
+    public:
+        BrowseManager(ContextController* controller);
+    public slots:
+        ///Enabled/disables the browsing mode
+        void setBrowsing(bool);
+    private:
+        class Watcher : public EditorViewWatcher {
+            public:
+            Watcher(BrowseManager* manager);
+            virtual void viewAdded(KTextEditor::View*);
+            private:
+            BrowseManager* m_manager;
+        };
+        //Installs/uninstalls the event-filter
+        void applyEventFilter(QWidget* object, bool install);
+        virtual bool eventFilter(QObject * watched, QEvent * event) ;
+        ContextController* m_controller;
+        bool m_browsing;
+        Watcher m_watcher;
+};
+
+#endif
