@@ -22,11 +22,11 @@ set(veritascoverage_SRCS
 
 kde4_add_library(kdevveritascoverage SHARED ${veritascoverage_SRCS})
 target_link_libraries(kdevveritascoverage
-    kdevplatforminterfaces
-    kdevplatformshell
-    kdevplatformoutputview
-    kdevplatformutil
-    sublime
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_SHELL_LIBRARY}
+    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
+    ${KDEVPLATFORM_SUBLIME_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS}
@@ -39,10 +39,10 @@ qt4_automoc(coverageplugin.cpp)
 kde4_add_plugin(kdevcoverage coverageplugin.cpp)
 target_link_libraries(kdevcoverage
     kdevveritascoverage
-    kdevplatformoutputview
-    kdevplatforminterfaces
-    kdevplatformutil
-    kdevplatformproject
+    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
