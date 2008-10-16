@@ -220,7 +220,7 @@ int TypeConversion::baseConversionLevels() const {
     return categories;
   }
 
-  ///if myRank is better then rank, rank will be set to myRank
+  ///if myRank is better than rank, rank will be set to myRank
   void maximizeRank( ConversionRank& rank, ConversionRank myRank ) {
     if( myRank > rank )
       rank = myRank;
