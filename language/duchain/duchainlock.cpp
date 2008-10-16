@@ -39,7 +39,7 @@
 // When uncommented, a backtrace will be printed whenever a too long lock-time is discovered
 //#define DEBUG_LOG_BACKTRACE
 
-//If DEBUG_LOG_TIMING is uncommented, and the duchain is locked for more then this count of milliseconds, a message is printed
+//If DEBUG_LOG_TIMING is uncommented, and the duchain is locked for more than this count of milliseconds, a message is printed
 #define LOCK_LOG_MILLISECONDS 1000
 
 //If this is uncommented, backtraces are produced whenever the duchain is read-locked, and shows it when the same thread tries to get a write-lock, triggering an assertion.

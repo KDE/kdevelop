@@ -52,7 +52,7 @@
 
 using namespace KTextEditor;
 
-//Do visibility-caching when more then X items are found.
+//Do visibility-caching when more than X items are found.
 const uint visibilityCachingMargin = 10;
 
 namespace std {
