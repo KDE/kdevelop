@@ -299,7 +299,7 @@ class NETWORK_EXPORT WeakSharedPtr {
                ();
     }
 
-    ///This leads to another order then sorting equivalent normal pointers
+    ///This leads to another order than sorting equivalent normal pointers
     bool operator < ( const WeakSharedPtr<Item, Serialization>& rhs ) const {
       return ref_ < rhs.ref_;
     }

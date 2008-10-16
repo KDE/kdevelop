@@ -63,12 +63,12 @@ class DYNAMICTEXT_EXPORT VectorTimestamp {
     }
 
     /**
-     * @return whether every timestamp is smaller then the according index of rhs
+     * @return whether every timestamp is smaller than the according index of rhs
     * */
     bool smaller( const VectorTimestamp& rhs ) const ;
 
     /**
-    * @return whether every timestamp is smaller or same then the according index of rhs
+    * @return whether every timestamp is smaller than or same as the according index of rhs
     * */
     bool smallerOrSame( const VectorTimestamp& rhs ) const ;
 

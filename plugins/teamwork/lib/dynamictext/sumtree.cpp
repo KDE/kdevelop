@@ -18,7 +18,7 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "verify.h"
 #include <limits.h>
 
-///Must be less then SPLIT_NODES_THRESHOLD and more than JOIN_NODES_THRESHOLD
+///Must be less than SPLIT_NODES_THRESHOLD and more than JOIN_NODES_THRESHOLD
 #define PREFERRED_NODES 4
 
 #define SPLIT_NODES_THRESHOLD 8

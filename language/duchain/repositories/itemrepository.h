@@ -198,7 +198,7 @@ class Bucket {
   public:
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
-      MaxFreeItemsForHide = 0, //When less then this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
+      MaxFreeItemsForHide = 0, //When less than this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
       MinFreeItemsForReuse = 1//When this count of free items in one bucket is reached, consider re-assigning them to new requests
     };
     enum {

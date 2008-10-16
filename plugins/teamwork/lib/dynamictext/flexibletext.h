@@ -346,7 +346,7 @@ class DYNAMICTEXT_EXPORT FlexibleText {
 #endif
     }
         
-    ///Remove 'length' charateres in line 'line', starting at column 'column'. If the length is longer then the rest of the line, this will continue deleting in the next line.
+    ///Remove 'length' characters in line 'line', starting at column 'column'. If the length is longer than the rest of the line, this will continue deleting in the next line.
     void erase( int line, int column, int length ) {
 #ifdef EXTREMEDEBUG
       cout << "erasing " << line << ":" << column << " length " << length << endl;
