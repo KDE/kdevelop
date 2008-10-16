@@ -37,6 +37,10 @@
 
 using namespace KDevelop;
 
+//If this is true, the return-values of argument-hints will be just written as "..." if they are too long
+const bool shortenArgumentHintReturnValues = true;
+const int maximumArgumentHintReturnValueLength = 30;
+
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
   bool spaceBetweenParens = true;
@@ -296,9 +300,13 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
 
-              if (functionType->returnType())
-                return indentation + functionType->returnType()->toString();
-              else if(funDecl && funDecl->isConstructor() )
+              if (functionType->returnType()) {
+                QString ret = indentation + functionType->returnType()->toString();
+                if(shortenArgumentHintReturnValues && argumentHintDepth() && ret.length() > maximumArgumentHintReturnValueLength)
+                  return QString("...");
+                else
+                  return ret;
+              }else if(funDecl && funDecl->isConstructor() )
                 return indentation + "<constructor>";
               else if(funDecl && funDecl->isDestructor() )
                 return indentation + "<destructor>";
