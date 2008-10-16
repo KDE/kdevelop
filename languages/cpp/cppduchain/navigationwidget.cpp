@@ -970,7 +970,7 @@ void NavigationWidget::initBrowser(int height) {
   layout->addWidget(m_browser);
   setLayout(layout);
   
-  connect( this, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
+  connect( m_browser, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );
 }
 
 NavigationWidget::~NavigationWidget() {
