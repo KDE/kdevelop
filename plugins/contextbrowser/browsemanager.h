@@ -84,6 +84,7 @@ class BrowseManager : public QObject {
         virtual bool eventFilter(QObject * watched, QEvent * event) ;
         ContextController* m_controller;
         bool m_browsing;
+        bool m_browsingByKey; //Whether the browsing was started because of a key
         Watcher m_watcher;
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;

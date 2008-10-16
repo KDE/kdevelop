@@ -21,6 +21,7 @@
 
 #include "browsemanager.h"
 #include <QMouseEvent>
+#include <QToolButton>
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -89,7 +90,7 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
     return m_views;
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false) {
+BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false) {
 }
 
 KTextEditor::View* viewFromWidget(QWidget* widget) {
@@ -109,6 +110,28 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if(!view)
         return false;
     
+    const int browseKey = Qt::Key_Control;
+    
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    if(keyEvent && keyEvent->key() == browseKey) {
+        if(!m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
+            m_browsingByKey = true;
+            if(!m_browsing) {
+                m_controller->browseButton()->setChecked(true);
+                m_browsing = false;
+            }
+        } else if(m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) {
+            m_browsingByKey = false;
+            if(!m_browsing)
+                m_controller->browseButton()->setChecked(false);
+        }
+    }
+    
+    if(!m_browsing && !m_browsingByKey) {
+        resetChangedCursor();
+        return false;
+    }
+    
     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
     if(mouseEvent) {
         KTextEditor::CoordinatesToCursorInterface* iface = dynamic_cast<KTextEditor::CoordinatesToCursorInterface*>(view);
@@ -123,6 +146,10 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         if(textCursor.isValid()) {
             SmartInterface* iface = dynamic_cast<SmartInterface*>(view->document());
             if (!iface) return false;
+            
+            ///@todo find out why this is needed, fix the code in kate
+            if(textCursor.column() > 0)
+                textCursor.setColumn(textCursor.column()-1);
 
             KUrl viewUrl = view->document()->url();
             QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
@@ -165,12 +192,12 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 }
 
 void BrowseManager::resetChangedCursor() {
-    for(QMap<QPointer<QWidget>, QCursor>::iterator it = m_oldCursors.begin(); it != m_oldCursors.end(); ++it) {
-        if(it.key())
-            it.key()->setCursor(*it);
-    }
-    
+    QMap<QPointer<QWidget>, QCursor> cursors = m_oldCursors;
     m_oldCursors.clear();
+    
+    for(QMap<QPointer<QWidget>, QCursor>::iterator it = cursors.begin(); it != cursors.end(); ++it)
+        if(it.key())
+            it.key()->setCursor(QCursor(Qt::IBeamCursor));
 }
 
 void BrowseManager::setHandCursor(QWidget* widget) {
@@ -192,8 +219,7 @@ void BrowseManager::applyEventFilter(QWidget* object, bool install) {
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
-    if(m_manager->m_browsing)
-        m_manager->applyEventFilter(view, true);
+    m_manager->applyEventFilter(view, true);
 }
 
 void BrowseManager::setBrowsing(bool enabled) {
@@ -209,13 +235,13 @@ void BrowseManager::setBrowsing(bool enabled) {
             applyEventFilter(view, true);
     }else{
         kDebug() << "Disabled browsing-mode";
-        //Disable browsing
-        foreach(KTextEditor::View* view, m_watcher.allViews())
-            applyEventFilter(view, false);
+        resetChangedCursor();
     }
 }
 
 BrowseManager::Watcher::Watcher(BrowseManager* manager) : EditorViewWatcher(masterWidget(manager->m_controller->view())), m_manager(manager) {
+    foreach(KTextEditor::View* view, allViews())
+        m_manager->applyEventFilter(view, true);
 }
 
 
