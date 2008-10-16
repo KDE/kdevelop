@@ -120,9 +120,9 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 m_controller->browseButton()->setChecked(true);
             
         } else if(m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) {
-            m_browsingByKey = false;
             if(!m_browsing)
                 m_controller->browseButton()->setChecked(false);
+            m_browsingByKey = false;
         }
     }
     
