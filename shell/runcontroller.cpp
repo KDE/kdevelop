@@ -323,8 +323,12 @@ IRun KDevelop::RunController::defaultRun() const
     if(exec.isEmpty())
     {
         QString target=group.readEntry("Run Item", QString());
-        #warning implement me! give a way to retrieve the exec url from the buildtool
+        QModelIndex idx=pathToIndex(model, target.split('/'));
+        ProjectBaseItem *it=model->item(idx);
+        if(it->executable())
+            exec=it->executable()->builtUrl().toLocalFile();
     }
+    //FIXME: throw error
     run.setExecutable(exec);
     run.setWorkingDirectory(group.readEntry("Working Directory", QString()));
     run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
