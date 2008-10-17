@@ -162,7 +162,15 @@ KUrl KDevVcsCommonPlugin::urlForItem( KDevelop::ProjectBaseItem* item ) const
 
 KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevelop::Context* context )
 {
-    //TODO: the following logic to determine which actions need to be enabled or disabled does not work properly. What needs to be implemented is that project items that are vc-controlled enable all except add, project items that are not vc-controlled enable add action. For urls that cannot be made into a project item, or if the project has no associated VC plugin we need to check wether a VC controls the parent dir, if we have one we assume the urls can be added but are not currently controlled. If the url is already version controlled then just enable all except add
+    /* TODO: the following logic to determine which actions need to be enabled
+     * or disabled does not work properly. What needs to be implemented is that
+     * project items that are vc-controlled enable all except add, project 
+     * items that are not vc-controlled enable add action. For urls that cannot
+     * be made into a project item, or if the project has no associated VC 
+     * plugin we need to check wether a VC controls the parent dir, if we have 
+     * one we assume the urls can be added but are not currently controlled. If
+     * the url is already version controlled then just enable all except add
+     */
     m_ctxUrls.clear();
     KDevelop::ContextMenuExtension menuExt;
     {
