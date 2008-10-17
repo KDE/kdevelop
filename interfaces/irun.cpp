@@ -134,14 +134,19 @@ void IRun::clearInstrumentorArguments()
     d->instrumentorArguments.clear();
 }
 
+void IRun::clearCompilationDependencies()
+{
+    d->compilationDependencies.clear();
+}
+
 QList<ProjectBaseItem*> IRun::compilationDependencies() const
 {
-	return d->compilationDependencies;
+    return d->compilationDependencies;
 }
 
 void IRun::setCompilationDependencies(const QList<ProjectBaseItem*>& deps)
 {
-	d->compilationDependencies=deps;
+    d->compilationDependencies=deps;
 }
 
 #include "irun.moc"
