@@ -4,6 +4,10 @@ project(kdevplatform)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
+set(KDEVPLATFORM_MAJOR_VERSION 0)
+set(KDEVPLATFORM_MAJOR_VERSION 9)
+set(KDEVPLATFORM_MAJOR_VERSION 80)
+
 set(KDE_MIN_VERSION "4.1.60")
 find_package(KDE4 4.1.60 REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -17,9 +21,6 @@ include (MacroLogFeature)
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} )
-
-# create config.h
-configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
 set(KDEVPLATFORM_LIB_VERSION 1.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 1)
