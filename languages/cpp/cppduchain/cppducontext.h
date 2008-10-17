@@ -529,7 +529,10 @@ class CppDUContext : public BaseContext {
         TemplateDeclaration* templ = dynamic_cast<TemplateDeclaration*>(this->owner());
         if(templ) {
           DUContext* ret = templ->instantiate(info, source)->internalContext();
-          Q_ASSERT(ret);
+          if(!ret) {
+            kWarning() << "Failed to instantiate template context";
+            return this;
+          }
           return ret;
         }
       }
