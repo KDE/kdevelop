@@ -59,7 +59,7 @@ public:
 
     virtual Features features() const { return Features(Folders | Targets | Files); }
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectFolderItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KUrl buildDirectory(const KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
     virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
     virtual QHash<QString,QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
