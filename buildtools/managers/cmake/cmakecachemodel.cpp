@@ -20,7 +20,6 @@
 
 #include "cmakecachemodel.h"
 #include <QFile>
-#include <QRegExp>
 #include <KDebug>
 #include <KLocale>
 
