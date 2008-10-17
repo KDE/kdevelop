@@ -133,7 +133,7 @@ public:
     /**
      * Helper function to create a vcs revision for one of the special types
      */
-    static VcsRevision createSpecialRevision( VcsRevision::RevisionSpecialType type );
+    static VcsRevision createSpecialRevision( KDevelop::VcsRevision::RevisionSpecialType type );
 protected:
     /**
      * Get the keys that make up the internal data of this revision instance

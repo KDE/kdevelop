@@ -85,7 +85,7 @@ public:
     /**
      * @returns the type of this location
      */
-    VcsLocation::LocationType type() const;
+    LocationType type() const;
 
     /**
      * Set the local url for this location, automatically sets the type to LocalLocation

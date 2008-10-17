@@ -11,7 +11,6 @@ namespace KDevelop { class ProjectBuildFolderItem; }
 namespace KDevelop { class ProjectTargetItem; }
 namespace KDevelop { class ProjectExecutableTargetItem; }
 namespace KDevelop { class ProjectLibraryTargetItem; }
-namespace KDevelop { class ProjectTestTargetItem; }
 namespace KDevelop { class ProjectFileItem; }
 namespace KDevelop { class ProjectModel; }
 namespace Handlers
@@ -23,10 +22,6 @@ namespace Handlers
 	QVariant _kDevelopProjectFileItemHandler(void* type);
 	QVariant kDevelopProjectFileItemHandler(KDevelop::ProjectFileItem* type);
 	QVariant kDevelopProjectFileItemHandler(const KDevelop::ProjectFileItem* type);
-
-	QVariant _kDevelopProjectTestTargetItemHandler(void* type);
-	QVariant kDevelopProjectTestTargetItemHandler(KDevelop::ProjectTestTargetItem* type);
-	QVariant kDevelopProjectTestTargetItemHandler(const KDevelop::ProjectTestTargetItem* type);
 
 	QVariant _kDevelopProjectLibraryTargetItemHandler(void* type);
 	QVariant kDevelopProjectLibraryTargetItemHandler(KDevelop::ProjectLibraryTargetItem* type);

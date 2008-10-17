@@ -40,7 +40,6 @@ class ProjectBuildFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectExecutableTargetItem;
-class ProjectTestTargetItem;
 class ProjectLibraryTargetItem;
 
 /**
@@ -51,7 +50,6 @@ class ProjectLibraryTargetItem;
  * \li Custom Target
  * \li Library Target
  * \li Executable Target
- * \li Test Executable Target
  * \li File
  */
 class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
@@ -73,7 +71,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
             Folder = QStandardItem::UserType+1            /** item is a folder */,
             ExecutableTarget = QStandardItem::UserType+2  /** item is an executable target */,
             LibraryTarget = QStandardItem::UserType+3     /** item is a library target */,
-            TestTarget = QStandardItem::UserType+4        /** item is a test executable target */,
             Target = QStandardItem::UserType+5            /** item is a target */,
             File = QStandardItem::UserType+6              /** item is a file */
         };
@@ -99,9 +96,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns Returns a list of the targets that have this object as the parent. */
         QList<ProjectTargetItem*> targetList() const;
-
-        /** @returns Returns a list of the test targets that have this object as the parent. */
-        QList<ProjectTestTargetItem*> testList() const;
 
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
@@ -209,7 +203,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
     public:
         ProjectExecutableTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
 
-    ///Reimplemented from QStandardItem
         virtual int type() const;
 };
 
@@ -224,22 +217,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
     public:
         ProjectLibraryTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
 
-    ///Reimplemented from QStandardItem
-        virtual int type() const;
-};
-
-
-/**
- * Object which represents an executable test target in a build system.
- *
- * This object contains all properties specific to a test target.
- */
-class KDEVPLATFORMPROJECT_EXPORT ProjectTestTargetItem: public ProjectExecutableTargetItem
-{
-    public:
-        ProjectTestTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
-
-    ///Reimplemented from QStandardItem
         virtual int type() const;
 };
 

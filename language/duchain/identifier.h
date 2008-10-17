@@ -60,7 +60,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier {
   Identifier identifier() const;
   operator Identifier() const;
 
-  uint index;
+  unsigned int index;
 };
 
 //A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.

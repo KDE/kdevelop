@@ -47,13 +47,13 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	Q_ENUMS(Flags)
-	Q_FLAGS(Flags NoFlags ProxyContextFlag AnyFlag UpdatingContext LastFlag)
+	Q_FLAGS(Flags NoFlags UpdatingContext LastFlag)
 
 	Q_ENUMS(Features)
 	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses)
 
 	public:
-// 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, ProxyContextFlag=KDevelop::TopDUContext::ProxyContextFlag, AnyFlag=KDevelop::TopDUContext::AnyFlag, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
+		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
 		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
@@ -90,6 +90,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void clearImportedParentContexts() { wrapped->clearImportedParentContexts(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext::Import > importedParentContexts() const { return wrapped->importedParentContexts(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
+		Q_SCRIPTABLE QList< KDevelop::DUContext* > loadedImporters() const { return wrapped->loadedImporters(); }
 		Q_SCRIPTABLE KDevelop::SimpleCursor importPosition(const KDevelop::DUContext* x0) const { return wrapped->importPosition(x0); }
 		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 >& x0, const KDevelop::SimpleCursor& x1, const TypePtr< KDevelop::AbstractType >& x2, KDevVarLengthArray< KDevelop::Declaration*, 40 >& x3, const KDevelop::TopDUContext* x4, QFlags< KDevelop::DUContext::SearchFlag > x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
 	private:

@@ -1,9 +1,9 @@
 
-add_executable(xmltokross main.cpp cppxmlparse.cpp)
-target_link_libraries(xmltokross ${QT_QTCORE_LIBRARY})
+#add_executable(xmltokross main.cpp cppxmlparse.cpp)
+#target_link_libraries(xmltokross ${QT_QTCORE_LIBRARY})
 
-add_executable(xmltokrossimpl abstractclasses.cpp cppxmlparse.cpp)
-target_link_libraries(xmltokrossimpl ${QT_QTCORE_LIBRARY})
+#add_executable(xmltokrossimpl abstractclasses.cpp cppxmlparse.cpp)
+#target_link_libraries(xmltokrossimpl ${QT_QTCORE_LIBRARY})
 
 set(KDEVCPPDUCHAIN "" CACHE STRING "kdevcpp location")
 if(KDEVCPPDUCHAIN)

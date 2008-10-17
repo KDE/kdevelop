@@ -43,8 +43,6 @@ class ProjectManagerCallbacks : public QObject
             { return m_interface->addLibrary(folder, targetName); }
         KDevelop::ProjectExecutableTargetItem* addExecutable(const QString& folder, const QString & targetName)
             { return m_interface->addExecutable(folder, targetName); }
-        KDevelop::ProjectTestTargetItem* addTest(const QString& folder, const QString & targetName)
-            { return m_interface->addTest(folder, targetName); }
         
         KDevelop::ProjectFolderItem* addFolder(const QString& folder)
             { return m_interface->addFolder(folder); }
@@ -262,18 +260,6 @@ KDevelop::ProjectLibraryTargetItem* KrossBuildSystemManager::addLibrary(const QS
     Q_ASSERT(m_folderPerUrl.contains(url));
     KDevelop::ProjectFolderItem* parent=m_folderPerUrl[url];
     KDevelop::ProjectLibraryTargetItem* newTarget = new KDevelop::ProjectLibraryTargetItem(parent->project(), targetName, parent);
-    Q_ASSERT(! m_targetPerName.contains(targetName));
-    m_targetPerName[targetName]=newTarget;
-    return newTarget;
-}
-
-KDevelop::ProjectTestTargetItem* KrossBuildSystemManager::addTest(const QString& folder, const QString & targetName)
-{
-    kDebug() << "adding test" << folder << targetName;
-    KUrl url(folder);
-    Q_ASSERT(m_folderPerUrl.contains(url));
-    KDevelop::ProjectFolderItem* parent=m_folderPerUrl[url];
-    KDevelop::ProjectTestTargetItem* newTarget = new KDevelop::ProjectTestTargetItem(parent->project(), targetName, parent);
     Q_ASSERT(! m_targetPerName.contains(targetName));
     m_targetPerName[targetName]=newTarget;
     return newTarget;

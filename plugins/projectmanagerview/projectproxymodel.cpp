@@ -27,7 +27,7 @@ KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
     if( type == KDevelop::ProjectBaseItem::Folder || type == KDevelop::ProjectBaseItem::BuildFolder )
         return KDevelop::ProjectBaseItem::Folder;
     if( type == KDevelop::ProjectBaseItem::Target || type == KDevelop::ProjectBaseItem::ExecutableTarget
-        || type == KDevelop::ProjectBaseItem::LibraryTarget || type == KDevelop::ProjectBaseItem::TestTarget)
+        || type == KDevelop::ProjectBaseItem::LibraryTarget)
         return KDevelop::ProjectBaseItem::Target;
 
     return KDevelop::ProjectBaseItem::File;

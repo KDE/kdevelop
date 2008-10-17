@@ -20,6 +20,9 @@
 #define DUCONTEXT_H
 
 #include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QSet>
+#include <QtCore/QVector>
 #include <util/kdevvarlengtharray.h>
 
 #include "../editor/documentcursorobject.h"
@@ -28,9 +31,6 @@
 #include "types/abstracttype.h"
 #include "duchainpointer.h"
 #include "declarationid.h"
-
-template<class T>
-class QSet;
 
 class QWidget;
 

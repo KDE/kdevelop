@@ -62,7 +62,6 @@ public:
     KDevelop::ProjectFileItem* addFile(const QString& folder, const QString& targetName, const QString& filename);
     KDevelop::ProjectTargetItem* addTarget(const QString& folder, const QString& targetName);
     KDevelop::ProjectExecutableTargetItem* addExecutable(const QString& folder, const QString& targetName);
-    KDevelop::ProjectTestTargetItem* addTest(const QString& folder, const QString& targetName);
     KDevelop::ProjectLibraryTargetItem* addLibrary(const QString& folder, const QString& targetName);
     KDevelop::ProjectFolderItem* addFolder(const QString& folder);
     

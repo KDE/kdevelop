@@ -162,26 +162,9 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     {
         QStandardItem* item = child( i );
         if ( item->type() == Target || item->type() == LibraryTarget ||
-             item->type() == ExecutableTarget || item->type() == TestTarget)
+             item->type() == ExecutableTarget)
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
-            if ( kdevitem )
-                lst.append( kdevitem );
-        }
-    }
-
-    return lst;
-}
-
-QList<ProjectTestTargetItem*> ProjectBaseItem::testList() const
-{
-    QList<ProjectTestTargetItem*> lst;
-    for ( int i = 0; i < rowCount(); ++i )
-    {
-        QStandardItem* item = child( i );
-        if (item->type() == TestTarget)
-        {
-            ProjectTestTargetItem *kdevitem = dynamic_cast<ProjectTestTargetItem*>( item );
             if ( kdevitem )
                 lst.append( kdevitem );
         }
@@ -452,15 +435,6 @@ ProjectLibraryTargetItem::ProjectLibraryTargetItem( IProject* project, const QSt
 int ProjectLibraryTargetItem::type() const
 {
     return ProjectBaseItem::LibraryTarget;
-}
-
-ProjectTestTargetItem::ProjectTestTargetItem( IProject* project, const QString &name, QStandardItem *parent )
-    : ProjectExecutableTargetItem(project, name, parent)
-{}
-
-int ProjectTestTargetItem::type() const
-{
-    return ProjectBaseItem::TestTarget;
 }
 
 
