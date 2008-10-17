@@ -58,6 +58,7 @@
 #include "environmentmanager.h"
 #include <unistd.h>
 #include <qwaitcondition.h>
+#include <kdevplatform/language/duchain/duchainutils.h>
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
@@ -439,7 +440,26 @@ void CPPInternalParseJob::run()
       }
 
       CppEditorIntegrator editor(parentJob()->parseSession());
-      editor.setCurrentUrl(parentJob()->document());
+      bool isStandardContext = false;
+      {
+        DUChainWriteLocker l(DUChain::lock());
+        TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
+        
+        isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
+    
+        if(isStandardContext) {
+          //Delete the smart-ranges of all other contexts, so we never get problems with smart uses/highlighting
+          foreach(TopDUContext* context, DUChain::self()->chainsForDocument(parentJob()->document())) {
+            if(context != updatingContentContext) {
+              SmartConverter sc(&editor);
+              sc.deconvertDUChain(context);
+              kDebug() << "smart-deconverting a non-standard context";
+            }
+          }
+        }
+      }
+      
+      editor.setCurrentUrl(parentJob()->document(), isStandardContext);
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 

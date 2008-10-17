@@ -287,25 +287,11 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
   m_contextClasses.clear();
   m_useClassCache = true;
 
-  TopDUContext* standardCtx = CppLanguageSupport::self()->standardContext(KUrl(context->url().str()), false);
+  //Highlight
+  highlightDUChainSimple(static_cast<DUContext*>(context));
 
-  //Only highlight if this is the standard context(we only want exactly one context highlighted at a time)
-  if(context == standardCtx) {
-    //Clear the highlighting of all other contexts for this file
-    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(context->url());
-
-    foreach(TopDUContext* ctx, contexts) {
-      if(ctx == context)
-        continue;
-      deleteHighlighting(ctx);
-    }
-
-    //Highlight
-    highlightDUChainSimple(static_cast<DUContext*>(context));
-
-    m_functionColorsForDeclarations.clear();
-    m_functionDeclarationsForColors.clear();
-  }
+  m_functionColorsForDeclarations.clear();
+  m_functionDeclarationsForColors.clear();
 
   m_useClassCache = false;
   m_contextClasses.clear();

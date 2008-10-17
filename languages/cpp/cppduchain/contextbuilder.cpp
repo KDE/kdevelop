@@ -253,7 +253,8 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
   
   filePtr->setIsProxyContext(true);
   
-  editor()->setCurrentUrl(file->url());
+  //Never give smart-ranges to proxy-contexts
+  editor()->setCurrentUrl(file->url(), false);
 
   TopDUContext* topLevelContext = 0;
   {
@@ -297,6 +298,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
 
 ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
 {
+  Q_ASSERT(file);
   setCompilingContexts(true);
 
   if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
@@ -304,7 +306,8 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
     updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
   }
 
-  editor()->setCurrentUrl(file->url());
+  if(editor()->currentUrl() != file->url())
+    editor()->setCurrentUrl(file->url(), true);
 
   ReferencedTopDUContext topLevelContext;
   {
