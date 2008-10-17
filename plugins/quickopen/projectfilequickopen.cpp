@@ -107,7 +107,7 @@ QWidget* ProjectFileData::expandingWidget() const {
 }
 
 QIcon ProjectFileData::icon() const {
-  return QIcon();
+  return m_file.m_icon;
 }
 
 ProjectFileDataProvider::ProjectFileDataProvider() {
@@ -118,12 +118,26 @@ void ProjectFileDataProvider::setFilterText( const QString& text ) {
   Base::setFilter( text );
 }
 
+namespace
+{
+QSet<IndexedString> openFiles()
+{
+  QSet<IndexedString> openFiles;
+  foreach( IDocument* doc, ICore::self()->documentController()->openDocuments() ) {
+    openFiles << IndexedString(doc->url().pathOrUrl());
+  }
+  return openFiles;
+}
+}
+
 void ProjectFileDataProvider::reset() {
   Base::clearFilter();
   QList<ProjectFile> projectFiles;
-  
+  QSet<IndexedString> openFiles_ = openFiles();
+
   foreach( IProject* project, ICore::self()->projectController()->projects() ) {
     QSet<IndexedString> allFiles = project->fileSet();
+    allFiles -= openFiles_;
     IndexedString projectFolder(project->folder().pathOrUrl());
     IndexedString projectName(project->name());
     foreach(IndexedString file, allFiles) {
@@ -148,7 +162,7 @@ QSet<IndexedString> ProjectFileDataProvider::files() const {
   foreach( IProject* project, ICore::self()->projectController()->projects() )
     ret += project->fileSet();
 
-  return ret;
+  return ret - openFiles();
 }
 
 QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start, uint end ) const {
@@ -168,3 +182,34 @@ QList<KDevelop::QuickOpenDataPointer> ProjectFileDataProvider::data( uint start,
 QString ProjectFileDataProvider::itemText( const ProjectFile& data ) const {
   return data.m_url.str();
 }
+
+void OpenFilesDataProvider::reset()
+{
+  Base::clearFilter();
+  QList<ProjectFile> currentFiles;
+  IProjectController* projCtrl = ICore::self()->projectController();
+  IDocumentController* docCtrl = ICore::self()->documentController();
+
+  KIcon icon("emblem-important");
+  foreach( IDocument* doc, docCtrl->openDocuments() ) {
+    ProjectFile f;
+    f.m_icon = icon;
+    f.m_url = IndexedString(doc->url().pathOrUrl());
+    IProject* proj = projCtrl->findProjectForUrl(doc->url());
+    if (proj) {
+        f.m_projectUrl = IndexedString(proj->folder().pathOrUrl());
+        f.m_project = IndexedString(proj->name());
+    } else {
+        f.m_project = IndexedString(i18n("none"));
+    }
+    currentFiles << f;
+  }
+
+  setItems(currentFiles);
+}
+
+QSet<KDevelop::IndexedString> OpenFilesDataProvider::files() const
+{
+  return openFiles();
+}
+

@@ -52,7 +52,8 @@ public:
       Files = 1,
       Functions = 2,
       Classes = 4,
-      All = Files + Functions + Classes
+      OpenFiles = 8,
+      All = Files + Functions + Classes + OpenFiles
     };
 
     /**
@@ -76,6 +77,7 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
+    void quickOpenOpenFiles();
 
 private slots:
     void storeScopes( const QStringList& );
@@ -91,6 +93,7 @@ private:
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;
     class ProjectItemDataProvider* m_projectItemData;
+    class OpenFilesDataProvider* m_openFilesData;
     QStringList lastUsedScopes;
     
     //Contains a pointer to the current QuickOpenWidgetHandler, if a completion is active.

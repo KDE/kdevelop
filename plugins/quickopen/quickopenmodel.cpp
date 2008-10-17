@@ -146,8 +146,8 @@ void QuickOpenModel::textChanged( const QString& str )
   m_cachedData.clear();
   clearExpanding();
 
-  //Get the 100 first items, so the data-providers notice changes without ui-glitches due to resetting
-  for(int  a = 0; a < 50; ++a)
+  //Get the 50 first items, so the data-providers notice changes without ui-glitches due to resetting
+  for(int  a = 0; a < 50 && a < rowCount(QModelIndex()) ; ++a)
     getItem(a, true);
   
 
@@ -200,7 +200,7 @@ void QuickOpenModel::destroyed( QObject* obj )
 
 QModelIndex QuickOpenModel::index( int row, int column, const QModelIndex& /*parent*/) const
 {
-  if( column >= columnCount() )
+  if( column >= columnCount() || row >= rowCount(QModelIndex()) )
     return QModelIndex();
   return createIndex( row, column );
 }
@@ -301,7 +301,7 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 }
 
 void QuickOpenModel::resetTimer() {
-    
+
     //Remove all cached data behind row m_resetBehindRow
     for(QHash<uint, KDevelop::QuickOpenDataPointer>::iterator it = m_cachedData.begin(); it != m_cachedData.end(); ) {
         if(it.key() > m_resetBehindRow)
@@ -310,9 +310,11 @@ void QuickOpenModel::resetTimer() {
             ++it;
     }
     
-    uint currentRow = treeView()->currentIndex().row();
+    QModelIndex currentIndex(treeView()->currentIndex());  
     QAbstractItemModel::reset(); //New items have been inserted
-    treeView()->setCurrentIndex(index(currentRow, 0, QModelIndex())); //Preserve the current index
+    if (currentIndex.isValid()) {
+        treeView()->setCurrentIndex(index(currentIndex.row(), 0, QModelIndex())); //Preserve the current index
+    }
     m_resetBehindRow = 0;
 }
 
@@ -326,11 +328,12 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
 #endif
   int rowOffset = 0;
 
+    Q_ASSERT(row < rowCount(QModelIndex()));
+
   foreach( const ProviderEntry& provider, m_providers ) {
     if( !provider.enabled )
       continue;
     uint itemCount = provider.provider->itemCount();
-    
     if( (uint)row < itemCount )
     {
       QList<QuickOpenDataPointer> items = provider.provider->data( row, row+1 );
@@ -347,7 +350,7 @@ QuickOpenDataPointer QuickOpenModel::getItem( int row, bool noReset ) const {
         return QuickOpenDataPointer();
       } else {
 #ifdef QUICKOPEN_USE_ITEM_CACHING
-        m_cachedData[row] = items.first();
+        m_cachedData[row+rowOffset] = items.first();
 #endif
         return items.first();
       }

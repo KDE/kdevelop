@@ -464,6 +464,11 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
+    KAction* quickOpenOpenFile = actions->addAction("quick_open_class");
+    quickOpenOpenFile->setText( i18n("Quick Open &Open Files") );
+    quickOpenOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_T );
+    connect(quickOpenOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFiles()));
+
     KAction* quickOpenFunction = actions->addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
@@ -490,6 +495,14 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << "Project" << "Includes" << "Includers" );
+
+    {
+      m_openFilesData = new OpenFilesDataProvider();
+      QStringList scopes, items;
+      scopes << i18n("Project");
+      items << i18n("Open Files");
+      m_model->registerProvider( scopes, items, m_openFilesData );
+    }
     {
       m_projectFileData = new ProjectFileDataProvider();
       QStringList scopes, items;
@@ -504,6 +517,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       items << ProjectItemDataProvider::supportedItemTypes();
       m_model->registerProvider( scopes, items, m_projectItemData );
     }
+
 }
 
 QuickOpenPlugin::~QuickOpenPlugin()
@@ -513,6 +527,7 @@ QuickOpenPlugin::~QuickOpenPlugin()
   delete m_model;
   delete m_projectFileData;
   delete m_projectItemData;
+  delete m_openFilesData;
 }
 
 void QuickOpenPlugin::unload()
@@ -533,6 +548,9 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 
   if( modes & Classes )
     initialItems << i18n("Classes");
+
+  if( modes & OpenFiles)
+    initialItems <<i18n("Open Files");
 
   m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, lastUsedScopes );
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
@@ -565,6 +583,11 @@ void QuickOpenPlugin::quickOpenFunction()
 void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
+}
+
+void QuickOpenPlugin::quickOpenOpenFiles()
+{
+  showQuickOpen( OpenFiles );
 }
 
 QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const {
@@ -702,6 +725,7 @@ void QuickOpenPlugin::quickOpenDefinition()
   core()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
 }
 
+
 void QuickOpenPlugin::quickOpenNavigate()
 {
   if(!freeModel())
@@ -835,7 +859,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         m_currentWidgetHandler->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
       }
       ++num;
-    }
+    } 
   }
   model->setParent(m_currentWidgetHandler);
   m_currentWidgetHandler->run();

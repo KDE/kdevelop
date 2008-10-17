@@ -19,6 +19,7 @@
 #ifndef PROJECT_FILE_QUICKOPEN
 #define PROJECT_FILE_QUICKOPEN
 
+#include <KIcon>
 #include <KUrl>
 #include <language/interfaces/quickopendataprovider.h>
 #include <language/interfaces/quickopenfilter.h>
@@ -34,6 +35,7 @@ struct ProjectFile {
   KDevelop::IndexedString m_url;
   KDevelop::IndexedString m_projectUrl;
   KDevelop::IndexedString m_project;
+  KIcon m_icon;
 };
 
 class ProjectFileData : public KDevelop::QuickOpenDataBase {
@@ -80,6 +82,13 @@ class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     virtual QString itemText( const ProjectFile& data ) const;
 };
 
+
+class OpenFilesDataProvider : public ProjectFileDataProvider
+{
+public:
+    virtual void reset();
+    virtual QSet<KDevelop::IndexedString> files() const;
+};
 
 #endif
 
