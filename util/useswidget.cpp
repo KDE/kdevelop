@@ -38,7 +38,6 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, Index
 }
 
 UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declaration), m_showingUses(false) {
-    return;
     DUChainReadLocker lock(DUChain::lock());
     if(Declaration* decl = declaration.data()) {
 
@@ -59,28 +58,23 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declarati
             QLayout* layout = new QHBoxLayout;
             QLabel* label = new QLabel(i18n("Used in:"));
             layout->addWidget(label);
-            uint maxHeight = layout->sizeHint().height();
+            layout->setMargin(0);
             
             foreach(QString file, files) {
 //                 if(file.isEmpty()) {
 //                     kDebug() << "got empty file-name in list";
 //                     continue;
 //                 }
-                QPushButton* button = new QPushButton(this);
-                button->setText(KUrl(file).fileName());
-                QSize size = button->sizeHint();
-                button->setMaximumWidth(size.width());
-                button->setMaximumHeight(size.height());
-                if(size.height() > maxHeight)
-                    maxHeight = size.height();
+                QLabel* fileLabel = new QLabel(this);
+                KUrl u(file);
+                fileLabel->setText(QString("<a href=\"%1\">%2</a>").arg(u.url()).arg(u.fileName()));
                 
-                layout->addWidget(button);
+                layout->addWidget(fileLabel);
                 layout->setAlignment(Qt::AlignLeft);
-                connect(button, SIGNAL(clicked(bool)), this, SLOT(showUsesForButton()));
+                connect(fileLabel, SIGNAL(linkActivated(const QString&)),
+                        this, SLOT(showUsesForButton()));
             }
             setLayout(layout);
-            setMaximumHeight(maxHeight);
-//             layout->setSizeConstraint(QLayout::SetMaximumSize);
         }
     }
 }
@@ -102,16 +96,17 @@ QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
 void UsesWidget::showUsesForButton() {
     m_showingUses = !m_showingUses;
     emit showingUses(m_showingUses);
-    QPushButton* button = qobject_cast<QPushButton*>(sender());
-    Q_ASSERT(button);
+    QLabel* button = qobject_cast<QLabel*>(sender());
+
     if(button) {
         int num = layout()->indexOf(button);
         Q_ASSERT(num != -1);
         DUChainReadLocker lock(DUChain::lock());
         QList<IndexedTopDUContext> usingContexts = allUsingContexts();
-        if(usingContexts.size() > num) {
+
+        if(usingContexts.size() > (num - 1)) {
             //Show all the uses of the declaration within this context
-            usingContexts[num].data();
+            usingContexts.value(num - 1).data();
         }else{
             kWarning() << "Wrong count of using contexts";
         }
