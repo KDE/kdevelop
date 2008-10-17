@@ -219,7 +219,7 @@ void DocDevHelpPlugin::autoSetupPlugin()
 void DocDevHelpPlugin::scanDevHelpDir(const QString &path)
 {
     QDir d(path);
-    if (! d.exists())
+    if (! d.exists() || !d.isReadable())
         return;
     
     d.setFilter(QDir::Files);
