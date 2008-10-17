@@ -176,7 +176,6 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
-    m_targetsType[test->testName()]=Test;
     if(!m_filesPerTarget.contains(test->testName()) || m_targetsType[test->testName()]==Library)
         kDebug(9042) << "warning. The target " << test->testName() << " does not exist or it is not an executable";
     return 1;
@@ -236,7 +235,7 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
 
 void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
 {
-    if (!m_targetsType.contains(id) || m_targetsType[id] != Test)
+    if (!m_targetsType.contains(id))
     {
         m_targetsType[id]=t;
     }

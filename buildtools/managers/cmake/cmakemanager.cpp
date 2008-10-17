@@ -459,24 +459,21 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             QStringList dependencies=v.targetDependencies(t);
             if(!dependencies.isEmpty()) //Just to remove verbosity
             {
-                KDevelop::ProjectTargetItem* targetItem;
-
+                
+                QString outputName=t;
+                if(v.targetHasProperty(t, "OUTPUT_NAME"))
+                    outputName=v.targetProperty(t, "OUTPUT_NAME");
+             
+                KDevelop::ProjectTargetItem* targetItem;   
                 switch(v.targetType(t))
                 {
                     case CMakeProjectVisitor::Library:
-                        targetItem = new CMakeLibraryTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
+                        targetItem = new CMakeLibraryTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
                         break;
                     case CMakeProjectVisitor::Executable:
-                        targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
-                        break;
-                    case CMakeProjectVisitor::Test:
-                        targetItem = new CMakeTestTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t] );
+                        targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
                         break;
                 }
-                QString targetName=t;
-                if(v.targetHasProperty(t, "OUTPUT_NAME"))
-                    targetName=v.targetProperty(t, "OUTPUT_NAME");
-                targetItem->setData(t);
 
                 foreach( const QString & sFile, dependencies )
                 {
@@ -824,7 +821,7 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
     foreach(KDevelop::ProjectBaseItem* item, items)
     {
         KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
-        if(t && (dynamic_cast<KDevelop::ProjectTestTargetItem*>(t) || dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)))
+        if(t && dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t))
         {
             targets.append(t->text());
         }
@@ -866,7 +863,7 @@ void CMakeProjectManager::runTargets()
     foreach(KDevelop::ProjectBaseItem* item, m_clickedItems)
     {
         KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
-        if(t && (dynamic_cast<KDevelop::ProjectTestTargetItem*>(t) || dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t)))
+        if(t && dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t))
         {
             kDebug(9032) << "Running target: " << t->text() << targetUrl(t);
             IRun r;

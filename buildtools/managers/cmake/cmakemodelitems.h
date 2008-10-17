@@ -74,26 +74,30 @@ class DUChainAttatched
         KDevelop::IndexedDeclaration decl;
 };
 
-class CMakeExecutableTargetItem : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched
+class CMakeExecutableTargetItem 
+    : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched
 {
     public:
-        CMakeExecutableTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
-            : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c) {}
+        CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
+                                  CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
+            : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+            
+    private:
+        QString outputName;
 };
 
-class CMakeLibraryTargetItem : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched
+class CMakeLibraryTargetItem
+    : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched
 {
     public:
-        CMakeLibraryTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
-            : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c) {}
+        CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
+                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
+            : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+            
+    private:
+        QString outputName;
 };
 
-class CMakeTestTargetItem : public KDevelop::ProjectTestTargetItem, public DUChainAttatched
-{
-    public:
-        CMakeTestTargetItem( KDevelop::IProject* project, const QString &name, QStandardItem *parent, KDevelop::IndexedDeclaration c )
-            : KDevelop::ProjectTestTargetItem( project, name, parent), DUChainAttatched(c) {}
-};
 /*
 class CMakeFileItem : public KDevelop::ProjectFileItem, public DUChainAttatched
 {

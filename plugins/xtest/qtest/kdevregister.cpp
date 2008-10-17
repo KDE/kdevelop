@@ -48,40 +48,40 @@ namespace
 
 /*! Recurses down the project item tree and collects all TestTargets.
     Returns these as a list. */
-QList<ProjectTestTargetItem*> fetchAllTestTargets(ProjectBaseItem* root)
-{
-    QList<ProjectTestTargetItem*> tests;
-    if (!root) return tests;
-    foreach(ProjectTestTargetItem* t, root->testList()) {
-        kDebug() << "Found Test " << t->data(Qt::DisplayRole).toString();
-        tests << t;
-    }
-    foreach(ProjectFolderItem* fldr, root->folderList()) {
-        tests += fetchAllTestTargets(fldr);
-    }
-    return tests;
-}
+// QList<ProjectTestTargetItem*> fetchAllTestTargets(ProjectBaseItem* root)
+// {
+//     QList<ProjectTestTargetItem*> tests;
+//     if (!root) return tests;
+//     foreach(ProjectTestTargetItem* t, root->testList()) {
+//         kDebug() << "Found Test " << t->data(Qt::DisplayRole).toString();
+//         tests << t;
+//     }
+//     foreach(ProjectFolderItem* fldr, root->folderList()) {
+//         tests += fetchAllTestTargets(fldr);
+//     }
+//     return tests;
+// }
 
 /*! Get the test names from a list of TestTargetItems */
-QStringList namesFromTargets(QList<ProjectTestTargetItem*> testTargets)
-{
-    QStringList testNames;
-    foreach(ProjectTestTargetItem* test, testTargets) {
-        testNames << test->data(Qt::DisplayRole).toString();
-    }
-    return testNames;
-}
+// /*QStringList namesFromTargets(QList<ProjectTestTargetItem*> testTargets)
+// {
+//     QStringList testNames;
+//     foreach(ProjectTestTargetItem* test, testTargets) {
+//         testNames << test->data(Qt::DisplayRole).toString();
+//     }
+//     return testNames;
+// }*/
 
 /*! Debug info printer */
-void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
-{
-    foreach(ProjectTestTargetItem* test, targets) {
-        kDebug() << test->data(Qt::DisplayRole);
-        foreach(ProjectFileItem* f, test->fileList()) {
-            kDebug() << "- " << f->url();
-        }
-    }
-}
+// void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
+// {
+//     foreach(ProjectTestTargetItem* test, targets) {
+//         kDebug() << test->data(Qt::DisplayRole);
+//         foreach(ProjectFileItem* f, test->fileList()) {
+//             kDebug() << "- " << f->url();
+//         }
+//     }
+// }
 
 /*! Locate all test executables in @p dir for which the name is contained in
 @p testNames. This function recurses down @p dir and its subdirectories.
@@ -167,8 +167,8 @@ void KDevRegister::reload()
     Q_ASSERT(!m_runner->isRunning());
 
     m_reloading = true;
-    QList<KDevelop::ProjectTestTargetItem*> testTargets = fetchAllTestTargets(project()->projectItem());
-    m_testNames = namesFromTargets(testTargets);
+//     QList<KDevelop::ProjectTestTargetItem*> testTargets = fetchAllTestTargets(project()->projectItem());
+//     m_testNames = namesFromTargets(testTargets);
     fetchTestCommands(0);
 }
 
