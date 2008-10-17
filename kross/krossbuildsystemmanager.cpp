@@ -50,6 +50,15 @@ class ProjectManagerCallbacks : public QObject
         KrossBuildSystemManager* m_interface;
 };
 
+class KrossProjectExecutableTargetItem : public KDevelop::ProjectExecutableTargetItem
+{
+    public:
+        KrossProjectExecutableTargetItem(KDevelop::IProject* project, const QString &name, QStandardItem *parent = 0)
+            : KDevelop::ProjectExecutableTargetItem(project, name, parent) {}
+            
+        virtual KUrl builtUrl() const { return KUrl(); }
+        virtual KUrl installedUrl() const { return KUrl(); }
+};
 
 KrossBuildSystemManager::KrossBuildSystemManager(const QVariantList& )
     : action(0)
@@ -91,7 +100,7 @@ KDevelop::IProjectBuilder* KrossBuildSystemManager::builder(KDevelop::ProjectFol
     return 0;
 }
 
-KUrl KrossBuildSystemManager::buildDirectory(KDevelop::ProjectBaseItem* it) const
+KUrl KrossBuildSystemManager::buildDirectory(const KDevelop::ProjectBaseItem* it) const
 {
     QVariant result=action->callFunction( "buildDirectory", QVariantList() << Handlers::kDevelopProjectBaseItemHandler(it));
     return result.toUrl();
@@ -247,7 +256,7 @@ KDevelop::ProjectExecutableTargetItem* KrossBuildSystemManager::addExecutable(co
     KUrl url(folder);
     Q_ASSERT(m_folderPerUrl.contains(url));
     KDevelop::ProjectFolderItem* parent=m_folderPerUrl[url];
-    KDevelop::ProjectExecutableTargetItem* newTarget = new KDevelop::ProjectExecutableTargetItem(parent->project(), targetName, parent);
+    KDevelop::ProjectExecutableTargetItem* newTarget = new KrossProjectExecutableTargetItem(parent->project(), targetName, parent);
     Q_ASSERT(! m_targetPerName.contains(targetName));
     m_targetPerName[targetName]=newTarget;
     return newTarget;

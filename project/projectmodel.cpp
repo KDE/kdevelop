@@ -133,6 +133,11 @@ ProjectTargetItem *ProjectBaseItem::target() const
     return 0;
 }
 
+ProjectExecutableTargetItem *ProjectBaseItem::executable() const
+{
+    return 0;
+}
+
 ProjectFileItem *ProjectBaseItem::file() const
 {
     return 0;
@@ -422,6 +427,11 @@ void ProjectTargetItem::setIcon()
 ProjectExecutableTargetItem::ProjectExecutableTargetItem( IProject* project, const QString &name, QStandardItem *parent )
     : ProjectTargetItem(project, name, parent)
 {}
+
+ProjectExecutableTargetItem *ProjectExecutableTargetItem::executable() const
+{
+    return const_cast<ProjectExecutableTargetItem*>( this );
+}
 
 int ProjectExecutableTargetItem::type() const
 {

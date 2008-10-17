@@ -22,6 +22,7 @@ class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* folder() const { return wrapped->folder(); }
 		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
 		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
+		Q_SCRIPTABLE KDevelop::ProjectExecutableTargetItem* executable() const { return wrapped->executable(); }
 		Q_SCRIPTABLE void setParent(QStandardItem* x0) { wrapped->setParent(x0); }
 		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectFolderItem* > folderList() const { return wrapped->folderList(); }
@@ -89,7 +90,10 @@ class KrossKDevelopProjectExecutableTargetItem : public KrossKDevelopProjectTarg
 	{ setObjectName("KDevelop::ProjectExecutableTargetItem"); }
 		void* wrappedObject() const { return wrapped; }
 
+		Q_SCRIPTABLE KDevelop::ProjectExecutableTargetItem* executable() const { return wrapped->executable(); }
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
+		Q_SCRIPTABLE KUrl builtUrl() const { return wrapped->builtUrl(); }
+		Q_SCRIPTABLE KUrl installedUrl() const { return wrapped->installedUrl(); }
 	private:
 		KDevelop::ProjectExecutableTargetItem* wrapped;
 };

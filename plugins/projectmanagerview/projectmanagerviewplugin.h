@@ -70,6 +70,7 @@ protected Q_SLOTS:
     void buildAllProjects();
     void addItemsFromContextMenuToBuildset();
     void projectConfiguration();
+    void runTargetsFromContextMenu();
     void reloadFromContextMenu();
     void createFolderFromContextMenu();
     void createFileFromContextMenu();

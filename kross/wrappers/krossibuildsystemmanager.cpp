@@ -26,7 +26,7 @@ class KrossKDevelopIBuildSystemManager : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE QList< KDevelop::ProjectTargetItem* > targets(KDevelop::ProjectFolderItem* x0) const { return wrapped->targets(x0); }
 		Q_SCRIPTABLE bool addFileToTarget(KDevelop::ProjectFileItem* x0, KDevelop::ProjectTargetItem* x1) { return wrapped->addFileToTarget(x0, x1); }
 		Q_SCRIPTABLE bool removeFileFromTarget(KDevelop::ProjectFileItem* x0, KDevelop::ProjectTargetItem* x1) { return wrapped->removeFileFromTarget(x0, x1); }
-		Q_SCRIPTABLE KUrl buildDirectory(KDevelop::ProjectBaseItem* x0) const { return wrapped->buildDirectory(x0); }
+		Q_SCRIPTABLE KUrl buildDirectory(const KDevelop::ProjectBaseItem* x0) const { return wrapped->buildDirectory(x0); }
 	private:
 		KDevelop::IBuildSystemManager* wrapped;
 };

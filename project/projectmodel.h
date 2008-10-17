@@ -86,6 +86,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
         virtual ProjectFileItem *file() const;
+        
+        /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
+        virtual ProjectExecutableTargetItem *executable() const;
 
         /**  @param parent sets the item parent to @p parent */
         void setParent( QStandardItem* parent);
@@ -203,7 +206,10 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
     public:
         ProjectExecutableTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
 
+        virtual ProjectExecutableTargetItem *executable() const;
         virtual int type() const;
+        virtual KUrl builtUrl() const=0;
+        virtual KUrl installedUrl() const=0;
 };
 
 
@@ -215,7 +221,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetItem
 {
     public:
-        ProjectLibraryTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        ProjectLibraryTargetItem(IProject* project, const QString &name, QStandardItem *parent = 0 );
 
         virtual int type() const;
 };

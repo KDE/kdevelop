@@ -36,7 +36,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
 
         KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const { return 0; }
-        KUrl buildDirectory(KDevelop::ProjectBaseItem*) const { return m_buildDir; }
+        KUrl buildDirectory(const KDevelop::ProjectBaseItem*) const { return m_buildDir; }
 
         KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const { qDebug("jojooooooooooojo"); return m_includeDirectories; }
         QHash<QString,QString> defines(KDevelop::ProjectBaseItem *) const { return m_defines; }

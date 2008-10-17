@@ -48,7 +48,7 @@ public:
     bool reload(KDevelop::ProjectBaseItem *item);
 
     KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
-    KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
+    KUrl buildDirectory(const KDevelop::ProjectBaseItem*) const;
 
     KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     QHash<QString,QString> defines(KDevelop::ProjectBaseItem *) const;

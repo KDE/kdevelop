@@ -42,6 +42,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/irun.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
@@ -156,6 +157,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     ContextMenuExtension menuExt;
     bool closeProjectsAdded = false;
     bool buildItemsAdded = false;
+    bool hasTargets=false;
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
@@ -199,8 +201,16 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
+        
+        if(!hasTargets && item->executable())
+        {
+            KAction* action = new KAction( i18n("Run"), this );
+            connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
+            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+        }
 
     }
+    
 //     if( items.count() == 1 )
 //     {
 //         KAction* action = new KAction( i18n( "Project Configuration" ), this );
@@ -413,9 +423,26 @@ void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
     }
 }
 
+void ProjectManagerViewPlugin::runTargetsFromContextMenu( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        KDevelop::ProjectExecutableTargetItem* t=item->executable();
+        if(t)
+        {
+            kDebug() << "Running target: " << t->text() << t->builtUrl();
+            IRun r;
+            r.setExecutable(t->builtUrl().toLocalFile());
+            r.setInstrumentor("default");
+            
+            ICore::self()->runController()->execute(r);
+        }
+    }
+}
+
 void ProjectManagerViewPlugin::projectConfiguration( )
 {
-    if( d->ctxProjectItemList.count() > 0 )
+    if( !d->ctxProjectItemList.isEmpty() )
     {
         core()->projectController()->configureProject( d->ctxProjectItemList.at( 0 )->project() );
     }
