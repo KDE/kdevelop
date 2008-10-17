@@ -320,6 +320,7 @@ IRun KDevelop::RunController::defaultRun() const
     KConfigGroup group(project->projectConfiguration(), targetName+"-Run Options" );
 
     QString exec=group.readEntry("Executable", QString());
+    ProjectModel *model=ICore::self()->projectController()->projectModel();
     if(exec.isEmpty())
     {
         QString target=group.readEntry("Run Item", QString());
@@ -342,7 +343,6 @@ IRun KDevelop::RunController::defaultRun() const
     QStringList compileItems=group.readEntry("Compile Items", QStringList());
 
     QList<ProjectBaseItem*> comp;
-    ProjectModel *model=ICore::self()->projectController()->projectModel();
     foreach(const QString& it, compileItems)
     {
         QModelIndex idx=pathToIndex(model, it.split('/'));
