@@ -170,10 +170,9 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
 }
 
 CMakeProjectManager::~CMakeProjectManager()
-{
-}
+{}
 
-KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
+KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) const
 {
     KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -186,11 +185,11 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     KUrl path = group.readEntry("CurrentBuildDir");
     KUrl projectPath = m_realRoot[item->project()];
 
-    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
+    const ProjectFolderItem *fi=dynamic_cast<const ProjectFolderItem*>(item);
     for(; !fi && item; )
     {
-        item=dynamic_cast<ProjectBaseItem*>(item->parent());
-        fi=dynamic_cast<ProjectFolderItem*>(item);
+        item=dynamic_cast<const ProjectBaseItem*>(item->parent());
+        fi=dynamic_cast<const ProjectFolderItem*>(item);
     }
     if(!fi)
         return path;
@@ -576,13 +575,6 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
     return newList;
 }
 
-KUrl CMakeProjectManager::targetUrl(KDevelop::ProjectTargetItem* target) const
-{
-    KUrl ret=buildDirectory(target);
-    ret.addPath(target->data().toString());
-    return ret;
-}
-
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem* folder=0;
@@ -817,23 +809,6 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
     
-    QStringList targets;
-    foreach(KDevelop::ProjectBaseItem* item, items)
-    {
-        KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
-        if(t && dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t))
-        {
-            targets.append(t->text());
-        }
-    }
-    
-    if(!targets.isEmpty())
-    {
-        KAction* action = new KAction( i18n( "Run '%1'", targets.join(", ")), this );
-        connect( action, SIGNAL( triggered() ), this, SLOT( runTargets() ) );
-        menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-    }
-    
     return menuExt;
 }
 
@@ -854,24 +829,6 @@ void CMakeProjectManager::jumpToDeclaration()
         }
         
         ICore::self()->documentController()->openDocument(url, c);
-    }
-}
-
-void CMakeProjectManager::runTargets()
-{
-    kDebug(9042) << "run targets " << m_clickedItems;
-    foreach(KDevelop::ProjectBaseItem* item, m_clickedItems)
-    {
-        KDevelop::ProjectTargetItem* t=dynamic_cast<KDevelop::ProjectTargetItem*>(item);
-        if(t && dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(t))
-        {
-            kDebug(9032) << "Running target: " << t->text() << targetUrl(t);
-            IRun r;
-            r.setExecutable(targetUrl(t).toLocalFile());
-            r.setInstrumentor("default");
-            
-            ICore::self()->runController()->execute(r);
-        }
     }
 }
 

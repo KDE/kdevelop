@@ -71,11 +71,10 @@ public:
     virtual Features features() const { return Features(Folders | Targets | Files); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
-    virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
+    virtual KUrl buildDirectory(const KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
-    virtual KUrl targetUrl(KDevelop::ProjectTargetItem* ) const;
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */,
             KDevelop::ProjectFolderItem* /*parent*/ ) { return false; }
@@ -124,7 +123,6 @@ public slots:
     void dirtyFile(const QString& file);
 
     void jumpToDeclaration();
-    void runTargets();
 
 private:
     static QString guessCMakeShare(const QString& cmakeBin);

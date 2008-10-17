@@ -20,6 +20,7 @@ class IProject;
 template<typename T1,typename T2> class QPair;
 // template<typename T1,typename T2> class QHash;
 #include <QHash>
+#include <KUrl>
 template<typename T1> class QList;
 class QString;
 class CustomMakeTreeSynchronizer;

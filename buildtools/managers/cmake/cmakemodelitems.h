@@ -38,14 +38,14 @@ namespace KDevelop {
     class Declaration;
 }
 
+class CMakeProjectManager;
+
 /**
  * The project model item for CMake folders.
  *
  * @author Matt Rogers <mattr@kde.org>
  * @author Aleix Pol <aleixpol@gmail.com>
  */
-
-namespace KDevelop { class TopDUContext; }
 
 class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
@@ -59,6 +59,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFold
         
         void setTopDUContext(KDevelop::IndexedTopDUContext ctx) { m_topcontext=ctx; }
         KDevelop::IndexedTopDUContext topDUContext() const { return m_topcontext;}
+        
     private:
         KDevelop::IndexedTopDUContext m_topcontext;
         QStringList m_includeList;
@@ -81,7 +82,10 @@ class CMakeExecutableTargetItem
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
                                   CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
             : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
-            
+        
+        virtual KUrl builtUrl() const;
+        virtual KUrl installedUrl() const { return KUrl(); }
+        
     private:
         QString outputName;
 };

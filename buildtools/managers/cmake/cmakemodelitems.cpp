@@ -25,6 +25,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+#include "cmakemanager.h"
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
     : KDevelop::ProjectBuildFolderItem( project, name, item )
@@ -41,4 +42,11 @@ QStringList CMakeFolderItem::includeDirectories() const
         folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
     }
     return urls;
+}
+
+KUrl CMakeExecutableTargetItem::builtUrl() const
+{
+    KUrl ret=project()->buildSystemManager()->buildDirectory(this);
+    ret.addPath(outputName);
+    return ret;
 }

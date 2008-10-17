@@ -13,7 +13,6 @@ add_subdirectory(tests)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 
 set( cmakecommon_SRCS
-  cmakemodelitems.cpp
   parser/cmListFileLexer.c
   parser/astfactory.cpp
   parser/cmakelistsparser.cpp
@@ -27,6 +26,7 @@ set( cmakecommon_SRCS
  )
 
 set( cmakemanager_SRCS
+  cmakemodelitems.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
