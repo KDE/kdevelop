@@ -31,13 +31,13 @@
 #include <kdebug.h>
 #include "../../languageexport.h"
 
-//#define DEBUG_ITEMREPOSITORY_LOADING
+// #define DEBUG_ITEMREPOSITORY_LOADING
 // #define ifDebugInfiniteRecursion(x) x
 #define ifDebugInfiniteRecursion(x)
 
 // #define ifDebugLostSpace(x) x
 #define ifDebugLostSpace(x)
-#define DEBUG_INCORRECT_DELETE
+// #define DEBUG_INCORRECT_DELETE
 
 //Makes sure that all items stay reachable through the basic hash
 // #define DEBUG_ITEM_REACHABILITY
@@ -69,7 +69,6 @@ namespace KDevelop {
    * @see stringrepository.h
    * @see indexedstring.h
    *
-   * Items must not be larger than the bucket size!
    * */
 
 ///Returns a version-number that is used to reset the item-repository after incompatible layout changes
@@ -192,24 +191,26 @@ class ExampleRequestItem {
 
 template<class Item, class ItemRequest, class DynamicData>
 class Bucket {
-  enum {
-    AdditionalSpacePerItem = DynamicData::Size + 2
-  };
   public:
+    enum {
+      AdditionalSpacePerItem = DynamicData::Size + 2
+    };
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
       MaxFreeItemsForHide = 0, //When less than this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-      MinFreeItemsForReuse = 1//When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      MaxFreeSizeForHide = 0, //Only when the largest free size is smaller then this, the bucket is taken from the free list
+      MinFreeItemsForReuse = 10,//When this count of free items in one bucket is reached, consider re-assigning them to new requests
+      MinFreeSizeForReuse = ItemRepositoryBucketSize/20 //When the largest free item is bigger then this, the bucket is automatically added to the free list
     };
     enum {
       NextBucketHashSize = ObjectMapSize, //Affects the average count of bucket-chains that need to be walked in ItemRepository::index. Must be a multiple of ObjectMapSize
-      DataSize = sizeof(unsigned int) * 4 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
+      DataSize = sizeof(unsigned int) * 3 + ItemRepositoryBucketSize + sizeof(short unsigned int) * (ObjectMapSize + NextBucketHashSize + 1)
     };
     enum {
       CheckStart = 0xff00ff1,
       CheckEnd = 0xfafcfb
     };
-    Bucket() : m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0) {
+    Bucket() : m_monsterBucketExtent(0), m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0) {
     }
     ~Bucket() {
       delete[] m_data;
@@ -217,10 +218,11 @@ class Bucket {
       delete[] m_objectMap;
     }
 
-    void initialize() {
+    void initialize(uint monsterBucketExtent) {
       if(!m_data) {
+        m_monsterBucketExtent = monsterBucketExtent;
         m_available = ItemRepositoryBucketSize;
-        m_data = new char[ItemRepositoryBucketSize];
+        m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
         m_objectMapSize = ObjectMapSize;
         m_objectMap = new short unsigned int[m_objectMapSize];
@@ -233,25 +235,25 @@ class Bucket {
     }
     void initialize(QFile* file, size_t offset) {
       if(!m_data) {
-        initialize();
-        if(file->size() >= offset + DataSize) {
-          file->seek(offset);
-          Q_ASSERT(file->size() >= offset + DataSize);
+        if(file->size() > offset) {
           
-          uint checkStart, checkEnd;
-          file->read((char*)&checkStart, sizeof(unsigned int));
+          file->seek(offset);
+          file->read((char*)&m_monsterBucketExtent, sizeof(unsigned int));
+          Q_ASSERT(file->size() >= offset + (1+m_monsterBucketExtent)*DataSize);
+          
+          initialize(m_monsterBucketExtent);
+          
           file->read((char*)&m_available, sizeof(unsigned int));
-          file->read(m_data, ItemRepositoryBucketSize);
           file->read((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
           file->read((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
           file->read((char*)&m_largestFreeItem, sizeof(short unsigned int));
           file->read((char*)&m_freeItemCount, sizeof(unsigned int));
-          file->read((char*)&checkEnd, sizeof(unsigned int));
-          Q_ASSERT(checkStart == CheckStart);
-          Q_ASSERT(checkEnd == CheckEnd);
-          Q_ASSERT(file->pos() == offset + DataSize);
+          file->read(m_data, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
+          Q_ASSERT(file->pos() == offset + (1+m_monsterBucketExtent)*DataSize);
           m_changed = false;
           m_lastUsed = 0;
+        }else{
+          initialize(m_monsterBucketExtent);
         }
       }
     }
@@ -260,56 +262,54 @@ class Bucket {
       if(!m_data)
         return;
       
-      if(file->size() < offset + DataSize)
-        file->resize(offset + DataSize);
+      if(file->size() < offset + (1+m_monsterBucketExtent)*DataSize)
+        file->resize(offset + (1+m_monsterBucketExtent)*DataSize);
 
       file->seek(offset);
       
-      uint checkStart = CheckStart, checkEnd = CheckEnd;
-      file->write((char*)&checkStart, sizeof(unsigned int));
+      file->write((char*)&m_monsterBucketExtent, sizeof(unsigned int));
       file->write((char*)&m_available, sizeof(unsigned int));
-      file->write(m_data, ItemRepositoryBucketSize);
       file->write((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
       file->write((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
       file->write((char*)&m_largestFreeItem, sizeof(short unsigned int));
       file->write((char*)&m_freeItemCount, sizeof(unsigned int));
-      file->write((char*)&checkEnd, sizeof(unsigned int));
+      file->write(m_data, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
 
-      Q_ASSERT(file->pos() == offset + DataSize);
+      Q_ASSERT(file->pos() == offset + (1+m_monsterBucketExtent)*DataSize);
       m_changed = false;
 #ifdef DEBUG_ITEMREPOSITORY_LOADING
       {
         file->flush();
         file->seek(offset);
         
-        uint available, freeItemCount;
+        uint available, freeItemCount, monsterBucketExtent;
         short unsigned int largestFree;
         
-        char* d = new char[ItemRepositoryBucketSize];
         short unsigned int* m = new short unsigned int[m_objectMapSize];
         short unsigned int* h = new short unsigned int[NextBucketHashSize];
         
-        file->read((char*)&checkStart, sizeof(unsigned int));
+        
+        file->read((char*)&monsterBucketExtent, sizeof(unsigned int));
+        char* d = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
+        
         file->read((char*)&available, sizeof(unsigned int));
-        file->read(d, ItemRepositoryBucketSize);
         file->read((char*)m, sizeof(short unsigned int) * m_objectMapSize);
         file->read((char*)h, sizeof(short unsigned int) * NextBucketHashSize);
         file->read((char*)&largestFree, sizeof(short unsigned int));
         file->read((char*)&freeItemCount, sizeof(unsigned int));
-        file->read((char*)&checkEnd, sizeof(unsigned int));
+        file->read(d, ItemRepositoryBucketSize);
 
-        Q_ASSERT(checkStart == CheckStart);
-        Q_ASSERT(checkEnd == CheckEnd);
-        
+        Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
         Q_ASSERT(available == m_available);
-        Q_ASSERT(memcmp(d, m_data, ItemRepositoryBucketSize) == 0);
+        Q_ASSERT(memcmp(d, m_data, ItemRepositoryBucketSize + monsterBucketExtent * DataSize) == 0);
         Q_ASSERT(memcmp(m, m_objectMap, sizeof(short unsigned int) * m_objectMapSize) == 0);
         Q_ASSERT(memcmp(h, m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize) == 0);
         Q_ASSERT(m_largestFreeItem == largestFree);
         Q_ASSERT(m_freeItemCount == freeItemCount);
         
-        Q_ASSERT(file->pos() == offset + DataSize);
+        Q_ASSERT(file->pos() == offset + DataSize + m_monsterBucketExtent * DataSize);
         
+        delete[] d;
         delete[] m;
         delete[] h;
       }
@@ -359,8 +359,27 @@ class Bucket {
       m_changed = true;
 
       unsigned int totalSize = itemSize + AdditionalSpacePerItem;
-      //If this triggers, your item is too big.
-      Q_ASSERT(totalSize < ItemRepositoryBucketSize);
+      
+      if(m_monsterBucketExtent) {
+        ///This is a monster-bucket. Other rules are applied here. Only one item can be allocated, and that must be bigger than the bucket data
+        Q_ASSERT(totalSize > ItemRepositoryBucketSize);
+        Q_ASSERT(m_available);
+        m_available = 0;
+        
+        insertedAt = AdditionalSpacePerItem;
+        DynamicData::initialize(m_data);
+        setFollowerIndex(insertedAt, 0);
+        Q_ASSERT(m_objectMap[localHash] == 0);
+        m_objectMap[localHash] = insertedAt;
+      
+        //Last thing we do, because createItem may recursively do even more transformation of the repository
+        request.createItem((Item*)(m_data + insertedAt));
+        
+        if(dynamic)
+          itemFromIndex(insertedAt, dynamic);
+        
+        return insertedAt;
+      }
       
       //The second condition is needed, else we can get problems with zero-length items and an overflow in insertedAt to zero
       if(totalSize > m_available || (!itemSize && totalSize == m_available)) {
@@ -602,10 +621,29 @@ class Bucket {
       
       memset(const_cast<Item*>(itemFromIndex(index)), 0, size); //For debugging, so we notice the data is wrong   
       
-      setFreeSize(index, size);
-      
-      //Try merging the created free item to other free items around, else add it into the free list
-      insertFreeItem(index);
+      if(m_monsterBucketExtent) {
+        ///This is a monster-bucket. Make it completely empty again.
+        Q_ASSERT(!m_available);
+        m_available = ItemRepositoryBucketSize;
+        
+        //Items are always inserted into monster-buckets at a fixed position
+        Q_ASSERT(currentIndex == AdditionalSpacePerItem);
+        Q_ASSERT(m_objectMap[localHash] == 0);
+      }else{
+        ///Put the space into the free-set
+        setFreeSize(index, size);
+        
+        //Try merging the created free item to other free items around, else add it into the free list
+        insertFreeItem(index);
+        
+        if(m_freeItemCount == 1 && freeSize(m_largestFreeItem) + m_available == ItemRepositoryBucketSize) {
+          //Everything has been deleted, there is only free space left. Make the bucket empty again,
+          //so it can later also be used as a monster-bucket.
+          m_available = ItemRepositoryBucketSize;
+          m_freeItemCount = 0;
+          m_largestFreeItem = 0;
+        }
+      }
       
       Q_ASSERT((bool)m_freeItemCount == (bool)m_largestFreeItem);
       ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
@@ -637,7 +675,19 @@ class Bucket {
         dynamic->apply(m_data + index - AdditionalSpacePerItem);
       return ret;
     }
+
+    bool isEmpty() const {
+      return m_available == ItemRepositoryBucketSize;
+    }
     
+    ///Returns true if this bucket has no nextBucketForHash links
+    bool noNextBuckets() const { 
+      for(int a = 0; a < NextBucketHashSize; ++a)
+        if(m_nextBucketHash[a])
+          return false;
+      return true;
+    }
+
     uint available() const {
       return m_available;
     }
@@ -686,11 +736,16 @@ class Bucket {
       return ret;
     }
     
-    short unsigned int largestFreeItemSize() const {
+    //Size of the largest item that could be inserted into this bucket
+    short unsigned int largestFreeSize() const {
+      short unsigned int ret = 0;
       if(m_largestFreeItem)
-        return freeSize(m_largestFreeItem);
-      else
-        return 0;
+        ret = freeSize(m_largestFreeItem);
+      if(m_available > (uint)(AdditionalSpacePerItem + (uint)ret)) {
+        ret = m_available - AdditionalSpacePerItem;
+        Q_ASSERT(ret == (m_available - AdditionalSpacePerItem));
+      }
+      return ret;
     }
     
     bool canAllocateItem(short unsigned int size) const {
@@ -725,8 +780,16 @@ class Bucket {
       m_changed = true;
     }
     
+    ///Returns the count of following buckets that were merged onto this buckets data array
+    uint monsterBucketExtent() const {
+      return m_monsterBucketExtent;
+    }
+    
     //Counts together the space that is neither accessible through m_objectMap nor through the free items
     uint lostSpace() {
+      if(m_monsterBucketExtent)
+        return 0;
+      
       uint need = ItemRepositoryBucketSize - m_available;
       uint found = 0;
       
@@ -863,6 +926,7 @@ class Bucket {
       *((unsigned short*)(m_data+index)) = size;
     }
 
+    uint m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
@@ -1082,6 +1146,70 @@ class ItemRepository : public AbstractItemRepository {
       
       unsigned short indexInBucket = bucketPtr->index(request, dynamic, size);
       
+      //If we could not allocate the item in an empty bucket, then we need to create a monster-bucket that
+      //can hold the data.
+      if(bucketPtr->isEmpty() && !indexInBucket) {
+        ///@todo Move this compound statement into an own function
+        uint totalSize = size + Bucket<Item, ItemRequest, DynamicData>::AdditionalSpacePerItem;
+        
+        Q_ASSERT((totalSize > ItemRepositoryBucketSize));
+        
+        useBucket = 0;
+        //The item did not fit in, we need a monster-bucket(Merge consecutive buckets)
+        ///Step one: Search whether we can merge multiple empty buckets in the free-list into one monster-bucket
+        int rangeStart = -1;
+        int rangeEnd = -1;
+        for(int a = 0; a < (int)m_freeSpaceBucketsSize; ++a) {
+          Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+          if(bucketPtr->isEmpty()) {
+            //This bucket is a candidate for monster-bucket merging
+            int index = (int)m_freeSpaceBuckets[a];
+            if(rangeEnd != index) {
+              rangeStart = index;
+              rangeEnd = index+1;
+            }else{
+              ++rangeEnd;
+            }
+            if(rangeStart != rangeEnd) {
+              uint totalAvailableSpace = bucketForIndex(rangeStart)->available() + Bucket<Item, ItemRequest, DynamicData>::DataSize * (rangeEnd - rangeStart - 1);
+              if(totalAvailableSpace > totalSize) {
+                ///We can merge these buckets into one monster-bucket that can hold the data
+                convertMonsterBucket(rangeStart, rangeEnd-rangeStart-1);
+                useBucket = rangeStart;
+                
+                break;
+              }
+            }
+          }
+        }
+        if(!useBucket) {
+          //Create a new monster-bucket at the end of the data
+          uint needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / Bucket<Item, ItemRequest, DynamicData>::DataSize + 1;
+          Q_ASSERT(needMonsterExtent);
+          if(!bucketForIndex(m_currentBucket)->isEmpty()) {
+            m_freeSpaceBuckets << m_currentBucket;
+            updateFreeSpaceOrder(m_freeSpaceBuckets.size()-1);
+          }
+          ++m_currentBucket;
+          if(m_currentBucket + needMonsterExtent + 1 > (uint)m_buckets.size()) {
+            uint oldBucketCount = m_bucketCount;
+            m_bucketCount += 10 + needMonsterExtent + 1;
+            m_buckets.resize(m_bucketCount);
+            m_fastBuckets = m_buckets.data();
+            memset(m_fastBuckets + oldBucketCount, 0, (m_bucketCount-oldBucketCount) * sizeof(void*));
+          }
+          useBucket = m_currentBucket;
+          convertMonsterBucket(useBucket, needMonsterExtent);
+          
+          m_currentBucket += 1 + needMonsterExtent;
+        }
+        Q_ASSERT(useBucket);
+        bucketPtr = bucketForIndex(useBucket);
+        
+        indexInBucket = bucketPtr->index(request, dynamic, size);
+        Q_ASSERT(indexInBucket);
+      }
+      
       if(indexInBucket) {
         ++m_statItemCount;
         
@@ -1257,25 +1385,6 @@ class ItemRepository : public AbstractItemRepository {
     
     bucketPtr->deleteItem(index, hash);
     
-    int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
-    
-    if(indexInFree == -1 && bucketPtr->freeItemCount() > Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse) {
-      //Add the bucket to the list of buckets from where to re-assign free space
-      //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
-      Q_ASSERT(bucketPtr->largestFreeItemSize());
-      uint insertPos;
-      for(insertPos = 0; insertPos < m_freeSpaceBucketsSize; ++insertPos) {
-        if(bucketForIndex(m_freeSpaceBuckets[insertPos])->largestFreeItemSize() > bucketPtr->largestFreeItemSize())
-          break;
-      }
-      
-      m_freeSpaceBuckets.insert(insertPos, bucket);
-      ++m_freeSpaceBucketsSize;
-    }else if(indexInFree != -1) {
-      ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
-      updateFreeSpaceOrder(indexInFree);
-    }
-    
     /**
      * Now check whether the link previousBucketNumber -> bucket is still needed.
      */
@@ -1309,7 +1418,7 @@ class ItemRepository : public AbstractItemRepository {
             bucketPtr = m_fastBuckets[next];
           }
         }else{
-          return;
+          break;
         }
       }
     }else{
@@ -1334,6 +1443,16 @@ class ItemRepository : public AbstractItemRepository {
     }
     
     ENSURE_REACHABLE(bucket);
+    
+    if(bucketPtr->monsterBucketExtent()) {
+      //Convert the monster-bucket back to multiple normal buckets, and put them into the free list
+      uint newBuckets = bucketPtr->monsterBucketExtent()+1;
+      convertMonsterBucket(bucket, 0);
+      for(uint created = bucket; created < bucket + newBuckets; ++created)
+        putIntoFreeList(created, bucketForIndex(created));
+    }else{
+      putIntoFreeList(bucket, bucketPtr);
+    }
   }
   
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
@@ -1541,17 +1660,17 @@ class ItemRepository : public AbstractItemRepository {
 
   private:
   
-  ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeItemSize has been changed for m_freeSpaceBuckets[index].
+  ///Makes sure the order within m_freeSpaceBuckets is correct, after largestFreeSize has been changed for m_freeSpaceBuckets[index].
   ///If too few space is free within the given bucket, it is removed from m_freeSpaceBuckets.
-  void updateFreeSpaceOrder(int index) {
+  void updateFreeSpaceOrder(uint index) {
     m_metaDataChanged = true;
 
-    Q_ASSERT(index >= 0 && index < m_freeSpaceBuckets.size());
+    Q_ASSERT(index < (uint)m_freeSpaceBuckets.size());
     Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[index]);
     
-    unsigned short largestFreeSize = bucketPtr->largestFreeItemSize();
+    unsigned short largestFreeSize = bucketPtr->largestFreeSize();
     
-    if(largestFreeSize == 0 || bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide) {
+    if(largestFreeSize == 0 || (bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide && largestFreeSize <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeSizeForHide)) {
       //Remove the item from m_freeSpaceBuckets
       m_freeSpaceBuckets.remove(index);
       m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
@@ -1559,25 +1678,66 @@ class ItemRepository : public AbstractItemRepository {
       while(1) {
         int prev = index-1;
         int next = index+1;
-        if(prev >= 0 && bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeItemSize() > largestFreeSize) {
-          //The predecessor has a bigger largestFreeItemSize, but it should be smallest first. So flip.
+        if(prev >= 0 && (bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize() > largestFreeSize ||
+                         (bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize() == largestFreeSize && index < m_freeSpaceBuckets[prev]))
+          ) {
+          //This item should be behind the successor, either because it has a lower largestFreeSize, or because the index is lower
           uint oldPrevValue = m_freeSpaceBuckets[prev];
           m_freeSpaceBuckets[prev] = m_freeSpaceBuckets[index];
           m_freeSpaceBuckets[index] = oldPrevValue;
           index = prev;
-        }else if(next < m_freeSpaceBuckets.size() && bucketForIndex(m_freeSpaceBuckets[next])->largestFreeItemSize() < largestFreeSize) {
-          //The successor has a smaller largestFreeItemSize, but the order is smallest-first, so flip.
+        }else if(next < m_freeSpaceBuckets.size() && (bucketForIndex(m_freeSpaceBuckets[next])->largestFreeSize() < largestFreeSize || 
+                                                     (bucketForIndex(m_freeSpaceBuckets[next])->largestFreeSize() == largestFreeSize && index > m_freeSpaceBuckets[next]))) {
+          //This item should be behind the successor, either because it has a higher largestFreeSize, or because the index is higher
           uint oldNextValue = m_freeSpaceBuckets[next];
           m_freeSpaceBuckets[next] = m_freeSpaceBuckets[index];
           m_freeSpaceBuckets[index] = oldNextValue;
           index = next;
-        }else{
+        }else {
           break;
         }
       }
     }
   }
-    
+  
+  ///Does conversion from monster-bucket to normal bucket and from normal bucket to monster-bucket
+  ///The bucket @param bucketNumber must already be loaded and empty. the "extent" buckets behind must also be loaded,
+  ///and also be empty.
+  ///The created buckets are not registered anywhere. When converting from monster-bucket to normal bucket,
+  ///oldExtent+1 normal buckets are created, that must be registered somewhere.
+  ///@warning During conversion, all the touched buckets are deleted and re-created
+  ///@param extent When this is zero, the bucket is converted from monster-bucket to normal bucket.
+  ///              When it is nonzero, it is converted to a monster-bucket.
+  Bucket<Item, ItemRequest, DynamicData>* convertMonsterBucket(short unsigned int bucketNumber, unsigned int extent) {
+    Q_ASSERT(bucketNumber);
+    if(extent) {
+      //Convert to monster-bucket
+      Q_ASSERT(m_fastBuckets[bucketNumber]);
+      for(uint index = bucketNumber; index < bucketNumber + 1 + extent; ++index) {
+        Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(index);
+        Q_ASSERT(bucketPtr->isEmpty());
+        Q_ASSERT(!bucketPtr->monsterBucketExtent());
+      }
+      for(uint index = bucketNumber; index < bucketNumber + 1 + extent; ++index)
+        deleteBucket(index);
+      
+      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
+      m_fastBuckets[bucketNumber]->initialize(extent);
+    }else{
+      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(bucketNumber);
+      Q_ASSERT(bucketPtr->monsterBucketExtent());
+      Q_ASSERT(bucketPtr->isEmpty());
+      uint oldExtent = bucketPtr->monsterBucketExtent();
+      deleteBucket(bucketNumber); //Delete the monster-bucket
+      
+      for(uint index = bucketNumber; index < bucketNumber + 1 + oldExtent; ++index) {
+        m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
+        m_fastBuckets[bucketNumber]->initialize(0);
+      }
+    }
+    return m_fastBuckets[bucketNumber];
+  }
+
   Bucket<Item, ItemRequest, DynamicData>* bucketForIndex(short unsigned int index) const {
     Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[index];
     if(!bucketPtr) {
@@ -1761,9 +1921,18 @@ class ItemRepository : public AbstractItemRepository {
           kWarning() << "cannot open repository-file for reading";
         }
       } else
-        m_fastBuckets[bucketNumber]->initialize();
+        m_fastBuckets[bucketNumber]->initialize(0);
     }
   }
+  
+  ///Can only be called on empty buckets
+  void deleteBucket(unsigned int bucketNumber) {
+    Q_ASSERT(bucketForIndex(bucketNumber)->isEmpty());
+    Q_ASSERT(bucketForIndex(bucketNumber)->noNextBuckets());
+    delete m_fastBuckets[bucketNumber];
+    m_fastBuckets[bucketNumber] = 0;
+  }
+  
   //m_file must be opened
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
@@ -1785,7 +1954,7 @@ class ItemRepository : public AbstractItemRepository {
   }
   
   ///Computes the bucket where the chains opened by the buckets @param mainHead and @param intersectorHead
-  ///with hash @param hash @meat each other.
+  ///with hash @param hash meet each other.
   ///@return <predecessor of first shared bucket in mainHead, first shared bucket>
   QPair<unsigned int, unsigned int> hashChainIntersection(uint mainHead, uint intersectorHead, uint hash) const {
     uint previous = 0;
@@ -1800,13 +1969,37 @@ class ItemRepository : public AbstractItemRepository {
     }
     return qMakePair(0u, 0u);
   }
+  
+  void putIntoFreeList(unsigned short bucket, Bucket<Item, ItemRequest, DynamicData>* bucketPtr) {
+    Q_ASSERT(!bucketPtr->monsterBucketExtent());
+    int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
+    
+    if(indexInFree == -1 && (bucketPtr->freeItemCount() > Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse || bucketPtr->largestFreeSize() > Bucket<Item, ItemRequest, DynamicData>::MinFreeSizeForReuse)) {
+      
+      //Add the bucket to the list of buckets from where to re-assign free space
+      //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
+      Q_ASSERT(bucketPtr->largestFreeSize());
+      uint insertPos;
+      for(insertPos = 0; insertPos < m_freeSpaceBucketsSize; ++insertPos) {
+        if(bucketForIndex(m_freeSpaceBuckets[insertPos])->largestFreeSize() > bucketPtr->largestFreeSize())
+          break;
+      }
+      
+      m_freeSpaceBuckets.insert(insertPos, bucket);
+      ++m_freeSpaceBucketsSize;
+      updateFreeSpaceOrder(insertPos);
+    }else if(indexInFree != -1) {
+      ///Re-order so the order in m_freeSpaceBuckets is correct(sorted by largest free item size)
+      updateFreeSpaceOrder(indexInFree);
+    }
+  }
 
   bool m_metaDataChanged;
   mutable QMutex m_mutex;
   QString m_repositoryName;
   unsigned int m_size;
   mutable uint m_currentBucket;
-  //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first
+  //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
   QVector<uint> m_freeSpaceBuckets;
   uint m_freeSpaceBucketsSize; //for speedup
   mutable QVector<Bucket<Item, ItemRequest, DynamicData>* > m_buckets;

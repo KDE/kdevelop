@@ -300,16 +300,6 @@ public:
       TopDUContext* chain = TopDUContextDynamicData::load(index);
       if(chain) {
 //         kDebug() << "url" << chain->url().str();
-        if(EditorIntegrator::documentForUrl(chain->url())) {
-          l.unlock(); //Must be unlocked to prevent deadlocks
-          {
-            EditorIntegrator editor;
-            SmartConverter sc(&editor);
-            sc.convertDUChain(chain);
-          }
-          l.relock();
-        }
-
         loadInformation(chain->url());
         for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.lowerBound(chain->url()); it != m_fileEnvironmentInformations.end() && it.key() == chain->url(); ++it) {
           if((*it)->indexedTopContext() == IndexedTopDUContext(index))
@@ -974,36 +964,30 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   EditorIntegrator editor;
   if(doc->textDocument())
     editor.insertLoadedDocument(doc->textDocument()); //Make sure the editor-integrator knows the document
-  SmartConverter sc(&editor);
 
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
-
-  foreach (TopDUContext* chain, chains) {
-    sc.convertDUChain(chain);
-    if(chain->smartRange())
-      ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), chain->smartRange());
-  }
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
     
-    sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
-    if(!standardContext->smartRange()) {
-      //May happen during loading
+    {
+      ///Make the standard-context editor-smart
+      SmartConverter sc(&editor);
+      Q_ASSERT(!standardContext->smartRange());
+      
       sc.convertDUChain(standardContext);
-      if(standardContext->smartRange())
-        ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
+      Q_ASSERT(standardContext->smartRange());
+      ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
     }
+    
+    sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
+    
     foreach( KDevelop::ILanguage* language, languages)
       if(language->languageSupport() && language->languageSupport()->codeHighlighting())
         language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
-
-    if(!standardContext->smartRange()) {
-      kDebug(9505) << "Could not create smart-range for document during startup";
-    }
 
     if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()) || (standardContext->features() != TopDUContext::AllDeclarationsContextsAndUses))
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);

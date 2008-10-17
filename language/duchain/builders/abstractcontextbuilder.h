@@ -106,19 +106,15 @@ public:
    */
   virtual ReferencedTopDUContext build( const IndexedString& url, T* node,
                               ReferencedTopDUContext updateContext
-                                    = ReferencedTopDUContext() )
+                                    = ReferencedTopDUContext(), bool useSmart = true )
   {
     m_compilingContexts = true;
-    m_editor->setCurrentUrl( url );
+    m_editor->setCurrentUrl( url, useSmart );
 
     ReferencedTopDUContext top;
     {
       DUChainWriteLocker lock( DUChain::lock() );
       top = updateContext.data();
-
-      // If the duchain does not have smart ranges associated, create them now from the preexisting simple ranges
-      if( top && !top->smartRange() && m_editor->smart() )
-        smartenContext(top);
 
       if( top && top->smartRange() )
       {
@@ -137,7 +133,7 @@ public:
           LockedSmartInterface iface = m_editor->smart();
           if( iface && top->range().textRange() != iface.currentDocument()->documentRange() )
           {
-            kDebug() << "WARN: top level range changed";
+            //Happens if the context wasn't smart
             top->setRange( SimpleRange( iface.currentDocument()->documentRange() ) );
           }
         }
@@ -193,7 +189,10 @@ protected:
 
     openContext( context );
 
-    m_editor->setCurrentUrl(currentContext()->url());
+    //The url must be set before supportBuild is called, together with the decision
+    //whether smart-ranges shold be created
+    if(m_editor->currentUrl() != currentContext()->url())
+      m_editor->setCurrentUrl(currentContext()->url(), true);
 
     {
       LockedSmartInterface iface = m_editor->smart();
@@ -328,27 +327,6 @@ protected:
   inline void setCompilingContexts(bool compilingContexts) { m_compilingContexts = compilingContexts; }
 
   /**
-   * Iterates a duchain and creates smart ranges for the objects.
-   * \warning you must hold the duchain write lock to call this function.
-   * \todo determine the role of this function, is it still required?
-   * \param topLevelContext The top level context for which to create smart ranges.
-   */
-  void smartenContext(TopDUContext* topLevelContext) {
-    if( topLevelContext && !topLevelContext->smartRange()) {
-      LockedSmartInterface iface = m_editor->smart();
-      if (!iface)
-        return;
-
-      //This happens! The problem seems to be that sometimes documents are not added to EditorIntegratorStatic in time.
-      //This means that DocumentRanges are created although the document is already loaded, which means that SmartConverter in CppLanguageSupport is not triggered.
-      //Since we do not want this to be so fragile, do the conversion here if it isn't converted(instead of crashing).
-      // Smart mutex locking is performed by the smart converter.
-      SmartConverter conv(m_editor);
-      conv.convertDUChain(topLevelContext);
-    }
-  }
-
-  /**
    * Create child contexts for only a portion of the document at \a url.
    *
    * \param url The url of the document to parse
@@ -361,7 +339,10 @@ protected:
   {
   //     m_compilingContexts = true;
   //     m_recompiling = false;
-      m_editor->setCurrentUrl( IndexedString( url.pathOrUrl() ) );
+      {
+        DUChainReadLocker lock( DUChain::lock() );
+        m_editor->setCurrentUrl( IndexedString( url.pathOrUrl() ), (bool)parent->smartRange() );
+      }
       setContextOnNode( node, parent );
       {
           openContext( contextFromNode( node ) );

@@ -1190,7 +1190,7 @@ void DUContext::deleteUse(int index)
   if(!m_dynamicData->m_rangesForUses.isEmpty()) {
     if(m_dynamicData->m_rangesForUses[index]) {
       EditorIntegrator editor;
-      editor.setCurrentUrl(url());
+      editor.setCurrentUrl(url(), (bool)smartRange());
       LockedSmartInterface iface = editor.smart();
       if (iface) {
         m_dynamicData->m_rangesForUses[index]->removeWatcher(this);
@@ -1454,7 +1454,7 @@ void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
 
   if(m_dynamicData->m_rangesForUses[useIndex]) {
     EditorIntegrator editor;
-    editor.setCurrentUrl(url());
+    editor.setCurrentUrl(url(), (bool)range);
     LockedSmartInterface iface = editor.smart();
     if (iface) {
       m_dynamicData->m_rangesForUses[useIndex]->removeWatcher(this);
@@ -1474,7 +1474,7 @@ void DUContext::clearUseSmartRanges()
 
   if (!m_dynamicData->m_rangesForUses.isEmpty()) {
     EditorIntegrator editor;
-    editor.setCurrentUrl(url());
+    editor.setCurrentUrl(url(), (bool)smartRange());
     LockedSmartInterface iface = editor.smart();
     if (iface) {
       foreach (SmartRange* range, m_dynamicData->m_rangesForUses) {

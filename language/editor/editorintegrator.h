@@ -145,7 +145,8 @@ public:
   IndexedString currentUrl() const;
 
   /// Associate this editor integrator with the editor which is currently editing the given \a url
-  void setCurrentUrl(const IndexedString& url);
+  /// @param useSmart Whether smart-ranges should be created for this url.
+  void setCurrentUrl(const IndexedString& url, bool useSmart);
 
   /// Retrieve a locked version of the SmartInterface for the current document, or null if one does not exist / is being deleted etc.
   LockedSmartInterface smart() const;

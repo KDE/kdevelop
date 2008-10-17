@@ -51,6 +51,7 @@ public:
 
   IndexedString m_currentUrl;
 
+  bool m_useSmart;
   /// The following two pointers may only be accessed with the editor integrator static mutex held
   KTextEditor::Document* m_currentDocument;
   KTextEditor::SmartInterface* m_smart;
@@ -71,6 +72,7 @@ EditorIntegrator::EditorIntegrator()
 {
   d->m_currentDocument = 0;
   d->m_smart = 0;
+  d->m_useSmart = true;
 }
 
 EditorIntegrator::~ EditorIntegrator()
@@ -326,9 +328,10 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
   return -1;
 }
 
-void EditorIntegrator::setCurrentUrl(const IndexedString& url)
+void EditorIntegrator::setCurrentUrl(const IndexedString& url, bool useSmart)
 {
   QMutexLocker lock(data()->mutex);
+  d->m_useSmart = useSmart;
 
   if (d->m_currentDocument) {
     data()->editorIntegrators.remove(d->m_currentDocument, this);
@@ -343,7 +346,7 @@ void EditorIntegrator::setCurrentUrl(const IndexedString& url)
 
   IndexedString indexedUrl(url.str());
 
-  if (data()->documents.contains(indexedUrl)) {
+  if (useSmart && data()->documents.contains(indexedUrl)) {
     EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
     d->m_currentDocument = i.document;
     data()->editorIntegrators.insert(d->m_currentDocument, this);
@@ -353,6 +356,8 @@ void EditorIntegrator::setCurrentUrl(const IndexedString& url)
 //       kDebug(9506) << "Using revision" << i.revision;
       d->m_smart->useRevision(i.revision);
     }
+  }else{
+    d->m_smart = 0;
   }
 }
 
