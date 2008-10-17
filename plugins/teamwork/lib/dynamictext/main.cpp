@@ -11,10 +11,6 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *                                                                         *
  ***************************************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "offsetutils.h"
