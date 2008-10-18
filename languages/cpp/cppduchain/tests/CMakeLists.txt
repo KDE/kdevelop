@@ -27,3 +27,11 @@ set(duchaintest_SRCS test_duchain.cpp)
 kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
 target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}
     kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY})
+
+########### next target ###############
+
+set(itemrepositorytest_SRCS test_itemrepository.cpp)
+
+
+kde4_add_unit_test(itemrepositorytest ${itemrepositorytest_SRCS})
+target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY})
