@@ -112,18 +112,23 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     const int browseKey = Qt::Key_Control;
     
+    //Eventually start key-browsing
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-    if(keyEvent && keyEvent->key() == browseKey) {
-        if(!m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
-            m_browsingByKey = true;
-            if(!m_browsing)
-                m_controller->browseButton()->setChecked(true);
-            
-        } else if(m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) {
-            if(!m_browsing)
-                m_controller->browseButton()->setChecked(false);
-            m_browsingByKey = false;
-        }
+    if(keyEvent && keyEvent->key() == browseKey && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
+        m_browsingByKey = true;
+        if(!m_browsing)
+            m_controller->browseButton()->setChecked(true);
+        
+    }
+    
+    QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
+    
+    //Eventually stop key-browsing
+    if((keyEvent && keyEvent->key() == browseKey && m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) || 
+       (focusEvent && focusEvent->lostFocus())) {
+        if(!m_browsing)
+            m_controller->browseButton()->setChecked(false);
+        m_browsingByKey = false;
     }
     
     if(!m_browsing && !m_browsingByKey) {
