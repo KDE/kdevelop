@@ -166,4 +166,4 @@ class TestItemRepository : public QObject {
 
 #include "test_itemrepository.moc"
 
-QTEST_MAIN(TestItemRepository);
+QTEST_MAIN(TestItemRepository)
