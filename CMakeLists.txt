@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(kdevplatform)
+project(KDevPlatform)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
-set(KDEVPLATFORM_MAJOR_VERSION 0)
-set(KDEVPLATFORM_MINOR_VERSION 9)
-set(KDEVPLATFORM_PATCH_VERSION 82)
+set(KDevPlatform_VERSION_MAJOR 0)
+set(KDevPlatform_VERSION_MINOR 9)
+set(KDevPlatform_VERSION_PATCH 82)
 
 set(KDE_MIN_VERSION "4.1.60")
 find_package(KDE4 4.1.60 REQUIRED)
@@ -41,3 +41,14 @@ if(NOT WIN32)
 endif(NOT WIN32)
 macro_optional_add_subdirectory(doc)
 
+configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfigVersion.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" )
+configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" )
+configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" )
+
+install( FILES 
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" 
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" 
+        DESTINATION "${LIB_INSTALL_DIR}/kdevplatform" )
+install( FILES
+        "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
+        DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )

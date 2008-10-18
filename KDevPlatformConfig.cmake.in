@@ -1,0 +1,77 @@
+#########################################################################
+#
+# KDevPlatform Configuration File 
+#
+# This file sets various CMake Variables
+#
+# KDevPlatform_INCLUDE_DIR             - The Include Directory for all KDevPlatform libraries
+# KDevPlatform_INTERFACES_LIBRARY      - the interfaces library
+# KDevPlatform_LANGUAGE_LIBRARY        - the language library
+# KDevPlatform_OUTPUTVIEW_LIBRARY      - the outputview library
+# KDevPlatform_PROJECT_LIBRARY         - the project library
+# KDevPlatform_SUBLIME_LIBRARY         - the sublime library
+# KDevPlatform_SHELL_LIBRARY           - the shell library
+# KDevPlatform_UTIL_LIBRARY            - the util library
+# KDevPlatform_VCS_LIBRARY             - the vcs library
+# KDevPlatform_VERITAS                 - the veritas library
+# KDevPlatform_SOURCEFORMATTER_LIBRARY - the sourceformatter library
+#
+# Copyright 2008  Andreas Pakulat <apaku@gmx.de>
+# Redistribution and use is allowed according to the terms of the BSD license.
+######################################################################
+
+set( KDevPlatform_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
+
+# Change PATHS to HINTS as soon as cmake 2.6.2 is required for KDE
+find_library( KDevPlatform_INTERFACES_LIBRARY kdevplatforminterfaces 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform interfaces library" )
+
+find_library( KDevPlatform_UTIL_LIBRARY kdevplatformutil 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform util library" )
+
+find_library( KDevPlatform_LANGUAGE_LIBRARY kdevplatformlanguage 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform language library" )
+
+find_library( KDevPlatform_OUTPUTVIEW_LIBRARY kdevplatformoutputview 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform outputview library" )
+
+find_library( KDevPlatform_PROJECT_LIBRARY kdevplatformproject 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform project library" )
+
+find_library( KDevPlatform_SUBLIME_LIBRARY sublime 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform sublime library" )
+
+find_library( KDevPlatform_SHELL_LIBRARY kdevplatformshell 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform shell library" )
+
+find_library( KDevPlatform_VCS_LIBRARY kdevplatformvcs 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform vcs library" )
+
+find_library( KDevPlatform_VERITAS_LIBRARY kdevplatformveritas 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform veritas library" )
+
+find_library( KDevPlatform_SOURCEFORMATTER_LIBRARY kdevplatformsourceformatter 
+        PATHS "@LIB_INSTALL_DIR@" 
+        DOC "KDevPlatform sourceformatter library" )
+
+mark_as_advanced(
+    KDevPlatform_INTERFACES_LIBRARY
+    KDevPlatform_LANGUAGE_LIBRARY
+    KDevPlatform_OUTPUTVIEW_LIBRARY
+    KDevPlatform_PROJECT_LIBRARY
+    KDevPlatform_SUBLIME_LIBRARY
+    KDevPlatform_SHELL_LIBRARY
+    KDevPlatform_UTIL_LIBRARY
+    KDevPlatform_VCS_LIBRARY
+    KDevPlatform_VERITAS_LIBRARY
+    KDevPlatform_SOURCEFORMATTER_LIBRARY
+)
