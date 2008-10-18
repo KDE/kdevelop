@@ -190,7 +190,7 @@ void OpenFilesDataProvider::reset()
   IProjectController* projCtrl = ICore::self()->projectController();
   IDocumentController* docCtrl = ICore::self()->documentController();
 
-  KIcon icon("emblem-important");
+  KIcon icon("tab-duplicate");
   foreach( IDocument* doc, docCtrl->openDocuments() ) {
     ProjectFile f;
     f.m_icon = icon;

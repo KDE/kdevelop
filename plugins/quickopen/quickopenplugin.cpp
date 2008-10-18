@@ -464,7 +464,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
-    KAction* quickOpenOpenFile = actions->addAction("quick_open_class");
+    KAction* quickOpenOpenFile = actions->addAction("quick_open_open_files");
     quickOpenOpenFile->setText( i18n("Quick Open &Open Files") );
     quickOpenOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_T );
     connect(quickOpenOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFiles()));
@@ -494,13 +494,13 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
-    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << "Project" << "Includes" << "Includers" );
+    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
 
     {
       m_openFilesData = new OpenFilesDataProvider();
       QStringList scopes, items;
-      scopes << i18n("Project");
-      items << i18n("Open Files");
+      scopes << i18n("Currently Open");
+      items << i18n("Files");
       m_model->registerProvider( scopes, items, m_openFilesData );
     }
     {
@@ -540,7 +540,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
     return;
 
   QStringList initialItems;
-  if( modes & Files )
+  if( modes & Files || modes & OpenFiles )
     initialItems << i18n("Files");
 
   if( modes & Functions )
@@ -548,11 +548,16 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 
   if( modes & Classes )
     initialItems << i18n("Classes");
+  
+  QStringList useScopes = lastUsedScopes;
+  
+  if(modes & OpenFiles) {
+    useScopes.clear();
+    useScopes.append(i18n("Currently Open"));
+  }
+  
 
-  if( modes & OpenFiles)
-    initialItems <<i18n("Open Files");
-
-  m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, lastUsedScopes );
+  m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, useScopes );
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   m_currentWidgetHandler->run();
 }
@@ -572,7 +577,7 @@ void QuickOpenPlugin::quickOpen()
 
 void QuickOpenPlugin::quickOpenFile()
 {
-  showQuickOpen( Files );
+  showQuickOpen( (ModelTypes)(Files | OpenFiles) );
 }
 
 void QuickOpenPlugin::quickOpenFunction()
