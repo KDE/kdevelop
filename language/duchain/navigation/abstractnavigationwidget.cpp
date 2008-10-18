@@ -38,6 +38,7 @@
 #include "../classmemberdeclaration.h"
 #include "../topducontext.h"
 #include "abstractnavigationcontext.h"
+#include "abstractdeclarationnavigationcontext.h"
 #include "navigationaction.h"
 #include "useswidget.h"
 #include "../../../interfaces/icore.h"
@@ -84,8 +85,9 @@ void AbstractNavigationWidget::update() {
   delete m_usesWidget;
   m_usesWidget = 0;
 
-  if (m_context->declaration()) {
-    m_usesWidget = new KDevelop::UsesWidget(m_context->declaration().data());
+  AbstractDeclarationNavigationContext* declContext = dynamic_cast<AbstractDeclarationNavigationContext*>(m_context.data());
+  if (declContext && declContext->declaration()) {
+    m_usesWidget = new KDevelop::UsesWidget(declContext->declaration().data());
     layout()->addWidget(m_usesWidget);
   }
   m_browser->verticalScrollBar()->setValue(scrollPos);

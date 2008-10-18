@@ -65,12 +65,14 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/enumerationtype.cpp
     duchain/types/constantintegraltype.cpp
     duchain/types/enumeratortype.cpp
+    duchain/types/typeutils.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
 
     duchain/navigation/abstractnavigationwidget.cpp
     duchain/navigation/abstractnavigationcontext.cpp
+    duchain/navigation/abstractdeclarationnavigationcontext.cpp
     duchain/navigation/useswidget.cpp
 
     interfaces/ilanguagesupport.cpp
@@ -205,6 +207,7 @@ install(FILES
     duchain/types/constantintegraltype.h
     duchain/types/enumeratortype.h
     duchain/types/alltypes.h
+    duchain/types/typeutils.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types
 )
 
@@ -241,6 +244,7 @@ install(FILES
 
 install(FILES
     duchain/navigation/abstractnavigationcontext.h
+    duchain/navigation/abstractdeclarationnavigationcontext.h
     duchain/navigation/abstractnavigationwidget.h
     duchain/navigation/navigationaction.h
     duchain/navigation/useswidget.h

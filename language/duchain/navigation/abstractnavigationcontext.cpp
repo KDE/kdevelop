@@ -21,6 +21,7 @@
 #include <QtGui/QTextDocument>
 #include <klocale.h>
 
+#include "abstractdeclarationnavigationcontext.h"
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
 #include "../functiondeclaration.h"
@@ -39,14 +40,10 @@
 
 namespace KDevelop {
 
-AbstractNavigationContext::AbstractNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : m_declaration(decl), m_selectedLink(0), m_linkCount(-1),
+AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
+  : m_selectedLink(0), m_linkCount(-1),
     m_previousContext(previousContext), m_topContext(topContext)
 {
-  //Jump from definition to declaration if possible
-  FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data());
-  if(definition && definition->declaration())
-    m_declaration = DeclarationPointer(definition->declaration());
 }
 
 void AbstractNavigationContext::addExternalHtml( const QString& text )
@@ -116,7 +113,8 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
       break;
     case NavigationAction::NavigateDeclaration:
     {
-      if( m_previousContext && m_previousContext->m_declaration == action.decl )
+      AbstractDeclarationNavigationContext* ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(m_previousContext);
+      if( ctx && ctx->declaration() == action.decl )
         return NavigationContextPointer( m_previousContext );
       return registerChild(action.decl);
     } break;
@@ -201,26 +199,24 @@ NavigationAction AbstractNavigationContext::currentAction() const {
   return m_selectedLinkAction;
 }
 
-QString AbstractNavigationContext::declarationKind(Declaration* decl)
+
+QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
 {
-  const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl);
+  const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
 
   QString kind;
 
   if( decl->isTypeAlias() )
     kind = i18n("Typedef");
   else if( decl->kind() == Declaration::Type ) {
-    //if( decl->type<CppClassType>() )
     if( decl->type<StructureType>() )
       kind = i18n("Class");
-    else
-      i18n("Class");
   }
 
   if( decl->kind() == Declaration::Instance )
     kind = i18n("Variable");
 
-  if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl) ) {
+  if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data()) ) {
     if( alias->identifier().isEmpty() )
       kind = i18n("Namespace import");
     else
@@ -235,41 +231,6 @@ QString AbstractNavigationContext::declarationKind(Declaration* decl)
 
   return kind;
 }
-
-
-DeclarationPointer AbstractNavigationContext::declaration() const
-{
-  return m_declaration;
-}
-
-QString AbstractNavigationContext::stringFromAccess(Declaration::AccessPolicy access)
-{
-  switch(access) {
-    case Declaration::Private:
-      return "private";
-    case Declaration::Protected:
-      return "protected";
-    case Declaration::Public:
-      return "public";
-  }
-  return "";
-}
-
-QString AbstractNavigationContext::declarationName( Declaration* decl )
-{
-  if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl) ) {
-    if( alias->identifier().isEmpty() )
-      return "using namespace " + alias->importIdentifier().toString();
-    else
-      return "namespace " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();
-  }
-
-  if( !decl )
-    return i18nc("An unknown declaration that is unknown", "Unknown");
-  else
-    return decl->identifier().toString();
-}
-
 
 const Colorizer AbstractNavigationContext::errorHighlight("990000");
 const Colorizer AbstractNavigationContext::labelHighlight("000035");

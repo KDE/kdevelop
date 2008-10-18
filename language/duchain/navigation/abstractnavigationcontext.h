@@ -30,8 +30,6 @@
 
 namespace KDevelop {
 
-class FunctionDefinition;
-class NamespaceAliasDeclaration;
 /** A helper-class for elegant colorization of html-strings .
  *
  * Initialize it with a html-color like "990000". and colorize strings
@@ -63,7 +61,7 @@ typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 {
   public:
-    AbstractNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
+    AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
 
     virtual ~AbstractNavigationContext() {
     }
@@ -78,13 +76,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     virtual QString name() const = 0;
     virtual QString html(bool shorten = false) = 0;
 
-    DeclarationPointer declaration() const;
-
-    static QString declarationKind(Declaration* decl);
-
   protected:
-
-    DeclarationPointer m_declaration;
 
     NavigationContextPointer execute(NavigationAction& action);
 
@@ -112,8 +104,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     QString m_prefix, m_suffix;
     KDevelop::TopDUContextPointer m_topContext;
 
-    static QString stringFromAccess(Declaration::AccessPolicy access);
-    static QString declarationName( Declaration* decl );
+    static QString declarationKind(DeclarationPointer decl);
 
     static const Colorizer errorHighlight;
     static const Colorizer labelHighlight;
