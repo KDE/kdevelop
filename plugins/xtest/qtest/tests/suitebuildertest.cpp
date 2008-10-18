@@ -37,7 +37,6 @@ using QTest::QTestCase;
 using QTest::QTestCommand;
 using QTest::QTestSuite;
 using QTest::Test::ExecutableStub;
-using KDevelop::ProjectTestTargetItem;
 using Veritas::Test;
 
 namespace QTest { namespace Test
