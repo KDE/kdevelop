@@ -81,10 +81,6 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevel
  * */
 KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line );
 
-/**
- * Gets the argument hint context from a function declaration
- */
-KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getArgumentContext(KDevelop::Declaration* decl);
 }
 
 #endif

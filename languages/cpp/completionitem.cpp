@@ -32,7 +32,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
-#include "navigationwidget.h"
+#include "cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;

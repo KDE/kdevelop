@@ -25,6 +25,7 @@
 #include <QVariant>
 #include <language/duchain/declaration.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
+#include <language/duchain/duchainutils.h>
 #include <QTextFormat>
 #include <QStringList>
 #include "overloadresolution.h"
@@ -53,8 +54,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   if (functionType && decl) {
 
     QVector<Declaration*> parameters;
-    if( getArgumentContext(dec) )
-      parameters = getArgumentContext(dec)->localDeclarations();
+    if( DUChainUtils::getArgumentContext(dec) )
+      parameters = DUChainUtils::getArgumentContext(dec)->localDeclarations();
 
 //     QStringList defaultParams = decl->defaultParameters();
 

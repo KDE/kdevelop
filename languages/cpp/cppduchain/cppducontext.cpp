@@ -17,7 +17,10 @@
 */
 
 #include "cppducontext.h"
-#include "navigationwidget.h"
+#include "navigation/navigationwidget.h"
+#include "navigation/navigationcontext.h"
+#include "navigation/includenavigationcontext.h"
+#include "navigation/macronavigationcontext.h"
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/topducontextdata.h>
 

@@ -22,7 +22,7 @@
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/types/identifiedtype.h>
-#include "cppduchain/navigationwidget.h"
+#include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/typeutils.h"
 #include "cpplanguagesupport.h"
 #include "cppcodecompletionmodel.h"

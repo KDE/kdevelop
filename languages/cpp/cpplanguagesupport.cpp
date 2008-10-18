@@ -81,7 +81,7 @@
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
 #include "environmentmanager.h"
-#include "navigationwidget.h"
+#include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
 #include "veritas/testswitch.h"
 #include "veritas/stubcontextaction.h"

@@ -53,7 +53,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/dumpchain.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "navigationwidget.h"
+#include "cppduchain/navigation/navigationwidget.h"
 #include "preprocessjob.h"
 #include <language/duchain/duchainutils.h>
 #include "cppcodecompletionworker.h"
