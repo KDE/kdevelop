@@ -22,7 +22,7 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
-#include "utilexport.h"
+#include "../../languageexport.h"
 
 
 namespace KDevelop {
@@ -30,7 +30,7 @@ namespace KDevelop {
     /**
      * Represents the uses of a declaration within one top-context
      */
-    class KDEVPLATFORMUTIL_EXPORT TopContextUsesWidget : public QWidget {
+    class KDEVPLATFORMLANGUAGE_EXPORT TopContextUsesWidget : public QWidget {
         Q_OBJECT
         public:
             TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext);
@@ -41,7 +41,7 @@ namespace KDevelop {
     /**
      * A widget that allows browsing through all the uses of a declaration
      */
-    class KDEVPLATFORMUTIL_EXPORT UsesWidget : public QWidget {
+    class KDEVPLATFORMLANGUAGE_EXPORT UsesWidget : public QWidget {
         Q_OBJECT
         public:
             UsesWidget(IndexedDeclaration declaration);

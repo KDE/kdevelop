@@ -1,0 +1,62 @@
+/*
+   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef NAVIGATIONACTION_H
+#define NAVIGATIONACTION_H
+
+#include <kurl.h>
+#include <ktexteditor/cursor.h>
+
+#include "../duchainpointer.h"
+
+namespace KDevelop {
+
+class AbstractNavigationContext;
+
+struct NavigationAction {
+  enum Type {
+    None,
+    NavigateDeclaration,
+    JumpToSource //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
+  };
+
+  NavigationAction() : targetContext(0), type(None) {
+  }
+
+  NavigationAction( DeclarationPointer decl_, Type type_ ) : targetContext(0), decl(decl_), type(type_) {
+  }
+
+  NavigationAction( const KUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(0), document(_document), cursor(_cursor) {
+    type = JumpToSource;
+  }
+
+  NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {
+  }
+
+  AbstractNavigationContext* targetContext; //If this is set, this action does nothing else than jumping to that context
+
+  DeclarationPointer decl;
+  Type type;
+
+  KUrl document;
+  KTextEditor::Cursor cursor;
+};
+
+}
+
+#endif

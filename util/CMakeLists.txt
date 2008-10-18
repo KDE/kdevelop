@@ -5,7 +5,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 set(kdevplatformutil_LIB_SRCS
     processlinemaker.cpp
     commandexecutor.cpp
-    useswidget.cpp
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
     sourceformattermanager.cpp
@@ -32,7 +31,6 @@ install( FILES
     environmentgrouplist.h
     pushvalue.h
     kdevvarlengtharray.h
-    useswidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
     
 install( FILES

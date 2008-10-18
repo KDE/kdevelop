@@ -360,3 +360,17 @@ void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter )
     }
   }
 }
+
+KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* decl) {
+  DUContext* internal = decl->internalContext();
+  if( !internal )
+    return 0;
+  if( internal->type() == DUContext::Function )
+    return internal;
+  foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
+    if( ctx.context() )
+      if( ctx.context()->type() == DUContext::Function )
+        return ctx.context();
+  }
+  return 0;
+}

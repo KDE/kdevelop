@@ -69,6 +69,10 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
 
+    duchain/navigation/abstractnavigationwidget.cpp
+    duchain/navigation/abstractnavigationcontext.cpp
+    duchain/navigation/useswidget.cpp
+
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
@@ -83,6 +87,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
     codegen/createclass.cpp
     codegen/codegenerator.cpp
+
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -232,4 +237,12 @@ install(FILES
     codegen/duchainchangeset.h
     codegen/codegenerator.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen
+)
+
+install(FILES
+    duchain/navigation/abstractnavigationcontext.h
+    duchain/navigation/abstractnavigationwidget.h
+    duchain/navigation/navigationaction.h
+    duchain/navigation/useswidget.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation
 )

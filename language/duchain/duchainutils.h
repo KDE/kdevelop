@@ -69,8 +69,9 @@ namespace DUChainUtils {
   ///Re-implement DUChainItemFilter to do something with the items.
   KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
 
-}
+  KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
 
+}
 }
 
 #endif // DUCHAINUTILS_H
