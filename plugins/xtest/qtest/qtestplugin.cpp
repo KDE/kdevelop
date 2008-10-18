@@ -139,8 +139,8 @@ void QTestPlugin::newQTest()
               QString("MyTest"), &kk);
     if (!kk || clz.isEmpty()) return;
 
-    DocumentController* dc;
-    dc = Core::self()->documentControllerInternal();
+    IDocumentController* dc;
+    dc = ICore::self()->documentController();
     IProjectFileManager* pfm;
     if (m_proj) {
         pfm = m_proj->projectFileManager();
