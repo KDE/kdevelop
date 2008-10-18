@@ -25,12 +25,12 @@ set(kdevqtest_SRCS
 qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})
 target_link_libraries(kdevqtest
-    ${KDEVPLATFORM_VERITAS_LIBRARY}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY}
-    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
-    ${KDEVPLATFORM_PROJECT_LIBRARY}
-    ${KDEVPLATFORM_UTIL_LIBRARY}
-    ${KDEVPLATFORM_SUBLIME_LIBRARY}
+    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_OUTPUTVIEW_LIBRARY}
+    ${KDevPlatform_PROJECT_LIBRARY}
+    ${KDevPlatform_UTIL_LIBRARY}
+    ${KDevPlatform_SUBLIME_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
@@ -45,7 +45,7 @@ kde4_add_plugin(kdevqtestview ${kdevqtestview_SRCS})
 target_link_libraries(kdevqtestview
     kdevqtest
     ${QT_QTCORE_LIBRARY}
-    ${KDEVPLATFORM_LIBRARIES}
+    ${KDevPlatform_PROJECT_LIBRARY} ${KDevPlatform_INTERFACES_LIBRARY} ${KDevPlatform_VERITAS_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBS})

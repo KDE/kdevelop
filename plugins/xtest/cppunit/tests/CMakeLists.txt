@@ -14,7 +14,7 @@ macro(kdev_qx_add_test test_EXEC)
         ${QT_QTTEST_LIBRARY}
         ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}
-        ${KDEVPLATFORM_VERITAS_LIBRARY}
+        ${KDevPlatform_VERITAS_LIBRARY}
         kdevcppunit)
 endmacro(kdev_qx_add_test)
 

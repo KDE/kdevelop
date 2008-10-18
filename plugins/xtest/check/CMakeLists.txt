@@ -28,7 +28,8 @@ set(kdevcheck_SRCS
 qt4_automoc( ${kdevcheck_SRCS} )
 kde4_add_library(kdevcheck SHARED ${kdevcheck_SRCS})
 target_link_libraries(kdevcheck
-    ${KDEVPLATFORM_VERITAS_LIBRARY}
+    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
     ${CHECK_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY})
@@ -41,7 +42,8 @@ qt4_automoc(${kdevcheckview_SRCS})
 kde4_add_plugin(kdevcheckview ${kdevcheckview_SRCS})
 target_link_libraries(kdevcheckview
     kdevcheck
-    ${KDEVPLATFORM_LIBRARIES}
+    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY})
 install(TARGETS kdevcheckview DESTINATION ${PLUGIN_INSTALL_DIR})

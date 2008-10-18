@@ -25,7 +25,8 @@ qt4_add_resources(kdevcppunit_SRCS
 qt4_automoc( ${kdevcppunit_SRCS} )
 kde4_add_library(kdevcppunit SHARED ${kdevcppunit_SRCS})
 target_link_libraries(kdevcppunit
-    ${KDEVPLATFORM_VERITAS_LIBRARY}
+    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
     ${CPPUNIT_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY})
@@ -38,7 +39,8 @@ qt4_automoc(${kdevcppunitview_SRCS})
 kde4_add_plugin(kdevcppunitview ${kdevcppunitview_SRCS})
 target_link_libraries(kdevcppunitview
     kdevcppunit
-    ${KDEVPLATFORM_LIBRARIES}
+    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY})
 install(TARGETS kdevcppunitview DESTINATION ${PLUGIN_INSTALL_DIR})

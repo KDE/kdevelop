@@ -2,6 +2,9 @@ project(kdevelop)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
+set( KDevelop_VERSION_MAJOR 3 )
+set( KDevelop_VERSION_MINOR 9 )
+set( KDevelop_VERSION_PATCH 82 )
 
 find_package(KDE4 REQUIRED)
 #find_package(BerkeleyDB)
@@ -14,7 +17,7 @@ find_package(KDevPlatform REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDevPlatform_INCLUDE_DIR} )
 
 include(KDevelopMacros)
 

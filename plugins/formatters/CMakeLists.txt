@@ -26,9 +26,9 @@ target_link_libraries(kdevastyle
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY}
-    ${KDEVPLATFORM_PROJECT_LIBRARY}
-    ${KDEVPLATFORM_UTIL_LIBRARY})
+    ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_PROJECT_LIBRARY}
+    ${KDevPlatform_UTIL_LIBRARY})
 
 install(TARGETS kdevastyle DESTINATION ${PLUGIN_INSTALL_DIR} )
 
@@ -46,8 +46,8 @@ kde4_add_plugin(kdevindent ${kdevindent_PART_SRCS})
 target_link_libraries(kdevindent
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
-    ${KDEVPLATFORM_INTERFACES_LIBRARY}
-    ${KDEVPLATFORM_UTIL_LIBRARY})
+    ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_UTIL_LIBRARY})
 
 install(TARGETS kdevindent DESTINATION ${PLUGIN_INSTALL_DIR} )
 
