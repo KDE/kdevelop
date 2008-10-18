@@ -551,11 +551,8 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   
   QStringList useScopes = lastUsedScopes;
   
-  if(modes & OpenFiles) {
-    useScopes.clear();
-    useScopes.append(i18n("Currently Open"));
-  }
-  
+  if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
+    useScopes << i18n("Currently Open");
 
   m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, useScopes );
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
