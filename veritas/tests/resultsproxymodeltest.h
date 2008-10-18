@@ -22,12 +22,10 @@
 #define VERITAS_RESULTSPROXYMODELTEST_H
 
 #include <QtCore/QObject>
-#include <QtTest/QtTest>
 
 namespace Veritas {
 class ResultsModel;
 class ResultsProxyModel;
-class RunnerModelStub;
 
 class ResultsProxyModelTest : public QObject
 {
@@ -41,12 +39,11 @@ private slots:
 private:
     void assertDataAt(int row, int column, const QVariant& expected);
     void assertRowFiltered(int row);
-    void assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3);
+    void assertRowContains(int row, const QVariant& col1, const QVariant& col2, const QVariant& col3, const QVariant& col4);
 
 private:
     ResultsModel* source;
     ResultsProxyModel* proxy;
-    RunnerModelStub* runnerModel;
 };
 
 }

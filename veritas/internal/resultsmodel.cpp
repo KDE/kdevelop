@@ -22,6 +22,7 @@
 #include "resultsmodel.h"
 
 #include "../test.h"
+#include "../testresult.h"
 #include "test_p.h"
 #include "utils.h"
 #include "tests/common/modeltest.h"
@@ -29,12 +30,16 @@
 #include <KDebug>
 
 using Veritas::Test;
+using Veritas::TestResult;
 using Veritas::ResultsModel;
 
 Test* ResultsModel::testFromIndex(const QModelIndex& i) const
 {
-    QModelIndex j = mapToTestIndex(i);
-    return itemFromIndex(j);
+    if (!i.isValid()) return 0;
+    if (i.row() >= m_results.count()) return 0;
+    Q_ASSERT(m_results[i.row()]);
+    Q_ASSERT(i.model() == this);
+    return m_results[i.row()]->owner();
 }
 
 void ResultsModel::changed()
@@ -53,30 +58,45 @@ ResultsModel::~ResultsModel()
 
 bool ResultsModel::hasChildren(const QModelIndex& index) const
 {
-    return !index.isValid();
+    return !index.isValid() && !m_results.isEmpty();
 }
 
 QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
 
-    Test* item = 0;
+    Test* ownerTest = 0;
     switch (role) {
-    case Qt::CheckStateRole:
-        return QVariant();
     case Qt::TextAlignmentRole:
         return int(Qt::AlignLeft | Qt::AlignTop);
     case Qt::DisplayRole:
-        item = itemFromIndex(m_testItemIndexes.at(index.row()));
-        return item->internal()->data(index.column());
+        Q_ASSERT(index.row() < m_results.size());
+        switch(index.column()) {
+        case 0:
+            ownerTest = m_results[index.row()]->owner();
+            if (!ownerTest) {
+                qWarning() << "Owner test not set for result.";
+                return QVariant();
+            }
+            return ownerTest->name();
+        case 1:
+            return m_results[index.row()]->message();
+        case 2:
+            return m_results[index.row()]->file().pathOrUrl();
+        case 3:
+            return QString::number(m_results[index.row()]->line());
+        default:
+            kDebug()<< "INVALID COLUMN" << index.column() <<"row " << index.column();
+            Q_ASSERT(0);
+        }
     case Qt::DecorationRole:
         if (index.column() == 0) {
-            item = itemFromIndex(m_testItemIndexes.at(index.row()));
-            return Utils::resultIcon(item->state());
+            return Utils::resultIcon(result(index.row()));
         }
         break;
     default: {}
     }
+
     return QVariant();
 }
 
@@ -86,16 +106,16 @@ QVariant ResultsModel::headerData(int section, Qt::Orientation orientation,
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         return m_headerData.at(section);
     }
-
     return QVariant();
 }
 
 int ResultsModel::rowCount(const QModelIndex& parent) const
 {
-    if (hasChildren(parent))
-        return m_testItemIndexes.count();
-    else
+    if (hasChildren(parent)) {
+        return m_results.count();
+    } else {
         return 0;
+    }
 }
 
 int ResultsModel::columnCount(const QModelIndex& parent) const
@@ -106,56 +126,46 @@ int ResultsModel::columnCount(const QModelIndex& parent) const
 
 int ResultsModel::result(int row) const
 {
-    QModelIndex testItemIndex = mapToTestIndex(index(row, 0));
-    if (!testItemIndex.isValid()) {
-        return Veritas::NoResult;
-    }
-    Test* item = itemFromIndex(testItemIndex);
-    return item->state();
+    if (row < 0 || row >= rowCount()) return -1;
+    Q_ASSERT(row < m_results.size());
+    Q_ASSERT(m_results[row]);
+    return m_results[row]->state();
 }
 
 QModelIndex ResultsModel::mapToTestIndex(const QModelIndex& index) const
 {
-    if (!index.isValid()) {
-        return QModelIndex();
-    }
-    return m_testItemIndexes.value(index.row());
-    // Note: QList provides sensible default values if the row
-    // number is out of range.
-}
-
-QModelIndex ResultsModel::mapFromTestIndex(const QModelIndex& testItemIndex) const
-{
-    if (!testItemIndex.isValid()) {
-        return QModelIndex();
-    }
-    QModelIndex modelIndex;
-    qint64 id = testItemIndex.internalId();
-    if (m_testItemMap.contains(id)) {
-        modelIndex = index(m_testItemMap[id], 0);
-    }
-    return modelIndex;
+    if (!index.isValid()) return QModelIndex();
+    Test* t = testFromIndex(index);
+    if (!t) return QModelIndex();
+    return t->internal()->index();
 }
 
 void ResultsModel::addResult(const QModelIndex& testItemIndex)
 {
-    if (!testItemIndex.isValid()) {
-        return;
-    }
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    m_testItemIndexes.append(QPersistentModelIndex(testItemIndex));
-    m_testItemMap[testItemIndex.internalId()] = rowCount() - 1;
-    endInsertRows();
+    if (!testItemIndex.isValid()) return;
+    Test* t = static_cast<Test*>(testItemIndex.internalPointer());
+    Q_ASSERT(t);
+    addResult(t->result());
 }
 
 void ResultsModel::clear()
 {
-    m_testItemIndexes.clear();
-    m_testItemMap.clear();
+    m_results.clear();
     reset();
 }
 
-Test* ResultsModel::itemFromIndex(const QModelIndex& testItemIndex) const
+void ResultsModel::addResult(TestResult* result)
 {
-    return static_cast<Test*>(testItemIndex.internalPointer());
+    if (!result || result->state() == Veritas::RunSuccess) return;
+    if (result->childCount() == 0) {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        m_results << result;
+        endInsertRows();
+    } else {
+        beginInsertRows(QModelIndex(), rowCount(), rowCount()+result->childCount()-1);
+        for(int i=0; i<result->childCount(); i++) {
+            m_results << result->child(i);
+        }
+        endInsertRows();
+    }
 }

@@ -39,6 +39,7 @@ public:
      *  or crash. */
     void setResizeMode();
     QTreeView* tree();
+
 };
 
 }

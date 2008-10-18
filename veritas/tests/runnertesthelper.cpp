@@ -34,13 +34,13 @@ using Veritas::RunnerTestHelper;
 using Veritas::Test;
 
 RunnerTestHelper::RunnerTestHelper()
-    : m_window(0), m_show(false)
+    : m_window(0), m_show(false), m_timeout(2000)
 {}
 
 void RunnerTestHelper::initializeGUI()
 {
     QStringList resultHeaders;
-    resultHeaders << i18n("Test Name") << i18n("Result") << i18n("Message")
+    resultHeaders << i18n("Test Name") << i18n("Message")
                   << i18n("File Name") << i18n("Line Number");
     m_resultsModel = new ResultsModel(resultHeaders);
     m_window = new RunnerWindow(m_resultsModel);
@@ -100,7 +100,7 @@ void RunnerTestHelper::runTests()
 {
     KDevSignalSpy* spy = new KDevSignalSpy(m_window, SIGNAL(runCompleted()), Qt::QueuedConnection);
     triggerRunAction();
-    bool gotSignal = spy->wait(2000);
+    bool gotSignal = spy->wait(m_timeout);
     delete spy;
 
     if (m_show) {
@@ -109,6 +109,11 @@ void RunnerTestHelper::runTests()
     }
 
     QVERIFY2(gotSignal, "Timeout while waiting for runner items to complete execution");
+}
+
+void RunnerTestHelper::setTimeout(int timeout)
+{
+    m_timeout = timeout;
 }
 
 void RunnerTestHelper::verifyTestTree(QStringList runnerItems)

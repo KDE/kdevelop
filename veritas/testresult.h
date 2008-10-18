@@ -46,6 +46,7 @@ enum TestState
 const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunException | RunInfo;
 
 class TestResultPrivate;
+class Test;
 
 /*! Holds state, descriptive message and location */
 class VERITAS_EXPORT TestResult
@@ -65,10 +66,14 @@ public:
     void setLine(int);
     void setFile(const KUrl&);
 
-    bool operator==(const TestResult&) const;
     void clear();
 
-    void log() const; // debug
+    int childCount();
+    TestResult* child(int i);
+    void appendChild(TestResult*);
+
+    void setOwner(Test* t);
+    Test* owner() const;
 
 private:
     TestResult& operator=(const TestResult&);

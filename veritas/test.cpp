@@ -169,6 +169,7 @@ void Test::setResult(TestResult* res)
         d->setData(1, res->message());
         d->setData(2, res->file().pathOrUrl());
         d->setData(3, res->line());
+        d->result->setOwner(this);
     }
 }
 

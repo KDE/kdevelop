@@ -24,11 +24,11 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
-class QIcon;
-
-namespace Veritas {
+namespace Veritas
+{
 class ResultsModel;
 class RunnerModelStub;
+class TestResult;
 
 class ResultsModelTest : public QObject
 {
@@ -38,21 +38,25 @@ private slots:
     void init();
     void cleanup();
 
-    void default_();
-    void appendResults();
-    void mapIndices();
-    void errorHandling();
     void testFromIndex();
+
+    void addSingleResult();
+    void addMultipleResults();
+    void addSubResult();
+    void fetchDataFromEmpty();
+    void fetchDataIllegalRow();
+    void fetchDataNoOwner();
+    void clear();
+    void constructEmpty();
+    void addNullResult();
 
 private:
     void assertColumnHeader(const QVariant& expected, int index);
-    void assertDataAt(const QVariant& expected, int row, int column);
-    //void assertIconAtRow(int row, const QIcon& icon);
-    void checkRow(int index);
-    void fillRows();
+    void assertRowDataEquals(ResultsModel* model, int rowNumber, TestResult* expected);
+    void assertNrofItemsEquals(int expected, ResultsModel* model);
 
 private:
-    Veritas::ResultsModel* m_model;
+    ResultsModel* m_model;
     RunnerModelStub* m_runnerModel;
 };
 

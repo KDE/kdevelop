@@ -35,9 +35,11 @@
 
 using Veritas::ResultsModel;
 using Veritas::RunnerModel;
-using Veritas::Test;
 using Veritas::RunnerModelStub;
 using Veritas::ResultsModelTest;
+using Veritas::Test;
+using Veritas::TestResult;
+using Veritas::TestState;
 
 void ResultsModelTest::init()
 {
@@ -53,132 +55,277 @@ void ResultsModelTest::cleanup()
     if (m_runnerModel) delete m_runnerModel;
 }
 
-// test command
-void ResultsModelTest::default_()
+namespace
 {
-    // size check
-    KOMPARE(0, m_model->rowCount());
-    KOMPARE(3, m_model->columnCount());
-
-    // verify column headers
-    assertColumnHeader("col0", 0);
-    assertColumnHeader("col1", 1);
-    assertColumnHeader("col2", 2);
-
-    // should still be empty
-    assertDataAt(QVariant(), 0, 0);
-    assertDataAt(QVariant(), 0, 1);
-    assertDataAt(QVariant(), 1, 1);
+ResultsModel* createResultsModel()
+{
+    ResultsModel* rmodel = new ResultsModel(QStringList() << "test" << "msg" << "file" << "line");
+    return rmodel;
 }
 
-// test command
-void ResultsModelTest::appendResults()
+TestResult* createTestResult(Test* owner, TestState state, const KUrl& location, int line, const QString& message)
 {
-    fillRows();
-
-    KOMPARE(2, m_model->rowCount());
-    KOMPARE(Veritas::RunSuccess, m_model->result(0));
-    KOMPARE(Veritas::RunFatal, m_model->result(1));
-
-    QModelIndex topIndex = m_model->index(0,0);
-    KVERIFY(topIndex.isValid());
-    KVERIFY_MSG(!topIndex.child(0,0).isValid(), "Not expecting children");
-    KVERIFY_MSG(!m_model->index(0,0, topIndex).isValid(), "Not expecting children");
-
-    checkRow(0);
-    checkRow(1);
+    TestResult* result = new TestResult;
+    result->setFile(location);
+    result->setLine(line);
+    result->setMessage(message);
+    result->setState(state);
+    if (owner) owner->setResult(result);
+    return result;
 }
 
-// test command
-void ResultsModelTest::mapIndices()
+TestResult* createTestResult(TestState state, const QString& testName, const KUrl& location, int line, const QString& message)
 {
-    fillRows();
-    QModelIndex runIndex0 = m_runnerModel->index(0, 0);
-    KVERIFY(runIndex0.isValid());
-    QModelIndex resultIndex0 = m_model->index(0, 0);
-    KVERIFY(resultIndex0.isValid());
-
-    KOMPARE(runIndex0, m_model->mapToTestIndex(resultIndex0));
-    KOMPARE(resultIndex0, m_model->mapFromTestIndex(runIndex0));
-
-    KOMPARE(resultIndex0, m_model->mapFromTestIndex(m_model->mapToTestIndex(resultIndex0)));
-    KOMPARE(runIndex0, m_model->mapToTestIndex(m_model->mapFromTestIndex(runIndex0)));
+    Test* t = new Test(testName);
+    return createTestResult(t, state, location, line, message);
 }
 
-// test command
-void ResultsModelTest::errorHandling()
+TestResult* createTestResult(TestResult* parent, TestState state, const KUrl& location, int line, const QString& message)
 {
-    fillRows();
-    QVariant illegal; // default constructed variant denotes trouble
-    KOMPARE_MSG(illegal, m_model->data(m_model->index(0, 0), Qt::CheckStateRole),
-                "Results have no items with checked state");
-    KOMPARE(illegal, m_model->data(m_model->index(0, 0), Qt::EditRole));
-    KOMPARE(illegal, m_model->data(m_model->index(0, 1), Qt::DecorationRole));
+    TestResult* result = new TestResult;
+    result->setFile(location);
+    result->setLine(line);
+    result->setMessage(message);
+    result->setState(state);
+    parent->appendChild(result);
+    return result;
+}
 
-    KOMPARE(illegal, m_model->headerData(0, Qt::Vertical, Qt::DisplayRole));
-    KOMPARE(illegal, m_model->headerData(0, Qt::Horizontal, Qt::EditRole));
-
-    //KOMPARE(Veritas::NoResult, m_model->result(-1));
-    KOMPARE(QModelIndex(), m_model->mapToTestIndex(QModelIndex()));
-    KOMPARE(QModelIndex(), m_model->mapFromTestIndex(QModelIndex()));
 }
 
 // command
 void ResultsModelTest::testFromIndex()
 {
-    fillRows();
-    QModelIndex testIndex = m_runnerModel->index(0,0);
-    Test* actual = m_model->testFromIndex(testIndex);
-    Test* expected = static_cast<Test*>(testIndex.internalPointer());
+    TestResult* foo = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(Veritas::RunException, "BarTest", KUrl("bar.cpp"), 16, "descriptive message");
 
-    KVERIFY(expected != NULL); // sanity check
-    KVERIFY_MSG(actual != NULL,
-        "Null pointer. Failed to map to test through resultsmodel.");
-    KOMPARE(actual->name(), expected->name());
+    m_model->addResult(foo);
+    m_model->addResult(bar);
+
+    QModelIndex fooIndex = m_model->index(0,0);
+    QModelIndex barIndex = m_model->index(1,0);
+
+    Test* fooTest = m_model->testFromIndex(fooIndex);
+    Test* barTest = m_model->testFromIndex(barIndex);
+
+    KVERIFY(fooTest);
+    KOMPARE(foo->owner(), fooTest);
+    KVERIFY(barTest);
+    KOMPARE(bar->owner(), barTest);
+
+    KOMPARE(0, m_model->testFromIndex(QModelIndex()));
 }
 
-// test command
-// void ResultsModelTest::fetchIcon()
-// {
-//     fillRows();
-//     assertIconAtRow(0, QIcon(":/icons/success.png"));
-//     assertIconAtRow(1, QIcon(":/icons/fatal.png"));
-// }
+// command
+void ResultsModelTest::constructEmpty()
+{
+    // An untouched model should contain zero items
 
-// void ResultsModelTest::assertIconAtRow(int row, const QIcon& icon)
-// {
-//     QVariant actual = m_model->data(model->index(row,0), Qt::DecorationRole);
-//     QIcon actualIcon = qVariantCast<QIcon>(actual);
-//     KOMPARE(icon, actualIcon);
-// }
+    assertNrofItemsEquals(0, m_model);
+    KOMPARE(3, m_model->columnCount());
+    assertColumnHeader("col0", 0);
+    assertColumnHeader("col1", 1);
+    assertColumnHeader("col2", 2);
+}
+
+// command
+void ResultsModelTest::addSingleResult()
+{
+    // A single result in the model. Verify that the model does
+    // indeed now contain a single item equal to the one that was inserted
+
+    ResultsModel* rmodel = createResultsModel();
+    TestResult* result = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+
+    rmodel->addResult(result);
+    assertNrofItemsEquals(1, rmodel);
+    assertRowDataEquals(rmodel, 0, result);
+}
+
+void ResultsModelTest::assertRowDataEquals(ResultsModel* model, int rowNumber, TestResult* expected)
+{
+    KOMPARE_MSG(expected->state(), model->result(rowNumber), expected->owner()->name());
+    KVERIFY(expected->owner());
+    KOMPARE(expected->owner()->name(), model->index(rowNumber,0).data(Qt::DisplayRole).toString());
+    KOMPARE(expected->file().pathOrUrl(), model->index(rowNumber,2).data(Qt::DisplayRole).toString());
+    KOMPARE(QString::number(expected->line()), model->index(rowNumber,3).data(Qt::DisplayRole).toString());
+    KOMPARE(expected->message(), model->index(rowNumber,1).data(Qt::DisplayRole).toString());
+}
+
+// command
+void ResultsModelTest::addMultipleResults()
+{
+    // Multiple testresults inserted into the model
+    // The model should now contain exactly this number of items
+    // with the expected content in the order of insertion.
+
+    ResultsModel* rmodel = createResultsModel();
+    TestResult* foo = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(Veritas::RunException, "BarTest", KUrl("bar.cpp"), 16, "descriptive message");
+
+    rmodel->addResult(foo);
+    rmodel->addResult(bar);
+
+    assertNrofItemsEquals(2, rmodel);
+    assertRowDataEquals(rmodel, 0, foo);
+    assertRowDataEquals(rmodel, 1, bar);
+}
+
+void ResultsModelTest::addSubResult()
+{
+    // Results can have subresults. Add some of those to
+    // this model and check that evrything was inserted as expected
+
+    ResultsModel* rmodel = createResultsModel();
+    TestResult* root = createTestResult(Veritas::RunError, "FooTest", KUrl("baz.cpp"), 13, "");
+    TestResult* foo = createTestResult(root, Veritas::RunError, KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(root, Veritas::RunException, KUrl("bar.cpp"), 16, "descriptive message");
+
+    rmodel->addResult(root);
+
+    assertNrofItemsEquals(2, rmodel);
+    assertRowDataEquals(rmodel, 0, foo);
+    assertRowDataEquals(rmodel, 1, bar);
+}
+
+void ResultsModelTest::fetchDataFromEmpty()
+{
+    // Get data from an empty model
+
+    ResultsModel* rmodel = createResultsModel();
+    assertNrofItemsEquals(0, rmodel);
+    KOMPARE(-1, rmodel->result(0));
+    KOMPARE(-1, rmodel->result(1));
+    KOMPARE(-1, rmodel->result(-1));
+
+    KOMPARE(QModelIndex(), rmodel->index(0,0));
+    KOMPARE(QVariant(), rmodel->index(0,0).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(0,1).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(0,2).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(0,3).data(Qt::DisplayRole));
+
+    KOMPARE(QModelIndex(), rmodel->index(1,0));
+    KOMPARE(QVariant(), rmodel->index(1,0).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(1,1).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(1,2).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(1,3).data(Qt::DisplayRole));
+}
+
+void ResultsModelTest::fetchDataIllegalRow()
+{
+    // Fetch data from the model from rows/indexes that
+    // are not contained within the model boundaries (number of rows)
+
+    ResultsModel* rmodel = createResultsModel();
+    TestResult* foo = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(Veritas::RunException, "BarTest", KUrl("bar.cpp"), 16, "descriptive message");
+
+    rmodel->addResult(foo);
+    rmodel->addResult(bar);
+
+    KOMPARE(-1, rmodel->result(2));
+    KOMPARE(-1, rmodel->result(-1));
+
+    KOMPARE(QModelIndex(), rmodel->index(3,0));
+    KOMPARE(QVariant(), rmodel->index(3,0).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(3,1).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(3,2).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(3,3).data(Qt::DisplayRole));
+
+    KOMPARE(QModelIndex(), rmodel->index(4,0));
+    KOMPARE(QVariant(), rmodel->index(4,0).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(4,1).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(4,2).data(Qt::DisplayRole));
+    KOMPARE(QVariant(), rmodel->index(4,3).data(Qt::DisplayRole));
+}
+
+void ResultsModelTest::fetchDataNoOwner()
+{
+    // TestResults normally have an owner Test initialized.
+    // this command fetches data for results in the model
+    // without an owner, ie owner() returns 0
+
+    ResultsModel* rmodel = createResultsModel();
+    Test* t = 0;
+    TestResult* result = createTestResult(t, Veritas::RunError, KUrl("foo/bar.cpp"), 10, "failure message");
+
+    rmodel->addResult(result);
+    assertNrofItemsEquals(1, rmodel);
+
+    QTest::ignoreMessage(QtWarningMsg, "Owner test not set for result. ");
+    KOMPARE(QVariant(), rmodel->index(0,0).data(Qt::DisplayRole));
+}
+
+// command
+void ResultsModelTest::clear()
+{
+    // First add some testresults to a model
+    // next clear this model. It should now contain zero items
+    // Finally re-add some items and verify that the correct items
+    // were inserted
+
+    ResultsModel* rmodel = createResultsModel();
+    TestResult* foo = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(Veritas::RunException, "BarTest", KUrl("bar.cpp"), 16, "descriptive message");
+
+    rmodel->addResult(foo);
+    rmodel->addResult(bar);
+    assertNrofItemsEquals(2, rmodel);
+
+    rmodel->clear();
+    assertNrofItemsEquals(0, rmodel);
+
+    rmodel->addResult(foo);
+    rmodel->addResult(bar);
+    assertNrofItemsEquals(2, rmodel);
+    assertRowDataEquals(rmodel, 0, foo);
+    assertRowDataEquals(rmodel, 1, bar);
+}
+
+// custom assertions
+void ResultsModelTest::assertNrofItemsEquals(int expected, ResultsModel* model)
+{
+    KOMPARE(expected, model->rowCount());
+    if (expected == 0) QVERIFY(!model->hasChildren());
+    else QVERIFY(model->hasChildren());
+    for (int i=0; i<expected; i++) {
+        QVERIFY(model->index(i,0).isValid());
+        QVERIFY(model->index(i,1).isValid());
+        QVERIFY(model->index(i,2).isValid());
+        QVERIFY(model->index(i,3).isValid());
+        QVERIFY(!model->hasChildren(model->index(i,0)));
+    }
+    QVERIFY(!model->index(expected,0).isValid());
+}
+
+//command
+void ResultsModelTest::addNullResult()
+{
+    // call addResult with a NULL result on empty model.
+    // fill the model a bit, now call addResult with NULL again
+    // the model is expected to stay unaffected by these NULL calls.
+
+    ResultsModel* rmodel = createResultsModel();
+    rmodel->addResult(0);
+    assertNrofItemsEquals(0, rmodel);
+
+    TestResult* foo = createTestResult(Veritas::RunError, "FooTest", KUrl("foo/bar.cpp"), 10, "failure message");
+    TestResult* bar = createTestResult(Veritas::RunException, "BarTest", KUrl("bar.cpp"), 16, "descriptive message");
+
+    rmodel->addResult(foo);
+    rmodel->addResult(bar);
+    assertNrofItemsEquals(2, rmodel);
+
+    rmodel->addResult(0);
+    assertNrofItemsEquals(2, rmodel);
+    rmodel->addResult(0);
+    assertNrofItemsEquals(2, rmodel);
+}
 
 // helper
 void ResultsModelTest::assertColumnHeader(const QVariant& expected, int index)
 {
-    KOMPARE_MSG(expected, m_model->headerData(index, Qt::Horizontal), "Incorrect column header caption");
-}
-
-// helper
-void ResultsModelTest::assertDataAt(const QVariant& expected, int row, int column)
-{
-    QVariant actual = m_model->data(m_model->index(row, column), Qt::DisplayRole);
-    KOMPARE(expected, actual);
-}
-
-// helper
-void ResultsModelTest::checkRow(int index)
-{
-    QString rowStr = QString::number(index);
-    assertDataAt(rowStr + '0', index, 0);
-    assertDataAt(rowStr + '1', index, 1);
-    assertDataAt(rowStr + '2', index, 2);
-}
-
-// helper
-void ResultsModelTest::fillRows()
-{
-    m_model->addResult(m_runnerModel->index(0, 0)); // invoke slot
-    m_model->addResult(m_runnerModel->index(1, 0)); // invoke slot
+   KOMPARE_MSG(expected, m_model->headerData(index, Qt::Horizontal), "Incorrect column header caption");
 }
 
 QTEST_KDEMAIN(ResultsModelTest, GUI)

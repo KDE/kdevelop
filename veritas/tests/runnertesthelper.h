@@ -53,6 +53,8 @@ public:
     void setRoot(Test* root);
     /*! run the items in the tree. blocking */
      void runTests();
+    void setTimeout(int milliseconds);
+
     /*! compares the actual test tree in the model against a serialized
     version in @p testTreeContents
     eg "0 suite1"
@@ -83,6 +85,7 @@ private:
     RunnerWindow* m_window;
     ResultsModel* m_resultsModel;
     bool m_show;
+    int m_timeout; // in milliseconds
 };
 
 } // end namespace Veritas

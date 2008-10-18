@@ -21,6 +21,7 @@
 #include "resultswidget.h"
 #include <QTreeView>
 #include <QHeaderView>
+#include <KDebug>
 
 using Veritas::ResultsWidget;
 
@@ -50,15 +51,14 @@ ResultsWidget::~ResultsWidget()
 
 void ResultsWidget::setResizeMode()
 {
-    header()->setResizeMode(QHeaderView::Fixed);
-    header()->setResizeMode(0, QHeaderView::ResizeToContents); // test name
-    header()->setResizeMode(1, QHeaderView::Stretch); // message
-    header()->setResizeMode(2, QHeaderView::Interactive); // file name
-    header()->setResizeMode(3, QHeaderView::ResizeToContents); // line number
+//    header()->setResizeMode(QHeaderView::Fixed);
+//    header()->setResizeMode(0, QHeaderView::ResizeToContents); // test name
+//    header()->setResizeMode(1, QHeaderView::Stretch); // message
+//    header()->setResizeMode(2, QHeaderView::Interactive); // file name
+//    header()->setResizeMode(3, QHeaderView::ResizeToContents); // line number
 }
 
 QTreeView* ResultsWidget::tree()
 {
     return this;
 }
-

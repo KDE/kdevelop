@@ -159,32 +159,6 @@ inline RunnerModelStub* createRunnerModelStub(bool fill = true)
     return new RunnerModelStub(fill);
 }
 
-class ResultsHeader
-{
-public:
-    static const QString col0;
-    static const QString col1;
-    static const QString col2;
-};
-
-const QString ResultsHeader::col0 = "col0";
-const QString ResultsHeader::col1 = "col1";
-const QString ResultsHeader::col2 = "col2";
-
-inline QPair<ResultsModel*,RunnerModelStub*> createResultsModelStub()
-{
-    QStringList header;
-    header << ResultsHeader::col0 << ResultsHeader::col1 << ResultsHeader::col2;
-
-    ResultsModel* model = new ResultsModel(header);
-    RunnerModelStub* runnerModel = new RunnerModelStub();
-
-    model->addResult(runnerModel->index(0, 0)); // invoke slot
-    model->addResult(runnerModel->index(1, 0)); // invoke slot
-
-    return qMakePair(model, runnerModel);
-}
-
 }
 
 

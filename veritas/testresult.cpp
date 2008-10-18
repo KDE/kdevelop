@@ -18,9 +18,8 @@
  * 02110-1301, USA.
  */
 
-#include "veritas/testresult.h"
-#include <KDebug>
-
+#include "testresult.h"
+#include "test.h"
 
 using Veritas::TestResult;
 using Veritas::TestState;
@@ -31,12 +30,14 @@ class TestResultPrivate
 {
 public:
     TestResultPrivate(TestState state, const QString& msg, int line, const KUrl& file) :
-        m_state(state), m_message(msg), m_line(line), m_file(file) {}
+        state(state), message(msg), line(line), file(file), owner(0) {}
     ~TestResultPrivate() {}
-    TestState m_state;
-    QString m_message;
-    int m_line;
-    KUrl m_file;
+    TestState state;
+    QString message;
+    int line;
+    KUrl file;
+    QList<TestResult*> children;
+    Test* owner;
 };
 }
 
@@ -48,78 +49,87 @@ TestResult::TestResult(TestState state, const QString& message, int line, const 
 
 TestResult::~TestResult()
 {
+    qDeleteAll(d->children);
     delete d;
 }
 
 TestState TestResult::state() const
 {
-    return d->m_state;
+    return d->state;
 }
 
 QString TestResult::message() const
 {
-    return d->m_message;
+    return d->message;
 }
 
 int TestResult::line() const
 {
-    return d->m_line;
+    return d->line;
 }
 
 KUrl TestResult::file() const
 {
-    return d->m_file;
+    return d->file;
 }
 
 void TestResult::setState(TestState state)
 {
-    d->m_state = state;
+    d->state = state;
 }
 
 void TestResult::setMessage(const QString& message)
 {
-    d->m_message = message;
+    d->message = message;
 }
 
 void TestResult::setLine(int line)
 {
-    d->m_line = line;
+    d->line = line;
 }
 
 void TestResult::setFile(const KUrl& file)
 {
-    d->m_file = file;
+    d->file = file;
 }
 
 void TestResult::clear()
 {
-    d->m_state = Veritas::NoResult;
-    d->m_message = "";
-    d->m_line = 0;
-    d->m_file = KUrl();
+    d->state = Veritas::NoResult;
+    d->message = QString();
+    d->line = 0;
+    d->file = KUrl();
+    d->children.clear();
+    d->owner = 0;
 }
 
-bool TestResult::operator==(const TestResult& other) const
+int TestResult::childCount()
 {
-    return (d->m_state == other.d->m_state) &&
-           (d->m_file == other.d->m_file) &&
-           (d->m_line == other.d->m_line) &&
-           (d->m_message == other.d->m_message);
+    return d->children.count();
 }
 
-void TestResult::log() const
+TestResult* TestResult::child(int i)
 {
-    QString result = "default";
-    switch (d->m_state) {
-    case Veritas::NoResult:
-        result = "not set";
-        break;
-    case Veritas::RunSuccess:
-        result = "success";
-        break;
-    case Veritas::RunError:
-        result = "failed";
-        break;
-    default: {}
+    return d->children.value(i);
+}
+
+void TestResult::appendChild(TestResult* res)
+{
+    Q_ASSERT(res);
+    d->children.append(res);
+    res->setOwner(d->owner);
+}
+
+Veritas::Test* TestResult::owner() const
+{
+    return d->owner;
+}
+
+void TestResult::setOwner(Veritas::Test* owner)
+{
+    Q_ASSERT(owner);
+    d->owner = owner;
+    foreach(TestResult* child, d->children) {
+        child->setOwner(d->owner);
     }
 }

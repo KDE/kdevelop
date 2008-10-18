@@ -30,6 +30,7 @@ namespace Veritas
 {
 
 class Test;
+class TestResult;
 
 /*!
  * \brief The ResultsModel class maintains results data in a
@@ -87,57 +88,31 @@ public: // Operations
      */
     int result(int row) const;
 
-    /*!
-     * Returns the runner item index related to the results model
-     * \a index.
-     */
-    QModelIndex mapToTestIndex(const QModelIndex& index) const;
+    /*! Returns the test runnermodel index related to @p resultIndex. */
+    QModelIndex mapToTestIndex(const QModelIndex& resultIndex) const;
+    /*! Returns the test related to a resultsmodel index @p resultIndex */
+    Test* testFromIndex(const QModelIndex& resultIndex) const;
 
-    /*!
-     * Returns the results model index related to the runner item
-     * index \a testItemIndex.
-     */
-    QModelIndex mapFromTestIndex(const QModelIndex& testItemIndex) const;
-
-    /*!
-     * Concatenates mapToTestIndex and itemFromIndex
-     */
-    Test* testFromIndex(const QModelIndex& i) const;
-
-    /*!
-     * Trigger a model update
-     */
+    /*! Forces attached views to update */
     void changed();
 
 public slots:
 
-    /*!
-     * Adds \a testItemIndex at the end of the results list. Increases
-     * the number of rows by one.
-     */
-    void addResult(const QModelIndex& testItemIndex);
+    /*! Adds \a testItemIndex at the end of the results list. */
+    void addResult(const QModelIndex& runnerModelIndex);
+    void addResult(TestResult* result);
 
-    /*!
-     * Removes all result entries. Forces attached views to update.
-     */
+    /*! Removes all result entries. Forces attached views to update. */
     void clear();
 
 private: // Operations
-
-    /*!
-     * Returns the runner item referred to by \a testItemIndex.
-     */
-    Test* itemFromIndex(const QModelIndex& testItemIndex) const;
-
     // Copy and assignment not supported.
     ResultsModel(const ResultsModel&);
     ResultsModel& operator=(const ResultsModel&);
 
 private: // Attributes
     QStringList m_headerData;
-    QList<QPersistentModelIndex> m_testItemIndexes;
-    typedef QMap<qint64, int> TestMap;
-    TestMap m_testItemMap;
+    QList<TestResult*> m_results;
 };
 
 } // namespace
