@@ -15,28 +15,23 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef CPP_NAVIGATIONCONTEXT_H
-#define CPP_NAVIGATIONCONTEXT_H
+#ifndef CPP_DECLARATIONNAVIGATIONCONTEXT_H
+#define CPP_DECLARATIONNAVIGATIONCONTEXT_H
 
-#include <language/duchain/navigation/abstractnavigationcontext.h>
+#include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
 #include <language/duchain/types/abstracttype.h>
 
 namespace Cpp {
 
-class NavigationContext : public KDevelop::AbstractNavigationContext
+class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigationContext
 {
   public:
-    NavigationContext( KDevelop::DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, KDevelop::AbstractNavigationContext* previousContext = 0 );
-
-   virtual QString name() const;
-   virtual QString html(bool shorten = false);
+    DeclarationNavigationContext( KDevelop::DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, KDevelop::AbstractNavigationContext* previousContext = 0 );
 
   protected:
-    ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
-    void eventuallyMakeTypeLinks( KDevelop::AbstractType::Ptr type );
-
     virtual KDevelop::NavigationContextPointer registerChild(KDevelop::DeclarationPointer declaration);
-
+    virtual void htmlClass();
+    virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType);
 };
 
 }

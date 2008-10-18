@@ -41,30 +41,6 @@ namespace TypeUtils {
     return base;
   }
 
-  AbstractType::Ptr targetType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
-
-    AbstractType::Ptr base(_base);
-
-    ReferenceType::Ptr ref = base.cast<ReferenceType>();
-    PointerType::Ptr pnt = base.cast<PointerType>();
-
-    while( ref || pnt ) {
-      if( ref ) {
-        if( constant )
-          (*constant) |= static_cast<bool>(ref->modifiers() & AbstractType::ConstModifier);
-        base = ref->baseType();
-      } else {
-        if( constant )
-          (*constant) |= static_cast<bool>(pnt->modifiers() & AbstractType::ConstModifier);
-        base = pnt->baseType();
-      }
-      ref = base.cast<ReferenceType>();
-      pnt = base.cast<PointerType>();
-    }
-
-    return base;
-  }
-
   bool isPointerType(const AbstractType::Ptr& type) {
     return realType(type, 0).cast<PointerType>();
   }

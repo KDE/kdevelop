@@ -32,7 +32,7 @@ using namespace KDevelop;
 using namespace rpp;
 
 MacroNavigationContext::MacroNavigationContext(const pp_macro& macro, QString preprocessedBody)
-  : AbstractNavigationContext(DeclarationPointer(0), TopDUContextPointer(0)),
+  : AbstractNavigationContext(TopDUContextPointer(0)),
     m_macro(copyConstantMacro(&macro)), m_body(preprocessedBody)
 {}
 

@@ -31,7 +31,7 @@ namespace Cpp {
 using namespace KDevelop;
 
 IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDevelop::TopDUContextPointer topContext)
-    : AbstractNavigationContext(DeclarationPointer(0), topContext), m_item(item)
+    : AbstractNavigationContext(topContext), m_item(item)
 {}
 
 QString IncludeNavigationContext::html(bool shorten)
@@ -120,7 +120,7 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
         else
           first = false;
 
-        m_currentText += Qt::escape(indent + declarationKind(*declarationIterator) + " ");
+        m_currentText += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
       }
       ++declarationIterator;

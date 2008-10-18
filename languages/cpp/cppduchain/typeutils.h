@@ -16,10 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef TYPEUTILS_H
-#define TYPEUTILS_H
+#ifndef CPP_TYPEUTILS_H
+#define CPP_TYPEUTILS_H
 
 #include <QHash>
+#include <language/duchain/types/typeutils.h>
 #include "cppduchainexport.h"
 #include <language/duchain/declaration.h>
 #include "cpptypes.h"
@@ -36,22 +37,12 @@ namespace TypeUtils {
    * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
    *
    *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
+   * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
 
   /**
-   * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
-   *
-   *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
-   * @return return-value will only be zero if type is zero
-   */
-  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr targetType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
-  //KDEVCPPDUCHAIN_EXPORT const AbstractType* targetType(const AbstractType* type, const TopDUContext* topContext, bool* constant = 0);
-
-  /**k
    * Returns whether the type is a pointer-type or reference to pointer-type.
    *
    *  @param type The type

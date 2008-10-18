@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include "navigationwidget.h"
-#include "navigationcontext.h"
+#include "declarationnavigationcontext.h"
 #include "includenavigationcontext.h"
 #include "macronavigationcontext.h"
 
@@ -31,7 +31,7 @@ NavigationWidget::NavigationWidget(KDevelop::DeclarationPointer declaration, KDe
   initBrowser(400);
 
   //The first context is registered so it is kept alive by the shared-pointer mechanism
-  m_startContext = NavigationContextPointer(new NavigationContext(declaration, m_topContext));
+  m_startContext = NavigationContextPointer(new DeclarationNavigationContext(declaration, m_topContext));
   m_startContext->setPrefixSuffix( htmlPrefix, htmlSuffix );
   setContext( m_startContext );
 }
@@ -61,7 +61,7 @@ NavigationWidget::NavigationWidget(const rpp::pp_macro& macro, const QString& pr
 
 
 QString NavigationWidget::shortDescription(KDevelop::Declaration* declaration) {
-  NavigationContextPointer ctx(new NavigationContext(DeclarationPointer(declaration), TopDUContextPointer())); ///@todo give correct top-context
+  NavigationContextPointer ctx(new DeclarationNavigationContext(DeclarationPointer(declaration), TopDUContextPointer())); ///@todo give correct top-context
   return ctx->html(true);
 }
 

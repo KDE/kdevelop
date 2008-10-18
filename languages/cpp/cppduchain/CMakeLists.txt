@@ -42,7 +42,7 @@ set(kdevcppduchain_LIB_SRCS
     expressionevaluationresult.cpp
     classdeclaration.cpp
     navigation/navigationwidget.cpp
-    navigation/navigationcontext.cpp
+    navigation/declarationnavigationcontext.cpp
     navigation/includenavigationcontext.cpp
     navigation/macronavigationcontext.cpp
 )
