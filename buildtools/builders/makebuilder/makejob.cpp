@@ -259,6 +259,13 @@ void MakeJob::addStandardOutput( const QStringList& lines )
 
 void MakeJob::procError( QProcess::ProcessError error )
 {
+    //This slot might be called twice for a given process, once when a real error 
+    //occurs and then again when the process has exited due to the error
+    //via procFinished() slot. So make sure we run the code only once.
+    if( error() )
+    {
+        return;
+    } 
     Q_UNUSED(error)
     m_lineMaker->flushBuffers();
 
