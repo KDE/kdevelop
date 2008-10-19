@@ -89,22 +89,22 @@ class ExecuteCompositeJob : public KCompositeJob
     public slots:
         virtual void start()
         {
-            slotResult(0);
+            if(hasSubjobs())
+                subjobs().first()->start();
+            else
+                emitResult();
         }
         
         void slotResult(KJob* job)
         {
-            kDebug() << "finished: "<< job;
-            if(job)
-                KCompositeJob::slotResult(job);
+            kDebug() << "finished: "<< job << job->error() << error();
+            KCompositeJob::slotResult(job);
             
-            if(hasSubjobs())
+            if(hasSubjobs() && !error())
             {
-                if(!job || job->error()==0) {
-                    kDebug() << "remaining: " << subjobs().count() << subjobs();
-                    KJob* nextJob=subjobs().first();
-                    nextJob->start();
-                }
+                kDebug() << "remaining: " << subjobs().count() << subjobs();
+                KJob* nextJob=subjobs().first();
+                nextJob->start();
             } else {
                 emitResult();
             }    
