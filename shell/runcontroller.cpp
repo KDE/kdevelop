@@ -321,7 +321,9 @@ IRun KDevelop::RunController::defaultRun() const
     run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
     if (group.readEntry("Start In Terminal", false))
         // TODO: start in terminal rather than output view
-        #warning Implement a Konsole instrumentor
+#ifdef GNU_CC
+		#warning Implement a Konsole instrumentor
+#endif
         run.setInstrumentor("konsole");
     else
         run.setInstrumentor("default");
@@ -335,9 +337,9 @@ IRun KDevelop::RunController::defaultRun() const
         foreach(const QString& it, compileItems)
         {
             QModelIndex idx=pathToIndex(model, it.split('/'));
-            ProjectBaseItem *it=model->item(idx);
+            ProjectBaseItem *pit=model->item(idx);
             
-            IProject* project = it->project();
+            IProject* project = pit->project();
             if (!project)
                 continue;
 
@@ -351,13 +353,15 @@ IRun KDevelop::RunController::defaultRun() const
                 switch(actionDeps)
                 {
                     case 1:
-                        buildJob=builder->build(it);
+                        buildJob=builder->build(pit);
                         break;
                     case 2:
-                        buildJob=builder->install(it);
+                        buildJob=builder->install(pit);
                         break;
                     case 3:
+#ifdef GNU_CC
                         #warning make it install as superuser.
+#endif
                         break;
                 }
                 comp+=buildJob;
@@ -432,7 +436,7 @@ void KDevelop::RunController::checkState()
         }
     }
 
-    if (d->state != running ? Running : Idle) {
+    if ( ( d->state != Running ? false : true ) == running ) {
         d->state = running ? Running : Idle;
         emit runStateChanged(d->state);
     }
