@@ -32,7 +32,16 @@ set(kdevplatformshell_LIB_SRCS
 kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformlanguage sublime kdevplatformutil kdevplatformoutputview)
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformshell ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+set(kdevplatformtestshell_LIB_SRCS
+    testcore.cpp
+)
+
+kde4_add_library(kdevplatformtestshell SHARED ${kdevplatformtestshell_LIB_SRCS})
+target_link_libraries(kdevplatformtestshell kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformlanguage sublime kdevplatformutil kdevplatformoutputview)
+set_target_properties(kdevplatformtestshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
+
+install(TARGETS kdevplatformtestshell kdevplatformshell ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     mainwindow.h
@@ -53,5 +62,6 @@ install(FILES
     sessioncontroller.h
     language.h
     shellexport.h
+    testcore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell
 )

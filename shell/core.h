@@ -33,6 +33,7 @@ class PartController;
 class DocumentController;
 class RunController;
 class SessionController;
+class CorePrivate;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -101,11 +102,12 @@ public:
     void cleanup();
 
     Core::Setup setupFlags() const;
-
+protected:
+    Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
+    KDevelop::CorePrivate *d;
+    static Core *m_self;
 private:
     Core(QObject *parent = 0);
-    static Core *m_self;
-    struct CorePrivate *d;
 };
 
 }

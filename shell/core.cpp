@@ -43,85 +43,100 @@
 #include "languagecontroller.h"
 #include "documentcontroller.h"
 #include "runcontroller.h"
+#include "core_p.h"
 
 namespace KDevelop {
 
 Core *Core::m_self = 0;
 
-struct CorePrivate {
-    CorePrivate(Core *core):
-        m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), "1.0", ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) ), m_core(core), m_cleanedUp(false)
-    {
-    }
+CorePrivate::CorePrivate(Core *core):
+    m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), "1.0", ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) ), m_core(core), m_cleanedUp(false)
+{
+}
 
-    void initialize(Core::Setup mode)
+void CorePrivate::initialize(Core::Setup mode)
+{
+    m_mode=mode;
+    if( !sessionController )
     {
-        m_mode=mode;
         sessionController = new SessionController(m_core);
-        kDebug() << "Creating ui controller";
-        uiController = new UiController(m_core);
-        kDebug() << "Creating plugin controller";
-        pluginController = new PluginController(m_core);
-        if(!(mode & Core::NoUi)) partController = new PartController(m_core, uiController->defaultMainWindow());
-        projectController = new ProjectController(m_core);
-        languageController = new LanguageController(m_core);
-        documentController = new DocumentController(m_core);
-        runController = new RunController(m_core);
-
-        kDebug() << "initializing ui controller";
-        sessionController->initialize();
-        if(!(mode & Core::NoUi)) uiController->initialize();
-        languageController->initialize();
-        projectController->initialize();
-        documentController->initialize();
-
-        /* This is somewhat messy.  We want to load the areas before
-           loading the plugins, so that when each plugin is loaded we
-           know if an area wants some of the tool view from that plugin.
-           OTOH, loading of areas creates documents, and some documents
-           might require that a plugin is already loaded.
-           Probably, the best approach would be to plugins to just add
-           tool views to a list of available tool view, and then grab
-           those tool views when loading an area.  */
-
-        kDebug() << "loading global plugin";
-        pluginController->loadPlugins( PluginController::Global );
-
-        if(!(mode & Core::NoUi))
-        {
-            /* Need to do this after everything else is loaded.  It's too
-               hard to restore position of views, and toolbars, and whatever
-               that are not created yet.  */
-            uiController->loadAllAreas(KGlobal::config());
-            uiController->defaultMainWindow()->show();
-        }
     }
-    ~CorePrivate()
+    kDebug() << "Creating ui controller";
+    if( !uiController )
     {
-        delete projectController;
-        delete languageController;
-        delete pluginController;
-        delete uiController;
-        delete partController;
-        delete documentController;
-        delete runController;
-        delete sessionController;
+        uiController = new UiController(m_core);
+    }
+    kDebug() << "Creating plugin controller";
+
+    if( !pluginController )
+    {
+        pluginController = new PluginController(m_core);
+    }
+    if( !partController && !(mode & Core::NoUi))
+    {
+        partController = new PartController(m_core, uiController->defaultMainWindow());
     }
 
-    QPointer<PluginController> pluginController;
-    QPointer<UiController> uiController;
-    QPointer<ProjectController> projectController;
-    QPointer<LanguageController> languageController;
-    QPointer<PartController> partController;
-    QPointer<DocumentController> documentController;
-    QPointer<RunController> runController;
-    QPointer<SessionController> sessionController;
- 
-    KComponentData m_componentData;
-    Core *m_core;
-    bool m_cleanedUp;
-    Core::Setup m_mode;
-};
+    if( !projectController )
+    {
+        projectController = new ProjectController(m_core);
+    }
+
+    if( !languageController )
+    {
+        languageController = new LanguageController(m_core);
+    }
+
+    if( !documentController )
+    {
+        documentController = new DocumentController(m_core);
+    }
+
+    if( !runController )
+    {
+        runController = new RunController(m_core);
+    }
+
+    kDebug() << "initializing ui controller";
+    sessionController->initialize();
+    if(!(mode & Core::NoUi)) uiController->initialize();
+    languageController->initialize();
+    projectController->initialize();
+    documentController->initialize();
+
+    /* This is somewhat messy.  We want to load the areas before
+        loading the plugins, so that when each plugin is loaded we
+        know if an area wants some of the tool view from that plugin.
+        OTOH, loading of areas creates documents, and some documents
+        might require that a plugin is already loaded.
+        Probably, the best approach would be to plugins to just add
+        tool views to a list of available tool view, and then grab
+        those tool views when loading an area.  */
+
+    kDebug() << "loading global plugin";
+    pluginController->loadPlugins( PluginController::Global );
+
+    if(!(mode & Core::NoUi))
+    {
+        /* Need to do this after everything else is loaded.  It's too
+            hard to restore position of views, and toolbars, and whatever
+            that are not created yet.  */
+        uiController->loadAllAreas(KGlobal::config());
+        uiController->defaultMainWindow()->show();
+    }
+}
+CorePrivate::~CorePrivate()
+{
+    delete projectController;
+    delete languageController;
+    delete pluginController;
+    delete uiController;
+    delete partController;
+    delete documentController;
+    delete runController;
+    delete sessionController;
+}
+
 
 void Core::initialize(Setup mode)
 {
@@ -141,6 +156,11 @@ Core::Core(QObject *parent)
     : ICore(parent)
 {
     d = new CorePrivate(this);
+}
+
+Core::Core(CorePrivate* dd, QObject* parent)
+: ICore(parent), d(dd)
+{
 }
 
 Core::~Core()
