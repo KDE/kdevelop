@@ -684,9 +684,9 @@ BreakpointController::BreakpointController(GDBController* parent)
 
     //new ModelTest(this, this);
 
-    foreach(KParts::Part* p, KDevelop::ICore::self()->partManager()->parts())
+    foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
         slotPartAdded(p);
-    connect(KDevelop::ICore::self()->partManager(),
+    connect(KDevelop::ICore::self()->partController(),
             SIGNAL(partAdded(KParts::Part*)),
             this,
             SLOT(slotPartAdded(KParts::Part*)));

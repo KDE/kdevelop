@@ -54,7 +54,7 @@ public:
         m_uiController(0),
         m_runController(0),
         m_session(0),
-        m_partManager(0) {}
+        m_partController(0) {}
 
     virtual ~Core() {}
     virtual KDevelop::IDocumentController *documentController() {
@@ -75,8 +75,8 @@ public:
     virtual KDevelop::IUiController *uiController() {
         return m_uiController;
     }
-    virtual KParts::PartManager *partManager() {
-        return m_partManager;
+    virtual KParts::PartManager *partController() {
+        return m_partController;
     }
     virtual KDevelop::ISession* activeSession() {
         return m_session;
@@ -94,7 +94,7 @@ public:
     KDevelop::IUiController* m_uiController;
     KDevelop::IRunController* m_runController;
     KDevelop::ISession* m_session;
-    KParts::PartManager* m_partManager;
+    KParts::PartManager* m_partController;
 };
 
 }
