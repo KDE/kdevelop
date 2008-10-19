@@ -1579,7 +1579,9 @@ class ItemRepository : public AbstractItemRepository {
         if(bucket->isEmpty()) {
           ++ret.emptyBuckets;
           Q_ASSERT(!bucket->monsterBucketExtent());
+#ifdef DEBUG_MONSTERBUCKETS
           Q_ASSERT(m_freeSpaceBuckets.contains(a));
+#endif
         }
         
         lostSpace += bucket->lostSpace();
