@@ -87,7 +87,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::AbstractFunctionDeclaration::FunctionSpe
 ///Use this to merge AbstractFunctionDeclaration into the class hierarchy. Base must be the base-class
 ///in the hierarchy, and Data must be the Data class of the following Declaration, and must be based on AbstractFunctionDeclarationData
 ///and BaseData.
-template<class Base, class Data>
+template<class Base, class _Data>
 class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDeclaration {
   public:
   template<class BaseData>
@@ -102,10 +102,11 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
   
   private:
   virtual const AbstractFunctionDeclarationData* data() const {
-    return static_cast<const Data*>(Base::d_func());
+	const _Data* tmp = static_cast<const _Data*>(Base::d_func());
+    return static_cast<const AbstractFunctionDeclarationData*>(tmp);
   }
   virtual AbstractFunctionDeclarationData* dynamicData() {
-    return static_cast<Data*>(Base::d_func_dynamic());
+    return static_cast<_Data*>(Base::d_func_dynamic());
   }
 };
 
