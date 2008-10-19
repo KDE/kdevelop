@@ -83,12 +83,15 @@ CMakeBuilder::~CMakeBuilder()
 {
 }
 
-KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *item)
+KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     if( m_builder )
     {
+        if(dom->file())
+            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+        
         kDebug(9032) << "Building with make";
-        return m_builder->build(item);
+        return m_builder->build(dom);
     }
     return false;
 }
@@ -97,6 +100,9 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
     if( m_builder )
     {
+        if(dom->file()) //It doesn't work to compile a file
+            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+        
         kDebug(9032) << "Cleaning with make";
         return m_builder->clean(dom);
     }
@@ -107,6 +113,9 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
     if( m_builder )
     {
+        if(dom->file())
+            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+        
         kDebug(9032) << "Installing with make";
         return m_builder->install(dom);
     }
