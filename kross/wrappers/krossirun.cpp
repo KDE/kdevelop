@@ -30,9 +30,9 @@ class KrossKDevelopIRun : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void addInstrumentorArgument(const QString& x0) { wrapped->addInstrumentorArgument(x0); }
 		Q_SCRIPTABLE void setInstrumentorArguments(const QStringList& x0) { wrapped->setInstrumentorArguments(x0); }
 		Q_SCRIPTABLE void clearInstrumentorArguments() { wrapped->clearInstrumentorArguments(); }
-		Q_SCRIPTABLE void setCompilationDependencies(const QList< KDevelop::ProjectBaseItem* >& x0) { wrapped->setCompilationDependencies(x0); }
-		Q_SCRIPTABLE void clearCompilationDependencies() { wrapped->clearCompilationDependencies(); }
-		Q_SCRIPTABLE QList< KDevelop::ProjectBaseItem* > compilationDependencies() const { return wrapped->compilationDependencies(); }
+		Q_SCRIPTABLE void setDependencies(const QList< KJob* >& x0) { wrapped->setDependencies(x0); }
+		Q_SCRIPTABLE void clearDependencies() { wrapped->clearDependencies(); }
+		Q_SCRIPTABLE QList< KJob* > dependencies() const { return wrapped->dependencies(); }
 	private:
 		KDevelop::IRun* wrapped;
 };

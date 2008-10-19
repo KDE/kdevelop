@@ -26,10 +26,10 @@ Boston, MA 02110-1301, USA.
 #include <KUrl>
 
 #include "interfacesexport.h"
+class KJob;
 
 namespace KDevelop
 {
-class ProjectBaseItem;
 
 /**
  * This class holds all properties which specify a run session.
@@ -123,19 +123,19 @@ public:
     void clearInstrumentorArguments();
 
     /**
-     * Set the project items that should be compiled before executing
+     * Set the jobs that have to be started before running.
      */
-    void setCompilationDependencies(const QList<ProjectBaseItem*>& c);
+    void setDependencies(const QList<KJob*>& c);
 
     /**
-     * Clear all compilation dependencies.
+     * Clear all run dependencies.
      */
-    void clearCompilationDependencies();
+    void clearDependencies();
 
     /**
-     * The requested compilation dependencies
+     * The requested run dependencies.
      */
-    QList<ProjectBaseItem*> compilationDependencies() const;
+    QList<KJob*> dependencies() const;
 
 
 private:
