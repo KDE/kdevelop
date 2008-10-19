@@ -46,9 +46,13 @@ class UiController;
  * //replace plugin controller
  * core->setPluginController( new MyCustomPluginController( core ) );
  * core->initialize();
+ * ... //test code
+ * core->cleanup();
+ * delete core;
  * \endcode
  *
- * @note Its important to call initialize, else the controller's won't work
+ * @note Its important to call initialize and cleanup, else the controller's
+ * won't work properly.
  */
 class TestCore : public Core
 {
