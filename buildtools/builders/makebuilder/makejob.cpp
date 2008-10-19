@@ -264,7 +264,6 @@ void MakeJob::procError( QProcess::ProcessError error )
 
     if (!m_killed) {
         setError(FailedError);
-        // FIXME need more detail
         setErrorText(i18n("Job failed"));
         model()->addLine( i18n("*** Failed ***") );
 
@@ -277,14 +276,15 @@ void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 {
     Q_UNUSED(code)
     m_lineMaker->flushBuffers();
-    if( status != QProcess::NormalExit )
-    {
-        model()->addLine( i18n("*** Aborted ***") );
-    } else
+    if( code==0 && status == QProcess::NormalExit )
     {
         model()->addLine( i18n("*** Finished ***") );
+        emitResult();
     }
-    emitResult();
+    else
+    {
+        procError(QProcess::UnknownError);
+    }
 }
 
 bool MakeJob::doKill()
