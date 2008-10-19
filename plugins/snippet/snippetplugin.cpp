@@ -58,7 +58,7 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
 {
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
-    connect( core()->partManager(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
+    connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
 }
 
 SnippetPlugin::~SnippetPlugin()
@@ -75,7 +75,7 @@ void SnippetPlugin::insertText(const QString& snippet)
 {
     kDebug(9500) << "Insert Snippet:" << snippet ;
 
-	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partManager()->activeWidget() );
+	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partController()->activeWidget() );
 	if (view) {
 		view->insertText( snippet );
 	}

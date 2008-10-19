@@ -189,7 +189,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (!d->document)
     {
-        d->document = Core::self()->partManagerInternal()->createTextPart(Core::self()->documentController()->encoding());
+        d->document = Core::self()->partControllerInternal()->createTextPart(Core::self()->documentController()->encoding());
 
         // Connect to the first text changed signal, it occurs before the completed() signal
         connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(slotDocumentLoaded()));
@@ -204,7 +204,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
            to have several views, disable that behaviour.  */
         d->document->setAutoDeletePart(false);
 
-        Core::self()->partManager()->addPart(d->document, false);
+        Core::self()->partController()->addPart(d->document, false);
 
         connect(d->document, SIGNAL(modifiedChanged(KTextEditor::Document*)),
                  this, SLOT(newDocumentStatus(KTextEditor::Document*)));

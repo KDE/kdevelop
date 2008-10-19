@@ -56,8 +56,8 @@ public:
     /** @copydoc ICore::languageController() */
     virtual ILanguageController *languageController();
 
-    /** @copydoc ICore::partManager() */
-    virtual KParts::PartManager *partManager();
+    /** @copydoc ICore::partController() */
+    virtual KParts::PartManager *partController();
 
     /** @copydoc ICore::documentController() */
     virtual IDocumentController *documentController();
@@ -85,7 +85,7 @@ public:
     LanguageController *languageControllerInternal();
 
     /** @return part manager */
-    PartController *partManagerInternal();
+    PartController *partControllerInternal();
 
     /** @return document controller */
     DocumentController *documentControllerInternal();

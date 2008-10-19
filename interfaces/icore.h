@@ -87,7 +87,7 @@ public:
     Q_SCRIPTABLE virtual KDevelop::ILanguageController *languageController() = 0;
 
     /** @return part manager */
-    Q_SCRIPTABLE virtual KParts::PartManager *partManager() = 0;
+    Q_SCRIPTABLE virtual KParts::PartManager *partController() = 0;
 
     /** @return document controller */
     Q_SCRIPTABLE virtual KDevelop::IDocumentController *documentController() = 0;

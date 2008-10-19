@@ -48,10 +48,10 @@ PartDocument::~PartDocument()
 
 QWidget *PartDocument::createViewWidget(QWidget */*parent*/)
 {
-    KParts::Part *part = Core::self()->partManagerInternal()->createPart(url());
+    KParts::Part *part = Core::self()->partControllerInternal()->createPart(url());
     if( part )
     {
-        Core::self()->partManager()->addPart(part);
+        Core::self()->partController()->addPart(part);
         QWidget *w = part->widget();
         d->partForView[w] = part;
         return w;
@@ -159,8 +159,8 @@ void PartDocument::activate(Sublime::View *activeView, KParts::MainWindow *mainW
 {
     Q_UNUSED(mainWindow);
     KParts::Part *part = partForView(activeView->widget());
-    if (Core::self()->partManager()->activePart() != part)
-        Core::self()->partManager()->setActivePart(part);
+    if (Core::self()->partController()->activePart() != part)
+        Core::self()->partController()->setActivePart(part);
     notifyActivated();
 }
 

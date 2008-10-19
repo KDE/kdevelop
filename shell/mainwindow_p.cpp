@@ -127,7 +127,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     {
         //activated view is not a part document so we need to remove active part gui
         ///@todo adymo: only this window needs to remove GUI
-//         KParts::Part *activePart = Core::self()->partManager()->activePart();
+//         KParts::Part *activePart = Core::self()->partController()->activePart();
 //         if (activePart)
 //             guiFactory()->removeClient(activePart);
     }

@@ -40,7 +40,7 @@ using namespace KDevelop;
 CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel* aModel, const QString& language)
   : QObject(parent), m_model(aModel), m_language(language)
 {
-  connect (KDevelop::ICore::self()->partManager(), SIGNAL(partAdded(KParts::Part*)),
+  connect (KDevelop::ICore::self()->partController(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
   aModel->setParent(this);
 }

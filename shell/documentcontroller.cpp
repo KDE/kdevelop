@@ -347,7 +347,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                 }
             }
         }
-        if ( !d->documents.contains(url) && Core::self()->partManagerInternal()->isTextType(mimeType))
+        if ( !d->documents.contains(url) && Core::self()->partControllerInternal()->isTextType(mimeType))
             d->documents[url] = new TextDocument(url, Core::self());
         else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());

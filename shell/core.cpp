@@ -238,12 +238,12 @@ ProjectController *Core::projectControllerInternal()
     return d->projectController;
 }
 
-KParts::PartManager *Core::partManager()
+KParts::PartManager *Core::partController()
 {
     return d->partController;
 }
 
-PartController *Core::partManagerInternal()
+PartController *Core::partControllerInternal()
 {
     return d->partController;
 }

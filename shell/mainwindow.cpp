@@ -126,11 +126,11 @@ void MainWindow::saveSettings()
 void MainWindow::initialize()
 {
     setupGUI( KXmlGuiWindow::Keys | KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create );
-    Core::self()->partManager()->addManagedTopLevelWidget(this);
+    Core::self()->partController()->addManagedTopLevelWidget(this);
     kDebug() << "Adding plugin-added connection";
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
-    connect( Core::self()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+    connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
         d, SLOT(changeActiveView(Sublime::View*)));

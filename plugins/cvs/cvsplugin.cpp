@@ -127,7 +127,7 @@ void CvsPlugin::setupActions()
 const KUrl CvsPlugin::urlFocusedDocument() const
 {
     KParts::ReadOnlyPart *plugin =
-            dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
+            dynamic_cast<KParts::ReadOnlyPart*>( core()->partController()->activePart() );
     if ( plugin ) {
         if (plugin->url().isLocalFile() ) {
             return plugin->url();

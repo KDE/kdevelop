@@ -81,7 +81,7 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 	m_formatTextAction->setEnabled(false);
 	m_formatFilesAction->setEnabled(true);
 
-	connect(core()->partManager(), SIGNAL(activePartChanged(KParts::Part*)),
+	connect(core()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
 	        this, SLOT(activePartChanged(KParts::Part*)));
 }
 

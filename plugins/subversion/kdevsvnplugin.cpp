@@ -319,7 +319,7 @@ KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsMapping& mapping )
 const KUrl KDevSvnPlugin::urlFocusedDocument()
 {
     KParts::ReadOnlyPart *part =
-            dynamic_cast<KParts::ReadOnlyPart*>( core()->partManager()->activePart() );
+            dynamic_cast<KParts::ReadOnlyPart*>( core()->partController()->activePart() );
     if ( part ) {
         if (part->url().isLocalFile() ) {
             return part->url();
