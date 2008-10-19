@@ -321,7 +321,7 @@ IRun KDevelop::RunController::defaultRun() const
     run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
     if (group.readEntry("Start In Terminal", false))
         // TODO: start in terminal rather than output view
-#ifdef GNU_CC
+#ifdef __GNUC__
 		#warning Implement a Konsole instrumentor
 #endif
         run.setInstrumentor("konsole");
@@ -359,7 +359,7 @@ IRun KDevelop::RunController::defaultRun() const
                         buildJob=builder->install(pit);
                         break;
                     case 3:
-#ifdef GNU_CC
+#ifdef __GNUC__
                         #warning make it install as superuser.
 #endif
                         break;
