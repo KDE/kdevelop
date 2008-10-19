@@ -48,11 +48,6 @@ class DeclarationId;
 class Declaration;
 class IndexedTopDUContext;
 
-struct ImportTraceItem;
-
-
-typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
-
 
 ///Represents a declaration only by its global indices
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {

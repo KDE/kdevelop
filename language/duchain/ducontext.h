@@ -138,7 +138,9 @@ struct ImportTraceItem {
   SimpleCursor position;
 };
 
-typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
+class ImportTrace : public KDevVarLengthArray<ImportTraceItem, 40>
+{
+};
 
 template<class T>
 class DUChainPointer;
