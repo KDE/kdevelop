@@ -102,6 +102,10 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
   
   private:
   virtual const AbstractFunctionDeclarationData* data() const {
+    // Note: This two-step cast is needed to help MSVC8 to see that the return value 
+	// of Base::d_func(), _Data and AbstractFunctionDeclarationData are indeed related.
+	// d_func() returns one parent class of _Data and AbstractFunctionDeclarationData 
+	// is the other parent class of _Data)
 	const _Data* tmp = static_cast<const _Data*>(Base::d_func());
     return static_cast<const AbstractFunctionDeclarationData*>(tmp);
   }
