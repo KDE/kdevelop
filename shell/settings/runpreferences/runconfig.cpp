@@ -39,7 +39,7 @@ RunSettings::RunSettings(const QString& groupPrefix,  const QString& config  )
   mStartinterminalItem = new KConfigSkeleton::ItemBool( currentGroup(), QLatin1String( "Start In Terminal" ), mStartinterminal, false );
   mStartinterminalItem->setLabel( i18n("Start In Terminal") );
   addItem( mStartinterminalItem, QLatin1String( "startinterminal" ) );
-  mBeforeExecItem = new KConfigSkeleton::ItemInt( currentGroup(), QLatin1String( "Before Execute" ), mBeforeExec, 0);
+  mBeforeExecItem = new KConfigSkeleton::ItemInt( currentGroup(), QLatin1String( "Before Execute" ), mBeforeExec, 1);
   mBeforeExecItem->setLabel( i18n("Before Execute") );
   addItem( mBeforeExecItem, QLatin1String( "beforeExec" ) );
   

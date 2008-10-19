@@ -113,27 +113,13 @@ class ExecuteCompositeJob : public KCompositeJob
 
 KJob* RunController::execute(const IRun & run)
 {
-    if(!run.compilationDependencies().isEmpty())
+    if(!run.dependencies().isEmpty())
         ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
     
     QList<KJob*> jobs;
-    foreach(ProjectBaseItem* item, run.compilationDependencies())
+    foreach(KJob* job, run.dependencies())
     {
-        IProject* project = item->project();
-        if (!project)
-            return 0;
-
-        ProjectFolderItem* prjitem = project->projectItem();
-        IPlugin* fmgr = project->managerPlugin();
-        IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
-        IProjectBuilder* builder;
-        if( mgr )
-        {
-            builder=mgr->builder( prjitem );
-        }
-        
-        KJob* buildJob=builder->build( item );
-        jobs.append(buildJob);
+        jobs.append(job);
     }
     
     jobs.append(new RunJob(this, run));
@@ -341,15 +327,48 @@ IRun KDevelop::RunController::defaultRun() const
         run.setInstrumentor("default");
     
     QStringList compileItems=group.readEntry("Compile Items", QStringList());
-
-    QList<ProjectBaseItem*> comp;
-    foreach(const QString& it, compileItems)
+    int actionDeps=group.readEntry("BeforeExecute", 1);
+    
+    QList<KJob*> comp;
+    if(actionDeps!=0)
     {
-        QModelIndex idx=pathToIndex(model, it.split('/'));
-        ProjectBaseItem *it=model->item(idx);
-        comp += it;
+        foreach(const QString& it, compileItems)
+        {
+            QModelIndex idx=pathToIndex(model, it.split('/'));
+            ProjectBaseItem *it=model->item(idx);
+            
+            IProject* project = it->project();
+            if (!project)
+                continue;
+
+            IPlugin* fmgr = project->managerPlugin();
+            IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
+            IProjectBuilder* builder;
+            if( mgr )
+            {
+                builder=mgr->builder( project->projectItem() );
+                KJob* buildJob;
+                switch(actionDeps)
+                {
+                    case 1:
+                        buildJob=builder->build(it);
+                        break;
+                    case 2:
+                        buildJob=builder->install(it);
+                        break;
+                    case 3:
+                        #warning make it install as superuser.
+                        break;
+                }
+                comp+=buildJob;
+            }
+            else
+            {
+                kDebug() << "Failed to compile";
+            }
+        }
+        run.setDependencies(comp);
     }
-    run.setCompilationDependencies(comp);
     
     return run;
 }
