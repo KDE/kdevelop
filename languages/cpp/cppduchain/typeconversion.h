@@ -33,7 +33,7 @@
 namespace KDevelop {
   class TopDUContext;
   class ImportTraceItem;
-  typedef KDevVarLengthArray<ImportTraceItem, 40> ImportTrace;
+  class ImportTrace;
 }
 
 namespace Cpp {
