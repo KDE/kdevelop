@@ -156,6 +156,24 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     return ret;
 }
 
+QString CMakeProjectVisitor::testExecutable(const QString& test) const
+{
+    if (m_tests.contains(test)) {
+        return m_tests[test].first;
+    } else {
+        return QString();
+    }
+}
+
+QStringList CMakeProjectVisitor::testArguments(const QString& test) const
+{
+    if (m_tests.contains(test)) {
+        return m_tests[test].second;
+    } else {
+        return QStringList();
+    }
+}
+
 int CMakeProjectVisitor::notImplemented(const QString &name) const
 {
     kDebug(9042) << "not implemented!" << name;
@@ -176,8 +194,10 @@ int CMakeProjectVisitor::visit(const CMakeAst *ast)
 
 int CMakeProjectVisitor::visit( const AddTestAst * test)
 {
-    if(!m_filesPerTarget.contains(test->testName()) || m_targetsType[test->testName()]==Library)
+/*    if(!m_filesPerTarget.contains(test->testName()) || m_targetsType[test->testName()]==Library)
         kDebug(9042) << "warning. The target " << test->testName() << " does not exist or it is not an executable";
+    return 1;*/
+    m_tests[test->testName()] = qMakePair(test->exeName(), test->testArgs());
     return 1;
 }
 

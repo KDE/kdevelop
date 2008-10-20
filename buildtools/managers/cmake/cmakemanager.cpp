@@ -77,6 +77,8 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmakemanager", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
+namespace {
+
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
 {
     kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
@@ -97,6 +99,58 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
     kDebug(9042) << "executed" << execName << "<" << t;
 
     return t;
+}
+
+QString fetchBuildDir(KDevelop::IProject* project)
+{
+    Q_ASSERT(project);
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    KUrl binurl=group.readEntry("CurrentBuildDir");
+    return binurl.toLocalFile(KUrl::AddTrailingSlash);
+}
+
+QString fetchInstallDir(KDevelop::IProject* project)
+{
+    Q_ASSERT(project);
+    KSharedConfig::Ptr cfg = project->projectConfiguration();
+    KConfigGroup group(cfg.data(), "CMake");
+    KUrl insturl=group.readEntry("CurrentInstallDir");
+    return insturl.toLocalFile(KUrl::AddTrailingSlash);
+}
+
+inline QString replaceBuildDir(QString in, QString buildDir)
+{
+    return in.replace("#[bin_dir]", buildDir);
+}
+
+inline QString replaceInstallDir(QString in, QString installDir)
+{
+    return in.replace("#[install_dir]", installDir);
+}
+
+KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs)
+{
+    QString buildDir = fetchBuildDir(project);
+    QString installDir = fetchInstallDir(project);
+
+    KUrl::List newList;
+    foreach(const QString& _s, dirs)
+    {
+        QString s=_s;
+        if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
+        {
+            s= replaceBuildDir(s, buildDir);
+        }
+        else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
+        {
+            s= replaceInstallDir(s, installDir);
+        }
+        newList.append(KUrl(s));
+    }
+    return newList;
+}
+
 }
 
 CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
@@ -319,6 +373,18 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     m_watchers[project]->addFile(file);
 }
 
+QList<Veritas::TestExecutableInfo> CMakeProjectManager::testExecutables() const
+{
+    QList<Veritas::TestExecutableInfo> tests;
+    typedef QMapIterator<KUrl, QMap<QString, Veritas::TestExecutableInfo> > It;
+    It it(m_testsPerFolder);
+    while( it.hasNext() ) {
+        it.next();
+        tests << it.value().values();
+    }
+    return tests;
+}
+
 QStringList removeMatches(const QString& exp, const QStringList& orig)
 {
     QStringList ret;
@@ -498,6 +564,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 m_targets.append(targetItem);
             }
         }
+
+        updateTestExecutables(v, item);
     }
 
     foreach( const QString& entry, entries )
@@ -521,7 +589,33 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             item->project()->addToFileSet( KDevelop::IndexedString( folderurl ) );
         }
     }
+
     return folderList;
+}
+
+void CMakeProjectManager::updateTestExecutables(const CMakeProjectVisitor& visitor, KDevelop::ProjectFolderItem* folder)
+{
+    // first remove any previous test entries
+    m_testsPerFolder.remove(folder->url()); // TODO(mbr.nxi@gmail.com) also remove stale sub-directories.
+
+    // now re-add the freshly parsed ones
+    KDevelop::IProject* project = folder->project();
+    QString buildDir = fetchBuildDir(project);
+    foreach(const QString& testName, visitor.tests()) {
+        Veritas::TestExecutableInfo test;
+        test.setName(testName);
+        QString cmd = replaceBuildDir(visitor.testExecutable(testName), buildDir);
+        test.setCommand(cmd);
+
+        QStringList args;
+        foreach(const QString& arg, visitor.testArguments(testName)) {
+            args << replaceBuildDir(arg, buildDir);
+        }
+        test.setArguments(args);
+
+        test.setWorkingDirectory(folder->url());
+        m_testsPerFolder[folder->url()][testName] = test;
+    }
 }
 
 bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
@@ -545,35 +639,6 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
     return m_targets;
 }
 
-KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dirs)
-{
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    
-    KUrl binurl=group.readEntry("CurrentBuildDir");
-    KUrl insturl=group.readEntry("CurrentInstallDir");
-    
-    QString bindir=binurl.toLocalFile(KUrl::AddTrailingSlash);
-    QString instdir=insturl.toLocalFile(KUrl::AddTrailingSlash);
-
-    KUrl::List newList;
-    foreach(const QString& _s, dirs)
-    {
-        QString s=_s;
-//         kDebug(9042) << "replace? " << s;
-        if(s.startsWith(QString::fromUtf8("#[bin_dir]")))
-        {
-            s=s.replace("#[bin_dir]", bindir);
-        }
-        else if(s.startsWith(QString::fromUtf8("#[install_dir]")))
-        {
-            s=s.replace("#[install_dir]", instdir);
-        }
-//         kDebug(9042) << "adding " << s;
-        newList.append(KUrl(s));
-    }
-    return newList;
-}
 
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {

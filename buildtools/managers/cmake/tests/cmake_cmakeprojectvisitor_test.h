@@ -44,15 +44,20 @@ private slots:
     void testRun();
     void testRun_data();
 
-    void addTest_addExeInFront();
-    void addTest_addExeAfter();
+    void addTest_single();
     void addTest_multiple();
+    void addTest_flags();
+    void addTest_url();
+    void addTest_identicalAddExecutable();
+    void addTest_properties();
+    void addTest_kde4AddUnitTest();
+    void addTest_variableUsage();
 
 private:
     // helpers
     CMakeProjectVisitor* setupVisitor();
     CMakeFileContent setupFileContent(const QString& content);
-    void assertTestFound(CMakeProjectVisitor* visitor, const QString& targetName);
+    void assertTestFound(CMakeProjectVisitor* visitor, const QString& testName, const QString& exe, const QStringList& args = QStringList());
 
 private:
     KDevelop::TopDUContext* m_fakeContext;

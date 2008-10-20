@@ -206,30 +206,31 @@ CMakeFileContent CMakeProjectVisitorTest::setupFileContent(const QString& conten
     return code;
 }
 
-void CMakeProjectVisitorTest::assertTestFound(CMakeProjectVisitor* visitor, const QString& targetName)
+void CMakeProjectVisitorTest::assertTestFound(CMakeProjectVisitor* visitor, 
+        const QString& name, const QString& exe, const QStringList& arguments)
 {
-    QVERIFY(visitor->targets().contains(targetName));
-    //QCOMPARE(CMakeProjectVisitor::Test, visitor->targetType(targetName));
+    QVERIFY(visitor->tests().contains(name));
+    QCOMPARE(exe, visitor->testExecutable(name));
+    QCOMPARE(arguments, visitor->testArguments(name));
 }
 
+
 // command
-void CMakeProjectVisitorTest::addTest_addExeInFront()
+void CMakeProjectVisitorTest::addTest_single()
 {
-    QString content(
-        "add_test(foo foo.exe)\n"
-        "add_executable(foo foo.cpp)\n");
+    QString content("add_test(foo foo.exe)\n");
 
     CMakeFileContent code = setupFileContent(content);
     CMakeProjectVisitor* vtor = setupVisitor();
 
     vtor->walk(code, 0);
 
-    QCOMPARE(1, vtor->targets().count());
-    assertTestFound(vtor, "foo");
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "foo.exe");
 }
 
 // command
-void CMakeProjectVisitorTest::addTest_addExeAfter()
+void CMakeProjectVisitorTest::addTest_identicalAddExecutable()
 {
     QString content(
         "add_executable(foo foo.cpp)\n"
@@ -240,21 +241,32 @@ void CMakeProjectVisitorTest::addTest_addExeAfter()
 
     vtor->walk(code, 0);
 
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "foo.exe");
     QCOMPARE(1, vtor->targets().count());
-    assertTestFound(vtor, "foo");
+    QVERIFY(vtor->targets().contains("foo"));
+
+    content = QString(
+        "add_test(foo foo.exe)\n"
+        "add_executable(foo foo.cpp)\n");
+
+    code = setupFileContent(content);
+    vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "foo.exe");
+    QCOMPARE(1, vtor->targets().count());
+    QVERIFY(vtor->targets().contains("foo"));
 }
 
 // command
 void CMakeProjectVisitorTest::addTest_multiple()
 {
     QString content(
-        "add_executable(foo foo.cpp)\n"
         "add_test(foo foo.exe)\n"
-        "\n"
         "add_test(zoo zoo.exe)\n"
-        "add_executable(zoo zoo.cpp)\n"
-        "\n"
-        "add_executable(moo moo.cpp)\n"
         "add_test(moo moo.exe)\n");
 
     CMakeFileContent code = setupFileContent(content);
@@ -262,10 +274,99 @@ void CMakeProjectVisitorTest::addTest_multiple()
 
     vtor->walk(code, 0);
 
-    QCOMPARE(3, vtor->targets().count());
-    assertTestFound(vtor, "foo");
-    assertTestFound(vtor, "zoo");
-    assertTestFound(vtor, "moo");
+    QCOMPARE(3, vtor->tests().count());
+    assertTestFound(vtor, "foo", "foo.exe");
+    assertTestFound(vtor, "zoo", "zoo.exe");
+    assertTestFound(vtor, "moo", "moo.exe");
+}
+
+#define TDD_TODO QSKIP("Not implemented yet", SkipSingle)
+
+// command
+void CMakeProjectVisitorTest::addTest_flags()
+{
+    QString content(
+        "add_test(foo foo.exe --test123 bar)\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "foo.exe", QStringList() << "--test123" << "bar");
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_properties()
+{
+    TDD_TODO;
+
+    QString content(
+        "add_test(foo foo.exe)\n"
+        "set_tests_properties(foo PROPERTIES WILL_FAIL)\n");
+
+    content = QString(
+        "add_test(foo foo.exe)\n"
+        "set_tests_properties(foo PROPERTIES WILL_FAIL FAIL_REGULAR_EXPRESSION)\n");
+
+    content = QString(
+        "add_test(foo foo.exe)\n"
+        "add_test(bar bar.exe)\n"
+        "set_tests_properties(foo bar PROPERTIESFAIL_REGULAR_EXPRESSION)\n");
+
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_url()
+{
+    QString content(
+        "add_test(foo /path/to/foo)\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "/path/to/foo");
+
+    content = QString(
+        "add_test(foo file://dir/to/bar)\n");
+
+    code = setupFileContent(content);
+    vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->tests(). count());
+    assertTestFound(vtor, "foo", "file://dir/to/bar");
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_kde4AddUnitTest()
+{
+    TDD_TODO;
+
+    QString content(
+        "find_package(KDE4 REQUIRED)\n"
+        "kde4_add_unit_test(foo foo.cpp)\n");
+}
+
+// command
+void CMakeProjectVisitorTest::addTest_variableUsage()
+{
+    QString content(
+        "set(foo_var /foo/bar)\n"
+        "add_test(foo ${foo_var})\n");
+
+    CMakeFileContent code = setupFileContent(content);
+    CMakeProjectVisitor* vtor = setupVisitor();
+
+    vtor->walk(code, 0);
+
+    QCOMPARE(1, vtor->tests().count());
+    assertTestFound(vtor, "foo", "/foo/bar");
 }
 
 #include "cmake_cmakeprojectvisitor_test.moc"
