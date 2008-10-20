@@ -41,82 +41,26 @@ using QTest::DocumentAccess;
 using QTest::SuiteBuilder;
 using QTest::Settings;
 using Veritas::Test;
+using Veritas::TestExecutableInfo;
 using namespace KDevelop;
 
 namespace
 {
 
-/*! Recurses down the project item tree and collects all TestTargets.
-    Returns these as a list. */
-// QList<ProjectTestTargetItem*> fetchAllTestTargets(ProjectBaseItem* root)
-// {
-//     QList<ProjectTestTargetItem*> tests;
-//     if (!root) return tests;
-//     foreach(ProjectTestTargetItem* t, root->testList()) {
-//         kDebug() << "Found Test " << t->data(Qt::DisplayRole).toString();
-//         tests << t;
-//     }
-//     foreach(ProjectFolderItem* fldr, root->folderList()) {
-//         tests += fetchAllTestTargets(fldr);
-//     }
-//     return tests;
-// }
-
-/*! Get the test names from a list of TestTargetItems */
-// /*QStringList namesFromTargets(QList<ProjectTestTargetItem*> testTargets)
-// {
-//     QStringList testNames;
-//     foreach(ProjectTestTargetItem* test, testTargets) {
-//         testNames << test->data(Qt::DisplayRole).toString();
-//     }
-//     return testNames;
-// }*/
-
-/*! Debug info printer */
-// void printFilesInTargets(QList<ProjectTestTargetItem*> targets)
-// {
-//     foreach(ProjectTestTargetItem* test, targets) {
-//         kDebug() << test->data(Qt::DisplayRole);
-//         foreach(ProjectFileItem* f, test->fileList()) {
-//             kDebug() << "- " << f->url();
-//         }
-//     }
-// }
-
-/*! Locate all test executables in @p dir for which the name is contained in
-@p testNames. This function recurses down @p dir and its subdirectories.
-Return the found test exes as a list of  QFileInfo's. */
-QFileInfoList findTestExesIn(QDir& dir, const QStringList& testNames)
+/*! Recurses down the project item tree and collects all ExecutableTargets. */
+QList<ProjectExecutableTargetItem*> fetchAllExeTargets(ProjectBaseItem* root)
 {
-    kDebug() << dir.absolutePath();
-    QFileInfoList testExes;
-    QDir current(dir);
-    current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
-    QStringList subDirs = current.entryList();
-    foreach(const QString& subDir, subDirs) {
-        if (subDir == "CMakeFiles") continue;
-        current.cd(subDir);
-        testExes += findTestExesIn(current, testNames);
-        current.cdUp();
-    }
-    current = QDir(dir);
-    current.setFilter(QDir::Files |  QDir::Writable | QDir::NoSymLinks | QDir::Executable);
-    QFileInfoList files = current.entryInfoList();
-    foreach(QFileInfo fi, files) {
-        if (testNames.contains(fi.fileName())) {
-            testExes << fi;
+    QList<ProjectExecutableTargetItem*> exes;
+    if (!root) return exes;
+    foreach(ProjectTargetItem* exe, root->targetList()) {
+        if (ProjectExecutableTargetItem* exe_ = exe->executable()) {
+            exes << exe_;
         }
     }
-    return testExes;
-}
-
-QList<KUrl> fileInfo2KUrl(const QFileInfoList& fileInfos)
-{
-    QList<KUrl> urls;
-    foreach(QFileInfo fi, fileInfos) {
-        urls << KUrl(fi.absoluteFilePath());
+    foreach(ProjectFolderItem* fldr, root->folderList()) {
+        exes += fetchAllExeTargets(fldr);
     }
-    return urls;
+    return exes;
 }
 
 } // end anonymous namespace
@@ -167,14 +111,43 @@ void KDevRegister::reload()
     Q_ASSERT(!m_runner->isRunning());
 
     m_reloading = true;
-//     QList<KDevelop::ProjectTestTargetItem*> testTargets = fetchAllTestTargets(project()->projectItem());
-//     m_testNames = namesFromTargets(testTargets);
+
+    IBuildSystemManager* bsm = project()->buildSystemManager();
+    if (bsm && bsm->features() & IProjectFileManager::Tests) {
+        m_testExes = bsm->testExecutables();
+    } else { // TODO
+        emit reloadFailed();
+        QString msg = !bsm ? i18n("No buildsystem active, failed to fetch tests. [todo]") :
+                             i18n("Buildsystem does not offer test executable information. [todo]");
+        emit showErrorMessage(msg, 5);
+        return;
+    }
+
     fetchTestCommands(0);
 }
 
 QString KDevRegister::statusName() const
 {
     return i18n("xTest");
+}
+
+typedef QMap<KUrl, ProjectExecutableTargetItem*> ExeTargetMap;
+
+ProjectExecutableTargetItem* findTargetFor(const TestExecutableInfo& test, const ExeTargetMap& exeTargets)
+{
+    KUrl testCmd(test.command());
+    QString testFile = testCmd.fileName();
+    ProjectExecutableTargetItem* exe = 0;
+    if (testFile.endsWith(".shell")) {
+        testFile.chop(6);
+        testCmd = KUrl(testCmd.upUrl(), testFile);
+        if (exeTargets.contains(testCmd)) {
+            exe = exeTargets[testCmd];
+        }
+    } else if (exeTargets.contains(testCmd)) {
+        exe = exeTargets[testCmd];
+    }
+    return exe;
 }
 
 void KDevRegister::fetchTestCommands(KJob*)
@@ -191,16 +164,22 @@ void KDevRegister::fetchTestCommands(KJob*)
     STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
 
     QDir buildDir(buildRoot.path());
-    QFileInfoList shells = findTestExesIn(buildDir, m_testNames);
-    foreach(QFileInfo shell, shells) {
-        kDebug() << "shell -> " << shell.absoluteFilePath();
-    }
-    STOP_IF(shells.isEmpty(), "No test exes found.");
+    KUrl::List testExes;
 
-    QList<KUrl> shellUrls = fileInfo2KUrl(shells);
+    QMap<KUrl, ProjectExecutableTargetItem*> exeTargets;
+    foreach(ProjectExecutableTargetItem* exe, fetchAllExeTargets(project()->projectItem())) {
+        exeTargets[exe->builtUrl()] = exe;
+    }
+    foreach(const TestExecutableInfo& testInfo, m_testExes) {
+        if (!KUrl(testInfo.command()).isValid()) continue;
+        if (ProjectExecutableTargetItem* target = findTargetFor(testInfo, exeTargets)) {
+            testExes << target->builtUrl();
+        }
+    }
+
     if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
     SuiteBuilder* sb = new SuiteBuilder;
-    sb->setTestExecutables(shellUrls);
+    sb->setTestExecutables(testExes);
     sb->setSettings(settings());
 
     m_runner->m_suiteBuilder = sb;

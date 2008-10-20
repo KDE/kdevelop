@@ -46,6 +46,9 @@ public:
     @note mandatory to call this exactly once
     @note takes ownership */
     void setExecutable(Executable*);
+
+    /*! Call the qtest-executable and parse it for testfunctions.
+     *  May return zero. */
     virtual QTestCase* construct();
 
     void setSuiteName(const QString&);

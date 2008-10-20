@@ -53,10 +53,7 @@ void CaseBuilderTest::noCommands()
 {
     initTestExeStub("emptyCase", QStringList());
     m_caze = m_builder->construct();
-
-    assertNotNull(m_caze); CHECK_STOP
-    assertNamed("emptyCase", m_caze);
-    assertNrofChildren(0, m_caze);
+    QVERIFY(!m_caze);
 }
 
 // command
@@ -127,9 +124,14 @@ void CaseBuilderTest::garbageInFunctionsOutput()
     assertChildCommand(1, "testBar", m_caze); CHECK_STOP
 }
 
+QStringList someCommand()
+{
+    return QStringList() << "test()";
+}
+
 void CaseBuilderTest::removeDirPrefix()
 {
-    initTestExeStub("dir-footest", QStringList());
+    initTestExeStub("dir-footest", someCommand());
     m_builder->setSuiteName("dir");
     m_caze = m_builder->construct();
 
@@ -140,7 +142,7 @@ void CaseBuilderTest::removeDirPrefix()
 // command
 void CaseBuilderTest::keepSecondaryPrefixes()
 {
-    initTestExeStub("dir-more-footest", QStringList());
+    initTestExeStub("dir-more-footest", someCommand());
     m_builder->setSuiteName("dir");
     m_caze = m_builder->construct();
 
@@ -151,7 +153,7 @@ void CaseBuilderTest::keepSecondaryPrefixes()
 // command
 void CaseBuilderTest::dontRemoveNonMatchinPrefix()
 {
-    initTestExeStub("dir-footest", QStringList());
+    initTestExeStub("dir-footest", someCommand());
     m_builder->setSuiteName("bar");
     m_caze = m_builder->construct();
 
@@ -159,6 +161,13 @@ void CaseBuilderTest::dontRemoveNonMatchinPrefix()
     assertNamed("dir-footest", m_caze);
 }
 
+// command
+void CaseBuilderTest::onlyGarbageOutput()
+{
+    initTestExeStub("garbageCase", QStringList() << "_something_" << "more");
+    m_caze = m_builder->construct();
+    QVERIFY(!m_caze);
+}
 
 /////////////////////// helpers //////////////////////////////////////////////
 

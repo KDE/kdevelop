@@ -32,11 +32,15 @@
 #include <KLocale>
 #include <KDebug>
 #include <QTimer>
+#include <QTime>
+#include <iostream>
 
 using namespace Veritas;
 using namespace QTest;
 
 void do_stuff(int argc, char** argv);
+bool doProfile;
+QTime timer;
 
 int main(int argc, char** argv)
 {
@@ -45,6 +49,7 @@ int main(int argc, char** argv)
     Boot* b = new Boot;
     b->regXML = QString(argv[1]);
     b->rootDir = QString(argv[2]);
+    doProfile = (argc == 4);
     b->start();
     return app.exec();
 }
@@ -84,6 +89,13 @@ void Boot::showWindow()
     QMainWindow* mw = new QMainWindow;
     mw->setCentralWidget(runner->runnerWidget());
     mw->show();
+    if (doProfile) {
+        timer.start();
+        runner->setTimeout(-1);
+        runner->runTests();
+        std::cerr <<  timer.elapsed() << std::endl;
+        KApplication::exit();
+    }
 }
 
 QByteArray b("stuff");
@@ -99,6 +111,7 @@ void do_stuff(int argc, char** argv)
     o = new KCmdLineOptions;
     o->add("+regxml", ki18n("Test registration XML."));
     o->add("+testroot", ki18n("Test root."));
+    o->add("+profile", ki18n("profile"));
     KCmdLineArgs::addCmdLineOptions(*o);
 }
 

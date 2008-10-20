@@ -26,6 +26,7 @@
 #include <QList>
 #include <KUrl>
 #include <interfaces/istatus.h>
+#include <veritas/testexecutableinfo.h>
 
 namespace Veritas { class Test; }
 class KJob;
@@ -67,7 +68,7 @@ private slots:
 
 private:
     Veritas::Test* m_root;
-    QList<QString> m_testNames;
+    QList<Veritas::TestExecutableInfo> m_testExes;
     SuiteBuilderRunner *m_runner;
     bool m_reloading;
 };

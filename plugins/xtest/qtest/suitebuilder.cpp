@@ -127,6 +127,7 @@ void SuiteBuilder::constructCases()
         cb->setSuiteName(suiteName);
         QTestCase* caze = cb->construct();
         delete cb;
+        if (!caze) continue;
 
         Q_ASSERT(m_suites.contains(suiteName));
         QTestSuite* suite = m_suites[suiteName];

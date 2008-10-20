@@ -63,16 +63,22 @@ QTestCase* CaseBuilder::construct()
     QTestCase* caze = new QTestCase(cazeName, exeLocation);
 
     QStringList exeFunctionOut = m_executable->fetchFunctions();
+    bool success = false;
     foreach(QString line, exeFunctionOut) {
         if (line.endsWith("()") && !line.contains(" ")) {
             // recognize this as a legit qtest function output line
             line.chop(2); // remove "()"
             QTestCommand* foo = new QTestCommand(line, caze);
             caze->addChild(foo);
+            success = true;
         } else { // garbage
             kDebug() << "Garbage line:\n" << line;
         }
     }
-    return caze;
+    if (success) {
+        return caze;
+    } else {
+        return 0;
+    }
 }
 

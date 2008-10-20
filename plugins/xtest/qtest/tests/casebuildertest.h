@@ -48,6 +48,7 @@ private slots:
     void garbageInFront();
     void angleBracketGarbage();
     void garbageInFunctionsOutput();
+    void onlyGarbageOutput();
 
     void removeDirPrefix();
     void keepSecondaryPrefixes();
