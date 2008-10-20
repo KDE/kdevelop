@@ -21,8 +21,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef VERITASEXPORT_H
-#define VERITASEXPORT_H
+#ifndef LANGUAGES_CPP_VERITASCPP_EXPORT_H
+#define LANGUAGES_CPP_VERITASCPP_EXPORT_H
 
 #include <kdemacros.h>
 
@@ -34,4 +34,4 @@
 # endif
 #endif
 
-#endif // VERITAS_EXPORT_H
+#endif // LANGUAGES_CPP_VERITASCPP_EXPORT_H
