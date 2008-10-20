@@ -26,5 +26,11 @@ namespace KDevelop
 IProjectFileManager::~IProjectFileManager()
 {
 }
+
+QList<Veritas::TestExecutableInfo> IProjectFileManager::testExecutables() const
+{
+    return QList<Veritas::TestExecutableInfo>();
+}
+
 }
 

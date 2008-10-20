@@ -27,7 +27,7 @@
 #include <kurl.h>
 
 #include <interfaces/iextension.h>
-
+#include "veritas/testexecutableinfo.h"
 #include "../projectexport.h"
 
 
@@ -65,7 +65,8 @@ public:
         None     = 0 ,     ///< This manager supports nothing
         Folders  = 1 << 0, ///< Folders are supported by the manager
         Targets  = 1 << 1, ///< Targets are supported by the manager
-        Files    = 1 << 2  ///< Files are supported by the manager
+        Files    = 1 << 2, ///< Files are supported by the manager
+        Tests    = 1 << 3  ///< This manager provides test location information
     };
     Q_DECLARE_FLAGS( Features, Feature )
 
@@ -142,6 +143,11 @@ public:
      * Reloads the item specified by @p item
      */
     virtual bool reload(ProjectBaseItem* item) = 0;
+
+    /**
+     * Fetch test location information.
+     */
+    virtual QList<Veritas::TestExecutableInfo> testExecutables() const;
 
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<ProjectBaseItem*> &dom, KDialogBase *dialog);
