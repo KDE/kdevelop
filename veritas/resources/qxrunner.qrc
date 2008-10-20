@@ -7,5 +7,13 @@
         <file>arrow-right-double-bordeaux-16.png</file>
         <file>arrow-right-grey-16.png</file>
         <file>arrow-right-double-grey-16.png</file>
+        <file>go-next-run.png</file>
+        <file>go-next-bug.png</file>
+	<file>go-next2.png</file>
+        <file>bug-small.png</file>
+        <file>test-success-small.png</file>
+        <file>system-running-small.png</file>
+        <file>test-notrun-small.png</file>
+        <file>go-next-success.png</file>
     </qresource>
 </RCC>

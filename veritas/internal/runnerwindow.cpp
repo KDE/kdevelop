@@ -119,7 +119,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
-    QPixmap run = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::Small);
+    QPixmap run = KIconLoader::global()->loadIcon("system-run", KIconLoader::Small);
     m_ui->actionStart->setIcon(run);
     QPixmap stop = KIconLoader::global()->loadIcon("window-close", KIconLoader::Small);
     m_ui->actionStop->setIcon(stop);

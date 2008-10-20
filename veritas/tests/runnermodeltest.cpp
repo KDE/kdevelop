@@ -164,10 +164,12 @@ void RunnerModelTest::dataChangedSignalsOnRun()
     executeItems(model);
 
     // dataChanged must have been emitted with both the parent's and the child's index
-    // the child since it has been run
+    // the child since it has been run.
     // the parent since it's state will have changed after the child has been run.
+    // dataChanged signals are being emitted both for started + finished on both parent + child
+    //    => 4 dataChanged signals
 
-    KOMPARE(2, dataChanged->count());
+    KOMPARE(4, dataChanged->count());
 
     Test* emitted1 = takeTestFromSpy(dataChanged);
     Test* emitted2 = takeTestFromSpy(dataChanged);

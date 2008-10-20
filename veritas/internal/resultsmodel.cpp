@@ -71,24 +71,11 @@ QVariant ResultsModel::data(const QModelIndex& index, int role) const
         return int(Qt::AlignLeft | Qt::AlignTop);
     case Qt::DisplayRole:
         Q_ASSERT(index.row() < m_results.size());
-        switch(index.column()) {
-        case 0:
-            ownerTest = m_results[index.row()]->owner();
-            if (!ownerTest) {
-                qWarning() << "Owner test not set for result.";
-                return QVariant();
-            }
-            return ownerTest->name();
-        case 1:
-            return m_results[index.row()]->message();
-        case 2:
-            return m_results[index.row()]->file().pathOrUrl();
-        case 3:
-            return QString::number(m_results[index.row()]->line());
-        default:
-            kDebug()<< "INVALID COLUMN" << index.column() <<"row " << index.column();
-            Q_ASSERT(0);
-        }
+        // col0 -> owner test name
+        // col1 -> descriptive message
+        // col2 -> file
+        // col3 -> linenumber
+        return m_results[index.row()]->cachedData(index.column());
     case Qt::DecorationRole:
         if (index.column() == 0) {
             return Utils::resultIcon(result(index.row()));

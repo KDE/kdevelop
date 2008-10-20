@@ -54,7 +54,8 @@ inline Test* testFromIndex(const QModelIndex& index)
 QVariant g_failIcon;
 QVariant g_notRunIcon;
 QVariant g_successIcon;
-
+QVariant g_leafRunningIcon;
+QVariant g_aggregateRunnningIcon;
 }
 
 RunnerModel::RunnerModel(QObject* parent)
@@ -73,9 +74,11 @@ RunnerModel::RunnerModel(QObject* parent)
     setExpectedResults(Veritas::AllStates);
     //ModelTest* tm = new ModelTest(this);
 
-    g_failIcon = QIcon(":/icons/arrow-right-double-bordeaux-16.png");
-    g_notRunIcon = QIcon(":/icons/arrow-right-double-grey-16.png");
-    g_successIcon = KIcon("arrow-right-double");
+    g_aggregateRunnningIcon = QIcon(":/icons/go-next-run.png");
+    g_successIcon = QIcon(":/icons/go-next-success.png");
+    g_notRunIcon = QIcon(":/icons/go-next2.png");
+    g_failIcon = QIcon(":/icons/go-next-bug.png");
+    g_leafRunningIcon = QIcon(":/icons/system-running-small.png");
 }
 
 RunnerModel::~RunnerModel()
@@ -97,7 +100,7 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
     Q_ASSERT(index.column() == 0);
-
+    Test* t = 0;
     switch(role) {
     case Qt::TextAlignmentRole :
         return int(Qt::AlignLeft | Qt::AlignTop);
@@ -111,7 +114,12 @@ QVariant RunnerModel::data(const QModelIndex& index, int role) const
         if (index.child(0, 0).isValid()) { // not a leaf test
             return computeIconFromChildState(testFromIndex(index));
         } else { // a leaf test
-            return Utils::resultIcon(testFromIndex(index)->state());
+            t = testFromIndex(index);
+            if (t->internal()->isRunning()) {
+                return g_leafRunningIcon;
+            } else {
+                return Utils::resultIcon(testFromIndex(index)->state());
+            }
         }
     default: {}
     }
@@ -127,25 +135,32 @@ namespace
 class ParentStateResolver
 {
 public:
-    ParentStateResolver() : done(false) { state = Veritas::RunSuccess; }
+    ParentStateResolver() : done(false), isRunning(false) {
+        icon = g_successIcon;
+    }
     void operator()(Test* current) {
         if (done) return;
         switch(current->state()) {
         case Veritas::RunFatal:
         case Veritas::RunError:
-            state = Veritas::RunError;
+            icon = g_failIcon;
             done = true;
             break;
         case Veritas::NoResult:
-            if (current->childCount()==0) {
-                state = Veritas::NoResult;
+            if (current->childCount() != 0) break;
+            if (current->internal()->isRunning()) {
+                icon = g_aggregateRunnningIcon;
+                isRunning = true;
+            } else if (!isRunning) {
+                icon = g_notRunIcon;
             }
             break;
         default: {}
         }
     }
+    bool isRunning;
     bool done;
-    Veritas::TestState state;
+    QVariant icon;
 };
 }
 
@@ -153,18 +168,7 @@ QVariant RunnerModel::computeIconFromChildState(Veritas::Test* test) const
 {
     ParentStateResolver psr;
     traverseTree(test, psr);
-
-    switch(psr.state) {
-    case Veritas::RunSuccess:
-        return g_successIcon;
-    case Veritas::RunFatal:
-    case Veritas::RunError:
-        return g_failIcon;
-    case Veritas::NoResult:
-        return g_notRunIcon;
-    default: {}
-    }
-    return QVariant();
+    return psr.icon;
 }
 
 bool RunnerModel::setData(const QModelIndex& index, const QVariant& value, int role)
@@ -384,6 +388,14 @@ void RunnerModel::clearTree()
     traverseTree(m_rootItem, ct);
 }
 
+namespace {
+/*! Returns true when @p test is last in it's parents childlist */
+bool isLastSibling(Test* test)
+{
+    return test && test->parent() && (test->row() == test->parent()->childCount()-1);
+}
+}
+
 void RunnerModel::postItemCompleted(QModelIndex index)
 {
     Test* item = testFromIndex(index);
@@ -414,6 +426,24 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
     emit numCompletedChanged(m_numStarted);
     emit itemCompleted(index);
+    emit dataChanged(index, index);
+    index = index.parent();
+    if ((item->state() != Veritas::RunSuccess) && (item->state() != Veritas::RunInfo)) {
+        emitParentsChanged(index);
+    } else {
+        // only emit dataChanged singals for the last siblings
+        // purpose of this is to get rid of icon flickering for 
+        // the parents from running->ready->running->ready->running
+        while (index.isValid() && isLastSibling(item)) {
+            emit dataChanged(index, index);
+            index = index.parent();
+            item = item->parent();
+        }
+    }
+}
+
+void RunnerModel::emitParentsChanged(QModelIndex index)
+{
     while (index.isValid()) {
         emit dataChanged(index, index);
         index = index.parent(); // the parent changed as well, since parent state is deduced 
@@ -423,7 +453,15 @@ void RunnerModel::postItemCompleted(QModelIndex index)
 
 void RunnerModel::postItemStarted(QModelIndex index)
 {
-    emit itemStarted(index);
+    //emit itemStarted(index);
     m_numStarted++;
+    emit dataChanged(index, index);
+    Test* item = testFromIndex(index);
+    index = index.parent();
+    while (index.isValid() && item && item->row() == 0) { // to reduce icon flickering
+        emit dataChanged(index, index);
+        index = index.parent();
+        item = item->parent();
+    }
     emit numStartedChanged(m_numStarted);
 }

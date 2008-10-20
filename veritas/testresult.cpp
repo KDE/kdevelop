@@ -20,6 +20,7 @@
 
 #include "testresult.h"
 #include "test.h"
+#include <KDebug>
 
 using Veritas::TestResult;
 using Veritas::TestState;
@@ -30,7 +31,18 @@ class TestResultPrivate
 {
 public:
     TestResultPrivate(TestState state, const QString& msg, int line, const KUrl& file) :
-        state(state), message(msg), line(line), file(file), owner(0) {}
+        state(state), message(msg), line(line), file(file), owner(0) {
+        cachedMessage = msg;
+        cachedFile = file.pathOrUrl();
+        cachedLine = QString::number(line);
+    }
+    void resetCache(){
+        cachedOwnerName = QVariant();
+        cachedFile = QVariant();
+        cachedLine = QVariant();
+        cachedMessage = QVariant();
+    }
+
     ~TestResultPrivate() {}
     TestState state;
     QString message;
@@ -38,6 +50,11 @@ public:
     KUrl file;
     QList<TestResult*> children;
     Test* owner;
+
+    QVariant cachedOwnerName;
+    QVariant cachedMessage;
+    QVariant cachedFile;
+    QVariant cachedLine;
 };
 }
 
@@ -45,7 +62,29 @@ using Veritas::TestResultPrivate;
 
 TestResult::TestResult(TestState state, const QString& message, int line, const KUrl& file)
         : d(new TestResultPrivate(state, message, line, file))
-{}
+{
+}
+
+QVariant TestResult::cachedData(int item)
+{
+    switch(item) {
+    case 0:
+        if (!d->owner) {
+            qWarning() << "Owner test not set for result.";
+        }
+        return d->cachedOwnerName;
+    case 1:
+        return d->cachedMessage;
+    case 2:
+        return d->cachedFile;
+    case 3:
+        return d->cachedLine;
+    default:
+        Q_ASSERT(0);
+    }
+    return QVariant();
+}
+
 
 TestResult::~TestResult()
 {
@@ -81,16 +120,19 @@ void TestResult::setState(TestState state)
 void TestResult::setMessage(const QString& message)
 {
     d->message = message;
+    d->cachedMessage = message;
 }
 
 void TestResult::setLine(int line)
 {
     d->line = line;
+    d->cachedLine = QString::number(line);
 }
 
 void TestResult::setFile(const KUrl& file)
 {
     d->file = file;
+    d->cachedFile = file.pathOrUrl();
 }
 
 void TestResult::clear()
@@ -101,6 +143,7 @@ void TestResult::clear()
     d->file = KUrl();
     d->children.clear();
     d->owner = 0;
+    d->resetCache();
 }
 
 int TestResult::childCount()
@@ -129,6 +172,7 @@ void TestResult::setOwner(Veritas::Test* owner)
 {
     Q_ASSERT(owner);
     d->owner = owner;
+    d->cachedOwnerName = owner->name();
     foreach(TestResult* child, d->children) {
         child->setOwner(d->owner);
     }

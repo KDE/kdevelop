@@ -34,16 +34,18 @@ namespace Veritas
 namespace {
 bool g_init = false;
 QVariant g_failIcon;
-QVariant g_notRunIcon;
+QVariant g_runningIcon;
 QVariant g_successIcon;
+QVariant g_notRunIcon;
 }
 
 QVariant Utils::resultIcon(int result)
 {
     if (!g_init) {
-        g_failIcon = QIcon(":/icons/arrow-right-bordeaux-16.png");
-        g_notRunIcon = QIcon(":/icons/arrow-right-grey-16.png");
-        g_successIcon = KIcon("arrow-right");
+        g_failIcon = QIcon(":/icons/bug-small.png");
+        g_successIcon = QIcon(":/icons/test-success-small.png");
+        g_runningIcon = QIcon(":/icons/system-running-small.png");
+        g_notRunIcon = QIcon(":/icons/test-notrun-small.png");
         g_init = true;
     }
     switch (result) {

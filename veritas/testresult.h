@@ -75,6 +75,9 @@ public:
     void setOwner(Test* t);
     Test* owner() const;
 
+    /*! Owner test-name, message, file & line as precomputed QVariants.*/
+    QVariant cachedData(int item);
+
 private:
     TestResult& operator=(const TestResult&);
     TestResult(const TestResult&);

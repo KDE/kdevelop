@@ -26,7 +26,9 @@ const int Test::Internal::columnCount = 4;
 
 Test::Internal::Internal(Veritas::Test* self)
   : self(self)
-{}
+{
+    m_isRunning = false;
+}
 
 void Test::Internal::setIndex(const QModelIndex& index)
 {
@@ -63,6 +65,7 @@ void Test::Internal::clear()
     }
     if (result) delete result;
     result = new TestResult;
+    m_isRunning = false;
 }
 
 bool Test::Internal::isChecked() const
@@ -86,4 +89,13 @@ void Test::Internal::unCheck()
     }
 }
 
+bool Test::Internal::isRunning() const
+{
+    return m_isRunning;
+}
+
+void Test::Internal::setIsRunning(bool value)
+{
+    m_isRunning = value;
+}
 

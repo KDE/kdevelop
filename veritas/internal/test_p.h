@@ -54,6 +54,9 @@ public:
     /*! Recursively lift check state */
     void unCheck();
 
+    bool isRunning() const;
+    void setIsRunning(bool);
+
 private:
     friend class Test;
 
@@ -67,6 +70,7 @@ private:
     QList<QVariant> itemData;
     bool needVerboseToggle;
     bool needSelectionToggle;
+    bool m_isRunning;
 
     static const int columnCount;
 };

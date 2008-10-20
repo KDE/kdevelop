@@ -188,11 +188,13 @@ QList<Test*> Test::leafs() const
 
 void Test::signalStarted()
 {
+    d->setIsRunning(true);
     emit started(d->index());
 }
 
 void Test::signalFinished()
 {
+    d->setIsRunning(false);
     emit finished(d->index());
 }
 

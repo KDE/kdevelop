@@ -195,6 +195,7 @@ public Q_SLOTS:
 
 private:  // Operations
     void initItemConnect(QModelIndex current);
+    void emitParentsChanged(QModelIndex index);
 
     // Copy and assignment not supported.
     RunnerModel(const RunnerModel&);
@@ -205,7 +206,6 @@ private:  // Constants
 
 private:  // Attributes
     Test* m_rootItem;
-    QModelIndex m_startedItemIndex;
     int m_expectedResults;
 
     int m_numSelected;
