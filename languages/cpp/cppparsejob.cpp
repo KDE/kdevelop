@@ -58,7 +58,7 @@
 #include "environmentmanager.h"
 #include <unistd.h>
 #include <qwaitcondition.h>
-#include <kdevplatform/language/duchain/duchainutils.h>
+#include <language/duchain/duchainutils.h>
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
