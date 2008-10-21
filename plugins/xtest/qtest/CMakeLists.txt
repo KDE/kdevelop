@@ -26,6 +26,7 @@ qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})
 target_link_libraries(kdevqtest
     ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDevPlatform_LANGUAGE_LIBRARY}
     ${KDevPlatform_INTERFACES_LIBRARY}
     ${KDevPlatform_OUTPUTVIEW_LIBRARY}
     ${KDevPlatform_PROJECT_LIBRARY}
