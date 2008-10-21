@@ -24,7 +24,7 @@
 #include "qtestoutputmodel.h"
 #include "qtestoutputdelegate.h"
 
-#include "../qtestcase.h"
+#include "qtestcase.h"
 
 #include <KLocale>
 #include <KDebug>

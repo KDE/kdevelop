@@ -23,7 +23,7 @@
 #include "qtestcommand.h"
 #include "qtestoutputparser.h"
 #include "qtestoutputmorpher.h"
-#include "config/qtestsettings.h"
+#include "qtestsettings.h"
 #include <veritas/testresult.h>
 
 #include <QCoreApplication>

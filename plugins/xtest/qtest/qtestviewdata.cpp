@@ -22,9 +22,9 @@
 #include "xmlregister.h"
 #include "kdevregister.h"
 #include "qtestsuite.h"
-#include "config/qtestsettings.h"
-#include "outputview/qtestoutputjob.h"
-#include "outputview/qtestoutputdelegate.h"
+#include "qtestsettings.h"
+#include "qtestoutputjob.h"
+#include "qtestoutputdelegate.h"
 
 #include <KSharedConfig>
 #include <KConfigGroup>

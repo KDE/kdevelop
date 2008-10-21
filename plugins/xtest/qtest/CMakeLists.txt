@@ -17,10 +17,10 @@ set(kdevqtest_SRCS
     documentaccess.cpp
     executable.cpp
     casebuilder.cpp
-    config/qtestsettings.cpp
-    outputview/qtestoutputmodel.cpp
-    outputview/qtestoutputdelegate.cpp
-    outputview/qtestoutputjob.cpp)
+    qtestsettings.cpp
+    qtestoutputmodel.cpp
+    qtestoutputdelegate.cpp
+    qtestoutputjob.cpp)
 
 qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})
@@ -39,7 +39,7 @@ target_link_libraries(kdevqtest
 install(TARGETS kdevqtest ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 set(kdevqtestview_SRCS qtestplugin.cpp)
-kde4_add_kcfg_files(kdevqtestview_SRCS config/qtestconfig.kcfgc)
+kde4_add_kcfg_files(kdevqtestview_SRCS qtestconfig.kcfgc)
 qt4_automoc(${kdevqtestview_SRCS})
 kde4_add_plugin(kdevqtestview ${kdevqtestview_SRCS})
 target_link_libraries(kdevqtestview

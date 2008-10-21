@@ -43,7 +43,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <outputview/ioutputview.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectfilemanager.h>
@@ -58,10 +57,10 @@
 #include "kdevregister.h"
 #include "qtestviewdata.h"
 #include "qtestoutputparser.h"
-#include "outputview/qtestoutputdelegate.h"
-#include "outputview/qtestoutputjob.h"
+#include "qtestoutputdelegate.h"
+#include "qtestoutputjob.h"
 
-#include "config/qtestsettings.h"
+#include "qtestsettings.h"
 #include "qtestconfig.h"
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)

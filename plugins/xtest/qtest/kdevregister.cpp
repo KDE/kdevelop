@@ -22,7 +22,7 @@
 #include "documentaccess.h"
 #include "suitebuilder.h"
 #include <veritas/test.h>
-#include "config/qtestsettings.h"
+#include "qtestsettings.h"
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>

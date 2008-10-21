@@ -19,7 +19,7 @@
 */
 
 #include "iregister.h"
-#include "config/qtestsettings.h"
+#include "qtestsettings.h"
 #include <interfaces/iproject.h>
 #include <Qt>
 

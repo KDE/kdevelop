@@ -25,7 +25,7 @@
 #include "qtestsuite.h"
 #include "executable.h"
 #include <interfaces/iplugin.h>
-#include "config/qtestsettings.h"
+#include "qtestsettings.h"
 #include <veritas/test.h>
 #include <KProcess>
 #include <KUrl>
