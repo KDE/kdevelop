@@ -27,7 +27,7 @@
 #include <kdemacros.h>
 
 #ifndef QXCPPUNIT_EXPORT
-# ifdef MAKE_QXCPPUNIT_LIB
+# ifdef MAKE_KDEVCPPUNIT_LIB
 #  define QXCPPUNIT_EXPORT KDE_EXPORT
 # else
 #  define QXCPPUNIT_EXPORT KDE_IMPORT

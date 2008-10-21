@@ -27,7 +27,7 @@
 #include <kdemacros.h>
 
 #ifndef VERITAS_CHECK_EXPORT
-# ifdef MAKE_QXCHECK_LIB
+# ifdef MAKE_KDEVCHECK_LIB
 #  define VERITAS_CHECK_EXPORT KDE_EXPORT
 # else
 #  define VERITAS_CHECK_EXPORT KDE_IMPORT
