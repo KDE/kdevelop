@@ -27,7 +27,7 @@
 #include <kdemacros.h>
 
 #ifndef QXQTEST_EXPORT
-# ifdef MAKE_QXQTEST_LIB
+# ifdef MAKE_KDEVQTEST_LIB
 #  define QXQTEST_EXPORT KDE_EXPORT
 # else
 #  define QXQTEST_EXPORT KDE_IMPORT
