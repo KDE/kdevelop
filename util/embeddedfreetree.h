@@ -23,6 +23,10 @@
 #include <limits>
 #include <stdlib.h>
 
+//Uncomment this to search for tree-inconsistencies, however it's very expensive
+// #define DEBUG_FREEITEM_COUNT debugFreeItemCount(); verifyTreeConsistent(*m_centralFreeItem, 0, m_itemCount);
+#define DEBUG_FREEITEM_COUNT
+
 /**
  * This file implements algorithms that allow managing a sorted list of items, and managing "free" items
  * for reuse efficiently in that list. Among those free items a tree is built, and they are traversed
@@ -85,13 +89,15 @@ namespace KDevelop {
 //             const Data& m_data;
 //     };
 
-    ///Use this for several constant algorithms on sorted lists with free-trees
+    /**
+     * Use this for several constant algorithms on sorted lists with free-trees
+     * */
     template<class Data, class ItemHandler>
     class EmbeddedTreeAlgorithms {
 
         public:
             
-            EmbeddedTreeAlgorithms(const Data* items, uint itemCount, const int& centralFreeItem) : m_items(items), m_itemCount(itemCount), m_centralFreeItem(centralFreeItem) {
+            EmbeddedTreeAlgorithms(const Data* items, uint itemCount, const int& centralFreeItem) : m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem) {
             }
             ~EmbeddedTreeAlgorithms() {
             }
@@ -109,7 +115,7 @@ namespace KDevelop {
                 while(1) {
                     if(start == end)
                         return -1;
-                    if(m_items[start] == data)
+                    if(ItemHandler(m_items[start]).equals(data))
                         return start;
                     if(end-start == 1) //The range only consists of 'start'
                         return -1;
@@ -135,10 +141,22 @@ namespace KDevelop {
             }
             
         uint countFreeItems() const {
-            return countFreeItemsInternal(m_centralFreeItem);
+            return countFreeItemsInternal(*m_centralFreeItem);
         }
 
+        void verifyTreeConsistent() {
+            verifyTreeConsistentInternal(*m_centralFreeItem, 0, m_itemCount);
+        }
+        
         private:
+        void verifyTreeConsistentInternal(int position, int lowerBound, int upperBound) {
+            if(position == -1)
+                return;
+            Q_ASSERT(lowerBound <= position && position < upperBound);
+            verifyTreeConsistentInternal(ItemHandler(m_items[position]).leftChild(), lowerBound, position);
+            verifyTreeConsistentInternal(ItemHandler(m_items[position]).rightChild(), position+1, upperBound);
+        }
+        
         uint countFreeItemsInternal(int item) const {
             if(item == -1)
                 return 0;
@@ -149,26 +167,34 @@ namespace KDevelop {
 
            const Data* m_items;
            uint m_itemCount;
-           int m_centralFreeItem;
+           const int* m_centralFreeItem;
     };
     
-    ///Use this to add items.
-    ///The added item must not be in the list yet!
+    /**Use this to add items.
+     * The added item must not be in the set yet!
+     * General usage:
+     * - Construct the object
+     * - Check if newItemCount() equals the previous item-count. If not, construct
+     *   a new list as large as newItemCount, and call object.transferData to transfer the data
+     *   into the new list. The new size must match the returned newItemCount.
+     * - Either call object.apply(), or let it be called automatically by the destructor.
+     * */
     template<class Data, class ItemHandler >
     class EmbeddedTreeAddItem {
 
         public:
             
-            EmbeddedTreeAddItem(Data* items, uint itemCount, int& centralFreeItem, const Data& add) : m_add(add), m_items(items), m_itemCount(itemCount), m_centralFreeItem(centralFreeItem) {
+            EmbeddedTreeAddItem(Data* items, uint itemCount, int& centralFreeItem, const Data& add) : m_add(add), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem), m_applied(false) {
             }
             ~EmbeddedTreeAddItem() {
-                apply();
+                if(!m_applied)
+                    apply();
             }
 
             ///Check this to see whether a new item-count is needed. If this does not equal the given itemCount, then
             ///the data needs to be transferred into a new list using transferData
             uint newItemCount() const {
-                if(m_centralFreeItem == -1) {
+                if(*m_centralFreeItem == -1) {
                     //We have to increase the size. Always increase by 10%.
                     uint newItemCount = m_itemCount + (m_itemCount/10);
                     if(newItemCount == m_itemCount)
@@ -181,9 +207,10 @@ namespace KDevelop {
             }
             
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
-            void transferData(Data* newItems, uint newCount) {
+            void transferData(Data* newItems, uint newCount, int* newCentralFree = 0) {
+                DEBUG_FREEITEM_COUNT
                 //We only transfer into a new list when all the free items are used up
-                Q_ASSERT(countFreeItems(m_centralFreeItem) == 0);
+                Q_ASSERT(countFreeItems(*m_centralFreeItem) == 0);
                 
                 //Create a new list where the items from m_items are put into newItems, with the free items evenly
                 //distributed, and a clean balanced free-tree.
@@ -205,73 +232,24 @@ namespace KDevelop {
                 
                 m_items = newItems;
                 m_itemCount = newCount;
-
-                m_centralFreeItem = buildFreeTree(newFreeCount, freeItemRaster, freeItemRaster-1);
-            }
-            
-            
-        private:
-            QPair<int, int> leftAndRightRealItems(int pos) {
-                Q_ASSERT(item(pos).isFree());
-                int left = -1, right = -1;
-                for(int a = pos-1; a >= 0; --a) {
-                    if(!item(a).isFree()) {
-                        left = a;
-                        break;
-                    }
-                }
-                for(uint a = pos+1; a < m_itemCount; ++a) {
-                    if(!item(a).isFree()) {
-                        right = a;
-                        break;
-                    }
-                }
-                return qMakePair(left, right);
-            }
-            
-            int buildFreeTree(int count, uint raster, int start) {
-                Q_ASSERT((start % raster) == (raster-1));
-                Q_ASSERT(count != 0);
-                Q_ASSERT(count <= (int)m_itemCount);
-                if(count == 1) {
-                    ItemHandler::createFreeItem(m_items[start]);
-                    return start;
-                }else{
-                    uint central = start + (count / 2) * raster;
-                    int leftCount = count / 2;
-                    int midCount = 1;
-                    int rightCount = count - leftCount - midCount;
-                    Q_ASSERT(leftCount + midCount <= count);
-                    ItemHandler::createFreeItem(m_items[central]);
-                    Q_ASSERT(item(central).isFree());
-                    
-                    item(central).setLeftChild( buildFreeTree(leftCount, raster, start) );
-                    
-                    if(rightCount > 0)
-                        item(central).setRightChild( buildFreeTree(rightCount, raster, central+raster) );
-                    
-                    return central;
-                }
-            }
-            
-            uint countFreeItems(int item) const {
-                if(item == -1)
-                    return 0;
-                ItemHandler current(m_items[item]);
                 
-                return 1 + countFreeItems(current.leftChild()) + countFreeItems(current.rightChild());
+                if(newCentralFree)
+                    m_centralFreeItem  = newCentralFree;
+
+                *m_centralFreeItem = buildFreeTree(newFreeCount, freeItemRaster, freeItemRaster-1);
+               
+                DEBUG_FREEITEM_COUNT
             }
             
-            ItemHandler item(uint number) const {
-                return ItemHandler(m_items[number]);
-            }
-            
+           ///Puts the item into the list
            void apply() {
-               Q_ASSERT(m_centralFreeItem != -1);
+               Q_ASSERT(!m_applied);
+               m_applied = true;
+               Q_ASSERT(*m_centralFreeItem != -1);
                
                //Find the free item that is nearest to the target position in the item order
                int previousItem = -1;
-               int currentItem = m_centralFreeItem;
+               int currentItem = *m_centralFreeItem;
                int replaceCurrentWith = -1;
                
                //Now go down the chain, always into the items direction
@@ -343,19 +321,23 @@ namespace KDevelop {
                             if(current.leftChild() != -1)
                             {
                                 Q_ASSERT(rightMostChild(current.leftChild()) != replaceCurrentWith);
+                                Q_ASSERT(current.leftChild() == -1 || current.leftChild() < replaceCurrentWith);
                                 replaceWith.setLeftChild(current.leftChild());
                                 
                                 if(addRightMostLeftChild != -1) {
                                     int rightMostLeft = rightMostChild(replaceWith.leftChild());
                                     Q_ASSERT(rightMostLeft != -1);
                                     Q_ASSERT(item(rightMostLeft).rightChild() == -1);
+                                    Q_ASSERT(rightMostLeft < addRightMostLeftChild);
                                     item(rightMostLeft).setRightChild(addRightMostLeftChild);
                                 }
                             }else{
+                                Q_ASSERT(addRightMostLeftChild == -1 || addRightMostLeftChild < replaceCurrentWith);
                                 replaceWith.setLeftChild(addRightMostLeftChild);
                             }
                            }
                            
+                           Q_ASSERT(current.rightChild() == -1 || replaceCurrentWith < current.rightChild());
                            replaceWith.setRightChild(current.rightChild());
                        }else{
                            //pick the right replacement, since it's more central
@@ -382,19 +364,23 @@ namespace KDevelop {
                             if(current.rightChild() != -1)
                             {
                                 Q_ASSERT(leftMostChild(current.rightChild()) != replaceCurrentWith);
+                                Q_ASSERT(current.rightChild() == -1 || replaceCurrentWith < current.rightChild());
                                 replaceWith.setRightChild(current.rightChild());
                                 
                                 if(addLeftMostRightChild != -1) {
                                     int leftMostRight = leftMostChild(replaceWith.rightChild());
                                     Q_ASSERT(leftMostRight != -1);
                                     Q_ASSERT(item(leftMostRight).leftChild() == -1);
+                                    Q_ASSERT(addLeftMostRightChild < leftMostRight);
                                     item(leftMostRight).setLeftChild(addLeftMostRightChild);
                                 }
                             }else{
+                                Q_ASSERT(addLeftMostRightChild == -1 || replaceCurrentWith < addLeftMostRightChild);
                                 replaceWith.setRightChild(addLeftMostRightChild);
                             }
                            }
                            
+                           Q_ASSERT(current.leftChild() == -1 || current.leftChild() < replaceCurrentWith);
                            replaceWith.setLeftChild(current.leftChild());
                        }
                        break;
@@ -407,21 +393,103 @@ namespace KDevelop {
                //First, take currentItem out of the chain, by replacing it with current.rightChild in the parent
                if(previousItem != -1) {
                    ItemHandler previous(m_items[previousItem]);
-                    if(previous.leftChild() == currentItem)
+                    if(previous.leftChild() == currentItem) {
+                        Q_ASSERT(replaceCurrentWith == -1 || replaceCurrentWith < previousItem);
                         previous.setLeftChild(replaceCurrentWith);
-                    else if(previous.rightChild() == currentItem)
+                    } else if(previous.rightChild() == currentItem) {
+                        Q_ASSERT(replaceCurrentWith == -1 || previousItem < replaceCurrentWith);
                         previous.setRightChild(replaceCurrentWith);
-                    else {
+                    } else {
                         Q_ASSERT(0);
                     }
                } else {
-                   m_centralFreeItem = replaceCurrentWith;
+                   *m_centralFreeItem = replaceCurrentWith;
                }
                
                m_add.copyTo(m_items[currentItem]);
                updateSorting(currentItem);
+               DEBUG_FREEITEM_COUNT
            }
-           
+        
+        private:
+           void verifyTreeConsistent(int position, int lowerBound, int upperBound) {
+               if(position == -1)
+                   return;
+               Q_ASSERT(lowerBound <= position && position < upperBound);
+               verifyTreeConsistent(item(position).leftChild(), lowerBound, position);
+               verifyTreeConsistent(item(position).rightChild(), position+1, upperBound);
+           }
+            
+            void debugFreeItemCount() {
+                uint count = 0;
+                for(uint a = 0; a < m_itemCount; ++a) {
+                    if(item(a).isFree())
+                        ++count;
+                }
+                uint counted = countFreeItems(*m_centralFreeItem);
+                Q_ASSERT(count == counted);
+            }
+            
+            QPair<int, int> leftAndRightRealItems(int pos) {
+                Q_ASSERT(item(pos).isFree());
+                int left = -1, right = -1;
+                for(int a = pos-1; a >= 0; --a) {
+                    if(!item(a).isFree()) {
+                        left = a;
+                        break;
+                    }
+                }
+                for(uint a = pos+1; a < m_itemCount; ++a) {
+                    if(!item(a).isFree()) {
+                        right = a;
+                        break;
+                    }
+                }
+                return qMakePair(left, right);
+            }
+            
+            int buildFreeTree(int count, uint raster, int start) {
+                Q_ASSERT((start % raster) == (raster-1));
+                Q_ASSERT(count != 0);
+                Q_ASSERT(count <= (int)m_itemCount);
+                if(count == 1) {
+                    ItemHandler::createFreeItem(m_items[start]);
+                    return start;
+                }else{
+                    int central = start + (count / 2) * raster;
+                    int leftCount = count / 2;
+                    int midCount = 1;
+                    int rightCount = count - leftCount - midCount;
+                    Q_ASSERT(leftCount + midCount <= count);
+                    ItemHandler::createFreeItem(m_items[central]);
+                    Q_ASSERT(item(central).isFree());
+                    
+                    int leftFreeTree = buildFreeTree(leftCount, raster, start);
+                    Q_ASSERT(leftFreeTree == -1 || leftFreeTree < central);
+                    item(central).setLeftChild( leftFreeTree );
+                    
+                    if(rightCount > 0) {
+                        int rightFreeTree = buildFreeTree(rightCount, raster, central+raster);
+                        Q_ASSERT(rightFreeTree == -1 || central < rightFreeTree);
+                        item(central).setRightChild( rightFreeTree );
+                    }
+                    
+                    return central;
+                }
+            }
+            
+            uint countFreeItems(int item) const {
+                if(item == -1)
+                    return 0;
+                ItemHandler current(m_items[item]);
+                
+                return 1 + countFreeItems(current.leftChild()) + countFreeItems(current.rightChild());
+            }
+            
+            ItemHandler item(uint number) const {
+                return ItemHandler(m_items[number]);
+            }
+            
            int leftMostChild(int pos) const {
                while(1) {
                    ItemHandler handler(m_items[pos]);
@@ -496,16 +564,25 @@ namespace KDevelop {
            ItemHandler m_add;
            Data* m_items;
            uint m_itemCount;
-           int& m_centralFreeItem;
+           int* m_centralFreeItem;
+           bool m_applied;
     };
 
-    ///The removed item must be in the list!
+    /**Use this to add items.
+     * The removed item must be in the set!
+     * General usage:
+     * - Construct the object
+     * - Check if newItemCount() equals the previous item-count. If not, construct
+     *   a new list as large as newItemCount, and call object.transferData to transfer the data
+     *   into the new list. The new size must match the returned newItemCount.
+     * However this may also be ignored if the memory-saving is not wanted in that moment.
+     * */
     template<class Data, class ItemHandler >
     class EmbeddedTreeRemoveItem {
 
         public:
             
-            EmbeddedTreeRemoveItem(Data* items, uint itemCount, int& centralFreeItem, const Data& remove) : m_remove(remove), m_items(items), m_itemCount(itemCount), m_centralFreeItem(centralFreeItem) {
+            EmbeddedTreeRemoveItem(Data* items, uint itemCount, int& centralFreeItem, const Data& remove) : m_remove(remove), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem) {
                  apply();
             }
 
@@ -515,15 +592,16 @@ namespace KDevelop {
             ///Check this to see whether a new item-count is needed. If this does not equal the given itemCount, then
             ///the data needs to be transferred into a new list using transferData
             uint newItemCount() const {
-                uint freeCount = countFreeItems(m_centralFreeItem);
-                if(freeCount > ((m_itemCount / 7)+1))
+                uint freeCount = countFreeItems(*m_centralFreeItem);
+                if(freeCount > ((m_itemCount / 7)+1) || freeCount == m_itemCount)
                     return m_itemCount - freeCount;
                 else
                     return m_itemCount;
             }
             
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
-            void transferData(Data* newItems, uint newCount) {
+            void transferData(Data* newItems, uint newCount, int* newCentralFree = 0) {
+                DEBUG_FREEITEM_COUNT
                 //We only transfer into a new list when all the free items are used up
                 
                 //Create a list where only the non-free items exist
@@ -536,13 +614,22 @@ namespace KDevelop {
                 }
                 Q_ASSERT(offset == newCount);
 
-                m_centralFreeItem = -1;
+                if(newCentralFree)
+                    m_centralFreeItem = newCentralFree;
+                *m_centralFreeItem = -1;
                 m_items = newItems;
                 m_itemCount = newCount;
+                DEBUG_FREEITEM_COUNT
             }
             
-            
         private:
+           void verifyTreeConsistent(int position, int lowerBound, int upperBound) {
+                if(position == -1)
+                    return;
+                Q_ASSERT(lowerBound <= position && position < upperBound);
+                verifyTreeConsistent(item(position).leftChild(), lowerBound, position);
+                verifyTreeConsistent(item(position).rightChild(), position+1, upperBound);
+           }
             
             uint countFreeItems(int item) const {
                 if(item == -1)
@@ -558,26 +645,28 @@ namespace KDevelop {
             }
             
             int findItem(const Data& data, uint start, uint end) {
-                EmbeddedTreeAlgorithms<Data, ItemHandler> alg(m_items, m_itemCount, m_centralFreeItem);
+                EmbeddedTreeAlgorithms<Data, ItemHandler> alg(m_items, m_itemCount, *m_centralFreeItem);
                 return alg.indexOf(data, start, end);
             }
             
            void apply() {
-               int removeIndex = findItem(m_remove.item(), 0, m_itemCount);
+               DEBUG_FREEITEM_COUNT
+               
+               int removeIndex = findItem(m_remove.data(), 0, m_itemCount);
                Q_ASSERT(removeIndex != -1);
                Q_ASSERT(!item(removeIndex).isFree());
                
                //Find the free item that is nearest to the target position in the item order
                int previousItem = -1;
-               int currentItem = m_centralFreeItem;
+               int currentItem = *m_centralFreeItem;
                
-               uint lowerBound = 0; //The minimum position the searched item can have
-               uint upperBound = m_itemCount; //The lowest known position the searched item can _not_ have
+               int lowerBound = 0; //The minimum position the searched item can have
+               int upperBound = m_itemCount; //The lowest known position the searched item can _not_ have
                
-               if(m_centralFreeItem == -1) {
-                   m_centralFreeItem = removeIndex;
-                   Q_ASSERT(m_centralFreeItem != -1);
-                   ItemHandler::createFreeItem(m_items[m_centralFreeItem]);
+               if(*m_centralFreeItem == -1) {
+                   *m_centralFreeItem = removeIndex;
+                   Q_ASSERT(*m_centralFreeItem != -1);
+                   ItemHandler::createFreeItem(m_items[*m_centralFreeItem]);
                    return;
                }
                
@@ -594,12 +683,15 @@ namespace KDevelop {
                            //Continue traversing
                            previousItem = currentItem;
                            currentItem = current.leftChild();
+                           Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
                            //The to-be deleted item is before current, and can be added as left child to current 
-                           int item = findItem(m_remove.item(), lowerBound, upperBound);
+                           int item = findItem(m_remove.data(), lowerBound, upperBound);
                            Q_ASSERT(item == removeIndex);
                            ItemHandler::createFreeItem(m_items[item]);
+                           Q_ASSERT(item == -1 || item < currentItem);
                            current.setLeftChild(item);
+                           Q_ASSERT(item >= lowerBound && item < upperBound);
                            break;
                        }
                    }else{
@@ -609,16 +701,31 @@ namespace KDevelop {
                            //Continue traversing
                            previousItem = currentItem;
                            currentItem = current.rightChild();
+                           Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
                            //The to-be deleted item is behind current, and can be added as right child to current 
-                           int item = findItem(m_remove.item(), lowerBound, upperBound);
+                           int item = findItem(m_remove.data(), lowerBound, upperBound);
                            Q_ASSERT(item == removeIndex);
                            ItemHandler::createFreeItem(m_items[item]);
+                           Q_ASSERT(item == -1 || currentItem < item);
                            current.setRightChild(item);
+                           Q_ASSERT(item >= lowerBound && item < upperBound);
                            break;
                        }
                    }
                }
+               
+               DEBUG_FREEITEM_COUNT
+           }
+            
+           void debugFreeItemCount() {
+               uint count = 0;
+               for(uint a = 0; a < m_itemCount; ++a) {
+                   if(item(a).isFree())
+                       ++count;
+               }
+               uint counted = countFreeItems(*m_centralFreeItem);
+               Q_ASSERT(count == counted);
            }
            
            //Updates the sorting for this item, using bubble-sort
@@ -629,7 +736,7 @@ namespace KDevelop {
            ItemHandler m_remove;
            Data* m_items;
            uint m_itemCount;
-           int& m_centralFreeItem;
+           int* m_centralFreeItem;
     };
 }
 

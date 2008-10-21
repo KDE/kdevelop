@@ -93,14 +93,18 @@ bool operator==(const std::set<uint> a, const std::set<uint> b) {
             return !m_data.value;
         }
         
-        const TestItem& item() const {
+        const TestItem& data() const {
             return m_data;
         }
 
-        TestItem& item() {
+        TestItem& data() {
             return m_data;
         }
 
+        bool equals(const TestItem& rhs) const {
+            return m_data.value == rhs.value;
+        }
+        
         private:
             TestItem& m_data;
     };
@@ -164,6 +168,7 @@ bool operator==(const std::set<uint> a, const std::set<uint> b) {
                 KDevelop::EmbeddedTreeAlgorithms<TestItem, TestItemHandler> algorithms(data.data(), data.size(), m_centralFree);
                 uint countFree = algorithms.countFreeItems();
                 Q_ASSERT(freeCount == countFree);
+                algorithms.verifyTreeConsistent();
             }
             
             uint getItem(uint number) const {
