@@ -25,19 +25,67 @@
 #include "repositories/itemrepository.h"
 #include "identifier.h"
 #include "indexedstring.h"
+#include <util/embeddedfreetree.h>
 
 #define ifDebug(x)
 
 namespace KDevelop {
 
+class CodeModelItemHandler {
+    public:
+    CodeModelItemHandler(const CodeModelItem& data) : m_data(const_cast<CodeModelItem&>(data)) {
+    }
+    int leftChild() const {
+        return (int)m_data.referenceCount;
+    }
+    void setLeftChild(int child) {
+        m_data.referenceCount = (uint)child;
+    }
+    int rightChild() const {
+        return (int)m_data.uKind;
+    }
+    void setRightChild(int child) {
+        m_data.uKind = (uint)child;
+    }
+    bool operator<(const CodeModelItemHandler& rhs) const {
+        return m_data.id < rhs.m_data.id;
+    }
+    //Copies this item into the given one
+    void copyTo(CodeModelItem& data) const {
+        data = m_data;
+    }
+    
+    static void createFreeItem(CodeModelItem& data) {
+        data = CodeModelItem();
+        data.referenceCount = (uint)-1;
+        data.uKind = (uint)-1;
+    }
+    
+    bool isFree() const {
+        return !m_data.id.isValid();
+    }
+
+    const CodeModelItem& data() {
+      return m_data;
+    }
+    
+    bool equals(const CodeModelItem& rhs) const {
+      return m_data.id == rhs.id;
+    }
+    
+    private:
+        CodeModelItem& m_data;
+};
+
+
 DEFINE_LIST_MEMBER_HASH(CodeModelRepositoryItem, items, CodeModelItem)
-  
+
 class CodeModelRepositoryItem {
   public:
-  CodeModelRepositoryItem() {
+  CodeModelRepositoryItem() : centralFreeItem(-1) {
     initializeAppendedLists();
   }
-  CodeModelRepositoryItem(const CodeModelRepositoryItem& rhs) : file(rhs.file) {
+  CodeModelRepositoryItem(const CodeModelRepositoryItem& rhs) : file(rhs.file), centralFreeItem(rhs.centralFreeItem) {
     initializeAppendedLists();
     copyListsFrom(rhs);
   }
@@ -61,6 +109,7 @@ class CodeModelRepositoryItem {
   }
   
   IndexedString file;
+  int centralFreeItem;
   
   START_APPENDED_LISTS(CodeModelRepositoryItem);
   APPENDED_LIST_FIRST(CodeModelRepositoryItem, CodeModelItem, items);
@@ -87,6 +136,7 @@ class CodeModelRequestItem {
   void createItem(CodeModelRepositoryItem* item) const {
     item->initializeAppendedLists(false);
     item->file = m_item.file;
+    item->centralFreeItem = m_item.centralFreeItem;
     item->copyListsFrom(m_item);
   }
   
@@ -127,57 +177,43 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
   
   uint index = d->m_repository.findIndex(item);
   
+  CodeModelItem newItem;
+  newItem.id = id;
+  newItem.kind = kind;
+  newItem.referenceCount = 1;
+  
   if(index) {
-    //Check whether the item is already in the mapped list, else copy the list into the new created item
     const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
-      ifDebug( kDebug() << "found index" << index << "count:" << oldItem->itemsSize(); )
-    int freePlace = -1;
-    uint itemsSize = oldItem->itemsSize();
-    const KDevelop::CodeModelItem* items = oldItem->items();
+    EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
     
-    for(uint a = 0; a < itemsSize; ++a) {
-      ifDebug( kDebug() << "id at" << a << items[a].id.identifier().toString(); )
-      if(items[a].id == id) {
-        CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
-        ++const_cast<CodeModelItem*>(editableItem->items())[a].referenceCount;
-        const_cast<CodeModelItem*>(editableItem->items())[a].kind = kind;
-        return; //Already there
-      }else if(freePlace == -1 && !items[a].id.isValid()) {
-        freePlace = (int)a; //Remember an unused position where we can insert the item
-        ifDebug( kDebug() << "found free place at" << freePlace; )
+    int listIndex = alg.indexOf(newItem);
+    
+    CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
+    CodeModelItem* items = const_cast<CodeModelItem*>(editableItem->items());
+    
+    if(listIndex != -1) {
+      //Only update the reference-count
+        ++items[listIndex].referenceCount;
+        items[listIndex].kind = kind;
+        return;
+    }else{
+      //Add the item to the list
+      EmbeddedTreeAddItem<CodeModelItem, CodeModelItemHandler> add(items, editableItem->itemsSize(), editableItem->centralFreeItem, newItem);
+      
+      if(add.newItemCount() != editableItem->itemsSize()) {
+        //The data needs to be transferred into a bigger list. That list is within "item".
+        
+        item.itemsList().resize(add.newItemCount());
+        add.transferData(item.itemsList().data(), item.itemsList().size(), &item.centralFreeItem);
+        
+        d->m_repository.deleteItem(index);
+      }else{
+        //We're fine: The item fits into the existing list.
+        return;
       }
     }
-    
-    CodeModelItem newItem;
-    newItem.referenceCount = 1;
-    newItem.id = id;
-    newItem.kind = kind;
-
-    if(freePlace != -1) {
-      //We can insert the item at a currently unused position
-      CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
-      const_cast<CodeModelItem*>(editableItem->items())[freePlace] = newItem;
-      ifDebug( kDebug() << "using freePlace" << freePlace; )
-      return;
-    }
-    
-    item.copyListsFrom(*oldItem);
-    item.itemsList().append(newItem);
-    
-    //Append a few additional items, so we don't need to re-create that often
-    item.itemsList().append(CodeModelItem());
-    item.itemsList().append(CodeModelItem());
-    item.itemsList().append(CodeModelItem());
-    item.itemsList().append(CodeModelItem());
-    
-    ifDebug( kDebug() << "deleting list, and creating new with" << item.itemsSize() << "items"; )
-    d->m_repository.deleteItem(index);
   }else{
     //We're creating a new index
-    CodeModelItem newItem;
-    newItem.referenceCount = 1;
-    newItem.id = id;
-    newItem.kind = kind;
     item.itemsList().append(newItem);
   }
   Q_ASSERT(!d->m_repository.findIndex(request));
@@ -200,21 +236,26 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
   item.file = file;
   CodeModelRequestItem request(item);
   
+  CodeModelItem newItem;
+  newItem.id = id;
+  newItem.kind = kind;
+  newItem.referenceCount = 1;
+  
   uint index = d->m_repository.findIndex(item);
   
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
-    const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
-    uint itemsSize = oldItem->itemsSize();
-    const KDevelop::CodeModelItem* items = oldItem->items();
+    CodeModelRepositoryItem* oldItem = d->m_repository.dynamicItemFromIndex(index);
     
-    for(uint a = 0; a < itemsSize; ++a) {
-      if(items[a].id == id) {
-        CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
-        const_cast<CodeModelItem*>(editableItem->items())[a].kind = kind;
-        return; //Already there
-      }
-    }
+    EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
+    int listIndex = alg.indexOf(newItem);
+    Q_ASSERT(listIndex != -1);
+    
+    CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
+    
+    Q_ASSERT(items[listIndex].id == id);
+    items[listIndex].kind = kind;
+    return;
   }
   
   Q_ASSERT(0); //The updated item as not in the symbol table!
@@ -234,40 +275,45 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
   
   if(index) {
     
-    uint freeItemCount = 0;
+    CodeModelItem searchItem;
+    searchItem.id = id;
     
     CodeModelRepositoryItem* oldItem = d->m_repository.dynamicItemFromIndex(index);
-    uint itemsSize = oldItem->itemsSize();
-    KDevelop::CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
     
-    for(uint a = 0; a < itemsSize; ++a) {
-      if(oldItem->items()[a].id == id) {
-        
-        --items[a].referenceCount;
-        ifDebug( kDebug() << "reduced reference-count for" << id.identifier().toString() << "to" << oldItem->items()[a].referenceCount; )
-        
-        if(!items[a].referenceCount) {
-          items[a].id = IndexedQualifiedIdentifier();
-          ifDebug( kDebug() << "marking index" << a << "as free"; )
-        }
-      }
-      if(!items[a].id.isValid()) {
-        ++freeItemCount;
-      }
-    }
-    if(freeItemCount == itemsSize) {
-      ifDebug( kDebug() << "no items left, deleting"; )
-      d->m_repository.deleteItem(index);
-    }else if(freeItemCount > 10) {
-        ifDebug( kDebug() << "resizing to make smaller"; )
-        
-        for(uint a = 0; a < itemsSize; ++a)
-          if(items[a].id.isValid())
-            item.itemsList().append(items[a]);
-        
+    EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
+    
+    int listIndex = alg.indexOf(searchItem);
+    if(listIndex == -1)
+      return;
+    
+    CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
+    
+    --items[listIndex].referenceCount;
+    
+    if(oldItem->items()[listIndex].referenceCount)
+      return; //Nothing to remove, there's still a reference-count left
+    
+    //We have reduced the reference-count to zero, so remove the item from the list
+    
+    EmbeddedTreeRemoveItem<CodeModelItem, CodeModelItemHandler> remove(items, oldItem->itemsSize(), oldItem->centralFreeItem, searchItem);
+    
+    uint newItemCount = remove.newItemCount();
+    if(newItemCount != oldItem->itemsSize()) {
+      if(newItemCount == 0) {
+        //Has become empty, delete the item
         d->m_repository.deleteItem(index);
-        ifDebug( kDebug() << "creating new entry with" << item.itemsSize() << "entries"; )
+        return;
+      }else{
+        //Make smaller
+        item.itemsList().resize(newItemCount);
+        remove.transferData(item.itemsList().data(), item.itemsSize(), &item.centralFreeItem);
+        
+        //Delete the old list
+        d->m_repository.deleteItem(index);
+        //Add the new list
         d->m_repository.index(request);
+        return;
+      }
     }
   }
 }

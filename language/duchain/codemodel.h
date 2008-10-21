@@ -44,7 +44,10 @@ namespace KDevelop {
     };
     IndexedQualifiedIdentifier id;
     uint referenceCount;
-    Kind kind;
+    union {
+      Kind kind;
+      uint uKind;
+    };
   };
   
 /**
@@ -70,6 +73,7 @@ namespace KDevelop {
     ///@param count A reference that will be filled with the count of retrieved items
     ///@param items A reference to a pointer, that will represent the array of items.
     ///             The array may contain items with an invalid identifier, those should be ignored.
+    ///             The list is sorted by identifier-index(except for the invalid identifiers in between).
     void items(const IndexedString& file, uint& count, const CodeModelItem*& items) const;
 
     static CodeModel& self();

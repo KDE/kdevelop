@@ -1178,7 +1178,7 @@ class ItemRepository : public AbstractItemRepository {
               if(totalAvailableSpace > totalSize) {
                 Q_ASSERT(extent);
                 ///We can merge these buckets into one monster-bucket that can hold the data
-                Q_ASSERT(m_freeSpaceBuckets[a-extent] == rangeStart);
+                Q_ASSERT((uint)m_freeSpaceBuckets[a-extent] == (uint)rangeStart);
                 m_freeSpaceBuckets.remove(a-extent, extent+1);
                 m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
                 useBucket = rangeStart;

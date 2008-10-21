@@ -73,6 +73,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
 
+  bool operator<(const IndexedQualifiedIdentifier& rhs) const {
+    return index < rhs.index;
+  }
+  
   bool isValid() const;
 
   QualifiedIdentifier identifier() const;
