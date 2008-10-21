@@ -371,7 +371,7 @@ class TestEmbeddedFreeTree : public QObject {
         set.add(9);
         set.verify();
     }
-};
+}
 
 #include "test_itemrepository.moc"
 

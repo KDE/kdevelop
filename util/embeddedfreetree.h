@@ -631,6 +631,6 @@ namespace KDevelop {
            uint m_itemCount;
            int& m_centralFreeItem;
     };
-};
+}
 
 #endif
