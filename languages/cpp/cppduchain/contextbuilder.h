@@ -29,11 +29,13 @@
 
 #include <language/duchain/builders/abstractcontextbuilder.h>
 #include <language/duchain/duchainpointer.h>
+#include <language/duchain/duchainlock.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/ducontext.h>
 #include <ksharedptr.h>
 #include "cppduchainexport.h"
 #include "cppeditorintegrator.h"
+#include "classdeclaration.h"
 
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
@@ -148,7 +150,21 @@ protected:
    */
   KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
 
-  virtual void addBaseType( Cpp::BaseClassInstance base );
+  virtual void addBaseType( Cpp::BaseClassInstance base ) {
+	DUChainWriteLocker lock(DUChain::lock());
+
+	  addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
+
+	  Q_ASSERT(currentContext()->type() == DUContext::Class);
+	  AbstractType::Ptr baseClass = base.baseClass.type();
+	  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
+	  Declaration* idDecl = 0;
+	  if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
+	    currentContext()->addImportedParentContext( idDecl->logicalInternalContext(0) );
+	  } else if( !baseClass.cast<DelayedType>() ) {
+	    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
+	  }
+  }
 
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.

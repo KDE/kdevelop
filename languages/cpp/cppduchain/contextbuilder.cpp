@@ -27,7 +27,6 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/duchainlock.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
 #include <language/duchain/smartconverter.h>
@@ -45,7 +44,6 @@
 #include "rpp/chartools.h"
 #include <language/duchain/dumpchain.h>
 #include "tokens.h"
-#include "classdeclaration.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -471,22 +469,6 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
   DefaultVisitor::visitNamespace (node);
 
   closeContext();
-}
-
-void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
-  DUChainWriteLocker lock(DUChain::lock());
-
-  addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
-
-  Q_ASSERT(currentContext()->type() == DUContext::Class);
-  AbstractType::Ptr baseClass = base.baseClass.type();
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
-  Declaration* idDecl = 0;
-  if( idType && (idDecl = idType->declaration(currentContext()->topContext())) && idDecl->logicalInternalContext(0) ) {
-    addImportedParentContextSafely(currentContext(), idDecl->logicalInternalContext(0) );
-  } else if( !baseClass.cast<DelayedType>() ) {
-    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
-  }
 }
 
 void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
