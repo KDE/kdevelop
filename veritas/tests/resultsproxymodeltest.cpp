@@ -36,6 +36,8 @@ using Veritas::Test;
 namespace
 {
 
+QList<Test*> g_garbage;
+
 ResultsModel* createResultsModel()
 {
     QStringList header;
@@ -45,16 +47,19 @@ ResultsModel* createResultsModel()
 
     TestResult* fooResult = new TestResult;
     Test* fooOwner = new Test("Foo");
+    g_garbage << fooOwner;
     fooResult->setOwner(fooOwner);
     fooResult->setFile(KUrl("foo.cpp"));
     fooResult->setState(Veritas::RunError);
+    fooOwner->setResult(fooResult);
 
     TestResult* barResult = new TestResult;
     Test* barOwner = new Test("Bar");
+    g_garbage << barOwner;
     barResult->setOwner(barOwner);
     barResult->setFile(KUrl("bar.cpp"));
     barResult->setState(Veritas::RunFatal);
-
+    barOwner->setResult(barResult);
     model->addResult(fooResult); // invoke slot
     model->addResult(barResult); // invoke slot
 
@@ -74,6 +79,8 @@ void ResultsProxyModelTest::cleanup()
 {
     if (proxy)  delete proxy;
     if (source) delete source;
+    qDeleteAll(g_garbage);
+    g_garbage.clear();
 }
 
 //test command

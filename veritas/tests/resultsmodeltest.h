@@ -24,11 +24,12 @@
 #include <QtCore/QObject>
 #include <QtTest/QtTest>
 
+#include "../testresult.h"
+
 namespace Veritas
 {
 class ResultsModel;
-class RunnerModelStub;
-class TestResult;
+class Test;
 
 class ResultsModelTest : public QObject
 {
@@ -54,10 +55,11 @@ private:
     void assertColumnHeader(const QVariant& expected, int index);
     void assertRowDataEquals(ResultsModel* model, int rowNumber, TestResult* expected);
     void assertNrofItemsEquals(int expected, ResultsModel* model);
+    TestResult* createTestResult(TestState state, const QString& testName, const KUrl& location, int line, const QString& message);
 
 private:
     ResultsModel* m_model;
-    RunnerModelStub* m_runnerModel;
+    QList<Test*> m_garbage;
 };
 
 }

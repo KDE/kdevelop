@@ -99,7 +99,7 @@ void Test::setSelectionToggle(bool enabled)
 
 Test::~Test()
 {
-    delete d->result;
+    if (d->result) delete d->result;
     qDeleteAll(d->children);
     delete d;
 }
