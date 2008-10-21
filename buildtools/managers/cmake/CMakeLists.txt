@@ -52,7 +52,7 @@ remove_definitions( -DQT_NO_STL )
 kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS}
-                        ${KDevPlatform_INTERFACES_LIBRARY} ${KDevPlatform_PROJECT_LIBRARY}
+                        ${KDE4_KTEXTEDITOR_LIBS} ${KDevPlatform_INTERFACES_LIBRARY} ${KDevPlatform_PROJECT_LIBRARY}
                         ${QT_QTSCRIPT_LIBRARY} ${KDevPlatform_LANGUAGE_LIBRARY}
                         )
 
