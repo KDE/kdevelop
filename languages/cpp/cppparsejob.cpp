@@ -456,6 +456,13 @@ void CPPInternalParseJob::run()
               kDebug() << "smart-deconverting a non-standard context";
             }
           }
+          
+          if(updatingContentContext && !updatingContentContext->smartRange()) {
+            kWarning() << "updated context has not been smartened yet! Smartening it";
+            editor.setCurrentUrl(parentJob()->document(), true);
+            SmartConverter sc(&editor);
+            sc.convertDUChain(updatingContentContext);
+          }
         }
       }
       
