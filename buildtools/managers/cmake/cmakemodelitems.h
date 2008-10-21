@@ -26,7 +26,6 @@
 
 #include <project/projectmodel.h>
 #include "cmakelistsparser.h"
-#include "cmakeexport.h"
 #include "cmaketypes.h"
 #include "cmakeast.h"
 #include <interfaces/iproject.h>
@@ -47,7 +46,7 @@ class CMakeProjectManager;
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-class KDEVCMAKECOMMON_EXPORT CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
+class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
