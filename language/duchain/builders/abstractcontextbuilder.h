@@ -375,7 +375,7 @@ protected:
   void deleteContextOnNode( T* node )
   {
     delete contextFromNode( node );
-    setContextFromNode( node, 0 );
+    setContextOnNode( node, 0 );
   }
 
   /**
