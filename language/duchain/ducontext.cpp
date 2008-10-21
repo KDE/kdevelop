@@ -1419,24 +1419,19 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
   }
 
   insertToArray(d->m_usesList(), Use(range, declarationIndex), insertBefore);
-  
   if(smartRange) {
-    //When updating, it may happen that the uses were skipped, and thus don't have smart-ranges.
-    //So initialize the smartrange array when it was empty.
-    if(m_dynamicData->m_rangesForUses.isEmpty())
-      m_dynamicData->m_rangesForUses = QVector<KTextEditor::SmartRange*>(d->m_usesSize()-1, 0);
-    
+    ///When this assertion triggers, then the updated context probably was not smart-converted before processing. @see SmartConverter
+    Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);
+    m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
     smartRange->addWatcher(this);
+//     smartRange->setWantsDirectChanges(true);
 
     d->m_usesList()[insertBefore].m_range = SimpleRange(*smartRange);
   }else{
     // This can happen eg. when a document is closed during its parsing, and has no ill effects.
     //Q_ASSERT(m_dynamicData->m_rangesForUses.isEmpty());
   }
-  
-  if(!m_dynamicData->m_rangesForUses.isEmpty())
-    m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
-  
+
   return insertBefore;
 }
 
@@ -1488,10 +1483,8 @@ void DUContext::clearUseSmartRanges()
     LockedSmartInterface iface = editor.smart();
     if (iface) {
       foreach (SmartRange* range, m_dynamicData->m_rangesForUses) {
-        if(range) {
-          range->removeWatcher(this);
-          EditorIntegrator::releaseRange(range);
-        }
+        range->removeWatcher(this);
+        EditorIntegrator::releaseRange(range);
       }
     }
 
