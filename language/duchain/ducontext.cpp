@@ -1484,8 +1484,10 @@ void DUContext::clearUseSmartRanges()
     LockedSmartInterface iface = editor.smart();
     if (iface) {
       foreach (SmartRange* range, m_dynamicData->m_rangesForUses) {
-        range->removeWatcher(this);
-        EditorIntegrator::releaseRange(range);
+        if(range) {
+          range->removeWatcher(this);
+          EditorIntegrator::releaseRange(range);
+        }
       }
     }
 
