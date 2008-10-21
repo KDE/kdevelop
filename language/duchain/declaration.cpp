@@ -240,10 +240,14 @@ IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
 }
 
 IndexedTopDUContext IndexedDeclaration::indexedTopContext() const {
+  if(isDummy())
+    return IndexedTopDUContext();
   return IndexedTopDUContext(m_topContext);
 }
 
 Declaration* IndexedDeclaration::declaration() const {
+  if(isDummy())
+    return 0;
   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)
     return 0;

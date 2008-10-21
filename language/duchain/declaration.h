@@ -64,29 +64,76 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     bool operator==(const IndexedDeclaration& rhs) const {
       return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
+    
     uint hash() const {
+      if(isDummy())
+        return 0;
       return (m_topContext * 53 + m_declarationIndex) * 23;
     }
 
     bool isValid() const {
-      return declaration() != 0;
+      return !isDummy() && declaration() != 0;
     }
 
     bool operator<(const IndexedDeclaration& rhs) const {
+      Q_ASSERT(!isDummy());
       return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
     }
 
     ///Index of the Declaration within the top context
     uint localIndex() const {
+      if(isDummy())
+        return 0;
       return m_declarationIndex;
     }
     
     uint topContextIndex() const {
+      if(isDummy())
+        return 0;
       return m_topContext;
     }
     
     IndexedTopDUContext indexedTopContext() const;
 
+    
+    ///The following functions allow storing 2 integers in this object and marking it as a dummy,
+    ///which makes the isValid() function always return false for this object, and use the integers
+    ///for other purposes
+    ///Clears the contained data
+    void setIsDummy(bool dummy) {
+      if(isDummy() == dummy)
+        return;
+      if(dummy)
+        m_topContext = 1 << 31;
+      else
+        m_topContext = 0;
+      m_declarationIndex = 0;
+    }
+    
+    bool isDummy() const {
+      //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
+      //integers
+      return (bool)(m_topContext & (1 << 31));
+    }
+    
+    QPair<uint, uint> dummyData() const {
+      Q_ASSERT(isDummy());
+      return qMakePair(m_topContext & (~(1<<31)), m_declarationIndex);
+    }
+    
+    ///Do not call this when this object is valid. The first integer loses one bit of precision.
+    void setDummyData(QPair<uint, uint> data) {
+      Q_ASSERT(isDummy());
+      
+      m_topContext = data.first;
+      m_declarationIndex = data.second;
+      Q_ASSERT(!isDummy());
+      m_topContext |= (1 << 31); //Mark as dummy
+      Q_ASSERT(isDummy());
+      Q_ASSERT(dummyData() == data);
+    }
+
+    
   private:
   uint m_topContext;
   uint m_declarationIndex;
