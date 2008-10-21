@@ -63,7 +63,7 @@ void XmlRegister::setSource(QIODevice* source)
     setDevice(source);
 }
 
-void XmlRegister::setSettings(ISettings* s)
+void XmlRegister::setSettings(QTest::ISettings* s)
 {
     m_settings = s;
 }

@@ -156,7 +156,7 @@ SuiteBuilder::~SuiteBuilder()
 {
 }
 
-void SuiteBuilder::setSettings(ISettings* settings)
+void SuiteBuilder::setSettings(QTest::ISettings* settings)
 {
     m_settings = settings;
 }
