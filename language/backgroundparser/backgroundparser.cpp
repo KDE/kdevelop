@@ -328,6 +328,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         Q_ASSERT(url.isValid());
         
         BackgroundParserPrivate::DocumentParsePlan plan(priority, features);
+        plan.notifyWhenReady += notifyWhenReady;
         
         QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::const_iterator it = d->m_documents.find(url);
         
