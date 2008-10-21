@@ -457,9 +457,10 @@ void CPPInternalParseJob::run()
             }
           }
           
-          if(updatingContentContext && !updatingContentContext->smartRange()) {
+          editor.setCurrentUrl(parentJob()->document(), true);
+          
+          if(updatingContentContext && !updatingContentContext->smartRange() && editor.smart()) {
             kWarning() << "updated context has not been smartened yet! Smartening it";
-            editor.setCurrentUrl(parentJob()->document(), true);
             SmartConverter sc(&editor);
             sc.convertDUChain(updatingContentContext);
           }
