@@ -41,9 +41,9 @@ if(NOT WIN32)
 endif(NOT WIN32)
 macro_optional_add_subdirectory(doc)
 
-configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfigVersion.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" )
-configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" )
-configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" )
+configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfigVersion.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" @ONLY )
+configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
+configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 
 install( FILES 
         "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" 

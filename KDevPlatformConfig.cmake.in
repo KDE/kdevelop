@@ -20,47 +20,56 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 ######################################################################
 
+get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
+
+if(NOT WIN32)
 set( KDevPlatform_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
+
+else(NOT WIN32)
+
+set( KDevPlatform_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../include/kdevplatform" )
+
+endif(NOT WIN32)
 
 # Change PATHS to HINTS as soon as cmake 2.6.2 is required for KDE
 find_library( KDevPlatform_INTERFACES_LIBRARY kdevplatforminterfaces 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform interfaces library" )
 
 find_library( KDevPlatform_UTIL_LIBRARY kdevplatformutil 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform util library" )
 
 find_library( KDevPlatform_LANGUAGE_LIBRARY kdevplatformlanguage 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform language library" )
 
 find_library( KDevPlatform_OUTPUTVIEW_LIBRARY kdevplatformoutputview 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform outputview library" )
 
 find_library( KDevPlatform_PROJECT_LIBRARY kdevplatformproject 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform project library" )
 
 find_library( KDevPlatform_SUBLIME_LIBRARY sublime 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform sublime library" )
 
 find_library( KDevPlatform_SHELL_LIBRARY kdevplatformshell 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform shell library" )
 
 find_library( KDevPlatform_VCS_LIBRARY kdevplatformvcs 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform vcs library" )
 
 find_library( KDevPlatform_VERITAS_LIBRARY kdevplatformveritas 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform veritas library" )
 
 find_library( KDevPlatform_SOURCEFORMATTER_LIBRARY kdevplatformsourceformatter 
-        PATHS "@LIB_INSTALL_DIR@" 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform sourceformatter library" )
 
 mark_as_advanced(
