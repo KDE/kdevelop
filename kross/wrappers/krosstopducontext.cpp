@@ -73,7 +73,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void clearProblems() { wrapped->clearProblems(); }
 		Q_SCRIPTABLE bool imports(const KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1) const { return wrapped->imports(x0, x1); }
 		Q_SCRIPTABLE void importTrace(const KDevelop::TopDUContext* x0, KDevelop::ImportTrace& x1) const { wrapped->importTrace(x0, x1); }
-		Q_SCRIPTABLE KDevVarLengthArray< KDevelop::ImportTraceItem, 40 > importTrace(const KDevelop::TopDUContext* x0) const { return wrapped->importTrace(x0); }
+		Q_SCRIPTABLE KDevelop::ImportTrace importTrace(const KDevelop::TopDUContext* x0) const { return wrapped->importTrace(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Features features() const { return wrapped->features(); }
 		Q_SCRIPTABLE void setFeatures(KDevelop::TopDUContext::Features x0) { wrapped->setFeatures(x0); }
 		Q_SCRIPTABLE int indexForUsedDeclaration(KDevelop::Declaration* x0, bool x1=true) { return wrapped->indexForUsedDeclaration(x0, x1); }

@@ -23,6 +23,10 @@ class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
+		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
+		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
+		Q_SCRIPTABLE QPair< unsigned int, unsigned int > dummyData() const { return wrapped->dummyData(); }
+		Q_SCRIPTABLE void setDummyData(QPair< unsigned int, unsigned int > x0) { wrapped->setDummyData(x0); }
 	private:
 		KDevelop::IndexedDUContext* wrapped;
 };
@@ -61,6 +65,17 @@ class KrossKDevelopImportTraceItem : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE KDevelopSimpleCursor  getposition() const { return wrapped->position; }
 	private:
 		KDevelop::ImportTraceItem* wrapped;
+};
+
+class KrossKDevelopImportTrace : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopImportTrace(KDevelop::ImportTrace* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ImportTrace"); }
+		void* wrappedObject() const { return wrapped; }
+
+	private:
+		KDevelop::ImportTrace* wrapped;
 };
 
 class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
@@ -216,6 +231,17 @@ QVariant _kDevelopDUContextHandler(void* type)
 bool b_KDevelopDUContext=krossducontext_registerHandler("KDevelop::DUContext*", _kDevelopDUContextHandler);
 QVariant kDevelopDUContextHandler(KDevelop::DUContext* type){ return _kDevelopDUContextHandler(type); }
 QVariant kDevelopDUContextHandler(const KDevelop::DUContext* type) { return _kDevelopDUContextHandler((void*) type); }
+
+QVariant _kDevelopImportTraceHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ImportTrace* t=static_cast<KDevelop::ImportTrace*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ImportTrace*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopImportTrace(t, 0));
+}
+bool b_KDevelopImportTrace=krossducontext_registerHandler("KDevelop::ImportTrace*", _kDevelopImportTraceHandler);
+QVariant kDevelopImportTraceHandler(KDevelop::ImportTrace* type){ return _kDevelopImportTraceHandler(type); }
+QVariant kDevelopImportTraceHandler(const KDevelop::ImportTrace* type) { return _kDevelopImportTraceHandler((void*) type); }
 
 QVariant _kDevelopImportTraceItemHandler(void* type)
 {

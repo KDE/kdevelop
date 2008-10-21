@@ -25,6 +25,10 @@ class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInt
 		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
+		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
+		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
+		Q_SCRIPTABLE QPair< unsigned int, unsigned int > dummyData() const { return wrapped->dummyData(); }
+		Q_SCRIPTABLE void setDummyData(QPair< unsigned int, unsigned int > x0) { wrapped->setDummyData(x0); }
 	private:
 		KDevelop::IndexedDeclaration* wrapped;
 };

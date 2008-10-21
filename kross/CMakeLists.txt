@@ -103,7 +103,7 @@ set(kdevkrossplugin_SRCS
 
 kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})
 target_link_libraries(kdevkrossplugin ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
-    kdevplatforminterfaces kdevplatformproject kdevplatformvcs kdevplatformlanguage ${KDE4_KROSSUI_LIBS})
+    kdevplatforminterfaces kdevplatformproject kdevplatformvcs kdevplatformlanguage kdevplatformveritas ${KDE4_KROSSUI_LIBS})
 
 install(TARGETS kdevkrossplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES kdevkrossplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})

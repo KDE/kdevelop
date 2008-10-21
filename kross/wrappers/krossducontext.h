@@ -8,6 +8,7 @@
 namespace KDevelop { class IndexedDUContext; }
 namespace KDevelop { class LocalIndexedDUContext; }
 namespace KDevelop { class ImportTraceItem; }
+namespace KDevelop { class ImportTrace; }
 namespace KDevelop { class DUContext; }
 namespace KDevelop { class Import; }
 namespace KDevelop { class SearchItem; }
@@ -24,6 +25,10 @@ namespace Handlers
 	QVariant _kDevelopDUContextHandler(void* type);
 	QVariant kDevelopDUContextHandler(KDevelop::DUContext* type);
 	QVariant kDevelopDUContextHandler(const KDevelop::DUContext* type);
+
+	QVariant _kDevelopImportTraceHandler(void* type);
+	QVariant kDevelopImportTraceHandler(KDevelop::ImportTrace* type);
+	QVariant kDevelopImportTraceHandler(const KDevelop::ImportTrace* type);
 
 	QVariant _kDevelopImportTraceItemHandler(void* type);
 	QVariant kDevelopImportTraceItemHandler(KDevelop::ImportTraceItem* type);

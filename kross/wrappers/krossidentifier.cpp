@@ -37,6 +37,7 @@ class KrossKDevelopIndexedQualifiedIdentifier : public QObject, public Kross::Wr
 		Q_SCRIPTABLE KDevelop::IndexedQualifiedIdentifier operator=(const KDevelop::QualifiedIdentifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedQualifiedIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->operator==(x0); }
+		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedQualifiedIdentifier& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier identifier() const { return wrapped->identifier(); }
 		Q_PROPERTY(unsigned int  index READ getindex WRITE setindex SCRIPTABLE true)
