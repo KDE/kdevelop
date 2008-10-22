@@ -28,6 +28,7 @@
 #include <QFileInfo>
 #include <QByteArray>
 #include <QMutexLocker>
+#include <QReadWriteLock>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -89,6 +90,9 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
+    //If we have a parent, that parent already has locked the parse-lock
+    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
+  
     //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
     //It must be low so the GUI stays fluid.
     if(QThread::currentThread())
@@ -114,8 +118,6 @@ void PreprocessJob::run()
             m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
         }
     }
-
-    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
 
     rpp::pp preprocessor(this);
     m_pp = &preprocessor;

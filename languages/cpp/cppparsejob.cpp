@@ -25,6 +25,8 @@
 
 #include <QFile>
 #include <QByteArray>
+#include <QReadWriteLock>
+#include <QReadLocker>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -347,8 +349,9 @@ void CPPInternalParseJob::run()
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
 
-    QMutexLocker lock(parentJob()->cpp()->language()->parseMutex(QThread::currentThread()));
-
+    //If we have a parent, the parse-mutex is already locked
+    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
+    
     ReferencedTopDUContext updatingProxyContext = parentJob()->updatingProxyContext().data();
     ReferencedTopDUContext updatingContentContext = parentJob()->updatingContentContext().data();
 
