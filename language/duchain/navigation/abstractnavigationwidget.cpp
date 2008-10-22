@@ -72,6 +72,10 @@ AbstractNavigationWidget::~AbstractNavigationWidget() {
 
 void AbstractNavigationWidget::setContext(NavigationContextPointer context)
 {
+  if(!context) {
+    kDebug() << "no new context created";
+    return;
+  }
   m_context = context;
   update();
 }
