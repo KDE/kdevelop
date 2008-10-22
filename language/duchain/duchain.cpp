@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QMultiMap>
 #include <QTimer>
+#include <QReadWriteLock>
 #include <qatomic.h>
 
 #include <kglobal.h>
@@ -365,15 +366,19 @@ public:
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.
     QList<ILanguage*> lockedParseMutexes;
     
+    QList<QReadWriteLock*> locked;
+    
     if(needLockRepository) {
       
-      lockedParseMutexes = ICore::self()->languageController()->activeLanguages();
+      lockedParseMutexes = ICore::self()->languageController()->loadedLanguages();
       
       writeLock.unlock();
       
       //Here we wait for all parsing-threads to stop their processing
-      foreach(ILanguage* language, lockedParseMutexes)
-        language->lockAllParseMutexes();
+      foreach(ILanguage* language, lockedParseMutexes) {
+        language->parseLock()->lockForWrite();
+        locked << language->parseLock();
+      }
       
       writeLock.lock();
       
@@ -500,8 +505,8 @@ public:
         kDebug(9505) << "milliseconds spent doing cleanup with locked duchain: " << elapesedMilliSeconds;
       }
       
-      foreach(ILanguage* language, lockedParseMutexes)
-        language->unlockAllParseMutexes();
+      foreach(QReadWriteLock* lock, locked)
+        lock->unlock();
   }
 
 private:

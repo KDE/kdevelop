@@ -95,6 +95,14 @@ QList<ILanguage*> LanguageController::activeLanguages()
     return d->activeLanguages;
 }
 
+QList<ILanguage*> LanguageController::loadedLanguages() const
+{
+    QList<ILanguage*> ret;
+    foreach(Language* lang, d->languages.values())
+        ret << lang;
+    return ret;
+}
+
 ILanguage *LanguageController::language(const QString &name) const
 {
     if(d->languages.contains(name))

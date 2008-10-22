@@ -43,6 +43,9 @@ public:
     Q_SCRIPTABLE virtual ILanguage* language(const QString &name) const = 0;
     /** @return the languages that support the MIME type of @p url. */
     Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
+    
+    /** @return All languages currently loaded */
+    Q_SCRIPTABLE virtual QList<ILanguage*> loadedLanguages() const = 0;
 
     /** @return the background parser used to parse source files */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;

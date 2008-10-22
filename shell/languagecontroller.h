@@ -47,6 +47,8 @@ public:
     /** @copydoc ILanguageController::backgroundParser() */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
 
+    virtual QList<ILanguage*> loadedLanguages() const;
+    
 private:
     Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
 

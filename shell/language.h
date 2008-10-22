@@ -39,22 +39,11 @@ public:
     virtual ILanguageSupport *languageSupport();
 
     /**
-     * The mutex for the specified \a thread must be held when doing any background parsing.
+     * Every thread that does background-parsing should read-lock its language's parse-mutex while parsing.
+     * Any other thread may write-lock the parse-mutex in order to wait for all parsing-threads to finish the parsing.
+     * The parse-mutex only needs to be locked while working on the du-chain, not while preprocessing or reading.
      */
-    virtual QMutex *parseMutex(QThread *thread) const;
-
-    /**
-     * Lock all background parser mutexes.
-     */
-    virtual void lockAllParseMutexes();
-
-    /**
-     * Unlock all background parser mutexes.
-     */
-    virtual void unlockAllParseMutexes();
-
-public Q_SLOTS:
-    void threadFinished();
+    virtual QReadWriteLock* parseLock() const;
 
 private:
     struct LanguagePrivate *d;

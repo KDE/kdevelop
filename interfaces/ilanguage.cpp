@@ -24,7 +24,7 @@ struct ILanguagePrivate {
     QString name;
 };
 
-ILanguage::ILanguage(const QString &name, QObject *parent)
+ILanguage::ILanguage(const QString &name, QObject */*parent*/)
 {
     d = new ILanguagePrivate();
     d->name = name;

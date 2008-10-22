@@ -20,7 +20,7 @@
 #include "language.h"
 
 #include <QHash>
-#include <QMutex>
+#include <QReadWriteLock>
 #include <QThread>
 
 #include <kdebug.h>
@@ -32,8 +32,7 @@ namespace KDevelop {
 struct LanguagePrivate {
     ILanguageSupport *support;
 
-    mutable QHash<QThread*, QMutex*> parseMutexes;
-    QMutex mutexMutex;
+    mutable QReadWriteLock lock;
 };
 
 Language::Language(ILanguageSupport *support, QObject *parent)
@@ -65,62 +64,9 @@ ILanguageSupport *Language::languageSupport()
     return d->support;
 }
 
-QMutex *Language::parseMutex(QThread *thread) const
+QReadWriteLock *Language::parseLock() const
 {
-    Q_ASSERT(thread);
-
-    QMutexLocker lock(&d->mutexMutex);
-
-    if (!d->parseMutexes.contains(thread)) {
-        connect(thread, SIGNAL(finished()), SLOT(threadFinished()));
-        d->parseMutexes.insert(thread, new QMutex(QMutex::Recursive));
-    }
-
-    return d->parseMutexes[thread];
-}
-
-void Language::lockAllParseMutexes()
-{
-    QMutexLocker lock(&d->mutexMutex);
-
-    QList<QMutex*> waitForLock;
-
-    // Grab the easy pickings first
-    QHashIterator<QThread*, QMutex*> it = d->parseMutexes;
-    while (it.hasNext()) {
-        it.next();
-        if (!it.value()->tryLock())
-        waitForLock.append(it.value());
-    }
-
-    lock.unlock();
-    // Work through the stragglers. mutexMutex must be unlocked, else we deadlock.
-    foreach (QMutex* mutex, waitForLock)
-        mutex->lock();
-}
-
-void Language::unlockAllParseMutexes()
-{
-    QMutexLocker lock(&d->mutexMutex);
-    
-    foreach(QMutex* mutex, d->parseMutexes)
-        mutex->unlock();
-}
-
-void Language::threadFinished()
-{
-    Q_ASSERT(sender());
-
-    QMutexLocker lock(&d->mutexMutex);
-
-    QThread* thread = static_cast<QThread*>(sender());
-
-    Q_ASSERT(d->parseMutexes.contains(thread));
-
-    QMutex* mutex = d->parseMutexes[thread];
-    mutex->unlock();
-    delete mutex;
-    d->parseMutexes.remove(thread);
+    return &d->lock;
 }
 
 }

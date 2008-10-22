@@ -25,7 +25,7 @@
 
 #include "interfacesexport.h"
 
-class QMutex;
+class QReadWriteLock;
 class QThread;
 
 namespace KDevelop {
@@ -46,9 +46,14 @@ public:
     /** @return the language support plugin.*/
     virtual ILanguageSupport *languageSupport() = 0;
 
-    virtual QMutex *parseMutex(QThread *thread) const = 0;
-    virtual void lockAllParseMutexes() = 0;
-    virtual void unlockAllParseMutexes() = 0;
+    /**
+     * Every thread that does background-parsing should read-lock its language's parse-mutex while parsing.
+     * Any other thread may write-lock the parse-mutex in order to wait for all parsing-threads to finish the parsing.
+     * The parse-mutex only needs to be locked while working on the du-chain, not while preprocessing or reading.
+     * Hint: use QReadLocker for read-locking.
+     * The duchain must always be unlocked when you try to lock a parseLock!
+     */
+    virtual QReadWriteLock* parseLock() const = 0;
 
 private:
     struct ILanguagePrivate *d;
