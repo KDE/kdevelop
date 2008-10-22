@@ -209,6 +209,11 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
     clear = true;
   }
   
+  QFileInfo rightVersion(path + QString("/version_%1").arg(staticItemRepositoryVersion()));
+  if(!rightVersion.exists()) {
+    clear = true;
+  }
+  
   m_path = path;
   if(clear) {
       kWarning() << QString("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository").arg(m_path);
@@ -252,6 +257,13 @@ void ItemRepositoryRegistry::store() {
   foreach(AbstractItemRepository* repository, m_repositories)
     repository->store();
 
+  QFile versionFile(m_path + QString("/version_%1").arg(staticItemRepositoryVersion()));
+  if(versionFile.open(QIODevice::WriteOnly)) {
+    versionFile.close();
+  }else{
+    kWarning() << "Could not open version file for writing";
+  }
+  
   //Store all custom counter values
   QFile f(m_path + "/Counters");
   if(f.open(QIODevice::WriteOnly)) {
