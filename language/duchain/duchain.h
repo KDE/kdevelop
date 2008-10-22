@@ -128,6 +128,7 @@ public:
   Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;  
   
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
+  ///The duchain must be read-locked when this is called
   Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;
 
   ///Returns the url for the given top-context index if available. This does have some cost, so avoid it when possible.

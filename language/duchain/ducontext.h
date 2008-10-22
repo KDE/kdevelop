@@ -53,9 +53,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
   public:
     IndexedDUContext(DUContext* decl);
     IndexedDUContext(uint topContext = 0, uint contextIndex = 0);
-    //Duchain must be read locked
+    
+    ///Duchain must be read locked
     DUContext* context() const;
     
+    ///Duchain must be read locked
     DUContext* data() const {
       return context();
     }

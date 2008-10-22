@@ -53,7 +53,6 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
   public:
     ReferencedTopDUContext(TopDUContext* context = 0);
-    ReferencedTopDUContext(IndexedTopDUContext context);
     ReferencedTopDUContext(const ReferencedTopDUContext& rhs);
     ~ReferencedTopDUContext();
     
@@ -95,7 +94,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     IndexedTopDUContext(TopDUContext* context = 0);
     
     ///Returns the top-context represented by this indexed top-context. If it wasn't loaded yet, it is loaded.
-    ///To prevent automatic unloading, store it in ReferencedTopDUContext
+    ///The duchain must be read-locked when this is called!
+    ///To prevent it from being unloaded, store it into a ReferencedTopDUContext before releasing the duchain lock.
     TopDUContext* data() const;
     
     ///Returns whether the top-context is currently loaded. If not, it will be loaded when you call data().

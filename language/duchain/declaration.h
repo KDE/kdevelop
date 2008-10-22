@@ -54,9 +54,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
   public:
     IndexedDeclaration(Declaration* decl = 0);
     IndexedDeclaration(uint topContext, uint declarationIndex);
-    //Duchain must be read locked
+    
+    ///Duchain must be read locked
     Declaration* declaration() const;
 
+    ///Duchain must be read locked
     Declaration* data() const {
       return declaration();
     }
