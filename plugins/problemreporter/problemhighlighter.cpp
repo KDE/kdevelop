@@ -63,16 +63,19 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
 
+    KTextEditor::SmartRange* topRange = editor.topRange(iface, EditorIntegrator::Highlighting);
+    m_topHLRanges.append(topRange);
+    
     HashedString hashedUrl = url.str();
 
     foreach (const KDevelop::ProblemPointer& problem, problems) {
         if (problem->finalLocation().document() != hashedUrl || !problem->finalLocation().isValid())
             continue;
 
-        KTextEditor::SmartRange* range = editor.topRange(iface, EditorIntegrator::Highlighting);
-        *range = problem->finalLocation();
-        if (range->isEmpty())
-            range->smartEnd().advance(1);
+        KTextEditor::SmartRange* problemRange = editor.createRange(iface, problem->finalLocation());
+//         *range = problem->finalLocation();
+        if (problemRange->isEmpty())
+            problemRange->smartEnd().advance(1);
 
         KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
         error->setBackground(QColor(Qt::red)); // 0xB60003
@@ -84,12 +87,12 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);*/
 
         // TODO text hint for problem
-        range->setAttribute(error);
-        range->addWatcher(this);
-        m_topHLRanges.append(range);
-
+        problemRange->setAttribute(error);
+        problemRange->addWatcher(this);
         editor.exitCurrentRange(iface);
     }
+    
+    editor.exitCurrentRange(iface);
 }
 
 void ProblemHighlighter::rangeDeleted(KTextEditor::SmartRange *range)
