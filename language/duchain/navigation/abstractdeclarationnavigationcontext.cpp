@@ -68,21 +68,18 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     comment.replace("<br/>", " ");
     m_currentText += commentHighlight(Qt::escape(comment)) + "   ";
   }
+  
   if( m_previousContext ) {
     m_currentText += navigationHighlight("Back to ");
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
     m_currentText += "<br>";
   }
 
-  const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
-  if( function && !shorten) {
-
-    qDebug() << "yyy" << m_declaration;
-    htmlFunction();
-
-  } else if( !shorten ) {
-
-    if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
+  if( !shorten ) {
+    const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
+    if( function ) {
+      htmlFunction();
+    } else if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
       if( m_declaration->isTypeAlias() )
         m_currentText += importantHighlight("typedef ");
 
@@ -140,73 +137,73 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         m_currentText += labelHighlight(i18n("Scope: ")) + Qt::escape(parent.toString()) + " ";
       }
     }
-
-    QString access = stringFromAccess(m_declaration);
-    if( !access.isEmpty() )
-      m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
-
-
-    ///@todo Enumerations
-
-    QString detailsHtml;
-    QStringList details = declarationDetails(m_declaration);
-    if( !details.isEmpty() ) {
-      bool first = true;
-      foreach( QString str, details ) {
-        if( !first )
-          detailsHtml += ", ";
-        first = false;
-        detailsHtml += propertyHighlight(str);
-      }
-    }
-
-    QString kind = declarationKind(m_declaration);
-    if( !kind.isEmpty() ) {
-      if( !detailsHtml.isEmpty() )
-        m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + detailsHtml + " ";
-      else
-        m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
-    } else if( !detailsHtml.isEmpty() ) {
-      m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
-    }
-
-    m_currentText += "<br />";
-
-    if( !shorten && !m_declaration->comment().isEmpty() ) {
-      QString comment = m_declaration->comment();
-      comment.replace("<br />", "\n"); //do not escape html newlines within the comment
-      comment.replace("<br/>", "\n");
-      comment = Qt::escape(comment);
-      comment.replace("\n", "<br />"); //Replicate newlines in html
-      m_currentText += commentHighlight(comment);
-      m_currentText += "<br />";
-    }
-
-    if( !shorten ) {
-      if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
-        m_currentText += labelHighlight(i18n( "Def.: " ));
-      else
-        m_currentText += labelHighlight(i18n( "Decl.: " ));
-
-      makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
-      m_currentText += " ";
-      //m_currentText += "<br />";
-      if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
-        if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
-          m_currentText += labelHighlight(i18n( " Def.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
-        }
-      }
-
-      if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
-        if(definition->declaration()) {
-          m_currentText += labelHighlight(i18n( " Decl.: " ));
-          makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
-        }
-      }
-    }
-    //m_currentText += "<br />";
   }
+
+  QString access = stringFromAccess(m_declaration);
+  if( !access.isEmpty() )
+    m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
+
+
+  ///@todo Enumerations
+
+  QString detailsHtml;
+  QStringList details = declarationDetails(m_declaration);
+  if( !details.isEmpty() ) {
+    bool first = true;
+    foreach( QString str, details ) {
+      if( !first )
+        detailsHtml += ", ";
+      first = false;
+      detailsHtml += propertyHighlight(str);
+    }
+  }
+
+  QString kind = declarationKind(m_declaration);
+  if( !kind.isEmpty() ) {
+    if( !detailsHtml.isEmpty() )
+      m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + detailsHtml + " ";
+    else
+      m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
+  } else if( !detailsHtml.isEmpty() ) {
+    m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
+  }
+
+  m_currentText += "<br />";
+
+  if( !shorten && !m_declaration->comment().isEmpty() ) {
+    QString comment = m_declaration->comment();
+    comment.replace("<br />", "\n"); //do not escape html newlines within the comment
+    comment.replace("<br/>", "\n");
+    comment = Qt::escape(comment);
+    comment.replace("\n", "<br />"); //Replicate newlines in html
+    m_currentText += commentHighlight(comment);
+    m_currentText += "<br />";
+  }
+
+  if( !shorten ) {
+    if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
+      m_currentText += labelHighlight(i18n( "Def.: " ));
+    else
+      m_currentText += labelHighlight(i18n( "Decl.: " ));
+
+    makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
+    m_currentText += " ";
+    //m_currentText += "<br />";
+    if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
+      if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
+        m_currentText += labelHighlight(i18n( " Def.: " ));
+        makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
+      }
+    }
+
+    if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
+      if(definition->declaration()) {
+        m_currentText += labelHighlight(i18n( " Decl.: " ));
+        makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
+      }
+    }
+  }
+    //m_currentText += "<br />";
 
   addExternalHtml(m_suffix);
 
