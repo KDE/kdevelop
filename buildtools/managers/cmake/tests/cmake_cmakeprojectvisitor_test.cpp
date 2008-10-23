@@ -40,9 +40,11 @@ void CMakeProjectVisitorTest::testVariables_data()
     QTest::addColumn<QStringList>("result");
     
     QTest::newRow("A variable alone") << "${MY_VAR}" << true << QStringList("MY_VAR");
+    QTest::newRow("env var") << "$ENV{MY_VAR}" << true << QStringList("MY_VAR");
     QTest::newRow("Contains a variable") << "${MY_VAR}/lol" << true << QStringList("MY_VAR");
     QTest::newRow("Contains a variable") << "${yipiee}#include <${it}>\n" << true << (QStringList("yipiee") << "it");
     QTest::newRow("Contains a variable") << "${a}${b}\n" << true << (QStringList("a") << "b");
+    QTest::newRow("mess") << "{}{}{}}}}{{{{}${a}\n" << true << QStringList("a");
     QTest::newRow("Nothing") << "aaaa${aaaa" << false << QStringList();
 }
 
@@ -58,8 +60,11 @@ void CMakeProjectVisitorTest::testVariables()
     do
     {
         QString aName=CMakeProjectVisitor::variableName(input, type, start, end);
-        start=end;
-        if(type) name += aName;
+        start=end+1;
+        if(type)
+            name += aName;
+        QVERIFY(!type || (start>0 && end>0));
+//         QVERIFY(aName==input.mid(start, end-start));
     } while(type);
     
     qDebug() << "name" << name;
@@ -133,6 +138,22 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("${c}", "def");
     QTest::newRow("semicolons1") << "set(a abc;def)\n" 
                                "LIST(GET a 1 c)\nLIST(GET a 0 b)\n" << cacheValues << results;
+   
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("${a}", "potatoe");
+    results << StringPair("${b}", "def");
+    QTest::newRow("varinvar") << "set(a potatoe)\n"
+                                    "set(potatoe \"abc\")\n"
+                                    "set(abc \"def\")\n"
+                                    "set(b \"${${${a}}}\")\n)" << cacheValues << results;
+    
+    cacheValues.clear();
+    results.clear();
+    QTest::newRow("envCC") << "IF($ENV{CC} MATCHES \".+\")\n"
+                                 "  MESSAGE(STATUS \"we!\")\n"
+                                 "ENDIF($ENV{CC} MATCHES \".+\")\n" << cacheValues << results;
+                                    
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -167,10 +188,9 @@ void CMakeProjectVisitorTest::testRun()
     {
         CMakeFunctionArgument arg;
         arg.value=vp.first;
-        
-        QCOMPARE(v.resolveVariable(arg).first(), vp.second);
     }
-
+    
+    qDebug() << "lolololo" << vm;
 }
 
 void CMakeProjectVisitorTest::init()

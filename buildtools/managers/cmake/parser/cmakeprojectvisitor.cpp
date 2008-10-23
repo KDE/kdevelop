@@ -77,41 +77,40 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
 
 QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type, int &before, int &after)
 {
-    QString name;
     type=NoVar;
-    const int length=exp.length();
-    bool done=false;
-    int prev=-1;
-    
-    for(int i=before; i<length && !done; i++)
+    while(!type)
     {
-        const QChar& expi=exp[i];
-        if(expi=='{')
-            prev=i;
-        else if(i>0 && prev>0 && expi=='}')
-        {
-            done=true;
-            name = exp.mid(prev+1, i-prev-1);
-            after=i;
-            if(exp[prev-1]=='$')
+        int cl= exp.indexOf('}', before);
+        int op=-1;
+        if(cl>0)
+            op=exp.lastIndexOf('{', cl);
+        after=cl;
+        before=op;
+        if(op>=1 && cl>op) {
+            if(exp[op-1]=='$')
             {
-                before=prev-1;
+                before-=1;
                 type=CMake;
             }
-            else if(exp.mid(prev-4,4)=="$ENV")
+            else if(op>=4 && exp.mid(op-4, 4)=="$ENV")
             {
-                before=prev-4;
+                before-=4;
                 type=ENV;
             }
-        }
+            
+            if(type)
+                return exp.mid(op+1, cl-op-1);
+        } else if(cl<0)
+            break;
+        before=cl+1;
     }
-    return name;
+    return QString();
 }
 
 QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &exp)
 {
     VariableType type;
-    int before=0, after; //FIXME: Unused
+    int after, before=0; //FIXME: Unused
     QStringList ret;
     QString var = variableName(exp.value, type, before, after);
 
@@ -130,28 +129,26 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
             vars=envVarDirectories(var);
         }
         QString pre=exp.value.left(before), post=exp.value.right(exp.value.length()-after-1);
+        
         if(vars.isEmpty())
             vars += QString();
         
         vars.first().prepend(pre);
         vars.last().append(post);
         QStringList::iterator it=vars.begin(), itEnd=vars.end();
-
         for(; it!=itEnd; ++it)
         {
             ret += resolveVariable(*it);
         }
     }
-    else if(!type)
+    else
     {
         ret.append(exp.value);
     }
     
     if(exp.quoted)
     {
-        QString r=ret.join(";");
-        ret.clear();
-        ret+=r;
+        ret=QStringList(ret.join(QChar(';')));
     }
     return ret;
 }
@@ -1692,17 +1689,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
 
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
-        int bef=0, aft;
-        VariableType t;
-        variableName(arg.value, t, bef, aft);
-        if(t)
-        {
-            ret.addArguments(resolveVariable(arg));
-        }
-        else
-        {
-            ret.arguments << arg;
-        }
+        ret.addArguments(resolveVariable(arg));
     }
 
     return ret;
