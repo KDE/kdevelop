@@ -43,6 +43,13 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
     QString newValue;
     bool escape=false;
+
+    if (!value.contains('\\'))
+    {
+        newValue = value;
+        return newValue;
+    }
+
     for(int i=0; i<value.size(); i++)
     {
         if(!escape && value[i]=='\\') 
