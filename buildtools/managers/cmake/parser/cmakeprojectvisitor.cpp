@@ -80,29 +80,29 @@ QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type
     type=NoVar;
     while(!type)
     {
-        int cl= exp.indexOf('}', before);
-        int op=-1;
-        if(cl>0)
-            op=exp.lastIndexOf('{', cl);
-        after=cl;
-        before=op;
-        if(op>=1 && cl>op) {
-            if(exp[op-1]=='$')
+        int closeBracketPos = exp.indexOf('}', before);
+        int openBracketPos = -1;
+        if (closeBracketPos > 0)
+            openBracketPos=exp.lastIndexOf('{', closeBracketPos);
+        after = closeBracketPos;
+        before = openBracketPos;
+        if(openBracketPos>=1 && closeBracketPos>openBracketPos) {
+            if(exp[openBracketPos-1]=='$')
             {
                 before-=1;
                 type=CMake;
             }
-            else if(op>=4 && exp.mid(op-4, 4)=="$ENV")
+            else if(openBracketPos >= 4 && exp.mid(openBracketPos - 4, 4)=="$ENV")
             {
                 before-=4;
                 type=ENV;
             }
             
             if(type)
-                return exp.mid(op+1, cl-op-1);
-        } else if(cl<0)
+                return exp.mid(openBracketPos + 1, closeBracketPos - openBracketPos - 1);
+        } else if(closeBracketPos<0)
             break;
-        before=cl+1;
+        before=closeBracketPos + 1;
     }
     return QString();
 }
