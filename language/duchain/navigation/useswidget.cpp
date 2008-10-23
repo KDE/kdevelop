@@ -22,9 +22,12 @@
 #include <language/duchain/uses.h>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QCompleter>
+#include <KComboBox>
 #include <qpushbutton.h>
 #include <limits>
 #include <klocalizedstring.h>
+#include <qabstractitemview.h>
 
 using namespace KDevelop;
 
@@ -37,7 +40,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, Index
     setLayout(layout);
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declaration), m_showingUses(false) {
+UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declaration), m_showingUses(false), m_usingFiles(0) {
     DUChainReadLocker lock(DUChain::lock());
     if(Declaration* decl = declaration.data()) {
 
@@ -56,12 +59,23 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declarati
             kDebug() << "hiding";
         }else{
             QLayout* layout = new QHBoxLayout;
-            QLabel* label = new QLabel(i18n("Used in:"));
-            layout->addWidget(label);
+//             QLabel* label = new QLabel(i18n("Used in:"));
+//             layout->addWidget(label);
+
+//             m_usingFiles = new QComboBox(this);
+//             m_usingFiles->setFocusPolicy(Qt::NoFocus);
+//             m_usingFiles->view()->setFocusPolicy(Qt::NoFocus);
+//             layout->addWidget(m_usingFiles);
+            layout->setAlignment(Qt::AlignLeft);
+            
             layout->setMargin(0);
             
+            
+            
             foreach(QString file, files) {
-//                 if(file.isEmpty()) {
+//               KUrl u(file);
+//               m_usingFiles->addItem(u.fileName());
+/*//                 if(file.isEmpty()) {
 //                     kDebug() << "got empty file-name in list";
 //                     continue;
 //                 }
@@ -72,7 +86,7 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declarati
                 layout->addWidget(fileLabel);
                 layout->setAlignment(Qt::AlignLeft);
                 connect(fileLabel, SIGNAL(linkActivated(const QString&)),
-                        this, SLOT(showUsesForButton()));
+                        this, SLOT(showUsesForButton()));*/
             }
             setLayout(layout);
         }

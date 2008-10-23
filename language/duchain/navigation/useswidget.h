@@ -24,6 +24,8 @@
 #include <language/duchain/topducontext.h>
 #include "../../languageexport.h"
 
+class KComboBox;
+class QComboBox;
 
 namespace KDevelop {
     class IndexedDeclaration;
@@ -55,6 +57,7 @@ namespace KDevelop {
             QList<IndexedTopDUContext> allUsingContexts();
             IndexedDeclaration m_declaration;
             bool m_showingUses;
+            QComboBox* m_usingFiles;
     };
 }
 
