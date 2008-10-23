@@ -31,7 +31,8 @@ public:
   virtual QString name() const;
 
 private:
-  void addDeclarationsFromContext(KDevelop::DUContext* ctx, QString indent = "", bool first = true);
+  ///@param first must initially be true
+  void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent = "");
   IncludeItem m_item;
 };
 

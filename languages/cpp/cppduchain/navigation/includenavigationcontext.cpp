@@ -74,7 +74,8 @@ QString IncludeNavigationContext::html(bool shorten)
     m_currentText += "<br />";
     if(!shorten) {
       m_currentText += labelHighlight(i18n("Declarations:")) + "<br />";
-      addDeclarationsFromContext(duchain);
+      bool first = true;
+      addDeclarationsFromContext(duchain, first);
     }
   }else if(duchains.isEmpty()) {
     m_currentText += i18n("not parsed yet");
@@ -91,7 +92,7 @@ QString IncludeNavigationContext::name() const
   return m_item.name;
 }
 
-void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, QString indent, bool first)
+void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent)
 {
   //m_currentText += indent + ctx->localScopeIdentifier().toString() + "{<br />";
   QVector<DUContext*> children = ctx->childContexts();
@@ -127,9 +128,8 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
     } else {
       //Eventually Recurse into the context
       if((*childIterator)->type() == DUContext::Global || (*childIterator)->type() == DUContext::Namespace /*|| (*childIterator)->type() == DUContext::Class*/)
-        addDeclarationsFromContext(*childIterator, indent + " ", first);
+        addDeclarationsFromContext(*childIterator, first, indent + " ");
       ++childIterator;
-      first = false;
     }
   }
   //m_currentText += "}<br />";
