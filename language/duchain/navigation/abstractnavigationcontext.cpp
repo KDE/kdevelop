@@ -122,15 +122,20 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
       {
         KUrl doc = action.document;
         KTextEditor::Cursor cursor = action.cursor;
-        if(doc.isEmpty()) {
-          doc = KUrl(action.decl->url().str());
-/*          if(action.decl->internalContext())
-            cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
-          else*/
-            cursor = action.decl->range().textRange().start();
+        {
+          DUChainReadLocker lock(DUChain::lock());
+          if(action.decl) {
+            if(doc.isEmpty()) {
+              doc = KUrl(action.decl->url().str());
+    /*          if(action.decl->internalContext())
+                cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
+              else*/
+                cursor = action.decl->range().textRange().start();
+            }
+    
+            action.decl->activateSpecialization();
+          }
         }
-
-        action.decl->activateSpecialization();
 
         //This is used to execute the slot delayed in the event-loop, so crashes are avoided
         QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
