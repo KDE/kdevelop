@@ -36,6 +36,7 @@ public:
 SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate)
 {
+	setObjectName("SessionController");
 }
 
 SessionController::~SessionController()

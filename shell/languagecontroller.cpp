@@ -76,6 +76,7 @@ private:
 LanguageController::LanguageController(QObject *parent)
     : ILanguageController(parent)
 {
+	setObjectName("LanguageController");
     d = new LanguageControllerPrivate(this);
 }
 
