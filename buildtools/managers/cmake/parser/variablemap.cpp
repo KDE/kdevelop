@@ -24,7 +24,7 @@ QStringList VariableMap::value(const QString & varName) const
 {
     const QStringList & value=QHash<QString, QStringList>::value(varName);
     QStringList res;
-    foreach(QString v, value) {
+    foreach(const QString& v, value) {
         res << v.split(';');
     }
     return res;
