@@ -409,6 +409,8 @@ bool ProjectController::projectImportingFinished( IProject* project )
         {
             parseList.append( file->url() );
         }
+        //Add low-priority parse jobs, with only the minimum parsed information
+        Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::VisibleDeclarationsAndContexts, 10000 );
     } else
     {
         // Add all currently open files that belong to the project to the background-parser,
@@ -420,9 +422,8 @@ bool ProjectController::projectImportingFinished( IProject* project )
                 parseList.append(document->url());
             }
         }
+        Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::AllDeclarationsContextsAndUses, 10 );
     }
-    //Add low-priority parse jobs, with only the minimum parsed information
-    Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::VisibleDeclarationsAndContexts, 10000 );
 
     return true;
 }
