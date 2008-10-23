@@ -29,6 +29,7 @@ QTEST_MAIN(CMakeProjectVisitorTest)
 using namespace KDevelop;
 
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
+ : CMakeProjectVisitor( QString(), new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0)))
 {
     m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
 }

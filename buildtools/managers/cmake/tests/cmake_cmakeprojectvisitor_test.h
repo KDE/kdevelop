@@ -25,10 +25,10 @@
 #include <QString>
 #include <language/duchain/topducontext.h>
 #include "cmakelistsparser.h"
+#include "cmakeprojectvisitor.h"
 
-class CMakeProjectVisitor;
 
-class CMakeProjectVisitorTest : public QObject
+class CMakeProjectVisitorTest : public QObject, public CMakeProjectVisitor
 {
     Q_OBJECT
 public:

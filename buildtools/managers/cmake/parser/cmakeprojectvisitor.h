@@ -42,7 +42,6 @@ namespace KDevelop
 
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
-    friend class CMakeProjectVisitorTest;
     public:
         enum TargetType { Library, Executable };
         explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
