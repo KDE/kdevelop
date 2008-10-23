@@ -92,13 +92,13 @@ void CMakeProjectVisitorTest::testRun_data()
     cacheValues << StringPair("ggg", "cmd");
 
     QList<StringPair> results;
-    results << StringPair("${aaa}", "cmd");
-    results << StringPair("${bbb}", "cmd");
-    results << StringPair("${ccc}", "cmd");
-    results << StringPair("${ddd}", "script");
-    results << StringPair("${eee}", "cmd");
-    results << StringPair("${fff}", "cmd");
-    results << StringPair("${ggg}", "cmd");
+    results << StringPair("aaa", "cmd");
+    results << StringPair("bbb", "cmd");
+    results << StringPair("ccc", "cmd");
+    results << StringPair("ddd", "script");
+    results << StringPair("eee", "cmd");
+    results << StringPair("fff", "cmd");
+    results << StringPair("ggg", "cmd");
     QTest::newRow("cache") <<
             "project(simpletest)\n"
             "cmake_minimum_required(VERSION 2.6)\n"
@@ -114,17 +114,17 @@ void CMakeProjectVisitorTest::testRun_data()
     
     cacheValues.clear();
     results.clear();
-    results << StringPair("${kkk}", "abcdef");
+    results << StringPair("kkk", "abcdef");
     QTest::newRow("abc") << "set(a abc)\nset(b def)\nSET(kkk \"${a}${b}\")\n" << cacheValues << results;
     
     cacheValues.clear();
     results.clear();
-    results << StringPair("${kkk}", "abcdef");
+    results << StringPair("kkk", "abcdef");
     QTest::newRow("defabc") << "set(a abc)\nset(b def)\nSET(kkk \"${kkk}${a}\")\nSET(kkk \"${kkk}${b}\")\n" << cacheValues << results;
     
     cacheValues.clear();
     results.clear();
-    results << StringPair("${_INCLUDE_FILES}", "#include <a>\n"
+    results << StringPair("_INCLUDE_FILES", "#include <a>\n"
                                                "#include <b>\n"
                                                "#include <c>\n");
     QTest::newRow("foreach") <<
@@ -135,15 +135,15 @@ void CMakeProjectVisitorTest::testRun_data()
             
     cacheValues.clear();
     results.clear();
-    results << StringPair("${b}", "abc");
-    results << StringPair("${c}", "def");
+    results << StringPair("b", "abc");
+    results << StringPair("c", "def");
     QTest::newRow("semicolons1") << "set(a abc;def)\n" 
                                "LIST(GET a 1 c)\nLIST(GET a 0 b)\n" << cacheValues << results;
    
     cacheValues.clear();
     results.clear();
-    results << StringPair("${a}", "potatoe");
-    results << StringPair("${b}", "def");
+    results << StringPair("a", "potatoe");
+    results << StringPair("b", "def");
     QTest::newRow("varinvar") << "set(a potatoe)\n"
                                     "set(potatoe \"abc\")\n"
                                     "set(abc \"def\")\n"
@@ -151,9 +151,11 @@ void CMakeProjectVisitorTest::testRun_data()
     
     cacheValues.clear();
     results.clear();
-    QTest::newRow("envCC") << "IF($ENV{CC} MATCHES \".+\")\n"
-                                 "  MESSAGE(STATUS \"we!\")\n"
-                                 "ENDIF($ENV{CC} MATCHES \".+\")\n" << cacheValues << results;
+    results << StringPair("a", "potatoe\n");
+    QTest::newRow("envCC") <<   "set(a \"potatoe\\n\")"
+                                "IF($ENV{CC} MATCHES \".+\")\n"
+                                "  MESSAGE(STATUS \"we!\")\n"
+                                "ENDIF($ENV{CC} MATCHES \".+\")\n" << cacheValues << results;
                                     
 }
 
@@ -189,6 +191,9 @@ void CMakeProjectVisitorTest::testRun()
     {
         CMakeFunctionArgument arg;
         arg.value=vp.first;
+        
+        qDebug() << "lalala" << vm << vp;
+        QCOMPARE(vp.second, vm.value(vp.first).join(QString(";")));
     }
     
     qDebug() << "lolololo" << vm;
