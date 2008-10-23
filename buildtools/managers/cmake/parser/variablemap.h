@@ -29,9 +29,9 @@ class KDEVCMAKECOMMON_EXPORT VariableMap : public QHash<QString, QStringList>
 {
     public:
 //         bool contains(const QString& varName) const;
-//         iterator insert(const QString& varName, const QStringList& value);
-//         iterator insertMulti(const QString& varName, const QStringList& value);
-        QStringList value(const QString& varName) const;
+        iterator insert(const QString& varName, const QStringList& value);
+        iterator insertMulti(const QString& varName, const QStringList& value);
+//         QStringList value(const QString& varName) const;
 //         QStringList take(const QString& varName);
 //         int remove(const QString& varName);
 // 

@@ -20,6 +20,36 @@
 
 #include "variablemap.h"
 
+QHash<QString, QStringList>::iterator VariableMap::insert(const QString & varName, const QStringList & value)
+{
+    QStringList ret;
+    foreach(const QString& v, value)
+    {
+        if(v.contains(';'))
+            ret += v.split(';');
+        else
+            ret += v;
+    }
+    
+    return QHash<QString, QStringList>::insert(varName, ret);
+}
+
+QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & varName, const QStringList & value)
+{
+    QStringList ret;
+    foreach(const QString& v, value)
+    {
+        if(v.contains(';'))
+            ret += v.split(';');
+        else
+            ret += v;
+    }
+    
+    return QHash<QString, QStringList>::insertMulti(varName, ret);
+}
+
+#if 0
+//We had this one when we splitted when reading
 QStringList VariableMap::value(const QString & varName) const
 {
     const QStringList & value=QHash<QString, QStringList>::value(varName);
@@ -30,20 +60,10 @@ QStringList VariableMap::value(const QString & varName) const
     return res;
 }
 
-#if 0
+
 bool VariableMap::contains(const QString & varName) const
 {
     return QHash<QString, QStringList>::contains(varName.toLower());
-}
-
-QHash<QString, QStringList>::iterator VariableMap::insert(const QString & varName, const QStringList & value)
-{
-    return QHash<QString, QStringList>::insert(varName.toLower(), value);
-}
-
-QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & varName, const QStringList & value)
-{
-    return QHash<QString, QStringList>::insertMulti(varName.toLower(), value);
 }
 
 QStringList VariableMap::take(const QString & varName)
