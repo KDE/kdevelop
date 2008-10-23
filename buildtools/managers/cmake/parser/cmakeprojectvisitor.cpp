@@ -1393,27 +1393,20 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         {
             QStringList res;
             QRegExp rx(sast->regex());
+            QString totalInput = sast->input().join(QString());
             switch(sast->cmdType())
             {
                 case StringAst::MATCH:
-                    foreach(const QString& in, sast->input())
-                    {
-                        int match=rx.indexIn(in);
-                        if(match>=0) {
-                            res = QStringList(in.mid(match, rx.matchedLength()));
-                            break;
-                        }
+                {
+                    int match=rx.indexIn(totalInput);
+                    if(match>=0) {
+                        res = QStringList(totalInput.mid(match, rx.matchedLength()));
+                        break;
                     }
                     break;
+                }
                 case StringAst::MATCHALL:
-                    foreach(const QString& in, sast->input())
-                    {
-                        int match=rx.indexIn(in);
-                        if(match>0)
-                        {
-                            res += in.mid(match, rx.matchedLength());
-                        }
-                    }
+                    res = sast->input().filter(rx);
                     break;
                 case StringAst::REGEX_REPLACE:
                 {
