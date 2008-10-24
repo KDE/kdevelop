@@ -302,7 +302,6 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     else
         values = set->values();
     m_vars->insert(set->variableName(), values);
-    kDebug(9042) << "set:" << set->variableName() << "=" << m_vars->value(set->variableName()) << "..." << set->values();
     return 1;
 }
 
