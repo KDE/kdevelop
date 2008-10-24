@@ -482,6 +482,132 @@ void QTestOutputParserTest::qassertx()
     checkResult(m_command1Info);
 }
 
+// test command
+void QTestOutputParserTest::multipleResultsInSingleCommand()
+{
+    // More than one failure messages in a single test function.
+    // The parser should add these as individual sub-TestResults on 
+    // the QTestCommand's TestResult
+    // You can trigger this behaviour in QTestLib with QVERIFY/QCOMPARES in different methods.
+
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"command\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[failure message]]></Description>\n"
+            "</Incident>\n"
+            "<Incident type=\"fail\" file=\"/path/to/file2.cpp\" line=\"50\">\n"
+            "<Description><![CDATA[another failure message]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+
+    createTestCommand(m_command1Info, m_caze, "command");
+    TestResult* result1 = new TestResult();
+    result1->setMessage("failure message");
+    result1->setLine(100);
+    result1->setFile(KUrl("/path/to/file.cpp"));
+    result1->setState(Veritas::RunError);
+
+    TestResult* result2 = new TestResult();
+    result2->setMessage("another failure message");
+    result2->setLine(50);
+    result2->setFile(KUrl("/path/to/file2.cpp"));
+    result2->setState(Veritas::RunError);
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    KOMPARE(Veritas::RunError, m_command1Info.test->state()); // overal test state should be RunError
+    assertNrofSubResultsEquals(2, m_command1Info.test);
+    assertSubResultEquals(0, m_command1Info.test, result1);
+    assertSubResultEquals(1, m_command1Info.test, result2);
+}
+
+// test command
+void QTestOutputParserTest::failureAndAssertInSingleCommand()
+{
+    // More than one failure messages in a single test function.
+    // The parser should add these as individual sub-TestResults on 
+    // the QTestCommand's TestResult
+    // You can trigger this behaviour in QTestLib with QVERIFY/QCOMPARES in different methods.
+
+    QByteArray input =
+        QTEST_HEADER_XML
+        QTEST_INITTESTCASE_XML
+        "<TestFunction name=\"command\">\n"
+            "<Incident type=\"fail\" file=\"/path/to/file.cpp\" line=\"100\">\n"
+            "<Description><![CDATA[failure message]]></Description>\n"
+            "</Incident>\n"
+            "<Incident type=\"fail\" file=\"/path/to/file2.cpp\" line=\"50\">\n"
+            "<Description><![CDATA[another failure message]]></Description>\n"
+            "</Incident>\n"
+            "<Message type=\"qfatal\" file=\"\" line=\"0\">\n"
+            "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
+            "</Message>\n"
+            "<Incident type=\"fail\" file=\"Unknown file\" line=\"0\">\n"
+            "<Description><![CDATA[Received a fatal error.]]></Description>\n"
+            "</Incident>\n"
+        "</TestFunction>\n"
+        QTEST_CLEANUPTESTCASE_XML
+        QTEST_FOOTER_XML;
+    initParser(input, m_caze);
+
+    createTestCommand(m_command1Info, m_caze, "command");
+    TestResult* result1 = new TestResult();
+    result1->setMessage("failure message");
+    result1->setLine(100);
+    result1->setFile(KUrl("/path/to/file.cpp"));
+    result1->setState(Veritas::RunError);
+
+    TestResult* result2 = new TestResult();
+    result2->setMessage("another failure message");
+    result2->setLine(50);
+    result2->setFile(KUrl("/path/to/file2.cpp"));
+    result2->setState(Veritas::RunError);
+
+    TestResult* result3 = new TestResult;
+    result3->setMessage("ASSERT: \"condition\"");
+    result3->setState(Veritas::RunFatal);
+    result3->setFile(KUrl("/path/to/file.cpp"));
+    result3->setLine(66);
+
+    m_parser->go();
+
+    assertParsed(m_command1Info);
+    KOMPARE(Veritas::RunError, m_command1Info.test->state()); // overal test state should be RunError
+    assertNrofSubResultsEquals(3, m_command1Info.test);
+    assertSubResultEquals(0, m_command1Info.test, result1);
+    assertSubResultEquals(1, m_command1Info.test, result2);
+    assertSubResultEquals(2, m_command1Info.test, result3);
+}
+
+
+void QTestOutputParserTest::assertNrofSubResultsEquals(int expected, Veritas::Test* t)
+{
+    KVERIFY(t->result());
+    KOMPARE(expected, t->result()->childCount());
+    for (int i=0; i<expected; i++) {
+        KVERIFY(t->result()->child(i));
+    }
+}
+
+void QTestOutputParserTest::assertSubResultEquals(int nrof, Veritas::Test* test, TestResult* expected)
+{
+    KVERIFY(test);
+    KVERIFY(test->result());
+    KVERIFY(test->result()->childCount() > nrof);
+    TestResult* actual = test->result()->child(nrof);
+    KVERIFY(actual);
+    KOMPARE(expected->message(), actual->message());
+    KOMPARE(expected->line(), actual->line());
+    KOMPARE(expected->state(), actual->state());
+    KOMPARE(expected->file(), actual->file());
+}
+
 /////////////// RANDOM TEST ///////////////////////////////////////////////////
 
 #include <stdlib.h>
@@ -800,8 +926,8 @@ void QTestOutputParserTest::assertResult(const TestResult& expected, const TestR
     KOMPARE_MSG(expected.state(), actual.state(),
                 "Expected " + QString::number(expected.state()) +
                 " got " + QString::number(actual.state()));
-    KOMPARE(expected.file(), actual.file());
     KOMPARE(expected.line(), actual.line());
+    KOMPARE(expected.file(), actual.file());
     KOMPARE_MSG(expected.message(), actual.message(),
                 "Expected " + expected.message() + " got " + actual.message());
 }

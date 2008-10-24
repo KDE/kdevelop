@@ -30,6 +30,7 @@ using QTest::QTestCase;
 using QTest::QTestOutputParser;
 using Veritas::Test;
 using Veritas::TestResult;
+using Veritas::TestState;
 
 /*example xml:
      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
@@ -103,8 +104,28 @@ void QTestOutputParser::newResult()
 void QTestOutputParser::setResult(Test* test)
 {
     Q_ASSERT(m_result);
-    test->setResult(m_result);
+    if (m_subResults.isEmpty()) {
+        test->setResult(m_result);
+    } else {
+        TestResult* result = new TestResult;
+        test->setResult(result);
+        TestState state = m_result->state();
+        foreach(TestResult* sub, m_subResults) {
+            if (sub->state() == Veritas::RunError) {
+                state = Veritas::RunError;
+            } else if (sub->state() == Veritas::RunFatal) {
+                state = Veritas::RunFatal;
+                break;
+            }
+        }
+        result->setState(state);
+        foreach(TestResult* sub, m_subResults) {
+            result->appendChild(sub);
+        }
+        result->appendChild(m_result);
+    }
     m_result = 0;
+    m_subResults.clear();
     g_result_assigned++;
 }
 
@@ -220,6 +241,7 @@ void QTestOutputParser::iterateTestFunctions()
     while (!atEnd()) {                 // main loop
         readNext();
         if (isStartElement_(c_testfunction)) {
+            if (m_result) m_result->setState(Veritas::NoResult);
             m_cmdName = attributes().value("name").toString();
             kDebug() << m_cmdName;
             m_cmd = m_case->childNamed(m_cmdName);
@@ -283,12 +305,14 @@ void QTestOutputParser::processMessage()
 {
     QString type = attributes().value(c_type).toString();
     if (type == c_skip) {
+        clearResult();
         m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());
         m_result->setState(Veritas::RunInfo);
         m_state = QSkip;
         processQSkip();
     } else if (type == c_qfatal) {
+        clearResult();
         m_result->setState(Veritas::RunFatal);
         m_state = QAssert;
         processQAssert();
@@ -321,6 +345,14 @@ void QTestOutputParser::processTestFunction()
     }
 }
 
+void QTestOutputParser::clearResult()
+{
+    if (m_result->state() != Veritas::NoResult) { // parsed a previous result
+        m_subResults << m_result;
+        m_result = new TestResult;
+    }
+}
+
 void QTestOutputParser::fillResult()
 {
     QString type = attributes().value(c_type).toString();
@@ -328,6 +360,7 @@ void QTestOutputParser::fillResult()
         setSuccess();
     } else if (type == c_fail) {
         if (m_result->state() == Veritas::RunFatal) return;
+        clearResult();
         m_result->setState(Veritas::RunError);
         m_result->setFile(KUrl(attributes().value(c_file).toString()));
         m_result->setLine(attributes().value(c_line).toString().toInt());

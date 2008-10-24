@@ -1,5 +1,7 @@
 #include <QtTest/QTest>
 
+bool predicate() { return false; }
+
 class MultipleFailuresCase : public QObject
 {
 Q_OBJECT
@@ -10,10 +12,10 @@ private slots:
     }
 private:
     void fail1() {
-        QVERIFY2(0, "fail1");
+        QVERIFY2(predicate(), "fail1");
     }
     void fail2() {
-        QVERIFY2(0, "fail2");
+        QVERIFY2(predicate(), "fail2");
     }
 };
 

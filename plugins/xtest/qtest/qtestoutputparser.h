@@ -94,7 +94,8 @@ private:
     void deleteResult();
     void newResult();
     void setResult(Veritas::Test*);
-
+    void clearResult();
+    
 private:
     // remember state to continue parsing
     enum State { Main = 0, TestFunction = 1, Failure = 2, Message = 3, QSkip = 4, QAssert = 5 };
@@ -105,6 +106,7 @@ private:
     Veritas::Test* m_cmd;
     QString m_cmdName;
     bool m_block;
+    QList<Veritas::TestResult*> m_subResults;
 
 private:    // some xml constants
     static const QString c_testfunction;

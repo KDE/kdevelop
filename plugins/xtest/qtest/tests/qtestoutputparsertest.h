@@ -65,6 +65,8 @@ private slots:
     void skipAll();
     void qassert();
     void qassertx();
+    void multipleResultsInSingleCommand();
+    void failureAndAssertInSingleCommand();
 
 private:
     struct TestInfo;
@@ -79,6 +81,8 @@ private:
     void assertResult(const Veritas::TestResult& expected, const Veritas::TestResult& actual);
     void assertResult(Veritas::TestResult* expected, Veritas::TestResult* actual, const QString&);
     void checkResult(TestInfo& testInfo);
+    void assertNrofSubResultsEquals(int expected, Veritas::Test* t);
+    void assertSubResultEquals(int nrof, Veritas::Test* test, Veritas::TestResult* expected);
 
     // creation methods
     QTestCase* createTestCase(TestInfo&);

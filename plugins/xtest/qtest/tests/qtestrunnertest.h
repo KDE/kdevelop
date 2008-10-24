@@ -42,7 +42,7 @@ private slots:
     void nonexistantTestExe();
     void nonexistantTestCommand();
     void segFault();
-    void tdd_multipleFailuresSingleCommand();
+    void multipleFailuresSingleCommand();
     void tdd_expectedFailure();
     void skip();
 

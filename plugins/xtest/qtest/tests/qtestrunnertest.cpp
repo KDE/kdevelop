@@ -306,8 +306,10 @@ QByteArray multipleFailuresSingleCommandXML()
 QList<QStringList> multipleFailuresSingleCommandResults()
 {
     QStringList result1, result2;
-    result1 << "command" << "fail1" << "multipleFailuresSingleCommand.cpp" << "13";
-    result2 << "command" << "fail2" << "multipleFailuresSingleCommand.cpp" << "16";
+    KUrl dir(__FILE__);
+    dir = dir.upUrl();
+    result1 << "command" << "'predicate()' returned FALSE. (fail1)" << dir.pathOrUrl() + "suite1/multipleFailuresSingleCommand.cpp" << "15";
+    result2 << "command" << "'predicate()' returned FALSE. (fail2)" << dir.pathOrUrl() + "suite1/multipleFailuresSingleCommand.cpp" << "18";
     return QList<QStringList>() << result1 << result2;
 }
 
@@ -319,10 +321,8 @@ QMap<QString, Veritas::TestState> multipleFailuresSingleCommandTestStates()
 }
 
 // command
-void QTestRunnerTest::tdd_multipleFailuresSingleCommand()
+void QTestRunnerTest::multipleFailuresSingleCommand()
 {
-    TDD_TODO;
-
     QByteArray regXML = multipleFailuresSingleCommandXML();
     Veritas::Test* root = fetchRoot(regXML);
     m_runner->setRoot(root);
