@@ -7,7 +7,6 @@ include_directories(
 
 macro(kdev_add_test test_EXEC)
     set(test_SRCS ${ARGN})
-    qt4_automoc( ${test_SRCS} )
     kde4_add_unit_test(qtest-${test_EXEC} ${test_SRCS})
     target_link_libraries(qtest-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
