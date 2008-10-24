@@ -391,11 +391,12 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, Index
   return ret;
 }
 
-void TopContextUsesWidget::labelClicked() {
-  kDebug() << "expanding";
-  if(hasItems()) {
+void TopContextUsesWidget::setExpanded(bool expanded) {
+  if(!expanded) {
     deleteItems();
   }else{
+    if(hasItems())
+      return;
     DUChainReadLocker lock(DUChain::lock());
     TopDUContext* topContext = m_topContext.data();
     
@@ -412,6 +413,13 @@ void TopContextUsesWidget::labelClicked() {
   }
 }
 
+void TopContextUsesWidget::labelClicked() {
+  if(hasItems())
+    setExpanded(false);
+  else
+    setExpanded(true);
+}
+
 UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(true), m_declaration(declaration) {
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
@@ -426,9 +434,38 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(t
         
         QList<IndexedTopDUContext> contexts = allUsingContexts();
         
-        FOREACH_ARRAY(IndexedTopDUContext context, contexts)
-            if(ICore::self()->projectController()->projects().isEmpty() || isInLoadedProject(context.url()))
-              addItem(new TopContextUsesWidget(declaration, context));
+        QList<IndexedTopDUContext> withOpenDocument;
+        QList<IndexedTopDUContext> withoutOpenDocument;
+        IndexedTopDUContext currentContext;
+        
+        foreach(IndexedTopDUContext ctx, contexts) {
+          if(IDocument* doc = ICore::self()->documentController()->documentForUrl(ctx.url().toUrl())) {
+            if(doc->isActive()) {
+              currentContext = ctx;
+              withOpenDocument.push_front(ctx);
+            }else{
+              withOpenDocument << ctx;
+            }
+          }else{
+            withoutOpenDocument << ctx;
+          }
+        }
+        
+
+        contexts.clear();
+        
+        contexts += withOpenDocument;
+        contexts += withoutOpenDocument;
+
+        
+        FOREACH_ARRAY(IndexedTopDUContext context, contexts) {
+            if(ICore::self()->projectController()->projects().isEmpty() || isInLoadedProject(context.url())) {
+              TopContextUsesWidget* widget = new TopContextUsesWidget(declaration, context);
+              if(context == currentContext)
+                widget->setExpanded(true);
+              addItem(widget);
+            }
+        }
     }
     
     setUpdatesEnabled(true);

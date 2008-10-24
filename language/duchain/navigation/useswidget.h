@@ -96,6 +96,7 @@ namespace KDevelop {
         Q_OBJECT
         public:
             TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext);
+            void setExpanded(bool);
         private slots:
             void labelClicked();
         private:
