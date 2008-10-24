@@ -19,7 +19,6 @@
 */
 
 #include "kdevregister.h"
-#include "documentaccess.h"
 #include "suitebuilder.h"
 #include <veritas/test.h>
 #include "qtestsettings.h"
@@ -37,7 +36,6 @@
 #include <KLocale>
 
 using QTest::KDevRegister;
-using QTest::DocumentAccess;
 using QTest::SuiteBuilder;
 using QTest::Settings;
 using Veritas::Test;

@@ -14,7 +14,6 @@ set(kdevqtest_SRCS
     qtestoutputmorpher.cpp
     kdevregister.cpp
     suitebuilder.cpp
-    documentaccess.cpp
     executable.cpp
     casebuilder.cpp
     qtestsettings.cpp

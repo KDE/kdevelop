@@ -26,7 +26,6 @@
 #include "../qtestsuite.h"
 #include "../qtestcase.h"
 #include "../qtestcommand.h"
-#include "documentaccessstub.h"
 #include <project/projectmodel.h>
 #include <veritas/test.h>
 
