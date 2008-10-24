@@ -27,6 +27,7 @@ kde4_add_library(kdevcppunit SHARED ${kdevcppunit_SRCS})
 target_link_libraries(kdevcppunit
     ${KDevPlatform_VERITAS_LIBRARY}
     ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_PROJECT_LIBRARY}
     ${CPPUNIT_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY})
@@ -41,6 +42,7 @@ target_link_libraries(kdevcppunitview
     kdevcppunit
     ${KDevPlatform_VERITAS_LIBRARY}
     ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_PROJECT_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY})
 install(TARGETS kdevcppunitview DESTINATION ${PLUGIN_INSTALL_DIR})
