@@ -106,7 +106,7 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
   uint leftCutRoom = range.start.column;
   uint rightCutRoom = line.length() - range.end.column;
   
-  if(cutOff > leftCutRoom + rightCutRoom)
+  if(range.start.column < 0 || range.end.column > line.length() || cutOff > leftCutRoom + rightCutRoom)
     return QString(); //Not enough room for cutting off on sides
   
   uint leftCut = 0;
