@@ -73,6 +73,7 @@ class ContextBrowserView : public QWidget {
         QVBoxLayout* m_layout;
         QToolButton* m_lockButton;
         QWidget* m_navigationWidget;
+        KDevelop::DeclarationId m_navigationWidgetDeclaration;
         bool m_allowLockedUpdate;
 };
 

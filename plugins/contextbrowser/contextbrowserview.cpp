@@ -46,6 +46,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/specializationstore.h>
 #include "browsemanager.h"
+#include <language/duchain/navigation/abstractnavigationwidget.h>
 
 const int maxHistoryLength = 30;
 
@@ -447,16 +448,23 @@ void ContextBrowserView::updateHistory(KDevelop::DUContext* context, const KDeve
 void ContextBrowserView::updateMainWidget(QWidget* widget)
 {
     if (widget) {
+        setUpdatesEnabled(false);
         kDebug() << "";
         resetWidget();
         m_navigationWidget = widget;
         m_layout->insertWidget(1, widget, 1);
         m_allowLockedUpdate = false;
+        setUpdatesEnabled(true);
     }
 }
 
 void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext) {
     if (!isLocked() && isVisible()) {  // NO-OP if toolview is hidden, for performance reasons
+        
+        if(m_navigationWidgetDeclaration == decl->id())
+            return;
+        m_navigationWidgetDeclaration = decl->id();
+        
         QWidget* w = m_declarationCtrl->createWidget(decl, topContext);
         updateMainWidget(w);
     }
@@ -475,6 +483,15 @@ void ContextBrowserView::allowLockedUpdate() {
 
 void ContextBrowserView::setContext(KDevelop::DUContext* context) {
     if (!isLocked() && isVisible()) { // NO-OP if toolview is hidden, for performance reasons
+        
+        if(context->owner()) {
+            if(context->owner()->id() == m_navigationWidgetDeclaration)
+                return;
+            m_navigationWidgetDeclaration = context->owner()->id();
+        }else{
+            m_navigationWidgetDeclaration = DeclarationId();
+        }
+        
         QWidget* w = m_contextCtrl->createWidget(context);
         updateMainWidget(w);
     }
