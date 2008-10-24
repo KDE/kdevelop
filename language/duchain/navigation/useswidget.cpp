@@ -30,7 +30,7 @@
 #include <qabstractitemview.h>
 #include <ktexteditor/smartrange.h>
 #include <QToolButton>
-#include <kdevplatform/language/duchain/use.h>
+#include <language/duchain/use.h>
 #include <kicon.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
