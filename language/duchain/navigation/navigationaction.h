@@ -32,6 +32,7 @@ struct NavigationAction {
   enum Type {
     None,
     NavigateDeclaration,
+    NavigateUses,
     JumpToSource //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
   };
 

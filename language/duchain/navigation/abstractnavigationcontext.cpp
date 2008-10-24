@@ -22,6 +22,7 @@
 #include <klocale.h>
 
 #include "abstractdeclarationnavigationcontext.h"
+#include "usesnavigationcontext.h"
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
 #include "../functiondeclaration.h"
@@ -118,6 +119,8 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
         return NavigationContextPointer( m_previousContext );
       return registerChild(action.decl);
     } break;
+    case NavigationAction::NavigateUses:
+      return registerChild(new UsesNavigationContext(action.decl.data(), this));
   case NavigationAction::JumpToSource:
       {
         KUrl doc = action.document;
@@ -126,7 +129,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
           DUChainReadLocker lock(DUChain::lock());
           if(action.decl) {
             if(doc.isEmpty()) {
-              doc = KUrl(action.decl->url().str());
+              doc = action.decl->url().toUrl();
     /*          if(action.decl->internalContext())
                 cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
               else*/
@@ -235,6 +238,14 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
     kind = i18n("Forward Declaration");
 
   return kind;
+}
+
+QString AbstractNavigationContext::html(bool /*shorten*/) {
+  return QString();
+}
+
+QWidget* AbstractNavigationContext::widget() const {
+  return 0;
 }
 
 const Colorizer AbstractNavigationContext::errorHighlight("990000");

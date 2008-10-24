@@ -461,6 +461,8 @@ void BackgroundParser::updateProgressBar()
         for(QMap<KDevelop::ParseJob*, float>::const_iterator it = d->m_jobProgress.begin(); it != d->m_jobProgress.end(); ++it)
             additionalProgress += *it;
         
+        kDebug() << "progress:" << (additionalProgress + d->m_doneParseJobs)*1000 << "of" << d->m_maxParseJobs*1000;
+        
         emit showProgress(0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
     }
 }

@@ -72,7 +72,7 @@ namespace KDevelop {
       TopDUContextPointer m_topContext;
 
       QPointer<QTextBrowser> m_browser;
-      UsesWidget* m_usesWidget;
+      QWidget* m_currentWidget;
 
   };
 }

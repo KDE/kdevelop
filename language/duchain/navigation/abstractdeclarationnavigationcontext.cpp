@@ -202,6 +202,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
       }
     }
+    
+    m_currentText += " ";
+    makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
     //m_currentText += "<br />";
 

@@ -72,6 +72,7 @@ set(kdevplatformlanguage_LIB_SRCS
 
     duchain/navigation/abstractnavigationwidget.cpp
     duchain/navigation/abstractnavigationcontext.cpp
+    duchain/navigation/usesnavigationcontext.cpp
     duchain/navigation/abstractdeclarationnavigationcontext.cpp
     duchain/navigation/useswidget.cpp
 
@@ -243,6 +244,7 @@ install(FILES
 )
 
 install(FILES
+    duchain/navigation/usesnavigationcontext.h
     duchain/navigation/abstractnavigationcontext.h
     duchain/navigation/abstractdeclarationnavigationcontext.h
     duchain/navigation/abstractnavigationwidget.h

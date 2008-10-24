@@ -74,7 +74,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     NavigationAction currentAction() const;
 
     virtual QString name() const = 0;
-    virtual QString html(bool shorten = false) = 0;
+    ///Here the context can return html to be displayed.
+    virtual QString html(bool shorten = false);
+    ///Here the context can return a widget to be displayed.
+    ///The widget stays owned by this navigation-context.
+    virtual QWidget* widget() const;
 
   protected:
 

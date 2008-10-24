@@ -28,69 +28,339 @@
 #include <limits>
 #include <klocalizedstring.h>
 #include <qabstractitemview.h>
+#include <ktexteditor/smartrange.h>
+#include <QToolButton>
+#include <kdevplatform/language/duchain/use.h>
+#include <kicon.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <ktexteditor/document.h>
+#include <QFile>
+#include <interfaces/iprojectcontroller.h>
+#include <qtextdocument.h>
 
 using namespace KDevelop;
 
-TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext) : m_topContext(topContext), m_declaration(declaration) {
-    DUChainReadLocker lock(DUChain::lock());
-    QLabel* label = new QLabel;
-    QHBoxLayout* layout = new QHBoxLayout;
-    label->setText(KUrl(topContext.url().str()).fileName());
-    layout->addWidget(label);
-    setLayout(layout);
+const int tooltipContextSize = 3; //How many lines around the use are shown in the tooltip
+const bool showUsesHeader = false;
+
+class CodeRepresentation {
+  public:
+    virtual ~CodeRepresentation() {
+    }
+    virtual QString line(int line) const = 0;
+};
+
+class EditorCodeRepresentation : public CodeRepresentation {
+  public:
+  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
+  }
+  QString line(int line) const {
+    if(line < 0 || line >= m_document->lines())
+      return QString();
+    return m_document->line(line);
+  }
+  private:
+    KTextEditor::Document* m_document;
+};
+
+class FileCodeRepresentation : public CodeRepresentation {
+  public:
+    FileCodeRepresentation(IndexedString document) {
+    QString localFile(document.toUrl().toLocalFile());
+  
+        QFile file( localFile );
+        if ( file.open(QIODevice::ReadOnly) )
+          lines = file.readAll().split('\n');
+    }
+    
+    QString line(int line) const {
+    if(line < 0 || line >= lines.size())
+      return QString();
+      
+      return QString::fromLocal8Bit(lines[line]);
+    }
+  private:
+    //We use QByteArray, because the column-numbers are measured in utf-8
+    QList<QByteArray> lines;
+};
+
+bool isInLoadedProject(IndexedString document) {
+  return (bool)ICore::self()->projectController()->findProjectForUrl(document.toUrl());
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration) : m_declaration(declaration), m_showingUses(false), m_usingFiles(0) {
+CodeRepresentation* createCodeRepresentation(IndexedString url) {
+  IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
+  if(document && document->textDocument())
+    return new EditorCodeRepresentation(document->textDocument());
+  else
+    return new FileCodeRepresentation(url);
+}
+
+OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code, KTextEditor::SmartRange* smartRange) : m_range(range), m_document(document), m_smartRange(smartRange), m_declaration(declaration) {
+  m_sourceLine = code.line(m_range.start.line);
+  if(m_smartRange)
+    m_smartRange->addWatcher(this);
+  
+  connect(this, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
+  
+  DUChainReadLocker lock(DUChain::lock());
+  QString text = i18n("<a href='open'>Line <b>%1</b></a>", range.start.line);
+  if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range.end.column) {
+    QString line = m_sourceLine;
+    m_sourceLine = Qt::escape(line.left(m_range.start.column)) + "<span style=\"background-color:yellow\">" + Qt::escape(line.mid(m_range.start.column, m_range.end.column - m_range.start.column)) + "</span>" + Qt::escape(line.mid(m_range.end.column, line.length() - m_range.end.column)) ;
+    
+    text += " " + m_sourceLine;
+    
+    //Useful tooltip:
+    int start = m_range.start.line - tooltipContextSize;
+    int end = m_range.end.line + tooltipContextSize + 1;
+    
+    QString toolTipText;
+    for(int a = start; a < end; ++a) {
+      QString lineText = code.line(a);
+      if(!lineText.isEmpty())
+        toolTipText += lineText + "\n";
+    }
+    setToolTip(toolTipText);
+  }
+  setText(text);
+}
+
+void OneUseWidget::jumpTo() {
+  if(m_smartRange)
+    m_range = *m_smartRange; ///@todo smart-locking
+        //This is used to execute the slot delayed in the event-loop, so crashes are avoided
+  ICore::self()->documentController()->openDocument(m_document.toUrl(), m_range.start.textCursor());
+}
+
+OneUseWidget::~OneUseWidget() {
+  if(m_smartRange)
+    m_smartRange->removeWatcher(this);
+}
+
+void OneUseWidget::rangeDeleted(KTextEditor::SmartRange* smartRange) {
+  Q_ASSERT(smartRange == m_smartRange);
+  m_smartRange = 0;
+}
+
+void NavigatableWidgetList::setShowHeader(bool show) {
+  if(show && !m_headerLayout->parent())
+    m_layout->insertLayout(0, m_headerLayout);
+  else
+    m_headerLayout->setParent(0);
+}
+
+NavigatableWidgetList::~NavigatableWidgetList() {
+  delete m_headerLayout;
+}
+
+NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight, bool vertical) : m_maxHeight(maxHeight), m_allowScrolling(allowScrolling) {
+  m_layout = new QVBoxLayout;
+  m_layout->setMargin(0);
+  m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+  m_layout->setSpacing(0);
+  
+  if(vertical)
+    m_itemLayout = new QVBoxLayout;
+  else
+    m_itemLayout = new QHBoxLayout;
+  
+  m_itemLayout->setMargin(0);
+  m_itemLayout->setSpacing(0);
+//   m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+//   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
+  setWidgetResizable(true);
+  
+  m_headerLayout = new QHBoxLayout;
+  m_headerLayout->setMargin(0);
+  m_headerLayout->setSpacing(0);
+  
+  
+  m_previousButton = new QToolButton();
+  m_previousButton->setIcon(KIcon("go-previous"));
+  
+  m_nextButton = new QToolButton();
+  m_nextButton->setIcon(KIcon("go-next"));
+  
+  m_headerLayout->addWidget(m_previousButton);
+  m_headerLayout->addWidget(m_nextButton);
+  
+  m_layout->addLayout(m_headerLayout);
+  m_layout->addLayout(m_itemLayout);
+
+  if(maxHeight)
+    setMaximumHeight(maxHeight);
+  
+  if(m_allowScrolling) {
+    QWidget* contentsWidget = new QWidget;
+    contentsWidget->setLayout(m_layout);
+    setWidget(contentsWidget);
+  }else{
+    setLayout(m_layout);
+  }
+}
+
+void NavigatableWidgetList::deleteItems() {
+  foreach(QWidget* item, items())
+    delete item;
+}
+
+void NavigatableWidgetList::addItem(QWidget* widget) {
+  m_itemLayout->addWidget(widget);
+}
+
+QList<QWidget*> NavigatableWidgetList::items() const {
+  QList<QWidget*> ret;
+  for(int a = 0; a < m_itemLayout->count(); ++a) {
+    QWidgetItem* widgetItem = dynamic_cast<QWidgetItem*>(m_itemLayout->itemAt(a));
+    if(widgetItem) {
+      ret << widgetItem->widget();
+    }
+  }
+  return ret;
+}
+
+bool NavigatableWidgetList::hasItems() const {
+  return (bool)m_itemLayout->count();
+}
+
+void NavigatableWidgetList::addHeaderItem(QWidget* widget) {
+  Q_ASSERT(m_headerLayout->count() >= 2); //At least the 2 back/next buttons
+  m_headerLayout->insertWidget(m_headerLayout->count()-1, widget);
+}
+
+///Returns whether the uses in the child should be a new uses-group
+bool isNewGroup(DUContext* parent, DUContext* child) {
+  if(parent->type() == DUContext::Other && child->type() == DUContext::Other)
+    return false;
+  else
+    return true;
+}
+
+uint countUses(int usedDeclarationIndex, DUContext* context) {
+  uint ret = 0;
+  
+  for(int useIndex = 0; useIndex < context->usesCount(); ++useIndex)
+    if(context->uses()[useIndex].m_declarationIndex == usedDeclarationIndex)
+      ++ret;
+    
+  foreach(DUContext* child, context->childContexts())
+    if(!isNewGroup(context, child))
+      ret += countUses(usedDeclarationIndex, child);
+  return ret;
+}
+
+QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDeclarationIndex, IndexedDeclaration decl, DUContext* context) {
+  QList<OneUseWidget*> ret;
+  for(int useIndex = 0; useIndex < context->usesCount(); ++useIndex)
+    if(context->uses()[useIndex].m_declarationIndex == usedDeclarationIndex)
+      ret << new OneUseWidget(decl, context->url(), context->uses()[useIndex].m_range, code, context->useSmartRange(useIndex));
+    
+  foreach(DUContext* child, context->childContexts())
+    if(!isNewGroup(context, child))
+      ret += createUseWidgets(code, usedDeclarationIndex, decl, child);
+  
+  return ret;
+}
+
+ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDeclaration usedDeclaration, IndexedDUContext context) : m_usedDeclaration(usedDeclaration), m_context(context) {
+
+  DUChainReadLocker lock(DUChain::lock());
+    QString headerText = i18n("Unknown context");
+    uint usesCount = 0;
+    
+    if(context.data() && m_usedDeclaration.data()) {
+      DUContext* ctx = context.data();
+      
+      if(ctx->scopeIdentifier(true).isEmpty())
+        headerText = i18n("Unnamed scope");
+      else {
+        headerText = ctx->scopeIdentifier(true).toString();
+        if(ctx->type() == DUContext::Function || (ctx->owner() && ctx->owner()->isFunctionDeclaration()))
+          headerText += "(..)";
+      }
+      
+      int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
+      if(usedDeclarationIndex != std::numeric_limits<int>::max()) {
+        foreach(OneUseWidget* widget, createUseWidgets(code, usedDeclarationIndex, m_usedDeclaration, ctx))
+          addItem(widget);
+        
+        usesCount = countUses(usedDeclarationIndex, ctx);
+      }
+    }
+    
+    addHeaderItem(new QLabel("<a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>"));
+    if(usesCount)
+      addHeaderItem(new QLabel(" " + i18n("Count: %1", usesCount)));
+}
+
+TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext) : m_topContext(topContext), m_declaration(declaration) {
     DUChainReadLocker lock(DUChain::lock());
+    QPushButton* label = new QPushButton;
+    label->setText(KUrl(topContext.url().str()).fileName());
+    connect(label, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
+    addHeaderItem(label);
+}
+
+QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, IndexedDeclaration declaration, DUContext* context) {
+  QList<ContextUsesWidget*> ret;
+  
+  if(!context->parentContext() || isNewGroup(context->parentContext(), context)) {
+    ContextUsesWidget* created = new ContextUsesWidget(code, declaration, context);
+    if(created->hasItems())
+      ret << created;
+    else
+        delete created;
+  }
+  
+  foreach(DUContext* child, context->childContexts())
+    ret += buildContextUses(code, declaration, child);
+  
+  return ret;
+}
+
+void TopContextUsesWidget::labelClicked() {
+  kDebug() << "expanding";
+  if(hasItems()) {
+    deleteItems();
+  }else{
+    DUChainReadLocker lock(DUChain::lock());
+    TopDUContext* topContext = m_topContext.data();
+    
+    if(topContext && m_declaration.data()) {
+      
+      CodeRepresentation* code = createCodeRepresentation(topContext->url());
+      setUpdatesEnabled(false);
+      foreach(ContextUsesWidget* useWidget, buildContextUses(*code, m_declaration, topContext))
+        addItem(useWidget);
+      setUpdatesEnabled(true);
+      
+      delete code;
+    }
+  }
+}
+
+UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(true), m_declaration(declaration) {
+    DUChainReadLocker lock(DUChain::lock());
+    setUpdatesEnabled(false);
+    
+    QLabel* label = new QLabel(i18n("Uses:"));
+    addHeaderItem(label);
+
+    if(!showUsesHeader)
+      setShowHeader(false);
+    
     if(Declaration* decl = declaration.data()) {
 
-        QStringList files;
-        
         QList<IndexedTopDUContext> contexts = allUsingContexts();
         
         FOREACH_ARRAY(IndexedTopDUContext context, contexts)
-            files << context.url().str();
-        
-        if(files.isEmpty()) {
-            //Hide
-            setMinimumHeight(0);
-            setMaximumHeight(0);
-            hide();
-            kDebug() << "hiding";
-        }else{
-            QLayout* layout = new QHBoxLayout;
-//             QLabel* label = new QLabel(i18n("Used in:"));
-//             layout->addWidget(label);
-
-//             m_usingFiles = new QComboBox(this);
-//             m_usingFiles->setFocusPolicy(Qt::NoFocus);
-//             m_usingFiles->view()->setFocusPolicy(Qt::NoFocus);
-//             layout->addWidget(m_usingFiles);
-            layout->setAlignment(Qt::AlignLeft);
-            
-            layout->setMargin(0);
-            
-            
-            
-            foreach(QString file, files) {
-//               KUrl u(file);
-//               m_usingFiles->addItem(u.fileName());
-/*//                 if(file.isEmpty()) {
-//                     kDebug() << "got empty file-name in list";
-//                     continue;
-//                 }
-                QLabel* fileLabel = new QLabel(this);
-                KUrl u(file);
-                fileLabel->setText(QString("<a href=\"%1\">%2</a>").arg(u.url()).arg(u.fileName()));
-                
-                layout->addWidget(fileLabel);
-                layout->setAlignment(Qt::AlignLeft);
-                connect(fileLabel, SIGNAL(linkActivated(const QString&)),
-                        this, SLOT(showUsesForButton()));*/
-            }
-            setLayout(layout);
-        }
+            if(ICore::self()->projectController()->projects().isEmpty() || isInLoadedProject(context.url()))
+              addItem(new TopContextUsesWidget(declaration, context));
     }
+    
+    setUpdatesEnabled(true);
 }
 
 QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
@@ -105,26 +375,6 @@ QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
             ret.push_front(decl->topContext());
 
     return ret;
-}
-
-void UsesWidget::showUsesForButton() {
-    m_showingUses = !m_showingUses;
-    emit showingUses(m_showingUses);
-    QLabel* button = qobject_cast<QLabel*>(sender());
-
-    if(button) {
-        int num = layout()->indexOf(button);
-        Q_ASSERT(num != -1);
-        DUChainReadLocker lock(DUChain::lock());
-        QList<IndexedTopDUContext> usingContexts = allUsingContexts();
-
-        if(usingContexts.size() > (num - 1)) {
-            //Show all the uses of the declaration within this context
-            usingContexts.value(num - 1).data();
-        }else{
-            kWarning() << "Wrong count of using contexts";
-        }
-    }
 }
 
 #include "useswidget.moc"

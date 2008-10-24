@@ -47,7 +47,7 @@
 namespace KDevelop {
 
 AbstractNavigationWidget::AbstractNavigationWidget()
-  : m_usesWidget(0)
+  : m_currentWidget(0)
 {
 }
 
@@ -67,7 +67,9 @@ void AbstractNavigationWidget::initBrowser(int height) {
 }
 
 AbstractNavigationWidget::~AbstractNavigationWidget() {
-  delete m_usesWidget;
+  if(m_currentWidget)
+    layout()->removeWidget(m_currentWidget);
+    
 }
 
 void AbstractNavigationWidget::setContext(NavigationContextPointer context)
@@ -76,6 +78,8 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context)
     kDebug() << "no new context created";
     return;
   }
+  if(context == m_context)
+    return;
   m_context = context;
   update();
 }
@@ -83,19 +87,36 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context)
 void AbstractNavigationWidget::update() {
   setUpdatesEnabled(false);
   Q_ASSERT( m_context );
-  int scrollPos = m_browser->verticalScrollBar()->value();
-  m_browser->setHtml( m_context->html() );
+  
+  QString html = m_context->html();
+  if(!html.isEmpty()) {
+    int scrollPos = m_browser->verticalScrollBar()->value();
+    m_browser->setHtml( m_context->html() );
 
-  delete m_usesWidget;
-  m_usesWidget = 0;
-
-  AbstractDeclarationNavigationContext* declContext = dynamic_cast<AbstractDeclarationNavigationContext*>(m_context.data());
-  if (declContext && declContext->declaration()) {
-    m_usesWidget = new KDevelop::UsesWidget(declContext->declaration().data());
-    layout()->addWidget(m_usesWidget);
+    m_browser->verticalScrollBar()->setValue(scrollPos);
+    m_browser->scrollToAnchor("selectedItem");
+    m_browser->show();
+  }else{
+    m_browser->hide();
   }
-  m_browser->verticalScrollBar()->setValue(scrollPos);
-  m_browser->scrollToAnchor("selectedItem");
+  
+  if(m_currentWidget) {
+    layout()->removeWidget(m_currentWidget);
+    m_currentWidget->setParent(0);
+  }
+
+  m_currentWidget = m_context->widget();
+  
+  if(m_currentWidget) {
+    layout()->addWidget(m_currentWidget);
+    //Leave unused room to the widget
+    m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    m_browser->setMaximumHeight(25);
+  }else{
+    m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_browser->setMaximumHeight(10000);
+  }
+
   setUpdatesEnabled(true);
 }
 
