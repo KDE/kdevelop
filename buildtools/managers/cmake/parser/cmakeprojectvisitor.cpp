@@ -798,7 +798,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     SimpleRange sr=macro->content().first().arguments.first().range();
     if(!decls.isEmpty())
     {
-        int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+        int idx=m_topctx->indexForUsedDeclaration(decls.first());
         m_topctx->createUse(idx, sr, 0);
     }
     else
@@ -845,7 +845,7 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     SimpleRange sr=func->content().first().arguments.first().range();
     if(!decls.isEmpty())
     {
-        int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+        int idx=m_topctx->indexForUsedDeclaration(decls.first(),);
         m_topctx->createUse(idx, sr, 0);
     }
     else
@@ -1828,7 +1828,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
         QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
         if(!decls.isEmpty())
         {
-            int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+            int idx=m_topctx->indexForUsedDeclaration(decls.first());
             m_topctx->createUse(idx, arg.range(), 0);
         }
         else
@@ -1863,7 +1863,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 
             if(!decls.isEmpty())
             {
-                int idx=m_topctx->indexForUsedDeclaration(decls.first(), false);
+                int idx=m_topctx->indexForUsedDeclaration(decls.first());
                 m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column+before, arg.line-1, arg.column+after), 0);
 
 //                 DumpChain d;
