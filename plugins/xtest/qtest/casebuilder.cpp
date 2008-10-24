@@ -78,6 +78,7 @@ QTestCase* CaseBuilder::construct()
     if (success) {
         return caze;
     } else {
+        delete caze;
         return 0;
     }
 }

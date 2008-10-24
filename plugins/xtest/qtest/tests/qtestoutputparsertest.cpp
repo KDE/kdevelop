@@ -525,6 +525,8 @@ void QTestOutputParserTest::multipleResultsInSingleCommand()
     assertNrofSubResultsEquals(2, m_command1Info.test);
     assertSubResultEquals(0, m_command1Info.test, result1);
     assertSubResultEquals(1, m_command1Info.test, result2);
+
+    delete result1; delete result2;
 }
 
 // test command
@@ -583,6 +585,8 @@ void QTestOutputParserTest::failureAndAssertInSingleCommand()
     assertSubResultEquals(0, m_command1Info.test, result1);
     assertSubResultEquals(1, m_command1Info.test, result2);
     assertSubResultEquals(2, m_command1Info.test, result3);
+
+    delete result1; delete result2; delete result3;
 }
 
 
