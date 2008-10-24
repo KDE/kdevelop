@@ -166,7 +166,7 @@ void PreprocessJob::run()
 
     QByteArray contents;
 
-    QString localFile(KUrl(parentJob()->document().str()).toLocalFile());
+    QString localFile(parentJob()->document().toUrl().toLocalFile());
   
     QFileInfo fileInfo( localFile );
     
