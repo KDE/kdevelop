@@ -96,6 +96,8 @@ public: // Operations
     /*! Forces attached views to update */
     void changed();
 
+    TestResult* testResult(const QModelIndex&) const;
+
 public slots:
 
     /*! Adds \a testItemIndex at the end of the results list. */

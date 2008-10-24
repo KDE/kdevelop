@@ -71,10 +71,14 @@ void RunnerTestHelper::checkResultItem(int num, const QStringList& item)
 {
     QAbstractItemModel* results = m_window->resultsView()->model();
 
-    KOMPARE(item[0], results->data(results->index(num, 0))); // test name
-    KOMPARE(item[1], results->data(results->index(num, 1))); // failure message
-    KOMPARE(item[2], results->data(results->index(num, 2))); // filename
-    KOMPARE(item[3], results->data(results->index(num, 3))); // line number
+    KOMPARE_MSG(item[0], results->data(results->index(num, 0)), // test name
+        QString("Test name does not match for result item %1").arg(num));
+    KOMPARE_MSG(item[1], results->data(results->index(num, 1)), // failure message
+        QString("Descriptive message does not match for result item %1").arg(num));
+    KOMPARE_MSG(item[2], results->data(results->index(num, 2)), // filename
+        QString("Filename does not match for result item %1").arg(num));
+    KOMPARE_MSG(item[3], results->data(results->index(num, 3)),  // line number
+        QString("Line number does not match for result item %1").arg(num));
 }
 
 void RunnerTestHelper::nrofMessagesEquals(int num)

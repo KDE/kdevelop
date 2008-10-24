@@ -691,8 +691,8 @@ void RunnerWindow::jumpToSource(const QItemSelection& selected, const QItemSelec
     // Determine the results model index.
     QModelIndex resultIndex;
     resultIndex = Utils::modelIndexFromProxy(resultsProxyModel(), indexes.first());
-    Test* t = resultsModel()->testFromIndex(resultIndex);
-    TestResult* r = t->result();
+    TestResult* r = resultsModel()->testResult(resultIndex);
+    if (!r) return;
 
     KTextEditor::Cursor range(r->line() - 1, 0);
     IDocumentController* dc = ICore::self()->documentController();

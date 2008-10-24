@@ -65,7 +65,6 @@ QVariant ResultsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return QVariant();
 
-    Test* ownerTest = 0;
     switch (role) {
     case Qt::TextAlignmentRole:
         return int(Qt::AlignLeft | Qt::AlignTop);
@@ -155,4 +154,11 @@ void ResultsModel::addResult(TestResult* result)
         }
         endInsertRows();
     }
+}
+
+TestResult* ResultsModel::testResult(const QModelIndex& index) const
+{
+    int row = index.row();
+    if (row>=m_results.size()) return 0;
+    return m_results[row];
 }
