@@ -47,6 +47,7 @@ namespace KDevelop {
       private slots:
         void jumpTo();
       private:
+        virtual void resizeEvent ( QResizeEvent * event );
         virtual void rangeDeleted(KTextEditor::SmartRange* range);
         
         SimpleRange m_range;

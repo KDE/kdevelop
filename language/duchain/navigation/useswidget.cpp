@@ -38,6 +38,8 @@
 #include <QFile>
 #include <interfaces/iprojectcontroller.h>
 #include <qtextdocument.h>
+#include <qevent.h>
+#include <qtextlayout.h>
 
 using namespace KDevelop;
 
@@ -97,7 +99,57 @@ CodeRepresentation* createCodeRepresentation(IndexedString url) {
     return new FileCodeRepresentation(url);
 }
 
+///The returned text is fully escaped
+///@param cutOff The total count of characters that should be cut of, all in all on both sides together.
+///@param range The range that is highlighted, and that will be preserved during cutting, given that there is enough room beside it.
+QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) {
+  uint leftCutRoom = range.start.column;
+  uint rightCutRoom = line.length() - range.end.column;
+  
+  if(cutOff > leftCutRoom + rightCutRoom)
+    return QString(); //Not enough room for cutting off on sides
+  
+  uint leftCut = 0;
+  uint rightCut = 0;
+  
+  if(leftCutRoom < rightCutRoom) {
+    if(leftCutRoom * 2 >= cutOff) {
+      //Enough room on both sides. Just cut.
+      leftCut = cutOff / 2;
+      rightCut = cutOff - leftCut;
+    }else{
+      //Not enough room in left side, but enough room all together
+      leftCut = leftCutRoom;
+      rightCut = cutOff - leftCut;
+    }
+  }else{
+    if(rightCutRoom * 2 >= cutOff) {
+      //Enough room on both sides. Just cut.
+      rightCut = cutOff / 2;
+      leftCut = cutOff - rightCut;
+    }else{
+      //Not enough room in right side, but enough room all together
+      rightCut = rightCutRoom;
+      leftCut = cutOff - rightCut;
+    }
+  }
+  Q_ASSERT(leftCut + rightCut <= cutOff);
+
+  line = line.left(line.length() - rightCut);
+  line = line.mid(leftCut);
+  range.start.column -= leftCut;
+  range.end.column -= leftCut;
+  
+  Q_ASSERT(range.start.column >= 0 && range.end.column <= line.length());
+  
+  return Qt::escape(line.left(range.start.column)) + "<span style=\"background-color:yellow\">" + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column)) + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) ;
+}
+
 OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code, KTextEditor::SmartRange* smartRange) : m_range(range), m_document(document), m_smartRange(smartRange), m_declaration(declaration) {
+  
+  //Make the sizing of this widget independent of the content, because we will adapt the content to the size
+  setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+  
   m_sourceLine = code.line(m_range.start.line);
   if(m_smartRange)
     m_smartRange->addWatcher(this);
@@ -107,10 +159,8 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   DUChainReadLocker lock(DUChain::lock());
   QString text = i18n("<a href='open'>Line <b>%1</b></a>", range.start.line);
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range.end.column) {
-    QString line = m_sourceLine;
-    m_sourceLine = Qt::escape(line.left(m_range.start.column)) + "<span style=\"background-color:yellow\">" + Qt::escape(line.mid(m_range.start.column, m_range.end.column - m_range.start.column)) + "</span>" + Qt::escape(line.mid(m_range.end.column, line.length() - m_range.end.column)) ;
     
-    text += " " + m_sourceLine;
+    text += " " + highlightAndEscapeUseText(m_sourceLine, 0, m_range);
     
     //Useful tooltip:
     int start = m_range.start.line - tooltipContextSize;
@@ -137,6 +187,27 @@ void OneUseWidget::jumpTo() {
 OneUseWidget::~OneUseWidget() {
   if(m_smartRange)
     m_smartRange->removeWatcher(this);
+}
+
+void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
+  ///Adapt the content
+  QSize size = event->size();
+
+  int cutOff = 0;
+  uint maxCutOff = m_sourceLine.length() - (m_range.end.column - m_range.start.column);
+  
+  //Reset so we also get more context while up-sizing
+  setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line) + " " + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
+  
+  while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
+    //We've got to save space
+    setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line) + " " + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
+    cutOff += 5;
+  }
+  
+  event->accept();
+  
+  QLabel::resizeEvent(event);
 }
 
 void OneUseWidget::rangeDeleted(KTextEditor::SmartRange* smartRange) {
