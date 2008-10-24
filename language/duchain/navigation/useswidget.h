@@ -109,6 +109,8 @@ namespace KDevelop {
         Q_OBJECT
         public:
             UsesWidget(IndexedDeclaration declaration);
+      private slots:
+            void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
         private:
             //Duchain needs to be locked
             QList<IndexedTopDUContext> allUsingContexts();

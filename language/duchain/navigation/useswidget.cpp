@@ -423,7 +423,7 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(t
       setShowHeader(false);
     
     if(Declaration* decl = declaration.data()) {
-
+        
         QList<IndexedTopDUContext> contexts = allUsingContexts();
         
         FOREACH_ARRAY(IndexedTopDUContext context, contexts)
@@ -434,6 +434,21 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(t
     setUpdatesEnabled(true);
 }
 
+void UsesWidget::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+    DUChainReadLocker lock(DUChain::lock());
+}
+
+bool hasUse(DUContext* context, int usedDeclarationIndex) {
+  for(int a = 0; a < context->usesCount(); ++a)
+    if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
+      return true;
+    
+  foreach(DUContext* child, context->childContexts())
+    if(hasUse(child, usedDeclarationIndex))
+      return true;
+  return false;
+}
+
 QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
     Declaration* decl = m_declaration.data();
     QList<IndexedTopDUContext> ret;
@@ -441,9 +456,8 @@ QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
     FOREACH_ARRAY(IndexedTopDUContext context, uses)
     ret << context;
     
-    if(decl && decl->topContext()->indexForUsedDeclaration(decl, false) != std::numeric_limits<int>::max())
-        if(ret.indexOf(decl->topContext()) == -1)
-            ret.push_front(decl->topContext());
+    if(decl && ret.indexOf(decl->topContext()) == -1 && hasUse(decl->topContext(), decl->topContext()->indexForUsedDeclaration(decl, false)))
+      ret.push_front(decl->topContext());
 
     return ret;
 }
