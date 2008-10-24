@@ -845,7 +845,7 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     SimpleRange sr=func->content().first().arguments.first().range();
     if(!decls.isEmpty())
     {
-        int idx=m_topctx->indexForUsedDeclaration(decls.first(),);
+        int idx=m_topctx->indexForUsedDeclaration(decls.first());
         m_topctx->createUse(idx, sr, 0);
     }
     else
