@@ -297,6 +297,8 @@ int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
     QStringList values;
+    kDebug() << "set: " << set->variableName() << set->values() << "wants cache:" << set->storeInCache()
+             << "has cache:" << m_cache->contains(set->variableName());
     if(set->storeInCache() && m_cache->contains(set->variableName()))
         values = m_cache->value(set->variableName()).split(';');
     else
@@ -443,12 +445,34 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     if(!haveToFind(pack->name()))
         return 1;
-    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
     
     QStringList possibs;
     if(pack->noModule())
     {
+        QString var="CMAKE_INSTALL_PREFIX";
+        QString instPath;
+        if(m_vars->contains(var))
+            instPath = m_vars->value(var)[0];
+        else if(m_cache->contains(var))
+            instPath = m_cache->value(var);
+        
+        kDebug(9042) << "config mode" << m_vars->value(var)[0] << m_cache->value(var) << instPath;
+        
+#if defined(Q_OS_WIN)
+        modulePath.prepend(instPath);
+        modulePath.prepend(instPath+"/cmake");
+#else
+        QString name=pack->name();
+        QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
+        foreach(const QString& post, postfix)
+        {
+            modulePath.prepend(instPath+"/share/"+name.toLower()+post);
+            modulePath.prepend(instPath+"/lib/"+name.toLower()+post);
+        }
+#endif
+        
         possibs+=QString("%1Config.cmake").arg(pack->name());
         possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
     }
@@ -471,7 +495,11 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     
     if(!path.isEmpty())
     {
-        m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insert("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        if(pack->isRequired())
+            m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
+        if(pack->isQuiet())
+            m_vars->insert(pack->name()+"_FIND_QUIET", QStringList("TRUE"));
         CMakeFileContent package=CMakeListsParser::readCMakeFile( path );
         if ( !package.isEmpty() )
         {
@@ -504,7 +532,6 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             kDebug(9032) << "error: find_package. Parsing error." << path;
         }
-        m_vars->take("CMAKE_CURRENT_LIST_FILE");
         
         if(pack->noModule())
         {
@@ -1754,7 +1781,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
 //         kDebug(9042) << "resolved:" << func.writeBack();
         bool correct = element->parseFunctionInfo(func);
-        kDebug(9042) << "parsed";
+//         kDebug(9042) << "parsed";
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl

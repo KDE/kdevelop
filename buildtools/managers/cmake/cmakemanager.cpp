@@ -329,15 +329,15 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_modulePathPerProject[project]=m_modulePathDef;
-        initializeProject(project, folderUrl);
-
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
-
-        m_folderPerUrl[folderUrl]=m_rootItem;
+        
         KUrl cachefile=buildDirectory(m_rootItem);
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
+        initializeProject(project, folderUrl);
+
+        m_folderPerUrl[folderUrl]=m_rootItem;
         connect(m_watchers[project], SIGNAL(dirty(const QString&)), this, SLOT(dirtyFile(const QString&)));
     }
     return m_rootItem;
@@ -909,6 +909,7 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path)
 
     CacheValues ret;
     QTextStream in(&file);
+    kDebug(9042) << "Reading cache:" << path;
     while (!in.atEnd())
     {
         QString line = in.readLine().trimmed();
