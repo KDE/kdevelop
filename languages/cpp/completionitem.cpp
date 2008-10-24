@@ -307,6 +307,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                   return QString("...");
                 else
                   return ret;
+              }else if(argumentHintDepth()) {
+                return indentation;//Don't show useless prefixes in the argument-hints
               }else if(funDecl && funDecl->isConstructor() )
                 return indentation + "<constructor>";
               else if(funDecl && funDecl->isDestructor() )
