@@ -23,8 +23,9 @@
 
 #include <QtGui/QTreeView>
 
-
 class KUrl;
+class QMenu;
+class QAction;
 class QItemSelectionModel;
 class QMouseEvent;
 
@@ -70,6 +71,7 @@ class ProjectTreeView: public QTreeView
         KDevelop::IProject* m_ctxProject;
         bool mouseClickChangesSelection;
         bool rightButtonClicked;
+        void appendActions(QMenu& menu, const QList<QAction*>& actions);
 };
 
 #endif // KDEVPROJECTMANAGER_H

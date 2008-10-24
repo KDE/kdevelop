@@ -163,8 +163,6 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
     KDevelop::ProjectModel *ret;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     ret=qobject_cast<KDevelop::ProjectModel*>( proxy->sourceModel() );
-
-//     ret=qobject_cast<KDevelop::ProjectModel*>( model() );
     Q_ASSERT(ret);
     return ret;
 }
@@ -184,11 +182,10 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
 {
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-//     QModelIndex index = indexAt( pos );
     QModelIndexList indexes = selectionModel()->selectedRows();
     QList<KDevelop::ProjectBaseItem*> itemlist;
 
-    foreach( QModelIndex index, indexes )
+    foreach( const QModelIndex& index, indexes )
     {
         if ( KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
             itemlist << item;
@@ -202,94 +199,51 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KDevelop::ProjectItemContext context(itemlist);
         QList<ContextMenuExtension> extensions = d->mplugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
 
-        foreach( const ContextMenuExtension ext, extensions )
-        {
-            foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
-            {
-                menu.addAction( act );
-            }
-        }
-
-        menu.addSeparator();
-
         QList<QAction*> buildActions;
         QList<QAction*> vcsActions;
         QList<QAction*> extActions;
         QList<QAction*> projectActions;
-        foreach( const ContextMenuExtension ext, extensions )
+        QList<QAction*> fileActions;
+        foreach( const ContextMenuExtension& ext, extensions )
         {
-            foreach( QAction* act, ext.actions( ContextMenuExtension::BuildGroup ) )
-            {
-                buildActions << act;
-            }
-
-            foreach( QAction* act, ext.actions( ContextMenuExtension::ProjectGroup ) )
-            {
-                projectActions << act;
-            }
-
-            foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )
-            {
-                vcsActions << act;
-            }
-
-            foreach( QAction* act, ext.actions( ContextMenuExtension::ExtensionGroup ) )
-            {
-                extActions << act;
-            }
-
-        }
-        QMenu* buildmenu = &menu;
-        if( buildActions.count() > 1 ) {
-            buildmenu = menu.addMenu("Build");
-        }
-        foreach( QAction* act, buildActions )
-        {
-            buildmenu->addAction(act);
+            buildActions += ext.actions(ContextMenuExtension::BuildGroup);
+            fileActions += ext.actions(ContextMenuExtension::FileGroup);
+            projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
+            vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
+            extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
         }
 
-        menu.addSeparator();
+        KAction* projectConfig = new KAction(i18n("Configure Project "), this);
+        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
+        projectActions << projectConfig;
 
-        QMenu* projectmenu = &menu;
-        if( buildActions.count() > 1 ) {
-            projectmenu = menu.addMenu("Project");
-        }
-        foreach( QAction* act, projectActions )
-        {
-            projectmenu->addAction(act);
-        }
-
-        menu.addSeparator();
+        appendActions(menu, buildActions);
+        appendActions(menu, fileActions);
+        appendActions(menu, projectActions);
 
         QMenu* vcsmenu = &menu;
         if( vcsActions.count() > 1 )
         {
-            vcsmenu = menu.addMenu( "Version Control ");
+            vcsmenu = menu.addMenu( i18n("Version Control "));
         }
-        foreach( QAction* act, vcsActions )
-        {
-            vcsmenu->addAction( act );
-        }
-
-        menu.addSeparator();
-        foreach( QAction* act, extActions )
-        {
-            menu.addAction( act );
-        }
-
-
-        menu.addSeparator();
-
-
-        KAction* projectConfig = new KAction(i18n("Project Options"), this);
-        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
-        menu.addAction( projectConfig );
+        appendActions(*vcsmenu, vcsActions);
+        appendActions(menu, extActions);
 
         menu.exec( mapToGlobal( pos ) );
+
     } else
     {
         m_ctxProject = 0;
     }
+}
+
+void ProjectTreeView::appendActions(QMenu& menu, const QList<QAction*>& actions)
+{
+    foreach( QAction* act, actions )
+    {
+        menu.addAction(act);
+    }
+    menu.addSeparator();
 }
 
 void ProjectTreeView::openProjectConfig()

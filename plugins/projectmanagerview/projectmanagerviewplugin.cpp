@@ -161,27 +161,27 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
-        if ( !buildItemsAdded && ( item->folder() || item->target() || item->file() ) )
+        if ( !buildItemsAdded && ( item->target() || item->type() == ProjectBaseItem::BuildFolder ) )
         {
             KAction* action = new KAction( i18n( "Build" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             action = new KAction( i18n( "Install" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             action = new KAction( i18n( "Clean" ), this );
             connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-            action = new KAction( i18n( "Add to buildset" ), this );
+            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
+            action = new KAction( i18n( "Add to Buildset" ), this );
             connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             buildItemsAdded = true;
         }
         
         KDevelop::ProjectFolderItem *prjitem = item->folder();
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
-            KAction* close = new KAction( i18n( "Close project(s)" ), this );
+            KAction* close = new KAction( i18n( "Close Project(s)" ), this );
             connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
             closeProjectsAdded = true;
@@ -211,13 +211,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 
     }
     
-//     if( items.count() == 1 )
-//     {
-//         KAction* action = new KAction( i18n( "Project Configuration" ), this );
-//         connect( action, SIGNAL( triggered() ), this, SLOT( projectConfiguration() ) );
-//         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-//     }
-
     return menuExt;
 }
 
