@@ -297,8 +297,6 @@ int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //FIXME: Must deal with ENV{something} case
     QStringList values;
-    kDebug() << "set: " << set->variableName() << set->values() << "wants cache:" << set->storeInCache()
-             << "has cache:" << m_cache->contains(set->variableName());
     if(set->storeInCache() && m_cache->contains(set->variableName()))
         values = m_cache->value(set->variableName()).split(';');
     else
