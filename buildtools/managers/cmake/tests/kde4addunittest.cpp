@@ -128,7 +128,7 @@ void KDE4AddUnitTest::cleanupTestCase()
 
 #define WAIT_FOR_OPEN_SIGNAL \
 {\
-    bool gotSignal = QTest::kWaitForSignal(projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 2000);\
+    bool gotSignal = QTest::kWaitForSignal(projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 10000);\
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
 } void(0)
 
