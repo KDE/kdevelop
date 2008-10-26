@@ -21,8 +21,10 @@
 #include "importprojectjob.h"
 #include "projectmodel.h"
 
-#include <QQueue>
-#include <QTimer>
+#include <QtConcurrentRun>
+#include <QFuture>
+#include <QFutureWatcher>
+
 
 #include <kglobal.h>
 #include <kdebug.h>
@@ -38,28 +40,18 @@ public:
     ImportProjectJobPrivate( ImportProjectJob* job ) : q(job) {}
     ProjectFolderItem *m_folder;
     IProjectFileManager *m_importer;
-    QTimer m_timer;
-    QQueue< QList<KDevelop::ProjectFolderItem*> > m_workQueue;
     ImportProjectJob* q;
 
-    void parseItem()
+    void import(ProjectFolderItem* folder)
     {
-        m_timer.stop();
-        if( m_workQueue.count() > 0 )
+        QList<KDevelop::ProjectFolderItem*> subFolders = m_importer->parse(folder);
+        foreach(KDevelop::ProjectFolderItem* sub, subFolders)
         {
-            QList<KDevelop::ProjectFolderItem*> front = m_workQueue.dequeue();
-            Q_FOREACH( KDevelop::ProjectFolderItem* _item, front )
-            {
-                QList<KDevelop::ProjectFolderItem*> workingList = m_importer->parse( _item );
-                if( workingList.count() > 0 )
-                    m_workQueue.enqueue( workingList );
-            }
-            m_timer.start();
-        } else
-        {
-            q->emitResult();
-        }
+            import(sub);
+        }  
     }
+
+
 };
 
 ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
@@ -74,8 +66,6 @@ ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *i
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
     }
     d->m_folder = folderItem;
-    d->m_timer.setInterval(200);
-    connect( &d->m_timer, SIGNAL(timeout()), this, SLOT(parseItem()) );
 }
 
 ImportProjectJob::~ImportProjectJob()
@@ -85,10 +75,18 @@ ImportProjectJob::~ImportProjectJob()
 
 void ImportProjectJob::start()
 {
-    QList<KDevelop::ProjectFolderItem*> initial;
-    initial.append( d->m_folder );
-    d->m_workQueue.enqueue( initial );
-    d->m_timer.start();
+    QFutureWatcher<void>* watcher = new QFutureWatcher<void>();
+    connect(watcher, SIGNAL(finished()), SLOT(importDone()));
+    QFuture<void> f = QtConcurrent::run(d, &ImportProjectJobPrivate::import, d->m_folder);
+    watcher->setFuture(f);
+}
+
+void ImportProjectJob::importDone()
+{
+    if ( sender() )
+        sender()->deleteLater(); /* Goodbye to the QFutureWatcher */
+
+    emitResult();
 }
 
 

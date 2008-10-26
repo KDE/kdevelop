@@ -46,8 +46,10 @@ public:
 public:
     void start();
 
+private Q_SLOTS:
+    void importDone();
+
 private:
-    Q_PRIVATE_SLOT( d, void parseItem() )
     class ImportProjectJobPrivate* const d;
     friend class ImportProjectJobPrivate;
 };
