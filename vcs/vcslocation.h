@@ -32,7 +32,7 @@ namespace KDevelop
 /**
  * Denotes a local or repository location for a Vcs system
  *
- * For the RepositoryLocation type most of the informations
+ * For the RepositoryLocation type most of the information
  * are vcs specific
  */
 class KDEVPLATFORMVCS_EXPORT VcsLocation

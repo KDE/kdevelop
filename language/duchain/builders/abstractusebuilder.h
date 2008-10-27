@@ -32,7 +32,7 @@ namespace KDevelop {
 /**
  * \short Abstract definition-use chain use builder class
  *
- * The AbstractUseBuilder is a convenience class template for creating customised
+ * The AbstractUseBuilder is a convenience class template for creating customized
  * definition-use chain use builders from an AST.  It simplifies:
  * - use of your editor integrator
  * - creating or modifying existing \ref Use "Uses"

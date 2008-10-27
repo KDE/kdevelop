@@ -310,7 +310,7 @@ namespace KDevelop {
                             takeRightMostChild(current.leftChild());
                             
                             //Since we'll be clearing the item, we have to put this childsomewhere else. 
-                            //Either make it our new "left" child, or make it the new left childs "rightmost" child.
+                            // Either make it our new "left" child, or make it the new left children "rightmost" child.
                             int addRightMostLeftChild = replaceWith.leftChild();
                             
                             replaceWith.setLeftChild(-1);
@@ -353,7 +353,7 @@ namespace KDevelop {
                             takeLeftMostChild(current.rightChild());
                             
                             //Since we'll be clearing the item, we have to put this childsomewhere else. 
-                            //Either make it our new "right" child, or make it the new right childs "leftmost" child.
+                            // Either make it our new "right" child, or make it the new right children "leftmost" child.
                             int addLeftMostRightChild = replaceWith.rightChild();
                             
                             replaceWith.setRightChild(-1);

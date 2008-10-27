@@ -87,7 +87,7 @@ public:
     /// Returns the set du-context, or zero of none was set.
     Q_SCRIPTABLE virtual ReferencedTopDUContext duChain() const;
 
-    /// Overriden to allow jobs to determine if they've been requested to abort
+    /// Overridden to allow jobs to determine if they've been requested to abort
     Q_SCRIPTABLE virtual void requestAbort();
     /// Determine if the job has been requested to abort
     Q_SCRIPTABLE bool abortRequested() const;

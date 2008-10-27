@@ -60,7 +60,7 @@ public:
     /**
      * return a user-visible string for the version control plugin
      * Can be used for example when importing a project into a
-     * version control system to choose the apropriate system
+     * version control system to choose the appropriate system
      *
      * @returns a translated user-visible name for this version control plugin
      */
@@ -86,9 +86,9 @@ public:
      */
 
     /**
-     * Is the given @p localLocation under version control? This checks wether
+     * Is the given @p localLocation under version control? This checks whether
      * the @p localLocation is under control of the versioning system or not.
-     * It does not only check wether the @p localLocation lies in a version
+     * It does not only check whether the @p localLocation lies in a version
      * controlled directory
      *
      * @returns true if the version control system knows the given @p localLocation
@@ -104,7 +104,7 @@ public:
      * adds a local unversioned file or directory to the list of versioned files.
      * @param recursive is only meaningful for directories
      * @param localLocations a list of files or directories that should be put under version control
-     * @param recursion wether to add directories and their childs or only directories themselves
+     * @param recursion whether to add directories and their children or only directories themselves
      * @returns a job that executes the addition
      */
     virtual VcsJob* add( const KUrl::List& localLocations,
@@ -149,7 +149,7 @@ public:
      * @param localLocation the local files/dirs that should be updated
      * @param rev Update to this revision. The operation will fail if @p rev is
      * a range.
-     * @param recursion defines wether the directories should be updated
+     * @param recursion defines whether the directories should be updated
      * recursively
      */
     virtual VcsJob* update( const KUrl::List& localLocations,

@@ -256,7 +256,7 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
-  ///Returns the language for this top-context. If the string is empty, the language is unkown.
+  // Returns the language for this top-context. If the string is empty, the language is unknown.
   IndexedString language() const;
   
   ///Sets the language for this top-context. Each top-context should get the language assigned that can by used

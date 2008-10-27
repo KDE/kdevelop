@@ -918,7 +918,7 @@ class Bucket {
       Q_ASSERT(index >= 2);
       *((unsigned short*)(m_data+(index-2))) = follower;
     }
-    //Only returns the corrent value if the item is actually free
+    // Only returns the current value if the item is actually free
     inline unsigned short freeSize(unsigned short index) const {
       return *((unsigned short*)(m_data+index));
     }

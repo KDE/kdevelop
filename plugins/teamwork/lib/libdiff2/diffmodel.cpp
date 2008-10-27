@@ -393,7 +393,7 @@ bool DiffModel::setSelectedDifference( Difference* diff )
 	{
 		if ( ( findItem( diff, m_differences ) ) == -1 )
 			return false;
-		// Dont set m_diffIndex if it cant be found
+		// Do not set m_diffIndex if it cant be found
 		m_diffIndex = findItem( diff, m_differences );
 		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
 		m_selectedDifference = diff;

@@ -245,7 +245,7 @@ p, li { white-space: pre-wrap; }
         <item row="0" column="3" >
          <widget class="QLabel" name="ipadress" >
           <property name="text" >
-           <string>IP-Adress</string>
+           <string>IP-Address</string>
           </property>
          </widget>
         </item>

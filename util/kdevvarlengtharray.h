@@ -164,7 +164,7 @@ public:
         resize(s-1);
     }
 
-    ///Removes exactly one occurence of the given value from the array. Returns false if none was found.
+    // Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     bool removeOne(const T& value) {
     for(int a = 0; a < s; ++a) {
         if(ptr[a] == value) {

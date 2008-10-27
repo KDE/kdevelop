@@ -35,7 +35,7 @@ namespace KDevelop
  * to stdout or stderr and for signaling completed and failed status.
  *
  * If you need more fine-grained control use (QK)Process directly and also
- * check wether you can use \ref KDevelop::ProcessLineMaker to use properly
+ * check whether you can use \ref KDevelop::ProcessLineMaker to use properly
  * terminated lines of output.
  *
  * Also this class provides only asynchronous operation, it doesn't allow to

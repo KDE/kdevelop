@@ -98,7 +98,7 @@ void LogView::parseOutput(const QString& jobOutput, QList<CvsRevision>& revision
             item.date = rx_date.cap(1);
             item.user = rx_date.cap(2);
         } else  if (rx_sep.exactMatch(s)) {
-//             kDebug(9500) << "MATCH SEPERATOR" ;
+//             kDebug(9500) << "MATCH SEPARATOR" ;
             if (firstSeperatorReached) {
                 revisions.append( item );
 

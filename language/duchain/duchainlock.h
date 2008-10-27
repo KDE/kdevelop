@@ -81,7 +81,7 @@ namespace KDevelop
 #endif
 
 /**
- * Customised read/write locker for the definition-use chain.
+ * Customized read/write locker for the definition-use chain.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock
 {
@@ -152,7 +152,7 @@ private:
 };
 
 /**
- * Customised read locker for the definition-use chain.
+ * Customized read locker for the definition-use chain.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker
 {
@@ -183,7 +183,7 @@ private:
 };
 
 /**
- * Customised write locker for the definition-use chain.
+ * Customized write locker for the definition-use chain.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker
 {

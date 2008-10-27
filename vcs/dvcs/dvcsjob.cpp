@@ -215,7 +215,7 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
     d->failed = true;
 
     //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
-    //and if exec is used, exec will return true and thet is wrong!
+    //and if exec is used, exec will return true and that is wrong!
     setError(UserDefinedError);
     setErrorText( i18n("Process exited with status %1", d->childproc->exitCode() ) );
 

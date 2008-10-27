@@ -79,7 +79,7 @@ namespace svn
     translateString (const char * str, const char ** newStr,
                      apr_pool_t * /*pool*/)
     {
-      // due to problems with apr_xlate we dont perform
+      // due to problems with apr_xlate we do not perform
       // any conversion at this place. YOU will have to make
       // sure any strings passed are UTF 8 strings
       // svn_string_t *string = svn_string_create ("", pool);
@@ -138,7 +138,7 @@ namespace svn
       svn_config_ensure (c_configDir, pool);
 
 
-      // intialize authentication providers
+      // initialize authentication providers
       // * simple 
       // * username
       // * simple prompt

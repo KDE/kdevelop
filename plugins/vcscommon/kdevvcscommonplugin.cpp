@@ -167,7 +167,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
      * project items that are vc-controlled enable all except add, project 
      * items that are not vc-controlled enable add action. For urls that cannot
      * be made into a project item, or if the project has no associated VC 
-     * plugin we need to check wether a VC controls the parent dir, if we have 
+     * plugin we need to check whether a VC controls the parent dir, if we have 
      * one we assume the urls can be added but are not currently controlled. If
      * the url is already version controlled then just enable all except add
      */

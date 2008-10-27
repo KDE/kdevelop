@@ -105,7 +105,7 @@ public:
 
     /**
      * Sets working directory.
-     * @param directory Should contain only absolute path. Relative path or "" (working dir) are depricated and will make job failed.
+     * @param directory Should contain only absolute path. Relative path or "" (working dir) are deprecated and will make job failed.
      * @note In DVCS plugins directory variable is used to get relative pathes.
      */
     void setDirectory(const QString& directory);
@@ -127,13 +127,13 @@ public:
     DVCSjob& operator<<(const QString& arg);
 
     /**
-     * Overloaded convinience function.
+     * Overloaded convenience function.
      * @see operator<<(const QString& arg).
      */
     DVCSjob& operator<<(const char* arg);
 
     /**
-     * Overloaded convinience function.
+     * Overloaded convenience function.
      * @see operator<<(const QString& arg).
      */
     DVCSjob& operator<<(const QStringList& args);

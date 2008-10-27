@@ -156,7 +156,7 @@ namespace svn
 
     // we do not need the newer version of this
     // function "svn_client_add2" or "svn_client_add3"
-    // since RapidSVN doesnt even have a dialog
+    // since RapidSVN does not even have a dialog
     // for adding false 
     svn_error_t * error =
       svn_client_add (path.c_str (), 

@@ -338,7 +338,7 @@ void ContextController::updateHistory(KDevelop::DUContext* context, const KDevel
         }
         return;
     } else { // Append new history entry
-        //To have a more useful history, do not duplicate items in it, so remove old occurences of the same context
+        //To have a more useful history, do not duplicate items in it, so remove old occurrences of the same context
         for(int a = 0; a < m_nextHistoryIndex; ++a) {
             if(m_history[a].context == IndexedDUContext(context)) {
                 m_history.remove(a);

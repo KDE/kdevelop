@@ -136,7 +136,7 @@ class TopDUContext::CacheData {
 };
 
 struct TopDUContext::AliasChainElement {
-  AliasChainElement() { //Creates invalid entries, but we need it fast because it's used to intialize all items in KDevVarLengthArray
+  AliasChainElement() { // Creates invalid entries, but we need it fast because it's used to initialize all items in KDevVarLengthArray
   }
   AliasChainElement(const AliasChainElement* _prev, Identifier id) : previous(_prev), ownsPrevious(false), identifier(id), hash(0), length(0) {
     if(previous) {

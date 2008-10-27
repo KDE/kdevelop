@@ -48,7 +48,7 @@ namespace KDevelop
 /**
  * \short Abstract definition-use chain context builder class
  *
- * The AbstractContextBuilder is a convenience class template for creating customised
+ * The AbstractContextBuilder is a convenience class template for creating customized
  * definition-use chain context builders from an AST.  It simplifies:
  * - use of your editor integrator
  * - creating or modifying an existing DUContext tree

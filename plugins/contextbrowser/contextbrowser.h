@@ -88,7 +88,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
   private:
-    void switchUse(bool foward);
+    void switchUse(bool forward);
     void clearMouseHover();
     virtual void rangeDeleted (KTextEditor::SmartRange *range);
     virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
