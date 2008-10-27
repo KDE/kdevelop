@@ -23,8 +23,9 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakelistsparser.h"
 #include <QString>
+#include <qtest_kde.h>
 
-QTEST_MAIN(CMakeProjectVisitorTest)
+QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 
@@ -37,40 +38,37 @@ CMakeProjectVisitorTest::CMakeProjectVisitorTest()
 void CMakeProjectVisitorTest::testVariables_data()
 {
     QTest::addColumn<QString>("input");
-    QTest::addColumn<bool>("containsVariable");
     QTest::addColumn<QStringList>("result");
     
-    QTest::newRow("A variable alone") << "${MY_VAR}" << true << QStringList("MY_VAR");
-    QTest::newRow("env var") << "$ENV{MY_VAR}" << true << QStringList("MY_VAR");
-    QTest::newRow("Contains a variable") << "${MY_VAR}/lol" << true << QStringList("MY_VAR");
-    QTest::newRow("Contains a variable") << "${yipiee}#include <${it}>\n" << true << (QStringList("yipiee") << "it");
-    QTest::newRow("Contains a variable") << "${a}${b}\n" << true << (QStringList("a") << "b");
-    QTest::newRow("mess") << "{}{}{}}}}{{{{}${a}\n" << true << QStringList("a");
-    QTest::newRow("Nothing") << "aaaa${aaaa" << false << QStringList();
+    QTest::newRow("a variable") << "${MY_VAR}" << QStringList("MY_VAR");
+    QTest::newRow("env var") << "$ENV{MY_VAR}" << QStringList("MY_VAR");
+    QTest::newRow("Contains a variable") << "${MY_VAR}/lol" << QStringList("MY_VAR");
+    QTest::newRow("Contains a variable") << "${yipiee}#include <${it}>\n" << (QStringList("yipiee") << "it");
+    QTest::newRow("Contains a variable") << "${a}${b}\n" << (QStringList("a") << "b");
+    QTest::newRow("mess") << "{}{}{}}}}{{{{}${a}\n" << QStringList("a");
+    QTest::newRow("Nothing") << "aaaa${aaaa" << QStringList();
+    QTest::newRow("varinvar") << "${${${a}}}" << (QStringList() << "${${a}}" << "${a}" << "a");
 }
 
 void CMakeProjectVisitorTest::testVariables()
 {
     QFETCH(QString, input);
-    QFETCH(bool, containsVariable);
     QFETCH(QStringList, result);
     
-    int start=0, end;
-    CMakeProjectVisitor::VariableType type;
     QStringList name;
-    do
-    {
-        QString aName=CMakeProjectVisitor::variableName(input, type, start, end);
-        start=end+1;
-        if(type)
-            name += aName;
-        QVERIFY(!type || (start>0 && end>0));
-//         QVERIFY(aName==input.mid(start, end-start));
-    } while(type);
+    QList<CMakeProjectVisitor::IntPair> variables =CMakeProjectVisitor::parseArgument(input);
     
-    qDebug() << "name" << name;
-    QCOMPARE(containsVariable, !name.isEmpty());
-    QCOMPARE(name, result);
+//     qDebug() << "kakakaka" << result << variables;
+    QCOMPARE(result.count(), variables.count());
+    
+    typedef QPair<int,int> IntPair;
+    foreach(const CMakeProjectVisitor::IntPair& v, variables)
+    {
+        QString name=input.mid(v.first+1, v.second-v.first-1);
+        if(!result.contains(name))
+            qDebug() << "not a var:" << name;
+        QVERIFY(result.contains(name));
+    }
 }
 
 typedef QPair<QString, QString> StringPair;
@@ -125,8 +123,8 @@ void CMakeProjectVisitorTest::testRun_data()
     cacheValues.clear();
     results.clear();
     results << StringPair("_INCLUDE_FILES", "#include <a>\n"
-                                               "#include <b>\n"
-                                               "#include <c>\n");
+                                            "#include <b>\n"
+                                            "#include <c>\n");
     QTest::newRow("foreach") <<
             "set(_HEADER a b c)\n"
             "FOREACH (it ${_HEADER})\n"
@@ -156,7 +154,35 @@ void CMakeProjectVisitorTest::testRun_data()
                                 "IF($ENV{CC} MATCHES \".+\")\n"
                                 "  MESSAGE(STATUS \"we!\")\n"
                                 "ENDIF($ENV{CC} MATCHES \".+\")\n" << cacheValues << results;
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "${caca}");
+    QTest::newRow("strange_var") <<   "set(caca aaaa)\n"
+                                "set(v1 \"{ca\")\n"
+                                "set(v2 \"ca}\")\n"
+                                "set(res \"$${v1}${v2}\")\"\n" << cacheValues << results;
+                                
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "222aaaa333");
+    QTest::newRow("concatenation") <<   "set(tt aaaa)\n"
+                                "set(res \"222${tt}333\")\"\n" << cacheValues << results;
+                                
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "oooaaaa");
+    QTest::newRow("composing") <<   "set(tt aaaa)\n"
+                                    "set(a t)\n"
+                                    "set(b t)\n"
+                                    "set(res ooo${${a}${b}})\"\n" << cacheValues << results;
                                     
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "oooaaaa");
+    QTest::newRow("mad") << "set(ARGN tamare)"
+                            "GET_SOURCE_FILE_PROPERTY(_deps ${_file} OBJECT_DEPENDS)\n"
+                            "set(_deps ${_deps} ${ARGN})\n" << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -192,11 +218,8 @@ void CMakeProjectVisitorTest::testRun()
         CMakeFunctionArgument arg;
         arg.value=vp.first;
         
-        qDebug() << "lalala" << vm << vp;
-        QCOMPARE(vp.second, vm.value(vp.first).join(QString(";")));
+        QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
     }
-    
-    qDebug() << "lolololo" << vm;
 }
 
 void CMakeProjectVisitorTest::init()

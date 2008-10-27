@@ -75,76 +75,132 @@ QStringList CMakeProjectVisitor::envVarDirectories(const QString &varName)
     }
 }
 
-QString CMakeProjectVisitor::variableName(const QString &exp, VariableType &type, int &before, int &after)
+QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const QString &exp)
 {
-    type=NoVar;
-    while(!type)
+    QString name;
+    QStack<int> opened;
+    QList< IntPair > pos;
+    bool gotDollar=false;
+    for(int i=exp.indexOf('$'); i<exp.size(); i++)
     {
-        int closeBracketPos = exp.indexOf('}', before);
-        int openBracketPos = -1;
-        if (closeBracketPos > 0)
-            openBracketPos=exp.lastIndexOf('{', closeBracketPos);
-        after = closeBracketPos;
-        before = openBracketPos;
-        if(openBracketPos>=1 && closeBracketPos>openBracketPos) {
-            if(exp[openBracketPos-1]=='$')
+        switch(exp[i].toAscii())
+        {
+            case '$':
+                gotDollar=true;
+                break;
+            case '{':
+                if(gotDollar) 
+                {
+                    opened.push(i);
+                }
+                gotDollar=false;
+                break;
+            case '}':
+                if(!opened.isEmpty())
+                    pos.append(IntPair(opened.pop(), i, opened.count()));
+                break;
+        }
+    }    
+    return pos;
+}
+
+QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& thecase) const
+{
+    int dollar=exp.lastIndexOf('$', thecase.first);
+    QString type=exp.mid(dollar, thecase.first-dollar-1);
+    QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
+    QStringList vars;
+    if(type.isEmpty())
+    {
+        if(m_vars->contains(var))
+            vars = m_vars->value(var);
+        else if(m_cache->contains(var))
+            vars = m_cache->value(var).split(';');
+    }
+    else if(type=="ENV")
+    {
+        vars=envVarDirectories(var);
+    }
+    else
+        kDebug() << "error: I do not understand the key: " << type;
+    
+//     qDebug() << "solving: " << var << vars << exp;
+    return vars;
+}
+
+QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>& poss, int desired) const
+{
+    QString var=exp;
+    QList<IntPair> invars;
+    invars += poss[desired];
+    for(; desired+1<poss.size() && poss[desired].level>1; desired++)
+    {
+        invars+=poss[desired+1];
+    }
+    
+    if(invars.count()>1)
+    {
+//         qDebug() << "vaaaaars" << var << IntPair::printList(invars);
+//         IntPair p=invars.takeLast();
+//         var=exp.mid(p.first+1, p.second-p.first-1);
+//         qDebug() << "vaaaaars22222" << var << IntPair::printList(invars);
+        QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
+        QList<IntPair>::iterator itEnd=invars.end();
+        QList<IntPair>::iterator itBegin=invars.begin();
+        for(QList<IntPair>::const_iterator it=invars.constBegin(); (it+1)!=itConstEnd; ++it)
+        {
+            const IntPair& subvar=*it;
+            int dollar=var.lastIndexOf('$', subvar.first);
+            QString id=var.mid(dollar, subvar.second-dollar+1), value=theValue(var, subvar).join(QChar(';'));
+//             qDebug() << "xaaaa" << id << subvar.print();
+            
+            int diff=value.size()-id.size();
+            for(QList<IntPair>::iterator it=itBegin; it!=itEnd; ++it)
             {
-                before-=1;
-                type=CMake;
-            }
-            else if(openBracketPos >= 4 && exp.mid(openBracketPos - 4, 4)=="$ENV")
-            {
-                before-=4;
-                type=ENV;
+                if(it->first > subvar.second) it->first += diff;
+                if(it->second> subvar.second) it->second+= diff;
             }
             
-            if(type)
-                return exp.mid(openBracketPos + 1, closeBracketPos - openBracketPos - 1);
-        } else if(closeBracketPos<0)
-            break;
-        before=closeBracketPos + 1;
+//             qDebug() << "replaaaaaaace" << id << value << diff;
+            var=var.replace(id, value);
+//             qDebug() << "reeeeeeees" << var;
+        }
     }
-    return QString();
+//     qDebug() << "exiiiiiit" << theValue(var, invars.last()) << invars.last().print();
+    return theValue(var, invars.last());
 }
 
 QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &exp)
 {
-    VariableType type;
-    int after, before=0; //FIXME: Unused
     QStringList ret;
-    QString var = variableName(exp.value, type, before, after);
+    ret += QString();
+    QList< IntPair > var = parseArgument(exp.value);
 
-    if(type)
+    int i=0;
+    IntPair last(-1,-1, 0);
+    
+    for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
     {
-        QStringList vars;
-        if(type==CMake)
-        {
-            if(m_vars->contains(var))
-                vars = m_vars->value(var);
-            else if(m_cache->contains(var))
-                vars = m_cache->value(var).split(';');
-        }
-        else
-        {
-            vars=envVarDirectories(var);
-        }
-        QString pre=exp.value.left(before), post=exp.value.right(exp.value.length()-after-1);
+        while(it!=var.constEnd() && it->level>1)
+            ++it;
+        const IntPair& p=*it;
+        int dollar=exp.value.lastIndexOf('$', p.first);
+        QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
+//         qDebug () << "reeeeeet" << ret << pre << exp.value;
         
-        if(vars.isEmpty())
-            vars += QString();
+        QStringList vars = value(exp.value, var, i);
+//         qDebug() << "aaaaaaaaaA" << vars;
         
-        vars.first().prepend(pre);
-        vars.last().append(post);
-        QStringList::iterator it=vars.begin(), itEnd=vars.end();
-        for(; it!=itEnd; ++it)
+        if(!vars.isEmpty())
         {
-            ret += resolveVariable(*it);
+            pre+=vars.takeFirst();
         }
+        ret.last()+=pre;
+        ret += vars;
+        last=p;
+        i++;
     }
-    else
-    {
-        ret.append(exp.value);
-    }
+    ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
     
     if(exp.quoted)
     {
@@ -1267,6 +1323,13 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     return 1;
 }
 
+int CMakeProjectVisitor::visit(const GetSourceFilePropAst* prop)
+{
+    kDebug(9042) << "not supported yet";
+    m_vars->insert(prop->variableName(), QStringList());
+    return 1;
+}
+
 int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
     kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
@@ -1706,7 +1769,10 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
 
     foreach(const CMakeFunctionArgument &arg, exp.arguments)
     {
-        ret.addArguments(resolveVariable(arg));
+        if(arg.value.contains('$'))
+            ret.addArguments(resolveVariable(arg));
+        else
+            ret.arguments.append(arg);
     }
 
     return ret;
@@ -1839,6 +1905,8 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
 
 void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 {
+    #warning port me
+#if 0
     if(!m_topctx)
         return;
     int before=0;
@@ -1870,6 +1938,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         }
         before+=2;
     }
+#endif
 }
 
 void CMakeProjectVisitor::setCacheValues( CacheValues* cache)

@@ -92,6 +92,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const RemoveDefinitionsAst * );
         virtual int visit( const SeparateArgumentsAst * );
         virtual int visit( const WhileAst * );
+        virtual int visit( const GetSourceFilePropAst * );
         virtual int visit( const CMakeAst * );
         
         void setCacheValues( CacheValues* cache);
@@ -116,7 +117,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
             
         int walk(const CMakeFileContent& fc, int line);
         
-        enum VariableType { NoVar, CMake, ENV };
 //         static VariableType hasVariable(const QString &name);
         static QStringList envVarDirectories(const QString &varName);
         
@@ -139,9 +139,26 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList testArguments(const QString& test) const;
 
     protected:
-        static QString variableName(const QString &name, VariableType &isEnv, int& before, int& next);
+        struct IntPair
+        {
+            IntPair(int f, int s, int l) : first(f), second(s), level(l) {}
+            int first, second, level;
+            QString print() const { return QString("(%1, %2 : %3)").arg(first).arg(second).arg(level); }
+            static QStringList printList(const QList<IntPair>& l)
+            {
+                QStringList r;
+                foreach(const IntPair& i, l)
+                    r+= i.print();
+                return r;
+            }
+        };
+        
+        static QList< IntPair > parseArgument(const QString &exp);
+        
     private:
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
+        QStringList value(const QString& exp, const QList<IntPair>& poss, int desired) const;
+        QStringList theValue(const QString& exp, const IntPair& p) const;
 
         typedef QMap<QString, QString> TargetProperties;
         struct VisitorState
