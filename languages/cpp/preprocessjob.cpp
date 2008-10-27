@@ -254,7 +254,7 @@ void PreprocessJob::run()
           m_updatingEnvironmentFile = KSharedPtr<Cpp::EnvironmentFile>( dynamic_cast<Cpp::EnvironmentFile*>(updating->parsingEnvironmentFile().data()) );
         }
         if( m_secondEnvironmentFile && parentJob()->updatingProxyContext() ) {
-            //Must be true, because we explicity passed the flag to chainForDocument
+            // Must be true, because we explicitly passed the flag to chainForDocument
             Q_ASSERT((parentJob()->updatingProxyContext()->parsingEnvironmentFile()->isProxyContext()));
         }
     }

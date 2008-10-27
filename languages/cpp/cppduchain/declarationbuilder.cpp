@@ -366,7 +366,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   Identifier localId = customName;
 
   if (name) {
-    TypeSpecifierAST* typeSpecifier = 0; //Additional type-specifier for example the return-type of a cast operator. This is not catched by the type builder.
+    TypeSpecifierAST* typeSpecifier = 0; // Additional type-specifier for example the return-type of a cast operator. This is not caught by the type builder.
     QualifiedIdentifier id = identifierForNode(name, &typeSpecifier);
 
     static Identifier castIdentifier("operator{...cast...}");

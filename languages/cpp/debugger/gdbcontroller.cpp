@@ -736,7 +736,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
-    // GDBMI::GdbSet, "enviroment" command
+    // GDBMI::GdbSet, "environment" command
     // Note that we quote the variable value due to the possibility of
     // embedded spaces
     QString environstr;

@@ -120,7 +120,7 @@ public:
     /** Adds command to the front of the commands queue. It will be executed
         next.
 
-        This is usefull to implement 'atomic' command sequences. For example,
+        This is useful to implement 'atomic' command sequences. For example,
         if one wants to switch to each thread in turn, asking gdb where that
         thread stand, this should never be interrupted by other command, since
         other commands might not expect that thread magically changes.

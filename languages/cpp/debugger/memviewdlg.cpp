@@ -62,7 +62,7 @@
 //  No data means disassemble the method we're curently in.(from the
 //  start of the method)
 //
-// click ok buton to send the request to gdb
+// click ok button to send the request to gdb
 // the output is returned (some time later) in the raw data slot
 // and displayed as is, so it's rather crude, but it works!
 // **************************************************************************

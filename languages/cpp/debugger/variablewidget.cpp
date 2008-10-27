@@ -54,7 +54,7 @@
     - slotCurrentFrame
 
     The first is received the program status changes and the second is
-    recieved after current frame in the debugger can possibly changes.
+    received after current frame in the debugger can possibly changes.
 
     The widget has a list item for each frame/thread combination, with
     variables as children. However, at each moment only one item is shown.

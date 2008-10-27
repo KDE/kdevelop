@@ -166,7 +166,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
             
             uint m_hash = splitTreeForRanges(target, ranges, rangesSizes, rangeList+1, splitBit);
             
-            n = &target[position]; //The adress may have changed
+            n = &target[position]; // The address may have changed
             
             //Now compute the right part of the split
             
@@ -177,7 +177,7 @@ uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* ran
             rangesSizes[rangeList] = oldRangeSize - range;
             m_hash += splitTreeForRanges(target, ranges+rangeList, rangesSizes+rangeList, rangeListCounts - rangeList, splitBit);
             
-            n = &target[position]; //The adress may have changed
+            n = &target[position]; // The address may have changed
             
             n->m_hash = m_hash;
             

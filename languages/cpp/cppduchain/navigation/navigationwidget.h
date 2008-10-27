@@ -35,7 +35,7 @@ public:
       * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
       * normal text in the navigation-widget.
       * The texts may contain links to files, using a simple special Syntax:
-      * KDEV_FILE_LINK{File}. Every occurence of KDEV_FILE_LINK will be replaced.
+      * KDEV_FILE_LINK{File}. Every occurrence of KDEV_FILE_LINK will be replaced.
       * */
     NavigationWidget(KDevelop::DeclarationPointer declaration, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
 

@@ -17,7 +17,7 @@
     <widget class="QCheckBox" name="enable" >
      <property name="whatsThis" >
       <string>&lt;b>Enable tracing&lt;/b>
-&lt;p>Tracing is a mechanism to automatically print values of the choosed expressions and continue execution when breakpoint is hit. You can think of it as printf debugging that does not require modifying the source.&lt;/p></string>
+&lt;p>Tracing is a mechanism to automatically print values of the chosen expressions and continue execution when breakpoint is hit. You can think of it as printf debugging that does not require modifying the source.&lt;/p></string>
      </property>
      <property name="text" >
       <string>Enable tracing</string>
@@ -74,7 +74,7 @@
      </property>
      <property name="whatsThis" >
       <string>&lt;b>Custom format string&lt;/b>
-&lt;p>Specify a C-style format string that will be used when printing the choosen expression. For example:
+&lt;p>Specify a C-style format string that will be used when printing the chosen expression. For example:
 &lt;p align="center"> &lt;tt>Tracepoint 1: g = %d&lt;/tt>&lt;/p>
 If custom format string is not enabled, names and values of all expressions will be printed, using "%d" as format specifier for all expressions.</string>
      </property>

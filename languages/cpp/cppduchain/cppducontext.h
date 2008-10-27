@@ -205,7 +205,7 @@ class CppDUContext : public BaseContext {
           if(!findDeclarationsInternal(id, position, dataType, ret, source, basicFlags))
             return false;
 
-      //Remove all foward-declarations if there is a real declaration in the list
+      // Remove all forward-declarations if there is a real declaration in the list
 
       bool haveForwardDeclaration = false;
       bool haveNonForwardDeclaration = false;
@@ -349,7 +349,7 @@ class CppDUContext : public BaseContext {
             } else {
               Declaration* copy;
               if(decl->context() != m_instantiatedFrom) {
-                //The declaration has been propagated up from a sub-context like an enumerator, add more empty instantiation informations
+                // The declaration has been propagated up from a sub-context like an enumerator, add more empty instantiation information
                 InstantiationInformation i;
                 i.previousInstantiationInformation = memberInstantiationInformation.indexed().index(); //Currently we don't propagate higher than 1 level
                 copy = templateDecl->instantiate(i, source);

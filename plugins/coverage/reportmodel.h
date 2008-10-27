@@ -69,7 +69,7 @@ private:
     QMap<QString, ReportDirItem*> m_dirs;
 };
 
-// TODO merge this with the CoveredFile class, it is totally redundant to have both waste ressources
+// TODO merge this with the CoveredFile class, it is totally redundant to have both waste resources
 class VERITAS_COVERAGE_EXPORT ReportFileItem : public QStandardItem
 {
 public:
