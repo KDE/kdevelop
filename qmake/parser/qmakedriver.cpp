@@ -77,7 +77,7 @@ bool Driver::parse( ProjectAST** qmast )
     bool matched = qmakeparser.parseProject(&ast);
     if( matched )
     {
-        kDebug(9024) << "Sucessfully parsed";
+        kDebug(9024) << "Successfully parsed";
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
