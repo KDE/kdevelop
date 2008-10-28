@@ -654,6 +654,7 @@ void TestDUChain::testVirtualMemberFunction()
   ClassFunctionDeclaration* memberFun; // filled by assert macro below
   ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
   QVERIFY(memberFun->isVirtual());
+  QVERIFY(!memberFun->isAbstract());
   release(top);
 }
 
@@ -667,6 +668,7 @@ void TestDUChain::testMultipleVirtual()
     ASSERT_TWO_MEMBER_FUNCTIONS_IN(top, bar, baz);
     QVERIFY(bar->isVirtual());
     QVERIFY(baz->isVirtual());
+    QVERIFY(!baz->isAbstract());
     release(top);
 }
 
@@ -681,6 +683,7 @@ void TestDUChain::testMixedVirtualNormal()
     ASSERT_TWO_MEMBER_FUNCTIONS_IN(top, bar, baz);
     QVERIFY(bar->isVirtual());
     QVERIFY(!baz->isVirtual());
+    QVERIFY(!baz->isAbstract());
     release(top);
   }
 }
@@ -695,6 +698,7 @@ void TestDUChain::testNonVirtualMemberFunction()
     ClassFunctionDeclaration* memberFun; // filled by assert macro below
     ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
     QVERIFY(!memberFun->isVirtual());
+    QVERIFY(!memberFun->isAbstract());
     release(top);
   }
 }
@@ -847,7 +851,7 @@ void TestDUChain::testDeclareStruct()
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A { short i; A(int b, int c) : i(c) { } virtual void test(int j) = 0; }; A instance;");
 
-    TopDUContext* top = parse(method, DumpNone);
+    TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -907,6 +911,12 @@ void TestDUChain::testDeclareStruct()
     QCOMPARE(defC->uses().count(), 1);
     QCOMPARE(defC->uses().begin()->count(), 1);
 
+    Declaration* defTest = structA->localDeclarations()[2];
+    QCOMPARE(defTest->identifier(), Identifier("test"));
+    ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(defTest);
+    QVERIFY(classFunDecl);
+    QVERIFY(classFunDecl->isAbstract());
+    
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("c")), defC);

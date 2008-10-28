@@ -82,13 +82,13 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false)
 {
   setEditor(editor, false);
 }
@@ -180,6 +180,12 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   m_functionDefinedStack.pop();
 
   popSpecifiers();
+}
+
+void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
+{
+  PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
+  DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
 void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
@@ -591,6 +597,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
     ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
      DUChainWriteLocker lock(DUChain::lock());
     fun->setAccessPolicy(currentAccessPolicy());
+    fun->setIsAbstract(m_declarationHasInitializer);
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition

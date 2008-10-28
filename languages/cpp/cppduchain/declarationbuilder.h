@@ -87,6 +87,7 @@ public:
   virtual void visitEnumerator(EnumeratorAST* node);
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitTypeId(TypeIdAST *);
+  virtual void visitInitDeclarator(InitDeclaratorAST *node);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
 
@@ -139,7 +140,7 @@ private:
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 
-  bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators;
+  bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
 };
 
 #endif // DECLARATIONBUILDER_H
