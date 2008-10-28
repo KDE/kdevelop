@@ -147,13 +147,10 @@ void CMakeProjectVisitorTest::testRun_data()
                                     "set(abc \"def\")\n"
                                     "set(b \"${${${a}}}\")\n)" << cacheValues << results;
     
-    cacheValues.clear();
-    results.clear();
-    results << StringPair("a", "potatoe\n");
-    QTest::newRow("envCC") <<   "set(a \"potatoe\\n\")"
-                                "IF($ENV{CC} MATCHES \".+\")\n"
-                                "  MESSAGE(STATUS \"we!\")\n"
-                                "ENDIF($ENV{CC} MATCHES \".+\")\n" << cacheValues << results;
+//     cacheValues.clear();
+//     results.clear();
+//     results << StringPair("a", "potatoe\n");
+//     QTest::newRow("envCC") <<   "set(a $ENV{a})" << cacheValues << results;
     
     cacheValues.clear();
     results.clear();
@@ -168,7 +165,15 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("res", "222aaaa333");
     QTest::newRow("concatenation") <<   "set(tt aaaa)\n"
                                 "set(res \"222${tt}333\")\"\n" << cacheValues << results;
-                                
+    
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "222aaaa333");
+    QTest::newRow("invar_concatenation") << "set(abc aaaa)\n"
+                                            "set(kk b)\n"
+                                            "set(res \"222${a${kk}c}333\")\n" << cacheValues << results;
+    
+                                        
     cacheValues.clear();
     results.clear();
     results << StringPair("res", "oooaaaa");
@@ -176,13 +181,19 @@ void CMakeProjectVisitorTest::testRun_data()
                                     "set(a t)\n"
                                     "set(b t)\n"
                                     "set(res ooo${${a}${b}})\"\n" << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "aaaaaa");
+    QTest::newRow("composing1") <<  "set(tt aaaaa)\n"
+                                    "set(a t)\n"
+                                    "set(res \"${${a}${a}}a\")\n" << cacheValues << results;
                                     
     cacheValues.clear();
     results.clear();
-    results << StringPair("res", "oooaaaa");
-    QTest::newRow("mad") << "set(ARGN tamare)"
-                            "GET_SOURCE_FILE_PROPERTY(_deps ${_file} OBJECT_DEPENDS)\n"
-                            "set(_deps ${_deps} ${ARGN})\n" << cacheValues << results;
+    results << StringPair("_deps", "");
+    QTest::newRow("mad") << "set(_deps tamare)\n"
+                            "aux_source_directory(/tmp _deps)\n"//any unimplemented method
+                            "set(_deps ${_deps})\n" << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()

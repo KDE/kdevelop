@@ -50,13 +50,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const CustomCommandAst * );
         virtual int visit( const CustomTargetAst * );
         virtual int visit( const AddDefinitionsAst * );
-        virtual int visit( const AddDependenciesAst * ) { return notImplemented("AddDependenciesAst"); }
         virtual int visit( const AddTestAst * );
-        virtual int visit( const AuxSourceDirectoryAst * ) { return notImplemented("AuxSourceDirectoryAst"); }
-        virtual int visit( const BuildCommandAst * ) { return notImplemented("BuildCommandAst"); }
-        virtual int visit( const BuildNameAst * ) { return notImplemented("BuildNameAst"); }
-        virtual int visit( const CMakeMinimumRequiredAst * ) { return notImplemented("CMakeMinimumRequiredAst"); }
-        virtual int visit( const ConfigureFileAst * ) { return notImplemented("ConfigureFileAst"); }
         virtual int visit( const AddExecutableAst * );
         virtual int visit( const AddLibraryAst * );
         virtual int visit( const AddSubdirectoryAst * );

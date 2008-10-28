@@ -107,9 +107,10 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
 QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& thecase) const
 {
     int dollar=exp.lastIndexOf('$', thecase.first);
-    QString type=exp.mid(dollar, thecase.first-dollar-1);
+    QString type=exp.mid(dollar+1, thecase.first-dollar-1);
     QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
     QStringList vars;
+    qDebug() << "lalalallalala" << exp << thecase.print();
     if(type.isEmpty())
     {
         if(m_vars->contains(var))
@@ -128,6 +129,13 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     return vars;
 }
 
+QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
+{
+//     qDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
+    qDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+    return var.mid(0, dollar)+value+var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+}
+
 QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>& poss, int desired) const
 {
     QString var=exp;
@@ -140,10 +148,7 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     
     if(invars.count()>1)
     {
-//         qDebug() << "vaaaaars" << var << IntPair::printList(invars);
-//         IntPair p=invars.takeLast();
-//         var=exp.mid(p.first+1, p.second-p.first-1);
-//         qDebug() << "vaaaaars22222" << var << IntPair::printList(invars);
+        qDebug() << "vaaaaars" << var << IntPair::printList(invars);
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
         QList<IntPair>::iterator itEnd=invars.end();
         QList<IntPair>::iterator itBegin=invars.begin();
@@ -152,18 +157,18 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
             const IntPair& subvar=*it;
             int dollar=var.lastIndexOf('$', subvar.first);
             QString id=var.mid(dollar, subvar.second-dollar+1), value=theValue(var, subvar).join(QChar(';'));
-//             qDebug() << "xaaaa" << id << subvar.print();
+            qDebug() << "xaaaa" << id << subvar.print();
             
             int diff=value.size()-id.size();
             for(QList<IntPair>::iterator it=itBegin; it!=itEnd; ++it)
             {
-                if(it->first > subvar.second) it->first += diff;
+                if(it->first > subvar.first) it->first += diff;
                 if(it->second> subvar.second) it->second+= diff;
             }
             
-//             qDebug() << "replaaaaaaace" << id << value << diff;
-            var=var.replace(id, value);
-//             qDebug() << "reeeeeeees" << var;
+            qDebug() << "replaaaaaaace" << id << value << diff;
+            var=replaceOne(var, id, value, dollar);
+            qDebug() << "reeeeeeees" << var;
         }
     }
 //     qDebug() << "exiiiiiit" << theValue(var, invars.last()) << invars.last().print();
@@ -242,6 +247,12 @@ bool CMakeProjectVisitor::hasMacro(const QString& name) const
 int CMakeProjectVisitor::visit(const CMakeAst *ast)
 {
     kDebug(9042) << "error! function not implemented" << ast->content()[ast->line()].name;
+    foreach(const CMakeFunctionArgument& arg, ast->outputArguments())
+    {
+        //NOTE: this is a workaround, but fixes some issues.
+        kDebug(9042) << "reseting: " << arg.value;
+        m_vars->insert(arg.value, QStringList());
+    }
     return 1;
 }
 
@@ -351,7 +362,8 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
-    //FIXME: Must deal with ENV{something} case
+    //TODO: Must deal with ENV{something} case
+    kDebug() << "set" << set->variableName();
     QStringList values;
     if(set->storeInCache() && m_cache->contains(set->variableName()))
         values = m_cache->value(set->variableName()).split(';');
@@ -1325,7 +1337,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 
 int CMakeProjectVisitor::visit(const GetSourceFilePropAst* prop)
 {
-    kDebug(9042) << "not supported yet";
+    kDebug(9042) << "not supported yet :::" << prop->variableName();
     m_vars->insert(prop->variableName(), QStringList());
     return 1;
 }
@@ -1829,23 +1841,19 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         Q_ASSERT( line<fc.count() );
         Q_ASSERT( line>=0 );
 //         kDebug(9042) << "@" << line;
-//         kDebug(9042) <return core()->languageController()->language(name());
 
         Q_ASSERT( *it == fc[line] );
 //         kDebug(9042) << "At line" << line << "/" << fc.count();
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         if(!element)
-        {
             element = new MacroCallAst;
-        }
 
         createUses(*it);
-//         kDebug(9042) << "resolving:" << it->writeBack();
+        kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
-//         kDebug(9042) << "resolved:" << func.writeBack();
         bool correct = element->parseFunctionInfo(func);
-//         kDebug(9042) << "parsed";
+        kDebug(9042) << "resolved:" << func.writeBack() << correct;
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl

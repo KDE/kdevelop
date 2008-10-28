@@ -75,16 +75,10 @@ class CMakeAstVisitor {
         virtual ~CMakeAstVisitor() {}
 
         virtual int visit( const AddDefinitionsAst * ) = 0;
-        virtual int visit( const AddDependenciesAst * ) = 0;
         virtual int visit( const AddExecutableAst * ) = 0;
         virtual int visit( const AddLibraryAst * ) = 0;
         virtual int visit( const AddSubdirectoryAst * ) = 0;
         virtual int visit( const AddTestAst * ) = 0;
-        virtual int visit( const AuxSourceDirectoryAst * ) = 0;
-        virtual int visit( const BuildCommandAst * ) = 0;
-        virtual int visit( const BuildNameAst * ) = 0;
-        virtual int visit( const CMakeMinimumRequiredAst * ) = 0;
-        virtual int visit( const ConfigureFileAst * ) = 0;
         virtual int visit( const CustomCommandAst * ) = 0;
         virtual int visit( const CustomTargetAst * ) = 0;
         virtual int visit( const ExecProgramAst * ) = 0;

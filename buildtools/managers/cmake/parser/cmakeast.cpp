@@ -1783,6 +1783,7 @@ bool GetSourceFilePropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="get_source_file_property" || func.arguments.count()!=3)
         return false;
+    addOutputArgument(func.arguments[0]);
     m_variableName=func.arguments[0].value;
     m_filename=func.arguments[1].value;
     m_property=func.arguments[2].value;
