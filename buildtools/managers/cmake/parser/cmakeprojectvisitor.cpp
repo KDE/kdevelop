@@ -1858,10 +1858,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             element = new MacroCallAst;
 
         createUses(*it);
-        kDebug(9042) << "resolving:" << it->writeBack();
+//         kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
-        kDebug(9042) << "resolved:" << func.writeBack() << correct;
+//         kDebug(9042) << "resolved:" << func.writeBack() << correct;
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
