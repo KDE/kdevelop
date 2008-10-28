@@ -42,7 +42,7 @@ endif( KDevPlatform_FIND_VERSION_MAJOR )
 find_package( KDevPlatform ${_args} NO_MODULE )
 
 if( NOT KDevPlatform_FOUND AND KDevPlatform_FIND_REQUIRED )
-    message( FATAL "Could not find KDevPlatform libraries, searched in ${CMAKE_PREFIX_PATH} and $ENV{CMAKE_PREFIX_PATH}. You can set CMAKE_PREFIX_PATH to search in other directories." )
+    message( FATAL_ERROR "Could not find KDevPlatform libraries, searched in '${CMAKE_PREFIX_PATH}' and '$ENV{CMAKE_PREFIX_PATH}'. You can set CMAKE_PREFIX_PATH to search in other directories." )
 elseif( KDevPlatform_FOUND AND NOT KDevPlatform_FIND_QUIETLY )
     message( STATUS "Found KDevPlatform ${KDevPlatform_VERSION}, using include dir ${KDevPlatform_INCLUDE_DIR}." )
 endif( NOT KDevPlatform_FOUND AND KDevPlatform_FIND_REQUIRED )
