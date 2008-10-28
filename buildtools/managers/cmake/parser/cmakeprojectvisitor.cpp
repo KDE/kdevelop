@@ -100,7 +100,14 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                     pos.append(IntPair(opened.pop(), i, opened.count()));
                 break;
         }
-    }    
+    }
+    
+    for(int i=pos.count()-1; i>=0 && !opened.isEmpty(); i--)
+    {
+        if(pos[i].first==opened.top())
+            opened.pop();
+        pos[i].level -= opened.size();
+    }
     return pos;
 }
 
@@ -110,7 +117,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     QString type=exp.mid(dollar+1, thecase.first-dollar-1);
     QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
     QStringList vars;
-    qDebug() << "lalalallalala" << exp << thecase.print();
+//     qDebug() << "lalalallalala" << exp << thecase.print();
     if(type.isEmpty())
     {
         if(m_vars->contains(var))
@@ -132,7 +139,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
 QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
 {
 //     qDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
-    qDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+//     qDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
     return var.mid(0, dollar)+value+var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
 }
 
@@ -148,7 +155,7 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     
     if(invars.count()>1)
     {
-        qDebug() << "vaaaaars" << var << IntPair::printList(invars);
+//         qDebug() << "vaaaaars" << var << IntPair::printList(invars);
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
         QList<IntPair>::iterator itEnd=invars.end();
         QList<IntPair>::iterator itBegin=invars.begin();
@@ -157,7 +164,7 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
             const IntPair& subvar=*it;
             int dollar=var.lastIndexOf('$', subvar.first);
             QString id=var.mid(dollar, subvar.second-dollar+1), value=theValue(var, subvar).join(QChar(';'));
-            qDebug() << "xaaaa" << id << subvar.print();
+//             qDebug() << "xaaaa" << id << subvar.print();
             
             int diff=value.size()-id.size();
             for(QList<IntPair>::iterator it=itBegin; it!=itEnd; ++it)
@@ -166,9 +173,9 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
                 if(it->second> subvar.second) it->second+= diff;
             }
             
-            qDebug() << "replaaaaaaace" << id << value << diff;
+//             qDebug() << "replaaaaaaace" << id << value << diff;
             var=replaceOne(var, id, value, dollar);
-            qDebug() << "reeeeeeees" << var;
+//             qDebug() << "reeeeeeees" << var;
         }
     }
 //     qDebug() << "exiiiiiit" << theValue(var, invars.last()) << invars.last().print();
@@ -188,10 +195,11 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     {
         while(it!=var.constEnd() && it->level>1)
             ++it;
+        
         const IntPair& p=*it;
+//         qDebug () << "reeeeeet" << ret << exp.value << p.print();
         int dollar=exp.value.lastIndexOf('$', p.first);
         QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
-//         qDebug () << "reeeeeet" << ret << pre << exp.value;
         
         QStringList vars = value(exp.value, var, i);
 //         qDebug() << "aaaaaaaaaA" << vars;

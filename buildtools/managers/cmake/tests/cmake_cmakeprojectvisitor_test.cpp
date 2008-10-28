@@ -48,6 +48,7 @@ void CMakeProjectVisitorTest::testVariables_data()
     QTest::newRow("mess") << "{}{}{}}}}{{{{}${a}\n" << QStringList("a");
     QTest::newRow("Nothing") << "aaaa${aaaa" << QStringList();
     QTest::newRow("varinvar") << "${${${a}}}" << (QStringList() << "${${a}}" << "${a}" << "a");
+    QTest::newRow("varinvar") << "${${a}${b}a" << (QStringList() << "a" << "b");
 }
 
 void CMakeProjectVisitorTest::testVariables()
@@ -60,6 +61,8 @@ void CMakeProjectVisitorTest::testVariables()
     
 //     qDebug() << "kakakaka" << result << variables;
     QCOMPARE(result.count(), variables.count());
+    if(!variables.isEmpty())
+        QCOMPARE(1, variables.last().level);
     
     typedef QPair<int,int> IntPair;
     foreach(const CMakeProjectVisitor::IntPair& v, variables)
@@ -147,10 +150,13 @@ void CMakeProjectVisitorTest::testRun_data()
                                     "set(abc \"def\")\n"
                                     "set(b \"${${${a}}}\")\n)" << cacheValues << results;
     
-//     cacheValues.clear();
-//     results.clear();
-//     results << StringPair("a", "potatoe\n");
-//     QTest::newRow("envCC") <<   "set(a $ENV{a})" << cacheValues << results;
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("b", "k");
+    QTest::newRow("envCC") <<   "set(a $ENV{PATH})\n"
+                                "if(DEFINED a)\n"
+                                "   set(b k)\n"
+                                "endif(DEFINED a)\n"<< cacheValues << results;
     
     cacheValues.clear();
     results.clear();
@@ -193,7 +199,8 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("_deps", "");
     QTest::newRow("mad") << "set(_deps tamare)\n"
                             "aux_source_directory(/tmp _deps)\n"//any unimplemented method
-                            "set(_deps ${_deps})\n" << cacheValues << results;
+                            "set(_deps ${_deps})\n"
+                            "set(${${a}${b}a 33)\n" << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
