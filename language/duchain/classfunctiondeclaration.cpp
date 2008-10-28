@@ -108,14 +108,39 @@ QString ClassFunctionDeclaration::toString() const {
   return true;
 }*/
 
-ClassFunctionDeclaration::QtFunctionType ClassFunctionDeclaration::functionType() const
-{
-  return d_func()->m_functionType;
+uint setFlag(bool enable, uint flag, uint flags) {
+  if(enable)
+    return flags | flag;
+  else
+    return flags & (~flag);
 }
 
-void ClassFunctionDeclaration::setFunctionType(QtFunctionType functionType)
+bool ClassFunctionDeclaration::isAbstract() const
 {
-  d_func_dynamic()->m_functionType = functionType;
+  return d_func()->m_functionFlags & AbstractFunctionFlag;
+}
+
+void ClassFunctionDeclaration::setIsAbstract(bool abstract)
+{
+  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(abstract, AbstractFunctionFlag, d_func()->m_functionFlags);
+}
+
+bool ClassFunctionDeclaration::isSignal() const
+{
+  return d_func()->m_functionFlags & FunctionSignalFlag;
+}
+
+void ClassFunctionDeclaration::setIsSignal(bool isSignal) {
+  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(isSignal, FunctionSignalFlag, d_func()->m_functionFlags);
+}
+
+bool ClassFunctionDeclaration::isSlot() const
+{
+  return d_func()->m_functionFlags & FunctionSlotFlag;
+}
+
+void ClassFunctionDeclaration::setIsSlot(bool isSlot) {
+  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(isSlot, FunctionSlotFlag, d_func()->m_functionFlags);
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {

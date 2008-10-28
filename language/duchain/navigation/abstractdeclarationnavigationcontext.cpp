@@ -427,9 +427,9 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
     const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
 
     if( classFunDecl ) {
-      if( classFunDecl->functionType() == ClassFunctionDeclaration::Signal )
+      if( classFunDecl->isSignal() )
         details << "signal";
-      if( classFunDecl->functionType() == ClassFunctionDeclaration::Slot )
+      if( classFunDecl->isSlot() )
         details << "slot";
       if( classFunDecl->isConstructor() )
         details << "constructor";
