@@ -1161,7 +1161,7 @@ class ItemRepository : public AbstractItemRepository {
         ///Step one: Search whether we can merge multiple empty buckets in the free-list into one monster-bucket
         int rangeStart = -1;
         int rangeEnd = -1;
-        for(int a = 0; a < (int)m_freeSpaceBucketsSize; ++a) {
+        for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
           Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
           if(bucketPtr->isEmpty()) {
             //This bucket is a candidate for monster-bucket merging
@@ -1749,33 +1749,36 @@ class ItemRepository : public AbstractItemRepository {
   void updateFreeSpaceOrder(uint index) {
     m_metaDataChanged = true;
 
-    Q_ASSERT(index < (uint)m_freeSpaceBuckets.size());
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[index]);
+    unsigned int* freeSpaceBuckets = m_freeSpaceBuckets.data();
+    
+    Q_ASSERT(index < (uint)m_freeSpaceBucketsSize);
+    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(freeSpaceBuckets[index]);
     
     unsigned short largestFreeSize = bucketPtr->largestFreeSize();
     
     if(largestFreeSize == 0 || (bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide && largestFreeSize <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeSizeForHide)) {
-      //Remove the item from m_freeSpaceBuckets
+      //Remove the item from freeSpaceBuckets
       m_freeSpaceBuckets.remove(index);
-      m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
+      m_freeSpaceBucketsSize = m_freeSpaceBucketsSize;
     }else{
+      
       while(1) {
         int prev = index-1;
         int next = index+1;
-        if(prev >= 0 && (bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize() > largestFreeSize ||
-                         (bucketForIndex(m_freeSpaceBuckets[prev])->largestFreeSize() == largestFreeSize && m_freeSpaceBuckets[index] < m_freeSpaceBuckets[prev]))
+        if(prev >= 0 && (bucketForIndex(freeSpaceBuckets[prev])->largestFreeSize() > largestFreeSize ||
+                         (bucketForIndex(freeSpaceBuckets[prev])->largestFreeSize() == largestFreeSize && freeSpaceBuckets[index] < freeSpaceBuckets[prev]))
           ) {
           //This item should be behind the successor, either because it has a lower largestFreeSize, or because the index is lower
-          uint oldPrevValue = m_freeSpaceBuckets[prev];
-          m_freeSpaceBuckets[prev] = m_freeSpaceBuckets[index];
-          m_freeSpaceBuckets[index] = oldPrevValue;
+          uint oldPrevValue = freeSpaceBuckets[prev];
+          freeSpaceBuckets[prev] = freeSpaceBuckets[index];
+          freeSpaceBuckets[index] = oldPrevValue;
           index = prev;
-        }else if(next < m_freeSpaceBuckets.size() && (bucketForIndex(m_freeSpaceBuckets[next])->largestFreeSize() < largestFreeSize || 
-                                                     (bucketForIndex(m_freeSpaceBuckets[next])->largestFreeSize() == largestFreeSize && m_freeSpaceBuckets[index] > m_freeSpaceBuckets[next]))) {
+        }else if(next < (int)m_freeSpaceBucketsSize && (bucketForIndex(freeSpaceBuckets[next])->largestFreeSize() < largestFreeSize || 
+                                                     (bucketForIndex(freeSpaceBuckets[next])->largestFreeSize() == largestFreeSize && freeSpaceBuckets[index] > freeSpaceBuckets[next]))) {
           //This item should be behind the successor, either because it has a higher largestFreeSize, or because the index is higher
-          uint oldNextValue = m_freeSpaceBuckets[next];
-          m_freeSpaceBuckets[next] = m_freeSpaceBuckets[index];
-          m_freeSpaceBuckets[index] = oldNextValue;
+          uint oldNextValue = freeSpaceBuckets[next];
+          freeSpaceBuckets[next] = freeSpaceBuckets[index];
+          freeSpaceBuckets[index] = oldNextValue;
           index = next;
         }else {
           break;
