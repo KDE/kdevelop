@@ -371,8 +371,11 @@ public:
 //     QMutexLocker l(&m_chainsMutex);
 
     uint cnt = 0;
+    
+    //For stability in the case of changes, we create a copy here
+    QMultiMap<IndexedString, ParsingEnvironmentFilePointer> mapCopy = m_fileEnvironmentInformations;
 
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it  != m_fileEnvironmentInformations.end(); ++it) {
+    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = mapCopy.begin(); it  != mapCopy.end(); ++it) {
       
       EnvironmentInformationRequest req(it->data());
       uint index = m_environmentInfo.findIndex(req);
@@ -385,7 +388,9 @@ public:
           m_environmentInfo.deleteItem(index);
         
         //Add the new entry to the item repository
-        m_environmentInfo.index(req);
+        index = m_environmentInfo.index(req);
+        
+        (*it)->setData( (KDevelop::DocumentRangeObjectData*)(((char*)(const_cast<KDevelop::EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index)))) + sizeof(KDevelop::EnvironmentInformationItem)) );
         
         ++cnt;
         if(!atomic && (cnt % 100 == 0)) {
@@ -599,7 +604,7 @@ private:
       }
     }
     
-    //Step two: Check if it is on disk, and if es, load it
+    //Step two: Check if it is on disk, and if is, load it
     uint dataIndex = m_environmentInfo.findIndex(EnvironmentInformationRequest(topContextIndex));
     if(!dataIndex) {
       //No environment-information stored for this top-context
@@ -608,9 +613,7 @@ private:
 
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
     
-    char* pos = (char*)&item;
-    pos += sizeof(EnvironmentInformationItem);
-    ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create((DUChainBaseData*)pos));
+    ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
     if(ret) {
       m_fileEnvironmentInformations.insert(url, ParsingEnvironmentFilePointer(ret));
       Q_ASSERT(ret->url() == url);
