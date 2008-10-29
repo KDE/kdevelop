@@ -22,18 +22,18 @@
 
 #include <klocale.h>
 
-#include "../functiondeclaration.h"
-#include "../functiondefinition.h"
-#include "../classfunctiondeclaration.h"
-#include "../namespacealiasdeclaration.h"
-#include "../forwarddeclaration.h"
-#include "../types/enumeratortype.h"
-#include "../types/enumerationtype.h"
-#include "../types/functiontype.h"
-#include "../duchainutils.h"
-#include "../types/pointertype.h"
-#include "../types/referencetype.h"
-#include "../types/typeutils.h"
+#include "functiondeclaration.h"
+#include "functiondefinition.h"
+#include "classfunctiondeclaration.h"
+#include "namespacealiasdeclaration.h"
+#include "forwarddeclaration.h"
+#include "enumeratortype.h"
+#include "enumerationtype.h"
+#include "functiontype.h"
+#include "duchainutils.h"
+#include "pointertype.h"
+#include "referencetype.h"
+#include "typeutils.h"
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)

@@ -27,22 +27,22 @@
 
 #include <klocale.h>
 
-#include "../declaration.h"
-#include "../ducontext.h"
-#include "../duchainlock.h"
-#include "../functiondeclaration.h"
-#include "../functiondefinition.h"
-#include "../forwarddeclaration.h"
-#include "../namespacealiasdeclaration.h"
-#include "../classfunctiondeclaration.h"
-#include "../classmemberdeclaration.h"
-#include "../topducontext.h"
+#include "declaration.h"
+#include "ducontext.h"
+#include "duchainlock.h"
+#include "functiondeclaration.h"
+#include "functiondefinition.h"
+#include "forwarddeclaration.h"
+#include "namespacealiasdeclaration.h"
+#include "classfunctiondeclaration.h"
+#include "classmemberdeclaration.h"
+#include "topducontext.h"
 #include "abstractnavigationcontext.h"
 #include "abstractdeclarationnavigationcontext.h"
 #include "navigationaction.h"
 #include "useswidget.h"
-#include "../../../interfaces/icore.h"
-#include "../../../interfaces/idocumentcontroller.h"
+#include "icore.h"
+#include "idocumentcontroller.h"
 
 namespace KDevelop {
 

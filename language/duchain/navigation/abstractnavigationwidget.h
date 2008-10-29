@@ -25,9 +25,9 @@
 #include <KDE/KSharedPtr>
 #include <ktextbrowser.h>
 
-#include "../duchainpointer.h"
-#include "../../interfaces/quickopendataprovider.h"
-#include "../../languageexport.h"
+#include "duchainpointer.h"
+#include "quickopendataprovider.h"
+#include "languageexport.h"
 #include "abstractnavigationcontext.h"
 
 class QWidget;

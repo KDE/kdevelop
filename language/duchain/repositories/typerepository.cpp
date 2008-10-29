@@ -20,8 +20,8 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
-#include "../types/typesystemdata.h"
-#include "../types/typeregister.h"
+#include "typesystemdata.h"
+#include "typeregister.h"
 #include "itemrepository.h"
 
 #define DEBUG_TYPE_REPOSITORY

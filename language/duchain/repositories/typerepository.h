@@ -19,7 +19,7 @@
 #ifndef TYPEREPOSITORY_H
 #define TYPEREPOSITORY_H
 
-#include "../types/abstracttype.h"
+#include "abstracttype.h"
 
 namespace KDevelop {
   class TypeRepository {

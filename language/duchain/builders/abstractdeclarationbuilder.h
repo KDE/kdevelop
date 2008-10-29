@@ -21,11 +21,11 @@
 
 #include <typeinfo>
 
-#include "../classfunctiondeclaration.h"
-#include "../forwarddeclaration.h"
-#include "../types/identifiedtype.h"
-#include "../functiondeclaration.h"
-#include "../../editor/editorintegrator.h"
+#include "classfunctiondeclaration.h"
+#include "forwarddeclaration.h"
+#include "identifiedtype.h"
+#include "functiondeclaration.h"
+#include "editorintegrator.h"
 
 namespace KDevelop
 {

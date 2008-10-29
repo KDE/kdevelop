@@ -20,7 +20,7 @@
 
 #include "integraltype.h"
 
-#include "../indexedstring.h"
+#include "indexedstring.h"
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"

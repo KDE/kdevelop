@@ -22,7 +22,7 @@
 #include <kurl.h>
 #include <ktexteditor/cursor.h>
 
-#include "../duchainpointer.h"
+#include "duchainpointer.h"
 
 namespace KDevelop {
 

@@ -21,8 +21,8 @@
 #ifndef TYPESYSTEMDATA_H
 #define TYPESYSTEMDATA_H
 
-#include "../appendedlist.h"
-#include "../indexedstring.h"
+#include "appendedlist.h"
+#include "indexedstring.h"
 #include "indexedtype.h"
 #include "delayedtype.h"
 #include "identifiedtype.h"

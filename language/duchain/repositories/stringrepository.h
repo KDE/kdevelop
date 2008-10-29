@@ -23,7 +23,7 @@
 
 #include "itemrepository.h"
 
-#include "../indexedstring.h"
+#include "indexedstring.h"
 
 namespace Repositories {
 using namespace KDevelop;

@@ -20,7 +20,7 @@
 #define USESNAVIGATIONCONTEXT_H
 
 #include "abstractnavigationwidget.h"
-#include "../../languageexport.h"
+#include "languageexport.h"
 
 namespace KDevelop {
   class UsesWidget;
