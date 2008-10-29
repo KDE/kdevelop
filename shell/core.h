@@ -39,7 +39,12 @@ class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
     enum Setup { Default=0, NoUi=1 };
 
+    /** Initialize the core of the kdevplatform application */
     static void initialize(Setup mode=Default);
+
+    /**
+     * \brief Provide access an instance of Core
+     */
     static Core *self();
 
     virtual ~Core();

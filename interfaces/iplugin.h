@@ -155,6 +155,9 @@ public:
      */
     Q_SCRIPTABLE KIconLoader* iconLoader() const;
 
+    /**
+     * Provides access to the ICore implemenation
+     */
     Q_SCRIPTABLE ICore *core() const;
 
     Q_SCRIPTABLE void registerExtensions();
