@@ -124,6 +124,9 @@ class EnvironmentInformationRequest {
     new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
     
     DUChainItemSystem::self().copy(*m_file->d_func(), *(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem)), true);
+    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).m_range == m_file->d_func()->m_range);
+    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).classId == m_file->d_func()->classId);
+    Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).m_dynamic == false);
   }
 
   bool equals(const EnvironmentInformationItem* item) const {
@@ -389,8 +392,18 @@ public:
         
         //Add the new entry to the item repository
         index = m_environmentInfo.index(req);
+        Q_ASSERT(index);
         
-        (*it)->setData( (KDevelop::DocumentRangeObjectData*)(((char*)(const_cast<KDevelop::EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index)))) + sizeof(KDevelop::EnvironmentInformationItem)) );
+        EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
+        DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
+        static DUChainBaseData* dataCopy;
+        dataCopy = theData;
+        
+        Q_ASSERT(theData->m_range == (*it)->d_func()->m_range);
+        Q_ASSERT(theData->m_dynamic == false);
+        Q_ASSERT(theData->classId == (*it)->d_func()->classId);
+        
+        (*it)->setData( theData );
         
         ++cnt;
         if(!atomic && (cnt % 100 == 0)) {
