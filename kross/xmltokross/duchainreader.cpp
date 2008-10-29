@@ -23,6 +23,7 @@
 #include <language/duchain/types/enumerationtype.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include "classdeclaration.h"
@@ -38,8 +39,8 @@ QList<const Declaration*> extractTypes(const DUContext* ctx, int ind=1)
     qDebug() << qPrintable(QString(ind*3, '-')) << "ctx" << ctx << ctx->childContexts();
     foreach(const Declaration* decl, ctx->localDeclarations())
     {
-        qDebug() << qPrintable(QString(ind*3, '-')) << "decl" << decl->toString()
-                 << (decl->kind()==Declaration::Type);
+//         qDebug() << qPrintable(QString(ind*3, '-')) << "decl" << decl->toString()
+//                  << (decl->kind()==Declaration::Type);
         
         if(dynamic_cast<const Cpp::ClassDeclaration*>(decl) && !decl->identifier().toString().isEmpty())
         {
@@ -142,8 +143,9 @@ void DUChainReader::foundClass(const Declaration* decl)
             const AbstractType::Ptr atype=func->abstractType();
             
             const FunctionType::Ptr ftype=atype.cast<FunctionType>();
+            const ClassFunctionDeclaration* cdec=dynamic_cast<const ClassFunctionDeclaration*>(func);
             const AbstractFunctionDeclaration* dec=dynamic_cast<const AbstractFunctionDeclaration*>(func);
-            Q_ASSERT(dec && func && memberDecl);
+            Q_ASSERT(dec && cdec && func && memberDecl);
             
             if(ftype->returnType().isNull() ||
                memberDecl->accessPolicy()!=Declaration::Public) //isConstructor
@@ -160,6 +162,8 @@ void DUChainReader::foundClass(const Declaration* decl)
             
             bool isConst=ftype->modifiers() & AbstractType::ConstModifier;
             bool isVirtual=dec->isVirtual();
+            bool isAbstract=cdec->isAbstract();
+            
             const IndexedString* idx=dec->defaultParameters();
             int notDefCount = ftype->arguments().count()-dec->defaultParametersSize();
             int i=0;
@@ -209,6 +213,7 @@ void DUChainReader::foundClass(const Declaration* decl)
             currentMethod.returnType=rettype;
             currentMethod.isConst=isConst;
             currentMethod.isVirtual=isVirtual;
+            currentMethod.isAbstract=isAbstract;
             writeEndFunction(currentMethod);
         }
         else if(dynamic_cast<const ClassMemberDeclaration*>(func) && func->kind() == Declaration::Instance)

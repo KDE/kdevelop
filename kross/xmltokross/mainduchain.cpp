@@ -89,6 +89,7 @@ int main(int argc, char** argv)
     options.add("F <filename>", ki18n("filename to be used for the .moc and the .h file"), QByteArray());
     options.add("D <directory>", ki18n("directory where to put the .h output"), QByteArray());
     options.add("o <output>", ki18n("directory where to put the code output"), QByteArray());
+    options.add("impl", ki18n("create implementation"), QByteArray());
     options.add("verbose", ki18n("Verbose output"), QByteArray());
     KCmdLineArgs::addCmdLineOptions( options );
     
@@ -114,10 +115,12 @@ int main(int argc, char** argv)
     QStringList toinclude(args->getOption("i").split(':'));
     QString output(args->getOption("o"));
     verbose=args->isSet("verbose");
+    bool createImpl=args->isSet("impl");
     args->clear();
     
     DUChainExtractor e;
     kDebug() << input << builddir << includes << toinclude;
+    e.setWriteImpl(createImpl);
     e.start(input, builddir, includes, filename, directory, toinclude, output);
     
     return app.exec();

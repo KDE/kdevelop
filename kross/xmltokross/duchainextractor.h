@@ -39,6 +39,7 @@ class DUChainExtractor : public QObject
         void start(const KUrl& _input, const KUrl& builddir, const KUrl::List& includes, 
                    const QString& filename, const QString& directory, const QStringList& toinclude, const QString& output);
         bool isDone() const { return m_done; }
+        void setWriteImpl(bool w) { m_writeImpl=w; }
     public slots:
         void parsingFinished(KDevelop::ParseJob* job);
         void progressUpdated(int minimum, int maximum, int value);
@@ -51,6 +52,7 @@ class DUChainExtractor : public QObject
         QStringList m_toinclude;
         bool m_done;
         DummyBSM* m_manager;
+        bool m_writeImpl;
 };
 
 #endif

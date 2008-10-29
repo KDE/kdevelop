@@ -32,6 +32,7 @@ struct method
     QString access;
     bool isConst;
     bool isVirtual;
+    bool isAbstract;
     QList<argument> args;
 };
 
