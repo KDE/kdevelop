@@ -63,7 +63,7 @@ IndexedString DUChainBase::url() const
 {
   TopDUContext* top = topContext();
   if(top)
-    return top->url();
+    return top->TopDUContext::url();
   else
     return IndexedString();
 }
