@@ -78,8 +78,8 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             problemRange->smartEnd().advance(1);
 
         KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
-        error->setBackground(QColor(Qt::red)); // 0xB60003
-        error->setForeground(Qt::white);
+        error->setUnderlineColor(Qt::red);
+        error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
         /*KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
         dyn->setBackground(Qt::red);
