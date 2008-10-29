@@ -427,6 +427,7 @@ class CppDUContext : public BaseContext {
       this->setLocalScopeIdentifier(totalId);
       
       m_instantiatedFrom = context;
+      Q_ASSERT(m_instantiatedFrom != this);
       m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
     }
     
@@ -558,15 +559,17 @@ class CppDUContext : public BaseContext {
   private:
     ~CppDUContext() {
       //Delete all the local declarations first, so they also delete their instantiations
-      BaseContext::deleteLocalDeclarations();
+//       BaseContext::deleteLocalDeclarations();
       //Specializations will be destroyed the same time this is destroyed
       QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* > instatiations;
       {
         QMutexLocker l(&cppDuContextInstantiationsMutex);
         instatiations = m_instatiations;
       }
-      foreach( CppDUContext<BaseContext>* instatiation, instatiations )
+      foreach( CppDUContext<BaseContext>* instatiation, instatiations ) {
+        Q_ASSERT(instatiation != this);
         delete instatiation;
+      }
     }
 
     virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source,  bool searchInParents, int currentDepth) const
