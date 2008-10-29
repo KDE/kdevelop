@@ -140,33 +140,32 @@ Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
 
 Declaration::~Declaration()
 {
-  DUCHAIN_D_DYNAMIC(Declaration);
-  // Inserted by the builder after construction has finished.
+  //Only perform the actions when the top-context isn't being deleted, or when it hasn't been stored to disk
   if(!topContext()->deleting() || !topContext()->isOnDisk()) {
+    DUCHAIN_D_DYNAMIC(Declaration);
+    // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )
       d->m_internalContext.context()->setOwner(0);
-  }
-  
-  if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
-    if(!topContext()->deleting() || !topContext()->isOnDisk()) {
+    
+    if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
       QualifiedIdentifier id = qualifiedIdentifier();
       PersistentSymbolTable::self().removeDeclaration(id, this);
       CodeModel::self().removeItem(url(), id);
     }
+    
+    d->m_inSymbolTable = false;
+
+    // context is only null in the test cases
+    if (context() && !d->m_anonymousInContext) {
+      Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
+    }
+
+    clearOwnIndex();
+    
+    setContext(0);
+
+    setAbstractType(AbstractType::Ptr());
   }
-  
-  d->m_inSymbolTable = false;
-
-  // context is only null in the test cases
-  if (context() && !d->m_anonymousInContext) {
-    Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
-  }
-
-  clearOwnIndex();
-  
-  setContext(0);
-
-  setAbstractType(AbstractType::Ptr());
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 

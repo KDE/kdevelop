@@ -558,10 +558,10 @@ DUContext::DUContext(DUContext& useDataFrom)
 DUContext::~DUContext( )
 {
   ///@todo Don't create dynamic versions of the data while destroying!
-  DUCHAIN_D_DYNAMIC(DUContext);
   TopDUContext* top = topContext();
 
   if(!top->deleting() || !top->isOnDisk()) {
+    DUCHAIN_D_DYNAMIC(DUContext);
     QualifiedIdentifier id(scopeIdentifier(true));
     if(d->m_inSymbolTable && parentContext()) {
       PersistentSymbolTable::self().removeContext(id, this);
@@ -590,12 +590,15 @@ DUContext::~DUContext( )
 
   deleteLocalDeclarations();
 
-  if (m_dynamicData->m_parentContext)
-    m_dynamicData->m_parentContext->m_dynamicData->removeChildContext(this);
-  //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
+  //If the top-context is being delete, we don't need to spend time rebuilding the inner structure.
+  //That's expensive, especially when the data is not dynamic.
+  if(!top->deleting() || !top->isOnDisk()) {
+    if (m_dynamicData->m_parentContext)
+      m_dynamicData->m_parentContext->m_dynamicData->removeChildContext(this);
+    //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 
-  if(top)
     top->m_dynamicData->clearContextIndex(this);
+  }
 }
 
 QVector< DUContext * > DUContext::childContexts( ) const
@@ -1072,12 +1075,13 @@ void DUContext::deleteLocalDeclarations()
 void DUContext::deleteChildContextsRecursively()
 {
   ENSURE_CAN_WRITE
-  DUCHAIN_D_DYNAMIC(DUContext);
-  QVector<LocalIndexedDUContext> children;
-  FOREACH_FUNCTION(LocalIndexedDUContext ctx, d->m_childContexts)
-    children << ctx;
 
   TopDUContext* top = topContext();
+  
+  QVector<LocalIndexedDUContext> children;
+  FOREACH_FUNCTION(LocalIndexedDUContext ctx, d_func()->m_childContexts)
+    children << ctx;
+
   //If we are deleting a context that is already stored to disk, we don't need to load not yet loaded child-contexts.
   //Else we need to, so the declarations are unregistered from symbol-table and from TopDUContextDynamicData in their destructor
   foreach(LocalIndexedDUContext ctx, children)
@@ -1208,9 +1212,12 @@ void DUContext::deleteUse(int index)
 void DUContext::deleteUses()
 {
   ENSURE_CAN_WRITE
-  DUCHAIN_D_DYNAMIC(DUContext);
-
-  d->m_usesList().clear();
+  
+  if(!topContext()->deleting() || !topContext()->isOnDisk())
+  {
+    DUCHAIN_D_DYNAMIC(DUContext);
+    d->m_usesList().clear();
+  }
 
   clearUseSmartRanges();
 }
