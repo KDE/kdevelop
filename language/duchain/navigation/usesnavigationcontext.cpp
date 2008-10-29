@@ -17,12 +17,10 @@
 */
 
 #include "usesnavigationcontext.h"
-
-#include <klocale.h>
-
 #include "useswidget.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include <klocale.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 
 using namespace KDevelop;
 

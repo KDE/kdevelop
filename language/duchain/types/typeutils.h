@@ -19,7 +19,7 @@
 #ifndef TYPEUTILS_H
 #define TYPEUTILS_H
 
-#include "languageexport.h"
+#include "../../languageexport.h"
 #include "abstracttype.h"
 namespace KDevelop {
   class TopDUContext;

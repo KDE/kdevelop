@@ -22,10 +22,10 @@
 #include <QLabel>
 #include <QScrollArea>
 
-#include "declaration.h"
-#include "topducontext.h"
+#include <language/duchain/declaration.h>
+#include <language/duchain/topducontext.h>
 #include <editor/simplecursor.h>
-#include "languageexport.h"
+#include "../../languageexport.h"
 
 class KComboBox;
 class QComboBox;

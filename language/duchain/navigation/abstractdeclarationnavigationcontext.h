@@ -20,8 +20,8 @@
 #define ABSTRACTDECLARATIONNAVIGATIONCONTEXT_H
 
 #include "abstractnavigationcontext.h"
-#include "duchainpointer.h"
-#include "structuretype.h"
+#include "../duchainpointer.h"
+#include "../types/structuretype.h"
 
 
 

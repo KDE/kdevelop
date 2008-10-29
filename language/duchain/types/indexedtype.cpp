@@ -20,7 +20,7 @@
 
 #include "indexedtype.h"
 
-#include "typerepository.h"
+#include "../repositories/typerepository.h"
 
 namespace KDevelop
 {

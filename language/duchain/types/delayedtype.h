@@ -21,7 +21,7 @@
 #define DELAYEDTYPE_H
 
 #include "abstracttype.h"
-#include "identifier.h"
+#include "../identifier.h"
 
 namespace KDevelop
 {

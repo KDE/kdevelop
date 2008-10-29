@@ -19,13 +19,13 @@
 #ifndef KDEV_USEBUILDER_H
 #define KDEV_USEBUILDER_H
 
-#include "declaration.h"
-#include "use.h"
-#include "topducontext.h"
-#include "duchain.h"
-#include "duchainlock.h"
+#include "../declaration.h"
+#include "../use.h"
+#include "../topducontext.h"
+#include "../duchain.h"
+#include "../duchainlock.h"
 
-#include "editorintegrator.h"
+#include <language/editor/editorintegrator.h>
 
 namespace KDevelop {
 

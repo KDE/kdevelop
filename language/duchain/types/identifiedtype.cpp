@@ -19,9 +19,9 @@
 */
 
 #include "identifiedtype.h"
-#include "declaration.h"
-#include "duchainpointer.h"
-#include "declarationid.h"
+#include "../declaration.h"
+#include "../duchainpointer.h"
+#include "../declarationid.h"
 
 namespace KDevelop
 {

@@ -29,7 +29,7 @@
 #include <QtCore/QAtomicInt>
 #include <klockfile.h>
 #include <kdebug.h>
-#include "languageexport.h"
+#include "../../languageexport.h"
 
 //#define DEBUG_MONSTERBUCKETS
 

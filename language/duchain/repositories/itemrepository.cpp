@@ -26,9 +26,9 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 
-#include "icore.h"
+#include <interfaces/icore.h>
 
-#include "duchain.h"
+#include "../duchain.h"
 
 namespace KDevelop {
 

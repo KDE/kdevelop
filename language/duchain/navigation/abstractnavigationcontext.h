@@ -21,10 +21,10 @@
 
 #include <KDE/KSharedPtr>
 
-#include "languageexport.h"
-#include "duchainpointer.h"
+#include "../../languageexport.h"
+#include "../duchainpointer.h"
 #include "navigationaction.h"
-#include "structuretype.h"
+#include "../types/structuretype.h"
 
 
 

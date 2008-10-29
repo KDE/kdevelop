@@ -21,8 +21,8 @@
 #ifndef IDENTIFIEDTYPE_H
 #define IDENTIFIEDTYPE_H
 
-#include "identifier.h"
-#include "declarationid.h"
+#include "../identifier.h"
+#include "../declarationid.h"
 
 namespace KDevelop
 {
