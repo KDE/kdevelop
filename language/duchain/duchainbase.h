@@ -102,7 +102,7 @@ public:
    * */
   const KSharedPtr<DUChainPointerData>& weakPointer() const;
 
-  IndexedString url() const;
+  virtual IndexedString url() const;
   
   ///Is called immediately before this object is saved to disk. Remember calling the implementation of the parent!
   virtual void aboutToSave();

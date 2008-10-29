@@ -75,16 +75,73 @@ const int SOFT_CLEANUP_STEPS = 1;
 namespace KDevelop
 {
 //This thing is not actually used, but it's needed for compiling
-DEFINE_LIST_MEMBER_HASH(EnvironmentInformationItem, sizes, uint)
+DEFINE_LIST_MEMBER_HASH(EnvironmentInformationListItem, items, uint)
 
-///Represtens the environment-information for exactly one file in the repository, holding all known instances
+//An entry for the item-repository that holds some meta-data. Behind this entry, the actual ParsingEnvironmentFileData is stored.
 class EnvironmentInformationItem {
   public:
-  EnvironmentInformationItem() {
-    initializeAppendedLists(true);
+  EnvironmentInformationItem(uint topContext, uint size) : m_topContext(topContext), m_size(size) {
   }
 
   ~EnvironmentInformationItem() {
+  }
+
+  unsigned int hash() const {
+    return m_topContext;
+  }
+
+  unsigned short int itemSize() const {
+    return sizeof(*this) + m_size;
+  }
+
+  uint m_topContext;
+  uint m_size;//Size of the data behind, that holds the actual item
+};
+
+class EnvironmentInformationRequest {
+  public:
+
+  ///This constructor should only be used for lookup
+  EnvironmentInformationRequest(uint topContextIndex) : m_file(0), m_index(topContextIndex) {
+  }
+
+  EnvironmentInformationRequest(const ParsingEnvironmentFile* file) : m_file(file), m_index(file->indexedTopContext().index()) {
+  }
+
+  enum {
+    AverageSize = 32 //This should be the approximate average size of an Item
+  };
+
+  unsigned int hash() const {
+    return m_index;
+  }
+
+  size_t itemSize() const {
+    return sizeof(EnvironmentInformationItem) + DUChainItemSystem::self().dynamicSize(*m_file->d_func());
+  }
+
+  void createItem(EnvironmentInformationItem* item) const {
+    new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
+    
+    DUChainItemSystem::self().copy(*m_file->d_func(), *(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem)), true);
+  }
+
+  bool equals(const EnvironmentInformationItem* item) const {
+    return m_index == item->m_topContext;
+  }
+
+  const ParsingEnvironmentFile* m_file;
+  uint m_index;
+};
+
+///A list of environment-informations/top-contexts mapped to a file-name
+class EnvironmentInformationListItem {
+  public:
+  EnvironmentInformationListItem() {
+    initializeAppendedLists(true);
+  }
+
+  ~EnvironmentInformationListItem() {
     freeAppendedLists();
   }
 
@@ -95,10 +152,7 @@ class EnvironmentInformationItem {
   }
 
   unsigned short int itemSize() const {
-    uint dataSize = 0;
-    FOREACH_FUNCTION(uint size, sizes)
-      dataSize += size;
-    return dynamicSize() + dataSize;
+    return dynamicSize();
   }
 
   IndexedString m_file;
@@ -107,24 +161,24 @@ class EnvironmentInformationItem {
     return sizeof(*this);
   }
 
-  START_APPENDED_LISTS(EnvironmentInformationItem);
-  ///Contains a size for each contained data item. The items are stored behind the end of this list.
-  APPENDED_LIST_FIRST(EnvironmentInformationItem, uint, sizes);
-  END_APPENDED_LISTS(EnvironmentInformationItem, sizes);
+  START_APPENDED_LISTS(EnvironmentInformationListItem);
+  ///Contains the index of each contained environment-item
+  APPENDED_LIST_FIRST(EnvironmentInformationListItem, uint, items);
+  END_APPENDED_LISTS(EnvironmentInformationListItem, items);
 };
 
-class EnvironmentInformationRequest {
+class EnvironmentInformationListRequest {
   public:
 
   ///This constructor should only be used for lookup
-  EnvironmentInformationRequest(const IndexedString& file) : m_file(file) {
+  EnvironmentInformationListRequest(const IndexedString& file) : m_file(file), m_item(0) {
   }
   ///This is used to actually construct the information in the repository
-  EnvironmentInformationRequest(const IndexedString& file, QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start, QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end) : m_file(file), m_start(start), m_end(end) {
+  EnvironmentInformationListRequest(const IndexedString& file, const EnvironmentInformationListItem& item) : m_file(file), m_item(&item) {
   }
 
   enum {
-    AverageSize = 45 //This should be the approximate average size of an Item
+    AverageSize = 64 //This should be the approximate average size of an Item
   };
 
   unsigned int hash() const {
@@ -132,46 +186,21 @@ class EnvironmentInformationRequest {
   }
 
   size_t itemSize() const {
-    uint dataSize = 0;
-
-    uint count = 0;
-    
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator info = m_start; info != m_end; ++info) {
-      dataSize += DUChainItemSystem::self().dynamicSize( *(*info)->d_func() );
-      ++count;
-    }
-
-    return sizeof(EnvironmentInformationItem) + sizeof(uint) * count + dataSize;
+    return m_item->itemSize();
   }
 
-  void createItem(EnvironmentInformationItem* item) const {
-    item->m_file = m_file;
+  void createItem(EnvironmentInformationListItem* item) const {
     item->initializeAppendedLists(false);
-    char* pos = ((char*)item) + sizeof(EnvironmentInformationItem);
-
-    uint count = 0;
-    //Store the sizes
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator info = m_start; info != m_end; ++info) {
-      *(uint*)pos = DUChainItemSystem::self().dynamicSize( *(*info)->d_func() );
-      pos += sizeof(uint);
-      ++count;
-    }
-    //Store the data
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator info = m_start; info != m_end; ++info) {
-      DUChainItemSystem::self().copy(*(*info)->d_func(), *(DUChainBaseData*)pos, true);
-      pos += DUChainItemSystem::self().dynamicSize( *(*info)->d_func() );;
-    }
-
-    item->sizesData = count;
+    item->m_file = m_file;
+    item->copyListsFrom(*m_item);
   }
 
-  bool equals(const EnvironmentInformationItem* item) const {
+  bool equals(const EnvironmentInformationListItem* item) const {
     return m_file == item->m_file;
   }
 
   IndexedString m_file;
-  QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator m_start;
-  QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator m_end;
+  const EnvironmentInformationListItem* m_item;
 };
 
 class DUChainPrivate;
@@ -208,7 +237,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentInfo("Environment Information")
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
   {
     m_chainsByIndex.set_empty_key(0);
     m_chainsByIndex.set_deleted_key(0xffffffff);
@@ -244,9 +273,12 @@ public:
     for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       instance->removeDocumentChain((*it).second);
 
-    //Store all the environment-information to disk
-    while(!m_fileEnvironmentInformations.isEmpty())
-      unloadInformation(m_fileEnvironmentInformations.begin().key());
+    {
+        DUChainWriteLocker writeLock(instance->lock());
+        storeAllInformation(true, writeLock);
+    }
+
+    m_fileEnvironmentInformations.clear();
 
     Q_ASSERT(m_fileEnvironmentInformations.isEmpty());
     Q_ASSERT(m_chainsByUrl.isEmpty());
@@ -274,18 +306,29 @@ public:
   bool m_destroyed;
 
   void addEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
-    loadInformation(url);
     m_fileEnvironmentInformations.insert(url, info);
   }
 
   void removeEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
-    loadInformation(url);
+    ///@todo Deal with completely deleting the environment-info for a file, like necessary when deleting a top-context
     m_fileEnvironmentInformations.remove(url, info);
   }
 
   QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(IndexedString url) {
-    loadInformation(url);
-    return m_fileEnvironmentInformations.values(url);
+    QList<ParsingEnvironmentFilePointer> ret;
+    
+    uint listIndex = m_environmentListInfo.findIndex(url);
+    
+    if(listIndex) {
+      const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
+    
+      FOREACH_FUNCTION(uint topContextIndex, item->items)
+        ret << ParsingEnvironmentFilePointer(loadInformation(url, topContextIndex));
+    }
+    //Add those informations that have not been added to the stored lists yet
+    ret += m_fileEnvironmentInformations.values(url);
+    
+    return ret;
   }
 
   ///Makes sure that the chain with the given index is loaded
@@ -301,11 +344,7 @@ public:
       TopDUContext* chain = TopDUContextDynamicData::load(index);
       if(chain) {
 //         kDebug() << "url" << chain->url().str();
-        loadInformation(chain->url());
-        for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.lowerBound(chain->url()); it != m_fileEnvironmentInformations.end() && it.key() == chain->url(); ++it) {
-          if((*it)->indexedTopContext() == IndexedTopDUContext(index))
-            chain->setParsingEnvironmentFile((*it).data());
-        }
+        chain->setParsingEnvironmentFile(loadInformation(chain->url(), chain->ownIndex()));
 
         l.unlock();
         //Also load all the imported chains, so they are in the symbol table and the import-structure is built
@@ -330,14 +369,43 @@ public:
   ///@param atomic If this is false, the write-lock will be released time by time
   void storeAllInformation(bool atomic, DUChainWriteLocker& locker) {
 //     QMutexLocker l(&m_chainsMutex);
+
+    uint cnt = 0;
+
+    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it  != m_fileEnvironmentInformations.end(); ++it) {
+      
+      EnvironmentInformationRequest req(it->data());
+      uint index = m_environmentInfo.findIndex(req);
+      (*it)->aboutToSave();
+      if((*it)->d_func()->isDynamic()) {
+        //This item has been changed, or isn't in the repositor yet
+        
+        //Eventually remove an old entry
+        if(index)
+          m_environmentInfo.deleteItem(index);
+        
+        //Add the new entry to the item repository
+        m_environmentInfo.index(req);
+        
+        ++cnt;
+        if(!atomic && (cnt % 100 == 0)) {
+            //Release the lock on a regular basis
+            locker.unlock();
+            locker.lock();
+        }
+      }else{
+        m_environmentInfo.itemFromIndex(index); //Prevent unloading of the data, by accessing the item
+      }
+    }
+
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
     foreach(IndexedString url, urls) {
-      storeInformation(url);
+      storeInformationList(url);
 
       //Access the data in the repository, so the bucket isn't unloaded
-      uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
+      uint index = m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url));
       if(index) {
-        m_environmentInfo.itemFromIndex(index);
+        m_environmentListInfo.itemFromIndex(index);
       }else{
         kDebug(9505) << "Did not find stored item for" << url.str() << "count:" << m_fileEnvironmentInformations.values(url);
       }
@@ -470,17 +538,13 @@ public:
         }
       }
       
-      foreach(IndexedString unloaded, unloadedNames) {
-        if(!m_chainsByUrl.contains(unloaded))
-          //No more top-contexts with the url are loaded, so also unload the environment-info
-          unloadInformation(unloaded);
-        
-        if(retries) {
-          //Eventually give other threads a chance to access the duchain
-          writeLock.unlock();
-          //Sleep to give the other threads a realistic chance to get a read-lock in between
-          usleep(500);
-          writeLock.lock();
+      
+      foreach(ParsingEnvironmentFilePointer info, m_fileEnvironmentInformations) {
+        if(info->ref == 1) {
+          //The ParsingEnvironmentFilePointer is only referenced once. This means that it's does not belong to any
+          //loaded top-context, so just remove it to save some memory and processing time.
+          ///@todo use some kind of timeout before removing
+          Q_ASSERT(m_fileEnvironmentInformations.remove(info->url(), info) == 1);
         }
       }
   
@@ -512,29 +576,50 @@ public:
 private:
   void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
 
-  void loadInformation(IndexedString url) {
-    if(m_fileEnvironmentInformations.find(url) != m_fileEnvironmentInformations.end())
-      return;
-
-    uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
-    if(!index) {
-      //No information there yet for this file
-      return;
+  template<class Entry>
+  bool listContains(const Entry entry, const Entry* list, uint listSize) {
+    for(uint a = 0; a < listSize; ++a)
+      if(list[a] == entry)
+        return true;
+    return false;
+  }
+  
+  ///Loads/gets the environment-information for the given top-context index, or returns zero if none exists
+  ParsingEnvironmentFile* loadInformation(IndexedString url, uint topContextIndex) {
+    
+    {
+      //Step one: Check if the info is already loaded on m_fileEnvironmentInformations
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
+      
+      while(start != end) {
+        if((*start)->indexedTopContext().index() == topContextIndex)
+          return start->data();
+        ++start;
+      }
+    }
+    
+    //Step two: Check if it is on disk, and if es, load it
+    uint dataIndex = m_environmentInfo.findIndex(EnvironmentInformationRequest(topContextIndex));
+    if(!dataIndex) {
+      //No environment-information stored for this top-context
+      return 0;
     }
 
-    const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(index));
+    const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
+    
     char* pos = (char*)&item;
-    pos += item.dynamicSize();
-    FOREACH_FUNCTION(uint size, item.sizes) {
-      DUChainBase* data = DUChainItemSystem::self().create((DUChainBaseData*)pos);
-      Q_ASSERT(dynamic_cast<ParsingEnvironmentFile*>(data));
-      m_fileEnvironmentInformations.insert(url, ParsingEnvironmentFilePointer(static_cast<ParsingEnvironmentFile*>(data)));
-      pos += size;
+    pos += sizeof(EnvironmentInformationItem);
+    ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create((DUChainBaseData*)pos));
+    if(ret) {
+      m_fileEnvironmentInformations.insert(url, ParsingEnvironmentFilePointer(ret));
+      Q_ASSERT(ret->url() == url);
     }
+    return ret;
   }
 
   ///Stores the environment-information for the given url
-  void storeInformation(IndexedString url) {
+  void storeInformationList(IndexedString url) {
 
     QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
     QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
@@ -542,47 +627,47 @@ private:
     if(start == end)
         return;
 
-    //Here we check whether any of the stored items have been changed. If none have been changed(all data is still constant),
-    //then we don't need to update.
-    bool allInfosConstant = true;
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it) {
-      (*it)->aboutToSave();
-      if((*it)->d_func()->isDynamic())
-        allInfosConstant = false;
-    }
-
-    if(allInfosConstant && m_environmentInfo.findIndex(EnvironmentInformationRequest(url))) {
-      ///@todo Find out why sometimes the data is constant although it's not in the repository(might be leaking memory)
-      //None of the informations have data that is marked "dynamic". This means it hasn't been changed, and thus we don't
-      //need to save anything.
-    }else{
+    uint index = m_environmentListInfo.findIndex(url);
+    bool listChanged = true;
+    if(index) {
+      listChanged = false;
+      const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(index);
+      ///@todo Make the list sorted, so the "contains" function is efficient
       for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it) {
-        ///@todo Don't do this, instead directly copy data from repository to repository
-        (*it)->makeDynamic(); //We have to make everything dynamic, so it survives when we remove the index
+        if(!listContains((*it)->indexedTopContext().index(), item->items(), item->itemsSize())) {
+          listChanged = true;
+          break;
+        }
+      }
+    }
+    
+    if(listChanged) {
+      ///Update/insert a new list
+      uint index = m_environmentListInfo.findIndex(url);
+      EnvironmentInformationListItem item;
+      
+      if(index) {
+        item.copyListsFrom(*m_environmentListInfo.itemFromIndex(index));
+        m_environmentListInfo.deleteItem(index); //Remove the previous item
       }
 
-      uint index = m_environmentInfo.findIndex(EnvironmentInformationRequest(url));
-      if(index)
-        m_environmentInfo.deleteItem(index); //Remove the previous item
-
-      Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)) == 0);
-
+      Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)) == 0);
+      
+      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it)
+        if(!listContains((*it)->indexedTopContext().index(), item.items(), item.itemsSize()))
+          item.itemsList().append( (*it)->indexedTopContext().index() );
+      
       //Insert the new item
-      m_environmentInfo.index(EnvironmentInformationRequest(url, start, end));
+      m_environmentListInfo.index(EnvironmentInformationListRequest(url, item));
     }
 
-    Q_ASSERT(m_environmentInfo.findIndex(EnvironmentInformationRequest(url)));
-  }
-
-  //Stores the information into the repository, and removes it from m_fileEnvironmentInformations
-  void unloadInformation(IndexedString url) {
-    storeInformation(url);
-
-    m_fileEnvironmentInformations.remove(url);
+    Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)));
   }
 
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
-  //Persistent version of m_fileEnvironmentInformations
+  ///Maps filenames to a list of top-contexts/environment-informations
+  ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest> m_environmentListInfo;
+  ///Maps top-context-indices to environment-information item
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 

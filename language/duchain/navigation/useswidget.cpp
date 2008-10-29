@@ -46,6 +46,7 @@ using namespace KDevelop;
 const int tooltipContextSize = 3; //How many lines around the use are shown in the tooltip
 const bool showUsesHeader = false;
 
+///Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
 class CodeRepresentation {
   public:
     virtual ~CodeRepresentation() {
