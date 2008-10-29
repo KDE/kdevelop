@@ -24,12 +24,18 @@
 namespace KDevelop {
 
 /**
- * This file contains macros and classes that can be used to conveniently implement classes that store the data of an arbitrary count
- * of additional lists within the same memory block directly behind the class data, in a way that one the whole data can be stored by one copy-operation
- * to another place, like needed in ItemRepository. These macros simplify having two versions of a class: One that has its lists attached in memory,
- * and one version that has them contained as a directly accessible KDevVarLengthArray. Both versions have their lists accessible through access-functions,
- * have a completeSize() function that computes the size of the one-block version, and a copyListsFrom(..) function which can copy the lists from one
- * version to the other. The class that contains these lists must have a boolean template parameter called "dynamic".
+ * This file contains macros and classes that can be used to conveniently
+ * implement classes that store the data of an arbitrary count
+ * of additional lists within the same memory block directly behind the
+ * class data, in a way that one the whole data can be stored by one copy-operation
+ * to another place, like needed in ItemRepository. These macros simplify
+ * having two versions of a class: One that has its lists attached in memory,
+ * and one version that has them contained as a directly accessible
+ * KDevVarLengthArray. Both versions have their lists accessible through access-functions,
+ * have a completeSize() function that computes the size of the one-block
+ * version, and a copyListsFrom(..) function which can copy the lists from one
+ * version to the other. The class that contains these lists must have
+ * a boolean template parameter called "dynamic".
  * 
  * See identifier.cpp for an example how to use these classes. @todo Document this a bit more
  * */
