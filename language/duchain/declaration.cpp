@@ -154,14 +154,18 @@ Declaration::~Declaration()
     }
     
     d->m_inSymbolTable = false;
+  }
 
-    // context is only null in the test cases
-    if (context() && !d->m_anonymousInContext) {
-      Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
+    // If the parent-context already has dynamic data, like for example any temporary context,
+    // always delete the declaration, to not create crashes within more complex code like C++ template stuff.
+    if (context() && !d_func()->m_anonymousInContext) {
+      if(!topContext()->deleting() || !topContext()->isOnDisk() || context()->d_func()->isDynamic())
+        Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
     }
-
-    clearOwnIndex();
     
+  clearOwnIndex();
+  
+  if(!topContext()->deleting() || !topContext()->isOnDisk()) {
     setContext(0);
 
     setAbstractType(AbstractType::Ptr());
