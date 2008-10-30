@@ -47,6 +47,7 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
+#include <interfaces/isession.h>
 
 #include "profileengine.h"
 #include "mainwindow.h"
@@ -155,9 +156,14 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 void PluginController::loadPlugins( PluginType type )
 {
     KPluginInfo::List offers = d->engine.offers( d->profile, type );
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( "Plugins" );
+    QStringList sessionPlugins = grp.readEntry( "Plugins To Load", QStringList() );
     foreach( const KPluginInfo& pi, offers )
     {
-        loadPluginInternal( pi.pluginName() );
+        if( sessionPlugins.isEmpty() || sessionPlugins.contains( pi.pluginName() ) )
+        {
+            loadPluginInternal( pi.pluginName() );
+        }
     }
 }
 
@@ -313,7 +319,13 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         info.setPluginEnabled( true );
 
         kDebug() << "Successfully loaded plugin '" << pluginId << "'";
-
+        KConfigGroup grp = Core::self()->activeSession()->config()->group( "Plugins" );
+        QStringList plugins = grp.readEntry( "Plugins To Load", QStringList() );
+        if( !plugins.contains( info.pluginName() ) )
+        {
+            plugins << info.pluginName();
+            grp.writeEntry( "Plugins To Load", plugins );
+        }
         emit pluginLoaded( plugin );
     }
     else
