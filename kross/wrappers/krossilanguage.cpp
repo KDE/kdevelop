@@ -17,9 +17,7 @@ class KrossKDevelopILanguage : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void activate() { wrapped->activate(); }
 		Q_SCRIPTABLE void deactivate() { wrapped->deactivate(); }
 		Q_SCRIPTABLE KDevelop::ILanguageSupport* languageSupport() { return wrapped->languageSupport(); }
-// 		Q_SCRIPTABLE QMutex* parseMutex(QThread* x0) const { return wrapped->parseMutex(x0); }
-// 		Q_SCRIPTABLE void lockAllParseMutexes() { wrapped->lockAllParseMutexes(); }
-// 		Q_SCRIPTABLE void unlockAllParseMutexes() { wrapped->unlockAllParseMutexes(); }
+		Q_SCRIPTABLE QReadWriteLock* parseLock() const { return wrapped->parseLock(); }
 	private:
 		KDevelop::ILanguage* wrapped;
 };
