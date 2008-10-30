@@ -46,6 +46,7 @@ public:
 
     void loadSession( const QString& );
     void deleteSession( const QString& );
+    static QString sessionDirectory();
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );

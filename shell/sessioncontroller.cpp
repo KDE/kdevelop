@@ -22,6 +22,10 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QHash>
 #include <QtCore/QStringList>
 
+#include <kglobal.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
+
 #include "session.h"
 
 namespace KDevelop
@@ -128,6 +132,11 @@ void SessionController::loadDefaultSession()
 Session* SessionController::session( const QString& name ) const
 {
     return d->findSessionForName( name );
+}
+
+QString SessionController::sessionDirectory()
+{
+    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
 }

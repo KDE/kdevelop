@@ -26,9 +26,10 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
 #include "core.h"
-#include <interfaces/iplugincontroller.h>
+#include "sessioncontroller.h"
 
 namespace KDevelop
 {
@@ -53,7 +54,13 @@ public:
     }
     void initializeSessionDirectory()
     {
-        sessionDirectory = KStandardDirs::locate( "appdata", name );
+        QString sessionDirectory = SessionController::sessionDirectory() + "/" + name;
+        kDebug() << "got dir:" << sessionDirectory;
+        if( !QFileInfo( sessionDirectory ).exists() )
+        {
+            kDebug() << "creating dir";
+            QDir( SessionController::sessionDirectory() ).mkdir( name );
+        } 
     }
 };
 
