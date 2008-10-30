@@ -21,19 +21,35 @@ Boston, MA 02110-1301, USA.
 #define SESSIONDIALOG_H
 
 #include <kdialog.h>
-#include <QtCore/QHash>
+#include <QtCore/QAbstractListModel>
 
 namespace Ui
 {
 class SessionDialog;
 }
 
+class QModelIndex;
+class QItemSelection;
+class QVariant;
+
 namespace KDevelop
 {
 class Session;
-}
 
-class QListWidgetItem;
+class SessionModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    SessionModel( QObject* parent = 0 );
+    int rowCount( const QModelIndex& = QModelIndex() ) const;
+    QVariant data( const QModelIndex&, int = Qt::DisplayRole ) const;
+    QVariant headerData( int, Qt::Orientation, int = Qt::DisplayRole ) const;
+    bool setData( const QModelIndex&, const QVariant&, int = Qt::DisplayRole );
+    Qt::ItemFlags flags( const QModelIndex& ) const;
+    void deleteSessions( const QList<QModelIndex>& );
+    void activateSession( const QModelIndex& );
+    void addSession();
+};
 
 class SessionDialog : public KDialog
 {
@@ -43,12 +59,16 @@ public:
 private Q_SLOTS:
     void createSession();
     void deleteSession();
-    void renameSession( QListWidgetItem* );
-    QListWidgetItem* createAndSetupItem( KDevelop::Session* );
+    void activateSession();
+    void enableNewButton( const QModelIndex&, const QModelIndex& );
+    void enableButtons( const QModelIndex&, const QModelIndex& );
+    void enableButtons( const QItemSelection&, const QItemSelection& );
+    void enableButtons();
 private:
-    void enableNewButton();
     Ui::SessionDialog* m_ui;
-    QHash<QListWidgetItem*, KDevelop::Session*> itemSessionMap;
+    SessionModel* m_model;
 };
+
+}
 
 #endif
