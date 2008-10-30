@@ -50,7 +50,6 @@ Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
 private:
-    Q_PRIVATE_SLOT( d, void sessionNameChanged( const QString&, const QString& ) )
     class SessionControllerPrivate* const d;
 };
 

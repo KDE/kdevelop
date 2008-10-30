@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 
 #include <QtCore/QHash>
-#include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 #include "session.h"
 
@@ -30,14 +30,20 @@ namespace KDevelop
 class SessionControllerPrivate
 {
 public:
-    void sessionNameChanged( const QString& newname, const QString& oldname )
+    bool knownSession( const QString& name ) const
     {
-        Q_ASSERT( availableSessions.contains( oldname ) );
-
-        availableSessions.insert( newname, availableSessions.value( oldname ) );
-        availableSessions.remove( oldname );
+        return findSessionForName( name ) != 0;
     }
-    QHash<QString,Session*> availableSessions;
+    Session* findSessionForName( const QString& name ) const
+    {
+        foreach( Session* s, availableSessions )
+        {
+            if( s->name() == name )
+                return s;
+        }
+        return 0;
+    }
+    QList<Session*> availableSessions;
     ISession* activeSession;
 };
 
@@ -69,35 +75,39 @@ ISession* SessionController::activeSession() const
 
 void SessionController::loadSession( const QString& name )
 {
-    Q_ASSERT( d->availableSessions.contains( name ) );
-    d->activeSession = d->availableSessions[name];
+    Session * s = d->findSessionForName( name );
+    Q_ASSERT( s );
+    d->activeSession = s;
 }
 
 QList<QString> SessionController::sessions() const
 {
-    return d->availableSessions.keys();
+    QStringList l;
+    foreach( const Session* s, d->availableSessions )
+    {
+        l << s->name();
+    }
+    return l;
 }
 
 Session* SessionController::createSession( const QString& name )
 {
-    Q_ASSERT( !d->availableSessions.contains( name ) );
+    Q_ASSERT( !d->knownSession( name ) );
     Session* s = new Session( name );
-    connect( s, SIGNAL( nameChanged( const QString&, const QString& ) ),
-             this, SLOT( sessionNameChanged( const QString&, const QString& ) ) );
-    d->availableSessions.insert(name, s);
+    d->availableSessions << s;
     return s;
 }
 
 void SessionController::deleteSession( const QString& name )
 {
-    Q_ASSERT( d->availableSessions.contains( name ) );
-    Session* s  = d->availableSessions[ name ];
+    Q_ASSERT( d->knownSession( name ) );
+    Session* s  = d->findSessionForName( name );
     s->deleteFromDisk();
     emit sessionDeleted( name );
     if( s == d->activeSession ) {
         loadDefaultSession();
     }
-    d->availableSessions.remove(name);
+    d->availableSessions.removeOne(s);
     s->deleteLater();
 }
 
@@ -117,7 +127,7 @@ void SessionController::loadDefaultSession()
 
 Session* SessionController::session( const QString& name ) const
 {
-    return d->availableSessions.value( name );
+    return d->findSessionForName( name );
 }
 
 }
