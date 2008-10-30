@@ -91,6 +91,20 @@ void SessionControllerTest::renameSession()
     QCOMPARE( newSessionName, arguments.at(0).toString() );
 }
 
+void SessionControllerTest::cannotRenameActiveSession()
+{
+    const QString sessionName = "TestSession5";
+    const QString newSessionName = "TestOtherSession5";
+    KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
+    QCOMPARE( sessionName, s->name() );
+    m_sessionCtrl->loadSession( sessionName );
+    QSignalSpy spy(s, SIGNAL(nameChanged(const QString&, const QString&)));
+    s->setName( newSessionName );
+    QCOMPARE( sessionName, s->name() );
+    
+    QCOMPARE( spy.size(), 0 );
+}
+
 void SessionControllerTest::deleteSession()
 {
     const QString sessionName = "TestSession3";

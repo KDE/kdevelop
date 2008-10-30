@@ -91,9 +91,12 @@ void Session::deleteFromDisk()
 
 void Session::setName( const QString& name )
 {
-    const QString tmp = d->name;
-    d->name = name;
-    emit nameChanged( name, tmp );
+    if( Core::self()->activeSession() != this )
+    {
+        const QString tmp = d->name;
+        d->name = name;
+        emit nameChanged( name, tmp );
+    }
 }
 
 }
