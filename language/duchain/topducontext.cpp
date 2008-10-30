@@ -625,7 +625,7 @@ struct TopDUContext::DeclarationChecker {
       if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
         return false;
 
-      if (dataType && decl->abstractType() != dataType)
+      if (dataType && decl->abstractType()->indexed() != dataType->indexed())
         // The declaration doesn't match the type filter we are applying
         return false;
 

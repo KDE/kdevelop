@@ -698,7 +698,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
           if((m_flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
             return 0;
 
-          if (!m_dataType || m_dataType == declaration->abstractType())
+          if (!m_dataType || m_dataType->indexed() == declaration->abstractType()->indexed())
             if (m_ownType == Class || m_ownType == Template || m_position > declaration->range().start || !m_position.isValid()) ///@todo This is C++-specific
               return declaration;
           return 0;
