@@ -319,13 +319,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         info.setPluginEnabled( true );
 
         kDebug() << "Successfully loaded plugin '" << pluginId << "'";
-        KConfigGroup grp = Core::self()->activeSession()->config()->group( "Plugins" );
-        QStringList plugins = grp.readEntry( "Plugins To Load", QStringList() );
-        if( !plugins.contains( info.pluginName() ) )
-        {
-            plugins << info.pluginName();
-            grp.writeEntry( "Plugins To Load", plugins );
-        }
         emit pluginLoaded( plugin );
     }
     else
