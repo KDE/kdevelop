@@ -310,6 +310,7 @@ public:
 
   void addEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
     m_fileEnvironmentInformations.insert(url, info);
+    Q_ASSERT(info->d_func()->classId);
   }
 
   void removeEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
@@ -382,7 +383,11 @@ public:
       
       EnvironmentInformationRequest req(it->data());
       uint index = m_environmentInfo.findIndex(req);
+      
+      Q_ASSERT((*it)->d_func()->classId);
       (*it)->aboutToSave();
+      Q_ASSERT((*it)->d_func()->classId);
+      
       if((*it)->d_func()->isDynamic()) {
         //This item has been changed, or isn't in the repositor yet
         
@@ -404,6 +409,8 @@ public:
         Q_ASSERT(theData->classId == (*it)->d_func()->classId);
         
         (*it)->setData( theData );
+        Q_ASSERT((*it)->d_func()->classId);
+        
         
         ++cnt;
         if(!atomic && (cnt % 100 == 0)) {
@@ -557,12 +564,15 @@ public:
       }
       
       
-      foreach(ParsingEnvironmentFilePointer info, m_fileEnvironmentInformations) {
-        if(info->ref == 1) {
+      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
+        ParsingEnvironmentFile* f = (*it).data();
+        if(f->ref == 1) {
           //The ParsingEnvironmentFilePointer is only referenced once. This means that it's does not belong to any
           //loaded top-context, so just remove it to save some memory and processing time.
           ///@todo use some kind of timeout before removing
-          Q_ASSERT(m_fileEnvironmentInformations.remove(info->url(), info) == 1);
+          it = m_fileEnvironmentInformations.erase(it);
+        }else{
+          ++it;
         }
       }
   
