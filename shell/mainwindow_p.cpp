@@ -177,6 +177,11 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n( "Show statusbar" ) );
     action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar.</p>" ) );
 
+    action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
+    action->setText( i18n("Configure Sessions...") );
+    action->setToolTip( i18n("Create/Delete/Activate Sessions") );
+    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session" ) );
+
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
 //                                            i18n( "&Stop" ),

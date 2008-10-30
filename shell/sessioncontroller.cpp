@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 
 #include <QtCore/QHash>
+#include <QtCore/QDebug>
 
 #include "session.h"
 
@@ -29,6 +30,13 @@ namespace KDevelop
 class SessionControllerPrivate
 {
 public:
+    void sessionNameChanged( const QString& newname, const QString& oldname )
+    {
+        Q_ASSERT( availableSessions.contains( oldname ) );
+
+        availableSessions.insert( newname, availableSessions.value( oldname ) );
+        availableSessions.remove( oldname );
+    }
     QHash<QString,Session*> availableSessions;
     ISession* activeSession;
 };
@@ -69,11 +77,14 @@ QList<QString> SessionController::sessions() const
     return d->availableSessions.keys();
 }
 
-void SessionController::createSession( const QString& name )
+Session* SessionController::createSession( const QString& name )
 {
     Q_ASSERT( !d->availableSessions.contains( name ) );
     Session* s = new Session( name );
+    connect( s, SIGNAL( nameChanged( const QString&, const QString& ) ),
+             this, SLOT( sessionNameChanged( const QString&, const QString& ) ) );
     d->availableSessions.insert(name, s);
+    return s;
 }
 
 void SessionController::deleteSession( const QString& name )
@@ -101,6 +112,11 @@ void SessionController::loadDefaultSession()
         name = sessions().at(0);
     }
     loadSession( name );
+}
+
+Session* SessionController::session( const QString& name ) const
+{
+    return d->availableSessions.value( name );
 }
 
 }

@@ -27,6 +27,7 @@ Boston, MA 02110-1301, USA.
 
 #include "core.h"
 #include "documentcontroller.h"
+#include "sessiondialog.h"
 
 namespace KDevelop {
 
@@ -189,5 +190,10 @@ void MainWindowPrivate::quitAll()
     s_quitRequested = false;
 }
 
+void MainWindowPrivate::configureSessions()
+{
+    SessionDialog dlg(m_mainWindow);
+    dlg.exec();
+}
 }
 

@@ -89,6 +89,13 @@ void Session::deleteFromDisk()
 {
 }
 
+void Session::setName( const QString& name )
+{
+    const QString tmp = d->name;
+    d->name = name;
+    emit nameChanged( name, tmp );
+}
+
 }
 #include "session.moc"
 

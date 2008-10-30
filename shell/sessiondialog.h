@@ -17,43 +17,38 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef SESSIONCONTROLLER_H
-#define SESSIONCONTROLLER_H
+#ifndef SESSIONDIALOG_H
+#define SESSIONDIALOG_H
 
-#include "shellexport.h"
-#include <QtCore/QObject>
+#include <kdialog.h>
+#include <QtCore/QHash>
+
+namespace Ui
+{
+class SessionDialog;
+}
 
 namespace KDevelop
 {
-
 class Session;
-class ISession;
+}
 
-class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject
+class QListWidgetItem;
+
+class SessionDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SessionController( QObject *parent = 0 );
-    virtual ~SessionController();
-    void initialize();
-    void cleanup();
-
-    Session* session( const QString& name ) const;
-    virtual ISession* activeSession() const;
-    QList<QString> sessions() const;
-    Session* createSession( const QString& name );
-    void loadDefaultSession();
-
-    void loadSession( const QString& );
-    void deleteSession( const QString& );
-Q_SIGNALS:
-    void sessionLoaded( ISession* );
-    void sessionDeleted( const QString& );
+    SessionDialog( QWidget* = 0 );
+private Q_SLOTS:
+    void createSession();
+    void deleteSession();
+    void renameSession( QListWidgetItem* );
+    QListWidgetItem* createAndSetupItem( KDevelop::Session* );
 private:
-    Q_PRIVATE_SLOT( d, void sessionNameChanged( const QString&, const QString& ) )
-    class SessionControllerPrivate* const d;
+    void enableNewButton();
+    Ui::SessionDialog* m_ui;
+    QHash<QListWidgetItem*, KDevelop::Session*> itemSessionMap;
 };
 
-}
 #endif
-

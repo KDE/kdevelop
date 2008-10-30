@@ -100,6 +100,8 @@ public Q_SLOTS:
 
     bool applicationQuitRequested() const;
 
+    void configureSessions();
+
 private:
     KActionCollection *actionCollection();
 

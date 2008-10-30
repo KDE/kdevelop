@@ -34,11 +34,15 @@ public:
     Session( const QString& name );
     virtual ~Session();
 
-    virtual QString name() const;
     virtual KUrl pluginDataArea( const IPlugin* );
     virtual KSharedConfig::Ptr config();
 
     void deleteFromDisk();
+
+    virtual QString name() const;
+    void setName( const QString& );
+Q_SIGNALS:
+    void nameChanged( const QString& newname, const QString& oldname );
 private:
     class SessionPrivate* const d;
 

@@ -74,6 +74,22 @@ void SessionControllerTest::loadSession()
     m_sessionCtrl->deleteSession( sessionName );
 }
 
+void SessionControllerTest::renameSession()
+{
+    const QString sessionName = "TestSession4";
+    const QString newSessionName = "TestOtherSession4";
+    KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
+    QCOMPARE( sessionName, s->name() );
+    QSignalSpy spy(s, SIGNAL(nameChanged(const QString&, const QString&)));
+    s->setName( newSessionName );
+    QCOMPARE( newSessionName, s->name() );
+    
+    QCOMPARE( spy.size(), 1 );
+    QList<QVariant> arguments = spy.takeFirst();
+
+    QCOMPARE( sessionName, arguments.at(1).toString() );
+    QCOMPARE( newSessionName, arguments.at(0).toString() );
+}
 
 void SessionControllerTest::deleteSession()
 {

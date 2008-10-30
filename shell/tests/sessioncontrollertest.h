@@ -39,6 +39,7 @@ private slots:
     void createSession();
     void loadSession();
     void deleteSession();
+    void renameSession();
 private:
 
     KDevelop::Core* m_core;
