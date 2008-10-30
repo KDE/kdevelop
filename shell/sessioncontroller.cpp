@@ -58,6 +58,7 @@ void SessionController::cleanup()
 
 void SessionController::initialize()
 {
+    loadDefaultSession();
 }
 
 
