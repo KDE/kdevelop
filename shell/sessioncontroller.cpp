@@ -20,16 +20,21 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 
 #include <QtCore/QHash>
+#include <QtCore/QDir>
 #include <QtCore/QStringList>
 
 #include <kglobal.h>
 #include <kcomponentdata.h>
+#include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
 #include "session.h"
 
 namespace KDevelop
 {
+
+static const QLatin1String sessionGroup("Sessions");
+static const QLatin1String activeSessionEntry("Active Session");
 
 class SessionControllerPrivate
 {
@@ -68,6 +73,11 @@ void SessionController::cleanup()
 
 void SessionController::initialize()
 {
+    QDir sessiondir( SessionController::sessionDirectory() );
+    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+    {
+        createSession( s );
+    }
     loadDefaultSession();
 }
 
@@ -81,6 +91,9 @@ void SessionController::loadSession( const QString& name )
 {
     Session * s = d->findSessionForName( name );
     Q_ASSERT( s );
+    KConfigGroup grp = KGlobal::config()->group( sessionGroup );
+    grp.writeEntry( activeSessionEntry, name );
+    grp.sync();
     d->activeSession = s;
 }
 
@@ -117,15 +130,12 @@ void SessionController::deleteSession( const QString& name )
 
 void SessionController::loadDefaultSession()
 {
-    QString name;
-    if( d->availableSessions.count() == 0 )
+    KConfigGroup grp = KGlobal::config()->group( sessionGroup );
+    QString name = grp.readEntry( activeSessionEntry, "default" );
+    if( d->availableSessions.count() == 0 || !sessions().contains( name ) )
     {
-        name = "default";
         createSession( name );
-    } else
-    {
-        name = sessions().at(0);
-    }
+    }  
     loadSession( name );
 }
 
