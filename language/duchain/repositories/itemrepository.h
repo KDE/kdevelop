@@ -1759,7 +1759,7 @@ class ItemRepository : public AbstractItemRepository {
     if(largestFreeSize == 0 || (bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide && largestFreeSize <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeSizeForHide)) {
       //Remove the item from freeSpaceBuckets
       m_freeSpaceBuckets.remove(index);
-      m_freeSpaceBucketsSize = m_freeSpaceBucketsSize;
+      m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
     }else{
       
       while(1) {
