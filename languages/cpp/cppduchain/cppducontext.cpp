@@ -211,17 +211,29 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
 
     s.templateParameters = InstantiationInformation();
 
-    ///@todo When there is a namespace-alias and a class, what to prefer?
-    
     ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply remove them
     bool hadNamespaceAlias = false;
+    bool hadScopeDeclaration = false;
     for(QList<DeclarationPointer>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
-      if( dynamic_cast<NamespaceAliasDeclaration*>(it->data()) )
-        hadNamespaceAlias = true;
+      Declaration* decl = it->data();
+      if(decl) {
+        if( dynamic_cast<NamespaceAliasDeclaration*>(decl) )
+          hadNamespaceAlias = true;
+        if(decl->internalContext() || decl->kind() == Declaration::Type)
+          hadScopeDeclaration = true;
+      }
     }
 
-    if(!hadNamespaceAlias)
-      s.identifier.clear();
+    ///We filter out declarations without contexts, because in some places in C++ those should not be considered as scope-parts
+    if(!hadNamespaceAlias) {
+      if(!isFinalIdentifier && !hadScopeDeclaration) {
+        kDebug() << "filtering out while searching" << lookup.toString();
+        s.result.clear();
+        return true;
+      }else{
+        s.identifier.clear();
+      }
+    }
   } else {
     s.result.clear();
     s.templateParameters = InstantiationInformation();

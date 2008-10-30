@@ -655,6 +655,7 @@ void TestDUChain::testVirtualMemberFunction()
   ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
   QVERIFY(memberFun->isVirtual());
   QVERIFY(!memberFun->isAbstract());
+  kDebug() << memberFun->toString();
   release(top);
 }
 
@@ -1630,6 +1631,19 @@ void TestDUChain::testFunctionDefinition6() {
   QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[1]), top->localDeclarations()[0]);
   QVERIFY(top->childContexts()[1]->importers().contains(top->childContexts()[2]));
   QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+  release(top);
+}
+
+void TestDUChain::testEnumOverride() {
+  QByteArray text("class B{class BA{};};class A{enum {B}; B::BA ba; };");
+  TopDUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().size(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->childContexts()[1]->localDeclarations()[1]->indexedType());
+
   release(top);
 }
 
