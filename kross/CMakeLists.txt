@@ -1,9 +1,8 @@
 project(krosssupport)
 add_subdirectory(xmltokross)
 
-#Aleix's note: please, don't add it yet until I can commit everything (involving the uiless shell)
-option(GENERATE_INTERFACES "Generate kross interfaces at compile-time? You need kdevcpp to use it" OFF)
-if(GENERATE_INTERFACES)
+set(KDEVCPPDUCHAIN "" CACHE STRING "kdevcpp location")
+if(KDEVCPPDUCHAIN)
     get_directory_property(include_DIRS INCLUDE_DIRECTORIES)
     
     get_directory_property(inclist INCLUDE_DIRECTORIES)
@@ -11,16 +10,17 @@ if(GENERATE_INTERFACES)
         set(incs ${incs}:${inc})
     endforeach(inc)
     
+    add_custom_target(krossWrappers)
     macro(kdev_create_kross_iface interface output includes)
         get_filename_component(weFile ${output} NAME_WE)
         get_filename_component(outPath ${output} PATH)
         get_filename_component(ifacePath ${interface} PATH)
         
-        add_custom_command(OUTPUT ${output} ${headerFile}
-                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${interface}
-                                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath} -o ${output}
-                           MAIN_DEPENDENCY ${interface}
-                           DEPENDS xmltokross/duchaintokross )
+        add_custom_target(${weFile}
+                            ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross --impl ${interface}
+                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath} -o ${output} 
+                            DEPENDS ${interface} xmltokross/duchaintokross )
+        add_dependencies(krossWrappers ${weFile})
         set(mocFile ${weFile}.moc)
         qt4_generate_moc( ${output} ${CMAKE_CURRENT_BINARY_DIR}/${mocFile})
     endmacro(kdev_create_kross_iface)
@@ -66,13 +66,10 @@ if(GENERATE_INTERFACES)
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectbuilder.cpp project/interfaces/iprojectbuilder.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/irun.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossirun.cpp interfaces/irun.h)
-
-
-
-
-else(GENERATE_INTERFACES)
-    message(STATUS "The used interfaces will be the ones from svn instead of generating them.")
-endif(GENERATE_INTERFACES)
+        
+else(KDEVCPPDUCHAIN)
+    message(STATUS "You can't generate interfaces without specifying KDEVCPPDUCHAIN in the cache.")
+endif(KDEVCPPDUCHAIN)
 
 set(kdevkrossplugin_SRCS
     krossplugin.cpp
