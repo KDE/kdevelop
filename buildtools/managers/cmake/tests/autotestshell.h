@@ -53,6 +53,7 @@ public:
     }
     QString projectFileExtension() { return QString(); }
     QString projectFileDescription() { return QString(); }
+    QStringList defaultPlugins() { return QStringList(); }
 
     static void init() { s_instance = new AutoTestShell; }
 };
