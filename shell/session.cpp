@@ -52,7 +52,7 @@ public:
         kDebug() << fi.absolutePath();
         return KUrl( fi.absolutePath() );
     }
-    void initializeSessionDirectory()
+    void initialize()
     {
         sessionDirectory = SessionController::sessionDirectory() + "/" + name;
         kDebug() << "got dir:" << sessionDirectory;
@@ -61,6 +61,7 @@ public:
             kDebug() << "creating dir";
             QDir( SessionController::sessionDirectory() ).mkdir( name );
         } 
+        config = KSharedConfig::openConfig( sessionDirectory+"/sessionrc" );
     }
 };
 
@@ -68,7 +69,7 @@ Session::Session( const QString& name )
         : d( new SessionPrivate )
 {
     d->name = name;
-    d->initializeSessionDirectory();
+    d->initialize();
 }
 
 Session::~Session()
