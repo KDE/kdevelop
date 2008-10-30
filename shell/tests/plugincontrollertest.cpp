@@ -27,6 +27,7 @@
 
 using KDevelop::Core;
 using KDevelop::PluginController;
+using KDevelop::IPlugin;
 
 using QTest::kWaitForSignal;
 
@@ -48,10 +49,26 @@ void PluginControllerTest::cleanup()
 {
 }
 
-void PluginControllerTest::loadPlugin()
+void PluginControllerTest::pluginInfo()
+{
+    IPlugin* plugin = m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
+    KPluginInfo kpi = m_pluginCtrl->pluginInfo( plugin );
+    QCOMPARE( QString( "KDevStandardOutputView" ), kpi.pluginName() );
+}
+
+void PluginControllerTest::loadUnloadPlugin()
 {
     m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
     QVERIFY( m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
+    m_pluginCtrl->unloadPlugin( "KDevStandardOutputView" );
+    QVERIFY( !m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
+}
+
+void PluginControllerTest::loadFromExtension()
+{
+    IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.IOutputView" );
+    QVERIFY( plugin );
+    QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.IOutputView" );
 }
 
 QTEST_KDEMAIN( PluginControllerTest, GUI)

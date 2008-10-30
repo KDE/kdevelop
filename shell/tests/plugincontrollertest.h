@@ -35,7 +35,9 @@ private slots:
     void initTestCase();
     void init();
     void cleanup();
-    void loadPlugin();
+    void loadUnloadPlugin();
+    void loadFromExtension();
+    void pluginInfo();
 private:
 
     KDevelop::Core* m_core;
