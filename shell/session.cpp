@@ -54,7 +54,7 @@ public:
     }
     void initializeSessionDirectory()
     {
-        QString sessionDirectory = SessionController::sessionDirectory() + "/" + name;
+        sessionDirectory = SessionController::sessionDirectory() + "/" + name;
         kDebug() << "got dir:" << sessionDirectory;
         if( !QFileInfo( sessionDirectory ).exists() )
         {
@@ -94,6 +94,11 @@ KSharedConfig::Ptr Session::config()
 
 void Session::deleteFromDisk()
 {
+    kDebug() << "deleting session" << d->name;
+    QDir dir( d->sessionDirectory );
+    dir.cdUp();
+    kDebug() << dir;
+    kDebug() << dir.rmpath( d->name );
 }
 
 void Session::setName( const QString& name )
