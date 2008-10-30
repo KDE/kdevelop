@@ -267,10 +267,35 @@ void AbstractDeclarationNavigationContext::htmlFunction()
   m_currentText += "<br />";
 }
 
+///For a class, returns all classes that inherit it
+QList<Declaration*> getInheriters(const Declaration* decl)
+{
+  QList<Declaration*> ret;
+  
+  if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
+    foreach(DUContext* importer, decl->internalContext()->importers())
+      if(importer->type() == DUContext::Class && importer->owner())
+        ret << importer->owner();
+  
+  return ret;
+}
+
+QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration) {
+  QList<Declaration*> ret;
+  
+  if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
+    ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), SimpleCursor::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
+  
+  foreach(Declaration* inheriter, getInheriters(currentClass))
+    ret += getOverriders(inheriter, overriddenDeclaration);
+  
+  return ret;
+}
+
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 {
+  ///Check if the function overrides or hides another one
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
-  //Check if the function overrides another one
   if(classFunDecl) {
     QList<Declaration*> decls;
 
@@ -307,6 +332,44 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
         ++num;
       }
     }
+    
+    ///Show all places where this function is overridden
+    if(classFunDecl->isVirtual()) {
+      Declaration* classDecl = m_declaration->context()->owner();
+      if(classDecl) {
+        QList<Declaration*> overriders = getOverriders(classDecl, classFunDecl);
+        
+        if(!overriders.isEmpty()) {
+          m_currentText += i18n("Overridden in") + " ";
+          bool first = true;
+          foreach(Declaration* overrider, overriders) {
+            if(!first)
+              m_currentText += ", ";
+            first = false;
+            
+            QString name = overrider->context()->scopeIdentifier(true).toString();
+            makeLink(name, name, NavigationAction(DeclarationPointer(overrider), NavigationAction::NavigateDeclaration));
+          }
+          m_currentText += "<br />";
+        }
+      }
+    }
+  }
+  
+  ///Show all classes that inherit this one
+  QList<Declaration*> inheriters = getInheriters(m_declaration.data());
+  if(!inheriters.isEmpty()) {
+      m_currentText += i18n("Inherited by") + " ";
+      bool first = true;
+      foreach(Declaration* importer, inheriters) {
+        if(!first)
+          m_currentText += ", ";
+        first = false;
+        
+        QString importerName = importer->qualifiedIdentifier().toString();
+        makeLink(importerName, importerName, NavigationAction(DeclarationPointer(importer), KDevelop::NavigationAction::NavigateDeclaration));
+      }
+      m_currentText += "<br />";
   }
 }
 
@@ -317,12 +380,6 @@ void AbstractDeclarationNavigationContext::htmlClass()
 
   m_currentText += "class ";
   eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
-  
-  ///@todo Show all importers/inheriters
-  if(m_declaration->internalContext() && m_declaration->internalContext()->type() == DUContext::Class) {
-    DUContext* classContext = m_declaration->internalContext();
-  }
-  
 }
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
