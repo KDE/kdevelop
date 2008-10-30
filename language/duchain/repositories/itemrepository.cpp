@@ -209,8 +209,10 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
     clear = true;
   }
   
-  QFileInfo rightVersion(path + QString("/version_%1").arg(staticItemRepositoryVersion()));
+  QString wantFile = path + QString("/version_%1").arg(staticItemRepositoryVersion());
+  QFileInfo rightVersion(wantFile);
   if(!rightVersion.exists()) {
+    kWarning() << wantFile << "not found, seems to be an old version";
     clear = true;
   }
   
