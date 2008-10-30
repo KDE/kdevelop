@@ -285,7 +285,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return d->loadedPlugins[ info ];
 
     kDebug() << "Attempting to load '" << pluginId << "'";
-    emit loadingPlugin( info.name() );
+    emit loadingPlugin( info.pluginName() );
     QString str_error;
     IPlugin *plugin = 0;
     QStringList missingInterfaces;
