@@ -308,14 +308,39 @@ public:
 
   bool m_destroyed;
 
-  void addEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
-    m_fileEnvironmentInformations.insert(url, info);
+  ParsingEnvironmentFile* findEnvironmentFor(IndexedTopDUContext top) {
+    IndexedString url = top.url();
+    
+    QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
+    QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
+    
+    while(start != end) {
+      if((*start)->indexedTopContext().index() == top.index())
+        return start->data();
+      ++start;
+    }
+    
+    return 0;
+  }
+  
+  ///The item must not be stored yet
+  void addEnvironmentInformation(ParsingEnvironmentFilePointer info) {
+    Q_ASSERT(!findEnvironmentFor(info->indexedTopContext()));
+    Q_ASSERT(m_environmentInfo.findIndex(info->indexedTopContext().index()) == 0);
+    
+    m_fileEnvironmentInformations.insert(info->url(), info);
     Q_ASSERT(info->d_func()->classId);
   }
 
-  void removeEnvironmentInformation(IndexedString url, ParsingEnvironmentFilePointer info) {
-    ///@todo Deal with completely deleting the environment-info for a file, like necessary when deleting a top-context
-    m_fileEnvironmentInformations.remove(url, info);
+  ///The item must managed currently
+  void removeEnvironmentInformation(ParsingEnvironmentFilePointer info) {
+    
+    bool removed = (bool)m_fileEnvironmentInformations.remove(info->url(), info);
+    uint index = m_environmentInfo.findIndex(info->indexedTopContext().index());
+    if(index)
+      m_environmentInfo.deleteItem(index);
+    
+    Q_ASSERT(index || removed);
   }
 
   QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(IndexedString url) {
@@ -376,55 +401,69 @@ public:
 
     uint cnt = 0;
     
-    //For stability in the case of changes, we create a copy here
-    QMultiMap<IndexedString, ParsingEnvironmentFilePointer> mapCopy = m_fileEnvironmentInformations;
-
-    for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = mapCopy.begin(); it  != mapCopy.end(); ++it) {
+    QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
+    
+    foreach(IndexedString url, urls) {
       
-      EnvironmentInformationRequest req(it->data());
-      uint index = m_environmentInfo.findIndex(req);
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
       
-      Q_ASSERT((*it)->d_func()->classId);
-      (*it)->aboutToSave();
-      Q_ASSERT((*it)->d_func()->classId);
-      
-      if((*it)->d_func()->isDynamic()) {
-        //This item has been changed, or isn't in the repositor yet
+      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it  != end; ++it) {
         
-        //Eventually remove an old entry
-        if(index)
-          m_environmentInfo.deleteItem(index);
+        EnvironmentInformationRequest req(it->data());
+        uint index = m_environmentInfo.findIndex(req);
         
-        //Add the new entry to the item repository
-        index = m_environmentInfo.index(req);
-        Q_ASSERT(index);
-        
-        EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
-        DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
-        static DUChainBaseData* dataCopy;
-        dataCopy = theData;
-        
-        Q_ASSERT(theData->m_range == (*it)->d_func()->m_range);
-        Q_ASSERT(theData->m_dynamic == false);
-        Q_ASSERT(theData->classId == (*it)->d_func()->classId);
-        
-        (*it)->setData( theData );
+        Q_ASSERT((*it)->d_func()->classId);
+        (*it)->aboutToSave();
         Q_ASSERT((*it)->d_func()->classId);
         
-        
-        ++cnt;
-        if(!atomic && (cnt % 100 == 0)) {
-            //Release the lock on a regular basis
-            locker.unlock();
-            locker.lock();
+        if((*it)->d_func()->isDynamic()) {
+          //This item has been changed, or isn't in the repositor yet
+          
+          //Eventually remove an old entry
+          if(index) {
+//           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
+//           DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
+//             
+//             foreach(ParsingEnvironmentFilePointer p, m_fileEnvironmentInformations.values())
+//               if(p != *it)
+//                 Q_ASSERT(p->d_func() != theData); //Make sure the data we're deleting isn't used by any other existing environment-info
+//             
+            m_environmentInfo.deleteItem(index);
+          }
+          
+          Q_ASSERT((*it)->d_func()->classId);
+          
+          //Add the new entry to the item repository
+          index = m_environmentInfo.index(req);
+          Q_ASSERT(index);
+          
+          EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
+          DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
+          static DUChainBaseData* dataCopy;
+          dataCopy = theData;
+          
+          Q_ASSERT(theData->m_range == (*it)->d_func()->m_range);
+          Q_ASSERT(theData->m_dynamic == false);
+          Q_ASSERT(theData->classId == (*it)->d_func()->classId);
+          
+          (*it)->setData( theData );
+          Q_ASSERT((*it)->d_func()->classId);
+          
+          ++cnt;
+        }else{
+          m_environmentInfo.itemFromIndex(index); //Prevent unloading of the data, by accessing the item
         }
-      }else{
-        m_environmentInfo.itemFromIndex(index); //Prevent unloading of the data, by accessing the item
       }
-    }
+      
+      ///We must not release the lock while holding a reference to a ParsingEnvironmentFilePointer, else we may miss the deletion of an
+      ///information, and will get crashes.
+      if(!atomic && (cnt % 100 == 0)) {
+          //Release the lock on a regular basis
+          locker.unlock();
+          locker.lock();
+      }
 
-    QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
-    foreach(IndexedString url, urls) {
       storeInformationList(url);
 
       //Access the data in the repository, so the bucket isn't unloaded
@@ -566,6 +605,7 @@ public:
       
       for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
         ParsingEnvironmentFile* f = (*it).data();
+        Q_ASSERT(f->d_func()->classId);
         if(f->ref == 1) {
           //The ParsingEnvironmentFilePointer is only referenced once. This means that it's does not belong to any
           //loaded top-context, so just remove it to save some memory and processing time.
@@ -638,6 +678,8 @@ private:
     
     ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
     if(ret) {
+      Q_ASSERT(ret->d_func()->classId);
+      
       m_fileEnvironmentInformations.insert(url, ParsingEnvironmentFilePointer(ret));
       Q_ASSERT(ret->url() == url);
     }
@@ -834,8 +876,16 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
+  
+  if(ParsingEnvironmentFile* alreadyHave = sdDUChainPrivate->findEnvironmentFor(file->indexedTopContext())) 
+  {
+    ///If this triggers, there has already been another environment-information registered for this top-context.
+    ///removeFromEnvironmentManager should have been called before to remove the old environment-information.
+    Q_ASSERT(alreadyHave == file.data());
+    return;
+  }
 
-  sdDUChainPrivate->addEnvironmentInformation(chain->url(), file);
+  sdDUChainPrivate->addEnvironmentInformation(file);
 }
 
 void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
@@ -845,7 +895,7 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   if( !file )
     return; //We don't need to manage
 
-  sdDUChainPrivate->removeEnvironmentInformation(chain->url(), file);
+  sdDUChainPrivate->removeEnvironmentInformation(file);
 }
 
 TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
