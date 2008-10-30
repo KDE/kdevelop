@@ -109,7 +109,7 @@ QList<QString> SessionController::sessions() const
 
 Session* SessionController::createSession( const QString& name )
 {
-    if( !QRegExp( "[a-z0-9_-A-Z]+" ).exactMatch( name ) )
+    if( !QRegExp( "[a-z0-9_-A-Z ]+" ).exactMatch( name ) )
     {
         return 0;
     }
