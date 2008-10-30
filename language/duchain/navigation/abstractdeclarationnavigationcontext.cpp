@@ -268,6 +268,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 }
 
 ///For a class, returns all classes that inherit it
+///@todo Respect different parsed versions of headers here. The same class may have multiple Declarations.
 QList<Declaration*> getInheriters(const Declaration* decl)
 {
   QList<Declaration*> ret;
