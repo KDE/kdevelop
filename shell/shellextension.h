@@ -68,6 +68,12 @@ public:
     /**Reimplement to return the description for project files.*/
     virtual QString projectFileDescription() = 0;
 
+    /**
+     * Reimplement to return the list of plugins that should
+     * automatically be loaded
+     */
+    virtual QStringList defaultPlugins() = 0;
+
 protected:
     ShellExtension();
     static ShellExtension *s_instance;
