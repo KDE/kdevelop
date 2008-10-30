@@ -1190,11 +1190,28 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration());
   if(!function)
     return;
+  
   if (!m_functionSpecifiers.isEmpty() && m_functionSpecifiers.top() != 0) {
 
     function->setFunctionSpecifiers(m_functionSpecifiers.top());
   }else{
     function->setFunctionSpecifiers((AbstractFunctionDeclaration::FunctionSpecifiers)0);
+  }
+  
+  ///Eventually inherit the "virtual" flag from overridden functions
+  ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(function);
+  if(classFunDecl && !classFunDecl->isVirtual()) {
+    QList<Declaration*> overridden;
+    foreach(DUContext::Import import, currentContext()->importedParentContexts())
+      overridden += import.context()->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
+                                            SimpleCursor::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
+    if(!overridden.isEmpty()) {
+      foreach(Declaration* decl, overridden) {
+        if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
+          if(fun->isVirtual())
+            classFunDecl->setVirtual(true);
+      }
+    }
   }
 }
 
