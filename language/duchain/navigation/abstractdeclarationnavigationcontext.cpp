@@ -91,8 +91,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       m_currentText += " " + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
     }else{
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
-        qDebug() << "xxx" << m_declaration;
-        qDebug() << "xxx" << m_declaration->abstractType().cast<StructureType>();
         htmlClass();
       }
 
@@ -170,6 +168,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
   m_currentText += "<br />";
 
+  if(!shorten)
+    htmlAdditionalNavigation();
+  
   if( !shorten && !m_declaration->comment().isEmpty() ) {
     QString comment = m_declaration->comment();
     comment.replace("<br />", "\n"); //do not escape html newlines within the comment
@@ -223,7 +224,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
   const FunctionType::Ptr type = m_declaration->abstractType().cast<FunctionType>();
   if( !type ) {
-    m_currentText += errorHighlight("Invalid type<br>");
+    m_currentText += errorHighlight("Invalid type<br />");
     return;
   }
   if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
@@ -263,7 +264,50 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
     m_currentText += " )";
   }
-  m_currentText += "<br>";
+  m_currentText += "<br />";
+}
+
+void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
+{
+  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
+  //Check if the function overrides another one
+  if(classFunDecl) {
+    QList<Declaration*> decls;
+
+      foreach(DUContext::Import import, m_declaration->context()->importedParentContexts())
+        decls += import.context()->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
+                                              SimpleCursor::invalid(), m_declaration->abstractType(), m_topContext.data(), DUContext::DontSearchInParent);
+
+    if(decls.size() && classFunDecl->isVirtual()) {
+      //Found a declaration in the imports that has the same type
+      uint num = 0;
+      foreach(Declaration* decl, decls) {
+        m_currentText += i18n("Overrides a") + " ";
+        makeLink(i18n("function"), QString("jump_to_override_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
+        m_currentText += " " + i18n("from") + " ";
+        makeLink(decl->context()->scopeIdentifier(true).toString(), QString("jump_to_override_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        
+        m_currentText += "<br />";
+        ++num;
+      }
+    }else{
+      //Check if this declarations hides other declarations
+      QList<Declaration*> decls;
+      foreach(DUContext::Import import, m_declaration->context()->importedParentContexts())
+        decls += import.context()->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
+                                                SimpleCursor::invalid(), AbstractType::Ptr(), m_topContext.data(), DUContext::DontSearchInParent);
+      uint num = 0;
+      foreach(Declaration* decl, decls) {
+        m_currentText += i18n("Hides a") + " ";
+        makeLink(i18n("function"), QString("jump_to_hide_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
+        m_currentText += " " + i18n("from") + " ";
+        makeLink(decl->context()->scopeIdentifier(true).toString(), QString("jump_to_hide_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        
+        m_currentText += "<br />";
+        ++num;
+      }
+    }
+  }
 }
 
 void AbstractDeclarationNavigationContext::htmlClass()
@@ -273,6 +317,12 @@ void AbstractDeclarationNavigationContext::htmlClass()
 
   m_currentText += "class ";
   eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
+  
+  ///@todo Show all importers/inheriters
+  if(m_declaration->internalContext() && m_declaration->internalContext()->type() == DUContext::Class) {
+    DUContext* classContext = m_declaration->internalContext();
+  }
+  
 }
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
