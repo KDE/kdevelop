@@ -86,7 +86,7 @@ public:
 PluginController::PluginController(Core *core)
     : IPluginController(), d(new PluginControllerPrivate)
 {
-	setObjectName("PluginController");
+    setObjectName("PluginController");
     d->core = core;
     d->profile = ShellExtension::getInstance() ->defaultProfile();
     kDebug() << "Loading plugins which match:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);

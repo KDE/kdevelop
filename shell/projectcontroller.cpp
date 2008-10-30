@@ -183,7 +183,7 @@ void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
 {
-	setObjectName("ProjectController");
+    setObjectName("ProjectController");
     d->reopenProjectsOnStartup = false;
     d->parseAllProjectSources = false;
     d->m_core = core;

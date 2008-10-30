@@ -107,7 +107,7 @@ PartController::PartController(Core *core, QWidget *toplevel)
         : KParts::PartManager( toplevel, 0 ), d(new PartControllerPrivate)
 
 {
-	setObjectName("PartController");
+    setObjectName("PartController");
     d->m_core = core;
     //Cache this as it is too expensive when creating parts
     //     KConfig * config = Config::standard();

@@ -148,7 +148,7 @@ struct DocumentControllerPrivate {
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
 {
-	setObjectName("DocumentController");
+    setObjectName("DocumentController");
     d = new DocumentControllerPrivate(this);
     QDBusConnection::sessionBus().registerObject( "/org/kdevelop/DocumentController",
         this, QDBusConnection::ExportScriptableSlots );

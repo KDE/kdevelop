@@ -66,7 +66,7 @@ RunController::RunController(QObject *parent)
     : IRunController(parent)
     , d(new RunControllerPrivate)
 {
-	setObjectName("RunController");
+    setObjectName("RunController");
     // TODO: need to implement compile only if needed before execute
     // TODO: need to implement abort all running programs when project closed
 
