@@ -16,3 +16,7 @@ target_link_libraries(shell-projectcontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KD
 set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 kde4_add_unit_test(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})
 target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell )
+
+set( plugincontrollertest_SRCS plugincontrollertest.cpp )
+kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
+target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell )
