@@ -22,6 +22,9 @@
 #include <qtest_kde.h>
 #include <tests/common/autotestshell.h>
 
+#include <kglobal.h>
+#include <kconfiggroup.h>
+
 #include "../core.h"
 #include "../sessioncontroller.h"
 #include "../session.h"
@@ -51,6 +54,12 @@ void SessionControllerTest::init()
 
 void SessionControllerTest::cleanup()
 {
+    QDir dir( SessionController::sessionDirectory() );
+    foreach( const QString& s, dir.entryList( QDir::AllDirs ) )
+    {
+        dir.rmpath( s );
+    }
+    KGlobal::config()->group( SessionController::cfgSessionGroup ).deleteEntry( SessionController::cfgActiveSessionEntry );
 }
 
 void SessionControllerTest::createSession()
@@ -63,7 +72,6 @@ void SessionControllerTest::createSession()
     QString sessiondir = SessionController::sessionDirectory() + "/" + sessionName;
     QVERIFY( QFileInfo( sessiondir ).exists() );
     QVERIFY( QFileInfo( sessiondir ).isDir() );
-    m_sessionCtrl->deleteSession( sessionName );
 }
 
 void SessionControllerTest::loadSession()
@@ -74,7 +82,8 @@ void SessionControllerTest::loadSession()
     m_sessionCtrl->loadSession( sessionName );
     QEXPECT_FAIL("", "expecting a changed active session", Continue);
     QCOMPARE( s, m_sessionCtrl->activeSession()); 
-    m_sessionCtrl->deleteSession( sessionName );
+    KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
+    QCOMPARE( grp.readEntry( SessionController::cfgActiveSessionEntry, "default" ), sessionName );
 }
 
 void SessionControllerTest::renameSession()
@@ -99,7 +108,6 @@ void SessionControllerTest::renameSession()
     sessiondir = SessionController::sessionDirectory() + "/" + newSessionName;
     QVERIFY( QFileInfo( sessiondir ).exists() );
     QVERIFY( QFileInfo( sessiondir ).isDir() );
-    m_sessionCtrl->deleteSession( s->name() );
 }
 
 void SessionControllerTest::cannotRenameActiveSession()
