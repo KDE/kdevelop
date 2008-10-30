@@ -59,17 +59,24 @@ void PluginControllerTest::pluginInfo()
 void PluginControllerTest::loadUnloadPlugin()
 {
     QSignalSpy spy(m_pluginCtrl, SIGNAL(pluginLoaded(KDevelop::IPlugin*)));
-    
+    QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(const QString&)));
+    QVERIFY(spy.isValid());
+    QVERIFY(spyloading.isValid());
     m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
     QVERIFY( m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
 
     QCOMPARE(spy.size(), 1);
+    QCOMPARE(spyloading.size(), 1);
+
+    QList<QVariant> args = spyloading.takeFirst();
+    QCOMPARE( args.at(0).toString(), QString( "KDevStandardOutputView" ) );
 
     QSignalSpy spy2(m_pluginCtrl, SIGNAL(pluginUnloaded(KDevelop::IPlugin*)) );
+    QVERIFY(spy2.isValid());
     m_pluginCtrl->unloadPlugin( "KDevStandardOutputView" );
     QVERIFY( !m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
 
-    QCOMPARE(spy.size(), 1);
+    QCOMPARE(spy2.size(), 1);
 }
 
 void PluginControllerTest::loadFromExtension()
