@@ -107,6 +107,9 @@ void Session::setName( const QString& name )
     {
         const QString tmp = d->name;
         d->name = name;
+        QDir dir( d->sessionDirectory );
+        dir.cdUp();
+        dir.rename( tmp, name );
         emit nameChanged( name, tmp );
     }
 }
