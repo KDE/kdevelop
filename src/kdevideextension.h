@@ -31,6 +31,7 @@ public:
     virtual KDevelop::AreaParams defaultArea();
     virtual QString projectFileExtension();
     virtual QString projectFileDescription();
+    virtual QStringList defaultPlugins();
 
 protected:
     KDevIDEExtension();
