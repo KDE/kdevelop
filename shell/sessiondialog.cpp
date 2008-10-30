@@ -57,12 +57,12 @@ QVariant SessionModel::headerData( int, Qt::Orientation, int ) const
 QVariant SessionModel::data( const QModelIndex& idx, int role ) const
 {
     if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() 
-        || ( role != Qt::DisplayRole && role != Qt::BackgroundRole ) )
+        || ( role != Qt::DisplayRole && role != Qt::BackgroundRole && role != Qt::EditRole) )
     {
         return QVariant();
     }
     QString sname = Core::self()->sessionController()->sessions().at( idx.row() );
-    if( role == Qt::DisplayRole )
+    if( role == Qt::DisplayRole || role == Qt::EditRole )
     {
         return sname;
     } else
