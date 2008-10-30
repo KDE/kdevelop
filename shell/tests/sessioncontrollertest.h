@@ -41,6 +41,7 @@ private slots:
     void deleteSession();
     void renameSession();
     void cannotRenameActiveSession();
+    void readFromConfig();
 private:
 
     KDevelop::Core* m_core;

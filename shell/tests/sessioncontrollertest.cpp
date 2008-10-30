@@ -23,6 +23,7 @@
 #include <tests/common/autotestshell.h>
 
 #include <kglobal.h>
+#include <kdebug.h>
 #include <kconfiggroup.h>
 
 #include "../core.h"
@@ -60,6 +61,7 @@ void SessionControllerTest::cleanup()
         dir.rmpath( s );
     }
     KGlobal::config()->group( SessionController::cfgSessionGroup ).deleteEntry( SessionController::cfgActiveSessionEntry );
+    KGlobal::config()->group( SessionController::cfgSessionGroup ).sync();
 }
 
 void SessionControllerTest::createSession()
@@ -144,6 +146,15 @@ void SessionControllerTest::deleteSession()
     QCOMPARE( sessionName, emittedSession );
 
     QVERIFY( !QFileInfo( sessiondir ).exists() );
+}
+
+void SessionControllerTest::readFromConfig()
+{
+    ISession* s = Core::self()->activeSession();
+    KConfigGroup grp( s->config(), "TestGroup" );
+    grp.writeEntry( "TestEntry", "Test1" );
+    KConfigGroup grp2( s->config(), "TestGroup" );
+    QCOMPARE(grp.readEntry( "TestEntry", "" ), QString( "Test1" ) );
 }
 
 QTEST_KDEMAIN( SessionControllerTest, GUI)
