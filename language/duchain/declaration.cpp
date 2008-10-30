@@ -402,7 +402,7 @@ void Declaration::clearOwnIndex() {
   if(!m_indexInTopContext)
     return;
   
-  if(!context() || (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
+  if(!context() || (!d_func()->m_anonymousInContext && !context()->isAnonymous())) {
     ENSURE_CAN_WRITE
   }
   
