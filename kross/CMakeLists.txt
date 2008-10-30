@@ -52,8 +52,6 @@ if(KDEVCPPDUCHAIN)
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiproblem.cpp language/interfaces/iproblem.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/use.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossuse.cpp language/duchain/use.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/symboltable.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosssymboltable.cpp language/duchain/symboltable.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/identifier.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossidentifier.cpp language/duchain/identifier.h:language/duchain/indexedstring.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/duchainlock.h
