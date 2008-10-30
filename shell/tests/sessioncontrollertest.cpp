@@ -74,6 +74,11 @@ void SessionControllerTest::createSession()
     QString sessiondir = SessionController::sessionDirectory() + "/" + sessionName;
     QVERIFY( QFileInfo( sessiondir ).exists() );
     QVERIFY( QFileInfo( sessiondir ).isDir() );
+
+    const QString brokenSessionName = "Test%$Session";
+    ISession* s = m_sessionCtrl->createSession( brokenSessionName );
+    QVERIFY( !s );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
 }
 
 void SessionControllerTest::loadSession()

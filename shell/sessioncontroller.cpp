@@ -109,6 +109,10 @@ QList<QString> SessionController::sessions() const
 
 Session* SessionController::createSession( const QString& name )
 {
+    if( !QRegExp( "[a-z0-9_-A-Z]+" ).exactMatch( name ) )
+    {
+        return 0;
+    }
     Q_ASSERT( !d->knownSession( name ) );
     Session* s = new Session( name );
     d->availableSessions << s;
@@ -121,7 +125,8 @@ void SessionController::deleteSession( const QString& name )
     Session* s  = d->findSessionForName( name );
     s->deleteFromDisk();
     emit sessionDeleted( name );
-    if( s == d->activeSession ) {
+    if( s == d->activeSession ) 
+    {
         loadDefaultSession();
     }
     d->availableSessions.removeOne(s);
