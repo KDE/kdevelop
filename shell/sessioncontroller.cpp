@@ -33,8 +33,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-static const QLatin1String sessionGroup("Sessions");
-static const QLatin1String activeSessionEntry("Active Session");
+const QString SessionController::cfgSessionGroup = "Sessions";
+const QString SessionController::cfgActiveSessionEntry("Active Session");
 
 class SessionControllerPrivate
 {
@@ -91,8 +91,8 @@ void SessionController::loadSession( const QString& name )
 {
     Session * s = d->findSessionForName( name );
     Q_ASSERT( s );
-    KConfigGroup grp = KGlobal::config()->group( sessionGroup );
-    grp.writeEntry( activeSessionEntry, name );
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
+    grp.writeEntry( cfgActiveSessionEntry, name );
     grp.sync();
     d->activeSession = s;
 }
@@ -130,8 +130,8 @@ void SessionController::deleteSession( const QString& name )
 
 void SessionController::loadDefaultSession()
 {
-    KConfigGroup grp = KGlobal::config()->group( sessionGroup );
-    QString name = grp.readEntry( activeSessionEntry, "default" );
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
+    QString name = grp.readEntry( cfgActiveSessionEntry, "default" );
     if( d->availableSessions.count() == 0 || !sessions().contains( name ) )
     {
         createSession( name );

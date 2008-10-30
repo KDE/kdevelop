@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+
 class Session;
 class ISession;
 
@@ -47,6 +48,8 @@ public:
     void loadSession( const QString& );
     void deleteSession( const QString& );
     static QString sessionDirectory();
+    static const QString cfgSessionGroup;
+    static const QString cfgActiveSessionEntry;
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
