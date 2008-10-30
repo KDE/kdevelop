@@ -58,8 +58,13 @@ void PluginControllerTest::pluginInfo()
 
 void PluginControllerTest::loadUnloadPlugin()
 {
+    QSignalSpy spy(m_pluginCtrl, SIGNAL(pluginLoaded(KDevelop::IPlugin*)));
+    
     m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
     QVERIFY( m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
+
+    QCOMPARE(spy.size(), 1);
+
     m_pluginCtrl->unloadPlugin( "KDevStandardOutputView" );
     QVERIFY( !m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
 }
