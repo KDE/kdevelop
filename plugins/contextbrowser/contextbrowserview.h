@@ -39,6 +39,10 @@ class BrowseManager;
 class ContextController;     // declared below
 class DeclarationController; // declared below
 
+namespace KDevelop {
+class IDocument;
+}
+
 class ContextBrowserView : public QWidget {
     Q_OBJECT
     public:
@@ -84,9 +88,10 @@ class ContextController : public QObject {
         ContextController(ContextBrowserView*);
         virtual ~ContextController();
 
-        //duchain must be locked
+        ///duchain must be locked
+        ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
         void updateHistory(KDevelop::DUContext* context, const
-        KDevelop::SimpleCursor& cursorPosition);
+        KDevelop::SimpleCursor& cursorPosition, bool force = false);
         QWidget* createWidget(KDevelop::DUContext* context);
 
         QToolButton* previousButton() const;
@@ -119,6 +124,7 @@ class ContextController : public QObject {
         void actionTriggered();
     private Q_SLOTS:
         void comboItemActivated(int index);
+        void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
     private:
         void updateDeclarationListBox(KDevelop::DUContext* context);
         bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor);
@@ -141,6 +147,7 @@ class ContextController : public QObject {
         QList<KDevelop::IndexedDeclaration> m_listDeclarations;
         KDevelop::IndexedString m_listUrl;
         BrowseManager* m_browseManager;
+        KUrl m_ignoreJump;
 };
 
 // Handles Declaration related operations for ContextBrowserView

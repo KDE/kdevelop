@@ -47,6 +47,7 @@
 #include <language/duchain/specializationstore.h>
 #include "browsemanager.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <kparts/part.h>
 
 const int maxHistoryLength = 30;
 
@@ -66,6 +67,8 @@ QToolButton* ContextController::browseButton() const {
 
 ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIndex(0), m_view(view) {
     m_browseManager = new BrowseManager(this);
+    
+    connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
     
     m_previousButton = new QToolButton();
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -95,6 +98,31 @@ ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIn
     m_currentContextBox = new KComboBox();
     m_currentContextBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(m_currentContextBox, SIGNAL(activated(int)), this, SLOT(comboItemActivated(int)));
+}
+
+///Duchain must be locked
+DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
+    TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
+    if (!topContext) return 0;
+    return contextAt(SimpleCursor(cursor), topContext);
+}
+
+void ContextController::documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor) {
+    if(newCursor.isValid() && previousCursor.isValid()) {
+        
+        KUrl oldIgnore = m_ignoreJump;
+        m_ignoreJump = KUrl();
+        if(newDocument->url() == oldIgnore)
+            return;
+        
+        DUChainReadLocker lock(DUChain::lock());
+        
+        if(previousDocument && previousCursor.isValid())
+            updateHistory(getContextAt(previousDocument->url(), previousCursor), SimpleCursor(previousCursor), true);
+        
+        if(newDocument && newCursor.isValid())
+            updateHistory(getContextAt(newDocument->url(), newCursor), SimpleCursor(newCursor), true);
+    }
 }
 
 ContextBrowserView* ContextController::view() const {
@@ -155,7 +183,8 @@ void ContextController::openDocument(int historyIndex) {
     Q_ASSERT_X(historyIndex < m_history.size(), "openDocument", "history index out of range");
     DocumentCursor c = m_history[historyIndex].computePosition();
     if (c.isValid() && !c.document().str().isEmpty()) {
-        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
+        m_ignoreJump = KUrl(c.document().str());
+        ICore::self()->documentController()->openDocument(m_ignoreJump, c);
 
         KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
         updateDeclarationListBox(m_history[historyIndex].context.data());
@@ -320,10 +349,10 @@ void ContextController::updateDeclarationListBox(DUContext* context) {
     currentContextBox()->setCurrentIndex(m_listDeclarations.indexOf(context->owner()));
 }
 
-void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position)
+void ContextController::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position, bool force)
 {
     if (context == 0) return;
-    if(!context->owner())
+    if(!context->owner() && !force)
         return; //Only add history-entries for contexts that have owners, which in practice should be functions and classes
                 //This keeps the history cleaner
 

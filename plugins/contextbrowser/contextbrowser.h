@@ -134,6 +134,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     ContextBrowserViewFactory* m_viewFactory;
 };
 
+DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);
+
 #endif // CONTEXTBROWSERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

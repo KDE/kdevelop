@@ -111,12 +111,12 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
 
   KAction* previousContext = actions->addAction("previous_context");
-  previousContext->setText( i18n("&Previous Context") );
+  previousContext->setText( i18n("&Previous Visited Context") );
   previousContext->setShortcut( Qt::META | Qt::Key_Left );
   connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
 
   KAction* nextContext = actions->addAction("next_context");
-  nextContext->setText( i18n("&Next Context") );
+  nextContext->setText( i18n("&Next Visited Context") );
   nextContext->setShortcut( Qt::META | Qt::Key_Right );
   connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
 
@@ -395,9 +395,6 @@ void ContextBrowserPlugin::showContextView(View* view, const SimpleCursor& posit
     }
 }
 
-namespace
-{
-
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
 {
       DUContext* ctx = topContext->findContextAt(position);
@@ -405,8 +402,6 @@ DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
         ctx = ctx->parentContext();
       return ctx;
 }
-
-} // end anonymous namespace
 
 void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
 {
