@@ -186,6 +186,7 @@ install(FILES
     duchain/duchainregister.h
     duchain/persistentsymboltable.h
     duchain/specializationstore.h
+    duchain/persistentsetmap.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 
