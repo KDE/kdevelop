@@ -39,6 +39,7 @@
 #include "classmemberdeclaration.h"
 #include "functiondefinition.h"
 #include "specializationstore.h"
+#include "persistentsymboltable.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -374,3 +375,40 @@ KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* dec
   }
   return 0;
 }
+
+///For a class, returns all classes that inherit it
+QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, bool collectVersions)
+{
+  QList<Declaration*> ret;
+
+  if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
+    foreach(DUContext* importer, decl->internalContext()->importers())
+      if(importer->type() == DUContext::Class && importer->owner())
+        ret << importer->owner();
+  
+  if(collectVersions && decl->inSymbolTable()) {
+    uint count;
+    const IndexedDeclaration* allDeclarations;
+    PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
+    for(int a = 0; a < count; ++a) {
+      if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
+        ret += getInheriters(allDeclarations[a].data(), false);
+      }
+    }
+  }
+  
+  return ret;
+}
+
+QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration) {
+  QList<Declaration*> ret;
+  
+  if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
+    ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), SimpleCursor::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
+  
+  foreach(Declaration* inheriter, getInheriters(currentClass))
+    ret += getOverriders(inheriter, overriddenDeclaration);
+  
+  return ret;
+}
+

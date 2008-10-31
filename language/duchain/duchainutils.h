@@ -38,6 +38,7 @@ class DUContext;
 class SimpleCursor;
 class HashedString;
 class TopDUContext;
+class IndexedDUContext;
 
 /**
  * A namespace which contains convenience utilities for navigating definition-use chains.
@@ -70,7 +71,14 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
 
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
-
+  
+  ///If the given declaration is a class, this gets all classes that inherit this one
+  ///@param collectVersions If this is true, the persistent symbol table is used to first find all registered
+  ///                       versions of this class, and then get the inheriters from them all together. This is neded for C++.
+  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getInheriters(const Declaration* decl, bool collectVersions = true);
+  
+  ///Gets all functions that override the function @param overriddenDeclaration, starting the search at @param currentClass
+  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration);
 }
 }
 

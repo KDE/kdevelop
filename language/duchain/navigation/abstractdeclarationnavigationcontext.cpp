@@ -34,6 +34,7 @@
 #include "../types/pointertype.h"
 #include "../types/referencetype.h"
 #include "../types/typeutils.h"
+#include "../persistentsymboltable.h"
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
@@ -267,32 +268,6 @@ void AbstractDeclarationNavigationContext::htmlFunction()
   m_currentText += "<br />";
 }
 
-///For a class, returns all classes that inherit it
-///@todo Respect different parsed versions of headers here. The same class may have multiple Declarations.
-QList<Declaration*> getInheriters(const Declaration* decl)
-{
-  QList<Declaration*> ret;
-  
-  if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
-    foreach(DUContext* importer, decl->internalContext()->importers())
-      if(importer->type() == DUContext::Class && importer->owner())
-        ret << importer->owner();
-  
-  return ret;
-}
-
-QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration) {
-  QList<Declaration*> ret;
-  
-  if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
-    ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), SimpleCursor::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
-  
-  foreach(Declaration* inheriter, getInheriters(currentClass))
-    ret += getOverriders(inheriter, overriddenDeclaration);
-  
-  return ret;
-}
-
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 {
   ///Check if the function overrides or hides another one
@@ -338,7 +313,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     if(classFunDecl->isVirtual()) {
       Declaration* classDecl = m_declaration->context()->owner();
       if(classDecl) {
-        QList<Declaration*> overriders = getOverriders(classDecl, classFunDecl);
+        QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl);
         
         if(!overriders.isEmpty()) {
           m_currentText += i18n("Overridden in") + " ";
@@ -358,7 +333,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
   }
   
   ///Show all classes that inherit this one
-  QList<Declaration*> inheriters = getInheriters(m_declaration.data());
+  QList<Declaration*> inheriters = DUChainUtils::getInheriters(m_declaration.data());
   if(!inheriters.isEmpty()) {
       m_currentText += i18n("Inherited by") + " ";
       bool first = true;
