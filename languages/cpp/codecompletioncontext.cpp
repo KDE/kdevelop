@@ -43,8 +43,12 @@
 #include "cppduchain/cppduchain.h"
 #include "cppdebughelper.h"
 #include "missingincludecompletionitem.h"
+#include <interfaces/idocumentcontroller.h>
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
+
+///If this is enabled, KDevelop corrects wrong member access operators like "." on a pointer automatically
+const bool assistAccessType = true;
 
 #ifdef TEST_COMPLETION
 //Stub implementation that does nothing
@@ -317,11 +321,6 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       }
     }
     break;
-    case MemberChoose:
-    case StaticMemberChoose:
-    {
-      ///@todo Check whether it is a MemberChoose
-    }
     case ArrowMemberAccess:
     {
       LOCKDUCHAIN;
@@ -349,7 +348,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                   log( QString("arrow-operator of class is not a function: %1").arg(containerType ? containerType->toString() : QString("null") ) );
               }
             } else {
-              log( QString("arrow-operator on type without operator* member: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+              log( QString("arrow-operator on type without operator-> member: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+              if(idDecl->internalContext()->type() == DUContext::Class)
+                replaceCurrentAccess("->", ".");
             }
           } else {
             log( QString("arrow-operator on type without declaration and context: %1").arg(containerType ? containerType->toString() : QString("null") ) );
@@ -366,6 +367,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         m_expressionResult.isInstance = true;
       }
     }
+    case MemberChoose:
+    case StaticMemberChoose:
     case MemberAccess:
     {
       if( expr.trimmed().isEmpty() ) {
@@ -384,6 +387,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         if(delayed && delayed->kind() == DelayedType::Unresolved)
           m_storedItems += missingIncludeCompletionItems(m_expression, m_followingText.trimmed() + ": ", m_expressionResult, m_duContext.data());
 #endif
+        if(type.cast<PointerType>())
+          replaceCurrentAccess(".", "->");
       }else{
         log( "No type for expression" );
       }
@@ -821,6 +826,24 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
     uint oldItemCount = items.count();
     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
     kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
+  }
+}
+
+void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
+{
+  IDocument* document = ICore::self()->documentController()->documentForUrl(m_duContext->url().toUrl());
+  if(document) {
+    KTextEditor::Document* textDocument = document->textDocument();
+    if(textDocument) {
+      KTextEditor::View* activeView = textDocument->activeView();
+      if(activeView) {
+        KTextEditor::Cursor cursor = activeView->cursorPosition();
+        KTextEditor::Range oldRange = KTextEditor::Range(cursor-KTextEditor::Cursor(0,old.length()), cursor);
+        if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == old) {
+          textDocument->replaceText(oldRange, _new);
+        }
+      }
+    }
   }
 }
 
