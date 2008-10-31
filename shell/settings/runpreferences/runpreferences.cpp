@@ -74,6 +74,10 @@ TargetProperties::TargetProperties(const QVariantList& args, const QString& targ
     preferencesDialog->addCompilationProjectItem->setText(QString());
     preferencesDialog->removeCompilationProjectItem->setIcon(KIcon("list-remove"));
     preferencesDialog->removeCompilationProjectItem->setText(QString());
+    preferencesDialog->upItem->setIcon(KIcon("go-up"));
+    preferencesDialog->upItem->setText(QString());
+    preferencesDialog->downItem->setIcon(KIcon("go-down"));
+    preferencesDialog->downItem->setText(QString());
     preferencesDialog->executableWidget->setVisible(false);
     
     QAbstractItemModel* model=ICore::self()->projectController()->projectModel();
@@ -84,12 +88,27 @@ TargetProperties::TargetProperties(const QVariantList& args, const QString& targ
     
     connect(preferencesDialog->addCompilationProjectItem, SIGNAL(clicked()), this, SLOT(slotAddCompileTarget()));
     connect(preferencesDialog->removeCompilationProjectItem, SIGNAL(clicked()), this, SLOT(removeCompileTarget()));
-    
+    connect(preferencesDialog->upItem, SIGNAL(clicked()), this, SLOT(upClicked()));
+    connect(preferencesDialog->downItem, SIGNAL(clicked()), this, SLOT(downClicked()));
 }
 
 TargetProperties::~TargetProperties()
 {
     delete preferencesDialog;
+}
+
+void TargetProperties::upClicked()
+{
+    int curr=preferencesDialog->compileItems->currentRow();
+    QListWidgetItem* it=preferencesDialog->compileItems->takeItem(curr);
+    preferencesDialog->compileItems->insertItem(curr+1, it);
+}
+
+void TargetProperties::downClicked()
+{
+    int curr=preferencesDialog->compileItems->currentRow();
+    QListWidgetItem* it=preferencesDialog->compileItems->takeItem(curr);
+    preferencesDialog->compileItems->insertItem(curr-1, it);
 }
 
 void TargetProperties::save() const
@@ -140,6 +159,8 @@ void TargetProperties::addCompileTarget(const QString& name)
     } else
         it=its.first();
     it->setSelected(true);
+    preferencesDialog->upItem->setEnabled(true);
+    preferencesDialog->downItem->setEnabled(true);
 }
 
 void TargetProperties::removeCompileTarget()
@@ -149,8 +170,14 @@ void TargetProperties::removeCompileTarget()
     if(curr>=0)
     {
         delete preferencesDialog->compileItems->takeItem(curr);
-        preferencesDialog->removeCompilationProjectItem->setEnabled(preferencesDialog->compileItems->count()>0);
         emit changed(true);
+    }
+    
+    if(preferencesDialog->compileItems->count()==0)
+    {
+        preferencesDialog->removeCompilationProjectItem->setEnabled(false);
+        preferencesDialog->upItem->setEnabled(false);
+        preferencesDialog->downItem->setEnabled(false);
     }
 }
 

@@ -58,6 +58,8 @@ class TargetProperties : public QWidget
     private slots:
         void slotAddCompileTarget();
         void removeCompileTarget();
+        void upClicked();
+        void downClicked();
     signals:
         void changed(bool);
         

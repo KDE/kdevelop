@@ -147,14 +147,6 @@
        </widget>
       </item>
      </layout>
-     <zorder>mainprogram_label_3_2</zorder>
-     <zorder>kcfg_workingDirectory</zorder>
-     <zorder>label</zorder>
-     <zorder>kcfg_environment</zorder>
-     <zorder>kcfg_startinterminal</zorder>
-     <zorder>label_4</zorder>
-     <zorder>mainprogram_label_2</zorder>
-     <zorder>kcfg_arguments</zorder>
     </widget>
    </item>
    <item>
@@ -211,7 +203,7 @@
        </widget>
       </item>
       <item row="2" column="2" >
-       <widget class="QPushButton" name="pushButton" >
+       <widget class="QPushButton" name="upItem" >
         <property name="enabled" >
          <bool>false</bool>
         </property>
@@ -221,7 +213,7 @@
        </widget>
       </item>
       <item row="3" column="2" >
-       <widget class="QPushButton" name="pushButton_2" >
+       <widget class="QPushButton" name="downItem" >
         <property name="enabled" >
          <bool>false</bool>
         </property>
