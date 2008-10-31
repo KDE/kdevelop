@@ -371,7 +371,6 @@ int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 int CMakeProjectVisitor::visit(const SetAst *set)
 {
     //TODO: Must deal with ENV{something} case
-    kDebug() << "set" << set->variableName();
     QStringList values;
     if(set->storeInCache() && m_cache->contains(set->variableName()))
         values = m_cache->value(set->variableName()).split(';');
