@@ -104,6 +104,10 @@ Q_SIGNALS:
     /**Emitted when the document has been activated.*/
     void documentActivated( KDevelop::IDocument* document );
 
+    ///Emitted whenever the active cursor jumps from one document+cursor to another, caused by a call to openDocument(..)
+    ///This is also emitted when a document is only activated, then previousDocument is zero
+    void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
+    
     /**Emitted when a document has been saved.*/
     void documentSaved( KDevelop::IDocument* document );
 
