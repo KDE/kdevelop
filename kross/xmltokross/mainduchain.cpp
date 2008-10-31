@@ -47,6 +47,7 @@ class ConsoleIDEExtension : public KDevelop::ShellExtension
         }
         virtual QString projectFileExtension() { return QString(); }
         virtual QString projectFileDescription() { return QString(); }
+	virtual QStringList defaultPlugins() { return QStringList(); }
 
 protected:
         ConsoleIDEExtension() {}
