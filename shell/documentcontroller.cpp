@@ -38,6 +38,7 @@ Boston, MA 02110-1301, USA.
 #include <ktemporaryfile.h>
 #include <kplugininfo.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -270,6 +271,12 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Range& range,
         DocumentActivationParams activationParams)
 {
+    IDocument* previousActiveDocument = activeDocument();
+    KTextEditor::Cursor previousActivePosition;
+    if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
+        previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+    
+
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::Area *area = uiController->activeArea();
 
@@ -415,6 +422,14 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     d->closeAll->setEnabled(true);
     d->closeAllOthers->setEnabled(true);
 
+    if(doc != previousActiveDocument) {
+        KTextEditor::Cursor activePosition;
+        if(doc->textDocument() && doc->textDocument()->activeView())
+            activePosition = doc->textDocument()->activeView()->cursorPosition();
+        
+        emit documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
+    }
+    
     return doc;
 }
 
