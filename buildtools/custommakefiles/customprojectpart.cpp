@@ -526,7 +526,29 @@ void CustomProjectPart::findNewFiles( const QString& dir, QStringList& filelist 
         }
         else if ( QFileInfo( absoluteEntry ).isDir() )
         {
-            findNewFiles( absoluteEntry, filelist );
+            bool searchRecursive = true;
+            QFileInfo fi( absoluteEntry );
+            if( fi.isSymLink() )
+            {
+                QString realDir = fi.readLink(); 
+                if( QFileInfo( realDir ).exists() )
+                {
+                    for( QStringList::const_iterator it = filelist.constBegin(); it != filelist.constEnd(); ++it )
+                    {
+
+                        if( QFileInfo(projectDirectory()+"/"+*it).absFilePath().startsWith( realDir ) )
+                        {
+                            searchRecursive = false;
+                        }
+                    }
+                } else {
+                    searchRecursive = false;
+                }
+            }
+            if( searchRecursive )
+            {
+                findNewFiles( absoluteEntry, filelist );
+            }
         }
     }
 }
