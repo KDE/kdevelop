@@ -109,6 +109,21 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
           m_currentText += ") ";
         }else{
           m_currentText += i18n("(unresolved forward-declaration)") + " ";
+          QualifiedIdentifier id = forwardDec->qualifiedIdentifier();
+          uint count;
+          const IndexedDeclaration* decls;
+          PersistentSymbolTable::self().declarations(id, count, decls);
+          bool had = false;
+          for(uint a = 0; a < count; ++a) {
+            if(decls[a].isValid() && !decls[a].data()->isForwardDeclaration()) {
+              m_currentText += "<br />";
+              makeLink(i18n("possible resolution from"), KDevelop::DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
+              m_currentText += " " + decls[a].data()->url().str();
+              had = true;
+            }
+          }
+          if(had)
+            m_currentText += "<br />";
         }
       }
     }
