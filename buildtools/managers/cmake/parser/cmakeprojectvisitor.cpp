@@ -568,7 +568,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     
     if(!path.isEmpty())
     {
-        m_vars->insert("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
         if(pack->isRequired())
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
@@ -610,6 +610,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insert(QString("%1_CONFIG"), QStringList(path));
         }
+        m_vars->take("CMAKE_CURRENT_LIST_FILE");
     }
     else if(pack->isRequired())
     {

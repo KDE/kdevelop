@@ -281,8 +281,10 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
         return CMakeFileContent();
-    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( fileName ) ) )
+    if ( !cmListFileLexer_SetFileName( lexer, qPrintable( fileName ) ) ) {
+        kDebug(9042) << "cmake read error. could not read " << fileName;
         return CMakeFileContent();
+    }
 
     CMakeFileContent ret;
     bool readError = false, haveNewline = true;
