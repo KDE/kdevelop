@@ -51,7 +51,7 @@ class ContextBrowserView : public QWidget {
 
         //duchain must be locked
         void setContext(KDevelop::DUContext* context);
-        void setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
+        void setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force = false);
         void setSpecialNavigationWidget(QWidget*);
         void updateHistory(KDevelop::DUContext*, const KDevelop::SimpleCursor&);
         void updateMainWidget(QWidget*);
@@ -67,6 +67,7 @@ class ContextBrowserView : public QWidget {
         void updateLockIcon(bool); 
 
     private:
+        virtual void showEvent(QShowEvent* event);
         bool isLocked() const;
         void resetWidget();
 
@@ -79,6 +80,7 @@ class ContextBrowserView : public QWidget {
         QWidget* m_navigationWidget;
         KDevelop::DeclarationId m_navigationWidgetDeclaration;
         bool m_allowLockedUpdate;
+        KDevelop::IndexedTopDUContext m_lastUsedTopContext;
 };
 
 // handles Context related operations for ContextBrowserView
@@ -116,6 +118,7 @@ class ContextController : public QObject {
             QString alternativeString;
         };
 
+        void updateDeclarationListBox(KDevelop::DUContext* context);
     public Q_SLOTS:
         void historyNext();
         void historyPrevious();
@@ -126,7 +129,6 @@ class ContextController : public QObject {
         void comboItemActivated(int index);
         void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
     private:
-        void updateDeclarationListBox(KDevelop::DUContext* context);
         bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor);
         QString actionTextFor(int historyIndex);
         void updateButtonState();

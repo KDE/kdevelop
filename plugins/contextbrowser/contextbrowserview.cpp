@@ -24,12 +24,15 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QToolButton>
+#include <QShowEvent>
 #include <QAction>
 #include <QMenu>
 #include <KIcon>
 #include <KTextBrowser>
 #include <KLocale>
 #include <KComboBox>
+#include <ktexteditor/document.h>
+#include <ktexteditor/view.h>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
@@ -457,6 +460,28 @@ ContextBrowserView::~ContextBrowserView() {
     m_plugin->unRegisterToolView(this);
 }
 
+void ContextBrowserView::showEvent(QShowEvent* event) {
+    if(m_navigationWidgetDeclaration.isValid()) {
+        DUChainReadLocker lock(DUChain::lock());
+        TopDUContext* top = m_lastUsedTopContext.data();
+        if(top) {
+            //Update the navigation-widget
+            Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
+            setDeclaration(decl, top, true);
+            
+            //Update the declaration combo-box
+            DUContext* context = 0;
+            KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
+            if(doc && doc->textDocument() && doc->textDocument()->activeView()) {
+                KTextEditor::Cursor c = doc->textDocument()->activeView()->cursorPosition();
+                context = getContextAt(top->url().toUrl(), c);
+            }
+            m_contextCtrl->updateDeclarationListBox(context);
+        }
+    }
+    QWidget::showEvent(event);
+}
+
 bool ContextBrowserView::isLocked() const {
     bool isLocked;
     if (m_allowLockedUpdate) {
@@ -487,12 +512,14 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
     }
 }
 
-void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext) {
-    if (!isLocked() && isVisible()) {  // NO-OP if toolview is hidden, for performance reasons
-        
-        if(m_navigationWidgetDeclaration == decl->id())
-            return;
-        m_navigationWidgetDeclaration = decl->id();
+void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force) {
+    m_lastUsedTopContext = IndexedTopDUContext(topContext);
+    
+    if(m_navigationWidgetDeclaration == decl->id() && !force)
+        return;
+    m_navigationWidgetDeclaration = decl->id();
+    
+    if (!isLocked() && (isVisible() || force)) {  // NO-OP if toolview is hidden, for performance reasons
         
         QWidget* w = m_declarationCtrl->createWidget(decl, topContext);
         updateMainWidget(w);
@@ -511,15 +538,17 @@ void ContextBrowserView::allowLockedUpdate() {
 }
 
 void ContextBrowserView::setContext(KDevelop::DUContext* context) {
+    m_lastUsedTopContext = IndexedTopDUContext(context->topContext());
+    
+    if(context->owner()) {
+        if(context->owner()->id() == m_navigationWidgetDeclaration)
+            return;
+        m_navigationWidgetDeclaration = context->owner()->id();
+    }else{
+        m_navigationWidgetDeclaration = DeclarationId();
+    }
+    
     if (!isLocked() && isVisible()) { // NO-OP if toolview is hidden, for performance reasons
-        
-        if(context->owner()) {
-            if(context->owner()->id() == m_navigationWidgetDeclaration)
-                return;
-            m_navigationWidgetDeclaration = context->owner()->id();
-        }else{
-            m_navigationWidgetDeclaration = DeclarationId();
-        }
         
         QWidget* w = m_contextCtrl->createWidget(context);
         updateMainWidget(w);
