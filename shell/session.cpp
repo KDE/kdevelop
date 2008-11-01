@@ -98,8 +98,7 @@ void Session::deleteFromDisk()
     kDebug() << "deleting session" << d->name;
     QDir dir( d->sessionDirectory );
     dir.cdUp();
-    kDebug() << dir;
-    kDebug() << dir.rmpath( d->name );
+    dir.rmpath( d->name );
 }
 
 void Session::setName( const QString& name )
