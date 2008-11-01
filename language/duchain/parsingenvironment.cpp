@@ -19,6 +19,9 @@
 #include "parsingenvironment.h"
 #include "topducontext.h"
 #include "duchainregister.h"
+#include "topducontextdynamicdata.h"
+#include "duchain.h"
+#include "topducontextdata.h"
 
 namespace KDevelop
 {
@@ -66,6 +69,26 @@ bool ParsingEnvironmentFile::isProxyContext() const {
 
 void ParsingEnvironmentFile::setIsProxyContext(bool is) {
   d_func_dynamic()->m_isProxyContext = is;
+}
+
+///Returns the parsing-environment informations of all importers of the coupled TopDUContext. This is more efficient than
+///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
+QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() {
+  
+  QList<IndexedDUContext> imp;
+  IndexedTopDUContext top = indexedTopContext();
+  if(top.isLoaded()) {
+    TopDUContext* topCtx = top.data();
+    FOREACH_FUNCTION(const IndexedDUContext& ctx, topCtx->d_func()->m_importers)
+      imp << ctx;
+  }else{
+    imp = TopDUContextDynamicData::loadImporters(top.index());
+  }
+  
+  QList< KSharedPtr<ParsingEnvironmentFile> > ret;
+  foreach(IndexedDUContext ctx, imp)
+    ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+  return ret;
 }
 
 } //KDevelop

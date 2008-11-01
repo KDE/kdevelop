@@ -30,6 +30,7 @@ class TopDUContext;
 class DUContext;
 class Declaration;
 class IndexedString;
+class IndexedDUContext;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -79,6 +80,9 @@ class TopDUContextDynamicData {
 
   ///Loads only the url out of the data stored on disk for the top-context.
   static IndexedString loadUrl(uint topContextIndex);
+
+  ///Loads only the list of importers out of the data stored on disk for the top-context.
+  static QList<IndexedDUContext> loadImporters(uint topContextIndex);
   
   private:
     void loadData() const;

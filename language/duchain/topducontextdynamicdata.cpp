@@ -65,6 +65,27 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_t
 TopDUContextDynamicData::~TopDUContextDynamicData() {
 }
 
+QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
+  QList<IndexedDUContext> ret;
+  
+  QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
+  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QFile file(fileName);
+  if(file.open(QIODevice::ReadOnly)) {
+     uint readValue;
+     file.read((char*)&readValue, sizeof(uint));
+     //now readValue is filled with the top-context data size
+     
+     //We only read the most needed stuff, not the whole top-context data
+     QByteArray data = file.read(readValue);
+     const TopDUContextData* topData = (const TopDUContextData*)data.constData();
+     FOREACH_FUNCTION(IndexedDUContext importer, topData->m_importers)
+      ret << importer;
+  }
+  
+  return ret;
+}
+
 IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";

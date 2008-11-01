@@ -307,7 +307,7 @@ public:
   QSet<ReferencedTopDUContext> m_openDocumentContexts;
 
   bool m_destroyed;
-
+  
   ParsingEnvironmentFile* findEnvironmentFor(IndexedTopDUContext top) {
     IndexedString url = top.url();
     
@@ -640,17 +640,6 @@ public:
       foreach(QReadWriteLock* lock, locked)
         lock->unlock();
   }
-
-private:
-  void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
-
-  template<class Entry>
-  bool listContains(const Entry entry, const Entry* list, uint listSize) {
-    for(uint a = 0; a < listSize; ++a)
-      if(list[a] == entry)
-        return true;
-    return false;
-  }
   
   ///Loads/gets the environment-information for the given top-context index, or returns zero if none exists
   ParsingEnvironmentFile* loadInformation(IndexedString url, uint topContextIndex) {
@@ -685,7 +674,18 @@ private:
     }
     return ret;
   }
+  
+private:
+  void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
 
+  template<class Entry>
+  bool listContains(const Entry entry, const Entry* list, uint listSize) {
+    for(uint a = 0; a < listSize; ++a)
+      if(list[a] == entry)
+        return true;
+    return false;
+  }
+  
   ///Stores the environment-information for the given url
   void storeInformationList(IndexedString url) {
 
@@ -1030,6 +1030,15 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
   }
 
   return ParsingEnvironmentFilePointer();
+}
+
+ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(IndexedTopDUContext topContext) const {
+   if(topContext.index() == 0)
+     return ParsingEnvironmentFilePointer();
+
+   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+   
+   return ParsingEnvironmentFilePointer(sdDUChainPrivate->loadInformation(topContext.url(), topContext.index()));
 }
 
 TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {

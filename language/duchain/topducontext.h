@@ -367,6 +367,7 @@ private:
   friend class LocalIndexedDeclaration;
   friend class LocalIndexedDUContext;
   friend class DeclarationId;
+  friend class ParsingEnvironmentFile;
   
   TopDUContextLocalPrivate* m_local;
   
