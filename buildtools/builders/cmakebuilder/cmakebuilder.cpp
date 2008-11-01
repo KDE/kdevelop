@@ -71,6 +71,9 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
         m_builder = i->extension<IMakeBuilder>();
         if( m_builder )
         {
+            connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
+            connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
+            
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SIGNAL(built(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(failed(KDevelop::ProjectBaseItem*)), this, SIGNAL(failed(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
@@ -83,12 +86,27 @@ CMakeBuilder::~CMakeBuilder()
 {
 }
 
+void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
+{
+    if(m_deleteWhenDone.remove(it)) {
+        delete it;
+    }
+}
+
 KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     if( m_builder )
     {
         if(dom->file())
-            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+        {
+            int lastDot=dom->file()->text().lastIndexOf('.');
+            QString target=dom->file()->text().mid(0, lastDot)+".o";
+            
+            KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(dom->project(), target);
+            
+            dom=it;
+            m_deleteWhenDone.insert(static_cast<KDevelop::ProjectBaseItem*>(it));
+        }
         
         kDebug(9032) << "Building with make";
         return m_builder->build(dom);

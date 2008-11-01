@@ -26,6 +26,7 @@
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <QtCore/QPair>
+#include <QtCore/QSet>
 #include <KUrl>
 
 class QStringList;
@@ -57,7 +58,9 @@ public:
     virtual KJob* configure(KDevelop::IProject*);
 
 //     bool updateConfig( KDevelop::IProject* project );
-
+private Q_SLOTS:
+    void buildFinished(KDevelop::ProjectBaseItem*);
+    
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
     void failed(KDevelop::ProjectBaseItem*);
@@ -67,6 +70,7 @@ Q_SIGNALS:
 private:
     bool m_dirty;
     IMakeBuilder* m_builder;
+    QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
 };
 
 #endif // CMAKEBUILDER_H
