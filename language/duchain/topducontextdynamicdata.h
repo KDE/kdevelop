@@ -81,6 +81,8 @@ class TopDUContextDynamicData {
   static IndexedString loadUrl(uint topContextIndex);
   
   private:
+    void loadData() const;
+    
     struct ItemDataInfo {
       //parentContext 0 means the global context
       ItemDataInfo(uint _dataOffset = 0, uint _parentContext = 0) : dataOffset(_dataOffset), parentContext(_parentContext) {
@@ -99,9 +101,9 @@ class TopDUContextDynamicData {
     mutable Declaration** m_fastDeclarations;
     mutable int m_fastDeclarationsSize;
     
-    QVector<ItemDataInfo> m_contextDataOffsets;
+    mutable QVector<ItemDataInfo> m_contextDataOffsets;
     
-    QVector<ItemDataInfo> m_declarationDataOffsets;
+    mutable QVector<ItemDataInfo> m_declarationDataOffsets;
     
     //Protects m_temporaryDeclarations, must be locked before accessing that vector
     static QMutex m_temporaryDataMutex;
@@ -109,8 +111,10 @@ class TopDUContextDynamicData {
     QVector<Declaration*> m_temporaryDeclarations;
     QVector<DUContext*> m_temporaryContexts;
     
-    QList<ArrayWithPosition> m_data;
+    mutable QList<ArrayWithPosition> m_data;
+    mutable QList<ArrayWithPosition> m_topContextData;
     bool m_onDisk;
+    mutable bool m_dataLoaded;
 };
 }
 
