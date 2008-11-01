@@ -58,6 +58,10 @@ public:
     virtual void viewCreated(Sublime::View* view);
 };
 
+/**
+ *
+ * Allows to access various parts of the user-interface, like the toolviews or the mainwindow
+ */
 class KDEVPLATFORMINTERFACES_EXPORT IUiController {
 public:
     virtual ~IUiController();
