@@ -2947,7 +2947,7 @@ void Config::check()
     config_err("Warning: No output formats selected! Set at least one of the main GENERATE_* options to YES.\n");
   }
 
-  // you can't generate HTMLHELP without HTML enabled!
+  // check HTMLHELP creation requirements
   if (!Config_getBool("GENERATE_HTML") && 
       Config_getBool("GENERATE_HTMLHELP"))
   {
@@ -2963,6 +2963,46 @@ void Config::check()
 #define PUTENV putenv
 #define SEP ":"
 #endif
+  // check QHP creation requirements
+  if (Config_getBool("GENERATE_QHP"))
+  {
+    bool quit = false;
+    if (!Config_getBool("GENERATE_HTML"))
+    {
+      config_err("Warning: GENERATE_QHP=YES requires GENERATE_HTML=YES.\n");
+      quit = true;
+    }
+
+    if (Config_getString("QHP_NAMESPACE").isEmpty())
+    {
+      config_err("Warning: GENERATE_QHP=YES requires QHP_NAMESPACE to be set.\n");
+      quit = true;
+    }
+
+    if (Config_getString("QHP_VIRTUAL_FOLDER").isEmpty())
+    {
+      config_err("Warning: GENERATE_QHP=YES requires QHP_VIRTUAL_FOLDER to be set.\n");
+      quit = true;
+    }
+
+    if (quit)
+    {
+      exit(1);
+    }
+  }
+
+  // check QCH creation requirements
+  if (!Config_getString("QHG_LOCATION").isEmpty() &&
+      !Config_getBool("GENERATE_QHP"))
+  {
+    config_err("Warning: Specifying QHG_LOCATION requires GENERATE_QHP=YES.\n");
+  }
+  if (!Config_getString("QCH_FILE").isEmpty() &&
+      Config_getString("QHG_LOCATION").isEmpty())
+  {
+    config_err("Warning: Specifying QCH_FILE requires QHG_LOCATION to be set.\n");
+  }
+
   if (Config_getBool("HAVE_DOT")) 
   {
     char *curFontPath = getenv("DOTFONTPATH");
@@ -3344,14 +3384,14 @@ void Config::create()
 		    "description. Set this tag to YES if you prefer the old behaviour instead. \n",
                     FALSE
                  );
-  cb = addBool(
-                    "DETAILS_AT_TOP",
-                    "If the DETAILS_AT_TOP tag is set to YES then Doxygen \n"
-                    "will output the detailed description near the top, like JavaDoc.\n"
-                    "If set to NO, the detailed description appears after the member \n"
-                    "documentation. \n",
-                    FALSE
-                 );
+  //cb = addBool(
+  //                  "DETAILS_AT_TOP",
+  //                  "If the DETAILS_AT_TOP tag is set to YES then Doxygen \n"
+  //                  "will output the detailed description near the top, like JavaDoc.\n"
+  //                  "If set to NO, the detailed description appears after the member \n"
+  //                  "documentation. \n",
+  //                  FALSE
+  //               );
   cb = addBool(
                     "INHERIT_DOCS",
                     "If the INHERIT_DOCS tag is set to YES (the default) then an undocumented \n"
@@ -3411,6 +3451,16 @@ void Config::create()
 		    "VHDL. \n",
                     FALSE
                  );
+  cl = addList(     "EXTENSION_MAPPING",
+                    "Doxygen selects the parser to use depending on the extension of the files it parses. \n"
+		    "With this tag you can assign which parser to use for a given extension. \n"
+		    "Doxygen has a built-in mapping, but you can override or extend it using this tag. \n"
+		    "The format is ext=language, where ext is a file extension, and language is one of \n"
+		    "the parsers supported by doxygen: IDL, Java, Javascript, C#, C, C++, D, PHP, \n"
+		    "Objective-C, Python, Fortran, VHDL, C, C++. For instance to make doxygen treat \n"
+		    ".inc files as Fortran files (default is PHP), and .f files as C (default is Fortran), \n"
+		    "use: inc=Fortran f=C\n"
+                 );
   cb = addBool(  
                     "BUILTIN_STL_SUPPORT",
 		    "If you use STL classes (i.e. std::string, std::vector, etc.) but do not want \n"
@@ -3434,15 +3484,15 @@ void Config::create()
 		    "instead of private inheritance when no explicit protection keyword is present. \n",
                     FALSE
                  );
-  cb = addBool(    "IDL_PROPERTY_SUPPORT",
-                   "For Microsoft's IDL there are propget and propput attributes to indicate getter \n"
-		   "and setter methods for a property. Setting this option to YES (the default) \n"
-		   "will make doxygen to replace the get and set methods by a property in the \n"
-		   "documentation. This will only work if the methods are indeed getting or \n"
-		   "setting a simple type. If this is not the case, or you want to show the \n"
-		   "methods anyway, you should set this option to NO. \n",
-		   TRUE
-		  );
+  cb = addBool(     "IDL_PROPERTY_SUPPORT",
+                    "For Microsoft's IDL there are propget and propput attributes to indicate getter \n"
+		    "and setter methods for a property. Setting this option to YES (the default) \n"
+		    "will make doxygen to replace the get and set methods by a property in the \n"
+		    "documentation. This will only work if the methods are indeed getting or \n"
+		    "setting a simple type. If this is not the case, or you want to show the \n"
+		    "methods anyway, you should set this option to NO. \n",
+		    TRUE
+		 );
   cb = addBool(
                     "DISTRIBUTE_GROUP_DOC",
                     "If member grouping is used in the documentation and the DISTRIBUTE_GROUP_DOC \n"
@@ -3722,6 +3772,17 @@ void Config::create()
 		   "is used as the file version. See the manual for examples. \n"
               );
   cs->setWidgetType(ConfigString::File);
+  cs = addString(  "LAYOUT_FILE",
+                   "The LAYOUT_FILE tag can be used to specify a layout file which will be parsed by \n"
+		   "doxygen. The layout file controls the global structure of the generated output files \n"
+		   "in an output format independent way. The create the layout file that represents \n"
+		   "doxygen's defaults, run doxygen with the -l option. You can optionally specify a \n"
+		   "file name after the option, if omitted DoxygenLayout.xml will be used as the name \n"
+		   "of the layout file.\n"
+	      );
+  cs->setWidgetType(ConfigString::File);
+  addObsolete("DETAILS_AT_TOP");
+
   
   //-----------------------------------------------------------------------------------------------
   addInfo(  "Messages","configuration options related to warning and progress messages");
@@ -4050,14 +4111,20 @@ void Config::create()
                  );
   cb->addDependency("GENERATE_HTML");
   cb = addBool(
-                    "GENERATE_HTMLHELP",
-                    "If the GENERATE_HTMLHELP tag is set to YES, additional index files \n"
-                    "will be generated that can be used as input for tools like the \n"
-                    "Microsoft HTML help workshop to generate a compiled HTML help file (.chm) \n"
-                    "of the generated HTML documentation. \n",
+                    "HTML_DYNAMIC_SECTIONS",
+                    "If the HTML_DYNAMIC_SECTIONS tag is set to YES then the generated HTML \n"
+		    "documentation will contain sections that can be hidden and shown after the \n"
+		    "page has loaded. For this to work a browser that supports \n"
+                    "JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox \n"
+		    "Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari). \n",
                     FALSE
                  );
   cb->addDependency("GENERATE_HTML");
+
+  /////////////////////////////////////////////////////////
+  // Docsets //////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+
   cb = addBool( "GENERATE_DOCSET",
                     "If the GENERATE_DOCSET tag is set to YES, additional index files \n"
                     "will be generated that can be used as input for Apple's Xcode 3 \n"
@@ -4091,13 +4158,16 @@ void Config::create()
   cs->setDefaultValue("org.doxygen.Project");
   cs->addDependency("GENERATE_DOCSET");
 
+  /////////////////////////////////////////////////////////
+  // HTMLHELP /////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+
   cb = addBool(
-                    "HTML_DYNAMIC_SECTIONS",
-                    "If the HTML_DYNAMIC_SECTIONS tag is set to YES then the generated HTML \n"
-		    "documentation will contain sections that can be hidden and shown after the \n"
-		    "page has loaded. For this to work a browser that supports \n"
-                    "JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox \n"
-		    "Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari). \n",
+                    "GENERATE_HTMLHELP",
+                    "If the GENERATE_HTMLHELP tag is set to YES, additional index files \n"
+                    "will be generated that can be used as input for tools like the \n"
+                    "Microsoft HTML help workshop to generate a compiled HTML help file (.chm) \n"
+                    "of the generated HTML documentation. \n",
                     FALSE
                  );
   cb->addDependency("GENERATE_HTML");
@@ -4119,6 +4189,7 @@ void Config::create()
                    );
   cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
+#if 0
   cs = addString(
                     "QTHELP_FILE",
                     "If the GENERATE_HTMLHELP tag is set to YES, the QTHELP_FILE tag can \n"
@@ -4144,6 +4215,10 @@ void Config::create()
                    );
   cs->setWidgetType(ConfigString::File);
   cs->addDependency("GENERATE_HTML");
+#endif
+  addObsolete("QTHELP_FILE");
+  addObsolete("QTHELP_CONFIG");
+  addObsolete("DOXYGEN2QTHELP_LOC");
   cb = addBool(
                     "GENERATE_CHI",
                     "If the GENERATE_HTMLHELP tag is set to YES, the GENERATE_CHI flag \n"
@@ -4174,6 +4249,82 @@ void Config::create()
                     FALSE
                  );
   cb->addDependency("GENERATE_HTML");
+
+  /////////////////////////////////////////////////////////
+  // QT HELP //////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+
+  cb = addBool(
+                    "GENERATE_QHP",
+                    "If the GENERATE_QHP tag is set to YES and both QHP_NAMESPACE and QHP_VIRTUAL_FOLDER \n"
+                    "are set, an additional index file will be generated that can be used as input for \n"
+                    "Qt's qhelpgenerator to generate a Qt Compressed Help (.qch) of the generated \n"
+                    "HTML documentation. \n",
+                    FALSE
+                 );
+  cb->addDependency("GENERATE_HTML");
+  cs = addString(
+                    "QCH_FILE",
+                    "If the QHG_LOCATION tag is specified, the QCH_FILE tag can \n"
+                    "be used to specify the file name of the resulting .qch file. \n"
+                    "The path specified is relative to the HTML output folder. \n"
+                   );
+  cs->setWidgetType(ConfigString::File);
+  cs->addDependency("GENERATE_QHP");
+  cs = addString(
+                    "QHP_NAMESPACE",
+                    "The QHP_NAMESPACE tag specifies the namespace to use when generating \n"
+                    "Qt Help Project output. For more information please see \n"
+                    "http://doc.trolltech.com/qthelpproject.html#namespace \n"
+                   );
+  cs->addDependency("GENERATE_QHP");
+  cs = addString(
+                    "QHP_VIRTUAL_FOLDER",
+                    "The QHP_VIRTUAL_FOLDER tag specifies the namespace to use when generating \n"
+                    "Qt Help Project output. For more information please see \n"
+                    "http://doc.trolltech.com/qthelpproject.html#virtual-folders \n"
+                   );
+  cs->setDefaultValue("doc");
+  cs->addDependency("GENERATE_QHP");
+
+  cs = addString(
+                    "QHP_CUSTOM_FILTER_NAME",
+                    "If QHP_CUSTOM_FILTER_NAME is set, it specifies the name of a custom filter to add. \n"
+                    "For more information please see \n"
+                    "http://doc.trolltech.com/qthelpproject.html#custom-filters \n"
+                   );
+  cs->addDependency("GENERATE_QHP");
+
+  cs = addString(
+                    "QHP_CUST_FILTER_ATTRS",
+                    "The QHP_CUST_FILT_ATTRS tag specifies the list of the attributes of the custom filter to add."
+                    "For more information please see \n"
+                    "<a href=\"http://doc.trolltech.com/qthelpproject.html#custom-filters\">Qt Help Project / Custom Filters</a>. \n"
+                   );
+  cs->addDependency("GENERATE_QHP");
+
+  cs = addString(
+                    "QHP_SECT_FILTER_ATTRS",
+                    "The QHP_SECT_FILTER_ATTRS tag specifies the list of the attributes this project's \n"
+                    "filter section matches. \n"
+                    "<a href=\"http://doc.trolltech.com/qthelpproject.html#filter-attributes\">Qt Help Project / Filter Attributes</a>. \n"
+                   );
+  cs->addDependency("GENERATE_QHP");
+
+  cs = addString(
+                    "QHG_LOCATION",
+                    "If the GENERATE_QHP tag is set to YES, the QHG_LOCATION tag can \n"
+                    "be used to specify the location of Qt's qhelpgenerator. \n"
+                    "If non-empty doxygen will try to run qhelpgenerator on the generated \n"
+                    ".qhp file .\n"
+                   );
+  cs->setWidgetType(ConfigString::File);
+  cs->addDependency("GENERATE_QHP");
+
+  /////////////////////////////////////////////////////////
+  // MISC /////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+
   cb = addBool(
                     "DISABLE_INDEX",
                     "The DISABLE_INDEX tag can be used to turn on/off the condensed index at \n"
@@ -4200,7 +4351,7 @@ void Config::create()
 		    "Netscape 6.0+, Internet explorer 5.0+, or Konqueror). Windows users are \n"
 		    "probably better off using the HTML help feature. Other possible values \n"
 		    "for this tag are: HIERARCHIES, which will generate the Groups, Directories,\n"
-                    "and Class Hiererachy pages using a tree view instead of an ordered list;\n"
+                    "and Class Hierarchy pages using a tree view instead of an ordered list;\n"
                     "ALL, which combines the behavior of FRAME and HIERARCHIES; and NONE, which\n"
                     "disables this behavior completely. For backwards compatibility with previous\n"
                     "releases of Doxygen, the values YES and NO are equivalent to FRAME and NONE\n"
@@ -4714,12 +4865,20 @@ void Config::create()
 		    "containing the font. \n"
                  );
   cs->setDefaultValue("FreeSans");
+  cb->addDependency("HAVE_DOT");
+  ci = addInt(      "DOT_FONTSIZE",
+                    "The DOT_FONTSIZE tag can be used to set the size of the font of dot graphs. \n"
+		    "The default size is 10pt. \n",
+		    4,24,10
+	     );
+  ci->addDependency("HAVE_DOT");
   cs = addString(   "DOT_FONTPATH",
       		    "By default doxygen will tell dot to use the output directory to look for the \n"
 		    "FreeSans.ttf font (which doxygen will put there itself). If you specify a \n"
 		    "different font using DOT_FONTNAME you can set the path where dot \n"
 		    "can find it using this tag. \n"
                 );
+  cs->addDependency("HAVE_DOT");
   cb = addBool(
                     "CLASS_GRAPH",
                     "If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen \n"
@@ -4806,12 +4965,12 @@ void Config::create()
                  );
   cb->addDependency("HAVE_DOT");
   cb = addBool(    
-                    "DIRECTORY_GRAPH",
-		    "If the DIRECTORY_GRAPH, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES \n"
-		    "then doxygen will show the dependencies a directory has on other directories \n"
-		    "in a graphical way. The dependency relations are determined by the #include\n"
-		    "relations between the files in the directories.\n",
-                    TRUE
+                  "DIRECTORY_GRAPH",
+  		  "If the DIRECTORY_GRAPH, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES \n"
+  	 	  "then doxygen will show the dependencies a directory has on other directories \n"
+       	          "in a graphical way. The dependency relations are determined by the #include\n"
+  		  "relations between the files in the directories.\n",
+                  TRUE
                );
   cb->addDependency("HAVE_DOT");
   ce = addEnum(
@@ -4869,11 +5028,11 @@ void Config::create()
   cb = addBool(
                     "DOT_TRANSPARENT",
 		    "Set the DOT_TRANSPARENT tag to YES to generate images with a transparent \n"
-		    "background. This is enabled by default, which results in a transparent \n"
-		    "background. Warning: Depending on the platform used, enabling this option \n"
-		    "may lead to badly anti-aliased labels on the edges of a graph (i.e. they \n"
-		    "become hard to read). \n",
-		    TRUE
+		    "background. This is disabled by default, because dot on Windows does not \n"
+		    "seem to support this out of the box. Warning: Depending on the platform used, \n"
+		    "enabling this option may lead to badly anti-aliased labels on the edges of \n"
+		    "a graph (i.e. they become hard to read). \n",
+		    FALSE
               );
   cb->addDependency("HAVE_DOT");
   cb = addBool(
