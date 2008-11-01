@@ -40,6 +40,7 @@
 #include <qtextdocument.h>
 #include <qevent.h>
 #include <qtextlayout.h>
+#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 
@@ -476,17 +477,6 @@ void UsesWidget::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTo
     DUChainReadLocker lock(DUChain::lock());
 }
 
-bool hasUse(DUContext* context, int usedDeclarationIndex) {
-  for(int a = 0; a < context->usesCount(); ++a)
-    if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
-      return true;
-    
-  foreach(DUContext* child, context->childContexts())
-    if(hasUse(child, usedDeclarationIndex))
-      return true;
-  return false;
-}
-
 QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
     Declaration* decl = m_declaration.data();
     QList<IndexedTopDUContext> ret;
@@ -494,7 +484,7 @@ QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
     FOREACH_ARRAY(IndexedTopDUContext context, uses)
     ret << context;
     
-    if(decl && ret.indexOf(decl->topContext()) == -1 && hasUse(decl->topContext(), decl->topContext()->indexForUsedDeclaration(decl, false)))
+    if(decl && DUChainUtils::contextHasUse(decl->topContext(), decl))
       ret.push_front(decl->topContext());
 
     return ret;

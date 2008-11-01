@@ -603,7 +603,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
       if(decl) {
         KDevVarLengthArray<IndexedTopDUContext> usingFiles = DUChain::uses()->uses(decl->id());
         
-        if(decl->topContext()->indexForUsedDeclaration(decl, false) != std::numeric_limits<int>::max() && usingFiles.indexOf(decl->topContext()) == -1)
+        if(DUChainUtils::contextHasUse(decl->topContext(), decl) && usingFiles.indexOf(decl->topContext()) == -1)
           usingFiles.insert(decl->topContext(), 0);
         
         if(decl->range().contains(c) && decl->url() == chosen->url()) {

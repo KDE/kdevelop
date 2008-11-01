@@ -412,3 +412,17 @@ QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass,
   return ret;
 }
 
+static bool hasUse(DUContext* context, int usedDeclarationIndex) {
+  for(int a = 0; a < context->usesCount(); ++a)
+    if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
+      return true;
+    
+  foreach(DUContext* child, context->childContexts())
+    if(hasUse(child, usedDeclarationIndex))
+      return true;
+  return false;
+}
+
+bool DUChainUtils::contextHasUse(DUContext* context, Declaration* declaration) {
+  return hasUse(context, context->topContext()->indexForUsedDeclaration(declaration, false));
+}

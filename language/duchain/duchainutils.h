@@ -79,6 +79,9 @@ namespace DUChainUtils {
   
   ///Gets all functions that override the function @param overriddenDeclaration, starting the search at @param currentClass
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration);
+  
+  ///Returns whether the given context or any of its child-contexts contain a use of the given declaration. This is relatively expensive.
+  KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);  
 }
 }
 
