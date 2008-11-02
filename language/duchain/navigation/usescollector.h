@@ -35,6 +35,9 @@ namespace KDevelop {
             ~UsesCollector();
             IndexedDeclaration declaration() const;
             
+            ///This must be called to start the actual collecting!
+            void startCollecting();
+            
             ///Override this to decide whether a file should be respect while computation.
             ///If true is returned, the uses will be computed for this file, and for all files
             ///in the import-chain between that file, and the file where the declaration occurs.
@@ -43,9 +46,6 @@ namespace KDevelop {
             virtual bool shouldRespectFile(IndexedString url);
         private slots:
             void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
-        protected:
-            //This must be called to start the actual collecting
-            void startCollecting();
         private:
             ///Called with every top-context that can contain uses of the declaration.
             ///Override this to do your custom processing. You do not need to recurse into imports, that's done for you.

@@ -426,7 +426,7 @@ UsesWidget::~UsesWidget() {
   delete m_collector;
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration) {
+UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(true) {
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
     
@@ -437,6 +437,8 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) {
       setShowHeader(false);
     
     m_collector = new UsesWidgetCollector(declaration, this);
+    
+    m_collector->startCollecting();
     
     setUpdatesEnabled(true);
 }
