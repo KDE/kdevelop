@@ -225,7 +225,8 @@ public:
   enum Features {
     VisibleDeclarationsAndContexts = 0, //Standard: The top-context should only contain publically accessible declarations and contexts
     AllDeclarationsAndContexts = 2, //The top-context should also contain non-public declarations and contexts, but no uses
-    AllDeclarationsContextsAndUses = 4 + AllDeclarationsAndContexts //The top-context should contain uses and all declarations + contexts
+    AllDeclarationsContextsAndUses = 4 + AllDeclarationsAndContexts, //The top-context should contain uses and all declarations + contexts
+    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses  //When this flag is set, also _all_ recursive imports have to be computed with AllDeclarationsContextsAndUses
   };
   
   Features features() const;

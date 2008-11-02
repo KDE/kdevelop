@@ -1166,7 +1166,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       if(language->languageSupport() && language->languageSupport()->codeHighlighting())
         language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
 
-    if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()) || (standardContext->features() != TopDUContext::AllDeclarationsContextsAndUses))
+    if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()) || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses))
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
