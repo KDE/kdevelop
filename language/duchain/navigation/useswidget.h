@@ -26,6 +26,7 @@
 #include <language/duchain/topducontext.h>
 #include <editor/simplecursor.h>
 #include "../../languageexport.h"
+#include "usescollector.h"
 
 class KComboBox;
 class QComboBox;
@@ -103,31 +104,24 @@ namespace KDevelop {
             IndexedTopDUContext m_topContext;
             IndexedDeclaration m_declaration;
     };
+
     /**
      * A widget that allows browsing through all the uses of a declaration
      */
     class KDEVPLATFORMLANGUAGE_EXPORT UsesWidget : public NavigatableWidgetList {
-        Q_OBJECT
         public:
             UsesWidget(IndexedDeclaration declaration);
             ~UsesWidget();
-      private slots:
-            void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
         private:
-            //Duchain needs to be locked
-            QList<IndexedTopDUContext> allUsingContexts();
-            IndexedDeclaration m_declaration;
-            QSet<IndexedString> m_waitForUpdate;
-            QSet<IndexedString> m_updateReady;
             
-            //All files that already have a widget
-            QSet<IndexedString> m_showing;
-            
-            //To prevent endless recursion in updateReady()
-            QSet<IndexedTopDUContext> m_checked;
-            
-            ///Set of all files where the features were manipulated statically through ParseJob
-            QSet<IndexedString> m_staticFeaturesManipulated;
+            struct UsesWidgetCollector : public UsesCollector {
+              public:
+              UsesWidgetCollector(IndexedDeclaration decl, UsesWidget* widget);
+              virtual void processUses(KDevelop::ReferencedTopDUContext topContext);
+              virtual void progress(uint processed, uint total);
+              UsesWidget* m_widget;
+            };
+            UsesWidgetCollector* m_collector;
     };
 }
 

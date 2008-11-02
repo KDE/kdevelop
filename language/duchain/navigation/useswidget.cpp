@@ -93,11 +93,6 @@ class FileCodeRepresentation : public CodeRepresentation {
     QList<QByteArray> lines;
 };
 
-//Returns true if either the file is in an open project, or if it is currently open
-bool isInLoadedProject(IndexedString document) {
-  return (bool)ICore::self()->projectController()->findProjectForUrl(document.toUrl()) || (bool)ICore::self()->documentController()->documentForUrl(document.toUrl());
-}
-
 CodeRepresentation* createCodeRepresentation(IndexedString url) {
   IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
   if(document && document->textDocument())
@@ -427,47 +422,11 @@ void TopContextUsesWidget::labelClicked() {
     setExpanded(true);
 }
 
-template<class ImportanceChecker>
-void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* current, QSet<ParsingEnvironmentFile*>& visited, QSet<ParsingEnvironmentFile*>& collected) {
-  if(visited.contains(current))
-    return;
-  
-  visited.insert(current);
-  if(checker(current))
-    collected.insert(current);
-  
-  foreach(ParsingEnvironmentFilePointer importer, current->importers())
-    if(importer.data())
-      collectImporters(checker, importer.data(), visited, collected);
-    else
-      kDebug() << "missing environment-file, strange";
-}
-
-struct ImportanceChecker {
-  bool operator ()(ParsingEnvironmentFile* file) {
-    bool ret = isInLoadedProject(file->url());
-    return ret;
-  }
-};
-
-///The returned set does not include the file itself
-///@parm visited should be empty on each call, used to prevent endless recursion
-void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& set, QSet<ParsingEnvironmentFilePointer>& visited) {
-  foreach(ParsingEnvironmentFilePointer import, file->imports()) {
-    if(!visited.contains(import)) {
-      visited.insert(import);
-      set.insert(import->url());
-      allImportedFiles(import, set, visited);
-    }
-  }
-}
-
 UsesWidget::~UsesWidget() {
-  foreach(IndexedString file, m_staticFeaturesManipulated)
-    ParseJob::unsetStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
+  delete m_collector;
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(true), m_declaration(declaration) {
+UsesWidget::UsesWidget(IndexedDeclaration declaration) {
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
     
@@ -477,170 +436,28 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(t
     if(!showUsesHeader)
       setShowHeader(false);
     
-    if(Declaration* decl = declaration.data()) {
-        
-        //We collect all versions here so we get all virtual top-contexts where this declaration occurs.
-        //Also this will collect all forward-declarations etc.
-        QList<IndexedDeclaration> decls = DUChainUtils::collectAllVersions(decl);
-        QList<ReferencedTopDUContext> candidateTopContexts;
-        foreach(IndexedDeclaration d, decls)
-          if(d.data() && d.data()->indexedType() == decl->indexedType() && d.indexedTopContext().data())
-            candidateTopContexts << d.indexedTopContext().data();
-        
-        ImportanceChecker checker;
-        
-        QSet<ParsingEnvironmentFile*> visited;
-        QSet<ParsingEnvironmentFile*> collected;
-        
-        kDebug() << "count of source candidate top-contexts:" << candidateTopContexts.size();
-        
-        ///We use ParsingEnvironmentFile to collect all the relevant importers, because loading those is very cheap, compared
-        ///to loading a whole TopDUContext.
-        foreach(ReferencedTopDUContext top, candidateTopContexts)
-          if(top->parsingEnvironmentFile())
-            collectImporters(checker, top->parsingEnvironmentFile().data(), visited, collected);
-        
-        ///We have all importers now. However since we can tell parse-jobs to also update all their importers, we only need to
-        ///update the "root" top-contexts that open the whole set with their imports.
-        QSet<IndexedString> rootFiles;
-        QSet<IndexedString> allFiles;
-        foreach(ParsingEnvironmentFile* importer, collected) {
-          QSet<IndexedString> allImports;
-          QSet<ParsingEnvironmentFilePointer> visited;
-          allImportedFiles(ParsingEnvironmentFilePointer(importer), allImports, visited);
-          //Remove all files from the "root" set that are imported by this one
-          rootFiles -= allImports;
-          allFiles += allImports;
-          allFiles.insert(importer->url());
-          rootFiles.insert(importer->url());
-        }
-        
-        //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This we only
-        //set the minimum-features selectively on the files we encountered.
-        foreach(ParsingEnvironmentFile* file, visited)
-          m_staticFeaturesManipulated.insert(file->url());
-        m_staticFeaturesManipulated.insert(decl->url());
-        
-        foreach(IndexedString file, m_staticFeaturesManipulated)
-          ParseJob::setStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
-        
-        m_waitForUpdate = rootFiles;
-        
-        foreach(IndexedString file, rootFiles) {
-          kDebug() << "updating root file:" << file.str();
-          DUChain::self()->updateContextForUrl(file, TopDUContext::AllDeclarationsContextsAndUses, this);
-        }
-        
-//         QList<IndexedTopDUContext> contexts = allUsingContexts();
-//         
-//         QList<IndexedTopDUContext> withOpenDocument;
-//         QList<IndexedTopDUContext> withoutOpenDocument;
-//         IndexedTopDUContext currentContext;
-//         
-//         foreach(IndexedTopDUContext ctx, contexts) {
-//           if(IDocument* doc = ICore::self()->documentController()->documentForUrl(ctx.url().toUrl())) {
-//             if(doc->isActive()) {
-//               currentContext = ctx;
-//               withOpenDocument.push_front(ctx);
-//             }else{
-//               withOpenDocument << ctx;
-//             }
-//           }else{
-//             withoutOpenDocument << ctx;
-//           }
-//         }
-//         
-// 
-//         contexts.clear();
-//         
-//         contexts += withOpenDocument;
-//         contexts += withoutOpenDocument;
-
-        
-/*        FOREACH_ARRAY(IndexedTopDUContext context, contexts) {
-            if(ICore::self()->projectController()->projects().isEmpty() || isInLoadedProject(context.url())) {
-              TopContextUsesWidget* widget = new TopContextUsesWidget(declaration, context);
-              if(context == currentContext)
-                widget->setExpanded(true);
-              addItem(widget);
-            }
-        }*/
-    }
+    m_collector = new UsesWidgetCollector(declaration, this);
     
     setUpdatesEnabled(true);
 }
 
-void UsesWidget::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl, UsesWidget* widget) : UsesCollector(decl), m_widget(widget) {
   
-  DUChainReadLocker lock(DUChain::lock());
-  
-  if(m_waitForUpdate.contains(url)) {
-    m_updateReady << url;
-    m_checked.clear();
-  }
-  
-  if(!topContext) {
-    kDebug() << "failed updating" << url.str();
-    return;
-  }
-  
-  if(!topContext->parsingEnvironmentFile()) {
-    kDebug() << "missing parsingEnvironmentFile";
-    return;
-  }
-  
-  if(!m_staticFeaturesManipulated.contains(url))
-    return; //Not interesting
-  
-  if(topContext->parsingEnvironmentFile()->needsUpdate() || !(topContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
-      ///@todo With simplified environment-matching, the same file may have been imported multiple times,
-      ///while only one of  those was updated. We have to check here whether this file is just such an import,
-      ///or whether we work on with it.
-      ///@todo We will lose files that were edited right after their update here.
-//       kDebug() << "context" << topContext->url().str() << "does not have the required features";
-      return;
-  }
-  
-//   kDebug() << "ready:" << url.str();
-  
-    IndexedTopDUContext indexed(topContext.data());
-    if(m_checked.contains(indexed))
-      return;
-    
-    if(!topContext.data()) {
-      kDebug() << "updated top-context is zero:" << url.str();
-      return;
-    }
-    
-    m_checked.insert(indexed);
-    
-    if(m_declaration.data() && DUChainUtils::contextHasUse(topContext.data(), m_declaration.data())) {
-      if(!m_showing.contains(topContext->url())) {
-        TopContextUsesWidget* widget = new TopContextUsesWidget(m_declaration.data(), topContext.data());
-        addItem(widget);
-        m_showing.insert(topContext->url());
-      }
-    }else{
-      if(!m_declaration.data())
-        kDebug() << "declaration has become invalid";
-    }
-    
-    foreach(DUContext::Import imported, topContext->importedParentContexts())
-      if(imported.context() && imported.context()->topContext())
-        updateReady(imported.context()->url(), ReferencedTopDUContext(imported.context()->topContext()));
 }
 
-QList<IndexedTopDUContext> UsesWidget::allUsingContexts() {
-    Declaration* decl = m_declaration.data();
-    QList<IndexedTopDUContext> ret;
-    KDevVarLengthArray<IndexedTopDUContext> uses = DUChain::uses()->uses(decl->id());
-    FOREACH_ARRAY(IndexedTopDUContext context, uses)
-    ret << context;
-    
-    if(decl && DUChainUtils::contextHasUse(decl->topContext(), decl))
-      ret.push_front(decl->topContext());
-
-    return ret;
+void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
 }
+
+void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
+    TopContextUsesWidget* widget = new TopContextUsesWidget(declaration().data(), topContext.data());
+    m_widget->addItem(widget);
+}
+
+UsesCollector::~UsesCollector() {
+  foreach(IndexedString file, m_staticFeaturesManipulated)
+    ParseJob::unsetStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
+}
+
+
 
 #include "useswidget.moc"
