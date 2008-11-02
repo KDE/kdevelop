@@ -580,7 +580,7 @@ void CPPInternalParseJob::run()
       }
 
       if (!parentJob()->abortRequested()) {
-        if (contentContext->features() == TopDUContext::AllDeclarationsContextsAndUses || parentJob()->minimumFeatures() == TopDUContext::AllDeclarationsContextsAndUses) {
+        if ((contentContext->features() & TopDUContext::AllDeclarationsContextsAndUses) || (parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses)) {
             parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
             UseBuilder useBuilder(&editor);
