@@ -88,41 +88,6 @@ CPPParseJob * PreprocessJob::parentJob() const
     return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
 }
 
-///Makes sure the the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
-bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Features minimumFeatures, QSet<ParsingEnvironmentFilePointer>* checked = 0) {
-  bool deleteChecked = false;
-  if(checked == 0) {
-    checked = new QSet<ParsingEnvironmentFilePointer>();
-    deleteChecked = true;
-  }else{
-    if(checked->contains(file))
-      return true;
-  }
-  
-  checked->insert(file);
-  
-  ///Locally we don't require the "recursive" condition, that only counts when we also have imports
-  TopDUContext::Features localRequired = (TopDUContext::Features)(minimumFeatures & TopDUContext::AllDeclarationsContextsAndUses);
-  if(!((file->features() & localRequired) == localRequired )) {
-    if(deleteChecked)
-      delete checked;
-    return false;
-  }
-  
-  if(minimumFeatures & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) {
-    foreach(ParsingEnvironmentFilePointer import, file->imports())
-      if(!featuresMatch(import, minimumFeatures)) {
-        if(deleteChecked)
-          delete checked;
-        return false;
-      }
-  }
-  
-  if(deleteChecked)
-    delete checked;
-  return true;
-}
-
 void PreprocessJob::run()
 {
     //If we have a parent, that parent already has locked the parse-lock
@@ -180,7 +145,7 @@ void PreprocessJob::run()
         
         if(parentJob()->masterJob() == parentJob() && updatingEnvironmentFile) {
           //Check whether we need to run at all, or whether the file is already up to date
-          if(featuresMatch(updatingEnvironmentFile, parentJob()->minimumFeatures())) {
+          if(updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures())) {
             KUrl localPath(parentJob()->document().toUrl());
             localPath.setFileName(QString());
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
@@ -390,7 +355,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
                 
-            if(!CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (featuresMatch(content->parsingEnvironmentFile(), parentJob()->minimumFeatures())) ) {
+            if(!CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
                 
@@ -484,7 +449,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment )
-                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls()) || !includedEnvironment->featuresSatisfied(parentJob()->minimumFeatures());
             }
         }
 

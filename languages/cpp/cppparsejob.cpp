@@ -453,7 +453,7 @@ void CPPInternalParseJob::run()
         if(isStandardContext) {
           //Delete the smart-ranges of all other contexts, so we never get problems with smart uses/highlighting
           foreach(TopDUContext* context, DUChain::self()->chainsForDocument(parentJob()->document())) {
-            if(context != updatingContentContext) {
+            if(context != updatingContentContext && context->smartRange()) {
               SmartConverter sc(&editor);
               sc.deconvertDUChain(context);
               kDebug() << "smart-deconverting a non-standard context";
@@ -507,8 +507,18 @@ void CPPInternalParseJob::run()
       }
 
       DeclarationBuilder declarationBuilder(&editor);
+      
+      TopDUContext::Features newFeatures = parentJob()->minimumFeatures();
+      if(contentContext)
+        newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
+      
+      ///At some point, we have to give up on features again, else processing will be just too slow.
+      ///Simple solution for now: Always go down to the minimum required level.
+      ///@todo Think of a good mechanism to decide when we want to drop features, and when we want to keep them.
+      if(!contentContext || !contentContext->smartRange())
+        newFeatures = parentJob()->minimumFeatures();
 
-      if(parentJob()->minimumFeatures() == TopDUContext::VisibleDeclarationsAndContexts && (!contentContext || contentContext->features() == TopDUContext::VisibleDeclarationsAndContexts))
+      if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts)
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
         
       
@@ -521,7 +531,7 @@ void CPPInternalParseJob::run()
         ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
         ///      While searching, always use the perspective of the proxy. Even better: Change the context-system so proxy-contexts become completely valid contexts from the outside perspective,
         ///      that import all their imports, and that share all their content except the imports/environment-information with all the other proxy contexts for that file, and with one content-context.
-        ///      Problem: What to do with imports that happen within the content-section then?
+        ///      Main problem: Contained Declarations/DUContexts point at their parent top-context. Which proxy-context should they point at?
         //kDebug() << "A significant change was recorded, all following contexts will be updated";
         //parentJob()->masterJob()->setNeedUpdateEverything(true);
       }
@@ -580,7 +590,7 @@ void CPPInternalParseJob::run()
       }
 
       if (!parentJob()->abortRequested()) {
-        if ((contentContext->features() & TopDUContext::AllDeclarationsContextsAndUses) || (parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUses)) {
+        if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
             parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
             UseBuilder useBuilder(&editor);
@@ -600,9 +610,9 @@ void CPPInternalParseJob::run()
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
           DUChainWriteLocker l(DUChain::lock());
-          contentContext->setFeatures((TopDUContext::Features) (contentContext->features() | parentJob()->minimumFeatures()) );
+          contentContext->setFeatures(newFeatures);
           if(proxyContext)
-            proxyContext->setFeatures(contentContext->features());
+            proxyContext->setFeatures(newFeatures);
           contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
       }
 
