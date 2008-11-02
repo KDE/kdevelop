@@ -230,8 +230,13 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(url);
 
   foreach( KDevelop::ILanguage* language, languages)
+  {
     if(!chosen)
-      chosen = language->languageSupport()->standardContext(url);
+    {
+      if (language->languageSupport())
+        chosen = language->languageSupport()->standardContext(url);
+    }
+  }
 
   if(!chosen)
     return DUChain::self()->chainForDocument(IndexedString(url.pathOrUrl()));
