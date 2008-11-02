@@ -23,9 +23,13 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     connect( ui->locationUrl, SIGNAL(textChanged(const QString&)),
-             this, SLOT(locationChanged() ));
+             this, SLOT(validateData() ));
     connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
-             this, SLOT(locationChanged() ));
+             this, SLOT(validateData() ));
+    connect( ui->templateView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), 
+             this, SLOT( validateData() ) );
+    connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
+             this, SLOT( validateData() ) );
     ui->locationUrl->setPath(QDir::homePath());
 }
 
@@ -53,22 +57,48 @@ QString ProjectSelectionPage::appName()
     return ui->appNameEdit->text();
 }
 
-void ProjectSelectionPage::locationChanged()
+void ProjectSelectionPage::validateData()
 {
     KUrl url = ui->locationUrl->url();
-    if( url.isLocalFile() )
+    if( !url.isLocalFile() )
     {
-        QFileInfo fi( url.toLocalFile( KUrl::RemoveTrailingSlash ) );
-        if( fi.exists() && fi.isDir() && QDir( fi.absoluteFilePath()).entryList().isEmpty() )
-        {
-            ui->locationValidLabel->setText( i18n("Invalid Location") );
-            emit invalid();
-            return;
-        }
+        ui->locationValidLabel->setText( i18n("Invalid Location") );
+        emit invalid();
+        return;
     }
-    ui->locationValidLabel->setText( i18n("Valid Location") );
-    emit valid();
-    emit locationChanged( url );
+    QFileInfo fi( url.toLocalFile( KUrl::RemoveTrailingSlash ) );
+    if( fi.exists() && fi.isDir() )
+    {
+           if( !QDir( fi.absoluteFilePath()).entryList().isEmpty() )
+           {
+                ui->locationValidLabel->setText( i18n("Directory already exists and is not empty!") );
+                emit invalid();
+                return;
+           }
+    }
+
+    if( ui->appNameEdit->text().isEmpty() )
+    {
+        ui->locationValidLabel->setText( i18n("Empty project name") );
+        emit invalid();
+        return;
+    }
+
+    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    if( item && !item->hasChildren() )
+    {
+        ui->locationValidLabel->setText( i18n("Valid Location") );
+        emit valid();
+        emit locationChanged( url );
+        return;
+    } else 
+    {
+        ui->locationValidLabel->setText( i18n("Invalid Project Template") );
+        emit invalid();
+        return;
+    }
+    ui->locationValidLabel->setText( i18n("Invalid Location") );
+    emit invalid();
 }
 
 #include "projectselectionpage.moc"

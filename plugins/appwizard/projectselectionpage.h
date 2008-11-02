@@ -33,7 +33,7 @@ signals:
     void valid();
     void invalid();
 private slots:
-    void locationChanged();
+    void validateData();
 private:
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;

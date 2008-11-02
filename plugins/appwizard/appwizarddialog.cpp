@@ -10,6 +10,7 @@
 #include "appwizarddialog.h"
 
 #include <QSignalMapper>
+#include <QDir>
 
 #include <klocale.h>
 
@@ -35,12 +36,14 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
 
     m_pageItems[m_vcsPage] = addPage(m_vcsPage, i18nc("Page for version control options", "Version Control") );
 
-    setValid( m_pageItems[m_selectionPage], true );
+    setValid( m_pageItems[m_selectionPage], false );
 
-    m_validMapper = new QSignalMapper(this);
-    connect( m_validMapper, SIGNAL( map(QWidget*) ), this, SLOT( pageValid(QWidget*) ) );
     m_invalidMapper = new QSignalMapper(this);
-    connect( m_invalidMapper, SIGNAL( map(QWidget*) ), this, SLOT( pageInValid(QWidget*) ) );
+    m_invalidMapper->setMapping(m_selectionPage, m_selectionPage);
+    m_invalidMapper->setMapping(m_vcsPage, m_vcsPage);
+    m_validMapper = new QSignalMapper(this);
+    m_validMapper->setMapping(m_selectionPage, m_selectionPage);
+    m_validMapper->setMapping(m_vcsPage, m_vcsPage);
 
     connect( m_selectionPage, SIGNAL(invalid()), m_invalidMapper, SLOT(map()) );
     connect( m_selectionPage, SIGNAL(valid()), m_validMapper, SLOT(map()) );
@@ -48,6 +51,8 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     connect( m_vcsPage, SIGNAL(invalid()), m_invalidMapper, SLOT(map()) );
     connect( m_vcsPage, SIGNAL(valid()), m_validMapper, SLOT(map()) );
 
+    connect( m_validMapper, SIGNAL( mapped(QWidget*) ), this, SLOT( pageValid(QWidget*) ) );    
+    connect( m_invalidMapper, SIGNAL( mapped(QWidget*) ), this, SLOT( pageInValid(QWidget*) ) );
 }
 
 ApplicationInfo AppWizardDialog::appInfo() const
@@ -55,6 +60,12 @@ ApplicationInfo AppWizardDialog::appInfo() const
     ApplicationInfo a;
     a.name = m_selectionPage->appName();
     a.location = m_selectionPage->location();
+    //correct place?
+    if (QFile::exists(a.location.toLocalFile()))
+    {
+        QDir tDir;
+        tDir.mkdir( a.location.toLocalFile() );
+    }
     a.appTemplate = m_selectionPage->selectedTemplate();
     if( !m_vcsPage->pluginName().isEmpty() )
     {
