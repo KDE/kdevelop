@@ -279,8 +279,11 @@ void NavigatableWidgetList::deleteItems() {
     delete item;
 }
 
-void NavigatableWidgetList::addItem(QWidget* widget) {
-  m_itemLayout->addWidget(widget);
+void NavigatableWidgetList::addItem(QWidget* widget, int pos) {
+  if(pos == -1)
+    m_itemLayout->addWidget(widget);
+  else
+    m_itemLayout->insertWidget(pos, widget);
 }
 
 QList<QWidget*> NavigatableWidgetList::items() const {
@@ -371,7 +374,10 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDecl
 TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext) : m_topContext(topContext), m_declaration(declaration) {
     DUChainReadLocker lock(DUChain::lock());
     QPushButton* label = new QPushButton;
-    label->setText(KUrl(topContext.url().str()).fileName());
+    QString labelText = KUrl(topContext.url().str()).fileName();
+    if(topContext.isLoaded())
+      labelText += ": " + i18n("%1 uses", DUChainUtils::contextCountUses(topContext.data(), declaration.data()));
+    label->setText(labelText);
     connect(label, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
     addHeaderItem(label);
 }
@@ -451,8 +457,22 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
 }
 
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
+  DUChainReadLocker lock(DUChain::lock());
     TopContextUsesWidget* widget = new TopContextUsesWidget(declaration().data(), topContext.data());
-    m_widget->addItem(widget);
+    bool expand = false;
+    bool toFront = false;
+    if(ICore::self()->documentController()->activeDocument() &&  ICore::self()->documentController()->activeDocument()->url().equals(topContext->url().toUrl())) {
+      expand = true; //Expand + move to front the item belonging to the current open document
+      toFront = true;
+    }
+    
+    if(m_widget->items().count() == 0)
+      expand = true; //Expand the first item
+    
+    if(expand)
+      widget->setExpanded(true);
+    
+    m_widget->addItem(widget, toFront ? 0 : -1);
 }
 
 UsesCollector::~UsesCollector() {

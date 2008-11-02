@@ -64,7 +64,7 @@ namespace KDevelop {
       public:
         NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
         ~NavigatableWidgetList();
-        void addItem(QWidget* widget);
+        void addItem(QWidget* widget, int pos = -1);
         void addHeaderItem(QWidget* widget);
         ///Whether items were added to this list using addItem(..)
         bool hasItems() const;
