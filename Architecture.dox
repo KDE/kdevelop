@@ -184,6 +184,7 @@ public:
   extension being asked for if needed.
 - Once an KDevelop::IPlugin pointer is returned by one of two methods above,
   it can be asked for an extension using KDevelop::IPlugin::extension
+
 .
 \subsubsection interplugin_dependency To set a dependency between interfaces:
 - Set the list of required interfaces in plugin's .desktop file
@@ -351,21 +352,22 @@ way to open files in KDevelop until DocumentController is ported.
 \subsection sublime_architecture Brief Architecture Overview
 
 Sublime::Controller is the central point of the whole Sublime infrastructure. It contains areas,
-documents and controlls mainwindows. \n
+documents, and controlls mainwindows. \n
 Sublime::Controller::showArea() is the only way to show an area in the mainwindow.
 
-Sublime::MainWindow is just a KParts::MainWindow which just knows how to "reconstruct" the area,
-react on area changes. Additionally it knows which view and toolview is "active" (i.e. last focused).
+Sublime::MainWindow is just a KParts::MainWindow which knows how to "reconstruct" the area
+and react on area changes. Additionally it knows which view and toolview is "active" (i.e. last focused).
 
-Sublime::Area is the object that controls views, toolviews and defines their placement
-inside the mainwindow. Provides varous view management (e.g. add/remove/etc.) methods and signals.
-Also Area is responsible to store/restore view layout (on-disk storage is not implemented currently).
+Sublime::Area is the object that controls views, toolviews, and defines their placement
+inside the mainwindow. Provides various view management (e.g. add/remove/etc.) methods and signals.
+Also Area is responsible for storing and restoring the view layout (on-disk storage is not
+ implemented currently).
 
-Area is identified by its name. Each KDevelop platform application, for example, has to define
-a concept of "default area" in ShellExtension so that UiController can load it by default.
+An area is identified by its name. Each KDevelop platform application, for example, has to define
+a concept of a "default area" in ShellExtension so that the UiController can load it by default.
 
-While areas operate on views, the Sublime Controller deals with \ref Sublime::Document 's only.
-Sublime::View is only a thin wrapper around actual QWidget.
+While areas operate on views, the Sublime Controller deals with Sublime::Document objects only.
+Sublime::View is only a thin wrapper around QWidget.
 
 Document is what provides views. Sublime::Document::createView() is the only way to get a view.
 When createView() is called, the protected Sublime::Document::createViewWidget() is called to
