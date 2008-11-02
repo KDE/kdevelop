@@ -1513,8 +1513,15 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     break;
                 }
                 case StringAst::MATCHALL:
-                    res = sast->input().filter(rx);
+                {
+                    int pos = 0;
+                    while( (pos = rx.indexIn( totalInput, pos ) ) != -1 )
+                    {
+                        res << rx.cap();
+                        pos += rx.matchedLength();
+                    }
                     break;
+                }
                 case StringAst::REGEX_REPLACE:
                 {
                     foreach(const QString& _in, sast->input())
