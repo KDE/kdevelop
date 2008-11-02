@@ -71,6 +71,24 @@ void ParsingEnvironmentFile::setIsProxyContext(bool is) {
   d_func_dynamic()->m_isProxyContext = is;
 }
 
+QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
+  
+  QList<IndexedDUContext> imp;
+  IndexedTopDUContext top = indexedTopContext();
+  if(top.isLoaded()) {
+    TopDUContext* topCtx = top.data();
+    FOREACH_FUNCTION(const DUContext::Import& import, topCtx->d_func()->m_importedContexts)
+      imp << import.indexedContext();
+  }else{
+    imp = TopDUContextDynamicData::loadImports(top.index());
+  }
+  
+  QList< KSharedPtr<ParsingEnvironmentFile> > ret;
+  foreach(IndexedDUContext ctx, imp)
+    ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+  return ret;
+}
+
 ///Returns the parsing-environment informations of all importers of the coupled TopDUContext. This is more efficient than
 ///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
 QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() {

@@ -340,6 +340,10 @@ public:
       return m_context.topContextIndex();
     }
     
+    IndexedDUContext indexedContext() const {
+      return m_context;
+    }
+    
     SimpleCursor position;
     private:
       //Either we store m_declaration, or m_context. That way we can resolve specialized contexts.

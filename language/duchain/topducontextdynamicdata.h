@@ -84,6 +84,8 @@ class TopDUContextDynamicData {
   ///Loads only the list of importers out of the data stored on disk for the top-context.
   static QList<IndexedDUContext> loadImporters(uint topContextIndex);
   
+  static QList<IndexedDUContext> loadImports(uint topContextIndex);
+
   private:
     void loadData() const;
     

@@ -149,11 +149,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///are accessible even without the top-context loaded.
     TopDUContext::Features features() const;
     
-    DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
-    
     ///Returns the parsing-environment informations of all importers of the coupled TopDUContext. This is more efficient than
     ///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
     QList< KSharedPtr<ParsingEnvironmentFile> > importers();
+
+    ///Returns the parsing-environment informations of all imports of the coupled TopDUContext. This is more efficient than
+    ///loading the top-context and finding out
+    QList< KSharedPtr<ParsingEnvironmentFile> > imports();
+    
+    
+    DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
     
   private:
     friend class TopDUContext;
