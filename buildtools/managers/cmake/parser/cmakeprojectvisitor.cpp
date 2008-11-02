@@ -1517,47 +1517,26 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     break;
                 case StringAst::REGEX_REPLACE:
                 {
-                    QRegExp rx(sast->regex());
-                    kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
-/*                    if(sast->replace().startsWith('\\'))
+                    foreach(const QString& _in, sast->input())
                     {
-                        rx.indexIn(sast->input()[0]);
+                        QString in(_in);
+                        kDebug() << "regex" << sast->regex();
+                        int idx = rx.indexIn(in);
                         QStringList info = rx.capturedTexts();
-                        int idx = sast->replace().right(sast->replace().size()-1).toInt();
-//                         kDebug(9042) << "\\number replace" << idx << info << sast->input();
-                        if(idx>=info.count())
-                            kDebug(9032) << "error: not matched regex";
-                        else
-                            res.append(info[idx]);
-                    }
-                    else*/
-                    {
-                        foreach(const QString& _in, sast->input())
+                        if(idx<0)
                         {
-                            QString in(_in);
-                            kDebug() << "regex" << sast->regex();
-                            int idx = rx.indexIn(in);
-                            QStringList info = rx.capturedTexts();
-                            if(idx<0)
+                            res.append(in);
+                        }
+                        else
+                        {
+                            QString tmp = sast->replace();
+                            for(int i = 1; i < info.count(); i++)
                             {
-                                res.append(in);
+                                tmp.replace(QString("\\%1").arg(i), info.at(i));
                             }
-                            else
-                            {
-                                QString tmp = sast->replace();
-                                for(int i = 1; i < info.count(); i++)
-                                {
-                                    kDebug() << "replacing" << QString("\\%1").arg(i) << "with" << info.at(i);
-                                    tmp.replace(QString("\\%1").arg(i), info.at(i));
-                                }
-                                kDebug() << "adjusting in:" << in << "with" << tmp;
-                                res.append(in.left(idx)+tmp+in.right(in.length()-idx-rx.matchedLength()));
-                                kDebug() << "adjusted in:" << res.last();
-                            }
+                            res.append(in.left(idx)+tmp+in.right(in.length()-idx-rx.matchedLength()));
                         }
                     }
-                    kDebug(9042) << "ret: " << res << " << string(regex replace "
-                            << sast->regex() << sast->replace() << sast->outputVariable() << sast->input();
                 }
                     break;
                 default:
