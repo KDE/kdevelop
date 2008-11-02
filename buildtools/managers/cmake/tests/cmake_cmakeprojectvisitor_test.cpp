@@ -103,6 +103,8 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("FOOBAR", "ORT Basket Is Strange ABORT");
     results << StringPair("RES", "Ok");
     results << StringPair("BARFOO", "ORT Is Basket Strange? ABORT");
+    results << StringPair("BARFOO_MATCH", "Basket Is");
+    results << StringPair("BARFOO_MATCHALL", "Basket Is;Basket Is;Basket Is;Basket Is");
     QTest::newRow("cache") <<
             "project(simpletest)\n"
             "cmake_minimum_required(VERSION 2.6)\n"
@@ -120,6 +122,8 @@ void CMakeProjectVisitorTest::testRun_data()
             "  set(RES Wrong)\n"
             "endif( FOOBAR MATCHES \"^ORT Bas\")\n"
             "string( REGEX REPLACE \"Basket ([a-zA-Z]*) ([a-zA-Z]*)\" \"\\\\1 Basket \\\\2?\" BARFOO ${FOOBAR})\n"
+            "string( REGEX MATCH \"Basket Is\" BARFOO_MATCH ${FOOBAR} ${RES} ${FOOBAR})\n"
+            "string( REGEX MATCHALL \"Basket Is\" BARFOO_MATCHALL ${FOOBAR} \"${FOOBAR}${RES}${FOOBAR}\" ${FOOBAR})\n"
             "#message(STATUS \"ooooo- ${aaa} ${bbb} ${ccc} ${ddd}\")\n" << cacheValues << results;
             
     
