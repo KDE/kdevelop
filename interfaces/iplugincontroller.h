@@ -52,9 +52,13 @@ class KDEVPLATFORMINTERFACES_EXPORT IPluginController : public QObject
 Q_OBJECT
 
 public:
+    /**
+     * \brief Indicates the plugin type
+     * This is used to determine how the plugin is loaded
+     */
     enum PluginType {
-        Global = 0,
-        Project
+        Global = 0, ///< Indicates that the plugin is loaded at startup
+        Project ///< Indicates that the plugin is loaded with the first opened project
     };
 
     IPluginController( QObject* parent = 0 );
@@ -88,9 +92,9 @@ public:
     virtual IPlugin* loadPlugin( const QString & pluginName ) = 0;
 
      /**
-     * Queries for the plugin which supports given extension interface.
+     * Retrieve a plugin which supports the given extension interface.
      * All already loaded plugins will be queried and the first one to support the extension interface
-     * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
+     * will be returned. Any plugin can be an extension, only the "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
      * @param extension The extension interface
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
@@ -98,11 +102,21 @@ public:
      */
     virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginname = "" ) = 0;
 
+     /**
+     * Retrieve a list of plugins which supports the given extension interface.
+     * All already loaded plugins will be queried and the first one to support the extension interface
+     * will be returned. Any plugin can be an extension, only the "ServiceTypes=..." entry is
+     * required in .desktop file for that plugin.
+     * @param extension The extension interface
+     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
+     * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
+     */
     virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList()) = 0;
 
      /**
-     * Queries for the plugin which supports given extension interface and returns a pointer to the extension interface.
-     * This is the difference between this method and pluginForExtension, what returns the plugin itself.
+     * Retrieve the plugin which supports given extension interface and 
+     * returns a pointer to the extension interface.
+     *
      * All already loaded plugins will be queried and the first one to support the extension interface
      * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
@@ -120,21 +134,24 @@ public:
 
 
     /**
-     * Queries KDevelop services. Version is checked automatically
-     * by adding proper X-KDevelop-Version=N statement into the query.
-     * @param serviceType The service type to query, for example "KDevelop/Plugin" or
-     * "KDevelop/SourceFormatter."
-     * @param constraint A constraint for the service. Do not include plugin version number - it
-     * is done automatically.
+     * Query for a KDevelop service. 
+     *
+     * The service version is checked for automatically
+     * @param serviceType The service type to query for. Examples include:
+     * "KDevelop/Plugin" or "KDevelop/SourceFormatter."
+     * @param constraint A constraint for the service. Do not include plugin 
+     * version number - it is done automatically.
      * @return The list of plugin offers.
      */
     static KPluginInfo::List query( const QString &serviceType, const QString &constraint );
 
     /**
-     * Queries KDevelop plugins. Works like KDevPluginController::query
-     * with serviceType set to "KDevelop/Plugin".
-     * @param constraint A constraint for the service. Do not include plugin version number - it
-     * is done automatically.
+     * Query for a KDevelop plugin. 
+     *
+     * The service version is checked for automatically and the only serviceType
+     * searched for is "KDevelop/Plugin"
+     * @param constraint A constraint for the service. Do not include plugin 
+     * version number - it is done automatically.
      * @return The list of plugin offers.
      */
     static KPluginInfo::List queryPlugins( const QString &constraint );
