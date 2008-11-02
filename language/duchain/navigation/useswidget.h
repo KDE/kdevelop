@@ -110,12 +110,24 @@ namespace KDevelop {
         Q_OBJECT
         public:
             UsesWidget(IndexedDeclaration declaration);
+            ~UsesWidget();
       private slots:
             void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
         private:
             //Duchain needs to be locked
             QList<IndexedTopDUContext> allUsingContexts();
             IndexedDeclaration m_declaration;
+            QSet<IndexedString> m_waitForUpdate;
+            QSet<IndexedString> m_updateReady;
+            
+            //All files that already have a widget
+            QSet<IndexedString> m_showing;
+            
+            //To prevent endless recursion in updateReady()
+            QSet<IndexedTopDUContext> m_checked;
+            
+            ///Set of all files where the features were manipulated statically through ParseJob
+            QSet<IndexedString> m_staticFeaturesManipulated;
     };
 }
 

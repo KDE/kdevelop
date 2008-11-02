@@ -106,6 +106,22 @@ public:
     /// Minimum set of features the resulting top-context should have
     Q_SCRIPTABLE TopDUContext::Features minimumFeatures() const;
     
+    /// Allows statically specifying an amount of features required for an url.
+    /// These features will automatically be or'ed with the minimumFeatures() returned
+    /// by any ParseJob with the given url.
+    /// Since this causes some additional complixity in update-checking, minimum features should not
+    /// be set permanently.
+    static void setStaticMinimumFeatures(IndexedString url, TopDUContext::Features features);
+    
+    /// Must be called exactly once for each call to setStaticMinimumFeatures, with the same features.
+    static void unsetStaticMinimumFeatures(IndexedString url, TopDUContext::Features features);
+    
+    /// Returns the statically set minimum features for  the given url, or zero.
+    static TopDUContext::Features staticMinimumFeatures(IndexedString url);
+    
+    /// Returns whether there is minimum features set up for some url
+    static bool hasStaticMinimumFeatures();
+    
     /**
      * Attempt to add \a dependency as a dependency of \a actualDependee, which must
      * be a subjob of this job, or null (in which case, the dependency is added

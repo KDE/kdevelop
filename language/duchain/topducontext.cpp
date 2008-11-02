@@ -217,6 +217,7 @@ public:
     m_ctxt(ctxt), m_sharedDataOwner(sharedDataOwner), m_ownIndex(index), m_inDuChain(false)
   {
     if(sharedDataOwner) {
+      Q_ASSERT(0); //Not supported and to be removed
       Q_ASSERT(!sharedDataOwner->m_local->m_sharedDataOwner);
       sharedDataOwner->m_local->m_dataUsers.insert(m_ctxt);
       
@@ -828,6 +829,7 @@ TopDUContext::Features TopDUContext::features() const
 
 void TopDUContext::setFeatures(Features features)
 {
+  features = (TopDUContext::Features)(features & (~((uint)8))); //Remove the "Recursive" flag since that's only for searching
   d_func_dynamic()->m_features = features;
   
   //Replicate features to ParsingEnvironmentFile
@@ -1270,11 +1272,11 @@ void TopDUContext::clearImportedParentContexts() {
   
 }
 
-void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool /*anonymous*/, bool temporary) {
+void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous, bool temporary) {
   if(context == this)
     return;
   if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
-    DUContext::addImportedParentContext(context, position, true, temporary); 
+    DUContext::addImportedParentContext(context, position, anonymous, temporary); 
   
   m_local->addImportedContextRecursively(static_cast<TopDUContext*>(context), temporary, true);
 }

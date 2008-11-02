@@ -45,7 +45,19 @@
 #include "parserdependencypolicy.h"
 #include "duchain/topducontext.h"
 
+#include "duchain/duchainlock.h"
+#include "duchain/duchain.h"
+#include "duchain/parsingenvironment.h"
+
+
 using namespace KTextEditor;
+
+Q_DECLARE_METATYPE(KDevelop::IndexedString)
+Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
+Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
+
+static QMutex minimumFeaturesMutex;
+static QHash<KDevelop::IndexedString, QList<KDevelop::TopDUContext::Features> > staticMinimumFeatures;
 
 namespace KDevelop
 {
@@ -92,6 +104,13 @@ ParseJob::ParseJob( const KUrl &url,
 
 ParseJob::~ParseJob()
 {
+    {
+        //Only for testing
+        DUChainReadLocker lock(DUChain::lock());
+        if(d->duContext)
+            d->duContext->parsingEnvironmentFile();
+    }
+    
     typedef QPointer<QObject> QObjectPointer;
     foreach(QObjectPointer p, d->notify)
         if(p)
@@ -115,9 +134,28 @@ void ParseJob::setMinimumFeatures(TopDUContext::Features features)
     d->features = features;
 }
 
+bool ParseJob::hasStaticMinimumFeatures()
+{
+    QMutexLocker lock(&minimumFeaturesMutex);
+    return ::staticMinimumFeatures.size();
+}
+
+TopDUContext::Features ParseJob::staticMinimumFeatures(IndexedString url)
+{
+    QMutexLocker lock(&minimumFeaturesMutex);
+    TopDUContext::Features features = (TopDUContext::Features)0;
+    
+    if(::staticMinimumFeatures.contains(url))
+        foreach(TopDUContext::Features f, ::staticMinimumFeatures[url])
+            features = (TopDUContext::Features)(features | f);
+    
+    return features;
+}
+
 TopDUContext::Features ParseJob::minimumFeatures() const
 {
-    return d->features;
+    
+    return (TopDUContext::Features)(d->features | staticMinimumFeatures(d->document));
 }
 
 void ParseJob::setDuChain(ReferencedTopDUContext duChain)
@@ -240,6 +278,17 @@ void ParseJob::setNotifyWhenReady(QList<QPointer<QObject> > notify) {
     d->notify = notify;
 }
 
+void ParseJob::setStaticMinimumFeatures(IndexedString url, TopDUContext::Features features) {
+    QMutexLocker lock(&minimumFeaturesMutex);
+    ::staticMinimumFeatures[url].append(features);
+}
+
+void ParseJob::unsetStaticMinimumFeatures(IndexedString url, TopDUContext::Features features) {
+    QMutexLocker lock(&minimumFeaturesMutex);
+    ::staticMinimumFeatures[url].removeOne(features);
+    if(::staticMinimumFeatures[url].isEmpty())
+      ::staticMinimumFeatures.remove(url);
+}
 
 }
 

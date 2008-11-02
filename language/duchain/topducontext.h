@@ -226,7 +226,10 @@ public:
     VisibleDeclarationsAndContexts = 0, //Standard: The top-context should only contain publically accessible declarations and contexts
     AllDeclarationsAndContexts = 2, //The top-context should also contain non-public declarations and contexts, but no uses
     AllDeclarationsContextsAndUses = 4 + AllDeclarationsAndContexts, //The top-context should contain uses and all declarations + contexts
-    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses  //When this flag is set, also _all_ recursive imports have to be computed with AllDeclarationsContextsAndUses
+    ///When this flag is set, also _all_ recursive imports have to be computed with AllDeclarationsContextsAndUses
+    ///This flag can not be set on a context, it is only used as a parameter to several updating functions. When you set it
+    ///on a top-context, its flag will be AllDeclarationsContextsAndUses.
+    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses
   };
   
   Features features() const;
@@ -236,7 +239,7 @@ public:
    * Retrieves or creates a local index that is to be used for referencing the given @param declaration
    * in local uses. Also registers this context as a user of the declaration.
    * @param create If this is false, only already registered indices will be returned.
-   *               If the declaration is not registered, std::limits<int>::max is returned
+   *               If the declaration is not registered, std::numeric_limits<int>::max() is returned
    *
    * The duchain must be write-locked if create is true, else it must at least be read-locked.
    * */
@@ -387,6 +390,10 @@ KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(TopDUCo
 
 inline uint qHash(const ReferencedTopDUContext& ctx) {
   return ctx.hash();
+}
+
+inline uint qHash(const IndexedTopDUContext& ctx) {
+  return ctx.index();
 }
 
 }

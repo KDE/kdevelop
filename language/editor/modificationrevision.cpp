@@ -79,7 +79,7 @@ FileModificationMap& fileModificationCache() {
 }
 
 QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
-  QDateTime currentDateTime = QDateTime::currentDateTime();
+  QDateTime currentDateTime = QDateTime::currentDateTime(); ///@todo Use something faster than QDateTime for this
 
   FileModificationMap::const_iterator it = fileModificationCache().find( fileName );
   if( it != fileModificationCache().end() ) {

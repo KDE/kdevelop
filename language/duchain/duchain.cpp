@@ -1220,7 +1220,7 @@ void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
 
 void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady) const {
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(document.toUrl());
-  if(standardContext && standardContext->parsingEnvironmentFile() && !standardContext->parsingEnvironmentFile()->needsUpdate() && (standardContext->features() & minFeatures) == minFeatures) {
+  if(standardContext && standardContext->parsingEnvironmentFile() && !standardContext->parsingEnvironmentFile()->needsUpdate() && standardContext->parsingEnvironmentFile()->featuresSatisfied(minFeatures)) {
     if(notifyReady)
     QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, document), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
   }else{

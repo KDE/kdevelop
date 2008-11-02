@@ -39,6 +39,7 @@ class SimpleCursor;
 class HashedString;
 class TopDUContext;
 class IndexedDUContext;
+class IndexedDeclaration;
 
 /**
  * A namespace which contains convenience utilities for navigating definition-use chains.
@@ -71,6 +72,10 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
 
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
+  
+  ///Uses the persistent symbol table to find all occurences of this declaration, based on its identifier.
+  ///The result should be filtered to make sure that the declaration is actually useful to you.
+  KDEVPLATFORMLANGUAGE_EXPORT QList<IndexedDeclaration> collectAllVersions(Declaration* decl);
   
   ///If the given declaration is a class, this gets all classes that inherit this one
   ///@param collectVersions If this is true, the persistent symbol table is used to first find all registered

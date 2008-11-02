@@ -22,6 +22,7 @@
 #include "topducontextdynamicdata.h"
 #include "duchain.h"
 #include "topducontextdata.h"
+#include <language/backgroundparser/parsejob.h>
 
 namespace KDevelop
 {
@@ -108,5 +109,33 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
     ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
   return ret;
 }
+
+///Makes sure the the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
+static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Features minimumFeatures, QSet<ParsingEnvironmentFilePointer>& checked) {
+  if(checked.contains(file))
+    return true;
+  
+  checked.insert(file);
+  
+  ///Locally we don't require the "recursive" condition, that only counts when we also have imports
+  TopDUContext::Features localRequired = (TopDUContext::Features)(minimumFeatures & TopDUContext::AllDeclarationsContextsAndUses);
+  localRequired = (TopDUContext::Features) (localRequired | ParseJob::staticMinimumFeatures(file->url()));
+  if(!((file->features() & localRequired) == localRequired )) {
+    return false;
+  }
+  
+  if(minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive || ParseJob::hasStaticMinimumFeatures())
+    foreach(ParsingEnvironmentFilePointer import, file->imports())
+      if(!featuresMatch(import, minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive ? minimumFeatures : ((TopDUContext::Features)0), checked))
+        return false;
+  
+  return true;
+}
+
+bool ParsingEnvironmentFile::featuresSatisfied(TopDUContext::Features minimumFeatures) {
+  QSet<ParsingEnvironmentFilePointer> checked;
+  return featuresMatch(ParsingEnvironmentFilePointer(this), minimumFeatures, checked);
+}
+
 
 } //KDevelop

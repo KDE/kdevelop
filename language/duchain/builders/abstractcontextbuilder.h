@@ -760,8 +760,8 @@ protected:
 
         ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
 
-        if( recompiling() )
-          kDebug() << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
+//         if( recompiling() )
+//           kDebug() << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
       }
     }
 

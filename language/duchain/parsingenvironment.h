@@ -157,6 +157,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///loading the top-context and finding out
     QList< KSharedPtr<ParsingEnvironmentFile> > imports();
     
+    ///Returns true if this top-context satisfies at least the given minimum features.
+    ///If there is static minimum features set up in ParseJob, this also checks against those.
+    bool featuresSatisfied(TopDUContext::Features minimumFeatures);
     
     DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
     

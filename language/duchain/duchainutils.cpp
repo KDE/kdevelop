@@ -381,6 +381,23 @@ KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* dec
   return 0;
 }
 
+QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
+  QList<IndexedDeclaration> ret;
+  ret << IndexedDeclaration(decl);
+  
+  if(decl->inSymbolTable())
+  {
+    uint count;
+    const IndexedDeclaration* allDeclarations;
+    PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
+    for(int a = 0; a < count; ++a)
+      if(!(allDeclarations[a] == IndexedDeclaration(decl)))
+        ret << allDeclarations[a];
+  }
+  
+  return ret;
+}
+
 ///For a class, returns all classes that inherit it
 QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, bool collectVersions)
 {
@@ -418,6 +435,9 @@ QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass,
 }
 
 static bool hasUse(DUContext* context, int usedDeclarationIndex) {
+  if(usedDeclarationIndex == std::numeric_limits<int>::max())
+    return false;
+  
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
       return true;
