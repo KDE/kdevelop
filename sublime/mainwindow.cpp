@@ -44,8 +44,6 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 {
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
-
-    loadGeometry(KGlobal::config()->group("Main Window"));
 }
 
 MainWindow::~MainWindow()
@@ -149,71 +147,11 @@ void MainWindow::saveSettings()
 
 void MainWindow::loadSettings()
 {
-    kDebug() << "loading settings for " << (area() ? area()->objectName() : "");
-    QString group = "MainWindow";
-    if (area())
-        group += '_' + area()->objectName();
-    KConfigGroup cg = KGlobal::config()->group(group);
-
-    // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,
-    // we don't really want that one to try restoring window size, and we also
-    // cannot stop it from doing that in any clean way.
-    QStatusBar* sb = qFindChild<KStatusBar *>(this);
-    if (sb) {
-        QString entry = cg.readEntry("StatusBar", "Enabled");
-        if ( entry == "Disabled" )
-           sb->hide();
-        else
-           sb->show();
-    }
-
-    QMenuBar* mb = qFindChild<KMenuBar *>(this);
-    if (mb) {
-        QString entry = cg.readEntry ("MenuBar", "Enabled");
-        if ( entry == "Disabled" )
-           mb->hide();
-        else
-           mb->show();
-    }
-
-    if ( !autoSaveSettings() || cg.name() == autoSaveGroup() ) {
-        QString entry = cg.readEntry ("ToolBarsMovable", "Enabled");
-        if ( entry == "Disabled" )
-            KToolBar::setToolBarsLocked(true);
-        else
-            KToolBar::setToolBarsLocked(false);
-    }
-
-    int n = 1; // Toolbar counter. toolbars are counted from 1,
-    foreach (KToolBar* toolbar, toolBars()) {
-        QString group("Toolbar");
-        // Give a number to the toolbar, but prefer a name if there is one,
-        // because there's no real guarantee on the ordering of toolbars
-        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QString(" ")+toolbar->objectName());
-
-        KConfigGroup toolbarGroup(&cg, group);
-        toolbar->applySettings(toolbarGroup, false);
-        n++;
-    }
-   
-    // Utilise the QMainWindow::restoreState() functionality
-    // Note that we're fixing KMainWindow bug here -- the original
-    // code has this fragment above restoring toolbar properties.
-    // As result, each save/restore would move the toolbar a bit to
-    // the left.
-    if (cg.hasKey("State")) {
-        QByteArray state;
-        state = cg.readEntry("State", state);
-        state = QByteArray::fromBase64(state);
-        // One day will need to load the version number, but for now, assume 0
-        restoreState(state);
-    }
-    
     KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
     foreach (Container *container, findChildren<Container*>())
         container->setTabBarHidden(uiGroup.readEntry("TabBarVisibility", 1) == 0);
 
-    cg.sync();
+    uiGroup.sync();
 
     emit settingsLoaded();
 }
@@ -221,9 +159,6 @@ void MainWindow::loadSettings()
 bool MainWindow::queryClose()
 {
 //    saveSettings();
-    KConfigGroup config(KGlobal::config(), "Main Window");
-    saveGeometry(config);
-    config.sync();
     
     return KParts::MainWindow::queryClose();
 }
@@ -231,41 +166,6 @@ bool MainWindow::queryClose()
 void Sublime::MainWindow::setStatusIcon(View * view, const QIcon & icon)
 {
     d->setStatusIcon(view, icon);
-}
-
-void MainWindow::saveGeometry(KConfigGroup &config)
-{
-    int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-
-    QString key = QString::fromLatin1("Desktop %1 %2")
-        .arg(desk.width()).arg(desk.height());
-    config.writeEntry(key, geometry());
-
-}
-void MainWindow::loadGeometry(const KConfigGroup &config)
-{
-    // The below code, essentially, is copy-paste from
-    // KMainWindow::restoreWindowSize.  Right now, that code is buggy,
-    // as per http://permalink.gmane.org/gmane.comp.kde.devel.core/52423
-    // so we implement a less theoretically correct, but working, version
-    // below
-    const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-    QRect desk = QApplication::desktop()->screenGeometry(scnum);
-
-    // if the desktop is virtual then use virtual screen size
-    if (QApplication::desktop()->isVirtualDesktop())
-        desk = QApplication::desktop()->screenGeometry(QApplication::desktop()->screen());
-
-    QString key = QString::fromLatin1("Desktop %1 %2")
-        .arg(desk.width()).arg(desk.height());
-    QRect g = config.readEntry(key, QRect());
-    if (!g.isEmpty())
-        setGeometry(g);
 }
 
 void MainWindow::enableAreaSettingsSave()

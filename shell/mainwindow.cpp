@@ -125,7 +125,7 @@ void MainWindow::saveSettings()
 
 void MainWindow::initialize()
 {
-    setupGUI( KXmlGuiWindow::Keys | KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create );
+    setupGUI( KXmlGuiWindow::Keys | KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
     Core::self()->partController()->addManagedTopLevelWidget(this);
     kDebug() << "Adding plugin-added connection";
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
