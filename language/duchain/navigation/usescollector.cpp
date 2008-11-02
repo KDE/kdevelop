@@ -98,6 +98,8 @@ void UsesCollector::startCollecting() {
             if(top->parsingEnvironmentFile())
               collectImporters(checker, top->parsingEnvironmentFile().data(), visited, collected);
         }
+        if(checker(decl->topContext()->parsingEnvironmentFile().data()))
+          collected.insert(decl->topContext()->parsingEnvironmentFile().data());
         
         ///We have all importers now. However since we can tell parse-jobs to also update all their importers, we only need to
         ///update the "root" top-contexts that open the whole set with their imports.
