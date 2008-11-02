@@ -1519,7 +1519,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 {
                     QRegExp rx(sast->regex());
                     kDebug(9042) << "REGEX REPLACE" << sast->input() << sast->regex() << sast->replace();
-                    if(sast->replace().startsWith('\\'))
+/*                    if(sast->replace().startsWith('\\'))
                     {
                         rx.indexIn(sast->input()[0]);
                         QStringList info = rx.capturedTexts();
@@ -1530,11 +1530,12 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                         else
                             res.append(info[idx]);
                     }
-                    else
+                    else*/
                     {
                         foreach(const QString& _in, sast->input())
                         {
                             QString in(_in);
+                            kDebug() << "regex" << sast->regex();
                             int idx = rx.indexIn(in);
                             QStringList info = rx.capturedTexts();
                             if(idx<0)
@@ -1543,10 +1544,15 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                             }
                             else
                             {
-                                foreach(const QString& s, info)
+                                QString tmp = sast->replace();
+                                for(int i = 1; i < info.count(); i++)
                                 {
-                                    res.append(in.replace(s, sast->replace()));
+                                    kDebug() << "replacing" << QString("\\%1").arg(i) << "with" << info.at(i);
+                                    tmp.replace(QString("\\%1").arg(i), info.at(i));
                                 }
+                                kDebug() << "adjusting in:" << in << "with" << tmp;
+                                res.append(in.left(idx)+tmp+in.right(in.length()-idx-rx.matchedLength()));
+                                kDebug() << "adjusted in:" << res.last();
                             }
                         }
                     }

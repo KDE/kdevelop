@@ -100,6 +100,9 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("eee", "cmd");
     results << StringPair("fff", "cmd");
     results << StringPair("ggg", "cmd");
+    results << StringPair("FOOBAR", "ORT Basket Is Strange ABORT");
+    results << StringPair("RES", "Ok");
+    results << StringPair("BARFOO", "ORT Is Basket Strange? ABORT");
     QTest::newRow("cache") <<
             "project(simpletest)\n"
             "cmake_minimum_required(VERSION 2.6)\n"
@@ -110,6 +113,13 @@ void CMakeProjectVisitorTest::testRun_data()
             "find_path(eee stdio.h /usr/include)\n"
             "find_library(fff stdio.h /usr/include)\n"
             "find_program(ggg gcc /usr/gcc)\n"
+            "set(FOOBAR \"ORT Basket Is Strange ABORT\")\n"
+            "if( FOOBAR MATCHES \"^ORT Bas\")\n"
+            "  set(RES Ok)\n"
+            "else( FOOBAR MATCHES \"^ORT Bas\")\n"
+            "  set(RES Wrong)\n"
+            "endif( FOOBAR MATCHES \"^ORT Bas\")\n"
+            "string( REGEX REPLACE \"Basket ([a-zA-Z]*) ([a-zA-Z]*)\" \"\\\\1 Basket \\\\2?\" BARFOO ${FOOBAR})\n"
             "#message(STATUS \"ooooo- ${aaa} ${bbb} ${ccc} ${ddd}\")\n" << cacheValues << results;
             
     
