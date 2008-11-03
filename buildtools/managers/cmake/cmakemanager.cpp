@@ -644,20 +644,20 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem* folder=0;
-    kDebug(9042) << "Querying inc dirs for " << item;
+//     kDebug(9042) << "Querying inc dirs for " << item;
     while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
         item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
-        kDebug(9042) << "Looking for a folder: " << folder << item;
+//         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
 
     if(!folder)
         return KUrl::List();
 
-    kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
+//     kDebug(9042) << "Include directories! -- before" << folder->includeDirectories();
     KUrl::List l = resolveSystemDirs(folder->project(), folder->includeDirectories());
-    kDebug(9042) << "Include directories!" << l;
+//     kDebug(9042) << "Include directories!" << l;
     return l;
 }
 
