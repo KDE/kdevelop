@@ -528,9 +528,13 @@ UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl, Us
 }
 
 void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
-  m_widget->m_progressBar->setMaximum(max);
-  m_widget->m_progressBar->setMinimum(0);
-  m_widget->m_progressBar->setValue(0);
+  if(m_widget->m_progressBar) {
+    m_widget->m_progressBar->setMaximum(max);
+    m_widget->m_progressBar->setMinimum(0);
+    m_widget->m_progressBar->setValue(0);
+  }else{
+    kWarning() << "maximumProgress called twice";
+  }
 }
 
 void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
@@ -545,7 +549,7 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
       m_widget->setUpdatesEnabled(true);
     }
   }else{
-    kDebug() << "progress() called too often";
+    kWarning() << "progress() called too often";
   }
 }
 

@@ -118,6 +118,8 @@ void UsesCollector::startCollecting() {
           rootFiles.insert(importer->url());
         }
         
+        maximumProgress(rootFiles.size());
+        
         //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This we only
         //set the minimum-features selectively on the files we encountered.
         foreach(ParsingEnvironmentFile* file, visited)
@@ -134,7 +136,6 @@ void UsesCollector::startCollecting() {
           DUChain::self()->updateContextForUrl(file, TopDUContext::AllDeclarationsContextsAndUses, this);
         }
         
-        maximumProgress(rootFiles.size());
     }else{
         maximumProgress(0);
     }
