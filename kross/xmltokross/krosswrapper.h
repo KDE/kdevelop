@@ -204,8 +204,15 @@ class KrossWrapper : public DUChainReader
                 output+="\telse ";
                 
             output += "return qVariantFromValue((QObject*) new "+toKrossName(classname)+"(t, 0));\n"
-                      "}\n"
-                      "bool b_"+classname+"="+filename+"_registerHandler(\""+_classname+"*\", _"+handlerName(classname)+"Handler);\n";
+                      "}\n";
+            
+            if(_classname.contains("::"))
+            {
+                int idx=_classname.indexOf("::")+2;
+                output += "bool b_"+classname+"1="+filename+"_registerHandler(\""+
+                    _classname.mid(idx, _classname.size()-idx)+"*\", _"+handlerName(classname)+"Handler);\n";
+            }
+            output += "bool b_"+classname+"="+filename+"_registerHandler(\""+_classname+"*\", _"+handlerName(classname)+"Handler);\n";
             output += "QVariant "+handlerName(classname)+"Handler("+_classname+"* type)"
                       "{ return _"+handlerName(classname)+"Handler(type); }\n";
             output += "QVariant "+handlerName(classname)+"Handler(const "+_classname+"* type) "
