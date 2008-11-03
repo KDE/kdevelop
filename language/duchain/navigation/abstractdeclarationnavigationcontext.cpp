@@ -48,7 +48,10 @@ AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( Decl
 
 QString AbstractDeclarationNavigationContext::name() const
 {
-  return declarationName(m_declaration);
+  if(m_declaration.data())
+    return m_declaration->qualifiedIdentifier().toString();
+  else
+    return declarationName(m_declaration);
 }
 
 QString AbstractDeclarationNavigationContext::html(bool shorten)
