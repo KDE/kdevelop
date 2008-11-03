@@ -219,7 +219,6 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
         appendActions(menu, buildActions);
         appendActions(menu, fileActions);
-        appendActions(menu, projectActions);
 
         QMenu* vcsmenu = &menu;
         if( vcsActions.count() > 1 )
@@ -228,6 +227,8 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         }
         appendActions(*vcsmenu, vcsActions);
         appendActions(menu, extActions);
+
+        appendActions(menu, projectActions);
 
         menu.exec( mapToGlobal( pos ) );
 
