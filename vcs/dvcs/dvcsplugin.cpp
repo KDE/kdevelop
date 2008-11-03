@@ -62,6 +62,7 @@
 // #include "ui/commitmanager.h"
 #include "ui/revhistory/commitlogmodel.h"
 #include "ui/revhistory/commitView.h"
+#include <language/interfaces/editorcontext.h>
 
 namespace KDevelop
 {

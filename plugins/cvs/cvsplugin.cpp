@@ -48,6 +48,7 @@
 #include "checkoutdialog.h"
 #include "importdialog.h"
 #include "importmetadatawidget.h"
+#include <language/interfaces/editorcontext.h>
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>(); )
 K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))

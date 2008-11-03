@@ -53,6 +53,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/interfaces/editorcontext.h>
 
 K_PLUGIN_FACTORY(KDevVcsCommonFactory, registerPlugin<KDevVcsCommonPlugin>(); )
 K_EXPORT_PLUGIN(KDevVcsCommonFactory(KAboutData("kdevvcscommon","kdevvcscommon", ki18n("Common VCS"), "0.1", ki18n("Common VCS operations"), KAboutData::License_GPL)))
@@ -203,27 +204,6 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
         if( filectx )
         {
             foreach( const KUrl url, filectx->urls() )
-            {
-                KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
-                if( plugin )
-                {
-                    m_ctxUrls[plugin].append( url );
-                }
-            }
-        }
-    }
-    {
-        KDevelop::CodeContext* codectx = dynamic_cast<KDevelop::CodeContext*>( context );
-        if( codectx )
-        {
-            KUrl url;
-            {
-                KDevelop::DUChainReadLocker l(KDevelop::DUChain::lock());
-                if (codectx->item()) {
-                    KUrl url = codectx->item()->url().toUrl();
-                }
-            }
-            if (!url.path().isEmpty())
             {
                 KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
                 if( plugin )

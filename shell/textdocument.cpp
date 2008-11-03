@@ -40,6 +40,7 @@
 #include <interfaces/contextmenuextension.h>
 
 #include <language/editor/editorintegrator.h>
+#include <language/interfaces/editorcontext.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -80,7 +81,7 @@ struct TextDocumentPrivate {
         menu->clear();
         v->defaultContextMenu(menu);
 
-        Context* c = new EditorContext( v );
+        Context* c = new EditorContext( v, v->cursorPosition() );
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
         menu->addSeparator();
 

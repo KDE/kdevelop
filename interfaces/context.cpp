@@ -49,61 +49,6 @@ bool Context::hasType( int aType ) const
     return aType == this->type();
 }
 
-class EditorContextPrivate
-{
-public:
-    EditorContextPrivate( KTextEditor::View* view )
-            : m_view( view )
-    {
-        m_url = view->document()->url();
-        m_position = view->cursorPosition();
-    }
-
-    KUrl m_url;
-    KTextEditor::Cursor m_position;
-    QString m_currentLine, m_currentWord;
-    KTextEditor::View* m_view;
-};
-
-EditorContext::EditorContext( KTextEditor::View* view )
-        : Context(), d( new EditorContextPrivate( view ) )
-{}
-
-EditorContext::~EditorContext()
-{
-    delete d;
-}
-
-int EditorContext::type() const
-{
-    return Context::EditorContext;
-}
-
-KUrl EditorContext::url() const
-{
-    return d->m_url;
-}
-
-KTextEditor::Cursor EditorContext::position() const
-{
-    return d->m_position;
-}
-
-QString EditorContext::currentLine() const
-{
-    return d->m_currentLine;
-}
-
-QString EditorContext::currentWord() const
-{
-    return d->m_currentWord;
-}
-
-KTextEditor::View* EditorContext::view() const
-{
-    return d->m_view;
-}
-
 class FileContextPrivate
 {
 public:

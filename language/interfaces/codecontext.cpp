@@ -28,36 +28,105 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "codecontext.h"
+#include <duchain/declaration.h>
+#include <duchain/ducontext.h>
+#include <duchain/duchainlock.h>
+#include <duchain/duchain.h>
+#include <duchain/duchainutils.h>
+#include <duchain/use.h>
+#include <ktexteditor/document.h>
 
 namespace KDevelop
 {
 
-class CodeContext::Private
+class DUContextContext::Private
 {
 public:
-    Private( const DUChainBasePointer& item ) : m_item( item )
+    Private( const IndexedDUContext& item ) : m_item( item )
     {}
 
-    DUChainBasePointer m_item;
+    IndexedDUContext m_item;
 };
 
-CodeContext::CodeContext( const DUChainBasePointer& item )
+DUContextContext::DUContextContext( const IndexedDUContext& item )
         : Context(), d( new Private( item ) )
 {}
 
-CodeContext::~CodeContext()
+DUContextContext::~DUContextContext()
 {
     delete d;
 }
 
-int CodeContext::type() const
+int DUContextContext::type() const
+{
+    return Context::EditorContext;
+}
+
+IndexedDUContext DUContextContext::context() const
+{
+    return d->m_item;
+}
+void DUContextContext::setContext(IndexedDUContext context)
+{
+    d->m_item = context;
+}
+
+class DeclarationContext::Private
+{
+public:
+    Private( const IndexedDeclaration& declaration, const DocumentRange& use ) : m_declaration( declaration ), m_use(use)
+    {}
+
+    IndexedDeclaration m_declaration;
+    DocumentRange m_use;
+};
+
+DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, const DocumentRange& use, const IndexedDUContext& context )
+        : DUContextContext(context), d( new Private( declaration, use ) )
+{}
+
+DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
+{
+    DUChainReadLocker lock(DUChain::lock());
+    DocumentRange useRange;
+    IndexedDeclaration declaration;
+    IndexedDUContext context;
+    TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
+    if(topContext) {
+        DUContext* specific = topContext->findContextAt(SimpleCursor(position));
+        context = IndexedDUContext(specific);
+        if(specific) {
+            int use = specific->findUseAt(SimpleCursor(position));
+            if(use != -1) {
+                //Found a use under the cursor:
+                useRange = DocumentRange(HashedString(specific->url().str()), specific->uses()[use].m_range.textRange());
+            }else{
+                declaration = IndexedDeclaration(specific->findDeclarationAt(SimpleCursor(position)));
+            }
+        }
+    }
+    d = new Private(declaration, useRange);
+    setContext(context);
+}
+
+DeclarationContext::~DeclarationContext()
+{
+    delete d;
+}
+
+int DeclarationContext::type() const
 {
     return Context::CodeContext;
 }
 
-const DUChainBasePointer& CodeContext::item() const
+IndexedDeclaration DeclarationContext::declaration() const
 {
-    return d->m_item;
+    return d->m_declaration;
+}
+
+DocumentRange DeclarationContext::use() const
+{
+    return d->m_use;
 }
 
 }

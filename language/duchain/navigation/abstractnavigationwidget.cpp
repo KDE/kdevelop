@@ -136,6 +136,10 @@ void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
   setContext( m_context->acceptLink(url.toString()) );
 }
 
+void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
+  QWidget::keyPressEvent(event);
+}
+
 void AbstractNavigationWidget::next() {
   DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );

@@ -199,7 +199,18 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
   QMenu *menu = new QMenu(this);
   QModelIndex index = indexAt(e->pos());
   if (index.isValid()) {
-    Context* c = new CodeContext( model()->duObjectForIndex(index) );
+    Context* c;
+    {
+    DUChainReadLocker readLock(DUChain::lock());
+    if(Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(index).data()))
+      c = new DeclarationContext( decl );
+    else {
+      delete menu;
+      return;
+    }
+    }
+    
+    
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
     ContextMenuExtension::populateMenu(menu, extensions);
   }

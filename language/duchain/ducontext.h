@@ -280,9 +280,16 @@ public:
 
   /**
    * Find the context which most specifically covers \a position.
+   * The search is recursive, so the most specific context is found.
    */
   DUContext* findContextAt(const SimpleCursor& position) const;
 
+  /**
+   * Find a child declaration that has a rang that covers the given position
+   * The search is local, not recursive.
+   */
+  Declaration* findDeclarationAt(const SimpleCursor& position) const;
+  
   /**
    * Find the context which most specifically covers \a range.
    */

@@ -1520,6 +1520,20 @@ DUContext * DUContext::findContextAt(const SimpleCursor & position) const
   return const_cast<DUContext*>(this);
 }
 
+Declaration * DUContext::findDeclarationAt(const SimpleCursor & position) const
+{
+  ENSURE_CAN_READ
+
+  if (!range().contains(position))
+    return 0;
+
+  FOREACH_FUNCTION(LocalIndexedDeclaration child, d_func()->m_localDeclarations)
+    if (child.data(topContext())->range().contains(position))
+      return child.data(topContext());
+
+  return 0;
+}
+
 DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
 {
   ENSURE_CAN_READ

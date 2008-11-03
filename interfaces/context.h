@@ -92,9 +92,9 @@ public:
         for kdevplatform official context types.</strong>*/
     enum Type
     {
-        EditorContext,               /**<Editor menu.*/
         FileContext,                 /**<File menu.*/
-        CodeContext,                 /**<Code context menu.*/
+        CodeContext,                 /**<Code context menu(DeclarationContext or DUContextContext)*/
+        EditorContext,               /**<Editor menu.*/
         ProjectItemContext           /**<ProjectItem context menu.*/
     };
 
@@ -113,45 +113,6 @@ protected:
     virtual ~Context();
 private:
     class ContextPrivate* const d;
-};
-
-/**A context for the KTextEditor.*/
-class KDEVPLATFORMINTERFACES_EXPORT EditorContext: public Context
-{
-public:
-    /**Builds a context for a KTextEditor part.
-        @param url The url of a file in the editor.
-        @param position The position where the cursor is.
-        @param linestr The content of the line where the cursor is.
-        @param wordstr The current word under the cursor.*/
-    EditorContext( KTextEditor::View* );
-
-    /**Destructor.*/
-    virtual ~EditorContext();
-
-    virtual int type() const;
-
-    /**@return The url for the file which this context was invoked for.*/
-    KUrl url() const;
-
-    /**@return The cursor position.*/
-    KTextEditor::Cursor position() const;
-
-    /**@return A QString with the content of the line which this context was
-        invoked for.*/
-    QString currentLine() const;
-
-    /**@return A QString containing the word near to the cursor when this
-        context object was created.*/
-    QString currentWord() const;
-
-    KTextEditor::View* view() const;
-
-private:
-    class EditorContextPrivate* const d;
-
-    EditorContext( const EditorContext & );
-    EditorContext &operator=( const EditorContext & );
 };
 
 /**

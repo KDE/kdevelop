@@ -33,43 +33,72 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/context.h>
 
-#include "../duchain/duchainpointer.h"
+#include <language/editor/documentrange.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/ducontext.h>
 
 namespace KDevelop
 {
 
+class IndexedDeclaration;
+class IndexedDUContext;
+
+/**
+ * A context that represents DUContexts. Before using this, first try casting to DeclarationContext, and use that if possible.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT  DUContextContext : public Context {
+public:
+    DUContextContext(const IndexedDUContext& context);
+    virtual ~DUContextContext();
+        
+    ///Returns the represented DUContext
+    IndexedDUContext context() const;
+    
+    int type() const;
+    
+protected:
+    void setContext(IndexedDUContext context);
+private:
+    class Private;
+    Private *d;
+
+    Q_DISABLE_COPY(DUContextContext)
+};
+
 /**
 A context for definition-use chain objects.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeContext: public Context
+class KDEVPLATFORMLANGUAGE_EXPORT DeclarationContext: public DUContextContext
 {
 public:
     /**Builds the context.
-    @param item The item to build the context from.*/
-    CodeContext( const DUChainBasePointer& item );
+     * @param declaration The represented declaration.
+     * @param use If this context represents the use of a declaration, this should contain the exact use range.
+     * @param context If this represents a use, then this should be the context 
+     *              surrounding the use. Else it should be the context surrounding the declaration.
+     */
+    DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use = DocumentRange(), const IndexedDUContext& context = IndexedDUContext());
+    ///Computes the items under the cursor
+    DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position);
 
     /**Destructor.*/
-    virtual ~CodeContext();
+    virtual ~DeclarationContext();
 
     /// Returns the type of this context.
     virtual int type() const;
 
-    /**
-     * Retrieve the definition-use chain item pointer.
-     *
-     * The duchain lock is not held when plugins are queried for
-     * context menu actions with this context, so you will need to lock
-     * it in order to access the duchain.
-     *
-     * @return The duchain item.
-     */
-    const DUChainBasePointer& item() const;
+    ///The referenced declaration
+    IndexedDeclaration declaration() const;
+    ///If this code-context represents the use of a declaration, then this contains the exact position+range
+    ///of that use. declaration() returnes the used declaration, and context() the context
+    ///that surrounds the use.
+    DocumentRange use() const;
 
 private:
     class Private;
     Private *d;
 
-    Q_DISABLE_COPY(CodeContext)
+    Q_DISABLE_COPY(DeclarationContext)
 };
 
 }

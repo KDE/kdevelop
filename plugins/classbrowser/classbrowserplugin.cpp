@@ -43,6 +43,7 @@
 
 #include "classmodel.h"
 #include "classtree.h"
+#include <language/interfaces/codecontext.h>
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
 K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("Browser for all known classes"), KAboutData::License_GPL)))
@@ -105,14 +106,16 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   if( context->type() != KDevelop::Context::CodeContext )
       return menuExt;
 
-  KDevelop::CodeContext *codeContext = dynamic_cast<KDevelop::CodeContext*>(context);
+  KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
   if (!codeContext)
       return menuExt;
 
   DUChainReadLocker readLock(DUChain::lock());
 
-  DUChainBasePointer base = codeContext->item();
+  IndexedDeclaration decl = codeContext->declaration();
 
+  DUChainBasePointer base(decl.data());
+  
   if (base) {
     QAction* openDec = new QAction(i18n("Open &Declaration"), this);
     connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));

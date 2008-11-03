@@ -64,6 +64,7 @@ namespace KDevelop {
       void navigateDeclaration(KDevelop::IndexedDeclaration decl);
       void anchorClicked(const QUrl&);
     protected:
+      virtual void keyPressEvent(QKeyEvent* event);
 
       void initBrowser(int height);
       void update();
