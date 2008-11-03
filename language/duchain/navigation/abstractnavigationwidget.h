@@ -58,7 +58,10 @@ namespace KDevelop {
       virtual void up();
       virtual void down();
 
+      NavigationContextPointer context();
+      
     private slots:
+      void navigateDeclaration(KDevelop::IndexedDeclaration decl);
       void anchorClicked(const QUrl&);
     protected:
 

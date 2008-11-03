@@ -35,6 +35,8 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QBoxLayout;
 class CodeRepresentation;
+class QPushButton;
+class QProgressBar;
 
 namespace KDevelop {
     class IndexedDeclaration;
@@ -65,7 +67,7 @@ namespace KDevelop {
         NavigatableWidgetList(bool allowScrolling = false, uint maxHeight = 0, bool vertical = true);
         ~NavigatableWidgetList();
         void addItem(QWidget* widget, int pos = -1);
-        void addHeaderItem(QWidget* widget);
+        void addHeaderItem(QWidget* widget, Qt::Alignment alignment = 0);
         ///Whether items were added to this list using addItem(..)
         bool hasItems() const;
         ///Deletes all items that were added using addItem
@@ -78,13 +80,17 @@ namespace KDevelop {
         QHBoxLayout* m_headerLayout;
         QToolButton *m_previousButton, *m_nextButton;
         uint m_maxHeight;
-        bool m_allowScrolling;
+        bool m_allowScrolling, m_useArrows;
     };
     
     class KDEVPLATFORMLANGUAGE_EXPORT ContextUsesWidget : public NavigatableWidgetList {
       Q_OBJECT
       public:
         ContextUsesWidget(const CodeRepresentation& code, IndexedDeclaration usedDeclaration, IndexedDUContext context);
+      Q_SIGNALS:
+        void navigateDeclaration(KDevelop::IndexedDeclaration);
+      private Q_SLOTS:
+        void linkWasActivated(QString);
       private:
         IndexedDeclaration m_usedDeclaration;
         IndexedDUContext m_context;
@@ -98,30 +104,38 @@ namespace KDevelop {
         public:
             TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext);
             void setExpanded(bool);
+        Q_SIGNALS:
+          void navigateDeclaration(KDevelop::IndexedDeclaration);
         private slots:
             void labelClicked();
         private:
             IndexedTopDUContext m_topContext;
             IndexedDeclaration m_declaration;
+            QPushButton* m_button;
     };
 
     /**
      * A widget that allows browsing through all the uses of a declaration
      */
     class KDEVPLATFORMLANGUAGE_EXPORT UsesWidget : public NavigatableWidgetList {
+      Q_OBJECT
         public:
             UsesWidget(IndexedDeclaration declaration);
             ~UsesWidget();
+        Q_SIGNALS:
+            void navigateDeclaration(KDevelop::IndexedDeclaration);
         private:
             
             struct UsesWidgetCollector : public UsesCollector {
               public:
               UsesWidgetCollector(IndexedDeclaration decl, UsesWidget* widget);
               virtual void processUses(KDevelop::ReferencedTopDUContext topContext);
+              virtual void maximumProgress(uint max);
               virtual void progress(uint processed, uint total);
               UsesWidget* m_widget;
             };
             UsesWidgetCollector* m_collector;
+            QProgressBar* m_progressBar;
     };
 }
 

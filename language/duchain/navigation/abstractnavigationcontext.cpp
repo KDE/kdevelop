@@ -117,7 +117,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
       AbstractDeclarationNavigationContext* ctx = dynamic_cast<AbstractDeclarationNavigationContext*>(m_previousContext);
       if( ctx && ctx->declaration() == action.decl )
         return NavigationContextPointer( m_previousContext );
-      return registerChild(action.decl);
+      return AbstractNavigationContext::registerChild(action.decl);
     } break;
     case NavigationAction::NavigateUses:
       return registerChild(new UsesNavigationContext(action.decl.data(), this));
@@ -152,6 +152,19 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
 NavigationContextPointer AbstractNavigationContext::registerChild( AbstractNavigationContext* context ) {
   m_children << NavigationContextPointer(context);
   return m_children.last();
+}
+
+NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPointer declaration) {
+  //We create a navigation-widget here, and steal its context.. evil ;)
+  QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
+  NavigationContextPointer ret;
+  AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
+  if(abstractNavigationWidget)
+    ret = abstractNavigationWidget->context();
+  delete navigationWidget;
+  ret->m_previousContext = this;
+  m_children << ret;
+  return ret;
 }
 
 void AbstractNavigationContext::nextLink()
@@ -191,6 +204,15 @@ NavigationContextPointer AbstractNavigationContext::accept() {
     return execute(action);
   }
   return NavigationContextPointer(this);
+}
+
+NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration decl) {
+  if(decl.data()) {
+    NavigationAction action(DeclarationPointer(decl.data()), NavigationAction::NavigateDeclaration);
+    return execute(action);
+  }else{
+    return NavigationContextPointer(this);
+  }
 }
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link) {

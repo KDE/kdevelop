@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QCompleter>
+#include <QProgressBar>
 #include <KComboBox>
 #include <qpushbutton.h>
 #include <limits>
@@ -44,9 +45,13 @@
 #include "language/duchain/parsingenvironment.h"
 #include "language/duchain/types/indexedtype.h"
 #include <language/backgroundparser/parsejob.h>
+#include <interfaces/iproject.h>
 
 
 using namespace KDevelop;
+
+QString sizePrefix;// = "<small><small>";
+QString sizeSuffix;// = "</small></small>";
 
 const int tooltipContextSize = 3; //How many lines around the use are shown in the tooltip
 const bool showUsesHeader = false;
@@ -159,7 +164,8 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   connect(this, SIGNAL(linkActivated(QString)), this, SLOT(jumpTo()));
   
   DUChainReadLocker lock(DUChain::lock());
-  QString text = i18n("<a href='open'>Line <b>%1</b></a>", range.start.line);
+  QString text = sizePrefix + "<a href='open'>" + i18n("Line") + sizeSuffix + QString(" <b>%1%2%3</b></a>").arg(sizePrefix).arg(range.start.line).arg(sizeSuffix);
+  text += sizePrefix;
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range.end.column) {
     
     text += " " + highlightAndEscapeUseText(m_sourceLine, 0, m_range);
@@ -176,6 +182,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
     }
     setToolTip(toolTipText);
   }
+  text += sizeSuffix;
   setText(text);
 }
 
@@ -234,6 +241,8 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
   m_layout->setSpacing(0);
   
+  m_useArrows = false;
+  
   if(vertical)
     m_itemLayout = new QVBoxLayout;
   else
@@ -249,15 +258,18 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   m_headerLayout->setMargin(0);
   m_headerLayout->setSpacing(0);
   
+  if(m_useArrows) {
+    m_previousButton = new QToolButton();
+    m_previousButton->setIcon(KIcon("go-previous"));
+    
+    m_nextButton = new QToolButton();
+    m_nextButton->setIcon(KIcon("go-next"));
+    
+    m_headerLayout->addWidget(m_previousButton);
+    m_headerLayout->addWidget(m_nextButton);
+  }
   
-  m_previousButton = new QToolButton();
-  m_previousButton->setIcon(KIcon("go-previous"));
-  
-  m_nextButton = new QToolButton();
-  m_nextButton->setIcon(KIcon("go-next"));
-  
-  m_headerLayout->addWidget(m_previousButton);
-  m_headerLayout->addWidget(m_nextButton);
+  //hide these buttons for now, they're senseless
   
   m_layout->addLayout(m_headerLayout);
   m_layout->addLayout(m_itemLayout);
@@ -301,9 +313,16 @@ bool NavigatableWidgetList::hasItems() const {
   return (bool)m_itemLayout->count();
 }
 
-void NavigatableWidgetList::addHeaderItem(QWidget* widget) {
-  Q_ASSERT(m_headerLayout->count() >= 2); //At least the 2 back/next buttons
-  m_headerLayout->insertWidget(m_headerLayout->count()-1, widget);
+void NavigatableWidgetList::addHeaderItem(QWidget* widget, Qt::Alignment alignment) {
+  if(m_useArrows) {
+    Q_ASSERT(m_headerLayout->count() >= 2); //At least the 2 back/next buttons
+    m_headerLayout->insertWidget(m_headerLayout->count()-1, widget, alignment);
+  }else{
+    //We need to do this so the header doesn't get stretched
+    widget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+    m_headerLayout->insertWidget(m_headerLayout->count(), widget, alignment);
+//     widget->setMaximumHeight(20);
+  }
 }
 
 ///Returns whether the uses in the child should be a new uses-group
@@ -345,12 +364,13 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDecl
   DUChainReadLocker lock(DUChain::lock());
     QString headerText = i18n("Unknown context");
     uint usesCount = 0;
+    setUpdatesEnabled(false);
     
     if(context.data() && m_usedDeclaration.data()) {
       DUContext* ctx = context.data();
       
       if(ctx->scopeIdentifier(true).isEmpty())
-        headerText = i18n("Unnamed scope");
+        headerText = i18n("Global");
       else {
         headerText = ctx->scopeIdentifier(true).toString();
         if(ctx->type() == DUContext::Function || (ctx->owner() && ctx->owner()->isFunctionDeclaration()))
@@ -366,20 +386,69 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDecl
       }
     }
     
-    addHeaderItem(new QLabel("<a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>"));
-    if(usesCount)
-      addHeaderItem(new QLabel(" " + i18n("Count: %1", usesCount)));
+    QLabel* headerLabel = new QLabel(sizePrefix + i18n("Context") + " <a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>" + sizeSuffix);
+    addHeaderItem(headerLabel);
+    if(usesCount) {
+      QLabel* usesCountLabel = new QLabel(" " + ((usesCount == 1) ? i18n("1 use") : i18n("%1 uses", usesCount)));
+      usesCountLabel->setAlignment(Qt::AlignLeft);
+      addHeaderItem(usesCountLabel, Qt::AlignLeft);
+    }
+    
+    setUpdatesEnabled(true);
+    
+    connect(headerLabel, SIGNAL(linkActivated(QString)), this, SLOT(linkWasActivated(QString)));
+}
+
+void ContextUsesWidget::linkWasActivated(QString link) {
+
+  IndexedDeclaration decl;
+  bool declValid = false;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    
+    if(m_context.context() && m_context.context()->owner())
+      decl = IndexedDeclaration(m_context.context()->owner());
+    declValid = decl.isValid();
+  }
+  
+  if(link == "navigateToFunction" && declValid)
+    emit navigateDeclaration(decl);
 }
 
 TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext) : m_topContext(topContext), m_declaration(declaration) {
+    setUpdatesEnabled(false);
     DUChainReadLocker lock(DUChain::lock());
-    QPushButton* label = new QPushButton;
-    QString labelText = KUrl(topContext.url().str()).fileName();
+    QHBoxLayout * labelLayout = new QHBoxLayout;
+    QWidget* headerWidget = new QWidget;
+    headerWidget->setLayout(labelLayout);
+    
+    QLabel* projectLabel = new QLabel;
+    QLabel* usesCountLabel = new QLabel;
+    m_button = new QPushButton;
+    labelLayout->addWidget(projectLabel, Qt::AlignRight | Qt::AlignVCenter);
+    labelLayout->addWidget(m_button, Qt::AlignCenter | Qt::AlignVCenter);
+    labelLayout->addWidget(usesCountLabel, Qt::AlignLeft | Qt::AlignVCenter);
+    
+    usesCountLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));
+    projectLabel->setAlignment((Qt::Alignment)(Qt::AlignRight | Qt::AlignVCenter));
+    
+    if(topContext.data()) {
+      KDevelop::IProject* project = ICore::self()->projectController()->findProjectForUrl(topContext.data()->url().toUrl());
+      if(project) {
+        projectLabel->setText(project->name());
+        m_button->setText(project->relativeUrl(topContext.data()->url().toUrl()).path());
+      }else{
+        m_button->setText(topContext.url().str());
+        projectLabel->setText(i18n("No project"));
+      }
+    }
+    
     if(topContext.isLoaded())
-      labelText += ": " + i18n("%1 uses", DUChainUtils::contextCountUses(topContext.data(), declaration.data()));
-    label->setText(labelText);
-    connect(label, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
-    addHeaderItem(label);
+      usesCountLabel->setText(i18n("%1 uses", DUChainUtils::contextCountUses(topContext.data(), declaration.data())));
+    m_button->setIcon(KIcon("zoom-in"));
+    connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
+    addHeaderItem(headerWidget);
+    setUpdatesEnabled(true);
 }
 
 QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, IndexedDeclaration declaration, DUContext* context) {
@@ -402,7 +471,9 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, Index
 void TopContextUsesWidget::setExpanded(bool expanded) {
   if(!expanded) {
     deleteItems();
+    m_button->setIcon(KIcon("zoom-in"));
   }else{
+    m_button->setIcon(KIcon("zoom-out"));
     if(hasItems())
       return;
     DUChainReadLocker lock(DUChain::lock());
@@ -412,8 +483,10 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
       
       CodeRepresentation* code = createCodeRepresentation(topContext->url());
       setUpdatesEnabled(false);
-      foreach(ContextUsesWidget* useWidget, buildContextUses(*code, m_declaration, topContext))
+      foreach(ContextUsesWidget* useWidget, buildContextUses(*code, m_declaration, topContext)) {
         addItem(useWidget);
+        connect(useWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
+      }
       setUpdatesEnabled(true);
       
       delete code;
@@ -422,10 +495,13 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
 }
 
 void TopContextUsesWidget::labelClicked() {
-  if(hasItems())
+  if(hasItems()) {
     setExpanded(false);
-  else
+    m_button->setIcon(KIcon("zoom-in"));
+  }else{
     setExpanded(true);
+    m_button->setIcon(KIcon("zoom-out"));
+  }
 }
 
 UsesWidget::~UsesWidget() {
@@ -436,11 +512,8 @@ UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(t
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
     
-    QLabel* label = new QLabel(i18n("Uses:"));
-    addHeaderItem(label);
-
-    if(!showUsesHeader)
-      setShowHeader(false);
+    m_progressBar = new QProgressBar;
+    addHeaderItem(m_progressBar);
     
     m_collector = new UsesWidgetCollector(declaration, this);
     
@@ -453,12 +526,22 @@ UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl, Us
   
 }
 
+void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
+  m_widget->m_progressBar->setMaximum(max);
+  m_widget->m_progressBar->setMinimum(0);
+  m_widget->m_progressBar->setValue(0);
+}
+
 void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
+  m_widget->m_progressBar->setValue(processed);
+  if(processed == total)
+    m_widget->setShowHeader(false);
 }
 
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
   DUChainReadLocker lock(DUChain::lock());
     TopContextUsesWidget* widget = new TopContextUsesWidget(declaration().data(), topContext.data());
+    connect(widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  m_widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
     bool expand = false;
     bool toFront = false;
     if(ICore::self()->documentController()->activeDocument() &&  ICore::self()->documentController()->activeDocument()->url().equals(topContext->url().toUrl())) {

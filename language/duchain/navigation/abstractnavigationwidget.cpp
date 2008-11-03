@@ -108,6 +108,8 @@ void AbstractNavigationWidget::update() {
   m_currentWidget = m_context->widget();
   
   if(m_currentWidget) {
+    //This connection is a bit hacky..
+    connect(m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
     layout()->addWidget(m_currentWidget);
     //Leave unused room to the widget
     m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -118,6 +120,15 @@ void AbstractNavigationWidget::update() {
   }
 
   setUpdatesEnabled(true);
+}
+
+NavigationContextPointer AbstractNavigationWidget::context() {
+  return m_context;
+}
+
+void AbstractNavigationWidget::navigateDeclaration(KDevelop::IndexedDeclaration decl) {
+  DUChainReadLocker lock( DUChain::lock() );
+  setContext(m_context->accept(decl));
 }
 
 void AbstractNavigationWidget::anchorClicked(const QUrl& url) {

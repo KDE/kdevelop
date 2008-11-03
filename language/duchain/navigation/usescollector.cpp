@@ -18,6 +18,7 @@
 
 #include "usescollector.h"
 #include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -26,6 +27,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/indexedtype.h>
 #include <backgroundparser/parsejob.h>
+#include <backgroundparser/backgroundparser.h>
 
 using namespace KDevelop;
 
@@ -142,6 +144,7 @@ void UsesCollector::maximumProgress(uint max) {
 }
 
 UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration) {
+  ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 }
 
 void UsesCollector::progress(uint processed, uint total) {
@@ -170,7 +173,7 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   if(!m_staticFeaturesManipulated.contains(url))
     return; //Not interesting
   
-  if(topContext->parsingEnvironmentFile()->needsUpdate() || !(topContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
+  if(!(topContext->features() & TopDUContext::AllDeclarationsContextsAndUses) || topContext->parsingEnvironmentFile()->needsUpdate()) {
       ///@todo With simplified environment-matching, the same file may have been imported multiple times,
       ///while only one of  those was updated. We have to check here whether this file is just such an import,
       ///or whether we work on with it.

@@ -70,6 +70,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     void previousLink();
     void setPrefixSuffix( const QString& prefix, const QString& suffix );
     NavigationContextPointer accept();
+    NavigationContextPointer accept(IndexedDeclaration decl);
     NavigationContextPointer acceptLink(const QString& link);
     NavigationAction currentAction() const;
 
@@ -78,6 +79,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     virtual QString html(bool shorten = false);
     ///Here the context can return a widget to be displayed.
     ///The widget stays owned by this navigation-context.
+    ///The widget may have a signal "navigateDeclaration(KDevelop::IndexedDeclaration)".
+    ///If that signal is emitted, the new declaration is navigated in the navigation-wdiget.
     virtual QWidget* widget() const;
 
   protected:
@@ -95,7 +98,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     int m_selectedLink; //The link currently selected
     NavigationAction m_selectedLinkAction; //Target of the currently selected link
 
-    virtual NavigationContextPointer registerChild(DeclarationPointer /*declaration*/) { return NavigationContextPointer(); };
+    NavigationContextPointer registerChild(DeclarationPointer /*declaration*/);
     NavigationContextPointer registerChild( AbstractNavigationContext* context );
     QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
 
