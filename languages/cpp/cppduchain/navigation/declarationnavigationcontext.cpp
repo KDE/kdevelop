@@ -39,12 +39,6 @@ DeclarationNavigationContext::DeclarationNavigationContext( DeclarationPointer d
 {
 }
 
-
-NavigationContextPointer DeclarationNavigationContext::registerChild(DeclarationPointer declaration)
-{
-  return AbstractNavigationContext::registerChild(new DeclarationNavigationContext(declaration, m_topContext, this));
-}
-
 void DeclarationNavigationContext::htmlClass()
 {
   AbstractDeclarationNavigationContext::htmlClass();

@@ -29,7 +29,6 @@ class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigat
     DeclarationNavigationContext( KDevelop::DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, KDevelop::AbstractNavigationContext* previousContext = 0 );
 
   protected:
-    virtual KDevelop::NavigationContextPointer registerChild(KDevelop::DeclarationPointer declaration);
     virtual void htmlClass();
     virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType);
 };
