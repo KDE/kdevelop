@@ -412,10 +412,17 @@ public:
 
   /**
    * Returns the list of contexts importing this context.
-   * Expensive.
+   * Very expensive, since the importers top-contexts need to be loaded.
    */
   virtual QVector<DUContext*> importers() const;
 
+  /**
+   * Cheap, because nothing needs to be loaded.
+   * Returns an array of IndexedDUContext, with the size indexedImportersSize()
+   */
+  const IndexedDUContext* indexedImporters() const;
+  uint indexedImportersSize() const;
+  
   /**
    * Returns the list of immediate child contexts for this context.
    * Expensive.

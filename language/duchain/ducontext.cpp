@@ -907,6 +907,16 @@ void DUContext::removeImportedParentContext( DUContext * context )
   //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
+const IndexedDUContext* DUContext::indexedImporters() const
+{
+  return d_func()->m_importers();
+}
+
+uint DUContext::indexedImportersSize() const
+{
+  return d_func()->m_importersSize();
+}
+
 QVector<DUContext*> DUContext::importers() const
 {
   ENSURE_CAN_READ
