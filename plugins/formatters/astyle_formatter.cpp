@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QString>
 #include <KDebug>
 
-#include <util/interfaces/isourceformatter.h>
+#include <interfaces/isourceformatter.h>
 #include "astyle_stringiterator.h" 
 
 AStyleFormatter::AStyleFormatter()
@@ -69,7 +69,7 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 
 void AStyleFormatter::updateFormatter()
 {
-    kDebug() << "Updating option with: " << ISourceFormatter::optionMapToString(m_options) << endl;
+    kDebug() << "Updating option with: " << KDevelop::ISourceFormatter::optionMapToString(m_options) << endl;
     // fill
     int wsCount = m_options["FillCount"].toInt();
     if(m_options["Fill"].toString() == "Tabs") {
@@ -241,13 +241,13 @@ void AStyleFormatter::loadStyle(const QString &content)
 //         QStringList bits = (*it).split('=');
 //         m_options[bits[0]] = bits[1];
 //     }
-    m_options = ISourceFormatter::stringToOptionMap(content);
+    m_options = KDevelop::ISourceFormatter::stringToOptionMap(content);
     updateFormatter();
 }
 
 QString AStyleFormatter::saveStyle()
 {
-    return ISourceFormatter::optionMapToString(m_options);
+    return KDevelop::ISourceFormatter::optionMapToString(m_options);
 //     QMap<QString, QVariant>::const_iterator it = m_options.constBegin();
 //     for(; it != m_options.constEnd(); it++) {
 //         options += it.key();

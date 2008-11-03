@@ -102,7 +102,7 @@ void AStylePlugin::setStyle(const QString &name, const QString &content)
         m_formatter->loadStyle(content);
 }
 
-SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mime)
+KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;
     if(mime->is("text/x-java-source"))

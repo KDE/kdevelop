@@ -21,13 +21,13 @@ Boston, MA 02110-1301, USA.
 #ifndef ASTYLEPREFERENCES_H
 #define ASTYLEPREFERENCES_H
 
-#include <util/interfaces/isourceformatter.h>
+#include <interfaces/isourceformatter.h>
 #include "ui_astyle_preferences.h"
 
 // class AStylePlugin;
 class AStyleFormatter;
 
-class AStylePreferences : public SettingsWidget, public Ui::AStylePreferences
+class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePreferences
 {
         Q_OBJECT
 

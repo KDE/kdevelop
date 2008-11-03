@@ -124,7 +124,7 @@ void IndentPlugin::setStyle(const QString &name, const QString &content)
 		m_options = content.split(' ');
 }
 
-SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
+KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
 // 	return new IndentPreferences();
 	return 0;

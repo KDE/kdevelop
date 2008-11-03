@@ -58,7 +58,7 @@ Boston, MA 02110-1301, USA.
 #define BRACKET_LINUX 3
 
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
-    : SettingsWidget(parent), m_lang(lang)
+    : KDevelop::SettingsWidget(parent), m_lang(lang)
 {
     setupUi(this);
     m_formatter = new AStyleFormatter();

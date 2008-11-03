@@ -23,14 +23,14 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 #define ASTYLEPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <util/interfaces/isourceformatter.h>
+#include <interfaces/isourceformatter.h>
 
 class AStyleFormatter;
 
-class AStylePlugin : public KDevelop::IPlugin, public ISourceFormatter
+class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 {
     Q_OBJECT
-    Q_INTERFACES(ISourceFormatter)
+    Q_INTERFACES(KDevelop::ISourceFormatter)
 
     public:
         explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
@@ -56,7 +56,7 @@ class AStylePlugin : public KDevelop::IPlugin, public ISourceFormatter
 
         /** \return The widget to edit a style.
         */
-        virtual SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime);
+        virtual KDevelop::SettingsWidget* editStyleWidget(const KMimeType::Ptr &mime);
         
         /** \return The text used in the config dialog to preview the current style.
         */
