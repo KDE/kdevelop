@@ -49,6 +49,7 @@ QVariant _kDevelopIRunHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IRun*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIRun(t, 0));
 }
+bool b_KDevelopIRun1=krossirun_registerHandler("IRun*", _kDevelopIRunHandler);
 bool b_KDevelopIRun=krossirun_registerHandler("KDevelop::IRun*", _kDevelopIRunHandler);
 QVariant kDevelopIRunHandler(KDevelop::IRun* type){ return _kDevelopIRunHandler(type); }
 QVariant kDevelopIRunHandler(const KDevelop::IRun* type) { return _kDevelopIRunHandler((void*) type); }

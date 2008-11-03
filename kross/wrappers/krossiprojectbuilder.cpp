@@ -34,6 +34,7 @@ QVariant _kDevelopIProjectBuilderHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IProjectBuilder*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIProjectBuilder(t, 0));
 }
+bool b_KDevelopIProjectBuilder1=krossiprojectbuilder_registerHandler("IProjectBuilder*", _kDevelopIProjectBuilderHandler);
 bool b_KDevelopIProjectBuilder=krossiprojectbuilder_registerHandler("KDevelop::IProjectBuilder*", _kDevelopIProjectBuilderHandler);
 QVariant kDevelopIProjectBuilderHandler(KDevelop::IProjectBuilder* type){ return _kDevelopIProjectBuilderHandler(type); }
 QVariant kDevelopIProjectBuilderHandler(const KDevelop::IProjectBuilder* type) { return _kDevelopIProjectBuilderHandler((void*) type); }

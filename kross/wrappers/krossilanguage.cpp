@@ -34,6 +34,7 @@ QVariant _kDevelopILanguageHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ILanguage*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopILanguage(t, 0));
 }
+bool b_KDevelopILanguage1=krossilanguage_registerHandler("ILanguage*", _kDevelopILanguageHandler);
 bool b_KDevelopILanguage=krossilanguage_registerHandler("KDevelop::ILanguage*", _kDevelopILanguageHandler);
 QVariant kDevelopILanguageHandler(KDevelop::ILanguage* type){ return _kDevelopILanguageHandler(type); }
 QVariant kDevelopILanguageHandler(const KDevelop::ILanguage* type) { return _kDevelopILanguageHandler((void*) type); }

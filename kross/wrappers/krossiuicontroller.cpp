@@ -55,6 +55,7 @@ QVariant _kDevelopIUiControllerHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IUiController*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIUiController(t, 0));
 }
+bool b_KDevelopIUiController1=krossiuicontroller_registerHandler("IUiController*", _kDevelopIUiControllerHandler);
 bool b_KDevelopIUiController=krossiuicontroller_registerHandler("KDevelop::IUiController*", _kDevelopIUiControllerHandler);
 QVariant kDevelopIUiControllerHandler(KDevelop::IUiController* type){ return _kDevelopIUiControllerHandler(type); }
 QVariant kDevelopIUiControllerHandler(const KDevelop::IUiController* type) { return _kDevelopIUiControllerHandler((void*) type); }
@@ -66,6 +67,7 @@ QVariant _kDevelopIToolViewFactoryHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IToolViewFactory*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIToolViewFactory(t, 0));
 }
+bool b_KDevelopIToolViewFactory1=krossiuicontroller_registerHandler("IToolViewFactory*", _kDevelopIToolViewFactoryHandler);
 bool b_KDevelopIToolViewFactory=krossiuicontroller_registerHandler("KDevelop::IToolViewFactory*", _kDevelopIToolViewFactoryHandler);
 QVariant kDevelopIToolViewFactoryHandler(KDevelop::IToolViewFactory* type){ return _kDevelopIToolViewFactoryHandler(type); }
 QVariant kDevelopIToolViewFactoryHandler(const KDevelop::IToolViewFactory* type) { return _kDevelopIToolViewFactoryHandler((void*) type); }

@@ -36,6 +36,7 @@ QVariant _kDevelopUseHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::Use*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopUse(t, 0));
 }
+bool b_KDevelopUse1=krossuse_registerHandler("Use*", _kDevelopUseHandler);
 bool b_KDevelopUse=krossuse_registerHandler("KDevelop::Use*", _kDevelopUseHandler);
 QVariant kDevelopUseHandler(KDevelop::Use* type){ return _kDevelopUseHandler(type); }
 QVariant kDevelopUseHandler(const KDevelop::Use* type) { return _kDevelopUseHandler((void*) type); }

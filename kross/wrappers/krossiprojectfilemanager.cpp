@@ -44,6 +44,7 @@ QVariant _kDevelopIProjectFileManagerHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IProjectFileManager*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIProjectFileManager(t, 0));
 }
+bool b_KDevelopIProjectFileManager1=krossiprojectfilemanager_registerHandler("IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
 bool b_KDevelopIProjectFileManager=krossiprojectfilemanager_registerHandler("KDevelop::IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
 QVariant kDevelopIProjectFileManagerHandler(KDevelop::IProjectFileManager* type){ return _kDevelopIProjectFileManagerHandler(type); }
 QVariant kDevelopIProjectFileManagerHandler(const KDevelop::IProjectFileManager* type) { return _kDevelopIProjectFileManagerHandler((void*) type); }

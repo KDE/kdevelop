@@ -43,6 +43,7 @@ QVariant _kDevelopIBuildSystemManagerHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IBuildSystemManager*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIBuildSystemManager(t, 0));
 }
+bool b_KDevelopIBuildSystemManager1=krossibuildsystemmanager_registerHandler("IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
 bool b_KDevelopIBuildSystemManager=krossibuildsystemmanager_registerHandler("KDevelop::IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
 QVariant kDevelopIBuildSystemManagerHandler(KDevelop::IBuildSystemManager* type){ return _kDevelopIBuildSystemManagerHandler(type); }
 QVariant kDevelopIBuildSystemManagerHandler(const KDevelop::IBuildSystemManager* type) { return _kDevelopIBuildSystemManagerHandler((void*) type); }

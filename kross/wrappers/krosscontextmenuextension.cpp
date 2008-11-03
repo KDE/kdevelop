@@ -51,6 +51,7 @@ QVariant _kDevelopContextMenuExtensionHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ContextMenuExtension*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopContextMenuExtension(t, 0));
 }
+bool b_KDevelopContextMenuExtension1=krosscontextmenuextension_registerHandler("ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
 bool b_KDevelopContextMenuExtension=krosscontextmenuextension_registerHandler("KDevelop::ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
 QVariant kDevelopContextMenuExtensionHandler(KDevelop::ContextMenuExtension* type){ return _kDevelopContextMenuExtensionHandler(type); }
 QVariant kDevelopContextMenuExtensionHandler(const KDevelop::ContextMenuExtension* type) { return _kDevelopContextMenuExtensionHandler((void*) type); }

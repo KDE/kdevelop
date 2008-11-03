@@ -54,6 +54,7 @@ QVariant _kDevelopIDocumentHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IDocument*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIDocument(t, 0));
 }
+bool b_KDevelopIDocument1=krossidocument_registerHandler("IDocument*", _kDevelopIDocumentHandler);
 bool b_KDevelopIDocument=krossidocument_registerHandler("KDevelop::IDocument*", _kDevelopIDocumentHandler);
 QVariant kDevelopIDocumentHandler(KDevelop::IDocument* type){ return _kDevelopIDocumentHandler(type); }
 QVariant kDevelopIDocumentHandler(const KDevelop::IDocument* type) { return _kDevelopIDocumentHandler((void*) type); }

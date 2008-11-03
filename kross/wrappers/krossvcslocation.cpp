@@ -51,6 +51,7 @@ QVariant _kDevelopVcsLocationHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::VcsLocation*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopVcsLocation(t, 0));
 }
+bool b_KDevelopVcsLocation1=krossvcslocation_registerHandler("VcsLocation*", _kDevelopVcsLocationHandler);
 bool b_KDevelopVcsLocation=krossvcslocation_registerHandler("KDevelop::VcsLocation*", _kDevelopVcsLocationHandler);
 QVariant kDevelopVcsLocationHandler(KDevelop::VcsLocation* type){ return _kDevelopVcsLocationHandler(type); }
 QVariant kDevelopVcsLocationHandler(const KDevelop::VcsLocation* type) { return _kDevelopVcsLocationHandler((void*) type); }

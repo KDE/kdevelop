@@ -127,6 +127,7 @@ QVariant _kDevelopDeclarationHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::Declaration*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopDeclaration(t, 0));
 }
+bool b_KDevelopDeclaration1=krossdeclaration_registerHandler("Declaration*", _kDevelopDeclarationHandler);
 bool b_KDevelopDeclaration=krossdeclaration_registerHandler("KDevelop::Declaration*", _kDevelopDeclarationHandler);
 QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type){ return _kDevelopDeclarationHandler(type); }
 QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type) { return _kDevelopDeclarationHandler((void*) type); }
@@ -138,6 +139,7 @@ QVariant _kDevelopLocalIndexedDeclarationHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::LocalIndexedDeclaration*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopLocalIndexedDeclaration(t, 0));
 }
+bool b_KDevelopLocalIndexedDeclaration1=krossdeclaration_registerHandler("LocalIndexedDeclaration*", _kDevelopLocalIndexedDeclarationHandler);
 bool b_KDevelopLocalIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::LocalIndexedDeclaration*", _kDevelopLocalIndexedDeclarationHandler);
 QVariant kDevelopLocalIndexedDeclarationHandler(KDevelop::LocalIndexedDeclaration* type){ return _kDevelopLocalIndexedDeclarationHandler(type); }
 QVariant kDevelopLocalIndexedDeclarationHandler(const KDevelop::LocalIndexedDeclaration* type) { return _kDevelopLocalIndexedDeclarationHandler((void*) type); }
@@ -149,6 +151,7 @@ QVariant _kDevelopIndexedDeclarationHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IndexedDeclaration*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIndexedDeclaration(t, 0));
 }
+bool b_KDevelopIndexedDeclaration1=krossdeclaration_registerHandler("IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
 bool b_KDevelopIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
 QVariant kDevelopIndexedDeclarationHandler(KDevelop::IndexedDeclaration* type){ return _kDevelopIndexedDeclarationHandler(type); }
 QVariant kDevelopIndexedDeclarationHandler(const KDevelop::IndexedDeclaration* type) { return _kDevelopIndexedDeclarationHandler((void*) type); }

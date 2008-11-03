@@ -44,6 +44,7 @@ QVariant _kDevelopVcsRevisionHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::VcsRevision*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopVcsRevision(t, 0));
 }
+bool b_KDevelopVcsRevision1=krossvcsrevision_registerHandler("VcsRevision*", _kDevelopVcsRevisionHandler);
 bool b_KDevelopVcsRevision=krossvcsrevision_registerHandler("KDevelop::VcsRevision*", _kDevelopVcsRevisionHandler);
 QVariant kDevelopVcsRevisionHandler(KDevelop::VcsRevision* type){ return _kDevelopVcsRevisionHandler(type); }
 QVariant kDevelopVcsRevisionHandler(const KDevelop::VcsRevision* type) { return _kDevelopVcsRevisionHandler((void*) type); }

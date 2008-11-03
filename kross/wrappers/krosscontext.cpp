@@ -81,6 +81,7 @@ QVariant _kDevelopProjectItemContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ProjectItemContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopProjectItemContext(t, 0));
 }
+bool b_KDevelopProjectItemContext1=krosscontext_registerHandler("ProjectItemContext*", _kDevelopProjectItemContextHandler);
 bool b_KDevelopProjectItemContext=krosscontext_registerHandler("KDevelop::ProjectItemContext*", _kDevelopProjectItemContextHandler);
 QVariant kDevelopProjectItemContextHandler(KDevelop::ProjectItemContext* type){ return _kDevelopProjectItemContextHandler(type); }
 QVariant kDevelopProjectItemContextHandler(const KDevelop::ProjectItemContext* type) { return _kDevelopProjectItemContextHandler((void*) type); }
@@ -92,6 +93,7 @@ QVariant _kDevelopFileContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::FileContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopFileContext(t, 0));
 }
+bool b_KDevelopFileContext1=krosscontext_registerHandler("FileContext*", _kDevelopFileContextHandler);
 bool b_KDevelopFileContext=krosscontext_registerHandler("KDevelop::FileContext*", _kDevelopFileContextHandler);
 QVariant kDevelopFileContextHandler(KDevelop::FileContext* type){ return _kDevelopFileContextHandler(type); }
 QVariant kDevelopFileContextHandler(const KDevelop::FileContext* type) { return _kDevelopFileContextHandler((void*) type); }
@@ -103,6 +105,7 @@ QVariant _kDevelopEditorContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::EditorContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopEditorContext(t, 0));
 }
+bool b_KDevelopEditorContext1=krosscontext_registerHandler("EditorContext*", _kDevelopEditorContextHandler);
 bool b_KDevelopEditorContext=krosscontext_registerHandler("KDevelop::EditorContext*", _kDevelopEditorContextHandler);
 QVariant kDevelopEditorContextHandler(KDevelop::EditorContext* type){ return _kDevelopEditorContextHandler(type); }
 QVariant kDevelopEditorContextHandler(const KDevelop::EditorContext* type) { return _kDevelopEditorContextHandler((void*) type); }
@@ -117,6 +120,7 @@ QVariant _kDevelopContextHandler(void* type)
 	else if(dynamic_cast<KDevelop::ProjectItemContext*>(t)) return _kDevelopProjectItemContextHandler(type);
 	else return qVariantFromValue((QObject*) new KrossKDevelopContext(t, 0));
 }
+bool b_KDevelopContext1=krosscontext_registerHandler("Context*", _kDevelopContextHandler);
 bool b_KDevelopContext=krosscontext_registerHandler("KDevelop::Context*", _kDevelopContextHandler);
 QVariant kDevelopContextHandler(KDevelop::Context* type){ return _kDevelopContextHandler(type); }
 QVariant kDevelopContextHandler(const KDevelop::Context* type) { return _kDevelopContextHandler((void*) type); }
