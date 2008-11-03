@@ -37,6 +37,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -112,8 +113,11 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent))
-        emit shiftKeyTriggered();
+    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
+        KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
+        if(!cc || !cc->isCompletionActive())
+            emit shiftKeyTriggered();
+    }
     
     const int browseKey = Qt::Key_Control;
     

@@ -41,25 +41,25 @@ namespace KDevelop {
 
 struct ShiftPressDetector {
     public:
-        ShiftPressDetector() : m_hadKeyWithShift(false) {
+        ShiftPressDetector() : m_hadOtherKey(false) {
         }
         ///Must be called with all key-events
         ///Returns true if the shift-key was released and no other key was pressed between its press and release.
         bool checkKeyEvent(QKeyEvent* e) {
             if(e->type() == QEvent::KeyPress) {
-                if(e->modifiers() & Qt::ShiftModifier)
-                    m_hadKeyWithShift = true;
-                if (e->key() == Qt::Key_Shift)
-                    m_hadKeyWithShift = false;
+                m_hadOtherKey = true;
+                if (e->key() == Qt::Key_Shift && (e->modifiers() & (~Qt::ShiftModifier)) == 0)
+                    m_hadOtherKey = false;
+                
             }else if(e->type() == QEvent::KeyRelease) {
-                if(e->key() == Qt::Key_Shift && !m_hadKeyWithShift)
+                if(e->key() == Qt::Key_Shift && !m_hadOtherKey)
                     return true;
             }
             
             return false;
         }
     private:
-    bool m_hadKeyWithShift;
+    bool m_hadOtherKey;
 };
 
 class EditorViewWatcher : QObject {
