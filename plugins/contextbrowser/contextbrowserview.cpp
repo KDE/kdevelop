@@ -480,7 +480,7 @@ void ContextBrowserView::focusInEvent(QFocusEvent* event) {
     //Indicate that we have focus
     kDebug() << "got focus";
     parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
-    m_layout->removeItem(m_buttons);
+/*    m_layout->removeItem(m_buttons);*/
     
     return QWidget::focusInEvent(event);
 }
@@ -488,7 +488,10 @@ void ContextBrowserView::focusInEvent(QFocusEvent* event) {
 void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
     kDebug() << "lost focus";
     parentWidget()->setBackgroundRole(QPalette::Background);
-    m_layout->insertLayout(0, m_buttons);
+/*    m_layout->insertLayout(0, m_buttons);
+    for(int a = 0; a < m_buttons->count(); ++a) {
+        QWidgetItem* item = dynamic_cast<QWidgetItem*>(m_buttons->itemAt(a));
+    }*/
     QWidget::focusOutEvent(event);
 }
 
@@ -515,6 +518,8 @@ bool ContextBrowserView::event(QEvent* event) {
                 navigationWidget->down();
             if(key == Qt::Key_Return || key == Qt::Key_Enter)
                 navigationWidget->accept();
+            if(key == Qt::Key_L)
+                m_lockButton->toggle();
         }
     }
     return QWidget::event(event);
