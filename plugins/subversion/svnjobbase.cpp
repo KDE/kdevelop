@@ -53,7 +53,7 @@ void SvnJobBase::askForLogin( const QString& realm )
 void SvnJobBase::showNotification( const QString& path, const QString& msg )
 {
     kDebug( 9510 ) << "notification" << path << msg;
-    m_part->outputModel()->appendRow( new SvnOutputItem( path, msg ) );
+    //TODO: Use a passive popup for important messages, like showing the committed revision number or....
 }
 
 void SvnJobBase::askForCommitMessage()

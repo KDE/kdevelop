@@ -81,7 +81,6 @@ K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion","kdevsubversion", ki1
 
 KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)
-    , m_outputmodel(0), m_outputdelegate(0), m_factory(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ICentralizedVersionControl )
@@ -93,19 +92,6 @@ KDevSvnPlugin::KDevSvnPlugin( QObject *parent, const QVariantList & )
     qRegisterMetaType<KDevelop::VcsRevision::RevisionSpecialType>();
     qRegisterMetaType<KDevelop::VcsAnnotation>();
     qRegisterMetaType<KDevelop::VcsAnnotationLine>();
-    m_outputmodel = new SvnOutputModel( this, this );
-
-    IPlugin* plugin = core()->pluginController()->pluginForExtension( "org.kdevelop.IOutputView" );
-    Q_ASSERT( plugin );
-    if( plugin )
-    {
-        m_outputdelegate = new SvnOutputDelegate( this );
-        KDevelop::IOutputView* iface = plugin->extension<KDevelop::IOutputView>();
-        int tvid = iface->registerToolView( "Subversion", KDevelop::IOutputView::OneView, KIcon("vcs_commit") );
-        int id = iface->registerOutputInToolView( tvid, "Output", KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-        iface->setModel( id, m_outputmodel );
-        iface->setDelegate( id, m_outputdelegate );
-    }
 }
 
 KDevSvnPlugin::~KDevSvnPlugin()
@@ -315,18 +301,6 @@ KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsMapping& mapping )
     return job;
 }
 
-
-const KUrl KDevSvnPlugin::urlFocusedDocument()
-{
-    KParts::ReadOnlyPart *part =
-            dynamic_cast<KParts::ReadOnlyPart*>( core()->partController()->activePart() );
-    if ( part ) {
-        if (part->url().isLocalFile() ) {
-            return part->url();
-        }
-    }
-    return KUrl();
-}
 
 KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Context* context )
 {
@@ -731,13 +705,6 @@ void KDevSvnPlugin::ctxCat()
         return;
     }
 }
-
-
-SvnOutputModel* KDevSvnPlugin::outputModel() const
-{
-    return m_outputmodel;
-}
-
 
 QString KDevSvnPlugin::name() const
 {

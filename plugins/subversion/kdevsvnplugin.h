@@ -118,12 +118,7 @@ public:
     KDevelop::VcsJob* localRevision( const KUrl& localLocation,
                                      KDevelop::VcsRevision::RevisionType );
     // End:  KDevelop::ICentralizedVersionControl
-
-public:
-    const KUrl urlFocusedDocument( );
-
-    SvnOutputModel* outputModel() const;
-
+    
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
 public Q_SLOTS:
@@ -150,9 +145,6 @@ private slots:
     void doCommit( KDevelop::VcsCommitDialog* );
     void cancelCommit( KDevelop::VcsCommitDialog* );
 private:
-    SvnOutputModel* m_outputmodel;
-    SvnOutputDelegate* m_outputdelegate;
-    class KDevSvnViewFactory *m_factory;
     KUrl::List m_ctxUrlList;
 };
 #endif
