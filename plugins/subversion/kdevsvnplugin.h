@@ -22,8 +22,6 @@ class QMenu;
 class KUrl;
 class SvnStatusHolder;
 class KTempDir;
-class SvnOutputDelegate;
-class SvnOutputModel;
 class SvnCommitDialog;
 
 namespace KDevelop

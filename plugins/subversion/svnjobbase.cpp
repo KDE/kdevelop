@@ -20,7 +20,6 @@
 #include "svninternaljobbase.h"
 #include "svnssldialog.h"
 #include "kdevsvnplugin.h"
-#include "svnoutputmodel.h"
 
 SvnJobBase::SvnJobBase( KDevSvnPlugin* parent )
     : VcsJob( parent ), m_part( parent ),

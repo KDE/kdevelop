@@ -39,7 +39,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
-#include <outputview/ioutputview.h>
 #include <project/projectmodel.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -71,8 +70,6 @@
 #include "svnimportjob.h"
 #include "svncheckoutjob.h"
 
-#include "svnoutputdelegate.h"
-#include "svnoutputmodel.h"
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
 

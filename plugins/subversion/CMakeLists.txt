@@ -65,8 +65,6 @@ set(kdevsubversion_JOB_SRCS
 set(kdevsubversion_PART_SRCS
     kdevsvnplugin.cpp
     svnssldialog.cpp
-    svnoutputmodel.cpp
-    svnoutputdelegate.cpp
     svnimportmetadatawidget.cpp
     svncheckoutmetadatawidget.cpp
     svnclient.cpp
@@ -90,7 +88,6 @@ target_link_libraries(kdevsubversion
                     kdevplatforminterfaces
                     kdevplatformvcs
                     kdevplatformproject
-                    kdevplatformoutputview
                     ${KDE4_THREADWEAVER_LIBRARIES}
                     ${KDE4_KPARTS_LIBRARY}
                     )
