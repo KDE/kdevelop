@@ -237,14 +237,15 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     applyEventFilter(view, true);
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
-    QObject::connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(cursorPositionChanged()));
+    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(resetSiftDetector()));
+    connect(view->document(), SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(resetSiftDetector()));
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
     m_manager->viewAdded(view);
 }
 
-void BrowseManager::cursorPositionChanged() {
+void BrowseManager::resetSiftDetector() {
     m_shiftDetector.clear();
 }
 

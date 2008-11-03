@@ -97,7 +97,7 @@ class BrowseManager : public QObject {
     public slots:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
-        void cursorPositionChanged();
+        void resetSiftDetector();
     private:
         void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
