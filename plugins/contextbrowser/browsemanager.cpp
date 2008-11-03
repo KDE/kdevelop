@@ -117,7 +117,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 
     if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
         KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
-        if(!cc || !cc->isCompletionActive())
+        if(!cc || !cc->isCompletionActive() && view->hasFocus())
             emit shiftKeyTriggered();
     }
     
