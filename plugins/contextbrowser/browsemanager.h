@@ -27,6 +27,8 @@
 #include <QMap>
 #include <QPointer>
 #include <qevent.h>
+#include <util/shiftpressdetector.h>
+
 
 class QWidget;
 
@@ -38,32 +40,6 @@ namespace KTextEditor {
 namespace KDevelop {
     class IDocument;
 }
-
-struct ShiftPressDetector {
-    public:
-        ShiftPressDetector() : m_hadOtherKey(true) {
-        }
-        ///Must be called with all key-events
-        ///Returns true if the shift-key was released and no other key was pressed between its press and release.
-        bool checkKeyEvent(QKeyEvent* e) {
-            if(e->type() == QEvent::KeyPress) {
-                m_hadOtherKey = true;
-                if (e->key() == Qt::Key_Shift && (e->modifiers() & (~Qt::ShiftModifier)) == 0)
-                    m_hadOtherKey = false;
-                
-            }else if(e->type() == QEvent::KeyRelease) {
-                if(e->key() == Qt::Key_Shift && !m_hadOtherKey)
-                    return true;
-            }
-            
-            return false;
-        }
-        void clear() {
-            m_hadOtherKey = true;
-        }
-    private:
-    bool m_hadOtherKey;
-};
 
 class EditorViewWatcher : QObject {
     Q_OBJECT

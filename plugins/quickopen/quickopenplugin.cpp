@@ -336,8 +336,20 @@ void QuickOpenWidgetHandler::doubleClicked ( const QModelIndex & index ) {
 
 bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
 {
+  QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
+  
+  if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
+    //Toggle the expanded state
+    QModelIndex row = o.list->selectionModel()->currentIndex();
+    if( row.isValid() ) {
+      row = row.sibling( row.row(), 0 );
+
+      m_model->setExpanded( row, !m_model->isExpanded( row ) );
+      return true;
+    }      
+  }
+  
   if( event->type() == QEvent::KeyPress  ) {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 
     switch( keyEvent->key() ) {
       case Qt::Key_Down:
@@ -861,7 +873,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         m_currentWidgetHandler->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
       }
       ++num;
-    } 
+    }
   }
   model->setParent(m_currentWidgetHandler);
   m_currentWidgetHandler->run();
