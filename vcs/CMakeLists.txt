@@ -52,6 +52,7 @@ target_link_libraries(kdevplatformvcs
     kdevplatforminterfaces 
     kdevplatformutil
     kdevplatformproject
+    kdevplatformlanguage
 )
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs ${INSTALL_TARGETS_DEFAULT_ARGS} )
