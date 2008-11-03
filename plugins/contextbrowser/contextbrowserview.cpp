@@ -518,12 +518,32 @@ bool ContextBrowserView::event(QEvent* event) {
                 navigationWidget->down();
             if(key == Qt::Key_Return || key == Qt::Key_Enter)
                 navigationWidget->accept();
+            
+            
             if(key == Qt::Key_L)
                 m_lockButton->toggle();
+            if(key == Qt::Key_F) {
+                m_contextCtrl->currentContextBox()->setFocus();
+                m_contextCtrl->currentContextBox()->removeEventFilter(this); //Just to prevent double insertion
+                m_contextCtrl->currentContextBox()->installEventFilter(this);
+            }
         }
     }
     return QWidget::event(event);
 }
+
+bool ContextBrowserView::eventFilter(QObject* object, QEvent* event) {
+    if(object == m_contextCtrl->currentContextBox() && m_contextCtrl->currentContextBox()->hasFocus()) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if(keyEvent && keyEvent->type() == QEvent::KeyPress && keyEvent->key() == Qt::Key_F) {
+            m_contextCtrl->currentContextBox()->removeEventFilter(this);
+            setFocus();
+        }
+    }
+    return QWidget::eventFilter(object, event);
+}
+
+
 
 void ContextBrowserView::showEvent(QShowEvent* event) {
     DUChainReadLocker lock(DUChain::lock());

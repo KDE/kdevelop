@@ -71,6 +71,9 @@ class ContextBrowserView : public QWidget {
     private:
         virtual void showEvent(QShowEvent* event);
         virtual bool event(QEvent* event);
+        virtual bool eventFilter(QObject* object, QEvent* event);
+        
+        
         virtual void focusInEvent(QFocusEvent* event);
         virtual void focusOutEvent(QFocusEvent* event);
         bool isLocked() const;
