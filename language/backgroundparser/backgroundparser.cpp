@@ -135,7 +135,7 @@ public:
                 }
 
                 kDebug(9505) << "creating parse-job" << *it;
-                ParseJob* job = createParseJob(*it, m_documents[*it].features, m_documents[*it].notifyWhenReady);
+                ParseJob* job = createParseJob(*it, m_documents[*it].features(), m_documents[*it].notifyWhenReady());
                 if(job)
                     jobs.append(job);
                 
@@ -237,13 +237,41 @@ public:
     QTimer m_timer;
     int m_delay;
     int m_threads;
-
-    struct DocumentParsePlan {
-        DocumentParsePlan(int _priority = 0, TopDUContext::Features _features = TopDUContext::VisibleDeclarationsAndContexts) : priority(_priority), features(_features) {
-        }
+    struct DocumentParseTarget {
+        QPointer<QObject> notifyWhenReady;
         int priority;
         TopDUContext::Features features;
-        QList<QPointer<QObject> > notifyWhenReady;
+    };
+
+    struct DocumentParsePlan {
+        QList<DocumentParseTarget> targets;
+        
+        int priority() const {
+            //Pick the best priority
+            int ret = BackgroundParser::WorstPriority;
+            foreach(DocumentParseTarget target, targets)
+                if(target.priority < ret)
+                    ret = target.priority;
+            return ret;
+        }
+        
+        TopDUContext::Features features() const {
+            //Pick the best features
+            TopDUContext::Features ret = (TopDUContext::Features)0;
+            foreach(DocumentParseTarget target, targets)
+                ret = (TopDUContext::Features) (ret | target.features);
+            return ret;
+        }
+        
+        QList<QPointer<QObject> > notifyWhenReady() {
+            QList<QPointer<QObject> > ret;
+            
+            foreach(DocumentParseTarget target, targets)
+                if(target.notifyWhenReady)
+                    ret << target.notifyWhenReady;
+            
+            return ret;
+        }
     };
     // A list of known documents, and their priority
     QMap<KUrl, DocumentParsePlan > m_documents;
@@ -320,6 +348,33 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
 //     }
 // }
 
+void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
+{
+    QPointer<QObject> p(notifyWhenReady);
+    
+    QMutexLocker lock(&d->m_mutex);
+    for(QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.begin(); it != d->m_documents.end(); ) {
+        
+        d->m_documentsForPriority[it.value().priority()].remove(it.key());
+        
+        int index = -1;
+        for(int a = 0; a < (*it).targets.size(); ++a)
+            if((*it).targets[a].notifyWhenReady == notifyWhenReady)
+                index = a;
+        
+        if(index != -1) {
+            (*it).targets.removeAt(index);
+            if((*it).targets.isEmpty()) {
+                it = d->m_documents.erase(it);
+                continue;
+            }
+        }
+        
+        d->m_documentsForPriority[it.value().priority()].insert(it.key());
+        ++it;
+    }
+}
+
 void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features features, int priority, QObject* notifyWhenReady)
 {
 //     kDebug(9505) << "BackgroundParser::addDocument" << url.prettyUrl();
@@ -327,34 +382,25 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
     {
         Q_ASSERT(url.isValid());
         
-        BackgroundParserPrivate::DocumentParsePlan plan(priority, features);
-        if(notifyWhenReady)
-            plan.notifyWhenReady += notifyWhenReady;
+        BackgroundParserPrivate::DocumentParseTarget target;
+        target.priority = priority;
+        target.features = features;
+        target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
         
-        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::const_iterator it = d->m_documents.find(url);
+        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.find(url);
         
         if (it != d->m_documents.end()) {
-            //Update the stored priority
-            //Only allow upgrading
+            //Update the stored plan
             
-            if(it.value().priority < plan.priority)
-                plan.priority = it.value().priority; //The stored priority is better, use that one
-            
-            if(it.value().features > plan.features)
-                plan.features = it.value().features; //If the stored features are better, use those
-            
-            plan.notifyWhenReady +=  it.value().notifyWhenReady;
-            
-            //Update features + priority
-            d->m_documentsForPriority[it.value().priority].remove(url);
-            d->m_documents[url] = plan;
-            d->m_documentsForPriority[priority].insert(url);
+            d->m_documentsForPriority[it.value().priority()].remove(url);
+            it.value().targets << target;
+            d->m_documentsForPriority[it.value().priority()].insert(url);
         }
         
         if (it == d->m_documents.end()) {
 //             kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
-            d->m_documents[url] = plan;
-            d->m_documentsForPriority[priority].insert(url);
+            d->m_documents[url].targets << target;
+            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         } else {
 //             kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
@@ -379,7 +425,7 @@ void BackgroundParser::removeDocument(const KUrl &url)
     Q_ASSERT(url.isValid());
 
     if(d->m_documents.contains(url)) {
-        d->m_documentsForPriority[d->m_documents[url].priority].remove(url);
+        d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
         d->m_documents.remove(url);
         --d->m_maxParseJobs;
     }

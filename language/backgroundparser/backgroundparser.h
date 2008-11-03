@@ -3,6 +3,7 @@
  *
  * Copyright 2006 Adam Treat <treat@kde.org>
  * Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
+ * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -139,6 +140,10 @@ public Q_SLOTS:
      */
     void resume();
 
+    ///Reverts all requests that were made for the given notification-target.
+    ///priorities and requested features will be reverted as well.
+    void revertAllRequests(QObject* notifyWhenReady);
+    
     /**
      * Queues up the @p url to be parsed.
      * @p features The minimum features that should be computed for this top-context
