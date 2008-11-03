@@ -461,8 +461,8 @@ ContextBrowserView::~ContextBrowserView() {
 }
 
 void ContextBrowserView::showEvent(QShowEvent* event) {
+    DUChainReadLocker lock(DUChain::lock());
     if(m_navigationWidgetDeclaration.isValid()) {
-        DUChainReadLocker lock(DUChain::lock());
         TopDUContext* top = m_lastUsedTopContext.data();
         if(top) {
             //Update the navigation-widget
