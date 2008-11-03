@@ -54,8 +54,11 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <project/projectmodel.h>
-#include <util/interfaces/isourceformatter.h>
-#include <util/sourceformattermanager.h>
+#include <interfaces/isourceformatter.h>
+#include <interfaces/isourceformattercontroller.h>
+
+using KDevelop::ISourceFormatter;
+using KDevelop::ISourceFormatterController;
 
 K_PLUGIN_FACTORY(SourceFormatterFactory, registerPlugin<SourceFormatterPlugin>();)
 K_EXPORT_PLUGIN(SourceFormatterFactory(KAboutData("kdevsourceformatter","kdevsourceformatter", ki18n("Source Formatting"), "0.1", ki18n("Gui to re-format source code"), KAboutData::License_GPL)))
@@ -87,7 +90,6 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 
 SourceFormatterPlugin::~SourceFormatterPlugin()
 {
-	SourceFormatterManager::self()->deleteLater();
 }
 
 void SourceFormatterPlugin::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
@@ -96,7 +98,7 @@ void SourceFormatterPlugin::formatDocument(KDevelop::IDocument *doc, ISourceForm
 
 	KTextEditor::Cursor cursor = doc->cursorPosition();
 	QString text = formatter->formatSource(textDoc->text(), mime);
-	text = SourceFormatterManager::self()->addModelineForCurrentLang(text, mime);
+	text = KDevelop::ICore::self()->sourceFormatterController()->addModelineForCurrentLang(text, mime);
 	textDoc->setText(text);
 	doc->setCursorPosition(cursor);
 }
@@ -109,7 +111,7 @@ void SourceFormatterPlugin::beautifySource()
 		return;
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = KDevelop::ICore::self()->sourceFormatterController();
 	manager->loadConfig();
 	ISourceFormatter *formatter = manager->formatterForMimeType(mime);
 
@@ -193,7 +195,7 @@ void SourceFormatterPlugin::activePartChanged(KParts::Part *part)
 		KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(rw_part);
 		if (doc) {
 			KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-			if (SourceFormatterManager::self()->isMimeTypeSupported(mime))
+			if (KDevelop::ICore::self()->sourceFormatterController()->isMimeTypeSupported(mime))
 				enabled = true;
 		}
 	}
@@ -261,7 +263,7 @@ void SourceFormatterPlugin::formatItem()
 void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 {
 // 	m_formatter->loadConfig(KGlobal::config());
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = KDevelop::ICore::self()->sourceFormatterController();
 	manager->loadConfig();
 	//! \todo IStatus
 	for (int fileCount = 0; fileCount < list.size(); fileCount++) {

@@ -37,13 +37,13 @@ namespace KTextEditor
 
 #include <interfaces/iplugin.h>
 
-class ISourceFormatter;
 namespace KDevelop
 {
 	class IPlugin;
 	class IDocument;
 	class ContextMenuExtension;
 	class ProjectBaseItem;
+        class ISourceFormatter;
 }
 
 /** \short A plugin to format and beautify source files
@@ -77,13 +77,13 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 		* \arg mime is the mime type of the file. The content of the editor is
 		* modified but the file is not saved.
 		*/
-		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter,
+		void formatDocument(KDevelop::IDocument *doc, KDevelop::ISourceFormatter *formatter,
 							 const KMimeType::Ptr &mime);
 		/** Replaces spaces with tabs using the number of spaces per tabs defined
 		* in the \arg formatter or convert tabs to spaces, depending on the config.
 		* \return The modified string
 		*/
-		QString replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter);
+		QString replaceSpacesWithTab(const QString &input, KDevelop::ISourceFormatter *formatter);
 		/** Adds the string \arg indentWith at the beginning of each line in \arg input.
 		* \return The modified string
 		*/

@@ -20,6 +20,9 @@
 
 #include <KLocale>
 
+namespace KDevelop
+{
+
 SettingsWidget::SettingsWidget(QWidget *parent)
 		: QWidget(parent)
 {
@@ -63,6 +66,8 @@ QString ISourceFormatter::missingExecutableMessage(const QString &name)
 	return i18n("The executable %1 cannot be found. Please make sure"
 	" it is installed and can be executed. <br />"
 	"The plugin will not work until you fix this problem.").arg("<b>" + name + "</b>");
+}
+
 }
 
 // kate: indent-mode cstyle; space-indent off; tab-width 4; 

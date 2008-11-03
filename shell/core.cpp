@@ -43,6 +43,7 @@
 #include "languagecontroller.h"
 #include "documentcontroller.h"
 #include "runcontroller.h"
+#include "sourceformattercontroller.h"
 #include "core_p.h"
 
 namespace KDevelop {
@@ -97,6 +98,11 @@ void CorePrivate::initialize(Core::Setup mode)
         runController = new RunController(m_core);
     }
 
+    if( !sourceFormatterController )
+    {
+        sourceFormatterController = new SourceFormatterController(m_core);
+    }
+
     kDebug() << "initializing ui controller";
     sessionController->initialize();
     if(!(mode & Core::NoUi)) uiController->initialize();
@@ -124,6 +130,7 @@ void CorePrivate::initialize(Core::Setup mode)
         uiController->loadAllAreas(KGlobal::config());
         uiController->defaultMainWindow()->show();
     }
+    sourceFormatterController->initialize();
 }
 CorePrivate::~CorePrivate()
 {
@@ -135,6 +142,7 @@ CorePrivate::~CorePrivate()
     delete documentController;
     delete runController;
     delete sessionController;
+    delete sourceFormatterController;
 }
 
 
@@ -178,6 +186,7 @@ Core::Setup Core::setupFlags() const
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
+        d->sourceFormatterController->cleanup();
         d->sessionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
@@ -276,6 +285,11 @@ IRunController *Core::runController()
 RunController *Core::runControllerInternal()
 {
     return d->runController;
+}
+
+ISourceFormatterController* Core::sourceFormatterController()
+{
+    return d->sourceFormatterController;
 }
 
 }

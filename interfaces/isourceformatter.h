@@ -23,8 +23,11 @@
 #include <QStringList>
 #include <KMimeType>
 
-#include <interfaces/iextension.h>
-#include "../utilexport.h"
+#include "iextension.h"
+#include "interfacesexport.h"
+
+namespace KDevelop
+{
 
 /**
 * @short A widget to edit a style
@@ -32,7 +35,7 @@
 * edit a style.
 * @author Cédric Pasteur
 */
-class KDEVPLATFORMUTIL_EXPORT SettingsWidget : public QWidget
+class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 {
 		Q_OBJECT
 
@@ -67,7 +70,7 @@ class KDEVPLATFORMUTIL_EXPORT SettingsWidget : public QWidget
  * the formatting can be found in kdevelop/plugins/formatters/indent_plugin.cpp.
  * @author Cédric Pasteur
  */
-class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
+class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 {
 	public:
 		virtual ~ISourceFormatter();
@@ -141,8 +144,10 @@ class KDEVPLATFORMUTIL_EXPORT ISourceFormatter
 		static QString missingExecutableMessage(const QString &name);
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatter")
-Q_DECLARE_INTERFACE(ISourceFormatter, "org.kdevelop.ISourceFormatter")
+}
+
+KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, ISourceFormatter, "org.kdevelop.ISourceFormatter")
+Q_DECLARE_INTERFACE(KDevelop::ISourceFormatter, "org.kdevelop.ISourceFormatter")
 
 #endif // ISOURCEFORMATTER_H
 // kate: indent-mode cstyle; space-indent off; tab-width 4;

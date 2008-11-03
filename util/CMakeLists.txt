@@ -7,8 +7,6 @@ set(kdevplatformutil_LIB_SRCS
     commandexecutor.cpp
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
-    sourceformattermanager.cpp
-    interfaces/isourceformatter.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -35,10 +33,6 @@ install( FILES
     kdevvarlengtharray.h
     embeddedfreetree.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
-    
-install( FILES
-    interfaces/isourceformatter.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/interfaces)
 
 install( FILES
     google/dense_hash_map

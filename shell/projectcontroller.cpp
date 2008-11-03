@@ -66,10 +66,7 @@ class ProjectControllerPrivate
 public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
-    QMap< IProject*, QPointer<QAction> > m_configActions;
     QPointer<KRecentFilesAction> m_recentAction;
-    KActionMenu *m_projectConfigAction;
-    QSignalMapper *m_signalMapper;
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
@@ -187,10 +184,6 @@ ProjectController::ProjectController( Core* core )
     d->reopenProjectsOnStartup = false;
     d->parseAllProjectSources = false;
     d->m_core = core;
-    d->m_signalMapper = new QSignalMapper( this );
-    connect( d->m_signalMapper, SIGNAL( mapped( QObject* ) ),
-            this, SLOT( projectConfig( QObject* ) ) );
-//     d->m_currentProject = 0;
     d->model = new ProjectModel();
     d->selectionModel = new QItemSelectionModel(d->model);
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
@@ -240,10 +233,6 @@ void ProjectController::setupActions()
     d->m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
-
-    d->m_projectConfigAction = new KActionMenu( i18n("Configure Project"), ac );
-    ac->addAction( "project_config_menu", d->m_projectConfigAction );
-    d->m_projectConfigAction->setIcon(KIcon("configure"));
 }
 
 ProjectController::~ProjectController()
@@ -392,11 +381,6 @@ bool ProjectController::projectImportingFinished( IProject* project )
     d->m_recentAction->saveEntries( recentGroup );
 
     config->sync();
-    QAction* qa = new QAction( project->name(), d->m_projectConfigAction );
-    d->m_configActions.insert( project, qa );
-    connect( qa, SIGNAL( triggered() ), d->m_signalMapper, SLOT( map() ) );
-    d->m_signalMapper->setMapping( qa, project );
-    d->m_projectConfigAction->addAction( qa );
 
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
@@ -477,17 +461,6 @@ void ProjectController::closeAllOpenedFiles(IProject* proj)
 }
 
 // helper method for closeProject()
-void ProjectController::deleteProjectSettingsMenu(IProject* proj)
-{
-    QPointer<QAction> configAction = d->m_configActions.take(proj);
-    delete configAction;
-    if( d->m_cfgDlgs.contains(proj) )
-    {
-        delete d->m_cfgDlgs.take(proj);
-    }
-}
-
-// helper method for closeProject()
 void ProjectController::initializePluginCleanup(IProject* proj)
 {
     // Unloading (and thus deleting) these plugins is not a good idea just yet
@@ -513,7 +486,6 @@ bool ProjectController::closeProject(IProject* proj)
     //disableProjectCloseAction();
     unloadUnusedProjectPlugins(proj);
     closeAllOpenedFiles(proj);
-    deleteProjectSettingsMenu(proj);
     proj->close();
     proj->deleteLater();                //be safe when deleting
     d->m_projects.removeAll(proj);

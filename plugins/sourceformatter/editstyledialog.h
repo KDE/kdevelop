@@ -29,8 +29,11 @@ namespace KTextEditor
 	class Document;
 	class View;
 }
-class ISourceFormatter;
-class SettingsWidget;
+namespace KDevelop
+{
+        class ISourceFormatter;
+        class SettingsWidget;
+}
 
 /** \short A simple dialog to add preview around a \ref SettingsWidget
 */
@@ -39,7 +42,7 @@ class EditStyleDialog : public KDialog
 		Q_OBJECT
 
 	public:
-		EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
+		EditStyleDialog(KDevelop::ISourceFormatter *formatter, const KMimeType::Ptr &mime,
 		        const QString &content = QString(), QWidget *parent = 0);
 		virtual ~EditStyleDialog();
 
@@ -54,10 +57,10 @@ class EditStyleDialog : public KDialog
 		void updatePreviewText(const QString &text);
 
 	private:
-		ISourceFormatter *m_sourceFormatter;
+                KDevelop::ISourceFormatter *m_sourceFormatter;
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
-		SettingsWidget *m_settingsWidget;
+                KDevelop::SettingsWidget *m_settingsWidget;
 		KMimeType::Ptr m_mimeType;
 		QWidget *m_content;
 		Ui::EditStyle m_ui;

@@ -27,6 +27,7 @@ set(kdevplatformshell_LIB_SRCS
     session.cpp
     savedialog.cpp
     sessiondialog.cpp
+    sourceformattercontroller.cpp
 )
 
 set(kdevplatformshell_UI
@@ -65,6 +66,7 @@ install(FILES
     languagecontroller.h
     session.h
     sessioncontroller.h
+    sourceformattercontroller.h
     language.h
     shellexport.h
     testcore.h

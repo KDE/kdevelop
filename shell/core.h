@@ -34,6 +34,7 @@ class DocumentController;
 class RunController;
 class SessionController;
 class CorePrivate;
+class SourceFormatterController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -69,6 +70,9 @@ public:
 
     /** @copydoc ICore::runController() */
     virtual IRunController *runController();
+
+    /** @copydoc ICore::sourceFormatterController() */
+    virtual ISourceFormatterController* sourceFormatterController();
 
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();

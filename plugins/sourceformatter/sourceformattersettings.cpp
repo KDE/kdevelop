@@ -33,8 +33,9 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/configinterface.h>
 
 #include <interfaces/iplugin.h>
-#include <util/interfaces/isourceformatter.h>
-#include <util/sourceformattermanager.h>
+#include <interfaces/icore.h>
+#include <interfaces/isourceformatter.h>
+#include <interfaces/isourceformattercontroller.h>
 
 #include "editstyledialog.h"
 
@@ -42,6 +43,10 @@ Boston, MA 02110-1301, USA.
 
 K_PLUGIN_FACTORY(SourceFormatterSettingsFactory, registerPlugin<SourceFormatterSettings>();)
 K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"))
+
+using KDevelop::ICore;
+using KDevelop::ISourceFormatter;
+using KDevelop::ISourceFormatterController;
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
 		: KCModule(SourceFormatterSettingsFactory::componentData(), parent, args)
@@ -79,7 +84,7 @@ void SourceFormatterSettings::init()
 	}
 
 	//init language combo box
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 	QStringList l = manager->languages();
 	foreach(QString s, l) {
 		//! todo add real icons to support
@@ -131,13 +136,13 @@ void SourceFormatterSettings::updatePreviewText()
 
 void SourceFormatterSettings::load()
 {
-	SourceFormatterManager::self()->loadConfig(); //reload
+	ICore::self()->sourceFormatterController()->loadConfig(); //reload
 	cbLanguagesStyle->setCurrentIndex(0); // select the first item to fill the rest
 	cbLanguagesFormatters->setCurrentIndex(0);
 	languagesStylesChanged(0);
 	languagesFormattersChanged(0);
 	//update kate modeline
-	chkKateModelines->setChecked(SourceFormatterManager::self()->modelinesEnabled());
+	chkKateModelines->setChecked(ICore::self()->sourceFormatterController()->modelinesEnabled());
 
 	updatePreviewText();
 }
@@ -145,7 +150,7 @@ void SourceFormatterSettings::load()
 void SourceFormatterSettings::save()
 {
 	// save current styles
-	KConfigGroup group = SourceFormatterManager::self()->configGroup().parent().parent();
+	KConfigGroup group = ICore::self()->sourceFormatterController()->configGroup().parent().parent();
 	StyleHash::const_iterator it = m_currentStyles.constBegin();
 	for (; it != m_currentStyles.constEnd(); ++it) {
 		QHash<QString, QString> hash = it.value();
@@ -158,8 +163,8 @@ void SourceFormatterSettings::save()
 		}
 	}
 
-	SourceFormatterManager::self()->setModelinesEnabled(chkKateModelines->isChecked());
-	SourceFormatterManager::self()->saveConfig();
+	ICore::self()->sourceFormatterController()->setModelinesEnabled(chkKateModelines->isChecked());
+	ICore::self()->sourceFormatterController()->saveConfig();
 }
 
 void SourceFormatterSettings::currentTabChanged()
@@ -180,13 +185,13 @@ void SourceFormatterSettings::languagesStylesChanged(int idx)
 	populateStyleList();
 
 	// reload current style
-// 	QString currentStyle = SourceFormatterManager::self()->currentStyle();
-	ISourceFormatter *f = SourceFormatterManager::self()->activeFormatter();
+// 	QString currentStyle = ICore::self()->sourceFormatterController()->currentStyle();
+	ISourceFormatter *f = ICore::self()->sourceFormatterController()->activeFormatter();
 	QString currentStyle;
 	if(f)
 		currentStyle = m_currentStyles[m_currentLang][f->name()];
 	if(currentStyle.isEmpty())
-		currentStyle = SourceFormatterManager::self()->currentStyle();
+		currentStyle = ICore::self()->sourceFormatterController()->currentStyle();
 	kDebug() << "Trying to select " << currentStyle << endl;
 
 	int selectedRow = 0;
@@ -212,7 +217,7 @@ void SourceFormatterSettings::populateStyleList()
 	m_numberOfPredefinedStyles = map.count();
 
 	//load custom styles
-	KConfigGroup pluginGroup = SourceFormatterManager::self()->configGroup();
+	KConfigGroup pluginGroup = ICore::self()->sourceFormatterController()->configGroup();
 	QStringList keyList = pluginGroup.keyList();
 	foreach(QString key, keyList) {
 		if (key.startsWith("User")) { // style definition
@@ -228,7 +233,7 @@ void SourceFormatterSettings::currentStyleChanged(QListWidgetItem *current, QLis
 {
 	if (!current)
 		return;
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 
 	QString styleName = current->data(STYLE_ROLE).toString();
 	manager->setCurrentStyle(styleName);
@@ -268,7 +273,7 @@ void SourceFormatterSettings::deleteStyle()
 		return;
 
 	QString styleName = item->data(STYLE_ROLE).toString();
-	SourceFormatterManager::self()->deleteStyle(styleName);
+	ICore::self()->sourceFormatterController()->deleteStyle(styleName);
 	listStyles->setCurrentRow(idx - 1);
 }
 
@@ -284,7 +289,7 @@ void SourceFormatterSettings::addStyle()
 
 	EditStyleDialog dialog(m_currentFormatter, m_currentMimeType);
 	if (dialog.exec() == QDialog::Accepted) {
-		SourceFormatterManager *manager = SourceFormatterManager::self();
+		ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 		QString name = manager->nameForNewStyle();
 		manager->saveStyle(name, dialog.content());
 		manager->renameStyle(name, caption);
@@ -303,11 +308,11 @@ void SourceFormatterSettings::editStyle()
 		return;
 	QString styleName = item->data(STYLE_ROLE).toString();
 
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 	QString content = manager->configGroup().readEntry(styleName);
 	EditStyleDialog dialog(m_currentFormatter, m_currentMimeType, content);
 	if (dialog.exec() == QDialog::Accepted)
-		SourceFormatterManager::self()->saveStyle(styleName, dialog.content());
+		ICore::self()->sourceFormatterController()->saveStyle(styleName, dialog.content());
 }
 
 void SourceFormatterSettings::modelineChanged()
@@ -331,7 +336,7 @@ void SourceFormatterSettings::poulateFormattersList()
 	cbFormatters->blockSignals(true);
 	cbFormatters->clear();
 
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 	QList<KDevelop::IPlugin*> list = manager->pluginListForLanguage(cbLanguagesFormatters->currentText());
 
 	int rowToSelect = 0;
@@ -364,7 +369,7 @@ void SourceFormatterSettings::formattersChanged(int idx)
 void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QString &plugin)
 {
 	kDebug() << "lang = " << lang << " plugin = " << plugin << endl;
-	SourceFormatterManager *manager = SourceFormatterManager::self();
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 	manager->setActiveLanguage(lang, plugin);
 
 	m_currentFormatter = manager->activeFormatter();

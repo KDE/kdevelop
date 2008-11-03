@@ -95,7 +95,6 @@ private:
     void unloadUnusedProjectPlugins(IProject* proj);
     void disableProjectCloseAction();
     void closeAllOpenedFiles(IProject* proj);
-    void deleteProjectSettingsMenu(IProject* proj);
     void initializePluginCleanup(IProject* proj);
 
 private:

@@ -17,6 +17,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     iruncontroller.cpp
     irunprovider.cpp
     isession.cpp
+    isourceformatter.cpp
+    isourceformattercontroller.cpp
     contextmenuextension.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
@@ -41,6 +43,8 @@ install(FILES
     ilanguage.h
     idocument.h
     idocumentcontroller.h
+    isourceformatter.h
+    isourceformattercontroller.h
     iextension.h
     interfacesexport.h
     istatus.h

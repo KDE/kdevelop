@@ -32,7 +32,10 @@ namespace KTextEditor
 	class Document;
 	class View;
 }
+namespace KDevelop
+{
 class ISourceFormatter;
+}
 
 /** \short The settings modulefor the Source formatter plugin.
 * It supports predefined and custom styles. A live preview of the style
@@ -88,7 +91,7 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 	private:
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
-		ISourceFormatter* m_currentFormatter;
+                KDevelop::ISourceFormatter* m_currentFormatter;
 		int m_numberOfPredefinedStyles;
 		KMimeType::Ptr m_currentMimeType;
 		QString m_previewText;
