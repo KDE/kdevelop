@@ -87,6 +87,9 @@ namespace DUChainUtils {
   
   ///Returns whether the given context or any of its child-contexts contain a use of the given declaration. This is relatively expensive.
   KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);  
+
+  ///Returns the toal count of uses of the gien declaration under the given context
+  KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);  
 }
 }
 

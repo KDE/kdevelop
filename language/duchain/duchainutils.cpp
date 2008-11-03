@@ -390,7 +390,7 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
     uint count;
     const IndexedDeclaration* allDeclarations;
     PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
-    for(int a = 0; a < count; ++a)
+    for(uint a = 0; a < count; ++a)
       if(!(allDeclarations[a] == IndexedDeclaration(decl)))
         ret << allDeclarations[a];
   }
@@ -412,7 +412,7 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, bool co
     uint count;
     const IndexedDeclaration* allDeclarations;
     PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
-    for(int a = 0; a < count; ++a) {
+    for(uint a = 0; a < count; ++a) {
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
         ret += getInheriters(allDeclarations[a].data(), false);
       }
@@ -450,4 +450,24 @@ static bool hasUse(DUContext* context, int usedDeclarationIndex) {
 
 bool DUChainUtils::contextHasUse(DUContext* context, Declaration* declaration) {
   return hasUse(context, context->topContext()->indexForUsedDeclaration(declaration, false));
+}
+
+static uint countUses(DUContext* context, int usedDeclarationIndex) {
+  if(usedDeclarationIndex == std::numeric_limits<int>::max())
+    return 0;
+  
+  uint ret = 0;
+  
+  for(int a = 0; a < context->usesCount(); ++a)
+    if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
+      ++ret;
+    
+  foreach(DUContext* child, context->childContexts())
+    ret += countUses(child, usedDeclarationIndex);
+  
+  return ret;
+}
+
+uint DUChainUtils::contextCountUses(DUContext* context, Declaration* declaration) {
+  return countUses(context, context->topContext()->indexForUsedDeclaration(declaration, false));
 }
