@@ -73,6 +73,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
       return (m_topContext * 53 + m_declarationIndex) * 23;
     }
 
+    ///@warning The duchain needs to be locked when this is called
     bool isValid() const {
       return !isDummy() && declaration() != 0;
     }
