@@ -240,7 +240,7 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   m_layout->setMargin(0);
   m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
   m_layout->setSpacing(0);
-  
+  setBackgroundRole(QPalette::Light);
   m_useArrows = false;
   
   if(vertical)
