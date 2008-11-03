@@ -38,7 +38,7 @@
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : AbstractNavigationContext(topContext, previousContext), m_declaration(decl)
+  : AbstractNavigationContext(topContext, previousContext), m_declaration(decl), m_fullBackwardSearch(false)
 {
   //Jump from definition to declaration if possible
   FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data());
@@ -336,7 +336,8 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     if(classFunDecl->isVirtual()) {
       Declaration* classDecl = m_declaration->context()->owner();
       if(classDecl) {
-        QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl);
+        uint maxAllowedSteps = m_fullBackwardSearch ? (uint)-1 : 10;
+        QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
         
         if(!overriders.isEmpty()) {
           m_currentText += i18n("Overridden in") + " ";
@@ -351,12 +352,16 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
           }
           m_currentText += "<br />";
         }
+        if(maxAllowedSteps == 0)
+          createFullBackwardSearchLink(i18n("Overriders"));
       }
     }
   }
   
   ///Show all classes that inherit this one
-  QList<Declaration*> inheriters = DUChainUtils::getInheriters(m_declaration.data());
+  uint maxAllowedSteps = m_fullBackwardSearch ? (uint)-1 : 10;
+  QList<Declaration*> inheriters = DUChainUtils::getInheriters(m_declaration.data(), maxAllowedSteps);
+  
   if(!inheriters.isEmpty()) {
       m_currentText += i18n("Inherited by") + " ";
       bool first = true;
@@ -370,6 +375,23 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       }
       m_currentText += "<br />";
   }
+  if(maxAllowedSteps == 0)
+    createFullBackwardSearchLink(i18n("Inheriters"));
+}
+
+void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString recomputedItems)
+{
+  makeLink(i18n("More %1 possible, show all", recomputedItems), "m_fullBackwardSearch=true", NavigationAction("m_fullBackwardSearch=true"));
+  m_currentText += "<br />";
+}
+
+NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction( QString key )
+{
+  if(key == "m_fullBackwardSearch=true") {
+    m_fullBackwardSearch = true;
+    clear();
+  }
+  return NavigationContextPointer(this);
 }
 
 void AbstractDeclarationNavigationContext::htmlClass()

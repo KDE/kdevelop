@@ -33,9 +33,14 @@ struct NavigationAction {
     None,
     NavigateDeclaration,
     NavigateUses,
-    JumpToSource //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
+    JumpToSource, //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
+    ExecuteKey
   };
 
+  ///When executed, this navigation-action calls the "executeKeyAction(QString) function in its navigation-context
+  NavigationAction(QString _key) : targetContext(0), type(ExecuteKey), key(_key) {
+  }
+  
   NavigationAction() : targetContext(0), type(None) {
   }
 
@@ -56,6 +61,7 @@ struct NavigationAction {
 
   KUrl document;
   KTextEditor::Cursor cursor;
+  QString key;
 };
 
 }

@@ -78,7 +78,7 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context)
     kDebug() << "no new context created";
     return;
   }
-  if(context == m_context)
+  if(context == m_context && (!context || context->alreadyComputed()))
     return;
   m_context = context;
   update();

@@ -399,22 +399,39 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
 }
 
 ///For a class, returns all classes that inherit it
-QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, bool collectVersions)
+QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
   QList<Declaration*> ret;
+  if(maxAllowedSteps == 0)
+    return ret;
 
   if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class)
-    foreach(DUContext* importer, decl->internalContext()->importers())
-      if(importer->type() == DUContext::Class && importer->owner())
-        ret << importer->owner();
-  
+    FOREACH_FUNCTION(IndexedDUContext importer, decl->internalContext()->indexedImporters) {
+      
+      DUContext* imp = importer.data();
+      
+      if(imp->type() == DUContext::Class && imp->owner())
+        ret << imp->owner();
+
+      --maxAllowedSteps;
+      
+      if(maxAllowedSteps == 0)
+        return ret;
+    }
+    
+    if(maxAllowedSteps == 0)
+      return ret;
+
   if(collectVersions && decl->inSymbolTable()) {
     uint count;
     const IndexedDeclaration* allDeclarations;
     PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
     for(uint a = 0; a < count; ++a) {
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
-        ret += getInheriters(allDeclarations[a].data(), false);
+        ret += getInheriters(allDeclarations[a].data(), maxAllowedSteps, false);
+        
+        if(maxAllowedSteps == 0)
+          return ret;
       }
     }
   }
@@ -422,14 +439,17 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, bool co
   return ret;
 }
 
-QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration) {
+QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
   QList<Declaration*> ret;
+  
+  if(maxAllowedSteps == 0)
+    return ret;
   
   if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
     ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), SimpleCursor::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
   
-  foreach(Declaration* inheriter, getInheriters(currentClass))
-    ret += getOverriders(inheriter, overriddenDeclaration);
+  foreach(Declaration* inheriter, getInheriters(currentClass, maxAllowedSteps))
+    ret += getOverriders(inheriter, overriddenDeclaration, maxAllowedSteps);
   
   return ret;
 }

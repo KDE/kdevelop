@@ -96,11 +96,26 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
   ++m_linkCount;
 }
 
+void AbstractNavigationContext::clear() {
+    m_linkCount = 0;
+    m_currentText.clear();
+    m_links.clear();
+    m_intLinks.clear();
+}
+
+NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key) {
+  return NavigationContextPointer(this);
+}
+
 NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& action)
 {
   if(action.targetContext)
     return NavigationContextPointer(action.targetContext);
 
+  if(action.type == NavigationAction::ExecuteKey)
+    return executeKeyAction(action.key);
+  
+  
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
       kDebug(9007) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
@@ -264,6 +279,10 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
 
 QString AbstractNavigationContext::html(bool /*shorten*/) {
   return QString();
+}
+
+bool AbstractNavigationContext::alreadyComputed() const {
+  return !m_currentText.isEmpty();
 }
 
 QWidget* AbstractNavigationContext::widget() const {

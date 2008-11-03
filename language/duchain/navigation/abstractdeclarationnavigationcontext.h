@@ -56,7 +56,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
     virtual void eventuallyMakeTypeLinks( KDevelop::AbstractType::Ptr type );
 
+    virtual NavigationContextPointer executeKeyAction(QString key);
 
+    ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
+    void createFullBackwardSearchLink(QString recomputedItems);
+    
+    bool m_fullBackwardSearch;
 };
 
 }

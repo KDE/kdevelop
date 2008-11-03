@@ -83,8 +83,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     ///If that signal is emitted, the new declaration is navigated in the navigation-wdiget.
     virtual QWidget* widget() const;
 
+    ///Returns whether this context's string has already been computed, and is up to date.
+    ///After clear() was called, this returns false again.
+    bool alreadyComputed() const;
+    
   protected:
 
+    //Clears the computed html and links
+    void clear();
+    
+    ///Override this to execute own key-actions using NavigationAction
+    virtual NavigationContextPointer executeKeyAction(QString key);
+    
     NavigationContextPointer execute(NavigationAction& action);
 
     void addExternalHtml( const QString& text );
