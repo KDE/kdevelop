@@ -64,6 +64,9 @@ if(KDEVCPPDUCHAIN)
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectbuilder.cpp project/interfaces/iprojectbuilder.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/irun.h
         ${CMAKE_SOURCE_DIR}/kross/wrappers/krossirun.cpp interfaces/irun.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/editorcontext.h
+        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosseditorcontext.cpp language/interfaces/editorcontext.h)
+
         
 else(KDEVCPPDUCHAIN)
     message(STATUS "You can't generate interfaces without specifying KDEVCPPDUCHAIN in the cache.")
