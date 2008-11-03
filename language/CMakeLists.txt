@@ -75,6 +75,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/navigation/usesnavigationcontext.cpp
     duchain/navigation/abstractdeclarationnavigationcontext.cpp
     duchain/navigation/useswidget.cpp
+    duchain/navigation/usescollector.cpp
 
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
@@ -251,5 +252,6 @@ install(FILES
     duchain/navigation/abstractnavigationwidget.h
     duchain/navigation/navigationaction.h
     duchain/navigation/useswidget.h
+    duchain/navigation/usescollector.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation
 )
