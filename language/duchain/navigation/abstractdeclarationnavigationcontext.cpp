@@ -61,6 +61,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
   addExternalHtml(m_prefix);
 
+  if(!m_declaration.data()) {
+    m_currentText += i18n("<br /> lost declaration <br />");
+    return m_currentText;
+  }
+  
   if( shorten && !m_declaration->comment().isEmpty() ) {
     QString comment = m_declaration->comment();
     if( comment.length() > 60 ) {
