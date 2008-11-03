@@ -22,7 +22,7 @@
  */
 
 #include "backgroundparser.h"
-
+ 
 #include <QList>
 #include <QFile>
 #include <QTimer>
@@ -366,6 +366,8 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
             (*it).targets.removeAt(index);
             if((*it).targets.isEmpty()) {
                 it = d->m_documents.erase(it);
+                --d->m_maxParseJobs;
+                
                 continue;
             }
         }
@@ -499,7 +501,9 @@ void BackgroundParser::resume()
 
 void BackgroundParser::updateProgressBar()
 {
-    if (d->m_doneParseJobs == d->m_maxParseJobs) {
+    if (d->m_doneParseJobs >= d->m_maxParseJobs) {
+        if(d->m_doneParseJobs > d->m_maxParseJobs)
+            kWarning() << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
     } else {
@@ -512,7 +516,7 @@ void BackgroundParser::updateProgressBar()
         emit showProgress(0, d->m_maxParseJobs*1000, (additionalProgress + d->m_doneParseJobs)*1000);
     }
 }
-
+ 
 ParserDependencyPolicy* BackgroundParser::dependencyPolicy() const
 {
     return &d->m_dependencyPolicy;
