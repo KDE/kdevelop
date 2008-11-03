@@ -64,6 +64,7 @@
 #include <util/processlinemaker.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/interfaces/editorcontext.h>
 
 #include "variablewidget.h"
 #include "gdbbreakpointwidget.h"

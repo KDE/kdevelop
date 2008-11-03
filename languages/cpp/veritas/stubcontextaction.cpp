@@ -44,6 +44,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainutils.h>
 #include <language/editor/simplecursor.h>
+#include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainlock.h>
 
 // kdevelop
@@ -129,6 +130,7 @@ void StubContextAction::appendTo(ContextMenuExtension& menu, Context* context)
     STOP_IF(!ec);
 
     DUChainWriteLocker lock(DUChain::lock());
+    ///@todo this isn't neede any more, the context contains the information
     SimpleCursor sc(ec->position());
     Declaration* dcl = DUChainUtils::itemUnderCursor(ec->url(), sc);
     STOP_IF(!dcl);

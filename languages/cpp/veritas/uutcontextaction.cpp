@@ -46,6 +46,7 @@
 #include <language/duchain/duchainutils.h>
 #include <language/editor/simplecursor.h>
 #include <language/duchain/duchainlock.h>
+#include <language/interfaces/editorcontext.h>
 
 // kdevelop
 #include "languages/cpp/cppduchain/classdeclaration.h"
@@ -141,6 +142,7 @@ void UUTContextAction::appendTo(ContextMenuExtension& menu, Context* context)
 
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor sc(ec->position());
+    ///@todo not needed any more, just take the data out of the context(DeclarationContext)
     Declaration* decl = DUChainUtils::itemUnderCursor(ec->url(), sc);
     STOP_IF_(!decl, "no declaration under cursor.");
     STOP_IF_(decl->kind() != Declaration::Instance, "Not an instance declaration.");
