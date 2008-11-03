@@ -421,6 +421,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, Index
     QHBoxLayout * labelLayout = new QHBoxLayout;
     QWidget* headerWidget = new QWidget;
     headerWidget->setLayout(labelLayout);
+    headerWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     
     QLabel* projectLabel = new QLabel;
     QLabel* usesCountLabel = new QLabel;
@@ -533,9 +534,19 @@ void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
 }
 
 void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
-  m_widget->m_progressBar->setValue(processed);
-  if(processed == total)
-    m_widget->setShowHeader(false);
+  if(m_widget->m_progressBar) {
+    m_widget->m_progressBar->setValue(processed);
+    
+    if(processed == total) {
+      m_widget->setUpdatesEnabled(false);
+      delete m_widget->m_progressBar;
+      m_widget->m_progressBar = 0;
+      m_widget->setShowHeader(false);
+      m_widget->setUpdatesEnabled(true);
+    }
+  }else{
+    kDebug() << "progress() called too often";
+  }
 }
 
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
