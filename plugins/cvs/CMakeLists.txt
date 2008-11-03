@@ -47,6 +47,7 @@ target_link_libraries(kdevcvs
     kdevplatforminterfaces
     kdevplatformvcs
     kdevplatformproject
+    kdevplatformlanguage
 )
 
 install(TARGETS kdevcvs DESTINATION ${PLUGIN_INSTALL_DIR} )

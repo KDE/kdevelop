@@ -52,6 +52,7 @@
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcsdiffwidget.h>
 #include <vcs/widgets/vcscommitdialog.h>
+#include <language/interfaces/editorcontext.h>
 
 #include "kdevsvncpp/apr.hpp"
 
