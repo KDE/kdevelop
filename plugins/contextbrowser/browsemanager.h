@@ -26,6 +26,7 @@
 #include <QCursor>
 #include <QMap>
 #include <QPointer>
+#include <qevent.h>
 
 class QWidget;
 
@@ -37,6 +38,29 @@ namespace KTextEditor {
 namespace KDevelop {
     class IDocument;
 }
+
+struct ShiftPressDetector {
+    public:
+        ShiftPressDetector() : m_hadKeyWithShift(false) {
+        }
+        ///Must be called with all key-events
+        ///Returns true if the shift-key was released and no other key was pressed between its press and release.
+        bool checkKeyEvent(QKeyEvent* e) {
+            if(e->type() == QEvent::KeyPress) {
+                if(e->modifiers() & Qt::ShiftModifier)
+                    m_hadKeyWithShift = true;
+                if (e->key() == Qt::Key_Shift)
+                    m_hadKeyWithShift = false;
+            }else if(e->type() == QEvent::KeyRelease) {
+                if(e->key() == Qt::Key_Shift && !m_hadKeyWithShift)
+                    return true;
+            }
+            
+            return false;
+        }
+    private:
+    bool m_hadKeyWithShift;
+};
 
 class EditorViewWatcher : QObject {
     Q_OBJECT
@@ -64,6 +88,9 @@ class BrowseManager : public QObject {
     Q_OBJECT
     public:
         BrowseManager(ContextController* controller);
+    Q_SIGNALS:
+        //Emitted whenever the shift-key has been pressed + released without any other key in between
+        void shiftKeyTriggered();
     public slots:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
@@ -88,6 +115,7 @@ class BrowseManager : public QObject {
         Watcher m_watcher;
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
+        ShiftPressDetector m_shiftDetector;
 };
 
 #endif

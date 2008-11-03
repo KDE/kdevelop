@@ -51,6 +51,7 @@
 #include "browsemanager.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <kparts/part.h>
+#include <qapplication.h>
 
 const int maxHistoryLength = 30;
 
@@ -72,6 +73,8 @@ ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIn
     m_browseManager = new BrowseManager(this);
     
     connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+    
+    connect(m_browseManager, SIGNAL(shiftKeyTriggered()), this, SLOT(switchFocusToContextBrowser()));
     
     m_previousButton = new QToolButton();
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
@@ -253,6 +256,19 @@ void ContextController::fillHistoryPopup(QMenu* menu, const QList<int>& historyI
     }
 }
 
+QWidget* ContextController::focusBackWidget() {
+    return m_focusBackWidget;
+}
+
+void ContextController::switchFocusToContextBrowser() {
+    if(m_view->isVisible()) {
+        kDebug() << "switching focus to context-browser";
+        if(QApplication::focusWidget() != m_view)
+            m_focusBackWidget = QApplication::focusWidget();
+        m_view->setFocus();
+    }
+}
+
 void ContextController::actionTriggered() {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action); Q_ASSERT(action->data().type() == QVariant::Int);
@@ -431,22 +447,22 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     
     m_allowLockedUpdate = false;
     
-    QHBoxLayout* buttons = new QHBoxLayout;
+    m_buttons = new QHBoxLayout;
     m_lockButton = new QToolButton();
     m_lockButton->setCheckable(true);
     m_lockButton->setChecked(false);
     updateLockIcon(m_lockButton->isChecked());
     connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
 
-    buttons->addWidget(m_contextCtrl->previousButton());
-    buttons->addWidget(m_contextCtrl->currentContextBox());
-    buttons->addWidget(m_contextCtrl->nextButton());
-    buttons->addWidget(m_contextCtrl->browseButton());
-    buttons->addStretch();
-    buttons->addWidget(m_lockButton);
+    m_buttons->addWidget(m_contextCtrl->previousButton());
+    m_buttons->addWidget(m_contextCtrl->currentContextBox());
+    m_buttons->addWidget(m_contextCtrl->nextButton());
+    m_buttons->addWidget(m_contextCtrl->browseButton());
+    m_buttons->addStretch();
+    m_buttons->addWidget(m_lockButton);
 
     m_layout = new QVBoxLayout;
-    m_layout->addLayout(buttons);
+    m_layout->addLayout(m_buttons);
     m_layout->addWidget(m_navigationWidget);
     //m_layout->addStretch();
     setLayout(m_layout);
@@ -458,6 +474,50 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
 
 ContextBrowserView::~ContextBrowserView() {
     m_plugin->unRegisterToolView(this);
+}
+
+void ContextBrowserView::focusInEvent(QFocusEvent* event) {
+    //Indicate that we have focus
+    kDebug() << "got focus";
+    parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
+    m_layout->removeItem(m_buttons);
+    
+    return QWidget::focusInEvent(event);
+}
+
+void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
+    kDebug() << "lost focus";
+    parentWidget()->setBackgroundRole(QPalette::Background);
+    m_layout->insertLayout(0, m_buttons);
+    QWidget::focusOutEvent(event);
+}
+
+bool ContextBrowserView::event(QEvent* event) {
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    
+    if(hasFocus() && keyEvent) {
+        if(m_shiftDetector.checkKeyEvent(keyEvent)) {
+            //Switch the focus back to the editor view
+            kDebug() << "switching back to" << m_contextCtrl->focusBackWidget();
+            if(m_contextCtrl->focusBackWidget())
+                m_contextCtrl->focusBackWidget()->setFocus();
+        }
+        AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget);
+        if(navigationWidget && event->type() == QEvent::KeyPress) {
+            int key = keyEvent->key();
+            if(key == Qt::Key_Left)
+                navigationWidget->previous();
+            if(key == Qt::Key_Right)
+                navigationWidget->next();
+            if(key == Qt::Key_Up)
+                navigationWidget->up();
+            if(key == Qt::Key_Down)
+                navigationWidget->down();
+            if(key == Qt::Key_Return || key == Qt::Key_Enter)
+                navigationWidget->accept();
+        }
+    }
+    return QWidget::event(event);
 }
 
 void ContextBrowserView::showEvent(QShowEvent* event) {

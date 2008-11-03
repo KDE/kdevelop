@@ -110,10 +110,14 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if(!view)
         return false;
     
+    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+
+    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent))
+        emit shiftKeyTriggered();
+    
     const int browseKey = Qt::Key_Control;
     
     //Eventually start key-browsing
-    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
     if(keyEvent && keyEvent->key() == browseKey && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
         m_browsingByKey = true;
         if(!m_browsing)

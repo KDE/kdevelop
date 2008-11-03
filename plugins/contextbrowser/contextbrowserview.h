@@ -27,9 +27,11 @@
 #include <language/duchain/topducontext.h>
 #include <language/editor/simplecursor.h>
 #include <language/editor/documentcursor.h>
+#include "browsemanager.h"
 
 class ContextBrowserPlugin;
 class QVBoxLayout;
+class QHBoxLayout;
 class QToolButton;
 class QCheckBox;
 class QMenu;
@@ -68,6 +70,9 @@ class ContextBrowserView : public QWidget {
 
     private:
         virtual void showEvent(QShowEvent* event);
+        virtual bool event(QEvent* event);
+        virtual void focusInEvent(QFocusEvent* event);
+        virtual void focusOutEvent(QFocusEvent* event);
         bool isLocked() const;
         void resetWidget();
 
@@ -77,10 +82,12 @@ class ContextBrowserView : public QWidget {
         DeclarationController* m_declarationCtrl;
         QVBoxLayout* m_layout;
         QToolButton* m_lockButton;
+        QHBoxLayout* m_buttons;
         QWidget* m_navigationWidget;
         KDevelop::DeclarationId m_navigationWidgetDeclaration;
         bool m_allowLockedUpdate;
         KDevelop::IndexedTopDUContext m_lastUsedTopContext;
+        ShiftPressDetector m_shiftDetector;
 };
 
 // handles Context related operations for ContextBrowserView
@@ -119,12 +126,15 @@ class ContextController : public QObject {
         };
 
         void updateDeclarationListBox(KDevelop::DUContext* context);
+        
+        QWidget* focusBackWidget();
     public Q_SLOTS:
         void historyNext();
         void historyPrevious();
         void nextMenuAboutToShow();
         void previousMenuAboutToShow();
         void actionTriggered();
+        void switchFocusToContextBrowser();
     private Q_SLOTS:
         void comboItemActivated(int index);
         void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
@@ -150,6 +160,7 @@ class ContextController : public QObject {
         KDevelop::IndexedString m_listUrl;
         BrowseManager* m_browseManager;
         KUrl m_ignoreJump;
+        QPointer<QWidget> m_focusBackWidget;
 };
 
 // Handles Declaration related operations for ContextBrowserView
