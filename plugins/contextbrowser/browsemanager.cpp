@@ -92,6 +92,8 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
 }
 
 BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false) {
+    foreach(KTextEditor::View* view, m_watcher.allViews())
+        viewAdded(view);
 }
 
 KTextEditor::View* viewFromWidget(QWidget* widget) {
@@ -231,8 +233,19 @@ void BrowseManager::applyEventFilter(QWidget* object, bool install) {
             applyEventFilter(qobject_cast<QWidget*>(child), install);
 }
 
+void BrowseManager::viewAdded(KTextEditor::View* view) {
+    applyEventFilter(view, true);
+    //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
+    //so those keys are not passed to the event-filter
+    QObject::connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(cursorPositionChanged()));
+}
+
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
-    m_manager->applyEventFilter(view, true);
+    m_manager->viewAdded(view);
+}
+
+void BrowseManager::cursorPositionChanged() {
+    m_shiftDetector.clear();
 }
 
 void BrowseManager::setBrowsing(bool enabled) {
@@ -245,9 +258,6 @@ void BrowseManager::setBrowsing(bool enabled) {
     //This collects all the views
     if(enabled) {
         kDebug() << "Enabled browsing-mode";
-        ///Enable browsing, install an event-filter on all events
-        foreach(KTextEditor::View* view, m_watcher.allViews())
-            applyEventFilter(view, true);
     }else{
         kDebug() << "Disabled browsing-mode";
         resetChangedCursor();

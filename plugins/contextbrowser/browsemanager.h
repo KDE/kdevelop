@@ -41,7 +41,7 @@ namespace KDevelop {
 
 struct ShiftPressDetector {
     public:
-        ShiftPressDetector() : m_hadOtherKey(false) {
+        ShiftPressDetector() : m_hadOtherKey(true) {
         }
         ///Must be called with all key-events
         ///Returns true if the shift-key was released and no other key was pressed between its press and release.
@@ -57,6 +57,9 @@ struct ShiftPressDetector {
             }
             
             return false;
+        }
+        void clear() {
+            m_hadOtherKey = true;
         }
     private:
     bool m_hadOtherKey;
@@ -94,7 +97,9 @@ class BrowseManager : public QObject {
     public slots:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
+        void cursorPositionChanged();
     private:
+        void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
             public:
             Watcher(BrowseManager* manager);
