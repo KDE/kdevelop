@@ -271,17 +271,8 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
 //         action = new KAction(i18n("Diff..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
 //         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
-    else
-    {
-        action = new KAction(i18n("Import..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(slotImport()) );
-        menu->addAction( action );
-        action = new KAction(i18n("Checkout..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(slotCheckout()) );
-        menu->addAction( action );
-    }
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;
 }

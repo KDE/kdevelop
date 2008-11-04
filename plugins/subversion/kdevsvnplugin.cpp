@@ -400,36 +400,6 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
 //         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
     }
-    else
-    {
-
-        action = new KAction(i18n("Import..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxImport()) );
-        menu->addAction( action );
-        action = new KAction(i18n("Checkout..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxCheckout()) );
-        menu->addAction( action );
-
-//         action = new QAction(i18n("Blame/Annotate..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-//         actions << action;
-//
-//         action = new QAction(i18n("Cat..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxCat()) );
-//         actions << action;
-//
-//         action = new QAction(i18n("Diff to..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-//         actions << action;
-//
-//         action = new QAction(i18n("Information..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxInfo()) );
-//         actions << action;
-//
-//         action = new QAction(i18n("Status..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
-//         actions << action;
-    }
     menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;

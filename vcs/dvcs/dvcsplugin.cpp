@@ -309,8 +309,8 @@ KDevelop::VcsJob*
                                mapping.sourceLocations()[1].localUrl().path());
 }
 
-KDevelop::VcsJob* 
-        DistributedVersionControlPlugin::reset(const KUrl& repository, 
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::reset(const KUrl& repository,
                                                const QStringList &args, const KUrl::List& files)
 {
     return d->m_exec->reset(repository.path(), args, files);
@@ -414,14 +414,8 @@ KDevelop::ContextMenuExtension
         action = new KAction(i18n("Log View"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
         menu->addAction( action );
+        menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
-    else
-    {
-        action = new KAction(i18n("Init..."), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(slotInit()) );
-        menu->addAction(action);
-    }
-    menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;
 
