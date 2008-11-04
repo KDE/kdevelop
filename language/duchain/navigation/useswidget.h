@@ -34,11 +34,12 @@ class QToolButton;
 class QVBoxLayout;
 class QHBoxLayout;
 class QBoxLayout;
-class CodeRepresentation;
 class QPushButton;
 class QProgressBar;
 
 namespace KDevelop {
+    class CodeRepresentation;
+  
     class IndexedDeclaration;
     ///A widget representing one use of a Declaration in a speicific context
     class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QLabel, public KTextEditor::SmartRangeWatcher {

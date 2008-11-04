@@ -44,6 +44,7 @@
 #include <language/duchain/duchainutils.h>
 #include "language/duchain/parsingenvironment.h"
 #include "language/duchain/types/indexedtype.h"
+#include <language/codegen/coderepresentation.h>
 #include <language/backgroundparser/parsejob.h>
 #include <interfaces/iproject.h>
 
@@ -55,56 +56,6 @@ QString sizeSuffix;// = "</small></small>";
 
 const int tooltipContextSize = 3; //How many lines around the use are shown in the tooltip
 const bool showUsesHeader = false;
-
-///Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
-class CodeRepresentation {
-  public:
-    virtual ~CodeRepresentation() {
-    }
-    virtual QString line(int line) const = 0;
-};
-
-class EditorCodeRepresentation : public CodeRepresentation {
-  public:
-  EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
-  }
-  QString line(int line) const {
-    if(line < 0 || line >= m_document->lines())
-      return QString();
-    return m_document->line(line);
-  }
-  private:
-    KTextEditor::Document* m_document;
-};
-
-class FileCodeRepresentation : public CodeRepresentation {
-  public:
-    FileCodeRepresentation(IndexedString document) {
-    QString localFile(document.toUrl().toLocalFile());
-  
-        QFile file( localFile );
-        if ( file.open(QIODevice::ReadOnly) )
-          lines = file.readAll().split('\n');
-    }
-    
-    QString line(int line) const {
-    if(line < 0 || line >= lines.size())
-      return QString();
-      
-      return QString::fromLocal8Bit(lines[line]);
-    }
-  private:
-    //We use QByteArray, because the column-numbers are measured in utf-8
-    QList<QByteArray> lines;
-};
-
-CodeRepresentation* createCodeRepresentation(IndexedString url) {
-  IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
-  if(document && document->textDocument())
-    return new EditorCodeRepresentation(document->textDocument());
-  else
-    return new FileCodeRepresentation(url);
-}
 
 ///The returned text is fully escaped
 ///@param cutOff The total count of characters that should be cut of, all in all on both sides together.

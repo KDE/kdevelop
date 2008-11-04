@@ -92,6 +92,8 @@ set(kdevplatformlanguage_LIB_SRCS
 
     codegen/createclass.cpp
     codegen/codegenerator.cpp
+    codegen/documentchangeset.cpp
+    codegen/coderepresentation.cpp
 
 )
 
@@ -244,6 +246,8 @@ install(FILES
     codegen/astchangeset.h
     codegen/duchainchangeset.h
     codegen/codegenerator.h
+    codegen/documentchangeset.h
+    codegen/coderepresentation.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen
 )
 
