@@ -69,6 +69,7 @@ install(FILES
     sourceformattercontroller.h
     language.h
     shellexport.h
+    testshellexport.h
     testcore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell
 )

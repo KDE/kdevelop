@@ -11,6 +11,7 @@
 # KDevPlatform_PROJECT_LIBRARY         - the project library
 # KDevPlatform_SUBLIME_LIBRARY         - the sublime library
 # KDevPlatform_SHELL_LIBRARY           - the shell library
+# KDevPlatform_TESTSHELL_LIBRARY       - the testshell library
 # KDevPlatform_UTIL_LIBRARY            - the util library
 # KDevPlatform_VCS_LIBRARY             - the vcs library
 # KDevPlatform_VERITAS                 - the veritas library
@@ -62,6 +63,10 @@ find_library( KDevPlatform_SUBLIME_LIBRARY sublime
 find_library( KDevPlatform_SHELL_LIBRARY kdevplatformshell 
         PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
         DOC "KDevPlatform shell library" )
+
+find_library( KDevPlatform_TESTSHELL_LIBRARY kdevplatformtestshell 
+        PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
+        DOC "KDevPlatform testshell library" )
 
 find_library( KDevPlatform_VCS_LIBRARY kdevplatformvcs 
         PATHS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
