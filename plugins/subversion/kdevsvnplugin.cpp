@@ -399,8 +399,8 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
 //         action = new KAction(i18n("Annotation..."), this);
 //         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
 //         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
 
     return menuExt;
 }
