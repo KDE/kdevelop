@@ -353,7 +353,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
           m_currentText += "<br />";
         }
         if(maxAllowedSteps == 0)
-          createFullBackwardSearchLink(i18n("Overriders"));
+          createFullBackwardSearchLink(overriders.isEmpty() ? i18n("Overriders possible, show all") : i18n("More overriders possible, show all"));
       }
     }
   }
@@ -376,12 +376,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       m_currentText += "<br />";
   }
   if(maxAllowedSteps == 0)
-    createFullBackwardSearchLink(i18n("Inheriters"));
+    createFullBackwardSearchLink(inheriters.isEmpty() ? i18n("Inheriters possible, show all") : i18n("More inheriters possible, show all"));
 }
 
-void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString recomputedItems)
+void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString string)
 {
-  makeLink(i18n("More %1 possible, show all", recomputedItems), "m_fullBackwardSearch=true", NavigationAction("m_fullBackwardSearch=true"));
+  makeLink(string, "m_fullBackwardSearch=true", NavigationAction("m_fullBackwardSearch=true"));
   m_currentText += "<br />";
 }
 

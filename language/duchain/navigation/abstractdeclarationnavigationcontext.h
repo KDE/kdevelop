@@ -59,7 +59,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     virtual NavigationContextPointer executeKeyAction(QString key);
 
     ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
-    void createFullBackwardSearchLink(QString recomputedItems);
+    void createFullBackwardSearchLink(QString string);
     
     bool m_fullBackwardSearch;
 };
