@@ -145,8 +145,15 @@ void UsesCollector::maximumProgress(uint max) {
 }
 
 UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration) {
-  ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 }
+
+UsesCollector::~UsesCollector() {
+  ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
+  
+  foreach(IndexedString file, m_staticFeaturesManipulated)
+    ParseJob::unsetStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
+}
+
 
 void UsesCollector::progress(uint processed, uint total) {
 }

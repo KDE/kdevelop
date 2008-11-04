@@ -573,11 +573,6 @@ void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUCont
     m_widget->addItem(widget, toFront ? 0 : -1);
 }
 
-UsesCollector::~UsesCollector() {
-  foreach(IndexedString file, m_staticFeaturesManipulated)
-    ParseJob::unsetStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
-}
-
 
 
 #include "useswidget.moc"
