@@ -141,8 +141,7 @@ public:
       {
         kDebug() << "compiling";
         LockedSmartInterface iface = m_editor->smart();
-        top = new TopDUContext( m_editor->currentUrl(),
-                                iface.currentDocument()
+        top = newTopContext( iface.currentDocument()
                                     ? SimpleRange( iface.currentDocument()->documentRange() )
                                     : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
         top->setSmartRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
@@ -280,6 +279,19 @@ protected:
   virtual DUContext* newContext(const SimpleRange& range)
   {
     return new DUContext(range, currentContext());
+  }
+
+  /**
+   * Create a new TopDUContext from the given \a range.
+   *
+   * This exists so that you can create custom TopDUContext subclasses for your
+   * language if you need to.
+   *
+   * \returns the newly created context
+   */
+  virtual TopDUContext* newTopContext(const SimpleRange& range, ParsingEnvironmentFile* file = 0)
+  {
+    return new TopDUContext(m_editor->currentUrl(), range, file);
   }
 
   /// Determine the currently open context. \returns the current context.
