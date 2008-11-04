@@ -37,9 +37,9 @@ public:
         m_currentLine = view->document()->line(m_position.line());
         int wordStart = m_position.column();
         int wordEnd = m_position.column();
-        while(wordStart > 0 && wordStart < m_currentLine.length() && m_currentLine[wordStart-1].isLetterOrNumber() || m_currentLine[wordStart-1] == '_')
+        while(wordStart > 0 && wordStart < m_currentLine.length() && (m_currentLine[wordStart-1].isLetterOrNumber() || m_currentLine[wordStart-1] == '_'))
             --wordStart;
-        while(wordEnd >= 0 && wordEnd < m_currentLine.length() && m_currentLine[wordEnd].isLetterOrNumber() || m_currentLine[wordEnd] == '_')
+        while(wordEnd >= 0 && wordEnd < m_currentLine.length() && (m_currentLine[wordEnd].isLetterOrNumber() || m_currentLine[wordEnd] == '_'))
             ++wordEnd;
     }
 
