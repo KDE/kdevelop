@@ -63,6 +63,6 @@ namespace KDevelop {
         private:
             QMap< IndexedString, QList<DocumentChangePointer> > m_changes;
     };
-};
+}
 
 #endif
