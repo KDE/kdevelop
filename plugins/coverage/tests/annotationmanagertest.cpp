@@ -24,6 +24,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <sublime/controller.h>
+#include <shell/testcore.h>
 
 #include <kparts/mainwindow.h>
 #include <ktexteditor/document.h>
@@ -54,7 +55,6 @@ using KTextEditor::Range;
 using KTextEditor::View;
 
 using TestStubs::KDevDocument;
-using TestStubs::Core;
 using TestStubs::TextDocument;
 using TestStubs::UiController;
 
@@ -62,14 +62,15 @@ using TestStubs::UiController;
 
 void AnnotationManagerTest::initTestCase()
 {
-    m_core = new TestStubs::Core;
+    m_core = new KDevelop::TestCore;
     Q_ASSERT(m_core);
-    UiController* uic = new TestStubs::UiController;
-    m_core->m_uiController = uic;
+    UiController* uic = new TestStubs::UiController(m_core);
+    m_core->setUiController( uic );
     uic->m_activeMainWindow = new KParts::MainWindow;
     uic->m_controller = new Sublime::Controller;
     m_docCtrl = new TestStubs::DocumentController(0);
-    m_core->m_documentController = m_docCtrl;
+    m_core->setDocumentController( m_docCtrl );
+    m_core->initialize( KDevelop::Core::NoUi );
 }
 
 void AnnotationManagerTest::init()

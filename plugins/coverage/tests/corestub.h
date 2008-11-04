@@ -21,6 +21,8 @@
 #define TESTFAKES_CORESTUB_H
 
 #include "interfaces/icore.h"
+#include <shell/uicontroller.h>
+#include <shell/documentcontroller.h>
 #include <KComponentData>
 
 namespace KDevelop
@@ -39,74 +41,14 @@ namespace KParts
 class KPartManager;
 }
 
-namespace TestStubs
-{
-
-/*! Allows for proper unit testing of components with an ICore dependency */
-class Core : public KDevelop::ICore
-{
-public:
-    Core() :
-        m_documentController(0),
-        m_languageController(0),
-        m_pluginController(0),
-        m_projectController(0),
-        m_uiController(0),
-        m_runController(0),
-        m_session(0),
-        m_partController(0) {}
-
-    virtual ~Core() {}
-    virtual KDevelop::IDocumentController *documentController() {
-        return m_documentController;
-    }
-    virtual KDevelop::ILanguageController *languageController() {
-        return m_languageController;
-    }
-    virtual KDevelop::IPluginController *pluginController() {
-        return m_pluginController;
-    }
-    virtual KDevelop::IProjectController *projectController() {
-        return m_projectController;
-    }
-    virtual KDevelop::IRunController *runController() {
-        return m_runController;
-    }
-    virtual KDevelop::IUiController *uiController() {
-        return m_uiController;
-    }
-    virtual KParts::PartManager *partController() {
-        return m_partController;
-    }
-    virtual KDevelop::ISession* activeSession() {
-        return m_session;
-    }
-
-    virtual KComponentData componentData() const {
-        return KGlobal::mainComponent();
-    }
-
-    // inject whatever it is you want.
-    KDevelop::IDocumentController* m_documentController;
-    KDevelop::ILanguageController* m_languageController;
-    KDevelop::IPluginController* m_pluginController;
-    KDevelop::IProjectController* m_projectController;
-    KDevelop::IUiController* m_uiController;
-    KDevelop::IRunController* m_runController;
-    KDevelop::ISession* m_session;
-    KParts::PartManager* m_partController;
-};
-
-}
-
 #include "interfaces/iuicontroller.h"
 
 namespace TestStubs
 {
 
-class UiController : public KDevelop::IUiController {
+class UiController : public KDevelop::UiController {
 public:
-    UiController() : m_activeMainWindow(0) {}
+    UiController( KDevelop::Core* c ) : KDevelop::UiController(c), m_activeMainWindow(0) {}
     virtual ~UiController() {}
 
     //enum SwitchMode {
@@ -132,7 +74,7 @@ public:
 namespace TestStubs
 {
 
-class DocumentController : public KDevelop::IDocumentController
+class DocumentController : public KDevelop::DocumentController
 {
 //    Q_OBJECT
 public:
@@ -145,7 +87,7 @@ public:
     };
     Q_DECLARE_FLAGS(DocumentActivationParams, DocumentActivation)
 #endif
-    DocumentController(QObject *parent) : IDocumentController(parent) {}
+    DocumentController(QObject *parent) : KDevelop::DocumentController(parent) {}
     virtual ~DocumentController() {}
 
     virtual void setEncoding( const QString &encoding ) {}
