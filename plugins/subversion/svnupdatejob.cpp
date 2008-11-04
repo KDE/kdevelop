@@ -47,7 +47,7 @@ void SvnInternalUpdateJob::run()
     KUrl::List l = locations();
     foreach( KUrl url, l )
     {
-        QByteArray ba = url.path().toUtf8();
+        QByteArray ba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( ba.data() ) );
     }
     try

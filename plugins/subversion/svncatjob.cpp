@@ -57,10 +57,10 @@ void SvnInternalCatJob::run()
             KUrl url = source().localUrl();
             if( url.isLocalFile() )
             {
-                srcba = url.path().toUtf8();
+                srcba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
             }else
             {
-                srcba = url.url().toUtf8();
+                srcba = url.url( KUrl::RemoveTrailingSlash ).toUtf8();
             }
         }else
         {

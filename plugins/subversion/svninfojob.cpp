@@ -43,7 +43,7 @@ void SvnInternalInfoJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        QByteArray ba = location().path().toUtf8();
+        QByteArray ba = location().path( KUrl::RemoveTrailingSlash ).toUtf8();
         svn::InfoVector v = cli.info( ba.data() );
         svn::Info i = v.at(0);
         SvnInfoHolder h;

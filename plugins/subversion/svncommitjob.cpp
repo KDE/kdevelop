@@ -103,7 +103,7 @@ void SvnInternalCommitJob::run()
     KUrl::List l = urls();
     foreach( KUrl u, l )
     {
-        QByteArray path = u.path().toUtf8();
+        QByteArray path = u.path( KUrl::RemoveTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( path.data() ) );
     }
     QByteArray ba = commitMessage().toUtf8();

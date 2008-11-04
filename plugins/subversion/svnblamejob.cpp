@@ -48,7 +48,7 @@ void SvnInternalBlameJob::run()
              this, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ) );
     try
     {
-        QByteArray ba = location().path().toUtf8();
+        QByteArray ba = location().path( KUrl::RemoveTrailingSlash ).toUtf8();
         cli.blame( ba.data(),
                  createSvnCppRevisionFromVcsRevision( startRevision() ),
                  createSvnCppRevisionFromVcsRevision( endRevision() ) );

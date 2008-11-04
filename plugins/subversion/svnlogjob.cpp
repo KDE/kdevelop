@@ -48,7 +48,7 @@ void SvnInternalLogJob::run()
              this, SIGNAL(logEvent( const KDevelop::VcsEvent&) ) );
     try
     {
-        QByteArray ba = location().path().toUtf8();
+        QByteArray ba = location().path( KUrl::RemoveTrailingSlash ).toUtf8();
         cli.log( ba.data(),
                  createSvnCppRevisionFromVcsRevision( startRevision() ),
                  createSvnCppRevisionFromVcsRevision( endRevision() ),
