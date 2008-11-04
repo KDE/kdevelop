@@ -39,10 +39,12 @@
 #include <kaction.h>
 #include <kfadewidgeteffect.h>
 #include <kcombobox.h>
+#include <kjob.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -110,6 +112,15 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     addAction(m_syncAction);
     updateSyncAction();
 
+    m_buildAction = new KAction(this);
+    m_buildAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_buildAction->setText(i18n("Build Selected Items"));
+    m_buildAction->setToolTip(i18n("Builds the selected items in the tree."));
+    m_buildAction->setIcon(KIcon("run-build"));
+    connect(m_buildAction, SIGNAL(triggered(bool)), this, SLOT( buildSelectedItems() ));
+    addAction(m_buildAction);
+
+
     d->mplugin = plugin;
     QVBoxLayout *vbox = new QVBoxLayout( this );
     vbox->setMargin( 0 );
@@ -162,16 +173,28 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     setWhatsThis( i18n( "Project Manager" ) );
     connect( d->m_projectOverview->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
-    selectionChanged();
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
+    selectionChanged();
 }
 
 void ProjectManagerView::selectionChanged()
 {
     d->m_buildView->selectionChanged();
+    m_buildAction->setEnabled( !d->m_projectOverview->selectionModel()->selectedIndexes().isEmpty() );
+}
+
+void ProjectManagerView::buildSelectedItems()
+{
+    foreach( ProjectBaseItem* item, selectedItems() )
+    {
+        if( item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item->project()->projectItem() ) )
+        {
+            ICore::self()->runController()->registerJob( item->project()->buildSystemManager()->builder( item->project()->projectItem() )->build( item ) );
+        }
+    }
 }
 
 void ProjectManagerView::updateSyncAction()
@@ -226,7 +249,7 @@ void ProjectManagerView::locateCurrentDocument()
 
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
-            QModelIndex index = d->m_modelFilter->indexFromItem(item);
+            QModelIndex index = d->m_modelFilter->proxyIndexFromItem(item);
             if (index.isValid()) {
                 d->m_projectOverview->setCurrentIndex(index);
                 d->m_projectOverview->expand(index);

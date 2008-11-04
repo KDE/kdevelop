@@ -23,6 +23,8 @@
 
 #include <QtGui/QWidget>
 
+class KAction;
+
 namespace KDevelop
 {
 class ProjectBaseItem;
@@ -45,6 +47,7 @@ private slots:
     void switchDetailView();
     void locateCurrentDocument();
     void updateSyncAction();
+    void buildSelectedItems();
 private:
     Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
     Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )
@@ -52,7 +55,8 @@ private:
     Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )
 //     Q_PRIVATE_SLOT( d, void filtersChanged() )
     class ProjectManagerPrivate* const d;
-    QAction* m_syncAction;
+    KAction* m_syncAction;
+    KAction* m_buildAction;
 };
 
 #endif // KDEVPROJECTMANAGER_H

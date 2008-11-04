@@ -23,7 +23,8 @@
 #include <QtGui/QSortFilterProxyModel>
 
 namespace KDevelop {
-class ProjectModel; 
+class ProjectModel;
+class ProjectBaseItem;
 }
 
 class QStandardItem;
@@ -33,9 +34,10 @@ class ProjectProxyModel : public QSortFilterProxyModel
     public:
         ProjectProxyModel(QObject *parent);
         bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
-        
-        QModelIndex indexFromItem(QStandardItem* item) const;
-        
+
+        QModelIndex proxyIndexFromItem(QStandardItem* item) const;
+        KDevelop::ProjectBaseItem* itemFromProxyIndex( const QModelIndex& ) const;
+
     private:
         KDevelop::ProjectModel* projectModel() const;
 };
