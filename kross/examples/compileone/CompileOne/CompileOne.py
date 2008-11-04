@@ -13,7 +13,8 @@ def compileCurrent():
 		items=project.filesForUrl(comp)
 		
 		for item in items:
-			buildjob=project.buildSystemManager().builder(item)
+			builder=project.buildSystemManager().builder(item)
+			buildjob=builder.build(item)
 			
 			print "registering: "+str(buildjob)+"\n\n"
 			print "runco:"+ICore.runController().objectName
