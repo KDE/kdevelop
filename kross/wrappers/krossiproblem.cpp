@@ -34,7 +34,7 @@ class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 		KDevelop::Problem* wrapped;
 };
 
-bool krossiproblem_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool iproblem_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -46,10 +46,10 @@ QVariant _kDevelopProblemHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::Problem*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopProblem(t, 0));
 }
-bool b_KDevelopProblem1=krossiproblem_registerHandler("Problem*", _kDevelopProblemHandler);
-bool b_KDevelopProblem=krossiproblem_registerHandler("KDevelop::Problem*", _kDevelopProblemHandler);
+bool b_kDevelopProblem1=iproblem_registerHandler("Problem*", _kDevelopProblemHandler);
+bool b_kDevelopProblem=iproblem_registerHandler("KDevelop::Problem*", _kDevelopProblemHandler);
 QVariant kDevelopProblemHandler(KDevelop::Problem* type){ return _kDevelopProblemHandler(type); }
 QVariant kDevelopProblemHandler(const KDevelop::Problem* type) { return _kDevelopProblemHandler((void*) type); }
 
 }
-#include "krossiproblem.moc"
+#include "iproblem.moc"

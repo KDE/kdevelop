@@ -32,7 +32,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 		KDevelop::IProjectFileManager* wrapped;
 };
 
-bool krossiprojectfilemanager_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool iprojectfilemanager_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -44,10 +44,10 @@ QVariant _kDevelopIProjectFileManagerHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IProjectFileManager*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIProjectFileManager(t, 0));
 }
-bool b_KDevelopIProjectFileManager1=krossiprojectfilemanager_registerHandler("IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
-bool b_KDevelopIProjectFileManager=krossiprojectfilemanager_registerHandler("KDevelop::IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
+bool b_kDevelopIProjectFileManager1=iprojectfilemanager_registerHandler("IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
+bool b_kDevelopIProjectFileManager=iprojectfilemanager_registerHandler("KDevelop::IProjectFileManager*", _kDevelopIProjectFileManagerHandler);
 QVariant kDevelopIProjectFileManagerHandler(KDevelop::IProjectFileManager* type){ return _kDevelopIProjectFileManagerHandler(type); }
 QVariant kDevelopIProjectFileManagerHandler(const KDevelop::IProjectFileManager* type) { return _kDevelopIProjectFileManagerHandler((void*) type); }
 
 }
-#include "krossiprojectfilemanager.moc"
+#include "iprojectfilemanager.moc"

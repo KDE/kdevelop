@@ -39,7 +39,7 @@ class KrossKDevelopVcsLocation : public QObject, public Kross::WrapperInterface
 		KDevelop::VcsLocation* wrapped;
 };
 
-bool krossvcslocation_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool vcslocation_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -51,10 +51,10 @@ QVariant _kDevelopVcsLocationHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::VcsLocation*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopVcsLocation(t, 0));
 }
-bool b_KDevelopVcsLocation1=krossvcslocation_registerHandler("VcsLocation*", _kDevelopVcsLocationHandler);
-bool b_KDevelopVcsLocation=krossvcslocation_registerHandler("KDevelop::VcsLocation*", _kDevelopVcsLocationHandler);
+bool b_kDevelopVcsLocation1=vcslocation_registerHandler("VcsLocation*", _kDevelopVcsLocationHandler);
+bool b_kDevelopVcsLocation=vcslocation_registerHandler("KDevelop::VcsLocation*", _kDevelopVcsLocationHandler);
 QVariant kDevelopVcsLocationHandler(KDevelop::VcsLocation* type){ return _kDevelopVcsLocationHandler(type); }
 QVariant kDevelopVcsLocationHandler(const KDevelop::VcsLocation* type) { return _kDevelopVcsLocationHandler((void*) type); }
 
 }
-#include "krossvcslocation.moc"
+#include "vcslocation.moc"

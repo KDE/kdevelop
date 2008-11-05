@@ -100,6 +100,7 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE int depth() const { return wrapped->depth(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
 		Q_SCRIPTABLE KDevelop::DUContext* findContextAt(const KDevelop::SimpleCursor& x0) const { return wrapped->findContextAt(x0); }
+		Q_SCRIPTABLE KDevelop::Declaration* findDeclarationAt(const KDevelop::SimpleCursor& x0) const { return wrapped->findDeclarationAt(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* findContextIncluding(const KDevelop::SimpleRange& x0) const { return wrapped->findContextIncluding(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier scopeIdentifier(bool x0=false) const { return wrapped->scopeIdentifier(x0); }
 		Q_SCRIPTABLE bool equalScopeIdentifier(const KDevelop::DUContext* x0) const { return wrapped->equalScopeIdentifier(x0); }
@@ -117,6 +118,8 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setPropagateDeclarations(bool x0) { wrapped->setPropagateDeclarations(x0); }
 		Q_SCRIPTABLE bool isPropagateDeclarations() const { return wrapped->isPropagateDeclarations(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
+		Q_SCRIPTABLE const KDevelop::IndexedDUContext* indexedImporters() const { return wrapped->indexedImporters(); }
+		Q_SCRIPTABLE unsigned int indexedImportersSize() const { return wrapped->indexedImportersSize(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > childContexts() const { return wrapped->childContexts(); }
 		Q_SCRIPTABLE void deleteChildContextsRecursively() { wrapped->deleteChildContextsRecursively(); }
 		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }
@@ -195,7 +198,7 @@ class KrossKDevelopDUContextSearchItem : public QObject, public Kross::WrapperIn
 		KDevelop::DUContext::SearchItem* wrapped;
 };
 
-bool krossducontext_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool ducontext_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -207,8 +210,8 @@ QVariant _kDevelopDUContextSearchItemHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::DUContext::SearchItem*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopDUContextSearchItem(t, 0));
 }
-bool b_KDevelopDUContextSearchItem1=krossducontext_registerHandler("DUContext::SearchItem*", _kDevelopDUContextSearchItemHandler);
-bool b_KDevelopDUContextSearchItem=krossducontext_registerHandler("KDevelop::DUContext::SearchItem*", _kDevelopDUContextSearchItemHandler);
+bool b_kDevelopDUContextSearchItem1=ducontext_registerHandler("DUContext::SearchItem*", _kDevelopDUContextSearchItemHandler);
+bool b_kDevelopDUContextSearchItem=ducontext_registerHandler("KDevelop::DUContext::SearchItem*", _kDevelopDUContextSearchItemHandler);
 QVariant kDevelopDUContextSearchItemHandler(KDevelop::DUContext::SearchItem* type){ return _kDevelopDUContextSearchItemHandler(type); }
 QVariant kDevelopDUContextSearchItemHandler(const KDevelop::DUContext::SearchItem* type) { return _kDevelopDUContextSearchItemHandler((void*) type); }
 
@@ -219,8 +222,8 @@ QVariant _kDevelopDUContextImportHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::DUContext::Import*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopDUContextImport(t, 0));
 }
-bool b_KDevelopDUContextImport1=krossducontext_registerHandler("DUContext::Import*", _kDevelopDUContextImportHandler);
-bool b_KDevelopDUContextImport=krossducontext_registerHandler("KDevelop::DUContext::Import*", _kDevelopDUContextImportHandler);
+bool b_kDevelopDUContextImport1=ducontext_registerHandler("DUContext::Import*", _kDevelopDUContextImportHandler);
+bool b_kDevelopDUContextImport=ducontext_registerHandler("KDevelop::DUContext::Import*", _kDevelopDUContextImportHandler);
 QVariant kDevelopDUContextImportHandler(KDevelop::DUContext::Import* type){ return _kDevelopDUContextImportHandler(type); }
 QVariant kDevelopDUContextImportHandler(const KDevelop::DUContext::Import* type) { return _kDevelopDUContextImportHandler((void*) type); }
 
@@ -231,8 +234,8 @@ QVariant _kDevelopDUContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::DUContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopDUContext(t, 0));
 }
-bool b_KDevelopDUContext1=krossducontext_registerHandler("DUContext*", _kDevelopDUContextHandler);
-bool b_KDevelopDUContext=krossducontext_registerHandler("KDevelop::DUContext*", _kDevelopDUContextHandler);
+bool b_kDevelopDUContext1=ducontext_registerHandler("DUContext*", _kDevelopDUContextHandler);
+bool b_kDevelopDUContext=ducontext_registerHandler("KDevelop::DUContext*", _kDevelopDUContextHandler);
 QVariant kDevelopDUContextHandler(KDevelop::DUContext* type){ return _kDevelopDUContextHandler(type); }
 QVariant kDevelopDUContextHandler(const KDevelop::DUContext* type) { return _kDevelopDUContextHandler((void*) type); }
 
@@ -243,8 +246,8 @@ QVariant _kDevelopImportTraceHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ImportTrace*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopImportTrace(t, 0));
 }
-bool b_KDevelopImportTrace1=krossducontext_registerHandler("ImportTrace*", _kDevelopImportTraceHandler);
-bool b_KDevelopImportTrace=krossducontext_registerHandler("KDevelop::ImportTrace*", _kDevelopImportTraceHandler);
+bool b_kDevelopImportTrace1=ducontext_registerHandler("ImportTrace*", _kDevelopImportTraceHandler);
+bool b_kDevelopImportTrace=ducontext_registerHandler("KDevelop::ImportTrace*", _kDevelopImportTraceHandler);
 QVariant kDevelopImportTraceHandler(KDevelop::ImportTrace* type){ return _kDevelopImportTraceHandler(type); }
 QVariant kDevelopImportTraceHandler(const KDevelop::ImportTrace* type) { return _kDevelopImportTraceHandler((void*) type); }
 
@@ -255,8 +258,8 @@ QVariant _kDevelopImportTraceItemHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ImportTraceItem*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopImportTraceItem(t, 0));
 }
-bool b_KDevelopImportTraceItem1=krossducontext_registerHandler("ImportTraceItem*", _kDevelopImportTraceItemHandler);
-bool b_KDevelopImportTraceItem=krossducontext_registerHandler("KDevelop::ImportTraceItem*", _kDevelopImportTraceItemHandler);
+bool b_kDevelopImportTraceItem1=ducontext_registerHandler("ImportTraceItem*", _kDevelopImportTraceItemHandler);
+bool b_kDevelopImportTraceItem=ducontext_registerHandler("KDevelop::ImportTraceItem*", _kDevelopImportTraceItemHandler);
 QVariant kDevelopImportTraceItemHandler(KDevelop::ImportTraceItem* type){ return _kDevelopImportTraceItemHandler(type); }
 QVariant kDevelopImportTraceItemHandler(const KDevelop::ImportTraceItem* type) { return _kDevelopImportTraceItemHandler((void*) type); }
 
@@ -267,8 +270,8 @@ QVariant _kDevelopLocalIndexedDUContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::LocalIndexedDUContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopLocalIndexedDUContext(t, 0));
 }
-bool b_KDevelopLocalIndexedDUContext1=krossducontext_registerHandler("LocalIndexedDUContext*", _kDevelopLocalIndexedDUContextHandler);
-bool b_KDevelopLocalIndexedDUContext=krossducontext_registerHandler("KDevelop::LocalIndexedDUContext*", _kDevelopLocalIndexedDUContextHandler);
+bool b_kDevelopLocalIndexedDUContext1=ducontext_registerHandler("LocalIndexedDUContext*", _kDevelopLocalIndexedDUContextHandler);
+bool b_kDevelopLocalIndexedDUContext=ducontext_registerHandler("KDevelop::LocalIndexedDUContext*", _kDevelopLocalIndexedDUContextHandler);
 QVariant kDevelopLocalIndexedDUContextHandler(KDevelop::LocalIndexedDUContext* type){ return _kDevelopLocalIndexedDUContextHandler(type); }
 QVariant kDevelopLocalIndexedDUContextHandler(const KDevelop::LocalIndexedDUContext* type) { return _kDevelopLocalIndexedDUContextHandler((void*) type); }
 
@@ -279,10 +282,10 @@ QVariant _kDevelopIndexedDUContextHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IndexedDUContext*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIndexedDUContext(t, 0));
 }
-bool b_KDevelopIndexedDUContext1=krossducontext_registerHandler("IndexedDUContext*", _kDevelopIndexedDUContextHandler);
-bool b_KDevelopIndexedDUContext=krossducontext_registerHandler("KDevelop::IndexedDUContext*", _kDevelopIndexedDUContextHandler);
+bool b_kDevelopIndexedDUContext1=ducontext_registerHandler("IndexedDUContext*", _kDevelopIndexedDUContextHandler);
+bool b_kDevelopIndexedDUContext=ducontext_registerHandler("KDevelop::IndexedDUContext*", _kDevelopIndexedDUContextHandler);
 QVariant kDevelopIndexedDUContextHandler(KDevelop::IndexedDUContext* type){ return _kDevelopIndexedDUContextHandler(type); }
 QVariant kDevelopIndexedDUContextHandler(const KDevelop::IndexedDUContext* type) { return _kDevelopIndexedDUContextHandler((void*) type); }
 
 }
-#include "krossducontext.moc"
+#include "ducontext.moc"

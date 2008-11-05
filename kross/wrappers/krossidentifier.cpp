@@ -165,7 +165,7 @@ class KrossKDevelopTypeIdentifier : public KrossKDevelopQualifiedIdentifier
 		KDevelop::TypeIdentifier* wrapped;
 };
 
-bool krossidentifier_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool identifier_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -177,8 +177,8 @@ QVariant _kDevelopTypeIdentifierHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::TypeIdentifier*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopTypeIdentifier(t, 0));
 }
-bool b_KDevelopTypeIdentifier1=krossidentifier_registerHandler("TypeIdentifier*", _kDevelopTypeIdentifierHandler);
-bool b_KDevelopTypeIdentifier=krossidentifier_registerHandler("KDevelop::TypeIdentifier*", _kDevelopTypeIdentifierHandler);
+bool b_kDevelopTypeIdentifier1=identifier_registerHandler("TypeIdentifier*", _kDevelopTypeIdentifierHandler);
+bool b_kDevelopTypeIdentifier=identifier_registerHandler("KDevelop::TypeIdentifier*", _kDevelopTypeIdentifierHandler);
 QVariant kDevelopTypeIdentifierHandler(KDevelop::TypeIdentifier* type){ return _kDevelopTypeIdentifierHandler(type); }
 QVariant kDevelopTypeIdentifierHandler(const KDevelop::TypeIdentifier* type) { return _kDevelopTypeIdentifierHandler((void*) type); }
 
@@ -190,8 +190,8 @@ QVariant _kDevelopQualifiedIdentifierHandler(void* type)
 	if(dynamic_cast<KDevelop::TypeIdentifier*>(t)) return _kDevelopTypeIdentifierHandler(type);
 	else return qVariantFromValue((QObject*) new KrossKDevelopQualifiedIdentifier(t, 0));
 }
-bool b_KDevelopQualifiedIdentifier1=krossidentifier_registerHandler("QualifiedIdentifier*", _kDevelopQualifiedIdentifierHandler);
-bool b_KDevelopQualifiedIdentifier=krossidentifier_registerHandler("KDevelop::QualifiedIdentifier*", _kDevelopQualifiedIdentifierHandler);
+bool b_kDevelopQualifiedIdentifier1=identifier_registerHandler("QualifiedIdentifier*", _kDevelopQualifiedIdentifierHandler);
+bool b_kDevelopQualifiedIdentifier=identifier_registerHandler("KDevelop::QualifiedIdentifier*", _kDevelopQualifiedIdentifierHandler);
 QVariant kDevelopQualifiedIdentifierHandler(KDevelop::QualifiedIdentifier* type){ return _kDevelopQualifiedIdentifierHandler(type); }
 QVariant kDevelopQualifiedIdentifierHandler(const KDevelop::QualifiedIdentifier* type) { return _kDevelopQualifiedIdentifierHandler((void*) type); }
 
@@ -202,8 +202,8 @@ QVariant _kDevelopIdentifierHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::Identifier*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIdentifier(t, 0));
 }
-bool b_KDevelopIdentifier1=krossidentifier_registerHandler("Identifier*", _kDevelopIdentifierHandler);
-bool b_KDevelopIdentifier=krossidentifier_registerHandler("KDevelop::Identifier*", _kDevelopIdentifierHandler);
+bool b_kDevelopIdentifier1=identifier_registerHandler("Identifier*", _kDevelopIdentifierHandler);
+bool b_kDevelopIdentifier=identifier_registerHandler("KDevelop::Identifier*", _kDevelopIdentifierHandler);
 QVariant kDevelopIdentifierHandler(KDevelop::Identifier* type){ return _kDevelopIdentifierHandler(type); }
 QVariant kDevelopIdentifierHandler(const KDevelop::Identifier* type) { return _kDevelopIdentifierHandler((void*) type); }
 
@@ -214,8 +214,8 @@ QVariant _kDevelopIndexedTypeIdentifierHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IndexedTypeIdentifier*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIndexedTypeIdentifier(t, 0));
 }
-bool b_KDevelopIndexedTypeIdentifier1=krossidentifier_registerHandler("IndexedTypeIdentifier*", _kDevelopIndexedTypeIdentifierHandler);
-bool b_KDevelopIndexedTypeIdentifier=krossidentifier_registerHandler("KDevelop::IndexedTypeIdentifier*", _kDevelopIndexedTypeIdentifierHandler);
+bool b_kDevelopIndexedTypeIdentifier1=identifier_registerHandler("IndexedTypeIdentifier*", _kDevelopIndexedTypeIdentifierHandler);
+bool b_kDevelopIndexedTypeIdentifier=identifier_registerHandler("KDevelop::IndexedTypeIdentifier*", _kDevelopIndexedTypeIdentifierHandler);
 QVariant kDevelopIndexedTypeIdentifierHandler(KDevelop::IndexedTypeIdentifier* type){ return _kDevelopIndexedTypeIdentifierHandler(type); }
 QVariant kDevelopIndexedTypeIdentifierHandler(const KDevelop::IndexedTypeIdentifier* type) { return _kDevelopIndexedTypeIdentifierHandler((void*) type); }
 
@@ -226,8 +226,8 @@ QVariant _kDevelopIndexedQualifiedIdentifierHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IndexedQualifiedIdentifier*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIndexedQualifiedIdentifier(t, 0));
 }
-bool b_KDevelopIndexedQualifiedIdentifier1=krossidentifier_registerHandler("IndexedQualifiedIdentifier*", _kDevelopIndexedQualifiedIdentifierHandler);
-bool b_KDevelopIndexedQualifiedIdentifier=krossidentifier_registerHandler("KDevelop::IndexedQualifiedIdentifier*", _kDevelopIndexedQualifiedIdentifierHandler);
+bool b_kDevelopIndexedQualifiedIdentifier1=identifier_registerHandler("IndexedQualifiedIdentifier*", _kDevelopIndexedQualifiedIdentifierHandler);
+bool b_kDevelopIndexedQualifiedIdentifier=identifier_registerHandler("KDevelop::IndexedQualifiedIdentifier*", _kDevelopIndexedQualifiedIdentifierHandler);
 QVariant kDevelopIndexedQualifiedIdentifierHandler(KDevelop::IndexedQualifiedIdentifier* type){ return _kDevelopIndexedQualifiedIdentifierHandler(type); }
 QVariant kDevelopIndexedQualifiedIdentifierHandler(const KDevelop::IndexedQualifiedIdentifier* type) { return _kDevelopIndexedQualifiedIdentifierHandler((void*) type); }
 
@@ -238,10 +238,10 @@ QVariant _kDevelopIndexedIdentifierHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IndexedIdentifier*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIndexedIdentifier(t, 0));
 }
-bool b_KDevelopIndexedIdentifier1=krossidentifier_registerHandler("IndexedIdentifier*", _kDevelopIndexedIdentifierHandler);
-bool b_KDevelopIndexedIdentifier=krossidentifier_registerHandler("KDevelop::IndexedIdentifier*", _kDevelopIndexedIdentifierHandler);
+bool b_kDevelopIndexedIdentifier1=identifier_registerHandler("IndexedIdentifier*", _kDevelopIndexedIdentifierHandler);
+bool b_kDevelopIndexedIdentifier=identifier_registerHandler("KDevelop::IndexedIdentifier*", _kDevelopIndexedIdentifierHandler);
 QVariant kDevelopIndexedIdentifierHandler(KDevelop::IndexedIdentifier* type){ return _kDevelopIndexedIdentifierHandler(type); }
 QVariant kDevelopIndexedIdentifierHandler(const KDevelop::IndexedIdentifier* type) { return _kDevelopIndexedIdentifierHandler((void*) type); }
 
 }
-#include "krossidentifier.moc"
+#include "identifier.moc"

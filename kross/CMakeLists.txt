@@ -11,62 +11,43 @@ if(KDEVCPPDUCHAIN)
     endforeach(inc)
     
     add_custom_target(krossWrappers)
-    macro(kdev_create_kross_iface interface output includes)
-        get_filename_component(weFile ${output} NAME_WE)
-        get_filename_component(outPath ${output} PATH)
-        get_filename_component(ifacePath ${interface} PATH)
+    macro(kdev_create_kross_iface interface includes)
+        get_filename_component(weFile ${interface} NAME_WE)
+        set(outPath ${CMAKE_SOURCE_DIR}/kross/wrappers/)
+        get_filename_component(ifacePath interface PATH)
         
         add_custom_target(${weFile}
                             ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross --impl ${interface}
-                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath} -o ${output} 
+                                -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath}
+                                -o${CMAKE_SOURCE_DIR}/kross/wrappers/kross${weFile}.cpp
                             DEPENDS ${interface} xmltokross/duchaintokross )
         add_dependencies(krossWrappers ${weFile})
-        set(mocFile ${weFile}.moc)
-        qt4_generate_moc( ${output} ${CMAKE_CURRENT_BINARY_DIR}/${mocFile})
     endmacro(kdev_create_kross_iface)
 
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/idocument.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossidocument.cpp interfaces/idocument.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/iuicontroller.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiuicontroller.cpp interfaces/iuicontroller.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/context.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontext.cpp interfaces/context.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/contextmenuextension.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosscontextmenuextension.cpp interfaces/contextmenuextension.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/projectmodel.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossprojectmodel.cpp project/projectmodel.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcsrevision.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcsrevision.cpp vcs/vcsrevision.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcslocation.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossvcslocation.cpp vcs/vcslocation.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/ilanguage.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossilanguage.cpp interfaces/ilanguage.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/idocument.h interfaces/idocument.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/iuicontroller.h interfaces/iuicontroller.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/context.h interfaces/context.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/contextmenuextension.h interfaces/contextmenuextension.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/projectmodel.h project/projectmodel.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcsrevision.h vcs/vcsrevision.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/vcs/vcslocation.h vcs/vcslocation.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/ilanguage.h interfaces/ilanguage.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/topducontext.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosstopducontext.cpp
         language/duchain/topducontext.h:language/duchain/parsingenvironment.h:language/interfaces/iproblem.h:language/editor/simplecursor.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/ducontext.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossducontext.cpp language/duchain/ducontext.h:language/duchain/topducontext.h)
+        language/duchain/ducontext.h:language/duchain/topducontext.h)
     kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/declaration.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossdeclaration.cpp language/duchain/declaration.h:language/duchain/declarationid.h:language/duchain/types/indexedtype.h:language/duchain/topducontext.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/iproblem.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiproblem.cpp language/interfaces/iproblem.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/use.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossuse.cpp language/duchain/use.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/identifier.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossidentifier.cpp language/duchain/identifier.h:language/duchain/indexedstring.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/duchainlock.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossduchainlock.cpp language/duchain/duchainlock.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/ibuildsystemmanager.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossibuildsystemmanager.cpp project/interfaces/ibuildsystemmanager.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectfilemanager.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectfilemanager.cpp project/interfaces/iprojectfilemanager.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectbuilder.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossiprojectbuilder.cpp project/interfaces/iprojectbuilder.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/irun.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krossirun.cpp interfaces/irun.h)
-    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/editorcontext.h
-        ${CMAKE_SOURCE_DIR}/kross/wrappers/krosseditorcontext.cpp language/interfaces/editorcontext.h)
-
+        language/duchain/declaration.h:language/duchain/declarationid.h:language/duchain/types/indexedtype.h:language/duchain/topducontext.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/iproblem.h language/interfaces/iproblem.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/use.h language/duchain/use.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/identifier.h language/duchain/identifier.h:language/duchain/indexedstring.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/duchain/duchainlock.h language/duchain/duchainlock.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/ibuildsystemmanager.h project/interfaces/ibuildsystemmanager.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectfilemanager.h project/interfaces/iprojectfilemanager.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/project/interfaces/iprojectbuilder.h project/interfaces/iprojectbuilder.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/interfaces/irun.h interfaces/irun.h)
+    kdev_create_kross_iface(${CMAKE_SOURCE_DIR}/language/interfaces/editorcontext.h language/interfaces/editorcontext.h)
+    kdev_create_kross_iface(${QT_QTGUI_INCLUDE_DIR}/qtoolbar.h QToolBar)
         
 else(KDEVCPPDUCHAIN)
     message(STATUS "You can't generate interfaces without specifying KDEVCPPDUCHAIN in the cache.")
@@ -97,6 +78,7 @@ set(kdevkrossplugin_SRCS
     wrappers/krossiprojectfilemanager.cpp
     wrappers/krossiprojectbuilder.cpp
     wrappers/krossirun.cpp
+    wrappers/krosseditorcontext.cpp
 )
 
 kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})

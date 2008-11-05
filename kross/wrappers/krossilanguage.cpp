@@ -22,7 +22,7 @@ class KrossKDevelopILanguage : public QObject, public Kross::WrapperInterface
 		KDevelop::ILanguage* wrapped;
 };
 
-bool krossilanguage_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool ilanguage_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -34,10 +34,10 @@ QVariant _kDevelopILanguageHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ILanguage*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopILanguage(t, 0));
 }
-bool b_KDevelopILanguage1=krossilanguage_registerHandler("ILanguage*", _kDevelopILanguageHandler);
-bool b_KDevelopILanguage=krossilanguage_registerHandler("KDevelop::ILanguage*", _kDevelopILanguageHandler);
+bool b_kDevelopILanguage1=ilanguage_registerHandler("ILanguage*", _kDevelopILanguageHandler);
+bool b_kDevelopILanguage=ilanguage_registerHandler("KDevelop::ILanguage*", _kDevelopILanguageHandler);
 QVariant kDevelopILanguageHandler(KDevelop::ILanguage* type){ return _kDevelopILanguageHandler(type); }
 QVariant kDevelopILanguageHandler(const KDevelop::ILanguage* type) { return _kDevelopILanguageHandler((void*) type); }
 
 }
-#include "krossilanguage.moc"
+#include "ilanguage.moc"

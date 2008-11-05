@@ -37,7 +37,7 @@ class KrossKDevelopIRun : public QObject, public Kross::WrapperInterface
 		KDevelop::IRun* wrapped;
 };
 
-bool krossirun_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool irun_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -49,10 +49,10 @@ QVariant _kDevelopIRunHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IRun*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIRun(t, 0));
 }
-bool b_KDevelopIRun1=krossirun_registerHandler("IRun*", _kDevelopIRunHandler);
-bool b_KDevelopIRun=krossirun_registerHandler("KDevelop::IRun*", _kDevelopIRunHandler);
+bool b_kDevelopIRun1=irun_registerHandler("IRun*", _kDevelopIRunHandler);
+bool b_kDevelopIRun=irun_registerHandler("KDevelop::IRun*", _kDevelopIRunHandler);
 QVariant kDevelopIRunHandler(KDevelop::IRun* type){ return _kDevelopIRunHandler(type); }
 QVariant kDevelopIRunHandler(const KDevelop::IRun* type) { return _kDevelopIRunHandler((void*) type); }
 
 }
-#include "krossirun.moc"
+#include "irun.moc"
