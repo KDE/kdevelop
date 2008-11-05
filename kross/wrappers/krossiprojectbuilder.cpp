@@ -22,7 +22,7 @@ class KrossKDevelopIProjectBuilder : public QObject, public Kross::WrapperInterf
 		KDevelop::IProjectBuilder* wrapped;
 };
 
-bool iprojectbuilder_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool krossiprojectbuilder_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -34,10 +34,10 @@ QVariant _kDevelopIProjectBuilderHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IProjectBuilder*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIProjectBuilder(t, 0));
 }
-bool b_kDevelopIProjectBuilder1=iprojectbuilder_registerHandler("IProjectBuilder*", _kDevelopIProjectBuilderHandler);
-bool b_kDevelopIProjectBuilder=iprojectbuilder_registerHandler("KDevelop::IProjectBuilder*", _kDevelopIProjectBuilderHandler);
+bool b_KDevelopIProjectBuilder1=krossiprojectbuilder_registerHandler("IProjectBuilder*", _kDevelopIProjectBuilderHandler);
+bool b_KDevelopIProjectBuilder=krossiprojectbuilder_registerHandler("KDevelop::IProjectBuilder*", _kDevelopIProjectBuilderHandler);
 QVariant kDevelopIProjectBuilderHandler(KDevelop::IProjectBuilder* type){ return _kDevelopIProjectBuilderHandler(type); }
 QVariant kDevelopIProjectBuilderHandler(const KDevelop::IProjectBuilder* type) { return _kDevelopIProjectBuilderHandler((void*) type); }
 
 }
-#include "iprojectbuilder.moc"
+#include "krossiprojectbuilder.moc"

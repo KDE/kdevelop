@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import IPlugin, ICore, Kross, DUChain
+import IPlugin
+import ICore
+import Kross
+import DUChain
 from urlparse import urlparse
 
 forms=Kross.module("forms")
@@ -27,6 +30,7 @@ def contextMenuExtension(ctx, cme):
 		cme.addAction(cme.ExtensionGroup, act)
 
 
-act=forms.createAction(0)
+act=forms.createAction(ICore.uiController().activeMainWindow())
 act.text="Compile this file"
+act.shortcut="Shift+F10"
 act.connect("triggered()", compileCurrent)

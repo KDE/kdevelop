@@ -32,7 +32,7 @@ class KrossKDevelopVcsRevision : public QObject, public Kross::WrapperInterface
 		KDevelop::VcsRevision* wrapped;
 };
 
-bool vcsrevision_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool krossvcsrevision_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -44,10 +44,10 @@ QVariant _kDevelopVcsRevisionHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::VcsRevision*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopVcsRevision(t, 0));
 }
-bool b_kDevelopVcsRevision1=vcsrevision_registerHandler("VcsRevision*", _kDevelopVcsRevisionHandler);
-bool b_kDevelopVcsRevision=vcsrevision_registerHandler("KDevelop::VcsRevision*", _kDevelopVcsRevisionHandler);
+bool b_KDevelopVcsRevision1=krossvcsrevision_registerHandler("VcsRevision*", _kDevelopVcsRevisionHandler);
+bool b_KDevelopVcsRevision=krossvcsrevision_registerHandler("KDevelop::VcsRevision*", _kDevelopVcsRevisionHandler);
 QVariant kDevelopVcsRevisionHandler(KDevelop::VcsRevision* type){ return _kDevelopVcsRevisionHandler(type); }
 QVariant kDevelopVcsRevisionHandler(const KDevelop::VcsRevision* type) { return _kDevelopVcsRevisionHandler((void*) type); }
 
 }
-#include "vcsrevision.moc"
+#include "krossvcsrevision.moc"

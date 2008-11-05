@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import IPlugin, ICore, Kross
 from urlparse import urlparse
 

@@ -42,7 +42,7 @@ class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 		KDevelop::IDocument* wrapped;
 };
 
-bool idocument_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool krossidocument_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -54,10 +54,10 @@ QVariant _kDevelopIDocumentHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IDocument*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIDocument(t, 0));
 }
-bool b_kDevelopIDocument1=idocument_registerHandler("IDocument*", _kDevelopIDocumentHandler);
-bool b_kDevelopIDocument=idocument_registerHandler("KDevelop::IDocument*", _kDevelopIDocumentHandler);
+bool b_KDevelopIDocument1=krossidocument_registerHandler("IDocument*", _kDevelopIDocumentHandler);
+bool b_KDevelopIDocument=krossidocument_registerHandler("KDevelop::IDocument*", _kDevelopIDocumentHandler);
 QVariant kDevelopIDocumentHandler(KDevelop::IDocument* type){ return _kDevelopIDocumentHandler(type); }
 QVariant kDevelopIDocumentHandler(const KDevelop::IDocument* type) { return _kDevelopIDocumentHandler((void*) type); }
 
 }
-#include "idocument.moc"
+#include "krossidocument.moc"

@@ -31,7 +31,7 @@ class KrossKDevelopIBuildSystemManager : public QObject, public Kross::WrapperIn
 		KDevelop::IBuildSystemManager* wrapped;
 };
 
-bool ibuildsystemmanager_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool krossibuildsystemmanager_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -43,10 +43,10 @@ QVariant _kDevelopIBuildSystemManagerHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::IBuildSystemManager*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopIBuildSystemManager(t, 0));
 }
-bool b_kDevelopIBuildSystemManager1=ibuildsystemmanager_registerHandler("IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
-bool b_kDevelopIBuildSystemManager=ibuildsystemmanager_registerHandler("KDevelop::IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
+bool b_KDevelopIBuildSystemManager1=krossibuildsystemmanager_registerHandler("IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
+bool b_KDevelopIBuildSystemManager=krossibuildsystemmanager_registerHandler("KDevelop::IBuildSystemManager*", _kDevelopIBuildSystemManagerHandler);
 QVariant kDevelopIBuildSystemManagerHandler(KDevelop::IBuildSystemManager* type){ return _kDevelopIBuildSystemManagerHandler(type); }
 QVariant kDevelopIBuildSystemManagerHandler(const KDevelop::IBuildSystemManager* type) { return _kDevelopIBuildSystemManagerHandler((void*) type); }
 
 }
-#include "ibuildsystemmanager.moc"
+#include "krossibuildsystemmanager.moc"

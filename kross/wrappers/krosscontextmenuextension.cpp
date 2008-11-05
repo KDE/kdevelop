@@ -39,7 +39,7 @@ class KrossKDevelopContextMenuExtension : public QObject, public Kross::WrapperI
 		KDevelop::ContextMenuExtension* wrapped;
 };
 
-bool contextmenuextension_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
+bool krosscontextmenuextension_registerHandler(const QByteArray& name, Kross::MetaTypeHandler::FunctionPtr* handler)
 { Kross::Manager::self().registerMetaTypeHandler(name, handler); return false; }
 
 namespace Handlers
@@ -51,10 +51,10 @@ QVariant _kDevelopContextMenuExtensionHandler(void* type)
 	Q_ASSERT(dynamic_cast<KDevelop::ContextMenuExtension*>(t));
 	return qVariantFromValue((QObject*) new KrossKDevelopContextMenuExtension(t, 0));
 }
-bool b_kDevelopContextMenuExtension1=contextmenuextension_registerHandler("ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
-bool b_kDevelopContextMenuExtension=contextmenuextension_registerHandler("KDevelop::ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
+bool b_KDevelopContextMenuExtension1=krosscontextmenuextension_registerHandler("ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
+bool b_KDevelopContextMenuExtension=krosscontextmenuextension_registerHandler("KDevelop::ContextMenuExtension*", _kDevelopContextMenuExtensionHandler);
 QVariant kDevelopContextMenuExtensionHandler(KDevelop::ContextMenuExtension* type){ return _kDevelopContextMenuExtensionHandler(type); }
 QVariant kDevelopContextMenuExtensionHandler(const KDevelop::ContextMenuExtension* type) { return _kDevelopContextMenuExtensionHandler((void*) type); }
 
 }
-#include "contextmenuextension.moc"
+#include "krosscontextmenuextension.moc"
