@@ -79,6 +79,8 @@ private:
     QtDesignerToolViewFactory* m_propertyEditorFactory;
     QtDesignerToolViewFactory* m_objectInspectorFactory;
     QtDesignerToolViewFactory* m_actionEditorFactory;
+    QtDesignerToolViewFactory*  m_signalSlotEditorFactory;
+    QtDesignerToolViewFactory*  m_resourceEditorFactory;
 };
 
 #endif // QTDESIGNER_PART_H

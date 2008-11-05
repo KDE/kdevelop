@@ -86,7 +86,9 @@ public:
         WidgetBox,
         PropertyEditor,
         ActionEditor,
-        ObjectInspector
+        ObjectInspector,
+        SignalSlotEditor,
+        ResourceEditor
     };
     QtDesignerToolViewFactory( QtDesignerPlugin* plugin, Type typ )
         : IToolViewFactory(), m_plugin(plugin), m_type(typ)
@@ -103,6 +105,10 @@ public:
             return m_plugin->designer()->actionEditor();
         else if( m_type == ObjectInspector )
             return m_plugin->designer()->objectInspector();
+        else if( m_type == SignalSlotEditor )
+            return QDesignerComponents::createSignalSlotEditor(m_plugin->designer(), 0);
+        else if( m_type == ResourceEditor )
+            return QDesignerComponents::createResourceEditor(m_plugin->designer(), 0);
         kDebug(9038) << "Type not found:" << m_type;
         return 0;
     }
@@ -116,6 +122,10 @@ public:
             return Qt::RightDockWidgetArea;
         else if( m_type == ObjectInspector )
             return Qt::RightDockWidgetArea;
+        else if( m_type == SignalSlotEditor )
+            return Qt::BottomDockWidgetArea;
+        else if( m_type == ResourceEditor )
+            return Qt::BottomDockWidgetArea;
         kDebug(9038) << "Type not found:" << m_type;
         return Qt::TopDockWidgetArea;
     }
@@ -130,6 +140,10 @@ public:
             return "org.kevelop.qtdesigner.ActionEditor";
         else if( m_type == ObjectInspector )
             return "org.kevelop.qtdesigner.ObjectInspector";
+        else if( m_type == SignalSlotEditor )
+            return "org.kevelop.qtdesigner.SignalSlotEditor";
+        else if( m_type == ResourceEditor )
+            return "org.kevelop.qtdesigner.ResourceEditor";
         return QString();
     }
 
@@ -195,10 +209,17 @@ QtDesignerPlugin::QtDesignerPlugin(QObject *parent, const QVariantList &args)
             QtDesignerToolViewFactory::ActionEditor);
     m_objectInspectorFactory = new QtDesignerToolViewFactory( this,
             QtDesignerToolViewFactory::ObjectInspector);
+    m_signalSlotEditorFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::SignalSlotEditor);
+    m_resourceEditorFactory = new QtDesignerToolViewFactory( this,
+            QtDesignerToolViewFactory::ResourceEditor);
+
     core()->uiController()->addToolView("Widget Box", m_widgetBoxFactory );
     core()->uiController()->addToolView("Property Editor", m_propertyEditorFactory );
     core()->uiController()->addToolView("Action Editor", m_actionEditorFactory );
     core()->uiController()->addToolView("Object Inspector", m_objectInspectorFactory );
+    core()->uiController()->addToolView("Signal/Slot Editor", m_signalSlotEditorFactory );
+    core()->uiController()->addToolView("Resource Editor", m_resourceEditorFactory );
 
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("application/x-designer", m_docFactory);
