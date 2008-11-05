@@ -644,6 +644,9 @@ void ContextBrowserView::allowLockedUpdate() {
 }
 
 void ContextBrowserView::setContext(KDevelop::DUContext* context) {
+    if(!context)
+        return;
+    
     m_lastUsedTopContext = IndexedTopDUContext(context->topContext());
     
     if(context->owner()) {
