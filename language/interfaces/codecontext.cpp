@@ -59,7 +59,7 @@ DUContextContext::~DUContextContext()
 
 int DUContextContext::type() const
 {
-    return Context::EditorContext;
+    return Context::CodeContext;
 }
 
 IndexedDUContext DUContextContext::context() const
@@ -100,6 +100,7 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cur
             if(use != -1) {
                 //Found a use under the cursor:
                 useRange = DocumentRange(HashedString(specific->url().str()), specific->uses()[use].m_range.textRange());
+                declaration = IndexedDeclaration(specific->topContext()->usedDeclarationForIndex( specific->uses()[use].m_declarationIndex ));
             }else{
                 declaration = IndexedDeclaration(specific->findDeclarationAt(SimpleCursor(position)));
             }
