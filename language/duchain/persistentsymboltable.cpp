@@ -473,10 +473,6 @@ void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint&
   }
 }
 
-uint qHash(IndexedDeclaration decl) {
-  return decl.hash();
-}
-
 struct Visitor {
   bool operator() (const PersistentSymbolTableItem* item) {
     QualifiedIdentifier id(item->id.identifier());

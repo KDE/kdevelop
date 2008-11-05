@@ -566,6 +566,9 @@ private:
   int m_indexInTopContext;
 };
 
+inline uint qHash(const IndexedDeclaration& decl) {
+  return decl.hash();
+}
 }
 
 #endif // DECLARATION_H
