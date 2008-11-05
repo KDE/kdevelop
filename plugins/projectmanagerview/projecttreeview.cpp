@@ -65,7 +65,7 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
     setContextMenuPolicy( Qt::CustomContextMenu );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    setIndentation(15);
+    setIndentation(10);
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
     if( style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this) == KGlobalSettings::singleClick() )
