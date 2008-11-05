@@ -35,6 +35,8 @@ set(kdevcpplanguagesupport_PART_SRCS
     missingincludecompletionitem.cpp
 
     codegen/cppnewclass.cpp
+    codegen/simplerefactoring.cpp
+    codegen/progressdialogs.cpp
 )
 
 

@@ -92,6 +92,7 @@
 #include "setuphelpers.h"
 #include "quickopen.h"
 #include "cppdebughelper.h"
+#include "codegen/simplerefactoring.h"
 
 #define DEBUG_INCLUDE_PATHS 1
 
@@ -130,6 +131,7 @@ KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop
     ContextMenuExtension cm;
     m_stubAction->appendTo(cm, context);
     m_uutAction->appendTo(cm, context);
+    SimpleRefactoring::self().doContextMenu(cm, context);
     return cm;
 }
 
