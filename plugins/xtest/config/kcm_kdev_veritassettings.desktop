@@ -19,6 +19,7 @@ Name[uk]=Тест
 Name[x-test]=xxTestxx
 Name[zh_TW]=測試
 Comment=Configure Test settings
+Comment[de]=Test-Einstellungen
 Comment[el]=Ρύθμιση επιλογών δοκιμής
 Comment[gl]=Configura os parámetros da proba
 Comment[nds]=Test instellen
