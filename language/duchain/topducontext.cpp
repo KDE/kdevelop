@@ -98,27 +98,27 @@ IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
   if(context)
     m_index = context->ownIndex();
   else
-    m_index = 0;
+    m_index = DummyMask;
 }
 
 bool IndexedTopDUContext::isLoaded() const {
-  if(m_index)
-    return DUChain::self()->isInMemory(m_index);
+  if(index())
+    return DUChain::self()->isInMemory(index());
   else
     return false;
 }
 
 IndexedString IndexedTopDUContext::url() const {
-  if(m_index)
-    return DUChain::self()->urlForIndex(m_index);
+  if(index())
+    return DUChain::self()->urlForIndex(index());
   else
     return IndexedString();
 }
 
 TopDUContext* IndexedTopDUContext::data() const {
 //   ENSURE_CHAIN_READ_LOCKED
-  if(m_index)
-    return DUChain::self()->chainForIndex(m_index);
+  if(index())
+    return DUChain::self()->chainForIndex(index());
   else
     return 0;
 }
@@ -1360,6 +1360,9 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   }else{
     ENSURE_CAN_READ
   }
+  
+if(!declaration)
+  return std::numeric_limits<int>::max();
   
   if(declaration->topContext() == this) {
     uint index = declaration->ownIndex();

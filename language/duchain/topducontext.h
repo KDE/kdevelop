@@ -22,6 +22,7 @@
 #include <QtCore/QMutex>
 
 #include "ducontext.h"
+#include <util/convenientfreelist.h>
 
 template< class T >
 class KSharedPtr;
@@ -90,8 +91,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
   public:
     IndexedTopDUContext(uint index) : m_index(index) {
+      if(!index)
+        setIsDummy(true);
     }
     IndexedTopDUContext(TopDUContext* context = 0);
+    
+    enum {
+      DummyMask = 1<<31
+    };
     
     ///Returns the top-context represented by this indexed top-context. If it wasn't loaded yet, it is loaded.
     ///The duchain must be read-locked when this is called!
@@ -107,14 +114,93 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     bool operator!=(const IndexedTopDUContext& rhs) const {
       return m_index != rhs.m_index;
     }
+    
+    bool operator<(const IndexedTopDUContext& rhs) const {
+      return m_index < rhs.m_index;
+    }
+    
     uint index() const {
-      return m_index;
+      if(isDummy())
+        return 0;
+      else
+        return m_index;
+    }
+    
+    bool isDummy() const {
+      return m_index & DummyMask;
+    }
+    
+    void setIsDummy(bool isDummy) {
+      if(isDummy)
+        m_index |= DummyMask;
+      else
+        m_index &= ~((uint)DummyMask);
+    }
+    
+    ///Allows giving this IndexedTopDUContext some data while logically keeping it invalid.
+    ///It will still return zero on index(), data(), etc.
+    ///@param first The highest of this value bit will be removed
+    void setDummyData(ushort first, ushort second) {
+      Q_ASSERT(isDummy());
+      m_index = ((((uint)first)<<16) + second) | DummyMask;
+    }
+
+    ///The data previously set through setDummyData(). Initially 0.
+    QPair<ushort, ushort> dummyData() const {
+      uint withoutMask = m_index & (~((uint)DummyMask));
+      return qMakePair((ushort)(withoutMask >> 16), (ushort)withoutMask);
     }
     
     IndexedString url() const;
   private:
   uint m_index;
+  friend class IndexedTopDUContextEmbeddedTreeHandler;
 };
+
+class IndexedTopDUContextEmbeddedTreeHandler {
+    public:
+    IndexedTopDUContextEmbeddedTreeHandler(const IndexedTopDUContext& data) : m_data(const_cast<IndexedTopDUContext&>(data)) {
+    }
+    int leftChild() const {
+        return int(m_data.dummyData().first)-1;
+    }
+    void setLeftChild(int child) {
+        m_data.setDummyData((ushort)(child+1), m_data.dummyData().second);
+    }
+    int rightChild() const {
+        return int(m_data.dummyData().second)-1;
+    }
+    void setRightChild(int child) {
+        m_data.setDummyData(m_data.dummyData().first, (ushort)(child+1));
+    }
+    static void createFreeItem(IndexedTopDUContext& data) {
+        data = IndexedTopDUContext();
+        data.setIsDummy(true);
+        data.setDummyData(0u, 0u); //Since we substract 1, this equals children -1, -1
+    }
+    bool operator<(const IndexedTopDUContextEmbeddedTreeHandler& rhs) const {
+        return m_data < rhs.m_data;
+    }
+    //Copies this item into the given one
+    void copyTo(IndexedTopDUContext& data) const {
+        data = m_data;
+    }
+    bool isFree() const {
+        return m_data.isDummy();
+    }
+
+    const IndexedTopDUContext& data() {
+      return m_data;
+    }
+    
+    bool equals(const IndexedTopDUContext& rhs) const {
+      return m_data == rhs;
+    }
+    
+    private:
+        IndexedTopDUContext& m_data;
+};
+
 
 /**
  * The top context in a definition-use chain for one source file.
@@ -260,7 +346,7 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
-  // Returns the language for this top-context. If the string is empty, the language is unknown.
+  /// Returns the language for this top-context. If the string is empty, the language is unknown.
   IndexedString language() const;
   
   ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
@@ -292,10 +378,21 @@ public:
   ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
   virtual void clearImportedParentContexts();
   
+  typedef ConvenientEmbeddedSetIterator<IndexedTopDUContext, IndexedTopDUContextEmbeddedTreeHandler> RecursiveImportsIterator;
+  
+  ///@todo Create a cache of recursive imports that is stored to disk, so we don't need to load all imports when loading a file
+  ///A cached set of all top-contexts that are recursively imported into this one. It is updated when updateRecursiveImports() is called,
+  ///when it is first used after an import was removed/added.
+//   RecursiveImportsIterator recursiveImportsCache();
+  
+  ///Updates the recursive imports cache. This needs to be called whenever the top-context or one of its imports has been updated.
+  ///The cache is automatically cleared when an import is added/removed
+//   void updateRecursiveImports();
+  
   virtual QVector<Import> importedParentContexts() const;
   
   virtual QVector<DUContext*> importers() const;
-  
+
   ///Returns all currently loade importers
   virtual QList<DUContext*> loadedImporters() const;
   
@@ -318,6 +415,8 @@ public:
     Q_DISABLE_COPY(Cache)
     CacheData* d;
   };
+  
+  
 
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
 protected:
