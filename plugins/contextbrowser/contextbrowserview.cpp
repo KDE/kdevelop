@@ -52,6 +52,10 @@
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <kparts/part.h>
 #include <qapplication.h>
+#include <language/interfaces/codecontext.h>
+#include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/iplugincontroller.h>
 
 const int maxHistoryLength = 30;
 
@@ -427,6 +431,24 @@ void ContextBrowserView::resetWidget()
     }
 }
 
+void ContextBrowserView::declarationMenu() {
+    DUChainReadLocker lock(DUChain::lock());
+    
+    AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget);
+    if(navigationWidget) {
+        AbstractDeclarationNavigationContext* navigationContext = dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
+        if(navigationContext && navigationContext->declaration().data()) {
+            KDevelop::DeclarationContext* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
+            lock.unlock();
+            QMenu menu;
+            QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+
+            ContextMenuExtension::populateMenu(&menu, extensions);
+            menu.exec(QCursor::pos());
+        }
+    }
+}
+
 void ContextBrowserView::updateLockIcon(bool checked) {
     m_lockButton->setIcon(KIcon(checked ? "document-encrypt" : "document-decrypt"));
 }
@@ -443,14 +465,21 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_lockButton = new QToolButton();
     m_lockButton->setCheckable(true);
     m_lockButton->setChecked(false);
+    m_lockButton->setToolTip(i18n("Lock current view"));
     updateLockIcon(m_lockButton->isChecked());
     connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
 
+    m_declarationMenuButton = new QToolButton();
+    m_declarationMenuButton->setIcon(KIcon("class"));
+    m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
+    connect(m_declarationMenuButton, SIGNAL(clicked(bool)), SLOT(declarationMenu()));
+    
     m_buttons->addWidget(m_contextCtrl->previousButton());
     m_buttons->addWidget(m_contextCtrl->currentContextBox());
     m_buttons->addWidget(m_contextCtrl->nextButton());
     m_buttons->addWidget(m_contextCtrl->browseButton());
     m_buttons->addStretch();
+    m_buttons->addWidget(m_declarationMenuButton);
     m_buttons->addWidget(m_lockButton);
 
     m_layout = new QVBoxLayout;
@@ -491,7 +520,7 @@ bool ContextBrowserView::event(QEvent* event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
     
     if(hasFocus() && keyEvent) {
-        if(m_shiftDetector.checkKeyEvent(keyEvent)) {
+        if(m_shiftDetector.checkKeyEvent(keyEvent) || (event->type() == QEvent::KeyPress && keyEvent->key() == Qt::Key_Escape)) {
             //Switch the focus back to the editor view
             kDebug() << "switching back to" << m_contextCtrl->focusBackWidget();
             if(m_contextCtrl->focusBackWidget())

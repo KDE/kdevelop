@@ -67,6 +67,7 @@ class ContextBrowserView : public QWidget {
         
     private Q_SLOTS:
         void updateLockIcon(bool); 
+        void declarationMenu();
 
     private:
         virtual void showEvent(QShowEvent* event);
@@ -85,6 +86,8 @@ class ContextBrowserView : public QWidget {
         DeclarationController* m_declarationCtrl;
         QVBoxLayout* m_layout;
         QToolButton* m_lockButton;
+        QToolButton* m_declarationMenuButton;
+        
         QHBoxLayout* m_buttons;
         QWidget* m_navigationWidget;
         KDevelop::DeclarationId m_navigationWidgetDeclaration;
