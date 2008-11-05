@@ -49,6 +49,8 @@ namespace KDevelop {
     ///@todo Better dynamic rebalancing the tree
     
     ///Responsible for handling the items in the list
+    ///This is an example. rightChild(..) and leftChild(..) must be values that must be able to hold the count of positive
+    ///values that will be the maximum size of the list, and additionally -1.
 //     template<class Data>
 //     class ExampleItemHandler {
 //         public:

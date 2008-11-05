@@ -32,6 +32,7 @@ install( FILES
     pushvalue.h
     kdevvarlengtharray.h
     embeddedfreetree.h
+    convenientfreelist.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
 
 install( FILES
