@@ -466,6 +466,8 @@ void CPPInternalParseJob::run()
             kWarning() << "updated context has not been smartened yet! Smartening it";
             SmartConverter sc(&editor);
             sc.convertDUChain(updatingContentContext);
+            Q_ASSERT(updatingContentContext->smartRange());
+            ICore::self()->languageController()->backgroundParser()->addManagedTopRange(updatingContentContext->smartRange()->document()->url(), updatingContentContext->smartRange());
           }
         }
       }
