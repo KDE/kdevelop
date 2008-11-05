@@ -72,6 +72,8 @@ Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
 
 void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
   DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context);
+  if(!declContext)
+    return;
   
   qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
   
