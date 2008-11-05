@@ -18,7 +18,7 @@ if(KDEVCPPDUCHAIN)
         get_filename_component(ifacePath interface PATH)
         
         add_custom_target(${weFile}
-                            ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross --impl ${interface}
+                            ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${interface}
                                 -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath}
                                 -o${CMAKE_SOURCE_DIR}/kross/wrappers/${weFile}.cpp
                             DEPENDS ${interface} xmltokross/duchaintokross )
@@ -80,6 +80,7 @@ set(kdevkrossplugin_SRCS
     wrappers/krossiprojectbuilder.cpp
     wrappers/krossirun.cpp
     wrappers/krosseditorcontext.cpp
+    wrappers/krossqtoolbar.cpp
 )
 
 kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})
