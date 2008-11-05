@@ -23,6 +23,10 @@
 
 class QString;
 
+namespace KTextEditor {
+    class Range;
+}
+
 namespace KDevelop {
 
     class IndexedString;
@@ -39,6 +43,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
     virtual bool setText(QString) = 0;
 };
 
+class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
+  public:
+      ///Used to group edit-history together. Call this before a bunch of replace(), and endEdit in the end.
+      virtual void startEdit() = 0;
+      virtual bool replace(const KTextEditor::Range& range, QString oldText, QString newText) = 0;
+      ///Must be called exactly once per startEdit()
+      virtual void endEdit() = 0;
+};
 
 ///Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
 KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation* createCodeRepresentation(IndexedString url);

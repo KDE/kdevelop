@@ -7,7 +7,7 @@
 
 namespace KDevelop {
 
-class EditorCodeRepresentation : public CodeRepresentation {
+class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
   EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
   }
@@ -23,6 +23,22 @@ class EditorCodeRepresentation : public CodeRepresentation {
   
   bool setText(QString text) {
     return m_document->setText(text);
+  }
+  
+  void startEdit() {
+      m_document->startEditing();
+  }
+  
+  void endEdit() {
+      m_document->endEditing();
+  }
+  
+  bool replace(const KTextEditor::Range& range, QString oldText, QString newText) {
+      QString old = m_document->text(range);
+      if(oldText != old)
+          return false;
+      
+      return m_document->replaceText(range, newText);
   }
   
   private:

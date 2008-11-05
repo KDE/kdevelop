@@ -35,6 +35,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     QMap<IndexedString, CodeRepresentation*> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
+    QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
     
     foreach(IndexedString file, m_changes.keys())
     {
@@ -69,11 +70,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
                     }
                 }
             }
+            previous = *it;
             ++it;
         }
         
         
-        QList<DocumentChangePointer> sortedChangesList = sortedChanges.values();
+        QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
+        sortedChangesList = sortedChanges.values();
+        
         for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
             DocumentChange& change(*sortedChangesList[pos]);
             QString encountered;
@@ -102,8 +106,28 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     foreach(IndexedString file, m_changes.keys())
     {
         oldTexts[file] = codeRepresentations[file]->text();
+        bool fail = false;
         
-        if(!codeRepresentations[file]->setText(newTexts[file])) {
+        DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(codeRepresentations[file]);
+        if(dynamic) {
+            dynamic->startEdit();
+            //Replay the changes one by one
+            QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
+            
+            for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
+                DocumentChange& change(*sortedChangesList[pos]);
+                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText)) {
+                    dynamic->endEdit();
+                    return DocumentChangeSet::ChangeResult(QString("Inconsistent change at line %1").arg(change.m_range.start.line));
+                }
+            }
+            
+            dynamic->endEdit();
+        }else{
+            fail = !codeRepresentations[file]->setText(newTexts[file]);
+        }
+        
+        if(fail) {
             //Fail
             foreach(IndexedString revertFile, oldTexts.keys())
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
