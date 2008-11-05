@@ -320,8 +320,10 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         else
         {
             KDialog chooseRoot;
+            QWidget *e=new QWidget(&chooseRoot);
             Ui::CMakePossibleRoots ui;
-            ui.setupUi(&chooseRoot);
+            ui.setupUi(e);
+            chooseRoot.setMainWidget(e);
             KUrl aux=folderUrl;
             for(; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
             {
