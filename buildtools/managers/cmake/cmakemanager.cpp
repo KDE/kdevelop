@@ -27,6 +27,10 @@
 #include <QDir>
 #include <QQueue>
 
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+#include <KAboutData>
+#include <KDialog>
 #include <KUrl>
 #include <KProcess>
 #include <KAction>
@@ -43,13 +47,9 @@
 #include <interfaces/context.h>
 #include <interfaces/irun.h>
 #include <interfaces/iruncontroller.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
 #include <project/projectmodel.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
-
 #include <language/duchain/duchain.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/topducontext.h>
@@ -60,13 +60,14 @@
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
 #include "cmakehighlighting.h"
-
 #include "cmakecachereader.h"
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
-#include "icmakebuilder.h"
 #include "cmakecodecompletionmodel.h"
+#include "icmakebuilder.h"
+
+#include "ui_cmakepossibleroots.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -313,17 +314,35 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         
         if(group.hasKey("ProjectRoot"))
         {
-            folderUrl=group.readEntry("ProjectRoot");
+            QString relative=group.readEntry("ProjectRoot");
+            folderUrl.cd(relative);
         }
         else
         {
+            KDialog chooseRoot;
+            Ui::CMakePossibleRoots ui;
+            ui.setupUi(&chooseRoot);
             KUrl aux=folderUrl;
             for(; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
             {
-                kDebug() << "checking" << aux;
-                folderUrl=aux;
+                ui.candidates->addItem(aux.toLocalFile());
             }
-            group.writeEntry("ProjectRoot", folderUrl);
+            
+            if(ui.candidates->count()>1) {
+                int a=chooseRoot.exec();
+                if(!a || !ui.candidates->currentItem())
+                {
+                    return 0;
+                }
+                KUrl choice=KUrl(ui.candidates->currentItem()->text());
+                QString relative=KUrl::relativeUrl(folderUrl, choice);
+                group.writeEntry("ProjectRoot", relative);
+                folderUrl=choice;
+            }
+            else
+            {
+                group.writeEntry("ProjectRoot", "./");
+            }
         }
         
         m_realRoot[project] = folderUrl;
