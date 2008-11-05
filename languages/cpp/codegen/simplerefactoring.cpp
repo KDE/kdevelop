@@ -68,7 +68,7 @@ SimpleRefactoring& SimpleRefactoring::self() {
   return ret;
 }
 
-Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration);
+Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
 
 void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
   DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context);
