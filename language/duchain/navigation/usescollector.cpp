@@ -63,6 +63,10 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
 ///@parm visited should be empty on each call, used to prevent endless recursion
 void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& set, QSet<ParsingEnvironmentFilePointer>& visited) {
   foreach(ParsingEnvironmentFilePointer import, file->imports()) {
+    if(!import) {
+      kDebug() << "warning: missing import";
+      continue;
+    }
     if(!visited.contains(import)) {
       visited.insert(import);
       set.insert(import->url());
