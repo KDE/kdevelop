@@ -213,6 +213,8 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
             }
         }
     }
+    if(m_ctxUrls.isEmpty())
+        return menuExt;
 
     foreach( const QString& id, m_actions.keys() )
     {
