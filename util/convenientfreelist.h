@@ -102,6 +102,6 @@ namespace KDevelop {
         return ConvenientEmbeddedSetIterator<Data, Handler>(m_data, m_dataSize, m_centralFreeItem);
     }
     
-};
+}
 
 #endif
