@@ -13,12 +13,10 @@
 #
 
 find_path(CHECK_INCLUDE_DIR
-    check.h
-    /usr/include /usr/local/include)
+    check.h )
 
 find_library(CHECK_LIBRARY
-    NAMES check
-    PATH /usr/lib /usr/local/lib)
+    NAMES check )
 
 if (CHECK_INCLUDE_DIR AND CHECK_LIBRARY)
     set(CHECK_FOUND on)
