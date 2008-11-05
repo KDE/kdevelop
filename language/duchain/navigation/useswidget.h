@@ -24,7 +24,7 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
-#include <editor/simplecursor.h>
+#include <language/editor/simplecursor.h>
 #include "../../languageexport.h"
 #include "usescollector.h"
 
@@ -87,14 +87,21 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT ContextUsesWidget : public NavigatableWidgetList {
       Q_OBJECT
       public:
-        ContextUsesWidget(const CodeRepresentation& code, IndexedDeclaration usedDeclaration, IndexedDUContext context);
+        ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclaration, IndexedDUContext context);
       Q_SIGNALS:
         void navigateDeclaration(KDevelop::IndexedDeclaration);
       private Q_SLOTS:
         void linkWasActivated(QString);
       private:
-        IndexedDeclaration m_usedDeclaration;
         IndexedDUContext m_context;
+    };
+
+    class KDEVPLATFORMLANGUAGE_EXPORT DeclarationsWidget : public NavigatableWidgetList {
+      Q_OBJECT
+      public:
+        DeclarationsWidget(const CodeRepresentation& code, QList<IndexedDeclaration> declarations);
+      private:
+        QList<IndexedDeclaration> m_declarations;
     };
     
     /**
@@ -103,7 +110,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT TopContextUsesWidget : public NavigatableWidgetList {
         Q_OBJECT
         public:
-            TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext);
+            TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> localDeclarations, IndexedTopDUContext topContext);
             void setExpanded(bool);
         Q_SIGNALS:
           void navigateDeclaration(KDevelop::IndexedDeclaration);
@@ -112,29 +119,36 @@ namespace KDevelop {
         private:
             IndexedTopDUContext m_topContext;
             IndexedDeclaration m_declaration;
-            QPushButton* m_button;
+            QToolButton* m_button;
+            QList<IndexedDeclaration> m_allDeclarations;
     };
 
     /**
-     * A widget that allows browsing through all the uses of a declaration
+     * A widget that allows browsing through all the uses of a declaration, and also through all declarations of it.
      */
     class KDEVPLATFORMLANGUAGE_EXPORT UsesWidget : public NavigatableWidgetList {
       Q_OBJECT
         public:
-            UsesWidget(IndexedDeclaration declaration);
-            ~UsesWidget();
-        Q_SIGNALS:
-            void navigateDeclaration(KDevelop::IndexedDeclaration);
-        private:
-            
+            ///This class can be overridden to do additional processing while the uses-widget shows the uses.
             struct UsesWidgetCollector : public UsesCollector {
               public:
-              UsesWidgetCollector(IndexedDeclaration decl, UsesWidget* widget);
+              void setWidget(UsesWidget* widget );
+              UsesWidgetCollector(IndexedDeclaration decl);
               virtual void processUses(KDevelop::ReferencedTopDUContext topContext);
               virtual void maximumProgress(uint max);
               virtual void progress(uint processed, uint total);
               UsesWidget* m_widget;
             };
+            ///@param customCollector allows specifying an own subclass of UsesWidgetCollector. The object will be owned
+            ///@param showDeclarations whether all declarations used for the search should be shown as well in the list
+            ///by this widget, and will be deleted on destruction.
+            UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector = 0);
+            ~UsesWidget();
+        Q_SIGNALS:
+            void navigateDeclaration(KDevelop::IndexedDeclaration);
+        private:
+
+            bool m_showDeclarations;
             UsesWidgetCollector* m_collector;
             QProgressBar* m_progressBar;
     };

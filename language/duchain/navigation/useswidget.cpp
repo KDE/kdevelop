@@ -310,14 +310,14 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
   return ret;
 }
 
-ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDeclaration usedDeclaration, IndexedDUContext context) : m_usedDeclaration(usedDeclaration), m_context(context) {
+ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclarations, IndexedDUContext context) : m_context(context) {
 
   DUChainReadLocker lock(DUChain::lock());
     QString headerText = i18n("Unknown context");
     uint usesCount = 0;
     setUpdatesEnabled(false);
     
-    if(context.data() && m_usedDeclaration.data()) {
+    if(context.data()) {
       DUContext* ctx = context.data();
       
       if(ctx->scopeIdentifier(true).isEmpty())
@@ -327,20 +327,29 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, IndexedDecl
         if(ctx->type() == DUContext::Function || (ctx->owner() && ctx->owner()->isFunctionDeclaration()))
           headerText += "(..)";
       }
-      
-      int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
-      if(usedDeclarationIndex != std::numeric_limits<int>::max()) {
-        foreach(OneUseWidget* widget, createUseWidgets(code, usedDeclarationIndex, m_usedDeclaration, ctx))
-          addItem(widget);
+
+      QSet<int> hadIndices;
+
+      foreach(IndexedDeclaration usedDeclaration, usedDeclarations) {
+        int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
+        if(hadIndices.contains(usedDeclarationIndex))
+          continue;
         
-        usesCount = countUses(usedDeclarationIndex, ctx);
+        hadIndices.insert(usedDeclarationIndex);
+        
+        if(usedDeclarationIndex != std::numeric_limits<int>::max()) {
+          foreach(OneUseWidget* widget, createUseWidgets(code, usedDeclarationIndex, usedDeclaration, ctx))
+            addItem(widget);
+          
+          usesCount = countUses(usedDeclarationIndex, ctx);
+        }
       }
     }
     
-    QLabel* headerLabel = new QLabel(sizePrefix + i18n("Context") + " <a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>" + sizeSuffix);
+    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Context") + "</b>" + " <a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>" + sizeSuffix);
     addHeaderItem(headerLabel);
     if(usesCount) {
-      QLabel* usesCountLabel = new QLabel(" " + ((usesCount == 1) ? i18n("1 use") : i18n("%1 uses", usesCount)));
+      QLabel* usesCountLabel = new QLabel("&nbsp;" + ((usesCount == 1) ? i18n("<i>(1 use)</i>") : i18n("<i>(%1 uses)</i>", usesCount)));
       usesCountLabel->setAlignment(Qt::AlignLeft);
       addHeaderItem(usesCountLabel, Qt::AlignLeft);
     }
@@ -366,7 +375,25 @@ void ContextUsesWidget::linkWasActivated(QString link) {
     emit navigateDeclaration(decl);
 }
 
-TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, IndexedTopDUContext topContext) : m_topContext(topContext), m_declaration(declaration) {
+DeclarationsWidget::DeclarationsWidget(const CodeRepresentation& code, QList<IndexedDeclaration> declarations) : m_declarations(declarations) {
+
+  DUChainReadLocker lock(DUChain::lock());
+    setUpdatesEnabled(false);
+
+    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Declaration") + "</b>" + sizeSuffix);
+    addHeaderItem(headerLabel);
+
+    foreach(IndexedDeclaration decl, declarations)
+      if(decl.data())
+        addItem(new OneUseWidget(decl, decl.data()->url(), decl.data()->range(), code, decl.data()->smartRange()));
+
+    setUpdatesEnabled(true);
+}
+
+TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> allDeclarations, IndexedTopDUContext topContext) : 
+m_topContext(topContext), 
+m_declaration(declaration), 
+m_allDeclarations(allDeclarations) {
     setUpdatesEnabled(false);
     DUChainReadLocker lock(DUChain::lock());
     QHBoxLayout * labelLayout = new QHBoxLayout;
@@ -374,40 +401,42 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, Index
     headerWidget->setLayout(labelLayout);
     headerWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
     
-    QLabel* projectLabel = new QLabel;
-    QLabel* usesCountLabel = new QLabel;
-    m_button = new QPushButton;
-    labelLayout->addWidget(projectLabel, Qt::AlignRight | Qt::AlignVCenter);
-    labelLayout->addWidget(m_button, Qt::AlignCenter | Qt::AlignVCenter);
-    labelLayout->addWidget(usesCountLabel, Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel* label = new QLabel;
+    m_button = new QToolButton;
+    labelLayout->addWidget(m_button, Qt::AlignLeft | Qt::AlignVCenter);
+    labelLayout->addWidget(label, Qt::AlignLeft | Qt::AlignVCenter);
     
-    usesCountLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));
-    projectLabel->setAlignment((Qt::Alignment)(Qt::AlignRight | Qt::AlignVCenter));
+    QString projectName = i18n("No project");
+    QString fileName = topContext.url().str();
+    int usesCount = 0;
+    
+/*    usesCountLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));
+    projectLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));*/
     
     if(topContext.data()) {
       KDevelop::IProject* project = ICore::self()->projectController()->findProjectForUrl(topContext.data()->url().toUrl());
       if(project) {
-        projectLabel->setText(project->name());
-        m_button->setText(project->relativeUrl(topContext.data()->url().toUrl()).path());
-      }else{
-        m_button->setText(topContext.url().str());
-        projectLabel->setText(i18n("No project"));
+        projectName = project->name();
+        fileName = project->relativeUrl(topContext.data()->url().toUrl()).path();
       }
     }
     
     if(topContext.isLoaded())
-      usesCountLabel->setText(i18n("%1 uses", DUChainUtils::contextCountUses(topContext.data(), declaration.data())));
-    m_button->setIcon(KIcon("zoom-in"));
+      usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
+    
+    label->setText(i18n("<b>Project:</b> %1 &nbsp; <b>File:</b> %2 &nbsp; <i>(%3 uses)</i>", projectName, fileName, usesCount));
+    
+    m_button->setIcon(KIcon("go-next"));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
     addHeaderItem(headerWidget);
     setUpdatesEnabled(true);
 }
 
-QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, IndexedDeclaration declaration, DUContext* context) {
+QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, QList<IndexedDeclaration> declarations, DUContext* context) {
   QList<ContextUsesWidget*> ret;
   
   if(!context->parentContext() || isNewGroup(context->parentContext(), context)) {
-    ContextUsesWidget* created = new ContextUsesWidget(code, declaration, context);
+    ContextUsesWidget* created = new ContextUsesWidget(code, declarations, context);
     if(created->hasItems())
       ret << created;
     else
@@ -415,7 +444,7 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, Index
   }
   
   foreach(DUContext* child, context->childContexts())
-    ret += buildContextUses(code, declaration, child);
+    ret += buildContextUses(code, declarations, child);
   
   return ret;
 }
@@ -423,9 +452,9 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, Index
 void TopContextUsesWidget::setExpanded(bool expanded) {
   if(!expanded) {
     deleteItems();
-    m_button->setIcon(KIcon("zoom-in"));
+    m_button->setIcon(KIcon("go-next"));
   }else{
-    m_button->setIcon(KIcon("zoom-out"));
+    m_button->setIcon(KIcon("go-down"));
     if(hasItems())
       return;
     DUChainReadLocker lock(DUChain::lock());
@@ -435,9 +464,19 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
       
       CodeRepresentation* code = createCodeRepresentation(topContext->url());
       setUpdatesEnabled(false);
-      foreach(ContextUsesWidget* useWidget, buildContextUses(*code, m_declaration, topContext)) {
-        addItem(useWidget);
-        connect(useWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
+      
+      IndexedTopDUContext localTopContext(topContext);
+      QList<IndexedDeclaration> localDeclarations;
+      foreach(IndexedDeclaration decl, m_allDeclarations)
+        if(decl.indexedTopContext() == localTopContext)
+          localDeclarations << decl;
+        
+        if(!localDeclarations.isEmpty())
+          addItem(new DeclarationsWidget(*code, localDeclarations));
+
+      foreach(ContextUsesWidget* usesWidget, buildContextUses(*code, m_allDeclarations, topContext)) {
+        addItem(usesWidget);
+        connect(usesWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
       }
       setUpdatesEnabled(true);
       
@@ -449,10 +488,10 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
 void TopContextUsesWidget::labelClicked() {
   if(hasItems()) {
     setExpanded(false);
-    m_button->setIcon(KIcon("zoom-in"));
+    m_button->setIcon(KIcon("go-next"));
   }else{
     setExpanded(true);
-    m_button->setIcon(KIcon("zoom-out"));
+    m_button->setIcon(KIcon("go-down"));
   }
 }
 
@@ -460,23 +499,34 @@ UsesWidget::~UsesWidget() {
   delete m_collector;
 }
 
-UsesWidget::UsesWidget(IndexedDeclaration declaration) : NavigatableWidgetList(true) {
+UsesWidget::UsesWidget(IndexedDeclaration declaration, UsesWidgetCollector* customCollector) : NavigatableWidgetList(true) {
     DUChainReadLocker lock(DUChain::lock());
     setUpdatesEnabled(false);
     
     m_progressBar = new QProgressBar;
     addHeaderItem(m_progressBar);
     
-    m_collector = new UsesWidgetCollector(declaration, this);
-    
+    if(!customCollector) {
+      m_collector = new UsesWidgetCollector(declaration);
+    }else{
+      m_collector = customCollector;
+    }
+
+    m_collector->setProcessDeclarations(true);
+    m_collector->setWidget(this);
     m_collector->startCollecting();
     
     setUpdatesEnabled(true);
 }
 
-UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl, UsesWidget* widget) : UsesCollector(decl), m_widget(widget) {
+UsesWidget::UsesWidgetCollector::UsesWidgetCollector(IndexedDeclaration decl) : UsesCollector(decl), m_widget(0) {
   
 }
+
+void UsesWidget::UsesWidgetCollector::setWidget(UsesWidget* widget ) {
+  m_widget = widget;
+}
+
 
 void UsesWidget::UsesWidgetCollector::maximumProgress(uint max) {
   if(m_widget->m_progressBar) {
@@ -506,7 +556,8 @@ void UsesWidget::UsesWidgetCollector::progress(uint processed, uint total) {
 
 void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUContext topContext ) {
   DUChainReadLocker lock(DUChain::lock());
-    TopContextUsesWidget* widget = new TopContextUsesWidget(declaration().data(), topContext.data());
+  kDebug() << "processing" << topContext->url().str();
+    TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
     connect(widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  m_widget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
     bool expand = false;
     bool toFront = false;

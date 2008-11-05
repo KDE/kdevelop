@@ -26,10 +26,22 @@
 #include <interfaces/idocumentcontroller.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/types/indexedtype.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <backgroundparser/parsejob.h>
 #include <backgroundparser/backgroundparser.h>
+#include "../classmemberdeclaration.h"
+#include "../abstractfunctiondeclaration.h"
+#include "../functiondefinition.h"
 
 using namespace KDevelop;
+
+///@todo make this language-neutral
+static Identifier destructorForName(Identifier name) {
+  QString str = name.identifier().str();
+  if(str.startsWith("~"))
+    return Identifier(str);
+  return Identifier("~"+str);
+}
 
 template<class ImportanceChecker>
 void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* current, QSet<ParsingEnvironmentFile*>& visited, QSet<ParsingEnvironmentFile*>& collected) {
@@ -59,6 +71,30 @@ void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& s
   }
 }
 
+void UsesCollector::setCollectConstructors(bool process) {
+  m_collectConstructors = process;
+}
+
+void UsesCollector::setProcessDeclarations(bool process) {
+  m_processDeclarations = process;
+}
+
+void UsesCollector::setCollectOverloads(bool collect) {
+  m_collectOverloads = collect;
+}
+
+void UsesCollector::setCollectDefinitions(bool collect) {
+  m_collectDefinitions = collect;
+}
+
+QList<IndexedDeclaration> UsesCollector::declarations() {
+  return m_declarations;
+}
+
+bool UsesCollector::isReady() const {
+  return m_waitForUpdate.size() == m_updateReady.size();
+}
+
 bool UsesCollector::shouldRespectFile(IndexedString document) {
   return (bool)ICore::self()->projectController()->findProjectForUrl(document.toUrl()) || (bool)ICore::self()->documentController()->documentForUrl(document.toUrl());
 }
@@ -77,13 +113,82 @@ void UsesCollector::startCollecting() {
 
     if(Declaration* decl = m_declaration.data()) {
         
-        //We collect all versions here so we get all virtual top-contexts where this declaration occurs.
-        //Also this will collect all forward-declarations etc.
-        QList<IndexedDeclaration> decls = DUChainUtils::collectAllVersions(decl);
+        if(m_collectDefinitions) {
+          if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+          //Jump from definition to declaration
+            Declaration* declaration = def->declaration();
+            if(declaration)
+              decl = declaration;
+          }
+        }
+      
+        ///Collect all overloads into "decls"
+        QList<Declaration*> decls;
+        
+        if(m_collectOverloads && decl->context()->owner() && decl->context()->type() == DUContext::Class) {
+          //First find the overridden base, and then all overriders of that base.
+          while(Declaration* overridden = DUChainUtils::getOverridden(decl))
+            decl = overridden;
+          uint maxAllowedSteps = 10000;
+          decls += DUChainUtils::getOverriders( decl->context()->owner(), decl, maxAllowedSteps );
+          if(maxAllowedSteps == 10000) {
+            ///@todo Fail!
+          }
+        }
+        
+        decls << decl;
+        
+        ///Collect all "parsed versions" or forward-declarations etc. here, into allDeclarations
+        QSet<IndexedDeclaration> allDeclarations;
+
+        foreach(Declaration* overload, decls) {
+          m_declarations = DUChainUtils::collectAllVersions(overload);
+          foreach(IndexedDeclaration d, m_declarations) {
+            if(!d.data() || d.data()->id() != overload->id())
+              continue;
+            allDeclarations.insert(d);
+            
+            if(m_collectConstructors && d.data() && d.data()->internalContext() && d.data()->internalContext()->type() == DUContext::Class) {
+              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              foreach(Declaration* constructor, constructors) {
+                ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
+                if(classFun && classFun->isConstructor())
+                  allDeclarations.insert(IndexedDeclaration(constructor));
+              }
+              
+              Identifier destructorId = destructorForName(d.data()->identifier());
+              
+              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              foreach(Declaration* destructor, destructors) {
+                ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
+                if(classFun && classFun->isDestructor())
+                  allDeclarations.insert(IndexedDeclaration(destructor));
+              }
+            }
+          }
+        }
+
+        ///Collect definitions for declarations
+        if(m_collectDefinitions) {
+          foreach(IndexedDeclaration d, allDeclarations) {
+            Declaration* definition = FunctionDefinition::definition(d.data());
+            if(definition) {
+                kDebug() << "adding definition";
+              allDeclarations.insert(IndexedDeclaration(definition));
+            }
+          }
+        }
+
+        m_declarations.clear();
+        
+        ///Step 4: Copy allDeclarations into m_declarations, build top-context list, etc.
         QList<ReferencedTopDUContext> candidateTopContexts;
-        foreach(IndexedDeclaration d, decls)
-          if(d.data() && d.data()->indexedType() == decl->indexedType() && d.indexedTopContext().data())
-            candidateTopContexts << d.indexedTopContext().data();
+        foreach(IndexedDeclaration d, allDeclarations) {
+          m_declarations << d;
+          m_declarationTopContexts.insert(d.indexedTopContext());
+          //We only collect declarations with the same type here.. 
+          candidateTopContexts << d.indexedTopContext().data();
+        }
         
         ImportanceChecker checker(*this);
         
@@ -112,12 +217,14 @@ void UsesCollector::startCollecting() {
           QSet<ParsingEnvironmentFilePointer> visited;
           allImportedFiles(ParsingEnvironmentFilePointer(importer), allImports, visited);
           //Remove all files from the "root" set that are imported by this one
+          ///@todo more intelligent
           rootFiles -= allImports;
           allFiles += allImports;
           allFiles.insert(importer->url());
           rootFiles.insert(importer->url());
         }
         
+        emit maximumProgressSignal(rootFiles.size());
         maximumProgress(rootFiles.size());
         
         //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This we only
@@ -137,6 +244,7 @@ void UsesCollector::startCollecting() {
         }
         
     }else{
+        emit maximumProgressSignal(0);
         maximumProgress(0);
     }
 }
@@ -144,7 +252,7 @@ void UsesCollector::startCollecting() {
 void UsesCollector::maximumProgress(uint max) {
 }
 
-UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration) {
+UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration), m_processDeclarations(true), m_collectOverloads(true), m_collectDefinitions(true), m_collectConstructors(true) {
 }
 
 UsesCollector::~UsesCollector() {
@@ -165,6 +273,9 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   if(m_waitForUpdate.contains(url)) {
     m_updateReady << url;
     m_checked.clear();
+    
+    
+    emit progressSignal(m_updateReady.size(), m_waitForUpdate.size());
     progress(m_updateReady.size(), m_waitForUpdate.size());
   }
   
@@ -201,10 +312,12 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     
     m_checked.insert(indexed);
     
-    if(m_declaration.data() && DUChainUtils::contextHasUse(topContext.data(), m_declaration.data())) {
+    if(m_declaration.data() && ((m_processDeclarations && m_declarationTopContexts.contains(indexed)) || 
+                                    DUChainUtils::contextHasUse(topContext.data(), m_declaration.data()))) {
       if(!m_processed.contains(topContext->url())) {
         m_processed.insert(topContext->url());
         lock.unlock();
+        emit processUsesSignal(topContext);
         processUses(topContext);
         lock.lock();
       }

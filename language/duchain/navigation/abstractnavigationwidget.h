@@ -60,8 +60,9 @@ namespace KDevelop {
 
       NavigationContextPointer context();
       
-    private slots:
+    public slots:
       void navigateDeclaration(KDevelop::IndexedDeclaration decl);
+    private slots:
       void anchorClicked(const QUrl&);
     protected:
       virtual void keyPressEvent(QKeyEvent* event);

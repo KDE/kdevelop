@@ -296,24 +296,16 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
   ///Check if the function overrides or hides another one
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
   if(classFunDecl) {
-    QList<Declaration*> decls;
+    
+    Declaration* overridden = DUChainUtils::getOverridden(m_declaration.data());
 
-      foreach(DUContext::Import import, m_declaration->context()->importedParentContexts())
-        decls += import.context()->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
-                                              SimpleCursor::invalid(), m_declaration->abstractType(), m_topContext.data(), DUContext::DontSearchInParent);
-
-    if(decls.size() && classFunDecl->isVirtual()) {
-      //Found a declaration in the imports that has the same type
-      uint num = 0;
-      foreach(Declaration* decl, decls) {
+    if(overridden) {
         m_currentText += i18n("Overrides a") + " ";
-        makeLink(i18n("function"), QString("jump_to_override_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(i18n("function"), QString("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
         m_currentText += " " + i18n("from") + " ";
-        makeLink(decl->context()->scopeIdentifier(true).toString(), QString("jump_to_override_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
+        makeLink(overridden->context()->scopeIdentifier(true).toString(), QString("jump_to_overridden_container"), NavigationAction(DeclarationPointer(overridden->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
         
         m_currentText += "<br />";
-        ++num;
-      }
     }else{
       //Check if this declarations hides other declarations
       QList<Declaration*> decls;
