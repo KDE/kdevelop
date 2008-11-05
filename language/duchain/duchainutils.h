@@ -92,6 +92,9 @@ namespace DUChainUtils {
 
   ///Returns the toal count of uses of the gien declaration under the given context
   KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);  
+  
+  ///Returns the declaration that is overridden by the given one, or zero.
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* getOverridden(const Declaration* decl);
 }
 }
 

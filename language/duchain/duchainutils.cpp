@@ -491,3 +491,23 @@ static uint countUses(DUContext* context, int usedDeclarationIndex) {
 uint DUChainUtils::contextCountUses(DUContext* context, Declaration* declaration) {
   return countUses(context, context->topContext()->indexForUsedDeclaration(declaration, false));
 }
+
+Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
+  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
+  if(!classFunDecl || !classFunDecl->isVirtual())
+    return 0;
+  
+  QList<Declaration*> decls;
+
+  foreach(DUContext::Import import, decl->context()->importedParentContexts())
+    decls += import.context()->findDeclarations(QualifiedIdentifier(decl->identifier()), 
+                                            SimpleCursor::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
+
+  foreach(Declaration* found, decls) {
+    const ClassFunctionDeclaration* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
+    if(foundClassFunDecl->isVirtual())
+      return found;
+  }
+    
+  return 0;
+}
