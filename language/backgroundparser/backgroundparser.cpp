@@ -105,7 +105,9 @@ public:
         QList<ParseJob*> jobs;
         QHashIterator<KUrl, DocumentChangeTracker*> it = m_delayedParseJobs;
         while (it.hasNext()) {
-            ParseJob* job = createParseJob(it.next().key(), TopDUContext::AllDeclarationsContextsAndUses, QList<QPointer<QObject> >());
+            ParseJob* job = createParseJob(it.next().key(), 
+                                           TopDUContext::AllDeclarationsContextsAndUses,
+                                           QList<QPointer<QObject> >());
             if (job) {
                 job->setChangedRanges(it.value()->changedRanges());
                 jobs.append(job);
