@@ -19,6 +19,9 @@
 #ifndef KDEV_TEXTDOCUMENT_H
 #define KDEV_TEXTDOCUMENT_H
 
+#include <QWidget>
+#include <KXMLGUIClient>
+
 #include <sublime/view.h>
 
 #include "partdocument.h"
@@ -97,13 +100,37 @@ public:
     virtual void setState(const QString& state);
 
 private Q_SLOTS:
-    void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
+    void sendStatusChanged();
 
 private:
     class TextViewPrivate* const d;
 };
 
+class KDEVPLATFORMSHELL_EXPORT TextEditorWidget : public QWidget, public KXMLGUIClient
+{
+    Q_OBJECT
+public:
+    TextEditorWidget(QWidget* parent = 0);
+    virtual ~TextEditorWidget();
+
+    void setEditorView(KTextEditor::View* view);
+    KTextEditor::View* editorView() const;
+
+    QString status() const;
+
+Q_SIGNALS:
+    void statusChanged();
+
+public Q_SLOTS:
+    void viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition);
+
+private:
+    class TextEditorWidgetPrivate* const d;
+
+};
+
 }
+
 
 #endif
 

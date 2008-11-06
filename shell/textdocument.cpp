@@ -21,12 +21,17 @@
 #include <QPointer>
 #include <QMenu>
 #include <QAction>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QLabel>
+
 
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kconfiggroup.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
+#include <kstatusbar.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -154,12 +159,28 @@ private:
 class TextViewPrivate
 {
 public:
-    TextViewPrivate()
+    TextViewPrivate() : editor(0) {}
+    TextEditorWidget* editor;
+};
+
+class TextEditorWidgetPrivate
+{
+public:
+    TextEditorWidgetPrivate()
     {
-        m_view = 0;
+        widget = 0;
+        statusBar = 0;
+        widgetLayout = 0;
+        view = 0;
+        statusLabel = 0;
     }
-    QPointer<KTextEditor::View> m_view;
-    QString m_status;
+    QWidget* widget;
+    QVBoxLayout* widgetLayout;
+    QPointer<KTextEditor::View> view;
+    KStatusBar *statusBar;
+    QLabel* statusLabel;
+    QString status;
+
 };
 
 TextDocument::TextDocument(const KUrl &url, ICore* core)
@@ -460,20 +481,20 @@ KDevelop::TextView::~TextView()
 
 QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
-    d->m_view = static_cast<KTextEditor::View*>(
-        static_cast<TextDocument*>(document())->createViewWidget(parent));
-
-    connect(d->m_view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
-    viewStatusChanged(d->m_view, d->m_view->cursorPosition());
-
-    return d->m_view;
+    TextDocument* doc = static_cast<TextDocument*>(document());
+    KTextEditor::View* view = static_cast<KTextEditor::View*>(doc->createViewWidget(parent));
+    TextEditorWidget* teWidget = new TextEditorWidget(parent);
+    teWidget->setEditorView(view);
+    connect(teWidget, SIGNAL(statusChanged()),
+            this, SLOT(sendStatusChanged()));
+    return teWidget;
 }
 
 QString KDevelop::TextView::viewState() const
 {
-    if( !d->m_view.isNull() )
+    if( d->editor->editorView() )
     {
-        KTextEditor::Cursor cursor = d->m_view->cursorPosition();
+        KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
         return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
     }else
     {
@@ -485,8 +506,8 @@ QString KDevelop::TextView::viewState() const
 void KDevelop::TextView::setState(const QString & state)
 {
     static QRegExp re("Cursor=([\\d]+),([\\d]+)");
-    if (d->m_view && re.exactMatch(state))
-        d->m_view->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+    if (d->editor && d->editor->editorView() && re.exactMatch(state))
+        d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
 }
 
 QString KDevelop::TextDocument::documentType() const
@@ -495,19 +516,79 @@ QString KDevelop::TextDocument::documentType() const
 }
 
 KTextEditor::View *KDevelop::TextView::textView() const
-{
-    return d->m_view;
+{  
+    if (d->editor)
+        return d->editor->editorView();
+
+    return 0;
 }
 
 QString KDevelop::TextView::viewStatus() const
 {
-    return d->m_status;
+    if (d->editor)
+        return d->editor->status();
+
+    return QString();
 }
 
-void KDevelop::TextView::viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition)
+void KDevelop::TextView::sendStatusChanged()
 {
-    d->m_status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(newPosition.line() + 1, 0), KGlobal::locale()->formatNumber(newPosition.column() + 1, 0));
     emit statusChanged(this);
+}
+
+KDevelop::TextEditorWidget::TextEditorWidget(QWidget* parent)
+: QWidget(parent), KXMLGUIClient(), d(new TextEditorWidgetPrivate)
+{
+    d->widgetLayout = new QVBoxLayout(this);
+    d->widgetLayout->setMargin(0);
+    d->widgetLayout->setSpacing(0);
+
+    setLayout(d->widgetLayout);
+    
+    d->statusBar = new KStatusBar(this);
+    d->statusLabel = new QLabel(d->statusBar);
+    d->statusBar->addPermanentWidget(d->statusLabel);
+    d->widgetLayout->addWidget(d->statusBar);
+}
+
+KDevelop::TextEditorWidget::~TextEditorWidget()
+{
+    delete d;
+}
+
+void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition)
+{
+    d->status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(newPosition.line() + 1, 0), KGlobal::locale()->formatNumber(newPosition.column() + 1, 0));
+    d->statusLabel->setText(d->status);
+    emit statusChanged();
+}
+
+void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
+{
+    if (d->view)
+    {
+        disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
+        removeChildClient(view);
+    }
+
+    d->view = view;
+    insertChildClient(d->view);
+    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), 
+            this, SLOT(viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor&)));
+    
+    viewStatusChanged(view, view->cursorPosition());
+
+    d->widgetLayout->insertWidget(0, d->view);
+}
+
+QString KDevelop::TextEditorWidget::status() const
+{
+    return d->status;
+}
+
+KTextEditor::View* KDevelop::TextEditorWidget::editorView() const
+{
+    return d->view;
 }
 
 #include "textdocument.moc"
