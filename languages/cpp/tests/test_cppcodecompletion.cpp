@@ -372,24 +372,51 @@ KDevelop::IndexedType toReference(IndexedType t) {
 }
 
 void TestCppCodeCompletion::testTypeConversion2() {
-  QByteArray test = "class A {}; class B {}; class C : public B{};";
-  TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(context->localDeclarations().size(), 3);
-  Cpp::TypeConversion conv(context);
-  QVERIFY( !conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
-  QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
-  QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[2]->indexedType()) );
-  QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[0]->indexedType()) );
-  QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+  {
+    QByteArray test = "class A {}; class B {public: explicit B(const A&) {}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->localDeclarations().size(), 3);
+    Cpp::TypeConversion conv(context);
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[2]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[1]->indexedType()) );
 
-  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
-  QVERIFY( conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
-  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[2]->indexedType()) ));
-  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
-  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[0]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
-  
-  release(context);
+    QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
+    QVERIFY( conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[2]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[0]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
+    
+    release(context);
+  }
+  {
+    QByteArray test = "const char** b; char** c; char** const d; char* const * e; char f; const char q; ";
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->localDeclarations().size(), 6);
+    Cpp::TypeConversion conv(context);
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+    PointerType::Ptr fromPointer = context->localDeclarations()[1]->indexedType().type().cast< PointerType>();
+    QVERIFY(fromPointer);
+    QVERIFY( !(fromPointer->modifiers() & AbstractType::ConstModifier));
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[2]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[2]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[3]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[3]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[3]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[3]->indexedType()) );
+    QVERIFY( !conv.implicitConversion(context->localDeclarations()[3]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[4]->indexedType(), context->localDeclarations()[5]->indexedType()) );
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[5]->indexedType(), context->localDeclarations()[4]->indexedType()) );
+    
+    release(context);
+  }
 }
 
 void TestCppCodeCompletion::testInclude() {

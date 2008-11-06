@@ -28,6 +28,8 @@ namespace TypeUtils {
 
   AbstractType::Ptr realType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
 
+    if(constant)
+      *constant = false;
     AbstractType::Ptr base = _base;
     ReferenceType::Ptr ref = base.cast<ReferenceType>();
 

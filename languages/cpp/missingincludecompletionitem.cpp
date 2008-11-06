@@ -29,6 +29,9 @@
 #include <klocale.h>
 #include <ktexteditor/document.h>
 
+//Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
+bool allowDotDot = false;
+
 using namespace KTextEditor;
 using namespace KDevelop;
 
@@ -50,7 +53,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefi
   foreach(KUrl includePath, includePaths) {
     QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
     
-    if(shortestDirective.isEmpty() || relative.length() < shortestDirective.length()) {
+    if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith("..")))) {
       shortestDirective = relative;
       if(shortestDirective.startsWith("./"))
         shortestDirective = shortestDirective.mid(2);

@@ -29,6 +29,8 @@
 #include "cppduchainexport.h"
 #include <QMap>
 #include <QPair>
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/types/pointertype.h>
 
 namespace KDevelop {
   class TopDUContext;
@@ -108,6 +110,11 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
 
 
   private:
+    
+    ///Returns whether the given declaration is accessible from here
+    ///@todo Does not respect the local context yet
+    bool isAccessible(const ClassMemberDeclaration* decl);
+    
     static void startCache();
     static void stopCache();
     
@@ -117,6 +124,8 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      */
     ConversionRank userDefinedConversion( AbstractType::Ptr from, AbstractType::Ptr to, bool fromLValue, bool secondConversionIsIdentity = false );
 
+    ConversionRank pointerConversion( PointerType::Ptr from, PointerType::Ptr to );
+    
     ///iso c++ draft 13.3.3.1.3
     ConversionRank ellipsisConversion( AbstractType::Ptr from, AbstractType::Ptr to );
 
