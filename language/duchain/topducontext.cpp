@@ -487,8 +487,9 @@ public:
     if(it == m_recursiveImports.end()) {
       //Insert new path to "imported"
       m_recursiveImports[imported] = qMakePair(depth, traceNext);
+
       m_indexedRecursiveImports.insert(imported->indexed());
-//       Q_ASSERT(m_indexedRecursiveImports.size() == m_recursiveImports.size());
+//       Q_ASSERT(m_indexedRecursiveImports.size() == m_recursiveImports.size()+1);
       
       Q_ASSERT(traceNext != m_ctxt);
     }else{
@@ -541,6 +542,8 @@ public:
 
         m_recursiveImports.erase(it); //In order to prevent problems, we completely remove everything, and re-add it.
                                       //Just updating these complex structures is very hard.
+                                      Q_ASSERT(imported != m_ctxt);
+
         m_indexedRecursiveImports.remove(imported->indexed());
 //         Q_ASSERT(m_indexedRecursiveImports.size() == m_recursiveImports.size());
 
@@ -707,6 +710,8 @@ const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndice
 {
   ENSURE_CAN_READ
   QMutexLocker lock(&importStructureMutex);
+  
+  Q_ASSERT(m_local->m_indexedRecursiveImports.contains(ownIndex()));
   return m_local->m_indexedRecursiveImports;
 }
 
@@ -786,7 +791,7 @@ uint TopDUContext::ownIndex() const
   return m_local->m_ownIndex;
 }
 
-TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this)) {
+TopDUContext::TopDUContext(TopDUContextData& data) : DUContext(data), m_local(new TopDUContextLocalPrivate(this, 0, data.m_ownIndex)), m_dynamicData(new TopDUContextDynamicData(this)) {
 }
 
 TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, ParsingEnvironmentFile* file)
@@ -795,9 +800,9 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   d_func_dynamic()->setClassId(this);
   
   DUCHAIN_D_DYNAMIC(TopDUContext);
-  d_func_dynamic()->setClassId(this);
   d->m_features = VisibleDeclarationsAndContexts;
   d->m_deleting = false;
+  d->m_ownIndex = m_local->m_ownIndex;
   m_local->m_file = ParsingEnvironmentFilePointer(file);
   setInSymbolTable(true);
 }
@@ -806,6 +811,8 @@ TopDUContext::TopDUContext(TopDUContext* sharedDataOwner, ParsingEnvironmentFile
   : DUContext(*sharedDataOwner), m_local(new TopDUContextLocalPrivate(this, sharedDataOwner, DUChain::newTopContextIndex())), m_dynamicData(sharedDataOwner->m_dynamicData)
 {
   m_local->m_file = ParsingEnvironmentFilePointer(file);
+  ///@todo this is incompatible with data-sharing, remove that option again.
+  d_func_dynamic()->m_ownIndex = m_local->m_ownIndex;
 }
 
 KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const {

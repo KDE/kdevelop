@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_currentUsedDeclarationIndex(0)
+    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_currentUsedDeclarationIndex(0), m_ownIndex(0)
   {
     initializeAppendedLists();
   }
@@ -46,6 +46,7 @@ public:
     m_url = rhs.m_url;
     m_language = rhs.m_language;
     m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
+    m_ownIndex = rhs.m_ownIndex;
   }
   ~TopDUContextData() {
     freeAppendedLists();
@@ -59,6 +60,7 @@ public:
 
   IndexedString m_url;
   IndexedString m_language;
+  uint m_ownIndex;
 
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;

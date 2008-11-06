@@ -195,7 +195,6 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     if(!language.isEmpty()) {
       ///@todo Load the language if it isn't loaded yet, problem: We're possibly not in the foreground thread!
     }
-    
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
       kWarning() << "Cannot load a top-context, the requered language-support is probably not loaded";
@@ -287,6 +286,8 @@ void TopDUContextDynamicData::store() {
     m_data.append( qMakePair(QByteArray(newDataSize, 1), currentDataOffset) );
     
     m_topContext->aboutToSave();
+    
+    Q_ASSERT(m_topContext->d_func()->m_ownIndex == m_topContext->ownIndex());
     
     uint topContextDataSize = DUChainItemSystem::self().dynamicSize(*m_topContext->d_func());
     m_topContextData.append( qMakePair(QByteArray(DUChainItemSystem::self().dynamicSize(*m_topContext->d_func()), topContextDataSize), (uint)0) );
