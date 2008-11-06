@@ -1244,7 +1244,10 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 directories.append(dir);
                 QDir direc(dir);
                 foreach(const QString& s, direc.entryList(QDir::Dirs))
-                    candidates.enqueue(s);
+                {
+                    if(s!=".." && s!=".")
+                        candidates.enqueue(s);
+                }
             }
 
             QDir d(current);
