@@ -93,9 +93,10 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
       int nextBaseConversion = 0;
       if( CppClassType::Ptr c = b.baseClass.type().cast<CppClassType>() ) {
         ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
-        if( decl && decl->isPublicBaseClass( base, topContext, &nextBaseConversion ) )
+        if( decl && decl->isPublicBaseClass( base, topContext, &nextBaseConversion ) ) {
           *baseConversionLevels += nextBaseConversion;
           return true;
+        }
       }
     }
     if( baseConversionLevels )
