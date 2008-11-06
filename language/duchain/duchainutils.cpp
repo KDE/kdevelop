@@ -505,7 +505,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
 
   foreach(Declaration* found, decls) {
     const ClassFunctionDeclaration* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
-    if(foundClassFunDecl->isVirtual())
+    if(foundClassFunDecl && foundClassFunDecl->isVirtual())
       return found;
   }
     
