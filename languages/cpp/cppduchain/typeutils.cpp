@@ -164,8 +164,11 @@ namespace TypeUtils {
       kDebug(9007) << "Tried to get constructors of a class without context";
       return;
     }
+    
+    Identifier id(context->owner()->identifier());
+    id.clearTemplateIdentifiers();
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(context->owner()->identifier(), SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
+    QList<Declaration*> declarations = context->findLocalDeclarations(id, SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
