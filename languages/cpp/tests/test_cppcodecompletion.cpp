@@ -364,6 +364,34 @@ void TestCppCodeCompletion::testTypeConversion() {
   release(context);
 }
 
+KDevelop::IndexedType toReference(IndexedType t) {
+  
+  ReferenceType::Ptr refType( new ReferenceType);
+  refType->setBaseType(t.type());
+  return refType->indexed();
+}
+
+void TestCppCodeCompletion::testTypeConversion2() {
+  QByteArray test = "class A {}; class B {}; class C : public B{};";
+  TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->localDeclarations().size(), 3);
+  Cpp::TypeConversion conv(context);
+  QVERIFY( !conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+  QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+  QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[2]->indexedType()) );
+  QVERIFY( !conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[0]->indexedType()) );
+  QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[1]->indexedType()) );
+
+  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
+  QVERIFY( conv.implicitConversion(toReference(context->localDeclarations()[2]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
+  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[2]->indexedType()) ));
+  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
+  QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[0]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
+  
+  release(context);
+}
+
 void TestCppCodeCompletion::testInclude() {
   TEST_FILE_PARSE_ONLY
 

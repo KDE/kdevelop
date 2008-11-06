@@ -66,6 +66,7 @@ private slots:
   void initTestCase();
   void testInclude();
   void testTypeConversion();
+  void testTypeConversion2();
   void testCompletionContext();
   void testPrivateVariableCompletion();
   void testUnnamedNamespace();
