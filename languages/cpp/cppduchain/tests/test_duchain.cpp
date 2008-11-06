@@ -2275,6 +2275,8 @@ void TestDUChain::testTemplatesRebind2() {
   QList<Declaration*> constructors;
   TypeUtils::getConstructors( top->localDeclarations()[2]->abstractType().cast<CppClassType>(), top, constructors );
   QCOMPARE(constructors.size(), 1);
+  OverloadResolver resolution( DUContextPointer(top->localDeclarations()[2]->internalContext()), TopDUContextPointer(top) );
+  QVERIFY(resolution.resolveConstructor( OverloadResolver::ParameterList() ));
 
   Declaration* member5Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass2"));
   QVERIFY(member5Decl);

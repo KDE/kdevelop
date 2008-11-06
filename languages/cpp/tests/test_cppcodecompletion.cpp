@@ -430,6 +430,28 @@ void TestCppCodeCompletion::testTypeConversion2() {
     
     release(context);
   }
+  
+  {
+    QByteArray test = "class A {}; class C {}; enum M { Em }; template<class T> class B{ public:B(T t); }; ";
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->localDeclarations().size(), 4);
+    QCOMPARE(context->childContexts().size(), 5);
+    Cpp::TypeConversion conv(context);
+    Declaration* decl = findDeclaration(context, QualifiedIdentifier("B<A>"));
+    QVERIFY(decl);
+    kDebug() << decl->toString();
+    
+    QVERIFY( conv.implicitConversion(context->localDeclarations()[0]->indexedType(), decl->indexedType()) );
+    
+    decl = findDeclaration(context, QualifiedIdentifier("B<M>"));
+    QVERIFY(decl);
+    kDebug() << decl->toString();
+    QCOMPARE(context->childContexts()[2]->localDeclarations().size(), 1);
+    QVERIFY( conv.implicitConversion(context->childContexts()[2]->localDeclarations()[0]->indexedType(), decl->indexedType()) );    
+    
+    release(context);
+  }  
 }
 
 void TestCppCodeCompletion::testInclude() {

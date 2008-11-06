@@ -40,7 +40,9 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
       return 0;
 
     QList<Declaration*> goodDeclarations;
-    QList<Declaration*> declarations = m_context->findLocalDeclarations(m_context->localScopeIdentifier().last(), KDevelop::SimpleCursor(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions);
+    Identifier id = m_context->localScopeIdentifier().last();
+    id.clearTemplateIdentifiers();
+    QList<Declaration*> declarations = m_context->findLocalDeclarations(id, KDevelop::SimpleCursor(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions);
 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       if( (*it)->indexedType() )
