@@ -492,7 +492,7 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 
 QString KDevelop::TextView::viewState() const
 {
-    if( d->editor->editorView() )
+    if( d->editor && d->editor->editorView() )
     {
         KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
         return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
