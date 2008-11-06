@@ -32,10 +32,6 @@ set( cmakemanager_SRCS
   cmakecodecompletionmodel.cpp
 )
 
-set( cmakemanager_UI
-  cmakepossibleroots.ui
-)
-
 set( cmakesettings_SRCS
   cmakepreferences.cpp
   cmakecachemodel.cpp
@@ -60,7 +56,6 @@ target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS}
                         ${QT_QTSCRIPT_LIBRARY} ${KDevPlatform_LANGUAGE_LIBRARY}
                         )
 
-kde4_add_ui_files( cmakemanager_SRCS ${cmakemanager_UI} )
 kde4_add_plugin( kdevcmakemanager ${cmakemanager_SRCS} )
 target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
                         ${KDevPlatform_INTERFACES_LIBRARY} kdev4cmakecommon
