@@ -579,6 +579,7 @@ void KDevelop::TextEditorWidget::setEditorView(KTextEditor::View* view)
     viewStatusChanged(view, view->cursorPosition());
 
     d->widgetLayout->insertWidget(0, d->view);
+    setFocusProxy(view);
 }
 
 QString KDevelop::TextEditorWidget::status() const
