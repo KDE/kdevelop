@@ -17,7 +17,10 @@
 */
 
 #include <util/kdevvarlengtharray.h>
+#include <util/convenientfreelist.h>
 #include "../languageexport.h"
+#include "declaration.h"
+#include "ducontext.h"
 
 #ifndef PERSISTENTSYMBOLTABLE_H
 #define PERSISTENTSYMBOLTABLE_H
@@ -30,6 +33,72 @@ namespace KDevelop {
   class DeclarationId;
   class TopDUContext;
   class IndexedQualifiedIdentifier;
+
+///@todo move into own header
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler {
+    public:
+    static int leftChild(const IndexedDeclaration& m_data) {
+        return ((int)(m_data.dummyData().first))-1;
+    }
+    static void setLeftChild(IndexedDeclaration& m_data, int child) {
+        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
+    }
+    static int rightChild(const IndexedDeclaration& m_data) {
+        return ((int)m_data.dummyData().second)-1;
+    }
+    static void setRightChild(IndexedDeclaration& m_data, int child) {
+        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
+    }
+    static void createFreeItem(IndexedDeclaration& data) {
+        data = IndexedDeclaration();
+        data.setIsDummy(true);
+        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
+    }
+    //Copies this item into the given one
+    static void copyTo(const IndexedDeclaration& m_data, IndexedDeclaration& data) {
+        data = m_data;
+    }
+    
+    static bool isFree(const IndexedDeclaration& m_data) {
+        return m_data.isDummy();
+    }
+
+    static bool equals(const IndexedDeclaration& m_data, const IndexedDeclaration& rhs) {
+      return m_data == rhs;
+    }
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
+    public:
+    static int leftChild(const IndexedDUContext& m_data) {
+        return ((int)(m_data.dummyData().first))-1;
+    }
+    static void setLeftChild(IndexedDUContext& m_data, int child) {
+        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
+    }
+    static int rightChild(const IndexedDUContext& m_data) {
+        return ((int)m_data.dummyData().second)-1;
+    }
+    static void setRightChild(IndexedDUContext& m_data, int child) {
+        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
+    }
+    static void createFreeItem(IndexedDUContext& data) {
+        data = IndexedDUContext();
+        data.setIsDummy(true);
+        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
+    }
+    //Copies this item into the given one
+    static void copyTo(const IndexedDUContext& m_data, IndexedDUContext& data) {
+        data = m_data;
+    }
+    static bool isFree(const IndexedDUContext& m_data) {
+        return m_data.isDummy();
+    }
+
+    static bool equals(const IndexedDUContext& m_data, const IndexedDUContext& rhs) {
+      return m_data == rhs;
+    }
+};
 
 /**
  * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
@@ -51,6 +120,13 @@ namespace KDevelop {
     ///@param declarations A reference to a pointer, that will be filled with a pointer to the retrieved declarations.
     void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 
+    typedef ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler> Declarations;
+    
+    ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way, and returns
+    ///them in a structure that is more convenient than declarations().
+    ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
+    Declarations getDeclarations(const IndexedQualifiedIdentifier& id) const;
+
     
     void addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
 
@@ -61,6 +137,13 @@ namespace KDevelop {
     ///@param count A reference that will be filled with the count of retrieved contexts
     ///@param contexts A reference to a pointer, that will be filled with a pointer to the retrieved contexts.
     void contexts(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDUContext*& contexts) const;
+    
+    typedef ConstantConvenientEmbeddedSet<IndexedDUContext, IndexedDUContextHandler> Contexts;
+
+    ///Retrieves all the contexts for a given IndexedQualifiedIdentifier in an efficient way, and returns them
+    ///in a more user-friendly structure then contexs().
+    ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
+    Contexts getContexts(const IndexedQualifiedIdentifier& id) const;
     
     static PersistentSymbolTable& self();
 

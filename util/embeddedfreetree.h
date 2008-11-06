@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <limits>
 #include <stdlib.h>
+#include <QPair>
 
 //Uncomment this to search for tree-inconsistencies, however it's very expensive
 // #define DEBUG_FREEITEM_COUNT debugFreeItemCount(); verifyTreeConsistent(*m_centralFreeItem, 0, m_itemCount);
@@ -49,20 +50,20 @@ namespace KDevelop {
     ///@todo Better dynamic rebalancing the tree
     
     ///Responsible for handling the items in the list
-    ///This is an example. rightChild(..) and leftChild(..) must be values that must be able to hold the count of positive
+    ///This is an example. ItemHandler::rightChild(..) and ItemHandler::leftChild(..) must be values that must be able to hold the count of positive
     ///values that will be the maximum size of the list, and additionally -1.
 //     template<class Data>
 //     class ExampleItemHandler {
 //         public:
 //         ExampleItemHandler(const Data& data) : m_data(data) {
 //         }
-//         int rightChild() const {
+//         int ItemHandler::rightChild() const {
 //             Q_ASSERT(0);
 //         }
-//         int leftChild() const {
+//         int ItemHandler::leftChild() const {
 //             Q_ASSERT(0);
 //         }
-//         void setLeftChild(int child) {
+//         void ItemHandler::setLeftChild(int child) {
 //             Q_ASSERT(0);
 //         }
 //         void setRightChild(int child) {
@@ -113,11 +114,10 @@ namespace KDevelop {
 
             ///Searches the given item within the specified bounds.
             int indexOf(const Data& data, uint start, uint end) {
-                ItemHandler dataHandler(data);
                 while(1) {
                     if(start == end)
                         return -1;
-                    if(ItemHandler(m_items[start]).equals(data))
+                    if(ItemHandler::equals(m_items[start], data))
                         return start;
                     if(end-start == 1) //The range only consists of 'start'
                         return -1;
@@ -125,14 +125,53 @@ namespace KDevelop {
                     //Skip free items, since they cannot be used for ordering
                     uint center = (start + end)/2;
                     for(; center < end; ) {
-                        if(!ItemHandler(m_items[center]).isFree())
+                        if(!ItemHandler::isFree(m_items[center]))
                             break;
                         ++center;
                     }
                     if(center == end) {
                         end = (start + end)/2; //No non-free items found in second half, so continue search in the other
                     }else{
-                        if(dataHandler < ItemHandler(m_items[center])) {
+                        if(data < m_items[center]) {
+                            end = (start + end)/2;
+                        }else{
+                            //Continue search in second half
+                            start = center;
+                        }
+                    }
+                }
+                return -1;
+            }
+
+            ///Returns the first valid index that has a data-value larger or equal to @param data.
+            ///Returns -1 if nothing is found.
+            int lowerBound(const Data& data, uint start, uint end) {
+                int currentBound = -1;
+                while(1) {
+                    if(start == end)
+                        return currentBound;
+                    if(ItemHandler::equals(m_items[start], data))
+                        return start;
+                    if(end-start == 1) { //The range only consists of 'start'
+                        if(data < m_items[start])
+                            return start;
+                        else
+                            return currentBound;
+                    }
+                    
+                    //Skip free items, since they cannot be used for ordering
+                    uint center = (start + end)/2;
+                    for(; center < end; ) {
+                        if(!ItemHandler::isFree(m_items[center]))
+                            break;
+                        ++center;
+                    }
+                    if(center == end) {
+                        end = (start + end)/2; //No non-free items found in second half, so continue search in the other
+                    }else{
+                        if(data < m_items[center]) {
+//                             Q_ASSERT(currentBound == -1 || currentBound > center);
+                            currentBound = center;
                             end = (start + end)/2;
                         }else{
                             //Continue search in second half
@@ -141,7 +180,7 @@ namespace KDevelop {
                     }
                 }
             }
-            
+
         uint countFreeItems() const {
             return countFreeItemsInternal(*m_centralFreeItem);
         }
@@ -155,16 +194,15 @@ namespace KDevelop {
             if(position == -1)
                 return;
             Q_ASSERT(lowerBound <= position && position < upperBound);
-            verifyTreeConsistentInternal(ItemHandler(m_items[position]).leftChild(), lowerBound, position);
-            verifyTreeConsistentInternal(ItemHandler(m_items[position]).rightChild(), position+1, upperBound);
+            verifyTreeConsistentInternal(ItemHandler::leftChild(m_items[position]), lowerBound, position);
+            verifyTreeConsistentInternal(ItemHandler::rightChild(m_items[position]), position+1, upperBound);
         }
         
         uint countFreeItemsInternal(int item) const {
             if(item == -1)
                 return 0;
-            ItemHandler current(m_items[item]);
             
-            return 1 + countFreeItemsInternal(current.leftChild()) + countFreeItemsInternal(current.rightChild());
+            return 1 + countFreeItemsInternal(ItemHandler::leftChild(m_items[item])) + countFreeItemsInternal(ItemHandler::rightChild(m_items[item]));
         }
 
            const Data* m_items;
@@ -258,35 +296,35 @@ namespace KDevelop {
                
                while(1) {
                    QPair<int, int> freeBounds = leftAndRightRealItems(currentItem);
-                   ItemHandler current(m_items[currentItem]);
-                   if(freeBounds.first != -1 && m_add < item(freeBounds.first)) {
+                   const Data& current(m_items[currentItem]);
+                   if(freeBounds.first != -1 && m_add < m_items[freeBounds.first]) {
                        //Follow left child
-                       if(current.leftChild() != -1) {
+                       if(ItemHandler::leftChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
-                           currentItem = current.leftChild();
+                           currentItem = ItemHandler::leftChild(current);
                        }else{
-                           replaceCurrentWith = current.rightChild();
+                           replaceCurrentWith = ItemHandler::rightChild(current);
                            break;
                        }
-                   }else if(freeBounds.second != -1 && item(freeBounds.second) < m_add) {
+                   }else if(freeBounds.second != -1 && m_items[freeBounds.second] < m_add) {
                        //Follow right child
-                       if(current.rightChild() != -1) {
+                       if(ItemHandler::rightChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
-                           currentItem = current.rightChild();
+                           currentItem = ItemHandler::rightChild(current);
                        }else{
-                           replaceCurrentWith = current.leftChild();
+                           replaceCurrentWith = ItemHandler::leftChild(current);
                            break;
                        }
                    }else{
                        //We will use this item! So find a replacement for it in the tree, and update the structure
                        
                        int leftReplaceCandidate = -1, rightReplaceCandidate = -1;
-                       if(current.leftChild() != -1)
-                           leftReplaceCandidate = rightMostChild(current.leftChild());
-                       if(current.rightChild() != -1)
-                           rightReplaceCandidate = leftMostChild(current.rightChild());
+                       if(ItemHandler::leftChild(current) != -1)
+                           leftReplaceCandidate = rightMostChild(ItemHandler::leftChild(current));
+                       if(ItemHandler::rightChild(current) != -1)
+                           rightReplaceCandidate = leftMostChild(ItemHandler::rightChild(current));
                        
                        ///@todo it's probably better using lowerBound and upperBound like in the "remove" version
                        //Left and right bounds of all children of current
@@ -296,94 +334,94 @@ namespace KDevelop {
                        
                        if(leftReplaceCandidate == -1 && rightReplaceCandidate == -1) {
                           //We don't have a replace candidate, since there is no children
-                          Q_ASSERT(current.leftChild() == -1);
-                          Q_ASSERT(current.rightChild() == -1);
+                          Q_ASSERT(ItemHandler::leftChild(current) == -1);
+                          Q_ASSERT(ItemHandler::rightChild(current) == -1);
                        }else if(rightReplaceCandidate == -1 || abs(leftReplaceCandidate - childCenter) < abs(rightReplaceCandidate - childCenter)) {
                            //pick the left replacement, since it's more central
                            Q_ASSERT(leftReplaceCandidate != -1);
                            replaceCurrentWith = leftReplaceCandidate;
                            
-                           ItemHandler replaceWith(m_items[replaceCurrentWith]);
+                           Data& replaceWith(m_items[replaceCurrentWith]);
                            
-                           if(replaceCurrentWith == current.leftChild()) {
+                           if(replaceCurrentWith == ItemHandler::leftChild(current)) {
                                //The left child of replaceWith can just stay as it is, and we just need to add the right child
-                               Q_ASSERT(replaceWith.rightChild() == -1);
+                               Q_ASSERT(ItemHandler::rightChild(replaceWith) == -1);
                            }else{
-                            takeRightMostChild(current.leftChild());
+                            takeRightMostChild(ItemHandler::leftChild(current));
                             
                             //Since we'll be clearing the item, we have to put this childsomewhere else. 
                             // Either make it our new "left" child, or make it the new left children "rightmost" child.
-                            int addRightMostLeftChild = replaceWith.leftChild();
+                            int addRightMostLeftChild = ItemHandler::leftChild(replaceWith);
                             
-                            replaceWith.setLeftChild(-1);
+                            ItemHandler::setLeftChild(replaceWith, -1);
                             
-                            Q_ASSERT(replaceWith.leftChild() == -1);
-                            Q_ASSERT(replaceWith.rightChild() == -1);
+                            Q_ASSERT(ItemHandler::leftChild(replaceWith) == -1);
+                            Q_ASSERT(ItemHandler::rightChild(replaceWith) == -1);
                             
-                            if(current.leftChild() != -1)
+                            if(ItemHandler::leftChild(current) != -1)
                             {
-                                Q_ASSERT(rightMostChild(current.leftChild()) != replaceCurrentWith);
-                                Q_ASSERT(current.leftChild() == -1 || current.leftChild() < replaceCurrentWith);
-                                replaceWith.setLeftChild(current.leftChild());
+                                Q_ASSERT(rightMostChild(ItemHandler::leftChild(current)) != replaceCurrentWith);
+                                Q_ASSERT(ItemHandler::leftChild(current) == -1 || ItemHandler::leftChild(current) < replaceCurrentWith);
+                                ItemHandler::setLeftChild(replaceWith, ItemHandler::leftChild(current));
                                 
                                 if(addRightMostLeftChild != -1) {
-                                    int rightMostLeft = rightMostChild(replaceWith.leftChild());
+                                    int rightMostLeft = rightMostChild(ItemHandler::leftChild(replaceWith));
                                     Q_ASSERT(rightMostLeft != -1);
-                                    Q_ASSERT(item(rightMostLeft).rightChild() == -1);
+//                                     Q_ASSERT(item(rightMostLeft).ItemHandler::rightChild() == -1);
                                     Q_ASSERT(rightMostLeft < addRightMostLeftChild);
-                                    item(rightMostLeft).setRightChild(addRightMostLeftChild);
+                                    ItemHandler::setRightChild(m_items[rightMostLeft], addRightMostLeftChild);
                                 }
                             }else{
                                 Q_ASSERT(addRightMostLeftChild == -1 || addRightMostLeftChild < replaceCurrentWith);
-                                replaceWith.setLeftChild(addRightMostLeftChild);
+                                ItemHandler::setLeftChild(replaceWith, addRightMostLeftChild);
                             }
                            }
                            
-                           Q_ASSERT(current.rightChild() == -1 || replaceCurrentWith < current.rightChild());
-                           replaceWith.setRightChild(current.rightChild());
+                           Q_ASSERT(ItemHandler::rightChild(current) == -1 || replaceCurrentWith < ItemHandler::rightChild(current));
+                           ItemHandler::setRightChild(replaceWith, ItemHandler::rightChild(current));
                        }else{
                            //pick the right replacement, since it's more central
                            Q_ASSERT(rightReplaceCandidate != -1);
                            replaceCurrentWith = rightReplaceCandidate;
                            
-                           ItemHandler replaceWith(m_items[replaceCurrentWith]);
+                           Data& replaceWith(m_items[replaceCurrentWith]);
                            
-                           if(replaceCurrentWith == current.rightChild()) {
+                           if(replaceCurrentWith == ItemHandler::rightChild(current)) {
                                //The right child of replaceWith can just stay as it is, and we just need to add the left child
-                               Q_ASSERT(replaceWith.leftChild() == -1);
+                               Q_ASSERT(ItemHandler::leftChild(replaceWith) == -1);
                            }else{
-                            takeLeftMostChild(current.rightChild());
+                            takeLeftMostChild(ItemHandler::rightChild(current));
                             
                             //Since we'll be clearing the item, we have to put this childsomewhere else. 
                             // Either make it our new "right" child, or make it the new right children "leftmost" child.
-                            int addLeftMostRightChild = replaceWith.rightChild();
+                            int addLeftMostRightChild = ItemHandler::rightChild(replaceWith);
                             
-                            replaceWith.setRightChild(-1);
+                            ItemHandler::setRightChild(replaceWith, -1);
                             
-                            Q_ASSERT(replaceWith.rightChild() == -1);
-                            Q_ASSERT(replaceWith.leftChild() == -1);
+                            Q_ASSERT(ItemHandler::rightChild(replaceWith) == -1);
+                            Q_ASSERT(ItemHandler::leftChild(replaceWith) == -1);
                             
-                            if(current.rightChild() != -1)
+                            if(ItemHandler::rightChild(current) != -1)
                             {
-                                Q_ASSERT(leftMostChild(current.rightChild()) != replaceCurrentWith);
-                                Q_ASSERT(current.rightChild() == -1 || replaceCurrentWith < current.rightChild());
-                                replaceWith.setRightChild(current.rightChild());
+                                Q_ASSERT(leftMostChild(ItemHandler::rightChild(current)) != replaceCurrentWith);
+                                Q_ASSERT(ItemHandler::rightChild(current) == -1 || replaceCurrentWith < ItemHandler::rightChild(current));
+                                ItemHandler::setRightChild(replaceWith, ItemHandler::rightChild(current));
                                 
                                 if(addLeftMostRightChild != -1) {
-                                    int leftMostRight = leftMostChild(replaceWith.rightChild());
+                                    int leftMostRight = leftMostChild(ItemHandler::rightChild(replaceWith));
                                     Q_ASSERT(leftMostRight != -1);
-                                    Q_ASSERT(item(leftMostRight).leftChild() == -1);
+                                    Q_ASSERT(ItemHandler::leftChild(m_items[leftMostRight]) == -1);
                                     Q_ASSERT(addLeftMostRightChild < leftMostRight);
-                                    item(leftMostRight).setLeftChild(addLeftMostRightChild);
+                                    ItemHandler::setLeftChild(m_items[leftMostRight], addLeftMostRightChild);
                                 }
                             }else{
                                 Q_ASSERT(addLeftMostRightChild == -1 || replaceCurrentWith < addLeftMostRightChild);
-                                replaceWith.setRightChild(addLeftMostRightChild);
+                                ItemHandler::setRightChild(replaceWith, addLeftMostRightChild);
                             }
                            }
                            
-                           Q_ASSERT(current.leftChild() == -1 || current.leftChild() < replaceCurrentWith);
-                           replaceWith.setLeftChild(current.leftChild());
+                           Q_ASSERT(ItemHandler::leftChild(current) == -1 || ItemHandler::leftChild(current) < replaceCurrentWith);
+                           ItemHandler::setLeftChild(replaceWith, ItemHandler::leftChild(current));
                        }
                        break;
                    }
@@ -394,13 +432,13 @@ namespace KDevelop {
                 
                //First, take currentItem out of the chain, by replacing it with current.rightChild in the parent
                if(previousItem != -1) {
-                   ItemHandler previous(m_items[previousItem]);
-                    if(previous.leftChild() == currentItem) {
+                   Data& previous(m_items[previousItem]);
+                    if(ItemHandler::leftChild(previous) == currentItem) {
                         Q_ASSERT(replaceCurrentWith == -1 || replaceCurrentWith < previousItem);
-                        previous.setLeftChild(replaceCurrentWith);
-                    } else if(previous.rightChild() == currentItem) {
+                        ItemHandler::setLeftChild(previous, replaceCurrentWith);
+                    } else if(ItemHandler::rightChild(previous) == currentItem) {
                         Q_ASSERT(replaceCurrentWith == -1 || previousItem < replaceCurrentWith);
-                        previous.setRightChild(replaceCurrentWith);
+                        ItemHandler::setRightChild(previous, replaceCurrentWith);
                     } else {
                         Q_ASSERT(0);
                     }
@@ -408,7 +446,7 @@ namespace KDevelop {
                    *m_centralFreeItem = replaceCurrentWith;
                }
                
-               m_add.copyTo(m_items[currentItem]);
+               ItemHandler::copyTo(m_add, m_items[currentItem]);
                updateSorting(currentItem);
                DEBUG_FREEITEM_COUNT
            }
@@ -418,14 +456,14 @@ namespace KDevelop {
                if(position == -1)
                    return;
                Q_ASSERT(lowerBound <= position && position < upperBound);
-               verifyTreeConsistent(item(position).leftChild(), lowerBound, position);
-               verifyTreeConsistent(item(position).rightChild(), position+1, upperBound);
+               verifyTreeConsistent(ItemHandler::leftChild(m_items[position]), lowerBound, position);
+               verifyTreeConsistent(ItemHandler::rightChild(m_items[position]), position+1, upperBound);
            }
             
             void debugFreeItemCount() {
                 uint count = 0;
                 for(uint a = 0; a < m_itemCount; ++a) {
-                    if(item(a).isFree())
+                    if(isFree(m_items[a]))
                         ++count;
                 }
                 uint counted = countFreeItems(*m_centralFreeItem);
@@ -433,16 +471,16 @@ namespace KDevelop {
             }
             
             QPair<int, int> leftAndRightRealItems(int pos) {
-                Q_ASSERT(item(pos).isFree());
+                Q_ASSERT(ItemHandler::isFree(m_items[pos]));
                 int left = -1, right = -1;
                 for(int a = pos-1; a >= 0; --a) {
-                    if(!item(a).isFree()) {
+                    if(!ItemHandler::isFree(m_items[a])) {
                         left = a;
                         break;
                     }
                 }
                 for(uint a = pos+1; a < m_itemCount; ++a) {
-                    if(!item(a).isFree()) {
+                    if(!ItemHandler::isFree(m_items[a])) {
                         right = a;
                         break;
                     }
@@ -464,16 +502,16 @@ namespace KDevelop {
                     int rightCount = count - leftCount - midCount;
                     Q_ASSERT(leftCount + midCount <= count);
                     ItemHandler::createFreeItem(m_items[central]);
-                    Q_ASSERT(item(central).isFree());
+                    Q_ASSERT(ItemHandler::isFree(m_items[central]));
                     
                     int leftFreeTree = buildFreeTree(leftCount, raster, start);
                     Q_ASSERT(leftFreeTree == -1 || leftFreeTree < central);
-                    item(central).setLeftChild( leftFreeTree );
+                    ItemHandler::setLeftChild(m_items[central],  leftFreeTree );
                     
                     if(rightCount > 0) {
                         int rightFreeTree = buildFreeTree(rightCount, raster, central+raster);
                         Q_ASSERT(rightFreeTree == -1 || central < rightFreeTree);
-                        item(central).setRightChild( rightFreeTree );
+                        ItemHandler::setRightChild(m_items[central], rightFreeTree );
                     }
                     
                     return central;
@@ -483,20 +521,15 @@ namespace KDevelop {
             uint countFreeItems(int item) const {
                 if(item == -1)
                     return 0;
-                ItemHandler current(m_items[item]);
+                const Data& current(m_items[item]);
                 
-                return 1 + countFreeItems(current.leftChild()) + countFreeItems(current.rightChild());
-            }
-            
-            ItemHandler item(uint number) const {
-                return ItemHandler(m_items[number]);
+                return 1 + countFreeItems(ItemHandler::leftChild(current)) + countFreeItems(ItemHandler::rightChild(current));
             }
             
            int leftMostChild(int pos) const {
                while(1) {
-                   ItemHandler handler(m_items[pos]);
-                   if(handler.leftChild() != -1)
-                       pos = handler.leftChild();
+                   if(ItemHandler::leftChild(m_items[pos]) != -1)
+                       pos = ItemHandler::leftChild(m_items[pos]);
                    else
                        return pos;
                }
@@ -505,13 +538,11 @@ namespace KDevelop {
            int takeLeftMostChild(int pos) const {
                int parent = -1;
                while(1) {
-                   ItemHandler handler(m_items[pos]);
-                   if(handler.leftChild() != -1) {
+                   if(ItemHandler::leftChild(m_items[pos]) != -1) {
                        parent = pos;
-                       pos = handler.leftChild();
+                       pos = ItemHandler::leftChild(m_items[pos]);
                    } else {
-                       ItemHandler parentHandler(m_items[parent]);
-                       parentHandler.setLeftChild(-1);
+                       ItemHandler::setLeftChild(m_items[parent], -1);
                        return pos;
                    }
                }
@@ -519,9 +550,8 @@ namespace KDevelop {
 
            int rightMostChild(int pos) const {
                while(1) {
-                   ItemHandler handler(m_items[pos]);
-                   if(handler.rightChild() != -1)
-                       pos = handler.rightChild();
+                   if(ItemHandler::rightChild(m_items[pos]) != -1)
+                       pos = ItemHandler::rightChild(m_items[pos]);
                    else
                        return pos;
                }
@@ -530,13 +560,11 @@ namespace KDevelop {
            int takeRightMostChild(int pos) const {
                int parent = -1;
                while(1) {
-                   ItemHandler handler(m_items[pos]);
-                   if(handler.rightChild() != -1) {
+                   if(ItemHandler::rightChild(m_items[pos]) != -1) {
                        parent = pos;
-                       pos = handler.rightChild();
+                       pos = ItemHandler::rightChild(m_items[pos]);
                    } else {
-                       ItemHandler parentHandler(m_items[parent]);
-                       parentHandler.setRightChild(-1);
+                       ItemHandler::setRightChild(m_items[parent], -1);
                        return pos;
                    }
                }
@@ -547,12 +575,12 @@ namespace KDevelop {
                while(1) {
                 int prev = pos-1;
                 int next = pos+1;
-                if(prev >= 0 && !item(prev).isFree() && item(pos) < item(prev)) {
+                if(prev >= 0 && !ItemHandler::isFree(m_items[prev]) && m_items[pos] < m_items[prev]) {
                     Data backup(m_items[prev]);
                     m_items[prev] = m_items[pos];
                     m_items[pos] = backup;
                     pos = prev;
-                }else if(next < (int)m_itemCount && !item(next).isFree() && item(next) < item(pos)) {
+                }else if(next < (int)m_itemCount && !ItemHandler::isFree(m_items[next]) && m_items[next] < m_items[pos]) {
                     Data backup(m_items[next]);
                     m_items[next] = m_items[pos];
                     m_items[pos] = backup;
@@ -563,7 +591,7 @@ namespace KDevelop {
                }
            }
            
-           ItemHandler m_add;
+           const Data& m_add;
            Data* m_items;
            uint m_itemCount;
            int* m_centralFreeItem;
@@ -609,7 +637,7 @@ namespace KDevelop {
                 //Create a list where only the non-free items exist
                 uint offset = 0;
                 for(uint a = 0; a < m_itemCount; ++a) {
-                    if(!item(a).isFree()) {
+                    if(!ItemHandler::isFree(m_items[a])) {
                         newItems[offset] = m_items[a];
                         ++offset;
                     }
@@ -629,21 +657,16 @@ namespace KDevelop {
                 if(position == -1)
                     return;
                 Q_ASSERT(lowerBound <= position && position < upperBound);
-                verifyTreeConsistent(item(position).leftChild(), lowerBound, position);
-                verifyTreeConsistent(item(position).rightChild(), position+1, upperBound);
+                verifyTreeConsistent(ItemHandler::leftChild(m_items[position]), lowerBound, position);
+                verifyTreeConsistent(ItemHandler::rightChild(m_items[position]), position+1, upperBound);
            }
             
             uint countFreeItems(int item) const {
                 if(item == -1)
                     return 0;
-                ItemHandler current(m_items[item]);
+                const Data& current(m_items[item]);
                 
-                return 1 + countFreeItems(current.leftChild()) + countFreeItems(current.rightChild());
-            }
-            
-            ItemHandler item(uint number) const {
-                Q_ASSERT(number < m_itemCount);
-                return ItemHandler(m_items[number]);
+                return 1 + countFreeItems(ItemHandler::leftChild(current)) + countFreeItems(ItemHandler::rightChild(current));
             }
             
             int findItem(const Data& data, uint start, uint end) {
@@ -654,9 +677,9 @@ namespace KDevelop {
            void apply() {
                DEBUG_FREEITEM_COUNT
                
-               int removeIndex = findItem(m_remove.data(), 0, m_itemCount);
+               int removeIndex = findItem(m_remove, 0, m_itemCount);
                Q_ASSERT(removeIndex != -1);
-               Q_ASSERT(!item(removeIndex).isFree());
+               Q_ASSERT(!ItemHandler::isFree(m_items[removeIndex]));
                
                //Find the free item that is nearest to the target position in the item order
                int previousItem = -1;
@@ -677,40 +700,40 @@ namespace KDevelop {
                ///      to balance the tree
                while(1) {
                    Q_ASSERT(removeIndex != currentItem);
-                   ItemHandler current(m_items[currentItem]);
+                   Data& current(m_items[currentItem]);
                    if(removeIndex < currentItem) {
                        upperBound = currentItem;
                        //Follow left child
-                       if(current.leftChild() != -1) {
+                       if(ItemHandler::leftChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
-                           currentItem = current.leftChild();
+                           currentItem = ItemHandler::leftChild(current);
                            Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
                            //The to-be deleted item is before current, and can be added as left child to current 
-                           int item = findItem(m_remove.data(), lowerBound, upperBound);
+                           int item = findItem(m_remove, lowerBound, upperBound);
                            Q_ASSERT(item == removeIndex);
                            ItemHandler::createFreeItem(m_items[item]);
                            Q_ASSERT(item == -1 || item < currentItem);
-                           current.setLeftChild(item);
+                           ItemHandler::setLeftChild(current, item);
                            Q_ASSERT(item >= lowerBound && item < upperBound);
                            break;
                        }
                    }else{
                        lowerBound = currentItem+1;
                        //Follow right child
-                       if(current.rightChild() != -1) {
+                       if(ItemHandler::rightChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
-                           currentItem = current.rightChild();
+                           currentItem = ItemHandler::rightChild(current);
                            Q_ASSERT(currentItem >= lowerBound && currentItem < upperBound);
                        }else{
                            //The to-be deleted item is behind current, and can be added as right child to current 
-                           int item = findItem(m_remove.data(), lowerBound, upperBound);
+                           int item = findItem(m_remove, lowerBound, upperBound);
                            Q_ASSERT(item == removeIndex);
                            ItemHandler::createFreeItem(m_items[item]);
                            Q_ASSERT(item == -1 || currentItem < item);
-                           current.setRightChild(item);
+                           ItemHandler::setRightChild(current, item);
                            Q_ASSERT(item >= lowerBound && item < upperBound);
                            break;
                        }
@@ -723,7 +746,7 @@ namespace KDevelop {
            void debugFreeItemCount() {
                uint count = 0;
                for(uint a = 0; a < m_itemCount; ++a) {
-                   if(item(a).isFree())
+                   if(ItemHandler::isFree(m_items[a]))
                        ++count;
                }
                uint counted = countFreeItems(*m_centralFreeItem);
@@ -735,7 +758,7 @@ namespace KDevelop {
                Q_ASSERT(0);
            }
            
-           ItemHandler m_remove;
+           const Data& m_remove;
            Data* m_items;
            uint m_itemCount;
            int* m_centralFreeItem;

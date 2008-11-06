@@ -48,6 +48,9 @@ namespace KDevelop {
       Kind kind;
       uint uKind;
     };
+    bool operator<(const CodeModelItem& rhs) const {
+      return id < rhs.id;
+    }
   };
   
 /**

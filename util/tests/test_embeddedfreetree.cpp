@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <set>
 #include <util/embeddedfreetree.h>
+#include <util/convenientfreelist.h>
 #include <kdebug.h>
 
 struct TestItem {
@@ -37,6 +38,15 @@ struct TestItem {
         return value < item.value;
     }
 };
+
+uint extractor_div_with = 0;
+
+struct Extractor{
+    static TestItem extract(const TestItem& item) {
+        return TestItem(item.value/extractor_div_with);
+    }
+};
+
 
 clock_t std_insertion = 0, std_removal = 0, std_contains = 0, std_iteration = 0, emb_insertion = 0, emb_removal = 0, emb_contains = 0, emb_iteration = 0;
 
@@ -64,49 +74,36 @@ bool operator==(const std::set<uint> a, const std::set<uint> b) {
 
     struct TestItemHandler {
         public:
-        TestItemHandler (const TestItem& data) : m_data(const_cast<TestItem&>(data)) {
-        }
-        int rightChild() const {
+        static int rightChild(const TestItem& m_data) {
             return m_data.rightChild;
         }
-        int leftChild() const {
+        static int leftChild(const TestItem& m_data) {
             return m_data.leftChild;
         }
-        void setLeftChild(int child) {
+        static void setLeftChild(TestItem& m_data, int child) {
             m_data.leftChild = child;
         }
-        void setRightChild(int child) {
+        static void setRightChild(TestItem& m_data, int child) {
             m_data.rightChild = child;
         }
-        bool operator<(const TestItemHandler & rhs) const {
-            Q_ASSERT(m_data.value && rhs.m_data.value);
-            return m_data.value < rhs.m_data.value;
-        }
         //Copies this item into the given one
-        void copyTo(TestItem& data) const {
+        static void copyTo(const TestItem& m_data, TestItem& data) {
             data = m_data;
         }
         static void createFreeItem(TestItem& data) {
             data = TestItem();
         }
-        bool isFree() const {
+        static inline bool isFree(const TestItem& m_data) {
             return !m_data.value;
         }
         
-        const TestItem& data() const {
+        static const TestItem& data(const TestItem& m_data) {
             return m_data;
         }
 
-        TestItem& data() {
-            return m_data;
-        }
-
-        bool equals(const TestItem& rhs) const {
+        inline static bool equals(const TestItem& m_data, const TestItem& rhs) {
             return m_data.value == rhs.value;
         }
-        
-        private:
-            TestItem& m_data;
     };
     
     class TestItemBasedSet {
@@ -375,6 +372,109 @@ class TestEmbeddedFreeTree : public QObject {
         set.verify();
         set.add(9);
         set.verify();
+    }
+    
+   
+    void testFiltering() {
+
+        clock_t stdTime = 0;
+        clock_t algoTime = 0;
+        
+        uint cycles = 1000;
+        
+        uint totalItems = 0, totalFilteredItems = 0;
+        
+        srand(time(NULL));
+        for(int a = 0; a < cycles; ++a) {
+            KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set1;
+            std::set<uint> testSet1;
+            KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set2;
+            std::set<uint> testSet2;
+            
+            if(a % (cycles / 10) == 0)
+                kDebug() << "cycle" << a;
+            
+            //Build the sets
+            extractor_div_with = (rand() % 10) + 1;
+            for(int a = 0; a < 4000; ++a) {
+                uint value = rand() % 1500;
+                uint divValue = value/extractor_div_with;
+                if(!divValue)
+                    continue;
+//                 kDebug() << "inserting" << value;
+
+                std::set<uint>::const_iterator it = testSet1.lower_bound(value);
+                int pos = set1.iterator().lowerBound(TestItem(value));
+                //This tests the upperBound functionality
+
+                Q_ASSERT((pos != -1 && it != testSet1.end() && set1.data()[pos].value == *it) || (pos == -1 && it == testSet1.end()));
+
+                set1.insert(TestItem(value));
+                testSet1.insert(value);
+                
+                //This is tuned so in the end, about 99% of all declarations are filtered out, like in the symbol table.
+                if((rand() % (extractor_div_with*100)) == 0) {
+                    set2.insert(TestItem(divValue));
+                    testSet2.insert(divValue);
+                }
+            }
+            
+            std::set<uint> verifySet1;
+            for(KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler>::Iterator it = set1.iterator(); it; ++it)
+                verifySet1.insert(it->value);
+            
+            std::set<uint> verifySet2;
+            for(KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler>::Iterator it = set2.iterator(); it; ++it)
+                verifySet2.insert(it->value);
+            QCOMPARE(verifySet1, testSet1);
+            QCOMPARE(verifySet2, testSet2);
+
+            std::set<uint> algoFiltered;
+
+            {
+                //Do the filtering once without actions on the filtered items, just for calculating the time
+                clock_t start = clock();
+                
+                KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
+                while(filterIterator)
+                    ++filterIterator;
+                
+                algoTime += clock() - start;
+                
+                std::set<uint> stdFiltered;
+                
+                start = clock();
+                
+                for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {
+                    if(testSet2.count((*it) / extractor_div_with) == 1) {
+                    }
+                }
+                
+                stdTime += clock() - start;
+            }
+
+            KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
+            while(filterIterator) {
+                algoFiltered.insert(filterIterator->value);
+                ++filterIterator;
+            }
+            
+            totalItems += testSet1.size();
+            totalFilteredItems += algoFiltered.size();
+            
+            
+            std::set<uint> stdFiltered;
+            
+            for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {
+                if(testSet2.count((*it) / extractor_div_with) == 1)
+                    stdFiltered.insert(*it);
+            }
+            
+            QCOMPARE(algoFiltered, stdFiltered);
+            
+        }
+        kDebug() << "Filtering performance: embedded-list filtering:" << toSeconds(algoTime) << "std::set filtering:" << toSeconds(stdTime) << "total processed items:" << totalItems << "total items after filtering:" << totalFilteredItems;
+        
     }
 };
 

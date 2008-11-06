@@ -159,18 +159,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
 
 class IndexedTopDUContextEmbeddedTreeHandler {
     public:
-    IndexedTopDUContextEmbeddedTreeHandler(const IndexedTopDUContext& data) : m_data(const_cast<IndexedTopDUContext&>(data)) {
-    }
-    int leftChild() const {
+    static int leftChild(const IndexedTopDUContext& m_data) {
         return int(m_data.dummyData().first)-1;
     }
-    void setLeftChild(int child) {
+    static void setLeftChild(IndexedTopDUContext& m_data, int child) {
         m_data.setDummyData((ushort)(child+1), m_data.dummyData().second);
     }
-    int rightChild() const {
+    static int rightChild(const IndexedTopDUContext& m_data) {
         return int(m_data.dummyData().second)-1;
     }
-    void setRightChild(int child) {
+    static void setRightChild(IndexedTopDUContext& m_data, int child) {
         m_data.setDummyData(m_data.dummyData().first, (ushort)(child+1));
     }
     static void createFreeItem(IndexedTopDUContext& data) {
@@ -178,27 +176,17 @@ class IndexedTopDUContextEmbeddedTreeHandler {
         data.setIsDummy(true);
         data.setDummyData(0u, 0u); //Since we substract 1, this equals children -1, -1
     }
-    bool operator<(const IndexedTopDUContextEmbeddedTreeHandler& rhs) const {
-        return m_data < rhs.m_data;
-    }
     //Copies this item into the given one
-    void copyTo(IndexedTopDUContext& data) const {
+    static void copyTo(const IndexedTopDUContext& m_data, IndexedTopDUContext& data) {
         data = m_data;
     }
-    bool isFree() const {
+    static bool isFree(const IndexedTopDUContext& m_data) {
         return m_data.isDummy();
     }
 
-    const IndexedTopDUContext& data() {
-      return m_data;
-    }
-    
-    bool equals(const IndexedTopDUContext& rhs) const {
+    static bool equals(const IndexedTopDUContext& m_data, const IndexedTopDUContext& rhs) {
       return m_data == rhs;
     }
-    
-    private:
-        IndexedTopDUContext& m_data;
 };
 
 
@@ -244,6 +232,9 @@ public:
   
   TopDUContext* topContext() const;
 
+  ///Returns an indexed representation of this top-context. Indexed representations stay valid even if the top-context is unloaded.
+  IndexedTopDUContext indexed() const;
+  
   uint ownIndex() const;
   
   IndexedString url() const;
@@ -378,7 +369,7 @@ public:
   ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
   virtual void clearImportedParentContexts();
   
-  typedef ConvenientEmbeddedSetIterator<IndexedTopDUContext, IndexedTopDUContextEmbeddedTreeHandler> RecursiveImportsIterator;
+  typedef ConvenientFreeListSet<IndexedTopDUContext, IndexedTopDUContextEmbeddedTreeHandler> IndexedRecursiveImports;
   
   ///@todo Create a cache of recursive imports that is stored to disk, so we don't need to load all imports when loading a file
   ///A cached set of all top-contexts that are recursively imported into this one. It is updated when updateRecursiveImports() is called,
@@ -440,7 +431,8 @@ private:
   ///import through which the top-context is imported.
   RecursiveImports recursiveImports() const;
   ///Returns the indices of all recursively imported top-contexts
-  const QSet<uint>& recursiveImportIndices() const;
+  ///The list also contains this context itself
+  const IndexedRecursiveImports& recursiveImportIndices() const;
   
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
   //Must be called after all imported top-contexts were loaded into the du-chain

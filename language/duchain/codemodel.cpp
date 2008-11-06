@@ -33,25 +33,20 @@ namespace KDevelop {
 
 class CodeModelItemHandler {
     public:
-    CodeModelItemHandler(const CodeModelItem& data) : m_data(const_cast<CodeModelItem&>(data)) {
-    }
-    int leftChild() const {
+    static int leftChild(const CodeModelItem& m_data) {
         return (int)m_data.referenceCount;
     }
-    void setLeftChild(int child) {
+    static void setLeftChild(CodeModelItem& m_data, int child) {
         m_data.referenceCount = (uint)child;
     }
-    int rightChild() const {
+    static int rightChild(const CodeModelItem& m_data) {
         return (int)m_data.uKind;
     }
-    void setRightChild(int child) {
+    static void setRightChild(CodeModelItem& m_data, int child) {
         m_data.uKind = (uint)child;
     }
-    bool operator<(const CodeModelItemHandler& rhs) const {
-        return m_data.id < rhs.m_data.id;
-    }
     //Copies this item into the given one
-    void copyTo(CodeModelItem& data) const {
+    static void copyTo(const CodeModelItem& m_data, CodeModelItem& data) {
         data = m_data;
     }
     
@@ -61,20 +56,17 @@ class CodeModelItemHandler {
         data.uKind = (uint)-1;
     }
     
-    bool isFree() const {
+    static bool isFree(const CodeModelItem& m_data) {
         return !m_data.id.isValid();
     }
 
-    const CodeModelItem& data() {
+    static const CodeModelItem& data(const CodeModelItem& m_data) {
       return m_data;
     }
     
-    bool equals(const CodeModelItem& rhs) const {
+    static bool equals(const CodeModelItem& m_data, const CodeModelItem& rhs) {
       return m_data.id == rhs.id;
     }
-    
-    private:
-        CodeModelItem& m_data;
 };
 
 

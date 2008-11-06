@@ -33,95 +33,6 @@ namespace KDevelop {
 
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 
-class IndexedDeclarationHandler {
-    public:
-    IndexedDeclarationHandler(const IndexedDeclaration& data) : m_data(const_cast<IndexedDeclaration&>(data)) {
-    }
-    int leftChild() const {
-        return ((int)(m_data.dummyData().first))-1;
-    }
-    void setLeftChild(int child) {
-        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
-    }
-    int rightChild() const {
-        return ((int)m_data.dummyData().second)-1;
-    }
-    void setRightChild(int child) {
-        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
-    }
-    static void createFreeItem(IndexedDeclaration& data) {
-        data = IndexedDeclaration();
-        data.setIsDummy(true);
-        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
-    }
-    bool operator<(const IndexedDeclarationHandler& rhs) const {
-        return m_data < rhs.m_data;
-    }
-    //Copies this item into the given one
-    void copyTo(IndexedDeclaration& data) const {
-        data = m_data;
-    }
-    
-    bool isFree() const {
-        return m_data.isDummy();
-    }
-
-    const IndexedDeclaration& data() {
-      return m_data;
-    }
-    
-    bool equals(const IndexedDeclaration& rhs) const {
-      return m_data == rhs;
-    }
-    
-    private:
-        IndexedDeclaration& m_data;
-};
-
-class IndexedDUContextHandler {
-    public:
-    IndexedDUContextHandler(const IndexedDUContext& data) : m_data(const_cast<IndexedDUContext&>(data)) {
-    }
-    int leftChild() const {
-        return ((int)(m_data.dummyData().first))-1;
-    }
-    void setLeftChild(int child) {
-        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
-    }
-    int rightChild() const {
-        return ((int)m_data.dummyData().second)-1;
-    }
-    void setRightChild(int child) {
-        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
-    }
-    static void createFreeItem(IndexedDUContext& data) {
-        data = IndexedDUContext();
-        data.setIsDummy(true);
-        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
-    }
-    bool operator<(const IndexedDUContextHandler& rhs) const {
-        return m_data < rhs.m_data;
-    }
-    //Copies this item into the given one
-    void copyTo(IndexedDUContext& data) const {
-        data = m_data;
-    }
-    bool isFree() const {
-        return m_data.isDummy();
-    }
-
-    const IndexedDUContext& data() {
-      return m_data;
-    }
-    
-    bool equals(const IndexedDUContext& rhs) const {
-      return m_data == rhs;
-    }
-    
-    private:
-        IndexedDUContext& m_data;
-};
-
 class PersistentSymbolTableItem {
   public:
   PersistentSymbolTableItem() : centralFreeItem(-1) {
@@ -357,6 +268,21 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     d->m_declarations.index(request);
 }
 
+PersistentSymbolTable::Declarations PersistentSymbolTable::getDeclarations(const IndexedQualifiedIdentifier& id) const {
+  PersistentSymbolTableItem item;
+  item.id = id;
+  PersistentSymbolTableRequestItem request(item);
+  
+  uint index = d->m_declarations.findIndex(item);
+  
+  if(index) {
+    const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
+    return PersistentSymbolTable::Declarations(repositoryItem->declarations(), repositoryItem->declarationsSize(), repositoryItem->centralFreeItem);
+  }else{
+    return PersistentSymbolTable::Declarations();
+  }
+}
+
 void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget) const
 {
   PersistentSymbolTableItem item;
@@ -454,6 +380,21 @@ void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, 
   //This inserts the changed item
   if(item.contextsSize())
     d->m_contexts.index(request);
+}
+
+PersistentSymbolTable::Contexts PersistentSymbolTable::getContexts(const IndexedQualifiedIdentifier& id) const {
+  PersistentContextTableItem item;
+  item.id = id;
+  PersistentContextTableRequestItem request(item);
+  
+  uint index = d->m_contexts.findIndex(item);
+  
+  if(index) {
+    const PersistentContextTableItem* repositoryItem = d->m_contexts.itemFromIndex(index);
+    return PersistentSymbolTable::Contexts(repositoryItem->contexts(), repositoryItem->contextsSize(), repositoryItem->centralFreeItem);
+  }else{
+    return PersistentSymbolTable::Contexts();
+  }
 }
 
 void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDUContext*& contextsTarget) const {
