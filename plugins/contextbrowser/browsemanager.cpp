@@ -38,6 +38,8 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <language/duchain/functiondefinition.h>
+#include <language/duchain/forwarddeclaration.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -182,6 +184,37 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 Declaration* foundDeclaration = 0;
                 KDevelop::DUChainReadLocker lock( DUChain::lock() );
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
+                
+                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains(SimpleCursor(textCursor))) {
+                    ///A declaration was clicked directory. Jumping to it is useless, so jump to the definition or something useful
+
+                    bool foundBetter = false;
+
+                    Declaration* definition = FunctionDefinition::definition(foundDeclaration);
+                    if(definition) {
+                        foundDeclaration = definition;
+                        foundBetter = true;
+                    }
+                    ForwardDeclaration* forward = dynamic_cast<ForwardDeclaration*>(foundDeclaration);
+                    if(forward) {
+                        TopDUContext* standardContext = DUChainUtils::standardContextForUrl(view->document()->url());
+                        if(standardContext) {
+                            Declaration* resolved = forward->resolve(standardContext);
+                            if(resolved) {
+                                foundDeclaration = resolved; //This probably won't work
+                                foundBetter = true;
+                            }
+                        }
+                    }
+                    //This will do a search without visibility-restriction, and that search will prefer non forward declarations
+                    if(!foundBetter) {
+                        Declaration* betterDecl = foundDeclaration->id().getDeclaration(0);
+                        if(betterDecl) {
+                            foundDeclaration = betterDecl;
+                            foundBetter = true;
+                        }
+                    }
+                }
                 
                 if( foundDeclaration ) {
                     jumpTo.first = foundDeclaration->url().toUrl();
