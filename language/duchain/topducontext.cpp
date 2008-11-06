@@ -1165,8 +1165,7 @@ struct TopDUContext::FindContextsAcceptor {
     PersistentSymbolTable::Contexts allDecls;
     
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    if(!id.isEmpty())
-      allDecls = PersistentSymbolTable::self().getContexts(id);
+    allDecls = PersistentSymbolTable::self().getContexts(id);
     
     TopDUContext::IndexedRecursiveImports::Iterator imports (top->recursiveImportIndices().iterator());
 
