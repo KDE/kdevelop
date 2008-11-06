@@ -371,6 +371,13 @@ KDevelop::IndexedType toReference(IndexedType t) {
   return refType->indexed();
 }
 
+KDevelop::IndexedType toPointer(IndexedType t) {
+  
+  PointerType::Ptr refType( new PointerType);
+  refType->setBaseType(t.type());
+  return refType->indexed();
+}
+
 void TestCppCodeCompletion::testTypeConversion2() {
   {
     QByteArray test = "class A {}; class B {public: explicit B(const A&) {}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
@@ -389,6 +396,12 @@ void TestCppCodeCompletion::testTypeConversion2() {
     QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[2]->indexedType()) ));
     QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[1]->indexedType()), toReference(context->localDeclarations()[0]->indexedType()) ));
     QVERIFY( !conv.implicitConversion(toReference(context->localDeclarations()[0]->indexedType()), toReference(context->localDeclarations()[1]->indexedType()) ));
+
+    QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[2]->indexedType()), toPointer(context->localDeclarations()[0]->indexedType()) ));
+    QVERIFY( conv.implicitConversion(toPointer(context->localDeclarations()[2]->indexedType()), toPointer(context->localDeclarations()[1]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[1]->indexedType()), toPointer(context->localDeclarations()[2]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[1]->indexedType()), toPointer(context->localDeclarations()[0]->indexedType()) ));
+    QVERIFY( !conv.implicitConversion(toPointer(context->localDeclarations()[0]->indexedType()), toPointer(context->localDeclarations()[1]->indexedType()) ));
     
     release(context);
   }

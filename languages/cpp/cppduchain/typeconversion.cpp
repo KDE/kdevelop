@@ -267,9 +267,9 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
         return changed ? Conversion : ExactMatch;
     }
     
-  }else{
-    return NoMatch;
   }
+  
+  return NoMatch;
 }
 
 /**
