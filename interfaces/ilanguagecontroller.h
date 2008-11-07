@@ -30,6 +30,7 @@ namespace KDevelop {
 
 class ILanguage;
 class BackgroundParser;
+class ICompletionSettings;
 
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
     Q_OBJECT
@@ -49,6 +50,9 @@ public:
 
     /** @return the background parser used to parse source files */
     Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;
+
+    /** Access to the completion settings */
+    Q_SCRIPTABLE virtual ICompletionSettings *completionSettings() const = 0;
 };
 
 }
