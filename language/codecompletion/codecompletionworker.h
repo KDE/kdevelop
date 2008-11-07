@@ -57,6 +57,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
 
     void abortCurrentCompletion();
 
+    void setFullCompletion(bool);
+    bool fullCompletion() const;
+
   Q_SIGNALS:
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
 
@@ -73,6 +76,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
   private:
     QMutex* m_mutex;
     bool m_abort;
+    bool m_fullCompletion;
 };
 
 }

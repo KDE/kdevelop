@@ -1,6 +1,5 @@
 /***************************************************************************
- *   Copyright 2006 Adam Treat <treat@kde.org>                         *
- *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>             *
+ *   Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -17,48 +16,28 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef LANGUAGECONTROLLER_H
-#define LANGUAGECONTROLLER_H
 
-#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
-#include "shellexport.h"
-
-namespace KParts {
-class Part;
-}
-
-namespace KDevelop {
-
-class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
-    Q_OBJECT
+class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
-    LanguageController(QObject *parent);
-    virtual ~LanguageController();
-
-    void initialize();
-
-    /** @copydoc ILanguageController::activeLanguages() */
-    virtual QList<ILanguage*> activeLanguages();
-    /** @copydoc ILanguageController::language() */
-    virtual ILanguage *language(const QString &name) const;
-    /** @copydoc ILanguageController::languageForUrl() */
-    virtual QList<ILanguage*> languagesForUrl(const KUrl &url);
-    /** @copydoc ILanguageController::backgroundParser() */
-    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const;
-
-    virtual QList<ILanguage*> loadedLanguages() const;
+    CompletionSettings() : m_level(AlwaysFull), m_automatic(true) {
+    }
     
-    virtual ICompletionSettings *completionSettings() const;
+    virtual CompletionLevel completionLevel() const {
+        return m_level;
+    }
+        
+    virtual bool automaticCompletionEnabled() const {
+        return m_automatic;
+    }
     
+    void emitChanged() {
+        emit settingsChanged(this);
+    }
     
-private:
-    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
-
-    struct LanguageControllerPrivate *d;
+    static CompletionSettings& self();
+    
+    CompletionLevel m_level;
+    bool m_automatic;
 };
-
-}
-
-#endif
-

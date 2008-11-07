@@ -36,6 +36,10 @@
 #include "ccconfig.h"
 
 #include "ui_ccsettings.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
+
+#include "../completionsettings.h"
 
 using namespace KTextEditor;
 
@@ -44,7 +48,6 @@ namespace KDevelop
 
 K_PLUGIN_FACTORY(CCPreferencesFactory, registerPlugin<CCPreferences>();)
 K_EXPORT_PLUGIN(CCPreferencesFactory("kcm_kdev_ccsettings"))
-
 
 CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
  : KCModule( CCPreferencesFactory::componentData(), parent, args )
@@ -61,6 +64,26 @@ CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
     load();
 }
 
+void CCPreferences::load()
+{
+    KCModule::load();
+    writeToSettings();
+}
+
+void CCPreferences::writeToSettings()
+{
+    CompletionSettings& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
+    settings.m_automatic = preferencesDialog->kcfg_automaticInvocation->isChecked();
+    if(preferencesDialog->kcfg_alwaysFullCompletion->isChecked())
+        settings.m_level = ICompletionSettings::AlwaysFull;
+    if(preferencesDialog->kcfg_minimalAutomaticCompletion->isChecked())
+        settings.m_level = ICompletionSettings::MinimalWhenAutomatic;
+    if(preferencesDialog->kcfg_alwaysMinimalCompletion->isChecked())
+        settings.m_level = ICompletionSettings::Minimal;
+    
+    settings.emitChanged();
+}
+
 CCPreferences::~CCPreferences( )
 {
     delete preferencesDialog;
@@ -75,6 +98,8 @@ void CCPreferences::save()
             foreach (View* view, textDoc->views())
                 if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
+    
+    writeToSettings();
 }
 
 }

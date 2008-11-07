@@ -33,6 +33,7 @@
 #include "../languageexport.h"
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
+#include <interfaces/icompletionsettings.h>
 
 class QIcon;
 class QString;
@@ -71,6 +72,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     //Tracks navigation widget so they can be interactive with through the keyboard later on
     void addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const;
 
+    ///Whether the completion should be fully detailed. If false, it should be simplifed, so no argument-hints,
+    ///no expanding information, no type-information, etc.
+    bool fullCompletion() const;
+    
   Q_SIGNALS:
     void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
 
@@ -88,6 +93,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
   private:
+    bool m_fullCompletion;
     QMutex* m_mutex;
     CodeCompletionWorker* m_worker;
     KDevelop::TopDUContextPointer m_currentTopContext;

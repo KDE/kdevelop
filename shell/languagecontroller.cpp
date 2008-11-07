@@ -32,8 +32,11 @@
 
 #include "core.h"
 #include "language.h"
+#include "settings/ccpreferences.h"
+#include "completionsettings.h"
 
 namespace KDevelop {
+
 
 typedef QHash<QString, Language*> LanguageHash;
 typedef QHash<QString, QList<ILanguage*> > LanguageCache;
@@ -94,6 +97,10 @@ void LanguageController::initialize()
 QList<ILanguage*> LanguageController::activeLanguages()
 {
     return d->activeLanguages;
+}
+
+ICompletionSettings *LanguageController::completionSettings() const {
+    return &CompletionSettings::self();
 }
 
 QList<ILanguage*> LanguageController::loadedLanguages() const

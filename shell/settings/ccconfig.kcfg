@@ -5,6 +5,15 @@
   <group name="Code Completion">
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
     <default>false</default>
+</entry>
+    <entry name="minimalAutomaticCompletion" key="minimalAutomaticCompletion" type="Bool">
+    <default>false</default>
+</entry>
+    <entry name="alwaysFullCompletion" key="alwaysFullCompletion" type="Bool">
+    <default>true</default>
+</entry>
+    <entry name="alwaysMinimalCompletion" key="alwaysMinimalCompletion" type="Bool">
+    <default>false</default>
     </entry>
   </group>
 </kcfg>

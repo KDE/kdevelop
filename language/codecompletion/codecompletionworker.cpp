@@ -39,12 +39,21 @@ CodeCompletionWorker::CodeCompletionWorker(QObject* parent)
   : QThread(parent)
   , m_mutex(new QMutex())
   , m_abort(false)
+  , m_fullCompletion(true)
 {
 }
 
 CodeCompletionWorker::~CodeCompletionWorker()
 {
   delete m_mutex;
+}
+
+void CodeCompletionWorker::setFullCompletion(bool full) {
+  m_fullCompletion = full;
+}
+
+bool CodeCompletionWorker::fullCompletion() const {
+  return m_fullCompletion;
 }
 
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)

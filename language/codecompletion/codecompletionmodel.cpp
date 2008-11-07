@@ -45,6 +45,9 @@
 #include "../duchain/topducontext.h"
 #include "../duchain/duchainutils.h"
 #include "../interfaces/quickopendataprovider.h"
+#include "../interfaces/icore.h"
+#include "../interfaces/ilanguagecontroller.h"
+#include "../interfaces/icompletionsettings.h"
 
 #include "codecompletionworker.h"
 #include "codecompletioncontext.h"
@@ -57,6 +60,7 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
   , m_mutex(new QMutex)
   , m_worker(0)
+  , m_fullCompletion(true)
 {
   qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
@@ -96,8 +100,24 @@ void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* eleme
   m_navigationWidgets[element] = widget;
 }
 
+bool CodeCompletionModel::fullCompletion() const
+{
+  return m_fullCompletion;
+}
+
+
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
+  
+  KDevelop::ICompletionSettings::CompletionLevel level = KDevelop::ICore::self()->languageController()->completionSettings()->completionLevel();
+  if(level == KDevelop::ICompletionSettings::AlwaysFull || (invocationType != AutomaticInvocation && level == KDevelop::ICompletionSettings::MinimalWhenAutomatic))
+    m_fullCompletion = true;
+  else
+    m_fullCompletion = false;
+  
+  //Only use grouping in full completion mode
+  setHasGroups(m_fullCompletion);
+  
   Q_UNUSED(invocationType)
 
   if (!m_worker)
@@ -109,6 +129,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   reset();
 
   m_worker->abortCurrentCompletion();
+  m_worker->setFullCompletion(m_fullCompletion);
 
   KUrl url = view->document()->url();
 
@@ -225,10 +246,19 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
       }
       break;
     }
-    
   }
+  
+  //In minimal completion mode, hide all columns except the "name" one
+  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name)
+    return QVariant();
+  
+  QVariant ret = treeElement.asItem()->data(index, role, this);
 
-  return treeElement.asItem()->data(index, role, this);
+  //In reduced completion mode, don't show information text with the selected items
+  if(!m_fullCompletion && role == ItemSelected)
+    return QVariant();
+  
+  return ret;
 }
 
 KDevelop::TopDUContextPointer CodeCompletionModel::currentTopContext() const
