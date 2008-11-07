@@ -68,7 +68,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     connect(m_prefsUi->showAdvanced, SIGNAL(toggled(bool)), this, SLOT(showAdvanced(bool)));
     
     showInternal(m_prefsUi->showInternal->checkState());
-//     m_srcFolder=KUrl(args[1].toString()).upUrl();
+    m_subprojFolder=KUrl(args[1].toString()).upUrl();
     
     kDebug(9042) << "Source folder: " << m_srcFolder << args[1].toString();
 //     foreach(const QVariant &v, args)
@@ -94,7 +94,8 @@ void CMakePreferences::load()
     m_prefsUi->buildDirs->addItems(CMakeSettings::buildDirs());
     m_prefsUi->buildDirs->setCurrentIndex( m_prefsUi->buildDirs->findText( CMakeSettings::currentBuildDir().toLocalFile() ) );
     
-    m_srcFolder=CMakeSettings::projectRoot();
+    m_srcFolder=m_subprojFolder;
+    m_srcFolder.cd(CMakeSettings::projectRootRelative());
 
     if(m_prefsUi->buildDirs->count()==0)
     {
