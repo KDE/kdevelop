@@ -127,11 +127,22 @@ void ContextController::documentJumpPerformed( KDevelop::IDocument* newDocument,
         
         DUChainReadLocker lock(DUChain::lock());
         
+        DUContext* newContext = 0;
+        if(newDocument && newCursor.isValid()) {
+            newContext = getContextAt(newDocument->url(), newCursor);
+            
+            if(newContext && isPreviousEntry(newContext, SimpleCursor(newCursor))) {
+                //The jump has already been noticed, and thus we remove the last history element
+                --m_nextHistoryIndex;
+                m_history.resize(m_nextHistoryIndex);
+            }
+        }
+        
         if(previousDocument && previousCursor.isValid())
             updateHistory(getContextAt(previousDocument->url(), previousCursor), SimpleCursor(previousCursor), true);
         
-        if(newDocument && newCursor.isValid())
-            updateHistory(getContextAt(newDocument->url(), newCursor), SimpleCursor(newCursor), true);
+        if(newContext)
+            updateHistory(newContext, SimpleCursor(newCursor), true);
     }
 }
 

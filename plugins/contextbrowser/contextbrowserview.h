@@ -165,6 +165,7 @@ class ContextController : public QObject {
         QList<KDevelop::IndexedDeclaration> m_listDeclarations;
         KDevelop::IndexedString m_listUrl;
         BrowseManager* m_browseManager;
+        //Used to not record jumps triggered by the context-browser as history entries
         KUrl m_ignoreJump;
         QPointer<QWidget> m_focusBackWidget;
 };
