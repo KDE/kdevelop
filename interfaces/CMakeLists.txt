@@ -20,6 +20,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     isourceformatter.cpp
     isourceformattercontroller.cpp
     contextmenuextension.cpp
+    icompletionsettings.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
     #scripting/scriptingmanager.cpp
