@@ -41,6 +41,6 @@ namespace KDevelop {
         Q_SIGNALS:
             void settingsChanged(ICompletionSettings*);
     };
-};
+}
 
 #endif
