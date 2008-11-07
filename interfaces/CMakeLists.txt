@@ -53,6 +53,7 @@ install(FILES
     isession.h
     iruncontroller.h
     irunprovider.h
+    icompletionsettings.h
     contextmenuextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces
 )
