@@ -607,7 +607,7 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
 
 // #ifndef TEST_COMPLETION
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort) {
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort, bool fullCompletion) {
     LOCKDUCHAIN;
 
     QList<CompletionTreeItemPointer> items;
@@ -674,40 +674,42 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     }
 
 
-    int argumentHintDepth = 0;
-    ///Find all recursive function-calls that should be shown as call-tips
-    CodeCompletionContext::Ptr parentContext(this);
-    do {
-      if (shouldAbort)
-        return items;
+    if(fullCompletion) {
+      int argumentHintDepth = 0;
+      ///Find all recursive function-calls that should be shown as call-tips
+      CodeCompletionContext::Ptr parentContext(this);
+      do {
+        if (shouldAbort)
+          return items;
 
-      ++argumentHintDepth;
+        ++argumentHintDepth;
 
-      parentContext = parentContext->parentContext();
-      if( parentContext ) {
-        if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
-          //When there is too many overloaded functions, do not show them. They can just be too many.
-          if( ((parentContext->functions().count() == 0 || parentContext->functions().count() > maxOverloadedOperatorArgumentHints) && parentContext->additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall)
-                || parentContext->functions().count() > maxOverloadedArgumentHints) {
-            items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(), parentContext, 0, 0 ) );
-            if(parentContext->functions().count())
-              items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
-            else
-              items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = parentContext->functionName();
-          }else if(parentContext->functions().count() == 0) {
-            items += missingIncludeCompletionItems(parentContext->m_expression, QString(), parentContext->m_expressionResult, m_duContext.data(), argumentHintDepth );
-          }else{
-            int num = 0;
-            foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
-              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), parentContext, 0, num ) );
-              ++num;
+        parentContext = parentContext->parentContext();
+        if( parentContext ) {
+          if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+            //When there is too many overloaded functions, do not show them. They can just be too many.
+            if( ((parentContext->functions().count() == 0 || parentContext->functions().count() > maxOverloadedOperatorArgumentHints) && parentContext->additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall)
+                  || parentContext->functions().count() > maxOverloadedArgumentHints) {
+              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(), parentContext, 0, 0 ) );
+              if(parentContext->functions().count())
+                items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18n("%1 overloads of", parentContext->functions().count()) + " " + parentContext->functionName();
+              else
+                items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = parentContext->functionName();
+            }else if(parentContext->functions().count() == 0) {
+              items += missingIncludeCompletionItems(parentContext->m_expression, QString(), parentContext->m_expressionResult, m_duContext.data(), argumentHintDepth );
+            }else{
+              int num = 0;
+              foreach( Cpp::CodeCompletionContext::Function function, parentContext->functions() ) {
+                items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), parentContext, 0, num ) );
+                ++num;
+              }
             }
+          } else {
+            kDebug(9007) << "parent-context has non function-call access type";
           }
-        } else {
-          kDebug(9007) << "parent-context has non function-call access type";
         }
-      }
-    } while( parentContext );
+      } while( parentContext );
+    }
 
   //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
   if(memberAccessOperation() == StaticMemberChoose && !m_followingText.trimmed().isEmpty()) {

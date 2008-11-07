@@ -82,7 +82,7 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
       return;
     }
 
-    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting());
+    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting(), fullCompletion());
 
     if (aborting())
       return;
