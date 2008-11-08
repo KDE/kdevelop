@@ -22,11 +22,8 @@
 #ifndef QTEST_QTESTOUTPUTJOB_H
 #define QTEST_QTESTOUTPUTJOB_H
 
-#include <interfaces/iplugin.h>
 #include <outputview/outputjob.h>
 #include "qxqtestexport.h"
-
-#include <QFileInfo>
 
 namespace KDevelop
 {

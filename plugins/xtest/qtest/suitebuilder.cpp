@@ -39,6 +39,7 @@ using QTest::QTestOutputParser;
 using QTest::QTestSuite;
 using QTest::Executable;
 using QTest::CaseBuilder;
+using QTest::ISettings;
 
 using Veritas::Test;
 
@@ -156,7 +157,7 @@ SuiteBuilder::~SuiteBuilder()
 {
 }
 
-void SuiteBuilder::setSettings(QTest::ISettings* settings)
+void SuiteBuilder::setSettings(ISettings* settings)
 {
     m_settings = settings;
 }

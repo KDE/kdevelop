@@ -22,10 +22,10 @@
 #include "qtestcase.h"
 #include "executable.h"
 #include <KDebug>
-#include <Qt>
 
 using QTest::CaseBuilder;
 using QTest::QTestCase;
+using QTest::Executable;
 
 CaseBuilder::CaseBuilder()
     : m_executable(0)
@@ -36,7 +36,7 @@ CaseBuilder::~CaseBuilder()
     if (m_executable) delete m_executable;
 }
 
-void CaseBuilder::setExecutable(QTest::Executable* exe)
+void CaseBuilder::setExecutable(Executable* exe)
 {
     Q_ASSERT(!m_executable); Q_ASSERT(exe);
     m_executable = exe;

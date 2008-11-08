@@ -40,27 +40,20 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocument.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectfilemanager.h>
-#include <shell/core.h>
-#include <shell/documentcontroller.h>
 #include <veritas/test.h>
-#include <veritas/itestrunner.h>
+
 #include <veritas/testtoolviewfactory.h>
 
-#include "qtestcase.h"
-#include "xmlregister.h"
-#include "kdevregister.h"
 #include "qtestviewdata.h"
-#include "qtestoutputparser.h"
 #include "qtestoutputdelegate.h"
-#include "qtestoutputjob.h"
-
-#include "qtestsettings.h"
 #include "qtestconfig.h"
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
@@ -140,10 +133,14 @@ void QTestPlugin::newQTest()
 
     IDocumentController* dc;
     dc = ICore::self()->documentController();
-    IProjectFileManager* pfm;
+    IProjectFileManager* pfm = 0;
     if (m_proj) {
         pfm = m_proj->projectFileManager();
+    } else {
+        kError() << "Can't create QTest skeleton, project not set.";
+        return;
     }
+    Q_ASSERT(pfm);
 
     KUrl hdrUrl = m_dir->url();
     hdrUrl.addPath(clz.toLower() + ".h");

@@ -21,7 +21,6 @@
 #include "iregister.h"
 #include "qtestsettings.h"
 #include <interfaces/iproject.h>
-#include <Qt>
 
 using KDevelop::IProject;
 using QTest::IRegister;

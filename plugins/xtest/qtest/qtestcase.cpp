@@ -37,13 +37,15 @@
 
 using QTest::QTestCase;
 using QTest::QTestCommand;
+using QTest::QTestSuite;
+using QTest::QTestOutputParser;
 using QTest::ISettings;
 using Veritas::Test;
 using Veritas::TestResult;
 
 int QTestCase::s_count = 0;
 
-QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTest::QTestSuite* parent)
+QTestCase::QTestCase(const QString& name, const QFileInfo& exe, QTestSuite* parent)
         : Test(name, parent),
           m_exe(exe),
           m_output(0),
@@ -174,7 +176,7 @@ void QTestCase::processError(QProcess::ProcessError error)
     closeOutputFile();
 }
 
-void QTestCase::setOutputParser(QTest::QTestOutputParser* p)
+void QTestCase::setOutputParser(QTestOutputParser* p)
 {
     Q_ASSERT(!m_parser); Q_ASSERT(p);
     m_parser = p;

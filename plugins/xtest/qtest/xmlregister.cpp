@@ -36,6 +36,7 @@ using QTest::QTestCommand;
 using QTest::QTestOutputParser;
 using QTest::XmlRegister;
 using QTest::QTestSuite;
+using QTest::ISettings;
 
 using Veritas::Test;
 
@@ -63,7 +64,7 @@ void XmlRegister::setSource(QIODevice* source)
     setDevice(source);
 }
 
-void XmlRegister::setSettings(QTest::ISettings* s)
+void XmlRegister::setSettings(ISettings* s)
 {
     m_settings = s;
 }

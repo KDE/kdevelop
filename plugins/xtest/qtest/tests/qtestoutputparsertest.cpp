@@ -376,6 +376,8 @@ void QTestOutputParserTest::doubleFailure()
     checkResult(m_command1Info);
     assertParsed(m_command2Info);
     checkResult(m_command2Info);
+
+    KVERIFY_MSG(false, "FooBar, some failure message");
 }
 
 // test command

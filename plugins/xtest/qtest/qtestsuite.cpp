@@ -20,7 +20,6 @@
 
 #include "qtestsuite.h"
 #include "qtestcase.h"
-#include <KDebug>
 
 using QTest::QTestSuite;
 using QTest::QTestCase;
