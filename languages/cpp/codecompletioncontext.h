@@ -160,6 +160,7 @@ namespace Cpp {
        * */
       QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
     private:
+      bool  filterDeclaration(Declaration* decl);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
       ///@return the extracted expression, without any access-operation

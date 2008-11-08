@@ -33,6 +33,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     completionitem.cpp
     completionhelpers.cpp
     missingincludecompletionitem.cpp
+    implementationhelperitem.cpp
 
     codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp

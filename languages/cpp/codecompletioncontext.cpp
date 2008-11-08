@@ -44,6 +44,7 @@
 #include "cppdebughelper.h"
 #include "missingincludecompletionitem.h"
 #include <interfaces/idocumentcontroller.h>
+#include "implementationhelperitem.h"
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -605,11 +606,24 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
   return static_cast<CodeCompletionContext*>(KDevelop::CodeCompletionContext::parentContext());
 }
 
+void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext) {
+  foreach(Declaration* decl, current->localDeclarations()) {
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if(classFun && classFun->isVirtual() && !classFun->isConstructor() && !classFun->isDestructor()) {
+      QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
+      if(!overridable.contains(key) && base->findLocalDeclarations(classFun->identifier(), SimpleCursor::invalid(), 0, key.first.type()).isEmpty())
+        overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(DeclarationPointer(decl), completionContext)));
+    }
+  }
+  foreach(DUContext::Import import, current->importedParentContexts())
+    getOverridable(base, import.context(), overridable, completionContext);
+}
+
+
 // #ifndef TEST_COMPLETION
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort, bool fullCompletion) {
     LOCKDUCHAIN;
-
     QList<CompletionTreeItemPointer> items;
 
     if(!m_duContext)
@@ -721,6 +735,14 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     kDebug() << "doing missing-include completion for" << m_expression;
     items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, memberAccessOperation() == StaticMemberChoose);
   }
+  
+  if(m_duContext->type() == DUContext::Class) {
+    //Show override helper items
+    QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
+    foreach(DUContext::Import import, m_duContext->importedParentContexts())
+      getOverridable(m_duContext.data(), import.context(), overridable, Ptr(this));
+    items += overridable.values();
+  }
 
   return items;
 }
@@ -772,7 +794,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
       QList<DUContext*> importedContexts = m_duContext->findContexts( DUContext::Namespace, id );
       foreach(DUContext* context, importedContexts)
         foreach(Declaration* decl, context->localDeclarations())
-          decls << qMakePair(decl, 1200);
+          if(filterDeclaration(decl))
+            decls << qMakePair(decl, 1200);
     }
   }
 
@@ -782,7 +805,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   //Remove pure function-definitions before doing overload-resolution, so they don't hide their own declarations.
   foreach( const DeclarationDepthPair& decl, oldDecls )
     if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration())
-      decls << decl;
+      if(filterDeclaration(decl.first))
+        decls << decl;
   
   decls = Cpp::hideOverloadedDeclarations(decls);
 
@@ -829,6 +853,12 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
     kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
   }
+}
+
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl) {
+  if(m_duContext->type() == DUContext::Class)
+    return decl->kind() == Declaration::Type; //Only show type declarations within class contexts
+  return true;
 }
 
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
