@@ -22,9 +22,11 @@
 #include <QWizard>
 
 #include "../languageexport.h"
+#include <kurl.h>
 
 class QTableWidget;
 class KLineEdit;
+class KUrl;
 
 namespace KDevelop {
 
@@ -117,18 +119,6 @@ private:
     class LicensePagePrivate* const d;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-    OutputPage(QWidget* parent);
-    virtual ~OutputPage();
-
-private:
-    class OutputPagePrivate* const d;
-};
-
 /**
  * Provides a wizard and logic for a new class wizard.
  *
@@ -139,13 +129,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT CreateClass : public QWizard
     Q_OBJECT
 
 public:
-    CreateClass(QWidget* parent);
-
+    CreateClass(QWidget* parent, KUrl baseUrl = KUrl());
+    virtual ~CreateClass();
     /**
      * Creates the generic parts of the new class wizard.
      */
     virtual void setup();
 
+    /**
+     *Should return the suggested url of the header file for the given class-name
+     */
+    virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
+    
+    /**
+     *Should return the suggested url of the implementation file for the given class-name,
+     *if header and implementation are separate for this language.
+     */
+    virtual KUrl implementationUrlFromBase(QString className, KUrl baseUrl);
     /**
      * Called when the wizard completes.
      */
@@ -164,9 +164,22 @@ public:
     virtual OverridesPage* newOverridesPage();
 
 private:
+    friend class OutputPage;
     class CreateClassPrivate* const d;
 };
 
+class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    OutputPage(CreateClass* parent);
+    virtual ~OutputPage();
+
+private:
+    virtual void showEvent(QShowEvent*);
+    class OutputPagePrivate* const d;
+};
 }
 
 #endif // KDEV_CREATECLASS_H

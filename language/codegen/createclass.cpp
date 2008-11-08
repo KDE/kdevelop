@@ -28,12 +28,26 @@
 
 using namespace KDevelop;
 
-CreateClass::CreateClass(QWidget* parent)
+namespace KDevelop {
+
+struct CreateClassPrivate {
+    KUrl baseUrl;
+    OutputPage* output;
+};
+}
+
+CreateClass::CreateClass(QWidget* parent, KUrl baseUrl)
     : QWizard(parent)
-    , d(0)
+    , d(new CreateClassPrivate)
 {
+    d->baseUrl = baseUrl;
     setDefaultProperty("KUrlRequester", "url", SIGNAL(textChanged(QString)));
     setDefaultProperty("KTextEdit", "plainText", SIGNAL(textChanged()));
+}
+
+CreateClass::~CreateClass()
+{
+    delete d;
 }
 
 void CreateClass::setup()
@@ -47,8 +61,21 @@ void CreateClass::setup()
         addPage(page);
 
     addPage(new LicensePage(this));
-    addPage(new OutputPage(this));
+    addPage(d->output = new OutputPage(this));
 }
+
+KUrl CreateClass::headerUrlFromBase(QString className, KUrl baseUrl)
+{
+    KUrl url;
+    url.addPath(className);
+    return url;
+}
+
+KUrl CreateClass::implementationUrlFromBase(QString className, KUrl baseUrl)
+{
+    return KUrl();
+}
+
 
 void CreateClass::accept()
 {
@@ -298,20 +325,27 @@ public:
     }
 
     Ui::OutputLocationDialog* output;
+    CreateClass* parent;
 };
 
-OutputPage::OutputPage(QWidget* parent)
+OutputPage::OutputPage(CreateClass* parent)
     : QWizardPage(parent)
     , d(new OutputPagePrivate)
 {
+    d->parent = parent;
     setTitle(i18n("Output"));
     setSubTitle( i18n("Choose where to save the new class.") );
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
-
+    
     registerField("headerUrl*", d->output->headerUrl);
     registerField("implementationUrl*", d->output->implementationUrl);
+}
+
+void OutputPage::showEvent(QShowEvent*) {
+    d->output->headerUrl->setUrl(d->parent->headerUrlFromBase(d->parent->field("classIdentifier").toString(), d->parent->d->baseUrl));
+    d->output->implementationUrl->setUrl(d->parent->implementationUrlFromBase(d->parent->field("classIdentifier").toString(), d->parent->d->baseUrl));
 }
 
 OutputPage::~OutputPage()
