@@ -10,7 +10,7 @@ include_directories(
 
 add_definitions(-DTEST_COMPLETION)
 
-set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletioncontext.cpp ../stringhelpers.cpp ../completionitem.cpp ../completionhelpers.cpp)
+set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletioncontext.cpp ../stringhelpers.cpp ../completionitem.cpp ../completionhelpers.cpp ../implementationhelperitem.cpp )
 
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
