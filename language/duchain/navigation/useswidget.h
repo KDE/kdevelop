@@ -130,7 +130,7 @@ namespace KDevelop {
       Q_OBJECT
         public:
             ///This class can be overridden to do additional processing while the uses-widget shows the uses.
-            struct UsesWidgetCollector : public UsesCollector {
+            struct KDEVPLATFORMLANGUAGE_EXPORT UsesWidgetCollector : public UsesCollector {
               public:
               void setWidget(UsesWidget* widget );
               UsesWidgetCollector(IndexedDeclaration decl);
