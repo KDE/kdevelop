@@ -36,6 +36,7 @@ private slots:
     void initTestCase();
     void init();
     void cleanup();
+    void createSession_data();
     void createSession();
     void loadSession();
     void deleteSession();

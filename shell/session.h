@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 #include <QtCore/QObject>
+#include <QtCore/QUuid>
 #include <interfaces/isession.h>
 
 namespace KDevelop
@@ -31,7 +32,8 @@ class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {
     Q_OBJECT
 public:
-    Session( const QString& name );
+    Session( const QString& );
+    Session( const QUuid& );
     virtual ~Session();
 
     virtual KUrl pluginDataArea( const IPlugin* );
@@ -41,6 +43,7 @@ public:
 
     virtual QString name() const;
     void setName( const QString& );
+    QUuid id() const;
 Q_SIGNALS:
     void nameChanged( const QString& newname, const QString& oldname );
 private:

@@ -34,6 +34,7 @@ Q_DECLARE_METATYPE( KDevelop::ISession* )
 
 using KDevelop::SessionController;
 using KDevelop::ISession;
+using KDevelop::Session;
 using KDevelop::Core;
 
 using QTest::kWaitForSignal;
@@ -64,21 +65,34 @@ void SessionControllerTest::cleanup()
     KGlobal::config()->group( SessionController::cfgSessionGroup ).sync();
 }
 
+void verifySessionDir( Session* s, bool exists = true )
+{
+    QString sessiondir = SessionController::sessionDirectory() + "/" + s->id().toString();
+    if( exists ) 
+    {
+        QVERIFY( QFileInfo( sessiondir ).exists() );
+        QVERIFY( QFileInfo( sessiondir ).isDir() );
+    } else {
+        QVERIFY( !QFileInfo( sessiondir ).exists() );
+    }
+}
+
+void SessionControllerTest::createSession_data()
+{
+    QTest::addColumn<QString>( "sessionName" );
+    QTest::newRow("SimpleName") << "TestSession";
+    QTest::newRow("NonLetterChars") << "Test%$Session";
+    QTest::newRow("NonAsciiChars") << QString::fromUtf8("TöstSession");
+}
+
 void SessionControllerTest::createSession()
 {
-    const QString sessionName = "TestSession";
+    QFETCH(QString, sessionName);
     int sessionCount = m_sessionCtrl->sessions().count();
-    m_sessionCtrl->createSession( sessionName );
+    Session* s = m_sessionCtrl->createSession( sessionName );
     QVERIFY( m_sessionCtrl->sessions().contains( sessionName )  );
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
-    QString sessiondir = SessionController::sessionDirectory() + "/" + sessionName;
-    QVERIFY( QFileInfo( sessiondir ).exists() );
-    QVERIFY( QFileInfo( sessiondir ).isDir() );
-
-    const QString brokenSessionName = "Test%$Session";
-    ISession* s = m_sessionCtrl->createSession( brokenSessionName );
-    QVERIFY( !s );
-    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    verifySessionDir( s );
 }
 
 void SessionControllerTest::loadSession()
@@ -99,9 +113,7 @@ void SessionControllerTest::renameSession()
     const QString newSessionName = "TestOtherSession4";
     KDevelop::Session *s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionName, s->name() );
-    QString sessiondir = SessionController::sessionDirectory() + "/" + sessionName;
-    QVERIFY( QFileInfo( sessiondir ).exists() );
-    QVERIFY( QFileInfo( sessiondir ).isDir() );
+    verifySessionDir( s );
     QSignalSpy spy(s, SIGNAL(nameChanged(const QString&, const QString&)));
     s->setName( newSessionName );
     QCOMPARE( newSessionName, s->name() );
@@ -112,9 +124,7 @@ void SessionControllerTest::renameSession()
     QCOMPARE( sessionName, arguments.at(1).toString() );
     QCOMPARE( newSessionName, arguments.at(0).toString() );
 
-    sessiondir = SessionController::sessionDirectory() + "/" + newSessionName;
-    QVERIFY( QFileInfo( sessiondir ).exists() );
-    QVERIFY( QFileInfo( sessiondir ).isDir() );
+    verifySessionDir( s );
 }
 
 void SessionControllerTest::cannotRenameActiveSession()
@@ -135,11 +145,9 @@ void SessionControllerTest::deleteSession()
 {
     const QString sessionName = "TestSession3";
     int sessionCount = m_sessionCtrl->sessions().count();
-    m_sessionCtrl->createSession( sessionName );
+    Session* s = m_sessionCtrl->createSession( sessionName );
     QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
-    QString sessiondir = SessionController::sessionDirectory() + "/" + sessionName;
-    QVERIFY( QFileInfo( sessiondir ).exists() );
-    QVERIFY( QFileInfo( sessiondir ).isDir() );
+    verifySessionDir( s );
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(const QString&)));
     m_sessionCtrl->deleteSession( sessionName );
     QCOMPARE( sessionCount, m_sessionCtrl->sessions().count() );
@@ -150,7 +158,7 @@ void SessionControllerTest::deleteSession()
     QString emittedSession = arguments.at(0).toString();
     QCOMPARE( sessionName, emittedSession );
 
-    QVERIFY( !QFileInfo( sessiondir ).exists() );
+    verifySessionDir( s, false );
 }
 
 void SessionControllerTest::readFromConfig()

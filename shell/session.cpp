@@ -38,6 +38,7 @@ class SessionPrivate
 {
 public:
     QString name;
+    QUuid id;
     KSharedConfig::Ptr config;
     QString sessionDirectory;
     KUrl pluginArea( const IPlugin* plugin )
@@ -52,14 +53,15 @@ public:
         kDebug() << fi.absolutePath();
         return KUrl( fi.absolutePath() );
     }
+
     void initialize()
     {
-        sessionDirectory = SessionController::sessionDirectory() + "/" + name;
+        sessionDirectory = SessionController::sessionDirectory() + "/" + id.toString();
         kDebug() << "got dir:" << sessionDirectory;
         if( !QFileInfo( sessionDirectory ).exists() )
         {
             kDebug() << "creating dir";
-            QDir( SessionController::sessionDirectory() ).mkdir( name );
+            QDir( SessionController::sessionDirectory() ).mkdir( id.toString() );
         } 
         config = KSharedConfig::openConfig( sessionDirectory+"/sessionrc" );
     }
@@ -69,7 +71,17 @@ Session::Session( const QString& name )
         : d( new SessionPrivate )
 {
     d->name = name;
+    d->id = QUuid::createUuid();
     d->initialize();
+    d->config->group("").writeEntry( "SessionName", d->name );
+}
+
+Session::Session( const QUuid& id )
+        : d( new SessionPrivate )
+{
+    d->id = id;
+    d->initialize();
+    d->name = d->config->group("").readEntry("SessionName", "");
 }
 
 Session::~Session()
@@ -93,12 +105,17 @@ KSharedConfig::Ptr Session::config()
     return d->config;
 }
 
+QUuid Session::id() const
+{
+    return d->id;
+}
+
 void Session::deleteFromDisk()
 {
     kDebug() << "deleting session" << d->name;
     QDir dir( d->sessionDirectory );
     dir.cdUp();
-    dir.rmpath( d->name );
+    dir.rmpath( d->id.toString() );
 }
 
 void Session::setName( const QString& name )

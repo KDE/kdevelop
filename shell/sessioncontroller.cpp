@@ -52,6 +52,7 @@ public:
         }
         return 0;
     }
+
     QList<Session*> availableSessions;
     ISession* activeSession;
 };
@@ -76,7 +77,11 @@ void SessionController::initialize()
     QDir sessiondir( SessionController::sessionDirectory() );
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
     {
-        createSession( s );
+        QUuid id( s );
+        if( id.isNull() )
+            continue;
+        // Only create sessions for directories that represent proper uuid's
+        d->availableSessions << new Session( id );
     }
     loadDefaultSession();
 }
@@ -107,12 +112,21 @@ QList<QString> SessionController::sessions() const
     return l;
 }
 
+QString getNewSessionDirName( const QString& sname )
+{
+    QDir sdir( SessionController::sessionDirectory() );
+    QString newname = sname;
+    int i = 0;
+    while( sdir.exists( newname ) ) 
+    {
+        newname = QString("%1_%2").arg( sname ).arg( i );
+        ++i;
+    }
+    return newname;
+}
+
 Session* SessionController::createSession( const QString& name )
 {
-    if( !QRegExp( "[a-z0-9_-A-Z ]+" ).exactMatch( name ) )
-    {
-        return 0;
-    }
     Q_ASSERT( !d->knownSession( name ) );
     Session* s = new Session( name );
     d->availableSessions << s;
