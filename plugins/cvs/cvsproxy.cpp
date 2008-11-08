@@ -20,6 +20,7 @@
 #include <KDebug>
 
 #include "cvsjob.h"
+#include "cvsannotatejob.h"
 
 #include <interfaces/iplugin.h>
 
@@ -167,7 +168,7 @@ CvsJob * CvsProxy::annotate(const KUrl & url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
 
-    CvsJob* job = new CvsJob(vcsplugin);
+    CvsAnnotateJob* job = new CvsAnnotateJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "annotate";

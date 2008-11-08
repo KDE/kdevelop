@@ -106,14 +106,6 @@ public:
 
 public slots:
     // slots for context menu
-    void ctxCommit();
-    void ctxAdd();
-    void ctxRemove();
-    void ctxUpdate();
-    void ctxLog();
-    void ctxAnnotate();
-    void ctxRevert();
-    void ctxDiff();
     void ctxEdit();
     void ctxUnEdit();
     void ctxEditors();

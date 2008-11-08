@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2008 Robert Gruber <rgruber@users.sourceforge.net>          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,74 +8,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "annotateview.h"
+#include "cvsannotatejob.h"
 
-#include <QTextBrowser>
-#include <QRegExp>
-#include <QDir>
-#include <QHeaderView>
 #include <KDebug>
+#include <KUrl>
+#include <QDir>
 
-#include <vcs/models/vcsannotationmodel.h>
+#include <vcs/vcsrevision.h>
 
-#include "cvsplugin.h"
-#include "cvsjob.h"
-
-
-AnnotateView::AnnotateView(CvsPlugin* plugin, CvsJob* job, QWidget *parent)
-    : QWidget(parent), Ui::AnnotateViewBase(), m_plugin(plugin)
-{
-    Ui::AnnotateViewBase::setupUi(this);
-
-    m_model = new KDevelop::VcsAnnotationModel( KUrl() );
-    annotations->setModel( m_model );
-
-    annotations->verticalHeader()->setVisible(false);
-
-    QHeaderView* header = annotations->horizontalHeader();
-    header->setResizeMode(0, QHeaderView::ResizeToContents);
-    header->setResizeMode(1, QHeaderView::ResizeToContents);
-    header->setResizeMode(2, QHeaderView::Stretch);
-
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SLOT( slotJobFinished(KJob*) ));
-    }
-}
-
-AnnotateView::~AnnotateView()
+CvsAnnotateJob::CvsAnnotateJob(KDevelop::IPlugin* parent)
+    : CvsJob(parent)
 {
 }
 
-void AnnotateView::slotJobFinished(KJob* job)
+CvsAnnotateJob::~CvsAnnotateJob()
 {
-    if ( job->error() )
-    {
-        return;
-    }
+}
 
-    CvsJob * cvsjob = dynamic_cast<CvsJob*>(job);
-    if (!cvsjob) {
-        return;
-    }
-
-
+QVariant CvsAnnotateJob::fetchResults()
+{
     // Convert job's output into KDevelop::VcsAnnotation
     KDevelop::VcsAnnotation annotateInfo;
-    parseOutput(cvsjob->output(), cvsjob->getDirectory(), annotateInfo);
+    parseOutput(output(), getDirectory(), annotateInfo);
 
-    QList<KDevelop::VcsAnnotationLine> lines;
+    QList<QVariant> lines;
     for(int i=0; i < annotateInfo.lineCount(); i++) {
         KDevelop::VcsAnnotationLine line = annotateInfo.line(i);
-
-        lines << line;
+        lines.append( qVariantFromValue( line ) );
     }
 
-    // Fill model with data
-    m_model->addLines( lines );
+    return lines;
 }
 
-void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingDirectory, KDevelop::VcsAnnotation& annotateInfo)
+void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workingDirectory, KDevelop::VcsAnnotation& annotateInfo)
 {
     // each annotation line looks like this:
     // 1.1 (kdedev 10-Nov-07): #include <QApplication>
@@ -88,7 +53,7 @@ void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingD
     QStringList lines = jobOutput.split("\n");
 
     QString filename;
-    for (int i=0, linenumber=1; i<lines.count(); ++i) {
+    for (int i=0, linenumber=0; i<lines.count(); ++i) {
         QString s = lines[i];
 
         if (re.exactMatch(s)) {
@@ -116,4 +81,4 @@ void AnnotateView::parseOutput(const QString& jobOutput, const QString& workingD
     }
 }
 
-#include "annotateview.moc"
+#include "cvsannotatejob.moc"

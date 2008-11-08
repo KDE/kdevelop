@@ -41,7 +41,6 @@
 #include "diffoptionsdialog.h"
 #include "editorsview.h"
 #include "logview.h"
-#include "annotateview.h"
 #include "commitdialog.h"
 #include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
@@ -228,21 +227,10 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     QMenu* menu = new QMenu("CVS");
     if( hasVersionControlledEntries )
     {
-//         action = new KAction(i18n("Commit..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxCommit()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Add"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Remove"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRemove()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Edit"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
+        // Just add actions which are not covered by the cvscommon plugin
+        action = new KAction(i18n("Edit"), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
+        menu->addAction( action );
 
         action = new KAction(i18n("Unedit"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
@@ -252,133 +240,10 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
         connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
         menu->addAction( action );
 
-//         action = new KAction(i18n("Update.."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxUpdate()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Log View"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Annotate"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxAnnotate()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Revert"), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevert()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Diff..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxDiff()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
 
     return menuExt;
-}
-
-
-void CvsPlugin::ctxCommit()
-{
-    KDevelop::VcsJob* j = commit("", d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void CvsPlugin::ctxAdd()
-{
-    KDevelop::VcsJob* j = add(d->m_ctxUrlList, KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void CvsPlugin::ctxRemove()
-{
-    KDevelop::VcsJob* j = remove(d->m_ctxUrlList);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void CvsPlugin::ctxUpdate()
-{
-    UpdateOptionsDialog dlg;
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsJob* j = update(d->m_ctxUrlList,
-                                     dlg.revision(),
-                                     KDevelop::IBasicVersionControl::Recursive);
-        CvsJob* job = dynamic_cast<CvsJob*>(j);
-        if (job) {
-            connect(job, SIGNAL( result(KJob*) ),
-                    this, SIGNAL( jobFinished(KJob*) ));
-            KDevelop::ICore::self()->runController()->registerJob(job);
-        }
-    }
-}
-
-void CvsPlugin::ctxLog()
-{
-    KDevelop::VcsRevision rev;
-    KDevelop::VcsJob* j = log( d->m_ctxUrlList.first(), rev, 0 );
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        KDevelop::ICore::self()->runController()->registerJob(job);
-        LogView* view = new LogView(this, job);
-        emit addNewTabToMainView( view, i18n("Log") );
-    }
-}
-
-void CvsPlugin::ctxAnnotate()
-{
-    /// @todo let user pick annotate revision
-    KDevelop::VcsRevision rev;
-
-    KDevelop::VcsJob* j = annotate(d->m_ctxUrlList.first(), rev);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        AnnotateView* view = new AnnotateView(this, job);
-        emit addNewTabToMainView( view, i18n("Annotate") );
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void CvsPlugin::ctxRevert()
-{
-    KDevelop::VcsJob* j = revert(d->m_ctxUrlList,
-                                    KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
-    if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
-
-void CvsPlugin::ctxDiff()
-{
-    KUrl url = d->m_ctxUrlList.first();
-    DiffOptionsDialog dlg(0, url);
-
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::VcsJob* j = diff(url, QString(""), dlg.revA(), dlg.revB(), KDevelop::VcsDiff::DiffUnified);
-        CvsJob* job = dynamic_cast<CvsJob*>(j);
-        if (job) {
-            KDevelop::ICore::self()->runController()->registerJob(job);
-            CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
-            emit addNewTabToMainView( view, i18n("Diff") );
-        }
-    }
 }
 
 void CvsPlugin::ctxEdit()

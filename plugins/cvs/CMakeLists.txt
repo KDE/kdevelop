@@ -15,13 +15,13 @@ set(kdevcvs_PART_SRCS
     diffoptionsdialog.cpp
     editorsview.cpp
     logview.cpp
-    annotateview.cpp
     commitdialog.cpp
     updateoptionsdialog.cpp
     importmetadatawidget.cpp
     importdialog.cpp
     checkoutdialog.cpp
 #   cvsfileinfoprovider.cpp
+    cvsannotatejob.cpp
 )
 
 set(kdevcvs_PART_UI
