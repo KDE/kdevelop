@@ -27,10 +27,10 @@
 namespace QTest
 {
 class Executable;
-class QTestCase;
+class Case;
 
 /*!
-Construct a QTestCase and it's children from the output
+Construct a Case and it's children from the output
 of a .shell QTest exe. This is an expensive operation since it
 involves invoking an external executable.
 
@@ -49,7 +49,7 @@ public:
 
     /*! Call the qtest-executable and parse it for testfunctions.
      *  May return zero. */
-    virtual QTestCase* construct();
+    virtual Case* construct();
 
     void setSuiteName(const QString&);
 

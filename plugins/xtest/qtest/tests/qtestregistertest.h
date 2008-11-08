@@ -27,8 +27,8 @@ namespace Veritas { class Test; }
 
 namespace QTest {
 class XmlRegister;
-class QTestSuite;
-class QTestCase;
+class Suite;
+class Case;
 namespace Test {
 
 class QTestRegisterTest : public QObject
@@ -49,10 +49,10 @@ private: // state
     QTest::XmlRegister* reg;
 
 private: // helpers
-    void compareSuites(QTest::QTestSuite* exp,
-                       QTest::QTestSuite* actual);
-    void compareCase(QTest::QTestCase* expected,
-                     QTest::QTestCase* actual);
+    void compareSuites(QTest::Suite* exp,
+                       QTest::Suite* actual);
+    void compareCase(QTest::Case* expected,
+                     QTest::Case* actual);
     Veritas::Test* registerTests(QByteArray& xml);
 };
 

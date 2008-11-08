@@ -34,9 +34,9 @@
 #include <QStringList>
 
 using QTest::SuiteBuilder;
-using QTest::QTestCase;
-using QTest::QTestOutputParser;
-using QTest::QTestSuite;
+using QTest::Case;
+using QTest::OutputParser;
+using QTest::Suite;
 using QTest::Executable;
 using QTest::CaseBuilder;
 using QTest::ISettings;
@@ -111,7 +111,7 @@ void SuiteBuilder::constructSuites()
         QString suiteName = m_suiteNames[testExe.upUrl()];
         if (!m_suites.contains(suiteName)) {
             QFileInfo suiteDir(testExe.upUrl().path());
-            QTestSuite* suite = new QTestSuite(suiteName, suiteDir, m_root);
+            Suite* suite = new Suite(suiteName, suiteDir, m_root);
             m_root->addChild(suite);
             m_suites[suiteName] = suite;
         }
@@ -126,17 +126,17 @@ void SuiteBuilder::constructCases()
         QString suiteName = m_suiteNames[testExe.upUrl()];
         CaseBuilder* cb = createCaseBuilder(testExe);
         cb->setSuiteName(suiteName);
-        QTestCase* caze = cb->construct();
+        Case* caze = cb->construct();
         delete cb;
         if (!caze) continue;
 
         Q_ASSERT(m_suites.contains(suiteName));
-        QTestSuite* suite = m_suites[suiteName];
+        Suite* suite = m_suites[suiteName];
         Q_ASSERT(suite);
         suite->addChild(caze);
         caze->setParent(suite);
         caze->setProcess(new KProcess);
-        caze->setOutputParser(new QTestOutputParser);
+        caze->setOutputParser(new OutputParser);
         caze->setSettings(m_settings);
         emit progress(0, nrofShells, count);
         count++;

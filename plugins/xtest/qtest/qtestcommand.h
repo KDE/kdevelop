@@ -28,16 +28,16 @@
 
 namespace QTest
 {
-class QTestCase;
+class Case;
 
 /*! Leaf item in the test tree. It represents a single test function, a
-private slot in the QTestCase. */
-class QXQTEST_EXPORT QTestCommand : public Veritas::Test
+private slot in the Case. */
+class QXQTEST_EXPORT Command : public Veritas::Test
 {
 Q_OBJECT
 public:
-    QTestCommand(const QString&, QTestCase*);
-    virtual ~QTestCommand();
+    Command(const QString&, Case*);
+    virtual ~Command();
     QString command(); // dead code for now, but might want it again to allow
                        // for execution of individual commands (vs full case)
 };

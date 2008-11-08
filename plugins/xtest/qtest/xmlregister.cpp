@@ -31,11 +31,11 @@
 
 #include <QIODevice>
 
-using QTest::QTestCase;
-using QTest::QTestCommand;
-using QTest::QTestOutputParser;
+using QTest::Case;
+using QTest::Command;
+using QTest::OutputParser;
 using QTest::XmlRegister;
-using QTest::QTestSuite;
+using QTest::Suite;
 using QTest::ISettings;
 
 using Veritas::Test;
@@ -114,31 +114,31 @@ void XmlRegister::setRootDir(const QString& root)
 
 void XmlRegister::processSuite()
 {
-    QTestSuite* suite = new QTestSuite(fetchName(), fetchDir(), m_rootItem);
+    Suite* suite = new Suite(fetchName(), fetchDir(), m_rootItem);
     m_rootItem->addChild(suite);
     kDebug() << suite->name();
 
     while (!atEnd() && !isEndElement_(c_suite)) {
         readNext();
         if (isStartElement_(c_case)) {
-            QTestCase* caze = instantiateCase(suite);
+            Case* caze = instantiateCase(suite);
             processCase(caze);
         }
     }
 }
 
-QTestCase* XmlRegister::instantiateCase(QTestSuite* parent)
+Case* XmlRegister::instantiateCase(Suite* parent)
 {
-    QTestCase* caze = new QTestCase(fetchName(), fetchExe(), parent);
+    Case* caze = new Case(fetchName(), fetchExe(), parent);
     parent->addChild(caze);
     caze->setSettings(m_settings);
     caze->setProcess(new KProcess(caze));
-    caze->setOutputParser(new QTestOutputParser);
+    caze->setOutputParser(new OutputParser);
     kDebug() << caze->name();
     return caze;
 }
 
-void XmlRegister::processCase(QTestCase* caze)
+void XmlRegister::processCase(Case* caze)
 {
     while (!atEnd() && !isEndElement_(c_case)) {
         readNext();
@@ -148,9 +148,9 @@ void XmlRegister::processCase(QTestCase* caze)
     }
 }
 
-void XmlRegister::processCmd(QTestCase* caze)
+void XmlRegister::processCmd(Case* caze)
 {
-    QTestCommand* cmd = new QTestCommand(fetchName(), caze);
+    Command* cmd = new Command(fetchName(), caze);
     caze->addChild(cmd);
     kDebug() << cmd->name();
 }

@@ -26,9 +26,9 @@
 namespace Veritas { class Test; }
 
 namespace QTest {
-class QTestSuite;
-class QTestCase;
-class QTestCommand;
+class Suite;
+class Case;
+class Command;
 
 namespace Test {
 class CustomSuiteBuilder;
@@ -47,10 +47,10 @@ private slots:
     void identicalSuiteNames();
 
 private:
-    QTestSuite* fetchSuite(Veritas::Test* root, int nrofSuite);
-    void verifySuite(QTestSuite* suite, const QString name, int childCount);
-    void verifyCommand(int nrofChild, QTestCase* parent, const QString name);
-    void verifyCaze(QTestCase* caze, const QString name, int childCount);
+    Suite* fetchSuite(Veritas::Test* root, int nrofSuite);
+    void verifySuite(Suite* suite, const QString name, int childCount);
+    void verifyCommand(int nrofChild, Case* parent, const QString name);
+    void verifyCaze(Case* caze, const QString name, int childCount);
 
 private:
     CustomSuiteBuilder* m_builder;

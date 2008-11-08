@@ -32,16 +32,16 @@
 #include <QModelIndex>
 #include <QAbstractListModel>
 
-using QTest::QTestOutputParser;
-using QTest::QTestCase;
-using QTest::QTestCommand;
+using QTest::OutputParser;
+using QTest::Case;
+using QTest::Command;
 using Veritas::TestResult;
 
-using QTest::QTestOutputParserTest;
+using QTest::OutputParserTest;
 
 Q_DECLARE_METATYPE(QFileInfo)
 Q_DECLARE_METATYPE(Veritas::TestState)
-Q_DECLARE_METATYPE(QTest::QTestCase*)
+Q_DECLARE_METATYPE(QTest::Case*)
 Q_DECLARE_METATYPE(QModelIndex)
 
 /*example xml output :
@@ -105,23 +105,23 @@ template<> inline char* toString(const TestResult& res)
 
 ////////////// FIXTURE ///////////////////////////////////////////////////////
 
-void QTestOutputParserTest::initTestCase()
+void OutputParserTest::initTestCase()
 {
     qRegisterMetaType<QModelIndex>("QModelIndex");
 }
 
-QTestOutputParserTest::TestInfo::TestInfo()
+OutputParserTest::TestInfo::TestInfo()
     : test(0), started(0), finished(0), result(0)
 {}
 
-QTestOutputParserTest::TestInfo::~TestInfo()
+OutputParserTest::TestInfo::~TestInfo()
 {
     if (started) delete started;
     if (finished) delete finished;
     if (result) delete result;
 }
 
-void QTestOutputParserTest::TestInfo::reset()
+void OutputParserTest::TestInfo::reset()
 {
     if (started) delete started;
     if (finished) delete finished;
@@ -133,15 +133,15 @@ void QTestOutputParserTest::TestInfo::reset()
 }
 
 
-void QTestOutputParserTest::init()
+void OutputParserTest::init()
 {
     m_buffer = 0;
-    m_parser = new QTestOutputParser;
+    m_parser = new OutputParser;
     m_caze = createTestCase(m_cazeInfo);
     m_assertType = QTestAssert;
 }
 
-void QTestOutputParserTest::cleanup()
+void OutputParserTest::cleanup()
 {
     delete m_parser;
     delete m_buffer;
@@ -152,7 +152,7 @@ void QTestOutputParserTest::cleanup()
 }
 
 // fixture setup helper
-void QTestOutputParserTest::initParser(QByteArray& xml, QTestCase* caze)
+void OutputParserTest::initParser(QByteArray& xml, Case* caze)
 {
     m_buffer = new QBuffer(&xml, 0);
     m_parser->setDevice(m_buffer);
@@ -163,9 +163,9 @@ void QTestOutputParserTest::initParser(QByteArray& xml, QTestCase* caze)
 
 
 // creation method
-QTestCase* QTestOutputParserTest::createTestCase(TestInfo& cInfo)
+Case* OutputParserTest::createTestCase(TestInfo& cInfo)
 {
-    QTestCase* caze = new QTestCase("TestTest", QFileInfo(), 0);
+    Case* caze = new Case("TestTest", QFileInfo(), 0);
     cInfo.test = caze;
     cInfo.finished = new QSignalSpy(caze, SIGNAL(finished(QModelIndex)));
     cInfo.started  = new QSignalSpy(caze, SIGNAL(started(QModelIndex)));
@@ -173,29 +173,29 @@ QTestCase* QTestOutputParserTest::createTestCase(TestInfo& cInfo)
 }
 
 // creation method
-void QTestOutputParserTest::createTestCommand(TestInfo& cInfo, QTestCase* parent, QString name)
+void OutputParserTest::createTestCommand(TestInfo& cInfo, Case* parent, QString name)
 {
-    cInfo.test = new QTestCommand(name, (QTestCase*)parent);
+    cInfo.test = new Command(name, (Case*)parent);
     parent->addChild(cInfo.test);
     cInfo.started  = new QSignalSpy(cInfo.test, SIGNAL(started(QModelIndex)));
     cInfo.finished = new QSignalSpy(cInfo.test, SIGNAL(finished(QModelIndex)));
 }
 
 // fixture setup helper
-void QTestOutputParserTest::setExpectedSuccess(TestInfo& tInfo)
+void OutputParserTest::setExpectedSuccess(TestInfo& tInfo)
 {
     setExpectedResult(tInfo, Veritas::RunSuccess, "", 0, "");
 }
 
 // fixture setup helper
-void QTestOutputParserTest::setExpectedFailure(TestInfo& tInfo)
+void OutputParserTest::setExpectedFailure(TestInfo& tInfo)
 {
     setExpectedResult(tInfo, Veritas::RunError, "/path/to/file.cpp",
                              100, "failure message");
 }
 
 // fixture setup helper
-void QTestOutputParserTest::setExpectedResult(
+void OutputParserTest::setExpectedResult(
     TestInfo& tInfo,
     Veritas::TestState state,
     QString filePath,
@@ -213,7 +213,7 @@ void QTestOutputParserTest::setExpectedResult(
 /////////////// DATA TEST ///////////////////////////////////////////////////////////
 
 //test command
-void QTestOutputParserTest::parse()
+void OutputParserTest::parse()
 {
     // exercise
     QFETCH(QByteArray, xml);
@@ -235,7 +235,7 @@ void QTestOutputParserTest::parse()
 }
 
 // test data implementation
-void QTestOutputParserTest::parse_data()
+void OutputParserTest::parse_data()
 {
     setupColumns();
     addSunnyDayData();
@@ -243,18 +243,18 @@ void QTestOutputParserTest::parse_data()
 }
 
 // helper for parse_data
-void QTestOutputParserTest::setupColumns()
+void OutputParserTest::setupColumns()
 {
     QTest::addColumn<QByteArray>("xml");
     QTest::addColumn<Veritas::TestState>("state");
     QTest::addColumn<QFileInfo>("file");
     QTest::addColumn<int>("line");
     QTest::addColumn<QString>("message");
-    QTest::addColumn<QTestCase*>("case");
+    QTest::addColumn<Case*>("case");
 }
 
 // test data
-void QTestOutputParserTest::addSunnyDayData()
+void OutputParserTest::addSunnyDayData()
 {
     // first row - sunny day test succes
     QByteArray input =
@@ -272,7 +272,7 @@ void QTestOutputParserTest::addSunnyDayData()
 }
 
 // test data
-void QTestOutputParserTest::addBasicFailureData()
+void OutputParserTest::addBasicFailureData()
 {
     // second row - test failure
     QByteArray input =
@@ -295,7 +295,7 @@ void QTestOutputParserTest::addBasicFailureData()
 ////////////// TEST COMMANDS ///////////////////////////////////////////////////////
 
 // test command
-void QTestOutputParserTest::initFailure()
+void OutputParserTest::initFailure()
 {
     QByteArray input =
         QTEST_HEADER_XML
@@ -317,7 +317,7 @@ void QTestOutputParserTest::initFailure()
 }
 
 // test command
-void QTestOutputParserTest::cleanupFailure()
+void OutputParserTest::cleanupFailure()
 {
     QByteArray input =
         QTEST_HEADER_XML
@@ -344,7 +344,7 @@ void QTestOutputParserTest::cleanupFailure()
 }
 
 // command
-void QTestOutputParserTest::doubleFailure()
+void OutputParserTest::doubleFailure()
 {
     QByteArray input =
         QTEST_HEADER_XML
@@ -376,12 +376,10 @@ void QTestOutputParserTest::doubleFailure()
     checkResult(m_command1Info);
     assertParsed(m_command2Info);
     checkResult(m_command2Info);
-
-    KVERIFY_MSG(false, "FooBar, some failure message");
 }
 
 // test command
-void QTestOutputParserTest::skipSingle()
+void OutputParserTest::skipSingle()
 {
     // QSKIP with the SkipSingle flag
     QByteArray input =
@@ -406,7 +404,7 @@ void QTestOutputParserTest::skipSingle()
 }
 
 // test command
-void QTestOutputParserTest::skipAll()
+void OutputParserTest::skipAll()
 {
     // QSKIP with the SkipAll flag. QTestLib refuses to print an <Incident type="pass" /> for those.
     QByteArray input =
@@ -431,7 +429,7 @@ void QTestOutputParserTest::skipAll()
 }
 
 // test command
-void QTestOutputParserTest::qassert()
+void OutputParserTest::qassert()
 {
     QByteArray input =
         QTEST_HEADER_XML
@@ -458,7 +456,7 @@ void QTestOutputParserTest::qassert()
 }
 
 // test command
-void QTestOutputParserTest::qassertx()
+void OutputParserTest::qassertx()
 {
     QByteArray input =
         QTEST_HEADER_XML
@@ -485,11 +483,11 @@ void QTestOutputParserTest::qassertx()
 }
 
 // test command
-void QTestOutputParserTest::multipleResultsInSingleCommand()
+void OutputParserTest::multipleResultsInSingleCommand()
 {
     // More than one failure messages in a single test function.
     // The parser should add these as individual sub-TestResults on 
-    // the QTestCommand's TestResult
+    // the Command's TestResult
     // You can trigger this behaviour in QTestLib with QVERIFY/QCOMPARES in different methods.
 
     QByteArray input =
@@ -532,11 +530,11 @@ void QTestOutputParserTest::multipleResultsInSingleCommand()
 }
 
 // test command
-void QTestOutputParserTest::failureAndAssertInSingleCommand()
+void OutputParserTest::failureAndAssertInSingleCommand()
 {
     // More than one failure messages in a single test function.
     // The parser should add these as individual sub-TestResults on 
-    // the QTestCommand's TestResult
+    // the Command's TestResult
     // You can trigger this behaviour in QTestLib with QVERIFY/QCOMPARES in different methods.
 
     QByteArray input =
@@ -592,7 +590,7 @@ void QTestOutputParserTest::failureAndAssertInSingleCommand()
 }
 
 
-void QTestOutputParserTest::assertNrofSubResultsEquals(int expected, Veritas::Test* t)
+void OutputParserTest::assertNrofSubResultsEquals(int expected, Veritas::Test* t)
 {
     KVERIFY(t->result());
     KOMPARE(expected, t->result()->childCount());
@@ -601,7 +599,7 @@ void QTestOutputParserTest::assertNrofSubResultsEquals(int expected, Veritas::Te
     }
 }
 
-void QTestOutputParserTest::assertSubResultEquals(int nrof, Veritas::Test* test, TestResult* expected)
+void OutputParserTest::assertSubResultEquals(int nrof, Veritas::Test* test, TestResult* expected)
 {
     KVERIFY(test);
     KVERIFY(test->result());
@@ -652,9 +650,9 @@ QList<QByteArray> chopInPieces(const QByteArray& input, int nrofPieces)
     return pieces;
 }
 
-void QTestOutputParserTest::runRandomCommand(const QList<QByteArray>& pieces, QTestCase* caze)
+void OutputParserTest::runRandomCommand(const QList<QByteArray>& pieces, Case* caze)
 {
-    m_parser = new QTestOutputParser;
+    m_parser = new OutputParser;
     m_buffer = new QBuffer();
     m_parser->setDevice(m_buffer);
     m_parser->setCase(caze);
@@ -671,7 +669,7 @@ void QTestOutputParserTest::runRandomCommand(const QList<QByteArray>& pieces, QT
     delete m_buffer;
 }
 
-void QTestOutputParserTest::verifyRandomResults(QList<TestInfo*>& expected)
+void OutputParserTest::verifyRandomResults(QList<TestInfo*>& expected)
 {
     foreach(TestInfo* ti, expected) {
         assertParsed(*ti);
@@ -679,7 +677,7 @@ void QTestOutputParserTest::verifyRandomResults(QList<TestInfo*>& expected)
     }
 }
 
-void QTestOutputParserTest::generateRandomInput(int maxCommands, QByteArray& parserInput, QList<TestInfo*>& expected, QTestCase*& caze)
+void OutputParserTest::generateRandomInput(int maxCommands, QByteArray& parserInput, QList<TestInfo*>& expected, Case*& caze)
 {
     parserInput = QTEST_HEADER_XML
                      QTEST_INITTESTCASE_XML;
@@ -783,12 +781,12 @@ void insertGarbage(QList<QByteArray>& input)
 }
 }
 
-void QTestOutputParserTest::setQuiet(bool quiet)
+void OutputParserTest::setQuiet(bool quiet)
 {
     m_quiet = quiet;
 }
 
-void QTestOutputParserTest::randomValidXML()
+void OutputParserTest::randomValidXML()
 {
     cout << "------------- OutputParser Random Stress Test  -------------" << endl;
     srand(time(0));
@@ -799,7 +797,7 @@ void QTestOutputParserTest::randomValidXML()
         for (int i=0; i<1000; i++) {
             m_randomTestType = "[pieces:" + QString::number(nrofPieces) + ";cycle:" + QString::number(i) + "]\n";
             QByteArray input;
-            QTestCase* caze;
+            Case* caze;
             QList<TestInfo*> expected;
 
             generateRandomInput(30, input, expected, caze);
@@ -823,7 +821,7 @@ void QTestOutputParserTest::randomValidXML()
     QCoreApplication::quit();
 }
 
-void QTestOutputParserTest::randomGarbageXML()
+void OutputParserTest::randomGarbageXML()
 {
     cout << "------------- OutputParser Random Garbage Test -------------" << endl;
     srand(time(0));
@@ -835,7 +833,7 @@ void QTestOutputParserTest::randomGarbageXML()
         for (int i=0; i<1000; i++) {
             m_randomTestType = "[pieces:" + QString::number(nrofPieces) + ";cycle:" + QString::number(i) + "]\n";
             QByteArray input;
-            QTestCase* caze;
+            Case* caze;
             QList<TestInfo*> expected;
 
             generateRandomInput(30, input, expected, caze);
@@ -865,7 +863,7 @@ void QTestOutputParserTest::randomGarbageXML()
 using Veritas::Test;
 
 // custom assertion
-void QTestOutputParserTest::checkResult(TestInfo& testInfo)
+void OutputParserTest::checkResult(TestInfo& testInfo)
 {
     Veritas::Test* test = testInfo.test;
     TestResult* actual = test->result();
@@ -900,7 +898,7 @@ if (expected != actual) {\
 
 
 // helper
-void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
+void OutputParserTest::assertParsed(TestInfo& testInfo)
 {
     QSignalSpy* started = testInfo.started;
     QSignalSpy* completed = testInfo.finished;
@@ -917,7 +915,7 @@ void QTestOutputParserTest::assertParsed(TestInfo& testInfo)
     } else { Q_ASSERT(0); }
 }
 
-void QTestOutputParserTest::assertResult(TestResult* expected, TestResult* actual, const QString& name)
+void OutputParserTest::assertResult(TestResult* expected, TestResult* actual, const QString& name)
 {
     if (m_assertType == QTestAssert) {
         assertResult(*expected, *actual);
@@ -927,7 +925,7 @@ void QTestOutputParserTest::assertResult(TestResult* expected, TestResult* actua
 }
 
 // helper
-void QTestOutputParserTest::assertResult(const TestResult& expected, const TestResult& actual)
+void OutputParserTest::assertResult(const TestResult& expected, const TestResult& actual)
 {
     KOMPARE_MSG(expected.state(), actual.state(),
                 "Expected " + QString::number(expected.state()) +
@@ -939,7 +937,7 @@ void QTestOutputParserTest::assertResult(const TestResult& expected, const TestR
 }
 
 // helper
-void QTestOutputParserTest::qassertResult(TestResult* expected, TestResult* actual, const QString& testName)
+void OutputParserTest::qassertResult(TestResult* expected, TestResult* actual, const QString& testName)
 {
     Q_ASSERT_EQUALS(expected->state(), actual->state(), state);
     Q_ASSERT_EQUALS(expected->file().path(), actual->file().path(), file);
@@ -948,4 +946,4 @@ void QTestOutputParserTest::qassertResult(TestResult* expected, TestResult* actu
 }
 
 #include "qtestoutputparsertest.moc"
-// QTEST_KDEMAIN(QTestOutputParserTest, NoGUI)
+// QTEST_KDEMAIN(OutputParserTest, NoGUI)

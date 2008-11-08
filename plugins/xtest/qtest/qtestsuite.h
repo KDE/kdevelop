@@ -30,16 +30,16 @@ namespace QTest
 {
 
 /*!
-Item in the test runner tree. Aggregates QTestCases.
-@unittest QTest::ut::QTestSuiteTest
+Item in the test runner tree. Aggregates Cases.
+@unittest QTest::ut::SuiteTest
 */
-class QXQTEST_EXPORT QTestSuite : public Veritas::Test
+class QXQTEST_EXPORT Suite : public Veritas::Test
 {
 Q_OBJECT
 public:
-    QTestSuite(const QString&, const QFileInfo&, Veritas::Test* parent);
-    virtual ~QTestSuite();
-    QTestCase* child(int i) const;
+    Suite(const QString&, const QFileInfo&, Veritas::Test* parent);
+    virtual ~Suite();
+    Case* child(int i) const;
 
     QFileInfo path();
     void setPath(const QFileInfo&);

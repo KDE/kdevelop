@@ -26,7 +26,7 @@
 
 namespace QTest { namespace Test {
 
-class QTestCommandTest : public QObject
+class CommandTest : public QObject
 {
     Q_OBJECT
 

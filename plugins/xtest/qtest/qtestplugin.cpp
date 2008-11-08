@@ -116,9 +116,9 @@ KDevelop::ProjectConfigSkeleton* QTestPlugin::configSkeleton(const QVariantList&
 QTestPlugin::~QTestPlugin()
 {
 //    int nrofLeaks =0;
-//    QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
-//    kDebug() << "QTestOutputParser leaked" << nrofLeaks << "Veritas::TestResult's";
-//    QTestOutputParser::fto_resetResultMemoryLeakStats();
+//    OutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
+//    kDebug() << "OutputParser leaked" << nrofLeaks << "Veritas::TestResult's";
+//    OutputParser::fto_resetResultMemoryLeakStats();
 }
 
 void QTestPlugin::newQTest()

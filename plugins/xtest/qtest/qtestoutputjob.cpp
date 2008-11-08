@@ -33,9 +33,9 @@
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
-using QTest::QTestCase;
+using QTest::Case;
 
-QTestOutputJob::QTestOutputJob(QTestOutputDelegate* parent, QTestCase* caze)
+QTestOutputJob::QTestOutputJob(QTestOutputDelegate* parent, Case* caze)
         : OutputJob(parent), m_caze(caze)
 {}
 

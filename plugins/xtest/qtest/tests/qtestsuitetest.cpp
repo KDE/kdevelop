@@ -24,9 +24,9 @@
 #include <qtest_kde.h>
 #include <qtestcase.h>
 
-using QTest::QTestSuite;
-using QTest::QTestCase;
-using QTest::Test::QTestSuiteTest;
+using QTest::Suite;
+using QTest::Case;
+using QTest::Test::SuiteTest;
 
 namespace
 {
@@ -36,39 +36,39 @@ QFileInfo someExe()
 }
 }
 
-void QTestSuiteTest::init()
+void SuiteTest::init()
 {
     m_path = QFileInfo("/path/to/module");
     m_name = "s1";
-    m_suite = new QTestSuite(m_name, m_path, 0);
+    m_suite = new Suite(m_name, m_path, 0);
 }
 
-void QTestSuiteTest::cleanup()
+void SuiteTest::cleanup()
 {
     delete m_suite;
 }
 
-void QTestSuiteTest::construct()
+void SuiteTest::construct()
 {
     KOMPARE(m_suite->name(), m_name);
     KOMPARE(m_suite->path(), m_path);
 }
 
-void QTestSuiteTest::addChildCase()
+void SuiteTest::addChildCase()
 {
     KOMPARE(m_suite->childCount(), 0);
 
-    QTestCase* t = new QTestCase("t1", someExe(), m_suite);
+    Case* t = new Case("t1", someExe(), m_suite);
     m_suite->addChild(t);
 
     KOMPARE(m_suite->childCount(), 1);
     KOMPARE(m_suite->child(0), t);
 }
 
-void QTestSuiteTest::addChildCases()
+void SuiteTest::addChildCases()
 {
-    QTestCase* t1 = new QTestCase("t1", someExe(), m_suite);
-    QTestCase* t2 = new QTestCase("t2", someExe(), m_suite);
+    Case* t1 = new Case("t1", someExe(), m_suite);
+    Case* t2 = new Case("t2", someExe(), m_suite);
     m_suite->addChild(t1);
     m_suite->addChild(t2);
 
@@ -78,4 +78,4 @@ void QTestSuiteTest::addChildCases()
 }
 
 #include "qtestsuitetest.moc"
-QTEST_KDEMAIN(QTestSuiteTest, NoGUI)
+QTEST_KDEMAIN(SuiteTest, NoGUI)

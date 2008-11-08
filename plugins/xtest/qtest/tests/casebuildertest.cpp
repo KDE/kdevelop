@@ -30,8 +30,8 @@
 
 using QTest::Test::CaseBuilderTest;
 using QTest::Test::ExecutableStub;
-using QTest::QTestCase;
-using QTest::QTestCommand;
+using QTest::Case;
+using QTest::Command;
 using QTest::Executable;
 using Veritas::Test;
 
@@ -88,9 +88,9 @@ void CaseBuilderTest::singleCommand()
     assertChildCommand(0, "testFoo", m_caze);
 }
 
-void CaseBuilderTest::assertChildCommand(int nrof, QString name, QTestCase* parent)
+void CaseBuilderTest::assertChildCommand(int nrof, QString name, Case* parent)
 {
-    QTestCommand* cmd = parent->child(nrof);
+    Command* cmd = parent->child(nrof);
     assertNotNull(cmd); CHECK_STOP
     assertNamed(name, cmd);
     assertParent(cmd, parent);
@@ -200,18 +200,18 @@ void CaseBuilderTest::initTestExeStub(QString name, QStringList functionsOutput)
 }
 
 // custom assertion
-void CaseBuilderTest::assertNotNull(QTestCase* caze)
+void CaseBuilderTest::assertNotNull(Case* caze)
 {
     m_stop = true; // make this a fatal assertion.
-    KVERIFY_MSG(caze, "Builder should have allocated a QTestCase, but returned NULL.");
+    KVERIFY_MSG(caze, "Builder should have allocated a Case, but returned NULL.");
     m_stop = false; // if we get here, the assertion succeeded.
 }
 
 // custom assertion
-void CaseBuilderTest::assertNotNull(QTestCommand* cmd)
+void CaseBuilderTest::assertNotNull(Command* cmd)
 {
     m_stop = true; // make this a fatal assertion.
-    KVERIFY_MSG(cmd, "Builder should have allocated a QTestCommand, but returned NULL.");
+    KVERIFY_MSG(cmd, "Builder should have allocated a Command, but returned NULL.");
     m_stop = false; // if we get here, the assertion succeeded.
 }
 
@@ -224,7 +224,7 @@ void CaseBuilderTest::assertParent(Veritas::Test* child, Veritas::Test* parent)
 }
 
 // custom assertion
-void CaseBuilderTest::assertNrofChildren(int count, QTestCase* caze)
+void CaseBuilderTest::assertNrofChildren(int count, Case* caze)
 {
     int actual = caze->childCount();
     QString failMsg = QString(
@@ -234,21 +234,21 @@ void CaseBuilderTest::assertNrofChildren(int count, QTestCase* caze)
 }
 
 // custom assertion
-void CaseBuilderTest::assertNamed(QString name, QTestCase* caze)
+void CaseBuilderTest::assertNamed(QString name, Case* caze)
 {
     QString actual = caze->name();
     QString failMsg = QString(
-        "Constructed QTestCase has a wrong name.\n"
+        "Constructed Case has a wrong name.\n"
         "Expected %1 but Got %2").arg(name).arg(actual);
     KOMPARE_MSG(name, actual, failMsg);
 }
 
 // custom assertion
-void CaseBuilderTest::assertNamed(QString name, QTestCommand* cmd)
+void CaseBuilderTest::assertNamed(QString name, Command* cmd)
 {
     QString actual = cmd->name();
     QString failMsg = QString(
-        "Constructed QTestCommand has a wrong name.\n"
+        "Constructed Command has a wrong name.\n"
         "Expected %1 but Got %2").arg(name).arg(actual);
     KOMPARE_MSG(name, actual, failMsg);
 }

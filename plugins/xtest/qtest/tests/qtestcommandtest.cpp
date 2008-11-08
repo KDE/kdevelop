@@ -25,22 +25,22 @@
 #include <qtestsuite.h>
 #include <qtestcase.h>
 
-using QTest::QTestSuite;
-using QTest::QTestCase;
-using QTest::QTestCommand;
-using QTest::Test::QTestCommandTest;
+using QTest::Suite;
+using QTest::Case;
+using QTest::Command;
+using QTest::Test::CommandTest;
 
-void QTestCommandTest::construct()
+void CommandTest::construct()
 {
-    QTestCommand c("cmd1", 0);
+    Command c("cmd1", 0);
     KOMPARE("cmd1", c.name());
 }
 
-void QTestCommandTest::cmdString()
+void CommandTest::cmdString()
 {
-    QTestSuite* suite = new QTestSuite("s1", QFileInfo("/a/b/"), 0);
-    QTestCase* caze = new QTestCase("c1", QFileInfo("c.sh"), suite);
-    QTestCommand* cmd = new QTestCommand("cmd", caze);
+    Suite* suite = new Suite("s1", QFileInfo("/a/b/"), 0);
+    Case* caze = new Case("c1", QFileInfo("c.sh"), suite);
+    Command* cmd = new Command("cmd", caze);
     suite->addChild(caze);
     caze->addChild(cmd);
 
@@ -49,17 +49,17 @@ void QTestCommandTest::cmdString()
     delete suite;
 }
 
-void QTestCommandTest::cmdStringNoParent()
+void CommandTest::cmdStringNoParent()
 {
-    QTestCommand* cmd = new QTestCommand("cmd1", 0);
+    Command* cmd = new Command("cmd1", 0);
     KOMPARE("", cmd->command());
     delete cmd;
 }
 
-void QTestCommandTest::cmdStringNoSuite()
+void CommandTest::cmdStringNoSuite()
 {
-    QTestCase* caze = new QTestCase("c1", QFileInfo("c.sh"), 0);
-    QTestCommand* cmd = new QTestCommand("cmd1", caze);
+    Case* caze = new Case("c1", QFileInfo("c.sh"), 0);
+    Command* cmd = new Command("cmd1", caze);
     caze->addChild(cmd);
     KOMPARE("c.sh cmd1", cmd->command());
 
@@ -68,4 +68,4 @@ void QTestCommandTest::cmdStringNoSuite()
 
 
 #include "qtestcommandtest.moc"
-QTEST_KDEMAIN(QTestCommandTest, NoGUI)
+QTEST_KDEMAIN(CommandTest, NoGUI)

@@ -31,7 +31,7 @@ class IOutputView;
 class IProject;
 }
 
-namespace QTest { class QTestCase; }
+namespace QTest { class Case; }
 
 class KProcess;
 class QTestOutputModel;
@@ -43,7 +43,7 @@ class QXQTEST_EXPORT QTestOutputJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QTestOutputJob(QTestOutputDelegate *parent, QTest::QTestCase*);
+    QTestOutputJob(QTestOutputDelegate *parent, QTest::Case*);
     virtual void start();
 
 protected:
@@ -54,7 +54,7 @@ private:
 
 private:
     QTestOutputDelegate* delegate() const;
-    QTest::QTestCase* m_caze;
+    QTest::Case* m_caze;
 };
 
 #endif // QTEST_QTESTOUTPUTJOB_H

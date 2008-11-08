@@ -24,9 +24,9 @@
 
 #include "kdevtest.h"
 
-using QTest::QTestCase;
-using QTest::QTestCommand;
-using QTest::Test::QTestCaseTest;
+using QTest::Case;
+using QTest::Command;
+using QTest::Test::CaseTest;
 
 namespace
 {
@@ -36,41 +36,41 @@ QString someCmd()
 }
 }// end anonymous namespace
 
-void QTestCaseTest::init()
+void CaseTest::init()
 {
     m_exe = QFileInfo("my.exe");
     m_name = "test1";
-    m_case = new QTestCase(m_name, m_exe, 0);
+    m_case = new Case(m_name, m_exe, 0);
 }
 
-void QTestCaseTest::cleanup()
+void CaseTest::cleanup()
 {
     delete m_case;
 }
 
-void QTestCaseTest::construct()
+void CaseTest::construct()
 {
     KOMPARE(m_case->childCount(), 0);
     KOMPARE(m_case->name(), m_name);
     KOMPARE(m_case->executable(), m_exe);
 }
 
-void QTestCaseTest::addCommand()
+void CaseTest::addCommand()
 {
     KOMPARE(m_case->childCount(), 0);
-    QTestCommand* c1 = new QTestCommand(someCmd(), m_case);
+    Command* c1 = new Command(someCmd(), m_case);
     m_case->addChild(c1);
 
     KOMPARE(m_case->childCount(), 1);
     KOMPARE(m_case->child(0), c1);
 }
 
-void QTestCaseTest::addCommands()
+void CaseTest::addCommands()
 {
     KOMPARE(m_case->childCount(), 0);
-    QTestCommand* c1 = new QTestCommand(someCmd(), m_case);
+    Command* c1 = new Command(someCmd(), m_case);
     m_case->addChild(c1);
-    QTestCommand* c2 = new QTestCommand(someCmd(), m_case);
+    Command* c2 = new Command(someCmd(), m_case);
     m_case->addChild(c2);
 
     KOMPARE(m_case->childCount(), 2);
@@ -79,11 +79,11 @@ void QTestCaseTest::addCommands()
 
 }
 
-void QTestCaseTest::emptyOutputFiles()
+void CaseTest::emptyOutputFiles()
 {
     KVERIFY(m_case->outFile().isEmpty());
     KVERIFY(m_case->errorFile().isEmpty());
 }
 
 #include "qtestcasetest.moc"
-QTEST_KDEMAIN(QTestCaseTest, NoGUI)
+QTEST_KDEMAIN(CaseTest, NoGUI)

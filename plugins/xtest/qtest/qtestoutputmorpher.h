@@ -30,11 +30,11 @@ namespace QTest
 {
 
 /*! Translates QTest XML output into plain ascii */
-class QXQTEST_EXPORT QTestOutputMorpher : public QXmlStreamReader
+class QXQTEST_EXPORT OutputMorpher : public QXmlStreamReader
 {
 public:
-    QTestOutputMorpher();
-    virtual ~QTestOutputMorpher();
+    OutputMorpher();
+    virtual ~OutputMorpher();
 
     void setSource(QIODevice*);
     void setTarget(QIODevice*);

@@ -37,8 +37,8 @@ namespace QTest
 {
 
 class ISettings;
-class QTestSuite;
-class QTestCase;
+class Suite;
+class Case;
 class IRegister;
 
 /*! Reads a QTest suite's structure from XML. After parsing the root of the
@@ -61,9 +61,9 @@ private: // helpers
     bool isStartElement_(const QString& elem);
     bool isEndElement_(const QString& elem);
     void processSuite();
-    QTestCase* instantiateCase(QTestSuite* parent);
-    void processCase(QTestCase* caze);
-    void processCmd(QTestCase* caze);
+    Case* instantiateCase(Suite* parent);
+    void processCase(Case* caze);
+    void processCmd(Case* caze);
     QString   fetchName();
     QFileInfo fetchDir();
     QFileInfo fetchExe();

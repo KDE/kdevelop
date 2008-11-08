@@ -24,7 +24,7 @@
 #include <KDebug>
 
 using QTest::CaseBuilder;
-using QTest::QTestCase;
+using QTest::Case;
 using QTest::Executable;
 
 CaseBuilder::CaseBuilder()
@@ -47,7 +47,7 @@ void CaseBuilder::setSuiteName(const QString& suite)
     m_suite = suite;
 }
 
-QTestCase* CaseBuilder::construct()
+Case* CaseBuilder::construct()
 {
     Q_ASSERT(m_executable);
     QFileInfo exeLocation(m_executable->location().path());
@@ -60,7 +60,7 @@ QTestCase* CaseBuilder::construct()
         cazeName = spl.join("-");
     }
 
-    QTestCase* caze = new QTestCase(cazeName, exeLocation);
+    Case* caze = new Case(cazeName, exeLocation);
 
     QStringList exeFunctionOut = m_executable->fetchFunctions();
     bool success = false;
@@ -68,7 +68,7 @@ QTestCase* CaseBuilder::construct()
         if (line.endsWith("()") && !line.contains(" ")) {
             // recognize this as a legit qtest function output line
             line.chop(2); // remove "()"
-            QTestCommand* foo = new QTestCommand(line, caze);
+            Command* foo = new Command(line, caze);
             caze->addChild(foo);
             success = true;
         } else { // garbage

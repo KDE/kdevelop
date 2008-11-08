@@ -23,7 +23,7 @@
 #include <QTextStream>
 
 QString prefix = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-                 "<TestCase name=\"QTestCaseTest\">\n"
+                 "<TestCase name=\"CaseTest\">\n"
                  "<Environment>\n"
                  "<QtVersion>4.4.0-rc1</QtVersion>\n"
                  "<QTestVersion>4.4.0-rc1</QTestVersion>\n"

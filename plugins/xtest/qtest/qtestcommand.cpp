@@ -22,24 +22,24 @@
 #include "qtestsuite.h"
 #include "qtestcase.h"
 
-using QTest::QTestCommand;
-using QTest::QTestCase;
+using QTest::Command;
+using QTest::Case;
 using Veritas::Test;
 
-QTestCommand::QTestCommand(const QString& name, QTestCase* parent)
+Command::Command(const QString& name, Case* parent)
     : Test(name, parent)
 {}
 
-QTestCommand::~QTestCommand()
+Command::~Command()
 {}
 
-QString QTestCommand::command()
+QString Command::command()
 {
     QFileInfo cmd;
     Test* caze = parent();
-    if (caze == 0 || qobject_cast<QTestCase*>(caze) == 0)
+    if (caze == 0 || qobject_cast<Case*>(caze) == 0)
             return "";
-    cmd = qobject_cast<QTestCase*>(caze)->executable();
+    cmd = qobject_cast<Case*>(caze)->executable();
 
     return cmd.filePath() + ' ' + name();
 }

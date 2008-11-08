@@ -25,7 +25,7 @@
 
 namespace QTest { namespace Test {
 
-class QTestOutputMorpherTest : public QObject
+class OutputMorpherTest : public QObject
 {
 Q_OBJECT
 private slots:

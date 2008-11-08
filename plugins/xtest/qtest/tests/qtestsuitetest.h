@@ -26,8 +26,8 @@
 
 namespace QTest { namespace Test {
 
-/*! @unitundertest QTest::QTestSuite */
-class QTestSuiteTest : public QObject
+/*! @unitundertest QTest::Suite */
+class SuiteTest : public QObject
 {
     Q_OBJECT
 
@@ -41,7 +41,7 @@ private slots:
 private:
     QFileInfo m_path;
     QString m_name;
-    QTest::QTestSuite* m_suite;
+    QTest::Suite* m_suite;
 };
 
 }}

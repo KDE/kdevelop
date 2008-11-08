@@ -21,32 +21,32 @@
 #include "qtestsuite.h"
 #include "qtestcase.h"
 
-using QTest::QTestSuite;
-using QTest::QTestCase;
+using QTest::Suite;
+using QTest::Case;
 using Veritas::Test;
 
-QTestSuite::QTestSuite(const QString& name, const QFileInfo& path, Test* parent)
+Suite::Suite(const QString& name, const QFileInfo& path, Test* parent)
     : Test(name, parent), m_path(path)
 {
     setSelectionToggle(true);
 }
 
-QTestSuite::~QTestSuite()
+Suite::~Suite()
 {}
 
-QFileInfo QTestSuite::path()
+QFileInfo Suite::path()
 {
     return m_path;
 }
 
-void QTestSuite::setPath(const QFileInfo& path)
+void Suite::setPath(const QFileInfo& path)
 {
     m_path = path;
 }
 
-QTestCase* QTestSuite::child(int i) const
+Case* Suite::child(int i) const
 {
-    return static_cast<QTestCase*>(Test::child(i));
+    return static_cast<Case*>(Test::child(i));
 }
 
 #include "qtestsuite.moc"

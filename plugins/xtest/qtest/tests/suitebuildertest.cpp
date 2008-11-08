@@ -32,9 +32,9 @@
 using QTest::Test::SuiteBuilderTest;
 using QTest::SuiteBuilder;
 using QTest::CaseBuilder;
-using QTest::QTestCase;
-using QTest::QTestCommand;
-using QTest::QTestSuite;
+using QTest::Case;
+using QTest::Command;
+using QTest::Suite;
 using QTest::Test::ExecutableStub;
 using Veritas::Test;
 
@@ -86,9 +86,9 @@ void SuiteBuilderTest::singleSuiteCaseCommand()
     KVERIFY(root);
     KOMPARE(1, root->childCount());
 
-    QTestSuite* suite = fetchSuite(root, 0);
+    Suite* suite = fetchSuite(root, 0);
     verifySuite(suite, "foosuite", 1);
-    QTestCase* caze = suite->child(0);
+    Case* caze = suite->child(0);
     verifyCaze(caze, "footest", 1);
     verifyCommand(0, caze, "foocommand");
 }
@@ -111,16 +111,16 @@ void SuiteBuilderTest::multiSuitesCasesCommands()
     KVERIFY(root);
     KOMPARE(2, root->childCount());
 
-    QTestSuite* foosuite = fetchSuite(root, 0);
+    Suite* foosuite = fetchSuite(root, 0);
     verifySuite(foosuite, "foosuite", 1);
-    QTestCase* caze = foosuite->child(0);
+    Case* caze = foosuite->child(0);
     verifyCaze(caze, "footest", 2);
     verifyCommand(0, caze, "foocommand");
     verifyCommand(1, caze, "foocommand2");
 
-    QTestSuite* barSuite = fetchSuite(root, 1);
+    Suite* barSuite = fetchSuite(root, 1);
     verifySuite(barSuite, "barsuite", 1);
-    QTestCase* barC = barSuite->child(0);
+    Case* barC = barSuite->child(0);
     verifyCaze(barC, "bartest", 1);
     verifyCommand(0, barC, "barcommand");
 }
@@ -146,43 +146,43 @@ void SuiteBuilderTest::identicalSuiteNames()
     KVERIFY(root);
     KOMPARE(2, root->childCount());
 
-    QTestSuite* foosuite = fetchSuite(root, 0);
+    Suite* foosuite = fetchSuite(root, 0);
     verifySuite(foosuite, "foo-suite", 1);
-    QTestCase* caze = foosuite->child(0);
+    Case* caze = foosuite->child(0);
     verifyCaze(caze, "footest", 2);
     verifyCommand(0, caze, "foocommand");
     verifyCommand(1, caze, "foocommand2");
 
-    QTestSuite* barSuite = fetchSuite(root, 1);
+    Suite* barSuite = fetchSuite(root, 1);
     verifySuite(barSuite, "bar-suite", 1);
-    QTestCase* barC = barSuite->child(0);
+    Case* barC = barSuite->child(0);
     verifyCaze(barC, "bartest", 1);
     verifyCommand(0, barC, "barcommand");
 }
 
 /////////////////////// helpers //////////////////////////////////////////////
 
-QTestSuite* SuiteBuilderTest::fetchSuite(Veritas::Test* root, int nrofSuite)
+Suite* SuiteBuilderTest::fetchSuite(Veritas::Test* root, int nrofSuite)
 {
-    return dynamic_cast<QTestSuite*>(root->child(nrofSuite));
+    return dynamic_cast<Suite*>(root->child(nrofSuite));
 }
 
-void SuiteBuilderTest::verifySuite(QTestSuite* suite, const QString name, int childCount)
+void SuiteBuilderTest::verifySuite(Suite* suite, const QString name, int childCount)
 {
     KVERIFY(suite);
     KOMPARE(name, suite->name());
     KOMPARE(childCount, suite->childCount());
 }
 
-void SuiteBuilderTest::verifyCommand(int nrofChild, QTestCase* parent, const QString name)
+void SuiteBuilderTest::verifyCommand(int nrofChild, Case* parent, const QString name)
 {
-    QTestCommand* cmd = parent->child(nrofChild);
+    Command* cmd = parent->child(nrofChild);
     KVERIFY(cmd);
     KOMPARE(name, cmd->name());
     KOMPARE(parent, cmd->parent());
 }
 
-void SuiteBuilderTest::verifyCaze(QTestCase* caze, const QString name, int childCount)
+void SuiteBuilderTest::verifyCaze(Case* caze, const QString name, int childCount)
 {
     KVERIFY(caze);
     KOMPARE(name, caze->name());

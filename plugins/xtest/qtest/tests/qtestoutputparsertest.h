@@ -28,12 +28,12 @@
 class QSignalSpy;
 
 namespace QTest {
-class QTestCase;
-class QTestCommand;
-class QTestOutputParser;
+class Case;
+class Command;
+class OutputParser;
 
-/*! @unitundertest QTest::QTestOutputParser */
-class QTestOutputParserTest : public QObject
+/*! @unitundertest QTest::OutputParser */
+class OutputParserTest : public QObject
 {
 Q_OBJECT
 public:
@@ -42,7 +42,7 @@ public:
 
 public slots:
     /*! Generates random test input and chops this into random pieces.
-     *  These pieces are iterativly fed to a QTestOutputParser. 
+     *  These pieces are iterativly fed to a OutputParser. 
      *
      *  It is not executed as part of the standard suite but through a
      *  seperate executable, see parserstresstest.cpp */
@@ -85,25 +85,25 @@ private:
     void assertSubResultEquals(int nrof, Veritas::Test* test, Veritas::TestResult* expected);
 
     // creation methods
-    QTestCase* createTestCase(TestInfo&);
-    void createTestCommand(TestInfo&, QTestCase* parent, QString name);
+    Case* createTestCase(TestInfo&);
+    void createTestCommand(TestInfo&, Case* parent, QString name);
 
     // setup helpers
-    void initParser(QByteArray& xml, QTestCase* caze);
+    void initParser(QByteArray& xml, Case* caze);
     void setExpectedSuccess(TestInfo& tInfo);
     void setExpectedFailure(TestInfo& tInfo);
     void setExpectedResult(TestInfo& tInfo, Veritas::TestState state,
                            QString filepath, int lineNumber, QString msg);
 
     // random-stress test helpers
-    void generateRandomInput(int maxCommands, QByteArray& qtestXmlOutput, QList<TestInfo*>&, QTestCase*&);
-    void runRandomCommand(const QList<QByteArray>& input, QTestCase*);
+    void generateRandomInput(int maxCommands, QByteArray& qtestXmlOutput, QList<TestInfo*>&, Case*&);
+    void runRandomCommand(const QList<QByteArray>& input, Case*);
     void qassertResult(Veritas::TestResult* expected, Veritas::TestResult* actual, const QString&);
     void verifyRandomResults(QList<TestInfo*>& expected);
 
 private:
-    QTestOutputParser* m_parser;
-    QTestCase* m_caze;
+    OutputParser* m_parser;
+    Case* m_caze;
 
     struct TestInfo
     {

@@ -35,23 +35,23 @@ class QTimer;
 
 namespace QTest
 {
-class QTestSuite;
-class QTestOutputParser;
+class Suite;
+class OutputParser;
 class ISettings;
 
 /*!
 QTestLib test class item in the test tree. This will invoke the
 QTestLib executable.
-@unittest QTest::ut::QTestCaseTest
+@unittest QTest::ut::CaseTest
 */
-class QXQTEST_EXPORT QTestCase : public Veritas::Test
+class QXQTEST_EXPORT Case : public Veritas::Test
 {
 Q_OBJECT
 public:
-    QTestCase(const QString&, const QFileInfo&, QTestSuite* parent=0);
-    virtual ~QTestCase();
+    Case(const QString&, const QFileInfo&, Suite* parent=0);
+    virtual ~Case();
 
-    QTestCommand* child(int i) const;
+    Command* child(int i) const;
     QFileInfo executable();
 
     virtual int run();
@@ -59,10 +59,10 @@ public:
     virtual bool shouldRun() const;
 
     /*! Client classes should instantiate a KProcess.
-        QTestCase takes ownership.
+        Case takes ownership.
         Sole purpose is to increase testability. */
     void setProcess(KProcess*);
-    void setOutputParser(QTestOutputParser*);
+    void setOutputParser(OutputParser*);
     void setSettings(ISettings*);
 
     void initProcArguments();
@@ -102,7 +102,7 @@ private:
     QString m_stdErrFilePath;  // path to temp file with standard error
 
     KProcess* m_proc;          // this will execute the qtest-exe.
-    QTestOutputParser* m_parser;
+    OutputParser* m_parser;
     QTimer* m_timer;
     static int s_count;        // used to get unique temp files.
     bool m_finished;

@@ -25,11 +25,11 @@
 #include <QFileInfo>
 
 namespace QTest {
-class QTestCase;
+class Case;
 namespace Test {
 
-/*! @unitundertest QTest::QTestCase */
-class QTestCaseTest : public QObject
+/*! @unitundertest QTest::Case */
+class CaseTest : public QObject
 {
     Q_OBJECT
 private slots:
@@ -43,7 +43,7 @@ private slots:
 private:
     QFileInfo m_exe;
     QString m_name;
-    QTest::QTestCase* m_case;
+    QTest::Case* m_case;
 };
 
 }}

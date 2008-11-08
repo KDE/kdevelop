@@ -41,7 +41,7 @@ Q_DECLARE_METATYPE(QList<QStringList>)
 
 void QTestRunnerTest::init()
 {
-    QTestOutputParser::fto_resetResultMemoryLeakStats();
+    OutputParser::fto_resetResultMemoryLeakStats();
     m_runner = new RunnerTestHelper;
     m_runner->initializeGUI();
 }
@@ -52,8 +52,8 @@ void QTestRunnerTest::cleanup()
     delete m_runner;
 
     int nrofLeaks = 0;
-    bool foundLeaks = QTestOutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
-    QString errorMsg = QString("QTestOutputParser leaked %1 number of Veritas::TestResult's.").arg(nrofLeaks);
+    bool foundLeaks = OutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
+    QString errorMsg = QString("OutputParser leaked %1 number of Veritas::TestResult's.").arg(nrofLeaks);
     KVERIFY_MSG(!foundLeaks, errorMsg);
 }
 
@@ -409,13 +409,13 @@ Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
 void QTestRunnerTest::assertAllFilesClosed(Veritas::Test* root)
 {
     QTest::qWait(75);
-    // QTestCases are on lvl2 in the test-tree
+    // Cases are on lvl2 in the test-tree
     for(int i=0; i<root->childCount(); i++) {
         Veritas::Test* suite = root->child(i);
         for (int i=0; i<suite->childCount(); i++) {
             Veritas::Test* test = suite->child(i);
-            QTestCase* caze = qobject_cast<QTestCase*>(test);
-            KVERIFY_MSG(caze, "Not a QTestCase on lvl2 of the test tree? (cast failed)");
+            Case* caze = qobject_cast<Case*>(test);
+            KVERIFY_MSG(caze, "Not a Case on lvl2 of the test tree? (cast failed)");
             KVERIFY_MSG(caze->fto_outputFileClosed(), caze->name());
         }
     }

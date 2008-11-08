@@ -60,7 +60,7 @@ int main(int argc, char** argv)
     QTimer* timer = new QTimer;
     timer->setSingleShot(true);
     timer->setInterval(1);
-    QTest::QTestOutputParserTest* pst = new QTest::QTestOutputParserTest;
+    QTest::OutputParserTest* pst = new QTest::OutputParserTest;
     pst->setQuiet(quiet);
     if (test == "valid") {
         QObject::connect(timer, SIGNAL(timeout()), pst, SLOT(randomValidXML()));

@@ -26,7 +26,7 @@
 #include <QStringRef>
 
 
-using QTest::QTestOutputMorpher;
+using QTest::OutputMorpher;
 
 /*example xml:
      "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>"
@@ -46,41 +46,41 @@ using QTest::QTestOutputMorpher;
      "</TestFunction>"
      "</TestCase>)"*/
 
-const QString QTestOutputMorpher::c_testcase("TestCase");
-const QString QTestOutputMorpher::c_testfunction("TestFunction");
-const QString QTestOutputMorpher::c_description("Description");
-const QString QTestOutputMorpher::c_incident("Incident");
-const QString QTestOutputMorpher::c_type("type");
-const QString QTestOutputMorpher::c_file("file");
-const QString QTestOutputMorpher::c_line("line");
-const QString QTestOutputMorpher::c_pass("pass");
-const QString QTestOutputMorpher::c_message("Message");
-const QString QTestOutputMorpher::c_fail("fail");
-const QString QTestOutputMorpher::c_xfail("xfail");
-const QString QTestOutputMorpher::c_initTestCase("initTestCase");
-const QString QTestOutputMorpher::c_cleanupTestCase("cleanupTestCase");
-const QString QTestOutputMorpher::c_name("name");
-const QString QTestOutputMorpher::c_dataTag("DataTag");
-const QByteArray QTestOutputMorpher::c_spacer("*********");
+const QString OutputMorpher::c_testcase("TestCase");
+const QString OutputMorpher::c_testfunction("TestFunction");
+const QString OutputMorpher::c_description("Description");
+const QString OutputMorpher::c_incident("Incident");
+const QString OutputMorpher::c_type("type");
+const QString OutputMorpher::c_file("file");
+const QString OutputMorpher::c_line("line");
+const QString OutputMorpher::c_pass("pass");
+const QString OutputMorpher::c_message("Message");
+const QString OutputMorpher::c_fail("fail");
+const QString OutputMorpher::c_xfail("xfail");
+const QString OutputMorpher::c_initTestCase("initTestCase");
+const QString OutputMorpher::c_cleanupTestCase("cleanupTestCase");
+const QString OutputMorpher::c_name("name");
+const QString OutputMorpher::c_dataTag("DataTag");
+const QByteArray OutputMorpher::c_spacer("*********");
 
-QTestOutputMorpher::QTestOutputMorpher()
+OutputMorpher::OutputMorpher()
         : m_target(0)
 {}
 
-QTestOutputMorpher::~QTestOutputMorpher()
+OutputMorpher::~OutputMorpher()
 {}
 
-void QTestOutputMorpher::setSource(QIODevice* source)
+void OutputMorpher::setSource(QIODevice* source)
 {
     setDevice(source);
 }
 
-void QTestOutputMorpher::setTarget(QIODevice* target)
+void OutputMorpher::setTarget(QIODevice* target)
 {
     m_target = target;
 }
 
-void QTestOutputMorpher::xmlToText()
+void OutputMorpher::xmlToText()
 {
     Q_ASSERT(m_target);
 
@@ -110,7 +110,7 @@ void QTestOutputMorpher::xmlToText()
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
-void QTestOutputMorpher::processTestCase()
+void OutputMorpher::processTestCase()
 {
     while (!atEnd() && !isEndElement_(c_testcase)) {
         readNext();
@@ -120,7 +120,7 @@ void QTestOutputMorpher::processTestCase()
     }
 }
 
-void QTestOutputMorpher::processTestCommand()
+void OutputMorpher::processTestCommand()
 {
     QByteArray cmdName = attribute(c_name);
     bool success = true;
@@ -139,7 +139,7 @@ void QTestOutputMorpher::processTestCommand()
     if (success) writeCommandPass(cmdName);
 }
 
-void QTestOutputMorpher::processMessage(const QByteArray& cmdName)
+void OutputMorpher::processMessage(const QByteArray& cmdName)
 {
 /*          "<Message type=\"system\" file=\"\" line=\"0\">\n"
             "<Description><![CDATA[system message]]></Description>\n"
@@ -184,12 +184,12 @@ void QTestOutputMorpher::processMessage(const QByteArray& cmdName)
     m_target->write(line);
 }
 
-QByteArray QTestOutputMorpher::attribute(const QString& attrName)
+QByteArray OutputMorpher::attribute(const QString& attrName)
 {
     return attributes().value(attrName).toString().toAscii();
 }
 
-void QTestOutputMorpher::processIncident(const QByteArray& cmdName)
+void OutputMorpher::processIncident(const QByteArray& cmdName)
 {
 //     "<Incident type=\"fail\" file=\"/path/to/footest.cpp\" line=\"66\">\n"
 //     "<Description><![CDATA[failure message]]></Description>\n"
@@ -238,17 +238,17 @@ void QTestOutputMorpher::processIncident(const QByteArray& cmdName)
     m_target->write(line);
 }
 
-bool QTestOutputMorpher::isStartElement_(const QString& tag)
+bool OutputMorpher::isStartElement_(const QString& tag)
 {
     return isStartElement() && (name() == tag);
 }
 
-bool QTestOutputMorpher::isEndElement_(const QString& tag)
+bool OutputMorpher::isEndElement_(const QString& tag)
 {
     return isEndElement() && (name() == tag);
 }
 
-void QTestOutputMorpher::writeStartTestingOf()
+void OutputMorpher::writeStartTestingOf()
 {
     //********* Started testing of FooTest *********
     QByteArray line;
@@ -261,7 +261,7 @@ void QTestOutputMorpher::writeStartTestingOf()
     m_target->write(line);
 }
 
-void QTestOutputMorpher::writeFinishTestingOf()
+void OutputMorpher::writeFinishTestingOf()
 {
     //********* Finished testing of FooTest *********
     QByteArray line;
@@ -274,9 +274,9 @@ void QTestOutputMorpher::writeFinishTestingOf()
     m_target->write(line);
 }
 
-void QTestOutputMorpher::writeCommandPass(const QByteArray& cmdName)
+void OutputMorpher::writeCommandPass(const QByteArray& cmdName)
 {
-    //PASS   : QTestCaseTest::initTestCase()
+    //PASS   : CaseTest::initTestCase()
     QByteArray line;
     line.append("PASS   : ");
     line.append(m_testCaseName);

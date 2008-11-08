@@ -28,8 +28,8 @@ namespace Veritas { class Test; }
 
 namespace QTest {
 class CaseBuilder;
-class QTestCase;
-class QTestCommand;
+class Case;
+class Command;
 namespace Test {
 
 class ExecutableStub;
@@ -56,19 +56,19 @@ private slots:
 
 private:
     void initTestExeStub(QString name, QStringList functionsOutput);
-    void assertNotNull(QTestCase*);
-    void assertNotNull(QTestCommand*);
+    void assertNotNull(Case*);
+    void assertNotNull(Command*);
     void assertParent(Veritas::Test*, Veritas::Test*);
-    void assertNrofChildren(int count, QTestCase* caze);
-    void assertNamed(QString name, QTestCase* caze);
-    void assertNamed(QString name, QTestCommand* cmd);
-    void assertChildCommand(int nrof, QString name, QTestCase* parent);
+    void assertNrofChildren(int count, Case* caze);
+    void assertNamed(QString name, Case* caze);
+    void assertNamed(QString name, Command* cmd);
+    void assertChildCommand(int nrof, QString name, Case* parent);
 
 private:
     CaseBuilder* m_builder;
     ExecutableStub* m_caseExeStub;
     bool m_stop; // flag to check if we should stop.
-    QTestCase* m_caze;
+    Case* m_caze;
 };
 
 }}

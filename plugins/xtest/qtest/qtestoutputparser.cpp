@@ -26,8 +26,8 @@
 #include <KUrl>
 #include <KDebug>
 
-using QTest::QTestCase;
-using QTest::QTestOutputParser;
+using QTest::Case;
+using QTest::OutputParser;
 using Veritas::Test;
 using Veritas::TestResult;
 using Veritas::TestState;
@@ -51,19 +51,19 @@ using Veritas::TestState;
      "</TestCase>)"*/
 
 
-const QString QTestOutputParser::c_testfunction("TestFunction");
-const QString QTestOutputParser::c_description("Description");
-const QString QTestOutputParser::c_incident("Incident");
-const QString QTestOutputParser::c_type("type");
-const QString QTestOutputParser::c_file("file");
-const QString QTestOutputParser::c_line("line");
-const QString QTestOutputParser::c_pass("pass");
-const QString QTestOutputParser::c_skip("skip");
-const QString QTestOutputParser::c_qfatal("qfatal");
-const QString QTestOutputParser::c_message("Message");
-const QString QTestOutputParser::c_fail("fail");
-const QString QTestOutputParser::c_initTestCase("initTestCase");
-const QString QTestOutputParser::c_cleanupTestCase("cleanupTestCase");
+const QString OutputParser::c_testfunction("TestFunction");
+const QString OutputParser::c_description("Description");
+const QString OutputParser::c_incident("Incident");
+const QString OutputParser::c_type("type");
+const QString OutputParser::c_file("file");
+const QString OutputParser::c_line("line");
+const QString OutputParser::c_pass("pass");
+const QString OutputParser::c_skip("skip");
+const QString OutputParser::c_qfatal("qfatal");
+const QString OutputParser::c_message("Message");
+const QString OutputParser::c_fail("fail");
+const QString OutputParser::c_initTestCase("initTestCase");
+const QString OutputParser::c_cleanupTestCase("cleanupTestCase");
 
 namespace
 {
@@ -72,19 +72,19 @@ int g_result_assigned = 0;
 int g_result_destructed = 0;
 }
 
-bool QTestOutputParser::fto_hasResultMemoryLeaks(int& amountLost)
+bool OutputParser::fto_hasResultMemoryLeaks(int& amountLost)
 {
     Q_ASSERT(g_result_constructed >= (g_result_assigned + g_result_destructed));
     amountLost = g_result_constructed - (g_result_assigned + g_result_destructed);
     return amountLost != 0;
 }
 
-void QTestOutputParser::fto_resetResultMemoryLeakStats()
+void OutputParser::fto_resetResultMemoryLeakStats()
 {
     g_result_constructed = g_result_assigned = g_result_destructed = 0;
 }
 
-void QTestOutputParser::deleteResult()
+void OutputParser::deleteResult()
 {
     if (m_result) {
         delete m_result;
@@ -93,7 +93,7 @@ void QTestOutputParser::deleteResult()
     }
 }
 
-void QTestOutputParser::newResult()
+void OutputParser::newResult()
 {
     if (!m_result) {
         m_result = new TestResult;
@@ -101,7 +101,7 @@ void QTestOutputParser::newResult()
     }
 }
 
-void QTestOutputParser::setResult(Test* test)
+void OutputParser::setResult(Test* test)
 {
     Q_ASSERT(m_result);
     if (m_subResults.isEmpty()) {
@@ -129,19 +129,19 @@ void QTestOutputParser::setResult(Test* test)
     g_result_assigned++;
 }
 
-QTestOutputParser::QTestOutputParser()
+OutputParser::OutputParser()
     : m_state(Main),
       m_buzzy(false),
       m_result(0),
       m_block(false)
 {}
 
-QTestOutputParser::~QTestOutputParser()
+OutputParser::~OutputParser()
 {
     deleteResult();
 }
 
-void QTestOutputParser::reset()
+void OutputParser::reset()
 {
     m_case = 0;
     deleteResult();
@@ -151,40 +151,40 @@ void QTestOutputParser::reset()
     m_block = false;
 }
 
-bool QTestOutputParser::isStartElement_(const QString& elementName)
+bool OutputParser::isStartElement_(const QString& elementName)
 {
     return isStartElement() && (name() == elementName);
 }
 
-bool QTestOutputParser::isEndElement_(const QString& elementName)
+bool OutputParser::isEndElement_(const QString& elementName)
 {
     return isEndElement() && (name() == elementName);
 }
 
-void QTestOutputParser::assertDeviceSet()
+void OutputParser::assertDeviceSet()
 {
-    Q_ASSERT_X(device(), "QTestOutputParser::go()",
+    Q_ASSERT_X(device(), "OutputParser::go()",
                "Illegal usage. Client classes should set a QIODevice*, with setDevice().");
 }
 
-void QTestOutputParser::assertCaseSet()
+void OutputParser::assertCaseSet()
 {
-    Q_ASSERT_X(m_case, "QTestOutputParser::go()",
+    Q_ASSERT_X(m_case, "OutputParser::go()",
                "Illegal usage. TestCase should have been set, with setCase().");
 }
 
-void QTestOutputParser::setCase(QTestCase* caze)
+void OutputParser::setCase(Case* caze)
 {
     Q_ASSERT(caze);
     m_case = caze;
 }
 
-void QTestOutputParser::block()
+void OutputParser::block()
 {
     m_block = true;
 }
 
-void QTestOutputParser::go()
+void OutputParser::go()
 {
     if (m_buzzy || m_block) return; // do not disturb.
     m_buzzy = true;
@@ -226,7 +226,7 @@ void QTestOutputParser::go()
     m_buzzy = false;
 }
 
-bool QTestOutputParser::fixtureFailed(const QString& cmd)
+bool OutputParser::fixtureFailed(const QString& cmd)
 {
     if (cmd != c_initTestCase && cmd != c_cleanupTestCase) {
         return false;
@@ -236,7 +236,7 @@ bool QTestOutputParser::fixtureFailed(const QString& cmd)
     }
 }
 
-void QTestOutputParser::iterateTestFunctions()
+void OutputParser::iterateTestFunctions()
 {
     while (!atEnd()) {                 // main loop
         readNext();
@@ -258,7 +258,7 @@ void QTestOutputParser::iterateTestFunctions()
     kError(hasError()) << errorString() << " @ " << lineNumber() << ":" << columnNumber();
 }
 
-void QTestOutputParser::processQSkip()
+void OutputParser::processQSkip()
 {
     while (!atEnd() && !isEndElement_(c_description)) {
         readNext();
@@ -272,7 +272,7 @@ void QTestOutputParser::processQSkip()
     }
 }
 
-void QTestOutputParser::processQAssert()
+void OutputParser::processQAssert()
 {
     // Q_ASSERT   "<Description><![CDATA[ASSERT: \"condition\" in file /path/to/file.cpp, line 66]]></Description>\n"
     // Q_ASSERT_X "<Description><![CDATA[ASSERT failure in command: \"message\", file /path/to/file.cpp, line 66]]></Description>\n"
@@ -301,7 +301,7 @@ void QTestOutputParser::processQAssert()
     }
 }
 
-void QTestOutputParser::processMessage()
+void OutputParser::processMessage()
 {
     QString type = attributes().value(c_type).toString();
     if (type == c_skip) {
@@ -319,7 +319,7 @@ void QTestOutputParser::processMessage()
     }
 }
 
-void QTestOutputParser::processTestFunction()
+void OutputParser::processTestFunction()
 {
     while (!atEnd() && !isEndElement_(c_testfunction)) {
         readNext();
@@ -345,7 +345,7 @@ void QTestOutputParser::processTestFunction()
     }
 }
 
-void QTestOutputParser::clearResult()
+void OutputParser::clearResult()
 {
     if (m_result->state() != Veritas::NoResult) { // parsed a previous result
         m_subResults << m_result;
@@ -353,7 +353,7 @@ void QTestOutputParser::clearResult()
     }
 }
 
-void QTestOutputParser::fillResult()
+void OutputParser::fillResult()
 {
     QString type = attributes().value(c_type).toString();
     if (type == c_pass) {
@@ -369,14 +369,14 @@ void QTestOutputParser::fillResult()
     }
 }
 
-void QTestOutputParser::setSuccess()
+void OutputParser::setSuccess()
 {
     if (m_result->state() != Veritas::RunInfo) {
         m_result->setState(Veritas::RunSuccess);
     }
 }
 
-void QTestOutputParser::setFailure()
+void OutputParser::setFailure()
 {
     while (!atEnd() && !isEndElement_(c_description)) {
         readNext();

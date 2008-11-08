@@ -30,24 +30,24 @@ namespace Veritas { class Test; }
 
 namespace QTest
 {
-class QTestCase;
+class Case;
 
 /*!
 Interprets QTestLib executables' XML output. TestResults get reported.
 It is a recoverable XML parser. It will operate on incomplete XML streams
 and resume when data becomes available again.
 
-@unittest QTest::ut::QTestOutputParserTest
+@unittest QTest::ut::OutputParserTest
 */
-class QXQTEST_EXPORT QTestOutputParser : public QObject, public QXmlStreamReader
+class QXQTEST_EXPORT OutputParser : public QObject, public QXmlStreamReader
 {
 Q_OBJECT
 public:
-    QTestOutputParser();
-    virtual ~QTestOutputParser();
+    OutputParser();
+    virtual ~OutputParser();
 
     /*! Must be called before parsing */
-    void setCase(QTestCase*caze);
+    void setCase(Case*caze);
 
     /*! Reset internal parser state. Call this
      *  Before reusing this object. */
@@ -102,7 +102,7 @@ private:
     State m_state;
     bool m_buzzy;
     Veritas::TestResult* m_result;
-    QTestCase* m_case;
+    Case* m_case;
     Veritas::Test* m_cmd;
     QString m_cmdName;
     bool m_block;

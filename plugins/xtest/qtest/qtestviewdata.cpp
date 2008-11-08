@@ -125,7 +125,7 @@ QString QTestViewData::fetchRegXML()
 
 void QTestViewData::openVerbose(Veritas::Test* t)
 {
-    QTestCase* caze = dynamic_cast<QTestCase*>(t);
+    Case* caze = dynamic_cast<Case*>(t);
     if (!caze) return;
     QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
     ICore::self()->runController()->registerJob(job);

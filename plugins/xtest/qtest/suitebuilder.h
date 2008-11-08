@@ -32,11 +32,11 @@ class KUrl;
 namespace QTest
 {
 class CaseBuilder;
-class QTestSuite;
+class Suite;
 class ISettings;
 
 /*!
-Constructs QTestCases and deduces it's child QTestCommands for a set
+Constructs Cases and deduces it's child Commands for a set
 of test executables. Also orders these testcases into suites based
 on directory information. This is expensive so should not be run
 in the GUI thread.
@@ -80,7 +80,7 @@ private:
     QList<KUrl> m_testShellExes;
     Veritas::Test* m_root;
     bool m_hasRun;
-    QMap<QString, QTestSuite*> m_suites;
+    QMap<QString, Suite*> m_suites;
     QMap<KUrl, QString> m_suiteNames;
     bool m_testExesSet;
     ISettings* m_settings;
