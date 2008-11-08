@@ -35,7 +35,7 @@ Q_OBJECT
 private slots:
     void initTestCase();
     void init();
-    void cleanup();
+    void cleanupTestCase();
     void createSession_data();
     void createSession();
     void loadSession();

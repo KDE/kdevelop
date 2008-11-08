@@ -24,11 +24,13 @@
 
 #include <kglobal.h>
 #include <kdebug.h>
+#include <kio/netaccess.h>
 #include <kconfiggroup.h>
 
 #include "../core.h"
 #include "../sessioncontroller.h"
 #include "../session.h"
+#include "../uicontroller.h"
 
 Q_DECLARE_METATYPE( KDevelop::ISession* )
 
@@ -38,6 +40,25 @@ using KDevelop::Session;
 using KDevelop::Core;
 
 using QTest::kWaitForSignal;
+
+//////////////////// Helper Functions ////////////////////////////////////////
+
+void verifySessionDir( Session* s, bool exists = true )
+{
+    QString sessiondir = SessionController::sessionDirectory() + "/" + s->id().toString();
+    if( exists ) 
+    {
+        kDebug() << "checking existing session" << sessiondir;
+        QVERIFY( QFileInfo( sessiondir ).exists() );
+        QVERIFY( QFileInfo( sessiondir ).isDir() );
+        QVERIFY( QFileInfo( sessiondir+"/sessionrc" ).exists() );
+        KSharedConfig::Ptr cfg = KSharedConfig::openConfig( sessiondir+"/sessionrc" );
+        QCOMPARE( s->name(), cfg->group("").readEntry( Session::cfgSessionNameEntry, "" ) );
+    } else {
+        kDebug() << "checking not-existing dir: " << sessiondir;
+        QVERIFY( !QFileInfo( sessiondir ).exists() );
+    }
+}
 
 ////////////////////// Fixture ///////////////////////////////////////////////
 
@@ -54,27 +75,18 @@ void SessionControllerTest::init()
     m_sessionCtrl = m_core->sessionController();
 }
 
-void SessionControllerTest::cleanup()
+void SessionControllerTest::cleanupTestCase()
 {
-    QDir dir( SessionController::sessionDirectory() );
-    foreach( const QString& s, dir.entryList( QDir::AllDirs ) )
+    foreach( const QString& name, m_sessionCtrl->sessions() )
     {
-        dir.rmpath( s );
+        m_sessionCtrl->deleteSession( name );
     }
+    // Need to cleanup this directory manually, because SessionController (rightfully) doesn't
+    // allow to delete the active session
+    Session* s = static_cast<Session*>( Core::self()->activeSession() );
+    KIO::NetAccess::del( SessionController::sessionDirectory() + "/" + s->id().toString(), 0 );
     KGlobal::config()->group( SessionController::cfgSessionGroup ).deleteEntry( SessionController::cfgActiveSessionEntry );
     KGlobal::config()->group( SessionController::cfgSessionGroup ).sync();
-}
-
-void verifySessionDir( Session* s, bool exists = true )
-{
-    QString sessiondir = SessionController::sessionDirectory() + "/" + s->id().toString();
-    if( exists ) 
-    {
-        QVERIFY( QFileInfo( sessiondir ).exists() );
-        QVERIFY( QFileInfo( sessiondir ).isDir() );
-    } else {
-        QVERIFY( !QFileInfo( sessiondir ).exists() );
-    }
 }
 
 void SessionControllerTest::createSession_data()
