@@ -1059,7 +1059,10 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
 
 void CppLanguageSupport::newClassWizard()
 {
-  CppNewClass newClassWizard(qApp->activeWindow());
+  KUrl baseUrl;
+  if(core()->documentController()->activeDocument())
+    baseUrl = core()->documentController()->activeDocument()->url().upUrl();
+  CppNewClass newClassWizard(qApp->activeWindow(), baseUrl);
   newClassWizard.exec();
 }
 
