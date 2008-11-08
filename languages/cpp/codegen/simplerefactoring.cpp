@@ -43,6 +43,8 @@
 #include <language/duchain/use.h>
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <project/projectmodel.h>
+#include "cppnewclass.h"
 
 using namespace KDevelop;
 
@@ -71,23 +73,50 @@ SimpleRefactoring& SimpleRefactoring::self() {
 Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
 
 void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
-  DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context);
-  if(!declContext)
-    return;
   
-  qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
-  
-  DUChainReadLocker lock(DUChain::lock());
-  
-  Declaration* declaration = declContext->declaration().data();
-  
-  if(declaration) {
-    QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
-    action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-    action->setIcon(KIcon("edit-rename"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+  if(DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context)){
+    //Actions on declarations
+    qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
     
-    extension.addAction(ContextMenuExtension::RefactorGroup, action);
+    DUChainReadLocker lock(DUChain::lock());
+    
+    Declaration* declaration = declContext->declaration().data();
+    
+    if(declaration) {
+      QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
+      action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+      action->setIcon(KIcon("edit-rename"));
+      connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+      
+      extension.addAction(ContextMenuExtension::RefactorGroup, action);
+    }
+  }
+  if(ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context)) {
+    //Actions on project-items
+    foreach(KDevelop::ProjectBaseItem* item, projectContext->items()) {
+      if(item->folder()) {
+        //Allow creating a class in the folder
+        QAction* action = new QAction(i18n("Create Class"), this);
+        action->setData(QVariant::fromValue(item->folder()->url()));
+//         action->setIcon(KIcon("edit-rename"));
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(executeNewClassAction()));
+        
+        extension.addAction(ContextMenuExtension::FileGroup, action);
+      }
+    }
+  }
+}
+
+void SimpleRefactoring::executeNewClassAction() {
+  QAction* action = qobject_cast<QAction*>(sender());
+  if(action) {
+    KUrl url = action->data().value<KUrl>();
+    if(url.isValid()) {
+      CppNewClass newClassWizard(qApp->activeWindow(), url);
+      newClassWizard.exec();
+    }
+  }else{
+    kWarning() << "strange problem";
   }
 }
 

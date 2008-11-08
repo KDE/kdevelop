@@ -38,6 +38,7 @@ public:
   
 private slots:
   void executeRenameAction();
+  void executeNewClassAction();
     
 };
 

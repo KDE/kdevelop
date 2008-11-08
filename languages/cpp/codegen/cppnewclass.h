@@ -37,16 +37,20 @@ class CppNewClass : public KDevelop::CreateClass
   Q_OBJECT
 
 public:
-  CppNewClass(QWidget* parent);
+  CppNewClass(QWidget* parent, KUrl baseUrl = KUrl());
 
   virtual void generate();
   void generateHeader();
   void generateImplementation();
 
+  virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
+  virtual KUrl implementationUrlFromBase(QString className, KUrl baseUrl);
+  
   virtual CppClassIdentifierPage* newIdentifierPage();
 
 private:
   QStringList m_baseClasses;
+  KUrl m_url;
 };
 
 #endif // CPP_NEWCLASS_H

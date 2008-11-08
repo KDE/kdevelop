@@ -42,8 +42,8 @@ CppClassIdentifierPage::CppClassIdentifierPage(QWidget* parent)
     inheritanceLineEdit()->setText("public ");
 }
 
-CppNewClass::CppNewClass(QWidget* parent)
-  : KDevelop::CreateClass(parent)
+CppNewClass::CppNewClass(QWidget* parent, KUrl baseUrl)
+  : KDevelop::CreateClass(parent, baseUrl)
 {
   setup();
 }
@@ -57,6 +57,18 @@ void CppNewClass::generate()
 {
   generateHeader();
   generateImplementation();
+}
+
+KUrl CppNewClass::headerUrlFromBase(QString className, KUrl baseUrl) {
+  KUrl url(baseUrl); ///@todo Add some settings somewhere to set up how this is computed
+  url.addPath(className.toLower() + ".h");
+  return url;
+}
+
+KUrl CppNewClass::implementationUrlFromBase(QString className, KUrl baseUrl) {
+  KUrl url(baseUrl);
+  url.addPath(className.toLower() + ".cpp");
+  return url;
 }
 
 void CppNewClass::generateHeader()
