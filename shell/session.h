@@ -32,6 +32,7 @@ class KDEVPLATFORMSHELL_EXPORT Session : public ISession
 {
     Q_OBJECT
 public:
+    static const QString cfgSessionNameEntry;
     Session( const QString& );
     Session( const QUuid& );
     virtual ~Session();

@@ -24,15 +24,19 @@ Boston, MA 02110-1301, USA.
 
 #include <kurl.h>
 #include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <kparts/mainwindow.h>
 #include <kdebug.h>
 
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
 #include "core.h"
 #include "sessioncontroller.h"
 
 namespace KDevelop
 {
+const QString Session::cfgSessionNameEntry = "SessionName";
 
 class SessionPrivate
 {
@@ -62,7 +66,7 @@ public:
         {
             kDebug() << "creating dir";
             QDir( SessionController::sessionDirectory() ).mkdir( id.toString() );
-        } 
+        }
         config = KSharedConfig::openConfig( sessionDirectory+"/sessionrc" );
     }
 };
@@ -73,7 +77,8 @@ Session::Session( const QString& name )
     d->name = name;
     d->id = QUuid::createUuid();
     d->initialize();
-    d->config->group("").writeEntry( "SessionName", d->name );
+    d->config->group("").writeEntry( cfgSessionNameEntry, d->name );
+    d->config->sync();
 }
 
 Session::Session( const QUuid& id )
@@ -81,7 +86,7 @@ Session::Session( const QUuid& id )
 {
     d->id = id;
     d->initialize();
-    d->name = d->config->group("").readEntry("SessionName", "");
+    d->name = d->config->group("").readEntry( cfgSessionNameEntry, "");
 }
 
 Session::~Session()
@@ -112,23 +117,13 @@ QUuid Session::id() const
 
 void Session::deleteFromDisk()
 {
-    kDebug() << "deleting session" << d->name;
-    QDir dir( d->sessionDirectory );
-    dir.cdUp();
-    dir.rmpath( d->id.toString() );
+    KIO::NetAccess::del( KUrl( d->sessionDirectory ), Core::self()->uiController()->activeMainWindow() );
 }
 
 void Session::setName( const QString& name )
 {
-    if( Core::self()->activeSession() != this )
-    {
-        const QString tmp = d->name;
-        d->name = name;
-        QDir dir( d->sessionDirectory );
-        dir.cdUp();
-        dir.rename( tmp, name );
-        emit nameChanged( name, tmp );
-    }
+    d->config->group("").writeEntry( cfgSessionNameEntry, name );
+    d->config->sync();
 }
 
 }
