@@ -91,6 +91,7 @@ public:
 private:
     bool addFileList(CvsJob* job, const QString& repository, const KUrl::List& urls);
     QString convertVcsRevisionToString(const KDevelop::VcsRevision& rev);
+    QString convertRevisionToPrevious(const KDevelop::VcsRevision& rev);
 
     enum RequestedOperation {
         NormalOperation,

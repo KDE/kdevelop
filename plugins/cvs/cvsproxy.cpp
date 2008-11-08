@@ -110,6 +110,40 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
     return str;
 }
 
+QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
+{
+    QString str;
+
+    // this only works if the revision is a real revisionnumber and not a date or special
+    switch (rev.revisionType())
+    {
+        case KDevelop::VcsRevision::FileNumber:
+            if (rev.revisionValue().isValid()) {
+                QString orig = rev.revisionValue().toString();
+
+                // First we need to find the base (aka branch-part) of the revision number which will not change
+                QString base(orig);
+                base.truncate(orig.lastIndexOf("."));
+
+                // next we need to cut off the last part of the revision number
+                // this number is a count of revisions with a branch
+                // so if we want to diff to the previous we just need to lower it by one
+                int number = orig.mid(orig.lastIndexOf(".")+1).toInt();
+                if (number > 1) // of course this is only possible if our revision is not the first on the branch
+                    number--;
+
+                str = QString("-r") + base + "." + QString::number(number);
+                kDebug(9500) << "Converted revision "<<orig<<" to previous revision "<<str;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    return str;
+}
+
 CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
@@ -150,9 +184,21 @@ CvsJob* CvsProxy::diff(const KUrl& url,
         if (!diffOptions.isEmpty())
             *job << diffOptions;
 
-        QString rA = convertVcsRevisionToString(revA);
+        QString rA;
+        if (revA.revisionType() == KDevelop::VcsRevision::Special) {
+            // We only support diffing to previous for now
+            // Other special types might be added later
+            KDevelop::VcsRevision::RevisionSpecialType specialtype =
+                    revA.revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>();
+            if (specialtype == KDevelop::VcsRevision::Previous) {
+                rA = convertRevisionToPrevious(revB);
+            }
+        } else {
+            rA = convertVcsRevisionToString(revA);
+        }
         if (!rA.isEmpty())
             *job << rA;
+
         QString rB = convertVcsRevisionToString(revB);
         if (!rB.isEmpty())
             *job << rB;
