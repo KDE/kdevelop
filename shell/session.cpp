@@ -41,7 +41,6 @@ const QString Session::cfgSessionNameEntry = "SessionName";
 class SessionPrivate
 {
 public:
-    QString name;
     QUuid id;
     KSharedConfig::Ptr config;
     QString sessionDirectory;
@@ -74,10 +73,9 @@ public:
 Session::Session( const QString& name )
         : d( new SessionPrivate )
 {
-    d->name = name;
     d->id = QUuid::createUuid();
     d->initialize();
-    d->config->group("").writeEntry( cfgSessionNameEntry, d->name );
+    d->config->group("").writeEntry( cfgSessionNameEntry, name );
     d->config->sync();
 }
 
@@ -86,7 +84,6 @@ Session::Session( const QUuid& id )
 {
     d->id = id;
     d->initialize();
-    d->name = d->config->group("").readEntry( cfgSessionNameEntry, "");
 }
 
 Session::~Session()
@@ -97,7 +94,7 @@ Session::~Session()
 
 QString Session::name() const
 {
-    return d->name;
+    return d->config->group("").readEntry( cfgSessionNameEntry, "" );
 }
 
 KUrl Session::pluginDataArea( const IPlugin* p )
@@ -120,10 +117,12 @@ void Session::deleteFromDisk()
     KIO::NetAccess::del( KUrl( d->sessionDirectory ), Core::self()->uiController()->activeMainWindow() );
 }
 
-void Session::setName( const QString& name )
+void Session::setName( const QString& newname )
 {
-    d->config->group("").writeEntry( cfgSessionNameEntry, name );
+    QString oldname = name();
+    d->config->group("").writeEntry( cfgSessionNameEntry, newname );
     d->config->sync();
+    emit nameChanged( newname, oldname );
 }
 
 }

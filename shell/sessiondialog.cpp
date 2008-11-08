@@ -99,11 +99,6 @@ bool SessionModel::setData( const QModelIndex& idx, const QVariant& value, int r
     }
     QString sname = Core::self()->sessionController()->sessions().at( idx.row() );
     Session* s = Core::self()->sessionController()->session( sname );
-    if( s == Core::self()->activeSession() )
-    {
-        //Cannot edit the name of the current session
-        return false;
-    }
     s->setName( value.toString() );
     emit dataChanged( idx, idx );
     return true;
