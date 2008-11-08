@@ -30,7 +30,6 @@ set(kdevcvs_PART_UI
     diffoptionsdialog.ui
     editorsview.ui
     logview.ui
-    annotateview.ui
     commitdialog.ui
     updateoptionsdialog.ui
     importmetadatawidget.ui
