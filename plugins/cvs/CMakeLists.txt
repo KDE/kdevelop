@@ -14,7 +14,6 @@ set(kdevcvs_PART_SRCS
     cvsproxy.cpp
     diffoptionsdialog.cpp
     editorsview.cpp
-    logview.cpp
     commitdialog.cpp
     updateoptionsdialog.cpp
     importmetadatawidget.cpp
@@ -22,6 +21,7 @@ set(kdevcvs_PART_SRCS
     checkoutdialog.cpp
 #   cvsfileinfoprovider.cpp
     cvsannotatejob.cpp
+    cvslogjob.cpp
 )
 
 set(kdevcvs_PART_UI
@@ -29,7 +29,6 @@ set(kdevcvs_PART_UI
     cvsgenericoutputview.ui
     diffoptionsdialog.ui
     editorsview.ui
-    logview.ui
     commitdialog.ui
     updateoptionsdialog.ui
     importmetadatawidget.ui

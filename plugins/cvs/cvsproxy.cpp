@@ -21,6 +21,7 @@
 
 #include "cvsjob.h"
 #include "cvsannotatejob.h"
+#include "cvslogjob.h"
 
 #include <interfaces/iplugin.h>
 
@@ -115,7 +116,7 @@ CvsJob* CvsProxy::log(const KUrl& url, const KDevelop::VcsRevision& rev)
     if (!info.isFile())
         return false;
 
-    CvsJob* job = new CvsJob(vcsplugin);
+    CvsLogJob* job = new CvsLogJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "log";
