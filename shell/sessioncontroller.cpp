@@ -127,7 +127,6 @@ QString getNewSessionDirName( const QString& sname )
 
 Session* SessionController::createSession( const QString& name )
 {
-    Q_ASSERT( !d->knownSession( name ) );
     Session* s = new Session( name );
     d->availableSessions << s;
     return s;
