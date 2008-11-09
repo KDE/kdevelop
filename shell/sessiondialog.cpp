@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <kmessagebox.h>
 #include <kcolorscheme.h>
 #include <kdebug.h>
+#include <kglobalsettings.h>
 
 #include "core.h"
 #include "sessioncontroller.h"
@@ -57,7 +58,7 @@ QVariant SessionModel::headerData( int, Qt::Orientation, int ) const
 QVariant SessionModel::data( const QModelIndex& idx, int role ) const
 {
     if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() 
-        || ( role != Qt::DisplayRole && role != Qt::BackgroundRole && role != Qt::EditRole) )
+        || ( role != Qt::DisplayRole && role != Qt::BackgroundRole && role != Qt::EditRole && role != Qt::FontRole ) )
     {
         return QVariant();
     }
@@ -65,7 +66,15 @@ QVariant SessionModel::data( const QModelIndex& idx, int role ) const
     if( role == Qt::DisplayRole || role == Qt::EditRole )
     {
         return sname;
-    } else
+    } else if( role == Qt::FontRole )
+    {
+        QFont f = KGlobalSettings::generalFont();
+        if( Core::self()->activeSession()->name() == sname )
+        {
+            f.setBold( true );
+        }
+        return QVariant::fromValue( f );
+    } else 
     {
         if( Core::self()->activeSession()->name() == sname )
         {
@@ -83,12 +92,7 @@ Qt::ItemFlags SessionModel::flags( const QModelIndex& idx ) const
     {
         return 0;
     }
-    Qt::ItemFlags _flags = Qt::ItemIsEnabled;
-    if( Core::self()->sessionController()->sessions().at( idx.row() ) != Core::self()->activeSession()->name() )
-    {
-        _flags |= Qt::ItemIsSelectable | Qt::ItemIsEditable;
-    } 
-    return _flags;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
 bool SessionModel::setData( const QModelIndex& idx, const QVariant& value, int role )
@@ -172,15 +176,12 @@ SessionDialog::SessionDialog( QWidget* parent )
     connect( m_ui->newButton, SIGNAL(clicked()), this, SLOT(createSession()) );
     connect( m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteSession()) );
     connect( m_ui->activateButton, SIGNAL(clicked()), this, SLOT(activateSession()) );
-    connect( m_model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), 
-             this, SLOT(enableNewButton( const QModelIndex&, const QModelIndex&) ) );
     connect( m_ui->sessionList->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), 
              this, SLOT( enableButtons( const QItemSelection&, const QItemSelection& ) ) );
     connect( m_ui->sessionList->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
              this, SLOT( enableButtons( const QModelIndex&, const QModelIndex& ) ) );
     connect( m_model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
              this, SLOT( enableButtons() ) );
-    enableNewButton( m_model->index( 0, 0, QModelIndex() ), m_model->index( m_model->rowCount() - 1, 0, QModelIndex() ) );
     enableButtons( m_ui->sessionList->selectionModel()->selection(), QItemSelection() );
     enableButtons();
 }
@@ -204,24 +205,6 @@ void SessionDialog::enableButtons( const QModelIndex& current, const QModelIndex
     }
 }
 
-void SessionDialog::enableNewButton(const QModelIndex& topLeft, const QModelIndex& bottomRight )
-{
-    m_ui->newButton->setEnabled( true );
-    m_ui->newButton->setToolTip( defaultNewButtonTooltip );
-    m_ui->newButton->setWhatsThis( defaultNewButtonWhatsthis );
-    for(int row = topLeft.row(); row <= bottomRight.row(); row++ )
-    {
-       if( m_model->data( m_model->index( row, 0, QModelIndex() ) ).toString() == newSessionName )
-       {
-            m_ui->newButton->setEnabled( false );
-            m_ui->newButton->setToolTip( i18n("Disabled because there's already a Session named 'New Session' " ) );
-            m_ui->newButton->setWhatsThis( i18n("<b>New Session</b><p>This button is disabled because there exists a Session with the"
-            "name 'New Session'. Rename or Delete that session to enable this button again") );
-            break;
-       }
-    }
-}
-
 void SessionDialog::enableButtons( const QItemSelection& selected, const QItemSelection& )
 {
     m_ui->deleteButton->setEnabled( !selected.isEmpty() );
@@ -241,8 +224,9 @@ void SessionDialog::enableButtons( const QItemSelection& selected, const QItemSe
 void SessionDialog::createSession()
 {
     m_model->addSession();
-    m_ui->newButton->setEnabled( false );
     m_ui->sessionList->edit( m_model->index( m_model->rowCount() - 1, 0, QModelIndex() ) );
+    m_ui->deleteButton->setEnabled( true );
+    m_ui->activateButton->setEnabled( true );
 }
 
 void SessionDialog::deleteSession()

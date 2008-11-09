@@ -60,7 +60,6 @@ private Q_SLOTS:
     void createSession();
     void deleteSession();
     void activateSession();
-    void enableNewButton( const QModelIndex&, const QModelIndex& );
     void enableButtons( const QModelIndex&, const QModelIndex& );
     void enableButtons( const QItemSelection&, const QItemSelection& );
     void enableButtons();
