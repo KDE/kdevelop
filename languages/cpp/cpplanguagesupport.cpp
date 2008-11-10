@@ -216,6 +216,17 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #endif
 }
 
+bool CppLanguageSupport::isHeader(const KUrl &url) const {
+  QFileInfo fi( url.path() );
+  QString path = fi.filePath();
+  // extract the exension
+  QString ext = fi.suffix();
+  if ( ext.isEmpty() )
+    return true;
+  
+  return headerExtensions.contains(ext);
+}
+
 KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) const
 {
   QString urlPath = url.path(); ///@todo Make this work with real urls

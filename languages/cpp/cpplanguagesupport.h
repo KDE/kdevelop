@@ -131,6 +131,12 @@ public:
 * */
   virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
 
+    ///If @param fast is true, no exhaustive search is done as fallback.
+  KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false ) const;
+  
+  ///Returns true if the given url is a header, looking at he known file extensions
+  bool isHeader(const KUrl &url) const;
+  
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
   
@@ -159,8 +165,6 @@ private:
 
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
-    ///If @param fast is true, no exhaustive search is done as fallback.
-    KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false ) const;
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;

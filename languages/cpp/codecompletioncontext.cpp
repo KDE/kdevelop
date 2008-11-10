@@ -112,8 +112,14 @@ bool isKeyword(QString str) {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false)
 {
+  if(m_duContext) {
+    LOCKDUCHAIN;
+    if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global))
+      m_onlyShowTypes = true;
+  }
+  
   m_followingText = followingText;
 
   if(depth > 10) {
@@ -612,9 +618,10 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
     if(classFun && classFun->isVirtual() && !classFun->isConstructor() && !classFun->isDestructor()) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
       if(!overridable.contains(key) && base->findLocalDeclarations(classFun->identifier(), SimpleCursor::invalid(), 0, key.first.type()).isEmpty())
-        overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(DeclarationPointer(decl), completionContext)));
+        overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext)));
     }
   }
+  
   foreach(DUContext::Import import, current->importedParentContexts())
     getOverridable(base, import.context(), overridable, completionContext);
 }
@@ -743,8 +750,41 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       getOverridable(m_duContext.data(), import.context(), overridable, Ptr(this));
     items += overridable.values();
   }
+  
+  if(m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)
+    items += getImplementationHelpers();
 
   return items;
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
+  TopDUContext* searchInContext = m_duContext->topContext();
+  if(!CppLanguageSupport::self()->isHeader( searchInContext->url().toUrl() )) {
+    KUrl headerUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
+    searchInContext = CppLanguageSupport::self()->standardContext(headerUrl);
+  }
+  
+  if(searchInContext) {
+    return getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
+  return QList<CompletionTreeItemPointer>();
+  }
+}
+
+QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context) {
+  QList<CompletionTreeItemPointer> ret;
+  
+  foreach(Declaration* decl, context->localDeclarations()) {
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
+    if(classFun) {
+      if(!classFun->isDefinition() && !FunctionDefinition::definition(classFun) && classFun->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
+        ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(classFun), KSharedPtr<CodeCompletionContext>(this)));
+      }
+  }
+  
+  foreach(DUContext* child, context->childContexts())
+    if(child->type() == DUContext::Namespace || child->type() == DUContext::Class)
+      ret += getImplementationHelpersInternal(minimumScope, child);
+  return ret;
 }
 
 QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) const {
@@ -856,7 +896,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 }
 
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl) {
-  if(m_duContext->type() == DUContext::Class)
+  if(m_onlyShowTypes)
     return decl->kind() == Declaration::Type; //Only show type declarations within class contexts
   return true;
 }

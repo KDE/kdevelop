@@ -160,6 +160,8 @@ namespace Cpp {
        * */
       QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
     private:
+      QList<CompletionTreeItemPointer> getImplementationHelpers();
+      QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
       bool  filterDeclaration(Declaration* decl);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
@@ -213,6 +215,7 @@ namespace Cpp {
       QList<Function> m_functions;
 
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
+      bool m_onlyShowTypes;
   };
 }
 

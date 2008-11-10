@@ -24,10 +24,15 @@ using namespace KDevelop;
 class ImplementationHelperItem : public NormalDeclarationCompletionItem
 {
 public:
-  ImplementationHelperItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0);
+  enum HelperType {
+    Override,
+    CreateDefinition
+  };
+  ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0);
   
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  HelperType m_type;
 };
 
 #endif // IMPLEMENTATIONHELPERITEM_H
