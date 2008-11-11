@@ -240,6 +240,9 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
     AbstractType::Ptr nextFrom = from->baseType();
     AbstractType::Ptr nextTo = to->baseType();
 
+    if(!nextTo || !nextFrom)
+      return NoMatch;
+    
     PointerType::Ptr pointerFrom = nextFrom.cast<PointerType>();
     PointerType::Ptr pointerTo = nextTo.cast<PointerType>();
     if(pointerFrom && pointerTo)
