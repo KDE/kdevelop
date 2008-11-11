@@ -413,6 +413,33 @@ void TestDUChain::testArrayType()
   release(top);
 }
 
+void TestDUChain::testBaseUses()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5
+  //                 012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("class A{ class B {}; }; class C : public A::B {};");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[1]->usesCount(), 2);
+
+  QCOMPARE(top->childContexts()[1]->uses()[0].m_range, SimpleRange(0, 41, 0, 42));
+  QCOMPARE(top->childContexts()[1]->uses()[1].m_range, SimpleRange(0, 44, 0, 45));
+
+  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+  
+  release(top);
+}
+
+
 void TestDUChain::testTypedefUses()
 {
   TEST_FILE_PARSE_ONLY

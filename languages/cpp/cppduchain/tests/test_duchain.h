@@ -117,6 +117,8 @@ private slots:
   void testEnumOverride();
 
   void testSymbolTableValid();
+  
+  void testBaseUses();
 
   void testCStruct();
   void testCStruct2();
