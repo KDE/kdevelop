@@ -75,6 +75,8 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
         return;
       
+      scope = scope.mid( localScope.count() );
+      
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
       if(asFunction && asFunction->returnType())
           newText += asFunction->returnType()->toString() + " ";
