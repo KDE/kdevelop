@@ -50,7 +50,8 @@
 
 ///If this is enabled, KDevelop corrects wrong member access operators like "." on a pointer automatically
 const bool assistAccessType = true;
-
+///If this is enabled, no chain of useless argument-hints for binary operators is created.
+const bool noMultipleBinaryOperators = true;
 #ifdef TEST_COMPLETION
 //Stub implementation that does nothing
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool namespaceAllowed) {
@@ -708,6 +709,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         parentContext = parentContext->parentContext();
         if( parentContext ) {
           if( parentContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+            if(m_contextType == BinaryOperatorFunctionCall && parentContext->m_contextType == BinaryOperatorFunctionCall && noMultipleBinaryOperators)
+              break;
+            //Don't show annoying empty argument-hints
+            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
+              break;
             //When there is too many overloaded functions, do not show them. They can just be too many.
             if( ((parentContext->functions().count() == 0 || parentContext->functions().count() > maxOverloadedOperatorArgumentHints) && parentContext->additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall)
                   || parentContext->functions().count() > maxOverloadedArgumentHints) {
