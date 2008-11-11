@@ -34,6 +34,42 @@ IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDev
     : AbstractNavigationContext(topContext), m_item(item)
 {}
 
+TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth, bool forcePick = true) {
+  TopDUContext* duchain = 0;
+
+  foreach(TopDUContext* ctx, duchains) {
+    if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->type() != KDevelop::CppParsingEnvironment)
+      continue;
+
+    if(ctx->childContexts().count() != 0 && (duchain == 0 || ctx->childContexts().count() > duchain->childContexts().count())) {
+      duchain = ctx;
+    }
+    if(ctx->localDeclarations().count() != 0 && (duchain == 0 || ctx->localDeclarations().count() > duchain->localDeclarations().count())) {
+      duchain = ctx;
+    }
+  }
+  
+  if(!duchain && maxDepth != 0) {
+    if(maxDepth != 0) {
+      foreach(TopDUContext* ctx, duchains) {
+        QList<TopDUContext*> children;
+        foreach(DUContext::Import import, ctx->importedParentContexts())
+          if(import.context())
+            children << import.context()->topContext();
+        
+        duchain = pickContextWithData(children, maxDepth-1, false);
+        if(duchain)
+          break;
+      }
+    }
+  }
+  
+  if(!duchain && !duchains.isEmpty() && forcePick)
+    duchain = duchains.first();
+  
+  return duchain;
+}
+
 QString IncludeNavigationContext::html(bool shorten)
 {
   m_currentText  = "<html><body><p><small><small>";
@@ -49,21 +85,7 @@ QString IncludeNavigationContext::html(bool shorten)
 
   //Pick the one duchain for this document that has the most child-contexts/declarations.
   //This prevents picking a context that is empty due to header-guards.
-  TopDUContext* duchain = 0;
-
-  foreach(TopDUContext* ctx, duchains) {
-    if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->type() != KDevelop::CppParsingEnvironment)
-      continue;
-
-    if(ctx->childContexts().count() != 0 && (duchain == 0 || ctx->childContexts().count() > duchain->childContexts().count())) {
-      duchain = ctx;
-    }
-    if(ctx->localDeclarations().count() != 0 && (duchain == 0 || ctx->localDeclarations().count() > duchain->localDeclarations().count())) {
-      duchain = ctx;
-    }
-    if(!duchain)
-      duchain = ctx; //Any is better than none
-  }
+  TopDUContext* duchain = pickContextWithData(duchains, 2);
 
   m_currentText += "<br />";
 
