@@ -293,6 +293,11 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     return;
   }
   
+  if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
+    kDebug() << "updated proxy-context" << url.str();
+    return;
+  }
+  
   if(!topContext->parsingEnvironmentFile()) {
     kDebug() << "missing parsingEnvironmentFile";
     return;
@@ -335,9 +340,18 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
         kDebug() << "declaration has become invalid";
     }
     
+    QList<KDevelop::ReferencedTopDUContext> imports;
+    
     foreach(DUContext::Import imported, topContext->importedParentContexts())
       if(imported.context() && imported.context()->topContext())
-        updateReady(imported.context()->url(), ReferencedTopDUContext(imported.context()->topContext()));
+      imports << KDevelop::ReferencedTopDUContext(imported.context()->topContext());
+    
+    foreach(KDevelop::ReferencedTopDUContext import, imports) {
+      IndexedString url = import->url();
+      lock.unlock();
+      updateReady(url, import);
+      lock.lock();
+    }
 }
 
 IndexedDeclaration UsesCollector::declaration() const {
