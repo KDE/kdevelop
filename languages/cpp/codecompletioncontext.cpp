@@ -764,6 +764,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers() {
+#ifndef TEST_COMPLETION
   TopDUContext* searchInContext = m_duContext->topContext();
   if(!CppLanguageSupport::self()->isHeader( searchInContext->url().toUrl() )) {
     KUrl headerUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
@@ -772,8 +773,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   
   if(searchInContext) {
     return getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
-  return QList<CompletionTreeItemPointer>();
   }
+#endif  
+  return QList<CompletionTreeItemPointer>();
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context) {
