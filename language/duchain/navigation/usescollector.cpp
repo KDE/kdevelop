@@ -285,8 +285,21 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   }
   
   if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
-    kDebug() << "updated proxy-context" << url.str();
-    return;
+    ///Use the attached content-context instead
+    foreach(DUContext::Import import, topContext->importedParentContexts()) {
+      if(import.context() && import.context()->topContext()->parsingEnvironmentFile() && !import.context()->topContext()->parsingEnvironmentFile()->isProxyContext()) {
+        if((import.context()->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
+          ReferencedTopDUContext newTop(import.context()->topContext());
+          topContext = newTop;
+          break;
+        }
+      }
+    }
+    if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
+      kDebug() << "got bad proxy-context for" << url.str();
+      return;
+    }
+    
   }
   
   if(m_waitForUpdate.contains(url) && !m_updateReady.contains(url)) {
