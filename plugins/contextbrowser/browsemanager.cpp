@@ -93,7 +93,7 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
     return m_views;
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false) {
+BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false), m_shiftDetector(true) {
     foreach(KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
 }
@@ -117,11 +117,11 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
+/*    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
         KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
         if(!cc || !cc->isCompletionActive() && view->hasFocus())
             emit shiftKeyTriggered();
-    }
+    }*/
     
     const int browseKey = Qt::Key_Control;
     
