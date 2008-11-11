@@ -45,6 +45,11 @@ static Identifier destructorForName(Identifier name) {
 
 template<class ImportanceChecker>
 void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* current, QSet<ParsingEnvironmentFile*>& visited, QSet<ParsingEnvironmentFile*>& collected) {
+  
+  //Ignore proxy-contexts while collecting. Those build a parallel and much more complicated structure.
+  if(current->isProxyContext())
+    return;
+  
   if(visited.contains(current))
     return;
   
