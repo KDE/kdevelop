@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.6)
 
 project(KDevPlatform)
 
+set(KDE4_BUILD_TESTS "ON" CACHE BOOL "Build the tests" FORCE)
+
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 set(KDevPlatform_VERSION_MAJOR 0)
