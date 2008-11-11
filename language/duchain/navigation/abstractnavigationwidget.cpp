@@ -168,6 +168,27 @@ void AbstractNavigationWidget::down() {
   m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepAdd );
 }
 
+void AbstractNavigationWidget::embeddedWidgetAccept() {
+  accept();
+}
+void AbstractNavigationWidget::embeddedWidgetDown() {
+  down();
+}
+
+void AbstractNavigationWidget::embeddedWidgetRight() {
+  next();
+}
+
+void AbstractNavigationWidget::embeddedWidgetLeft() {
+  previous();
+}
+
+void AbstractNavigationWidget::embeddedWidgetUp() {
+  up();
+}
+
+
+
 }
 
 #include "abstractnavigationwidget.moc"

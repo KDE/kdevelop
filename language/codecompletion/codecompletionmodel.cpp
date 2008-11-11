@@ -218,27 +218,6 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
     case CodeCompletionModel::ArgumentHintDepth:
       return treeElement.asItem()->argumentHintDepth();
 
-    case AccessibilityNext:
-    {
-      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
-      if( w )
-        w->next();
-    }
-    break;
-    case AccessibilityPrevious:
-    {
-      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
-      if( w )
-        w->previous();
-    }
-    break;
-    case AccessibilityAccept:
-    {
-      QuickOpenEmbeddedWidgetInterface* w = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(m_navigationWidgets[&treeElement].data());
-      if( w )
-        w->accept();
-    }
-    break;
     case CodeCompletionModel::ItemSelected: {
       DeclarationPointer decl = treeElement.asItem()->declaration();
       if(decl) {

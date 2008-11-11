@@ -58,6 +58,16 @@ namespace KDevelop {
       virtual void up();
       virtual void down();
 
+      ///These are temporarily for gettings these events directly from kate
+      ///@todo Do this through a public interface post 4.2
+      void embeddedWidgetRight();
+      ///Keyboard-action "previous"
+      void embeddedWidgetLeft();
+      ///Keyboard-action "accept"
+      void embeddedWidgetAccept();
+      void embeddedWidgetUp();
+      void embeddedWidgetDown();
+      
       NavigationContextPointer context();
       
     public slots:
