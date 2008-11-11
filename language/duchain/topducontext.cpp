@@ -922,8 +922,6 @@ struct TopDUContext::FindDeclarationsAcceptor {
       Declaration* decl = iDecl.data();
       if(!decl)
         continue;
-      if(decl->identifier() != element.identifier) ///@todo eventually do more extensive checking
-        continue;
 
       if( decl->kind() == Declaration::Alias ) {
         //Apply alias declarations
@@ -997,9 +995,6 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
                                  IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter(allDecls.iterator(), imports);
 
     if(filter) {
-#ifdef DEBUG_SEARCH
-      kDebug() << "found" << aliasesCount << "aliases";
-#endif
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
 
       //The first part of the identifier has been found as a namespace-alias.
@@ -1098,9 +1093,6 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
       for(; filter; ++filter)
       {
         //We must never break or return from this loop, because else we might be creating a bad cache
-#ifdef DEBUG_SEARCH
-      kDebug() << "found" << importsCount << "imports";
-#endif
         if(!check(*filter))
           continue;
 
@@ -1197,9 +1189,6 @@ struct TopDUContext::FindContextsAcceptor {
 
       DUContext* ctx = iDecl.data();
       if(!ctx)
-        continue;
-
-      if(ctx->localScopeIdentifier().last() != element.identifier) ///@todo eventually do more extensive checking
         continue;
 
       target << ctx;
