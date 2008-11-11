@@ -279,15 +279,6 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   
   DUChainReadLocker lock(DUChain::lock());
   
-  if(m_waitForUpdate.contains(url)) {
-    m_updateReady << url;
-    m_checked.clear();
-    
-    
-    emit progressSignal(m_updateReady.size(), m_waitForUpdate.size());
-    progress(m_updateReady.size(), m_waitForUpdate.size());
-  }
-  
   if(!topContext) {
     kDebug() << "failed updating" << url.str();
     return;
@@ -296,6 +287,15 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
     kDebug() << "updated proxy-context" << url.str();
     return;
+  }
+  
+  if(m_waitForUpdate.contains(url) && !m_updateReady.contains(url)) {
+    m_updateReady << url;
+    m_checked.clear();
+    
+    
+    emit progressSignal(m_updateReady.size(), m_waitForUpdate.size());
+    progress(m_updateReady.size(), m_waitForUpdate.size());
   }
   
   if(!topContext->parsingEnvironmentFile()) {
