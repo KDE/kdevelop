@@ -419,9 +419,9 @@ void TestDUChain::testBaseUses()
 
   //                 0         1         2         3         4         5
   //                 012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A{ class B {}; }; class C : public A::B {};");
+  QByteArray method("class A{ class B {}; }; class C : public A::B { C() : A::B() {} };");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -435,6 +435,9 @@ void TestDUChain::testBaseUses()
 
   QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->childContexts()[1]->usesCount(), 2);
   
   release(top);
 }

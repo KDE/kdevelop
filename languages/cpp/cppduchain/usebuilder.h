@@ -64,14 +64,14 @@ protected:
   virtual void visitSubscriptExpression(SubscriptExpressionAST *) ;
   //virtual void visitThrowExpression(ThrowExpressionAST *) ;
   virtual void visitUnaryExpression(UnaryExpressionAST *) ;
+  virtual void visitBaseSpecifier(BaseSpecifierAST *);
 
-  virtual void visitBaseSpecifier(BaseSpecifierAST* node);
+//   virtual void visitBaseSpecifier(BaseSpecifierAST* node);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
   virtual void visitCondition(ConditionAST *node);
   virtual void visitDeclarator(DeclaratorAST* node);
   virtual void visitUsing(UsingAST *);
   void visitTypeId(TypeIdAST* type_id);
-
   virtual void visitClassSpecifier(ClassSpecifierAST* node);
 private:
 
@@ -85,6 +85,7 @@ private:
 
   //Whether not encountered uses should be deleted during closeContext()
   bool m_finishContext;
+  bool m_localUsesBuilt;
 };
 
 #endif // USEBUILDER_H

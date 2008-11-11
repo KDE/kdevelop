@@ -35,7 +35,7 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 UseBuilder::UseBuilder (ParseSession* session)
-  : UseBuilderBase(), m_finishContext(true)
+  : UseBuilderBase(), m_finishContext(true), m_localUsesBuilt(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
@@ -119,14 +119,6 @@ void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* exp)
     newUse(node->name);*/
 }
 
-void UseBuilder::visitMemInitializer(MemInitializerAST * node)
-{
-  UseBuilderBase::visitMemInitializer(node);
-
-  if (node->initializer_id)
-    newUse(node->initializer_id);
-}
-
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
@@ -173,6 +165,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
 };
 
 void UseBuilder::visitExpression(AST* node) {
+
   UseExpressionVisitor visitor( editor()->parseSession(), this );
   if( !node->ducontext )
     node->ducontext = currentContext();
@@ -187,6 +180,19 @@ void UseBuilder::visitBaseSpecifier(BaseSpecifierAST* node) {
       node->name->ducontext = currentContext();
     
     visitor.parse( node->name );
+  }
+}
+
+void UseBuilder::visitMemInitializer(MemInitializerAST * node)
+{
+  UseBuilderBase::visitMemInitializer(node);
+
+  if (node->initializer_id) {
+    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    if( !node->initializer_id->ducontext )
+      node->initializer_id->ducontext = currentContext();
+      
+    visitor.parse( node->initializer_id );
   }
 }
 
