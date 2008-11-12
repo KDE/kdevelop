@@ -14,6 +14,18 @@ set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletionconte
 
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
-target_link_libraries(cppcodecompletiontest ${KDE4_KDECORE_LIBS} ${KDE4_TEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain veritascpp ${KDevPlatform_LANGUAGE_LIBRARY})
+target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
+    kdev4cppduchain
+    kdev4cpprpp
+    kdev4cppparser
+    veritascpp
+    ${QT_QTDESIGNER_LIBRARY}
+    ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDevPlatform_PROJECT_LIBRARY}
+    ${KDE4_THREADWEAVER_LIBRARIES}
+    ${KDevPlatform_LANGUAGE_LIBRARY}
+    ${KDE4_KHTML_LIBS}
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+)
 
