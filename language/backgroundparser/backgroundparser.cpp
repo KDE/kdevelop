@@ -187,6 +187,9 @@ public:
             return job;
         }
 
+        if(languages.isEmpty())
+            kWarning(9504) << "found no languages for url" << url;
+
         return 0;
     }
 
