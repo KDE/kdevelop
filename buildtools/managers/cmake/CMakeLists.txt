@@ -37,15 +37,15 @@ set( cmakemanager_UI
 )
 
 set( cmakesettings_SRCS
-  cmakepreferences.cpp
-  cmakecachemodel.cpp
-  cmakecachedelegate.cpp
-  cmakebuilddircreator.cpp
+  settings/cmakepreferences.cpp
+  settings/cmakecachemodel.cpp
+  settings/cmakecachedelegate.cpp
+  settings/cmakebuilddircreator.cpp
 )
 
 set( cmakesettings_UI
-  cmakebuildsettings.ui
-  cmakebuilddircreator.ui
+  settings/cmakebuildsettings.ui
+  settings/cmakebuilddircreator.ui
 )
 
 remove_definitions( -DQT_NO_STL )
