@@ -210,8 +210,9 @@ const Environment::EnvironmentMap& Environment::environment() const {
 
 pp_macro* Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) const
 {
-  if (m_environment.contains(name))
-    return m_environment[name];
+  EnvironmentMap::const_iterator it = m_environment.find(name);
+  if (it != m_environment.end())
+    return *it;
 
   return 0;
 }
