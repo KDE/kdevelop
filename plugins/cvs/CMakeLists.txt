@@ -19,9 +19,9 @@ set(kdevcvs_PART_SRCS
     importmetadatawidget.cpp
     importdialog.cpp
     checkoutdialog.cpp
-#   cvsfileinfoprovider.cpp
     cvsannotatejob.cpp
     cvslogjob.cpp
+    cvsstatusjob.cpp
 )
 
 set(kdevcvs_PART_UI

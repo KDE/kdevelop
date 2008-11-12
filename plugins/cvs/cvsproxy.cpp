@@ -22,6 +22,7 @@
 #include "cvsjob.h"
 #include "cvsannotatejob.h"
 #include "cvslogjob.h"
+#include "cvsstatusjob.h"
 
 #include <interfaces/iplugin.h>
 
@@ -433,7 +434,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
 
 CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    CvsStatusJob* job = new CvsStatusJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "status";

@@ -1,0 +1,38 @@
+/***************************************************************************
+ *   Copyright 2008 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#ifndef CVSSTATUSJOB_H
+#define CVSSTATUSJOB_H
+
+#include "cvsjob.h"
+#include <vcs/vcsstatusinfo.h>
+
+/**
+ * @author Robert Gruber <rgruber@users.sourceforge.net>
+ */
+class CvsStatusJob : public CvsJob
+{
+    Q_OBJECT
+public:
+    CvsStatusJob(KDevelop::IPlugin* parent);
+    virtual ~CvsStatusJob();
+
+    // Begin:  KDevelop::VcsJob
+    virtual QVariant fetchResults();
+    // End:  KDevelop::VcsJob
+
+private:
+    void parseOutput(const QString& jobOutput, QList<QVariant>& infos);
+
+    KDevelop::VcsStatusInfo::State String2EnumState(const QString& stateAsString);
+
+};
+
+#endif
