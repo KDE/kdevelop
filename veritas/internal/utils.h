@@ -37,7 +37,7 @@ namespace Veritas
 /*! Recursive function which traverses the tree in a depth first manner.
  *  Applies the visit functor on each test */
 template <typename V>
-VERITAS_EXPORT void traverseTree(Test* current, V& visit)
+void traverseTree(Test* current, V& visit)
 {
     // depth-first traversal
     if (!current) return;
