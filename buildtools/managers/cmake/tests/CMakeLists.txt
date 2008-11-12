@@ -75,7 +75,7 @@ target_link_libraries( cmakeparserutilstest
 
 kde4_add_unit_test(kde4addunittest  kde4addunittest.cpp)
 target_link_libraries(kde4addunittest
-        ${QT_QTEST_LIBRARY}
+        ${QT_QTTEST_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         ${KDevPlatform_SHELL_LIBRARY}
         kdev4cmakecommon ) 
