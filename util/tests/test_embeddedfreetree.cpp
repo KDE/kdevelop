@@ -23,6 +23,7 @@
 #include <util/embeddedfreetree.h>
 #include <util/convenientfreelist.h>
 #include <kdebug.h>
+#include <time.h>
 
 struct TestItem {
     explicit TestItem(uint _value = 0) : value(_value), leftChild(-1), rightChild(-1) {
