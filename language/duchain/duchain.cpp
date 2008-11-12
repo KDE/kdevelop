@@ -1032,6 +1032,11 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
   return ParsingEnvironmentFilePointer();
 }
 
+QList<ParsingEnvironmentFilePointer> DUChain::allEnvironmentFiles(const IndexedString& document) {
+  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
+  return sdDUChainPrivate->getEnvironmentInformation(document);
+}
+
 ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(IndexedTopDUContext topContext) const {
    if(topContext.index() == 0)
      return ParsingEnvironmentFilePointer();

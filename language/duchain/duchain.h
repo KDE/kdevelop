@@ -129,6 +129,11 @@ public:
 
   Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(IndexedTopDUContext topContext) const;  
   
+  /**
+   * Returns the list of the environment-infos of all versions of the given document.
+   */
+  Q_SCRIPTABLE QList<ParsingEnvironmentFilePointer> allEnvironmentFiles(const IndexedString& document);
+  
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   ///The duchain must be read-locked when this is called
   Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;

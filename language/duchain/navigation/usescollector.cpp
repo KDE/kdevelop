@@ -210,9 +210,19 @@ void UsesCollector::startCollecting() {
         ///to loading a whole TopDUContext.
         if(decl->inSymbolTable()) {
           //The declaration can only be used from other contexts if it is in the symbol table
-          foreach(ReferencedTopDUContext top, candidateTopContexts)
-            if(top->parsingEnvironmentFile())
+          foreach(ReferencedTopDUContext top, candidateTopContexts) {
+            if(top->parsingEnvironmentFile()) {
               collectImporters(checker, top->parsingEnvironmentFile().data(), visited, collected);
+              //In C++, visibility is not handled strictly through the import-structure.
+              //It may happen that an object is visible because of an earlier include.
+              //We can not perfectly handle that, but we can at least handle it if the header includes
+              //the header that contains the declaration. That header may be parsed empty due to header-guards,
+              //but we still need to pick it up here.
+              QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(top->url());
+              foreach(ParsingEnvironmentFilePointer version, allVersions)
+                collectImporters(checker, version.data(), visited, collected);
+            }
+          }
         }
         if(checker(decl->topContext()->parsingEnvironmentFile().data()))
           collected.insert(decl->topContext()->parsingEnvironmentFile().data());
