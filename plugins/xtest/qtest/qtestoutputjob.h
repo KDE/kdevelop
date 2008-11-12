@@ -43,7 +43,7 @@ class QXQTEST_EXPORT QTestOutputJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QTestOutputJob(QTestOutputDelegate *parent, QTest::Case*);
+    QTestOutputJob(QTest::Case*);
     virtual void start();
 
 protected:
@@ -53,7 +53,6 @@ private:
     void outputFile(const KUrl& path);
 
 private:
-    QTestOutputDelegate* delegate() const;
     QTest::Case* m_caze;
 };
 

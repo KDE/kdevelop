@@ -31,6 +31,7 @@
 #include "qtestcommand.h"
 
 class KProcess;
+class KJob;
 class QTimer;
 
 namespace QTest
@@ -47,6 +48,10 @@ QTestLib executable.
 class QXQTEST_EXPORT Case : public Veritas::Test
 {
 Q_OBJECT
+
+public slots:
+   virtual int run();
+   
 public:
     Case(const QString&, const QFileInfo&, Suite* parent=0);
     virtual ~Case();
@@ -54,7 +59,6 @@ public:
     Command* child(int i) const;
     QFileInfo executable();
 
-    virtual int run();
     virtual void kill();
     virtual bool shouldRun() const;
 
@@ -74,6 +78,8 @@ public:
     /*! For testers only method that returns whether the output file was closed */
     bool fto_outputFileClosed();
 
+    virtual KJob* createVerboseOutputJob();
+    
 private:
     void removeTempFiles();
 

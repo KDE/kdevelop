@@ -23,8 +23,6 @@
 #include "kdevregister.h"
 #include "qtestsuite.h"
 #include "qtestsettings.h"
-#include "qtestoutputjob.h"
-#include "qtestoutputdelegate.h"
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -50,8 +48,7 @@ using namespace QTest;
 QTestViewData::QTestViewData(ITestFramework* framework)
     : Veritas::ITestRunner(framework),
       m_settings(0),
-      m_lock(false),
-      m_delegate(new QTestOutputDelegate(this))
+      m_lock(false)
 {
 }
 
@@ -121,14 +118,6 @@ QString QTestViewData::fetchRegXML()
     KSharedConfig::Ptr cfg = project()->projectConfiguration();
     KConfigGroup group(cfg.data(), "QTest");
     return KUrl(group.readEntry("Test Registration")).pathOrUrl();
-}
-
-void QTestViewData::openVerbose(Veritas::Test* t)
-{
-    Case* caze = dynamic_cast<Case*>(t);
-    if (!caze) return;
-    QTestOutputJob* job = new QTestOutputJob(m_delegate, caze);
-    ICore::self()->runController()->registerJob(job);
 }
 
 #include "qtestviewdata.moc"

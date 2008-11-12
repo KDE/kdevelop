@@ -39,16 +39,12 @@ public:
     QString fetchBuildRoot();
     QString fetchRegXML();
 
-protected Q_SLOTS:
-    virtual void openVerbose(Veritas::Test*);
-
 private slots:
     void resetLock();
 
 private:
     QTest::ISettings* m_settings;
     bool m_lock;
-    QTestOutputDelegate* m_delegate;
 };
 
 #endif

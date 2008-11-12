@@ -35,8 +35,20 @@
 using namespace KDevelop;
 using QTest::Case;
 
-QTestOutputJob::QTestOutputJob(QTestOutputDelegate* parent, Case* caze)
-        : OutputJob(parent), m_caze(caze)
+namespace
+{
+QTestOutputDelegate* delegate()
+{
+    static QTestOutputDelegate* s_delegate = 0;
+    if (s_delegate == 0) {
+        s_delegate = new QTestOutputDelegate;
+    }
+    return s_delegate;
+}
+}
+
+QTestOutputJob::QTestOutputJob(Case* caze)
+        : OutputJob(0), m_caze(caze) // TODO leaks?
 {}
 
 void QTestOutputJob::start()
@@ -46,8 +58,8 @@ void QTestOutputJob::start()
     setViewType(KDevelop::IOutputView::HistoryView);
     setStandardToolView(KDevelop::IOutputView::TestView);
     setBehaviours(KDevelop::IOutputView::AutoScroll | KDevelop::IOutputView::AllowUserClose);
-    setModel(new QTestOutputModel(delegate()), KDevelop::IOutputView::TakeOwnership);
-    setDelegate(delegate());
+    setModel(new QTestOutputModel, KDevelop::IOutputView::TakeOwnership);
+    setDelegate(delegate(), KDevelop::IOutputView::KeepOwnership);
 
     startOutput();
     if (!m_caze->outFile().isEmpty()) {
@@ -84,11 +96,6 @@ void QTestOutputJob::outputFile(const KUrl& path)
         }
         model()->appendOutputs(lines);
     }
-}
-
-QTestOutputDelegate* QTestOutputJob::delegate() const
-{
-    return const_cast<QTestOutputDelegate*>(static_cast<const QTestOutputDelegate*>(parent()));
 }
 
 QTestOutputModel* QTestOutputJob::model() const

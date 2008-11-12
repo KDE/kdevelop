@@ -35,10 +35,6 @@ public:
     virtual ~CppUnitViewData();
     void registerTests();
     QString fetchExe();
-
-protected Q_SLOTS:
-    virtual void openVerbose(Veritas::Test*) {}
-
 };
 
 

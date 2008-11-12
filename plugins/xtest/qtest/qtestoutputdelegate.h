@@ -29,7 +29,7 @@
 class QXQTEST_EXPORT QTestOutputDelegate : public QItemDelegate
 {
 public:
-    QTestOutputDelegate(QObject*);
+    QTestOutputDelegate(QObject* parent=0);
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 private:
     KStatefulBrush textBrush;

@@ -34,10 +34,6 @@ public:
     virtual ~CheckViewData();
     void registerTests();
     QString fetchExe();
-
-protected Q_SLOTS:
-    virtual void openVerbose(Veritas::Test*) {}
-
 };
 
 #endif

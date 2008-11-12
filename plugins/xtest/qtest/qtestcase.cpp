@@ -24,6 +24,7 @@
 #include "qtestoutputparser.h"
 #include "qtestoutputmorpher.h"
 #include "qtestsettings.h"
+#include "qtestoutputjob.h"
 #include <veritas/testresult.h>
 
 #include <QCoreApplication>
@@ -335,6 +336,11 @@ void Case::executeProc()
 
     m_parser->setDevice(m_output);
     m_timer->start(50); // triggers OutputParser evry 0.05 sec
+}
+
+KJob* Case::createVerboseOutputJob()
+{
+    return new QTestOutputJob(this);
 }
 
 #include "qtestcase.moc"

@@ -40,7 +40,7 @@ class QTestOutputModel : public QStandardItemModel, public KDevelop::IOutputView
     Q_OBJECT
 
 public:
-    explicit QTestOutputModel(QObject *parent);
+    explicit QTestOutputModel(QObject *parent=0);
     ~QTestOutputModel();
 
     void activate(const QModelIndex &idx);
