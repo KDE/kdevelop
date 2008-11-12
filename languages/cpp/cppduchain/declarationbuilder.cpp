@@ -62,6 +62,8 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
+
+
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
 DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
@@ -597,6 +599,8 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
     ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
      DUChainWriteLocker lock(DUChain::lock());
     fun->setAccessPolicy(currentAccessPolicy());
+    fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
+    fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
     fun->setIsAbstract(m_declarationHasInitializer);
     return fun;
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
@@ -1059,20 +1063,24 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
 void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
 {
+  bool isSlot = false;
+  bool isSignal = false;
   if (node->specs) {
     const ListNode<std::size_t> *it = node->specs->toFront();
     const ListNode<std::size_t> *end = it;
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
-        case Token_signals:
         case Token_slots:
         case Token_k_dcop:
-        case Token_k_dcop_signals:
+          isSlot = true;
           break;
         case Token_public:
           setAccessPolicy(Declaration::Public);
           break;
+        case Token_k_dcop_signals:
+        case Token_signals:
+          isSignal = true;
         case Token_protected:
           setAccessPolicy(Declaration::Protected);
           break;
@@ -1084,6 +1092,13 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
       it = it->next;
     } while (it != end);
   }
+  
+  if(isSignal)
+    setAccessPolicy((KDevelop::Declaration::AccessPolicy)(currentAccessPolicy() | FunctionIsSignal));
+
+  if(isSlot)
+    setAccessPolicy((KDevelop::Declaration::AccessPolicy)(currentAccessPolicy() | FunctionIsSlot));
+  
 
   DeclarationBuilderBase::visitAccessSpecifier(node);
 }

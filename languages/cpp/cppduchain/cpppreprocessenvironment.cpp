@@ -103,6 +103,14 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
+    rpp::pp_macro* hadMacro = retrieveStoredMacro(macro->name);
+    
+    //If a macro of the same name has been fixed, the new macro has no effect
+    if(hadMacro && hadMacro->fixed) {
+      delete macro;
+      return;
+    }
+    
   //kDebug() << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
     //Note defined macros
     if( m_environmentFile )

@@ -50,6 +50,7 @@ struct KDEVCPPRPP_EXPORT pp_macro_direct_data
   bool hidden: 1;
   bool function_like: 1; // hasArguments
   bool variadics: 1;
+  bool fixed : 1; //If this is set, the macro can not be overridden or undefined.
   
   //The valueHash is not necessarily valid
   mutable HashType m_valueHash; //Hash that represents the values of all macros

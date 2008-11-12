@@ -147,6 +147,38 @@ bool setupStandardMacros(Cpp::LazyMacroSet& macros)
       insertMacro( macros, m );
     }
     
+    ///@todo The following macros are only required for Qt, so only set them on projects that use Qt.
+    {
+      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
+      rpp::pp_dynamic_macro m("Q_SLOTS");
+      m.definition = asBody( "slots" );
+      m.fixed = true;
+      insertMacro( macros, m );
+    }
+    {
+      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
+      rpp::pp_dynamic_macro m("slots");
+      m.defined = false;
+      m.fixed = true;
+      insertMacro( macros, m );
+    }
+
+    {
+      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
+      rpp::pp_dynamic_macro m("Q_SIGNALS");
+      m.definition = asBody( "signals" );
+      m.fixed = true;
+      insertMacro( macros, m );
+    }
+    {
+      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
+      rpp::pp_dynamic_macro m("signals");
+      m.defined = false;
+      m.fixed = true;
+      insertMacro( macros, m );
+    }
+    
+    
     //Get standard macros from gcc
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);

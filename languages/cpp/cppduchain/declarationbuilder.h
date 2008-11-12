@@ -35,6 +35,12 @@ namespace Cpp {
 class ClassDeclaration;
 }
 
+//Additional flags put into the access-policy member
+enum SignalSlotFlags {
+  FunctionIsSignal = 1 << 4,
+  FunctionIsSlot = 1 << 5
+};
+
 class DeclarationBuilderBase : public KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder>
 {
 };
@@ -125,7 +131,7 @@ private:
   void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
   void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
 
-  inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return m_accessPolicyStack.top(); }
+  inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return ((KDevelop::Declaration::AccessPolicy)((m_accessPolicyStack.top() & (~((uint)FunctionIsSignal))) & (~((uint)FunctionIsSlot)))); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
 
   void parseComments(const ListNode<size_t> *comments);

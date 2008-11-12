@@ -86,6 +86,7 @@ pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : 
   , hidden(false)
   , function_like(false)
   , variadics(false)
+  , fixed(false)
   , m_valueHash(0)
 {
 }
