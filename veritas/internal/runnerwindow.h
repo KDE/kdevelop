@@ -98,11 +98,10 @@ public: // Operations
 
 Q_SIGNALS:
     void runCompleted() const;
-    void openVerbose(Veritas::Test*);
 
 public Q_SLOTS:
 
-    void emitOpenVerbose();
+    void showVerboseTestOutput();
     void addProjectToPopup(KDevelop::IProject*);
     void rmProjectFromPopup(KDevelop::IProject*);
 

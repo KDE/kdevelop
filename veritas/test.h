@@ -32,6 +32,7 @@
 #include <QtCore/QModelIndex>
 
 class QAbstractItemModel;
+class KJob;
 
 namespace Veritas
 {
@@ -137,6 +138,10 @@ public: // Operations
 
     void signalStarted();
     void signalFinished();
+
+    /*! Factory method. May return 0. The job it returns is supposed to show
+     *  verbose test output. Eg a KDevelop::OutputJob. */
+    virtual KJob* createVerboseOutputJob();
 
     /*! Contains methods that are only to be used inside the library.
      *  This nested class is not exported nor is the header installed.

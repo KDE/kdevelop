@@ -77,6 +77,11 @@ QString Test::name() const
 void Test::kill()
 {}
 
+KJob* Test::createVerboseOutputJob()
+{
+    return 0;
+}
+
 bool Test::needVerboseToggle() const
 {
     return d->needVerboseToggle;

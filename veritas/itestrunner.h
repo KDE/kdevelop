@@ -64,9 +64,6 @@ protected:
 
     KDevelop::IProject* project() const;
 
-protected Q_SLOTS:
-    virtual void openVerbose(Test*) = 0;
-
 Q_SIGNALS:
     void registerFinished(Veritas::Test* root);
 

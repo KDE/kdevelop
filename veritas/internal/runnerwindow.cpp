@@ -37,6 +37,7 @@
 #include <ktexteditor/cursor.h>
 #include "interfaces/icore.h"
 #include "interfaces/idocumentcontroller.h"
+#include "interfaces/iruncontroller.h"
 
 #include "utils.h"
 #include "test_p.h"
@@ -114,7 +115,7 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_selection->setButton(selectionToggle);
     m_verbose = new OverlayManager(runnerView());
     m_verboseToggle = new VerboseToggle(runnerView()->viewport());
-    connect(m_verboseToggle, SIGNAL(clicked(bool)),SLOT(emitOpenVerbose()));
+    connect(m_verboseToggle, SIGNAL(clicked(bool)),SLOT(showVerboseTestOutput()));
     m_verbose->setButton(m_verboseToggle);
 
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
@@ -145,13 +146,14 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     runnerView()->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-void RunnerWindow::emitOpenVerbose()
+void RunnerWindow::showVerboseTestOutput()
 {
     const QModelIndex index = m_verboseToggle->index();
     if (index.isValid()) {
         Test* t = m_verbose->index2Test(index);
         if (t) {
-            emit openVerbose(t);
+            KJob* j = t->createVerboseOutputJob();
+            if (j) ICore::self()->runController()->registerJob(j);
         }
     }
 }
