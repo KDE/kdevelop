@@ -53,8 +53,8 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   
   QVector<DUContext::Import> bases = context->importedParentContexts();
   for( QVector<DUContext::Import>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
-    if( it->context() )
-      ret += findLocalDeclarations( (*it).context(), identifier, topContext );
+    if( it->context(topContext) )
+      ret += findLocalDeclarations( (*it).context(topContext), identifier, topContext );
   }
   return ret;
 }
@@ -144,7 +144,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
     ///Alternative way of finding the class, needed while building the duchain when the links are incomplete
     QVector<DUContext::Import> imports = context->importedParentContexts();
     foreach(const DUContext::Import& import, imports) {
-      DUContext* imp = import.context();
+      DUContext* imp = import.context(context->topContext());
       if(imp && imp->type() == DUContext::Class && imp->owner())
         return imp->owner();
     }

@@ -70,7 +70,7 @@ using namespace KDevelop;
 
 bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
   foreach(DUContext::Import listCtx, contexts)
-    if(listCtx.context() && listCtx.context()->imports(context))
+    if(listCtx.context(0) && listCtx.context(0)->imports(context))
       return true;
   return false;
 }
@@ -323,7 +323,7 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 LineContextPair contentFromProxy(LineContextPair ctx) {
     if( ctx.context->parsingEnvironmentFile() && ctx.context->parsingEnvironmentFile()->isProxyContext() ) {
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
-        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context()), ctx.sourceLine );
+        return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context(0)), ctx.sourceLine );
     }else{
         return ctx;
     }
@@ -376,7 +376,7 @@ void CPPInternalParseJob::run()
           DUChainWriteLocker lock(DUChain::lock());
 
           foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
-            contentContext->removeImportedParentContext(ctx.context());
+            contentContext->removeImportedParentContext(ctx.context(0));
           }
     }
 
@@ -584,9 +584,9 @@ void CPPInternalParseJob::run()
 
           QVector<DUContext::Import> imports = contentContext->importedParentContexts();
           foreach(DUContext::Import ctx, imports) {
-              if(ctx.context() && !encounteredIncludeUrls.contains(ctx.context()->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
-                  contentContext->removeImportedParentContext(ctx.context());
-                  kDebug( 9007 ) << "removing not encountered import " << ctx.context()->url().str();
+              if(ctx.context(0) && !encounteredIncludeUrls.contains(ctx.context(0)->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
+                  contentContext->removeImportedParentContext(ctx.context(0));
+                  kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url().str();
               }
           }
       }
@@ -644,7 +644,7 @@ void CPPInternalParseJob::run()
         if(proxyContext->importedParentContexts().isEmpty()) //Failure
           return;
 
-        Q_ASSERT(proxyContext->importedParentContexts()[0].context() == contentContext);
+        Q_ASSERT(proxyContext->importedParentContexts()[0].context(0) == contentContext);
 
         //Make sure the imported contextsa re added
         foreach ( LineContextPair context, parentJob()->includedFiles() )
@@ -652,7 +652,7 @@ void CPPInternalParseJob::run()
 
         //Make sure we don't imported any not imported contexts
         foreach(DUContext::Import import, proxyContext->importedParentContexts()) {
-          TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+          TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
           Q_ASSERT(top);
           bool shouldBeIncluded = false;
           if(top == contentContext)

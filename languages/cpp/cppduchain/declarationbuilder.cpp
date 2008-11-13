@@ -70,9 +70,9 @@ DUContext* getTemplateContext(Declaration* decl) {
   if( !internal )
     return 0;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context() )
-      if( ctx.context()->type() == DUContext::Template )
-        return ctx.context();
+    if( ctx.context(decl->topContext()) )
+      if( ctx.context(decl->topContext())->type() == DUContext::Template )
+        return ctx.context(decl->topContext());
   }
   return 0;
 }
@@ -122,13 +122,13 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   DeclarationBuilderBase::visitTemplateParameter(ast);
   ast->parameter_declaration = paramAST;
   
-  if( (ast->type_parameter && ast->type_parameter->name) || (ast->parameter_declaration && ast->parameter_declaration->declarator)) {
+  if( ast->type_parameter || ast->parameter_declaration ) {
     ///@todo deal with all the other stuff the AST may contain
     TemplateParameterDeclaration* decl;
     if(ast->type_parameter)
-      decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast);
+      decl = openDeclaration<TemplateParameterDeclaration>(ast->type_parameter->name, ast, Identifier(), false, !ast->type_parameter->name);
     else
-      decl = openDeclaration<TemplateParameterDeclaration>(ast->parameter_declaration->declarator->id, ast);
+      decl = openDeclaration<TemplateParameterDeclaration>(ast->parameter_declaration->declarator ? ast->parameter_declaration->declarator->id : 0, ast, Identifier(), false, !ast->parameter_declaration->declarator);
 
     DUChainWriteLocker lock(DUChain::lock());
     AbstractType::Ptr type = lastType();
@@ -157,8 +157,6 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
         decl->setDefaultParameter( QualifiedIdentifier( stringFromSessionTokens( editor()->parseSession(), ast->parameter_declaration->expression->start_token, ast->parameter_declaration->expression->end_token ) ) );
     }
     closeDeclaration(ast->parameter_declaration);
-  } else {
-    kDebug(9007) << "DeclarationBuilder::visitTemplateParameter: type-parameter is missing";
   }
 }
 
@@ -320,9 +318,9 @@ Type hasTemplateContext( const QList<Type>& contexts ) {
 }
 
 template<class Type>
-Type hasTemplateContext( const QVector<Type>& contexts ) {
+Type hasTemplateContext( const QVector<Type>& contexts, TopDUContext* top ) {
   foreach( const Type& context, contexts )
-    if( context.context() && context.context()->type() == KDevelop::DUContext::Template )
+    if( context.context(top) && context.context(top)->type() == KDevelop::DUContext::Template )
       return context;
 
   return Type(0);
@@ -330,11 +328,11 @@ Type hasTemplateContext( const QVector<Type>& contexts ) {
 
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context
 KDevelop::DUContext* isTemplateContext( KDevelop::DUContext* context ) {
-  return hasTemplateContext( context->importedParentContexts() ).context();
+  return hasTemplateContext( context->importedParentContexts(), context->topContext() ).context(context->topContext());
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange)
+T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd)
 {
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -343,16 +341,16 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
   ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
   ///by specialize(..) and its indirect DeclarationId
   if( templateCtx || m_templateDeclarationDepth ) {
-    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRange );
+    Cpp::SpecialTemplateDeclaration<T>* ret = openDeclarationReal<Cpp::SpecialTemplateDeclaration<T> >( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
     ret->setTemplateParameterContext(templateCtx);
     return ret;
   } else{
-    return openDeclarationReal<T>( name, rangeNode, customName, collapseRange );
+    return openDeclarationReal<T>( name, rangeNode, customName, collapseRangeAtStart, collapseRangeAtEnd );
   }
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRange)
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd)
 {
   SimpleRange newRange;
   if(name) {
@@ -368,8 +366,10 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     newRange = editor()->findRange(rangeNode);
   }
 
-  if(collapseRange)
+  if(collapseRangeAtStart)
     newRange.end = newRange.start;
+  else if(collapseRangeAtEnd)
+    newRange.start = newRange.end;
 
   Identifier localId = customName;
 
@@ -1218,7 +1218,7 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   if(classFunDecl && !classFunDecl->isVirtual()) {
     QList<Declaration*> overridden;
     foreach(DUContext::Import import, currentContext()->importedParentContexts())
-      overridden += import.context()->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
+      overridden += import.context(topContext())->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
                                             SimpleCursor::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
     if(!overridden.isEmpty()) {
       foreach(Declaration* decl, overridden) {

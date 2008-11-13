@@ -315,7 +315,7 @@ TopDUContext* TestSwitch::documentContextFor(const KUrl& url)
     delete env;
     if(docCtx && docCtx->parsingEnvironmentFile() && docCtx->parsingEnvironmentFile()->isProxyContext()) {
         if(!docCtx->importedParentContexts().isEmpty()) {
-            docCtx = dynamic_cast<TopDUContext*>(docCtx->importedParentContexts().first().context());
+            docCtx = dynamic_cast<TopDUContext*>(docCtx->importedParentContexts().first().context(0));
         }
     }
     return docCtx;

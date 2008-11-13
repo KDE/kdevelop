@@ -431,9 +431,9 @@ class CppDUContext : public BaseContext {
       m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
     }
     
-    virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers) const
+    virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers, const TopDUContext* source) const
     {
-      BaseContext::applyUpwardsAliases(identifiers);
+      BaseContext::applyUpwardsAliases(identifiers, source);
       ///@see Iso C++ 3.4.1 : Unqualified name lookup: 
       ///We need to make sure that when leaving a function definition, the namespace components are searched
       DUContext::ContextType type = BaseContext::type();
@@ -447,7 +447,7 @@ class CppDUContext : public BaseContext {
           
           if(type == DUContext::Helper) {
             if(!BaseContext::importedParentContexts().isEmpty())
-              classContext = BaseContext::importedParentContexts()[0].context();
+              classContext = BaseContext::importedParentContexts()[0].context(source);
           } else {
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
             if(classDeclaration && classDeclaration->internalContext())

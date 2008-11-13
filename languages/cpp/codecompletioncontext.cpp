@@ -624,7 +624,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
   }
   
   foreach(DUContext::Import import, current->importedParentContexts())
-    getOverridable(base, import.context(), overridable, completionContext);
+    getOverridable(base, import.context(base->topContext()), overridable, completionContext);
 }
 
 
@@ -753,7 +753,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     //Show override helper items
     QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
     foreach(DUContext::Import import, m_duContext->importedParentContexts())
-      getOverridable(m_duContext.data(), import.context(), overridable, Ptr(this));
+      getOverridable(m_duContext.data(), import.context(m_duContext->topContext()), overridable, Ptr(this));
     items += overridable.values();
   }
   

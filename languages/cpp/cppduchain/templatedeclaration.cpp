@@ -492,15 +492,15 @@ bool isTemplateDeclaration(const KDevelop::Declaration* decl) {
 }
 
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
-DUContext* getTemplateContext(Declaration* decl)
+DUContext* getTemplateContext(Declaration* decl, const TopDUContext* top)
 {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
   foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
-    if( ctx.context() )
-      if( ctx.context()->type() == DUContext::Template )
-        return ctx.context();
+    if( ctx.context(top) )
+      if( ctx.context(top)->type() == DUContext::Template )
+        return ctx.context(top);
   }
   return 0;
 }
@@ -539,11 +539,11 @@ DUContext* getTemplateContext(Declaration* decl)
 
 ///Reads the template-parameters from the template-context of the declaration, and puts them into the identifier.
 ///Must be called AFTER the declaration was instantiated.
-void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* basicDeclaration )
+void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* basicDeclaration, const TopDUContext* top )
 {
   identifier.clearTemplateIdentifiers();
 
-  DUContext* templateCtx = getTemplateContext(basicDeclaration);
+  DUContext* templateCtx = getTemplateContext(basicDeclaration, top);
   if( !templateCtx )
     return;
 
@@ -628,15 +628,15 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     ///Find  the template-parameter context, and recurse into it, so we can replace the template parameters
     foreach( DUContext::Import importedContext,  context->importedParentContexts() )
     {
-      if( !importedContext.context())
+      if( !importedContext.context(source))
         continue;
         ///For functions, the Template-context is one level deeper(it is imported by the function-context) so also copy the function-context
-      if( importedContext.context()->type() == KDevelop::DUContext::Template || importedContext.context()->type() == KDevelop::DUContext::Function )
+      if( importedContext.context(source)->type() == KDevelop::DUContext::Template || importedContext.context(source)->type() == KDevelop::DUContext::Function )
       {
-        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, importedContext.context(), templateArguments, 0, 0);
+        DUContext* ctx = instantiateDeclarationAndContext( parentContext, source, importedContext.context(source), templateArguments, 0, 0);
         contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
 
-        if( instantiatedDeclaration && importedContext.context()->type() == KDevelop::DUContext::Template ) {
+        if( instantiatedDeclaration && importedContext.context(source)->type() == KDevelop::DUContext::Template ) {
           TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
           if( instantiatedDeclaration )
             tempDecl->setTemplateParameterContext( ctx );
@@ -647,7 +647,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.context(), SimpleCursor::invalid(), true );
+        contextCopy->addImportedParentContext( importedContext.context(source), SimpleCursor::invalid(), true );
       }
     }
 
@@ -742,7 +742,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       ///Change the identifier to reflect the used template-arguments
       KDevelop::Identifier id = instantiatedDeclaration->identifier();
 
-      updateIdentifierTemplateParameters( id, instantiatedDeclaration );
+      updateIdentifierTemplateParameters( id, instantiatedDeclaration, source );
 
       instantiatedDeclaration->setIdentifier(id);
     }

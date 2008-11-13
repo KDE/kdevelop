@@ -346,15 +346,17 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   if (!context->smartRange())
     return;
 
+  TopDUContext* top = context->topContext();
+  
   //Merge the colors from the function arguments
   foreach( DUContext::Import imported, context->importedParentContexts() ) {
-    if(!imported.context() || (imported.context()->type() != DUContext::Other && imported.context()->type() != DUContext::Function))
+    if(!imported.context(top) || (imported.context(top)->type() != DUContext::Other && imported.context(top)->type() != DUContext::Function))
       continue;
     //For now it's enough simply copying them, because we only pass on colors within function bodies.
-    if (m_functionColorsForDeclarations.contains(imported.context()))
-      colorsForDeclarations = m_functionColorsForDeclarations[imported.context()];
-    if (m_functionDeclarationsForColors.contains(imported.context()))
-      declarationsForColors = m_functionDeclarationsForColors[imported.context()];
+    if (m_functionColorsForDeclarations.contains(imported.context(top)))
+      colorsForDeclarations = m_functionColorsForDeclarations[imported.context(top)];
+    if (m_functionDeclarationsForColors.contains(imported.context(top)))
+      declarationsForColors = m_functionDeclarationsForColors[imported.context(top)];
   }
 
   QList<Declaration*> takeFreeColors;

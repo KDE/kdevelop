@@ -202,6 +202,9 @@ protected:
   virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
+  TopDUContext* topContext() {
+    return currentContext()->topContext();
+  }
 
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
