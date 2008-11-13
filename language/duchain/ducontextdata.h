@@ -63,7 +63,8 @@ public:
   APPENDED_LIST_FIRST(DUContextData, DUContext::Import, m_importedContexts);
   APPENDED_LIST(DUContextData, LocalIndexedDUContext, m_childContexts, m_importedContexts);
   
-  ///@todo eventually move the importers into some separate structure
+  ///@todo Create an additional structure for importing to/from "temporary" contexts and classes in a way that it persists while saving/loading,
+  ///      and doesn't require changing a top-contexts data only because a class was derived from.
   APPENDED_LIST(DUContextData, IndexedDUContext, m_importers, m_childContexts);
 
   ///@warning: Whenever m_localDeclarations is read or written, DUContextDynamicData::m_localDeclarationsMutex must be locked.
