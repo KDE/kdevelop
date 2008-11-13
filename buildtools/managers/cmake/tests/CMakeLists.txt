@@ -81,4 +81,3 @@ target_link_libraries( cmakeparserutilstest
 #        ${KDevPlatform_SHELL_LIBRARY}
 #        kdev4cmakecommon ) 
 
-
