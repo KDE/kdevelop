@@ -135,10 +135,10 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   // ### do something here
     }
 
-    if(!model()->definitionForObject(base))
+    /*if(!model()->definitionForObject(base))
       openDef->setEnabled(false);
     if(!model()->declarationForObject(base))
-      openDec->setEnabled(false);
+      openDec->setEnabled(false);*/
   }
 
   return menuExt;
@@ -156,7 +156,7 @@ void ClassBrowserPlugin::openDeclaration()
 
   DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(a->data());
   if (base) {
-    Declaration* dec = model()->declarationForObject(base);
+    /*Declaration* dec = model()->declarationForObject(base);
 
     if (dec) {
       KUrl url( dec->url().str() );
@@ -168,7 +168,7 @@ void ClassBrowserPlugin::openDeclaration()
 
     } else {
       kDebug() << "No declaration for base object" << base;
-    }
+    }*/
 
   } else {
     kDebug() << "Base object has disappeared from the duchain";
@@ -183,7 +183,7 @@ void ClassBrowserPlugin::openDefinition()
 
   DUChainBasePointer base = qvariant_cast<DUChainBasePointer>(static_cast<QAction*>(sender())->data());
   if (base) {
-    Declaration* def = model()->definitionForObject(base);
+    /*Declaration* def = model()->definitionForObject(base);
 
     if (def) {
       KUrl url(def->url().str());
@@ -192,7 +192,7 @@ void ClassBrowserPlugin::openDefinition()
       readLock.unlock();
 
       ICore::self()->documentController()->openDocument(url, range.start());
-    }
+    }*/
   }
 }
 

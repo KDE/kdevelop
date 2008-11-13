@@ -35,6 +35,7 @@
 #include "language/duchain/codemodel.h"
 
 class ClassBrowserPlugin;
+class QTimer;
 
 namespace KDevelop {
  class TopDUContext;
@@ -52,12 +53,10 @@ namespace KDevelop {
  *    for those declarations are not currently loaded.  This is accomplished by using
  *    the KDevelop::CodeModel.
  * 2) It has to update itself whenever the definition-use chain changes.  Thus, it waits
- *    for notifications from KDevelop::DUChainNotifier, looks up the nodes which
- *    correspond to the changed duchain items, and modifies the node tree.
- * 3) Two separate code paths are required to implement the above two approaches to populating
- *    the class model.
- * 4) It does all this in a lazy way, to maximize performance.
- * 5) It provides some useful extras, such as sorting, searching for declarations, and filtering.
+ *    for notifications from KDevelop::DUChainNotifier, and remembers which files have had
+ *    duchain updates, so that they can be batch-checked later.
+ * 3) It does all this in a lazy way, to maximize performance.
+ * 4) It provides some useful extras, such as sorting, searching for declarations, and filtering.
  */
 class ClassModel : public QAbstractItemModel
 {
@@ -78,8 +77,6 @@ public:
   Node* objectForIdentifier(const KDevelop::QualifiedIdentifier& identifier) const;
   Node* objectForIdentifier(const KDevelop::IndexedQualifiedIdentifier& identifier) const;
 
-  KDevelop::Declaration* declarationForObject(const KDevelop::DUChainBasePointer& pointer) const;
-  KDevelop::Declaration* definitionForObject(const KDevelop::DUChainBasePointer& pointer) const;
 
   void setFilterByProject(bool filterByProject);
 
@@ -121,6 +118,8 @@ private:
   void startLoading();
   void finishLoading();
 
+  void startUpdateTimer();
+
   void referenceFile(const KDevelop::IndexedString& file);
   void dereferenceFile(const KDevelop::IndexedString& file);
 
@@ -131,7 +130,6 @@ private:
   static void getDuObject(Node* node);
 
   Node* discover(Node* node) const;
-  KDevelop::DUContext* trueParent(KDevelop::DUContext* parent) const;
 
   void branchChanged(KDevelop::DUContext* context);
 
@@ -152,6 +150,9 @@ private:
   Node* m_globalVariables;
   mutable QHash<KDevelop::IndexedQualifiedIdentifier, Node*> m_objects;
   QHash<KDevelop::IndexedString, int> m_displayedFiles;
+
+  QSet<KDevelop::IndexedString> m_updateFiles;
+  QTimer* m_updateTimer;
 
   KDevelop::IDocument* m_filterDocument;
   bool m_filterProject;

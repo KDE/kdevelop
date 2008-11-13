@@ -27,6 +27,7 @@
 #include <kprocess.h>
 
 #include <QMap>
+#include <QTimer>
 
 #include "interfaces/idocument.h"
 #include "interfaces/idocumentcontroller.h"
@@ -82,7 +83,7 @@ class ClassModel::Node
     void sortChildren();
 
     void resetEncounteredStatus();
-    void removeStaleItems(const ClassModel* model, DUContext* topContext);
+    void removeStaleItems(const ClassModel* model, const IndexedString& file);
     void removeItems(const ClassModel* model, const IndexedString& file);
 
     const QList<DUContextPointer>& namespaceContexts() const { return m_namespaceContexts; }
@@ -129,11 +130,15 @@ ClassModel::ClassModel(ClassBrowserPlugin* parent)
   , m_topNode(0L)
   , m_globalFunctions(0)
   , m_globalVariables(0)
+  , m_updateTimer(new QTimer(this))
   , m_filterDocument(0L)
   , m_filterProject(true)
   , m_loading(false)
 {
   //new ModelTest(this);
+
+  // 2 second update interval
+  m_updateTimer->setInterval(2000);
 
   connect(DUChain::self()->notifier(), SIGNAL(branchAdded(KDevelop::DUContextPointer)), SLOT(branchAdded(KDevelop::DUContextPointer)), Qt::QueuedConnection);
   connect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), SLOT(branchModified(KDevelop::DUContextPointer)), Qt::QueuedConnection);
@@ -279,28 +284,6 @@ void ClassModel::setFilterByProject(bool filterByProject)
     m_filterProject = filterByProject;
     resetModel();
   }
-}
-
-bool ClassModel::filterObject(DUChainBase* object) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  //If the range is empty, it was probably created from a macro like Q_OBJECT
-  if(object->range().isEmpty() && dynamic_cast<Declaration*>(object))
-    return true;
-
-  KUrl url(object->url().str());
-
-  if (m_filterDocument)
-    return m_filterDocument && !(url == m_filterDocument->url());
-
-  if (!m_searchString.isEmpty())
-    if (Declaration* declaration = dynamic_cast<Declaration*>(object))
-      // TODO regexp?
-      if (!declaration->identifier().toString().contains(m_searchString, Qt::CaseInsensitive))
-        return true;
-
-  return false;
 }
 
 int ClassModel::columnCount(const QModelIndex & parent) const
@@ -628,79 +611,24 @@ void ClassModel::refreshNode(Node* const node, DUContext* context, QList<Node*>*
     }
   }
 
-  if (!context) {
-    // Load objects from the code model
-    int level = node->depth();
-    foreach (const IndexedString& file, node->relevantFiles()) {
-      refreshNodes(file, level, node->qualifiedIdentifier());
-    }
+  // Load objects from the code model
+  int level = node->depth();
+  foreach (const IndexedString& file, node->relevantFiles()) {
+    refreshNodes(file, level, node->qualifiedIdentifier());
 
-  } else {
-    // only lock here (not above) to reduce unnecessary duchain locking
-    DUChainReadLocker l(DUChain::lock());
+    if (childrenDiscovered) {
+      if (node == m_topNode) {
+        node->removeStaleItems(this, file);
+        m_globalFunctions->removeStaleItems(this, file);
+        m_globalVariables->removeStaleItems(this, file);
 
-    if (context && m_displayedFiles.contains(context->url())) {
-      if (!filterObject(context)) {
-        // We only add the definitions, not the contexts
-        foreach (Declaration* declaration, context->localDeclarations()) {
-          if (!declaration->isForwardDeclaration() && !filterObject(declaration)) {
-
-            if (!m_filterDocument && dynamic_cast<FunctionDefinition*>(declaration))
-              // This is a definition, skip it
-              continue;
-
-            if (declaration->identifier().isEmpty())
-              // Skip anonymous declarations
-              continue;
-
-            if (declaration->kind() == Declaration::NamespaceAlias)
-              // Skip importing declarations
-              continue;
-
-            Node* parent = node;
-
-            CodeModelItem::Kind kind = CodeModelItem::Unknown;
-
-            if (FunctionType::Ptr::dynamicCast(declaration->abstractType())) {
-              kind = CodeModelItem::Function;
-              parent = m_globalFunctions;
-
-            } else if (!StructureType::Ptr::dynamicCast(declaration->abstractType())) {
-              parent = m_globalVariables;
-              kind = CodeModelItem::Variable;
-
-            } else {
-              kind = CodeModelItem::Class;
-            }
-
-            Node* newChild = createPointer(declaration, (node == m_topNode) ? parent : node);
-            newChild->setKind(kind);
-            newChild->setIdentifier(declaration->identifier());
-
-            parent->insertChild(newChild, this);
-
-            if (newChild->childrenDiscovered())
-              refreshNode(newChild);
-
-            if (resultChildren)
-              resultChildren->append(newChild);
-          }
-        }
+      } else {
+        node->removeStaleItems(this, IndexedString());
       }
     }
   }
 
-  if (childrenDiscovered) {
-    if (node == m_topNode) {
-      node->removeStaleItems(this, context);
-      m_globalFunctions->removeStaleItems(this, context);
-      m_globalVariables->removeStaleItems(this, context);
-
-    } else {
-      node->removeStaleItems(this, 0);
-    }
-
-  } else {
+  if (!childrenDiscovered) {
     node->sortChildren();
     node->setChildrenDiscovered();
   }
@@ -726,33 +654,6 @@ void ClassModel::getDuObject(Node* node)
   }
 }
 
-DUContext* ClassModel::trueParent(DUContext* parent) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  if (!parent)
-    return 0;
-
-  forever {
-    switch (parent->type()) {
-      case DUContext::Global:
-      case DUContext::Class:
-      case DUContext::Namespace:
-        return parent;
-
-      default:
-        break;
-    }
-
-    if (parent->parentContext())
-      parent = parent->parentContext();
-    else
-      break;
-  }
-
-  return parent;
-}
-
 void ClassModel::branchAdded(DUContextPointer context)
 {
   DUChainReadLocker readLock(DUChain::lock());
@@ -764,23 +665,16 @@ void ClassModel::branchAdded(DUContextPointer context)
 
 void ClassModel::branchChanged(KDevelop::DUContext * context)
 {
-  return;
-
   Q_ASSERT(context);
+  m_updateFiles.insert(context->url());
 
-  DUContext* parent = trueParent(context);
-  Q_ASSERT(parent);
+  startUpdateTimer();
+}
 
-  if (parent->type() == DUContext::Global) {
-    refreshNode(m_topNode, parent);
-
-  } else {
-    Node* node = objectForIdentifier(parent->scopeIdentifier(true));
-
-    if (node && node->childrenDiscovered())
-      refreshNode(node, parent);
-    // Else, the parent node is not yet discovered, it will be figured out later if needed
-  }
+void ClassModel::startUpdateTimer()
+{
+  if (!m_updateTimer->isActive())
+    m_updateTimer->start();
 }
 
 void ClassModel::branchModified(KDevelop::DUContextPointer context)
@@ -795,7 +689,6 @@ void ClassModel::branchRemoved(DUContextPointer context, DUContextPointer parent
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  // TODO possibly could be more efficient... but probably not worth the effort
   if (parentContext)
     branchChanged(parentContext.data());
 }
@@ -810,20 +703,6 @@ ClassModel::Node* ClassModel::createPointer(const KDevelop::QualifiedIdentifier&
   Node* n = new Node(id.last(), parent);
   m_objects.insert(iid, n);
   return n;
-}
-
-ClassModel::Node* ClassModel::createPointer(Declaration* dec, Node* parent) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  Node* ret = objectForIdentifier( dec->qualifiedIdentifier() );
-
-  if (!ret) {
-    ret = new Node(dec, parent);
-    m_objects.insert(IndexedQualifiedIdentifier(dec->qualifiedIdentifier()), ret);
-  }
-
-  return ret;
 }
 
 QVariant ClassModel::data(const QModelIndex& index, int role) const
@@ -862,23 +741,18 @@ QVariant ClassModel::data(Node* node, int role)
       } else if (Declaration* dec = dynamic_cast<Declaration*>(base)) {
         switch (role) {
           case Qt::DisplayRole: {
-            bool fullScope = false;
             if(dynamic_cast<FunctionDefinition*>(dec)) {
               Declaration* decl = static_cast<FunctionDefinition*>(dec)->declaration();
               if(decl) {
                 dec = decl;
-                fullScope = true;
               }
             }
 
-            QString ret;
-            if(!fullScope)
-              ret = dec->identifier().toString();
-            else
-              ret = dec->qualifiedIdentifier().toString();
+            QString ret = dec->identifier().toString();
 
             if (FunctionType::Ptr type = dec->type<FunctionType>())
               ret += type->partToString(FunctionType::SignatureArguments);
+
             return ret;
           }
           case Qt::DecorationRole:
@@ -914,60 +788,6 @@ QVariant ClassModel::data(Node* node, int role)
   return QVariant();
 }
 
-
-Declaration* ClassModel::declarationForObject(const DUChainBasePointer& pointer) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  if (!pointer)
-    return 0L;
-
-  if (Declaration* declaration = dynamic_cast<Declaration*>(pointer.data())) {
-
-    if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(declaration))
-      if(def->declaration())
-        return def->declaration();
-
-    return declaration;
-
-  } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
-    if (context->owner())
-      if(dynamic_cast<FunctionDefinition*>(context->owner()) && static_cast<FunctionDefinition*>(context->owner())->declaration())
-        return static_cast<FunctionDefinition*>(context->owner())->declaration();
-      else
-        return context->owner();
-  }
-
-  return 0L;
-}
-
-Declaration* ClassModel::definitionForObject(const DUChainBasePointer& pointer) const
-{
-  ENSURE_CHAIN_READ_LOCKED
-
-  if (!pointer)
-    return 0L;
-
-  if (Declaration* d = dynamic_cast<Declaration*>(pointer.data())) {
-    if(!dynamic_cast<FunctionDefinition*>(d)) {
-      if(FunctionDefinition::definition(d))
-        return FunctionDefinition::definition(d);
-      else
-        return 0L;
-    }
-    return d;
-  } else if (DUContext* context = dynamic_cast<DUContext*>(pointer.data())) {
-    if (context->owner()) {
-      if(context->owner()->isDefinition())
-        return context->owner();
-      else
-        if(FunctionDefinition::definition(context->owner()))
-          return FunctionDefinition::definition(context->owner());
-    }
-  }
-
-  return 0L;
-}
 
 void ClassModel::Node::insertChild(Node * node, const ClassModel * model)
 {
@@ -1029,19 +849,25 @@ void ClassModel::Node::resetEncounteredStatus()
   m_childrenEncountered = new QVector<bool>(m_children.count());
 }
 
-void ClassModel::Node::removeStaleItems(const ClassModel * model, DUContext* topContext)
+void ClassModel::Node::removeStaleItems(const ClassModel * model, const IndexedString& file)
 {
   Q_ASSERT(m_childrenEncountered);
 
-  // Top level node must have a context provided, so only those with the same top contexts get removed
-  Q_ASSERT(m_parent || topContext);
+  // Top level node must have a file provided, so only those with the same top contexts get removed
+  Q_ASSERT(m_parent || !file.isEmpty());
 
-  DUChainReadLocker l(topContext ? DUChain::lock() : 0);
-
-  for (int i = m_childrenEncountered->count() - 1; i >= 0; --i)
-    if (!m_childrenEncountered->at(i))
-      if (!topContext || (m_children[i]->duObject() && m_children[i]->duObject()->topContext() == topContext))
+  for (int i = m_childrenEncountered->count() - 1; i >= 0; --i) {
+    if (!m_childrenEncountered->at(i)) {
+      if (file.isEmpty()) {
         removeChild(m_children[i], model);
+      } else if (!m_children[i]->relevantFiles().contains(file)) {
+        if (m_children[i]->relevantFiles().count() == 1)
+          removeChild(m_children[i], model);
+        else
+          m_children[i]->removeRelevantFile(file);
+      }
+    }
+  }
 
   delete m_childrenEncountered;
   m_childrenEncountered = 0;
