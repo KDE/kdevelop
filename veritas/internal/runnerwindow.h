@@ -26,6 +26,7 @@
 #include <QTreeView>
 #include <QList>
 #include <QTime>
+#include <KUrl>
 #include "../veritasexport.h"
 
 namespace KDevelop { class IProject; }
@@ -90,11 +91,11 @@ public: // Operations
     ResultsProxyModel* resultsProxyModel() const;
 
     const Ui::RunnerWindow* ui() const;
-    KSelectAction* projectPopup() const;
 
     QWidget* resultsWidget() const;
 
     void resetProgressBar() const;
+    KDevelop::IProject* selectedProject() const;
 
 Q_SIGNALS:
     void runCompleted() const;
@@ -143,6 +144,9 @@ private Q_SLOTS:
     /*! If test with index @p i is currently expanded then collapse it.
         Vice versa if it is currently collapsed. */
     void expandOrCollapse(const QModelIndex& i) const;
+
+    void setSelectedProject(QAction*);
+
 
 private: // Operations
 
@@ -201,11 +205,12 @@ private:
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     OverlayManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
-    QMap<KDevelop::IProject*, QAction*> m_project2action;
+    QMap<KUrl, QAction*> m_project2action;
     QTime m_stopWatch;                 // times test-runs, shown in the gui
     TestExecutor* m_executor;
     mutable bool m_isRunning;
     VerboseToggle* m_verboseToggle;
+    KUrl m_currentProject;
 };
 
 } // namespace

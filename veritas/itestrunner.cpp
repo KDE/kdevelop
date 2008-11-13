@@ -73,7 +73,6 @@ class ITestRunner::Private
 public:
     Private() :
         window(0),
-        selectedProject(0),
         resultsView(0),
         resultsArea(0),
         previousRoot(0)
@@ -84,7 +83,6 @@ public:
     }
 
     RunnerWindow* window;
-    IProject* selectedProject;
     Sublime::View *resultsView;
     Sublime::Area *resultsArea;
     ResultsModel *resultsModel;
@@ -167,14 +165,9 @@ QWidget* ITestRunner::runnerWidget()
     connect(ipc, SIGNAL(projectClosed(KDevelop::IProject*)),
             d->window, SLOT(rmProjectFromPopup(KDevelop::IProject*)));
 
-    connect(d->window->projectPopup(), SIGNAL(triggered(QAction*)),
-            this, SLOT(setSelected(QAction*)));
-
     connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
 
-    connect(d->window, SIGNAL(openVerbose(Veritas::Test*)),
-            this, SLOT(openVerbose(Veritas::Test*)));
     reload();
     return d->window;
 
@@ -188,13 +181,7 @@ void ITestRunner::reload()
 
 IProject* ITestRunner::project() const
 {
-    return d->selectedProject;
-}
-
-void ITestRunner::setSelected(QAction* action)
-{
-    kDebug() << action->data().value<IProject*>();
-    d->selectedProject = action->data().value<IProject*>();
+    return d->window->selectedProject();
 }
 
 namespace {

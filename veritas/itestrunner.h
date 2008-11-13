@@ -69,7 +69,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void reload();
-    void setSelected(QAction*);
     void removeResultsView();
     void setupToolView(Veritas::Test*);
 

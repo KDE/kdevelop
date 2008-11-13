@@ -55,6 +55,7 @@
 #include <QBrush>
 #include <QColor>
 #include <QHeaderView>
+#include <interfaces/iprojectcontroller.h>
 
 using KDevelop::IProject;
 Q_DECLARE_METATYPE(KDevelop::IProject*)
@@ -164,30 +165,52 @@ void RunnerWindow::addProjectMenu()
     KSelectAction *m = new KSelectAction(i18n("Project"), this);
     m->setToolTip(i18n("Select project"));
     m->setToolBarMode(KSelectAction::MenuMode);
-    m->setEditable(true);
     m_ui->runnerToolBar->addSeparator();
     m_ui->runnerToolBar->addAction(m);
     m_projectPopup = m;
+    connect(m_projectPopup, SIGNAL(triggered(QAction*)),
+            SLOT(setSelectedProject(QAction*)));
+}
+
+void RunnerWindow::setSelectedProject(QAction* action)
+{
+    if (!action) return;
+    KUrl projectRoot = action->data().value<KUrl>();
+    Q_ASSERT(m_project2action.contains(projectRoot));
+    m_currentProject = projectRoot;
 }
 
 void RunnerWindow::addProjectToPopup(IProject* proj)
 {
-    kDebug() << "Adding project to popup " << proj->name();
     QAction* p = new QAction(proj->name(), this);
     QVariant v;
-    v.setValue(proj);
+    v.setValue(proj->folder());
     p->setData(v);
     m_projectPopup->addAction(p);
-    m_project2action[proj] = p;
+    m_project2action[proj->folder()] = p;
 }
 
 void RunnerWindow::rmProjectFromPopup(IProject* proj)
 {
-    if (m_project2action.contains(proj)) {
-        QAction* p = m_project2action[proj];
+    KUrl projectRoot = proj->folder();
+    if (m_project2action.contains(projectRoot)) {
+        QAction* p = m_project2action[projectRoot];
         m_projectPopup->removeAction(p);
-        m_project2action.remove(proj);
+        m_project2action.remove(projectRoot);
     }
+}
+
+IProject* RunnerWindow::selectedProject() const
+{
+    if (!m_currentProject.isValid()) return 0;
+    IProject* selected = 0;
+    foreach(IProject* proj, ICore::self()->projectController()->projects()) {
+        if (m_currentProject == proj->folder()) {
+            selected = proj;
+            break;
+        }
+    }
+    return selected;
 }
 
 namespace
@@ -238,11 +261,6 @@ void RunnerWindow::connectFocusStuff()
             SLOT(scrollToHighlightedRows()));
     connect(resultsView(), SIGNAL(pressed(const QModelIndex&)),
             SLOT(scrollToHighlightedRows()));
-}
-
-KSelectAction* RunnerWindow::projectPopup() const
-{
-    return m_projectPopup;
 }
 
 // helper for RunnerWindow(...) ctor
