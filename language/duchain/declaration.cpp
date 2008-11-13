@@ -311,6 +311,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
 
   d->m_type = type->indexed();
 
+  updateCodeModel();
   //if (d->m_type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
