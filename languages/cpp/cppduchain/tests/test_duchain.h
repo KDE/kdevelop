@@ -116,6 +116,8 @@ private slots:
   void testDeclarationId();
   void testConst();
   void testEnumOverride();
+  void testDoWhile();
+  void testCodeModel();
 
   void testSymbolTableValid();
   

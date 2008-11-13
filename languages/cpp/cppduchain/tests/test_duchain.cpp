@@ -55,6 +55,7 @@
 #include "classdeclaration.h"
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/codemodel.h>
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -1684,6 +1685,40 @@ void TestDUChain::testFunctionDefinition6() {
   QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[1]), top->localDeclarations()[0]);
   QVERIFY(top->childContexts()[1]->importers().contains(top->childContexts()[2]));
   QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+  release(top);
+}
+
+void TestDUChain::testCodeModel() {
+  QByteArray text("class C{}; void test() {}; ");
+  TopDUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  uint itemCount;
+  const CodeModelItem* items;
+  CodeModel::self().items( top->url(), itemCount, items );
+
+  uint validCount = 0;
+  for(uint a = 0; a < itemCount; ++a) {
+    if(items[a].id.isValid()) {
+      if(items[a].id == QualifiedIdentifier("C"))
+        QVERIFY(items[a].kind == CodeModelItem::Class);
+      if(items[a].id == QualifiedIdentifier("test"))
+        QVERIFY(items[a].kind == CodeModelItem::Function);
+      ++validCount;
+    }
+  }
+  
+  release(top);
+}
+
+void TestDUChain::testDoWhile() {
+  QByteArray text("void test() { do { int i = 2; i -= 3; } while(1); ");
+  TopDUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+
   release(top);
 }
 
