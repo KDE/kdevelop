@@ -1803,10 +1803,11 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
 }
 
 bool DUContext::Import::isBackwardMapped() const {
-  if(m_declaration.isValid())
+  return true; //Always do backward-mapping. We just have to find a solution for temporary imports.
+/*  if(m_declaration.isValid())
     return !m_declaration.specialization();
   else
-    return true;
+    return true;*/
 }
 
 }
