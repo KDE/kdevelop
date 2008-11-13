@@ -37,10 +37,34 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool isLoaded() const { return wrapped->isLoaded(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator!=(x0); }
+		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE unsigned int index() const { return wrapped->index(); }
+		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
+		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
+		Q_SCRIPTABLE void setDummyData(short unsigned int x0, short unsigned int x1) { wrapped->setDummyData(x0, x1); }
+		Q_SCRIPTABLE QPair< short unsigned int, short unsigned int > dummyData() const { return wrapped->dummyData(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 	private:
 		KDevelop::IndexedTopDUContext* wrapped;
+};
+
+class KrossKDevelopIndexedTopDUContextEmbeddedTreeHandler : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopIndexedTopDUContextEmbeddedTreeHandler(KDevelop::IndexedTopDUContextEmbeddedTreeHandler* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedTopDUContextEmbeddedTreeHandler"); }
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE int leftChild(const KDevelop::IndexedTopDUContext& x0) { return wrapped->leftChild(x0); }
+		Q_SCRIPTABLE void setLeftChild(KDevelop::IndexedTopDUContext& x0, int x1) { wrapped->setLeftChild(x0, x1); }
+		Q_SCRIPTABLE int rightChild(const KDevelop::IndexedTopDUContext& x0) { return wrapped->rightChild(x0); }
+		Q_SCRIPTABLE void setRightChild(KDevelop::IndexedTopDUContext& x0, int x1) { wrapped->setRightChild(x0, x1); }
+		Q_SCRIPTABLE void createFreeItem(KDevelop::IndexedTopDUContext& x0) { wrapped->createFreeItem(x0); }
+		Q_SCRIPTABLE void copyTo(const KDevelop::IndexedTopDUContext& x0, KDevelop::IndexedTopDUContext& x1) { wrapped->copyTo(x0, x1); }
+		Q_SCRIPTABLE bool isFree(const KDevelop::IndexedTopDUContext& x0) { return wrapped->isFree(x0); }
+		Q_SCRIPTABLE bool equals(const KDevelop::IndexedTopDUContext& x0, const KDevelop::IndexedTopDUContext& x1) { return wrapped->equals(x0, x1); }
+	private:
+		KDevelop::IndexedTopDUContextEmbeddedTreeHandler* wrapped;
 };
 
 class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
@@ -61,6 +85,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void deleteSelf() { wrapped->deleteSelf(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* sharedDataOwner() const { return wrapped->sharedDataOwner(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
+		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexed() const { return wrapped->indexed(); }
 		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::ParsingEnvironmentFile > parsingEnvironmentFile() const { return wrapped->parsingEnvironmentFile(); }
@@ -136,6 +161,18 @@ bool b_KDevelopTopDUContext1=krosstopducontext_registerHandler("TopDUContext*", 
 bool b_KDevelopTopDUContext=krosstopducontext_registerHandler("KDevelop::TopDUContext*", _kDevelopTopDUContextHandler);
 QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type){ return _kDevelopTopDUContextHandler(type); }
 QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type) { return _kDevelopTopDUContextHandler((void*) type); }
+
+QVariant _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::IndexedTopDUContextEmbeddedTreeHandler* t=static_cast<KDevelop::IndexedTopDUContextEmbeddedTreeHandler*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::IndexedTopDUContextEmbeddedTreeHandler*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopIndexedTopDUContextEmbeddedTreeHandler(t, 0));
+}
+bool b_KDevelopIndexedTopDUContextEmbeddedTreeHandler1=krosstopducontext_registerHandler("IndexedTopDUContextEmbeddedTreeHandler*", _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler);
+bool b_KDevelopIndexedTopDUContextEmbeddedTreeHandler=krosstopducontext_registerHandler("KDevelop::IndexedTopDUContextEmbeddedTreeHandler*", _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler);
+QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type){ return _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(type); }
+QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(const KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type) { return _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler((void*) type); }
 
 QVariant _kDevelopIndexedTopDUContextHandler(void* type)
 {

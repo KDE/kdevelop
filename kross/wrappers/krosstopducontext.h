@@ -7,6 +7,7 @@
 
 namespace KDevelop { class ReferencedTopDUContext; }
 namespace KDevelop { class IndexedTopDUContext; }
+namespace KDevelop { class IndexedTopDUContextEmbeddedTreeHandler; }
 namespace KDevelop { class TopDUContext; }
 namespace KDevelop { class Cache; }
 namespace Handlers
@@ -18,6 +19,10 @@ namespace Handlers
 	QVariant _kDevelopTopDUContextHandler(void* type);
 	QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type);
 	QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type);
+
+	QVariant _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(void* type);
+	QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type);
+	QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(const KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type);
 
 	QVariant _kDevelopIndexedTopDUContextHandler(void* type);
 	QVariant kDevelopIndexedTopDUContextHandler(KDevelop::IndexedTopDUContext* type);
