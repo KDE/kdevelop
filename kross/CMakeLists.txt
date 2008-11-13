@@ -51,7 +51,7 @@ if(KDEVCPPDUCHAIN)
     kdev_create_kross_iface(${QT_QTGUI_INCLUDE_DIR}/qtoolbar.h QToolBar)
         
 else(KDEVCPPDUCHAIN)
-    message(STATUS "You can't generate interfaces without specifying KDEVCPPDUCHAIN in the cache.")
+    message(STATUS "KDEVCPPDUCHAIN pointing to cppduchain directory in kdevelop not in the cache. Re-Generating kross-wrappers not supported, will use the pre-generated code.")
 endif(KDEVCPPDUCHAIN)
 
 set(kdevkrossplugin_SRCS
