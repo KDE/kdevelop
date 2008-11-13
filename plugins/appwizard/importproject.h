@@ -40,7 +40,8 @@ protected:
     bool eventFilter ( QObject * watched, QEvent * event );
 
 protected slots:
-    virtual void dirChanged();
+    void dirChanged();
+    void validateProjectName( const QString& name );
 
 private slots:
 //    void slotFinishedCheckout( QString destinationDir );

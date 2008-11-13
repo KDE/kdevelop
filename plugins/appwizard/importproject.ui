@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>220</height>
+    <width>447</width>
+    <height>248</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -141,6 +141,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="errorLabel" >
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer>
