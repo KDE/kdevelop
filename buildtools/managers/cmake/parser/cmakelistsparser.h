@@ -85,6 +85,9 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */
 
+    KDevelop::SimpleRange range() const
+    { return KDevelop::SimpleRange(line-1, column-1, endLine-1, endColumn); }
+
     bool operator==(const CMakeFunctionDesc &other) const;
     void addArguments( const QStringList& );
     QString writeBack() const;

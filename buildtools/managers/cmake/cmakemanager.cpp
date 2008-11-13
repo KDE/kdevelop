@@ -521,6 +521,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 a->setUrl(path);
                 a->setDefinitions(v.definitions());
                 folderList.append( a );
+                
+                DescriptorAttatched* datt=static_cast<DescriptorAttatched*>(a);
+                datt->setDescriptor(v.folderDeclarationDescriptor(subf));
             }
         }
         
@@ -566,6 +569,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                         targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
                         break;
                 }
+                DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
+                datt->setDescriptor(v.targetDeclarationDescriptor(outputName));
 
                 foreach( const QString & sFile, dependencies )
                 {
@@ -984,6 +989,27 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder,
         QTextStream out(&f);
         out << "\n";
         
+        bool saved=e.document()->documentSave();
+        if(!saved)
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                  i18n("Could not save the change."));
+    }
+    return 0;
+}
+
+bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
+{
+    KUrl lists=it->url().upUrl();
+    lists.addPath("CMakeLists.txt");
+    
+    ApplyChangesWidget e(i18n("Remove a folder called '%1'.", it->text()), lists);
+    CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
+    KTextEditor::Range r=cmit->descriptor().range().textRange();
+    kDebug(9042) << "For " << lists << " remove " << r;
+    e.document()->removeText(r);
+    
+    if(e.exec())
+    {
         bool saved=e.document()->documentSave();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),

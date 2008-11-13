@@ -109,6 +109,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool targetHasProperty(const QString& targetName, const QString &propName) const
             { return m_targetProperties[targetName].contains(propName); }
             
+        CMakeFunctionDesc folderDeclarationDescriptor(const QString& name) const { return m_folderDesc[name]; }
+        CMakeFunctionDesc targetDeclarationDescriptor(const QString& name) const { return m_targetDesc[name]; }
+            
         int walk(const CMakeFileContent& fc, int line);
         
 //         static VariableType hasVariable(const QString &name);
@@ -132,6 +135,13 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QString testExecutable(const QString& test) const;
         QStringList testArguments(const QString& test) const;
 
+        struct VisitorState
+        {
+            const CMakeFileContent* code;
+            int line;
+            KDevelop::ReferencedTopDUContext context;
+        };
+        
     protected:
         struct IntPair
         {
@@ -155,12 +165,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QStringList theValue(const QString& exp, const IntPair& p) const;
 
         typedef QMap<QString, QString> TargetProperties;
-        struct VisitorState
-        {
-            const CMakeFileContent* code;
-            int line;
-            KDevelop::ReferencedTopDUContext context;
-        };
         
         void defineTarget(const QString& id, const QStringList& sources, TargetType t);
         int notImplemented(const QString& n) const;
@@ -169,6 +173,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void createUses(const CMakeFunctionDesc& ast);
         unsigned int currentIdentity() const;
         void printBacktrace(const QStack<VisitorState> &backtrace);
+        VisitorState stackTop() const;
 
         QStringList m_modulePath;
         QString m_projectName;
@@ -179,6 +184,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QMap<QString, KDevelop::IndexedDeclaration> m_declarationsPerTarget;
         QMap<QString, TargetType> m_targetsType;
         QMap<QString, TargetProperties> m_targetProperties;
+        QMap<QString, CMakeFunctionDesc> m_folderDesc;
+        QMap<QString, CMakeFunctionDesc> m_targetDesc;
         
         QStack< VisitorState > m_backtrace;
         QString m_root;

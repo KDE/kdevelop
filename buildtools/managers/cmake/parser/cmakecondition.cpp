@@ -245,9 +245,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 last= (pathA.lastModified()>pathB.lastModified());
                 itEnd=it2-1;
             }
-            /*default:
+            default:
                 kDebug(9042) << "no operator:" << *it2;
-                break;*/
+                Q_ASSERT(false);
+                break;
         }
     }
     return last;

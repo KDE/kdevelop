@@ -39,6 +39,24 @@ namespace KDevelop {
 
 class CMakeProjectManager;
 
+class DescriptorAttatched
+{
+    public:
+        void setDescriptor(const CMakeFunctionDesc & desc) { m_desc=desc; }
+        CMakeFunctionDesc descriptor() const { return m_desc; }
+    private:
+        CMakeFunctionDesc m_desc;
+};
+
+class DUChainAttatched
+{
+    public:
+        DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
+        KDevelop::IndexedDeclaration declaration() const { return decl; }
+    private:
+        KDevelop::IndexedDeclaration decl;
+};
+
 /**
  * The project model item for CMake folders.
  *
@@ -46,7 +64,7 @@ class CMakeProjectManager;
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
+class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
 {
     public:
         CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
@@ -65,17 +83,8 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem
         Definitions m_defines;
 };
 
-class DUChainAttatched
-{
-    public:
-        DUChainAttatched(KDevelop::IndexedDeclaration _decl) : decl(_decl) {}
-        KDevelop::IndexedDeclaration declaration() const { return decl; }
-    private:
-        KDevelop::IndexedDeclaration decl;
-};
-
 class CMakeExecutableTargetItem 
-    : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched
+    : public KDevelop::ProjectExecutableTargetItem, public DUChainAttatched, public DescriptorAttatched
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
@@ -90,7 +99,7 @@ class CMakeExecutableTargetItem
 };
 
 class CMakeLibraryTargetItem
-    : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched
+    : public KDevelop::ProjectLibraryTargetItem, public DUChainAttatched, public DescriptorAttatched
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,

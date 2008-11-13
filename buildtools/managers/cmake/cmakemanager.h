@@ -86,7 +86,7 @@ public:
 
     virtual bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFolder( KDevelop::ProjectFolderItem* ) { return false; }
+    virtual bool removeFolder( KDevelop::ProjectFolderItem* );
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
 

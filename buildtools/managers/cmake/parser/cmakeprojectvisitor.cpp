@@ -300,6 +300,10 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
     kDebug(9042) << "adding subdirectory" << subd->sourceDir();
+    
+    VisitorState p=stackTop();
+    m_folderDesc[subd->sourceDir()]=p.code->at(p.line);
+    
     m_subdirectories += subd->sourceDir();
     return 1;
 }
@@ -325,13 +329,8 @@ void CMakeProjectVisitor::printBacktrace(const QStack<VisitorState> &backtrace)
     }
 }
 
-void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
+CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 {
-    if (!m_targetsType.contains(id))
-    {
-        m_targetsType[id]=t;
-    }
-
     VisitorState p;
     QString filename=m_backtrace.front().code->at(m_backtrace.front().line).filePath;
     QStack<VisitorState>::const_iterator it=m_backtrace.constBegin();
@@ -343,6 +342,16 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
 
         p=*it;
     }
+    return p;
+}
+
+void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
+{
+    if (!m_targetsType.contains(id))
+        kDebug(9032) << "warning! there already was a target called" << id;
+    m_targetsType[id]=t;
+
+    VisitorState p=stackTop();
 
     DUChainWriteLocker lock(DUChain::lock());
     Declaration *d = new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
@@ -351,6 +360,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
 //     kDebug(9042) << "looooooool" << d
 //         << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
     m_filesPerTarget.insert(id, sources);
+    m_targetDesc[id]=p.code->at(p.line);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
