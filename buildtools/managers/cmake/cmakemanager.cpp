@@ -965,29 +965,29 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder,
     Q_ASSERT(!relative.contains("/"));
 //     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
     
-    KDialog changes;
-    ApplyChangesWidget *e=new ApplyChangesWidget(lists, &changes);
-    changes.setMainWidget(e);
+    ApplyChangesWidget e(i18n("Create a folder called '%1'.", relative), lists);
     
-    e->document()->insertLine(e->document()->lines(), QString("add_subdirectory(%1)").arg(relative));
+    e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
     
-    if(changes.exec()) {
+    if(e.exec())
+    {
         KUrl newCMakeLists(folder);
         newCMakeLists.addPath("CMakeLists.txt");
         
         QFile f(newCMakeLists.toLocalFile());
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                     i18n("Could not create the directory's CMakeLists.txt file."));
+                                  i18n("Could not create the directory's CMakeLists.txt file."));
             return 0;
         }
         QTextStream out(&f);
         out << "\n";
         
-        bool saved=e->document()->documentSave();
+        bool saved=e.document()->documentSave();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                     i18n("Could not save the change."));
+                                  i18n("Could not save the change."));
     }
     return 0;
 }
