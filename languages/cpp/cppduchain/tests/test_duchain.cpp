@@ -1712,12 +1712,14 @@ void TestDUChain::testCodeModel() {
 }
 
 void TestDUChain::testDoWhile() {
-  QByteArray text("void test() { do { int i = 2; i -= 3; } while(1); ");
+  QByteArray text("void test() { int i; do { i = 2; i -= 3; } while(1); ");
   TopDUContext* top = parse(text, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+  kDebug() << top->childContexts()[1]->childContexts()[0] << top->childContexts()[1] << top;
+  QCOMPARE(top->childContexts()[1]->childContexts()[0]->usesCount(), 2);
 
   release(top);
 }

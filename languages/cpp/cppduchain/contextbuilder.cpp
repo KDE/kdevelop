@@ -919,14 +919,19 @@ void ContextBuilder::visitDoStatement(DoStatementAST *node)
     kWarning() << "error, no statement"; //Warning instead of crashing here
     return;
   }
-  DUContext* secondParentContext = openContext(node->statement, DUContext::Other);
+  //We don't need to create a context for compound-statements, since those create a context by themselves
+  if(node->statement->kind != AST::Kind_CompoundStatement) {
+    openContext(node->statement, DUContext::Other);
 
-  visit(node->statement);
+    visit(node->statement);
 
-  closeContext();
+    closeContext();
+  }else{
+    visit(node->statement);
+  }
 
   if (node->expression) {
-    const bool contextNeeded = createContextIfNeeded(node->expression, secondParentContext);
+    const bool contextNeeded = createContextIfNeeded(node->expression, lastContext());
 
     visit(node->expression);
 
