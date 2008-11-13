@@ -30,6 +30,7 @@ set( cmakemanager_SRCS
   cmakemanager.cpp
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
+  applychangeswidget.cpp
 )
 
 set( cmakemanager_UI

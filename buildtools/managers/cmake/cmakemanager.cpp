@@ -36,6 +36,7 @@
 #include <KAction>
 #include <KMessageBox>
 #include <kio/job.h>
+#include <ktexteditor/document.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -57,6 +58,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/codecompletion/codecompletion.h>
 
+#include "applychangeswidget.h"
 #include "cmakeconfig.h"
 #include "cmakemodelitems.h"
 #include "cmakehighlighting.h"
@@ -360,6 +362,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 
         m_folderPerUrl[folderUrl]=m_rootItem;
         connect(m_watchers[project], SIGNAL(dirty(const QString&)), this, SLOT(dirtyFile(const QString&)));
+        Q_ASSERT(m_rootItem->rowCount()==0);
     }
     return m_rootItem;
 }
@@ -425,10 +428,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
 
     QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
     entries = removeMatches("\\w*~$|\\w*\\.bak$", entries);
-    if ( folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
+    if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
+        Q_ASSERT(folder->rowCount()==0);
         m_folderPerUrl[item->url()]=folder;
-        Q_ASSERT(m_folderPerUrl[item->url()]);
 
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
@@ -512,7 +515,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     entries.removeAll(subf);
                 }
                 
-                CMakeFolderItem* a = new CMakeFolderItem( item->project(), subf, folder );
+                CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, folder );
+                kDebug() << "folder: " << a << a->index();
                 a->setUrl(path);
                 a->setDefinitions(v.definitions());
                 folderList.append( a );
@@ -818,6 +822,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     KUrl projectBaseUrl=m_realRoot[proj];
     projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
 
+    kDebug(9042) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
     if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
     {
 #if 0
@@ -839,7 +844,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     }
     else if(it)
     {
-        proj->reloadModel();
+        qDebug() << "reloading";
     }
     else
     {
@@ -946,5 +951,40 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path)
     return ret;
 }
 
+KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
+{
+    Q_ASSERT(QFile::exists(folder.toLocalFile()));
+    KUrl lists=parent->url();
+    lists.addPath("CMakeLists.txt");
+    QString relative=KUrl::relativeUrl(parent->url(), folder);
+    Q_ASSERT(!relative.contains("/"));
+//     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
+    
+    KDialog changes;
+    ApplyChangesWidget *e=new ApplyChangesWidget(lists, &changes);
+    changes.setMainWidget(e);
+    
+    e->document()->insertLine(e->document()->lines(), QString("add_subdirectory(%1)").arg(relative));
+    
+    if(changes.exec()) {
+        KUrl newCMakeLists(folder);
+        newCMakeLists.addPath("CMakeLists.txt");
+        
+        QFile f(newCMakeLists.toLocalFile());
+        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                     i18n("Could not create the directory's CMakeLists.txt file."));
+            return 0;
+        }
+        QTextStream out(&f);
+        out << "\n";
+        
+        bool saved=e->document()->documentSave();
+        if(!saved)
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                     i18n("Could not save the change."));
+    }
+    return 0;
+}
 
 #include "cmakemanager.moc"

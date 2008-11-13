@@ -76,8 +76,7 @@ public:
     virtual QHash<QString, QString> defines(KDevelop::ProjectBaseItem *) const;
     virtual QHash<QString, QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
 
-    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& /*folder */,
-            KDevelop::ProjectFolderItem* /*parent*/ ) { return false; }
+    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
 
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
             KDevelop::ProjectFolderItem* ) { return false; }
