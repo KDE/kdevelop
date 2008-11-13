@@ -24,9 +24,9 @@
 #include <QtCore/QObject>
 #include <KUrl>
 
-namespace KDevelop { class ICore; class IDocument; class TestCore; }
+namespace KDevelop { class ICore; class IDocument; }
 namespace KTextEditor { class View; }
-namespace TestStubs { class KDevDocument; class DocumentController; }
+namespace TestStubs { class Core; class KDevDocument; class DocumentController; }
 namespace Veritas { class CoveredFile; }
 
 namespace Veritas
@@ -63,7 +63,7 @@ private: // helpers
 
 private: // fixture
     AnnotationManager* m_manager;
-    KDevelop::TestCore* m_core;
+    TestStubs::Core* m_core;
     TestStubs::DocumentController* m_docCtrl;
     KUrl m_someUrl;
     QWidget* m_widget;
