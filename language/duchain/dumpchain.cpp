@@ -96,11 +96,11 @@ void DumpChain::dump( DUContext * context, bool imported )
   if (!imported) {
     ///@todo Think whether this is used for top-contexts, and if it is, prevent endless recursion due to loops
     foreach (DUContext::Import parent, context->importedParentContexts()) {
-      if(!parent.context()) {
+      if(!parent.context(context->topContext())) {
           kDebug() << "Could not get parent, is it registered in the DUChain?";
           continue;
       }
-      dump(parent.context(), true);
+      dump(parent.context(context->topContext()), true);
     }
 
     foreach (DUContext* child, context->childContexts())

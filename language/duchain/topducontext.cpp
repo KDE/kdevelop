@@ -236,8 +236,8 @@ public:
       sharedDataOwner->m_local->m_dataUsers.insert(m_ctxt);
       
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(dynamic_cast<TopDUContext*>(import.context()))
-          dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.insert(m_ctxt);
+        if(dynamic_cast<TopDUContext*>(import.context(0)))
+          dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.insert(m_ctxt);
     }
   }
   
@@ -267,12 +267,12 @@ public:
       }
       
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
-        if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context()))
-          dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.remove(m_ctxt);
+        if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
+          dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
     }
     foreach(const DUContext::Import& import, m_importedContexts)
-      if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context()))
-        dynamic_cast<TopDUContext*>(import.context())->m_local->m_directImporters.remove(m_ctxt);
+      if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
+        dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
   }
   
   //After loading, should rebuild the links
@@ -282,7 +282,7 @@ public:
     Q_ASSERT(m_importedContexts.isEmpty());
     FOREACH_FUNCTION(const DUContext::Import& import, m_ctxt->d_func()->m_importedContexts) {
       if(DUChain::self()->isInMemory(import.topContextIndex())) {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+        TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
         Q_ASSERT(top);
         addImportedContextRecursively(top, false, true);
       }
@@ -320,7 +320,7 @@ public:
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
 
     foreach(DUContext::Import import, m_importedContexts) {
-      TopDUContext* top = dynamic_cast<TopDUContext*>(import.context());
+      TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
       if(top) {
         top->m_local->m_directImporters.remove(m_ctxt);
         
@@ -727,8 +727,9 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
+  Import import(const_cast<DUContext*>(target), SimpleCursor::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
-    if(d->m_importedContexts()[a].context() == target)
+    if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
   
   return DUContext::importPosition(target);
@@ -740,7 +741,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
     return;
 
   for(QVector<DUContext::Import>::const_iterator parentIt = m_importedContexts.constBegin(); parentIt != m_importedContexts.constEnd(); ++parentIt) {
-    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context())); //To avoid detaching, use const iterator
+    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(0))); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -756,7 +757,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
   }
   
   for(unsigned int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
-  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context())); //To avoid detaching, use const iterator
+  TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context(0))); //To avoid detaching, use const iterator
     if(top) {
 //       top->m_local->needImportStructure();
       if(top == imported) {
@@ -1201,7 +1202,7 @@ struct TopDUContext::FindContextsAcceptor {
   const ContextChecker& check;
 };
 
-void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const {
+void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const {
 
   ENSURE_CAN_READ
   ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
@@ -1297,8 +1298,8 @@ void TopDUContext::clearImportedParentContexts() {
     DUContext::clearImportedParentContexts();
   else {
     foreach (Import parent, m_local->m_importedContexts)
-      if( parent.context() )
-        removeImportedParentContext(parent.context());
+      if( parent.context(0) )
+        removeImportedParentContext(parent.context(0));
     Q_ASSERT(m_local->m_importedContexts.isEmpty());
   }
   

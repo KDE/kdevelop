@@ -297,9 +297,9 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
   if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
     ///Use the attached content-context instead
     foreach(DUContext::Import import, topContext->importedParentContexts()) {
-      if(import.context() && import.context()->topContext()->parsingEnvironmentFile() && !import.context()->topContext()->parsingEnvironmentFile()->isProxyContext()) {
-        if((import.context()->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
-          ReferencedTopDUContext newTop(import.context()->topContext());
+      if(import.context(0) && import.context(0)->topContext()->parsingEnvironmentFile() && !import.context(0)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
+        if((import.context(0)->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
+          ReferencedTopDUContext newTop(import.context(0)->topContext());
           topContext = newTop;
           break;
         }
@@ -366,8 +366,8 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     QList<KDevelop::ReferencedTopDUContext> imports;
     
     foreach(DUContext::Import imported, topContext->importedParentContexts())
-      if(imported.context() && imported.context()->topContext())
-      imports << KDevelop::ReferencedTopDUContext(imported.context()->topContext());
+      if(imported.context(0) && imported.context(0)->topContext())
+      imports << KDevelop::ReferencedTopDUContext(imported.context(0)->topContext());
     
     foreach(KDevelop::ReferencedTopDUContext import, imports) {
       IndexedString url = import->url();

@@ -413,7 +413,7 @@ public:
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
 
-  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Does the same as DUContext::updateAliases, except that it uses the symbol-store, and processes the whole identifier.

@@ -310,7 +310,8 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       //Check if this declarations hides other declarations
       QList<Declaration*> decls;
       foreach(DUContext::Import import, m_declaration->context()->importedParentContexts())
-        decls += import.context()->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
+        if(import.context(m_topContext.data()))
+          decls += import.context(m_topContext.data())->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
                                                 SimpleCursor::invalid(), AbstractType::Ptr(), m_topContext.data(), DUContext::DontSearchInParent);
       uint num = 0;
       foreach(Declaration* decl, decls) {

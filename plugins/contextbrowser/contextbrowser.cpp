@@ -489,7 +489,7 @@ void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
   if(!ctx)
     return;
   if(dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile() && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()->isProxyContext() && !ctx->importedParentContexts().isEmpty())
-    return registerAsRangeWatcher(ctx->importedParentContexts()[0].context());
+    return registerAsRangeWatcher(ctx->importedParentContexts()[0].context(0));
 
   foreach(Declaration* decl, ctx->localDeclarations())
     registerAsRangeWatcher(decl);

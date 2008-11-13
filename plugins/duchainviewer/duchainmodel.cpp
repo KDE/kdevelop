@@ -54,7 +54,7 @@ using namespace KDevelop;
 ///When the context is a proxy-context, returns the assigned content-context.
 TopDUContext* getRealContext(TopDUContext* ctx) {
   if(ctx && ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext() && !ctx->importedParentContexts().isEmpty())
-    return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].context());
+    return dynamic_cast<TopDUContext*>(ctx->importedParentContexts()[0].context(0));
   else
     return ctx;
 }
@@ -313,8 +313,8 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
     QVector<DUContext*> importedParentContextsData;
     ///@todo Think whether this can be called for top-contexts, and if it can, care about endless recursion because of loops.
     foreach( DUContext::Import p, context->importedParentContexts() )
-      if( p.context() )
-        importedParentContextsData << p.context();
+      if( p.context(0) )
+        importedParentContextsData << p.context(0);
 
     QVectorIterator<DUContext*> contexts = context->childContexts();
     QVectorIterator<DUContext*> importedParentContexts = importedParentContextsData;

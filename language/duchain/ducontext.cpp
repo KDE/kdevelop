@@ -63,17 +63,6 @@ namespace KDevelop
 {
 QMutex DUContextDynamicData::m_localDeclarationsMutex(QMutex::Recursive);
 
-template<class Container>
-bool removeOneImport(Container& container, const DUContext* value) {
-  for(int a = 0; a < container.size(); ++a) {
-    if(container[a].context() == value) {
-      removeFromArray(container, a);
-      return true;
-    }
-  }
-  return false;
-}
-
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_childContexts, LocalIndexedDUContext)
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_importers, IndexedDUContext)
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_importedContexts, DUContext::Import)
@@ -557,7 +546,6 @@ DUContext::DUContext(DUContext& useDataFrom)
 
 DUContext::~DUContext( )
 {
-  ///@todo Don't create dynamic versions of the data while destroying!
   TopDUContext* top = topContext();
 
   if(!top->deleting() || !top->isOnDisk()) {
@@ -577,11 +565,7 @@ DUContext::~DUContext( )
     while( d->m_importersSize() != 0 )
       d->m_importers()[0].data()->removeImportedParentContext(this);
 
-    while( d->m_importedContextsSize() != 0 )
-      if( d->m_importedContexts()[0].context() )
-        removeImportedParentContext(d->m_importedContexts()[0].context());
-      else
-        removeOneImport(d->m_importedContextsList(), 0);
+    clearImportedParentContexts();
   }
 
   deleteChildContextsRecursively();
@@ -802,7 +786,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
 
     if( !nonGlobalIdentifiers.isEmpty() ) {
       for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
-        DUContext* context = d->m_importedContexts()[import].context();
+        DUContext* context = d->m_importedContexts()[import].context(source);
 
         while( !context && import > 0 ) {
           --import;
@@ -830,7 +814,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
 
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && m_dynamicData->m_parentContext) {
-    applyUpwardsAliases(aliasedIdentifiers);
+    applyUpwardsAliases(aliasedIdentifiers, source);
     return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end, dataType, ret, source, flags);
   }
   return true;
@@ -866,9 +850,11 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     kDebug(9007) << "Tried to import self";
     return;
   }
+  
+  Import import(context, position);
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
-    if(d->m_importedContexts()[a].context() == context) {
+    if(d->m_importedContexts()[a] == import) {
       d->m_importedContextsList()[a].position = position;
       return;
     }
@@ -882,7 +868,7 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
   ///Do not sort the imported contexts by their own line-number, it makes no sense.
   ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
 
-  d->m_importedContextsList().append(Import(context, position));
+  d->m_importedContextsList().append(import);
 
   //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
@@ -891,9 +877,11 @@ void DUContext::removeImportedParentContext( DUContext * context )
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
+  
+  Import import(context, SimpleCursor::invalid());
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
-    if(d->m_importedContexts()[a].context() == context) {
+    if(d->m_importedContexts()[a] == import) {
       removeFromArray(d->m_importedContextsList(), a);
       break;
     }
@@ -1039,11 +1027,11 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
 
   for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
     const Import* import(&d->m_importedContexts()[a]);
-    DUContext* context = import->context();
+    DUContext* context = import->context(source);
     while( !context && a > 0 ) {
       --a;
       import = &d->m_importedContexts()[a];
-      context = import->context();
+      context = import->context(source);
     }
     if( !context )
       break;
@@ -1248,8 +1236,9 @@ SimpleCursor DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
+  Import import(const_cast<DUContext*>(target), SimpleCursor::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
-    if(d->m_importedContexts()[a].context() == target)
+    if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
   return SimpleCursor::invalid();
 }
@@ -1263,7 +1252,7 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
   return ret;
 }
 
-QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position, SearchFlags flags) const
+QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position, const TopDUContext* top, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -1271,7 +1260,7 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(identifier));
 
-  findContextsInternal(contextType, identifiers, position.isValid() ? position : range().end, ret, flags);
+  findContextsInternal(contextType, identifiers, position.isValid() ? position : range().end, ret, top ? top : topContext(), flags);
   return ret;
 }
 
@@ -1325,7 +1314,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
   }
 }
 
-void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers) const {
+void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* source) const {
 
   if(type() == Namespace) {
     QualifiedIdentifier localId = d_func()->m_scopeIdentifier;
@@ -1353,7 +1342,7 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers) const {
   }
 }
 
-void DUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags) const
+void DUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const
 {
   DUCHAIN_D(DUContext);
   if (contextType == type()) {
@@ -1377,11 +1366,11 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
     if( !nonGlobalIdentifiers.isEmpty() ) {
       for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
 
-        DUContext* context = d->m_importedContexts()[a].context();
+        DUContext* context = d->m_importedContexts()[a].context(source);
 
         while( !context && a > 0 ) {
           --a;
-          context = d->m_importedContexts()[a].context();
+          context = d->m_importedContexts()[a].context(source);
         }
         
         if(context == this) {
@@ -1392,15 +1381,15 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
         if( !context )
           break;
 
-        context->findContextsInternal(contextType, nonGlobalIdentifiers, url() == context->url() ? position : context->range().end, ret, flags | InImportedParentContext);
+        context->findContextsInternal(contextType, nonGlobalIdentifiers, url() == context->url() ? position : context->range().end, ret, source, flags | InImportedParentContext);
       }
     }
   }
 
   ///Step 3: Continue search in parent
   if ( !(flags & DontSearchInParent) && shouldSearchInParent(flags) && parentContext()) {
-    applyUpwardsAliases(aliasedIdentifiers);
-    parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, ret, flags);
+    applyUpwardsAliases(aliasedIdentifiers, source);
+    parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, ret, source, flags);
   }
 }
 
@@ -1607,8 +1596,12 @@ void DUContext::clearImportedParentContexts()
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  while(d->m_importedContextsSize())
-    removeImportedParentContext(d->m_importedContexts()[0].context());
+  while( d->m_importedContextsSize() != 0 ) {
+    if( d->m_importedContexts()[0].isBackwardMapped() && d->m_importedContexts()[0].context(0) )
+      removeImportedParentContext(d->m_importedContexts()[0].context(0));
+    else
+      d->m_importedContextsList().removeOne(d->m_importedContexts()[0]);
+  }
 }
 
 void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
@@ -1795,9 +1788,11 @@ DUContext::Import::Import(DUContext* _context, const SimpleCursor& _position) : 
     m_context = _context;
   }
 }
-DUContext* DUContext::Import::context() const {
+
+DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
   if(m_declaration.isValid()) {
-    Declaration* decl = m_declaration.getDeclaration(0);
+    Q_ASSERT(m_declaration.isDirect());
+    Declaration* decl = m_declaration.getDeclaration(topContext);
     if(decl)
       return decl->internalContext();
     else
@@ -1805,6 +1800,13 @@ DUContext* DUContext::Import::context() const {
   }else{
     return m_context.data();
   }
+}
+
+bool DUContext::Import::isBackwardMapped() const {
+  if(m_declaration.isValid())
+    return !m_declaration.specialization();
+  else
+    return true;
 }
 
 }

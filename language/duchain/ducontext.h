@@ -340,7 +340,9 @@ public:
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
     }
     
-    DUContext* context() const;
+    ///@param topContext The top-context from where to start searching. This is important to find the correct imports
+    ///                  in the case of templates or similar structures.
+    DUContext* context(const TopDUContext* topContext) const;
     
     //Returns the top-context index, if this import is not a specialization import.
     uint topContextIndex() const {
@@ -350,6 +352,9 @@ public:
     IndexedDUContext indexedContext() const {
       return m_context;
     }
+    
+    ///Returns true if this import can be followed back from the imported context
+    bool isBackwardMapped() const;
     
     SimpleCursor position;
     private:
@@ -527,7 +532,7 @@ public:
    *
    * \warning this may return contexts which are not in this tree, you may need to lock them too...
    */
-  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), SearchFlags flags = NoSearchFlags) const;
+  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* source = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Iterates the tree to see if the provided \a context is a subcontext of this context.
@@ -751,7 +756,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
 
   /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, SearchFlags flags = NoSearchFlags) const;
+  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags = NoSearchFlags) const;
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
@@ -762,7 +767,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * The default-implementation adds a set of identifiers with the own local identifier prefixed, if this is a namespace.
    * For C++, this is needed when searching out of a namespace, so the item can be found within that namespace in another place.
    * */
-  virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers) const;
+  virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* source) const;
 
   DUContext(DUContextData& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
 

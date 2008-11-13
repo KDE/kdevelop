@@ -100,7 +100,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     return QString();
 
   m_hadObjects[context] = true;
-  
+
   QTextStream stream;
   QString ret;
   stream.setString(&ret, QIODevice::WriteOnly);
@@ -153,14 +153,14 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   }
   
   foreach (DUContext::Import parent, context->importedParentContexts()) {
-    if( parent.context() ) {
-      stream << dotGraphInternal(parent.context(), false, true);
+    if( parent.context(m_topContext) ) {
+      stream << dotGraphInternal(parent.context(m_topContext), false, true);
       QString label = "imports";
-      if( (!dynamic_cast<TopDUContext*>(parent.context()) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context()->url() == context->url()) ) {
-        label += " from " + KUrl(parent.context()->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
+      if( (!dynamic_cast<TopDUContext*>(parent.context(m_topContext)) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context(m_topContext)->url() == context->url()) ) {
+        label += " from " + KUrl(parent.context(m_topContext)->url().str()).fileName() + " to " + KUrl(context->url().str()).fileName();
       }
       
-      stream << shortLabel(context) << " -> " << shortLabel(parent.context()) << "[style=dotted,label=\"" << label  << "\"];\n";
+      stream << shortLabel(context) << " -> " << shortLabel(parent.context(m_topContext)) << "[style=dotted,label=\"" << label  << "\"];\n";
     }
   }
 
