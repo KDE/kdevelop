@@ -98,6 +98,14 @@ class EnvironmentInformationItem {
   uint m_size;//Size of the data behind, that holds the actual item
 };
 
+struct ItemRepositoryIndexHash
+{ 
+  size_t
+  operator()(unsigned int __x) const
+  { return 173*(__x>>2) + 11 * (__x >> 16); }
+};
+
+
 class EnvironmentInformationRequest {
   public:
 
@@ -270,10 +278,10 @@ public:
     QMutexLocker l(&m_chainsMutex);
 
     //Store all top-contexts to disk
-    for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
+    for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       (*it).second->m_dynamicData->store();
 
-    for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
+    for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       instance->removeDocumentChain((*it).second);
 
     {
@@ -296,7 +304,7 @@ public:
   DUChain* instance;
   DUChainLock lock;
   QMultiMap<IndexedString, TopDUContext*> m_chainsByUrl;
-  google::dense_hash_map<uint, TopDUContext*> m_chainsByIndex;
+  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash> m_chainsByIndex;
   QHash<TopDUContext*, uint> m_referenceCounts;
   DUChainObserver* notifier;
   Definitions m_definitions;
@@ -525,7 +533,7 @@ public:
     //We don't need to increase the reference-count, since the cleanup-mutex is locked
     QSet<TopDUContext*> workOnContexts;
       
-    for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
+    for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       workOnContexts << (*it).second;
     
     foreach(TopDUContext* context, workOnContexts) {
@@ -780,7 +788,7 @@ QList<TopDUContext*> DUChain::allChains() const
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
   QList<TopDUContext*> ret;
-  for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it)
+  for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it)
     ret << (*it).second;
     
   return ret;
@@ -807,7 +815,7 @@ void DUChain::removeDocumentChain( TopDUContext* context )
   uint index = context->ownIndex();
 
 //   kDebug(9505) << "duchain: removing document" << context->url().str();
-  google::dense_hash_map<uint, TopDUContext*>::iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
+  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
   
   if (it != sdDUChainPrivate->m_chainsByIndex.end()) {
     sdDUChainPrivate->m_chainsByUrl.remove(context->url(), context);
@@ -905,13 +913,13 @@ TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
 bool DUChain::isInMemory(uint topContextIndex) const {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  google::dense_hash_map<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(topContextIndex);
+  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(topContextIndex);
   return it != sdDUChainPrivate->m_chainsByIndex.end();
 }
 
 IndexedString DUChain::urlForIndex(uint index) const {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  google::dense_hash_map<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
+  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
   if(it != sdDUChainPrivate->m_chainsByIndex.end())
     return (*it).second->url();
   return TopDUContextDynamicData::loadUrl(index);
@@ -926,7 +934,7 @@ TopDUContext* DUChain::chainForIndex(uint index) const {
 
   p->m_chainsMutex.lock();
 
-  google::dense_hash_map<uint, TopDUContext*>::const_iterator it = p->m_chainsByIndex.find(index);
+  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = p->m_chainsByIndex.find(index);
   if(it != p->m_chainsByIndex.end()) {
     TopDUContext* ret = (*it).second;
     p->m_chainsMutex.unlock();
@@ -1081,7 +1089,7 @@ void DUChain::branchRemoved(DUContext* context)
 QList<KUrl> DUChain::documents() const
 {
   QList<KUrl> ret;
-  for(google::dense_hash_map<uint, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it) {
+  for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it) {
     ret << KUrl((*it).second->url().str());
   }
 
