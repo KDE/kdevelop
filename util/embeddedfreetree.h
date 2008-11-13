@@ -23,6 +23,8 @@
 #include <limits>
 #include <stdlib.h>
 #include <QPair>
+#include "kdevvarlengtharray.h"
+#include <iostream>
 
 //Uncomment this to search for tree-inconsistencies, however it's very expensive
 // #define DEBUG_FREEITEM_COUNT debugFreeItemCount(); verifyTreeConsistent(*m_centralFreeItem, 0, m_itemCount);
@@ -292,6 +294,11 @@ namespace KDevelop {
                int currentItem = *m_centralFreeItem;
                int replaceCurrentWith = -1;
                
+               //In currentLowerBound and currentUpperBound, we count the smallest contiguous range between free
+               //items that the added items needs to be sorted into. If the range is empty, the item can just be inserted.
+               int currentLowerBound = 0;
+               int currentUpperBound = m_itemCount;
+               
                //Now go down the chain, always into the items direction
                
                while(1) {
@@ -299,6 +306,8 @@ namespace KDevelop {
                    const Data& current(m_items[currentItem]);
                    if(freeBounds.first != -1 && m_add < m_items[freeBounds.first]) {
                        //Follow left child
+                       currentUpperBound = freeBounds.first+1;
+                       
                        if(ItemHandler::leftChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
@@ -309,6 +318,8 @@ namespace KDevelop {
                        }
                    }else if(freeBounds.second != -1 && m_items[freeBounds.second] < m_add) {
                        //Follow right child
+                       currentLowerBound = freeBounds.second;
+                       
                        if(ItemHandler::rightChild(current) != -1) {
                            //Continue traversing
                            previousItem = currentItem;
@@ -319,6 +330,8 @@ namespace KDevelop {
                        }
                    }else{
                        //We will use this item! So find a replacement for it in the tree, and update the structure
+                       
+                       currentLowerBound = currentUpperBound = currentItem;
                        
                        int leftReplaceCandidate = -1, rightReplaceCandidate = -1;
                        if(ItemHandler::leftChild(current) != -1)
@@ -446,8 +459,19 @@ namespace KDevelop {
                    *m_centralFreeItem = replaceCurrentWith;
                }
                
-               ItemHandler::copyTo(m_add, m_items[currentItem]);
-               updateSorting(currentItem);
+//                for(int a = currentLowerBound; a < currentUpperBound; ++a) {
+//                        Q_ASSERT(!ItemHandler::isFree(m_items[a]));
+//                }
+               
+               Q_ASSERT(currentItem < currentLowerBound || currentItem >= currentUpperBound);
+               
+               //If the current item is on a border of the bounds, it needs to be inserted in the right position.
+               //Else, the current position already is right, and we only need to copy it in.
+               if(currentLowerBound < currentUpperBound && (currentItem == currentLowerBound-1 || currentItem == currentUpperBound))
+                 insertSorted(m_add, currentItem, currentLowerBound, currentUpperBound);
+               else
+                ItemHandler::copyTo(m_add, m_items[currentItem]);
+
                DEBUG_FREEITEM_COUNT
            }
         
@@ -570,25 +594,64 @@ namespace KDevelop {
                }
            }
 
-           //Updates the sorting for this item locally, using bubble-sort
-           void updateSorting(int pos) {
-               while(1) {
-                int prev = pos-1;
-                int next = pos+1;
-                if(prev >= 0 && !ItemHandler::isFree(m_items[prev]) && m_items[pos] < m_items[prev]) {
-                    Data backup(m_items[prev]);
-                    m_items[prev] = m_items[pos];
-                    m_items[pos] = backup;
-                    pos = prev;
-                }else if(next < (int)m_itemCount && !ItemHandler::isFree(m_items[next]) && m_items[next] < m_items[pos]) {
-                    Data backup(m_items[next]);
-                    m_items[next] = m_items[pos];
-                    m_items[pos] = backup;
-                    pos = next;
-                }else{
-                    break;
+           void insertBubbleSorted(const Data& data, int pos) {
+                //Since we don't know how the target is enclosed, just do naive bubble sort
+                ItemHandler::copyTo(data, m_items[pos]);
+                while(1) {
+                    int prev = pos-1;
+                    int next = pos+1;
+                    if(prev >= 0 && !ItemHandler::isFree(m_items[prev]) && m_items[pos] < m_items[prev]) {
+                        Data backup(m_items[prev]);
+                        m_items[prev] = m_items[pos];
+                        m_items[pos] = backup;
+                        pos = prev;
+                    }else if(next < m_itemCount && !ItemHandler::isFree(m_items[next]) && m_items[next] < m_items[pos]) {
+                        Data backup(m_items[next]);
+                        m_items[next] = m_items[pos];
+                        m_items[pos] = backup;
+                        pos = next;
+                    }else{
+                        break;
+                    }
                 }
+           }
+           ///Inserts the given data item into position pos, and updates the sorting
+           ///@param otherBound can be another empty item, that together with @param pos represents the closest enclosure of the target position
+           void insertSorted(const Data& data, int pos, int start, int end) {
+               
+               if(pos < start)
+                   start = pos;
+               if(pos >= end)
+                   end = pos+1;
+               
+/*               for(int a = start; a < end; ++a) {
+                   if(a != pos) {
+                       Q_ASSERT(!ItemHandler::isFree(m_items[a]));
+                   }
+               }*/
+               EmbeddedTreeAlgorithms<Data, ItemHandler> alg(m_items, m_itemCount, *m_centralFreeItem);
+               int bound = alg.lowerBound(data, start, end);
+               //Now find the position that should be taken
+               if(bound == -1)
+                   bound = end;
+               
+               //Now our item should end up right before bound
+
+               int target;
+               //bound cannot be pos, because pos is invalid
+               Q_ASSERT(bound != pos);
+
+               if(bound < pos) {
+                   //Move [bound, pos) one to right, and insert at bound
+                    memmove(m_items+bound+1, m_items+bound, sizeof(Data)*(pos-bound));
+                    target = bound;
+               }else {
+                   Q_ASSERT(bound > pos);
+                   //Move (pos, bound) one to left, and insert at bound-1
+                    memmove(m_items+pos, m_items+pos+1, sizeof(Data)*(bound-pos-1));
+                    target = bound-1;
                }
+               ItemHandler::copyTo(data, m_items[target]);
            }
            
            const Data& m_add;
@@ -751,11 +814,6 @@ namespace KDevelop {
                }
                uint counted = countFreeItems(*m_centralFreeItem);
                Q_ASSERT(count == counted);
-           }
-           
-           //Updates the sorting for this item, using bubble-sort
-           void updateSorting(int pos) {
-               Q_ASSERT(0);
            }
            
            const Data& m_remove;
