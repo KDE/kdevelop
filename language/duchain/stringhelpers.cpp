@@ -179,12 +179,27 @@ QString reverse( const QString& str ) {
   return ret;
 }
 
+QString escapeForBracketMatching(QString str) {
+  str.replace("<<", "§&");
+  str.replace(">>", "§$");
+  str.replace("\\\"", "§!");
+  str.replace("->", "§^");
+  return str;
+}
+
+QString escapeFromBracketMatching(QString str) {
+  str.replace("§&", "<<");
+  str.replace("§$", ">>");
+  str.replace("§!", "\\\"");
+  str.replace("§^", "->");
+  return str;
+}
+
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
+  
+  str = escapeForBracketMatching(str);
+  
   //Blank out everything that can confuse the bracket-matching algorithm
-  str.replace("<<", "__");
-  str.replace(">>", "__");
-  str.replace("\\\"", "__");
-  str.replace("->", "__");
   QString reversed = reverse( str.left(argumentsStart) );
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
   SafetyCounter s( 1000 );
@@ -198,7 +213,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
     if( pos > lastPos ) {
       QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
       if( !arg.isEmpty() )
-        skippedArguments.push_front( arg ); //We are processing the reversed reverseding, so push to front
+        skippedArguments.push_front( escapeFromBracketMatching(arg) ); //We are processing the reversed reverseding, so push to front
     }
     if( reversed[pos] == ')' )
       break;
