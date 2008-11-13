@@ -557,6 +557,18 @@ QItemSelectionModel* ProjectController::projectSelectionModel()
     return d->selectionModel;
 }
 
+bool ProjectController::isProjectNameUsed( const QString& name ) const
+{
+    foreach( IProject* p, projects() )
+    {
+        if( p->name() == name )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 }
 
 #include "projectcontroller.moc"

@@ -68,6 +68,7 @@ public:
     void addProject(IProject*);
 //     IProject* currentProject() const;
 
+    virtual bool isProjectNameUsed( const QString& name ) const;
     void setDialogProvider(IProjectDialogProvider*);
 
 public Q_SLOTS:

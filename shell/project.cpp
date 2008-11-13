@@ -314,6 +314,11 @@ bool Project::open( const KUrl& projectFileUrl_ )
     KConfigGroup projectGroup( d->m_cfg, "Project" );
 
     d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
+    if( Core::self()->projectController()->isProjectNameUsed( d->name ) ) 
+    {
+        kWarning() << "Trying to open a project with a name thats already used by another open project";
+        return false;
+    }
     d->folder = projectFileUrl.directory( KUrl::AppendTrailingSlash );
 
     QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );

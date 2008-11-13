@@ -75,6 +75,14 @@ public:
      */
     Q_SCRIPTABLE virtual IProject* findProjectForUrl( const KUrl& url ) const = 0;
 
+    /**
+     * Checks wether the given project name is used already or not. The project
+     * controller supports only 1 project with a given name to be open at any time
+     * @param name the name of the project to be opened or created
+     * @returns wether the name is already used for an open project
+     */
+    Q_SCRIPTABLE virtual bool isProjectNameUsed( const QString& name ) const = 0;
+
 public Q_SLOTS:
     /**
      * open the project from the given kdev4 project file. This only reads
