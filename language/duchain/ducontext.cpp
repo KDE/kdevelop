@@ -860,7 +860,7 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     }
   }
 
-  if( !anonymous ) {
+  if( !anonymous && import.isBackwardMapped() ) {
     ENSURE_CAN_WRITE_(context)
     context->m_dynamicData->addImportedChildContext(this);
   }
