@@ -49,6 +49,7 @@
 #include <interfaces/irun.h>
 #include <interfaces/iruncontroller.h>
 #include <project/projectmodel.h>
+#include <project/importprojectjob.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchain.h>
@@ -649,7 +650,10 @@ bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
     CMakeFolderItem* folderItem = dynamic_cast<CMakeFolderItem*>(item);
     if (folderItem) {
         if (item == item->project()->projectItem()) {
-            item->project()->reloadModel();
+//             item->project()->reloadModel();
+            item->removeRows(0, item->rowCount());
+            KDevelop::ImportProjectJob* importJob = new KDevelop::ImportProjectJob( item, this );
+            KDevelop::ICore::self()->runController()->registerJob( importJob );
         } else {
             QStandardItem *parent = folderItem->parent();
             CMakeFolderItem* fi = new CMakeFolderItem( folderItem->project(), folderItem->url().toLocalFile(), parent);
@@ -845,13 +849,14 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     else if(it)
     {
         qDebug() << "reloading";
+        reload(proj->projectItem());
     }
     else
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
             if(m_watchers[project]->contains(dirty))
-                project->reloadModel();
+                reload(project->projectItem());
         }
     }
 }
