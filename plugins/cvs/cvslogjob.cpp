@@ -62,7 +62,11 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
 //             kDebug(9500) << "MATCH BRANCH" ;
         } else if (rx_date.exactMatch(s)) {
 //             kDebug(9500) << "MATCH DATE" ;
-            item.setDate( QDateTime::fromString( rx_date.cap(1), Qt::ISODate ) );
+            QString date = rx_date.cap(1);
+            // cut out the part that matches the Qt::ISODate format
+            date.truncate(19);
+
+            item.setDate( QDateTime::fromString( date, Qt::ISODate ) );
             item.setAuthor( rx_date.cap(2) );
         } else  if (rx_sep.exactMatch(s)) {
 //             kDebug(9500) << "MATCH SEPARATOR" ;
