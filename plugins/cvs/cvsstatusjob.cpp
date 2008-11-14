@@ -36,6 +36,37 @@ QVariant CvsStatusJob::fetchResults()
     return infos;
 }
 
+void CvsStatusJob::addInfoToList(QList<QVariant>& infos, 
+        const QString& currentDir, const QString& filename, 
+        const QString& statusString)
+{
+    KDevelop::VcsStatusInfo::State cvsState = String2EnumState( statusString );
+
+    QString correctedFilename = filename;
+    if (cvsState == KDevelop::VcsStatusInfo::ItemDeleted) {
+        // cvs status writes "no file" in front of the filename
+        // in case the file was locally removed
+        correctedFilename.remove("no file ");
+    }
+
+    // join the current directory (if any) and the found filename ...
+    // note: current directy is always relative to the directory where the 
+    //       cvs command was executed
+    QString file = currentDir;
+    if (file.length() > 0) {
+        file += QDir::separator();
+    }
+    file += correctedFilename;
+
+    // ... and create a VcsFileInfo entry
+    KDevelop::VcsStatusInfo info;
+    info.setUrl(getDirectory() + QDir::separator() + file);
+    info.setState(cvsState);
+
+    kDebug(9500) << "Added status of: " << info.url() << endl;
+    infos << qVariantFromValue( info );
+}
+
 void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
 {
     QString filename;
@@ -60,28 +91,10 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
 
         if ( re_start.exactMatch(s) ) {
             if ( !filename.isEmpty() ) {
-//                 kDebug(9500) << "File:" << filename << "Status:" << status
-//                          << "working:" << workrev << "repo:" << reporev << endl;
+//                kDebug(9500) << "File:" << filename << "Status:" << status
+//                    << "working:" << workrev << "repo:" << reporev << endl;
 
-                KDevelop::VcsStatusInfo::State cvsState = String2EnumState( status );
-
-                if (cvsState == KDevelop::VcsStatusInfo::ItemDeleted) {
-                    // cvs status writes "no file" in front of the filename
-                    // in case the file was locally removed
-                    filename.remove("no file ");
-                }
-
-                // join the current directory (if any) and the found filename ...
-                QString file = currentDir;
-                if (file.length() > 0)
-                    file += QDir::separator();
-                file += filename;
-
-                // ... and create a VcsFileInfo entry
-                KDevelop::VcsStatusInfo info;
-                info.setUrl(file);
-                info.setState(cvsState);
-                infos << qVariantFromValue( info );
+                addInfoToList( infos, currentDir, filename, status );
             }
             filename.clear();
             status.clear();
@@ -100,6 +113,14 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
                 currentDir.clear();
         }
     }
+
+    if ( !filename.isEmpty() ) {
+//        kDebug(9500) << "File:" << filename << "Status:" << status
+//            << "working:" << workrev << "repo:" << reporev << endl;
+
+        addInfoToList( infos, currentDir, filename, status );
+    }
+
 }
 
 KDevelop::VcsStatusInfo::State CvsStatusJob::String2EnumState(const QString& stateAsString)

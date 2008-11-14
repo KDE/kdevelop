@@ -30,6 +30,9 @@ public:
 
 private:
     void parseOutput(const QString& jobOutput, QList<QVariant>& infos);
+    void addInfoToList(QList<QVariant>& infos, 
+            const QString& currentDir, const QString& filename, 
+            const QString& statusString);
 
     KDevelop::VcsStatusInfo::State String2EnumState(const QString& stateAsString);
 

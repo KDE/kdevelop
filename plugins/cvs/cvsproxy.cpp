@@ -435,6 +435,7 @@ CvsJob * CvsProxy::checkout(const KUrl & targetDir,
 CvsJob * CvsProxy::status(const QString & repo, const KUrl::List & files, bool recursive, bool taginfo)
 {
     CvsStatusJob* job = new CvsStatusJob(vcsplugin);
+    job->setCommunicationMode( KProcess::MergedChannels );
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "status";
