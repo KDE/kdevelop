@@ -135,6 +135,7 @@ void CMakeDUChainTest::testUses()
 {
     QString input("project(simpletest)\n"
             "set(var a b c)\n"
+            "set(var a b c)\n"
             "set(var2 ${var})\n");
 
     QFile file("cmake_duchain_test");
@@ -172,7 +173,7 @@ void CMakeDUChainTest::testUses()
     QCOMPARE(ctx->findLocalDeclarations(Identifier("var")).count(), 1);
     QCOMPARE(ctx->findDeclarations(Identifier("var")).count(), 1);
     
-    QCOMPARE(ctx->usesCount(), 1);
+    QCOMPARE(ctx->usesCount(), 2);
     
     if(ctx->uses()[0].m_range.textRange() != SimpleRange(2,4,2,7).textRange())
         kDebug() << ctx->uses()[0].m_range.textRange();
