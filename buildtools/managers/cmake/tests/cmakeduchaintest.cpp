@@ -141,7 +141,7 @@ void CMakeDUChainTest::testUses()
             "macro(bla kk)\n"
             " message(STATUS ${kk})\n"
             "endmacro(bla)\n"
-//             "bla(kk)\n"
+            "bla(kk)\n"
             );
 
     QFile file("cmake_duchain_test");
@@ -156,7 +156,10 @@ void CMakeDUChainTest::testUses()
 
     MacroMap mm;
     VariableMap vm;
-    
+
+    m_fakeContext->deleteLocalDeclarations();
+    m_fakeContext->deleteChildContextsRecursively();
+    m_fakeContext->deleteUses();
     m_fakeContext->setRange(SimpleRange(0,0, 2,31));
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
@@ -174,6 +177,13 @@ void CMakeDUChainTest::testUses()
     QCOMPARE(ctx->range().start.line, 0);
     
     QStringList decls=QStringList() << "var" << "var2" << "bla";
+    if(decls.count() != declarations.count())
+    {
+        for(int i=0; i<decls.count(); i++) {
+            qDebug() << "decl" << declarations[i]->toString();
+        }
+    }
+    
     QCOMPARE(decls.count(), declarations.count());
     for(int i=0; i<decls.count(); i++) {
         QVERIFY(declarations[i]->inSymbolTable());
@@ -183,13 +193,8 @@ void CMakeDUChainTest::testUses()
     {
         QCOMPARE(decls[i], declarations[i]->identifier().toString());
         QCOMPARE(1, ctx->findLocalDeclarations(Identifier(decls[i])).count());
+        QCOMPARE(1, ctx->findDeclarations(Identifier(decls[i])).count());
     }
-    
-    
-    kDebug() << declarations[0]->identifier().toString();
-    kDebug() << ctx->range().textRange() << declarations[0]->range().textRange();
-    QCOMPARE(ctx->findLocalDeclarations(Identifier("var")).count(), 1);
-    QCOMPARE(ctx->findDeclarations(Identifier("var")).count(), 1);
     
     QCOMPARE(ctx->usesCount(), 2);
     

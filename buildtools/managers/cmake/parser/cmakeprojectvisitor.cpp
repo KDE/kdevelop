@@ -958,17 +958,17 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         }
         else
         {
-//             {
-//                 qDebug() << "caaaaaaaaaaaaaaaaaaaaaalling" << call->name();
-//                 DUChainWriteLocker lock(DUChain::lock());
-//                 QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(call->name()));
-// 
-//                 if(!decls.isEmpty())
-//                 {
-//                     int idx=m_topctx->indexForUsedDeclaration(decls.first());
-//                     m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
-//                 }
-//             }
+            {
+                qDebug() << "caaaaaaaaaaaaaaaaaaaaaalling" << call->name();
+                DUChainWriteLocker lock(DUChain::lock());
+                QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(call->name()));
+
+                if(!decls.isEmpty())
+                {
+                    int idx=m_topctx->indexForUsedDeclaration(decls.first());
+                    m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
+                }
+            }
             
             //Giving value to parameters
             QStringList::const_iterator mit = code.knownArgs.constBegin();
@@ -1832,6 +1832,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         KUrl url(fc[0].filePath);
         IndexedString pathOrUrl(url.pathOrUrl());
         m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
+        qDebug() << "blablabla" << m_topctx;
         if(!m_topctx)
         {
             m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
@@ -1840,12 +1841,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             DUChain::self()->addDocumentChain(m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
         }
-        else
-        {
-            m_topctx->deleteLocalDeclarations();
-            m_topctx->deleteChildContextsRecursively();
-            m_topctx->deleteUses();
-        }
+        
         m_topctx->addImportedParentContext(m_parentCtx);
     }
     VisitorState p;
