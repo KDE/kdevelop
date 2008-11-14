@@ -155,7 +155,6 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     
     if(invars.count()>1)
     {
-//         qDebug() << "vaaaaars" << var << IntPair::printList(invars);
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
         QList<IntPair>::iterator itEnd=invars.end();
         QList<IntPair>::iterator itBegin=invars.begin();
@@ -164,7 +163,6 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
             const IntPair& subvar=*it;
             int dollar=var.lastIndexOf('$', subvar.first);
             QString id=var.mid(dollar, subvar.second-dollar+1), value=theValue(var, subvar).join(QChar(';'));
-//             qDebug() << "xaaaa" << id << subvar.print();
             
             int diff=value.size()-id.size();
             for(QList<IntPair>::iterator it=itBegin; it!=itEnd; ++it)
@@ -173,12 +171,9 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
                 if(it->second> subvar.second) it->second+= diff;
             }
             
-//             qDebug() << "replaaaaaaace" << id << value << diff;
             var=replaceOne(var, id, value, dollar);
-//             qDebug() << "reeeeeeees" << var;
         }
     }
-//     qDebug() << "exiiiiiit" << theValue(var, invars.last()) << invars.last().print();
     return theValue(var, invars.last());
 }
 
@@ -878,7 +873,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     m_macros->insert(macro->macroName(), m);
 
     DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(macro->macroName()));
+    QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(macro->macroName()));
     SimpleRange sr=macro->content().first().arguments.first().range();
     if(!decls.isEmpty())
     {
@@ -963,6 +958,18 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         }
         else
         {
+//             {
+//                 qDebug() << "caaaaaaaaaaaaaaaaaaaaaalling" << call->name();
+//                 DUChainWriteLocker lock(DUChain::lock());
+//                 QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(call->name()));
+// 
+//                 if(!decls.isEmpty())
+//                 {
+//                     int idx=m_topctx->indexForUsedDeclaration(decls.first());
+//                     m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
+//                 }
+//             }
+            
             //Giving value to parameters
             QStringList::const_iterator mit = code.knownArgs.constBegin();
             QStringList::const_iterator cit = call->arguments().constBegin();
@@ -1910,56 +1917,43 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
-        if(!decls.isEmpty())
-        {
-            int idx=m_topctx->indexForUsedDeclaration(decls.first());
-            m_topctx->createUse(idx, arg.range(), 0);
-        }
-        else
+        QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(arg.value));
+        if(decls.isEmpty())
         {
             Declaration *d = new Declaration(arg.range(), m_topctx);
             d->setIdentifier( Identifier(arg.value) );
+        }
+        else
+        {
+            int idx=m_topctx->indexForUsedDeclaration(decls.first());
+            m_topctx->createUse(idx, arg.range(), 0);
         }
     }
 }
 
 void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
 {
-    #warning port me
-#if 0
     if(!m_topctx)
         return;
-    int before=0;
     DUChainWriteLocker lock(DUChain::lock());
     foreach(const CMakeFunctionArgument &arg, desc.arguments)
     {
-        if(!arg.isCorrect())
-        {
+        if(!arg.isCorrect() || !arg.value.contains('$'))
             continue;
-        }
-
-        int after;
-        VariableType type;
-        QString var = variableName(arg.value, type, before, after);
-        if(type)
+        
+        QList< IntPair > var = parseArgument(arg.value);
+        for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
         {
-            QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-
-//             qDebug() << "uuuuuuse" << decls.isEmpty();
+            QString var=arg.value.mid(it->first+1, it->second-it->first-1);
+            QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(var));
 
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());
-                m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column+before, arg.line-1, arg.column+after), 0);
-
-//                 DumpChain d;
-//                 d.dump(m_topctx);
+                m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column+it->first, arg.line-1, arg.column+it->second-1), 0);
             }
         }
-        before+=2;
     }
-#endif
 }
 
 void CMakeProjectVisitor::setCacheValues( CacheValues* cache)

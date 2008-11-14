@@ -133,10 +133,16 @@ void CMakeDUChainTest::testDUChainWalk()
 
 void CMakeDUChainTest::testUses()
 {
-    QString input("project(simpletest)\n"
+    QString input(
+            "project(simpletest)\n"
             "set(var a b c)\n"
-            "set(var a b c)\n"
-            "set(var2 ${var})\n");
+            "set(var2 ${var})\n"
+            
+            "macro(bla kk)\n"
+            " message(STATUS ${kk})\n"
+            "endmacro(bla)\n"
+//             "bla(kk)\n"
+            );
 
     QFile file("cmake_duchain_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
@@ -150,6 +156,8 @@ void CMakeDUChainTest::testUses()
 
     MacroMap mm;
     VariableMap vm;
+    
+    m_fakeContext->setRange(SimpleRange(0,0, 2,31));
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
@@ -164,9 +172,19 @@ void CMakeDUChainTest::testUses()
     dump.dump(ctx);
     QVector<Declaration*> declarations=ctx->localDeclarations();
     QCOMPARE(ctx->range().start.line, 0);
-    QCOMPARE(declarations.count(), 2);
-    QVERIFY(declarations[0]->inSymbolTable());
-    QVERIFY(declarations[1]->inSymbolTable());
+    
+    QStringList decls=QStringList() << "var" << "var2" << "bla";
+    QCOMPARE(decls.count(), declarations.count());
+    for(int i=0; i<decls.count(); i++) {
+        QVERIFY(declarations[i]->inSymbolTable());
+    }
+    
+    for(int i=0; i<decls.count(); i++)
+    {
+        QCOMPARE(decls[i], declarations[i]->identifier().toString());
+        QCOMPARE(1, ctx->findLocalDeclarations(Identifier(decls[i])).count());
+    }
+    
     
     kDebug() << declarations[0]->identifier().toString();
     kDebug() << ctx->range().textRange() << declarations[0]->range().textRange();
@@ -175,12 +193,19 @@ void CMakeDUChainTest::testUses()
     
     QCOMPARE(ctx->usesCount(), 2);
     
-    if(ctx->uses()[0].m_range.textRange() != SimpleRange(2,4,2,7).textRange())
-        kDebug() << ctx->uses()[0].m_range.textRange();
-    QCOMPARE(ctx->uses()[0].m_range.textRange(), SimpleRange(2,4,2,7).textRange());
+    KTextEditor::Range sr=ctx->uses()[0].m_range.textRange();
+    if(sr != SimpleRange(2,11, 2,11+3).textRange()) {
+        kDebug() << "wrong range" << sr;
+        
+        for(int i=0; i<ctx->usesCount(); i++)
+        {
+            kDebug() << "use " << i << ctx->uses()[i].m_range.textRange();
+        }
+    }
+    QCOMPARE(sr, SimpleRange(2,11, 2,11+3).textRange());
 
-    QCOMPARE(ctx->range().end.column, 15);
-    QCOMPARE(ctx->range().end.line, 2);
+//     QCOMPARE(ctx->range().end.column, 15);
+//     QCOMPARE(ctx->range().end.line, 2);
 }
 
 #include "cmakeduchaintest.moc"
