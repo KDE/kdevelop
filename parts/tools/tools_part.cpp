@@ -37,6 +37,8 @@
 static const KDevPluginInfo data("kdevtools");
 K_EXPORT_COMPONENT_FACTORY( libkdevtools, ToolsFactory( data ) )
 
+QMap<int, QString> externalToolMenuEntries;
+
 ToolsPart::ToolsPart(QObject *parent, const char *name, const QStringList &)
 	: KDevPlugin( &data, parent, name ? name : "ToolsPart")
 {
@@ -169,6 +171,7 @@ void ToolsPart::updateToolsMenu()
     config->setGroup("External Tools");
     QStringList l = config->readListEntry("Tool Menu");
 
+
     QPtrList<KAction> actions;
     QStringList::ConstIterator it;
     for (it = l.begin(); it != l.end(); ++it) {
@@ -199,6 +202,7 @@ void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
     const FileContext *fcontext = static_cast<const FileContext*>(context);
     m_contextPopup = popup;
     m_contextFileName = fcontext->urls().first().path();
+    externalToolMenuEntries.clear();
     
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("External Tools");
@@ -208,25 +212,25 @@ void ToolsPart::contextMenu(QPopupMenu *popup, const Context *context)
         QStringList l = config->readListEntry("Dir Context");
         QStringList::ConstIterator it;
         for (it = l.begin(); it != l.end(); ++it)
-            popup->insertItem( (*it), this, SLOT(dirContextActivated(int)) );
+            externalToolMenuEntries.insert( popup->insertItem( (*it), this, SLOT(dirContextActivated(int)) ), (*it) );
     } else {
         QStringList l = config->readListEntry("File Context");
         QStringList::ConstIterator it;
         for (it = l.begin(); it != l.end(); ++it)
-            popup->insertItem( (*it), this, SLOT(fileContextActivated(int))  );
+            externalToolMenuEntries.insert( popup->insertItem( (*it), this, SLOT(fileContextActivated(int))  ), (*it) );
     }
 }
 
 
 void ToolsPart::toolsMenuActivated()
 {
-    QString menutext = QString::fromUtf8(sender()->name());
+    QString menutext = sender()->name();
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("Tool Menu " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");
     bool isdesktopfile = config->readBoolEntry("DesktopFile");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kdDebug() << "tools:" << "activating " << menutext
               << "with cmdline " << cmdline
               << "and desktopfile " << isdesktopfile << endl;
     if (isdesktopfile)
@@ -238,13 +242,13 @@ void ToolsPart::toolsMenuActivated()
 
 void ToolsPart::fileContextActivated(int id)
 {
-    QString menutext = m_contextPopup->text(id);
-    
+    QString menutext = externalToolMenuEntries[ id ];
+
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("File Context " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kdDebug() << "filecontext:" << "activating " << menutext
               << " with cmdline " << cmdline
               << " on file " << m_contextFileName << endl;
     startCommand(cmdline, captured, m_contextFileName);
@@ -253,13 +257,13 @@ void ToolsPart::fileContextActivated(int id)
 
 void ToolsPart::dirContextActivated(int id)
 {
-    QString menutext = m_contextPopup->text(id);
+    QString menutext = externalToolMenuEntries[ id ];
 
     KConfig *config = ToolsFactory::instance()->config();
     config->setGroup("Dir Context " + menutext);
     QString cmdline = config->readPathEntry("CommandLine");
     bool captured = config->readBoolEntry("Captured");
-    kdDebug() << "activating " << menutext
+    kdDebug() << "dircontext:" << "activating " << menutext
               << "with cmdline " << cmdline
               << " on directory " << m_contextFileName << endl;
     startCommand(cmdline, captured, m_contextFileName);
