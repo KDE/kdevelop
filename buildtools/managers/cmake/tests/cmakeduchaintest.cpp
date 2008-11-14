@@ -158,6 +158,7 @@ void CMakeDUChainTest::testUses()
     DUChainWriteLocker lock(DUChain::lock());
     TopDUContext* ctx=v.context();
     QVERIFY(ctx);
+    QVERIFY(ctx->indexed().data());
     KDevelop::DumpChain dump;
     dump.dump(ctx);
     QVector<Declaration*> declarations=ctx->localDeclarations();
@@ -165,8 +166,14 @@ void CMakeDUChainTest::testUses()
     QCOMPARE(declarations.count(), 2);
     QVERIFY(declarations[0]->inSymbolTable());
     QVERIFY(declarations[1]->inSymbolTable());
+    
+    kDebug() << declarations[0]->identifier().toString();
+    kDebug() << ctx->range().textRange() << declarations[0]->range().textRange();
+    QCOMPARE(ctx->findLocalDeclarations(Identifier("var")).count(), 1);
+    QCOMPARE(ctx->findDeclarations(Identifier("var")).count(), 1);
+    
     QCOMPARE(ctx->usesCount(), 1);
-
+    
     if(ctx->uses()[0].m_range.textRange() != SimpleRange(2,4,2,7).textRange())
         kDebug() << ctx->uses()[0].m_range.textRange();
     QCOMPARE(ctx->uses()[0].m_range.textRange(), SimpleRange(2,4,2,7).textRange());
