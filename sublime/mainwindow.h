@@ -119,6 +119,9 @@ private:
 
     void resizeEvent(QResizeEvent* event);
 
+    void saveGeometry(KConfigGroup &config);
+    void loadGeometry(const KConfigGroup &config);
+
     struct MainWindowPrivate *const d;
     friend class MainWindowOperator;
     friend class MainWindowPrivate;
