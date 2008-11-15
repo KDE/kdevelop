@@ -119,7 +119,14 @@ public:
       if (view->widget()->metaObject()->indexOfSignal(SIGNAL(requestRaise())) != -1)
           QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
-
+  
+  /* At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
+     work, but they don't need any toolbar.  So, suppress toolbar action.  */
+  virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
+  {
+      return QList<QAction*>();
+  }
+  
 private:
   CppDebuggerPlugin* m_plugin;
   GDBController* m_controller;
