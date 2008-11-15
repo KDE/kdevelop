@@ -959,7 +959,6 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         else
         {
             {
-                qDebug() << "caaaaaaaaaaaaaaaaaaaaaalling" << call->name();
                 DUChainWriteLocker lock(DUChain::lock());
                 QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(call->name()));
 
@@ -1832,7 +1831,6 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         KUrl url(fc[0].filePath);
         IndexedString pathOrUrl(url.pathOrUrl());
         m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
-        qDebug() << "blablabla" << m_topctx;
         if(!m_topctx)
         {
             m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
