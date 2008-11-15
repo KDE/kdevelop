@@ -247,7 +247,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             }
             default:
                 kDebug(9042) << "no operator:" << *it2;
-                Q_ASSERT(false);
+                //Q_ASSERT(false); //FIXME: we should know if it is really an error
                 break;
         }
     }
