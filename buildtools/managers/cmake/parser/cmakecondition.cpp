@@ -246,8 +246,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }
             default:
-                kDebug(9042) << "no operator:" << *it2;
-                //Q_ASSERT(false); //FIXME: we should know if it is really an error
+                kWarning(9042) << "no support for operator:" << *it2;
                 break;
         }
     }
