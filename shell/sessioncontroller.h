@@ -47,6 +47,7 @@ public:
 
     void loadSession( const QString& );
     void deleteSession( const QString& );
+    QString cloneSession( const QString& );
     static QString sessionDirectory();
     static const QString cfgSessionGroup;
     static const QString cfgActiveSessionEntry;

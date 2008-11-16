@@ -70,15 +70,6 @@ public:
     }
 };
 
-Session::Session( const QString& name )
-        : d( new SessionPrivate )
-{
-    d->id = QUuid::createUuid();
-    d->initialize();
-    d->config->group("").writeEntry( cfgSessionNameEntry, name );
-    d->config->sync();
-}
-
 Session::Session( const QUuid& id )
         : d( new SessionPrivate )
 {

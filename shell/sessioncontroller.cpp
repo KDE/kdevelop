@@ -27,8 +27,13 @@ Boston, MA 02110-1301, USA.
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
+#include <kio/netaccess.h>
+#include <kparts/mainwindow.h>
 
 #include "session.h"
+#include "core.h"
+#include "uicontroller.h"
 
 namespace KDevelop
 {
@@ -127,7 +132,8 @@ QString getNewSessionDirName( const QString& sname )
 
 Session* SessionController::createSession( const QString& name )
 {
-    Session* s = new Session( name );
+    Session* s = new Session( QUuid::createUuid() );
+    s->setName( name );
     d->availableSessions << s;
     return s;
 }
@@ -165,6 +171,19 @@ Session* SessionController::session( const QString& name ) const
 QString SessionController::sessionDirectory()
 {
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+}
+
+QString SessionController::cloneSession( const QString& sessionName )
+{
+    Session* origSession = session( sessionName );
+    QUuid id = QUuid::createUuid();
+    KIO::NetAccess::dircopy( KUrl( sessionDirectory() + "/" + origSession->id().toString() ), 
+                             KUrl( sessionDirectory() + "/" + id.toString() ), 
+                             Core::self()->uiController()->activeMainWindow() );
+    Session* newSession = new Session( id );
+    d->availableSessions << newSession;
+    newSession->setName( i18n( "Copy of %1", origSession->name() ) );
+    return newSession->name();
 }
 
 }
