@@ -12,6 +12,7 @@ set(veritas_SRCS
     itestrunner.cpp
     itestframework.cpp
     testexecutableinfo.cpp
+    ctestfileparser.cpp
     internal/utils.cpp
     internal/selectionstore.cpp
     testtoolviewfactory.cpp
@@ -64,5 +65,6 @@ install(FILES
     itestframework.h
     testtoolviewfactory.h
     testexecutableinfo.h
+    ctestfileparser.h
     tests/runnertesthelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )

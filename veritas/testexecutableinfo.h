@@ -23,7 +23,7 @@
 
 #include <QtCore/QVariant>
 #include <QtCore/QStringList>
-#include <KUrl>
+#include <kurl.h>
 #include "veritasexport.h"
 
 namespace Veritas

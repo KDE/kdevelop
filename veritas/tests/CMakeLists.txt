@@ -19,6 +19,7 @@ kdev_add_test(sys-runnerwindow runnerwindowtest.cpp)
 kdev_add_test(unit-selectionstoretest selectionstoretest.cpp)
 kdev_add_test(unit-treetraverse treetraversetest.cpp)
 kdev_add_test(unit-resultswidget resultswidgettest.cpp)
+kdev_add_test(unit-ctestfileparser ctestfileparsertest.cpp)
 
 macro(veri_add_mem_test test_EXEC prefix)
     add_test(veritas-mem-${test_EXEC}
