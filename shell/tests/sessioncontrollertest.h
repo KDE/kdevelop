@@ -40,6 +40,7 @@ private slots:
     void createSession();
     void loadSession();
     void deleteSession();
+    void cloneSession();
     void renameSession();
     void canRenameActiveSession();
     void readFromConfig();

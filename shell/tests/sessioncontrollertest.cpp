@@ -179,6 +179,32 @@ void SessionControllerTest::deleteSession()
     verifySessionDir( s, false );
 }
 
+void SessionControllerTest::cloneSession()
+{
+    QString sessionName = "CloneableSession";
+    QString testgrp = "TestGroup";
+    QString testentry = "TestEntry";
+    QString testval = "TestValue";
+    int sessionCount = m_sessionCtrl->sessions().count();
+    m_sessionCtrl->createSession( sessionName );
+    Session* s = m_sessionCtrl->session( sessionName );
+    s->config()->group( testgrp ).writeEntry( testentry, testval );
+    s->config()->sync();
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    QVERIFY( m_sessionCtrl->session( sessionName ) );
+    
+    QString newSession = m_sessionCtrl->cloneSession( sessionName );
+    QVERIFY( m_sessionCtrl->session( newSession ) );
+    QCOMPARE( sessionCount+2, m_sessionCtrl->sessions().count() );
+    Session* news = m_sessionCtrl->session( newSession );
+    QCOMPARE( testval, news->config()->group( testgrp ).readEntry( testentry, "" ) );
+    QCOMPARE( i18n( "Copy of %1", sessionName ), news->name() );
+
+    verifySessionDir( news );
+
+
+}
+
 void SessionControllerTest::readFromConfig()
 {
     ISession* s = Core::self()->activeSession();
