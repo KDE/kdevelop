@@ -64,7 +64,7 @@ public:
         None     = 0 ,     ///< This manager supports nothing
         Folders  = 1 << 0, ///< Folders are supported by the manager
         Targets  = 1 << 1, ///< Targets are supported by the manager
-        Files    = 1 << 2, ///< Files are supported by the manager
+        Files    = 1 << 2  ///< Files are supported by the manager
     };
     Q_DECLARE_FLAGS( Features, Feature )
 
