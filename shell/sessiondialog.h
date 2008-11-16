@@ -49,6 +49,7 @@ public:
     void deleteSessions( const QList<QModelIndex>& );
     void activateSession( const QModelIndex& );
     void addSession();
+    void cloneSession( const QModelIndex& );
 };
 
 class SessionDialog : public KDialog
@@ -60,6 +61,7 @@ private Q_SLOTS:
     void createSession();
     void deleteSession();
     void activateSession();
+    void cloneSession();
     void enableButtons( const QModelIndex&, const QModelIndex& );
     void enableButtons( const QItemSelection&, const QItemSelection& );
     void enableButtons();

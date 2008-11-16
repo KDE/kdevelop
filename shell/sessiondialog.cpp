@@ -164,6 +164,18 @@ void SessionModel::activateSession( const QModelIndex& idx )
     emit dataChanged( idx, idx );
 }
 
+void SessionModel::cloneSession( const QModelIndex& idx )
+{
+    if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() )
+    {
+        return; 
+    }
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+    Core::self()->sessionController()->cloneSession( data( idx ).toString() );
+    endInsertRows();
+}
+
 SessionDialog::SessionDialog( QWidget* parent )
     : KDialog( parent ), m_ui( new Ui::SessionDialog ), m_model( new SessionModel( this ) )
 {
@@ -176,6 +188,7 @@ SessionDialog::SessionDialog( QWidget* parent )
     connect( m_ui->newButton, SIGNAL(clicked()), this, SLOT(createSession()) );
     connect( m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteSession()) );
     connect( m_ui->activateButton, SIGNAL(clicked()), this, SLOT(activateSession()) );
+    connect( m_ui->cloneButton, SIGNAL(clicked()), this, SLOT(cloneSession()) );
     connect( m_ui->sessionList->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), 
              this, SLOT( enableButtons( const QItemSelection&, const QItemSelection& ) ) );
     connect( m_ui->sessionList->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
@@ -209,6 +222,7 @@ void SessionDialog::enableButtons( const QItemSelection& selected, const QItemSe
 {
     m_ui->deleteButton->setEnabled( !selected.isEmpty() );
     m_ui->activateButton->setEnabled( !selected.isEmpty() );
+    m_ui->cloneButton->setEnabled( !selected.isEmpty() );
     QString activeName = Core::self()->activeSession()->name();
     foreach( const QModelIndex& idx, m_ui->sessionList->selectionModel()->selectedRows() )
     {
@@ -237,6 +251,12 @@ void SessionDialog::deleteSession()
 void SessionDialog::activateSession()
 {
     m_model->activateSession( m_ui->sessionList->selectionModel()->selectedRows().at( 0 ) );
+}
+
+void SessionDialog::cloneSession()
+{
+    m_model->cloneSession( m_ui->sessionList->selectionModel()->selectedRows().at( 0 ) );
+    m_ui->sessionList->edit( m_model->index( m_model->rowCount() - 1, 0, QModelIndex() ) );
 }
 
 }
