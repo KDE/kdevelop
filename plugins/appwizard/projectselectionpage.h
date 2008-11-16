@@ -33,10 +33,15 @@ signals:
     void valid();
     void invalid();
 private slots:
+    void urlEdited();
     void validateData();
 private:
+    inline QByteArray encodedAppName();
+    inline QString pathUp(const QString& aPath);
+
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;
+    bool m_urlEditedByUser;
 };
 
 #endif

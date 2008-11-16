@@ -264,7 +264,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         {
             if( !QFileInfo( dest.toLocalFile() ).exists() )
             {
-                QDir::root().mkdir( dest.toLocalFile() );
+                QDir::root().mkpath( dest.toLocalFile() );
             }
             unpackDir = dest.toLocalFile(); //in DVCS we unpack template directly to the project's directory
         }
@@ -274,7 +274,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             parentdir.cd( ".." );
             if( !QFileInfo( parentdir.toLocalFile() ).exists() )
             {
-                QDir::root().mkdir( parentdir.toLocalFile() );
+                QDir::root().mkpath( parentdir.toLocalFile() );
             }
         }
 

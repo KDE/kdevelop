@@ -60,12 +60,6 @@ ApplicationInfo AppWizardDialog::appInfo() const
     ApplicationInfo a;
     a.name = m_selectionPage->appName();
     a.location = m_selectionPage->location();
-    //correct place?
-    if (QFile::exists(a.location.toLocalFile()))
-    {
-        QDir tDir;
-        tDir.mkdir( a.location.toLocalFile() );
-    }
     a.appTemplate = m_selectionPage->selectedTemplate();
     if( !m_vcsPage->pluginName().isEmpty() )
     {
