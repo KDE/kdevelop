@@ -347,7 +347,8 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
-    defineTarget(lib->libraryName(), lib->sourceLists(), Library);
+    if(!lib->isImported())
+        defineTarget(lib->libraryName(), lib->sourceLists(), Library);
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
 }

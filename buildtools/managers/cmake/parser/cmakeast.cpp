@@ -489,6 +489,7 @@ AddLibraryAst::AddLibraryAst()
     m_isShared = false;
     m_isStatic = true;
     m_isModule = false;
+    m_isImported = false;
     m_excludeFromAll = false;
 }
 
@@ -514,7 +515,7 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     it = args.begin();
     m_libraryName = it->value;
     ++it;
-    while ( it != itEnd )
+    for(; it != itEnd;)
     {
         if ( it->value == "STATIC" && !libTypeSet )
         {
@@ -534,6 +535,11 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             libTypeSet = true;
             ++it;
         }
+        else if ( it->value == "IMPORTED")
+        {
+            m_isImported = true;
+            ++it;
+        }
         else if ( it->value == "EXCLUDE_FROM_ALL" )
         {
             m_excludeFromAll = true;
@@ -543,7 +549,7 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             break;
     }
 
-    if ( it == itEnd )
+    if ( it == itEnd && !m_isImported)
         return false; //there are no sources
 
     while ( it != itEnd )
