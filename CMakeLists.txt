@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDevelop_VERSION_MAJOR 3 )
 set( KDevelop_VERSION_MINOR 9 )
-set( KDevelop_VERSION_PATCH 82 )
+set( KDevelop_VERSION_PATCH 83 )
 
 find_package(KDE4 REQUIRED)
 #find_package(BerkeleyDB)
