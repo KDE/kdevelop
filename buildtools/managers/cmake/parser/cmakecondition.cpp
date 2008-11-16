@@ -255,6 +255,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 
 bool CMakeCondition::condition(const QStringList &expression) const
 {
+    if( expression.isEmpty() ) 
+    {
+        return false;
+    }
     bool ret = evaluateCondition(expression.constBegin(), expression.constEnd()-1);
 //     kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;

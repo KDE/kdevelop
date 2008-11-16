@@ -1011,6 +1011,11 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
 int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 {
     int lines=ifast->line();
+    if( ifast->condition().isEmpty() ) 
+    {
+        const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
+        kWarning() << "Parser couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
+    }
     CMakeCondition cond(this);
     bool result=cond.condition(ifast->condition());
 
