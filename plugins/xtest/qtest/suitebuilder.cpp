@@ -112,9 +112,12 @@ void SuiteBuilder::constructSuites()
         if (!m_suites.contains(suiteName)) {
             QFileInfo suiteDir(testExe.upUrl().path());
             Suite* suite = new Suite(suiteName, suiteDir, m_root);
-            m_root->addChild(suite);
             m_suites[suiteName] = suite;
         }
+    }
+    QMap<QString, Suite*>::Iterator it;
+    for(it = m_suites.begin(); it != m_suites.end(); it++) {
+        m_root->addChild(it.value());
     }
 }
 

@@ -67,6 +67,7 @@ private slots:
     void suiteBuilderFinished();
 
 private:
+    KUrl buildRoot();
     Veritas::Test* m_root;
     QList<Veritas::TestExecutableInfo> m_testExes;
     SuiteBuilderRunner *m_runner;

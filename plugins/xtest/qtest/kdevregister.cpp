@@ -26,7 +26,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <interfaces/iuicontroller.h>
-
+#include <veritas/ctestfileparser.h>
 #include <interfaces/icore.h>
 #include <KDebug>
 #include <QThread>
@@ -34,12 +34,15 @@
 #include <QApplication>
 #include <KUrl>
 #include <KLocale>
+#include <KConfigGroup>
 
 using QTest::KDevRegister;
 using QTest::SuiteBuilder;
 using QTest::Settings;
 using Veritas::Test;
 using Veritas::TestExecutableInfo;
+using Veritas::CTestfileParser;
+using Veritas::FilesystemAccess;
 using namespace KDevelop;
 
 namespace
@@ -98,7 +101,7 @@ if (X) {\
     emit reloadFailed(); \
     kDebug() << MSG; \
     emit showErrorMessage(MSG, 5); \
-    return; \
+    return KUrl(); \
 } else void(0)
 
 void KDevRegister::reload()
@@ -110,14 +113,16 @@ void KDevRegister::reload()
 
     m_reloading = true;
 
-    IBuildSystemManager* bsm = project()->buildSystemManager();
-    if (bsm && bsm->features() & IProjectFileManager::Tests) {
-        m_testExes = bsm->testExecutables();
+    KConfigGroup proj = project()->projectConfiguration()->group("Project");
+    if (proj.readEntry("Manager") == "KDevCMakeManager") {
+        FilesystemAccess* fsm = new FilesystemAccess;
+        CTestfileParser parser(fsm);
+        parser.parse(buildRoot());
+        m_testExes = parser.testExecutables();
+        delete fsm;
     } else { // TODO
         emit reloadFailed();
-        QString msg = !bsm ? i18n("No buildsystem active, failed to fetch tests. [todo]") :
-                             i18n("Buildsystem does not offer test executable information. [todo]");
-        emit showErrorMessage(msg, 5);
+        emit showErrorMessage(i18n("Failed to fetch test locations. Not a CMake project [todo]"), 5);
         return;
     }
 
@@ -148,20 +153,27 @@ ProjectExecutableTargetItem* findTargetFor(const TestExecutableInfo& test, const
     return exe;
 }
 
-void KDevRegister::fetchTestCommands(KJob*)
+KUrl KDevRegister::buildRoot()
 {
-    kDebug() << "";
-    Q_ASSERT(project());
-    Q_ASSERT(m_reloading);
-
     IBuildSystemManager* bm = project()->buildSystemManager();
     STOP_IF(!bm, "Build system manager zero");
 
     KUrl buildRoot = bm->buildDirectory(project()->projectItem());
     STOP_IF(buildRoot.isEmpty(), "Root build directory empty");
     STOP_IF(buildRoot == KUrl("/./"), "Root build directory empty");
+    
+    return buildRoot;
+}
 
-    QDir buildDir(buildRoot.path());
+void KDevRegister::fetchTestCommands(KJob*)
+{
+    kDebug() << "";
+    Q_ASSERT(project());
+    Q_ASSERT(m_reloading);
+
+    KUrl buildRoot_ = buildRoot();
+    if (!buildRoot_.isValid()) return;
+    QDir buildDir(buildRoot_.path());
     KUrl::List testExes;
 
     QMap<KUrl, ProjectExecutableTargetItem*> exeTargets;

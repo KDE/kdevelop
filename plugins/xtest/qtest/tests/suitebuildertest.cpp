@@ -111,14 +111,14 @@ void SuiteBuilderTest::multiSuitesCasesCommands()
     KVERIFY(root);
     KOMPARE(2, root->childCount());
 
-    Suite* foosuite = fetchSuite(root, 0);
+    Suite* foosuite = fetchSuite(root, 1); // suites are ordered alphabetically, so foosuite comes after barsuite
     verifySuite(foosuite, "foosuite", 1);
     Case* caze = foosuite->child(0);
     verifyCaze(caze, "footest", 2);
     verifyCommand(0, caze, "foocommand");
     verifyCommand(1, caze, "foocommand2");
 
-    Suite* barSuite = fetchSuite(root, 1);
+    Suite* barSuite = fetchSuite(root, 0); // barsuite comes first, index 0
     verifySuite(barSuite, "barsuite", 1);
     Case* barC = barSuite->child(0);
     verifyCaze(barC, "bartest", 1);
@@ -146,14 +146,14 @@ void SuiteBuilderTest::identicalSuiteNames()
     KVERIFY(root);
     KOMPARE(2, root->childCount());
 
-    Suite* foosuite = fetchSuite(root, 0);
+    Suite* foosuite = fetchSuite(root, 1);
     verifySuite(foosuite, "foo-suite", 1);
     Case* caze = foosuite->child(0);
     verifyCaze(caze, "footest", 2);
     verifyCommand(0, caze, "foocommand");
     verifyCommand(1, caze, "foocommand2");
 
-    Suite* barSuite = fetchSuite(root, 1);
+    Suite* barSuite = fetchSuite(root, 0);
     verifySuite(barSuite, "bar-suite", 1);
     Case* barC = barSuite->child(0);
     verifyCaze(barC, "bartest", 1);
