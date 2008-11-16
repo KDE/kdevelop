@@ -13,7 +13,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 	Q_FLAGS(Feature None Folders Targets Files Tests)
 
 	public:
-		enum KrossFeature { None=KDevelop::IProjectFileManager::None, Folders=KDevelop::IProjectFileManager::Folders, Targets=KDevelop::IProjectFileManager::Targets, Files=KDevelop::IProjectFileManager::Files, Tests=KDevelop::IProjectFileManager::Tests };
+		enum KrossFeature { None=KDevelop::IProjectFileManager::None, Folders=KDevelop::IProjectFileManager::Folders, Targets=KDevelop::IProjectFileManager::Targets, Files=KDevelop::IProjectFileManager::Files};
 		KrossKDevelopIProjectFileManager(KDevelop::IProjectFileManager* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IProjectFileManager"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -27,7 +27,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool renameFile(KDevelop::ProjectFileItem* x0, const KUrl& x1) { return wrapped->renameFile(x0, x1); }
 		Q_SCRIPTABLE bool renameFolder(KDevelop::ProjectFolderItem* x0, const KUrl& x1) { return wrapped->renameFolder(x0, x1); }
 		Q_SCRIPTABLE bool reload(KDevelop::ProjectBaseItem* x0) { return wrapped->reload(x0); }
-		Q_SCRIPTABLE QList< Veritas::TestExecutableInfo > testExecutables() const { return wrapped->testExecutables(); }
+//		Q_SCRIPTABLE QList< Veritas::TestExecutableInfo > testExecutables() const { return wrapped->testExecutables(); }
 	private:
 		KDevelop::IProjectFileManager* wrapped;
 };
