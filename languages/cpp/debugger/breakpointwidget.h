@@ -25,7 +25,9 @@
 #include "kdebug.h"
 
 #include "gdbcontroller.h"
+#include "newbreakpoint.h"
 #include "breakpointcontroller.h"
+#include "breakpoints.h"
 
 namespace GDBDebugger
 {

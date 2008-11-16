@@ -3,6 +3,7 @@
 
 #include "variablecollection.h"
 #include "breakpointcontroller.h"
+#include "breakpoints.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "mi/gdbmi.h"

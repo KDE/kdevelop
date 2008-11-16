@@ -27,7 +27,7 @@ public: // Methods that the derived classes should implement
         After fetching, should call setHasMore.  */
     virtual void fetchMoreChildren() = 0;
 
-    virtual void setColumn(int index, const QVariant& data) {}
+    virtual void setColumn(int index, const QVariant& data) { Q_UNUSED(index); Q_UNUSED(data); }
        
 protected: // Interface for derived classes
 
