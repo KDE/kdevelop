@@ -68,7 +68,7 @@ public:
     explicit CMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~CMakeProjectManager();
-    virtual Features features() const { return Features(Folders | Targets | Files | Tests); }
+    virtual Features features() const { return Features(Folders | Targets | Files ); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
     virtual KUrl buildDirectory(const KDevelop::ProjectBaseItem*) const;
@@ -109,9 +109,6 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
-    //ProjectFileManager
-    virtual QList<Veritas::TestExecutableInfo> testExecutables() const;
-
     //LanguageSupport
     virtual QString name() const;
     
@@ -132,7 +129,6 @@ private:
     void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
     CacheValues readCache(const KUrl &path);
-    void updateTestExecutables(const CMakeProjectVisitor& visitor, KDevelop::ProjectFolderItem* folder);
 
     
     void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
@@ -158,7 +154,6 @@ private:
     KDevelop::ReferencedTopDUContext m_buildstrapContext;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
-    QMap<KUrl, QMap<QString, Veritas::TestExecutableInfo> > m_testsPerFolder; // { directory x { 'target' name x exe info }}
 };
 
 #endif

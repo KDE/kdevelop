@@ -131,10 +131,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool hasMacro(const QString& name) const;
         TargetType targetType(const QString& targetName) { return m_targetsType[targetName]; }
 
-        QList<QString> tests() const { return m_tests.keys(); }
-        QString testExecutable(const QString& test) const;
-        QStringList testArguments(const QString& test) const;
-
         struct VisitorState
         {
             const CMakeFileContent* code;
@@ -198,7 +194,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
 
-        QMap<QString, QPair<QString, QStringList> > m_tests; // { testName x  (exe, args) }
 };
 
 #endif

@@ -33,35 +33,16 @@ class CMakeProjectVisitorTest : public QObject, public CMakeProjectVisitor
     Q_OBJECT
 public:
     CMakeProjectVisitorTest();
-    virtual ~CMakeProjectVisitorTest() {}
 
 private slots:
     void testVariables();
     void testVariables_data();
 
-    void init();
-
     void testRun();
     void testRun_data();
 
-    void addTest_single();
-    void addTest_multiple();
-    void addTest_flags();
-    void addTest_url();
-    void addTest_identicalAddExecutable();
-    void addTest_properties();
-    void addTest_kde4AddUnitTest();
-    void addTest_variableUsage();
-
-private:
-    // helpers
-    CMakeProjectVisitor* setupVisitor();
-    CMakeFileContent setupFileContent(const QString& content);
-    void assertTestFound(CMakeProjectVisitor* visitor, const QString& testName, const QString& exe, const QStringList& args = QStringList());
-
 private:
     KDevelop::TopDUContext* m_fakeContext;
-    QString m_someCMakeLists;
 };
 
 #endif
