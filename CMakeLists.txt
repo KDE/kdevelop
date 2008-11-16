@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 set(KDevPlatform_VERSION_MAJOR 0)
 set(KDevPlatform_VERSION_MINOR 9)
-set(KDevPlatform_VERSION_PATCH 82)
+set(KDevPlatform_VERSION_PATCH 83)
 
 set(KDE_MIN_VERSION "4.1.70")
 find_package(KDE4 4.1.70 REQUIRED)
