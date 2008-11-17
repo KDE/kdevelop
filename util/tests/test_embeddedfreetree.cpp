@@ -165,7 +165,7 @@ bool operator==(const std::set<uint> a, const std::set<uint> b) {
                 }
                 KDevelop::EmbeddedTreeAlgorithms<TestItem, TestItemHandler> algorithms(data.data(), data.size(), m_centralFree);
                 uint countFree = algorithms.countFreeItems();
-                Q_ASSERT(freeCount == countFree);
+                QCOMPARE(freeCount, countFree);
                 algorithms.verifyTreeConsistent();
             }
             

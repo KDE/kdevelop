@@ -49,8 +49,6 @@
  */
 
 namespace KDevelop {
-    ///@todo Better dynamic rebalancing the tree
-    
     ///Responsible for handling the items in the list
     ///This is an example. ItemHandler::rightChild(..) and ItemHandler::leftChild(..) must be values that must be able to hold the count of positive
     ///values that will be the maximum size of the list, and additionally -1.
@@ -220,46 +218,67 @@ namespace KDevelop {
      *   a new list as large as newItemCount, and call object.transferData to transfer the data
      *   into the new list. The new size must match the returned newItemCount.
      * - Either call object.apply(), or let it be called automatically by the destructor.
+     * @param increaseFraction By what fraction the list is increased when it needs to. For example the size will be increased by 1/5 if it's 5.
+     * @param rebuildIfInsertionMoreExpensive The structure is rebuilt completely when an insertion needs a moving around of more than rebuildIfInsertionMoreExpensive times
+                                              the count of items needed to be moved in worst case in a fresh tree.
+     *                                          After rebuilding the tree, the free space is evenly distributed, and thus insertions require much less moving.
      * */
-    template<class Data, class ItemHandler >
+    template<class Data, class ItemHandler, int increaseFraction = 5, int rebuildIfInsertionMoreExpensive = 20>
     class EmbeddedTreeAddItem {
 
         public:
             
-            EmbeddedTreeAddItem(Data* items, uint itemCount, int& centralFreeItem, const Data& add) : m_add(add), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem), m_applied(false) {
+            EmbeddedTreeAddItem(Data* items, uint itemCount, int& centralFreeItem, const Data& add) : m_add(add), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem), m_applied(false), m_needResize(false) {
+                m_needResize = !apply();
             }
             ~EmbeddedTreeAddItem() {
                 if(!m_applied)
-                    apply();
+                    apply(true);
             }
 
             ///Check this to see whether a new item-count is needed. If this does not equal the given itemCount, then
             ///the data needs to be transferred into a new list using transferData
             uint newItemCount() const {
-                if(*m_centralFreeItem == -1) {
-                    //We have to increase the size. Always increase by 10%.
-                    uint newItemCount = m_itemCount + (m_itemCount/10);
-                    if(newItemCount == m_itemCount)
-                        ++newItemCount;
-                    
-                    return newItemCount;
-                }else{
-                    return m_itemCount;
+                if(!m_applied) {
+                    if(*m_centralFreeItem == -1) {
+                        uint realItemCount = m_itemCount - countFreeItems(*m_centralFreeItem);
+                        uint newItemCount = realItemCount + (realItemCount/increaseFraction);
+                        if(newItemCount <= m_itemCount)
+                            newItemCount = m_itemCount+1;
+                        
+                        return newItemCount;
+                    }else if(m_needResize) {
+                        uint realItemCount = m_itemCount - countFreeItems(*m_centralFreeItem);
+                        uint newItemCount = realItemCount + (realItemCount/increaseFraction);
+                        
+                        return newItemCount;
+                    }
                 }
+                return m_itemCount;
             }
             
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
             void transferData(Data* newItems, uint newCount, int* newCentralFree = 0) {
                 DEBUG_FREEITEM_COUNT
-                //We only transfer into a new list when all the free items are used up
-                Q_ASSERT(countFreeItems(*m_centralFreeItem) == 0);
+                
+                uint currentRealCount = m_itemCount - countFreeItems(*m_centralFreeItem);
+//                 Q_ASSERT(currentRealCount + (currentRealCount/increaseFraction) == newCount);
                 
                 //Create a new list where the items from m_items are put into newItems, with the free items evenly
                 //distributed, and a clean balanced free-tree.
-                uint newFreeCount = newCount - m_itemCount;
-                volatile uint freeItemRaster = newCount / newFreeCount;
+                uint newFreeCount = newCount - currentRealCount;
+                volatile uint freeItemRaster;
+                if(newFreeCount)
+                    freeItemRaster = newCount / newFreeCount;
+                else {
+                    freeItemRaster = newCount+1; //No free items
+                }
+                    
+                ///@todo Do not iterate through all items, instead use the free-tree and memcpy for the ranges between free items.
+                ///Ideally, even the free-tree would be built on-the-fly.
                 Q_ASSERT(freeItemRaster);
                 uint offset = 0;
+                uint insertedValidCount = 0;
                 for(uint a = 0; a < newCount; ++a) {
                     //Create new free items at the end of their raster range
                     if(a % freeItemRaster == (freeItemRaster-1)) {
@@ -267,10 +286,17 @@ namespace KDevelop {
                         ItemHandler::createFreeItem(newItems[a]);
                         ++offset;
                     }else{
+                        ++insertedValidCount;
+                        while(ItemHandler::isFree(m_items[a-offset]) && a-offset < m_itemCount)
+                            --offset;
+                        Q_ASSERT(a-offset < m_itemCount);
                         newItems[a] = m_items[a-offset];
+//                         Q_ASSERT(!ItemHandler::isFree(newItems[a]));
                     }
                 }
-                Q_ASSERT(m_itemCount+offset == newCount);
+                Q_ASSERT(insertedValidCount == m_itemCount - countFreeItems(*m_centralFreeItem));
+//                  kDebug() << m_itemCount << newCount << offset;
+//                 Q_ASSERT(m_itemCount == newCount-offset);
                 
                 m_items = newItems;
                 m_itemCount = newCount;
@@ -280,14 +306,22 @@ namespace KDevelop {
 
                 *m_centralFreeItem = buildFreeTree(newFreeCount, freeItemRaster, freeItemRaster-1);
                
+//                 kDebug() << "count of new free items:" << newFreeCount;
+                
+//                 Q_ASSERT(countFreeItems( *m_centralFreeItem ) == newFreeCount);
+                
                 DEBUG_FREEITEM_COUNT
             }
             
-           ///Puts the item into the list
-           void apply() {
-               Q_ASSERT(!m_applied);
-               m_applied = true;
-               Q_ASSERT(*m_centralFreeItem != -1);
+           ///Tries to put the item into the list. If the insertion would be too inefficient or is not possible, returns false, unless @param force is true
+           bool apply(bool force = false) {
+               if(m_applied)
+                   return true;
+               
+               if(*m_centralFreeItem == -1) {
+                   Q_ASSERT(!force);
+                   return false;
+               }
                
                //Find the free item that is nearest to the target position in the item order
                int previousItem = -1;
@@ -330,7 +364,7 @@ namespace KDevelop {
                        }
                    }else{
                        //We will use this item! So find a replacement for it in the tree, and update the structure
-                       
+                       force = true;
                        currentLowerBound = currentUpperBound = currentItem;
                        
                        int leftReplaceCandidate = -1, rightReplaceCandidate = -1;
@@ -443,6 +477,24 @@ namespace KDevelop {
                //We can insert now
                //currentItem and previousItem are the two items that best enclose the target item
                 
+//                for(int a = currentLowerBound; a < currentUpperBound; ++a) {
+//                        Q_ASSERT(!ItemHandler::isFree(m_items[a]));
+//                }
+               
+               Q_ASSERT(currentItem < currentLowerBound || currentItem >= currentUpperBound);
+
+               //If the current item is on a border of the bounds, it needs to be inserted in the right position.
+               //Else, the current position already is right, and we only need to copy it in.
+               if(currentLowerBound < currentUpperBound && (currentItem == currentLowerBound-1 || currentItem == currentUpperBound)) {
+                 if(!insertSorted(m_add, currentItem, currentLowerBound, currentUpperBound, force)) {
+                     return false;
+                 }
+               }else{
+                ItemHandler::copyTo(m_add, m_items[currentItem]);
+               }
+
+               m_applied = true;
+               
                //First, take currentItem out of the chain, by replacing it with current.rightChild in the parent
                if(previousItem != -1) {
                    Data& previous(m_items[previousItem]);
@@ -459,19 +511,8 @@ namespace KDevelop {
                    *m_centralFreeItem = replaceCurrentWith;
                }
                
-//                for(int a = currentLowerBound; a < currentUpperBound; ++a) {
-//                        Q_ASSERT(!ItemHandler::isFree(m_items[a]));
-//                }
+               return true;
                
-               Q_ASSERT(currentItem < currentLowerBound || currentItem >= currentUpperBound);
-               
-               //If the current item is on a border of the bounds, it needs to be inserted in the right position.
-               //Else, the current position already is right, and we only need to copy it in.
-               if(currentLowerBound < currentUpperBound && (currentItem == currentLowerBound-1 || currentItem == currentUpperBound))
-                 insertSorted(m_add, currentItem, currentLowerBound, currentUpperBound);
-               else
-                ItemHandler::copyTo(m_add, m_items[currentItem]);
-
                DEBUG_FREEITEM_COUNT
            }
         
@@ -615,9 +656,16 @@ namespace KDevelop {
                     }
                 }
            }
+           
+           ///Maximum "moving" out of the way of items without forcing a complete rebuild of the list
+           inline int maxMoveAround() const {
+               return increaseFraction * rebuildIfInsertionMoreExpensive;
+           }
+           
            ///Inserts the given data item into position pos, and updates the sorting
            ///@param otherBound can be another empty item, that together with @param pos represents the closest enclosure of the target position
-           void insertSorted(const Data& data, int pos, int start, int end) {
+           ///@return Whether the item could be inserted. It is not inserted if 
+           bool insertSorted(const Data& data, int pos, int start, int end, bool force) {
                
                if(pos < start)
                    start = pos;
@@ -642,23 +690,32 @@ namespace KDevelop {
                Q_ASSERT(bound != pos);
 
                if(bound < pos) {
+                   if(!force && pos-bound > maxMoveAround()) {
+//                         kDebug() << "increasing because" << pos-bound << ">" << maxMoveAround() << "left free items:" << countFreeItems(*m_centralFreeItem) << "target free items:" << (m_itemCount-countFreeItems(*m_centralFreeItem))/increaseFraction;
+                       return false;
+                   }
                    //Move [bound, pos) one to right, and insert at bound
                     memmove(m_items+bound+1, m_items+bound, sizeof(Data)*(pos-bound));
                     target = bound;
                }else {
                    Q_ASSERT(bound > pos);
+                   if(!force && bound-pos-1 > maxMoveAround()) {
+//                         kDebug() << "increasing because" << bound-pos-1 << ">" << maxMoveAround() << "left free items:" << countFreeItems(*m_centralFreeItem)<< "target free items:" << (m_itemCount-countFreeItems(*m_centralFreeItem))/increaseFraction;
+                       return false;
+                   }
                    //Move (pos, bound) one to left, and insert at bound-1
                     memmove(m_items+pos, m_items+pos+1, sizeof(Data)*(bound-pos-1));
                     target = bound-1;
                }
                ItemHandler::copyTo(data, m_items[target]);
+               return true;
            }
            
            const Data& m_add;
            Data* m_items;
            uint m_itemCount;
            int* m_centralFreeItem;
-           bool m_applied;
+           bool m_applied, m_needResize;
     };
 
     /**Use this to add items.
@@ -670,12 +727,12 @@ namespace KDevelop {
      *   into the new list. The new size must match the returned newItemCount.
      * However this may also be ignored if the memory-saving is not wanted in that moment.
      * */
-    template<class Data, class ItemHandler >
+    template<class Data, class ItemHandler, int increaseFraction = 5 >
     class EmbeddedTreeRemoveItem {
 
         public:
             
-            EmbeddedTreeRemoveItem(Data* items, uint itemCount, int& centralFreeItem, const Data& remove) : m_remove(remove), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem) {
+            EmbeddedTreeRemoveItem(Data* items, uint itemCount, int& centralFreeItem, const Data& remove) : m_remove(remove), m_items(items), m_itemCount(itemCount), m_centralFreeItem(&centralFreeItem), m_insertedAtDepth(0) {
                  apply();
             }
 
@@ -685,11 +742,16 @@ namespace KDevelop {
             ///Check this to see whether a new item-count is needed. If this does not equal the given itemCount, then
             ///the data needs to be transferred into a new list using transferData
             uint newItemCount() const {
-                uint freeCount = countFreeItems(*m_centralFreeItem);
-                if(freeCount > ((m_itemCount / 7)+1) || freeCount == m_itemCount)
-                    return m_itemCount - freeCount;
-                else
-                    return m_itemCount;
+                uint maxFreeItems = ((m_itemCount / increaseFraction)*3)/2 + 1;
+                //First we approximate the count of free items using the insertion depth
+                if((1 << m_insertedAtDepth) >= maxFreeItems) {
+                    uint freeCount = countFreeItems(*m_centralFreeItem);
+                    if(freeCount > maxFreeItems || freeCount == m_itemCount) {
+                        return m_itemCount - freeCount;
+                    }
+                }
+                
+                return m_itemCount;
             }
             
             ///Transfers the data into a new item-list. The size of the new item-list must equal newItemCount()
@@ -764,6 +826,7 @@ namespace KDevelop {
                while(1) {
                    Q_ASSERT(removeIndex != currentItem);
                    Data& current(m_items[currentItem]);
+                   ++m_insertedAtDepth;
                    if(removeIndex < currentItem) {
                        upperBound = currentItem;
                        //Follow left child
@@ -820,6 +883,7 @@ namespace KDevelop {
            Data* m_items;
            uint m_itemCount;
            int* m_centralFreeItem;
+           int m_insertedAtDepth;
     };
 }
 
