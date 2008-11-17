@@ -71,7 +71,7 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
     KDEV_USE_EXTENSION_INTERFACE( Veritas::ITestFramework );
 
     TestToolViewFactory* factory = new TestToolViewFactory(this);
-    core()->uiController()->addToolView(name() + " Runner", factory);
+    core()->uiController()->addToolView(name(), factory);
     setXMLFile("kdevqtest.rc");
 }
 
