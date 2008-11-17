@@ -53,55 +53,18 @@
 
 #include "tests/common/modeltest.h"
 #include "projectproxymodel.h"
-#include "projectbuildsetwidget.h"
 #include "projectmanagerviewplugin.h"
-#include "projecttreeview.h"
 #include "proxyselectionmodel.h"
+#include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
 
-class ProjectManagerPrivate
-{
-public:
-    ProjectManagerViewPlugin *mplugin;
-    ProjectTreeView *m_projectOverview;
-    ProjectBuildSetWidget* m_buildView;
-    KComboBox* m_detailSwitcher;
-//     KLineEdit* m_filters;
-    QStackedWidget* m_detailStack;
-    QStringList m_cachedFileList;
-    QToolButton* hideDetailsButton;
-    ProjectProxyModel* m_modelFilter;
-
-    void fileDirty( const QString &fileName )
-    {
-        Q_UNUSED(fileName)
-    }
-    void fileCreated( const QString &fileName )
-    {
-        Q_UNUSED(fileName)
-    }
-    void fileDeleted( const QString &fileName )
-    {
-        Q_UNUSED(fileName)
-    }
-
-    void openUrl( const KUrl& url )
-    {
-        mplugin->core()->documentController()->openDocument( url );
-    }
-
-    /*void filtersChanged()
-    {
-        m_modelFilter->setFilterWildcard(m_filters->text());
-    }*/
-};
-
-ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent )
-        : QWidget( parent ),
-        d(new ProjectManagerPrivate)
+ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidget *parent )
+        : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
 {
     setWindowTitle(i18n("Projects"));
+
+    m_ui->setupUi( this );
 
     m_syncAction = new KAction(this);
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -121,57 +84,40 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
     addAction(m_buildAction);
 
 
-    d->mplugin = plugin;
-    QVBoxLayout *vbox = new QVBoxLayout( this );
-    vbox->setMargin( 0 );
+    m_ui->projectTreeView->setWhatsThis( i18n( "Project Overview" ) );
+    QSizePolicy pol( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    pol.setVerticalStretch( 6 );
+    m_ui->projectTreeView->setSizePolicy( pol );
+    connect(m_ui->projectTreeView, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
 
-    d->m_projectOverview = new ProjectTreeView( plugin, this );
-    d->m_projectOverview->setWhatsThis( i18n( "Project Overview" ) );
-    vbox->addWidget( d->m_projectOverview, 3 );
-    connect(d->m_projectOverview, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
-
-//     d->m_filters = new KLineEdit(this);
-//     d->m_filters->setClearButtonShown(true);
+//     m_filters = new KLineEdit(this);
+//     m_filters->setClearButtonShown(true);
 //     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
-//     vbox->addWidget( d->m_filters );
+//     vbox->addWidget( m_filters );
 
-    QHBoxLayout* hbox = new QHBoxLayout();
-    vbox->addLayout( hbox, 0 );
-
-    d->m_detailSwitcher = new KComboBox( false, this );
-    d->m_detailSwitcher->insertItem( 0, i18n( "Buildset" ) );
-    hbox->addWidget( d->m_detailSwitcher );
-
-    d->hideDetailsButton = new QToolButton( this );
-    d->hideDetailsButton->setIcon( KIcon( "arrow-down-double.png" ) );
-    connect( d->hideDetailsButton, SIGNAL( clicked() ),
+    m_ui->hideDetailsButton->setIcon( KIcon( "arrow-down-double.png" ) );
+    connect( m_ui->hideDetailsButton, SIGNAL( clicked() ),
              this, SLOT( switchDetailView() ) );
-    hbox->addWidget( d->hideDetailsButton );
 
-    d->m_detailStack = new QStackedWidget( this );
-    vbox->addWidget( d->m_detailStack, 1 );
+    pol = QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
+    pol.setVerticalStretch( 2 );
+    m_ui->buildSetView->setProjectView( this );
+    m_ui->buildSetView->setSizePolicy( pol );
+    m_ui->buildSetView->setWhatsThis( i18n( "Build Items:" ) );
 
-    connect( d->m_detailSwitcher, SIGNAL( activated( int ) ),
-             d->m_detailStack, SLOT( setCurrentIndex( int ) ) );
-
-    d->m_buildView = new ProjectBuildSetWidget( this, d->m_detailStack );
-//     d->m_buildView->setItemDelegate( delegate );
-    d->m_buildView->setWhatsThis( i18n( "Build Items:" ) );
-    d->m_detailStack->insertWidget( 0, d->m_buildView );
-
-    QStandardItemModel *overviewModel = d->mplugin->core()->projectController()->projectModel();
-    d->m_modelFilter = new ProjectProxyModel( this );
-    d->m_modelFilter->setSourceModel(overviewModel);
-    d->m_modelFilter->setDynamicSortFilter(true);
-    d->m_projectOverview->setModel( d->m_modelFilter );
-    d->m_projectOverview->setSortingEnabled(true);
-    d->m_projectOverview->sortByColumn( 0, Qt::AscendingOrder );
-    d->m_projectOverview->setSelectionModel( new ProxySelectionModel( d->m_projectOverview, ICore::self()->projectController()->projectSelectionModel(), this ) );
-//     d->m_projectOverview->setModel( overviewModel );c
+    QStandardItemModel *overviewModel = ICore::self()->projectController()->projectModel();
+    m_modelFilter = new ProjectProxyModel( this );
+    m_modelFilter->setSourceModel(overviewModel);
+    m_modelFilter->setDynamicSortFilter(true);
+    m_ui->projectTreeView->setModel( m_modelFilter );
+    m_ui->projectTreeView->setSortingEnabled(true);
+    m_ui->projectTreeView->sortByColumn( 0, Qt::AscendingOrder );
+    m_ui->projectTreeView->setSelectionModel( new ProxySelectionModel( m_ui->projectTreeView, ICore::self()->projectController()->projectSelectionModel(), this ) );
+//     m_ui->projectTreeView->setModel( overviewModel );c
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
     setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
-    connect( d->m_projectOverview->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
+    connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
@@ -182,8 +128,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidge
 
 void ProjectManagerView::selectionChanged()
 {
-    d->m_buildView->selectionChanged();
-    m_buildAction->setEnabled( !d->m_projectOverview->selectionModel()->selectedIndexes().isEmpty() );
+    m_ui->buildSetView->selectionChanged();
+    m_buildAction->setEnabled( !m_ui->projectTreeView->selectionModel()->selectedIndexes().isEmpty() );
 }
 
 void ProjectManagerView::buildSelectedItems()
@@ -204,21 +150,15 @@ void ProjectManagerView::updateSyncAction()
 
 ProjectManagerView::~ProjectManagerView()
 {
-    delete d;
-}
-
-ProjectManagerViewPlugin *ProjectManagerView::plugin() const
-{
-    return d->mplugin;
 }
 
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 {
     QList<KDevelop::ProjectBaseItem*> items;
-    foreach( const QModelIndex &idx, d->m_projectOverview->selectionModel()->selectedIndexes() )
+    foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
     {
         KDevelop::ProjectBaseItem* item =
-                d->mplugin->core()->projectController()->projectModel()->item( d->m_modelFilter->mapToSource(idx) );
+                ICore::self()->projectController()->projectModel()->item( m_modelFilter->mapToSource(idx) );
         if( item )
             items << item;
         else
@@ -230,15 +170,15 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 void ProjectManagerView::switchDetailView()
 {
     KFadeWidgetEffect* animation = new KFadeWidgetEffect( this );
-    if( d->m_detailStack->isHidden() )
+    if( m_ui->buildSetView->isHidden() )
     {
-        d->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
-        d->m_detailStack->show();
+        m_ui->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
+        m_ui->buildSetView->show();
     }
     else
     {
-        d->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
-        d->m_detailStack->hide();
+        m_ui->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
+        m_ui->buildSetView->hide();
     }
     animation->start();
 }
@@ -249,15 +189,33 @@ void ProjectManagerView::locateCurrentDocument()
 
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
-            QModelIndex index = d->m_modelFilter->proxyIndexFromItem(item);
+            QModelIndex index = m_modelFilter->proxyIndexFromItem(item);
             if (index.isValid()) {
-                d->m_projectOverview->setCurrentIndex(index);
-                d->m_projectOverview->expand(index);
-                d->m_projectOverview->scrollTo(index);
+                m_ui->projectTreeView->setCurrentIndex(index);
+                m_ui->projectTreeView->expand(index);
+                m_ui->projectTreeView->scrollTo(index);
                 return;
             }
         }
     }
+}
+
+void ProjectManagerView::fileDirty( const QString &fileName )
+{
+    Q_UNUSED(fileName)
+}
+void ProjectManagerView::fileCreated( const QString &fileName )
+{
+    Q_UNUSED(fileName)
+}
+void ProjectManagerView::fileDeleted( const QString &fileName )
+{
+    Q_UNUSED(fileName)
+}
+
+void ProjectManagerView::openUrl( const KUrl& url )
+{
+        ICore::self()->documentController()->openDocument( url );
 }
 
 #include "projectmanagerview.moc"

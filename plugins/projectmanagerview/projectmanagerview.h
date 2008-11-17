@@ -24,6 +24,14 @@
 #include <QtGui/QWidget>
 
 class KAction;
+class KUrl;
+
+namespace Ui
+{
+class ProjectManagerView;
+}
+
+class ProjectProxyModel;
 
 namespace KDevelop
 {
@@ -36,11 +44,10 @@ class ProjectManagerView: public QWidget
 {
     Q_OBJECT
 public:
-    ProjectManagerView( ProjectManagerViewPlugin *plugin, QWidget *parent );
+    ProjectManagerView( ProjectManagerViewPlugin*, QWidget *parent );
     virtual ~ProjectManagerView();
 
-    ProjectManagerViewPlugin *plugin() const;
-
+    ProjectManagerViewPlugin* plugin() const { return m_plugin; }
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:
     void selectionChanged();
@@ -48,15 +55,18 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void buildSelectedItems();
+    void openUrl( const KUrl& );
+    void fileCreated( const QString & );
+    void fileDirty( const QString & );
+    void fileDeleted( const QString & );
+
 private:
-    Q_PRIVATE_SLOT( d, void openUrl( const KUrl& ) )
-    Q_PRIVATE_SLOT( d, void fileCreated( const QString &fileName ) )
-    Q_PRIVATE_SLOT( d, void fileDirty( const QString &fileName ) )
-    Q_PRIVATE_SLOT( d, void fileDeleted( const QString &fileName ) )
-//     Q_PRIVATE_SLOT( d, void filtersChanged() )
-    class ProjectManagerPrivate* const d;
     KAction* m_syncAction;
     KAction* m_buildAction;
+    Ui::ProjectManagerView* m_ui;
+    QStringList m_cachedFileList;
+    ProjectProxyModel* m_modelFilter;
+    ProjectManagerViewPlugin* m_plugin;
 };
 
 #endif // KDEVPROJECTMANAGER_H

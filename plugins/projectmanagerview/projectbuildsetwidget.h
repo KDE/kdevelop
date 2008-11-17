@@ -44,8 +44,9 @@ class ProjectBuildSetWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ProjectBuildSetWidget( ProjectManagerView* view, QWidget* parent );
+    ProjectBuildSetWidget( QWidget* parent = 0 );
     ~ProjectBuildSetWidget();
+    void setProjectView( ProjectManagerView* view );
 public slots:
     void selectionChanged();
 private slots:
@@ -53,7 +54,6 @@ private slots:
     void removeItems();
     void showContextMenu( const QPoint& p );
 private:
-    ProjectManagerViewPlugin* m_plugin;
     ProjectManagerView* m_view;
 
     Ui::ProjectBuildSetWidget* m_ui;

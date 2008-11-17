@@ -43,9 +43,8 @@
 #include "ui_projectbuildsetwidget.h"
 #include <QHeaderView>
 
-ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
-                                              QWidget* parent )
-    : QWidget( parent ), m_view(view),
+ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
+    : QWidget( parent ), m_view( 0 ),
      m_ui( new Ui::ProjectBuildSetWidget )
 {
     m_ui->setupUi( this );
@@ -63,13 +62,18 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( ProjectManagerView* view,
 
 
     m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
-    m_ui->itemView->setModel( m_view->plugin()->buildSet() );
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              SLOT(showContextMenu(const QPoint&) ) );
     connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged()) );
     layout()->setMargin(0);
+}
+
+void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
+{
+    m_view = view;
+    m_ui->itemView->setModel( m_view->plugin()->buildSet() );
 }
 
 void ProjectBuildSetWidget::selectionChanged()

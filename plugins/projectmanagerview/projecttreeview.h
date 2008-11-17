@@ -44,7 +44,7 @@ class ProjectTreeView: public QTreeView
 {
         Q_OBJECT
     public:
-        ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent );
+        ProjectTreeView( QWidget *parent = 0 );
         virtual ~ProjectTreeView();
 
         ProjectManagerViewPlugin *plugin() const;
@@ -67,7 +67,6 @@ class ProjectTreeView: public QTreeView
         virtual void mouseReleaseEvent( QMouseEvent* );
 
     private:
-        class ProjectTreeViewPrivate* const d;
         KDevelop::IProject* m_ctxProject;
         bool mouseClickChangesSelection;
         bool rightButtonClicked;

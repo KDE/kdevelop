@@ -46,17 +46,9 @@
 
 using namespace KDevelop;
 
-class ProjectTreeViewPrivate
+ProjectTreeView::ProjectTreeView( QWidget *parent )
+        : QTreeView( parent ), m_ctxProject( 0 ), mouseClickChangesSelection( false )
 {
-
-    public:
-        ProjectManagerViewPlugin* mplugin;
-};
-
-ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *parent )
-        : QTreeView( parent ), d( new ProjectTreeViewPrivate ), m_ctxProject( 0 ), mouseClickChangesSelection( false )
-{
-    d->mplugin = plugin;
     header()->setResizeMode( QHeaderView::ResizeToContents );
     header()->hide();
 
@@ -85,12 +77,6 @@ ProjectTreeView::ProjectTreeView( ProjectManagerViewPlugin *plugin, QWidget *par
 
 ProjectTreeView::~ProjectTreeView()
 {
-    delete d;
-}
-
-ProjectManagerViewPlugin *ProjectTreeView::plugin() const
-{
-    return d->mplugin;
 }
 
 ProjectFolderItem *ProjectTreeView::currentFolderItem() const
@@ -197,7 +183,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KMenu menu( this );
 
         KDevelop::ProjectItemContext context(itemlist);
-        QList<ContextMenuExtension> extensions = d->mplugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
 
         QList<QAction*> buildActions;
         QList<QAction*> vcsActions;
@@ -251,7 +237,7 @@ void ProjectTreeView::openProjectConfig()
 {
     if( m_ctxProject )
     {
-        IProjectController* ip = d->mplugin->core()->projectController();
+        IProjectController* ip = ICore::self()->projectController();
         ip->configureProject( m_ctxProject );
     }
 }
