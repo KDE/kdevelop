@@ -43,6 +43,10 @@ class KDEVCPPDUCHAIN_EXPORT ConvenientIterator {
     const T& ref() const {
       return m_conversion.toItem(*m_it);
     }
+    
+    uint index() const {
+      return *m_it;
+    }
 
     private:
     Set::Iterator m_it;
@@ -78,6 +82,12 @@ class KDEVCPPDUCHAIN_EXPORT LazySet {
       if(!m_temporaryRemoveIndices.empty())
         apply();
       m_temporaryIndices.insert(m_conversion.toIndex(t));
+    }
+
+    void insertIndex(uint index) {
+      if(!m_temporaryRemoveIndices.empty())
+        apply();
+      m_temporaryIndices.insert(index);
     }
     
     void remove(const T& t) {

@@ -585,18 +585,31 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
   ///Merge those used macros that were not defined within this environment
   //This is slightly inefficient, would be nicer to have a fast mechanism for this
-  for( MacroSetIterator it( file.m_usedMacros.set() ); it; ++it )
-    if( !m_definedMacroNames.contains(it.ref().name) && !m_unDefinedMacroNames.contains(it.ref().name) )
-      m_usedMacros.insert( it.ref() );
-
+  
+  {
+    Utils::Set definedMacroNamesSet = m_definedMacroNames.set();
+    Utils::Set unDefinedMacroNamesSet = m_unDefinedMacroNames.set();
+    
+    for(Utils::Set::Iterator it = file.m_usedMacros.set().iterator(); it; ++it) {
+      if( !definedMacroNamesSet.contains(*it) && !unDefinedMacroNamesSet.contains(*it) )
+        m_usedMacros.insertIndex( *it );
+    }
+  }
+  
   ifDebug( Q_ASSERT(m_usedMacroNames.set().count() == m_usedMacros.set().count()) );
   
   ///Add defined macros from the merged file.
 
-  //Since merged macros overrule already stored ones, first remove the ones of the same name.
-  for( MacroSetIterator it( m_definedMacros.set() ); it; ++it )
-    if( file.m_definedMacroNames.contains( it.ref().name ) || file.m_unDefinedMacroNames.contains( it.ref().name ) )
-      m_definedMacros.remove(it.ref());
+  {
+    Utils::Set otherDefinedMacroNamesSet = file.m_definedMacroNames.set();
+    Utils::Set otherUnDefinedMacroNamesSet = file.m_unDefinedMacroNames.set();
+    //Since merged macros overrule already stored ones, first remove the ones of the same name.
+    for( MacroSetIterator it( m_definedMacros.set() ); it; ++it ) {
+      const rpp::pp_macro& macro(it.ref());
+      if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
+        m_definedMacros.remove(macro);
+    }
+  }
 
   //Now merge in the new defined macros
   
