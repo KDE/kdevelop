@@ -236,6 +236,7 @@ void Lexer::tokenize(ParseSession* _session)
   (*session->token_stream)[0].kind = Token_EOF;
   (*session->token_stream)[0].session = session;
   (*session->token_stream)[0].position = 0;
+  (*session->token_stream)[0].size = 0;
   index = 1;
 
   cursor.current = session->contents();
