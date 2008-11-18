@@ -2,6 +2,7 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
 set(kdevplatformlanguage_LIB_SRCS
+    editor/modificationrevisionset.cpp
     editor/documentrange.cpp
     editor/documentrangeobject.cpp
     editor/documentcursor.cpp
@@ -95,6 +96,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/coderepresentation.cpp
 
+    util/setrepository.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -109,7 +111,7 @@ kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} 
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
 target_link_libraries(kdevplatformlanguage ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES}
-    kdevplatforminterfaces)
+    kdevplatforminterfaces kdevplatformutil)
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
@@ -142,6 +144,7 @@ install(FILES
     editor/simplecursor.h
     editor/simplerange.h
     editor/modificationrevision.h
+    editor/modificationrevisionset.h
     editor/editorrevisiontracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor
 )
@@ -151,6 +154,12 @@ install(FILES
     backgroundparser/parsejob.h
     backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser
+)
+
+install(FILES
+    util/setrepository.h
+    util/basicsetrepository.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util
 )
 
 install(FILES

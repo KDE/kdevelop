@@ -31,10 +31,11 @@
 #include "../languageexport.h"
 #include "duchainbase.h"
 #include "topducontext.h"
+#include <language/editor/modificationrevisionset.h>
 
 namespace KDevelop
 {
-
+class ModificationRevisionSet;
 class ModificationRevision; //Can be found in  editorintegrator.h
 class IndexedTopDUContext;
 /**
@@ -94,6 +95,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBas
   }
   bool m_isProxyContext;
   TopDUContext::Features m_features;
+  KDevelop::ModificationRevision m_modificationTime;
+  ModificationRevisionSet m_allModificationRevisions;
+  KDevelop::IndexedString m_url;
+  KDevelop::IndexedTopDUContext m_topContext;
 };
 
 /**
@@ -109,26 +114,29 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
 {
   public:
     virtual ~ParsingEnvironmentFile();
-    ParsingEnvironmentFile();
+    ParsingEnvironmentFile(const IndexedString& url);
+    ParsingEnvironmentFile(ParsingEnvironmentFileData& data, const IndexedString& url);
     ParsingEnvironmentFile(ParsingEnvironmentFileData& data);
 
     ///@see ParsingEnvironmentType
     virtual int type() const;
 
+    ///Should return whether this file matches into the given environment. The default-implementation always returns true.
+    virtual bool matchEnvironment(const ParsingEnvironment* environment) const;
+
     ///Convenience-function that returns the top-context
-    virtual TopDUContext* topContext() const;
+    TopDUContext* topContext() const;
     
-    ///Should return the indexed version of the top-context
-    virtual KDevelop::IndexedTopDUContext indexedTopContext() const = 0;
+    KDevelop::IndexedTopDUContext indexedTopContext() const;
     
-    ///Should return a correctly filled ModificationRevision of the source it was created from.
-    virtual ModificationRevision modificationRevision() const = 0;
-
-    ///Should return whether this file matches into the given environment
-    virtual bool matchEnvironment(const ParsingEnvironment* environment) const = 0;
-
-    ///Should use language-specific information to decide whether the top-context that has this data attached needs to be reparsed
-    virtual bool needsUpdate() const = 0;
+    KDevelop::IndexedString url() const;
+    
+    void setTopContext(KDevelop::IndexedTopDUContext context);
+    
+    ///Can additionally use language-specific information to decide whether the top-context that has this data attached needs to be reparsed.
+    ///The standard-implementation checks the modification-time of this file stored using setModificationRevision, and all other modification-times
+    ///stored with addModificationRevision(..).
+    virtual bool needsUpdate() const;
     
     /**
      * A language-specific flag used by C++ to mark one context as a proxy of another.
@@ -160,6 +168,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     ///Returns true if this top-context satisfies at least the given minimum features.
     ///If there is static minimum features set up in ParseJob, this also checks against those.
     bool featuresSatisfied(TopDUContext::Features minimumFeatures);
+    
+    ///Should return a correctly filled ModificationRevision of the source it was created from.
+    void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
+    
+    KDevelop::ModificationRevision modificationRevision() const;
+
+    ///Clears the modification times of all dependencies
+    void clearModificationRevisions();
+    
+    void addModificationRevision(const IndexedString& url, const ModificationRevision& revision);
+    
+    const ModificationRevisionSet& allModificationRevisions() const;
+    
+    void addModificationRevisions(const ModificationRevisionSet&);
     
     DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
     
