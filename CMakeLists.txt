@@ -8,14 +8,15 @@ set( KDevelop_VERSION_MAJOR 3 )
 set( KDevelop_VERSION_MINOR 9 )
 set( KDevelop_VERSION_PATCH 83 )
 
-find_package(KDE4 REQUIRED)
+set(KDE_MIN_VERSION "4.1.70")
+find_package(KDE4 4.1.70 REQUIRED)
 #find_package(BerkeleyDB)
 #find_package(TDB)
 include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 
-find_package(KDevPlatform REQUIRED)
+find_package(KDevPlatform 0.9.82 REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
