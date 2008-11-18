@@ -44,7 +44,7 @@
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
-#include "setrepository.h"
+#include <language/util/setrepository.h>
 #include <language/editor/hashedstring.h>
 #include "typeutils.h"
 #include "templatedeclaration.h"
