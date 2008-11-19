@@ -74,9 +74,78 @@ typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData, false> IncludePathsRepository;
 IncludePathsRepository includePathsRepository("include path repository");
 
+struct FileModificationPair {
+  KDevelop::IndexedString file;
+  KDevelop::ModificationRevision revision;
+
+  FileModificationPair() {
+  }
+  
+  FileModificationPair(KDevelop::IndexedString _file, KDevelop::ModificationRevision _revision) : file(_file), revision(_revision) {
+  }
+  
+  unsigned int hash() const {
+    return ((file.hash() + revision.modificationTime) * 17 + revision.revision) * 73;
+  }
+  
+  unsigned short int itemSize() const {
+    return sizeof(FileModificationPair);
+  }
+  
+  bool operator==(const FileModificationPair& rhs) const {
+    return file == rhs.file && revision == rhs.revision;
+  }
+};
+
+struct FileModificationPairRequest {
+
+  FileModificationPairRequest(const FileModificationPair& data) : m_data(data) {
+  }
+  
+  const FileModificationPair& m_data;
+  
+  enum {
+    AverageSize = sizeof(FileModificationPair)
+  };
+
+  unsigned int hash() const {
+    return m_data.hash();
+  }
+  
+  size_t itemSize() const {
+      return m_data.itemSize();
+  }
+
+  void createItem(FileModificationPair* item) const {
+    *item = m_data;
+  }
+  
+  bool equals(const FileModificationPair* item) const {
+    return *item == m_data;
+  }
+};
+
+typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, KDevelop::NoDynamicData, false> FileModificationPairRepository;
+
+static FileModificationPairRepository& fileModificationPairRepository() {
+  static FileModificationPairRepository rep("file modification repository");
+  return rep;
+}
+
+struct FileModificationSetRepository : public Utils::BasicSetRepository {
+  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", true) {
+  }
+  virtual void itemRemovedFromSets(uint index) {
+    kDebug() << "item removed from file-modification repository:" << index;
+    fileModificationPairRepository().deleteItem(index);
+  }
+};
+
+FileModificationSetRepository fileModificationSetRepository;
+
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
-//  #define LEXERCACHE_DEBUG
-//  #define ifDebug(X) X
+// #define DEBUG
+// #define ifDebug(X) X
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
 //by calling setIsDebugging(true) from within the debugger
 // #define DYNAMIC_DEBUGGING
@@ -100,6 +169,9 @@ inline bool debugging() {
   return false;
 }
 #endif
+
+//When uncommented, the reason for needed updates is printed
+#define DEBUG_NEEDSUPDATE
 
 using namespace Cpp;
 
@@ -226,30 +298,62 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 }
 
 bool EnvironmentFile::needsUpdate() const {
-  return ParsingEnvironmentFile::needsUpdate();
+  ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( url() );
+
+  if ( revision != modificationRevision() ) {
+#ifdef DEBUG_NEEDSUPDATE
+  if(debugging()) {
+    kDebug( 9007 ) << url().str() << "has changed, stored stamp:" << modificationRevision() << "new time:" << revision;
+  }
+#endif
+    return true;
+  }
+
+  ///@todo Do caching for complete sets!
+  Utils::Set::Iterator it = m_allModificationTimes.iterator();
+  while(it) {
+    const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
+    ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
+    if( revision != data->revision ) {
+#ifdef DEBUG_NEEDSUPDATE
+      if(debugging()) {
+        kDebug( 9007 ) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
+      }
+#endif
+      
+      return true;
+    }
+
+    ++it;
+  }
+
+  return false;
 }
 
-EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url), /*m_includeFiles(&EnvironmentManager::stringSetRepository), */m_missingIncludeFiles(&EnvironmentManager::stringSetRepository), m_usedMacros(&EnvironmentManager::macroSetRepository), m_usedMacroNames(&EnvironmentManager::stringSetRepository), m_definedMacros(&EnvironmentManager::macroSetRepository), m_definedMacroNames(&EnvironmentManager::stringSetRepository), m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository) {
+EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData()), m_includeFiles(&EnvironmentManager::stringSetRepository), m_missingIncludeFiles(&EnvironmentManager::stringSetRepository), m_usedMacros(&EnvironmentManager::macroSetRepository), m_usedMacroNames(&EnvironmentManager::stringSetRepository), m_definedMacros(&EnvironmentManager::macroSetRepository), m_definedMacroNames(&EnvironmentManager::stringSetRepository), m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository) {
 
   d_func_dynamic()->setClassId(this);
   
   d_func_dynamic()->m_topContext = IndexedTopDUContext(topContext);
   
   d_func_dynamic()->m_url = url;
+  QFileInfo fileInfo( KUrl(url.str()).path() );
+  d_func_dynamic()->m_modificationTime = fileInfo.lastModified();
 
-//   ifDebug( kDebug(9007) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
+  ifDebug( kDebug(9007) << "created for" << url.str() << "modification-time:" << d_func_dynamic()->m_modificationTime );
   
-  clearModificationRevisions();
+  clearModificationTimes();
 }
 
 EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironmentFile(data) 
-//       , m_includeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_includeFiles, &EnvironmentManager::stringSetRepository)) 
+      , m_includeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_includeFiles, &EnvironmentManager::stringSetRepository)) 
       , m_missingIncludeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_missingIncludeFiles, &EnvironmentManager::stringSetRepository))
       , m_usedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_usedMacros, &EnvironmentManager::macroSetRepository))
       , m_usedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_usedMacroNames, &EnvironmentManager::stringSetRepository))
       , m_definedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_definedMacros, &EnvironmentManager::macroSetRepository))
       , m_definedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_definedMacroNames, &EnvironmentManager::stringSetRepository))
       , m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_unDefinedMacroNames, &EnvironmentManager::stringSetRepository))
+      , m_allModificationTimes(data.m_allModificationTimes, &fileModificationSetRepository)
 {
 }
 
@@ -257,8 +361,8 @@ void EnvironmentFile::aboutToSave() {
   ParsingEnvironmentFile::aboutToSave();
   ///@todo Get rid of this. Instead, automatically create LazySet's like done with lists in appendedlist code.
   //Copy data from temporary items to "data"
-//   if(d_func()->m_includeFiles != m_includeFiles.set().setIndex())
-//     d_func_dynamic()->m_includeFiles = m_includeFiles.set().setIndex();
+  if(d_func()->m_includeFiles != m_includeFiles.set().setIndex())
+    d_func_dynamic()->m_includeFiles = m_includeFiles.set().setIndex();
   if(d_func()->m_missingIncludeFiles != m_missingIncludeFiles.set().setIndex())
     d_func_dynamic()->m_missingIncludeFiles = m_missingIncludeFiles.set().setIndex();
   if(d_func()->m_usedMacros != m_usedMacros.set().setIndex())
@@ -271,6 +375,8 @@ void EnvironmentFile::aboutToSave() {
     d_func_dynamic()->m_definedMacroNames = m_definedMacroNames.set().setIndex();
   if(d_func()->m_unDefinedMacroNames != m_unDefinedMacroNames.set().setIndex())
     d_func_dynamic()->m_unDefinedMacroNames = m_unDefinedMacroNames.set().setIndex();
+  if(d_func()->m_allModificationTimes != m_allModificationTimes.setIndex())
+    d_func_dynamic()->m_allModificationTimes = m_allModificationTimes.setIndex();
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
@@ -388,6 +494,29 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   }
 }
 
+///Should contain a modification-time for each included-file
+const QMap<IndexedString, KDevelop::ModificationRevision> EnvironmentFile::allModificationTimes() const {
+  QMap<IndexedString, KDevelop::ModificationRevision> ret;
+  Utils::Set::Iterator it = m_allModificationTimes.iterator();
+  while(it) {
+    const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
+    ret[data->file] = data->revision;
+    ++it;
+  }
+  return ret;
+}
+
+void EnvironmentFile::clearModificationTimes() {
+  m_allModificationTimes.staticUnref();
+  
+  m_allModificationTimes = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+  m_allModificationTimes.staticRef();
+}
+
+IndexedString EnvironmentFile::url() const {
+  return d_func()->m_url;
+}
+
 void EnvironmentFile::addMissingIncludeFile(const IndexedString& file)
 {
   m_missingIncludeFiles.insert(file);
@@ -404,9 +533,38 @@ void EnvironmentFile::clearMissingIncludeFiles()
 }
 
 void EnvironmentFile::addIncludeFile( const IndexedString& file, const ModificationRevision& modificationTime ) {
-//   m_includeFiles.insert(file);
+  m_includeFiles.insert(file);
 
-  addModificationRevision(file, modificationTime);
+  Utils::Set oldMoficiationTimes = m_allModificationTimes;
+  m_allModificationTimes += fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(file, modificationTime)));
+  m_allModificationTimes.staticRef();
+  oldMoficiationTimes.staticUnref();
+}
+
+void EnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
+
+  Utils::Set oldMoficiationTimes = m_allModificationTimes;
+  m_allModificationTimes -= fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+  
+  #ifdef LEXERCACHE_DEBUG
+  if(debugging()) {
+  kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
+  }
+#endif
+  d_func_dynamic()->m_modificationTime = rev;
+#ifdef LEXERCACHE_DEBUG
+  if(debugging()) {
+  kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
+  }
+#endif
+  m_allModificationTimes += fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(d_func()->m_url, d_func()->m_modificationTime)));
+
+  m_allModificationTimes.staticRef();
+  oldMoficiationTimes.staticUnref();
+}
+
+KDevelop::ModificationRevision EnvironmentFile::modificationRevision() const {
+  return d_func()->m_modificationTime;
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
@@ -417,7 +575,7 @@ void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Inde
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
+  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.m_strings);
   }
 #endif
   d_func_dynamic()->m_strings = (strings() + (file.strings() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set()).setIndex();
@@ -432,10 +590,9 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Utils::Set definedMacroNamesSet = m_definedMacroNames.set();
     Utils::Set unDefinedMacroNamesSet = m_unDefinedMacroNames.set();
     
-    for(MacroSetIterator it( file.m_usedMacros.set() ); it; ++it) {
-      const rpp::pp_macro& macro(it.ref());
-      if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
-        m_usedMacros.insertIndex( it.index() );
+    for(Utils::Set::Iterator it = file.m_usedMacros.set().iterator(); it; ++it) {
+      if( !definedMacroNamesSet.contains(*it) && !unDefinedMacroNamesSet.contains(*it) )
+        m_usedMacros.insertIndex( *it );
     }
   }
   
@@ -463,10 +620,14 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   m_definedMacros += file.m_definedMacros.set();
 
   ///Merge include-files, problems and other stuff
-//   m_includeFiles += file.m_includeFiles.set();
+  m_includeFiles += file.m_includeFiles.set();
   m_missingIncludeFiles += file.m_missingIncludeFiles.set();
   
-  addModificationRevisions(file.allModificationRevisions());
+  Utils::Set oldModificationTimes = m_allModificationTimes;
+  
+  m_allModificationTimes += file.m_allModificationTimes;
+  m_allModificationTimes.staticRef();
+  oldModificationTimes.staticUnref();
 
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
@@ -474,7 +635,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   kDebug( 9007 ) << id(this) << ": defined in this after merge:" << m_definedMacros.set().count() << print(m_definedMacros);
   ifDebug( Q_ASSERT(m_definedMacros.set().count() == m_definedMacroNames.set().count()) );
   kDebug( 9007 ) << id(this) << ": undefined in this after merge:" << print(m_unDefinedMacroNames);
-  kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(strings());
+  kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(m_strings);
   kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(m_usedMacroNames);
   }
 #endif
@@ -492,6 +653,14 @@ uint EnvironmentFile::identityOffset() const {
 
 void EnvironmentFile::setIdentityOffset(uint offset) {
   d_func_dynamic()->m_identityOffset = offset;
+}
+
+void EnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context) {
+  d_func_dynamic()->m_topContext = context;
+}
+
+KDevelop::IndexedTopDUContext EnvironmentFile::indexedTopContext() const {
+  return d_func()->m_topContext;
 }
 
 int EnvironmentFile::type() const {
