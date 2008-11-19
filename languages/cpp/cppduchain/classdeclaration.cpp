@@ -109,4 +109,13 @@ QString ClassDeclaration::toString() const {
   return "class " + identifier().toString();
 }
 
+Cpp::ClassDeclarationData::ClassType ClassDeclaration::classType() const {
+  return d_func()->m_classType;
+}
+
+void ClassDeclaration::setClassType(Cpp::ClassDeclarationData::ClassType type) {
+  d_func_dynamic()->m_classType = type;
+}
+
+
 }

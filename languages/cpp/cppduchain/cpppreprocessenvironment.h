@@ -42,7 +42,7 @@ public:
   void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
   KSharedPtr<Cpp::EnvironmentFile> environmentFile() const;
 
-  void swapMacros( Environment* parentEnvironment );
+  void swapMacros( rpp::Environment* parentEnvironment );
 
   /**
     * Merges the given set of macros into the environment. Does not modify m_environmentFile.

@@ -62,7 +62,18 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
 
-
+ClassDeclarationData::ClassType classTypeFromTokenKind(int kind)
+{
+  switch(kind)
+  {
+  case Token_struct:
+    return ClassDeclarationData::Struct;
+  case Token_union:
+    return ClassDeclarationData::Union;
+  default:
+    return ClassDeclarationData::Class;
+  }
+}
 
 ///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
 DUContext* getTemplateContext(Declaration* decl) {
@@ -535,7 +546,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   return declaration;
 }
 
-Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange) {
+Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange, ClassDeclarationData::ClassType classType) {
   Identifier id;
 
   if(!name) {
@@ -548,6 +559,7 @@ Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AS
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();
+  ret->setClassType(classType);
   return ret;
 }
 
@@ -731,9 +743,10 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     openPrefixContext(node, id, pos);
   }
 
-  openClassDefinition(node->name, node, node->name == 0);
-
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
+  
+  openClassDefinition(node->name, node, node->name == 0, classTypeFromTokenKind(kind));
+
   if (kind == Token_struct || kind == Token_union)
     m_accessPolicyStack.push(Declaration::Public);
   else

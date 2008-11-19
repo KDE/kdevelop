@@ -81,41 +81,16 @@ bool isTemplateDependent(Declaration* decl) {
   return false;
 }
 
-uint classTypeFromTokenKind(int kind)
-{
-  switch(kind)
-  {
-  case Token_struct:
-    return CppClassType::Struct;
-  case Token_union:
-    return CppClassType::Union;
-  default:
-    return CppClassType::Class;
-  }
-}
-
-CppClassType* TypeBuilder::openClass(int kind)
-{
-  CppClassType* classType = new CppClassType();
-
-  classType->setClassType( classTypeFromTokenKind(kind) );
-
-  return classType;
-}
-
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
-  CppClassType::Ptr classType = CppClassType::Ptr(openClass(kind));
+  CppClassType::Ptr classType = CppClassType::Ptr(new CppClassType());
 
   openType(classType);
 
   classTypeOpened( currentAbstractType() ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
 
   TypeBuilderBase::visitClassSpecifier(node);
-
-  // Prevent additional elements being added if this becomes the current type again
-  classType->close();
 
   closeType();
 }
@@ -260,7 +235,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
       case Token_class:
       case Token_struct:
       case Token_union:
-        type = AbstractType::Ptr(openClass(kind));
+        type = AbstractType::Ptr(new CppClassType());
         break;
       case Token_enum:
         type = AbstractType::Ptr(new EnumerationType());

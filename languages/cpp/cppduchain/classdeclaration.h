@@ -46,7 +46,14 @@ DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
 class ClassDeclarationData : public KDevelop::DeclarationData
 {
 public:
-  ClassDeclarationData() {
+  enum ClassType {
+    Class,
+    Struct,
+    Union,
+    Interface
+  };
+  
+  ClassDeclarationData() : m_classType(Class) {
     initializeAppendedLists();
   }
 
@@ -57,7 +64,11 @@ public:
   ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::DeclarationData(rhs) {
     initializeAppendedLists();
     copyListsFrom(rhs);
+    m_classType = rhs.m_classType;
   }
+  
+  /// Type of the class (struct, class, etc.)
+  ClassType m_classType;
 
   START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::DeclarationData);
   APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
@@ -70,6 +81,7 @@ public:
 class KDEVCPPDUCHAIN_EXPORT ClassDeclaration : public KDevelop::Declaration
 {
 public:
+  
   ClassDeclaration(const ClassDeclaration& rhs);
   ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
@@ -91,6 +103,10 @@ public:
 
   QString toString() const;
 
+  void setClassType(ClassDeclarationData::ClassType type);
+  
+  ClassDeclarationData::ClassType classType() const;
+  
   enum {
     Identity = 17
   };

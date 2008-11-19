@@ -26,6 +26,7 @@
 
 #include <QStack>
 #include <cppparserexport.h>
+// #include "pp-macro.h"
 
 namespace KDevelop {
   class IndexedString;
@@ -95,7 +96,7 @@ public:
   QList<pp_macro*> allMacros() const;
 
   //Take the set of environment-macros from the given environment
-  void swapMacros( Environment* parentEnvironment );
+  virtual void swapMacros( Environment* parentEnvironment );
 
   //Faster access then allMacros(..), because nothing is copied
   const EnvironmentMap& environment() const; //krazy:exclude=constref

@@ -79,7 +79,6 @@ protected:
   void openDelayedType(const KDevelop::TypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 
-  CppClassType* openClass(int kind);
   KDevelop::FunctionType* openFunction(DeclaratorAST *node);
 
   uint parseConstVolatile(const ListNode<std::size_t>* cv);

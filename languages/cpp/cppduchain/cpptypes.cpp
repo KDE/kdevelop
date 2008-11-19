@@ -59,18 +59,9 @@ QString CppClassType::toString() const
     return AbstractType::toString() + id.toString();
   }
 
-  QString type;
-  switch (classType()) {
-    case Class:
-      type = "class";
-      break;
-    case Struct:
-      type = "struct";
-      break;
-    case Union:
-      type = "union";
-      break;
-  }
+  //This path usually is not taken
+  QString type = "class";
+
   return QString("<%1>%2").arg(type).arg(AbstractType::toString(true));
 }
 

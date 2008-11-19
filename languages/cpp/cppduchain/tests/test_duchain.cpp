@@ -62,6 +62,7 @@
 
 
 #include <typeinfo>
+#include <language/duchain/duchainutils.h>
 
 //Uncomment the following line to get additional output from the string-repository test
 //#define DEBUG_STRINGREPOSITORY
@@ -678,16 +679,32 @@ void TestDUChain::testEnum()
 
 void TestDUChain::testVirtualMemberFunction()
 {
-  QByteArray text("class Foo { public: virtual void bar(); }; \n");
-  TopDUContext* top = parse(text, DumpAll);
-  DUChainWriteLocker lock(DUChain::lock());
-
-  ClassFunctionDeclaration* memberFun; // filled by assert macro below
-  ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
-  QVERIFY(memberFun->isVirtual());
-  QVERIFY(!memberFun->isAbstract());
-  kDebug() << memberFun->toString();
-  release(top);
+  {
+    QByteArray text("class Foo { public: virtual void bar(); }; \n");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    ClassFunctionDeclaration* memberFun; // filled by assert macro below
+    ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
+    QVERIFY(memberFun->isVirtual());
+    QVERIFY(!memberFun->isAbstract());
+    kDebug() << memberFun->toString();
+    release(top);
+  }
+  {
+    //Forward-declarations with "struct" or "class" are considered equal, so make sure the override is detected correctly.
+    QByteArray text("class S; struct A { virtual S* ret(); }; struct S { }; struct B : public A { virtual S* ret(); };");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 4);
+    QCOMPARE(top->localDeclarations()[0]->indexedType(), top->localDeclarations()[2]->indexedType());
+    QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    QVERIFY(DUChainUtils::getOverridden(top->childContexts()[2]->localDeclarations()[0]));
+    
+    release(top);
+  }
 }
 
 void TestDUChain::testMultipleVirtual()
@@ -835,7 +852,10 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(defStructA->type<CppClassType>());
     QVERIFY(defStructA->internalContext());
     QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
-    QCOMPARE(defStructA->type<CppClassType>()->classType(), static_cast<uint>(CppClassType::Struct));
+    Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[0]);
+    QVERIFY(classDecl);
+    
+    QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
 
     release(top);
   }
@@ -874,7 +894,9 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(defStructA->type<CppClassType>());
     QVERIFY(defStructA->internalContext());
     QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
-    QCOMPARE(defStructA->type<CppClassType>()->classType(), static_cast<uint>(CppClassType::Struct));
+    Cpp::ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
 
     release(top);
   }
@@ -902,8 +924,10 @@ void TestDUChain::testDeclareStruct()
     QCOMPARE(defStructA->uses().count(), 1);
     QCOMPARE(defStructA->uses().begin()->count(), 1);
     QVERIFY(defStructA->type<CppClassType>());
-    QCOMPARE(defStructA->type<CppClassType>()->classType(), static_cast<uint>(CppClassType::Struct));
-
+    Cpp::ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
+    
     DUContext* structA = top->childContexts().first();
     QVERIFY(structA->parentContext());
     QCOMPARE(structA->importedParentContexts().count(), 0);
@@ -2925,7 +2949,19 @@ void TestDUChain::testConst()
     QCOMPARE(top->localDeclarations().size(), 2);
     release(top);
   }
-}
+  {
+    QByteArray method("class C;const C& c;");
+
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(method, DumpAll));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().size(), 2);
+    QVERIFY(top->localDeclarations()[1]->type<ReferenceType>());
+    QVERIFY(top->localDeclarations()[1]->type<ReferenceType>()->baseType());
+    QVERIFY(top->localDeclarations()[1]->type<ReferenceType>()->baseType()->modifiers() & AbstractType::ConstModifier);
+    kDebug() << top->localDeclarations()[1]->type<ReferenceType>()->toString();
+    release(top);
+  }}
 
 void TestDUChain::testDeclarationId()
 {

@@ -62,7 +62,7 @@ void CppPreprocessEnvironment::setEnvironmentFile( const KSharedPtr<Cpp::Environ
     m_finished = false;
 }
 
-void CppPreprocessEnvironment::swapMacros( Environment* parentEnvironment ) {
+void CppPreprocessEnvironment::swapMacros( rpp::Environment* parentEnvironment ) {
     CppPreprocessEnvironment* env = dynamic_cast<CppPreprocessEnvironment*>(parentEnvironment);
     Q_ASSERT(env);
 

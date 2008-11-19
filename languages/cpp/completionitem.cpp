@@ -34,6 +34,7 @@
 #include <language/duchain/namespacealiasdeclaration.h>
 #include "cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
+#include <classdeclaration.h>
 
 using namespace KDevelop;
 
@@ -153,21 +154,7 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
         break;
       case AbstractType::TypeStructure:
         if (CppClassType::Ptr classType =  dec->type<CppClassType>())
-          switch (classType->classType()) {
-            case CppClassType::Class:
-              p |= CodeCompletionModel::Class;
-              break;
-            case CppClassType::Struct:
-              // Remove class bit set in DUChainUtils
-              p &= ~CodeCompletionModel::Class;
-              p |= CodeCompletionModel::Struct;
-              break;
-            case CppClassType::Union:
-              // Remove class bit set in DUChainUtils
-              p &= ~CodeCompletionModel::Class;
-              p |= CodeCompletionModel::Union;
-              break;
-          }
+          p |= CodeCompletionModel::Class;
         break;
     }
   }
@@ -272,17 +259,23 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             indentation += "typedef ";
 
           if( dec->kind() == Declaration::Type && !dec->type<FunctionType>() && !dec->isTypeAlias() ) {
-            if (CppClassType::Ptr classType =  dec->type<CppClassType>())
-              switch (classType->classType()) {
-                case CppClassType::Class:
-                  return indentation + "class";
-                  break;
-                case CppClassType::Struct:
-                  return indentation + "struct";
-                  break;
-                case CppClassType::Union:
-                  return indentation + "union";
-                  break;
+              if (CppClassType::Ptr classType =  dec->type<CppClassType>()){
+                Cpp::ClassDeclaration* classDecl  = dynamic_cast<Cpp::ClassDeclaration*>(dec);
+                if(classDecl) {
+                  switch (classDecl->classType()) {
+                    case Cpp::ClassDeclarationData::Class:
+                      return indentation + "class";
+                      break;
+                    case Cpp::ClassDeclarationData::Struct:
+                      return indentation + "struct";
+                      break;
+                    case Cpp::ClassDeclarationData::Union:
+                      return indentation + "union";
+                      break;
+                  }
+                }else if(dec->isForwardDeclaration()) {
+                  return indentation + "class"; ///@todo Would be useful to have the class/struct/union info also for forward-declarations
+                }
               }
               if(dec->type<EnumerationType>()) {
                 return "enum";
