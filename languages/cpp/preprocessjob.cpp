@@ -314,6 +314,16 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
   headerSectionEndedInternal(&stream);
 }
 
+TopDUContext* contentFromProxy(TopDUContext* ctx) {
+    if( ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext() ) {
+        Q_ASSERT(!ctx->importedParentContexts().isEmpty());
+        return dynamic_cast<TopDUContext*>(ctx->importedParentContexts().first().context(0));
+    }else{
+        return ctx;
+    }
+}
+
+
 void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 {
     bool closeStream = false;
@@ -340,7 +350,12 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         ///Find a matching content-context
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
 
-        KDevelop::ReferencedTopDUContext content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false, true);
+        KDevelop::ReferencedTopDUContext content;
+
+        if(m_updatingEnvironmentFile)
+          content = KDevelop::ReferencedTopDUContext(contentFromProxy(m_updatingEnvironmentFile->topContext()));
+        else
+          content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false, true);
 
         m_currentEnvironment->disableIdentityOffsetRestriction();
 
@@ -354,7 +369,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             ///@todo think whether localPath is needed
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
-                
+            
             if(!CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
