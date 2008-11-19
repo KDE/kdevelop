@@ -32,10 +32,10 @@
 #include <language/duchain/topducontext.h>
 
 #include "cppduchainexport.h"
-#include "setrepository.h"
+#include <language/util/setrepository.h>
 #include "parser/rpp/macrorepository.h"
 
-/**
+/** 
  * The environment-manager helps achieving right representation of the way c++ works:
  * When a file is processed by the preprocessor, the same file may create totally
  * different results depending on the defined macros. Think for example of header-
@@ -142,7 +142,7 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     EnvironmentFileData() {
       m_contentStartLine = 0;
       m_strings = 0;
-      m_includeFiles = 0;
+//       m_includeFiles = 0;
       m_missingIncludeFiles = 0;
       m_usedMacros = 0;
       m_usedMacroNames = 0;
@@ -150,21 +150,18 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
       m_definedMacroNames = 0;
       m_unDefinedMacroNames = 0;
       m_identityOffset = 0;
-      m_allModificationTimes = 0;
       m_includePaths = 0;
     }
     EnvironmentFileData(const EnvironmentFileData& rhs) : KDevelop::ParsingEnvironmentFileData(rhs) {
       m_url = rhs.m_url;
-      m_modificationTime = rhs.m_modificationTime;
       m_strings = rhs.m_strings; //String-set
-      m_includeFiles = rhs.m_includeFiles; //String-set
+//       m_includeFiles = rhs.m_includeFiles; //String-set
       m_missingIncludeFiles = rhs.m_missingIncludeFiles; //String-set
       m_usedMacros = rhs.m_usedMacros; //Macro-set
       m_usedMacroNames = rhs.m_usedMacroNames; //String-set
       m_definedMacros = rhs.m_definedMacros; //Macro-set
       m_definedMacroNames = rhs.m_definedMacroNames; //String-set
       m_unDefinedMacroNames = rhs.m_unDefinedMacroNames; //String-set
-      m_allModificationTimes = rhs.m_allModificationTimes;
       m_contentStartLine = rhs.m_contentStartLine;
       m_topContext = rhs.m_topContext;
       m_identityOffset = rhs.m_identityOffset;
@@ -173,20 +170,16 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     
     ~EnvironmentFileData() {
     }
-    KDevelop::IndexedString m_url;
-    KDevelop::IndexedTopDUContext m_topContext;
-    KDevelop::ModificationRevision m_modificationTime;
     uint m_identityOffset;
     //Set of all strings that can be affected by macros from outside
     uint m_strings; //String-set
-    uint m_includeFiles; //String-set
+//     uint m_includeFiles; //String-set
     uint m_missingIncludeFiles; //String-set
     uint m_usedMacros; //Macro-set
     uint m_usedMacroNames; //String-set
     uint m_definedMacros; //Macro-set
     uint m_definedMacroNames; //String-set
     uint m_unDefinedMacroNames; //String-set
-    uint m_allModificationTimes;
     uint m_includePaths; //Index in the internal include-paths repository
     int m_contentStartLine;
 };
@@ -224,16 +217,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
 
     size_t hash() const;
 
-    void setTopContext(KDevelop::IndexedTopDUContext context);
-    
-    virtual KDevelop::IndexedTopDUContext indexedTopContext() const;
-    
-    KDevelop::IndexedString url() const;
-
-    void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
-    
-    virtual KDevelop::ModificationRevision modificationRevision() const;
-    
     /**Set of all files with absolute paths, including those included indirectly
      *
      * This by definition also includes this file, so when the count is 1,
@@ -260,13 +243,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     ///Set of all macros undefined to the outside
     const LazyStringSet& unDefinedMacroNames() const;
   
-    ///Should contain a modification-time for each included-file
-    ///Relatively expensive, since a conversion has to be done internally.
-    const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision> allModificationTimes() const;
-
-    ///Clears the modification times of all dependencies
-    void clearModificationTimes();
-
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
     const QList<KDevelop::IndexedString> includePaths() const;
     void setIncludePaths( const QList<KDevelop::IndexedString>& paths );
@@ -296,7 +272,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     virtual int type() const;
 
     friend class EnvironmentManager;
-    Cpp::LazyStringSet m_includeFiles; //Set of all files with absolute paths
+//     Cpp::LazyStringSet m_includeFiles; //Set of all files with absolute paths
     Cpp::LazyStringSet m_missingIncludeFiles; //Set of relative file-names of missing includes
     Cpp::LazyMacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
     Cpp::LazyStringSet m_usedMacroNames; //Set the names of all used macros
@@ -304,8 +280,6 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     Cpp::LazyStringSet m_definedMacroNames;
     Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
 
-    Utils::Set  m_allModificationTimes; //Set of indices in the modification-time repository
-    
     DUCHAIN_DECLARE_DATA(EnvironmentFile)
     /*
     Needed data:
