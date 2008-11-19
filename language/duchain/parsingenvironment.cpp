@@ -23,7 +23,6 @@
 #include "duchain.h"
 #include "topducontextdata.h"
 #include <language/backgroundparser/parsejob.h>
-#include <editor/modificationrevisionset.h>
 
 namespace KDevelop
 {
@@ -43,51 +42,8 @@ ParsingEnvironment::ParsingEnvironment() {
 ParsingEnvironment::~ParsingEnvironment() {
 }
 
-IndexedString ParsingEnvironmentFile::url() const {
-  return d_func()->m_url;
-}
-
-bool ParsingEnvironmentFile::needsUpdate() const {
-  return d_func()->m_allModificationRevisions.needsUpdate();
-}
-
-bool ParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* /*environment*/) const {
-  return true;
-}
-
-void ParsingEnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context) {
-  d_func_dynamic()->m_topContext = context;
-}
-
-KDevelop::IndexedTopDUContext ParsingEnvironmentFile::indexedTopContext() const {
-  return d_func()->m_topContext;
-}
-
-const ModificationRevisionSet& ParsingEnvironmentFile::allModificationRevisions() const {
-  return d_func()->m_allModificationRevisions;
-}
-
-void ParsingEnvironmentFile::addModificationRevisions(const ModificationRevisionSet& revisions) {
-  d_func_dynamic()->m_allModificationRevisions += revisions;
-}
-
-ParsingEnvironmentFile::ParsingEnvironmentFile(ParsingEnvironmentFileData& data, const IndexedString& url) : DUChainBase(data) {
-
-  d_func_dynamic()->m_url = url;
-  d_func_dynamic()->m_modificationTime = ModificationRevision::revisionForFile(url);
-  
-  addModificationRevision(url, d_func_dynamic()->m_modificationTime);
-  Q_ASSERT(d_func()->m_allModificationRevisions.index());
-}
-
-ParsingEnvironmentFile::ParsingEnvironmentFile(const IndexedString& url) : DUChainBase(*new ParsingEnvironmentFileData()) {
+ParsingEnvironmentFile::ParsingEnvironmentFile() : DUChainBase(*new ParsingEnvironmentFileData()) {
   d_func_dynamic()->setClassId(this);
-
-  d_func_dynamic()->m_url = url;
-  d_func_dynamic()->m_modificationTime = ModificationRevision::revisionForFile(url);
-  
-  addModificationRevision(url, d_func_dynamic()->m_modificationTime);
-  Q_ASSERT(d_func()->m_allModificationRevisions.index());
 }
 
 TopDUContext* ParsingEnvironmentFile::topContext() const {
@@ -98,8 +54,6 @@ ParsingEnvironmentFile::~ParsingEnvironmentFile() {
 }
 
 ParsingEnvironmentFile::ParsingEnvironmentFile(ParsingEnvironmentFileData& data) : DUChainBase(data) {
-  //If this triggers, the item has most probably not been initialized with the correct constructor that takes an IndexedString.
-  Q_ASSERT(d_func()->m_allModificationRevisions.index());
 }
 
 int ParsingEnvironment::type() const {
@@ -136,6 +90,8 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
   return ret;
 }
 
+///Returns the parsing-environment informations of all importers of the coupled TopDUContext. This is more efficient than
+///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
 QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() {
   
   QList<IndexedDUContext> imp;
@@ -168,7 +124,6 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
     return false;
   }
   
-  ///@todo Before recursing, do a fast check whether one of the imports has special rules stored. Else it's not neede.
   if(minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive || ParseJob::hasStaticMinimumFeatures())
     foreach(ParsingEnvironmentFilePointer import, file->imports())
       if(!featuresMatch(import, minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive ? minimumFeatures : ((TopDUContext::Features)0), checked))
@@ -182,42 +137,5 @@ bool ParsingEnvironmentFile::featuresSatisfied(TopDUContext::Features minimumFea
   return featuresMatch(ParsingEnvironmentFilePointer(this), minimumFeatures, checked);
 }
 
-void ParsingEnvironmentFile::clearModificationRevisions() {
-  d_func_dynamic()->m_allModificationRevisions.clear();
-  d_func_dynamic()->m_allModificationRevisions.addModificationRevision(d_func()->m_url, d_func()->m_modificationTime);
-}
-
-void ParsingEnvironmentFile::addModificationRevision(const IndexedString& url, const ModificationRevision& revision) {
-  d_func_dynamic()->m_allModificationRevisions.addModificationRevision(url, revision);
-  {
-    //Test
-    Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.index());
-    Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(url, revision) );
-    d_func_dynamic()->m_allModificationRevisions.addModificationRevision(url, revision);
-  }
-}
-
-void ParsingEnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
-
-  Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.index());
-  Q_ASSERT( d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(d_func()->m_url, d_func()->m_modificationTime) );
-  
-  #ifdef LEXERCACHE_DEBUG
-  if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
-  }
-#endif
-  d_func_dynamic()->m_modificationTime = rev;
-#ifdef LEXERCACHE_DEBUG
-  if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
-  }
-#endif
-  d_func_dynamic()->m_allModificationRevisions.addModificationRevision(d_func()->m_url, d_func()->m_modificationTime);
-}
-
-KDevelop::ModificationRevision ParsingEnvironmentFile::modificationRevision() const {
-  return d_func()->m_modificationTime;
-}
 
 } //KDevelop

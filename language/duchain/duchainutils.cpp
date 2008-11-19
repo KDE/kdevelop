@@ -233,7 +233,7 @@ TopDUContext* DUChainUtils::standardContextForUrl(const KUrl& url) {
   {
     if(!chosen)
     {
-      if (language->languageSupport())
+//      if (language->languageSupport())
         chosen = language->languageSupport()->standardContext(url);
     }
   }
