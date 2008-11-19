@@ -426,29 +426,30 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   AbstractType::Ptr target = TypeUtils::targetType( type, m_topContext.data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
-  ///@todo handle const etc. correctly
-  PointerType::Ptr pointer = type.cast<PointerType>();
-  ReferenceType::Ptr ref = type.cast<ReferenceType>();
-
-  if(pointer && pointer->modifiers() & AbstractType::ConstModifier)
-    m_currentText += "const ";
-  if(ref && ref->modifiers() & AbstractType::ConstModifier)
-    m_currentText += "const ";
-
   if( idType ) {
-
+    ///@todo This is C++ specific, move into subclass
+    
+    if(target->modifiers() & AbstractType::ConstModifier)
+      m_currentText += "const ";
+    
     htmlIdentifiedType(type, idType);
 
+    PointerType::Ptr pointer = type.cast<PointerType>();
+    ReferenceType::Ptr ref = type.cast<ReferenceType>();
+    
     //Add reference and pointer
-    ///@todo correct const handling
     while(pointer || ref) {
       if(pointer) {
         m_currentText += Qt::escape("*");
+        if(pointer->modifiers() & AbstractType::ConstModifier)
+          m_currentText += " const";
         ref = pointer->baseType().cast<ReferenceType>();
         pointer = pointer->baseType().cast<PointerType>();
       }
       if(ref) {
         m_currentText += Qt::escape("&");
+        if(ref->modifiers() & AbstractType::ConstModifier)
+          m_currentText += " const";
         pointer = ref->baseType().cast<PointerType>();
         ref = ref->baseType().cast<ReferenceType>();
       }
