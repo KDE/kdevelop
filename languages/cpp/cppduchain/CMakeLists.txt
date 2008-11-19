@@ -28,6 +28,7 @@ set(kdevcppduchain_LIB_SRCS
     cppducontext.cpp
     typeutils.cpp
     templatedeclaration.cpp
+    setrepository.cpp
     cpppreprocessenvironment.cpp
     expressionparser.cpp
     expressionvisitor.cpp
