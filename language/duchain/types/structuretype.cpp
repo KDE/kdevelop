@@ -55,9 +55,9 @@ bool StructureType::equals(const AbstractType* _rhs) const
 
   Q_ASSERT(fastCast<const StructureType*>(_rhs));
 
-  const StructureType* rhs = static_cast<const StructureType*>(_rhs);
+//   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
 
-  return d_func()->m_classType == rhs->d_func()->m_classType;
+  return true;
 }
 
 StructureType::StructureType()
@@ -68,26 +68,6 @@ StructureType::StructureType()
 
 StructureType::~StructureType()
 {
-}
-
-void StructureType::setClassType(uint type)
-{
-  d_func_dynamic()->m_classType = type;
-}
-
-uint StructureType::classType() const
-{
-  return d_func()->m_classType;
-}
-
-bool StructureType::isClosed() const
-{
-  return d_func()->m_closed;
-}
-
-void StructureType::close()
-{
-  d_func_dynamic()->m_closed = true;
 }
 
 void StructureType::accept0 (TypeVisitor *v) const
@@ -105,22 +85,7 @@ QString StructureType::toString() const
     return AbstractType::toString() + id.toString();
   }
 
-  QString type;
-
-  switch (classType()) {
-    case Class:
-      type = "class";
-      break;
-    case Struct:
-      type = "struct";
-      break;
-    case Union:
-      type = "union";
-      break;
-    case Interface:
-      type = "interface";
-      break;
-  }
+  QString type = "class";
 
   return QString("<%1>").arg(type) + AbstractType::toString(true);
 }

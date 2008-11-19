@@ -41,13 +41,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public StructureTypeBase
 public:
   typedef TypePtr<StructureType> Ptr;
 
-  enum ClassTypes {
-    Class,
-    Struct,
-    Union,
-    Interface
-  };
-
   /// Default constructor
   StructureType();
   /// Copy constructor. \param rhs type to copy
@@ -56,14 +49,6 @@ public:
   StructureType(StructureTypeData& data);
   /// Destructor
   virtual ~StructureType();
-
-  bool isClosed() const;
-  void close();
-  //After clearing, a class-type is open again.
-  //void clear();
-
-  void setClassType(uint type);
-  uint classType() const;
 
   virtual AbstractType* clone() const;
 

@@ -392,6 +392,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
   StructureType::Ptr klass = m_declaration->abstractType().cast<StructureType>();
   Q_ASSERT(klass);
 
+  ///@todo Use information from ClassDeclaration to print whether it's a struct/union/etc.
   m_currentText += "class ";
   eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 }

@@ -119,15 +119,11 @@ void FunctionTypeData::operator=(const FunctionTypeData& rhs)
 }
 
 StructureTypeData::StructureTypeData()
-  : m_classType(StructureType::Class)
-  , m_closed(false)
 {
 }
 
 StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
   : MergeIdentifiedType<AbstractType>::Data( rhs )
-  , m_classType(rhs.m_classType)
-  , m_closed(rhs.m_closed)
 {
 }
 

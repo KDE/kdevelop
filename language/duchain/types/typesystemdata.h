@@ -158,10 +158,7 @@ public:
   StructureTypeData();
   /// Copy constructor. \param rhs data to copy
   StructureTypeData( const StructureTypeData& rhs );
-  /// Type of the class (struct, class, etc.)
-  uint m_classType;
   /// Whether the type is closed yet
-  bool m_closed;
 };
 
 /// Private data structure for ArrayType
