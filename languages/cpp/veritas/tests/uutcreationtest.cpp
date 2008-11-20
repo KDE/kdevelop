@@ -31,6 +31,7 @@ using Veritas::Test::DeclarationFactory;
 using Veritas::Test::DocumentAccessStub;
 using Veritas::UUTConstructor;
 using Veritas::ClassSkeleton;
+using Veritas::MethodSkeleton;
 
 using namespace KDevelop;
 
