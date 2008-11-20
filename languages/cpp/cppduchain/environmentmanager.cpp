@@ -253,12 +253,11 @@ EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironme
 {
 }
 
+EnvironmentFile::~EnvironmentFile() {
+}
+
 void EnvironmentFile::aboutToSave() {
   ParsingEnvironmentFile::aboutToSave();
-  ///@todo Get rid of this. Instead, automatically create LazySet's like done with lists in appendedlist code.
-  //Copy data from temporary items to "data"
-//   if(d_func()->m_includeFiles != m_includeFiles.set().setIndex())
-//     d_func_dynamic()->m_includeFiles = m_includeFiles.set().setIndex();
   if(d_func()->m_missingIncludeFiles != m_missingIncludeFiles.set().setIndex())
     d_func_dynamic()->m_missingIncludeFiles = m_missingIncludeFiles.set().setIndex();
   if(d_func()->m_usedMacros != m_usedMacros.set().setIndex())
@@ -410,17 +409,31 @@ void EnvironmentFile::addIncludeFile( const IndexedString& file, const Modificat
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
-  d_func_dynamic()->m_strings = (this->strings() + EnvironmentManager::stringSetRepository.createSet(strings)).setIndex();
+  Utils::Set oldSet(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
+  Utils::Set newSet = (this->strings() + EnvironmentManager::stringSetRepository.createSet(strings));
+  d_func_dynamic()->m_strings = newSet.setIndex();
+
+/*  newSet.staticRef();
+  oldSet.staticUnref();*/
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
+  ///@todo Do reference-counting, so no useless string-sets remain from the temporary operations done here
+  
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
   kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
   }
 #endif
-  d_func_dynamic()->m_strings = (strings() + (file.strings() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set()).setIndex();
+  {
+    Utils::Set oldSet(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
+    Utils::Set newSet = (strings() + (file.strings() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set());
+    d_func_dynamic()->m_strings = newSet.setIndex();
+
+/*    newSet.staticRef();
+    oldSet.staticUnref();*/
+  }
   ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.  
   //Only add macros to the usedMacros-set that were not defined locally
   m_usedMacroNames += (file.m_usedMacroNames.set() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();

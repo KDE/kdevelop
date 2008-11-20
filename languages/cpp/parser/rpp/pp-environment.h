@@ -88,7 +88,8 @@ public:
 
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
-  virtual pp_macro* retrieveMacro(const KDevelop::IndexedString& name) const;
+
+  virtual pp_macro* retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const;
   
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
   pp_macro* retrieveStoredMacro(const KDevelop::IndexedString& name) const;

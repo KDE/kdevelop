@@ -36,8 +36,7 @@ public:
 
   void finish();
 
-
-  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name ) const;
+  virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const;
 
   void setEnvironmentFile( const KSharedPtr<Cpp::EnvironmentFile>& environmentFile );
   KSharedPtr<Cpp::EnvironmentFile> environmentFile() const;

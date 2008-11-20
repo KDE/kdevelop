@@ -171,6 +171,7 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     ~EnvironmentFileData() {
     }
     uint m_identityOffset;
+    //All the following sets get their reference-count increased whenever put in here
     //Set of all strings that can be affected by macros from outside
     uint m_strings; //String-set
 //     uint m_includeFiles; //String-set
@@ -190,6 +191,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     EnvironmentFile( KDevelop::IndexedString url, KDevelop::TopDUContext* topContext );
 
     EnvironmentFile( EnvironmentFileData& data );
+    
+    ~EnvironmentFile();
     
     void addStrings( const std::set<Utils::BasicSetRepository::Index>& strings );
 

@@ -436,7 +436,7 @@ Value pp::eval_primary(Stream& input)
       }
 
       {
-        pp_macro* m = m_environment->retrieveMacro(token_text);
+        pp_macro* m = m_environment->retrieveMacro(token_text, true);
         result.set_long( (m && !m->isUndef()) ? 1 : 0);
       }
 
@@ -930,7 +930,7 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 
   if (test_if_level())
   {
-    pp_macro* macro = m_environment->retrieveMacro(macro_name);
+    pp_macro* macro = m_environment->retrieveMacro(macro_name, true);
     bool value = false;
     if( macro && macro->defined )
       value = true;

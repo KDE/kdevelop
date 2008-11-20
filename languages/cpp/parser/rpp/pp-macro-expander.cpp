@@ -277,7 +277,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         // TODO handle inbuilt "defined" etc functions
 
-        pp_macro* macro = m_engine->environment()->retrieveMacro(name);
+        pp_macro* macro = m_engine->environment()->retrieveMacro(name, false);
         
         if (!macro || !macro->defined || macro->hidden || m_engine->hideNextMacro())
         {
@@ -321,7 +321,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               IndexedString identifier( skip_identifier(es) );
 
               pp_macro* m2 = 0;
-              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier)) && m2->defined) {
+              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier, false)) && m2->defined) {
                 m = m2;
               } else {
                 output.appendString(Anchor(input.inputPosition(), true), expanded);

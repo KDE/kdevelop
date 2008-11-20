@@ -217,7 +217,7 @@ pp_macro* Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) 
   return 0;
 }
 
-pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name) const
+pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const
 {
   return retrieveStoredMacro(name);
 }
