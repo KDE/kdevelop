@@ -9,7 +9,7 @@ set(parsertest_SRCS test_parser.cpp)
 
 
 kde4_add_unit_test(parsertest ${parsertest_SRCS})
-target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdev4cppparser)
+target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdev4cpprpp kdev4cppparser)
 
 
 ########### next target ###############
