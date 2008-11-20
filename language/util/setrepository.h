@@ -20,7 +20,7 @@ namespace Utils {
  *                   and a toItem member function that takes an index, and returns an item of type T.
  * */
 template<class T, class Conversion>
-class KDEVPLATFORMLANGUAGE_EXPORT ConvenientIterator {
+class ConvenientIterator {
   public:
     ConvenientIterator(Set::Iterator it=Set::Iterator(), const Conversion& conversion = Conversion()) : m_it(it), m_conversion(conversion) {
     }
@@ -67,7 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConvenientIterator {
      *                   and a toItem member function that takes an index, and returns an item of type T.
      **/
 template<class T, class Conversion>
-class KDEVPLATFORMLANGUAGE_EXPORT LazySet {
+class LazySet {
   public:
     /** @param rep The repository the set should belong/belongs to
      *  @param lockBeforeAccess If this is nonzero, the given mutex will be locked before each modification to the repository.
