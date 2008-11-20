@@ -2,6 +2,7 @@
 #include <QtTest/QtTest>
 #include <language/duchain/repositories/itemrepository.h>
 #include <stdlib.h>
+#include <time.h>
 struct TestItem {
   TestItem(uint hash, uint dataSize) : m_hash(hash), m_dataSize(dataSize) {
   }
