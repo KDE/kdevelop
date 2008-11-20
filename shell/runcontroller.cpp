@@ -274,16 +274,18 @@ QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofe
     
     QModelIndex current=model->index(0,0, QModelIndex());
     
+    QModelIndex ret;
     foreach(const QString& currentName, tofetch)
     {
         QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
-        
-        if(l.count()>0)
-            current = model->index(0,0, l.first());
-        else
+        if(l.count()>0) {
+            ret=l.first();
+            current = model->index(0,0, ret);
+        } else
             current = QModelIndex();
     }
-    return current;
+    Q_ASSERT(model->data(ret).toString()==tofetch.last());
+    return ret;
 }
 
 IRun KDevelop::RunController::defaultRun() const
@@ -315,6 +317,8 @@ IRun KDevelop::RunController::defaultRun() const
         ProjectBaseItem *it=model->item(idx);
         if(it->executable())
             exec=it->executable()->builtUrl().toLocalFile();
+        else
+            KMessageBox::error(0, i18n("%1 is not an executable", target));
     }
     //FIXME: throw error
     run.setExecutable(exec);
@@ -339,6 +343,12 @@ IRun KDevelop::RunController::defaultRun() const
         {
             QModelIndex idx=pathToIndex(model, it.split('/'));
             ProjectBaseItem *pit=model->item(idx);
+            
+            if(!pit)
+            {
+                KMessageBox::error(0, i18n("Could not find %1", it));
+                continue;
+            }
             
             IProject* project = pit->project();
             if (!project)

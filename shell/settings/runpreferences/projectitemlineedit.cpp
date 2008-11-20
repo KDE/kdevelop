@@ -38,17 +38,20 @@ QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofe
     
     QModelIndex current=model->index(0,0, QModelIndex());
     
+    QModelIndex ret;
     foreach(const QString& currentName, tofetch)
     {
         QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
-        
-        if(l.count()>0)
-            current = model->index(0,0, l.first());
-        else
+        if(l.count()>0) {
+            ret=l.first();
+            current = model->index(0,0, ret);
+        } else
             current = QModelIndex();
     }
-    return current;
+//     Q_ASSERT(model->data(ret).toString()==tofetch.last());
+    return ret;
 }
+
 
 void ProjectItemLineEdit::updated(const QString& newText)
 {
