@@ -20,8 +20,6 @@
 
 #include <QtTest/QtTest>
 
-#define private public
-
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
