@@ -29,9 +29,9 @@ void ReportItemsTest::constructDoubleValueItem()
     KVERIFY(ReportModel::Value == doubleItem.type());
     KOMPARE(5.0, doubleItem.value());
     KOMPARE(QString("5.0"), doubleItem.data(Qt::DisplayRole));
-    KVERIFY(not doubleItem.isEditable());
-    KVERIFY(not doubleItem.isSelectable());
-    KVERIFY(not doubleItem.isCheckable());
+    KVERIFY(! doubleItem.isEditable());
+    KVERIFY(! doubleItem.isSelectable());
+    KVERIFY(! doubleItem.isCheckable());
 }
 
 void ReportItemsTest::constructIntValueItem()
@@ -40,9 +40,9 @@ void ReportItemsTest::constructIntValueItem()
     KVERIFY(ReportModel::Value == intItem.type());
     KOMPARE(5, intItem.value());
     KOMPARE(QString("5"), intItem.data(Qt::DisplayRole));
-    KVERIFY(not intItem.isEditable());
-    KVERIFY(not intItem.isSelectable());
-    KVERIFY(not intItem.isCheckable());
+    KVERIFY(! intItem.isEditable());
+    KVERIFY(! intItem.isSelectable());
+    KVERIFY(! intItem.isCheckable());
 }
 
 void ReportItemsTest::constructDirItem()
@@ -52,9 +52,9 @@ void ReportItemsTest::constructDirItem()
     KOMPARE(0, dir.sloc());
     KOMPARE(0, dir.instrumented());
     KOMPARE(0, dir.coverage());
-    KVERIFY(not dir.isEditable());
+    KVERIFY(! dir.isEditable());
     KVERIFY(dir.isSelectable());
-    KVERIFY(not dir.isCheckable());
+    KVERIFY(! dir.isCheckable());
 }
 
 void addCoverageDataTo(ReportDirItem& dir, const QString& path, int sloc, int instrumented)

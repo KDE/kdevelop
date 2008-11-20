@@ -217,9 +217,9 @@ void AnnotationManagerTest::stopWatching()
     KTextEditor::AnnotationViewInterface *anno =
             qobject_cast<KTextEditor::AnnotationViewInterface*>(v);
     Q_ASSERT_X(anno, "assertAnnoCallCountEquals()", "Err?");
-    KVERIFY(not anno->isAnnotationBorderVisible());
+    KVERIFY(! anno->isAnnotationBorderVisible());
     AnnotationModel* model = anno->annotationModel();
-    KVERIFY(not model);
+    KVERIFY(! model);
 }
 
 ////////////////// setup helpers /////////////////////////////////////////////
@@ -304,7 +304,7 @@ void AnnotationManagerTest::assertNoAnnotationsOnLine(int line, KTextEditor::Vie
 void AnnotationManagerTest::assertAnnotationsGone(View* v)
 {
     AnnotationModel* model = annotationModelForView(v);
-    KVERIFY_MSG(not model, "Annotation model should have be reset.");
+    KVERIFY_MSG(! model, "Annotation model should have be reset.");
 }
 
 

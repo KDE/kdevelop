@@ -6,9 +6,13 @@ macro(kdev_add_test test_EXEC test_SRCS)
     target_link_libraries(gcov-${test_EXEC}
         kdevveritascoverage
         ${KDevPlatform_SUBLIME_LIBRARY}
+		${KDevPlatform_INTERFACES_LIBRARY}
+		${KDE4_KTEXTEDITOR_LIBRARY}
+		${KDE4_KPARTS_LIBRARY}
         ${QT_QTGUI_LIBRARY}
         ${QT_QTTEST_LIBRARY}
-        ${KDE4_KDECORE_LIBS})
+        ${KDE4_KDECORE_LIBS}
+        ${KDE4_KDEUI_LIBS})
 endmacro(kdev_add_test)
 
 

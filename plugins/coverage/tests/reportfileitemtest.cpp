@@ -48,9 +48,9 @@ void ReportFileItemTest::construct()
     KOMPARE(m_url, m_file->url());
 
     // QStandardItem properties
-    KVERIFY(not m_file->isEditable());
+    KVERIFY(! m_file->isEditable());
     KVERIFY(m_file->isSelectable());
-    KVERIFY(not m_file->isCheckable());
+    KVERIFY(! m_file->isCheckable());
 
     // Neighbour items should be initialized on 0
     KOMPARE(0, m_file->slocItem());
