@@ -6,6 +6,7 @@ macro(kdev_add_test test_EXEC)
     kde4_add_unit_test(veritas-${test_EXEC} ${test_SRCS})
     target_link_libraries(veritas-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
+		${QT_QTGUI_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         kdevplatformveritas)
 endmacro(kdev_add_test)
