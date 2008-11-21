@@ -45,8 +45,10 @@ QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofe
         if(l.count()>0) {
             ret=l.first();
             current = model->index(0,0, ret);
-        } else
-            current = QModelIndex();
+        } else {
+            ret = QModelIndex();
+            break;
+        }
     }
 //     Q_ASSERT(model->data(ret).toString()==tofetch.last());
     return ret;
