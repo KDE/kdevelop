@@ -314,11 +314,24 @@ IRun KDevelop::RunController::defaultRun() const
     {
         QString target=group.readEntry("Run Item", QString());
         QModelIndex idx=pathToIndex(model, target.split('/'));
-        ProjectBaseItem *it=model->item(idx);
-        if(it && it->executable())
-            exec=it->executable()->builtUrl().toLocalFile();
-        else
-            KMessageBox::error(0, i18n("%1 is not an executable", target));
+        if( idx.isValid() )
+        {
+            ProjectBaseItem *it=model->item(idx);
+            // This should never happen, pathToIndex asks
+            // the model for indexes that match a target
+            // so the indexes should always be convertable to an item
+            Q_ASSERT(it);
+            if(it->executable())
+            {
+                exec=it->executable()->builtUrl().toLocalFile();
+            } else
+            {
+                KMessageBox::error(0, i18n("Target '%1' is not executable.", target));
+            }
+        } else 
+        {
+            KMessageBox::error(0, i18n("Target '%1' could not be found.", target));
+        }
     }
     //FIXME: throw error
     run.setExecutable(exec);
