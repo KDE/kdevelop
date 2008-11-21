@@ -55,6 +55,7 @@
 #include "projectproxymodel.h"
 #include "projectmanagerviewplugin.h"
 #include "proxyselectionmodel.h"
+#include "builderjob.h"
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
@@ -134,13 +135,7 @@ void ProjectManagerView::selectionChanged()
 
 void ProjectManagerView::buildSelectedItems()
 {
-    foreach( ProjectBaseItem* item, selectedItems() )
-    {
-        if( item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item->project()->projectItem() ) )
-        {
-            ICore::self()->runController()->registerJob( item->project()->buildSystemManager()->builder( item->project()->projectItem() )->build( item ) );
-        }
-    }
+    ICore::self()->runController()->registerJob( new BuilderJob(BuilderJob::Build, selectedItems() ) );
 }
 
 void ProjectManagerView::updateSyncAction()

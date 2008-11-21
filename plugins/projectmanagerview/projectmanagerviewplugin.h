@@ -77,11 +77,6 @@ protected Q_SLOTS:
     void removeFolderFromContextMenu();
 
 private:
-    void executeBuild( KDevelop::ProjectBaseItem* );
-    void executeClean( KDevelop::ProjectBaseItem* );
-    void executeInstall( KDevelop::ProjectBaseItem* );
-    void executePrune( KDevelop::IProject* );
-    void executeConfigure( KDevelop::IProject* );
     static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     class ProjectManagerViewPluginPrivate* const d;

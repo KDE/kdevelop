@@ -48,6 +48,7 @@
 
 #include "projectmanagerview.h"
 #include "projectbuildsetmodel.h"
+#include "builderjob.h"
 
 using namespace KDevelop;
 
@@ -240,70 +241,6 @@ KDevelop::IProjectBuilder* ProjectManagerViewPlugin::getProjectBuilder( KDevelop
     return 0;
 }
 
-void ProjectManagerViewPlugin::executeBuild( KDevelop::ProjectBaseItem* item )
-{
-    if( !item )
-        return;
-    IProjectBuilder* builder = getProjectBuilder( item );
-    kDebug(9511) << "Building item:" << item->text();
-
-    core()->documentController()->saveAllDocuments(IDocument::Silent);
-
-    if( builder )
-        core()->runController()->registerJob(builder->build( item ));
-}
-
-void ProjectManagerViewPlugin::executeClean( KDevelop::ProjectBaseItem* item )
-{
-    if( !item )
-        return;
-    IProjectBuilder* builder = getProjectBuilder( item );
-    kDebug(9511) << "Cleaning item:" << item->text();
-    if( builder )
-        core()->runController()->registerJob(builder->clean( item ));
-}
-
-void ProjectManagerViewPlugin::executeInstall( KDevelop::ProjectBaseItem* item )
-{
-    if( !item )
-        return;
-    IProjectBuilder* builder = getProjectBuilder( item );
-    kDebug(9511) << "Installing item:" << item->text();
-
-    core()->documentController()->saveAllDocuments(IDocument::Silent);
-
-    if( builder )
-        core()->runController()->registerJob(builder->install( item ));
-}
-
-
-void ProjectManagerViewPlugin::executeConfigure( KDevelop::IProject* item )
-{
-    if( !item )
-        return;
-    IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
-    kDebug(9511) << "Configuring item:" << item->name();
-
-    core()->documentController()->saveAllDocuments(IDocument::Silent);
-
-    if( builder )
-        core()->runController()->registerJob(builder->configure( item ));
-}
-
-void ProjectManagerViewPlugin::executePrune( KDevelop::IProject* item )
-{
-    if( !item )
-        return;
-    IProjectBuilder* builder = getProjectBuilder( item->projectItem() );
-    kDebug(9511) << "Pruning item:" << item->name();
-
-    core()->documentController()->saveAllDocuments(IDocument::Silent);
-
-    if( builder )
-        core()->runController()->registerJob(builder->prune( item ));
-}
-
-
 void ProjectManagerViewPlugin::closeProjects()
 {
     QList<KDevelop::IProject*> projectsToClose;
@@ -324,90 +261,55 @@ void ProjectManagerViewPlugin::closeProjects()
 
 void ProjectManagerViewPlugin::installItemsFromContextMenu()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        executeInstall( item );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Install, d->ctxProjectItemList ) );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::cleanItemsFromContextMenu()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        executeClean( item );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Clean, d->ctxProjectItemList ) );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        executeBuild( item );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Build, d->ctxProjectItemList ) );
     d->ctxProjectItemList.clear();
 }
 
 void ProjectManagerViewPlugin::buildAllProjects()
 {
+    QList<KDevelop::ProjectBaseItem*> items;
     foreach( KDevelop::IProject* project, core()->projectController()->projects() )
     {
-        executeBuild( project->projectItem() );
+        items << project->projectItem();
     }
+    ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Build, items ) );
 }
 
 void ProjectManagerViewPlugin::installProjectItems()
 {
-    foreach( BuildItem item, d->buildSet->items() )
-    {
-        executeInstall( item.findItem() );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Install, d->buildSet->items() ) );
 }
 
 void ProjectManagerViewPlugin::pruneProjectItems()
 {
-    QSet<KDevelop::IProject*> projects;
-    foreach( BuildItem item, d->buildSet->items() )
-    {
-        if( item.findItem() )
-            projects << item.findItem()->project();
-    }
-    foreach( KDevelop::IProject* project, projects )
-    {
-        executePrune( project );
-    }
+    ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Prune, d->buildSet->items() ) );
 }
 
 void ProjectManagerViewPlugin::configureProjectItems()
 {
-    QSet<KDevelop::IProject*> projects;
-
-    foreach( BuildItem item, d->buildSet->items() )
-    {
-        if( item.findItem() )
-            projects << item.findItem()->project();
-    }
-    foreach( KDevelop::IProject* project, projects )
-    {
-        executeConfigure( project );
-    }
+    ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Configure, d->buildSet->items() ) );
 }
 
 void ProjectManagerViewPlugin::cleanProjectItems()
 {
-    foreach( BuildItem item, d->buildSet->items() )
-    {
-        executeClean( item.findItem() );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Clean, d->buildSet->items() ) );
 }
 
 void ProjectManagerViewPlugin::buildProjectItems()
 {
-    foreach( BuildItem item, d->buildSet->items() )
-    {
-        executeBuild( item.findItem() );
-    }
+     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Build, d->buildSet->items() ) );
 }
 
 ProjectBuildSetModel* ProjectManagerViewPlugin::buildSet()
