@@ -51,6 +51,7 @@
 #include <project/importprojectjob.h>
 #include <project/projectmodel.h>
 #include <language/duchain/indexedstring.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -366,6 +367,19 @@ bool Project::open( const KUrl& projectFileUrl_ )
     if( !vcsPlugin.isEmpty() )
     {
         d->vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPlugin );
+    } else 
+    {
+        foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
+        {
+            IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
+            if( iface && iface->isVersionControlled( d->topItem->url() ) )
+            {
+                d->vcsPlugin = p;
+                projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( d->vcsPlugin ).pluginName() );
+                projectGroup.sync();
+            }
+        }
+
     }
 
     return true;
