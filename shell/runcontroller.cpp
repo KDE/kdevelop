@@ -86,7 +86,7 @@ class ExecuteCompositeJob : public KCompositeJob
                 addSubjob(job);
             }
         }
-        
+
     public slots:
         virtual void start()
         {
@@ -95,12 +95,12 @@ class ExecuteCompositeJob : public KCompositeJob
             else
                 emitResult();
         }
-        
+
         void slotResult(KJob* job)
         {
             kDebug() << "finished: "<< job << job->error() << error();
             KCompositeJob::slotResult(job);
-            
+
             if(hasSubjobs() && !error())
             {
                 kDebug() << "remaining: " << subjobs().count() << subjobs();
@@ -108,7 +108,7 @@ class ExecuteCompositeJob : public KCompositeJob
                 nextJob->start();
             } else {
                 emitResult();
-            }    
+            }
         }
 };
 
@@ -116,13 +116,13 @@ KJob* RunController::execute(const IRun & run)
 {
     if(!run.dependencies().isEmpty())
         ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
-    
+
     QList<KJob*> jobs;
     foreach(KJob* job, run.dependencies())
     {
         jobs.append(job);
     }
-    
+
     jobs.append(new RunJob(this, run));
     ExecuteCompositeJob* ecj=new ExecuteCompositeJob(this, jobs);
     ecj->setObjectName(jobs.last()->objectName());
@@ -193,7 +193,7 @@ void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
     foreach(const QString& target, runTargets) {
         a=addTarget(project, target);
     }
-    
+
     if(a)
         a->setChecked(true);
 }
@@ -218,7 +218,7 @@ void KDevelop::RunController::slotConfigurationChanged()
     foreach (QAction* action, d->currentTargetAction->actions()) {
         delete action;
     }
-    
+
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
     }
@@ -236,7 +236,7 @@ QStringList splitArguments(const QString& args)
     for(int i=0; i<args.size(); i++)
     {
         if(i==0) ret += QString();
-        
+
         if(scaping)
         {
             ret.last() += args[i];
@@ -255,13 +255,13 @@ QStringList splitArguments(const QString& args)
                     ret.last() += args[i];
                 else
                     ret += QString();
-                
+
                 break;
             default:
                 ret.last() += args[i];
                 break;
         }
-        
+
     }
     return ret;
 }
@@ -271,9 +271,9 @@ QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofe
 {
     if(tofetch.isEmpty())
         return QModelIndex();
-    
+
     QModelIndex current=model->index(0,0, QModelIndex());
-    
+
     QModelIndex ret;
     foreach(const QString& currentName, tofetch)
     {
@@ -292,18 +292,18 @@ IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
     IRun run;
-    
+
     QAction* projectAction = d->currentTargetAction->currentAction();
-    
+
     Target data;
     if (projectAction) {
         data=qvariant_cast<Target>(projectAction->data());
         project = data.second;
     }
-    
+
     if (!project)
         return run;
-    
+
     QString targetName=data.first;
 
     KConfigGroup group(project->projectConfiguration(), targetName+"-Run Options" );
@@ -315,7 +315,7 @@ IRun KDevelop::RunController::defaultRun() const
         QString target=group.readEntry("Run Item", QString());
         QModelIndex idx=pathToIndex(model, target.split('/'));
         ProjectBaseItem *it=model->item(idx);
-        if(it->executable())
+        if(it && it->executable())
             exec=it->executable()->builtUrl().toLocalFile();
         else
             KMessageBox::error(0, i18n("%1 is not an executable", target));
@@ -332,10 +332,10 @@ IRun KDevelop::RunController::defaultRun() const
         run.setInstrumentor("konsole");
     else
         run.setInstrumentor("default");
-    
+
     QStringList compileItems=group.readEntry("Compile Items", QStringList());
     int actionDeps=group.readEntry("BeforeExecute", 1);
-    
+
     QList<KJob*> comp;
     if(actionDeps!=0)
     {
@@ -343,13 +343,13 @@ IRun KDevelop::RunController::defaultRun() const
         {
             QModelIndex idx=pathToIndex(model, it.split('/'));
             ProjectBaseItem *pit=model->item(idx);
-            
+
             if(!pit)
             {
                 KMessageBox::error(0, i18n("Could not find %1", it));
                 continue;
             }
-            
+
             IProject* project = pit->project();
             if (!project)
                 continue;
@@ -384,7 +384,7 @@ IRun KDevelop::RunController::defaultRun() const
         }
         run.setDependencies(comp);
     }
-    
+
     return run;
 }
 
