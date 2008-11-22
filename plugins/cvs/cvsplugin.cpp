@@ -38,7 +38,6 @@
 #include "cvsmainview.h"
 #include "cvsproxy.h"
 #include "cvsjob.h"
-#include "diffoptionsdialog.h"
 #include "editorsview.h"
 #include "commitdialog.h"
 #include "updateoptionsdialog.h"
@@ -429,7 +428,7 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
 
 KDevelop::VcsJob * CvsPlugin::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
 {
-    CvsJob* job = d->m_proxy->diff (localOrRepoLocationSrc.localUrl(), srcRevision, dstRevision, "");
+    CvsJob* job = d->m_proxy->diff (localOrRepoLocationSrc.localUrl(), srcRevision, dstRevision, "-u"/*always unified*/);
     return job;
 }
 

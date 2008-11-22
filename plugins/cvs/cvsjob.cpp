@@ -198,6 +198,8 @@ void CvsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
     d->isRunning = false;
 
+    kDebug(9500) << "proc exited with code "<< exitCode;
+
     if (exitStatus != QProcess::NormalExit || exitCode != 0) {
         setError( exitCode );
         setErrorText( i18n("Process exited with status %1", exitCode) );

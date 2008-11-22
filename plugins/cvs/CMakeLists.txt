@@ -12,7 +12,6 @@ set(kdevcvs_PART_SRCS
     cvsgenericoutputview.cpp
     cvsjob.cpp
     cvsproxy.cpp
-    diffoptionsdialog.cpp
     editorsview.cpp
     commitdialog.cpp
     updateoptionsdialog.cpp
@@ -21,13 +20,13 @@ set(kdevcvs_PART_SRCS
     checkoutdialog.cpp
     cvsannotatejob.cpp
     cvslogjob.cpp
+    cvsdiffjob.cpp
     cvsstatusjob.cpp
 )
 
 set(kdevcvs_PART_UI
     cvsmainview.ui
     cvsgenericoutputview.ui
-    diffoptionsdialog.ui
     editorsview.ui
     commitdialog.ui
     updateoptionsdialog.ui

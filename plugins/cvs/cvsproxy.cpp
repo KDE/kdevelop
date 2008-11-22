@@ -23,6 +23,7 @@
 #include "cvsannotatejob.h"
 #include "cvslogjob.h"
 #include "cvsstatusjob.h"
+#include "cvsdiffjob.h"
 
 #include <interfaces/iplugin.h>
 
@@ -177,7 +178,7 @@ CvsJob* CvsProxy::diff(const KUrl& url,
 {
     QFileInfo info(url.toLocalFile());
 
-    CvsJob* job = new CvsJob(vcsplugin);
+    CvsDiffJob* job = new CvsDiffJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "diff";
@@ -204,7 +205,9 @@ CvsJob* CvsProxy::diff(const KUrl& url,
         if (!rB.isEmpty())
             *job << rB;
 
-        *job << KShell::quoteArg(info.fileName());
+        // in case the KUrl is a directory there is no filename
+        if (!info.fileName().isEmpty())
+            *job << KShell::quoteArg(info.fileName());
 
         return job;
     }
