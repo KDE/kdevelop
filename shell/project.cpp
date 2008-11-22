@@ -374,7 +374,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
-        importJob->start();
+        Core::self()->runController()->registerJob( importJob );
     }
     else
     {
