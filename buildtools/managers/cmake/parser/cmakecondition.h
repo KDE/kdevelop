@@ -28,19 +28,19 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
     public:
         CMakeCondition(const CMakeProjectVisitor* v);
         bool condition(const QStringList &expression) const;
-    private:
+
         enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, MATCHES,
             LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, Last };
-
+    private:
         static conditionToken typeName(const QString& name);
-        static int priorityLevel(conditionToken t);
         QStringList::const_iterator prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const;
         bool evaluateCondition(QStringList::const_iterator it, QStringList::const_iterator itEnd) const;
         bool isTrue(const QString& var) const;
         const VariableMap *m_vars;
         const CMakeProjectVisitor *m_visitor;
         
-        static int m_priorities[Last];
+        static QVector<int> m_priorities;
+        static QMap<QString, conditionToken> nameToToken;
 //         int m_parameters[Last];
 };
 

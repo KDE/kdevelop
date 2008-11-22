@@ -23,68 +23,65 @@
 
 #include "astfactory.h"
 
-int CMakeCondition::m_priorities[Last];
+QVector<int> initPriorities()
+{
+    QVector<int> ret(CMakeCondition::Last);
+    for(int i=CMakeCondition::None; i<CMakeCondition::Last; i++) {
+        ret[i]=-1;
+    }
+    ret[CMakeCondition::AND]=0;
+    ret[CMakeCondition::OR]=0;
+    ret[CMakeCondition::NOT]=1;
+    ret[CMakeCondition::IS_NEWER_THAN]=2;
+    ret[CMakeCondition::MATCHES]=2;
+    ret[CMakeCondition::LESS]=2;
+    ret[CMakeCondition::GREATER]=2;
+    ret[CMakeCondition::EQUAL]=2;
+    ret[CMakeCondition::STRLESS]=2;
+    ret[CMakeCondition::STRGREATER]=2;
+    ret[CMakeCondition::STREQUAL]=2;
+    ret[CMakeCondition::DEFINED]=3;
+    ret[CMakeCondition::COMMAND]=3;
+    ret[CMakeCondition::EXISTS]=3;
+    ret[CMakeCondition::IS_DIRECTORY]=3;
+    return ret;
+}
+
+QMap<QString, CMakeCondition::conditionToken> initNameToToken()
+{
+    QMap<QString, CMakeCondition::conditionToken> ret;
+    ret["NOT"]=CMakeCondition::NOT;
+    ret["AND"]=CMakeCondition::AND;
+    ret["OR"]=CMakeCondition::OR;
+    ret["COMMAND"]=CMakeCondition::COMMAND;
+    ret["EXISTS"]=CMakeCondition::EXISTS;
+    ret["IS_NEWER_THAN"]=CMakeCondition::IS_NEWER_THAN;
+    ret["IS_DIRECTORY"]=CMakeCondition::IS_DIRECTORY;
+    ret["MATCHES"]=CMakeCondition::MATCHES;
+    ret["LESS"]=CMakeCondition::LESS;
+    ret["GREATER"]=CMakeCondition::GREATER;
+    ret["EQUAL"]=CMakeCondition::EQUAL;
+    ret["STRLESS"]=CMakeCondition::STRLESS;
+    ret["STRGREATER"]=CMakeCondition::STRGREATER;
+    ret["STREQUAL"]=CMakeCondition::STREQUAL;
+    ret["DEFINED"]=CMakeCondition::DEFINED;
+    return ret;
+}
+
+QVector<int> CMakeCondition::m_priorities=initPriorities();
+QMap<QString, CMakeCondition::conditionToken> CMakeCondition::nameToToken=initNameToToken();
 
 CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v) : m_vars(v->variables()), m_visitor(v)
 {
-    for(int i=None; i<Last; i++) {
-        m_priorities[i]=-1;
-    }
-    m_priorities[AND]=0;
-    m_priorities[OR]=0;
-    m_priorities[NOT]=1;
-    m_priorities[IS_NEWER_THAN]=2;
-    m_priorities[MATCHES]=2;
-    m_priorities[LESS]=2;
-    m_priorities[GREATER]=2;
-    m_priorities[EQUAL]=2;
-    m_priorities[STRLESS]=2;
-    m_priorities[STRGREATER]=2;
-    m_priorities[STREQUAL]=2;
-    m_priorities[DEFINED]=3;
-    m_priorities[COMMAND]=3;
-    m_priorities[EXISTS]=3;
-    m_priorities[IS_DIRECTORY]=3;
 }
 
 CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 {
-    QString name=_name.toUpper();
-    if(name=="NOT")
-        return NOT;
-    else if(name=="AND")
-        return AND;
-    else if(name=="OR")
-        return OR;
-    else if(name=="COMMAND")
-        return COMMAND;
-    else if(name=="EXISTS")
-        return EXISTS;
-    else if(name=="IS_NEWER_THAN")
-        return IS_NEWER_THAN;
-    else if(name=="IS_DIRECTORY")
-        return IS_DIRECTORY;
-    else if(name=="MATCHES")
-        return MATCHES;
-    else if(name=="LESS")
-        return LESS;
-    else if(name=="GREATER")
-        return GREATER;
-    else if(name=="EQUAL")
-        return EQUAL;
-    else if(name=="STRLESS")
-        return STRLESS;
-    else if(name=="STRGREATER")
-        return STRGREATER;
-    else if(name=="STREQUAL")
-        return STREQUAL;
-    else if(name=="DEFINED")
-        return DEFINED;
+    if(nameToToken.contains(_name))
+        return nameToToken[_name];
     else 
         return variable;
 }
-
-
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
