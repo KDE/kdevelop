@@ -348,11 +348,33 @@ bool Project::open( const KUrl& projectFileUrl_ )
                                 i18n("Could not open project") );
             return false;
         }
+
+        if( projectGroup.hasKey( "VersionControlSupport" ) )
+        {
+            QString vcsPlugin = projectGroup.readEntry("VersionControlSupport", "");
+            if( !vcsPlugin.isEmpty() )
+            {
+                d->vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPlugin );
+            }
+        } else 
+        {
+            foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
+            {
+                IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
+                if( iface && iface->isVersionControlled( d->topItem->url() ) )
+                {
+                    d->vcsPlugin = p;
+                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( d->vcsPlugin ).pluginName() );
+                    projectGroup.sync();
+                }
+            }
+        }
+
         d->topItem->setIcon();
 //         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
-        importJob->start(); //be asynchronous
+        importJob->start();
     }
     else
     {
@@ -362,26 +384,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
         d->manager = 0;
         return false;
     }
-
-    QString vcsPlugin = projectGroup.readEntry("VersionControlSupport", "");
-    if( !vcsPlugin.isEmpty() )
-    {
-        d->vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPlugin );
-    } else 
-    {
-        foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
-        {
-            IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-            if( iface && iface->isVersionControlled( d->topItem->url() ) )
-            {
-                d->vcsPlugin = p;
-                projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( d->vcsPlugin ).pluginName() );
-                projectGroup.sync();
-            }
-        }
-
-    }
-
+    
     return true;
 }
 
