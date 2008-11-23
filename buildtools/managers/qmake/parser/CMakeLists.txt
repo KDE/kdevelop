@@ -30,7 +30,7 @@ endif(KDEVPGQT_FOUND)
 add_subdirectory(tests)
 
 add_executable(qmake-parser main.cpp)
-target_link_libraries(qmake-parser kdev4qmakeparser )
+target_link_libraries(qmake-parser kdev4qmakeparser ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY} )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
