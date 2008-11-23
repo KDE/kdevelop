@@ -38,6 +38,11 @@ struct AreaIndexPrivate {
     {
         delete first;
         delete second;
+        foreach( View* v, views )
+        {
+            views.removeAll( v );
+            v->deleteLater();
+        }
     }
     AreaIndexPrivate(const AreaIndexPrivate &p)
     {

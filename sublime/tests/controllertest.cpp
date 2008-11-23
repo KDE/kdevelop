@@ -65,15 +65,9 @@ void ControllerTest::areaDeletion()
     delete area;
     view2 = 0; view3= 0;
 
-    QFAIL("\nnow we should have only one view remaining view that did not belong to the area\n"
-    "but we still have 3 because deleteLater only queues the deletion\n"
-    "\n"
-    "^^ Not quite. The Document still holds pointers to it's views so no delete I think.\n"
-    "   Run test with -vs to debug this.\n");
-
-    //QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
-    //QCOMPARE(doc->views().count(), 1);
-    //QCOMPARE(controller->defaultAreas().count(), 0);
+    QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
+    QCOMPARE(doc->views().count(), 1);
+    QCOMPARE(controller->defaultAreas().count(), 0);
 
     QTest::qWait(100); // wait for deleteLaters
     kDebug() << "Deleting doc";
