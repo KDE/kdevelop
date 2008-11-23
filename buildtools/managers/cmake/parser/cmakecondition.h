@@ -30,7 +30,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         bool condition(const QStringList &expression) const;
 
         enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, MATCHES,
-            LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, Last };
+            LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, LPR, RPR, Last };
     private:
         static conditionToken typeName(const QString& name);
         QStringList::const_iterator prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const;

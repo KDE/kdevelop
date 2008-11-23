@@ -44,6 +44,8 @@ QVector<int> initPriorities()
     ret[CMakeCondition::COMMAND]=3;
     ret[CMakeCondition::EXISTS]=3;
     ret[CMakeCondition::IS_DIRECTORY]=3;
+    ret[CMakeCondition::LPR]=-1;
+    ret[CMakeCondition::RPR]=-1;
     return ret;
 }
 
@@ -65,6 +67,8 @@ QMap<QString, CMakeCondition::conditionToken> initNameToToken()
     ret["STRGREATER"]=CMakeCondition::STRGREATER;
     ret["STREQUAL"]=CMakeCondition::STREQUAL;
     ret["DEFINED"]=CMakeCondition::DEFINED;
+    ret["("]=CMakeCondition::LPR;
+    ret[")"]=CMakeCondition::RPR;
     return ret;
 }
 
@@ -85,7 +89,7 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 
 bool CMakeCondition::isTrue(const QString& varName) const
 {
-//     kDebug(9042) << "+++++++ isTrue: " << varName;
+//     qDebug() << "+++++++ isTrue: " << varName;
     
     if(m_vars->contains(varName))
     {
@@ -102,21 +106,21 @@ bool CMakeCondition::isTrue(const QString& varName) const
 QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const
 {
     bool done=false;
-    it--;
-//     kDebug(9042) << "it" << *it;
+    --it;
+
     while(!done && it!=itStop)
     {
-//         qDebug() << "oper " << *it;
         conditionToken c = typeName(*it);
         done = c>variable;
         if(!done)
-            it--;
+            --it;
     }
     return it;
 }
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
 {
+//     qDebug() << "xxxx" << *itBegin << *itEnd;
     if(itBegin==itEnd)
     {
         return isTrue(*itBegin);
@@ -126,14 +130,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     last = isTrue(*(prevOperator(itEnd, itBegin)+1));
     while(!done && itBegin!=itEnd)
     {
-        QStringList::const_iterator it2;
-        it2 = prevOperator(itEnd, itBegin);
+        QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
         
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
-
-//         qDebug() << "operator" << *it2 << done;
-        QString cmd;
         
         switch(c)
         {
@@ -172,9 +172,9 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2;
                 break;
             case AND:
-                return evaluateCondition(itBegin, it2-1) && last;
+                return evaluateCondition(itBegin, it2) && last;
             case OR:
-                return evaluateCondition(itBegin, it2-1) || last;
+                return evaluateCondition(itBegin, it2) || last;
             case MATCHES: {
                 QRegExp rx(*(it2+1));
                 if(m_vars->contains(*(it2-1)))
@@ -242,6 +242,27 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 last= (pathA.lastModified()>pathB.lastModified());
                 itEnd=it2-1;
             }
+            case LPR: {
+                itEnd=it2;
+            } break;
+            case RPR: {
+                QStringList::const_iterator itL=it2;
+                int ind=0;
+                while(it2!=itBegin)
+                {
+                    if(*itL=="(") ind--;
+                    else if(*itL==")") ind++;
+                    
+                    if(ind==0)
+                        break;
+                    --itL;
+                }
+                last=evaluateCondition(itL, it2-1);
+                itEnd=itL;
+            } break;
+            case variable:
+                last = isTrue(*it2);
+                break;
             default:
                 kWarning(9042) << "no support for operator:" << *it2;
                 break;
