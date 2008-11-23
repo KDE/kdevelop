@@ -203,17 +203,20 @@ QStringList MakeJob::computeBuildCommand() const
 
     if( m_overrideTarget.isEmpty() )
     {
-        if( m_item->type() == KDevelop::ProjectBaseItem::Target )
-        {
-            KDevelop::ProjectTargetItem* targetItem = static_cast<KDevelop::ProjectTargetItem*>(m_item);
-            cmdline << targetItem->text();
-        }
-        else if( m_item->type() == KDevelop::ProjectBaseItem::BuildFolder )
-        {
-            QString target = builderGroup.readEntry("Default Target", QString());
+        QString target;
+        switch (m_item->type()) {
+        case KDevelop::ProjectBaseItem::Target:
+        case KDevelop::ProjectBaseItem::ExecutableTarget:
+        case KDevelop::ProjectBaseItem::LibraryTarget:
+            Q_ASSERT(m_item->target());
+            cmdline << m_item->target()->text();
+            break;
+        case KDevelop::ProjectBaseItem::BuildFolder:
+            target = builderGroup.readEntry("Default Target", QString());
             if( !target.isEmpty() )
                 cmdline << target;
-        }
+            break;
+        default: break; }
     }else
     {
         cmdline << m_overrideTarget;
