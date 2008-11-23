@@ -65,8 +65,6 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              SLOT(showContextMenu(const QPoint&) ) );
-    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
-             this, SLOT(selectionChanged()) );
     layout()->setMargin(0);
 }
 
@@ -74,10 +72,13 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
 {
     m_view = view;
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
+    connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
+             this, SLOT(selectionChanged()) );
 }
 
 void ProjectBuildSetWidget::selectionChanged()
 {
+    kDebug() << "checking selectionmodel:" << m_ui->itemView->selectionModel()->selectedRows();
     m_ui->removeItemButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
     m_ui->addItemButton->setEnabled( !m_view->selectedItems().isEmpty() );
 }
