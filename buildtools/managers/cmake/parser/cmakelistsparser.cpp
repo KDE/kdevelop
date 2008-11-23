@@ -338,13 +338,29 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
 
     // Arguments.
     unsigned long lastLine = cmListFileLexer_GetCurrentLine(lexer);
+    int parenthesis=1;
     while((token = cmListFileLexer_Scan(lexer)))
     {
         if(token->type == cmListFileLexer_Token_ParenRight)
         {
-            func.endLine=token->line;
-            func.endColumn=token->column;
-            return true;
+            parenthesis--;
+            if(parenthesis==0) {
+                func.endLine=token->line;
+                func.endColumn=token->column;
+                return true;
+            } else if(parenthesis<0)
+                 return false;
+            else
+            {
+                CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
+                func.arguments << a;
+            }
+        }
+        else if(token->type == cmListFileLexer_Token_ParenLeft)
+        {
+            parenthesis++;
+            CMakeFunctionArgument a( token->text, false, fileName, token->line, token->column );
+            func.arguments << a;
         }
         else if(token->type == cmListFileLexer_Token_Identifier ||
                 token->type == cmListFileLexer_Token_ArgumentUnquoted)

@@ -131,6 +131,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
+//         qDebug() << "yyy" << *it2;
         
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
@@ -172,8 +173,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2;
                 break;
             case AND:
+//                 qDebug() << "AND" << last;
                 return evaluateCondition(itBegin, it2) && last;
             case OR:
+//                 qDebug() << "OR" << last;
                 return evaluateCondition(itBegin, it2) || last;
             case MATCHES: {
                 QRegExp rx(*(it2+1));

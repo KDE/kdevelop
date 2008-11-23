@@ -102,6 +102,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "parenthese2" ) << QString("( ZERO AND NOT ZERO ) OR ZERO").split(" ") << false;
     QTest::newRow( "parenthese3" ) << QString("( ZERO AND ZERO ) OR ONE").split(" ") << true;
     QTest::newRow( "parenthese4" ) << QString("( ZERO AND ZERO ) OR ZERO").split(" ") << false;
+    QTest::newRow( "parenthese5" ) << QString("( ONE AND ZERO ) OR ( ZERO OR ONE )").split(" ") << true;
 }
 
 #include "cmake_cmakecondition_test.moc"

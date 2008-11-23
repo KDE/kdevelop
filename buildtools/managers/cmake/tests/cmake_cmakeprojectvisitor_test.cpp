@@ -29,6 +29,9 @@ QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 
+#undef TRUE
+#undef FALSE
+
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
  : CMakeProjectVisitor( QString(), new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0)))
 {
@@ -215,6 +218,17 @@ void CMakeProjectVisitorTest::testRun_data()
                             "aux_source_directory(/tmp _deps)\n"//any unimplemented method
                             "set(_deps ${_deps})\n"
                             "set(${${a}${b}a 33)\n" << cacheValues << results;
+                            
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "1");
+    QTest::newRow("parenthesed condition") <<
+                            "set(ONE TRUE)\n"
+                            "set(ZERO FALSE)\n"
+                            "if(( ONE AND ZERO ) OR ( ZERO OR ONE ))\n"
+                               "set(res 1)\n"
+                            "endif(( ONE AND ZERO ) OR ( ZERO OR ONE ))\n"
+                             << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
