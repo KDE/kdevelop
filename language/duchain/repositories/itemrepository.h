@@ -2032,7 +2032,7 @@ class ItemRepository : public AbstractItemRepository {
           m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
           m_file->close();
         }else{
-          kWarning() << "cannot open repository-file for reading";
+          kFatal() << "cannot open repository-file for reading";
         }
       } else
         m_fastBuckets[bucketNumber]->initialize(0);
