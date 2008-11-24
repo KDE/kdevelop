@@ -33,36 +33,50 @@ Name[tr]=KDevelop Eklentisi
 Name[x-test]=xxKDevelop Pluginxx
 Name[zh_TW]=KDevelop 外掛程式
 
-# versioning - prevent DLL hell
+# mandatory, versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
 Type=int
 
+# optional, determines wether a plugin is loaded only after
+# a project is opened, or is a global plugin.
+# If it is not set, the plugin can only be loaded by the
+# user or via requesting one of its dependencies
+# allowed values: Global, Project
 [PropertyDef::X-KDevelop-Category]
 Type=QString
 
+# mandatory, GUI-Operation Mode, determines wether a plugin
+# can work without having a mainwindow/partcontroller
+# running
+# allowed values: GUI, NoGUI
 [PropertyDef::X-KDevelop-Mode]
 Type=QString
 
-# defines a list of properties which the plugin has
-# a profile will query all plugins for properties and will load only
-# those that have queried properties
-[PropertyDef::X-KDevelop-Properties]
-Type=QStringList
-
+# optional, Arguments to pass to the plugin
 [PropertyDef::X-KDevelop-Args]
 Type=QString
 
+# optional, Plugin type, might be set to Kross
+# to indicate a Kross plugin
 [PropertyDef::X-KDevelop-PluginType]
 Type=QString
 
+# optional, Interfaces that a plugin implements
+# usualy values start with org.kdevelop
 [PropertyDef::X-KDevelop-Interfaces]
 Type=QStringList
 
+# optional, interfaces that this plugin depends
+# on
 [PropertyDef::X-KDevelop-IRequired]
 Type=QStringList
 
+# optional, interfaces that this plugin can use, 
+# but the plugin still works if the interfaces are
+# not available.
 [PropertyDef::X-KDevelop-IOptional]
 Type=QStringList
 
+# optional, mimetypes supported by a language plugin
 [PropertyDef::X-KDevelop-SupportedMimeTypes]
 Type=QStringList

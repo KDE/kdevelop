@@ -158,16 +158,6 @@ public:
 
     static QStringList argumentsFromService( const KService::Ptr &service );
 
-    virtual QString currentProfile() const = 0;
-
-    virtual void loadPlugins( PluginType offer ) = 0;
-    virtual void unloadPlugins( PluginType offer ) = 0;
-
-    virtual ProfileEngine &engine() const = 0;
-
-    //returns the name of an old profile that was unloaded
-    virtual QString changeProfile( const QString &newProfile ) = 0;
-
     virtual QExtensionManager* extensionManager() = 0;
 
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
@@ -176,12 +166,6 @@ Q_SIGNALS:
     void loadingPlugin( const QString& );
     void pluginLoaded( KDevelop::IPlugin* );
     void pluginUnloaded( KDevelop::IPlugin* );
-
-    /**
-     * Emitted when a plugin profile was changed (reloaded, other profile opened, etc.).
-     * Should work only on shells with plugin profiles support.
-     */
-    void profileChanged();
 
 private:
     friend class IPlugin;

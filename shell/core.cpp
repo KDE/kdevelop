@@ -119,8 +119,8 @@ void CorePrivate::initialize(Core::Setup mode)
         tool views to a list of available tool view, and then grab
         those tool views when loading an area.  */
 
-    kDebug() << "loading global plugin";
-    pluginController->loadPlugins( PluginController::Global );
+    kDebug() << "loading session plugins";
+    pluginController->initialize();
 
     if(!(mode & Core::NoUi))
     {

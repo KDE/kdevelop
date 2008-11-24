@@ -40,8 +40,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 class Core;
+class CorePrivate;
 class IPlugin;
-class ProfileEngine;
 class PluginControllerPrivate;
 /**
  * The KDevelop plugin controller.
@@ -53,6 +53,7 @@ class KDEVPLATFORMSHELL_EXPORT PluginController: public IPluginController
 
     Q_OBJECT
 friend class Core;
+friend class CorePrivate;
 
 public:
 
@@ -120,34 +121,6 @@ public:
 
     static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints);
 
-    /**
-     * Reimplement this function only if your shell supports plugin profiles.
-     * @return The list of URLs to the profile resources (files) with given @p extension.
-     * @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
-     * for name filters syntax.
-     */
-    KUrl::List profileResources( const QString &nameFilter );
-
-    /**
-     * Reimplement this function only if your shell supports plugin profiles.
-     * @return The list of URLs to the resources (files) with given @p extension.
-     * This list is obtained by a recursive search that process given profile
-     * and all it's subprofiles.
-     * @param nameFilter Name filter for files. @see QDir::setNameFilter documentation
-     * for name filters syntax.
-     */
-    KUrl::List profileResourcesRecursive( const QString &nameFilter );
-
-    QString currentProfile() const;
-
-    void loadPlugins( PluginType offer );
-    void unloadPlugins( PluginType offer );
-
-    ProfileEngine &engine() const;
-
-    //returns the name of an old profile that was unloaded
-    QString changeProfile( const QString &newProfile );
-
     QExtensionManager* extensionManager();
 
     QStringList allPluginNames();
@@ -155,6 +128,10 @@ public:
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
 
     QStringList projectPlugins();
+
+    void loadProjectPlugins();
+    void unloadProjectPlugins();
+
 
 private:
 
@@ -182,6 +159,7 @@ private:
     void loadOptionalDependencies( const KPluginInfo& info );
 
     void cleanup();
+    void initialize();
 
 private:
     class PluginControllerPrivate* const d;

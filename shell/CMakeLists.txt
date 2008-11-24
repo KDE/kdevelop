@@ -7,8 +7,6 @@ set(kdevplatformshell_LIB_SRCS
     mainwindow.cpp
     mainwindow_p.cpp
     plugincontroller.cpp
-    profileengine.cpp
-    profile.cpp
     shellextension.cpp
     core.cpp
     uicontroller.cpp
@@ -54,8 +52,6 @@ install(TARGETS kdevplatformtestshell kdevplatformshell ${INSTALL_TARGETS_DEFAUL
 install(FILES
     mainwindow.h
     plugincontroller.h
-    profileengine.h
-    profile.h
     shellextension.h
     core.h
     uicontroller.h

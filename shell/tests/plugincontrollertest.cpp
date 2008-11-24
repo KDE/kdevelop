@@ -19,7 +19,17 @@
 
 #include "plugincontrollertest.h"
 
+#include <QtCore/QProcess>
+#include <QtCore/QStringList>
+#include <QDBusConnection>
+#include <QDBusMessage>
+
 #include <qtest_kde.h>
+#include <kprocess.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
 #include <tests/common/autotestshell.h>
 
 #include "../core.h"
@@ -35,8 +45,30 @@ using QTest::kWaitForSignal;
 
 void PluginControllerTest::initTestCase()
 {
+    // This is needed so we don't have to install our test plugin, adds kdevplatform/shell/tests and builddir/lib to the KDEDIRS variable
+    KGlobal::mainComponent().dirs()->addResourceDir( "module", BUILD_DIR"/lib" );
+    KGlobal::mainComponent().dirs()->addResourceDir( "services", KDESRCDIR"/share/kde4/services" );
+
+    kDebug() << "module dirs:" << KGlobal::mainComponent().dirs()->resourceDirs("module");
+    QString kdedirs = "";
+    QStringList env = QProcess::systemEnvironment();
+    for( int i = 0; i < env.count(); i++ )
+    {
+        if( env[i].startsWith("KDEDIRS=") )
+        {
+            kdedirs = env[i].mid(8);
+            kDebug() << kdedirs;
+            break;
+        }
+    }
+    kdedirs = QString(KDESRCDIR":")+kdedirs;
+    KProcess p;
+    p.setEnv( "KDEDIRS", kdedirs, true );
+    p.setProgram( "kbuildsycoca4" );
+    p.execute();
+
     AutoTestShell::init();
-    Core::initialize( KDevelop::Core::NoUi );
+    Core::initialize( Core::NoUi );
     m_core = Core::self();
     m_pluginCtrl = m_core->pluginControllerInternal();
 }
@@ -51,9 +83,9 @@ void PluginControllerTest::cleanup()
 
 void PluginControllerTest::pluginInfo()
 {
-    IPlugin* plugin = m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
+    IPlugin* plugin = m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
     KPluginInfo kpi = m_pluginCtrl->pluginInfo( plugin );
-    QCOMPARE( QString( "KDevStandardOutputView" ), kpi.pluginName() );
+    QCOMPARE( QString( "kdevnonguiinterface" ), kpi.pluginName() );
 }
 
 void PluginControllerTest::loadUnloadPlugin()
@@ -62,28 +94,28 @@ void PluginControllerTest::loadUnloadPlugin()
     QSignalSpy spyloading(m_pluginCtrl, SIGNAL(loadingPlugin(const QString&)));
     QVERIFY(spy.isValid());
     QVERIFY(spyloading.isValid());
-    m_pluginCtrl->loadPlugin( "KDevStandardOutputView" );
-    QVERIFY( m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
+    m_pluginCtrl->loadPlugin( "kdevnonguiinterface" );
+    QVERIFY( m_pluginCtrl->plugin( "kdevnonguiinterface" ) );
 
     QCOMPARE(spy.size(), 1);
     QCOMPARE(spyloading.size(), 1);
 
     QList<QVariant> args = spyloading.takeFirst();
-    QCOMPARE( args.at(0).toString(), QString( "KDevStandardOutputView" ) );
+    QCOMPARE( args.at(0).toString(), QString( "kdevnonguiinterface" ) );
 
     QSignalSpy spy2(m_pluginCtrl, SIGNAL(pluginUnloaded(KDevelop::IPlugin*)) );
     QVERIFY(spy2.isValid());
-    m_pluginCtrl->unloadPlugin( "KDevStandardOutputView" );
-    QVERIFY( !m_pluginCtrl->plugin( "KDevStandardOutputView" ) );
+    m_pluginCtrl->unloadPlugin( "kdevnonguiinterface" );
+    QVERIFY( !m_pluginCtrl->plugin( "kdevnonguiinterface" ) );
 
     QCOMPARE(spy2.size(), 1);
 }
 
 void PluginControllerTest::loadFromExtension()
 {
-    IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.IOutputView" );
+    IPlugin* plugin = m_pluginCtrl->pluginForExtension( "org.kdevelop.ITestNonGuiInterface" );
     QVERIFY( plugin );
-    QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.IOutputView" );
+    QCOMPARE( plugin->extensions(), QStringList() << "org.kdevelop.ITestNonGuiInterface" );
 }
 
 QTEST_KDEMAIN( PluginControllerTest, GUI)

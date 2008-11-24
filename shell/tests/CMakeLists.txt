@@ -1,9 +1,18 @@
+# The executables go into the tests dir
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+
+# also needed for the plugin, so the plugincontrollertest knows the binary dir
+#add_definitions( -DBUILD_DIR="\\"${CMAKE_BINARY_DIR}\\"" )
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/interfaces
     ${CMAKE_SOURCE_DIR}/shell
     )
+
+# Disabled until I find out how to load plugins from builddir
+#set( plugincontrollertest_plugin_SRCS nonguiinterfaceplugin.cpp )
+#kde4_add_plugin( kdevnonguiinterfaceplugin ${plugincontrollertest_plugin_SRCS} )
+#target_link_libraries( kdevnonguiinterfaceplugin ${QT_QTCORE_LIBRARY} ${KDE4_KDECORE_LIBRARY} kdevplatforminterfaces )
 
 set( shelldocumentoperationtest_SRCS shelldocumentoperationtest.cpp )
 kde4_add_unit_test(shell-documentoperationtest ${shelldocumentoperationtest_SRCS})
@@ -17,6 +26,7 @@ set( sessioncontrollertest_SRCS sessioncontrollertest.cpp )
 kde4_add_unit_test(shell-sessioncontrollertest ${sessioncontrollertest_SRCS})
 target_link_libraries(shell-sessioncontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell sublime )
 
-set( plugincontrollertest_SRCS plugincontrollertest.cpp )
-kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
-target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )
+# Disabled for now, until I find a way of loading plugins from builddir/sourcedir
+#set( plugincontrollertest_SRCS plugincontrollertest.cpp )
+#kde4_add_unit_test(shell-plugincontrollertest ${plugincontrollertest_SRCS})
+#target_link_libraries(shell-plugincontrollertest ${QT_QTTEST_LIBRARY} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatforminterfaces sublime )

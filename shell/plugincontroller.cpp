@@ -49,13 +49,29 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 
-#include "profileengine.h"
 #include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
 
 namespace KDevelop
 {
+
+static const QString pluginControllerGrp("PluginController");
+static const QString sessionPluginsEntry("Plugins To Load");
+
+bool isGlobalPlugin( const KPluginInfo& info )
+{
+    return info.property( "X-KDevelop-Category" ).toString() == "Global";
+}
+
+bool hasMandatoryProperties( const KPluginInfo& info )
+{
+    QVariant mode = info.property( "X-KDevelop-Mode" );
+    QVariant version = info.property( "X-KDevelop-Version" );
+
+    return mode.isValid() && mode.canConvert( QVariant::String )
+           && version.isValid() && version.canConvert( QVariant::String );
+}
 
 class PluginControllerPrivate
 {
@@ -78,8 +94,6 @@ public:
     };
     CleanupMode cleanupMode;
 
-    QString profile;
-    ProfileEngine engine;
     Core *core;
     QExtensionManager* m_manager;
 };
@@ -89,12 +103,18 @@ PluginController::PluginController(Core *core)
 {
     setObjectName("PluginController");
     d->core = core;
-    d->profile = ShellExtension::getInstance() ->defaultProfile();
-    kDebug() << "Loading plugins which match:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
+    kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
         QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
+    foreach( KPluginInfo p, d->plugins )
+    {
+        if( p.pluginName().contains("nongui") )
+                kDebug() << "FOUND test plugin" << p.pluginName();
+    }
     d->cleanupMode = PluginControllerPrivate::Running;
     d->m_manager = new QExtensionManager();
+    // Register the KDevelop::IPlugin* metatype so we can properly unload it
+    qRegisterMetaType<KDevelop::IPlugin*>( "KDevelop::IPlugin*" );
 }
 
 PluginController::~PluginController()
@@ -105,16 +125,6 @@ PluginController::~PluginController()
 
     delete d->m_manager;
     delete d;
-}
-
-QString PluginController::currentProfile() const
-{
-    return d->profile;
-}
-
-ProfileEngine& PluginController::engine() const
-{
-    return d->engine;
 }
 
 KPluginInfo PluginController::pluginInfo( const IPlugin* plugin ) const
@@ -138,6 +148,16 @@ void PluginController::cleanup()
 
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
+    QStringList plugins;
+    foreach( const KPluginInfo& info, d->loadedPlugins.keys() )
+    {
+        if( isGlobalPlugin( info ) )
+        {
+            plugins << info.pluginName();
+        }
+    }
+    Core::self()->activeSession()->config()->group( pluginControllerGrp ).writeEntry( sessionPluginsEntry, plugins );
+
     // Ask all plugins to unload
     while ( !d->loadedPlugins.isEmpty() )
     {
@@ -153,30 +173,15 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
     return loadPluginInternal( pluginName );
 }
 
-void PluginController::loadPlugins( PluginType type )
+void PluginController::initialize()
 {
-    KPluginInfo::List offers = d->engine.offers( d->profile, type );
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( "Plugins" );
-    QStringList sessionPlugins = grp.readEntry( "Plugins To Load", QStringList() );
-    foreach( const KPluginInfo& pi, offers )
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    QStringList sessionPlugins = grp.readEntry( sessionPluginsEntry, ShellExtension::getInstance()->defaultPlugins() );
+    foreach( const KPluginInfo& pi, d->plugins )
     {
-        if( sessionPlugins.isEmpty() || sessionPlugins.contains( pi.pluginName() ) )
+        if( isGlobalPlugin( pi ) && ( sessionPlugins.isEmpty() || sessionPlugins.contains( pi.pluginName() ) ) )
         {
             loadPluginInternal( pi.pluginName() );
-        }
-    }
-}
-
-void PluginController::unloadPlugins( PluginType type )
-{
-    //TODO see if this can be optimized so it's not something like O(n^2)
-    KPluginInfo::List offers = d->engine.offers( d->profile, type );
-    foreach( const KPluginInfo& pi, offers )
-    {
-        foreach ( const KPluginInfo& lpi, d->loadedPlugins.keys() )
-        {
-            if ( pi.pluginName() == lpi.pluginName() )
-                unloadPlugin( pi.pluginName() );
         }
     }
 }
@@ -220,46 +225,6 @@ void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
         delete plugin;
 }
 
-KUrl::List PluginController::profileResources( const QString &nameFilter )
-{
-    return d->engine.resources( currentProfile(), nameFilter );
-}
-
-KUrl::List PluginController::profileResourcesRecursive( const QString &nameFilter )
-{
-    return d->engine.resourcesRecursive( currentProfile(), nameFilter );
-}
-
-QString PluginController::changeProfile( const QString &newProfile )
-{
-	Q_UNUSED( newProfile );
-    /* FIXME disabled for now
-    QStringList unload;
-    KService::List coreLoad;
-    KService::List globalLoad;
-    d->engine.diffProfiles( ProfileEngine::Core,
-                           currentProfile(),
-                           newProfile,
-                           unload,
-                           coreLoad );
-    d->engine.diffProfiles( ProfileEngine::Global,
-                           currentProfile(),
-                           newProfile,
-                           unload,
-                           globalLoad );
-
-    QString oldProfile = d->profile;
-    d->profile = newProfile;
-
-    unloadPlugins( unload );
-    loadPlugins( coreLoad );
-    loadPlugins( globalLoad );
-
-    return oldProfile;
-    */
-    return QString();
-}
-
 KPluginInfo PluginController::infoForPluginId( const QString &pluginId ) const
 {
     QList<KPluginInfo>::ConstIterator it;
@@ -283,6 +248,18 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
 
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
+
+    if( !hasMandatoryProperties( info ) ) {
+        kWarning() << "Unable to load plugin named " << pluginId << "! Doesn't have all mandatory properties set";
+        return 0;
+    }
+
+    if( info.property("X-KDevelop-Mode") == "GUI" 
+        && Core::self()->setupFlags() == Core::NoUi )
+    {
+        kWarning() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
+        return 0;
+    }
 
     kDebug() << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.pluginName() );
@@ -422,7 +399,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
     if( infos.isEmpty() )
         return 0;
-    if( d->plugins.contains( infos.first() ) )
+    if( d->loadedPlugins.contains( infos.first() ) )
         return d->loadedPlugins[ infos.first() ];
     else
         return loadPluginInternal( infos.first().pluginName() );
@@ -436,7 +413,7 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     foreach (const KPluginInfo &info, infos)
     {
         IPlugin* plugin;
-        if( d->plugins.contains( info ) )
+        if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];
         else
             plugin = loadPluginInternal( info.pluginName() );
@@ -491,6 +468,22 @@ QStringList PluginController::projectPlugins()
             names << info.pluginName();
     }
     return names;
+}
+
+void PluginController::loadProjectPlugins()
+{
+    Q_FOREACH( const QString& name, projectPlugins() )
+    {
+        loadPluginInternal( name );
+    }
+}
+
+void PluginController::unloadProjectPlugins()
+{
+    Q_FOREACH( const QString& name, projectPlugins() )
+    {
+        unloadPlugin( name );
+    }
 }
 
 }

@@ -82,7 +82,7 @@ public:
     void unloadAllProjectPlugins()
     {
         if( m_projects.isEmpty() )
-            m_core->pluginController()->unloadPlugins( IPluginController::Project );
+            m_core->pluginControllerInternal()->unloadProjectPlugins();
     }
 
     void projectConfig( QObject * obj )
@@ -340,9 +340,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
         //The project file has been opened.
         //Now we can load settings for all of the Core objects including this one!!
 //         Core::loadSettings();
-        d->m_core->pluginController()->loadPlugins( IPluginController::Project );
-    }
-    else
+        d->m_core->pluginControllerInternal()->loadProjectPlugins();
+    } else
         return false;
 
     Project* project = new Project();
@@ -494,7 +493,6 @@ bool ProjectController::closeProject(IProject* proj)
         initializePluginCleanup(proj);
     }
     emit projectClosed(proj);
-    //PluginController::self() ->changeProfile( m_oldProfileName ); //FIXME
     return true;
 }
 

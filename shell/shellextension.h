@@ -55,10 +55,6 @@ public:
     /**Reimplement to return the name of KXMLGUI resource file for an application.*/
     virtual QString xmlFile() = 0;
 
-    /**Reimplement to set a default profile for the shell. Default profile
-    will be used by a shell if no --profile argument is specified.*/
-    virtual QString defaultProfile() = 0;
-
     /**Reimplement to return the name of the default ui area.*/
     virtual AreaParams defaultArea() = 0;
 
