@@ -208,6 +208,19 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  *
  * For more information about duchain pointers, see KDevelop::DUChainPointer.
  *
+ * \section searching Searching for declarations
+ * If you have a qualified identifier and want to retrieve declaration(s) which share the
+ * identifier, you can do this by using the symbol table (KDevelop::PersistentSymbolTable):
+ *
+ * \code
+ *  KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
+ *  KDevelop::PersistentSymbolTable::Declarations declarations = KDevelop::PersistentSymbolTable::self().getDeclarations( qualifiedIdentifier );
+ *
+ *  for (PersistentSymbolTable::Declarations::Iterator it = declarations.iterator(); it; ++it) {
+ *    KDevelop::Declaration* decl = it->declaration();
+ *    // Use the declaration...
+ *  }
+ *
  * \section accessing Accessing a definition-use chain
  * The first step in using a duchain is to retrieve the chain that you are interested in.
  * Presumably you will know the URL of the file for which you want to retrieve the chain.

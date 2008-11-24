@@ -24,11 +24,12 @@
 #include "../languageexport.h"
 #include <kurl.h>
 
-class QTableWidget;
 class KLineEdit;
 class KUrl;
 
 namespace KDevelop {
+
+class OverridesPage;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWizardPage
 {
@@ -36,7 +37,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWizardPage
     Q_PROPERTY(QStringList inheritance READ inheritanceList())
 
 public:
-    ClassIdentifierPage(QWidget* parent);
+    ClassIdentifierPage(QWizard* parent);
     virtual ~ClassIdentifierPage();
 
     /// Returns the line edit which contains the new class identifier.
@@ -84,32 +85,12 @@ private:
     class ClassIdentifierPagePrivate* const d;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWizardPage
-{
-    Q_OBJECT
-
-public:
-    OverridesPage(QWidget* parent);
-    virtual ~OverridesPage();
-
-    QTableWidget* overrideTable() const;
-
-    QWidget* extraFunctionsContainer() const;
-
-public Q_SLOTS:
-    virtual void selectAll();
-    virtual void deselectAll();
-
-private:
-    class OverridesPagePrivate* const d;
-};
-
 class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    LicensePage(QWidget* parent);
+    LicensePage(QWizard* parent);
     virtual ~LicensePage();
 
 public Q_SLOTS:
@@ -140,7 +121,7 @@ public:
      *Should return the suggested url of the header file for the given class-name
      */
     virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
-    
+
     /**
      *Should return the suggested url of the implementation file for the given class-name,
      *if header and implementation are separate for this language.

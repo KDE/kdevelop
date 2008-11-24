@@ -70,15 +70,25 @@
        </layout>
       </item>
       <item>
-       <widget class="QTableWidget" name="overridesTable" >
+       <widget class="QTreeWidget" name="overridesTree" >
+        <property name="rootIsDecorated" >
+         <bool>false</bool>
+        </property>
+        <property name="uniformRowHeights" >
+         <bool>true</bool>
+        </property>
+        <property name="itemsExpandable" >
+         <bool>false</bool>
+        </property>
+        <property name="allColumnsShowFocus" >
+         <bool>true</bool>
+        </property>
+        <property name="expandsOnDoubleClick" >
+         <bool>false</bool>
+        </property>
         <column>
          <property name="text" >
-          <string>Override</string>
-         </property>
-        </column>
-        <column>
-         <property name="text" >
-          <string>Slot/Signal</string>
+          <string>Superclass -> Function</string>
          </property>
         </column>
         <column>
@@ -88,12 +98,12 @@
         </column>
         <column>
          <property name="text" >
-          <string>Return Type</string>
+          <string>Signal</string>
          </property>
         </column>
         <column>
          <property name="text" >
-          <string>Function</string>
+          <string>Slot</string>
          </property>
         </column>
        </widget>

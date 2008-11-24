@@ -22,9 +22,10 @@
 #include <KLineEdit>
 
 #include "ui_newclass.h"
-#include "ui_overridevirtuals.h"
 #include "ui_licensechooser.h"
 #include "ui_outputlocation.h"
+
+#include "overridespage.h"
 
 using namespace KDevelop;
 
@@ -112,7 +113,7 @@ public:
     Ui::NewClassDialog* classid;
 };
 
-ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
+ClassIdentifierPage::ClassIdentifierPage(QWizard* parent)
     : QWizardPage(parent)
     , d(new ClassIdentifierPagePrivate)
 {
@@ -210,59 +211,8 @@ QStringList ClassIdentifierPage::inheritanceList() const
     QStringList ret;
     for (int i = 0; i < d->classid->inheritanceList->count(); ++i)
         ret << d->classid->inheritanceList->item(i)->text();
+
     return ret;
-}
-
-class KDevelop::OverridesPagePrivate
-{
-public:
-    OverridesPagePrivate()
-        : overrides(0)
-    {
-    }
-
-    Ui::OverridesDialog* overrides;
-};
-
-OverridesPage::OverridesPage(QWidget* parent)
-    : QWizardPage(parent)
-    , d(new OverridesPagePrivate)
-{
-    setTitle(i18n("Override Methods"));
-    setSubTitle( i18n("Select any methods you would like to override in the new class.") );
-
-    d->overrides = new Ui::OverridesDialog;
-    d->overrides->setupUi(this);
-
-    connect(d->overrides->selectAllPushButton, SIGNAL(pressed()), this, SLOT(selectAll()));
-    connect(d->overrides->deselectAllPushButton, SIGNAL(pressed()), this, SLOT(deselectAll()));
-}
-
-OverridesPage::~OverridesPage()
-{
-    delete d;
-}
-
-QTableWidget* OverridesPage::overrideTable() const
-{
-    return d->overrides->overridesTable;
-}
-
-QWidget* OverridesPage::extraFunctionsContainer() const
-{
-    return d->overrides->extraFunctionWidget;
-}
-
-void OverridesPage::selectAll()
-{
-    for (int i = 0; i < d->overrides->overridesTable->rowCount(); ++i)
-        d->overrides->overridesTable->item(i, 0)->setCheckState(Qt::Checked);
-}
-
-void OverridesPage::deselectAll()
-{
-    for (int i = 0; i < d->overrides->overridesTable->rowCount(); ++i)
-        d->overrides->overridesTable->item(i, 0)->setCheckState(Qt::Unchecked);
 }
 
 class KDevelop::LicensePagePrivate
@@ -289,7 +239,7 @@ static const char* s_lgpl =
 "   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
 "   Boston, MA 02110-1301, USA.\n";
 
-LicensePage::LicensePage(QWidget* parent)
+LicensePage::LicensePage(QWizard* parent)
     : QWizardPage(parent)
     , d(new LicensePagePrivate)
 {
@@ -338,7 +288,7 @@ OutputPage::OutputPage(CreateClass* parent)
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
-    
+
     registerField("headerUrl*", d->output->headerUrl);
     registerField("implementationUrl*", d->output->implementationUrl);
 }

@@ -54,7 +54,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
   public:
     IndexedDeclaration(Declaration* decl = 0);
     IndexedDeclaration(uint topContext, uint declarationIndex);
-    
+
     ///Duchain must be read locked
     Declaration* declaration() const;
 
@@ -66,7 +66,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     bool operator==(const IndexedDeclaration& rhs) const {
       return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
-    
+
     uint hash() const {
       if(isDummy())
         return 0;
@@ -89,16 +89,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
         return 0;
       return m_declarationIndex;
     }
-    
+
     uint topContextIndex() const {
       if(isDummy())
         return 0;
       return m_topContext;
     }
-    
+
     IndexedTopDUContext indexedTopContext() const;
 
-    
+
     ///The following functions allow storing 2 integers in this object and marking it as a dummy,
     ///which makes the isValid() function always return false for this object, and use the integers
     ///for other purposes
@@ -112,22 +112,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
         m_topContext = 0;
       m_declarationIndex = 0;
     }
-    
+
     bool isDummy() const {
       //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
       //integers
       return (bool)(m_topContext & (1 << 31));
     }
-    
+
     QPair<uint, uint> dummyData() const {
       Q_ASSERT(isDummy());
       return qMakePair(m_topContext & (~(1<<31)), m_declarationIndex);
     }
-    
+
     ///Do not call this when this object is valid. The first integer loses one bit of precision.
     void setDummyData(QPair<uint, uint> data) {
       Q_ASSERT(isDummy());
-      
+
       m_topContext = data.first;
       m_declarationIndex = data.second;
       Q_ASSERT(!isDummy());
@@ -136,11 +136,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
       Q_ASSERT(dummyData() == data);
     }
 
-    
+
   private:
   uint m_topContext;
   uint m_declarationIndex;
 };
+
 
 ///Represents a declaration only by its index within the top-context
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
@@ -170,7 +171,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDeclaration {
     uint localIndex() const {
       return m_declarationIndex;
     }
-    
+
     bool isLoaded(TopDUContext* top) const;
 
   private:
@@ -256,7 +257,7 @@ public:
    *
    * \param specialization the specialization index (see DeclarationId)
    * \param topContext the top context to search from
-   * \param upDistance upwards distance in the context-structure of the 
+   * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
    * */
   virtual Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance = 0);
@@ -383,7 +384,7 @@ public:
    *         equals the internal representation. Use this for example to do equality-comparison.
    */
   IndexedIdentifier indexedIdentifier() const;
-  
+
   /**
    * Determine the global qualified identifier of this declaration.
    *
@@ -527,7 +528,7 @@ public:
    * of this declaration to SpecializationStore if it is nonzero.
    */
   virtual void activateSpecialization();
-  
+
   enum {
     Identity = 7
   };
@@ -554,7 +555,7 @@ private:
   virtual Declaration* clonePrivate() const;
 
   void updateCodeModel();
-   
+
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
 
   friend class DUContext;
@@ -570,6 +571,8 @@ inline uint qHash(const IndexedDeclaration& decl) {
   return decl.hash();
 }
 }
+
+Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
 
 #endif // DECLARATION_H
 

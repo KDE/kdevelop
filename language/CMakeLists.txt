@@ -95,6 +95,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/codegenerator.cpp
     codegen/documentchangeset.cpp
     codegen/coderepresentation.cpp
+    codegen/overridespage.cpp
 
     util/setrepository.cpp
 )
@@ -252,6 +253,7 @@ install(FILES
 
 install(FILES
     codegen/createclass.h
+    codegen/overridespage.h
     codegen/astchangeset.h
     codegen/duchainchangeset.h
     codegen/codegenerator.h

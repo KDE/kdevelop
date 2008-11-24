@@ -53,15 +53,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
   public:
     IndexedDUContext(DUContext* decl);
     IndexedDUContext(uint topContext = 0, uint contextIndex = 0);
-    
+
     ///Duchain must be read locked
     DUContext* context() const;
-    
+
     ///Duchain must be read locked
     DUContext* data() const {
       return context();
     }
-    
+
     bool operator==(const IndexedDUContext& rhs) const {
       return m_topContext == rhs.m_topContext && m_contextIndex == rhs.m_contextIndex;
     }
@@ -77,15 +77,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
       Q_ASSERT(!isDummy());
       return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_contextIndex < rhs.m_contextIndex);
     }
-    
+
     //Index within the top-context
     uint localIndex() const {
       if(isDummy())
         return 0;
-      
+
       return m_contextIndex;
     }
-    
+
     uint topContextIndex() const {
       return m_topContext;
     }
@@ -105,22 +105,22 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
         m_topContext = 0;
       m_contextIndex = 0;
     }
-    
+
     bool isDummy() const {
       //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
       //integers
       return (bool)(m_topContext & (1 << 31));
     }
-    
+
     QPair<uint, uint> dummyData() const {
       Q_ASSERT(isDummy());
       return qMakePair(m_topContext & (~(1<<31)), m_contextIndex);
     }
-    
+
     ///Do not call this when this object is valid. The first integer loses one bit of precision.
     void setDummyData(QPair<uint, uint> data) {
       Q_ASSERT(isDummy());
-      
+
       m_topContext = data.first;
       m_contextIndex = data.second;
       Q_ASSERT(!isDummy());
@@ -140,17 +140,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
     LocalIndexedDUContext(DUContext* decl);
     LocalIndexedDUContext(uint contextIndex = 0);
     //Duchain must be read locked
-    
+
     DUContext* data(TopDUContext* top) const;
-    
+
     bool operator==(const LocalIndexedDUContext& rhs) const {
       return m_contextIndex == rhs.m_contextIndex;
     }
-    
+
     bool isValid() const {
       return m_contextIndex != 0;
     }
-    
+
     uint hash() const {
       return m_contextIndex * 29;
     }
@@ -158,12 +158,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
     bool operator<(const LocalIndexedDUContext& rhs) const {
       return m_contextIndex < rhs.m_contextIndex;
     }
-    
+
     //Index within the top-context
     uint localIndex() const {
       return m_contextIndex;
     }
-    
+
     bool isLoaded(TopDUContext* top) const;
   private:
   uint m_contextIndex;
@@ -289,7 +289,7 @@ public:
    * The search is local, not recursive.
    */
   Declaration* findDeclarationAt(const SimpleCursor& position) const;
-  
+
   /**
    * Find the context which most specifically covers \a range.
    */
@@ -334,28 +334,29 @@ public:
    */
   DUContext* parentContext() const;
 
+  /// Represents an imported parent context.
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
     }
-    
+
     ///@param topContext The top-context from where to start searching. This is important to find the correct imports
     ///                  in the case of templates or similar structures.
     DUContext* context(const TopDUContext* topContext) const;
-    
+
     //Returns the top-context index, if this import is not a specialization import.
     uint topContextIndex() const {
       return m_context.topContextIndex();
     }
-    
+
     IndexedDUContext indexedContext() const {
       return m_context;
     }
-    
+
     ///Returns true if this import can be followed back from the imported context
     bool isBackwardMapped() const;
-    
+
     SimpleCursor position;
     private:
       //Either we store m_declaration, or m_context. That way we can resolve specialized contexts.
@@ -427,7 +428,7 @@ public:
    */
   const IndexedDUContext* indexedImporters() const;
   uint indexedImportersSize() const;
-  
+
   /**
    * Returns the list of immediate child contexts for this context.
    * Expensive.
@@ -448,11 +449,11 @@ public:
    *
    * \param specialization the specialization index (see DeclarationId)
    * \param topContext the top context to search from
-   * \param upDistance upwards distance in the context-structure of the 
+   * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
    * */
   virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance = 0);
-  
+
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
    * is currently active at the given text \a position, with the given type \a dataType.
@@ -599,7 +600,7 @@ public:
 
   ///Returns the count of uses that can be accessed through uses()
   int usesCount() const;
-  
+
   /**
    * Find the use which encompasses \a position, if one exists.
    * @return The local index of the use, or -1
@@ -776,7 +777,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 
   ///Whether this context, or any of its parent contexts, has been inserted anonymously into the du-chain(@see DUContext::DUContext)
   bool isAnonymous() const;
-  
+
   /**
    * This is called whenever the search needs to do the decision whether it should be continued in the parent context.
    * It is not called when the DontSearchInParent flag is set. Else this should be overridden to do language-specific logic.
@@ -786,7 +787,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 
 private:
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
-  
+
   friend class TopDUContext;
   friend class IndexedDUContext;
   friend class LocalIndexedDUContext;

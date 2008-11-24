@@ -59,7 +59,7 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationForDefinition(Declaration* definition, TopDUContext* topContext = 0);
   ///Returns the first declaration in the given line. Searches the given context and all sub-contexts.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* declarationInLine(const KDevelop::SimpleCursor& cursor, KDevelop::DUContext* ctx);
-  
+
   class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemFilter {
     public:
     virtual bool accept(Declaration* decl) = 0;
@@ -72,27 +72,27 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
 
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
-  
+
   ///Uses the persistent symbol table to find all occurences of this declaration, based on its identifier.
   ///The result should be filtered to make sure that the declaration is actually useful to you.
   KDEVPLATFORMLANGUAGE_EXPORT QList<IndexedDeclaration> collectAllVersions(Declaration* decl);
-  
+
   ///If the given declaration is a class, this gets all classes that inherit this one
   ///@param collectVersions If this is true, the persistent symbol table is used to first find all registered
-  ///                       versions of this class, and then get the inheriters from them all together. This is neded for C++.
+  ///                       versions of this class, and then get the inheriters from them all together. This is needed for C++.
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions = true);
-  
+
   ///Gets all functions that override the function @param overriddenDeclaration, starting the search at @param currentClass
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps);
-  
+
   ///Returns whether the given context or any of its child-contexts contain a use of the given declaration. This is relatively expensive.
-  KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);  
+  KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);
 
   ///Returns the toal count of uses of the gien declaration under the given context
-  KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);  
-  
+  KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);
+
   ///Returns the declaration that is overridden by the given one, or zero.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* getOverridden(const Declaration* decl);
 }
