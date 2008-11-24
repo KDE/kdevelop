@@ -29,6 +29,7 @@
 #include "../duchain/classmemberdeclaration.h"
 #include "../duchain/abstractfunctiondeclaration.h"
 #include "../duchain/duchainutils.h"
+#include "../duchain/classfunctiondeclaration.h"
 
 #include "ui_overridevirtuals.h"
 
@@ -78,6 +79,7 @@ void OverridesPage::initializePage()
     QWizardPage::initializePage();
 
     d->overrideSuperclasses.clear();
+    overrideTree()->clear();
 
     foreach (const QString& inherited, field("classInheritance").toStringList())
         fetchInheritance(inherited);
@@ -186,6 +188,11 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
     overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration));
     overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration)));
     overrideItem->setText(1, accessModifier);
+
+    if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration)) {
+        overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
+        overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
+    }
 }
 
 QTreeWidget* OverridesPage::overrideTree() const
