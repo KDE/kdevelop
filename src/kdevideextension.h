@@ -27,7 +27,6 @@ public:
     static void init();
 
     virtual QString xmlFile();
-    virtual QString defaultProfile();
     virtual KDevelop::AreaParams defaultArea();
     virtual QString projectFileExtension();
     virtual QString projectFileDescription();

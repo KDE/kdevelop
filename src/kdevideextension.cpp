@@ -43,11 +43,6 @@ QString KDevIDEExtension::xmlFile()
     return "kdevelopui.rc";
 }
 
-QString KDevIDEExtension::defaultProfile()
-{
-    return "IDE";
-}
-
 KDevelop::AreaParams KDevIDEExtension::defaultArea()
 {
     KDevelop::AreaParams params = {"code", i18n("Code")};
