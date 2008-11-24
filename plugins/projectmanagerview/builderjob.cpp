@@ -95,7 +95,10 @@ void BuilderJob::start()
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??
     KDevelop::ICore::self()->documentController()->saveAllDocuments( KDevelop::IDocument::Silent );
 
-    KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+    if(hasSubjobs())
+        KDevelop::ICore::self()->runController()->registerJob( subjobs().first() );
+    else
+        emitResult();
 }
 
 void BuilderJob::slotResult( KJob* job )
