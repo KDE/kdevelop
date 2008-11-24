@@ -70,24 +70,22 @@ SimpleRefactoring& SimpleRefactoring::self() {
   return ret;
 }
 
-Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)
-
 void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) {
-  
+
   if(DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context)){
     //Actions on declarations
     qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
-    
+
     DUChainReadLocker lock(DUChain::lock());
-    
+
     Declaration* declaration = declContext->declaration().data();
-    
+
     if(declaration) {
       QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
       action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
       action->setIcon(KIcon("edit-rename"));
       connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
-      
+
       extension.addAction(ContextMenuExtension::RefactorGroup, action);
     }
   }
@@ -100,7 +98,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
         action->setData(QVariant::fromValue(item->folder()->url()));
 //         action->setIcon(KIcon("edit-rename"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(executeNewClassAction()));
-        
+
         extension.addAction(ContextMenuExtension::FileGroup, action);
       }
     }
@@ -134,12 +132,12 @@ class SimpleRefactoringCollector : public KDevelop::UsesWidget::UsesWidgetCollec
   public:
   SimpleRefactoringCollector(IndexedDeclaration decl) : UsesWidgetCollector(decl) {
   }
-  
+
   virtual void processUses(KDevelop::ReferencedTopDUContext topContext) {
     m_allUsingContexts << IndexedTopDUContext(topContext.data());
     UsesWidgetCollector::processUses(topContext);
   }
-  
+
   QVector<IndexedTopDUContext> m_allUsingContexts;
 };
 
@@ -168,7 +166,7 @@ DocumentChangeSet::ChangeResult applyChangesToDeclarations(QString oldName, QStr
 DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, DocumentChangeSet& changes, DUContext* context, int usedDeclarationIndex) {
    if(usedDeclarationIndex == std::numeric_limits<int>::max())
      return DocumentChangeSet::ChangeResult(true);
-   
+
    for(int a = 0; a < context->usesCount(); ++a) {
      const Use& use(context->uses()[a]);
      if(use.m_declarationIndex != usedDeclarationIndex)
@@ -181,7 +179,7 @@ DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, D
      if(!result)
        return result;
    }
-   
+
    foreach(DUContext* child, context->childContexts()) {
      DocumentChangeSet::ChangeResult result = applyChanges(oldName, newName, changes, child, usedDeclarationIndex);
      if(!result)
@@ -193,28 +191,28 @@ DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, D
 void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl) {
   if(!doRefactoringWarning())
     return;
-  
+
   DUChainReadLocker lock(DUChain::lock());
 
   Declaration* declaration = decl.data();
-  
+
   if(!declaration)
     return;
-  
+
   ///Step 1: Allow the user to specify a replacement name, and allow him to see all uses
-  
+
   QString originalName = declaration->identifier().identifier().str();
   QString replacementName;
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
   SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(decl);
-  
+
   QDialog dialog;
-  
+
   QTabWidget tabWidget;
-  
+
   UsesWidget uses(decl, collector);
-  
+
   QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration);
   AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
 
@@ -228,47 +226,47 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   QHBoxLayout actionsLayout;
   dialog.setLayout(&verticalLayout);
   dialog.setWindowTitle(i18n("Rename %1", declaration->toString()));
-  
+
   QLabel newNameLabel(i18n("New name:"));
   actionsLayout.addWidget(&newNameLabel);
-  
+
   QLineEdit edit(declaration->identifier().identifier().str());
   newNameLabel.setBuddy(&edit);
-  
+
   actionsLayout.addWidget(&edit);
   edit.setText(originalName);
   QPushButton goButton(i18n("Rename"));
   goButton.setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
   actionsLayout.addWidget(&goButton);
   connect(&goButton, SIGNAL(clicked(bool)), &dialog, SLOT(accept()));
-  
+
   QPushButton cancelButton(i18n("Cancel"));
   actionsLayout.addWidget(&cancelButton);
   verticalLayout.addLayout(&actionsLayout);
-  
+
   tabWidget.addTab(&uses, i18n("Uses"));
   if(navigationWidget)
     tabWidget.addTab(navigationWidget, "Declaration Info");
-  
+
   verticalLayout.addWidget(&tabWidget);
-  
+
   connect(&cancelButton, SIGNAL(clicked(bool)), &dialog, SLOT(reject()));
-  
+
   lock.unlock();
   dialog.resize( 750, 550 );
-  
+
   if(dialog.exec() != QDialog::Accepted) {
     kDebug() << "stopped";
     return;
   }
   //It would be nicer to scope this, but then "uses" would not survive
-  
+
   replacementName = edit.text();
-  
+
 
   if(replacementName == originalName || replacementName.isEmpty())
     return;
-  
+
   //Now just start doing the actual changes, no matter whether the collector is ready or not
   CollectorProgressDialog collectorProgress(i18n("Searching uses of \"%1\"", originalName), *collector);
   if(!collector->isReady()) {
@@ -295,13 +293,13 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
       }
     }
   }
-  
+
   DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
   if(!result) {
     KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));
     return;
   }
-  
+
   result = changes.applyAllChanges();
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));

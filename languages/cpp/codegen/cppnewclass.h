@@ -23,13 +23,24 @@
 #define CPP_NEWCLASS_H
 
 #include <language/codegen/createclass.h>
+#include <language/codegen/overridespage.h>
 
 class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
 {
   Q_OBJECT
 
 public:
-  CppClassIdentifierPage(QWidget* parent);
+  CppClassIdentifierPage(QWizard* parent);
+};
+
+class CppOverridesPage : public KDevelop::OverridesPage
+{
+  Q_OBJECT
+
+public:
+    CppOverridesPage(QWizard* parent);
+
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
 };
 
 class CppNewClass : public KDevelop::CreateClass
@@ -45,8 +56,9 @@ public:
 
   virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
   virtual KUrl implementationUrlFromBase(QString className, KUrl baseUrl);
-  
+
   virtual CppClassIdentifierPage* newIdentifierPage();
+  virtual CppOverridesPage* newOverridesPage();
 
 private:
   QStringList m_baseClasses;

@@ -32,14 +32,33 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <language/duchain/identifier.h>
+#include <language/duchain/declaration.h>
+#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
 
 using namespace KDevelop;
 
-CppClassIdentifierPage::CppClassIdentifierPage(QWidget* parent)
+CppClassIdentifierPage::CppClassIdentifierPage(QWizard* parent)
   : KDevelop::ClassIdentifierPage(parent)
 {
     // Give the user a hint that the access info should be provided here too
     inheritanceLineEdit()->setText("public ");
+}
+
+CppOverridesPage::CppOverridesPage(QWizard* parent)
+  : KDevelop::OverridesPage(parent)
+{
+}
+
+void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration)
+{
+  // HACK: filter out Qt's moc calls
+  QString id = childDeclaration->identifier().toString();
+  if (id == "qt_metacall" || id == "qt_metacast" || id == "metaObject")
+    return;
+
+  OverridesPage::addPotentialOverride(classItem, childDeclaration);
 }
 
 CppNewClass::CppNewClass(QWidget* parent, KUrl baseUrl)
@@ -51,6 +70,11 @@ CppNewClass::CppNewClass(QWidget* parent, KUrl baseUrl)
 CppClassIdentifierPage* CppNewClass::newIdentifierPage()
 {
   return new CppClassIdentifierPage(this);
+}
+
+CppOverridesPage* CppNewClass::newOverridesPage()
+{
+  return new CppOverridesPage(this);
 }
 
 void CppNewClass::generate()
@@ -128,10 +152,40 @@ void CppNewClass::generateHeader()
   // if (baseClassIsQObjectDerivative) output << "\tQ_OBJECT\n\n";
 
   output << "public:\n";
+  Declaration::AccessPolicy ap = Declaration::Public;
 
   // Constructor(s)
 
   // Overrides
+  {
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
+    IndexedDeclaration id = qvariant_cast<IndexedDeclaration>(override);
+    if (Declaration* d = id.declaration()) {
+      if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(d)) {
+        if (ap != member->accessPolicy()) {
+          switch (member->accessPolicy()) {
+            case Declaration::Public:
+              output << "\npublic:\n";
+              break;
+
+            case Declaration::Protected:
+              output << "\nprotected:\n";
+              break;
+
+            case Declaration::Private:
+              output << "\nprivate:\n";
+              break;
+          }
+          ap = member->accessPolicy();
+        }
+      }
+
+      output << "  " << d->toString() << ";\n";
+    }
+  }
+  }
 
   output << "};\n\n";
 
