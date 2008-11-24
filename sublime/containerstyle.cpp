@@ -29,6 +29,7 @@ namespace Sublime {
 ContainerStyle::ContainerStyle(QWidget *parent)
     :QStyle(), parent(parent)
 {
+	setParent(parent); // setStyle does not take ownership, so do it manually
 }
 
 QStyle *ContainerStyle::style() const

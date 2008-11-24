@@ -27,6 +27,7 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QMenu>
+#include <QCommonStyle>
 
 #include <kdebug.h>
 #include <kacceleratormanager.h>
@@ -355,6 +356,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             /* The splitter used to have container as the only child, now it's
                time to get rid of it.  Make sure deleting splitter does not
                delete container -- per above comment, we'll delete it later.  */
+            QCommonStyle* tmpStyle = new QCommonStyle; // temp style since container uses it's parents style, which gets zeroed
+            container->setStyle(tmpStyle);
+            connect(container, SIGNAL(destroyed(QObject*)), tmpStyle, SLOT(deleteLater()));
             container->setParent(0);
             m_indexSplitters.remove(index);
             delete splitter;
