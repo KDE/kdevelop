@@ -182,7 +182,7 @@ void CppNewClass::generateHeader()
         }
       }
 
-      output << "  " << d->toString() << ";\n";
+      output << "  virtual " << d->toString() << ";\n";
     }
   }
   }
