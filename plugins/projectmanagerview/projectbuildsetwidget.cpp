@@ -48,18 +48,18 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
      m_ui( new Ui::ProjectBuildSetWidget )
 {
     m_ui->setupUi( this );
-    m_ui->addItemButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    
     m_ui->addItemButton->setIcon( KIcon( "list-add" ) );
-
     connect( m_ui->addItemButton, SIGNAL( clicked() ),
              this, SLOT( addItems() ) );
 
-    m_ui->removeItemButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
     m_ui->removeItemButton->setIcon( KIcon( "list-remove" ) );
-
     connect( m_ui->removeItemButton, SIGNAL( clicked() ),
              this, SLOT( removeItems() ) );
 
+    m_ui->buildButton->setIcon( KIcon( "run-build" ) );
+    m_ui->installButton->setIcon( KIcon( "run-install" ) );
+    m_ui->cleanButton->setIcon( KIcon( "run-clean" ) );
 
     m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -74,6 +74,13 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
     m_ui->itemView->setModel( m_view->plugin()->buildSet() );
     connect( m_ui->itemView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged()) );
+
+    connect( m_ui->buildButton, SIGNAL( clicked() ),
+             m_view->plugin(), SLOT( buildProjectItems() ) );
+    connect( m_ui->installButton, SIGNAL( clicked() ),
+             m_view->plugin(), SLOT( installProjectItems() ) );
+    connect( m_ui->cleanButton, SIGNAL( clicked() ),
+             m_view->plugin(), SLOT( cleanProjectItems() ) );
 }
 
 void ProjectBuildSetWidget::selectionChanged()
@@ -112,4 +119,3 @@ void ProjectBuildSetWidget::removeItems()
         m_view->plugin()->buildSet()->removeRows( range.top(), range.height() );
     }
 }
-
