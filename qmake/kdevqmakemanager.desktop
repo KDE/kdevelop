@@ -67,3 +67,4 @@ X-KDevelop-FileManager=QMake
 X-KDevelop-Version=6
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
 X-KDevelop-IRequired=org.kdevelop.IQMakeBuilder
+X-KDevelop-Mode=NoGUI
