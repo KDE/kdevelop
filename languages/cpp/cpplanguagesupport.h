@@ -36,7 +36,6 @@ class AST;
 class TranslationUnitAST;
 class IncludeFileDataProvider;
 
-namespace KParts { class Part; }
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer;}
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }

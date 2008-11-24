@@ -42,8 +42,6 @@
 #include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <kio/netaccess.h>
-#include <kparts/part.h>
-#include <kparts/partmanager.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/smartinterface.h>
