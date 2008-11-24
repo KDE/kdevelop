@@ -8,3 +8,4 @@ X-KDE-Library=kdevstandardoutputview
 X-KDE-PluginInfo-Name=KDevStandardOutputView
 X-KDevelop-Version=6
 X-KDevelop-Interfaces=org.kdevelop.IOutputView
+X-KDevelop-Mode=GUI
