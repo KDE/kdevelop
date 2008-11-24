@@ -235,6 +235,8 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   actionsLayout.addWidget(&edit);
   edit.setText(originalName);
+  edit.setFocus();
+  edit.selectAll();
   QPushButton goButton(i18n("Rename"));
   goButton.setToolTip(i18n("Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too"));
   actionsLayout.addWidget(&goButton);
