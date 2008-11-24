@@ -108,7 +108,7 @@ void ProjectSelectionPage::validateData()
         QFileInfo tFileInfo(tDir.absolutePath());
         if (!tFileInfo.isWritable() || !tFileInfo.isExecutable())
         {
-            ui->locationValidLabel->setText( i18n("Unabled to create subdirectories, "
+            ui->locationValidLabel->setText( i18n("Unable to create subdirectories, "
                                                   "missing permissions on: %1", tDir.absolutePath()) );
             emit invalid();
             return;
