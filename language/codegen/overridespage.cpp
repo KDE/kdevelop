@@ -163,12 +163,6 @@ void OverridesPage::fetchInheritanceFromClass(KDevelop::Declaration* decl)
 
 void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration)
 {
-    QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
-    overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
-    overrideItem->setCheckState( 0, Qt::Unchecked );
-    overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration));
-    overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration)));
-
     QString accessModifier;
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(childDeclaration)) {
         switch (member->accessPolicy()) {
@@ -181,12 +175,17 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
                 break;
 
             case Declaration::Private:
-                accessModifier = i18n("Private");
-                break;
+                // You can't override a private virtual in a superclass
+                return;
         }
-
-        overrideItem->setText(1, accessModifier);
     }
+
+    QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
+    overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
+    overrideItem->setCheckState( 0, Qt::Unchecked );
+    overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration));
+    overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration)));
+    overrideItem->setText(1, accessModifier);
 }
 
 QTreeWidget* OverridesPage::overrideTree() const
