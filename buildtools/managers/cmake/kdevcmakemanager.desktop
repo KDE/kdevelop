@@ -63,4 +63,4 @@ X-KDevelop-Category=Project
 X-KDevelop-Language=CMake
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager,ILanguageSupport
 X-KDevelop-SupportedMimeTypes=text/x-cmake
-
+X-KDevelop-Mode=GUI

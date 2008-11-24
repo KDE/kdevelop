@@ -38,3 +38,4 @@ X-KDevelop-Version=6
 X-KDevelop-Category=Project
 X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder
 X-KDevelop-IRequired=org.kdevelop.IOutputView
+X-KDevelop-Mode=NoGUI

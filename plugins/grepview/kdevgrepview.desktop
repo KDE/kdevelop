@@ -81,5 +81,5 @@ X-KDE-Library=kdevgrepview
 X-KDE-PluginInfo-Name=kdevgrepview
 X-KDevelop-Version=6
 X-KDevelop-Category=Global
-X-KDevelop-Properties=FileSearch
 X-KDevelop-IRequired=org.kdevelop.IOutputView
+X-KDevelop-Mode=GUI
