@@ -127,4 +127,8 @@ DeclarationPointer CompletionTreeItem::declaration() const {
   return DeclarationPointer();
 }
 
+IndexedType CompletionTreeItem::typeForArgumentMatching() const {
+  return IndexedType();
+}
+
 }

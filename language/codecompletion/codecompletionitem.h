@@ -43,6 +43,7 @@ class CodeCompletionModel;
 
 class CompletionTreeNode;
 class CompletionTreeItem;
+class IndexedType;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public KShared {
 public:
@@ -111,6 +112,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   ///If this item represents a Declaration, this should return the declaration.
   ///The default-implementation returns zero.
   virtual DeclarationPointer declaration() const;
+  
+  ///Should return the type should be used for matching items against this one when it's an argument hint.
+  ///May return IndexedType() when this item should not be matched.
+  virtual IndexedType typeForArgumentMatching() const;
 };
 
 typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
