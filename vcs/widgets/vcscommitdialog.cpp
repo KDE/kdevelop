@@ -10,25 +10,29 @@
 
 #include "vcscommitdialog.h"
 
+#include <QtCore/QHash>
+#include <QtGui/QBrush>
+#include <QtCore/QRegExp>
+
 #include <KDE/KTextEdit>
 #include <KDE/KComboBox>
 #include <KDE/KLocale>
 #include <KDE/KDebug>
 #include <KDE/KColorScheme>
+#include <KDE/KMessageBox>
+#include <kparts/mainwindow.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iplugin.h>
+#include <interfaces/iuicontroller.h>
 
 #include "../vcsjob.h"
 #include "../interfaces/ibasicversioncontrol.h"
 #include "../interfaces/idistributedversioncontrol.h"
 #include "../interfaces/icentralizedversioncontrol.h"
 #include "../vcsstatusinfo.h"
-
-#include <QtCore/QHash>
-#include <QtGui/QBrush>
-#include <QtCore/QRegExp>
 
 #include "ui_vcscommitdialog.h"
 
@@ -234,7 +238,7 @@ KUrl::List VcsCommitDialog::checkedUrls() const
             repo = addFiles[0];
             KJob* j = idvcs->add(addFiles);
             if( !j ) {
-                KMessageDialog::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not add files to commit list. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to add files to commit" ) );
+                KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not add files to commit list. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to add files to commit" ) );
             } else {
                 j->exec();
             }
@@ -242,9 +246,9 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         if (!rmFiles.isEmpty())
         {
             repo = rmFiles[0];
-            idvcs->remove(rmFiles)->exec();
+            KJob* j = idvcs->remove(rmFiles);
             if( !j ) {
-                KMessageDialog::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not remove files. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to remove files" ) );
+                KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not remove files. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to remove files" ) );
             } else {
                 j->exec();
             }
