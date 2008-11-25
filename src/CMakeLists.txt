@@ -1,6 +1,3 @@
-add_subdirectory(profiles)
-# add_subdirectory(profileengine)
-
 ########### next target ###############
 
 set(kdevelop_SRCS
