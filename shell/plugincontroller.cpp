@@ -246,6 +246,18 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0L;
     }
 
+    // Do not load KDevKrossManager directly, its indirectly loaded when loading
+    // any plugins written in a supported scripting language
+    // The kross-manager plugin needs the name+interfaces of the script-plugin
+    // as argument
+    // At a later point in time, we should try to move the plugin's code directly
+    // into shell
+    if( info.pluginName() == "KDevKrossManager" )
+    {
+        kDebug() << "tried to load KDevKrossManager, ignoring";
+        return 0;
+    }
+
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
@@ -254,7 +266,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0;
     }
 
-    if( info.property("X-KDevelop-Mode") == "GUI" 
+    if( info.property("X-KDevelop-Mode") == "GUI"
         && Core::self()->setupFlags() == Core::NoUi )
     {
         kWarning() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";

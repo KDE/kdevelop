@@ -13,8 +13,7 @@ set(KDevPlatform_VERSION_PATCH 83)
 set(KDE_MIN_VERSION "4.1.80")
 find_package(KDE4 4.1.80 REQUIRED)
 find_package(ZLIB REQUIRED)
-#find_package(BerkeleyDB)
-#find_package(TDB)
+
 include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
@@ -39,18 +38,18 @@ add_subdirectory(vcs)
 add_subdirectory(plugins)
 add_subdirectory(veritas)
 add_subdirectory(pics)
-#if(NOT WIN32)
-#    macro_optional_add_subdirectory(kross)
-#endif(NOT WIN32)
+if(NOT WIN32)
+    macro_optional_add_subdirectory(kross)
+endif(NOT WIN32)
 macro_optional_add_subdirectory(doc)
 
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfigVersion.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 
-install( FILES 
-        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" 
-        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake" 
+install( FILES
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
         DESTINATION "${LIB_INSTALL_DIR}/kdevplatform" )
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
