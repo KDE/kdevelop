@@ -54,6 +54,8 @@ public:
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
+  virtual KDevelop::IndexedType typeForArgumentMatching() const;
+  
   KDevelop::DeclarationPointer m_declaration;
   KSharedPtr<Cpp::CodeCompletionContext> completionContext;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
@@ -90,4 +92,32 @@ public:
   Cpp::IncludeItem includeItem;
 };
 
+class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
+  public:
+    TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth);
+    virtual int argumentHintDepth() const;
+    virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+    KDevelop::IndexedType type() const;
+    virtual KDevelop::IndexedType typeForArgumentMatching() const;
+  private:
+    QString m_text;
+    KDevelop::IndexedType m_type;
+    int m_argumentHintDepth;
+};
+
+//A completion item used for completing include-files
+/*class ArgumentListCompletionItem : public KDevelop::CompletionTreeItem {
+public:
+  IncludeFileCompletionItem(const Cpp::IncludeItem& include) : includeItem(include) {
+  }
+
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+
+  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+
+  virtual int inheritanceDepth() const;
+  virtual int argumentHintDepth() const;
+
+  Cpp::IncludeItem includeItem;
+};*/
 #endif

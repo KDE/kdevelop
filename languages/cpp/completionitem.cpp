@@ -169,6 +169,19 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   return p;
 }
 
+KDevelop::IndexedType NormalDeclarationCompletionItem::typeForArgumentMatching() const {
+  if( m_declaration && completionContext && completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && listOffset < completionContext->functions().count() )
+  {
+    Cpp::CodeCompletionContext::Function f( completionContext->functions()[listOffset] );
+
+    if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > f.matchedArguments ) {
+      return f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments];
+    }
+  }
+  return KDevelop::IndexedType();
+}
+
+CompletionTreeItemPointer currentMatchContext;
 
 QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {
 
@@ -177,9 +190,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
-
-  static CompletionTreeItemPointer currentMatchContext;
-
 
   //Stuff that does not require a declaration:
   switch (role) {
@@ -203,24 +213,13 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     break;
     case CodeCompletionModel::MatchQuality:
     {
-      if( currentMatchContext && currentMatchContext->asItem()) {
-        const NormalDeclarationCompletionItem& contextItem(*currentMatchContext->asItem<NormalDeclarationCompletionItem>());
-        if( contextItem.asItem() && contextItem.m_declaration && contextItem.completionContext && contextItem.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && contextItem.listOffset < contextItem.completionContext->functions().count() )
-        {
-          Cpp::CodeCompletionContext::Function f( contextItem.completionContext->functions()[contextItem.listOffset] );
+      if( currentMatchContext && currentMatchContext->typeForArgumentMatching().isValid()) {
+        
+        Cpp::TypeConversion conv(model->currentTopContext().data());
 
-          if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > f.matchedArguments ) {
-            Cpp::TypeConversion conv(model->currentTopContext().data());
-
-            ///@todo fill the lvalue-ness correctly
-            int quality = ( conv.implicitConversion( effectiveType(dec)->indexed(), f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments], true )  * 10 ) / Cpp::MaximumConversionResult;
-            return QVariant(quality);
-          }else{
-            //kDebug(9007) << "MatchQuality requested with invalid match-context";
-          }
-        } else {
-          //kDebug(9007) << "MatchQuality requested with invalid match-context";
-        }
+        ///@todo fill the lvalue-ness correctly
+        int quality = ( conv.implicitConversion( effectiveType(dec)->indexed(), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        return QVariant(quality);
       }
     }
     return QVariant();
@@ -488,5 +487,43 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
   }
 
   document->replaceText(word, newText);
-  ///@todo Make this more intelligent, also add a closing '"' or '>'
+}
+
+KDevelop::IndexedType TypeConversionCompletionItem::typeForArgumentMatching() const {
+  kDebug() <<  "returning type";
+  return m_type;
+}
+
+KDevelop::IndexedType TypeConversionCompletionItem::type() const {
+  return m_type;
+}
+
+QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
+
+  switch (role) {
+    case CodeCompletionModel::SetMatchContext:
+      currentMatchContext = CompletionTreeItemPointer(const_cast<TypeConversionCompletionItem*>(this));
+      return QVariant(1);
+    
+    case Qt::DisplayRole:
+      switch (index.column()) {
+        case CodeCompletionModel::Prefix:
+          return QVariant();
+        case CodeCompletionModel::Name: {
+          return m_text;
+        }
+      }
+      break;
+    case CodeCompletionModel::ItemSelected:
+      return QVariant();
+  }
+
+  return QVariant();
+}
+
+int TypeConversionCompletionItem::argumentHintDepth() const {
+  return m_argumentHintDepth;
+}
+
+TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth) {
 }

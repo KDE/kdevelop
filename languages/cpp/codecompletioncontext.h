@@ -73,7 +73,8 @@ namespace Cpp {
         FunctionCallAccess,  ///"function(". Will never appear as initial access-operation, but as parentContext() access-operation.
         SignalAccess,  ///All signals from MemberAccessContainer should be listed
         SlotAccess,     ///All slots from MemberAccessContainer should be listed
-        IncludeListAccess ///A list of include-files should be presented. Get the list through includeItems()
+        IncludeListAccess, ///A list of include-files should be presented. Get the list through includeItems()
+        ReturnAccess
       };
       /**
        * The first context created will never be a FunctionCallAccess
@@ -158,7 +159,7 @@ namespace Cpp {
        *
        * All those types should used to highlight the best matching item in the list created.
        * */
-      QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
+//       QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
     private:
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
