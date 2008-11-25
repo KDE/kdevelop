@@ -35,7 +35,7 @@
 #include "mi/gdbmi.h"
 #include "gdbcommand.h"
 
-#include "../stringhelpers.h"
+#include "stringhelpers.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

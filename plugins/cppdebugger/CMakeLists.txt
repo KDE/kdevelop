@@ -1,8 +1,7 @@
 
-#remove cpp default area first
-remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
+include_directories(${CMAKE_SOURCE_DIR}/plugins/languages/cpp)
 #add_subdirectory(tests)
 
 ########### next target ###############
@@ -66,7 +65,7 @@ set(kdevcppdebugger_PART_SRCS
     breakpointwidget.cpp
 #    modeltest.cpp
     tooltipwidget.cpp
-    ../stringhelpers.cpp
+    ../languages/cpp/stringhelpers.cpp
 )
 
 set(kdevcppdebugger_PART_UI
