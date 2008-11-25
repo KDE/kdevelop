@@ -179,19 +179,20 @@ QString reverse( const QString& str ) {
   return ret;
 }
 
+///@todo this hackery sucks
 QString escapeForBracketMatching(QString str) {
-  str.replace("<<", "§&");
-  str.replace(">>", "§$");
-  str.replace("\\\"", "§!");
-  str.replace("->", "§^");
+  str.replace("<<", "$&");
+  str.replace(">>", "$$");
+  str.replace("\\\"", "$!");
+  str.replace("->", "$?");
   return str;
 }
 
 QString escapeFromBracketMatching(QString str) {
-  str.replace("§&", "<<");
-  str.replace("§$", ">>");
-  str.replace("§!", "\\\"");
-  str.replace("§^", "->");
+  str.replace("$&", "<<");
+  str.replace("$$", ">>");
+  str.replace("$!", "\\\"");
+  str.replace("$?", "->");
   return str;
 }
 
