@@ -186,8 +186,6 @@ Core::Setup Core::setupFlags() const
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
-        d->sourceFormatterController->cleanup();
-        d->sessionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
 
@@ -196,7 +194,9 @@ void Core::cleanup()
         d->documentController->cleanup();
 
         d->projectController->cleanup();
+        d->sourceFormatterController->cleanup();
         d->pluginController->cleanup();
+        d->sessionController->cleanup();
     }
 
     d->m_cleanedUp = true;
