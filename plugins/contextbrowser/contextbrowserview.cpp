@@ -511,7 +511,7 @@ ContextBrowserView::~ContextBrowserView() {
 void ContextBrowserView::focusInEvent(QFocusEvent* event) {
     //Indicate that we have focus
     kDebug() << "got focus";
-    parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
+//     parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
 /*    m_layout->removeItem(m_buttons);*/
     
     return QWidget::focusInEvent(event);
@@ -519,7 +519,7 @@ void ContextBrowserView::focusInEvent(QFocusEvent* event) {
 
 void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
     kDebug() << "lost focus";
-    parentWidget()->setBackgroundRole(QPalette::Background);
+//     parentWidget()->setBackgroundRole(QPalette::Background);
 /*    m_layout->insertLayout(0, m_buttons);
     for(int a = 0; a < m_buttons->count(); ++a) {
         QWidgetItem* item = dynamic_cast<QWidgetItem*>(m_buttons->itemAt(a));
