@@ -1,7 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9039 )
 include_directories(
-    ${CMAKE_SOURCE_DIR}/buildtools/builders/makebuilder
+    ${CMAKE_SOURCE_DIR}/plugins/builders/makebuilder
     )
 
 
