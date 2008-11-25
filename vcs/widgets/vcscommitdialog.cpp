@@ -232,12 +232,22 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         if (!addFiles.isEmpty())
         {
             repo = addFiles[0];
-            idvcs->add(addFiles)->exec();
+            KJob* j = idvcs->add(addFiles);
+            if( !j ) {
+                KMessageDialog::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not add files to commit list. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to add files to commit" ) );
+            } else {
+                j->exec();
+            }
         }
         if (!rmFiles.isEmpty())
         {
             repo = rmFiles[0];
             idvcs->remove(rmFiles)->exec();
+            if( !j ) {
+                KMessageDialog::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not remove files. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to remove files" ) );
+            } else {
+                j->exec();
+            }
         }
         list << repo;
     }
