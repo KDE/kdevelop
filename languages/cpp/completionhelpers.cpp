@@ -88,7 +88,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       } else if( num < f.matchedArguments )
       {
         doHighlight = true;
-        doFormat = QTextFormat( QTextFormat::CharFormat );
+        QTextCharFormat format;
 
         if( parameterConversion != conversions.size() ) {
           //Interpolate the color
@@ -97,9 +97,11 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
           uint totalColor = (badMatchColor*(Cpp::MaximumConversionResult-conversions[parameterConversion].rank) + goodMatchColor*(conversions[parameterConversion]).rank)/Cpp::MaximumConversionResult;
 
-          doFormat.setBackground( QBrush(totalColor) );
+          format.setUnderlineStyle( QTextCharFormat::WaveUnderline );
+          format.setUnderlineColor( QColor(totalColor) );
 
           ++parameterConversion;
+          doFormat = format;
         }
       }
 
