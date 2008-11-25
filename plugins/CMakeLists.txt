@@ -1,3 +1,6 @@
+add_subdirectory(builders)
+add_subdirectory(managers)
+add_subdirectorY(languages)
 add_subdirectory(appwizard)
 add_subdirectory(documentview)
 add_subdirectory(valgrind)
