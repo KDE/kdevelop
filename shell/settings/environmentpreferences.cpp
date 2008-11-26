@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kconfiggroup.h>
+#include <kaboutdata.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
@@ -41,7 +42,7 @@ public:
 };
 
 K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
-K_EXPORT_PLUGIN(PreferencesFactory("kcm_kdev_envsettings"))
+K_EXPORT_PLUGIN(PreferencesFactory(KAboutData("kcm_kdev_envsettings", "kdevplatform", ki18n("Environment Settings"), "0.1")))
 
 EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantList &args )
     : KCModule( PreferencesFactory::componentData(), parent, args )

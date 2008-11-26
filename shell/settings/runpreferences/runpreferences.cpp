@@ -27,6 +27,7 @@
 
 #include <kgenericfactory.h>
 #include <KConfigDialogManager>
+#include <kaboutdata.h>
 #include <KMessageBox>
 
 #include <project/projectmodel.h>
@@ -53,7 +54,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(RunPreferencesFactory, registerPlugin<RunPreferences>();)
-K_EXPORT_PLUGIN(RunPreferencesFactory("kcm_kdev_runsettings"))
+K_EXPORT_PLUGIN(RunPreferencesFactory(KAboutData("kcm_kdev_runsettings", "kdevplatform", ki18n("Run Settings"), "0.1")))
 
 TargetProperties::TargetProperties(const QVariantList& args, const QString& targetName, QWidget* parent)
     : QWidget(parent), args0(args[0].toString()), groupPrefix(targetName)

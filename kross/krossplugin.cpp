@@ -28,6 +28,7 @@
 #include <kross/core/manager.h>
 #include <KUrl>
 #include <KProcess>
+#include <kaboutdata.h>
 #include <KDebug>
 #include <KStandardDirs>
 
@@ -43,7 +44,7 @@
 #include <interfaces/contextmenuextension.h>
 
 K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossPlugin>(); )
-K_EXPORT_PLUGIN(KrossSupportFactory("kdevkrossmanager"))
+K_EXPORT_PLUGIN(KrossSupportFactory(KAboutData("kdevkrossmanager","kdevkross",ki18n("Kross Manager"),"0.1")))
 
 extern "C"
 {

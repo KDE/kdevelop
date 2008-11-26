@@ -22,6 +22,8 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
+#include <kaboutdata.h>
+
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -35,7 +37,7 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(BGPreferencesFactory, registerPlugin<BGPreferences>();)
-K_EXPORT_PLUGIN(BGPreferencesFactory("kcm_kdev_bgsettings"))
+K_EXPORT_PLUGIN(BGPreferencesFactory( KAboutData("kcm_kdev_bgsettings", "kdevplatform", ki18n("Parser Background Settings"), "0.1")))
 
 
 BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )

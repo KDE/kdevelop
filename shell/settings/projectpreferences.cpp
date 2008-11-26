@@ -22,6 +22,7 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
+#include <kaboutdata.h>
 
 #include "projectconfig.h"
 #include "../core.h"
@@ -33,7 +34,7 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(ProjectPreferencesFactory, registerPlugin<ProjectPreferences>();)
-K_EXPORT_PLUGIN(ProjectPreferencesFactory("kcm_kdev_projectsettings"))
+K_EXPORT_PLUGIN(ProjectPreferencesFactory(KAboutData("kcm_kdev_projectsettings", "kdevplatform", ki18n("Project Settings"), "0.1")))
 
 ProjectPreferences::ProjectPreferences( QWidget *parent, const QVariantList &args )
         : KCModule( ProjectPreferencesFactory::componentData(), parent, args )

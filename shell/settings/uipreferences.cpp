@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 
 #include <kpluginfactory.h>
+#include <kaboutdata.h>
 #include <kpluginloader.h>
 
 #include "../core.h"
@@ -34,7 +35,7 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(UiPreferencesFactory, registerPlugin<UiPreferences>();)
-K_EXPORT_PLUGIN(UiPreferencesFactory("kcm_kdev_uisettings"))
+K_EXPORT_PLUGIN(UiPreferencesFactory(KAboutData("kcm_kdev_uisettings", "kdevplatform", ki18n("User Interface Settings"), "0.1")))
 
 UiPreferences::UiPreferences(QWidget* parent, const QVariantList& args )
     : KCModule( UiPreferencesFactory::componentData(), parent, args )

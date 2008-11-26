@@ -24,6 +24,7 @@
 #include <QVBoxLayout>
 
 #include <kgenericfactory.h>
+#include <kaboutdata.h>
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -47,7 +48,7 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(CCPreferencesFactory, registerPlugin<CCPreferences>();)
-K_EXPORT_PLUGIN(CCPreferencesFactory("kcm_kdev_ccsettings"))
+K_EXPORT_PLUGIN(CCPreferencesFactory(KAboutData("kcm_kdev_ccsettings", "kdevplatform", ki18n("Code Completion Settings"), "0.1")))
 
 CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
  : KCModule( CCPreferencesFactory::componentData(), parent, args )
