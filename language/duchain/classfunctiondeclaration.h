@@ -69,6 +69,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassFunctio
 {
 public:
   ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
+  ClassFunctionDeclaration(ClassFunctionDeclarationData&, const SimpleRange& range, DUContext* context);
   ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
   ~ClassFunctionDeclaration();
 
