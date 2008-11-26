@@ -53,6 +53,7 @@ public:
   
   //This always works, but is expensive
   QString symbolString() const;
+  QByteArray symbolByteArray() const;
 
   uint symbolLength() const;
   

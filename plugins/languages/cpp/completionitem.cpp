@@ -35,6 +35,7 @@
 #include "cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
 #include <classdeclaration.h>
+#include "cppduchain/qtfunctiondeclaration.h"
 
 using namespace KDevelop;
 
@@ -51,6 +52,24 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   if( completionContext && completionContext->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
+  if(m_isQtSignalSlotCompletion) {
+    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+    QString functionSignature;
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+    if(classFun && classFun->type<FunctionType>() && (classFun->isSignal() || classFun->isSlot())) {
+      ///@todo Replace previous signal/slot specifications
+      functionSignature = classFun->identifier().toString();
+      functionSignature += classFun->type<FunctionType>()->partToString(FunctionType::SignatureArguments);
+      if(classFun->isSignal())
+        functionSignature = "SIGNAL(" + functionSignature + ")";
+      else
+        functionSignature = "SLOT(" + functionSignature + ")";
+    }
+    lock.unlock();
+    document->replaceText(word, functionSignature);
+    return;
+  }
+  
   QString newText;
 
   if(!useAlternativeText) {
@@ -202,8 +221,14 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     if(role == Qt::DisplayRole && index.column() == CodeCompletionModel::Name)
       return alternativeText;
     return QVariant();
-  }else if(index.column() == CodeCompletionModel::Name && useAlternativeText)
-    return alternativeText;
+  }else if(useAlternativeText) {
+    if(role == Qt::DisplayRole) {
+      if(index.column() == CodeCompletionModel::Name)
+        return alternativeText;
+      else
+        return QVariant();
+    }
+  }
 
   Declaration* dec = const_cast<Declaration*>( m_declaration.data() );
 
@@ -213,6 +238,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     break;
     case CodeCompletionModel::MatchQuality:
     {
+      if(m_fixedMatchQuality != -1)
+        return QVariant(m_fixedMatchQuality);
+      
       if( currentMatchContext && currentMatchContext->typeForArgumentMatching().isValid()) {
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
@@ -239,6 +267,15 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       switch (index.column()) {
         case CodeCompletionModel::Prefix:
         {
+          if(m_isQtSignalSlotCompletion) {
+            Cpp::QtFunctionDeclaration* funDecl = dynamic_cast<Cpp::QtFunctionDeclaration*>(dec);
+            if(funDecl) {
+              if(funDecl->isSignal())
+                return QVariant("SIGNAL");
+              if(funDecl->isSlot())
+                return QVariant("SLOT");
+            }
+          }
           int depth = m_inheritanceDepth;
           if( depth >= 1000 )
             depth-=1000;

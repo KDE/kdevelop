@@ -47,7 +47,7 @@ class CppCodeCompletionModel;
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::CompletionTreeItem {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : m_declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset), useAlternativeText(false) {
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : m_declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset), useAlternativeText(false), m_isQtSignalSlotCompletion(false), m_fixedMatchQuality(-1) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
@@ -66,6 +66,12 @@ public:
   //Also the scope will be set to LocalScope when this attribute is true.
   bool useAlternativeText;
 
+  //If this is true, the execution of the item should trigger the insertion of a complete SIGNAL/SLOT use
+  bool m_isQtSignalSlotCompletion;
+
+  //If this is not -1, it can be a fixed match-quality from 0 to 10, that will be used non-dynamically.
+  int m_fixedMatchQuality;
+  
   KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
   
   virtual KDevelop::DeclarationPointer declaration() const {

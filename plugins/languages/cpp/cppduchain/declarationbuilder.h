@@ -100,6 +100,7 @@ public:
 
 private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
+  //Also collects the Qt function signature if required. In that case, true is always returned.
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
   QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position);
@@ -147,6 +148,9 @@ private:
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 
+  bool m_collectQtFunctionSignature;
+  QByteArray m_qtFunctionSignature;
+  
   bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
 };
 

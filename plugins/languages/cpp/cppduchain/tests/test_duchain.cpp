@@ -61,6 +61,7 @@
 
 #include <typeinfo>
 #include <language/duchain/duchainutils.h>
+#include <qtfunctiondeclaration.h>
 
 //Uncomment the following line to get additional output from the string-repository test
 //#define DEBUG_STRINGREPOSITORY
@@ -1471,26 +1472,43 @@ void TestDUChain::testDeclareUsingNamespace()
 }
 
 void TestDUChain::testSignalSlotDeclaration() {
-  QByteArray text("#define Q_SIGNALS signals\n#define signals bla\n#undef signals\nclass C {Q_SIGNALS: void signal2(); public slots: void slot2();}; ");
-  
-  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
+  {
+    QByteArray text("#define Q_SIGNALS signals\n#define signals bla\n#undef signals\nclass C {Q_SIGNALS: void signal2(); public slots: void slot2();}; ");
+    
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
-  
-  ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
-  QVERIFY(classFun);
-  QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Protected);
-  QVERIFY(classFun->isSignal());
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+    
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
+    QVERIFY(classFun);
+    QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Protected);
+    QVERIFY(classFun->isSignal());
 
-  classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[1]);
-  QVERIFY(classFun);
-  QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Public);
-  QVERIFY(classFun->isSlot());
-  
-  release(top);
+    classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[1]);
+    QVERIFY(classFun);
+    QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Public);
+    QVERIFY(classFun->isSlot());
+    
+    release(top);
+  }
+  {
+    QByteArray text("namespace A { class B;} class Q { public slots: void slot(A::B b, const Q* q); }; ");
+    
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+    QtFunctionDeclaration* qtDecl = dynamic_cast<QtFunctionDeclaration*>(top->childContexts()[1]->localDeclarations()[0]);
+    QVERIFY(qtDecl);
+    QCOMPARE(qtDecl->normalizedSignature().str(), QString("A::B,const Q*"));
+    
+    release(top);
+  }
 }
 
 void TestDUChain::testFunctionDefinition() {

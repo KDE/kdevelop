@@ -25,6 +25,7 @@ set(kdevcppduchain_LIB_SRCS
     environmentmanager.cpp
     cppduchain.cpp
     templateparameterdeclaration.cpp
+    qtfunctiondeclaration.cpp
     cppducontext.cpp
     typeutils.cpp
     templatedeclaration.cpp

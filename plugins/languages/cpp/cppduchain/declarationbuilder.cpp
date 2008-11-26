@@ -41,6 +41,7 @@
 #include <language/duchain/aliasdeclaration.h>
 #include <util/pushvalue.h>
 
+#include "qtfunctiondeclaration.h"
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include <language/duchain/classfunctiondeclaration.h>
@@ -95,13 +96,13 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false)
+  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(editor, false);
 }
@@ -223,6 +224,9 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   //need to make backup because we may temporarily change it
   ParameterDeclarationClauseAST* parameter_declaration_clause_backup = node->parameter_declaration_clause;
 
+  m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
+  m_qtFunctionSignature = QByteArray();
+  
   ///@todo this should be solved more elegantly within parser and AST
   if (node->parameter_declaration_clause) {
     //Check if all parameter declarations are valid. If not, this is a misunderstood variable declaration.
@@ -241,6 +245,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   } else {
     openDefinition(node->id, node, node->id == 0);
   }
+
+  m_collectQtFunctionSignature = false;
 
   applyStorageSpecifiers();
 
@@ -608,13 +614,24 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
    }
 
   if(currentContext()->type() == DUContext::Class) {
-    ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
-     DUChainWriteLocker lock(DUChain::lock());
-    fun->setAccessPolicy(currentAccessPolicy());
-    fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
-    fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
-    fun->setIsAbstract(m_declarationHasInitializer);
-    return fun;
+    if(!m_collectQtFunctionSignature) {
+      ClassFunctionDeclaration* fun = openDeclaration<ClassFunctionDeclaration>(name, rangeNode, localId);
+      DUChainWriteLocker lock(DUChain::lock());
+      fun->setAccessPolicy(currentAccessPolicy());
+      fun->setIsAbstract(m_declarationHasInitializer);
+      return fun;
+    }else{
+      QtFunctionDeclaration* fun = openDeclaration<QtFunctionDeclaration>(name, rangeNode, localId);
+      DUChainWriteLocker lock(DUChain::lock());
+      fun->setAccessPolicy(currentAccessPolicy());
+      fun->setIsAbstract(m_declarationHasInitializer);
+      fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
+      fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
+      IndexedString signature(QMetaObject::normalizedSignature(m_qtFunctionSignature.constData()));
+      kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
+      fun->setNormalizedSignature(signature);
+      return fun;
+    }
   } else if(m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global)) {
     //May be a definition
      FunctionDefinition* ret = openDeclaration<FunctionDefinition>(name, rangeNode, localId);
@@ -1263,6 +1280,19 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     do {
       ParameterDeclarationAST* ast = it->element;
       if(ast) {
+        if(m_collectQtFunctionSignature) {
+          size_t endToken = ast->end_token;
+          if(ast->expression)
+            endToken = ast->expression->start_token;
+          if(ast->declarator && ast->declarator->id)
+            endToken = ast->declarator->id->start_token;
+          
+          if(!m_qtFunctionSignature.isEmpty())
+            m_qtFunctionSignature += ", ";
+          
+          m_qtFunctionSignature += editor()->tokensToByteArray(ast->start_token, endToken);
+          ret = true;
+        }else{
         if(ast->expression || ast->declarator) {
           ret = true; //If one parameter has a default argument or a parameter name, it is surely a parameter
           break;
@@ -1278,6 +1308,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
             ret = true;
             break;
           }
+        }
         }
       }
       it = it->next;

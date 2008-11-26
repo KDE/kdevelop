@@ -123,6 +123,16 @@ public:
    * Retrieve the string represented by a range of tokens.
    */
   QString tokensToStrings(std::size_t start, std::size_t end) const;
+
+  /**
+   * Retrieve the string represented by a token in utf8.
+   */
+  QByteArray tokenToByteArray(std::size_t token) const;
+
+  /**
+   * Retrieve the string represented by a range of tokens in utf8.
+   */
+  QByteArray tokensToByteArray(std::size_t start, std::size_t end) const;
   
 private:
   ParseSession* m_session;

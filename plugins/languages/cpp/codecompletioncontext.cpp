@@ -45,6 +45,7 @@
 #include "missingincludecompletionitem.h"
 #include <interfaces/idocumentcontroller.h>
 #include "implementationhelperitem.h"
+#include <qtfunctiondeclaration.h>
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -274,13 +275,67 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     int parentContextEnd = expressionPrefix.length();
 
     skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
-    foreach(QString arg, otherArguments)
-      kDebug() << "other arg:" << arg;
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
 
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
     m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), depth+1, otherArguments );
+  }
+
+  ///Handle signal/slot access
+  if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
+    LOCKDUCHAIN;
+    
+    if(parentContext()->functionName() == "SIGNAL" || parentContext()->functionName() == "SLOT") {
+      kDebug() << "skipping parents";
+      m_parentContext = parentContext()->m_parentContext; //Ignore the SIGNAL and SLOT parts
+    }
+    
+    if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
+      foreach(Cpp::OverloadResolutionFunction function, parentContext()->functions()) {
+        if(function.function.declaration() && function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect") {
+          FunctionType::Ptr funType = function.function.declaration()->type<FunctionType>();
+          if(funType && funType->arguments().size() > function.matchedArguments) {
+            if(function.matchedArguments == 1 && parentContext()->m_knownArgumentTypes.size() >= 1) {
+              ///Pick a signal from the class pointed to in the earlier element
+              m_memberAccessOperation = SignalAccess;
+              kDebug() << "SignalAccess";
+            }else if(funType->arguments()[function.matchedArguments] && funType->arguments()[function.matchedArguments]->toString() == "const char*") {
+              m_memberAccessOperation = SlotAccess;
+              kDebug() << "SlotAccess";
+              
+              if(parentContext()->m_knownArgumentExpressions.size() > 1) {
+                QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
+                if(connectedSignal.startsWith("SIGNAL(") && connectedSignal.endsWith(")")) {
+                  connectedSignal = connectedSignal.mid(7);
+                  connectedSignal = connectedSignal.left(connectedSignal.length()-1);
+                  //Now connectedSignal is something like myFunction(...), and we want the "...".
+                  int parenBegin = connectedSignal.indexOf('(');
+                  int parenEnd = connectedSignal.lastIndexOf(')');
+                  if(parenBegin < parenEnd && parenBegin != -1) {
+                    m_connectedSignalIdentifier = Identifier(connectedSignal.left(parenBegin).trimmed());
+                    kDebug() << "identifier" << m_connectedSignalIdentifier;
+                    m_connectedSignalNormalizedSignature = QMetaObject::normalizedSignature(connectedSignal.mid(parenBegin+1, parenEnd-parenBegin-1).toUtf8().data());
+                  }
+                }
+              }
+            }
+            
+            if(m_memberAccessOperation == SignalAccess || m_memberAccessOperation == SlotAccess) {
+              if(function.matchedArguments == 2) {
+                //The function that does not take the target-argument is being used
+                if(Declaration* klass = Cpp::localClassFromCodeContext(m_duContext.data()))
+                  m_expressionResult.type = klass->indexedType();
+              }else{
+                m_expressionResult = parentContext()->m_knownArgumentTypes[function.matchedArguments-1];
+                m_expressionResult.type = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext())->indexed();
+              }
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 
   ///Handle overridden binary operator-functions
@@ -294,7 +349,6 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   bool isEmit = false, isThrow = false;
 
   QString expr = m_expression.trimmed();
-  kDebug() << "eexprssion" << expr;
 
   if( expr.startsWith("emit") )  {
     isEmit = true; //When isEmit is true, we should filter the result so only signals are left
@@ -318,7 +372,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ifDebug( kDebug(9007) << "expression: " << expr; )
 
-  if( !expr.trimmed().isEmpty() ) {
+  if( !expr.trimmed().isEmpty() && !m_expressionResult.isValid() ) {
     m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
@@ -644,7 +698,6 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
     getOverridable(base, import.context(base->topContext()), overridable, completionContext);
 }
 
-
 // #ifndef TEST_COMPLETION
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort, bool fullCompletion) {
@@ -656,6 +709,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
     typedef QPair<Declaration*, int> DeclarationDepthPair;
 
+    bool ignoreParentContext = false;
+    
     if(!m_storedItems.isEmpty()) {
       items = m_storedItems;
     }else{
@@ -771,9 +826,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             }
           }
           break;
-        case SignalAccess:
-        case SlotAccess:
-          break;
         case IncludeListAccess:
           //m_storedItems is used for include-list access
           {
@@ -790,14 +842,84 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             kDebug(9007) << "Added " << cnt << " include-files to completion-list";
           }          
           break;
+        case SignalAccess:
+        case SlotAccess:
+        if(!m_connectedSignalIdentifier.isEmpty()) {
+          //Create an additional argument-hint context that shows information about the signal we connect to
+          if(parentContext() && parentContext()->m_knownArgumentTypes.count() > 1 && parentContext()->m_knownArgumentTypes[0].type.isValid()) {
+            StructureType::Ptr signalContainerType = TypeUtils::targetType(parentContext()->m_knownArgumentTypes[0].type.type(), m_duContext->topContext()).cast<StructureType>();
+           if(signalContainerType) {
+//             kDebug() << "searching signal in container" << signalContainerType->toString() << m_connectedSignalIdentifier.toString();
+               Declaration* signalContainer = signalContainerType->declaration(m_duContext->topContext());
+              if(signalContainer && signalContainer->internalContext()) {
+                IndexedString signature(m_connectedSignalNormalizedSignature);
+                foreach(DeclarationDepthPair decl, signalContainer->internalContext()->allDeclarations( SimpleCursor::invalid(), m_duContext->topContext(), false )) {
+                  if(decl.first->identifier() == m_connectedSignalIdentifier) {
+                    if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(decl.first)) {
+                      if(classFun->isSignal() && classFun->normalizedSignature() == signature) {
+                        //Match
+                        NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
+                        item->useAlternativeText = true;
+                        item->alternativeText = i18n("Connect to") + " " + decl.first->qualifiedIdentifier().toString() + "(" + QString::fromUtf8(m_connectedSignalNormalizedSignature) + ")";
+                        item->m_isQtSignalSlotCompletion = true;
+                        items << CompletionTreeItemPointer(item);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        if( memberAccessContainer().isValid() ) {
+          //Collect all slots
+          AbstractType::Ptr type = memberAccessContainer().type.type();
+          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+          if(identified) {
+            Declaration* decl = identified->declaration(m_duContext->topContext());
+            if(decl && decl->internalContext()) {
+              foreach(DeclarationDepthPair candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
+                if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
+                  if(classFun->isSignal() || (memberAccessOperation() == SlotAccess && classFun->isSlot())) {
+                    NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), CodeCompletionContext::Ptr(this), candidate.second );
+                    item->m_isQtSignalSlotCompletion = true;
+                    if(!m_connectedSignalIdentifier.isEmpty()) {
+                      item->m_fixedMatchQuality = 0;
+                      //Compute a match-quality, by comparing the strings
+                      QByteArray thisSignature = classFun->normalizedSignature().byteArray();
+                      if(m_connectedSignalNormalizedSignature.startsWith(thisSignature) || (m_connectedSignalNormalizedSignature.isEmpty() && thisSignature.isEmpty())) {
+                        QByteArray remaining = m_connectedSignalNormalizedSignature.mid(thisSignature.length());
+                        int remainingElements = remaining.split(',').count();
+                        if(remaining.isEmpty())
+                          item->m_fixedMatchQuality = 10;
+                        else if(remainingElements < 4)
+                          item->m_fixedMatchQuality  = 6 - remainingElements;
+                        else
+                          item->m_fixedMatchQuality = 2;
+                      }
+                    }else{
+                      item->m_fixedMatchQuality = 10;
+                    }
+                    items << CompletionTreeItemPointer( item );
+                  }
+                }
+              }
+            }
+          }
+        }
+        //Since there is 2 connect() functions, the third argument may be a slot as well as a QObject*, so also
+        //give normal completion items
+        break;
+//         if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
+//           break;
         default:
           standardAccessCompletionItems(position, items);
           break;
       }
     }
       
-    if(fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
-      items += parentContext()->completionItems( position, shouldAbort, fullCompletion );
+    if(!ignoreParentContext && fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
+      items = parentContext()->completionItems( position, shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0) {
       //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|

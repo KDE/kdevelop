@@ -103,6 +103,10 @@ KDevelop::IndexedString Token::symbol() const {
     return KDevelop::IndexedString();
 }
 
+QByteArray Token::symbolByteArray() const {
+  return stringFromContents(session->contentsVector(), position, size);
+}
+
 QString Token::symbolString() const {
   return stringFromContents(session->contentsVector(), position, size);
 }

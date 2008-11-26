@@ -214,6 +214,10 @@ namespace Cpp {
       AdditionalContextType m_contextType;
 
       QList<Function> m_functions;
+      
+      //If a signal/slot access is performed, and a slot is being connected to a signal, this contains the identifier and the signature
+      Identifier m_connectedSignalIdentifier;
+      QByteArray m_connectedSignalNormalizedSignature;
 
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes;

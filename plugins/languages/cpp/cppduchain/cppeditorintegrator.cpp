@@ -28,6 +28,7 @@
 
 #include "ast.h"
 #include "parsesession.h"
+#include <rpp/chartools.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -109,7 +110,7 @@ SimpleRange CppEditorIntegrator::findRange( const Token & token )
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const
 {
-  return m_session->token_stream->token(token).symbol().str();
+  return m_session->token_stream->token(token).symbolString();
 }
 
 QString CppEditorIntegrator::tokensToStrings(std::size_t start, std::size_t end) const
@@ -117,6 +118,20 @@ QString CppEditorIntegrator::tokensToStrings(std::size_t start, std::size_t end)
   QString ret;
   for(std::size_t a = start; a < end; ++a) {
     ret += tokenToString(a) + " ";
+  }
+  return ret;
+}
+
+QByteArray CppEditorIntegrator::tokenToByteArray(std::size_t token) const
+{
+  return m_session->token_stream->token(token).symbolByteArray();
+}
+
+QByteArray CppEditorIntegrator::tokensToByteArray(std::size_t start, std::size_t end) const
+{
+  QByteArray ret;
+  for(std::size_t a = start; a < end; ++a) {
+    ret += tokenToByteArray(a) + " ";
   }
   return ret;
 }
