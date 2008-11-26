@@ -751,8 +751,8 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
   }
 }
 
-bool DUContext::foundEnough( const DeclarationList& ret ) const {
-  if( !ret.isEmpty() )
+bool DUContext::foundEnough( const DeclarationList& ret, SearchFlags flags ) const {
+  if( !ret.isEmpty() && !(flags & DUContext::NoFiltering))
     return true;
   else
     return false;
@@ -766,7 +766,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
       if(!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) //It makes no sense searching locally for qualified identifiers
         findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, source, flags);
 
-    if( foundEnough(ret) )
+    if( foundEnough(ret, flags) )
       return true;
   }
 
@@ -811,7 +811,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
     }
   }
 
-  if( foundEnough(ret) )
+  if( foundEnough(ret, flags) )
     return true;
 
   ///Step 3: Continue search in parent-context

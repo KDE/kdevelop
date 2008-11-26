@@ -746,7 +746,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * After one scope was searched, this function is asked whether more results should be collected. Override it, for example to collect overloaded functions.
    * The default-implementation returns true as soon as decls is not empty.
    * */
-  virtual bool foundEnough( const DeclarationList& decls ) const;
+  virtual bool foundEnough( const DeclarationList& decls , SearchFlags flags ) const;
   /**
    * Merges definitions and their inheritance-depth up all branches of the definition-use chain into one hash.
    * This includes declarations propagated from sub-contexts.
