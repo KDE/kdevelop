@@ -672,7 +672,9 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
             if(alias->aliasedDeclaration().isValid()) {
               declaration = alias->aliasedDeclaration().declaration();
             } else {
+#ifndef Q_CC_MSVC
               kDebug() << "lost aliased declaration";
+#endif
             }
           }
 

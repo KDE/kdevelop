@@ -88,6 +88,11 @@ public:
 ///This class contains data that is only runtime-dependant and does not need to be stored to disk
 class DUContextDynamicData
 {
+private:
+    inline const DUContextData* d_func() { return m_context->d_func(); }
+    static inline const DUContextData* ctx_d_func(DUContext* ctx) { return ctx->d_func(); }
+    static inline DUContextDynamicData* ctx_dynamicData(DUContext* ctx) { return ctx->m_dynamicData; }
+
 public:
   DUContextDynamicData( DUContext* );
   DUContextPointer m_parentContext;
@@ -173,8 +178,8 @@ public:
     
     VisibleDeclarationIterator(DUContextDynamicData* data) {
       current.data = data;
-      current.item = data->m_context->d_func()->m_localDeclarations();
-      current.endItem = current.item + data->m_context->d_func()->m_localDeclarationsSize();
+      current.item = data->d_func()->m_localDeclarations();
+      current.endItem = current.item + data->d_func()->m_localDeclarationsSize();
       current.nextChild = 0;
       toValidPosition();
     }
@@ -197,7 +202,7 @@ public:
     void toValidPosition() {
       if(current.item == current.endItem) {
         {
-          const DUContextData* data = current.data->m_context->d_func();
+          const DUContextData* data = current.data->d_func();
           
           //Check if we can proceed into a propagating child-context
           uint childContextCount = data->m_childContextsSize();
@@ -205,12 +210,12 @@ public:
           
           for(unsigned int a = 0; a < childContextCount; ++a) {
             DUContext* child = childContexts[a].data(current.data->m_topContext);
-            if(child->d_func()->m_propagateDeclarations) {
+            if(ctx_d_func(child)->m_propagateDeclarations) {
               current.nextChild = a+1;
               stack.append(current);
-              current.data = child->m_dynamicData;
-              current.item = child->d_func()->m_localDeclarations();
-              current.endItem = current.item + child->d_func()->m_localDeclarationsSize();
+              current.data = ctx_dynamicData(child);
+              current.item = ctx_d_func(child)->m_localDeclarations();
+              current.endItem = current.item + ctx_d_func(child)->m_localDeclarationsSize();
               current.nextChild = 0;
               toValidPosition();
               return;
@@ -227,21 +232,21 @@ public:
         current = stack.back();
         stack.pop_back();
 
-        const DUContextData* data = current.data->m_context->d_func();
+        const DUContextData* data = current.data->d_func();
         uint childContextCount = data->m_childContextsSize();
         const LocalIndexedDUContext* childContexts = data->m_childContexts();
 
         for(unsigned int a = current.nextChild; a < childContextCount; ++a) {
           DUContext* child = childContexts[a].data(current.data->m_topContext);
           
-          if(child->d_func()->m_propagateDeclarations) {
+          if(ctx_d_func(child)->m_propagateDeclarations) {
 
             current.nextChild = a+1;
             stack.append(current);
             
-            current.data = child->m_dynamicData;
-            current.item = child->d_func()->m_localDeclarations();
-            current.endItem = current.item + child->d_func()->m_localDeclarationsSize();
+            current.data = ctx_dynamicData(child);
+            current.item = ctx_d_func(child)->m_localDeclarations();
+            current.endItem = current.item + ctx_d_func(child)->m_localDeclarationsSize();
             current.nextChild = 0;
             toValidPosition();
             return;
@@ -261,6 +266,7 @@ public:
    * Returns true if this context is imported by the given one, on any level.
    * */
   bool isThisImportedBy(const DUContext* context) const;
+
 };
 
 }
