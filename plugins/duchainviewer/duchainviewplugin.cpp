@@ -34,7 +34,7 @@
 #include <interfaces/idocumentcontroller.h>
 
 K_PLUGIN_FACTORY(KDevDUChainViewFactory, registerPlugin<DUChainViewPlugin>(); )
-K_EXPORT_PLUGIN(KDevDUChainViewFactory(KAboutData("kdevduchainview","kdevduchainview",ki18n("DUChain View"), "0.1", ki18n("A simple tool to view the raw DUChain"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(KDevDUChainViewFactory(KAboutData("kdevduchainview","kdevduchainviewer",ki18n("DUChain View"), "0.1", ki18n("A simple tool to view the raw DUChain"), KAboutData::License_GPL)))
 
 class DUChainViewFactory: public KDevelop::IToolViewFactory
 {
