@@ -63,7 +63,7 @@ QString DUChainReader::printType(const TypePtr<AbstractType>& type)
     }
     else
         ret=type->toString();
-    qDebug() << "yyyyyyyyyy" << type->toString() << ret;
+//     qDebug() << "yyyyyyyyyy" << type->toString() << ret;
     return ret;
 }
 
@@ -132,11 +132,11 @@ void DUChainReader::foundClass(const Declaration* decl)
     foreach(const Declaration* func, ctx->localDeclarations())
     {
         const ClassMemberDeclaration* memberDecl=dynamic_cast<const ClassMemberDeclaration*>(func);
-        if(memberDecl) qDebug() << "bibibibibibi" << memberDecl->toString()
-                                << memberDecl << memberDecl->accessPolicy() << (memberDecl->accessPolicy()==Declaration::Public);
+//         if(memberDecl) qDebug() << "bibibibibibi" << memberDecl->toString()
+//                                 << memberDecl << memberDecl->accessPolicy() << (memberDecl->accessPolicy()==Declaration::Public);
         if(!memberDecl || memberDecl->accessPolicy()!=Declaration::Public)
             continue;
-        qDebug() << func->toString();
+//         qDebug() << "++++++++++" << func->toString();
         if(func->isFunctionDeclaration())
         {
             QualifiedIdentifier qid=func->qualifiedIdentifier();
@@ -147,16 +147,17 @@ void DUChainReader::foundClass(const Declaration* decl)
             const AbstractFunctionDeclaration* dec=dynamic_cast<const AbstractFunctionDeclaration*>(func);
             Q_ASSERT(dec && cdec && func && memberDecl);
             
-            if(ftype->returnType().isNull() ||
-               memberDecl->accessPolicy()!=Declaration::Public) //isConstructor
+            if(memberDecl->accessPolicy()!=Declaration::Public)
                continue;
             
             QString funcname=func->identifier().toString();
             
-            if(funcname.startsWith("qt_") || forbidden.contains(funcname))
+            if(funcname.startsWith("qt_") || funcname.startsWith('~') || forbidden.contains(funcname))
                 continue;
             
-            QString rettype=printType(ftype->returnType());
+            bool isConstructor=ftype->returnType().isNull();
+            
+            QString rettype= isConstructor ? QString() : printType(ftype->returnType());
             if(dynamic_cast<const Cpp::TemplateDeclaration*>(func)) //we disable templated functions
                 continue;
             
@@ -171,13 +172,19 @@ void DUChainReader::foundClass(const Declaration* decl)
                      << "isConst " << isConst << "isVirtual" << isVirtual;
             
             method currentMethod;
+            currentMethod.funcname=funcname;
+            currentMethod.returnType=rettype;
+            currentMethod.isConst=isConst;
+            currentMethod.isVirtual=isVirtual;
+            currentMethod.isAbstract=isAbstract;
+            currentMethod.isConstructor=isConstructor;
             foreach(const TypePtr<AbstractType>& argtype, ftype->arguments())
             {   
                 notDefCount--;
                 method::argument arg;
                 arg.type=printType(argtype);
                 arg.name=QString("x%1").arg(i++);
-                qDebug() << "arg" << notDefCount << arg.name;
+//                 qDebug() << "arg" << notDefCount << arg.name;
                 if(notDefCount<0)
                 {
                     arg.def=idx->str();
@@ -209,11 +216,6 @@ void DUChainReader::foundClass(const Declaration* decl)
                 currentMethod.args += arg;
             }
             
-            currentMethod.funcname=funcname;
-            currentMethod.returnType=rettype;
-            currentMethod.isConst=isConst;
-            currentMethod.isVirtual=isVirtual;
-            currentMethod.isAbstract=isAbstract;
             writeEndFunction(currentMethod);
         }
         else if(dynamic_cast<const ClassMemberDeclaration*>(func) && func->kind() == Declaration::Instance)

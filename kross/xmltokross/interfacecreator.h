@@ -33,6 +33,7 @@ struct method
     bool isConst;
     bool isVirtual;
     bool isAbstract;
+    bool isConstructor;
     QList<argument> args;
 };
 

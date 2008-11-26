@@ -130,6 +130,7 @@ void DUChainExtractor::parsingFinished(KDevelop::ParseJob* job)
     if(m_writeImpl)
     {
         KrossImpl r(top);
+        r.setIncludes(m_toinclude);
         r.start();
         
         QFile implFile(m_directory+'/'+m_filename+"impl.h");

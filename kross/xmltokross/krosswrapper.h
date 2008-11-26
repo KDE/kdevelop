@@ -255,6 +255,8 @@ class KrossWrapper : public DUChainReader
         
         void writeEndFunction(const method& m)
         {
+            if(m.isConstructor)
+                return;
             QString rettype=m.returnType;
             rettype=rettype.replace('&', QString());
             if(!rettype.contains('*'))
