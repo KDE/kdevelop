@@ -41,7 +41,8 @@ public:
   enum SignaturePart {
     SignatureWhole /**< When this is given to toString(..), a string link "RETURNTYPE (ARGTYPE1, ARGTYPE1, ..)" is returned */,
     SignatureReturn /**< When this is given, only a string that represents the return-type is returned */,
-    SignatureArguments /**< When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" is returend */
+    SignatureArguments /**< When this is given, a string that represents the arguments like "(ARGTYPE1, ARGTYPE1, ..)" 
+                        * is returend. This does _not_ include a trailing "const" if the function is constant */
   };
 
   /// Default constructor

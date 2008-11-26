@@ -310,7 +310,10 @@ public:
    * Scope identifier, used to qualify the identifiers occurring in each context.
    * This is the part relative to the parent context.
    */
-  const QualifiedIdentifier localScopeIdentifier() const;
+  QualifiedIdentifier localScopeIdentifier() const;
+  
+  ///Same as localScopeIdentifier, but faster
+  IndexedQualifiedIdentifier indexedLocalScopeIdentifier() const;
 
   /**
    * Scope identifier, used to qualify the identifiers occurring in each context

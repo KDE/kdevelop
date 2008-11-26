@@ -62,6 +62,13 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUC
     setContext( context );
 }
 
+ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const SimpleRange& range, DUContext* context)
+  : ClassFunctionDeclarationBase(data, range)
+{
+  if( context )
+    setContext( context );
+}
+
 Declaration* ClassFunctionDeclaration::clonePrivate() const {
   return new ClassFunctionDeclaration(*this);
 }

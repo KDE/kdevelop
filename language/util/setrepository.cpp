@@ -1288,6 +1288,11 @@ BasicSetRepository* Set::repository() const {
   return m_repository;
 }
 
+void Set::checkDelete() {
+    staticRef();
+    staticUnref();
+}
+
 void Set::staticRef() {
   if(!m_tree)
     return;

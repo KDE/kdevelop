@@ -1137,10 +1137,14 @@ void DUContext::setLocalScopeIdentifier(const QualifiedIdentifier & identifier)
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
 
-const QualifiedIdentifier DUContext::localScopeIdentifier() const
+QualifiedIdentifier DUContext::localScopeIdentifier() const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
 
+  return d_func()->m_scopeIdentifier;
+}
+
+IndexedQualifiedIdentifier DUContext::indexedLocalScopeIdentifier() const {
   return d_func()->m_scopeIdentifier;
 }
 

@@ -70,6 +70,14 @@ Declaration* IdentifiedType::declaration(const TopDUContext* top) const
   return idData()->m_id.getDeclaration(top);
 }
 
+KDevelop::DUContext* IdentifiedType::internalContext(const KDevelop::TopDUContext* top) const {
+  Declaration* decl = declaration(top);
+  if(decl)
+    return decl->internalContext();
+  else
+    return 0;
+}
+
 void IdentifiedType::setDeclaration(Declaration* declaration)
 {
   if(declaration)

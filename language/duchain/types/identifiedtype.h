@@ -103,6 +103,13 @@ public:
   Declaration* declaration(const TopDUContext* top) const;
 
   /**
+   * \param top Top context to search for the declaration within
+   * Convenience function that returns the internal context of the attached declaration,
+   * or zero if no declaration is found, or if it does not have an internal context.
+   */
+  DUContext* internalContext(const TopDUContext* top) const;
+  
+  /**
    * Set the declaration which created this type.
    *
    * \note You should be careful when setting this, because it also changes the meaning of the declaration.

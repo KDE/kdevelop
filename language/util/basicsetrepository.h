@@ -105,6 +105,9 @@ public:
     ///will be deleted as well. @warning Either protect ALL your sets by using reference-counting, or don't use it at all.
     void staticUnref();
   
+    ///Checks if this set is statically referenced, and if it isn't, delete it. This is equal to calling staticRef() and then staticUnref().
+    void checkDelete();
+    
   ///Returns a pointer to the repository this set belongs to. Returns zero when this set is not initialized yet.
   BasicSetRepository* repository() const;
 private:
