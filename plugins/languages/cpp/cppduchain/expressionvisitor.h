@@ -144,6 +144,8 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
     //Here the parameters of function-calls are collected
     //When a parameter could not be evaluated, this will hold a parameter with null-value type
     QList<OverloadResolver::Parameter> m_parameters;
+    //One AST-node for each of the parameters in m_parameters
+    KDevVarLengthArray<AST*> m_parameterNodes;
     int m_ignore_uses;
 
 public:
@@ -162,6 +164,10 @@ public:
         m_currentUse.declaration = decl;
       }
     }
+    
+protected:
+  const Token& tokenFromIndex( int index );
+    
 private:
 
     void flushUse() {
@@ -250,8 +256,6 @@ private:
    *  @return false on fail(for example type is no function)
    */
   void getReturnValue( AST* node );
-
-  const Token& tokenFromIndex( int index );
 
   /** If the member was found, it is returned through m_lastType and m_lastDeclaration. On fail those are zero.
    * du-chain must not be locked.
@@ -347,7 +351,10 @@ private:
   virtual void visitUsingDirective(UsingDirectiveAST *) ;
   virtual void visitWhileStatement(WhileStatementAST *) ;
   virtual void visitWinDeclSpec(WinDeclSpecAST *) ;
-
+  virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
+  
+  void putStringType();
+  
   ///Visits all nodes, and resets m_lastType and m_lastDeclaration to the previous values before each visit so they cannot influence each other
   template <class _Tp>
   void visitIndependentNodes(const ListNode<_Tp> *nodes);

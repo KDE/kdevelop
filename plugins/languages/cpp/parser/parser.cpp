@@ -1282,7 +1282,7 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
   ExpressionAST *expr = 0;
 
   if (!parseTypeId(typeId) || (session->token_stream->lookAhead() != ','
-                               && session->token_stream->lookAhead() != '>'))
+                               && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
     {
       rewind(start);
 
@@ -4514,6 +4514,10 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
 
+  if(parseSignalSlotExpression(node))
+    return true;
+    //Parsed a signal/slot expression, fine
+  
   if (session->token_stream->lookAhead() == Token_throw && !parseThrowExpression(node))
     return false;
   else if (!parseConditionalExpression(node))
@@ -4549,6 +4553,30 @@ bool Parser::parseConstantExpression(ExpressionAST *&node)
 bool Parser::parseExpression(ExpressionAST *&node)
 {
   return parseCommaExpression(node);
+}
+
+bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
+  if(session->token_stream->lookAhead() == Token___qt_sig_slot__) {
+    std::size_t start = session->token_stream->cursor();
+    CHECK(Token___qt_sig_slot__);
+    CHECK('(');
+    
+    SignalSlotExpressionAST *ast = CreateNode<SignalSlotExpressionAST>(session->mempool);
+    parseUnqualifiedName(ast->name, false);
+    CHECK('(');
+    parseTemplateArgumentList(ast->name->template_arguments);
+    CHECK(')');
+    ast->name->end_token = _M_last_valid_token+1;
+    
+    CHECK(')');
+
+    UPDATE_POS(ast, start, _M_last_valid_token+1);
+    node = ast;
+    
+    return true;
+  }else{
+    return false;
+  }
 }
 
 bool Parser::parseCommaExpression(ExpressionAST *&node)

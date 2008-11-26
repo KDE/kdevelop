@@ -464,3 +464,7 @@ void DefaultVisitor::visitWinDeclSpec(WinDeclSpecAST *)
   // nothing to do
 }
 
+void DefaultVisitor::visitSignalSlotExpression(SignalSlotExpressionAST * node) {
+  visit(node->name);
+}
+

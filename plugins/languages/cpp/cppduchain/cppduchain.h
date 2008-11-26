@@ -38,6 +38,7 @@ namespace KDevelop {
   class Identifier;
   class QualifiedIdentifier;
   class SimpleCursor;
+  class IndexedString;
 }
 
 namespace Cpp {
@@ -80,6 +81,9 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevel
  * DUChain does not need to be locked.
  * */
 KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line );
+
+///Extracts a normalized signature and identifier from a specifier like "mySignal(int)"
+KDEVCPPDUCHAIN_EXPORT QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction);
 
 }
 

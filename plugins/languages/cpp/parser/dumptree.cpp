@@ -101,7 +101,10 @@ static char const * const names[] = {
   "Using",
   "UsingDirective",
   "WhileStatement",
-  "WinDeclSpec"
+  "WinDeclSpec",
+  "Kind_Comment",
+  "Kind_JumpStatement",
+  "Kind_SignalSlotExpression"
 };
 
 DumpTree::DumpTree()

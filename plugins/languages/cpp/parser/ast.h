@@ -191,6 +191,7 @@ struct AST
       Kind_WinDeclSpec,                         // 74
       Kind_Comment,                             // 75
       Kind_JumpStatement,                       // 76
+      Kind_SignalSlotExpression,                     // 77
       NODE_KIND_COUNT
     };
 
@@ -263,6 +264,13 @@ struct BinaryExpressionAST: public ExpressionAST
   std::size_t op; //Index of the token that describes the operator
   ExpressionAST *left_expression;
   ExpressionAST *right_expression;
+};
+
+///An expression used to do more detailed processing of SIGNAL(..) and SLOT(..) specifications
+struct SignalSlotExpressionAST : public ExpressionAST {
+  DECLARE_AST_NODE(SignalSlotExpression)
+  //The unqualified name also contains the argument types in its template-arguments
+  UnqualifiedNameAST *name;
 };
 
 struct CastExpressionAST: public ExpressionAST

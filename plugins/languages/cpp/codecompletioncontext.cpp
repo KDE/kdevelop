@@ -310,13 +310,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                   connectedSignal = connectedSignal.mid(7);
                   connectedSignal = connectedSignal.left(connectedSignal.length()-1);
                   //Now connectedSignal is something like myFunction(...), and we want the "...".
-                  int parenBegin = connectedSignal.indexOf('(');
-                  int parenEnd = connectedSignal.lastIndexOf(')');
-                  if(parenBegin < parenEnd && parenBegin != -1) {
-                    m_connectedSignalIdentifier = Identifier(connectedSignal.left(parenBegin).trimmed());
-                    kDebug() << "identifier" << m_connectedSignalIdentifier;
-                    m_connectedSignalNormalizedSignature = QMetaObject::normalizedSignature(connectedSignal.mid(parenBegin+1, parenEnd-parenBegin-1).toUtf8().data());
-                  }
+                  QPair<Identifier, QByteArray> signature = Cpp::qtFunctionSignature(connectedSignal.toUtf8());
+                  m_connectedSignalIdentifier = signature.first;
+                  m_connectedSignalNormalizedSignature = signature.second;
                 }
               }
             }

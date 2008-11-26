@@ -1511,6 +1511,38 @@ void TestDUChain::testSignalSlotDeclaration() {
   }
 }
 
+void TestDUChain::testSignalSlotUse() {
+  {
+    QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_sig_slot__( signal1(TE*, char)), this, __qt_sig_slot__(slot2(TE*))); \nconnect(this, __qt_sig_slot__(signal2()), \n__qt_sig_slot__(slot1())); } };");
+    
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 5);
+    QtFunctionDeclaration* qtDecl = dynamic_cast<QtFunctionDeclaration*>(top->childContexts()[1]->localDeclarations()[0]);
+    QVERIFY(qtDecl);
+    QVERIFY(top->childContexts()[1]->localDeclarations()[0]->uses().count());
+/*    kDebug() << top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange();
+    kDebug() << top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange();
+    kDebug() << top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first().textRange();
+    kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();*/
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 16, 3, 21).textRange());
+    QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 74, 1, 79).textRange());
+    QVERIFY(top->childContexts()[1]->localDeclarations()[2]->uses().count());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 31, 1, 38));
+    QVERIFY(top->childContexts()[1]->localDeclarations()[3]->uses().count());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), SimpleRange(2, 30, 2, 37));
+    
+    QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 4);
+    
+    release(top);
+  }
+}
+
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() : i(3) {}; A::~A() {}; ");
 

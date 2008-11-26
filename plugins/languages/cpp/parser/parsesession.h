@@ -50,7 +50,6 @@ namespace rpp { class MacroBlock; class LocationTable; }
 class KDEVCPPPARSER_EXPORT ParseSession
 {
 public:
-  ///@todo Make stringUnifier unnecessary by moving the string-repository into the parser
   ParseSession();
   ~ParseSession();
 

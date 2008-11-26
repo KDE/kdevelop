@@ -44,7 +44,8 @@ public:
   NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
 
   void run(NameAST *node, bool skipLastNamePart = false);
-  void run(UnqualifiedNameAST *node);
+  ///@param skipThisName if this is true, only the template-parameters of the given node are processed
+  void run(UnqualifiedNameAST *node, bool skipThisName = false);
 
   QString name() const { return _M_name.toString(); }
   QStringList qualifiedName() const { return _M_name.toStringList(); }

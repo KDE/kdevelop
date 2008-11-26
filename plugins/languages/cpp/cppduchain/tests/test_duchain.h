@@ -99,6 +99,7 @@ private slots:
   void testFunctionDefinition5();
   void testFunctionDefinition6();
   void testSignalSlotDeclaration();
+  void testSignalSlotUse();
   void testBaseClasses();
   void testForwardDeclaration();
   void testForwardDeclaration2();

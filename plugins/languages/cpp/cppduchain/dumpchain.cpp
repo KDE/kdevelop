@@ -114,7 +114,10 @@ static char const * const names[] = {
   "Using",
   "UsingDirective",
   "WhileStatement",
-  "WinDeclSpec"
+  "WinDeclSpec",
+  "Comment",
+  "JumpStatement",
+  "SignalSlotExpression"
 };
 
 DumpChain::DumpChain()

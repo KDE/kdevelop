@@ -222,14 +222,19 @@ const QualifiedIdentifier& NameASTVisitor::identifier() const
   return _M_name;
 }
 
-void NameASTVisitor::run(UnqualifiedNameAST *node)
+void NameASTVisitor::run(UnqualifiedNameAST *node, bool skipThisName)
 {
   m_finalName = node;
 
   m_find.openQualifiedIdentifier(false);
   m_typeSpecifier = 0;
   _M_name.clear();
-  visit(node);
+  
+  if(skipThisName)
+    DefaultVisitor::visitUnqualifiedName(node);
+  else
+    visit(node);
+  
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();
 }

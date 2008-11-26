@@ -178,6 +178,16 @@ bool setupStandardMacros(Cpp::LazyMacroSet& macros)
       insertMacro( macros, m );
     }
     
+    {
+      rpp::pp_dynamic_macro m("SIGNAL");
+      m.definition = asBody("__qt_sig_slot__");
+      m.defined = true;
+      m.fixed = true;
+      insertMacro( macros, m );
+      m.name = IndexedString("SLOT");
+      insertMacro( macros, m );
+    }
+    
     
     //Get standard macros from gcc
     KProcess proc;

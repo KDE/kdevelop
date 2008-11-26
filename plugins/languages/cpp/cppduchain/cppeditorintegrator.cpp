@@ -98,6 +98,11 @@ SimpleRange CppEditorIntegrator::findRange( size_t start_token, size_t end_token
   return SimpleRange(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
 }
 
+SimpleRange CppEditorIntegrator::findRange( size_t token )
+{
+  return SimpleRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
+}
+
 SimpleRange CppEditorIntegrator::findRange(AST* from, AST* to)
 {
   return SimpleRange(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));

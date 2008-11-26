@@ -207,5 +207,22 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
   return ret;
 }
 
+QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction) {
+  
+  if(fullFunction.startsWith('"') && fullFunction.endsWith('"'))
+    fullFunction = fullFunction.mid(1, fullFunction.length()-2);
+  
+  int parenBegin = fullFunction.indexOf('(');
+  int parenEnd = fullFunction.lastIndexOf(')');
+  Identifier id;
+  QByteArray signature;
+  if(parenBegin < parenEnd && parenBegin != -1) {
+    id = Identifier(IndexedString(fullFunction.left(parenBegin).trimmed()));
+    signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin+1, parenEnd-parenBegin-1).data());
+  }
+  
+  return qMakePair(id, signature);
+}
+
 }
 

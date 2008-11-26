@@ -130,6 +130,7 @@ enum TOKEN_KIND
     Token_whitespaces,
     Token_xor,
     Token_xor_eq,
+    Token___qt_sig_slot__,
 
     TOKEN_KIND_COUNT
 };

@@ -209,6 +209,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(while);
   ADD_TOKEN(xor);
   ADD_TOKEN(xor_eq);
+  ADD_TOKEN(__qt_sig_slot__);
   return ret;
 }
 

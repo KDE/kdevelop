@@ -38,6 +38,7 @@
 #include "cppduchain.h"
 #include "overloadresolutionhelper.h"
 #include "builtinoperators.h"
+#include "qtfunctiondeclaration.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 //#define DEBUG_RESOLUTION_PROBLEMS
@@ -826,12 +827,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     AbstractType::Ptr leftType = m_lastType;
     clearLast();
 
-    visit(node->right_expression);
-
-    Instance rightInstance = m_lastInstance;
-    AbstractType::Ptr rightType = m_lastType;
-    clearLast();
-
     if( tokenFromIndex(node->op).kind == ',' ) {
       /**A ',' binary expression is used for separating the argument-expressions in a function-call.
        * Those should be collected into m_parameters
@@ -843,6 +838,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
        * */
       if( leftType && leftInstance) {
         m_parameters << OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ) );
+        m_parameterNodes.append(node->left_expression);
 
         //LOCKDUCHAIN;
         //kDebug(9007) << "Adding parameter from left: " << (leftType.data() ? leftType->toString() : QString("<notype>"));
@@ -856,13 +852,24 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             problem( node->left_expression, "left operand of binary ','-expression could not be evaluated" );
 
           m_parameters << OverloadResolver::Parameter(AbstractType::Ptr(), false);
+          m_parameterNodes.append(node->left_expression);
           //LOCKDUCHAIN;
           //kDebug(9007) << "Adding empty from left";
         }
       }
+    }
+    
+    visit(node->right_expression);
+
+    Instance rightInstance = m_lastInstance;
+    AbstractType::Ptr rightType = m_lastType;
+    clearLast();
+
+    if( tokenFromIndex(node->op).kind == ',' ) {
 
       if( rightType && rightInstance) {
         m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) );
+        m_parameterNodes.append(node->right_expression);
         //LOCKDUCHAIN;
         //kDebug(9007) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
       } else {
@@ -875,6 +882,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             problem( node->right_expression, "right operand of binary ','-expression could not be evaluated" );
 
           m_parameters << OverloadResolver::Parameter(AbstractType::Ptr(), false);
+          m_parameterNodes.append(node->right_expression);
           //kDebug(9007) << "Adding empty from right";
         }
       }
@@ -1487,7 +1495,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastType = f->returnType();
     //Just keep the function instance, set in findMember(..)
   }
-
+  
   void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
@@ -1519,7 +1527,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     QList<DeclarationPointer> declarations = m_lastDeclarations;
 
     QList<OverloadResolver::Parameter> oldParams = m_parameters;
+    KDevVarLengthArray<AST*> oldParameterNodes = m_parameterNodes;
     m_parameters.clear();
+    m_parameterNodes.clear();
     //kDebug(9007) << "clearing parameters";
 
     //Backup the current use and invalidate it, we will update and create it after overload-resolution
@@ -1532,6 +1542,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
     if( m_lastType ) {
       m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
+      m_parameterNodes.append(node->arguments);
       //LOCKDUCHAIN;
       //kDebug(9007) << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
     }
@@ -1601,7 +1612,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       chosenFunction = declarations.front();
     }
 
-    m_parameters = oldParams;
     //kDebug(9007) << "Resetting old parameters of size " << oldParams.size();
 
     clearLast();
@@ -1625,8 +1635,68 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(oldCurrentUse.isValid)
       newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, chosenFunction );
 
+    m_parameterNodes = oldParameterNodes;
+    m_parameters = oldParams;
+    
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
+  }
+  
+  void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {
+    
+    //So uses for the argument-types are built
+    {
+      //This builds the uses
+      SimpleCursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
+      NameASTVisitor nameV( m_session, this, m_currentContext, topContext(), position.isValid() ? position : m_currentContext->range().end );
+      nameV.run(node->name, true);
+    }
+    
+    LOCKDUCHAIN;
+    
+    putStringType();
+    
+    if(m_parameters.isEmpty())
+      return;
+    
+    DUContext* container = 0;///@todo check whether signal/slot match, warn if not.
+    
+    StructureType::Ptr slotStructure = TypeUtils::targetType(m_parameters.back().type, m_topContext).cast<StructureType>();
+    if(slotStructure)
+      container = slotStructure->internalContext(m_topContext);    
+    
+    if(!container) {
+      Declaration* klass = Cpp::localClassFromCodeContext(m_currentContext);
+      if(klass)
+        container = klass->internalContext();
+    }
+    
+    if(!container) {
+      lock.unlock();
+      problem(node, QString("No signal/slot container"));
+      return;
+    }
+
+    CppEditorIntegrator editor(session());
+    QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
+    
+    IndexedString sig;
+    if(node->name->end_token-1 >= node->name->id+2) //Skip the parens
+      sig = IndexedString(QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+2, node->name->end_token-1) ));
+
+    Identifier id(tokenFromIndex(node->name->id).symbol());
+    
+    if(!id.isEmpty()) {
+      foreach(Declaration* decl, container->findDeclarations(id, SimpleCursor::invalid(), m_topContext, DUContext::DontSearchInParent)) {
+        QtFunctionDeclaration* qtFunction = dynamic_cast<QtFunctionDeclaration*>(decl);
+        if(qtFunction && qtFunction->normalizedSignature() == sig) {
+            //Match
+            lock.unlock();
+            newUse( node, node->name->id, node->name->id+1, DeclarationPointer(qtFunction) );
+            return;
+        }
+      }
+    }
   }
 
   void ExpressionVisitor::visitSubscriptExpression(SubscriptExpressionAST* node)
@@ -1697,7 +1767,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       //problem(node, "No fitting operator. found" );
     }
   }
-
+  
   void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     visit(node->type_id);
@@ -1719,16 +1789,25 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(type_id->type_specifier);
     visit(type_id->declarator);
   }
+  
+  void ExpressionVisitor::putStringType() {
+    IntegralType::Ptr i(new KDevelop::IntegralType(IntegralType::TypeChar));
+    i->setModifiers(AbstractType::ConstModifier);
+    
+    PointerType::Ptr p( new PointerType() );
+    
+    p->setBaseType( AbstractType::Ptr(i.unsafeData()) );
+
+    m_lastType = p.cast<AbstractType>();
+    m_lastInstance = Instance(true);
+  }
+
 
   void ExpressionVisitor::visitStringLiteral(StringLiteralAST* node)  {
     LOCKDUCHAIN;
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    PointerType::Ptr p( new PointerType() );
-    p->setModifiers(AbstractType::ConstModifier);
-    p->setBaseType( AbstractType::Ptr( new KDevelop::IntegralType(IntegralType::TypeChar)) );
 
-    m_lastType = p.cast<AbstractType>();
-    m_lastInstance = Instance(true);
+    putStringType();
   }
 
   void ExpressionVisitor::visitIncrDecrExpression(IncrDecrExpressionAST* node)  {
@@ -1861,3 +1940,4 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitWhileStatement(WhileStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitWinDeclSpec(WinDeclSpecAST* node)  { problem(node, "node-type cannot be parsed"); }
 }
+
