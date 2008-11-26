@@ -154,5 +154,7 @@ private:
   bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
 };
 
+KDEVCPPDUCHAIN_EXPORT const Identifier& castIdentifier();
+
 #endif // DECLARATIONBUILDER_H
 

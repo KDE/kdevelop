@@ -64,6 +64,7 @@ private slots:
   void testContextRelationships();
   void testDeclareInt();
   void testIntegralTypes();
+  void testConversionReturn();
   void testArrayType();
   void testDeclareFor();
   void testVariableDeclaration();

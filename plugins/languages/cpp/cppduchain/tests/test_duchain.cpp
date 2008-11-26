@@ -381,6 +381,27 @@ void TestDUChain::testIntegralTypes()
   release(top);
 }
 
+void TestDUChain::testConversionReturn() {
+  TEST_FILE_PARSE_ONLY
+
+  QByteArray method("class A {}; class B{ operator A*() const ; };");
+
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 2);
+  
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  FunctionType::Ptr funType = top->childContexts()[1]->localDeclarations()[0]->type<KDevelop::FunctionType>();
+  QVERIFY(funType);
+  QVERIFY(funType->returnType().cast<PointerType>());
+
+  release(top);
+}
+
 void TestDUChain::testArrayType()
 {
   TEST_FILE_PARSE_ONLY
@@ -1473,7 +1494,7 @@ void TestDUChain::testDeclareUsingNamespace()
 
 void TestDUChain::testSignalSlotDeclaration() {
   {
-    QByteArray text("#define Q_SIGNALS signals\n#define signals bla\n#undef signals\nclass C {Q_SIGNALS: void signal2(); public slots: void slot2();}; ");
+    QByteArray text("#define Q___qt_sig_slot__S signals\n#define signals bla\n#undef signals\nclass C {Q___qt_sig_slot__S: void signal2(); public slots: void slot2();}; ");
     
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
 
@@ -1541,6 +1562,26 @@ void TestDUChain::testSignalSlotUse() {
     
     release(top);
   }
+  {
+    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class AA : public QObject { signals: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : public AA { public slots: void slot1(); void slot2(); signals: void signal1();public: void test() {T t;connect(t, __qt_sig_slot__(signal2()), this, __qt_sig_slot__(slot2()));connect(this, __qt_sig_slot__(signal1(int)), __qt_sig_slot__(slot1())); } }; ");
+    
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 4);
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[3]->localDeclarations().count(), 4);
+    QVERIFY(top->childContexts()[3]->localDeclarations()[0]->uses().count());
+    QVERIFY(top->childContexts()[3]->localDeclarations()[1]->uses().count());
+    QVERIFY(!top->childContexts()[3]->localDeclarations()[2]->uses().count()); //signal1() is not used
+    
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
+
+    QVERIFY(top->childContexts()[1]->localDeclarations()[0]->uses().count());
+    QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
+    
+    release(top);
+  }  
 }
 
 void TestDUChain::testFunctionDefinition() {

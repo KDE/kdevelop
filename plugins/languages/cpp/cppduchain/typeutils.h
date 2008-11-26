@@ -108,6 +108,12 @@ namespace TypeUtils {
   /**
    * Tries to return the internal context of a declaration, for example the internal context of a class can be found by calling this with the class'es declaration.
    **/
+  /**
+   * Tries to convert @param actual to a class-pointer that is compatible to @param matchTo. So actual is converted to a class-pointer
+   * that has the class pointed to by matchTo as base-class.
+   * Returns @param actual if nothing better was found
+   */
+  KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::Ptr& matchTo, const KDevelop::AbstractType::Ptr& actual, const KDevelop::TopDUContext* topContext);
 }
 
 #endif

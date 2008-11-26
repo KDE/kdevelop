@@ -354,6 +354,7 @@ private:
   virtual void visitSignalSlotExpression (SignalSlotExpressionAST*);
   
   void putStringType();
+  AbstractType::Ptr qObjectPtrType() const;
   
   ///Visits all nodes, and resets m_lastType and m_lastDeclaration to the previous values before each visit so they cannot influence each other
   template <class _Tp>

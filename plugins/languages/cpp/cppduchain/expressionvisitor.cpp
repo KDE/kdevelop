@@ -1661,7 +1661,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     
     DUContext* container = 0;///@todo check whether signal/slot match, warn if not.
     
-    StructureType::Ptr slotStructure = TypeUtils::targetType(m_parameters.back().type, m_topContext).cast<StructureType>();
+    StructureType::Ptr slotStructure = TypeUtils::targetType(TypeUtils::matchingClassPointer(qObjectPtrType(), TypeUtils::realType(m_parameters.back().type, m_topContext), m_topContext), m_topContext).cast<StructureType>();
     if(slotStructure)
       container = slotStructure->internalContext(m_topContext);    
     
@@ -1687,7 +1687,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     Identifier id(tokenFromIndex(node->name->id).symbol());
     
     if(!id.isEmpty()) {
-      foreach(Declaration* decl, container->findDeclarations(id, SimpleCursor::invalid(), m_topContext, DUContext::DontSearchInParent)) {
+      foreach(Declaration* decl, container->findDeclarations(id, SimpleCursor::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         QtFunctionDeclaration* qtFunction = dynamic_cast<QtFunctionDeclaration*>(decl);
         if(qtFunction && qtFunction->normalizedSignature() == sig) {
             //Match
@@ -1789,7 +1789,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     visit(type_id->type_specifier);
     visit(type_id->declarator);
   }
-  
+
+  AbstractType::Ptr ExpressionVisitor::qObjectPtrType() const {
+    CppClassType::Ptr p(new CppClassType());
+    p->setDeclarationId( DeclarationId(QualifiedIdentifier("QObject")) );
+    PointerType::Ptr pointer(new PointerType);
+    pointer->setBaseType(p.cast<AbstractType>());
+    return pointer.cast<AbstractType>();
+  }
+
   void ExpressionVisitor::putStringType() {
     IntegralType::Ptr i(new KDevelop::IntegralType(IntegralType::TypeChar));
     i->setModifiers(AbstractType::ConstModifier);

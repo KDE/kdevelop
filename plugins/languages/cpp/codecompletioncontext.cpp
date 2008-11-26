@@ -299,10 +299,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
             if(function.matchedArguments == 1 && parentContext()->m_knownArgumentTypes.size() >= 1) {
               ///Pick a signal from the class pointed to in the earlier element
               m_memberAccessOperation = SignalAccess;
-              kDebug() << "SignalAccess";
             }else if(funType->arguments()[function.matchedArguments] && funType->arguments()[function.matchedArguments]->toString() == "const char*") {
               m_memberAccessOperation = SlotAccess;
-              kDebug() << "SlotAccess";
               
               if(parentContext()->m_knownArgumentExpressions.size() > 1) {
                 QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
@@ -324,7 +322,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                   m_expressionResult.type = klass->indexedType();
               }else{
                 m_expressionResult = parentContext()->m_knownArgumentTypes[function.matchedArguments-1];
-                m_expressionResult.type = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext())->indexed();
+                m_expressionResult.type = TypeUtils::targetType(TypeUtils::matchingClassPointer(funType->arguments()[function.matchedArguments-1], m_expressionResult.type.type(), m_duContext->topContext()), m_duContext->topContext())->indexed();
               }
               break;
             }

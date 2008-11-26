@@ -371,8 +371,11 @@ class CppDUContext : public BaseContext {
         ctx->deleteUses();
     }
     
-    virtual bool foundEnough( const DUContext::DeclarationList& decls ) const
+    virtual bool foundEnough( const DUContext::DeclarationList& decls, DUContext::SearchFlags flags ) const
     {
+      if(flags & DUContext::NoFiltering)
+        return false;
+      
       if( decls.isEmpty() )
         return false;
 

@@ -58,6 +58,10 @@
 
 #include "cppdebughelper.h"
 
+const Identifier& castIdentifier() {
+  static Identifier id("operator{...cast...}");
+  return id;
+}
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -391,15 +395,12 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   Identifier localId = customName;
 
   if (name) {
-    TypeSpecifierAST* typeSpecifier = 0; // Additional type-specifier for example the return-type of a cast operator. This is not caught by the type builder.
-    QualifiedIdentifier id = identifierForNode(name, &typeSpecifier);
+    //If this is an operator thing, build the type first. Since it's part of the name, the type-builder doesn't catch it normally
+    if(name->unqualified_name && name->unqualified_name->operator_id)
+      visit(name->unqualified_name->operator_id);
+    
+    QualifiedIdentifier id = identifierForNode(name);
 
-    static Identifier castIdentifier("operator{...cast...}");
-
-    if( typeSpecifier && id.last() == castIdentifier ) {
-      if( typeSpecifier->kind == AST::Kind_SimpleTypeSpecifier )
-        visitSimpleTypeSpecifier( static_cast<SimpleTypeSpecifierAST*>( typeSpecifier ) );
-    }
     if(localId.isEmpty())
       localId = id.last();
   }
@@ -628,7 +629,7 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
       fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
       fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
       IndexedString signature(QMetaObject::normalizedSignature(m_qtFunctionSignature.constData()));
-      kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
+//       kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
       fun->setNormalizedSignature(signature);
       return fun;
     }

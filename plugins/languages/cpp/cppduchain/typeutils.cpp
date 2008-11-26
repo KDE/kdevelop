@@ -22,9 +22,11 @@
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include "classdeclaration.h"
+#include "typeconversion.h"
+#include <declarationbuilder.h>
 
 namespace TypeUtils {
-  using namespace KDevelop;
+using namespace KDevelop;
 
   AbstractType::Ptr realType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
 
@@ -185,5 +187,27 @@ namespace TypeUtils {
       return false;
   }
 
+KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::Ptr& matchTo, const KDevelop::AbstractType::Ptr& actual, const KDevelop::TopDUContext* topContext) {
+  Cpp::TypeConversion conversion(topContext);
+  
+  StructureType::Ptr actualStructure = realType(actual, topContext).cast<KDevelop::StructureType>();
+  
+  if(actualStructure) {
+    DUContext* internal = actualStructure->internalContext(topContext);
+    if(internal) {
+      typedef QPair<Declaration*, int> DeclarationDepthPair;
+      foreach(Declaration* decl, internal->findDeclarations(castIdentifier(), SimpleCursor::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
+        FunctionType::Ptr funType = decl->type<FunctionType>();
+        if(funType && funType->returnType()) {
+          if(conversion.implicitConversion(funType->returnType()->indexed(), matchTo->indexed(), true)) {
+            return funType->returnType();
+          }
+        }
+      }
+    }
+  }
+  
+  return actual;
+}
 
 }
