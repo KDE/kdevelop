@@ -30,7 +30,7 @@
    <item>
     <widget class="QLabel" name="label_2" >
      <property name="text" >
-      <string>Exlude files that match the following patterns from the project:</string>
+      <string>Exclude files that match the following patterns from the project:</string>
      </property>
     </widget>
    </item>

@@ -71,7 +71,7 @@
            <bool>false</bool>
           </property>
           <property name="whatsThis" >
-           <string>FIll the field with a date (e.g. &lt;i>20030204&lt;/i>)</string>
+           <string>Fill the field with a date (e.g. &lt;i>20030204&lt;/i>)</string>
           </property>
          </widget>
         </item>

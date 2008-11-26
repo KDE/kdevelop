@@ -385,7 +385,7 @@ void ProjectManagerViewPlugin::removeFolderFromContextMenu()
     {
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove de directory from the filesystem too?"));
+            int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the directory from the filesystem too?"));
             if(q)
             {
                 if ( !KIO::NetAccess::del( item->folder()->url(), window ) ) {
