@@ -45,11 +45,13 @@ public:
     void setBody(const QString&);
     void setAccess(Access) {}
     void setVirtual() {}
+    void setConst(bool);
 
     QString name() const;
     QString arguments() const;
     QString body() const;
     QString returnType() const;
+    bool isConst() const;
 
 private:
     bool m_empty;
@@ -57,6 +59,7 @@ private:
     QString m_body;
     QString m_returnType;
     QString m_arguments;
+    bool m_isConst;
 };
 
 }

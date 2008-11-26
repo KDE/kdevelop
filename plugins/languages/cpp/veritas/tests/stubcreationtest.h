@@ -48,7 +48,16 @@ private slots:
     void privateMethod();
     void signal();
     void signalWithEmptyPublic();
-
+    void prependNamespace();
+    void prependNestedNamespace();
+    void constMethod();
+    void dropMemberConstness();
+    void pointerConstructorInitializer();
+    void intConstructorInitializer();
+    void boolConstructorInitializer();
+    void noInitializerRegularClass();
+    void noInitializerVoidReturn();
+    
 private:
     ClassSkeleton createStubClassFrom(const QByteArray&);
     void kompareMethods(const MethodSkeleton& expected, const MethodSkeleton& actual);

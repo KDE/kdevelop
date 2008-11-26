@@ -50,3 +50,14 @@ signals:
 private:
     void barrr();
 };
+
+namespace Zoo
+{
+class Loo
+{
+public:
+    virtual void moo();
+};
+}
+
+

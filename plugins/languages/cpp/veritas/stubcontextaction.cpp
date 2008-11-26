@@ -69,10 +69,23 @@ QString activeUrl()
     if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
         return "";
     } else {
+        return doc->url().path();
+    }
+}
+
+QString stubUrl()
+{
+    ICore* core = ICore::self();
+    IDocumentController* dc = core->documentController(); 
+    IDocument* doc = dc->activeDocument();
+    if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
+        return "";
+    } else {
         QFileInfo fi(doc->url().path()); 
         return fi.absolutePath() + QDir::separator() + fi.baseName() + "stub." + fi.completeSuffix();
     }
 }
+
 } // end anonymous namespace
 
 StubContextAction::StubContextAction(QObject* parent)
@@ -101,7 +114,7 @@ void StubContextAction::constructStub()
     url = QInputDialog::getText(
               0, i18n("Generate Stub"),
               i18n("Save to "), QLineEdit::Normal,
-              current, &owk);
+              stubUrl(), &owk);
     if (!owk || url.isEmpty() || QFile::exists(url)) return;
 
     QFile target(url);

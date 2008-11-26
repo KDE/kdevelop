@@ -37,7 +37,11 @@ public:
     DeclarationFactory();
     virtual ~DeclarationFactory();
 
+    /*! Extract a classdeclaration from a piece of code in @p text.
+     *  Try the first declaration, and the first declaration in namespaces.
+     *  This method is rather conservative, ie loads of Q_ASSERT's */
     Cpp::ClassDeclaration* classFromText(const QByteArray& text);
+    
     QList<KDevelop::Declaration*> variablesFromText(const QByteArray& text);
     QList<KDevelop::Declaration*> unresolvedVariablesFromText(const QByteArray& text);
 

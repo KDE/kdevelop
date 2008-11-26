@@ -54,6 +54,19 @@ DeclarationFactory::~DeclarationFactory()
     }
 }
 
+namespace
+{
+Cpp::ClassDeclaration* classDeclarationIn(DUContext* ctx)
+{
+    Q_ASSERT(ctx->localDeclarations().count() !=0 );
+    Declaration* dcl = ctx->localDeclarations().first();
+    Q_ASSERT(dcl);
+    ClassDeclaration* clazz = dynamic_cast<ClassDeclaration*>(dcl);
+    Q_ASSERT(clazz);
+    return clazz;
+}
+}
+
 Cpp::ClassDeclaration* DeclarationFactory::classFromText(const QByteArray& text)
 {
     if (m_lock->locked()) m_lock->unlock();
@@ -61,11 +74,24 @@ Cpp::ClassDeclaration* DeclarationFactory::classFromText(const QByteArray& text)
     Q_ASSERT(top);
     m_tops << top;
     if (!m_lock->locked()) m_lock->lock();
-    Q_ASSERT(top->localDeclarations().count() !=0 );
-    Declaration* dcl = top->localDeclarations().first();
-    Q_ASSERT(dcl);
-    ClassDeclaration* clazz = dynamic_cast<ClassDeclaration*>(dcl);
-    Q_ASSERT(clazz);
+    DUContext* context = top;
+    
+    if (context->localDeclarations().count() == 0) {
+        // see if we'r in a namespace. if so extract the class from there
+        QVector<DUContext*> children = context->childContexts();
+        Q_ASSERT(!children.isEmpty());
+        Q_ASSERT(children[0]->type() == DUContext::Namespace);
+        context = children[0];
+        if (context->localDeclarations().count() == 0) {
+            // still no classdeclaration, try one more
+            QVector<DUContext*> children = context->childContexts();
+            Q_ASSERT(!children.isEmpty());
+            Q_ASSERT(children[0]->type() == DUContext::Namespace);
+            context = children[0];
+        }
+    }
+    
+    Cpp::ClassDeclaration* clazz = classDeclarationIn(context);
     if (m_lock->locked()) m_lock->unlock();
     return clazz;
 }

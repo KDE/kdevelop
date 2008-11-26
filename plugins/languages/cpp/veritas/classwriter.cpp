@@ -53,7 +53,7 @@ void writeConstructor(const ConstructorSkeleton& ctr, QTextStream& str)
     if (inits.count()!=0) str << ": ";
     for(int i=0; i<inits.count(); i++) {
         str << inits[i];
-        if (i!=inits.count()-1) str << " ,";
+        if (i!=inits.count()-1) str << ", ";
     }
     str << " {}\n";
 }

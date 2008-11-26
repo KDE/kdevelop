@@ -114,6 +114,9 @@ void StubCreationTest::basicInterface()
     KOMPARE("IFoo", actual.super());
     KOMPARE(1, actual.methods().count());
     kompareMethods(ms, actual.methods()[0]);
+    
+    KVERIFY(!actual.hasMembers());
+    KOMPARE(0, actual.memberCount());
 }
 
 void StubCreationTest::nonVoidReturnType()
@@ -187,6 +190,129 @@ void StubCreationTest::signalWithEmptyPublic()
     KVERIFY(actual.methods().isEmpty());
 }
 
+void StubCreationTest::prependNamespace()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "namespace Zoo { class IFoo {}; }\n");
+      
+    KVERIFY(!actual.isEmpty());
+    KOMPARE("Zoo::IFooStub", actual.name());
+}
+
+void StubCreationTest::prependNestedNamespace()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "namespace Zoo { namespace Loo { class IFoo {}; } }\n");
+
+    KVERIFY(!actual.isEmpty());
+    KOMPARE("Zoo::Loo::IFooStub", actual.name());
+}
+
+void StubCreationTest::constMethod()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual void foo() const = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    MethodSkeleton expectedMtd;
+    expectedMtd.setName("foo");
+    expectedMtd.setReturnType("void");
+    expectedMtd.setBody("");
+    expectedMtd.setConst(true);
+    KOMPARE(1, actual.methods().count());
+    kompareMethods(expectedMtd, actual.methods()[0]);
+}
+
+void StubCreationTest::dropMemberConstness()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual const int foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    KOMPARE(1, actual.memberCount());
+    KOMPARE("int m_foo", actual.member(0));
+}
+
+void StubCreationTest::pointerConstructorInitializer()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual IFoo* foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    ConstructorSkeleton cs = actual.constructor();
+    KOMPARE(1, cs.initializerList().size());
+    KOMPARE("m_foo(0)", cs.initializerList()[0]);
+}
+
+void StubCreationTest::boolConstructorInitializer()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual bool foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    ConstructorSkeleton cs = actual.constructor();
+    KOMPARE(1, cs.initializerList().size());
+    KOMPARE("m_foo(false)", cs.initializerList()[0]);
+}
+
+void StubCreationTest::intConstructorInitializer()
+{
+    ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual int foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    ConstructorSkeleton cs = actual.constructor();
+    KOMPARE(1, cs.initializerList().size());
+    KOMPARE("m_foo(0)", cs.initializerList()[0]);
+}
+
+void StubCreationTest::noInitializerRegularClass()
+{
+      ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual IFoo foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    ConstructorSkeleton cs = actual.constructor();
+    KOMPARE(0, cs.initializerList().size());
+}
+
+void StubCreationTest::noInitializerVoidReturn()
+{
+      ClassSkeleton actual = createStubClassFrom(
+      "class IFoo\n"
+      "{\n"
+      "public:\n"
+      "  virtual void foo() = 0;\n"
+      "};\n");
+
+    KVERIFY(!actual.isEmpty());
+    ConstructorSkeleton cs = actual.constructor();
+    KOMPARE(0, cs.initializerList().size());
+}
 
 /////////////////////////// helpers //////////////////////////////////////////
 
@@ -196,11 +322,13 @@ void StubCreationTest::kompareMethods(const MethodSkeleton& expected, const Meth
     KOMPARE(expected.returnType(), actual.returnType());
     KOMPARE(expected.arguments(), actual.arguments());
     KOMPARE(expected.body(), actual.body());
+    KOMPARE(expected.isConst(), actual.isConst());
 }
 
 ClassSkeleton StubCreationTest::createStubClassFrom(const QByteArray& text)
 {
     ClassDeclaration* clazz = m_factory->classFromText(text);
+    kDebug() << clazz;
     return m_constructor->morph(clazz);
 }
 

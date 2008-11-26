@@ -25,7 +25,7 @@ using Veritas::MethodSkeleton;
 using KDevelop::FunctionType;
 
 MethodSkeleton::MethodSkeleton()
-  : m_empty(true), m_arguments("()")
+  : m_empty(true), m_arguments("()"), m_isConst(false)
 {}
 
 MethodSkeleton::~MethodSkeleton()
@@ -87,4 +87,14 @@ QString MethodSkeleton::arguments() const
         return "()";
     }
     return m_arguments;
+}
+
+void MethodSkeleton::setConst(bool isConst)
+{
+    m_isConst = isConst;
+}
+
+bool MethodSkeleton::isConst() const
+{
+    return m_isConst;
 }
