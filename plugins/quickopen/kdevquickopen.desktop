@@ -2,11 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows quick access to project files and language-items like classes/functions.
-Comment[x-test]=xxThis plugin allows quick access to project files and language-items like classes or functions.xx
 Name=KDevQuickopen
-Name[x-test]=xxKDevQuickopenxx
 GenericName=Quickopen
-GenericName[x-test]=xxQuickopenxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevquickopen
 X-KDevelop-Version=6

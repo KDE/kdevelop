@@ -11,7 +11,5 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Background Parser
-Name[x-test]=xxBackground Parserxx
 Comment=Configure Background Parser settings
-Comment[x-test]=xxConfigure Background Parser settingsxx
 

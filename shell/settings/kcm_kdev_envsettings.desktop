@@ -11,7 +11,5 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Environment
-Name[x-test]=xxEnvironmentxx
 Comment=Configure Environment Variable settings
-Comment[x-test]=xxConfigure Environment Variable settingsxx
 

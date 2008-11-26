@@ -2,11 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates Bazaar to KDevelop
-Comment[x-test]=xxThis plugin integrates Bazaar to KDevelopxx
 Name=KDevBzr
-Name[x-test]=xxKDevBzrxx
 GenericName=Bzr frontend
-GenericName[x-test]=xxBzr frontendxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevgit
 X-KDE-PluginInfo-Name=kdevbzr

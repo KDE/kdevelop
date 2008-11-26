@@ -3,35 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 X-KDE-Derived=KPluginInfo
 Name=KDevelop Plugin
-Name[br]=Lugent KDevelop
-Name[ca]=Connector per a KDevelop
-Name[da]=KDevelop plugin
-Name[de]=KDevelop-Plugin
-Name[el]=Πρόσθετο KDevelop
-Name[es]=Extensión de KDevelop
-Name[et]=KDevelopi plugin
-Name[eu]=KDevelop plugin-a
-Name[fa]=وصلۀ KDevelop
-Name[fr]=Module externe de KDevelop
-Name[ga]=Breiseán KDevelop
-Name[hu]=KDevelop-bővítőmodul
-Name[it]=Plugin di KDevelop
-Name[ja]=KDevelop プラグイン
-Name[nb]=KDevelop-programtillegg
-Name[nds]=KDevelop-Moduul
-Name[pl]=Wtyczka do KDevelopa
-Name[pt]='Plugin' do KDevelop
-Name[pt_BR]=Plugin do KDevelop
-Name[ru]=Модуль KDevelop
-Name[sl]=Vstavek za KDevelop
-Name[sr]=Прикључак за KDevelop
-Name[sr@latin]=Priključak za KDevelop
-Name[sv]=KDevelop insticksmodul
-Name[ta]=KDevelop  சொருகு
-Name[tg]=Модули KDevelop
-Name[tr]=KDevelop Eklentisi
-Name[x-test]=xxKDevelop Pluginxx
-Name[zh_TW]=KDevelop 外掛程式
 
 # mandatory, versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
@@ -71,7 +42,7 @@ Type=QStringList
 [PropertyDef::X-KDevelop-IRequired]
 Type=QStringList
 
-# optional, interfaces that this plugin can use, 
+# optional, interfaces that this plugin can use,
 # but the plugin still works if the interfaces are
 # not available.
 [PropertyDef::X-KDevelop-IOptional]
