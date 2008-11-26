@@ -70,7 +70,7 @@ using Veritas::ReportWidget;
 using Veritas::ReportModel;
 
 K_PLUGIN_FACTORY(CoveragePluginFactory, registerPlugin<CoveragePlugin>();)
-K_EXPORT_PLUGIN(CoveragePluginFactory("kdevcoverage"))
+K_EXPORT_PLUGIN(CoveragePluginFactory(KAboutData("kdevcoverage","kdevcoverage", ki18n("Coverage Support"), "0.1", ki18n("Support for running coverage tools"), KAboutData::License_GPL)))
 
 CoveragePlugin::CoveragePlugin(QObject* parent, const QVariantList&)
         : KDevelop::IPlugin( CoveragePluginFactory::componentData(), parent ),

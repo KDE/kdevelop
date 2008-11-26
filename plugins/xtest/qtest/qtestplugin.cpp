@@ -57,7 +57,7 @@
 #include "qtestconfig.h"
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
-K_EXPORT_PLUGIN(QTestPluginFactory(KAboutData("kdevqtest","kdevqtest", ki18n("QTest test"), "0.1", ki18n("Support for running QTest unit tests"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(QTestPluginFactory(KAboutData("kdevqtest","kdevxtest", ki18n("QTest test"), "0.1", ki18n("Support for running QTest unit tests"), KAboutData::License_GPL)))
 
 using namespace KDevelop;
 using namespace QTest;
