@@ -55,11 +55,11 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   if(m_isQtSignalSlotCompletion) {
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     QString functionSignature;
-    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+    Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
     if(classFun && classFun->type<FunctionType>() && (classFun->isSignal() || classFun->isSlot())) {
       ///@todo Replace previous signal/slot specifications
       functionSignature = classFun->identifier().toString();
-      functionSignature += classFun->type<FunctionType>()->partToString(FunctionType::SignatureArguments);
+      functionSignature += "(" + classFun->normalizedSignature().str() + ")";
       if(classFun->isSignal())
         functionSignature = "SIGNAL(" + functionSignature + ")";
       else
