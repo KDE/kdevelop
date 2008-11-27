@@ -113,11 +113,11 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                                KUrl( subproject->absoluteDir() ),
                                item ) );
         }
-        foreach( QString s, folderitem->projectFile()->targets() )
+        foreach( const QString& s, folderitem->projectFile()->targets() )
         {
             kDebug(9024) << "adding target:" << s;
             QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
-            foreach( KUrl u, folderitem->projectFile()->filesForTarget(s) )
+            foreach( const KUrl& u, folderitem->projectFile()->filesForTarget(s) )
             {
                 if( entries.contains( u.fileName() ) )
                 {
@@ -130,7 +130,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
         }
     }
 
-    foreach( QString entry, entries )
+    foreach( const QString& entry, entries )
     {
         if( item->hasFileOrFolder( entry ) )
             continue;
@@ -275,7 +275,7 @@ QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* proj
             "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
             "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
             "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
-    foreach( QString var, queryVariables)
+    foreach( const QString& var, queryVariables)
     {
         p.clearProgram();
         p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
