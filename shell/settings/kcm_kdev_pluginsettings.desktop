@@ -1,0 +1,15 @@
+[Desktop Entry]
+Icon=preferences-plugin
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_pluginsettings
+X-KDE-FactoryName=kcm_kdev_pluginsettings
+X-KDE-ParentApp=kdevplatform
+X-KDE-ParentComponents=kdevplatform
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Plugins
+Comment=Configure Plugins
+
