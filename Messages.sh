@@ -6,7 +6,7 @@ if [[ "$rcfiles" != "" ]] ; then
     $EXTRACTRC "$rcfiles" >> rc.cpp || exit 11
 fi
 if [[ "$uifiles" != "" ]] ; then
-    $EXTRACTRC  >> rc.cpp || exit 12
+    $EXTRACTRC "$uifiles" >> rc.cpp || exit 12
 fi
 $XGETTEXT -kaliasLocal `find $subdirs -name \*.cc -o -name \*.cpp -o -name \*.h` rc.cpp -o $podir/kdevelop.pot
 rm -f rc.cpp
