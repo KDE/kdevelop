@@ -56,8 +56,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-static const QString pluginControllerGrp("PluginController");
-static const QString sessionPluginsEntry("Plugins To Load");
+static const QString pluginControllerGrp("Plugins");
 
 bool isGlobalPlugin( const KPluginInfo& info )
 {
@@ -148,16 +147,6 @@ void PluginController::cleanup()
 
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
-    QStringList plugins;
-    foreach( const KPluginInfo& info, d->loadedPlugins.keys() )
-    {
-        if( isGlobalPlugin( info ) )
-        {
-            plugins << info.pluginName();
-        }
-    }
-    Core::self()->activeSession()->config()->group( pluginControllerGrp ).writeEntry( sessionPluginsEntry, plugins );
-
     // Ask all plugins to unload
     while ( !d->loadedPlugins.isEmpty() )
     {
@@ -176,14 +165,31 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 void PluginController::initialize()
 {
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
-    QStringList sessionPlugins = grp.readEntry( sessionPluginsEntry, ShellExtension::getInstance()->defaultPlugins() );
+
+    QMap<QString, QString> entries = grp.entryMap();
+
+    QMap<QString, bool> pluginMap;
+
+    QMap<QString, QString>::Iterator it;
+    for ( it = entries.begin(); it != entries.end(); ++it )
+    {
+        QString key = it.key();
+        if ( key.endsWith( QLatin1String( "Enabled" ) ) )
+            pluginMap.insert( key.left(key.length() - 7), grp.readEntry(key,false) );
+    }
+
     foreach( const KPluginInfo& pi, d->plugins )
     {
-        if( isGlobalPlugin( pi ) && ( sessionPlugins.isEmpty() || sessionPlugins.contains( pi.pluginName() ) ) )
+        if( isGlobalPlugin( pi ) && ( pluginMap.isEmpty() || pluginMap.value( pi.pluginName() ) ) )
         {
-            loadPluginInternal( pi.pluginName() );
+            if( loadPluginInternal( pi.pluginName() ) != 0 && pluginMap.isEmpty() )
+            {
+                grp.writeEntry( pi.pluginName()+"Enabled", true );
+            }
         }
     }
+    // Synchronize so we're writing out to the file.
+    grp.sync();
 }
 
 QList<IPlugin *> PluginController::loadedPlugins() const
@@ -501,6 +507,10 @@ void PluginController::unloadProjectPlugins()
 QList<KPluginInfo> PluginController::allPluginInfos() const
 {
     return d->plugins;
+}
+
+void PluginController::updateLoadedPlugins()
+{
 }
 
 }

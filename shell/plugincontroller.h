@@ -97,7 +97,17 @@ public:
         Later
     };
 
+    /**
+     * retrieve all plugin infos
+     */
     QList<KPluginInfo> allPluginInfos() const;
+
+    /**
+     * loads not-yet-loaded plugins and unloads plugins
+     * depending on the configuration in the session\
+     */
+    void updateLoadedPlugins();
+
 
     /**
      * Directly unload the given \a plugin, either deleting it now or \a later.
