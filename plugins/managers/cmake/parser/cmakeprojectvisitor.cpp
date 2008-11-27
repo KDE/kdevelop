@@ -853,7 +853,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     m_macros->insert(macro->macroName(), m);
 
     DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(macro->macroName()));
+    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(macro->macroName()));
     SimpleRange sr=macro->content().first().arguments.first().range();
     if(!decls.isEmpty())
     {
@@ -940,7 +940,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         {
             {
                 DUChainWriteLocker lock(DUChain::lock());
-                QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(call->name()));
+                QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name()));
 
                 if(!decls.isEmpty())
                 {
@@ -1896,7 +1896,7 @@ void CMakeProjectVisitor::createDefinitions(const CMakeAst *ast)
     {
         if(!arg.isCorrect())
             continue;
-        QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(arg.value));
+        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(arg.value));
         if(decls.isEmpty())
         {
             Declaration *d = new Declaration(arg.range(), m_topctx);
@@ -1924,7 +1924,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
-            QList<Declaration*> decls=m_topctx->findLocalDeclarations(Identifier(var));
+            QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
 
             if(!decls.isEmpty())
             {
