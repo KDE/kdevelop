@@ -93,10 +93,12 @@ void CMakeDUChainTest::testDUChainWalk()
 
     MacroMap mm;
     VariableMap vm;
+    CacheValues cv;
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
+    v.setCacheValues(&cv);
 //     v.setModulePath();
     v.walk(code, 0);
 
@@ -138,25 +140,38 @@ void CMakeDUChainTest::testUses()
             "set(var a b c)\n"
             "set(var2 ${var})\n"
             
+            "set(CMAKE_MODULE_PATH .)\n"
+            "include(included)\n"
+            
             "macro(bla kk)\n"
             " message(STATUS ${kk})\n"
             "endmacro(bla)\n"
+            "set(usinginc aa${avalue})\n"
             "bla(kk)\n"
             );
 
     QFile file("cmake_duchain_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
-
     QTextStream out(&file);
     out << input;
     file.close();
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
     file.remove();
+    
+    QString inputIncluded="set(avalue 33)";
+    
+    QFile includedFile("included.cmake");
+    QVERIFY(includedFile.open(QIODevice::WriteOnly | QIODevice::Text));
+    QTextStream out2(&includedFile);
+    out2 << inputIncluded;
+    includedFile.close();
+    
     QVERIFY(code.count() != 0);
 
     MacroMap mm;
     VariableMap vm;
-
+    CacheValues cv;
+    
     m_fakeContext->deleteLocalDeclarations();
     m_fakeContext->deleteChildContextsRecursively();
     m_fakeContext->deleteUses();
@@ -165,6 +180,7 @@ void CMakeDUChainTest::testUses()
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
+    v.setCacheValues(&cv);
     v.walk(code, 0);
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -176,7 +192,7 @@ void CMakeDUChainTest::testUses()
     QVector<Declaration*> declarations=ctx->localDeclarations();
     QCOMPARE(ctx->range().start.line, 0);
     
-    QStringList decls=QStringList() << "var" << "var2" << "bla";
+    QStringList decls=QStringList() << "var" << "var2" << "CMAKE_MODULE_PATH" << "bla" << "usinginc";
     if(decls.count() != declarations.count())
     {
         for(int i=0; i<decls.count(); i++) {
@@ -196,21 +212,17 @@ void CMakeDUChainTest::testUses()
         QCOMPARE(1, ctx->findDeclarations(Identifier(decls[i])).count());
     }
     
-    QCOMPARE(ctx->usesCount(), 2);
-    
-    KTextEditor::Range sr=ctx->uses()[0].m_range.textRange();
-    if(sr != SimpleRange(2,11, 2,11+3).textRange()) {
-        kDebug() << "wrong range" << sr;
-        
-        for(int i=0; i<ctx->usesCount(); i++)
-        {
-            kDebug() << "use " << i << ctx->uses()[i].m_range.textRange();
-        }
+    QList<SimpleRange> uses=QList<SimpleRange>() << SimpleRange(2,11, 2,11+3)
+                                                 << SimpleRange(8,17, 8,17+6)
+                                                 << SimpleRange(9,0,  9,3);
+    QCOMPARE(ctx->usesCount(), uses.count());
+    for(int i=0; i<ctx->usesCount(); i++)
+    {
+        kDebug() << "use " << i << ctx->uses()[i].m_range.textRange();
+        QCOMPARE(uses[i], ctx->uses()[i].m_range);
     }
-    QCOMPARE(sr, SimpleRange(2,11, 2,11+3).textRange());
 
-//     QCOMPARE(ctx->range().end.column, 15);
-//     QCOMPARE(ctx->range().end.line, 2);
+    includedFile.remove();
 }
 
 #include "cmakeduchaintest.moc"
