@@ -110,7 +110,7 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 template<typename F> void KDevDocumentView::visitSelected(F f)
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    foreach(KUrl url, m_selectedDocs) {
+    foreach(const KUrl& url, m_selectedDocs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
     }

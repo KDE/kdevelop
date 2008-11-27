@@ -50,7 +50,7 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
         if( firstpath.contains( QRegExp( "[^\\\\]?(\\*|\\?|\\[)" ) ) )
         {
             QRegExp wildcard( firstpath, Qt::CaseSensitive, QRegExp::Wildcard );
-            foreach( QString entry, QDir( dir ).entryList()  )
+            foreach(const  QString& entry, QDir( dir ).entryList()  )
             {
                 if( wildcard.exactMatch( entry ) )
                 {
@@ -61,12 +61,12 @@ QStringList resolveShellGlobbingInternal( const QString& relativefile,
         {
             entries << firstpath;
         }
-        foreach( QString entry, entries )
+        foreach( const QString& entry, entries )
         {
-            QStringList subentries = resolveShellGlobbingInternal( remainder, dir+'/'+entry );
+            const QStringList subentries = resolveShellGlobbingInternal( remainder, dir+'/'+entry );
             if( !subentries.isEmpty() )
             {
-                foreach( QString subentry, subentries )
+                foreach( const QString& subentry, subentries )
                 {
                     result << entry+'/'+subentry;
                 }
@@ -173,7 +173,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         bool read = includefile.read();
         if( read )
         {
-            foreach( QString var, includefile.variables() )
+            foreach( const QString& var, includefile.variables() )
             {
                 if( m_variableValues[ var ] != includefile.variableValues( var ) )
                 {
@@ -206,13 +206,13 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         m_variableValues[node->identifier->value] += values;
     }else if( op == "-=" )
     {
-        foreach( QString value, values )
+        foreach( const QString& value, values )
         {
             m_variableValues[node->identifier->value].removeAll(value);
         }
     }else if( op == "*=" )
     {
-        foreach( QString value, values )
+        foreach( const QString& value, values )
         {
             if( !m_variableValues[node->identifier->value].contains(value) )
             {
@@ -249,7 +249,7 @@ bool QMakeFile::containsVariable( const QString& variable ) const
 QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
 {
     QStringList result;
-    foreach( QString s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
+    foreach( const QString& s, resolveShellGlobbingInternal( absolutefile.mid( 1 ), "/" ) )
     {
         result << '/'+s;
     }
@@ -273,7 +273,7 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
         absolutepath = absoluteDir() + '/' + file;
     }
     QStringList result;
-    foreach( QString s, resolveShellGlobbing( absolutepath ) )
+    foreach( const QString& s, resolveShellGlobbing( absolutepath ) )
     {
         result << QFileInfo( s ).canonicalFilePath();
     }
@@ -296,7 +296,7 @@ QStringList QMakeFile::resolveVariables( const QString& value ) const
     }
     QStringList ret;
     ret << value;
-    foreach( QString variable, parser.variableReferences() )
+    foreach( const QString& variable, parser.variableReferences() )
     {
         VariableInfo vi = parser.variableInfo( variable );
         kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;

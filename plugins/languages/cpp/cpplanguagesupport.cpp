@@ -259,7 +259,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   // if file is a header file search for implementation file
   else if ( headerExtensions.contains( ext ) )
   {
-    foreach(QString ext, sourceExtensions)
+    foreach(const QString& ext, sourceExtensions)
       candidates << ( base + addDot(ext) );
 
     possibleExts = sourceExtensions;
@@ -267,7 +267,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   // if file is an implementation file, search for header file
   else if ( sourceExtensions.contains( ext ) )
   {
-    foreach(QString ext, headerExtensions)
+    foreach(const QString& ext, headerExtensions)
       candidates << ( base + addDot(ext) );
 
     possibleExts = headerExtensions;
@@ -301,7 +301,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   }
   QFileInfo candidateFileWoExt;
   QString candidateFileWoExtString;
-  foreach ( KUrl url, projectFileList )
+  foreach ( const KUrl& url, projectFileList )
   {
     candidateFileWoExt.setFile(url.path());
     //kDebug( 9007 ) << "candidate file: " << url << endl;
@@ -476,7 +476,7 @@ void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
           bool isSource = false;
           QString path = doc->url().path();
 
-          foreach(QString str, sourceExtensions)
+          foreach(const QString& str, sourceExtensions)
             if(path.endsWith(str))
               isSource = true;
 
@@ -519,7 +519,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
   }
 
   if( source.isEmpty() ) {
-    foreach( QString path, *m_standardIncludePaths) {
+    foreach( const QString& path, *m_standardIncludePaths) {
         KUrl u(path);
         if(!hasPath.contains(u)) {
           allPaths << KUrl(path);
@@ -603,7 +603,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
         if (result) {
             bool hadMissingPath = false;
             if( !gotPathsFromManager ) {
-                foreach( QString res, result.paths ) {
+                foreach( const QString &res, result.paths ) {
                     KUrl r(res);
                     r.adjustPath(KUrl::AddTrailingSlash);
                     if(!hasPath.contains(r))
@@ -612,7 +612,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                 }
             } else {
                 //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
-                foreach( QString res, result.paths ) {
+                foreach( const QString& res, result.paths ) {
 
                     KUrl r(res);
                     r.adjustPath(KUrl::AddTrailingSlash);

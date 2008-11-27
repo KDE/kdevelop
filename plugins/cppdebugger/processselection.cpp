@@ -118,8 +118,8 @@ int ProcessSelectionDialog::pidSelected()
 void ProcessSelectionDialog::slotReceivedOutput(const QStringList& lines)
 {
     static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
-    QStringList tmp = lines.filter(ps_output_line);
-    foreach( QString line, lines )
+    const QStringList tmp = lines.filter(ps_output_line);
+    foreach( const QString& line, lines )
     {
         ps_output_line.exactMatch( line );
         new QTreeWidgetItem(m_ui->pids,

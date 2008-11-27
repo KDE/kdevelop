@@ -72,8 +72,8 @@ KDevelop::ProjectItem* AutoMakeImporter::import( KDevelop::ProjectModel* model,
 
     if ( parsedCorrectly )
     {
-        QStringList topLevelSubdirs = m_interface->topSubDirs();
-        foreach ( QString dir, topLevelSubdirs )
+        const QStringList topLevelSubdirs = m_interface->topSubDirs();
+        foreach ( const QString& dir, topLevelSubdirs )
         {
             QString fullPath = m_interface->projectRoot();
             fullPath = fullPath + QDir::separator() + dir;
@@ -104,11 +104,11 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevelop::Project
     AutoMakeDirItem* folderItem = new AutoMakeDirItem( folder, rootItem );
     rootItem->add( folderItem );
 
-    QStringList subdirs = m_interface->subdirsFor( folder );
+    const QStringList subdirs = m_interface->subdirsFor( folder );
 
     if ( !subdirs.isEmpty() )
     {
-        foreach( QString dir, subdirs )
+        foreach( const QString& dir, subdirs )
         {
             QString fullPath = folder.path();
             fullPath = fullPath + QDir::separator() + dir;
@@ -170,7 +170,7 @@ void AutoMakeImporter::createProjectItems( const KUrl& folder, KDevelop::Project
             AutoMakeTargetItem* targetItem = new AutoMakeTargetItem( target, folderItem );
             folderItem->add( targetItem );
             QList<QFileInfo> targetFiles = m_interface->filesForTarget( target );
-            foreach( QFileInfo fi, targetFiles )
+            foreach( const QFileInfo& fi, targetFiles )
                 targetItem->add( new AutoMakeFileItem( KUrl(fi.absoluteFilePath()), targetItem ) );
             break;
         };
