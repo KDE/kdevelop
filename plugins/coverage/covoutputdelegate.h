@@ -40,6 +40,7 @@ public:
 private:
     KStatefulBrush textBrush;
     KStatefulBrush processBrush;
+    KStatefulBrush warningBrush;
 };
 
 }

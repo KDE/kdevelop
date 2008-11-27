@@ -32,6 +32,7 @@ target_link_libraries(kdevveritascoverage
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4_KFILE_LIBS}
     ${KDevPlatform_INTERFACES_LIBRARY})
 install(TARGETS kdevveritascoverage ${INSTALL_TARGETS_DEFAULT_ARGS})
 

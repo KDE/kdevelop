@@ -53,7 +53,8 @@ public:
     LcovJob(const KUrl& root, QObject* parent=0);
     virtual ~LcovJob();
     void setProcess(KProcess *proc); // takes ownership.
-    void setDelegate(CovOutputDelegate *delegate);
+    void setParser(LcovInfoParser* parser);
+    void setDelegate(CovOutputDelegate* delegate);
     virtual void start();
 
 protected:
@@ -67,16 +68,13 @@ private:
     void initProcess();
     void initOutputView();
     void initParser();
-    void spawnCoverageTool();
 
 private:
-    CovOutputDelegate* delegate() const;
     KDevelop::ProcessLineMaker* m_lineMaker;
     KProcess* m_lcov;
-    LcovInfoParser* m_parser;
     KUrl m_root;
     QString m_tmpPath;
-    CovOutputDelegate* m_delegate;
+    LcovInfoParser* m_parser;
 };
 
 }

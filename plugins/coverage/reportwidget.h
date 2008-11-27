@@ -32,6 +32,8 @@ class QLineEdit;
 class QModelIndex;
 class QStandardItem;
 class QTableView;
+class QPushButton;
+class KUrlNavigator;
 
 namespace Veritas
 {
@@ -43,14 +45,20 @@ class LcovInfoParser;
 class ReportModel;
 class ReportProxyModel;
 class ReportViewFactory;
+class CovOutputDelegate;
 
-/*! Coverage report main widget, as shown in the toolview */
-class ReportWidget : public QWidget
+/*! Coverage report main widget, as shown in the toolview 
+ *  @unittest Veritas::ReportWidgetTest */
+class VERITAS_COVERAGE_EXPORT ReportWidget : public QWidget
 {
 Q_OBJECT
 public:
     ReportWidget(QWidget* parent);
     virtual ~ReportWidget();
+
+    /*! initialize child widgets and connects signals.
+        called by ReportViewFactory after construction */
+    void init();
 
 private Q_SLOTS:
     void dispatchClickedSignal(const QModelIndex&);
@@ -60,7 +68,11 @@ private Q_SLOTS:
     void setDirViewState();
     void setFileViewState();
     void updateTableView();
-
+    void updateColumns();
+    
+    void startLcovJob();
+    void jobFinished();
+    
 private:
     /*! updates the coverage statistics labels for a selected dir in the tree */
     void setCoverageStatistics(const QItemSelection&, const QItemSelection&);
@@ -77,9 +89,6 @@ private:
 
     /*! totally reset the widget */
     void reset_();
-    /*! initialize child widgets and connects signals.
-        called by ReportViewFactory after construction */
-    void init();
 
 protected:
     void resizeEvent(QResizeEvent* event);
@@ -99,23 +108,9 @@ private:
     QTimer* m_timer;
     int m_timerTicks;
     QString m_oldDirFilter;
-};
-
-/*! do not reuse this factory. */
-class ReportViewFactory : public KDevelop::IToolViewFactory
-{
-public:
-    ReportViewFactory(LcovInfoParser* parser, const KUrl& root);
-    virtual QWidget* create(QWidget *parent = 0);
-    virtual Qt::DockWidgetArea defaultPosition();
-    virtual QString id() const;
-    virtual void viewCreated(Sublime::View*);
-
-private:
-    KUrl m_root;
-    LcovInfoParser* m_parser;
-    ReportModel* m_model;
-    AnnotationManager* m_anno;
+    KUrlNavigator* m_targetDirectory; // lets the user select a directory to run coverage on
+    CovOutputDelegate* m_delegate;
+    QPushButton* m_startButton;
 };
 
 }

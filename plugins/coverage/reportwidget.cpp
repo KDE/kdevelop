@@ -24,30 +24,43 @@
 #include "reportmodel.h"
 #include "reportproxymodel.h"
 #include "lcovinfoparser.h"
+#include "lcovjob.h"
+#include "covoutputdelegate.h"
 
-#include <QListView>
 #include <QTimer>
 #include <QLabel>
 #include <QLineEdit>
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QHBoxLayout>
+#include <QPushButton>
 #include <KIconLoader>
 #include <KLocale>
+#include <KIcon>
+#include <KProcess>
+#include <KUrlNavigator>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <sublime/view.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 using KDevelop::ICore;
 using KDevelop::IDocument;
 using KDevelop::IDocumentController;
+using KDevelop::IProject;
+using KDevelop::IProjectController;
+using KDevelop::IBuildSystemManager;
 
 using Veritas::AnnotationManager;
 using Veritas::CoveredFile;
+using Veritas::CovOutputDelegate;
 using Veritas::DrillDownView;
 using Veritas::LcovInfoParser;
+using Veritas::LcovJob;
 using Veritas::ReportWidget;
 using Veritas::ReportModel;
 using Veritas::ReportViewFactory;
@@ -61,55 +74,11 @@ public:
 };
 }
 
-//////////////////////////// ReportViewFactory ///////////////////////////////
-
-ReportViewFactory::ReportViewFactory(LcovInfoParser* parser, const KUrl& root)
- : m_root(root), m_parser(parser)
-{
-    m_model = new ReportModel(0);
-    m_model->setRootDirectory(m_root);
-    m_anno = new AnnotationManager(0);
-    QObject::connect(m_parser, SIGNAL(parsedCoverageData(CoveredFile*)), 
-            m_model, SLOT(addCoverageData(CoveredFile*)));
-    QObject::connect(m_parser, SIGNAL(parsedCoverageData(CoveredFile*)),
-            m_anno, SLOT(addCoverageData(CoveredFile*)));
-}
-
-QWidget* ReportViewFactory::create(QWidget *parent)
-{
-    // TODO hmm does this get cleaned when closing the toolview?
-    //      ie when does this parent get destructored?
-    m_model->setParent(parent);
-    m_parser->setParent(parent);
-    ReportProxyModel* p = new ReportProxyModel(parent);
-    m_anno->setParent(parent);
-    p->setSourceModel(m_model);
-    ReportWidget* w = new ReportWidget(parent);
-    w->table()->setModel(p);
-    w->m_manager = m_anno;
-    w->m_proxy = p;
-    w->m_model = m_model;
-    w->init();
-    return w;
-}
-
-Qt::DockWidgetArea ReportViewFactory::defaultPosition()
-{
-    return Qt::RightDockWidgetArea;
-}
-
-QString ReportViewFactory::id() const
-{
-    return "org.kdevelop.CoverageReport";
-}
-
-void ReportViewFactory::viewCreated(Sublime::View* v)
-{}
-
 //////////////////////////////// ReportWidget ///////////////////////////////
 
 void ReportWidget::resizeEvent(QResizeEvent* event)
 {
+    Q_UNUSED(event);
     installEventFilter(this);
     switch(m_state) {
     case DirView: { table()->resizeDirStateColumns(); break; }
@@ -138,7 +107,20 @@ void ReportWidget::init()
     l->setMargin(5);
     l->setSpacing(5);
 
-    QFrame* f = new QFrame;
+    QFrame* sel = new QFrame(this); // uppermost frame. contains a breadcrumb selector widget + 'go' button
+    sel->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
+    l->addWidget(sel);
+    QHBoxLayout* selLay = new QHBoxLayout;
+    sel->setLayout(selLay);
+    QLabel* buildDir = new QLabel(i18n("Build Path: "), this);
+    selLay->addWidget(buildDir);
+    m_targetDirectory = new KUrlNavigator(0, KUrl(QDir::homePath()), this);
+    selLay->addWidget(m_targetDirectory);
+    m_startButton = new QPushButton(KIcon("arrow-right"), QString(), this);
+    selLay->addWidget(m_startButton);
+    connect(m_startButton, SIGNAL(clicked(bool)), SLOT(startLcovJob()));
+    
+    QFrame* f = new QFrame(this); // frame that shows filter box + Line Coverage; Instrumented lines & sloc metrics
     f->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
     l->addWidget(f);
 
@@ -161,12 +143,10 @@ void ReportWidget::init()
     //    |        label3: val3       |
 
 
-    gl->addItem(s1, 0, 0, 4, 1); // rowspan 4
+    gl->addItem(s1, 0, 0, 4, 1); // rowspan 4    
     m_filterBox = new FilterBox(this);
     m_filterBox->resize(250, m_filterBox->height());
     gl->addWidget(m_filterBox, 0, 1, 1, 2);
-    connect(m_filterBox, SIGNAL(textChanged(QString)),
-            m_proxy, SLOT(setFilterWildcard(QString)));
 
     const int FIRST_COL=1;
     gl->addWidget(covTextLabel, 1, FIRST_COL); // row, col, rowspan, colspan
@@ -211,7 +191,10 @@ ReportWidget::ReportWidget(QWidget* parent) :
     m_table(new  DrillDownView(this)),
     m_state(ReportWidget::DirView),
     m_manager(0),
-    m_timer(new QTimer)
+    m_proxy(0),
+    m_model(0),
+    m_timer(new QTimer),
+    m_delegate(new CovOutputDelegate)
 {
     setObjectName("Coverage Report");
     setWindowIcon(SmallIcon("system-file-manager"));
@@ -365,5 +348,60 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
     setCoverageStatistics(indexes.first());
 }
 
+/*! Try to find a project directory for a given build directory */
+KUrl findProjectRootFor(const KUrl& buildDir)
+{
+    foreach(IProject* proj, ICore::self()->projectController()->projects()) {
+//        proj->buildSystemManager()->
+    }
+}
+
+void ReportWidget::startLcovJob()
+{
+    Q_ASSERT(m_delegate); Q_ASSERT(m_targetDirectory); Q_ASSERT(m_startButton->isEnabled());
+    m_startButton->setEnabled(false);
+    m_state = DirView;
+    
+    if (m_model) delete m_model;
+    if (m_manager) delete m_manager;
+    if (m_proxy) delete m_proxy;
+    
+    m_model = new ReportModel(this);
+    m_model->setRootDirectory( m_targetDirectory->url() );
+    m_manager = new AnnotationManager(this);
+    m_proxy = new ReportProxyModel(this);
+    table()->setModel(m_proxy);
+    m_proxy->setSourceModel(m_model);
+
+    LcovJob* job = new LcovJob(m_targetDirectory->url(), m_delegate);
+    LcovInfoParser* parser = new LcovInfoParser(job);
+
+    connect(parser, SIGNAL(parsedCoverageData(CoveredFile*)), m_model, SLOT(addCoverageData(CoveredFile*)));
+    connect(parser, SIGNAL(parsedCoverageData(CoveredFile*)), m_manager, SLOT(addCoverageData(CoveredFile*)));
+    connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateColumns()));
+    connect(m_filterBox, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
+
+    job->setDelegate(m_delegate);
+    job->setProcess(new KProcess);
+    job->setParser(parser);
+
+    ICore::self()->runController()->registerJob(job);
+    connect(job, SIGNAL(finished(KJob*)), SLOT(jobFinished()));
+}
+
+void ReportWidget::updateColumns()
+{
+    switch(m_state) {
+    case DirView: { table()->resizeDirStateColumns(); break; }
+    case FileView: { table()->resizeFileStateColumns(); break; }
+    default: { Q_ASSERT(0); }
+    }
+}
+
+void ReportWidget::jobFinished()
+{
+    Q_ASSERT(!m_startButton->isEnabled());
+    m_startButton->setEnabled(true);
+}
 
 #include "reportwidget.moc"

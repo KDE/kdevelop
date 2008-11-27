@@ -25,20 +25,15 @@
 #include <QVariantList>
 #include <QFileInfo>
 #include <interfaces/iplugin.h>
+#include <interfaces/iuicontroller.h>
 
-class KActionMenu;
 class QDir;
-namespace KDevelop
-{
-class ContextMenuExtension;
-class Context;
-}
 
 namespace Veritas
 {
-class CovOutputDelegate;
+class ReportViewFactory;
 
-/*! Makes coverage context actions available */
+/*! GCC GCOV coverage plugin. Code coverage report with source annotations (line call count). */
 class CoveragePlugin : public KDevelop::IPlugin
 {
 Q_OBJECT
@@ -46,25 +41,26 @@ Q_OBJECT
 public:
     explicit CoveragePlugin(QObject* parent, const QVariantList& = QVariantList());
     virtual ~CoveragePlugin();
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-
-private Q_SLOTS:
-    void startLcovJob();
-    void removeGcdaFiles();
-    void insertGcovFlags();
 
 private:
-    void initReportAction();
-    void initCleanGcdaAction();
-    void initBuildFlagsAction();
     QFileInfoList findGcdaFilesIn(QDir& dir);
 
 private:
-    CovOutputDelegate* m_delegate;
-    KUrl m_buildRoot;
-    KActionMenu* m_ctxMenu;
+    ReportViewFactory* m_factory;
 };
 
-}
+/*! Report toolview factory */
+class ReportViewFactory : public KDevelop::IToolViewFactory
+{
+public:
+    ReportViewFactory();
+    virtual ~ReportViewFactory();
+    
+    virtual QWidget* create(QWidget *parent = 0);
+    virtual Qt::DockWidgetArea defaultPosition();
+    virtual QString id() const;
+};
+
+} // namespace Veritas
 
 #endif // VERITAS_COVERAGEPLUGIN_H

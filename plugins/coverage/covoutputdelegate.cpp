@@ -30,7 +30,8 @@ using Veritas::CovOutputDelegate;
 CovOutputDelegate::CovOutputDelegate(QObject* parent)
       : QItemDelegate(parent),
         textBrush(KColorScheme::View, KColorScheme::NormalText),
-        processBrush(KColorScheme::View, KColorScheme::PositiveText)
+        processBrush(KColorScheme::View, KColorScheme::PositiveText), 
+        warningBrush( KColorScheme::View, KColorScheme::NeutralText )
 {}
 
 CovOutputDelegate::~CovOutputDelegate()
@@ -42,8 +43,11 @@ void CovOutputDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     QStyleOptionViewItem opt = option;
     opt.palette.setBrush(QPalette::Text, textBrush.brush(option.palette));
     QString text = index.data().toString();
+    kDebug() << text;
     if (text.startsWith("Processing")) {
         opt.palette.setBrush(QPalette::Text, processBrush.brush(option.palette));
+    } else if (text.contains("source file is newer than graph file")) {
+        opt.palette.setBrush(QPalette::Text, warningBrush.brush(option.palette));
     }
     QItemDelegate::paint(painter, opt, index);
 }

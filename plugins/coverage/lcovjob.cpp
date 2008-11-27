@@ -71,23 +71,28 @@ using Veritas::AnnotationManager;
 using Veritas::ReportViewFactory;
 
 LcovJob::LcovJob(const KUrl& root, QObject* parent)
-        : OutputJob(parent), m_lcov(0), m_root(root), m_delegate(0)
+        : OutputJob(parent), m_lcov(0), m_root(root), m_parser(0)
 {}
 
 LcovJob::~LcovJob()
 {}
+
+void LcovJob::setDelegate(CovOutputDelegate* delegate)
+{
+    OutputJob::setDelegate(delegate);
+}
+
+void LcovJob::setParser(LcovInfoParser* parser)
+{
+    Q_ASSERT(parser); Q_ASSERT(m_parser == 0);
+    m_parser = parser;
+}
 
 void LcovJob::setProcess(KProcess *proc)
 {
     Q_ASSERT(proc);
     m_lcov = proc;
     m_lcov->setParent(this);
-}
-
-void LcovJob::setDelegate(CovOutputDelegate* delegate)
-{
-    Q_ASSERT(delegate);
-    m_delegate = delegate;
 }
 
 void LcovJob::initProcess()
@@ -127,15 +132,14 @@ void LcovJob::initOutputView()
     setViewType(KDevelop::IOutputView::HistoryView);
     setStandardToolView(KDevelop::IOutputView::TestView);
     setBehaviours(IOutputView::AutoScroll | IOutputView::AllowUserClose);
-    setModel(new CovOutputModel(delegate()), IOutputView::TakeOwnership);
-    setDelegate(delegate());
+    setModel(new CovOutputModel(0), IOutputView::TakeOwnership);
 }
 
 void LcovJob::initParser()
 {
     kDebug() << "";
-
-    m_parser = new LcovInfoParser;
+    
+    Q_ASSERT(m_parser);
     connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
             m_parser, SLOT(parseLines(QStringList)));
 }
@@ -161,24 +165,6 @@ private:
 };
 }
 
-
-void LcovJob::spawnCoverageTool()
-{
-    kDebug() << "";
-
-    UiController* uic = Core::self()->uiControllerInternal();
-    IToolViewFactory* fac = new ReportViewFactory(m_parser, m_root);
-    Sublime::Area* area = uic->activeArea();
-    Sublime::ToolDocument *doc = new Sublime::ToolDocument(QString("Coverage"), uic, new UiToolViewFactory(fac));
-    Sublime::View* view = doc->createView();
-    Sublime::Position pos = Sublime::dockAreaToPosition(fac->defaultPosition());
-    area->addToolView(view, pos);
-    connect(view, SIGNAL(raise(Sublime::View*)),
-            uic, SLOT(raiseToolView(Sublime::View*)));
-    uic->raiseToolView(view);
-    fac->viewCreated(view);
-}
-
 void LcovJob::start()
 {
     kDebug() << "";
@@ -186,7 +172,7 @@ void LcovJob::start()
     startOutput();
     initProcess();
     initParser();
-    spawnCoverageTool();
+    //spawnCoverageTool();
 
     kDebug() << "Executing " << m_lcov->program().join(" ");
     m_lcov->start();
@@ -206,12 +192,6 @@ void LcovJob::slotError(QProcess::ProcessError)
     m_lcov->kill();
     setError(UserDefinedError);
     emitResult();
-}
-
-CovOutputDelegate* LcovJob::delegate() const
-{
-    Q_ASSERT(m_delegate);
-    return m_delegate;
 }
 
 CovOutputModel* LcovJob::model() const
