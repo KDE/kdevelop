@@ -36,6 +36,10 @@ class PluginPreferences : public KCModule
     Q_OBJECT
 public:
     PluginPreferences( QWidget *, const QVariantList & );
+    void load();
+    void save();
+    void reparseConfig( const QByteArray& );
+    void defaults();
 private:
     KPluginSelector* selector;
 };

@@ -25,6 +25,7 @@
 #include <kaboutdata.h>
 #include <kpluginselector.h>
 #include <kplugininfo.h>
+#include <ksettings/dispatcher.h>
 
 #include <interfaces/isession.h>
 
@@ -53,7 +54,34 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
             plugins << info;
         }
     }
-    selector->addPlugins( plugins, KPluginSelector::IgnoreConfigFile, QString(), QString(), Core::self()->activeSession()->config() );
+    selector->addPlugins( plugins, KPluginSelector::ReadConfigFile, QString(), QString(), Core::self()->activeSession()->config() );
+    connect( selector, SIGNAL( changed(bool) ), this, SLOT( changed() ) );
+    connect( selector, SIGNAL( configComitted(const QByteArray&) ), this, SLOT( reparseConfig(const QByteArray&) ) );
+    selector->load();
+}
+
+void PluginPreferences::reparseConfig( const QByteArray& conf )
+{
+    KSettings::Dispatcher::reparseConfiguration( conf );
+}
+
+void PluginPreferences::defaults()
+{
+    selector->defaults();
+    KCModule::defaults();
+}
+
+void PluginPreferences::save()
+{
+    selector->save();
+    KCModule::save();
+}
+
+void PluginPreferences::load()
+{
+    selector->load();
+    Core::self()->pluginControllerInternal()->updateLoadedPlugins();
+    KCModule::load();
 }
 
 }
