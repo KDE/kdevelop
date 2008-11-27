@@ -44,6 +44,7 @@
 #include <QAbstractItemView>
 #include <QDir>
 #include <KAction>
+#include <KAboutData>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KDebug>
