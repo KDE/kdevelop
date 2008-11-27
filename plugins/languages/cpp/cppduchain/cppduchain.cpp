@@ -218,7 +218,8 @@ QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunct
   QByteArray signature;
   if(parenBegin < parenEnd && parenBegin != -1) {
     id = Identifier(IndexedString(fullFunction.left(parenBegin).trimmed()));
-    signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin+1, parenEnd-parenBegin-1).data());
+    signature = QMetaObject::normalizedSignature(fullFunction.mid(parenBegin, parenEnd-parenBegin+1).data());
+    signature = signature.mid(1, signature.length()-2);
   }
   
   return qMakePair(id, signature);

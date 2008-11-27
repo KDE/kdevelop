@@ -628,7 +628,8 @@ Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* ran
       fun->setIsAbstract(m_declarationHasInitializer);
       fun->setIsSlot(m_accessPolicyStack.top() & FunctionIsSlot);
       fun->setIsSignal(m_accessPolicyStack.top() & FunctionIsSignal);
-      IndexedString signature(QMetaObject::normalizedSignature(m_qtFunctionSignature.constData()));
+      QByteArray temp(QMetaObject::normalizedSignature("(" + m_qtFunctionSignature + ")"));
+      IndexedString signature(temp.mid(1, temp.length()-2));
 //       kDebug() << "normalized signature:" << signature.str() << "from:" << QString::fromUtf8(m_qtFunctionSignature);
       fun->setNormalizedSignature(signature);
       return fun;

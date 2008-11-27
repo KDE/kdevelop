@@ -1518,7 +1518,7 @@ void TestDUChain::testSignalSlotDeclaration() {
   {
     QByteArray text("namespace A { class B;} class Q { public slots: void slot(A::B b, const Q* q); }; ");
     
-    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
+    TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
@@ -1534,7 +1534,7 @@ void TestDUChain::testSignalSlotDeclaration() {
 
 void TestDUChain::testSignalSlotUse() {
   {
-    QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_sig_slot__( signal1(TE*, char)), this, __qt_sig_slot__(slot2(TE*))); \nconnect(this, __qt_sig_slot__(signal2()), \n__qt_sig_slot__(slot1())); } };");
+    QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_sig_slot__( signal1(TE*, const char&)), this, __qt_sig_slot__(slot2(TE*))); \nconnect(this, __qt_sig_slot__(signal2()), \n__qt_sig_slot__(slot1())); } };");
     
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
@@ -1551,7 +1551,7 @@ void TestDUChain::testSignalSlotUse() {
     kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();*/
     QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 16, 3, 21).textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 74, 1, 79).textRange());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 81, 1, 86).textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[2]->uses().count());
     QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 31, 1, 38));
     QVERIFY(top->childContexts()[1]->localDeclarations()[3]->uses().count());

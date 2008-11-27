@@ -1681,8 +1681,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
     
     IndexedString sig;
-    if(node->name->end_token-1 >= node->name->id+2) //Skip the parens
-      sig = IndexedString(QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+2, node->name->end_token-1) ));
+    if(node->name->end_token-1 >= node->name->id+2) {
+      QByteArray tempSig = QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+1, node->name->end_token) );
+      tempSig = tempSig.mid(1, tempSig.length()-2);
+      sig = IndexedString(tempSig);
+    }
 
     Identifier id(tokenFromIndex(node->name->id).symbol());
     
