@@ -45,7 +45,7 @@ ImportProject::ImportProject(AppWizardPlugin *plugin, QWidget *parent)
     directory->setMode(KFile::Directory|KFile::ExistingOnly);
 
     //connect( fetchModuleButton, SIGNAL(clicked()), SLOT(slotFetchModulesFromRepository()) );
-    connect(directory, SIGNAL(urlSelected(const QString& )), SLOT(dirChanged()));
+    connect(directory, SIGNAL(urlSelected(const KUrl& )), SLOT(dirChanged()));
     connect(directory, SIGNAL(returnPressed()), SLOT(dirChanged()));
     connect(projectName, SIGNAL(textEdited(const QString&)), SLOT(validateProjectName(const QString&)));
     directory->installEventFilter(this);
