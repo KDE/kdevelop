@@ -293,7 +293,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     
     if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
       foreach(Cpp::OverloadResolutionFunction function, parentContext()->functions()) {
-        if(function.function.declaration() && function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect") {
+        if(function.function.declaration() && (function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect" || function.function.declaration()->qualifiedIdentifier().toString() == "QObject::disconnect")) {
           FunctionType::Ptr funType = function.function.declaration()->type<FunctionType>();
           if(funType && funType->arguments().size() > function.matchedArguments) {
             if(function.matchedArguments == 1 && parentContext()->m_knownArgumentTypes.size() >= 1) {
