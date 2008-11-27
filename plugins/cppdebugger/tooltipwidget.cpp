@@ -24,6 +24,7 @@
 #include <QScrollBar>
 #include <QDesktopWidget>
 #include <KTextEditor/View>
+#include <KLocale>
 
 using namespace GDBDebugger;
 
@@ -70,9 +71,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     QHBoxLayout* inner = new QHBoxLayout();
     inner->setContentsMargins(11, 0, 11, 6);
     l->addLayout(inner);
-    QLabel* label = new QLabel("<a href=add_watch>Watch this</a>", this);
+    QLabel* label = new QLabel(i18n("<a href=add_watch>Watch this</a>"), this);
     inner->addWidget(label);
-    QLabel* label2 = new QLabel("<a href=watchpoint>Stop on change</a>", 
+    QLabel* label2 = new QLabel(i18n("<a href=watchpoint>Stop on change</a>"), 
                                 this);
     inner->addWidget(label2);
     connect(label, SIGNAL(linkActivated(const QString&)),

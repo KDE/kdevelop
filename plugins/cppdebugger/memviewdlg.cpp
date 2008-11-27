@@ -287,8 +287,7 @@ namespace GDBDebugger
         amountAsString_ = rangeSelector_->amountLineEdit->text();
         start_ = startAsString_.toUInt(0, 0);
 
-        setWindowTitle(QString("%1 (%2 bytes)")
-                   .arg(startAsString_).arg(amount_));
+        setWindowTitle(i18n("%1 (%2 bytes)",startAsString_,amount_));
         emit captionChanged(windowTitle());
 
         KHE::BytesEditInterface* bytesEditor
