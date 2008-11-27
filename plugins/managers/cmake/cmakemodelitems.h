@@ -74,11 +74,11 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         Definitions definitions() const { return m_defines; }
         void setDefinitions(const Definitions& defs) { m_defines=defs; }
         
-        void setTopDUContext(KDevelop::IndexedTopDUContext ctx) { m_topcontext=ctx; }
-        KDevelop::IndexedTopDUContext topDUContext() const { return m_topcontext;}
+        void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }
+        KDevelop::ReferencedTopDUContext topDUContext() const { return m_topcontext;}
         
     private:
-        KDevelop::IndexedTopDUContext m_topcontext;
+        KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;
         Definitions m_defines;
 };

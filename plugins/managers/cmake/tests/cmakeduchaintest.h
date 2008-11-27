@@ -42,7 +42,7 @@ class CMakeDUChainTest : public QObject
         void testDUChainWalk_data();
         void testDUChainWalk();
     private:
-        KDevelop::TopDUContext* m_fakeContext;
+        KDevelop::ReferencedTopDUContext m_fakeContext;
 };
 
 #endif

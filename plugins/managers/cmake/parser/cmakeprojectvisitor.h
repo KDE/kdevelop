@@ -124,7 +124,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QString findExecutable(const QString& filenames, const QStringList& dirs,
                                     const QStringList& pathSuffixes=QStringList()) const;
         
-        KDevelop::TopDUContext* context() const { return m_topctx; }
+        KDevelop::ReferencedTopDUContext context() const { return m_topctx; }
         const QMap<QString, KDevelop::IndexedDeclaration>& declarationsPerTarget() { return m_declarationsPerTarget; }
         QStringList resolveVariable(const CMakeFunctionArgument &exp);
 
