@@ -97,6 +97,8 @@ public:
         Later
     };
 
+    QList<KPluginInfo> allPluginInfos() const;
+
     /**
      * Directly unload the given \a plugin, either deleting it now or \a later.
      *

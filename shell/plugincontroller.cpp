@@ -498,6 +498,11 @@ void PluginController::unloadProjectPlugins()
     }
 }
 
+QList<KPluginInfo> PluginController::allPluginInfos() const
+{
+    return d->plugins;
+}
+
 }
 #include "plugincontroller.moc"
 
