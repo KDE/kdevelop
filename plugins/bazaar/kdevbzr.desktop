@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates Bazaar to KDevelop
+Comment[el]=Αυτό το πρόσθετο ενσωματώνει το Bazaar στο KDevelop
 Name=KDevBazaar
 GenericName=Bazaar frontend
+GenericName[el]=Σύστημα περιβάλλοντος Bazaar
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevbzr
 X-KDE-PluginInfo-Name=kdevbzr

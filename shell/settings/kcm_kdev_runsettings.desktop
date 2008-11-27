@@ -11,5 +11,7 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Run Settings
+Name[el]=Ρυθμίσεις εκτέλεσης
 Comment=Configure Run Executable settings
+Comment[el]=Ρυθμίσεις εκτέλεσης του εκτελέσιμου
 

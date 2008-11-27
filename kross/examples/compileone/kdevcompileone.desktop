@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Compile a file
+Comment[el]=Μεταγλώττιση ενός αρχείου
 Name=CompileOne
 GenericName=CompileOne
 ServiceTypes=KDevelop/Plugin

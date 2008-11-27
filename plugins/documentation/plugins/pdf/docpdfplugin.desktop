@@ -3,6 +3,7 @@ Type=Service
 Name=DocPDFPlugin
 Exec=blubb
 Comment=Documentation plugin for PDF format
+Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή PDF
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocpdfplugin

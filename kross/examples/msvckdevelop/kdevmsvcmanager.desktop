@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop MSVC Manager
+Name[el]=Διαχειριστής MSVC του KDevelop
 Comment=Imports MSVC projects
+Comment[el]=Εισαγωγή έργων MSVC
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevmsvcmanager

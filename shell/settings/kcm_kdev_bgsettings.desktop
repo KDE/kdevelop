@@ -11,5 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Background Parser
+Name[el]=Αναλυτής παρασκηνίου
 Comment=Configure Background Parser settings
+Comment[el]=Ρυθμίσεις αναλυτή παρασκηνίου
 

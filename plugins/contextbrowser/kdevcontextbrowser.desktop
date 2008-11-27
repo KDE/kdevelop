@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.
+Comment[el]=Αυτό το πρόσθετο εμφανίζει πληροφορίες σχετικά με την τρέχουσα γλώσσα σε μια πλευρική προβολή, και τονίζει τις σχετικές δηλώσεις και χρήσεις.
 Name=KDevContextBrowser
 GenericName=ContextBrowser
+GenericName[el]=Περιηγητής περιεχομένου
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcontextbrowser
 X-KDevelop-Version=6

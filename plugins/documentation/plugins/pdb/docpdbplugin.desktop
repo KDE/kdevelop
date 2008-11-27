@@ -3,6 +3,7 @@ Type=Service
 Name=DocPDBPlugin
 Exec=blubb
 Comment=Documentation plugin for Palmdoc format
+Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή Palmdoc
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocpdbplugin

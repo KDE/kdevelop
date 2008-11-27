@@ -11,5 +11,8 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Environment
+Name[el]=Περιβάλλον
+Name[uk]=Середовище
 Comment=Configure Environment Variable settings
+Comment[el]=Ρυθμίσεις μεταβλητών περιβάλλοντος
 

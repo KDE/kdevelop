@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin is purely for unit-test
+Comment[el]=Αυτό το πρόσθετο προορίζεται για τον έλεγχο μονάδας
 Name=KDevNonGuiInterface
 GenericName=NonGuiInterface
+GenericName[el]=Περιβάλλον χωρίς Gui
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=/home/andreas/src/build/kdevplatform/lib/kdevnonguiinterface
 X-KDevelop-Version=6

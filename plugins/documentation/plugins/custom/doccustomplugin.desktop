@@ -3,6 +3,7 @@ Type=Service
 Name=DocCustomPlugin
 Exec=blubb
 Comment=Documentation plugin for all types of documentation
+Comment[el]=Πρόσθετο τεκμηρίωσης για όλους τους τύπους τεκμηρίωσης
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdoccustomplugin

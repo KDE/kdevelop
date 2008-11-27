@@ -3,6 +3,7 @@ Type=Service
 Name=DocCHMPlugin
 Exec=blubb
 Comment=Documentation plugin for CHM documentation
+Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση CHM
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdocchmplugin

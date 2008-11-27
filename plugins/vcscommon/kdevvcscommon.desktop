@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates common vcs functionality to KDevelop.
+Comment[el]=Αυτό το πρόσθετο ενσωματώνει λειτουργίες vcs στο KDevelop
 Name=KDevVcsCommon
 GenericName=VcsCommon plugin
+GenericName[el]=Πρόσθετο VcsCommon
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevvcscommon
 X-KDE-PluginInfo-Name=kdevvcscommon

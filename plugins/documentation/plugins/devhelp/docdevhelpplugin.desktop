@@ -2,6 +2,7 @@
 Type=Service
 Name=DevHelpPlugin
 Comment=Documentation plugin for DevHelp documentation
+Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση DevHelp
 Exec=blubb
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5

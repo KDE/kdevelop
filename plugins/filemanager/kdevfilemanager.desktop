@@ -2,8 +2,12 @@
 Type=Service
 Exec=blubb
 Comment=This plugin brings a filemanager to KDevelop.
+Comment[el]=Αυτό το πρόσθετο ενσωματώνει ένα διαχειριστή αρχείων στο KDevelop
 Name=KDevFileManager
 GenericName=File Manager
+GenericName[el]=Διαχειριστής αρχείων
+GenericName[pt]=Gestor de Ficheiros
+GenericName[uk]=Менеджер файлів
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevfilemanager
 X-KDE-PluginInfo-Name=kdevfilemanager

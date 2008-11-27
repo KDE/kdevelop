@@ -2,6 +2,7 @@
 Type=Service
 Exec=foobar
 Comment=Embeddable HTMLHelp Viewer
+Comment[el]=Ενσωματωμένος προβολέας HTMLHelp
 MimeType=application/chm
 Name=KChmPart
 ServiceTypes=KParts/ReadOnlyPart,Browser/View

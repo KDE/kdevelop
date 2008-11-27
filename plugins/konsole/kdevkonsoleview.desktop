@@ -2,8 +2,11 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides KDevelop with an embedded konsole for quick and easy command line access.
+Comment[el]=Αυτό το πρόσθετο προσφέρει στο KDevelop μια ενσωματωμένη konsole για γρήγορη και εύκολη πρόσβαση σε γραμμή εντολών.
 Name=KDevKonsoleView
 GenericName=Embedded Konsole
+GenericName[el]=Ενσωματωμένη Konsole
+GenericName[uk]=Вбудована Konsole
 Icon=konsole
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevkonsoleview

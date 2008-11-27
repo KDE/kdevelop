@@ -11,5 +11,8 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Code Completion
+Name[el]=Συμπλήρωση κώδικα
+Name[uk]=Автозавершення коду
 Comment=Configure Code Completion settings
+Comment[el]=Ρυθμίσεις συμπλήρωσης κώδικα
 

@@ -2,7 +2,9 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop Kross Support
+Name[el]=Υποστήριξη Kross του KDevelop
 Comment=KDevelop Kross Support
+Comment[el]=Υποστήριξη Kross του KDevelop
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevkrossplugin

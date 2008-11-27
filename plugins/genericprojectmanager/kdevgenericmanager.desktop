@@ -1,7 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=KDevelop Generic Importer
+Name[el]=Γενικευμένος εισαγωγέας KDevelop
 Comment=Allow KDevelop to manage generic projects
+Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevgenericmanager

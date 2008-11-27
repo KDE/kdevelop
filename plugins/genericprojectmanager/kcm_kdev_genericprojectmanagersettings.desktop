@@ -11,4 +11,7 @@ X-KDE-ParentComponents=KDevGenericManager
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project Settings
+Name[el]=Ρυθμίσεις έργου
+Name[uk]=Параметри проекту
 Comment=Configure Project
+Comment[el]=Ρύθμιση έργου

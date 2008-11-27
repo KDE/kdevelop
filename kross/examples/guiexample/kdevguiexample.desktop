@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=GUI Example
+Comment[el]=Παράδειγμα GUI
 Name=GUIExample
 GenericName=GUIExample
 ServiceTypes=KDevelop/Plugin

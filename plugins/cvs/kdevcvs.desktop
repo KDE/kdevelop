@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates CVS to KDevelop
+Comment[el]=Το πρόσθετο αυτό ενσωματώνει το CVS στο KDevelop
 Name=KDevCvs
 GenericName=CVS frontend
+GenericName[el]=Σύστημα περιβάλλοντος CVS
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcvs
 X-KDE-PluginInfo-Name=kdevcvs

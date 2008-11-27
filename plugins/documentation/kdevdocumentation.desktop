@@ -2,8 +2,11 @@
 Type=Service
 Exec=blubb
 Comment=The Documentation plugin offers browsing and searching in local and online documentation with support for multiple documentation systems.
+Comment[el]=Το πρόσθετο τεκμηρίωσης προσφέρει περιήγηση και αναζήτηση σε τοπική και απομακρυσμένη τεκμηρίωση για πολλαπλά συστήματα τεκμηρίωσης.
 Name=KDevDocumentation
 GenericName=Documentation
+GenericName[el]=Τεκμηρίωση
+GenericName[uk]=Документація
 Icon=khelpcenter
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Scope=Global

@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows collaboration using kdevelop
+Comment[el]=Το πρόσθετο αυτό επιτρέπει τη συνεργασία στη χρήση του kdevelop
 Name=KDevTeamwork
 GenericName=Teamwork
+GenericName[el]=Ομαδική εργασία
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevteamwork
 X-KDE-PluginInfo-Name=kdevteamwork

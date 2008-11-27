@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows quick access to project files and language-items like classes/functions.
+Comment[el]=Το πρόσθετο αυτό επιτρέπει τη γρήγορη πρόσβαση σε αρχεία έργου και αντικείμενα γλώσσας όπως κλάσεις/συναρτήσεις.
 Name=KDevQuickopen
 GenericName=Quickopen
+GenericName[el]=Γρήγορο άνοιγμα
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevquickopen
 X-KDevelop-Version=6

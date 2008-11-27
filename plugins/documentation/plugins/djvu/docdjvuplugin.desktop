@@ -3,6 +3,7 @@ Type=Service
 Name=DocDjvuPlugin
 Exec=blubb
 Comment=Documentation plugin for djvu format
+Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή djvu
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocdjvuplugin

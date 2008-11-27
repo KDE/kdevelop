@@ -2,8 +2,10 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates Mercurial to KDevelop
+Comment[el]=Αυτό το πρόσθετο ενσωματώνει το Mercurial στο KDevelop
 Name=KDevMercurial
 GenericName=Mercurial frontend
+GenericName[el]=Σύστημα περιβάλλοντος Mercurial
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevhg
 X-KDE-PluginInfo-Name=kdevhg

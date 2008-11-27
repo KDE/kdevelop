@@ -3,6 +3,7 @@ Type=Service
 Name=DocKDevTOCPlugin
 Exec=blubb
 Comment=Documentation plugin for KDevelopTOC documentation
+Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση τύπου KDevelopTOC
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdockdevtocplugin
