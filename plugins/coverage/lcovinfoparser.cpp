@@ -60,7 +60,7 @@ inline bool firstTwoCharsEqual(const char* one, char* two)
 
 void LcovInfoParser::parseLines(const QStringList& lines)
 {
-    foreach(QString l, lines) parseLine(l);
+    foreach(const QString& l, lines) parseLine(l);
 }
 
 void LcovInfoParser::parseLine(const QString& line)

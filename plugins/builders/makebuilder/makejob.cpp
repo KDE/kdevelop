@@ -197,7 +197,7 @@ QStringList MakeJob::computeBuildCommand() const
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());
     if( ! extraOptions.isEmpty() )
     {
-        foreach(const QString option, KShell::splitArgs( extraOptions ) )
+        foreach(const QString& option, KShell::splitArgs( extraOptions ) )
             cmdline << option;
     }
 
@@ -232,9 +232,9 @@ QMap<QString, QString> MakeJob::environmentVars() const
     QString defaultProfile = builderGroup.readEntry(
             "Default Make Environment Profile", "default" );
 
-    QStringList procDefaultList = QProcess::systemEnvironment();
+    const QStringList procDefaultList = QProcess::systemEnvironment();
     QMap<QString, QString> retMap;
-    foreach( QString _line, procDefaultList )
+    foreach( const QString &_line, procDefaultList )
     {
         QString varName = _line.section( '=', 0, 0 );
         QString varValue = _line.section( '=', 1 );

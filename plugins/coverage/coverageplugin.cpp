@@ -114,8 +114,8 @@ QFileInfoList CoveragePlugin::findGcdaFilesIn(QDir& dir)
     QFileInfoList gcdaFiles;
     QDir current(dir);
     current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);
-    QStringList subDirs = current.entryList();
-    foreach(QString subDir, subDirs) {
+    const QStringList subDirs = current.entryList();
+    foreach(const QString& subDir, subDirs) {
         current.cd(subDir);
         gcdaFiles += findGcdaFilesIn(current);
         current.cdUp();
@@ -130,8 +130,8 @@ void CoveragePlugin::removeGcdaFiles()
 {
     if (m_buildRoot.isEmpty()) return;
     QDir root(m_buildRoot.path());
-    QFileInfoList gcdaFiles = findGcdaFilesIn(root);
-    foreach(QFileInfo f, gcdaFiles) {
+    const QFileInfoList gcdaFiles = findGcdaFilesIn(root);
+    foreach(const QFileInfo& f, gcdaFiles) {
         kDebug() << "Removing " << f.absoluteFilePath();
         QFile::remove(f.absoluteFilePath());
     }

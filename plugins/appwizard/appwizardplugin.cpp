@@ -331,7 +331,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
 {
     kDebug() << "unpacking dir:" << dir->name() << "to" << dest;
-    QStringList entries = dir->entries();
+    const QStringList entries = dir->entries();
     kDebug() << "entries:" << entries.join(",");
 
     //This extra tempdir is needed just for the files files have special names,
@@ -344,7 +344,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 
     bool ret = true;
 
-    foreach (QString entry, entries)
+    foreach (const QString& entry, entries)
     {
         if (entry.endsWith(".kdevtemplate"))
             continue;

@@ -39,8 +39,8 @@ void ProjectTemplatesModel::refresh()
     extractTemplateDescriptions();
 
     KStandardDirs *dirs = m_plugin->componentData().dirs();
-    QStringList templateDescriptions = dirs->findAllResources("apptemplate_descriptions");
-    foreach (QString templateDescription, templateDescriptions)
+    const QStringList templateDescriptions = dirs->findAllResources("apptemplate_descriptions");
+    foreach (const QString &templateDescription, templateDescriptions)
     {
         KConfig templateConfig(templateDescription);
         KConfigGroup general(&templateConfig, "General");
@@ -59,7 +59,7 @@ ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, cons
 
     QStandardItem *parent = invisibleRootItem();
     QStringList currentPath;
-    foreach (QString entry, path)
+    foreach (const QString& entry, path)
     {
         currentPath << entry;
         if (!m_templateItems.contains(currentPath.join("/")))
@@ -85,7 +85,7 @@ void ProjectTemplatesModel::extractTemplateDescriptions()
 
     QString localDescriptionsDir = dirs->saveLocation("apptemplate_descriptions");
 
-    foreach (QString archName, templateArchives)
+    foreach (const QString &archName, templateArchives)
     {
         kDebug(9010) << "processing template" << archName;
 #ifdef Q_WS_WIN

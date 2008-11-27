@@ -50,7 +50,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefi
   //We have found a potential declaration. Now find the shortest include path.
   QString shortestDirective;
   bool isRelativeToCurrentDir = false;
-  foreach(KUrl includePath, includePaths) {
+  foreach(const KUrl& includePath, includePaths) {
     QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
     
     if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith("..")))) {

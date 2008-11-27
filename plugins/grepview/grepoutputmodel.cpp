@@ -144,7 +144,7 @@ QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex& currentI
 
 void GrepOutputModel::appendOutputs( const QStringList &lines )
 {
-    foreach( QString line, lines )
+    foreach( const QString& line, lines )
     {
         int pos;
         QString filename, linenumber, rest;
@@ -185,7 +185,7 @@ void GrepOutputModel::appendOutputs( const QStringList &lines )
 
 void GrepOutputModel::appendErrors( const QStringList &lines )
 {
-    foreach( QString line, lines )
+    foreach( const QString& line, lines )
         appendRow( new QStandardItem(line) );
 }
 
