@@ -286,10 +286,13 @@ void CMakeProjectManager::initializeProject(KDevelop::IProject* project, const K
     else
         group.writeEntry("CMakeDir", m_modulePathDef);
 
+    ReferencedTopDUContext ref=m_buildstrapContext;
     foreach(const QString& script, cmakeInitScripts)
     {
-        includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()), project);
+        ref = includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()),
+                              project, ref);
     }
+    m_buildstrapContext=ref;
 }
 
 KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
@@ -369,14 +372,15 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 }
 
 
-void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject * project)
+KDevelop::ReferencedTopDUContext CMakeProjectManager::includeScript(const QString& file,
+                                                        KDevelop::IProject * project, ReferencedTopDUContext parent)
 {
     kDebug(9042) << "Running cmake script: " << file;
     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
     if(f.isEmpty())
     {
         kDebug() << "There is no such file: " << file;
-        return;
+        return 0;
     }
 
     VariableMap *vm=&m_varsPerProject[project];
@@ -384,7 +388,7 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
 
-    CMakeProjectVisitor v(file, m_buildstrapContext);
+    CMakeProjectVisitor v(file, parent);
     v.setCacheValues( &m_projectCache[project] );
     v.setVariableMap(vm);
     v.setMacroMap(mm);
@@ -396,6 +400,7 @@ void CMakeProjectManager::includeScript(const QString& file, KDevelop::IProject 
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
 
     m_watchers[project]->addFile(file);
+    return v.context();
 }
 
 QStringList removeMatches(const QString& exp, const QStringList& orig)

@@ -133,7 +133,8 @@ private:
     
     void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
-    void includeScript(const QString& File, KDevelop::IProject * project);
+    KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
+                                                    KDevelop::ReferencedTopDUContext parent);
     
     VariableMap m_varsDef;
     QStringList m_modulePathDef;
