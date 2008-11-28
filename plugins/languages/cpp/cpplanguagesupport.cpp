@@ -674,7 +674,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
     }
 
     //Insert the standard-paths at the end
-    foreach( QString path, *m_standardIncludePaths) {
+    foreach( const QString& path, *m_standardIncludePaths) {
       KUrl u(path);
       if(!hasPath.contains(u))
         allPaths << KUrl(path);
@@ -758,7 +758,7 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
     bool needSkip = !skipPath.isEmpty();
 
 restart:
-    foreach( KUrl path, includePaths ) {
+    foreach( const KUrl& path, includePaths ) {
         if( needSkip ) {
             if( path == skipPath ) {
                 needSkip = false;
@@ -784,7 +784,7 @@ restart:
 
     if( ret.first.isEmpty() && !quiet ) {
         kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
-        foreach( KUrl path, includePaths )
+        foreach( const KUrl& path, includePaths )
             kDebug(9007) << path;
     }
 

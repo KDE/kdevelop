@@ -70,7 +70,7 @@ void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recur
     // emitted first, and signal for child directories are emitted at next, which results in crash.
     // So, when removing a directory, remove all of its children files and directories
         QList<QString> dirkeys = d->m_folderHash.keys();
-        Q_FOREACH( QString _key, dirkeys )
+        Q_FOREACH( const QString& _key, dirkeys )
         {
             if( _key.contains(path) )
             {

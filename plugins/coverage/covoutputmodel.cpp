@@ -67,7 +67,7 @@ void CovOutputModel::appendOutputs(const QStringList &lines)
 
 void CovOutputModel::appendErrors(const QStringList &lines)
 {
-    foreach(QString line, lines) {
+    foreach(const QString& line, lines) {
         appendRow(new QStandardItem(line));
     }
 }

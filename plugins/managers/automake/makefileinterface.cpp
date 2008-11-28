@@ -170,7 +170,7 @@ bool MakefileInterface::parse( const KUrl& dir, ParserRecursion recursive )
 
 
     QStringList subdirs = subdirsFor( dir );
-    foreach( QString sd, subdirs )
+    foreach( const QString& sd, subdirs )
     {
         kDebug(9020) << "Beginning parsing of '" << sd << "'";
         parse( dir.path() + '/' + sd, recursive );
@@ -284,7 +284,7 @@ QList<TargetInfo> MakefileInterface::targetsForFolder( const KUrl& folder ) cons
             AssignmentAST* assignment = static_cast<AssignmentAST*>( (*cit) );
             if (  assignment->scopedID.contains( AutoMake::targetPrimaries ) )
             {
-                foreach( QString target, assignment->values )
+                foreach( const QString& target, assignment->values )
                 {
                     if ( target == "#" || target == "\\"  )
                         continue;
@@ -410,7 +410,7 @@ QList<QFileInfo> MakefileInterface::filesForTarget( const TargetInfo& target ) c
 
 
     QStringList valuesList = valuesForId( targetId, ast );
-    foreach( QString value, valuesList )
+    foreach( const QString& value, valuesList )
     {
         if ( value == QLatin1String( "\\" ) )
             continue;
