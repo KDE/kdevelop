@@ -53,13 +53,13 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 bool QMakeProjectFile::read()
 {
-    foreach( QString var, m_mkspecs->variables() )
+    foreach( const QString& var, m_mkspecs->variables() )
     {
         m_variableValues[var] = m_mkspecs->variableValues( var );
     }
     if( m_cache )
     {
-        foreach( QString var, m_cache->variables() )
+        foreach( const QString& var, m_cache->variables() )
         {
             m_variableValues[var] = m_cache->variableValues( var );
         }
@@ -71,7 +71,7 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
 {
     kDebug(9024) << "Fetching subprojects";
     QList<QMakeProjectFile*> list;
-    foreach( QString subdir, variableValues( "SUBDIRS" ) )
+    foreach(  QString subdir, variableValues( "SUBDIRS" ) )
     {
         QString fileOrPath;
         kDebug(9024) << "Found value:" << subdir;
@@ -126,14 +126,14 @@ KUrl::List QMakeProjectFile::includeDirectories() const
 
     KUrl::List list;
     kDebug(9024) << variableValues("INCLUDEPATH");
-    foreach( QString val, variableValues("INCLUDEPATH") )
+    foreach( const QString& val, variableValues("INCLUDEPATH") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
             list << url;
     }
     kDebug(9024) << variableValues("QMAKE_INCDIR");
-    foreach( QString val, variableValues("QMAKE_INCDIR") )
+    foreach( const QString& val, variableValues("QMAKE_INCDIR") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
@@ -142,7 +142,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     kDebug(9024) << variableValues("QMAKE_INCDIR_OPENGL");
     if( variableValues("CONFIG").contains("opengl") )
     {
-        foreach( QString val, variableValues("QMAKE_INCDIR_OPENGL") )
+        foreach( const QString& val, variableValues("QMAKE_INCDIR_OPENGL") )
         {
             KUrl url(val);
             if( !list.contains( url ) )
@@ -154,7 +154,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     {
         //@TODO add QtCore,QtGui and so on depending on CONFIG values,
         //      as QMAKE_INCDIR_QT only contains the include/ dir
-        foreach( QString val, variableValues("QMAKE_INCDIR_QT") )
+        foreach( const QString& val, variableValues("QMAKE_INCDIR_QT") )
         {
             KUrl url(val);
             if( !list.contains( url ) )
@@ -164,7 +164,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     kDebug(9024) << variableValues("QMAKE_INCDIR_THREAD");
     if( variableValues("CONFIG").contains("thread") )
     {
-        foreach( QString val, variableValues("QMAKE_INCDIR_THREAD") )
+        foreach( const QString& val, variableValues("QMAKE_INCDIR_THREAD") )
         {
             KUrl url(val);
             if( !list.contains( url ) )
@@ -174,7 +174,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     kDebug(9024) << variableValues("QMAKE_INCDIR_X11");
     if( variableValues("CONFIG").contains("x11") )
     {
-        foreach( QString val, variableValues("QMAKE_INCDIR_X11") )
+        foreach( const QString& val, variableValues("QMAKE_INCDIR_X11") )
         {
             KUrl url(val);
             if( !list.contains( url ) )
@@ -190,9 +190,9 @@ KUrl::List QMakeProjectFile::files() const
 
 
     KUrl::List list;
-    foreach( QString variable, QMakeProjectFile::FileVariables )
+    foreach( const QString& variable, QMakeProjectFile::FileVariables )
     {
-        foreach( QString value, variableValues(variable) )
+        foreach( const QString& value, variableValues(variable) )
         {
             list += KUrl::List( resolveFileName( value ) );
         }
@@ -209,10 +209,10 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
     KUrl::List list;
     if( variableValues("INSTALLS").contains(s) )
     {
-        QStringList files = variableValues(s+".files");
+        const QStringList files = variableValues(s+".files");
         if( !files.isEmpty() )
         {
-            foreach( QString val, files )
+            foreach( const QString& val, files )
             {
                 list += KUrl::List( resolveFileName( val ) );
             }
@@ -220,9 +220,9 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
     }
     if( !variableValues("INSTALLS").contains(s) || s == "target" )
     {
-        foreach( QString variable, QMakeProjectFile::FileVariables )
+        foreach( const QString& variable, QMakeProjectFile::FileVariables )
         {
-            foreach( QString value, variableValues(variable) )
+            foreach( const QString& value, variableValues(variable) )
             {
                 list += KUrl::List( resolveFileName( value ) );
             }
@@ -254,7 +254,7 @@ QStringList QMakeProjectFile::targets() const
         list += QFileInfo( absoluteFile() ).baseName();
     }
 
-    foreach( QString target, variableValues("INSTALLS") )
+    foreach( const QString& target, variableValues("INSTALLS") )
     {
         if( target != "target" )
             list << target;

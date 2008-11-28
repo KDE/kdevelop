@@ -115,7 +115,7 @@ void MakeJob::start()
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
 
-    Q_FOREACH( QString s, environmentVars().keys() )
+    Q_FOREACH( const QString& s, environmentVars().keys() )
     {
         m_process->setEnv( s, environmentVars()[s] );
     }

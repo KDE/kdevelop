@@ -144,7 +144,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
 
     m_selectedDocs.clear();
-    foreach ( QModelIndex index, indexes )
+    foreach ( const QModelIndex& index, indexes )
     {
         if ( KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
         {
@@ -161,7 +161,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 bool KDevDocumentView::someDocHasChanges()
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    foreach(KUrl url, m_selectedDocs)
+    foreach(const KUrl& url, m_selectedDocs)
     {
         KDevelop::IDocument* doc = dc->documentForUrl(url);
         if (!doc) continue;

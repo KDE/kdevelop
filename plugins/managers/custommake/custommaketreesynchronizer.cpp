@@ -67,15 +67,15 @@ void CustomMakeTreeSynchronizer::removeFile( const QString & path )
 void CustomMakeTreeSynchronizer::filesCreated( const KUrl::List &files,
                                                KDevelop::ProjectFolderItem *parentFolder )
 {
-    Q_FOREACH( KUrl _file, files )
+    Q_FOREACH( const KUrl& _file, files )
     {
         KDevelop::ProjectFileItem *newitem = new KDevelop::ProjectFileItem(
             parentFolder->project(), _file, parentFolder );
         // if Makefile, parse new targets and add to watcher
         if( _file.fileName() == QString( "Makefile" ) ) // TODO portable, setting aware
         {
-            QStringList newTargets = m_customMan->parseCustomMakeFile( _file );
-            Q_FOREACH( QString newTarget, newTargets )
+            const QStringList newTargets = m_customMan->parseCustomMakeFile( _file );
+            Q_FOREACH( const QString& newTarget, newTargets )
             {
                 new CustomMakeTargetItem( parentFolder->project(), newTarget, parentFolder );
             }
@@ -97,7 +97,7 @@ void CustomMakeTreeSynchronizer::filesDeleted( const QList<KDevelop::ProjectFile
 void CustomMakeTreeSynchronizer::directoriesCreated( const KUrl::List &files,
                                         KDevelop::ProjectFolderItem *parentFolder )
 {
-    Q_FOREACH( KUrl _file, files )
+    Q_FOREACH( const KUrl& _file, files )
     {
         KDevelop::ProjectBuildFolderItem *newitem = new KDevelop::ProjectBuildFolderItem(
                 parentFolder->project(), _file, parentFolder );
@@ -175,8 +175,8 @@ void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::Pro
     else
     {
         // Makefile contents modified
-        QStringList newTargets = m_customMan->parseCustomMakeFile( KUrl(file) );
-        Q_FOREACH( QString newTarget, newTargets )
+        const QStringList newTargets = m_customMan->parseCustomMakeFile( KUrl(file) );
+        Q_FOREACH( const QString& newTarget, newTargets )
         {
             new CustomMakeTargetItem( project, newTarget, parentFolder );
         }
