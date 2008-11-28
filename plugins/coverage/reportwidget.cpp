@@ -348,14 +348,6 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
     setCoverageStatistics(indexes.first());
 }
 
-/*! Try to find a project directory for a given build directory */
-KUrl findProjectRootFor(const KUrl& buildDir)
-{
-    foreach(IProject* proj, ICore::self()->projectController()->projects()) {
-//        proj->buildSystemManager()->
-    }
-}
-
 void ReportWidget::startLcovJob()
 {
     Q_ASSERT(m_delegate); Q_ASSERT(m_targetDirectory); Q_ASSERT(m_startButton->isEnabled());
