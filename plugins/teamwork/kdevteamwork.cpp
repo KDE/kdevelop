@@ -320,7 +320,7 @@ m_currentLogFilter( ( LogLevel ) ( Error | Warning | Info ) )
 
   banClientAction = new QAction( i18n("Ban"), this );
   connect( banClientAction, SIGNAL( triggered() ), this, SLOT( banClient() ) );
-  banClientAction->setToolTip( i18n("Ban the selected client(stop him from reconnecting).") );
+  banClientAction->setToolTip( i18n("Ban the selected client (stop him from reconnecting).") );
 
   kickAllClientsAction = new QAction( i18n("Disconnect All"), this );
   connect( kickAllClientsAction, SIGNAL( triggered() ), this, SLOT( kickAllClients() ) );
