@@ -126,7 +126,7 @@ void EnvironmentWidget::newButtonClicked()
     layout->addWidget( l, 0, 0 );
     KLineEdit *nameEdit = new KLineEdit( main );
     layout->addWidget( nameEdit, 0, 1 );
-    l = new QLabel( i18nc( "Name of an environment variable", "Variable Value:" ), main );
+    l = new QLabel( i18nc( "Value of an environment variable", "Variable Value:" ), main );
     l->setAlignment( Qt::AlignRight | Qt::AlignTop );
     layout->addWidget( l, 1, 0 );
     KTextEdit *valueEdit = new KTextEdit( main );
