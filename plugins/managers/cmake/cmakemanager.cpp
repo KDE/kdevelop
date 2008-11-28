@@ -456,10 +456,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     #endif
 
         ReferencedTopDUContext curr;
-        if(dynamic_cast<CMakeFolderItem*>(folder->parent()))
+        if(folder->parent())
         {
-            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext().data();
+            curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext();
         }
         else
             curr=m_buildstrapContext;
