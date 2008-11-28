@@ -12,6 +12,14 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Run Settings
 Name[el]=Ρυθμίσεις εκτέλεσης
+Name[es]=Ejecutar preferencias
+Name[pt]=Configuração da Execução
+Name[pt_BR]=Configuração da Execução
+Name[uk]=Параметри запуску
 Comment=Configure Run Executable settings
 Comment[el]=Ρυθμίσεις εκτέλεσης του εκτελέσιμου
+Comment[es]=Configurar las preferencias del ejecución de programas
+Comment[pt]=Configurar as opções para a Execução de Programas
+Comment[pt_BR]=Configurar as opções para a Execução de Programas
+Comment[uk]=Налаштування параметрів інструменту «Виконати програму»
 

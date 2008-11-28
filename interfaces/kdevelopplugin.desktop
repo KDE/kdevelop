@@ -4,6 +4,10 @@ X-KDE-ServiceType=KDevelop/Plugin
 X-KDE-Derived=KPluginInfo
 Name=KDevelop Plugin
 Name[el]=Πρόσθετο του KDevelop
+Name[es]=Complemento de KDevelop
+Name[pt]='Plugin' do KDevelop
+Name[pt_BR]='Plugin' do KDevelop
+Name[uk]=Додаток KDevelop
 
 # mandatory, versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

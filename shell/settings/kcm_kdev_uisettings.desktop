@@ -12,7 +12,14 @@ X-KDE-CfgDlgHierarchy=USERINTERFACE
 
 Name=User Interface
 Name[el]=Περιβάλλον χρήστη
+Name[es]=Interfaz de usuario
+Name[pt]=Interface do Utilizador
+Name[pt_BR]=Interface do Utilizador
 Name[uk]=Інтерфейс користувача
 Comment=Configure User Interface settings
 Comment[el]=Ρυθμίσεις περιβάλλοντος χρήστη
+Comment[es]=Configurar las preferencias de la interfaz de usuario
+Comment[pt]=Configurar as opções da Interface do Utilizador
+Comment[pt_BR]=Configurar as opções da Interface do Utilizador
+Comment[uk]=Налаштування параметрів інтерфейсу користувача
 

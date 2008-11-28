@@ -4,3 +4,6 @@ X-KDE-ServiceType=KDevelop/DocumentationPlugins
 X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Documentation Plugin Interface
 Name[el]=Διασύνδεση πρόσθετου τεκμηρίωσης KDevelop
+Name[pt]=Interface de 'Plugins' de Documentação do KDevelop
+Name[pt_BR]=Interface de 'Plugins' de Documentação do KDevelop
+Name[uk]=Інтерфейс додатка перегляду документації KDevelop

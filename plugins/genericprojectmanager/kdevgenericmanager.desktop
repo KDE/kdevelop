@@ -2,8 +2,16 @@
 Type=Service
 Name=KDevelop Generic Importer
 Name[el]=Γενικευμένος εισαγωγέας KDevelop
+Name[es]=Importador genérico de KDevelop
+Name[pt]=Importação Genérica do KDevelop
+Name[pt_BR]=Importação Genérica do KDevelop
+Name[uk]=Загальний інструмент імпорту до KDevelop
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
+Comment[es]=Permite que KDevelop gestione proyectos genéricos
+Comment[pt]=Permite ao KDevelop gerir projectos genéricos
+Comment[pt_BR]=Permite ao KDevelop gerir projectos genéricos
+Comment[uk]=За допомогою цього додатка можна увімкнути керування загальними проектами у KDevelop
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevgenericmanager

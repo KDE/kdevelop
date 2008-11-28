@@ -12,6 +12,13 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project Settings
 Name[el]=Ρυθμίσεις έργου
+Name[es]=Preferencias del proyecto
+Name[pt]=Configuração do Projecto
+Name[pt_BR]=Configuração do Projecto
 Name[uk]=Параметри проекту
 Comment=Configure Project
 Comment[el]=Ρύθμιση έργου
+Comment[es]=Configurar proyecto
+Comment[pt]=Configurar o Projecto
+Comment[pt_BR]=Configurar o Projecto
+Comment[uk]=Налаштування проекту
