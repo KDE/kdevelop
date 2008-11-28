@@ -146,8 +146,13 @@ void CMakeDUChainTest::testUses()
             "macro(bla kk)\n"
             " message(STATUS ${kk})\n"
             "endmacro(bla)\n"
+            
             "set(usinginc aa${avalue})\n"
             "bla(kk)\n"
+            
+            "if(var)\n"
+            " message(STATUS \"life rocks\")\n"
+            "endif(var)\n"
             );
 
     QFile file("cmake_duchain_test");
@@ -214,13 +219,14 @@ void CMakeDUChainTest::testUses()
     
     QList<SimpleRange> uses=QList<SimpleRange>() << SimpleRange(2,11, 2,11+3)
                                                  << SimpleRange(8,17, 8,17+6)
-                                                 << SimpleRange(9,0,  9,3);
-    QCOMPARE(ctx->usesCount(), uses.count());
+                                                 << SimpleRange(9,0,  9,3)
+                                                 << SimpleRange(10,4,  10,4+3);
     for(int i=0; i<ctx->usesCount(); i++)
     {
         kDebug() << "use " << i << ctx->uses()[i].m_range.textRange();
         QCOMPARE(uses[i], ctx->uses()[i].m_range);
     }
+    QCOMPARE(ctx->usesCount(), uses.count());
 
     includedFile.remove();
 }

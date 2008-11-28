@@ -1018,6 +1018,21 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     }
     CMakeCondition cond(this);
     bool result=cond.condition(ifast->condition());
+    
+    //We define the uses for the used variable without ${}
+    foreach(int use, cond.variableArguments())
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        QString var=ifast->condition()[use];
+        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
+
+        if(!decls.isEmpty())
+        {
+            CMakeFunctionArgument arg=ifast->content()[ifast->line()].arguments[use];
+            int idx=m_topctx->indexForUsedDeclaration(decls.first());
+            m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
+        }
+    }
 
     kDebug(9042) << "Visiting If" << ifast->condition() << "?" << result;
     if(result)
@@ -1086,7 +1101,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             inside--;
 //         kDebug(9042) << "endif???" << it->writeBack() << lines;
     }
-
+    //TODO: Should build uses for endif and ELSE's
 //     kDebug(9042) << "endif==" << ifast->content()[lines-1].writeBack() << "<>" << ifast->condition() << '=' << lines-ifast->line() << "@" << lines;
     return lines-ifast->line();
 }
@@ -1756,7 +1771,21 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
 {
     CMakeCondition cond(this);
     bool result=cond.condition(whileast->condition());
+     //We define the uses for the used variable without ${}
+    foreach(int use, cond.variableArguments())
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        QString var=whileast->condition()[use];
+        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
 
+        if(!decls.isEmpty())
+        {
+            CMakeFunctionArgument arg=whileast->content()[whileast->line()].arguments[use];
+            int idx=m_topctx->indexForUsedDeclaration(decls.first());
+            m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
+        }
+    }
+    
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
     if(result)
     {

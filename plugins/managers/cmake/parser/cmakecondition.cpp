@@ -87,10 +87,11 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
         return variable;
 }
 
-bool CMakeCondition::isTrue(const QString& varName) const
+bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
 //     qDebug() << "+++++++ isTrue: " << varName;
-    
+    QString varName=*it;
+    m_varUses.append(it);
     if(m_vars->contains(varName))
     {
         const QStringList valu=m_vars->value(varName);
@@ -118,16 +119,16 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
     return it;
 }
 
-bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd) const
+bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd)
 {
 //     qDebug() << "xxxx" << *itBegin << *itEnd;
     if(itBegin==itEnd)
     {
-        return isTrue(*itBegin);
+        return isTrue(itBegin);
     }
     
     bool last = false, done=false;
-    last = isTrue(*(prevOperator(itEnd, itBegin)+1));
+    last = isTrue(prevOperator(itEnd, itBegin)+1);
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
@@ -264,7 +265,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=itL;
             } break;
             case variable:
-                last = isTrue(*it2);
+                last = isTrue(it2);
                 break;
             default:
                 kWarning(9042) << "no support for operator:" << *it2;
@@ -274,13 +275,21 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     return last;
 }
 
-bool CMakeCondition::condition(const QStringList &expression) const
+bool CMakeCondition::condition(const QStringList &expression)
 {
     if( expression.isEmpty() ) 
     {
         return false;
     }
-    bool ret = evaluateCondition(expression.constBegin(), expression.constEnd()-1);
+    QStringList::const_iterator it = expression.constBegin(), itEnd=expression.constEnd();
+    bool ret = evaluateCondition(it, itEnd-1);
+    uint i=0;
+    for(; it!=itEnd; ++it, ++i)
+    {
+        if(m_varUses.contains(it))
+            m_argUses.append(i);
+    }
+    
 //     kDebug(9042) << "condition" << expression << "=>" << ret;
     return ret;
 }
