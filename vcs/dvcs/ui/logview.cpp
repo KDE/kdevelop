@@ -42,7 +42,7 @@ void LogView::slotJobFinished(KJob* job)
 {
     if ( job->error() )
     {
-        textbrowser->append( i18n("Listing the files's log failed") );
+        textbrowser->append( i18n("Listing the log of the files failed") );
         return;
     }
 
