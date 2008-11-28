@@ -40,8 +40,8 @@ struct AreaIndexPrivate {
         delete second;
         foreach( View* v, views )
         {
+            // Do the same as AreaIndex::remove(), seems like deletion of the view is happening elsewhere
             views.removeAll( v );
-            v->deleteLater();
         }
     }
     AreaIndexPrivate(const AreaIndexPrivate &p)
