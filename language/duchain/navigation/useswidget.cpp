@@ -349,7 +349,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
     QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Context") + "</b>" + " <a href='navigateToFunction'>" + Qt::escape(headerText) + "</a>" + sizeSuffix);
     addHeaderItem(headerLabel);
     if(usesCount) {
-      QLabel* usesCountLabel = new QLabel("&nbsp;" + ((usesCount == 1) ? i18n("<i>(1 use)</i>") : i18n("<i>(%1 uses)</i>", usesCount)));
+      QLabel* usesCountLabel = new QLabel("&nbsp;" + i18np("<i>(1 use)</i>", "<i>(%1 uses)</i>", usesCount));
       usesCountLabel->setAlignment(Qt::AlignLeft);
       addHeaderItem(usesCountLabel, Qt::AlignLeft);
     }
