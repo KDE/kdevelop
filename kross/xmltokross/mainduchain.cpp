@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 {
     qInstallMsgHandler(messageOutput);
     KAboutData aboutData( "duchaintokross", 0, ki18n( "duchaintokross" ),
-                          "33", ki18n("tooo booring"), KAboutData::License_GPL,
+                          "33", ki18n("Wrapper generator from C++ to Kross"), KAboutData::License_GPL,
                           ki18n( "(c) 2008, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
