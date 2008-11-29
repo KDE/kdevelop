@@ -99,13 +99,16 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
     {
         if(dom->file())
         {
-            int lastDot=dom->file()->text().lastIndexOf('.');
-            QString target=dom->file()->text().mid(0, lastDot)+".o";
-            
+            KDevelop::ProjectFileItem* file = dom->file();
+            int lastDot = file->text().lastIndexOf('.');
+            QString target = file->text().mid(0, lastDot)+".o";
+             
+            KDevelop::ProjectBuildFolderItem *fldr = new KDevelop::ProjectBuildFolderItem(dom->project(), file->url().upUrl());
             KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(dom->project(), target);
-            
+            fldr->add(it);
+             
             dom=it;
-            m_deleteWhenDone.insert(static_cast<KDevelop::ProjectBaseItem*>(it));
+            m_deleteWhenDone << fldr << it;
         }
         
         kDebug(9032) << "Building with make";
