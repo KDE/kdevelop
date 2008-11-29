@@ -74,7 +74,7 @@ QToolButton* ContextController::browseButton() const {
     return m_browseButton;
 }
 
-ContextController::ContextController(ContextBrowserView* view) : m_nextHistoryIndex(0), m_view(view) {
+ContextController::ContextController(ContextBrowserView* view) : QObject(view), m_nextHistoryIndex(0), m_view(view) {
     m_browseManager = new BrowseManager(this);
     
     connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
