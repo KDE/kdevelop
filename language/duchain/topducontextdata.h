@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
   TopDUContextData(IndexedString url)
-    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_currentUsedDeclarationIndex(0), m_ownIndex(0)
+    : DUContextData(), m_flags(TopDUContext::NoFlags), m_deleting(false), m_url(url), m_ownIndex(0), m_currentUsedDeclarationIndex(0)
   {
     initializeAppendedLists();
   }
