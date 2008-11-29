@@ -85,8 +85,8 @@ void SourceFormatterSettings::init()
 
 	//init language combo box
 	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
-	QStringList l = manager->languages();
-	foreach(QString s, l) {
+	const QStringList l = manager->languages();
+	foreach(const QString &s, l) {
 		//! todo add real icons to support
 		QString mime = manager->mimeTypeForLanguage(s).replace('/', '-');
 		KIcon icon(mime);
@@ -219,7 +219,7 @@ void SourceFormatterSettings::populateStyleList()
 	//load custom styles
 	KConfigGroup pluginGroup = ICore::self()->sourceFormatterController()->configGroup();
 	QStringList keyList = pluginGroup.keyList();
-	foreach(QString key, keyList) {
+	foreach(const QString &key, keyList) {
 		if (key.startsWith("User")) { // style definition
 			QString caption = pluginGroup.readEntry("Caption" + key.mid(4));
 			addItemInStyleList(caption, key);

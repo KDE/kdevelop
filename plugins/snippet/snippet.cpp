@@ -54,7 +54,7 @@ void Snippet::save()
         QTextStream input( &f );
         input << snippetText_;
 
-        foreach(QString keyword, keywords_) {
+        foreach(const QString& keyword, keywords_) {
             input << SNIPPET_METADATA << "keyword="<<keyword<<endl;
         }
     }
@@ -169,7 +169,7 @@ int Snippet::initVariableModel(SnippetVariableModel& model)
 
     // Copy the variable names into the given model
     int count = 0;
-    foreach (QString str, set) {
+    foreach (const QString& str, set) {
         model.appendVariable( str );
         count++;
     }

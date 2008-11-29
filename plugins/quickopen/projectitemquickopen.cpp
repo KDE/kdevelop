@@ -76,7 +76,7 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
   for(int a = 0; a < search.count(); ++a)
     cache.append(SubstringCache(search.at(a)));
 
-  foreach(QString str, search)
+  foreach(const QString &str, search)
     kDebug() << "filtering for" << str;
 
   if(!text.startsWith(m_currentFilter))

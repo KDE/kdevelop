@@ -189,7 +189,7 @@ void KDevelop::IPlugin::registerExtensions( )
         return;
     if( !d->m_factory )
         d->m_factory = new PluginExtensionFactory( extensions(), extensionManager() );
-    Q_FOREACH( QString ext, extensions() )
+    Q_FOREACH( const QString& ext, extensions() )
     {
         extensionManager()->registerExtensions( d->m_factory, ext );
     }
@@ -201,7 +201,7 @@ void KDevelop::IPlugin::unregisterExtensions( )
         return;
     if( !d->m_factory )
         return;
-    Q_FOREACH( QString ext, extensions() )
+    Q_FOREACH( const QString& ext, extensions() )
     {
         extensionManager()->unregisterExtensions( d->m_factory, ext );
     }

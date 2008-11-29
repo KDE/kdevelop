@@ -38,7 +38,7 @@ void OutputModel::appendLine( const QString& line )
 
 void OutputModel::appendLines( const QStringList& lines)
 {
-    Q_FOREACH( QString s, lines )
+    Q_FOREACH( const QString& s, lines )
     {
         appendRow( new QStandardItem( s ) );
     }

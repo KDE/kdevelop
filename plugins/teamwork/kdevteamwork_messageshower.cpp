@@ -318,9 +318,9 @@ void InDocumentMessageShower::contextClicked() {
 }
 
 QString escapeWithoutLineBreaks( const QString& str ) {
-  QStringList lines = str.split( '\n' );
+  const QStringList lines = str.split( '\n' );
   QStringList ret;
-  foreach( QString line, lines ) {
+  foreach( const QString& line, lines ) {
     ret << Qt::escape( line );
   }
   return ret.join( "<br>\n" );
