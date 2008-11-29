@@ -224,6 +224,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     o.list->setFocusPolicy(Qt::StrongFocus);
     o.scopesButton->hide();
     o.itemsButton->hide();
+    o.label->hide();
+    o.label_2->hide();
   }
 
   if( noSearchField ) {
@@ -275,27 +277,35 @@ void QuickOpenWidgetHandler::updateProviders() {
       menu->setActiveAction(action);
     }
   }
-  QStringList checkedItems;
-  QStringList checkedScopes;
-
-  foreach( QObject* obj, o.itemsButton->menu()->children() ) {
-    QAction* box = qobject_cast<QAction*>( obj );
-    if( box ) {
-      if( box->isChecked() )
-        checkedItems << box->text().remove('&');
-    }
-  }
-
-  foreach( QObject* obj, o.scopesButton->menu()->children() ) {
-    QAction* box = qobject_cast<QAction*>( obj );
-    if( box ) {
-      if( box->isChecked() )
-        checkedScopes << box->text().remove('&');
-    }
-  }
   
-  o.itemsButton->setText(checkedItems.join(", "));
-  o.scopesButton->setText(checkedScopes.join(", "));
+  QStringList checkedItems;
+  
+  if(o.itemsButton->menu()) {
+  
+    foreach( QObject* obj, o.itemsButton->menu()->children() ) {
+      QAction* box = qobject_cast<QAction*>( obj );
+      if( box ) {
+        if( box->isChecked() )
+          checkedItems << box->text().remove('&');
+      }
+    }
+    o.itemsButton->setText(checkedItems.join(", "));
+  }
+
+  QStringList checkedScopes;
+  
+  if(o.scopesButton->menu()) {
+    
+    foreach( QObject* obj, o.scopesButton->menu()->children() ) {
+      QAction* box = qobject_cast<QAction*>( obj );
+      if( box ) {
+        if( box->isChecked() )
+          checkedScopes << box->text().remove('&');
+      }
+    }
+    
+    o.scopesButton->setText(checkedScopes.join(", "));
+  }
 
   emit scopesChanged( checkedScopes );
   m_model->enableProviders( checkedItems, checkedScopes );
