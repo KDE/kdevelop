@@ -212,6 +212,13 @@ void AbstractNavigationContext::setPrefixSuffix( const QString& prefix, const QS
   m_suffix = suffix;
 }
 
+NavigationContextPointer AbstractNavigationContext::back() {
+  if(m_previousContext)
+    return NavigationContextPointer(m_previousContext);
+  else
+    return NavigationContextPointer(this);
+}
+
 NavigationContextPointer AbstractNavigationContext::accept() {
   if( m_selectedLink >= 0 &&  m_selectedLink < m_linkCount )
   {

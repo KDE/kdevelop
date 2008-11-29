@@ -70,6 +70,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     void previousLink();
     void setPrefixSuffix( const QString& prefix, const QString& suffix );
     NavigationContextPointer accept();
+    NavigationContextPointer back();
     NavigationContextPointer accept(IndexedDeclaration decl);
     NavigationContextPointer acceptLink(const QString& link);
     NavigationAction currentAction() const;

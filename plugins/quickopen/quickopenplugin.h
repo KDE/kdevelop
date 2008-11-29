@@ -28,7 +28,6 @@
 
 #include <language/interfaces/quickopendataprovider.h>
 #include "ui_quickopen.h"
-#include <util/shiftpressdetector.h>
 
 namespace KDevelop {
   class SimpleCursor;
@@ -134,7 +133,8 @@ class QuickOpenWidgetHandler : public QObject {
   virtual bool eventFilter ( QObject * watched, QEvent * event );
   QDialog* m_dialog; //Warning: m_dialog is also the parent
   QuickOpenModel* m_model;
-  ShiftPressDetector m_shiftDetector;
+  bool m_expandedTemporary;
+  QTime m_expandTime;
   public:
   Ui::QuickOpen o;
 };

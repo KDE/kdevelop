@@ -93,7 +93,7 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
     return m_views;
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false), m_shiftDetector(true) {
+BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false) {
     foreach(KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
 }
@@ -117,12 +117,6 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-/*    if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
-        KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
-        if(!cc || !cc->isCompletionActive() && view->hasFocus())
-            emit shiftKeyTriggered();
-    }*/
-    
     const int browseKey = Qt::Key_Control;
     
     //Eventually start key-browsing
@@ -270,16 +264,17 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     applyEventFilter(view, true);
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
-    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*, const KTextEditor::Cursor&)), this, SLOT(resetSiftDetector()));
-    connect(view->document(), SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(resetSiftDetector()));
+
+    connect(view, SIGNAL(navigateLeft()), m_controller->view(), SLOT(navigateLeft()));
+    connect(view, SIGNAL(navigateRight()), m_controller->view(), SLOT(navigateRight()));
+    connect(view, SIGNAL(navigateUp()), m_controller->view(), SLOT(navigateUp()));
+    connect(view, SIGNAL(navigateDown()), m_controller->view(), SLOT(navigateDown()));
+    connect(view, SIGNAL(navigateAccept()), m_controller->view(), SLOT(navigateAccept()));
+    connect(view, SIGNAL(navigateBack()), m_controller->view(), SLOT(navigateBack()));
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
     m_manager->viewAdded(view);
-}
-
-void BrowseManager::resetSiftDetector() {
-    m_shiftDetector.clear();
 }
 
 void BrowseManager::setBrowsing(bool enabled) {

@@ -65,6 +65,14 @@ class ContextBrowserView : public QWidget {
         ///Returns the currently locked declaration, or invalid of none is locked atm.
         KDevelop::IndexedDeclaration lockedDeclaration() const;
         
+    public Q_SLOTS:
+        void navigateLeft();
+        void navigateRight();
+        void navigateUp();
+        void navigateDown();
+        void navigateAccept();
+        void navigateBack();
+        
     private Q_SLOTS:
         void updateLockIcon(bool); 
         void declarationMenu();
@@ -93,7 +101,6 @@ class ContextBrowserView : public QWidget {
         KDevelop::DeclarationId m_navigationWidgetDeclaration;
         bool m_allowLockedUpdate;
         KDevelop::IndexedTopDUContext m_lastUsedTopContext;
-        ShiftPressDetector m_shiftDetector;
 };
 
 // handles Context related operations for ContextBrowserView

@@ -27,7 +27,6 @@
 #include <QMap>
 #include <QPointer>
 #include <qevent.h>
-#include <util/shiftpressdetector.h>
 
 
 class QWidget;
@@ -73,7 +72,6 @@ class BrowseManager : public QObject {
     public slots:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
-        void resetSiftDetector();
     private:
         void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
@@ -96,7 +94,6 @@ class BrowseManager : public QObject {
         Watcher m_watcher;
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
-        ShiftPressDetector m_shiftDetector;
 };
 
 #endif

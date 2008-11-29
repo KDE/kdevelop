@@ -57,6 +57,7 @@ namespace KDevelop {
       virtual void accept();
       virtual void up();
       virtual void down();
+      virtual void back();
 
       ///These are temporarily for gettings these events directly from kate
       ///@todo Do this through a public interface post 4.2

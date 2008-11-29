@@ -56,6 +56,7 @@
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugincontroller.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 const int maxHistoryLength = 30;
 
@@ -115,6 +116,67 @@ DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
     if (!topContext) return 0;
     return contextAt(SimpleCursor(cursor), topContext);
+}
+
+static bool useNavigationFromView(QObject* viewObject) {
+    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(viewObject);
+    if(!view) {
+        kWarning() << "sender is not a view";
+        return false;
+    }
+    KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view);
+    if(!iface || iface->isCompletionActive())
+        return false;
+    
+    return true;
+}
+
+void ContextBrowserView::navigateAccept() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->accept();
+}
+
+void ContextBrowserView::navigateBack() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->back();
+}
+
+void ContextBrowserView::navigateDown() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->down();
+}
+
+void ContextBrowserView::navigateLeft() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->previous();
+}
+
+void ContextBrowserView::navigateRight() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->next();
+}
+
+void ContextBrowserView::navigateUp() {
+    if(!useNavigationFromView(sender()))
+        return;
+    
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+        widget->up();
 }
 
 void ContextController::documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor) {
@@ -531,12 +593,6 @@ bool ContextBrowserView::event(QEvent* event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
     
     if(hasFocus() && keyEvent) {
-        if(m_shiftDetector.checkKeyEvent(keyEvent) || (event->type() == QEvent::KeyPress && keyEvent->key() == Qt::Key_Escape)) {
-            //Switch the focus back to the editor view
-            kDebug() << "switching back to" << m_contextCtrl->focusBackWidget();
-            if(m_contextCtrl->focusBackWidget())
-                m_contextCtrl->focusBackWidget()->setFocus();
-        }
         AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget);
         if(navigationWidget && event->type() == QEvent::KeyPress) {
             int key = keyEvent->key();

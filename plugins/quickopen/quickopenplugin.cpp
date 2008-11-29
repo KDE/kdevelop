@@ -177,7 +177,7 @@ QString cursorItemText() {
   return QString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
   m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
 
   o.setupUi( m_dialog );
@@ -338,24 +338,40 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
 {
   QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
   
-  if(keyEvent && m_shiftDetector.checkKeyEvent(keyEvent)) {
-    //Toggle the expanded state
-    QModelIndex row = o.list->selectionModel()->currentIndex();
-    if( row.isValid() ) {
-      row = row.sibling( row.row(), 0 );
-
-      m_model->setExpanded( row, !m_model->isExpanded( row ) );
-      return true;
-    }      
+  if( event->type() == QEvent::KeyRelease ) {
+    if(keyEvent->key() == Qt::Key_Alt && m_expandedTemporary) {
+      m_expandedTemporary = false;
+      if(m_expandTime.msecsTo( QTime::currentTime() ) > 300) {
+        //Eventually do temporary "peek" un-expansion
+        QModelIndex row = o.list->selectionModel()->currentIndex();
+        if( row.isValid() ) {
+          row = row.sibling( row.row(), 0 );
+          if(m_model->isExpanded( row ))
+            m_model->setExpanded( row, false );
+        }      
+      }
+    }
   }
   
   if( event->type() == QEvent::KeyPress  ) {
+    if(keyEvent->key() == Qt::Key_Alt) {
+      //Eventually do temporary "peek" expansion
+      QModelIndex row = o.list->selectionModel()->currentIndex();
+      if( row.isValid() ) {
+        row = row.sibling( row.row(), 0 );
+        if(!m_model->isExpanded( row )) {
+          m_expandedTemporary = true;
+          m_expandTime = QTime::currentTime();
+          m_model->setExpanded( row, true );
+        }
+      }      
+    }
 
     switch( keyEvent->key() ) {
       case Qt::Key_Down:
       case Qt::Key_Up:
       {
-        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+        if( keyEvent->modifiers() == Qt::AltModifier ) {
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
               dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>( w ) ){
@@ -378,7 +394,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
 
       case Qt::Key_Left: {
         //Expand/unexpand
-        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+        if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
@@ -401,7 +417,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_Right: {
         //Expand/unexpand
-        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+        if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
@@ -424,7 +440,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
       }
       case Qt::Key_Return:
       case Qt::Key_Enter: {
-        if( keyEvent->modifiers() == Qt::ShiftModifier ) {
+        if( keyEvent->modifiers() == Qt::AltModifier ) {
           //Eventually Send action to the widget
           QWidget* w = m_model->expandingWidget(o.list->selectionModel()->currentIndex());
           if( KDevelop::QuickOpenEmbeddedWidgetInterface* interface =

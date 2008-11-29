@@ -160,6 +160,10 @@ void AbstractNavigationWidget::accept() {
   setContext( m_context->accept() );
 }
 
+void AbstractNavigationWidget::back() {
+  setContext( m_context->back() );
+}
+
 void AbstractNavigationWidget::up() {
   m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepSub );
 }

@@ -209,7 +209,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::Key_Right );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
     action->setToolTip( i18n( "Next window" ) );
     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
     action->setIcon(KIcon("go-next"));
@@ -217,7 +217,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_previous_window" );
     action->setText( i18n( "&Previous Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::Key_Left );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
     action->setToolTip( i18n( "Previous window" ) );
     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
     action->setIcon(KIcon("go-previous"));
@@ -225,14 +225,14 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "view_last_window" );
     action->setText( i18n( "&Last Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoLastWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::Key_Up );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Up );
     action->setToolTip( i18n( "Last accessed window" ) );
     action->setWhatsThis( i18n( "<b>Last accessed window</b><p>Switches to the last viewed window (Hold the Alt key pressed and walk on by repeating the Up key).</p>" ) );
 
     action = actionCollection()->addAction( "view_first_window" );
     action->setText( i18n( "&First Accessed Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoFirstWindow() ) );
-    action->setShortcut( Qt::ALT + Qt::Key_Down );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Down );
     action->setToolTip( i18n( "First accessed window" ) );
     action->setWhatsThis( i18n( "<b>First accessed window</b><p>Switches to the first accessed window (Hold the Alt key pressed and walk on by repeating the Down key).</p>" ) );
 
