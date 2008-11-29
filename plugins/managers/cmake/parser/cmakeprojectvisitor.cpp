@@ -26,7 +26,6 @@
 #include <language/editor/simplerange.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/declaration.h>
@@ -1007,6 +1006,23 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     return 1;
 }
 
+void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx, const CMakeFunctionDesc& func)
+{
+    //We define the uses for the used variable without ${}
+    foreach(int use, args)
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        QString var=names[use];
+        QList<Declaration*> decls=topctx->findDeclarations(Identifier(var));
+
+        if(!decls.isEmpty())
+        {
+            CMakeFunctionArgument arg=func.arguments[use];
+            int idx=topctx->indexForUsedDeclaration(decls.first());
+            topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
+        }
+    }
+}
 
 int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 {
@@ -1018,21 +1034,8 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     }
     CMakeCondition cond(this);
     bool result=cond.condition(ifast->condition());
-    
-    //We define the uses for the used variable without ${}
-    foreach(int use, cond.variableArguments())
-    {
-        DUChainWriteLocker lock(DUChain::lock());
-        QString var=ifast->condition()[use];
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-
-        if(!decls.isEmpty())
-        {
-            CMakeFunctionArgument arg=ifast->content()[ifast->line()].arguments[use];
-            int idx=m_topctx->indexForUsedDeclaration(decls.first());
-            m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
-        }
-    }
+    QList<int> ini=cond.variableArguments();
+    usesForArguments(ifast->condition(), ini, m_topctx, ifast->content()[ifast->line()]);
 
     kDebug(9042) << "Visiting If" << ifast->condition() << "?" << result;
     if(result)
@@ -1058,8 +1061,11 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             else if(funcName=="endif")
             {
                 inside--;
-                if(inside<=0)
+                if(inside<=0) {
+                    usesForArguments(ifast->condition(), cond.variableArguments(), m_topctx, *it);
+                    
                     break;
+                }
 //                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
             }
             else if(inside==1 && funcName.startsWith("else"))
@@ -1089,19 +1095,20 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
     }
 
 //     kDebug(9042) << "looking for the endif now @" << lines;
-    int inside=0;
     CMakeFileContent::const_iterator it=ifast->content().constBegin()+lines;
     CMakeFileContent::const_iterator itEnd=ifast->content().constEnd();
-    for(; inside>=0 && it!=itEnd; ++it, lines++)
+    for(int inside=1; inside>0 && it!=itEnd; ++it, lines++)
     {
         QString funcName=it->name.toLower();
         if(funcName=="if")
             inside++;
-        else if(funcName=="endif")
+        else if(funcName=="endif") {
             inside--;
-//         kDebug(9042) << "endif???" << it->writeBack() << lines;
+            if(inside<=0)
+                usesForArguments(ifast->condition(), ini, m_topctx, ifast->content()[lines]);
+        }
+        kDebug(9042) << "endif???" << it->writeBack() << inside << lines;
     }
-    //TODO: Should build uses for endif and ELSE's
 //     kDebug(9042) << "endif==" << ifast->content()[lines-1].writeBack() << "<>" << ifast->condition() << '=' << lines-ifast->line() << "@" << lines;
     return lines-ifast->line();
 }
@@ -1771,20 +1778,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
 {
     CMakeCondition cond(this);
     bool result=cond.condition(whileast->condition());
-     //We define the uses for the used variable without ${}
-    foreach(int use, cond.variableArguments())
-    {
-        DUChainWriteLocker lock(DUChain::lock());
-        QString var=whileast->condition()[use];
-        QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-
-        if(!decls.isEmpty())
-        {
-            CMakeFunctionArgument arg=whileast->content()[whileast->line()].arguments[use];
-            int idx=m_topctx->indexForUsedDeclaration(decls.first());
-            m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
-        }
-    }
+    usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
     
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
     if(result)
@@ -1792,17 +1786,20 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
         walk(whileast->content(), whileast->line()+1);
         walk(whileast->content(), whileast->line());
     }
-    int inside=0;
-    CMakeFileContent::const_iterator it=whileast->content().constBegin()+whileast->line();
+    CMakeFileContent::const_iterator it=whileast->content().constBegin()+whileast->line()+1;
     CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
-    int lines=0;
-    for(; inside>=0 && it!=itEnd; ++it, lines++)
+    int lines=0, inside=1;
+    for(; inside>0 && it!=itEnd; ++it, lines++)
     {
         QString funcName=it->name.toLower();
         if(funcName=="while")
             inside++;
         else if(funcName=="endwhile")
             inside--;
+    }
+    
+    if(it!=itEnd) {
+        usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
     }
     return lines;
 }
