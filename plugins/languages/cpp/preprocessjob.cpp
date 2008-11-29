@@ -364,7 +364,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             parentJob()->setUpdatingContentContext(content);
 
             Cpp::EnvironmentFilePointer contentEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data()));
-            Q_ASSERT(contentEnvironment->identityOffset() == m_secondEnvironmentFile->identityOffset());
+            Q_ASSERT(m_updatingEnvironmentFile || contentEnvironment->identityOffset() == m_secondEnvironmentFile->identityOffset());            
 
             ///@todo think whether localPath is needed
             KUrl localPath(parentJob()->document().str());
