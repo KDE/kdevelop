@@ -94,3 +94,4 @@ CodeRepresentation* createCodeRepresentation(IndexedString url) {
     return new FileCodeRepresentation(url);
 }
 }
+

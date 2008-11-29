@@ -271,7 +271,7 @@ void UsesCollector::startCollecting() {
 void UsesCollector::maximumProgress(uint max) {
 }
 
-UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration), m_processDeclarations(true), m_collectOverloads(true), m_collectDefinitions(true), m_collectConstructors(true) {
+UsesCollector::UsesCollector(IndexedDeclaration declaration) : m_declaration(declaration), m_collectOverloads(true), m_collectDefinitions(true), m_collectConstructors(true), m_processDeclarations(true) {
 }
 
 UsesCollector::~UsesCollector() {

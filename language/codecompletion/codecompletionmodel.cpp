@@ -58,9 +58,9 @@ namespace KDevelop {
 
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
+  , m_fullCompletion(true)
   , m_mutex(new QMutex)
   , m_worker(0)
-  , m_fullCompletion(true)
 {
   qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");

@@ -88,3 +88,4 @@ KTextEditor::View* EditorContext::view() const
     return d->m_view;
 }
 }
+

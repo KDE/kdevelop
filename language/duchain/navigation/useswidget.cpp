@@ -103,7 +103,7 @@ QString highlightAndEscapeUseText(QString line, uint cutOff, SimpleRange range) 
   return Qt::escape(line.left(range.start.column)) + "<span style=\"background-color:yellow\">" + Qt::escape(line.mid(range.start.column, range.end.column - range.start.column)) + "</span>" + Qt::escape(line.mid(range.end.column, line.length() - range.end.column)) ;
 }
 
-OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code, KTextEditor::SmartRange* smartRange) : m_range(range), m_document(document), m_smartRange(smartRange), m_declaration(declaration) {
+OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code, KTextEditor::SmartRange* smartRange) : m_range(range), m_smartRange(smartRange), m_declaration(declaration), m_document(document) {
   
   //Make the sizing of this widget independent of the content, because we will adapt the content to the size
   setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
