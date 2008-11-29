@@ -368,7 +368,7 @@ QList<QVariant> GitExecutor::getModifiedFiles(const QString &directory)
         return QList<QVariant>();
 
     QList<QVariant> modifiedFiles;
-    foreach(QString line, output)
+    foreach(const QString &line, output)
     {
         QChar stCh = line[97];
 
@@ -422,7 +422,7 @@ QList<QVariant> GitExecutor::getCachedFiles(const QString &directory)
 
     QList<QVariant> cachedFiles;
 
-    foreach(QString line, output)
+    foreach(const QString &line, output)
     {
         QChar stCh = line[97];
 
