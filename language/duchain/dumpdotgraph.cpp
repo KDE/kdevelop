@@ -152,7 +152,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       stream << dotGraphInternal(ctx, false, true);
   }
   
-  foreach (DUContext::Import parent, context->importedParentContexts()) {
+  foreach (const DUContext::Import &parent, context->importedParentContexts()) {
     if( parent.context(m_topContext) ) {
       stream << dotGraphInternal(parent.context(m_topContext), false, true);
       QString label = "imports";

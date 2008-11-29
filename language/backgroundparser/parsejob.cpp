@@ -112,7 +112,7 @@ ParseJob::~ParseJob()
     }
     
     typedef QPointer<QObject> QObjectPointer;
-    foreach(QObjectPointer p, d->notify)
+    foreach(const QObjectPointer &p, d->notify)
         if(p)
             QMetaObject::invokeMethod(p, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
     
@@ -146,7 +146,7 @@ TopDUContext::Features ParseJob::staticMinimumFeatures(IndexedString url)
     TopDUContext::Features features = (TopDUContext::Features)0;
     
     if(::staticMinimumFeatures.contains(url))
-        foreach(TopDUContext::Features f, ::staticMinimumFeatures[url])
+        foreach(const TopDUContext::Features &f, ::staticMinimumFeatures[url])
             features = (TopDUContext::Features)(features | f);
     
     return features;

@@ -37,7 +37,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
     
-    foreach(IndexedString file, m_changes.keys())
+    foreach(const IndexedString &file, m_changes.keys())
     {
         CodeRepresentation* repr = createCodeRepresentation(file);
         if(!repr)
@@ -51,7 +51,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
         
         QMultiMap<SimpleCursor, DocumentChangePointer> sortedChanges;
         
-        foreach(DocumentChangePointer change, m_changes[file])
+        foreach(const DocumentChangePointer &change, m_changes[file])
             sortedChanges.insert(change->m_range.end, change);
         
         //Remove duplicates
@@ -103,7 +103,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     
     QMap<IndexedString, QString> oldTexts;
     
-    foreach(IndexedString file, m_changes.keys())
+    foreach(const IndexedString &file, m_changes.keys())
     {
         oldTexts[file] = codeRepresentations[file]->text();
         bool fail = false;
@@ -129,7 +129,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
         
         if(fail) {
             //Fail
-            foreach(IndexedString revertFile, oldTexts.keys())
+            foreach(const IndexedString &revertFile, oldTexts.keys())
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
             
             qDeleteAll(codeRepresentations.values());

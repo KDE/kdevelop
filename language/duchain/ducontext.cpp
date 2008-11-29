@@ -1084,7 +1084,7 @@ void DUContext::deleteChildContextsRecursively()
 
   //If we are deleting a context that is already stored to disk, we don't need to load not yet loaded child-contexts.
   //Else we need to, so the declarations are unregistered from symbol-table and from TopDUContextDynamicData in their destructor
-  foreach(LocalIndexedDUContext ctx, children)
+  foreach(const LocalIndexedDUContext &ctx, children)
     if(ctx.isLoaded(top) || !top->deleting() || !top->isOnDisk())
       delete ctx.data(top);
 }

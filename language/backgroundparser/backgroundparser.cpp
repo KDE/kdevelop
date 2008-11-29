@@ -254,7 +254,7 @@ public:
         int priority() const {
             //Pick the best priority
             int ret = BackgroundParser::WorstPriority;
-            foreach(DocumentParseTarget target, targets)
+            foreach(const DocumentParseTarget &target, targets)
                 if(target.priority < ret)
                     ret = target.priority;
             return ret;
@@ -263,7 +263,7 @@ public:
         TopDUContext::Features features() const {
             //Pick the best features
             TopDUContext::Features ret = (TopDUContext::Features)0;
-            foreach(DocumentParseTarget target, targets)
+            foreach(const DocumentParseTarget &target, targets)
                 ret = (TopDUContext::Features) (ret | target.features);
             return ret;
         }
@@ -271,7 +271,7 @@ public:
         QList<QPointer<QObject> > notifyWhenReady() {
             QList<QPointer<QObject> > ret;
             
-            foreach(DocumentParseTarget target, targets)
+            foreach(const DocumentParseTarget &target, targets)
                 if(target.notifyWhenReady)
                     ret << target.notifyWhenReady;
             
@@ -421,7 +421,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
 
 void BackgroundParser::addDocumentList(const KUrl::List &urls, TopDUContext::Features features, int priority)
 {
-    foreach (KUrl url, urls)
+    foreach (const KUrl &url, urls)
         addDocument(url, features, priority);
 }
 

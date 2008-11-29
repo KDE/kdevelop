@@ -172,7 +172,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   QStringList details = declarationDetails(m_declaration);
   if( !details.isEmpty() ) {
     bool first = true;
-    foreach( QString str, details ) {
+    foreach( const QString &str, details ) {
       if( !first )
         detailsHtml += ", ";
       first = false;
@@ -309,7 +309,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     }else{
       //Check if this declarations hides other declarations
       QList<Declaration*> decls;
-      foreach(DUContext::Import import, m_declaration->context()->importedParentContexts())
+      foreach(const DUContext::Import &import, m_declaration->context()->importedParentContexts())
         if(import.context(m_topContext.data()))
           decls += import.context(m_topContext.data())->findDeclarations(QualifiedIdentifier(m_declaration->identifier()), 
                                                 SimpleCursor::invalid(), AbstractType::Ptr(), m_topContext.data(), DUContext::DontSearchInParent);

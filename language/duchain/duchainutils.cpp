@@ -374,7 +374,7 @@ KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* dec
     return 0;
   if( internal->type() == DUContext::Function )
     return internal;
-  foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
+  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     if( ctx.context(decl->topContext()) )
       if( ctx.context(decl->topContext())->type() == DUContext::Function )
         return ctx.context(decl->topContext());
@@ -500,7 +500,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
   
   QList<Declaration*> decls;
 
-  foreach(DUContext::Import import, decl->context()->importedParentContexts())
+  foreach(const DUContext::Import &import, decl->context()->importedParentContexts())
     decls += import.context(decl->topContext())->findDeclarations(QualifiedIdentifier(decl->identifier()), 
                                             SimpleCursor::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
 

@@ -278,7 +278,7 @@ void TopDUContextDynamicData::store() {
     m_topContextData.clear();
 
     uint newDataSize = 0;
-    foreach(ArrayWithPosition array, oldDatas)
+    foreach(const ArrayWithPosition &array, oldDatas)
         newDataSize += array.second;
     
     //We always put 1 byte to the front, so we don't have zero data-offsets, since those are used for "invalid".

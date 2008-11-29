@@ -385,7 +385,7 @@ public:
 
         l.unlock();
         //Also load all the imported chains, so they are in the symbol table and the import-structure is built
-        foreach(DUContext::Import import, chain->DUContext::importedParentContexts()) {
+        foreach(const DUContext::Import &import, chain->DUContext::importedParentContexts()) {
           if(!loaded.contains(import.topContextIndex())) {
             loadChain(import.topContextIndex(), loaded);
           }
@@ -411,7 +411,7 @@ public:
     
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
     
-    foreach(IndexedString url, urls) {
+    foreach(const IndexedString &url, urls) {
       
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
@@ -980,7 +980,7 @@ TopDUContext* DUChain::chainForDocument(const IndexedString& document) const
 
   //Eventually load an existing chain from disk
   QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
-  foreach(ParsingEnvironmentFilePointer file, list) {
+  foreach(const ParsingEnvironmentFilePointer &file, list) {
     if(isInMemory(file->indexedTopContext().index()))
       return file->indexedTopContext().data();
   }
@@ -1135,7 +1135,7 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
     sc.deconvertDUChain( top );
   }
 
-  foreach(ReferencedTopDUContext top, sdDUChainPrivate->m_openDocumentContexts) {
+  foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts) {
     if(top->url().str() == doc->url().pathOrUrl())
       sdDUChainPrivate->m_openDocumentContexts.remove(top);
   }

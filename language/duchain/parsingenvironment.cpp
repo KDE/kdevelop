@@ -131,7 +131,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
   }
   
   QList< KSharedPtr<ParsingEnvironmentFile> > ret;
-  foreach(IndexedDUContext ctx, imp)
+  foreach(const IndexedDUContext &ctx, imp)
     ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
   return ret;
 }
@@ -149,7 +149,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
   }
   
   QList< KSharedPtr<ParsingEnvironmentFile> > ret;
-  foreach(IndexedDUContext ctx, imp)
+  foreach(const IndexedDUContext &ctx, imp)
     ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
   return ret;
 }
@@ -170,7 +170,7 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
   
   ///@todo Before recursing, do a fast check whether one of the imports has special rules stored. Else it's not neede.
   if(minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive || ParseJob::hasStaticMinimumFeatures())
-    foreach(ParsingEnvironmentFilePointer import, file->imports())
+    foreach(const ParsingEnvironmentFilePointer &import, file->imports())
       if(!featuresMatch(import, minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive ? minimumFeatures : ((TopDUContext::Features)0), checked))
         return false;
   

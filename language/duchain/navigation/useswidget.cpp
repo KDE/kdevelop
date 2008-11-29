@@ -330,7 +330,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
 
       QSet<int> hadIndices;
 
-      foreach(IndexedDeclaration usedDeclaration, usedDeclarations) {
+      foreach(const IndexedDeclaration &usedDeclaration, usedDeclarations) {
         int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
         if(hadIndices.contains(usedDeclarationIndex))
           continue;
@@ -383,7 +383,7 @@ DeclarationsWidget::DeclarationsWidget(const CodeRepresentation& code, QList<Ind
     QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Declaration") + "</b>" + sizeSuffix);
     addHeaderItem(headerLabel);
 
-    foreach(IndexedDeclaration decl, declarations)
+    foreach(const IndexedDeclaration &decl, declarations)
       if(decl.data())
         addItem(new OneUseWidget(decl, decl.data()->url(), decl.data()->range(), code, decl.data()->smartRange()));
 
@@ -467,7 +467,7 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
       
       IndexedTopDUContext localTopContext(topContext);
       QList<IndexedDeclaration> localDeclarations;
-      foreach(IndexedDeclaration decl, m_allDeclarations)
+      foreach(const IndexedDeclaration &decl, m_allDeclarations)
         if(decl.indexedTopContext() == localTopContext)
           localDeclarations << decl;
         

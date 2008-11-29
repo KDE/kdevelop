@@ -319,7 +319,7 @@ public:
   
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
 
-    foreach(DUContext::Import import, m_importedContexts) {
+    foreach(const DUContext::Import &import, m_importedContexts) {
       TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
       if(top) {
         top->m_local->m_directImporters.remove(m_ctxt);
@@ -953,7 +953,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
 #ifdef DEBUG_SEARCH
   FOREACH_ARRAY(SearchItem::Ptr idTree, identifiers)
-      foreach(QualifiedIdentifier id, idTree->toList())
+      foreach(const QualifiedIdentifier &id, idTree->toList())
         kDebug() << "findDeclarationsInternal" << id.toString();
 #endif
 
@@ -1297,7 +1297,7 @@ void TopDUContext::clearImportedParentContexts() {
   if(!m_local->m_sharedDataOwner)
     DUContext::clearImportedParentContexts();
   else {
-    foreach (Import parent, m_local->m_importedContexts)
+    foreach (const Import &parent, m_local->m_importedContexts)
       if( parent.context(0) )
         removeImportedParentContext(parent.context(0));
     Q_ASSERT(m_local->m_importedContexts.isEmpty());
@@ -1324,7 +1324,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context) {
 void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, SimpleCursor> >& contexts, bool temporary) {
   typedef QPair<TopDUContext*, SimpleCursor> Pair;
 
-  foreach(Pair pair, contexts)
+  foreach(const Pair &pair, contexts)
     addImportedParentContext(pair.first, pair.second, false, temporary);
 }
 
