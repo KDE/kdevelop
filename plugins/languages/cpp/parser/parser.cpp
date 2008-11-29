@@ -4562,7 +4562,8 @@ bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
     CHECK('(');
     
     SignalSlotExpressionAST *ast = CreateNode<SignalSlotExpressionAST>(session->mempool);
-    parseUnqualifiedName(ast->name, false);
+    if(!parseUnqualifiedName(ast->name, false))
+      return false;
     CHECK('(');
     parseTemplateArgumentList(ast->name->template_arguments);
     CHECK(')');
