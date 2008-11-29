@@ -1645,13 +1645,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {
     
     //So uses for the argument-types are built
-    {
-      //This builds the uses
-      SimpleCursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
-      NameASTVisitor nameV( m_session, this, m_currentContext, topContext(), position.isValid() ? position : m_currentContext->range().end );
-      nameV.run(node->name, true);
-    }
-    
     LOCKDUCHAIN;
     
     putStringType();
@@ -1676,6 +1669,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       problem(node, QString("No signal/slot container"));
       return;
     }
+    
+    if(!node->name) {
+      problem(node, QString("Bad signal/slot"));
+      return;
+    }
+    
+    {
+      SimpleCursor position = container->range().end;
+      lock.unlock();
+      //This builds the uses
+      NameASTVisitor nameV( m_session, this, container, topContext(), position );
+      nameV.run(node->name, true);
+      lock.lock();
+    }
+    
 
     CppEditorIntegrator editor(session());
     QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
