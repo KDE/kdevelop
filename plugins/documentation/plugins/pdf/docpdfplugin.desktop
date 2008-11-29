@@ -4,6 +4,7 @@ Name=DocPDFPlugin
 Exec=blubb
 Comment=Documentation plugin for PDF format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή PDF
+Comment[nds]=Dokmentatschoon-Moduul för't PDF-Formaat
 Comment[pt]='Plugin' de documentação para o formato PDF
 Comment[pt_BR]='Plugin' de documentação para o formato PDF
 Comment[uk]=Додаток для перегляду документації у форматі PDF

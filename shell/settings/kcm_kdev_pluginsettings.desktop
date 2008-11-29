@@ -11,5 +11,15 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Plugins
+Name[el]=Πρόσθετα
+Name[nds]=Modulen
+Name[pt]='Plugins'
+Name[pt_BR]='Plugins'
+Name[uk]=Додатки
 Comment=Configure Plugins
+Comment[el]=Ρύθμιση προσθέτων
+Comment[nds]=Modulen instellen
+Comment[pt]=Configurar os 'Plugins'
+Comment[pt_BR]=Configurar os 'Plugins'
+Comment[uk]=Налаштування додатків
 

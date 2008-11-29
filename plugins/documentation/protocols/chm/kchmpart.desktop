@@ -3,6 +3,7 @@ Type=Service
 Exec=foobar
 Comment=Embeddable HTMLHelp Viewer
 Comment[el]=Ενσωματωμένος προβολέας HTMLHelp
+Comment[nds]=Inbettbor Kieker för HTML-Hülp
 Comment[pt]=Visualizador do HTMLHelp Incorporado
 Comment[pt_BR]=Visualizador do HTMLHelp Incorporado
 Comment[uk]=Придатний для вбудовування переглядач HTMLHelp

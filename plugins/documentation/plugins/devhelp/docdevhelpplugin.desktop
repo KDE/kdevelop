@@ -3,6 +3,7 @@ Type=Service
 Name=DevHelpPlugin
 Comment=Documentation plugin for DevHelp documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση DevHelp
+Comment[nds]=Dokmentatschoon-Moduul för DevHelp-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os documentos do DevHelp
 Comment[pt_BR]='Plugin' de documentação para os documentos do DevHelp
 Comment[uk]=Додаток для роботи з документацією DevHelp

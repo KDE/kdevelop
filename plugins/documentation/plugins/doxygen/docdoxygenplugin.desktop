@@ -4,6 +4,7 @@ Name=DocDoxygenPlugin
 Exec=blubb
 Comment=Documentation plugin for Doxygen documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση τύπου Doxygen
+Comment[nds]=Dokmentatschoon-Moduul för Doxygen-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os documentos do Doxygen
 Comment[pt_BR]='Plugin' de documentação para os documentos do Doxygen
 Comment[uk]=Додаток для перегляду документації у форматі Doxygen

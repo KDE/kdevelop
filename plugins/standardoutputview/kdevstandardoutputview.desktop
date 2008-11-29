@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDevStandardOutputView
+Name[nds]=KDevStandardutgaavansicht
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview

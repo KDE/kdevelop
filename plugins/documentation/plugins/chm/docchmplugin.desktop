@@ -4,6 +4,7 @@ Name=DocCHMPlugin
 Exec=blubb
 Comment=Documentation plugin for CHM documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση CHM
+Comment[nds]=Dokmentatschoon-Moduul för CHM-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os manuais CHM
 Comment[pt_BR]='Plugin' de documentação para os manuais CHM
 Comment[uk]=Додаток для роботи з документацією CHM
