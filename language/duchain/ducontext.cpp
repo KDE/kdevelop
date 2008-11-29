@@ -456,7 +456,10 @@ bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 void DUContextDynamicData::addImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
-  Q_ASSERT(!arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context)));
+  if(arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context))) {
+    kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
+    return;
+  }
 
   m_context->d_func_dynamic()->m_importersList().append(context);
 
