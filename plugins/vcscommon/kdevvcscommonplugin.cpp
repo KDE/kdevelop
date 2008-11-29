@@ -203,7 +203,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
         KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
         if( filectx )
         {
-            foreach( const KUrl url, filectx->urls() )
+            foreach( const KUrl &url, filectx->urls() )
             {
                 KDevelop::IPlugin* plugin = findVcsPluginForUrl( url );
                 if( plugin )

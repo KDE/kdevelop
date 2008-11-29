@@ -59,10 +59,10 @@ void EditorsView::slotJobFinished(KJob* job)
     } else {
         QString html;
 
-        foreach (QString key, lockedFiles.uniqueKeys()) {
+        foreach (const QString &key, lockedFiles.uniqueKeys()) {
             html += "<h3>"+key+"</h3><br>";
 
-            foreach(CvsLocker item, lockedFiles.values( key )) {
+            foreach(const CvsLocker &item, lockedFiles.values( key )) {
                 html += "<b>"+i18n("User")+":</b> "+item.user+"<br>";
                 html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
                 html += "<b>"+i18n("Machine")+":</b> "+item.machine+"<br>";

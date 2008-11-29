@@ -29,7 +29,7 @@ SvnRevertOptionDlg::~SvnRevertOptionDlg()
 
 void SvnRevertOptionDlg::setCandidates( const KUrl::List &urls )
 {
-    foreach( KUrl _url, urls ){
+    foreach( const KUrl &_url, urls ){
         QFileInfo fileInfo(_url.toLocalFile());
 
         if( fileInfo.isFile() ){
@@ -53,7 +53,7 @@ void SvnRevertOptionDlg::setCandidates( const KUrl::List &urls )
             // FIXME this code adds every items whose status is not normal. Should we allow
             // only added/removed/modified here?
             QList<SvnStatusHolder> holderList = m_part->statusSync( _url, true, false, false, true ).values();
-            foreach( SvnStatusHolder _holder, holderList ){
+            foreach( const SvnStatusHolder &_holder, holderList ){
 
                 if( _holder.textStatus != svn_wc_status_unversioned &&
                     _holder.textStatus != svn_wc_status_none )

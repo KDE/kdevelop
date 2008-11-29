@@ -109,7 +109,7 @@ void VcsEventWidgetPrivate::jobReceivedResults( KDevelop::VcsJob* job )
     {
         QList<QVariant> l = job->fetchResults().toList();
         QList<KDevelop::VcsEvent> newevents;
-        foreach( QVariant v, l )
+        foreach( const QVariant &v, l )
         {
             if( qVariantCanConvert<KDevelop::VcsEvent>( v ) )
             {

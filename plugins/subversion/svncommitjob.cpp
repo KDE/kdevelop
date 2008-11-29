@@ -101,7 +101,7 @@ void SvnInternalCommitJob::run()
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
     KUrl::List l = urls();
-    foreach( KUrl u, l )
+    foreach( const KUrl &u, l )
     {
         QByteArray path = u.path( KUrl::RemoveTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( path.data() ) );

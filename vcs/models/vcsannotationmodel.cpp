@@ -137,7 +137,7 @@ void VcsAnnotationModel::addLines( const QList<KDevelop::VcsAnnotationLine>& lis
         beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
     else
         beginInsertRows( QModelIndex(), rowCount(), list.count() );
-    foreach( KDevelop::VcsAnnotationLine l, list )
+    foreach( const KDevelop::VcsAnnotationLine &l, list )
     {
         if( !d->m_brushes.contains( l.revision() ) )
         {

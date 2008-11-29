@@ -41,11 +41,11 @@ public:
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     d->m_defaultGroup = cfg.readEntry( "Default EnvironmentGroup", QString( "default" ) );
-    foreach( QString envgrpname, cfg.groupList() )
+    foreach( const QString &envgrpname, cfg.groupList() )
     {
         KConfigGroup envgrp( &cfg, envgrpname );
         QMap<QString,QString> variables;
-        foreach( QString varname, envgrp.keyList() )
+        foreach( const QString &varname, envgrp.keyList() )
         {
             variables[varname] = envgrp.readEntry( varname, QString("") );
         }
@@ -62,10 +62,10 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     cfg.writeEntry( "Default Environment Group", d->m_defaultGroup );
-    foreach( QString group, d->m_groups.keys() )
+    foreach( const QString &group, d->m_groups.keys() )
     {
         KConfigGroup envgrp( &cfg, group );
-        foreach( QString var, d->m_groups[group].keys() )
+        foreach( const QString &var, d->m_groups[group].keys() )
         {
             envgrp.writeEntry( var, d->m_groups[group][var] );
         }
@@ -148,7 +148,7 @@ EnvironmentGroupList::EnvironmentGroupList()
 QStringList EnvironmentGroupList::createEnvironment(const QString & group, const QStringList & defaults) const
 {
     QMap<QString, QString> retMap;
-    foreach( QString line, defaults )
+    foreach( const QString &line, defaults )
     {
         QString varName = line.section( '=', 0, 0 );
         QString varValue = line.section( '=', 1 );

@@ -122,7 +122,7 @@ void RunnerTestHelper::setTimeout(int timeout)
 
 void RunnerTestHelper::verifyTestTree(QStringList runnerItems)
 {
-    foreach(QString s, runnerItems) {
+    foreach(const QString &s, runnerItems) {
         QStringList spl = s.split(" ");
         int lvl0 = spl[0].toInt();
         int lvl1 = (spl.size() > 2) ? spl[1].toInt() : -1;

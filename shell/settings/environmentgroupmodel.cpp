@@ -155,7 +155,7 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     m_currentGroup = group;
     m_variableMap.clear();
     int i = 0;
-    foreach( const QString var, variables( m_currentGroup ).keys() )
+    foreach( const QString &var, variables( m_currentGroup ).keys() )
     {
         m_variableMap.insert(i++, var);
     }

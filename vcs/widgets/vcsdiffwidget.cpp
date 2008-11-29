@@ -49,7 +49,7 @@ public:
         KDevelop::VcsDiff diff = qVariantValue<KDevelop::VcsDiff>( m_job->fetchResults() );
 
         kDebug() << "diff:" << diff.leftTexts().count();
-        foreach( KDevelop::VcsLocation l, diff.leftTexts().keys() )
+        foreach( const KDevelop::VcsLocation &l, diff.leftTexts().keys() )
         {
             kDebug() << "diff:" << l.localUrl() << l.repositoryServer();
         }

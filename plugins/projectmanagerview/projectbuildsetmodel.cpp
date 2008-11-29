@@ -250,7 +250,7 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
     int count = 0;
-    foreach( BuildItem item, m_items)
+    foreach( const BuildItem &item, m_items)
     {
         if( item.projectName() == project->name() )
         {

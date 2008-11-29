@@ -52,7 +52,7 @@ SvnRevision SvnRevisionWidget::revision()
 void SvnRevisionWidget::installKeys( const QList<SvnRevision::Keyword> &keylist )
 {
     kindCombo->clear();
-    foreach( SvnRevision::Keyword _key, keylist )
+    foreach( const SvnRevision::Keyword &_key, keylist )
     {
         switch( _key ){
             case SvnRevision::Head:

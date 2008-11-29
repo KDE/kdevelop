@@ -100,7 +100,7 @@ void CommandExecutor::setWorkingDirectory( const QString& dir )
 
 void CommandExecutor::start()
 {
-    Q_FOREACH( QString s, d->m_env.keys() )
+    Q_FOREACH( const QString &s, d->m_env.keys() )
     {
         d->m_process->setEnv( s, d->m_env[s] );
     }

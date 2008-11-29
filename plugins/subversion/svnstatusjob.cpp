@@ -104,7 +104,7 @@ void SvnInternalStatusJob::run()
 
     svn::Client cli(m_ctxt);
     KUrl::List l = locations();
-    foreach( KUrl url, l )
+    foreach( const KUrl &url, l )
     {
         kDebug(9510) << "Fetching status info for:" << url;
         try

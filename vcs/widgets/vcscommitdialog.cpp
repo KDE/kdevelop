@@ -143,7 +143,7 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
         KStatefulBrush deletedRed(KColorScheme::View, KColorScheme::NegativeText);
         KStatefulBrush newGreen(KColorScheme::View, KColorScheme::ActiveText);
 
-        foreach( QVariant var, varlist.toList() )
+        foreach( const QVariant &var, varlist.toList() )
         {
             VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
 

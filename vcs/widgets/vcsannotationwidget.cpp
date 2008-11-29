@@ -48,7 +48,7 @@ public:
         {
             QList<QVariant> result = job->fetchResults().toList();
             QList<KDevelop::VcsAnnotationLine> lines;
-            foreach( QVariant v, result )
+            foreach( const QVariant &v, result )
             {
                 if( v.canConvert<KDevelop::VcsAnnotationLine>() )
                 {

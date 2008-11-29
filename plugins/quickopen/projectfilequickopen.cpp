@@ -140,7 +140,7 @@ void ProjectFileDataProvider::reset() {
     allFiles -= openFiles_;
     IndexedString projectFolder(project->folder().pathOrUrl());
     IndexedString projectName(project->name());
-    foreach(IndexedString file, allFiles) {
+    foreach(const IndexedString &file, allFiles) {
       ProjectFile f;
       f.m_projectUrl = projectFolder;
       f.m_url = file;

@@ -41,7 +41,7 @@ void SvnInternalAddJob::run()
 
     svn::Client cli(m_ctxt);
     KUrl::List l = locations();
-    foreach( KUrl url, l )
+    foreach( const KUrl &url, l )
     {
         try
         {

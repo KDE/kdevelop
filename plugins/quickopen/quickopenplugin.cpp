@@ -195,7 +195,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     QVBoxLayout *itemsLayout = new QVBoxLayout;
     itemsLayout->setAlignment(Qt::AlignTop);
 
-    foreach( QString type, allTypes )
+    foreach( const QString &type, allTypes )
     {
       QCheckBox* check = new QCheckBox( type );
       itemsLayout->addWidget( check );
@@ -215,7 +215,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     scopesLayout->setAlignment(Qt::AlignTop);
 
 
-    foreach( QString scope, allScopes )
+    foreach( const QString &scope, allScopes )
     {
       QCheckBox* check = new QCheckBox( scope );
       scopesLayout->addWidget( check );

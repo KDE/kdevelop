@@ -65,7 +65,7 @@ void BuilderJob::addJob( BuildType t, KDevelop::ProjectBaseItem* item )
 
 BuilderJob::BuilderJob( BuildType t, const QList<BuildItem>& items )
 {
-    foreach( BuildItem item, items )
+    foreach( const BuildItem &item, items )
     {
         addJob( t, item.findItem() );
     }

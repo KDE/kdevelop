@@ -68,7 +68,7 @@ void SnippetRepository::slotSyncRepository()
     QStringList l = list.filter(noHiddenFiles);
 
     // Now run through all found entries ...
-    foreach (QString file, l) {
+    foreach (const QString &file, l) {
         QFileInfo info(location_+QDir::separator()+file);
 
         if (info.isHidden()) {

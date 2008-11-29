@@ -83,7 +83,7 @@ void ProjectControllerTest::cleanup()
     foreach(IProject* p, m_projCtrl->projects()) {
         m_projCtrl->closeProject(p);
     }
-    foreach(KUrl cfg, m_tmpConfigs) {
+    foreach(const KUrl &cfg, m_tmpConfigs) {
         QFile::remove(cfg.pathOrUrl());
     }
 }

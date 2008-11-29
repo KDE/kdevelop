@@ -32,8 +32,8 @@ Q_DECLARE_METATYPE( HistoryMessagePointer )
 Q_DECLARE_METATYPE( Teamwork::MessageType )
 
 GuiMessageHistory::GuiMessageHistory( MessageManager* manager, UserList users, const QString& context ) : SafeLogger( manager->teamwork() ->logger() ), m_manager( manager ), m_defaultContext( context ) {
-  foreach( KDevTeamworkUserPointer user, users )
-  addUser( user );
+  foreach( const KDevTeamworkUserPointer &user, users )
+    addUser( user );
 
   if ( users.isEmpty() )
     m_allUsers = true;

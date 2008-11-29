@@ -151,7 +151,7 @@ void EnvironmentWidget::deleteButtonClicked()
     QModelIndexList selected = ui.variableTable->selectionModel()->selectedRows();
     if( selected.isEmpty() )
         return;
-    foreach( const QModelIndex idx, selected )
+    foreach( const QModelIndex &idx, selected )
     {
         kDebug() << "deleting index" << idx << proxyModel->mapToSource( idx );
         groupModel->removeVariable( proxyModel->mapToSource( idx ) );

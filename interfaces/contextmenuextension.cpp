@@ -93,7 +93,7 @@ void ContextMenuExtension::addAction( const QString& group, QAction* action )
 
 void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions)
 {
-    foreach( const ContextMenuExtension ext, extensions )
+    foreach( const ContextMenuExtension &ext, extensions )
     {
         foreach( QAction* act, ext.actions( ContextMenuExtension::FileGroup ) )
         {
@@ -110,7 +110,7 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     QList<QAction*> extActions;
     QList<QAction*> refactorActions;
     QList<QAction*> debugActions;
-    foreach( const ContextMenuExtension ext, extensions )
+    foreach( const ContextMenuExtension &ext, extensions )
     {
 
         foreach( QAction* act, ext.actions( ContextMenuExtension::VcsGroup ) )

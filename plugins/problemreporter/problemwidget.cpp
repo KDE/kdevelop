@@ -91,7 +91,7 @@ void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUCon
 
   allProblems += context->problems();
   bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
-  foreach(DUContext::Import ctx, context->importedParentContexts()) {
+  foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
     TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
     if(topCtx) {
       //If we are starting at a proxy-context, only recurse into other proxy-contexts,

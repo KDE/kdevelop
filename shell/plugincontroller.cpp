@@ -356,7 +356,7 @@ bool PluginController::checkForDependencies( const KPluginInfo& info, QStringLis
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
-        foreach( QString iface, deps )
+        foreach( const QString &iface, deps )
         {
             KPluginInfo::List l = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) );
             if( l.isEmpty() )
@@ -375,7 +375,7 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
-        foreach( QString iface, deps )
+        foreach( const QString &iface, deps )
         {
             KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
             if( !loadPluginInternal( info.pluginName() ) )
@@ -392,7 +392,7 @@ void PluginController::loadDependencies( const KPluginInfo& info )
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
-        foreach( QString iface, deps )
+        foreach( const QString &iface, deps )
         {
             KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
             loadPluginInternal( info.pluginName() );

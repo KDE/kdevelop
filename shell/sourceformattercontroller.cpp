@@ -60,7 +60,7 @@ void SourceFormatterController::loadPlugins()
 		kDebug() << "Found plugin " << info.name() << " for mimes " << mimes << endl;
 
 		QStringList mimeTypes = mimes.toStringList();
-		foreach(QString s, mimeTypes) {
+		foreach(const QString &s, mimeTypes) {
 			QString lang = languageNameFromLanguageSupport(s);
 			QList<KDevelop::IPlugin*> &list = m_plugins[lang];
 			if (!list.contains(p))
@@ -378,7 +378,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 			QStringList optionList = options.split(';', QString::SkipEmptyParts);
 
 			os <<  modeline;
-			foreach(QString s, optionList) {
+			foreach(const QString &s, optionList) {
 				if (knownOptions.indexIn(s) < 0) { // unknown option, add it
 					os << s << ";";
 					kDebug() << "Found unknown option: " << s << endl;

@@ -114,7 +114,7 @@ void ProjectBuildSetWidget::addItems()
 void ProjectBuildSetWidget::removeItems()
 {
     QList<int> rows;
-    foreach( QItemSelectionRange range, m_ui->itemView->selectionModel()->selection() )
+    foreach( const QItemSelectionRange &range, m_ui->itemView->selectionModel()->selection() )
     {
         m_view->plugin()->buildSet()->removeRows( range.top(), range.height() );
     }

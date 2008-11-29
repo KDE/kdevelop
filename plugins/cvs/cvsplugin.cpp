@@ -206,7 +206,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     KDevelop::ContextMenuExtension menuExt;
 
     bool hasVersionControlledEntries = false;
-    foreach( KUrl url, ctxUrlList )
+    foreach( const KUrl &url, ctxUrlList )
     {
         if( isVersionControlled( url ) )
         {

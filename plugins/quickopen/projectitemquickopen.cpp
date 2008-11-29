@@ -220,7 +220,7 @@ void ProjectItemDataProvider::reset() {
   m_addedItems.clear();
 
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
-  foreach( IndexedString u, m_usingFiles ) {
+  foreach( const IndexedString &u, m_usingFiles ) {
     uint count;
     const KDevelop::CodeModelItem* items;
     CodeModel::self().items( u, count, items );

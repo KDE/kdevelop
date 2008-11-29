@@ -44,7 +44,7 @@ void SvnInternalRemoveJob::run()
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
     KUrl::List l = locations();
-    foreach( KUrl url, l )
+    foreach( const KUrl &url, l )
     {
         QByteArray ba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( ba.data() ) );

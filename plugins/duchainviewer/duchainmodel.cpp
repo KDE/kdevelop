@@ -312,7 +312,7 @@ QList<DUChainBasePointer*>* DUChainModel::childItems(DUChainBasePointer* parentp
 
     QVector<DUContext*> importedParentContextsData;
     ///@todo Think whether this can be called for top-contexts, and if it can, care about endless recursion because of loops.
-    foreach( DUContext::Import p, context->importedParentContexts() )
+    foreach( const DUContext::Import &p, context->importedParentContexts() )
       if( p.context(0) )
         importedParentContextsData << p.context(0);
 
