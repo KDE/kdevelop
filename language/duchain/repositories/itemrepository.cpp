@@ -293,7 +293,7 @@ void ItemRepositoryRegistry::close() {
 ItemRepositoryRegistry::~ItemRepositoryRegistry() {
   close();
   QMutexLocker lock(&m_mutex);
-  foreach(QAtomicInt* counter, m_customCounters.values())
+  foreach(QAtomicInt* counter, m_customCounters)
     delete counter;
 }
 
