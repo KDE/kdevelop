@@ -124,3 +124,4 @@ namespace KDevelop {
             bool m_processDeclarations;
     };
 }
+
