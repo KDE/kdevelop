@@ -161,7 +161,7 @@ int StandardOutputView::registerToolView( const QString& title,
         newid = 0;
     else
     {
-        foreach( ToolViewData* d, toolviews.values() )
+        foreach( ToolViewData* d, toolviews )
         {
             if( d->title == title )
                 return d->toolViewId;
@@ -278,7 +278,7 @@ void StandardOutputView::removeToolView( int id )
 
 OutputWidget* StandardOutputView::outputWidgetForId( int id ) const
 {
-    foreach( ToolViewData* td, toolviews.values() )
+    foreach( ToolViewData* td, toolviews )
     {
         if( td->outputdata.contains( id ) )
         {

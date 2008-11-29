@@ -496,7 +496,7 @@ IDocument * DocumentController::documentForUrl( const KUrl & url ) const
 QList<IDocument*> DocumentController::openDocuments() const
 {
     QList<IDocument*> opened;
-    foreach (IDocument *doc, d->documents.values())
+    foreach (IDocument *doc, d->documents)
     {
         Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )

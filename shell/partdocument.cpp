@@ -134,7 +134,7 @@ bool PartDocument::close(DocumentSaveMode mode)
         }
     }
 
-    foreach (KParts::Part* part, d->partForView.values())
+    foreach (KParts::Part* part, d->partForView)
         part->deleteLater();
 
     Core::self()->documentControllerInternal()->notifyDocumentClosed(this);

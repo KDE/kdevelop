@@ -161,7 +161,7 @@ KDevelop::IBuildSystemManager::Features KrossBuildSystemManager::features() cons
 QList<KDevelop::ProjectTargetItem*> KrossBuildSystemManager::targets() const
 {
     QList<KDevelop::ProjectTargetItem*> targets;
-    foreach(const QList<KDevelop::ProjectTargetItem*>& it, m_targets.values())
+    foreach(const QList<KDevelop::ProjectTargetItem*>& it, m_targets)
         targets += it;
     return targets;
 }

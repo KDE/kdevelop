@@ -106,7 +106,7 @@ ICompletionSettings *LanguageController::completionSettings() const {
 QList<ILanguage*> LanguageController::loadedLanguages() const
 {
     QList<ILanguage*> ret;
-    foreach(Language* lang, d->languages.values())
+    foreach(Language* lang, d->languages)
         ret << lang;
     return ret;
 }
