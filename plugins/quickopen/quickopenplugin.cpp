@@ -352,10 +352,9 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
   QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
   
   if( event->type() == QEvent::KeyRelease ) {
-    if(keyEvent->key() == Qt::Key_Alt && m_expandedTemporary) {
-      m_expandedTemporary = false;
-      if(m_expandTime.msecsTo( QTime::currentTime() ) > 300) {
-        //Eventually do temporary "peek" un-expansion
+    if(keyEvent->key() == Qt::Key_Alt) {
+      if((m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) > 300) || (!m_expandedTemporary && m_altDownTime.msecsTo( QTime::currentTime() ) < 300 && m_hadNoCommandSinceAlt)) {
+        //Unexpand the item
         QModelIndex row = o.list->selectionModel()->currentIndex();
         if( row.isValid() ) {
           row = row.sibling( row.row(), 0 );
@@ -363,18 +362,21 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
             m_model->setExpanded( row, false );
         }      
       }
+      m_expandedTemporary = false;
     }
   }
   
   if( event->type() == QEvent::KeyPress  ) {
+    m_hadNoCommandSinceAlt = false;
     if(keyEvent->key() == Qt::Key_Alt) {
-      //Eventually do temporary "peek" expansion
+      m_hadNoCommandSinceAlt = true;
+      //Expand
       QModelIndex row = o.list->selectionModel()->currentIndex();
       if( row.isValid() ) {
         row = row.sibling( row.row(), 0 );
+        m_altDownTime = QTime::currentTime();
         if(!m_model->isExpanded( row )) {
           m_expandedTemporary = true;
-          m_expandTime = QTime::currentTime();
           m_model->setExpanded( row, true );
         }
       }      
