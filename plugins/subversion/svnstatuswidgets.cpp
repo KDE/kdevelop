@@ -20,7 +20,7 @@ SvnStatusOptionDlg::SvnStatusOptionDlg( const KUrl &path, QWidget *parent )
     : KDialog( parent )
 {
     ui.setupUi(mainWidget());
-    setCaption( "Subversion Status" );
+    setCaption( i18n("Subversion Status") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     ui.revisionWidget->setKey( SvnRevision::Head );

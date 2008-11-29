@@ -21,7 +21,7 @@ SvnCopyOptionDlg::SvnCopyOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info,
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
     ui.setupUi(mainWidget());
-    setCaption( "Subversion Copy" );
+    setCaption( i18n("Subversion Copy") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     ui.urlRadio->setChecked(true);

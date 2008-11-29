@@ -19,7 +19,7 @@ SvnMoveOptionDlg::SvnMoveOptionDlg( const KUrl &reqUrl, SvnInfoHolder *info, QWi
     : KDialog( parent ), m_reqUrl(reqUrl), m_info(info)
 {
     ui.setupUi(mainWidget());
-    setCaption( "Subversion Move" );
+    setCaption( i18n("Subversion Move" ));
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     ui.urlRadio->setChecked(true);

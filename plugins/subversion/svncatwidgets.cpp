@@ -17,7 +17,7 @@ SvnCatOptionDlg::SvnCatOptionDlg( const KUrl &path, QWidget *parent )
     : KDialog( parent )
 {
     ui.setupUi(mainWidget());
-    setCaption( "Subversion Cat" );
+    setCaption( i18n("Subversion Cat") );
     setButtons( KDialog::Ok | KDialog::Cancel );
 
     QList<SvnRevision::Keyword> keys;
