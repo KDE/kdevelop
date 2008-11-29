@@ -68,6 +68,7 @@
 #include "declarationlistquickopen.h"
 #include "customlistquickopen.h"
 #include <language/duchain/functiondefinition.h>
+#include <qmenu.h>
 
 using namespace KDevelop;
 
@@ -192,48 +193,37 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
     QStringList allTypes = m_model->allTypes();
     QStringList allScopes = m_model->allScopes();
 
-    QVBoxLayout *itemsLayout = new QVBoxLayout;
-    itemsLayout->setAlignment(Qt::AlignTop);
-
+    QMenu* itemsMenu = new QMenu;
+    
     foreach( const QString &type, allTypes )
     {
-      QCheckBox* check = new QCheckBox( type );
-      itemsLayout->addWidget( check );
-
-      if( initialItems.isEmpty() || initialItems.contains( type ) )
-        check->setCheckState( Qt::Checked );
-      else
-        check->setCheckState( Qt::Unchecked );
-
-      connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+      QAction* action = new QAction(type, itemsMenu);
+      action->setCheckable(true);
+      action->setChecked(initialItems.isEmpty() || initialItems.contains( type ));
+      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()) );
+      itemsMenu->addAction(action);
     }
 
-    itemsLayout->addStretch( 1 );
-    o.itemsGroup->setLayout( itemsLayout );
+    o.itemsButton->setMenu(itemsMenu);
 
-    QVBoxLayout *scopesLayout = new QVBoxLayout;
-    scopesLayout->setAlignment(Qt::AlignTop);
-
+    QMenu* scopesMenu = new QMenu;
 
     foreach( const QString &scope, allScopes )
     {
-      QCheckBox* check = new QCheckBox( scope );
-      scopesLayout->addWidget( check );
+      QAction* action = new QAction(scope, scopesMenu);
+      action->setCheckable(true);
+      action->setChecked(initialScopes.isEmpty() || initialScopes.contains( scope ) );
 
-      if( initialScopes.isEmpty() || initialScopes.contains( scope ) )
-        check->setCheckState( Qt::Checked );
-      else
-        check->setCheckState( Qt::Unchecked );
-
-      connect( check, SIGNAL(stateChanged(int)), this, SLOT(updateProviders()) );
+      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()) );
+      scopesMenu->addAction(action);
     }
+    
+    o.scopesButton->setMenu(scopesMenu);
 
-    scopesLayout->addStretch( 1 );
-    o.scopeGroup->setLayout( scopesLayout );
   }else{
     o.list->setFocusPolicy(Qt::StrongFocus);
-    o.scopeGroup->hide();
-    o.itemsGroup->hide();
+    o.scopesButton->hide();
+    o.itemsButton->hide();
   }
 
   if( noSearchField ) {
@@ -243,6 +233,9 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
   o.buttonBox->installEventFilter( this );
+  o.list->setFocusPolicy(Qt::NoFocus);
+  o.scopesButton->setFocusPolicy(Qt::NoFocus);
+  o.itemsButton->setFocusPolicy(Qt::NoFocus);
 
   connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
   connect( m_dialog, SIGNAL(accepted()), this, SLOT(accept()) );
@@ -275,24 +268,34 @@ QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
 }
 
 void QuickOpenWidgetHandler::updateProviders() {
+  if(QAction* action = qobject_cast<QAction*>(sender())) {
+    QMenu* menu = qobject_cast<QMenu*>(action->parentWidget());
+    if(menu) {
+      menu->show();
+      menu->setActiveAction(action);
+    }
+  }
   QStringList checkedItems;
   QStringList checkedScopes;
 
-  foreach( QObject* obj, o.itemsGroup->children() ) {
-    QCheckBox* box = qobject_cast<QCheckBox*>( obj );
+  foreach( QObject* obj, o.itemsButton->menu()->children() ) {
+    QAction* box = qobject_cast<QAction*>( obj );
     if( box ) {
-      if( box->checkState() == Qt::Checked )
+      if( box->isChecked() )
         checkedItems << box->text().remove('&');
     }
   }
 
-  foreach( QObject* obj, o.scopeGroup->children() ) {
-    QCheckBox* box = qobject_cast<QCheckBox*>( obj );
+  foreach( QObject* obj, o.scopesButton->menu()->children() ) {
+    QAction* box = qobject_cast<QAction*>( obj );
     if( box ) {
-      if( box->checkState() == Qt::Checked )
+      if( box->isChecked() )
         checkedScopes << box->text().remove('&');
     }
   }
+  
+  o.itemsButton->setText(checkedItems.join(", "));
+  o.scopesButton->setText(checkedScopes.join(", "));
 
   emit scopesChanged( checkedScopes );
   m_model->enableProviders( checkedItems, checkedScopes );

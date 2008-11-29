@@ -25,7 +25,6 @@
 #include <interfaces/iplugin.h>
 #include <language/interfaces/iquickopen.h>
 #include <QtCore/QVariant>
-
 #include <language/interfaces/quickopendataprovider.h>
 #include "ui_quickopen.h"
 
