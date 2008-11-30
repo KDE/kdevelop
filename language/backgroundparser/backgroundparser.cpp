@@ -92,7 +92,7 @@ public:
             delete it.value();
         }
 
-        qDeleteAll(m_delayedParseJobs.values());
+        qDeleteAll(m_delayedParseJobs);
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.

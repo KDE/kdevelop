@@ -84,7 +84,7 @@ DUChainViewPlugin* DUChainModel::plugin() const {
 
 DUChainModel::~DUChainModel()
 {
-  qDeleteAll(m_knownObjects.values());
+  qDeleteAll(m_knownObjects);
 }
 
 void DUChainModel::parseJobFinished(KDevelop::ParseJob* job)
@@ -123,7 +123,7 @@ void DUChainModel::setTopContext(TopDUContextPointer context)
   if (m_chain != context)
     m_chain = context;
 
-  qDeleteAll(m_proxyObjects.values());
+  qDeleteAll(m_proxyObjects);
   m_proxyObjects.clear();
 
   m_objectLists.clear();

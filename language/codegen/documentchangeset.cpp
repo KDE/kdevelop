@@ -65,7 +65,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
                         it = sortedChanges.erase(it);
                         continue;
                     }else{
-                        qDeleteAll(codeRepresentations.values());
+                        qDeleteAll(codeRepresentations);
                         return ChangeResult(QString("Inconsistent change-request at %1").arg(file.str()));
                     }
                 }
@@ -93,7 +93,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             {
                 textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
             }else{
-                qDeleteAll(codeRepresentations.values());
+                qDeleteAll(codeRepresentations);
                 return DocumentChangeSet::ChangeResult(QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered %7) -> %8").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText), sortedChangesList[pos]);
             }
         }
@@ -132,13 +132,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             foreach(const IndexedString &revertFile, oldTexts.keys())
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
             
-            qDeleteAll(codeRepresentations.values());
+            qDeleteAll(codeRepresentations);
             return DocumentChangeSet::ChangeResult(QString("Failed to set text on %1").arg(file.str()));
         }
     }
     
     
-    qDeleteAll(codeRepresentations.values());
+    qDeleteAll(codeRepresentations);
     return DocumentChangeSet::ChangeResult(true);
 }
 
