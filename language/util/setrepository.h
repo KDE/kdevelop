@@ -20,11 +20,11 @@ namespace Utils {
  *                   and a toItem member function that takes an index, and returns an item of type T.
  * */
 template<class T, class Conversion>
-class ConvenientIterator {
+class ConvenientIterator : public Conversion {
   public:
-    ConvenientIterator(Set::Iterator it=Set::Iterator(), const Conversion& conversion = Conversion()) : m_it(it), m_conversion(conversion) {
+    ConvenientIterator(Set::Iterator it=Set::Iterator()) : m_it(it) {
     }
-    ConvenientIterator(const Set& set, const Conversion& conversion = Conversion()) : m_it(set.iterator()), m_conversion(conversion) {
+    ConvenientIterator(const Set& set) : m_it(set.iterator()) {
     }
     
     operator bool() const {
@@ -37,11 +37,11 @@ class ConvenientIterator {
     }
 
     T operator*() const {
-      return m_conversion.toItem(*m_it);
+      return Conversion::toItem(*m_it);
     }
 
     const T& ref() const {
-      return m_conversion.toItem(*m_it);
+      return Conversion::toItem(*m_it);
     }
     
     uint index() const {
@@ -50,9 +50,145 @@ class ConvenientIterator {
 
     private:
     Set::Iterator m_it;
-    Conversion m_conversion;
   };
 
+struct DummyLocker {
+};
+  
+template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker = DummyLocker>
+class StorableSet : public Conversion {
+  public:
+      
+    StorableSet(const StorableSet& rhs) : m_setIndex(rhs.m_setIndex) {
+        if(doReferenceCounting)
+            set().staticRef();
+    }
+    
+    StorableSet(const Set& base) : m_setIndex(base.setIndex()) {
+        if(doReferenceCounting)
+            set().staticRef();
+    }
+    
+    StorableSet() : m_setIndex(0) {
+    }
+    
+    ~StorableSet() {
+        if(doReferenceCounting)
+            set().staticUnref();
+    }
+    
+    void insert(const T& t) {
+      insertIndex(Conversion::toIndex(t));
+    }
+
+    void insertIndex(uint index) {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      Set oldSet(set);
+      Set addedSet = StaticRepository::repository()->createSet(index);
+      set += addedSet;
+      m_setIndex = set.setIndex();
+      
+      if(doReferenceCounting) {
+          set.staticRef();
+          oldSet.staticUnref();
+          addedSet.checkDelete();
+      }
+    }
+    
+    void remove(const T& t) {
+      removeIndex(Conversion::toIndex(t));
+    }
+
+    void removeIndex(uint index) {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      Set oldSet(set);
+      Set removedSet = StaticRepository::repository()->createSet(index);
+      set -= removedSet;
+      m_setIndex = set.setIndex();
+      
+      if(doReferenceCounting) {
+          set.staticRef();
+          oldSet.staticUnref();
+          removedSet.checkDelete();
+      }
+    }
+
+    Set set() const {
+      return Set(m_setIndex, StaticRepository::repository());
+    }
+
+    bool contains(const T& item) const {
+      return containsIndex(Conversion::itemToIndex(item));
+    }
+
+    bool containsIndex(uint index) const {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      return set.contains(index);
+    }
+
+    StorableSet& operator +=(const StorableSet& rhs) {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      Set oldSet(set);
+      Set otherSet(rhs.m_setIndex, StaticRepository::repository());
+      set += otherSet;
+      m_setIndex = set.setIndex();
+      
+      if(doReferenceCounting) {
+          set.staticRef();
+          oldSet.staticUnref();
+      }
+      return *this;
+    }
+    
+    StorableSet& operator -=(const StorableSet& rhs) {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      Set oldSet(set);
+      Set otherSet(rhs.m_setIndex, StaticRepository::repository());
+      set -= otherSet;
+      m_setIndex = set.setIndex();
+      
+      if(doReferenceCounting) {
+          set.staticRef();
+          oldSet.staticUnref();
+      }
+      return *this;
+    }
+    
+    StorableSet& operator=(const StorableSet& rhs) {
+        if(doReferenceCounting)
+            set().staticUnref();
+        m_setIndex = rhs.m_setIndex;
+        if(doReferenceCounting)
+            set().staticRef();
+    }
+
+    StorableSet operator +(const StorableSet& rhs) const {
+      StaticAccessLocker lock;
+      StorableSet ret(*this);
+      ret += rhs;
+      return ret;
+    }
+    
+    StorableSet operator -(const Set& rhs) const {
+      StaticAccessLocker lock;
+      StorableSet ret(*this);
+      ret -= rhs;
+      return ret;
+    }
+
+    ConvenientIterator<T, Conversion> iterator() const {
+      return ConvenientIterator<T, Conversion>(set());
+    }
+
+  private:
+
+    uint m_setIndex;
+  };  
     /** This is a helper-class that helps inserting a bunch of items into a set without caring about grouping them together.
      *
      * It creates a much better tree-structure if many items are inserted at one time, and this class helps doing that in
@@ -67,7 +203,7 @@ class ConvenientIterator {
      *                   and a toItem member function that takes an index, and returns an item of type T.
      **/
 template<class T, class Conversion>
-class LazySet {
+class LazySet : public Conversion {
   public:
     /** @param rep The repository the set should belong/belongs to
      *  @param lockBeforeAccess If this is nonzero, the given mutex will be locked before each modification to the repository.
@@ -75,13 +211,13 @@ class LazySet {
      *
      * @warning Watch for deadlocks, never use this class while the mutex given through lockBeforeAccess is locked
      */
-    LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = 0, const Set& basicSet = Set(), const Conversion& conversion = Conversion()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess), m_conversion(conversion) {
+    LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = 0, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
     }
 
     void insert(const T& t) {
       if(!m_temporaryRemoveIndices.empty())
         apply();
-      m_temporaryIndices.insert(m_conversion.toIndex(t));
+      m_temporaryIndices.insert(Conversion::toIndex(t));
     }
 
     void insertIndex(uint index) {
@@ -93,7 +229,7 @@ class LazySet {
     void remove(const T& t) {
       if(!m_temporaryIndices.empty())
         apply();
-      m_temporaryRemoveIndices.insert(m_conversion.toIndex(t));
+      m_temporaryRemoveIndices.insert(Conversion::toIndex(t));
     }
     
     ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
@@ -105,7 +241,7 @@ class LazySet {
     ///@warning this is expensive, because the set is constructed
     bool contains(const T& item) const {
       QMutexLocker l(m_lockBeforeAccess);
-      uint index = m_conversion.toIndex(item);
+      uint index = Conversion::toIndex(item);
 
       if( m_temporaryRemoveIndices.empty() ) {
         //Simplification without creating the set
@@ -157,7 +293,7 @@ class LazySet {
 
     ConvenientIterator<T, Conversion> iterator() const {
       apply();
-      return ConvenientIterator<T, Conversion>(set(), m_conversion);
+      return ConvenientIterator<T, Conversion>(set());
     }
 
   private:
@@ -181,7 +317,6 @@ class LazySet {
     typedef std::set<Utils::BasicSetRepository::Index> IndexList;
     mutable IndexList m_temporaryIndices;
     mutable IndexList m_temporaryRemoveIndices;
-    Conversion m_conversion;
   };
 }
 
