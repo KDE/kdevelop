@@ -802,7 +802,6 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d->m_features = VisibleDeclarationsAndContexts;
-  d->m_deleting = false;
   d->m_ownIndex = m_local->m_ownIndex;
   m_local->m_file = ParsingEnvironmentFilePointer(file);
   setInSymbolTable(true);
@@ -823,7 +822,7 @@ KSharedPtr<ParsingEnvironmentFile> TopDUContext::parsingEnvironmentFile() const 
 TopDUContext::~TopDUContext( )
 {
   if(!m_local->m_sharedDataOwner) {
-    d_func_dynamic()->m_deleting = true;
+    m_dynamicData->m_deleting = true;
     if(!isOnDisk())
       clearUsedDeclarationIndices();
   }
@@ -835,7 +834,7 @@ void TopDUContext::deleteSelf() {
   TopDUContextDynamicData* dynamicData = m_dynamicData;
   
   if(!m_local->m_sharedDataOwner)
-    d_func_dynamic()->m_deleting = true;
+    m_dynamicData->m_deleting = true;
 
   delete this;
   
@@ -1225,7 +1224,8 @@ TopDUContext * TopDUContext::topContext() const
 
 bool TopDUContext::deleting() const
 {
-  return d_func()->m_deleting;
+  ///@todo remove d_func()->m_deleting, not used any more
+  return m_dynamicData->m_deleting;
 }
 
 QList<ProblemPointer> TopDUContext::problems() const

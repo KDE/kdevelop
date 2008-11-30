@@ -200,13 +200,15 @@ bool appendedListsDynamic() const { return m_dynamic; }
 
 ///use this if the class does not have a base class that also uses appended lists
 #define START_APPENDED_LISTS(container) \
-unsigned int offsetBehindBase() const { return 0; }
+unsigned int offsetBehindBase() const { return 0; } \
+void freeDynamicData() { freeAppendedLists(); } 
 
 ///Use this if one of the base-classes of the container also has the appended lists interfaces implemented.
 ///To reduce the probability of future problems, you should give the direct base class this one inherits from.
 ///@note: Multiple inheritance is not supported, however it will work ok if only one of the base-classes uses appended lists.
 #define START_APPENDED_LISTS_BASE(container, base) \
-unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); }
+unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } \
+void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); } 
 
 
 #define APPENDED_LIST_COMMON(container, type, name) \

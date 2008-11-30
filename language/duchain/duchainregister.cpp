@@ -40,6 +40,13 @@ void DUChainItemSystem::callDestructor(DUChainBaseData* data) const {
   return m_factories[data->classId]->callDestructor(data);
 }
 
+void DUChainItemSystem::freeDynamicData(KDevelop::DUChainBaseData* data) const {
+  if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == 0)
+    return;
+  return m_factories[data->classId]->freeDynamicData(data);
+
+}
+
 uint DUChainItemSystem::dynamicSize(const DUChainBaseData& data) const {
   if(uint(m_factories.size()) <= data.classId || m_factories[data.classId] == 0)
     return 0;

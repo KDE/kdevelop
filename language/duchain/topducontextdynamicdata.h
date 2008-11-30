@@ -86,6 +86,11 @@ class TopDUContextDynamicData {
   
   static QList<IndexedDUContext> loadImports(uint topContextIndex);
 
+  bool isTemporaryContextIndex(uint index) const;
+  bool isTemporaryDeclarationIndex(uint index) const ;
+  
+  bool m_deleting; ///Flag used during destruction
+  
   private:
     void loadData() const;
     

@@ -59,7 +59,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   item.setData(&target);
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_deleting(false) {
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
@@ -471,6 +471,14 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* decl, bool tempora
     m_temporaryContexts.append(decl);
     return 0x0fffffff - m_temporaryContexts.size(); //We always keep the highest bit at zero
   }
+}
+
+bool TopDUContextDynamicData::isTemporaryContextIndex(uint index) const {
+  return !(index < (0x0fffffff/2));
+}
+
+bool TopDUContextDynamicData::isTemporaryDeclarationIndex(uint index) const {
+  return !(index < (0x0fffffff/2));
 }
 
 DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {

@@ -43,6 +43,15 @@ class IndexedString;
 #define DUCHAIN_D(Class) const Class##Data * const d = d_func()
 #define DUCHAIN_D_DYNAMIC(Class) Class##Data * const d = d_func_dynamic()
 
+///@note When a data-item is stored on disk, no destructors of contained items will be called while destruction.
+///DUChainBase assumes that each item that has constant data, is stored on disk.
+///However the destructor is called even on constant items, when they have been replaced with a dynamic item.
+///This tries to keep constructor/destructor count consistency persistently, which allows doing static reference-counting
+///using contained classes in their constructor/destructors(For example the class Utils::StorableSet).
+///This means that the data of all items that are stored to disk _MUST_ be made constant before their destruction.
+///This also means that every item that is "semantically" deleted, _MUST_ have dynamic data before its destruction.
+///This also means that DUChainBaseData based items should never be cloned using memcpy, but rather always using the copy-constructor,
+///even if both sides are constant.
 struct KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectData {
     DUChainBaseData() : classId(0) {
     }
@@ -64,6 +73,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectD
       
     uint classSize() const;
 
+    ///This is called whenever the data-object is being deleted memory-wise, but not semantically(Which means it stays on disk)
+    ///Implementations of parent-classes must always be called
+    void freeDynamicData() {
+    }
+    
   ///Used to decide whether a constructed item should create constant data.
   ///The default is "false", so dynamic data is created by default.
   ///This is stored thread-locally.
@@ -116,6 +130,8 @@ public:
   
   DUChainBase( DUChainBaseData& dd );
   
+  ///This must only be used to change the storage-location or storage-kind(dynamic/constant) of the data, but
+  ///the data must always be equal!
   virtual void setData(DocumentRangeObjectData*);
   
 protected:

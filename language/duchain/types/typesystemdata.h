@@ -85,6 +85,9 @@ public:
   /// Expensive
   unsigned int hash() const;
 
+  void freeDynamicData() {
+  }
+  
 private:
   AbstractTypeData& operator=(const AbstractTypeData&);
 };

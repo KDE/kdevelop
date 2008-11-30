@@ -140,8 +140,12 @@ Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
 
 Declaration::~Declaration()
 {
+  uint oldOwnIndex = m_indexInTopContext;
+  
+  TopDUContext* topContext = this->topContext();
+  
   //Only perform the actions when the top-context isn't being deleted, or when it hasn't been stored to disk
-  if(!topContext()->deleting() || !topContext()->isOnDisk()) {
+  if(!topContext->deleting() || !topContext->isOnDisk()) {
     DUCHAIN_D_DYNAMIC(Declaration);
     // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )
@@ -156,20 +160,21 @@ Declaration::~Declaration()
     d->m_inSymbolTable = false;
   }
 
-    // If the parent-context already has dynamic data, like for example any temporary context,
-    // always delete the declaration, to not create crashes within more complex code like C++ template stuff.
-    if (context() && !d_func()->m_anonymousInContext) {
-      if(!topContext()->deleting() || !topContext()->isOnDisk() || context()->d_func()->isDynamic())
-        Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
-    }
+  // If the parent-context already has dynamic data, like for example any temporary context,
+  // always delete the declaration, to not create crashes within more complex code like C++ template stuff.
+  if (context() && !d_func()->m_anonymousInContext) {
+    if(!topContext->deleting() || !topContext->isOnDisk() || context()->d_func()->isDynamic())
+      Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
+  }
     
   clearOwnIndex();
   
-  if(!topContext()->deleting() || !topContext()->isOnDisk()) {
+  if(!topContext->deleting() || !topContext->isOnDisk()) {
     setContext(0);
 
     setAbstractType(AbstractType::Ptr());
   }
+  Q_ASSERT(d_func()->isDynamic() == (!topContext->deleting() || !topContext->isOnDisk() || topContext->m_dynamicData->isTemporaryDeclarationIndex(oldOwnIndex)));
   //DUChain::declarationChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
 }
 

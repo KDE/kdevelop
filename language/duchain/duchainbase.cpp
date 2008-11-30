@@ -70,19 +70,15 @@ IndexedString DUChainBase::url() const
 
 void DUChainBase::setData(DocumentRangeObjectData* data)
 {
-  if(d_func()->m_dynamic)
-    //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
-    KDevelop::DUChainItemSystem::self().callDestructor(d_func_dynamic());
+  KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
   
   DocumentRangeObject::setData(data);
 }
 
 DUChainBase::~DUChainBase()
 {
-  if(d_func()->m_dynamic) {
-    //We only delete the data when it's dynamic, because else it is embedded in an array in the top-context.
+  if(d_func()->m_dynamic)
     KDevelop::DUChainItemSystem::self().callDestructor(d_func_dynamic());
-  }
   
   if (m_ptr)
     m_ptr->m_base = 0;
@@ -115,8 +111,11 @@ void DUChainBase::makeDynamic() {
   Q_ASSERT(d_ptr);
   if(!d_func()->m_dynamic) {
     Q_ASSERT(d_func()->classId);
+    DUChainBaseData* newData = DUChainItemSystem::self().cloneData(*d_func());
     //We don't delete the previous data, because it's embedded in the top-context when it isn't dynamic.
-    d_ptr = DUChainItemSystem::self().cloneData(*d_func());
+    //However we do call the destructor, to keep semantic stuff like reference-counting within the data class working correctly.
+    KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
+    d_ptr = newData;
     Q_ASSERT(d_ptr);
     Q_ASSERT(d_func()->m_dynamic);
     Q_ASSERT(d_func()->classId);
@@ -137,6 +136,7 @@ void DUChainBaseData::setShouldCreateConstantData(bool should) {
   else
     shouldCreateConstantDataStorage.setLocalData(0);
 }
+
 }
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

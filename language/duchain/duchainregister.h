@@ -32,6 +32,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseFactory {
   public:
   virtual DUChainBase* create(DUChainBaseData* data) const = 0;
   virtual void callDestructor(DUChainBaseData* data) const = 0;
+  virtual void freeDynamicData(DUChainBaseData* data) const = 0;
   virtual void copy(const DUChainBaseData& from, DUChainBaseData& to, bool constant) const = 0;
   virtual DUChainBaseData* cloneData(const DUChainBaseData& data) const = 0;
   virtual uint dynamicSize(const DUChainBaseData& data) const = 0;
@@ -62,6 +63,11 @@ class DUChainItemFactory : public DUChainBaseFactory {
   void callDestructor(DUChainBaseData* data) const {
     Q_ASSERT(data->classId == T::Identity);
     static_cast<Data*>(data)->~Data();
+  }
+
+  void freeDynamicData(DUChainBaseData* data) const {
+    Q_ASSERT(data->classId == T::Identity);
+    static_cast<Data*>(data)->freeDynamicData();
   }
 
   uint dynamicSize(const DUChainBaseData& data) const {
@@ -133,8 +139,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
     size_t dataClassSize(const DUChainBaseData& data) const;
 
     ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
+    ///This should only be called when a duchain data-pointer is semantically deleted, eg. when it does not persist on disk.
     void callDestructor(DUChainBaseData* data) const;
 
+    ///Does not call the destructor, but frees all special data associated to dynamic data(the appendedlists stuff)
+    ///This needs to be called whenever a dynamic duchain data-pointer is being deleted.
+    void freeDynamicData(DUChainBaseData* data) const;
+    
     /// Access the static DUChainItemSystem instance.
     static DUChainItemSystem& self();
 

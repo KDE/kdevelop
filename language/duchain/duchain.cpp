@@ -127,7 +127,7 @@ class EnvironmentInformationRequest {
   size_t itemSize() const {
     return sizeof(EnvironmentInformationItem) + DUChainItemSystem::self().dynamicSize(*m_file->d_func());
   }
-
+  
   void createItem(EnvironmentInformationItem* item) const {
     new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
     
@@ -340,13 +340,16 @@ public:
     Q_ASSERT(info->d_func()->classId);
   }
 
-  ///The item must managed currently
+  ///The item must be managed currently
   void removeEnvironmentInformation(ParsingEnvironmentFilePointer info) {
+    
+    info->makeDynamic(); //By doing this, we make sure the data is actually being destroyed in the destructor
     
     bool removed = (bool)m_fileEnvironmentInformations.remove(info->url(), info);
     uint index = m_environmentInfo.findIndex(info->indexedTopContext().index());
-    if(index)
+    if(index) {
       m_environmentInfo.deleteItem(index);
+    }
     
     Q_ASSERT(index || removed);
   }
@@ -611,16 +614,20 @@ public:
       }
       
       
-      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
-        ParsingEnvironmentFile* f = (*it).data();
-        Q_ASSERT(f->d_func()->classId);
-        if(f->ref == 1) {
-          //The ParsingEnvironmentFilePointer is only referenced once. This means that it's does not belong to any
-          //loaded top-context, so just remove it to save some memory and processing time.
-          ///@todo use some kind of timeout before removing
-          it = m_fileEnvironmentInformations.erase(it);
-        }else{
-          ++it;
+      if(retries == 0) {
+        //Do this atomically, since we must be sure that _everything_ is already saved
+        for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
+          ParsingEnvironmentFile* f = (*it).data();
+          Q_ASSERT(f->d_func()->classId);
+          if(f->ref == 1) {
+            Q_ASSERT(!f->d_func()->isDynamic()); //It cannot be dynamic, since we have stored before
+            //The ParsingEnvironmentFilePointer is only referenced once. This means that it does not belong to any
+            //loaded top-context, so just remove it to save some memory and processing time.
+            ///@todo use some kind of timeout before removing
+            it = m_fileEnvironmentInformations.erase(it);
+          }else{
+            ++it;
+          }
         }
       }
   
@@ -825,8 +832,11 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 
     branchRemoved(context);
 
-    if(!context->isOnDisk())
+    if(!context->isOnDisk()) {
       removeFromEnvironmentManager(context);
+    }else{
+      context->m_dynamicData->store();
+    }
 
     context->deleteSelf();
 
