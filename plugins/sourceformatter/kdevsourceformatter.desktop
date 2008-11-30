@@ -16,6 +16,7 @@ GenericName[es]=Formateador de código
 GenericName[nds]=Bornformateren
 GenericName[pt]=Formatador de Código
 GenericName[pt_BR]=Formatador de Código
+GenericName[tr]=Kaynak Biçimlendirici
 GenericName[uk]=Форматування коду
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsourceformatter

@@ -15,6 +15,7 @@ GenericName[es]=Ejecutar
 GenericName[nds]=Utföhren
 GenericName[pt]=Execução
 GenericName[pt_BR]=Execução
+GenericName[tr]=Çalıştır
 GenericName[uk]=Виконати
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevexecute

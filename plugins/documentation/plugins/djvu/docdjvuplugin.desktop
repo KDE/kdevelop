@@ -7,6 +7,7 @@ Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή djvu
 Comment[nds]=Dokmentatschoon-Moduul för't djvu-Formaat
 Comment[pt]='Plugin' de documentação para o formato DjVu
 Comment[pt_BR]='Plugin' de documentação para o formato DjVu
+Comment[tr]=Djvu biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі djvu
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1

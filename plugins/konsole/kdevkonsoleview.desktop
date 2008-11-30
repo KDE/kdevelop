@@ -15,6 +15,7 @@ GenericName[es]=Consola empotrada
 GenericName[nds]=Inbett Konsole
 GenericName[pt]=Konsole Incorporado
 GenericName[pt_BR]=Konsole Incorporado
+GenericName[tr]=Gömülü Konsole
 GenericName[uk]=Вбудована Konsole
 Icon=konsole
 ServiceTypes=KDevelop/Plugin

@@ -15,11 +15,15 @@ Name[el]=Πρόσθετα
 Name[nds]=Modulen
 Name[pt]='Plugins'
 Name[pt_BR]='Plugins'
+Name[tr]=Eklentiler
 Name[uk]=Додатки
+Name[zh_CN]=插件
 Comment=Configure Plugins
 Comment[el]=Ρύθμιση προσθέτων
 Comment[nds]=Modulen instellen
 Comment[pt]=Configurar os 'Plugins'
 Comment[pt_BR]=Configurar os 'Plugins'
+Comment[tr]=Eklentileri Yapılandır
 Comment[uk]=Налаштування додатків
+Comment[zh_CN]=配置插件
 

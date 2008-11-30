@@ -8,6 +8,7 @@ Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή Palmd
 Comment[nds]=Dokmentatschoon-Moduul för't Palmdoc-Formaat
 Comment[pt]='Plugin' de documentação para o formato PalmDoc
 Comment[pt_BR]='Plugin' de documentação para o formato PalmDoc
+Comment[tr]=Palmdoc biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Palmdoc
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1

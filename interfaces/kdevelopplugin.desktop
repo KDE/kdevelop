@@ -8,7 +8,9 @@ Name[es]=Complemento de KDevelop
 Name[nds]=KDevelop-Moduul
 Name[pt]='Plugin' do KDevelop
 Name[pt_BR]='Plugin' do KDevelop
+Name[tr]=KDevelop Eklentisi
 Name[uk]=Додаток KDevelop
+Name[zh_CN]=KDevelop 插件
 
 # mandatory, versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]

@@ -7,6 +7,7 @@ Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση 
 Comment[nds]=Dokmentatschoon-Moduul för Doxygen-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os documentos do Doxygen
 Comment[pt_BR]='Plugin' de documentação para os documentos do Doxygen
+Comment[tr]=Doxygen için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Doxygen
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5

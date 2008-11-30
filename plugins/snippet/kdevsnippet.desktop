@@ -15,6 +15,7 @@ GenericName[es]=Fragmentos de cógido
 GenericName[nds]=Kodesnippels
 GenericName[pt]=Excertos de Código
 GenericName[pt_BR]=Excertos de Código
+GenericName[tr]=Kod Parçacıkları
 GenericName[uk]=Фрагменти коду
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsnippet

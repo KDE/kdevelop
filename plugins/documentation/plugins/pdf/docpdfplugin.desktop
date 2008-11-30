@@ -7,6 +7,7 @@ Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή PDF
 Comment[nds]=Dokmentatschoon-Moduul för't PDF-Formaat
 Comment[pt]='Plugin' de documentação para o formato PDF
 Comment[pt_BR]='Plugin' de documentação para o formato PDF
+Comment[tr]=PDF biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі PDF
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1

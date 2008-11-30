@@ -15,6 +15,7 @@ GenericName[es]=Vista DUChain
 GenericName[nds]=Dbkeed-Ansicht
 GenericName[pt]=Área de Definições/Usos
 GenericName[pt_BR]=Área de Definições/Usos
+GenericName[tr]=DUChain Görünümü
 GenericName[uk]=Перегляд ВВ-ланцюжка
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevduchainview

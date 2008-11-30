@@ -15,6 +15,7 @@ GenericName[el]=Περιηγητής περιεχομένου
 GenericName[nds]=Kontextkieker
 GenericName[pt]=Navegador de Contexto
 GenericName[pt_BR]=Navegador de Contexto
+GenericName[tr]=Durum Tarayıcı
 GenericName[uk]=Переглядач контексту
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcontextbrowser
