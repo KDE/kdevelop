@@ -28,7 +28,7 @@ QMakeIncludeFile::QMakeIncludeFile( const QString& incfile,
                                     const QMap<QString,QStringList>& variables  )
     : QMakeProjectFile( incfile )
 {
-    foreach( QString variable, variables.keys() )
+    foreach( const QString &variable, variables.keys() )
     {
         m_variableValues[variable] = variables[variable];
     }
