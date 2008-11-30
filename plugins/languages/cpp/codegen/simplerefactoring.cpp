@@ -142,7 +142,7 @@ class SimpleRefactoringCollector : public KDevelop::UsesWidget::UsesWidgetCollec
 };
 
 DocumentChangeSet::ChangeResult applyChangesToDeclarations(QString oldName, QString newName, DocumentChangeSet& changes, QList<IndexedDeclaration> declarations) {
-  foreach(IndexedDeclaration decl, declarations) {
+  foreach(const IndexedDeclaration &decl, declarations) {
     if(!decl.data())
       continue;
     TopDUContext* top = decl.data()->topContext();
@@ -281,9 +281,9 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   DocumentChangeSet changes;
   lock.lock();
-  foreach(KDevelop::IndexedTopDUContext collected, collector->m_allUsingContexts) {
+  foreach(const KDevelop::IndexedTopDUContext &collected, collector->m_allUsingContexts) {
     QSet<int> hadIndices;
-    foreach(IndexedDeclaration decl, collector->declarations()) {
+    foreach(const IndexedDeclaration &decl, collector->declarations()) {
       uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(collector->declaration().data(), false);
       if(hadIndices.contains(usedDeclarationIndex))
         continue;

@@ -259,7 +259,7 @@ void allIncludedRecursion( QSet<const DUContext*>& used, QMap<IndexedString, Inc
 
   used.insert(ctx.data());
   
-  foreach( DUContext::Import ctx2, ctx->importedParentContexts() ) {
+  foreach( const DUContext::Import &ctx2, ctx->importedParentContexts() ) {
     TopDUContextPointer d( dynamic_cast<TopDUContext*>(ctx2.context(0)) );
     allIncludedRecursion( used, ret, d, prefixPath );
   }
@@ -330,7 +330,7 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext );
       
-      foreach( IndexedString u, m_importers ) {
+      foreach( const IndexedString &u, m_importers ) {
         IncludeItem i;
         i.isDirectory = false;
         i.name = u.str();

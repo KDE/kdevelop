@@ -148,7 +148,7 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( AST* ast, ParseSessio
   if(v.lastInstance().declaration)
     ret.instanceDeclaration = KDevelop::DeclarationId(KDevelop::IndexedDeclaration(v.lastInstance().declaration.data()));
   
-  foreach(DeclarationPointer decl, v.lastDeclarations())
+  foreach(const DeclarationPointer &decl, v.lastDeclarations())
     if(decl)
       ret.allDeclarations.append(decl->id());
   return ret;

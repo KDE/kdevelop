@@ -349,7 +349,7 @@ void CppHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, u
   TopDUContext* top = context->topContext();
   
   //Merge the colors from the function arguments
-  foreach( DUContext::Import imported, context->importedParentContexts() ) {
+  foreach( const DUContext::Import &imported, context->importedParentContexts() ) {
     if(!imported.context(top) || (imported.context(top)->type() != DUContext::Other && imported.context(top)->type() != DUContext::Function))
       continue;
     //For now it's enough simply copying them, because we only pass on colors within function bodies.

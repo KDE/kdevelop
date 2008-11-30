@@ -85,7 +85,7 @@ DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
-  foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
+  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     if( ctx.context(decl->topContext()) )
       if( ctx.context(decl->topContext())->type() == DUContext::Template )
         return ctx.context(decl->topContext());
@@ -1249,7 +1249,7 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(function);
   if(classFunDecl && !classFunDecl->isVirtual()) {
     QList<Declaration*> overridden;
-    foreach(DUContext::Import import, currentContext()->importedParentContexts())
+    foreach(const DUContext::Import &import, currentContext()->importedParentContexts())
       overridden += import.context(topContext())->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
                                             SimpleCursor::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
     if(!overridden.isEmpty()) {

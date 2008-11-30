@@ -86,7 +86,7 @@ void ClassSerializer::write(const ClassSkeleton& source, QIODevice* target)
         str << "public:\n";
         writeConstructor(source.constructor(), str);
         writeDestructor(source.destructor(), str);
-        foreach(MethodSkeleton ms, source.methods()) {
+        foreach(const MethodSkeleton &ms, source.methods()) {
             writeMethod(ms, str);
         }
         for(int i=0; i<source.memberCount(); i++) {

@@ -82,7 +82,7 @@ void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recur
 
         // and same in case of files.
         QList<QString> filekeys = d->m_fileHash.keys();
-        Q_FOREACH( QString _filekey, filekeys )
+        Q_FOREACH( const QString &_filekey, filekeys )
         {
             if( _filekey.contains(path) )
             {
@@ -214,7 +214,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
             emit filesDeleted( deletedItems, folderItem );
 
         KUrl::List createdFileUrl;
-        Q_FOREACH( QString diskFile, fileList )
+        Q_FOREACH( const QString &diskFile, fileList )
         {
             if( itemFileListString.contains( diskFile ) == false )
             {
@@ -256,7 +256,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
             emit directoriesDeleted( deletedDirs, folderItem );
 
         KUrl::List createdDirs;
-        Q_FOREACH( QString diskDir, dirList )
+        Q_FOREACH( const QString &diskDir, dirList )
         {
             if( itemFolderListString.contains( diskDir ) == false )
             {

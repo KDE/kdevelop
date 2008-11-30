@@ -379,7 +379,7 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   }
   if(!paths.isEmpty()) {
     IncludePathListItem item;
-    foreach(IndexedString include, paths)
+    foreach(const IndexedString &include, paths)
       item.m_includePathsList().append(include);
     d_func_dynamic()->m_includePaths = includePathsRepository.index(item);
     IncludePathListItem* gotItem = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);

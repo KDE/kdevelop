@@ -89,7 +89,7 @@ QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
 
 QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
   QList<Declaration*> ret;
-  foreach( DeclarationPointer decl, list )
+  foreach( const DeclarationPointer &decl, list )
     if( decl )
       ret << decl.data();
   return ret;
@@ -292,7 +292,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     }
     
     if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
-      foreach(Cpp::OverloadResolutionFunction function, parentContext()->functions()) {
+      foreach(const Cpp::OverloadResolutionFunction &function, parentContext()->functions()) {
         if(function.function.declaration() && (function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect" || function.function.declaration()->qualifiedIdentifier().toString() == "QObject::disconnect")) {
           FunctionType::Ptr funType = function.function.declaration()->type<FunctionType>();
           if(funType && funType->arguments().size() > function.matchedArguments) {
@@ -511,7 +511,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   }
 
   OverloadResolver::ParameterList knownParameters;
-  foreach( ExpressionEvaluationResult result, m_knownArgumentTypes )
+  foreach( const ExpressionEvaluationResult &result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result.type.type(), result.isLValue() );
 
   helper.setKnownParameters(knownParameters);
@@ -688,7 +688,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
     }
   }
   
-  foreach(DUContext::Import import, current->importedParentContexts())
+  foreach(const DUContext::Import &import, current->importedParentContexts())
     getOverridable(base, import.context(base->topContext()), overridable, completionContext);
 }
 
@@ -778,7 +778,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth() );
             }else if(!functions().isEmpty()) {
               int num = 0;
-              foreach( Cpp::CodeCompletionContext::Function function, functions() ) {
+              foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
                 items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), KSharedPtr <Cpp::CodeCompletionContext >(this), 0, num ) );
                 ++num;
               }
@@ -847,7 +847,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                Declaration* signalContainer = signalContainerType->declaration(m_duContext->topContext());
               if(signalContainer && signalContainer->internalContext()) {
                 IndexedString signature(m_connectedSignalNormalizedSignature);
-                foreach(DeclarationDepthPair decl, signalContainer->internalContext()->allDeclarations( SimpleCursor::invalid(), m_duContext->topContext(), false )) {
+                foreach(const DeclarationDepthPair &decl, signalContainer->internalContext()->allDeclarations( SimpleCursor::invalid(), m_duContext->topContext(), false )) {
                   if(decl.first->identifier() == m_connectedSignalIdentifier) {
                     if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(decl.first)) {
                       if(classFun->isSignal() && classFun->normalizedSignature() == signature) {
@@ -872,7 +872,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           if(identified) {
             Declaration* decl = identified->declaration(m_duContext->topContext());
             if(decl && decl->internalContext()) {
-              foreach(DeclarationDepthPair candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
+              foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
                   if(classFun->isSignal() || (memberAccessOperation() == SlotAccess && classFun->isSlot())) {
                     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), CodeCompletionContext::Ptr(this), candidate.second );
@@ -930,7 +930,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       if(m_duContext->type() == DUContext::Class) {
         //Show override helper items
         QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
-        foreach(DUContext::Import import, m_duContext->importedParentContexts())
+        foreach(const DUContext::Import &import, m_duContext->importedParentContexts())
           getOverridable(m_duContext.data(), import.context(m_duContext->topContext()), overridable, Ptr(this));
         items += overridable.values();
       }
@@ -1017,7 +1017,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
       }
     }
 
-    foreach(QualifiedIdentifier id, ids) {
+    foreach(const QualifiedIdentifier &id, ids) {
       QList<DUContext*> importedContexts = m_duContext->findContexts( DUContext::Namespace, id );
       foreach(DUContext* context, importedContexts)
         foreach(Declaration* decl, context->localDeclarations())

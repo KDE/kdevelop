@@ -149,7 +149,7 @@ static bool dirHasFiles(QDir &dir, const QString &patterns)
     }
 
     QStringList subdirList = dir.entryList(QDir::Dirs);
-    foreach (const QString subdirectory, subdirList) {
+    foreach (const QString &subdirectory, subdirList) {
         QDir subdir(dir);
         subdir.cd(subdirectory);
         if (!subdir.entryList(patternList, QDir::Files).isEmpty())

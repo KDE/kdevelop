@@ -106,7 +106,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
           
           if( !find.lastDeclarations().isEmpty() ) {
             bool had = false;
-            foreach(DeclarationPointer decl, find.lastDeclarations()) {
+            foreach(const DeclarationPointer &decl, find.lastDeclarations()) {
               if(decl && !decl->isForwardDeclaration()) {
                 //Prefer registering non forward-declaration uses
                 m_visitor->newUse( node, token, token+1, decl );

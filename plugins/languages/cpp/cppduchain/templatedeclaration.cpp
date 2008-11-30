@@ -497,7 +497,7 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* top)
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
-  foreach( DUContext::Import ctx, internal->importedParentContexts() ) {
+  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     if( ctx.context(top) )
       if( ctx.context(top)->type() == DUContext::Template )
         return ctx.context(top);
@@ -626,7 +626,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
     }
 
     ///Find  the template-parameter context, and recurse into it, so we can replace the template parameters
-    foreach( DUContext::Import importedContext,  context->importedParentContexts() )
+    foreach( const DUContext::Import &importedContext,  context->importedParentContexts() )
     {
       if( !importedContext.context(source))
         continue;

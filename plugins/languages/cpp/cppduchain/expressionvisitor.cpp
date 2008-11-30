@@ -153,7 +153,7 @@ QList<DeclarationPointer> convert( const QList<Declaration*>& list ) {
 
 QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
   QList<Declaration*> ret;
-  foreach( DeclarationPointer decl, list )
+  foreach( const DeclarationPointer &decl, list )
     if( decl )
       ret << decl.data();
   return ret;
@@ -1592,7 +1592,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         params += param.toString() + ", ";
 
       QString candidates;
-      foreach(DeclarationPointer decl, declarations) {
+      foreach(const DeclarationPointer &decl, declarations) {
         if( !decl )
           continue;
         int defaultParamCount = 0;

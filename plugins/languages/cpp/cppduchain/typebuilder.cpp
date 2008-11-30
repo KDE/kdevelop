@@ -65,7 +65,7 @@ bool isTemplateDependent(Declaration* decl) {
 
   while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
     //Check if there is an imported template-context, which has an unresolved template-parameter
-    foreach( DUContext::Import importedCtx, ctx->importedParentContexts() ) {
+    foreach( const DUContext::Import &importedCtx, ctx->importedParentContexts() ) {
       if( !importedCtx.context(decl->topContext()) )
         continue;
       if( importedCtx.context(decl->topContext())->type() == DUContext::Template ) {

@@ -108,7 +108,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if( node->id && !m_find.lastDeclarations().isEmpty() ) {
     bool had = false;
-    foreach(DeclarationPointer decl, m_find.lastDeclarations()) {
+    foreach(const DeclarationPointer &decl, m_find.lastDeclarations()) {
       if(decl && !decl->isForwardDeclaration()) {
         //Prefer registering non forward-declaration uses
         m_visitor->newUse( node, node->id, node->id+1, decl );
@@ -141,7 +141,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
       res.type = m_visitor->lastType()->indexed();
-      foreach(DeclarationPointer decl, m_visitor->lastDeclarations())
+      foreach(const DeclarationPointer &decl, m_visitor->lastDeclarations())
         if(decl)
           res.allDeclarationsList().append(decl->id());
 
@@ -165,7 +165,7 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
       if( v.declarations()[0] )
         res.type = v.declarations()[0]->abstractType()->indexed();
 
-      foreach(DeclarationPointer decl, v.declarations())
+      foreach(const DeclarationPointer &decl, v.declarations())
         if(decl)
           res.allDeclarationsList().append(decl->id());
 

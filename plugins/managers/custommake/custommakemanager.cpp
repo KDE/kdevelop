@@ -205,7 +205,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
             {
                 topItem->fsWatcher()->addFile( absFilePath, fileItem );
                 QStringList targetlist = this->parseCustomMakeFile( KUrl(absFilePath) );
-                foreach( QString target, targetlist )
+                foreach( const QString &target, targetlist )
                 {
                     new CustomMakeTargetItem( item->project(), target, item );
     //             d->m_testItems.append( targetItem ); // debug

@@ -36,7 +36,7 @@ void QMakeCache::setMkSpecs( QMakeMkSpecs* specs )
 
 bool QMakeCache::read()
 {
-    foreach( QString var, m_mkspecs->variables() )
+    foreach( const QString &var, m_mkspecs->variables() )
     {
         m_variableValues[var] = m_mkspecs->variableValues( var );
     }

@@ -355,14 +355,14 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
 
     if (includes) {
       if(removeOldImports) {
-        foreach (DUContext::Import parent, topLevelContext->importedParentContexts())
+        foreach (const DUContext::Import &parent, topLevelContext->importedParentContexts())
           if (!containsContext(*includes, dynamic_cast<TopDUContext*>(parent.context(0))))
             topLevelContext->removeImportedParentContext(parent.context(0));
       }
 
       QList< QPair<TopDUContext*, SimpleCursor> > realIncluded;
       QList< QPair<TopDUContext*, SimpleCursor> > realTemporaryIncluded;
-      foreach (LineContextPair included, *includes)
+      foreach (const LineContextPair &included, *includes)
         if(!included.temporary)
           realIncluded << qMakePair(included.context.data(), SimpleCursor(included.sourceLine, 0));
         else

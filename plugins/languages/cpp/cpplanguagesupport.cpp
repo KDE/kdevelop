@@ -668,7 +668,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             Q_ASSERT(envFile);
             allPaths = convertToUrls(envFile->includePaths());
             kDebug(9007) << "Took include-path for" << source << "from a random parsed duchain-version of it";
-            foreach(KUrl url, allPaths)
+            foreach(const KUrl &url, allPaths)
               hasPath.insert(url);
         }
     }
@@ -911,7 +911,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
 
   if(word.startsWith("#include")) {
     //It's an #include, find out which file was included at the given line
-    foreach(DUContext::Import imported, ctx->importedParentContexts()) {
+    foreach(const DUContext::Import &imported, ctx->importedParentContexts()) {
       if(imported.context(0)) {
         if(ctx->importPosition(imported.context(0)).line == wordRange.start.line) {
           if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.context(0)))

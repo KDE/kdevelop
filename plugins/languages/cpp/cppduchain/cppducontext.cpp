@@ -94,7 +94,7 @@ void FindDeclaration::closeQualifiedIdentifier() {
       ExpressionEvaluationResult res;
       if( !s.result.isEmpty() ) {
         res.allDeclarations.clear();
-        foreach(DeclarationPointer decl, s.result)
+        foreach(const DeclarationPointer &decl, s.result)
           if(decl)
             res.allDeclarations.append(decl->id()); ///@todo prevent unneeded conversions here
         if(s.result[0]) {
@@ -122,7 +122,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   if( !s.result.isEmpty() && lookup.count() == 1 ) { //When we are searching within a scope-context, no namespaces are involved any more, so we look up exactly one item at a time.
 
     //Eventually extract a scope context
-    foreach( DeclarationPointer decl, s.result ) {
+    foreach( const DeclarationPointer &decl, s.result ) {
       if( !decl )
         continue;
       
