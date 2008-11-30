@@ -367,7 +367,7 @@ class CppDUContext : public BaseContext {
     
     virtual void deleteUses() {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
-      foreach(CppDUContext<BaseContext>* ctx, m_instatiations.values())
+      foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
         ctx->deleteUses();
     }
     
