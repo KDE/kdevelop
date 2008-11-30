@@ -24,6 +24,8 @@
 #include "cmakehighlighting.h"
 
 #include <ktexteditor/smartrange.h>
+#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/document.h>
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
@@ -34,6 +36,8 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
+#define LOCK_SMART(range) KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(range->document()); QMutexLocker lock(iface ? iface->smartMutex() : 0);
+
 CMakeHighlighting::CMakeHighlighting( QObject * parent )
   : QObject(parent)
 {
@@ -43,40 +47,65 @@ CMakeHighlighting::~CMakeHighlighting( )
 {
 }
 
-KTextEditor::Attribute::Ptr CMakeHighlighting::attributeForType( Types type, Contexts context ) const
+KTextEditor::Attribute::Ptr CMakeHighlighting::attributeForType( Types type, Contexts ctx) const
 {
     KTextEditor::Attribute::Ptr a;
-    a = m_definitionAttributes[type];
+    switch (ctx)
+    {
+        case DefinitionContext:
+        a = m_definitionAttributes[type];
+        break;
+
+        case DeclarationContext:
+        a = m_declarationAttributes[type];
+        break;
+
+        case ReferenceContext:
+        a = m_referenceAttributes[type];
+        break;
+    }
+    
     if (!a)
     {
         a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute());
         a->setBackgroundFillWhitespace(true);
-        m_definitionAttributes.insert(type, a);
+        
+        QColor c;
         switch (type)
         {
             case NamespaceType:
-                a->setBackground(QColor(Qt::green).light(170));
+                c=QColor(Qt::green);
                 break;
             case ClassType:
-                a->setBackground(QColor(Qt::blue).light(175));
+                c=QColor(Qt::blue);
                 break;
             case FunctionType:
-                a->setBackground(QColor(Qt::green).light(175));
+                c=QColor(Qt::green);
                 break;
             case FunctionVariableType:
-                a->setBackground(QColor(Qt::blue).light(175));
+                c=QColor(Qt::blue);
                 break;
              case NamespaceVariableType:
-                a->setBackground(QColor(Qt::red).light(175));
+                c=QColor(Qt::red);
                 break;
             case ClassVariableType:
-                a->setBackground(QColor(Qt::green).light(165));
+                c=QColor(Qt::green);
                 break;
             default:
-                a->setBackground(QColor(Qt::green).light(175));
+                c=QColor(Qt::green);
                 break;
         }
-        a->setFontBold();
+        if(ctx==ReferenceContext)
+        {
+            a->setForeground(c.dark());
+            m_referenceAttributes.insert(type, a);
+        }
+        else
+        {
+            a->setBackground(c.light(170));
+            a->setFontBold();
+            m_definitionAttributes.insert(type, a);
+        }
     }
     return a;
 }
@@ -112,7 +141,12 @@ void CMakeHighlighting::highlightDUChain(DUContext* context) const
     }
     kDebug() << "Highlighting declarations:" << context->localDeclarations();
     foreach (Declaration* dec, context->localDeclarations())
+    {
         highlightDeclaration(dec);
+    }
+    
+    highlightUses(context);
+    
     kDebug() << "Highlighting child contexts:" << context->childContexts();
     foreach (DUContext* child, context->childContexts())
         highlightDUChain(child);
@@ -121,7 +155,7 @@ void CMakeHighlighting::highlightDUChain(DUContext* context) const
 
 CMakeHighlighting::Types CMakeHighlighting::typeForDeclaration(Declaration * dec) const
 {
-    Types type;
+    Types type=ErrorVariableType;
     switch (dec->context()->type())
     {
       case DUContext::Class:
@@ -145,8 +179,20 @@ void CMakeHighlighting::highlightDeclaration(Declaration * declaration) const
         range->setAttribute(attributeForType(typeForDeclaration(declaration), DeclarationContext));
 }
 
-void CMakeHighlighting::highlightUses(KDevelop::DUContext* ) const
+void CMakeHighlighting::highlightUses(KDevelop::DUContext* context) const
 {
+    for(int i=0; i<context->usesCount(); i++)
+    {
+        if (SmartRange* range = context->useSmartRange(i)) {
+            Types type = ErrorVariableType;
+            Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[i].m_declarationIndex);
+            if (decl)
+                type = typeForDeclaration(decl);
+
+            LOCK_SMART(range);
+            range->setAttribute(attributeForType(type, ReferenceContext));
+        }
+    }
 }
 
 #include "cmakehighlighting.moc"

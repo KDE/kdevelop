@@ -370,7 +370,7 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
         }
         else if(token->type == cmListFileLexer_Token_ArgumentQuoted)
         {
-            CMakeFunctionArgument a( token->text, true, fileName, token->line, token->column );
+            CMakeFunctionArgument a( token->text, true, fileName, token->line, token->column+1 );
             func.arguments << a;
         }
         else if(token->type != cmListFileLexer_Token_Newline)

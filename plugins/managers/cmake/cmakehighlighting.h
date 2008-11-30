@@ -54,13 +54,15 @@ public:
         NamespaceType,
         FunctionVariableType,
         ClassVariableType,
-        NamespaceVariableType
+        NamespaceVariableType,
+        ErrorVariableType
     };
     enum Contexts
     {
         DefinitionContext,
         DeclarationContext,
-        NamespaceContext
+        NamespaceContext,
+        ReferenceContext
     };
     CMakeHighlighting(QObject* parent);
     virtual ~CMakeHighlighting();
@@ -79,6 +81,7 @@ private:
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;
+    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;
 };
 
 #endif
