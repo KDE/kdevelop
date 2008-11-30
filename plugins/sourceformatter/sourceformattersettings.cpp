@@ -64,9 +64,11 @@ void SourceFormatterSettings::init()
 {
 	// add texteditor preview
 	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-	if (!editor)
+	if (!editor) {
 		KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
 		        "Please check your KDE installation."));
+        return;
+    }
 
 	m_document = editor->createDocument(this);
 
