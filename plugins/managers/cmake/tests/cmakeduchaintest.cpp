@@ -144,14 +144,14 @@ void CMakeDUChainTest::testUses()
             "include(included)\n"
             
             "macro(bla kk)\n"
-            " message(STATUS ${kk})\n"
+                "message(STATUS ${kk})\n"
             "endmacro(bla)\n"
             
             "set(usinginc aa${avalue})\n"
             "bla(kk)\n"
             
             "if(var)\n"
-            " message(STATUS \"life rocks\")\n"
+                "message(STATUS \"life rocks\")\n"
             "endif(var)\n"
             "message(STATUS \"------- done\")\n"
             );

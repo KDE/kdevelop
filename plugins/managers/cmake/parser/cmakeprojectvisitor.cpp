@@ -1032,85 +1032,72 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
         const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
         kWarning() << "Parser couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
     }
-    CMakeCondition cond(this);
-    bool result=cond.condition(ifast->condition());
-    QList<int> ini=cond.variableArguments();
-    usesForArguments(ifast->condition(), ini, m_topctx, ifast->content()[ifast->line()]);
 
-    kDebug(9042) << "Visiting If" << ifast->condition() << "?" << result;
-    if(result)
-    {
-//         kDebug(9042) << "if executed, @" << lines; //<< "now:" << ifast->content()[lines+1].writeBack();
-        lines+=walk(ifast->content(), lines+1)-lines;
-    }
-    else
-    {
-        int inside=0;
-//         kDebug(9042) << "if() was false, looking for an else/elseif @" << lines;
-        CMakeFileContent::const_iterator it=ifast->content().constBegin()+lines;
-        CMakeFileContent::const_iterator itEnd=ifast->content().constEnd();
-
-        for(; it!=itEnd; ++it, lines++)
-        {
-            QString funcName=it->name.toLower();
-//             kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside;
-            if(funcName=="if")
-            {
-                inside++;
-            }
-            else if(funcName=="endif")
-            {
-                inside--;
-                if(inside<=0) {
-                    usesForArguments(ifast->condition(), cond.variableArguments(), m_topctx, *it);
-                    
-                    break;
-                }
-//                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
-            }
-            else if(inside==1 && funcName.startsWith("else"))
-            {
-                if(funcName.endsWith("if")) //it is an else if
-                {
-//                     kDebug(9042) << "found an elseif" << it->writeBack();
-                    IfAst myIf;
-                    if(!myIf.parseFunctionInfo(*it))
-                        kDebug(9042) << "elseif not correct";
-                    if(cond.condition(myIf.condition()))
-                    {
-//                         kDebug(9042) << "which was true, calculating";
-                        lines = walk(ifast->content(), lines+1);
-                        break;
-                    }
-//                     else kDebug(9042) << "which was false";
-                }
-                else //it is an else
-                {
-//                     kDebug(9042) << "Found an else finally";
-                    lines = walk(ifast->content(), lines+1);
-                    break;
-                }
-            }
-        }
-    }
-
-//     kDebug(9042) << "looking for the endif now @" << lines;
+    int inside=0;
+//     kDebug(9042) << "if() was false, looking for an else/elseif @" << lines;
     CMakeFileContent::const_iterator it=ifast->content().constBegin()+lines;
     CMakeFileContent::const_iterator itEnd=ifast->content().constEnd();
-    for(int inside=1; inside>0 && it!=itEnd; ++it, lines++)
+
+    bool visited=false;
+    QList<int> ini;
+    for(; it!=itEnd; ++it, lines++)
     {
         QString funcName=it->name.toLower();
+//         kDebug(9032) << "looking @" << lines << it->writeBack() << ">>" << inside << visited;
         if(funcName=="if")
+        {
             inside++;
-        else if(funcName=="endif") {
-            inside--;
-            if(inside<=0)
-                usesForArguments(ifast->condition(), ini, m_topctx, ifast->content()[lines]);
         }
-        kDebug(9042) << "endif???" << it->writeBack() << inside << lines;
+        else if(funcName=="endif")
+        {
+            inside--;
+            if(inside<=0 && !it->arguments.isEmpty()) {
+                Q_ASSERT(!ini.isEmpty());
+                usesForArguments(ifast->condition(), ini, m_topctx, *it);     
+                break;
+            }
+//                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
+        }
+        
+        if(inside==1)
+        {
+            bool result;
+            
+            if(funcName=="if" || funcName=="elseif")
+            {
+                CMakeCondition cond(this);
+                IfAst myIf;
+                if(!myIf.parseFunctionInfo(*it))
+                    kDebug(9042) << "uncorrect condition correct" << it->writeBack();
+                result=cond.condition(myIf.condition());
+                QList<int> args=cond.variableArguments();
+                if(funcName=="if")
+                    ini=args;
+                usesForArguments(myIf.condition(), args, m_topctx, *it);
+            }
+            else if(funcName=="else")
+            {
+                result=true;
+                usesForArguments(ifast->condition(), ini, m_topctx, *it);
+            }
+            
+            if(!visited && result)
+            {
+                kDebug(9042) << "About to visit " << funcName << "?" << result;
+                
+                int oldpos=lines;
+                lines = walk(ifast->content(), lines+1)-1;
+                
+                it+=lines-oldpos;
+                
+                visited=true;
+//                 kDebug(9042) << "Visited. now in" << it->name;
+            }
+        }
     }
-//     kDebug(9042) << "endif==" << ifast->content()[lines-1].writeBack() << "<>" << ifast->condition() << '=' << lines-ifast->line() << "@" << lines;
-    return lines-ifast->line();
+//     kDebug() << "finish" << "<>" << ifast->condition() << '|' << lines-ifast->line() << '>' << lines;
+//     kDebug(9042) << "endif==" << ifast->content()[lines].writeBack();
+    return lines-ifast->line()+1;
 }
 
 int CMakeProjectVisitor::visit(const ExecProgramAst *exec)

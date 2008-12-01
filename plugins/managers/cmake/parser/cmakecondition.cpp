@@ -284,6 +284,7 @@ bool CMakeCondition::condition(const QStringList &expression)
     QStringList::const_iterator it = expression.constBegin(), itEnd=expression.constEnd();
     bool ret = evaluateCondition(it, itEnd-1);
     uint i=0;
+    m_argUses.clear();
     for(; it!=itEnd; ++it, ++i)
     {
         if(m_varUses.contains(it))

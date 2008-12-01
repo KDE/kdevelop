@@ -103,11 +103,6 @@ void CMakeProjectVisitorTest::testRun_data()
     results << StringPair("eee", "cmd");
     results << StringPair("fff", "cmd");
     results << StringPair("ggg", "cmd");
-    results << StringPair("FOOBAR", "ORT Basket Is Strange ABORT");
-    results << StringPair("RES", "Ok");
-    results << StringPair("BARFOO", "ORT Is Basket Strange? ABORT");
-    results << StringPair("BARFOO_MATCH", "Basket Is");
-    results << StringPair("BARFOO_MATCHALL", "Basket Is;Basket Is;Basket Is;Basket Is");
     QTest::newRow("cache") <<
             "project(simpletest)\n"
             "cmake_minimum_required(VERSION 2.6)\n"
@@ -115,9 +110,19 @@ void CMakeProjectVisitorTest::testRun_data()
             "set(bbb script CACHE STRING HELLO)\n"
             "set(ccc script CACHE STRING HELLO FORCE)\n"
             "set(ddd script)\n"
+            "#message(STATUS \"ooooo- ${aaa} ${bbb} ${ccc} ${ddd}\")\n"
             "find_path(eee stdio.h /usr/include)\n"
             "find_library(fff stdio.h /usr/include)\n"
-            "find_program(ggg gcc /usr/gcc)\n"
+            "find_program(ggg gcc /usr/gcc)\n" << cacheValues << results;
+            
+    cacheValues.clear();
+    results.clear();
+    results << StringPair("FOOBAR", "ORT Basket Is Strange ABORT");
+    results << StringPair("RES", "Ok");
+    results << StringPair("BARFOO", "ORT Is Basket Strange? ABORT");
+    results << StringPair("BARFOO_MATCH", "Basket Is");
+    results << StringPair("BARFOO_MATCHALL", "Basket Is;Basket Is;Basket Is;Basket Is");
+    QTest::newRow("string") << 
             "set(FOOBAR \"ORT Basket Is Strange ABORT\")\n"
             "if( FOOBAR MATCHES \"^ORT Bas\")\n"
             "  set(RES Ok)\n"
@@ -127,13 +132,15 @@ void CMakeProjectVisitorTest::testRun_data()
             "string( REGEX REPLACE \"Basket ([a-zA-Z]*) ([a-zA-Z]*)\" \"\\\\1 Basket \\\\2?\" BARFOO ${FOOBAR})\n"
             "string( REGEX MATCH \"Basket Is\" BARFOO_MATCH ${FOOBAR} ${RES} ${FOOBAR})\n"
             "string( REGEX MATCHALL \"Basket Is\" BARFOO_MATCHALL ${FOOBAR} \"${FOOBAR}${RES}${FOOBAR}\" ${FOOBAR})\n"
-            "#message(STATUS \"ooooo- ${aaa} ${bbb} ${ccc} ${ddd}\")\n" << cacheValues << results;
+            << cacheValues << results;
             
     
     cacheValues.clear();
     results.clear();
     results << StringPair("kkk", "abcdef");
-    QTest::newRow("abc") << "set(a abc)\nset(b def)\nSET(kkk \"${a}${b}\")\n" << cacheValues << results;
+    QTest::newRow("abc") << "set(a abc)\n"
+                            "set(b def)\n"
+                            "SET(kkk \"${a}${b}\")\n" << cacheValues << results;
     
     cacheValues.clear();
     results.clear();
@@ -229,6 +236,39 @@ void CMakeProjectVisitorTest::testRun_data()
                                "set(res 1)\n"
                             "endif(( ONE AND ZERO ) OR ( ZERO OR ONE ))\n"
                              << cacheValues << results;
+                             
+                             cacheValues.clear();
+    results.clear();
+    results << StringPair("res", "1");
+    results << StringPair("end", "1");
+    QTest::newRow("full conditional") <<
+                            "set(ONE TRUE)\n"
+                            "set(ZERO FALSE)\n"
+                            "if(ONE)\n"
+                               "set(res 1)\n"
+                               "set(res 1)\n"
+                            "else(ONE)\n"
+                               "set(res 0)\n"
+                               "set(res 0)\n"
+                            "endif(ONE)\n"
+                            "set(end 1)\n"
+                             << cacheValues << results;
+                             
+    results.clear();
+    results << StringPair("res", "1");
+    results << StringPair("end", "1");
+    QTest::newRow("full conditional.false") <<
+                            "set(ONE TRUE)\n"
+                            "set(ZERO FALSE)\n"
+                            "if(ZERO)\n"
+                               "set(res 0)\n"
+                               "set(res 0)\n"
+                            "else(ZERO)\n"
+                               "set(res 1)\n"
+                               "set(res 1)\n"
+                            "endif(ZERO)\n"
+                            "set(end 1)\n"
+                             << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -263,6 +303,8 @@ void CMakeProjectVisitorTest::testRun()
     {
         CMakeFunctionArgument arg;
         arg.value=vp.first;
+        
+        qDebug() << "iiiii" << vm.value(vp.first).join(QString(";")) << vp.second;
         
         QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
     }
