@@ -39,8 +39,8 @@ void SpecializationStore::set(DeclarationId declaration, uint specialization) {
 }
 
 uint SpecializationStore::get(DeclarationId declaration) {
-  QHash<DeclarationId, uint>::const_iterator it = m_specializations.find(declaration);
-  if(it != m_specializations.end())
+  QHash<DeclarationId, uint>::const_iterator it = m_specializations.constFind(declaration);
+  if(it != m_specializations.constEnd())
     return *it;
   else
     return 0;

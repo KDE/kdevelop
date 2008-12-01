@@ -146,7 +146,7 @@ void ProjectConfigSkeleton::writeConfig()
 {
     KConfigSkeletonItem::List myitems = items();
     KConfigSkeletonItem::List::ConstIterator it;
-    for( it = myitems.begin(); it != myitems.end(); ++it )
+    for( it = myitems.constBegin(); it != myitems.constEnd(); ++it )
     {
         (*it)->writeConfig( config() );
     }

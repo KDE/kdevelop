@@ -158,16 +158,16 @@ QStringList EnvironmentGroupList::createEnvironment(const QString & group, const
     if( !group.isEmpty() ) {
       QMap<QString, QString> userMap = variables(group);
 
-      for( QMap<QString, QString>::const_iterator it = userMap.begin();
-          it != userMap.end(); ++it )
+      for( QMap<QString, QString>::const_iterator it = userMap.constBegin();
+          it != userMap.constEnd(); ++it )
       {
           retMap.insert( it.key(), it.value() );
       }
     }
 
     QStringList env;
-    for( QMap<QString, QString>::const_iterator it = retMap.begin();
-        it != retMap.end(); ++it )
+    for( QMap<QString, QString>::const_iterator it = retMap.constBegin();
+        it != retMap.constEnd(); ++it )
     {
         env << it.key() + '=' + it.value();
     }
