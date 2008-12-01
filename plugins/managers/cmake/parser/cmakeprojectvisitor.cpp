@@ -831,6 +831,39 @@ int CMakeProjectVisitor::visit(const TargetLinkLibrariesAst *)
     return 1;
 }
 
+void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args)
+{
+    if(def.arguments.isEmpty() || end.arguments.isEmpty())
+        return;
+    QString id=def.arguments.first().value;
+    DUChainWriteLocker lock(DUChain::lock());
+    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
+    SimpleRange sr=def.arguments.first().range();
+    SimpleRange endsr=end.arguments.first().range();
+    int idx;
+    if(!decls.isEmpty())
+    {
+        idx=m_topctx->indexForUsedDeclaration(decls.first());
+        m_topctx->createUse(idx, sr, 0);
+    }
+    else
+    {
+        Declaration *d = new Declaration(sr, m_topctx);
+        d->setIdentifier( Identifier(id) );
+        
+        FunctionType* func=new FunctionType();
+        foreach(const QString& arg, args)
+        {
+            DelayedType *delayed=new DelayedType;
+            delayed->setIdentifier( arg );
+            func->addArgument(AbstractType::Ptr(delayed));
+        }
+        d->setAbstractType( AbstractType::Ptr(func) );
+        idx=m_topctx->indexForUsedDeclaration(d);
+    }
+    m_topctx->createUse(idx, endsr, 0);
+}
+
 int CMakeProjectVisitor::visit(const MacroAst *macro)
 {
     kDebug(9042) << "Adding macro:" << macro->macroName();
@@ -841,39 +874,21 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     CMakeFileContent::const_iterator it=macro->content().constBegin()+macro->line();
     CMakeFileContent::const_iterator itEnd=macro->content().constEnd();
     int lines=0;
-    for(; it!=itEnd; ++it)
+    for(; it!=itEnd; ++it, ++lines)
     {
         if(it->name.toLower()=="endmacro")
             break;
         m.code += *it;
-        ++lines;
     }
     ++lines; //We do not want to return to endmacro
-    m_macros->insert(macro->macroName(), m);
 
-    DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(macro->macroName()));
-    SimpleRange sr=macro->content().first().arguments.first().range();
-    if(!decls.isEmpty())
+    if(it!=itEnd)
     {
-        int idx=m_topctx->indexForUsedDeclaration(decls.first());
-        m_topctx->createUse(idx, sr, 0);
+        m_macros->insert(macro->macroName(), m);
+        macroDeclaration(macro->content()[macro->line()],
+                     macro->content()[macro->line()+lines-1],
+                     m.knownArgs);
     }
-    else
-    {
-        Declaration *d = new Declaration(sr, m_topctx);
-        d->setIdentifier( Identifier(macro->macroName()) );
-
-        FunctionType* func=new FunctionType();
-        foreach(const QString& arg, macro->knownArgs())
-        {
-            DelayedType *delayed=new DelayedType;
-            delayed->setIdentifier( arg );
-            func->addArgument(AbstractType::Ptr(delayed));
-        }
-        d->setAbstractType( AbstractType::Ptr(func) );
-    }
-
     return lines;
 }
 
@@ -896,31 +911,15 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
         ++lines;
     }
     ++lines; //We do not want to return to endmacro
-    m_macros->insert(func->name(), m);
-
-    DUChainWriteLocker lock(DUChain::lock());
-    QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(func->name()));
-    SimpleRange sr=func->content().first().arguments.first().range();
-    if(!decls.isEmpty())
+    
+    if(it!=itEnd)
     {
-        int idx=m_topctx->indexForUsedDeclaration(decls.first());
-        m_topctx->createUse(idx, sr, 0);
-    }
-    else
-    {
-        Declaration *d = new Declaration(sr, m_topctx);
-        d->setIdentifier( Identifier(func->name()) );
+        m_macros->insert(func->name(), m);
 
-        FunctionType* funct=new FunctionType();
-        foreach(const QString& arg, func->knownArgs())
-        {
-            DelayedType *delayed=new DelayedType;
-            delayed->setIdentifier( arg );
-            funct->addArgument(AbstractType::Ptr(delayed));
-        }
-        d->setAbstractType( AbstractType::Ptr(funct) );
+        macroDeclaration(func->content()[func->line()],
+                        func->content()[func->line()+lines-1],
+                        m.knownArgs);
     }
-
     return lines;
 }
 

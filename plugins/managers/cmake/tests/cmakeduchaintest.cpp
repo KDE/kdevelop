@@ -219,10 +219,11 @@ void CMakeDUChainTest::testUses()
     }
     
     QList<SimpleRange> uses=QList<SimpleRange>() << SimpleRange(2,11, 2,11+3)
+                                                 << SimpleRange(7,9,  7,9+3)
                                                  << SimpleRange(8,17, 8,17+6)
                                                  << SimpleRange(9,0,  9,3)
-                                                 << SimpleRange(10,3,  10,3+3)
-                                                 << SimpleRange(12,6,  12,6+3);
+                                                 << SimpleRange(10,3, 10,3+3)
+                                                 << SimpleRange(12,6, 12,6+3);
     for(int i=0; i<ctx->usesCount(); i++)
     {
         kDebug() << "use " << i << ctx->uses()[i].m_range.textRange()
