@@ -1,14 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=DocDoxygenPlugin
+Name[sv]=Doxygen-dokumentationsinsticksmodul
+Name[x-test]=xxDocDoxygenPluginxx
 Exec=blubb
 Comment=Documentation plugin for Doxygen documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση τύπου Doxygen
+Comment[gl]=Extensión de documentación de Doxygen
 Comment[nds]=Dokmentatschoon-Moduul för Doxygen-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os documentos do Doxygen
 Comment[pt_BR]='Plugin' de documentação para os documentos do Doxygen
+Comment[sv]=Dokumentationsinsticksmodul för Doxygen-dokumentation
 Comment[tr]=Doxygen için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Doxygen
+Comment[x-test]=xxDocumentation plugin for Doxygen documentationxx
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdocdoxygenplugin

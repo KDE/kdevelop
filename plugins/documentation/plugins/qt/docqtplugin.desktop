@@ -1,14 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=DocQtPlugin
+Name[sv]=Qt-dokumentationsinsticksmodul
+Name[x-test]=xxDocQtPluginxx
 Exec=blubb
 Comment=Documentation plugin for Qt DCF documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση τύπου Qt DCF
+Comment[gl]=Extensión de documentación do Qt DCF
 Comment[nds]=Dokmentatschoon-Moduul för Qt-DCF-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para a documentação DCF do Qt
 Comment[pt_BR]='Plugin' de documentação para a documentação DCF do Qt
+Comment[sv]=Dokumentationsinsticksmodul för Qt DCF-dokumentation
 Comment[tr]=Qt DCF  belgeleri için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Qt DCF
+Comment[x-test]=xxDocumentation plugin for Qt DCF documentationxx
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdocqtplugin

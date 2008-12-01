@@ -2,6 +2,8 @@
 Type=Service
 Name=KDevStandardOutputView
 Name[nds]=KDevStandardutgaavansicht
+Name[sv]=KDevelop-standardutmatningsvy
+Name[x-test]=xxKDevStandardOutputViewxx
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview

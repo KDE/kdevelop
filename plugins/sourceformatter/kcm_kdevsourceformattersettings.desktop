@@ -12,10 +12,13 @@ X-KDE-CfgDlgHierarchy=USERINTERFACE
 Name=Source Formatter Settings
 Name[el]=Ρυθμίσεις διαμόρφωσης πηγαίου
 Name[es]=Preferencias del formateador de código
+Name[gl]=Configuración do formatador do código
 Name[nds]=Bornformateren instellen
 Name[pt]=Configuração da Formatação do Código
 Name[pt_BR]=Configuração da Formatação do Código
+Name[sv]=Inställningar för källkodsformatering
 Name[tr]=Kaynak Biçimlendirici Ayarları
 Name[uk]=Параметри інструменту форматування коду
+Name[x-test]=xxSource Formatter Settingsxx
 
 

@@ -1,14 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=DocDjvuPlugin
+Name[sv]=DocDjvu-insticksmodul
+Name[x-test]=xxDocDjvuPluginxx
 Exec=blubb
 Comment=Documentation plugin for djvu format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή djvu
+Comment[gl]=Extensión de documentación do formato djvu
 Comment[nds]=Dokmentatschoon-Moduul för't djvu-Formaat
 Comment[pt]='Plugin' de documentação para o formato DjVu
 Comment[pt_BR]='Plugin' de documentação para o formato DjVu
+Comment[sv]=Dokumentationsinsticksmodul för djvu-format
 Comment[tr]=Djvu biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі djvu
+Comment[x-test]=xxDocumentation plugin for djvu formatxx
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocdjvuplugin

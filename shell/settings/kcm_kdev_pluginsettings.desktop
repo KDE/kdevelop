@@ -12,18 +12,24 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Plugins
 Name[el]=Πρόσθετα
+Name[gl]=Extensións
 Name[nds]=Modulen
 Name[pt]='Plugins'
 Name[pt_BR]='Plugins'
+Name[sv]=Insticksprogram
 Name[tr]=Eklentiler
 Name[uk]=Додатки
+Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
 Comment=Configure Plugins
 Comment[el]=Ρύθμιση προσθέτων
+Comment[gl]=Configura as extensión
 Comment[nds]=Modulen instellen
 Comment[pt]=Configurar os 'Plugins'
 Comment[pt_BR]=Configurar os 'Plugins'
+Comment[sv]=Anpassa insticksprogram
 Comment[tr]=Eklentileri Yapılandır
 Comment[uk]=Налаштування додатків
+Comment[x-test]=xxConfigure Pluginsxx
 Comment[zh_CN]=配置插件
 

@@ -1,14 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=DocCustomPlugin
+Name[sv]=Egen dokumentationsinsticksmodul
+Name[x-test]=xxDocCustomPluginxx
 Exec=blubb
 Comment=Documentation plugin for all types of documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για όλους τους τύπους τεκμηρίωσης
+Comment[gl]=Extensión de documentacion para todos os tipos de documentación
 Comment[nds]=Dokmentatschoon-Moduul för all Typen vun Dokmentatschoon
 Comment[pt]='Plugin' de documentação para todos os tipos de documentação
 Comment[pt_BR]='Plugin' de documentação para todos os tipos de documentação
+Comment[sv]=Dokumentationsinsticksmodul för alla typer av dokumentation
 Comment[tr]=Tüm belge tipleri için belgelendirme eklentisi
 Comment[uk]=Додаток для роботи з документацією всіх типів.
+Comment[x-test]=xxDocumentation plugin for all types of documentationxx
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdoccustomplugin

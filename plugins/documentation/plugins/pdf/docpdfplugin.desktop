@@ -1,14 +1,19 @@
 [Desktop Entry]
 Type=Service
 Name=DocPDFPlugin
+Name[sv]=DocPDF-insticksmodul
+Name[x-test]=xxDocPDFPluginxx
 Exec=blubb
 Comment=Documentation plugin for PDF format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή PDF
+Comment[gl]=Extensión de documentación do formato PDF
 Comment[nds]=Dokmentatschoon-Moduul för't PDF-Formaat
 Comment[pt]='Plugin' de documentação para o formato PDF
 Comment[pt_BR]='Plugin' de documentação para o formato PDF
+Comment[sv]=Dokumentationsinsticksmodul för PDF-format
 Comment[tr]=PDF biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі PDF
+Comment[x-test]=xxDocumentation plugin for PDF formatxx
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocpdfplugin
