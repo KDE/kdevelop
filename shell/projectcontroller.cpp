@@ -362,10 +362,6 @@ bool ProjectController::projectImportingFinished( IProject* project )
     QList<IPlugin*> pluglist;
     pluglist.append( managerPlugin );
     d->m_projectPlugins.insert( project, pluglist );
-
-    ProjectFolderItem *topItem = project->projectItem();
-    d->model->insertRow( d->model->rowCount(), topItem );
-
     d->m_projects.append( project );
 
 //     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();

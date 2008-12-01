@@ -77,6 +77,18 @@ public:
     KSharedConfig::Ptr m_cfg;
     IProject *project;
     QSet<KDevelop::IndexedString> fileSet;
+    bool reloading;
+    bool scheduleReload;
+
+    void reloadDone()
+    {
+        reloading = false;
+        Core::self()->projectController()->projectModel()->appendRow(topItem);
+        if (scheduleReload) {
+            scheduleReload = false;
+            project->reloadModel();
+        }
+    }
 
     QList<ProjectFileItem*> recurseFiles( ProjectBaseItem * projectItem )
     {
@@ -160,7 +172,9 @@ public:
 
     void importDone( KJob* )
     {
-        Core::self()->projectControllerInternal()->projectImportingFinished( project );
+        ProjectController* projCtrl = Core::self()->projectControllerInternal();
+        projCtrl->projectModel()->appendRow(topItem);
+        projCtrl->projectImportingFinished( project );
     }
 };
 
@@ -175,6 +189,8 @@ Project::Project( QObject *parent )
     d->topItem = 0;
     d->tmp = 0;
     d->vcsPlugin = 0;
+    d->reloading = false;
+    d->scheduleReload = false;
 }
 
 Project::~Project()
@@ -220,6 +236,12 @@ const KUrl Project::folder() const
 
 void Project::reloadModel()
 {
+    if (d->reloading) {
+        d->scheduleReload = true;
+        return;
+    }
+    d->reloading = true;
+
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
@@ -230,12 +252,13 @@ void Project::reloadModel()
         {
             KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
                                 i18n("Could not open project") );
+            d->reloading = false;
+            d->scheduleReload = false;
             return;
         }
         d->topItem->setIcon();
-        model->appendRow(d->topItem);
-//         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+        connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
         Core::self()->runController()->registerJob( importJob );
      }
 }
@@ -338,9 +361,9 @@ bool Project::open( const KUrl& projectFileUrl_ )
         d->manager = 0;
         return false;
     }
+
     if ( d->manager && iface )
     {
-//         ProjectModel* model = Core::self()->projectController()->projectModel();
         d->topItem = iface->import( this );
         if( !d->topItem )
         {
@@ -371,7 +394,6 @@ bool Project::open( const KUrl& projectFileUrl_ )
         }
 
         d->topItem->setIcon();
-//         model->insertRow( model->rowCount(), d->topItem );
         ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
         connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
         Core::self()->runController()->registerJob( importJob );

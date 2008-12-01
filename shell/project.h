@@ -178,6 +178,7 @@ public Q_SLOTS:
 
 private:
     Q_PRIVATE_SLOT(d, void importDone(KJob*))
+    Q_PRIVATE_SLOT(d, void reloadDone())
 
     class ProjectPrivate* const d;
 };
