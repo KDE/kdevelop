@@ -365,7 +365,9 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         initializeProject(project, folderUrl);
 
         m_folderPerUrl[folderUrl]=m_rootItem;
-        connect(m_watchers[project], SIGNAL(dirty(const QString&)), this, SLOT(dirtyFile(const QString&)));
+        
+        m_watchers[project]->disconnect( SIGNAL(dirty() ), this, SLOT(dirtyFile(QString)));
+        connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
         Q_ASSERT(m_rootItem->rowCount()==0);
     }
     return m_rootItem;
@@ -621,10 +623,7 @@ bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
     CMakeFolderItem* folderItem = dynamic_cast<CMakeFolderItem*>(item);
     if (folderItem) {
         if (item == item->project()->projectItem()) {
-//             item->project()->reloadModel();
-            item->removeRows(0, item->rowCount());
-            KDevelop::ImportProjectJob* importJob = new KDevelop::ImportProjectJob( item, this );
-            KDevelop::ICore::self()->runController()->registerJob( importJob );
+            item->project()->reloadModel();
         } else {
             QStandardItem *parent = folderItem->parent();
             CMakeFolderItem* fi = new CMakeFolderItem( folderItem->project(), folderItem->url().toLocalFile(), parent);
