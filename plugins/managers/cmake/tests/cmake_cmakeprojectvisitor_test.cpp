@@ -269,6 +269,23 @@ void CMakeProjectVisitorTest::testRun_data()
                             "endif(ZERO)\n"
                             "set(end 1)\n"
                              << cacheValues << results;
+                             
+    results.clear();
+    QTest::newRow("no_endif") <<
+                            "set(ZERO FALSE)\n"
+                            "if(ZERO)\n"
+                               "set(res 0)\n"
+                               "set(res 0)\n"
+                             << cacheValues << results;
+                             
+    results.clear();
+    QTest::newRow("no_endwhile") <<
+                            "set(VAR TRUE)\n"
+                            "while(VAR)\n"
+                               "set(res 0)\n"
+                               "set(res 0)\n"
+                               "set(VAR FALSE)\n"
+                             << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
@@ -303,8 +320,6 @@ void CMakeProjectVisitorTest::testRun()
     {
         CMakeFunctionArgument arg;
         arg.value=vp.first;
-        
-        qDebug() << "iiiii" << vm.value(vp.first).join(QString(";")) << vp.second;
         
         QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
     }

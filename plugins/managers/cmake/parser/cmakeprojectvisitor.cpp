@@ -1095,9 +1095,18 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             }
         }
     }
-//     kDebug() << "finish" << "<>" << ifast->condition() << '|' << lines-ifast->line() << '>' << lines;
+    
+    if(it==itEnd)
+    {
+        kDebug() << "error. found an unfinished endif";
+        return ifast->content().size()-ifast->line();
+    }
+    else
+    {
+//     kDebug() << "finish" << "<>" << ifast->condition() << '|' << lines-ifast->line() << " to " << lines << '<' << ifast->content().size();
 //     kDebug(9042) << "endif==" << ifast->content()[lines].writeBack();
-    return lines-ifast->line()+1;
+        return lines-ifast->line()+1;
+    }
 }
 
 int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
