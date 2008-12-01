@@ -219,16 +219,6 @@ KSharedConfig::Ptr Project::projectConfiguration() const
     return d->m_cfg;
 }
 
-// void Project::setLocalFile( const KUrl& u )
-// {
-//     d->localFile = u;
-// }
-
-// void Project::setGlobalFile( const KUrl& u )
-// {
-//     d->globalFile = u;
-// }
-
 const KUrl Project::folder() const
 {
     return d->folder;
@@ -412,16 +402,6 @@ bool Project::open( const KUrl& projectFileUrl_ )
 
 void Project::close()
 {
-    // unloaded by project controller, depending on shared count
-//     KPluginInfo* pluginInfo = Core::self()->pluginController()->pluginInfo( d->manager );
-//     if ( pluginInfo )
-//     {
-//         Core::self()->pluginController()->unloadPlugin( pluginInfo->pluginName() );
-//     }
-
-    //the manager plugin will be deleted in the plugin controller, so just set
-    //the manager to zero.
-//     d->manager = 0;
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
     if( d->tmp )
@@ -530,11 +510,6 @@ void Project::setManagerPlugin( IPlugin* manager )
     d->manager = manager;
 }
 
-// PersistentHash * Project::persistentHash() const
-// {
-//     return &d->persistentHash;
-// }
-
 KUrl Project::projectFileUrl() const
 {
     return d->projectFileUrl;
@@ -571,7 +546,7 @@ QSet<IndexedString> Project::fileSet() const
     return d->fileSet;
 }
 
-}
+} // namespace KDevelop
 
 #include "project.moc"
 

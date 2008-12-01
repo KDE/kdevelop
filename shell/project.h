@@ -171,11 +171,6 @@ public Q_SLOTS:
      */
     bool inProject(const KUrl &url) const;
 
-    /**
-     * The persistent AST storage for this project.
-     */
-//     PersistentHash *persistentHash() const;
-
 private:
     Q_PRIVATE_SLOT(d, void importDone(KJob*))
     Q_PRIVATE_SLOT(d, void reloadDone())
@@ -183,5 +178,5 @@ private:
     class ProjectPrivate* const d;
 };
 
-}
+} // namespace KDevelop
 #endif
