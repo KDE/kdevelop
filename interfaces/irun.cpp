@@ -149,4 +149,3 @@ void IRun::setDependencies(const QList<KJob*>& deps)
     d->dependencies=deps;
 }
 
-#include "irun.moc"
