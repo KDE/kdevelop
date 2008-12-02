@@ -212,49 +212,16 @@ QString printSplitTree(SplitTreeNode* tree, QString prefix = "") {
     return ret;
 }
 
-struct SetNodeData {
-  //Rule: start <= end
-  Index start, end; //This set-node bounds all indices starting at start until end, not including end.
-
-  //Child nodes
-  //Rule: left->start == start, right->end == end
-  //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
-  //Ptr left, right;
-  uint leftNode, rightNode;
-  uint m_hash;
-  uint m_refCount;
-  
-  SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0), m_refCount(0) {
-  }
-  
-  uint hash() const {
-    return m_hash;
-  }
-  
-  short unsigned int itemSize() const {
-    return sizeof(SetNodeData);
-  }
-  
-  inline bool contiguous() const {
-    return !leftNode;
-  }
-  
-  inline bool hasSlaves() const {
-    return (bool)leftNode;
-  }
-  
-  //Must always be called when an attribute was changed!
-  void updateHash(const SetNodeData* left, const SetNodeData* right) {
+void SetNodeData::updateHash(const SetNodeData* left, const SetNodeData* right) {
     m_hash = 0;
     if(left && right) {
-      m_hash = left->m_hash + right->m_hash;
+    m_hash = left->m_hash + right->m_hash;
     } else
-      m_hash = hashFromRange(start, end);
-  }
-};
+    m_hash = hashFromRange(start, end);
+}
 
 class SetNodeDataRequest;
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false> SetDataRepository;
+typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, true> SetDataRepository;
 
 struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
@@ -1109,10 +1076,12 @@ Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
 }
 
 Set BasicSetRepository::createSet(Index i) {
-  std::vector<Index> ranges;
-  ranges.push_back(i);
-  ranges.push_back(i+1);
-  return createSetFromRanges(ranges);
+    SetNodeData data;
+    data.start = i;
+    data.end = i+1;
+    data.updateHash(0, 0);
+    
+    return Set(d->dataRepository.index( SetNodeDataRequest(&data, d->dataRepository) ), this);
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& _indices) {
@@ -1165,6 +1134,16 @@ void BasicSetRepository::printStatistics() const {
 BasicSetRepository::~BasicSetRepository() {
   
   delete d;
+}
+
+void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
+}
+#undef nodeFromIndex
+const SetNodeData* BasicSetRepository::nodeFromIndex(uint index) const {
+    if(index)
+        return d->dataRepository.itemFromIndex(index);
+    else
+        return 0;
 }
 
 ////////////Set convenience functions//////////////////
@@ -1288,11 +1267,6 @@ BasicSetRepository* Set::repository() const {
   return m_repository;
 }
 
-void Set::checkDelete() {
-    staticRef();
-    staticUnref();
-}
-
 void Set::staticRef() {
   if(!m_tree)
     return;
@@ -1333,9 +1307,6 @@ void Set::staticUnref() {
         m_repository->d->dataRepository.deleteItem(current);
       }
     }
-}
-
-void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
 }
 
 }

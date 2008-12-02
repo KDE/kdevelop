@@ -50,15 +50,85 @@ class ConvenientIterator : public Conversion {
 
     private:
     Set::Iterator m_it;
-  };
+};
 
 struct DummyLocker {
 };
-  
-template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker = DummyLocker>
+
+template<class T>
+struct IdentityConversion {
+    static T toIndex(const T& t) {
+        return t;
+    }
+    static T toItem(const T& t) {
+        return t;
+    }
+};
+
+///This is a virtual set-node that allows conveniently iterating through the tree-structure,
+///accessing the contained items directly, and accessing the ranges.
+template<class T, class Conversion, class StaticRepository>
+class VirtualSetNode {
+    public:
+        inline VirtualSetNode(const SetNodeData* data = 0) : m_data(data) {
+        }
+        
+        bool isValid() const {
+            return (bool)m_data;
+        }
+        
+        ///If this returns false, a left and a right node are available.
+        ///If this returns true, this node represents a single item, that can be retrieved by calling item() or operator*.
+        inline bool isFinalNode() const {
+            return m_data->leftNode == 0;
+        }
+        
+        T firstItem() const {
+            return Conversion::toItem(start());
+        }
+        
+        T lastItem() const {
+            return Conversion::toItem(end()-1);
+        }
+        
+        T operator*() const {
+            return Conversion::toItem(start());
+        }
+        
+        VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
+            if(m_data->leftNode)
+                return StaticRepository::repository()->nodeFromIndex(m_data->leftNode);
+            else
+                return 0;
+        }
+        
+        VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
+            if(m_data->rightNode)
+                return StaticRepository::repository()->nodeFromIndex(m_data->rightNode);
+            else
+                return 0;
+        }
+        
+        ///Returns the start of this node's range. If this is a final node, the length of the range is 1.
+        inline uint start() const {
+            return m_data->start;
+        }
+        
+        ///Returns the end of this node's range.
+        inline uint end() const {
+            return m_data->end;
+        }
+        
+    private:
+        const SetNodeData* m_data;
+};
+
+template<class T, class Conversion, class StaticRepository, bool doReferenceCounting = false, class StaticAccessLocker = DummyLocker>
 class StorableSet : public Conversion {
   public:
       
+    typedef VirtualSetNode<T, Conversion, StaticRepository> Node;
+    
     StorableSet(const StorableSet& rhs) : m_setIndex(rhs.m_setIndex) {
         if(doReferenceCounting)
             set().staticRef();
@@ -80,19 +150,25 @@ class StorableSet : public Conversion {
     void insert(const T& t) {
       insertIndex(Conversion::toIndex(t));
     }
+    
+    uint count() const {
+        return set().count();
+    }
 
     void insertIndex(uint index) {
       StaticAccessLocker lock;
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set addedSet = StaticRepository::repository()->createSet(index);
+      if(doReferenceCounting)
+          addedSet.staticRef();
       set += addedSet;
       m_setIndex = set.setIndex();
       
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
-          addedSet.checkDelete();
+          addedSet.staticUnref();
       }
     }
     
@@ -105,13 +181,16 @@ class StorableSet : public Conversion {
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set removedSet = StaticRepository::repository()->createSet(index);
+      if(doReferenceCounting) {
+          removedSet.staticRef();
+      }
       set -= removedSet;
       m_setIndex = set.setIndex();
       
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
-          removedSet.checkDelete();
+          removedSet.staticUnref();
       }
     }
 
@@ -120,7 +199,7 @@ class StorableSet : public Conversion {
     }
 
     bool contains(const T& item) const {
-      return containsIndex(Conversion::itemToIndex(item));
+      return containsIndex(Conversion::toIndex(item));
     }
 
     bool containsIndex(uint index) const {
@@ -159,30 +238,57 @@ class StorableSet : public Conversion {
       return *this;
     }
     
+    StorableSet& operator &=(const StorableSet& rhs) {
+      StaticAccessLocker lock;
+      Set set(m_setIndex, StaticRepository::repository());
+      Set oldSet(set);
+      Set otherSet(rhs.m_setIndex, StaticRepository::repository());
+      set &= otherSet;
+      m_setIndex = set.setIndex();
+      
+      if(doReferenceCounting) {
+          set.staticRef();
+          oldSet.staticUnref();
+      }
+      return *this;
+    }
+    
     StorableSet& operator=(const StorableSet& rhs) {
+      StaticAccessLocker lock;
         if(doReferenceCounting)
             set().staticUnref();
         m_setIndex = rhs.m_setIndex;
         if(doReferenceCounting)
             set().staticRef();
+        return *this;
     }
 
     StorableSet operator +(const StorableSet& rhs) const {
-      StaticAccessLocker lock;
       StorableSet ret(*this);
       ret += rhs;
       return ret;
     }
     
-    StorableSet operator -(const Set& rhs) const {
-      StaticAccessLocker lock;
+    StorableSet operator -(const StorableSet& rhs) const {
       StorableSet ret(*this);
       ret -= rhs;
       return ret;
     }
+    
+    StorableSet operator &(const StorableSet& rhs) const {
+      StorableSet ret(*this);
+      ret &= rhs;
+      return ret;
+    }
+    
+    typedef ConvenientIterator<T, Conversion> Iterator;
 
-    ConvenientIterator<T, Conversion> iterator() const {
+    Iterator iterator() const {
       return ConvenientIterator<T, Conversion>(set());
+    }
+    
+    Node node() const {
+        return Node(StaticRepository::repository()->nodeFromIndex(m_setIndex));
     }
 
   private:

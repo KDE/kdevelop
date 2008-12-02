@@ -50,6 +50,41 @@ namespace Utils {
 class SetNode;
 class BasicSetRepository;
 
+///Internal node representation, exported here for performance reason.
+struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
+  //Rule: start < end
+  uint start, end; //This set-node bounds all indices starting at start until end, not including end.
+
+  //Child nodes
+  //Rule: left->start == start, right->end == end
+  //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
+  uint leftNode, rightNode;
+  uint m_hash;
+  uint m_refCount;
+  
+  inline SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0), m_refCount(0) {
+  }
+  
+  inline uint hash() const {
+    return m_hash;
+  }
+  
+  inline short unsigned int itemSize() const {
+    return sizeof(SetNodeData);
+  }
+  
+  inline bool contiguous() const {
+    return !leftNode;
+  }
+  
+  inline bool hasSlaves() const {
+    return (bool)leftNode;
+  }
+  
+  //Must always be called when an attribute was changed!
+  void updateHash(const SetNodeData* left, const SetNodeData* right);
+};
+
 /**
  * This object is copyable. It represents a set, and allows iterating through the represented indices.
  * */
@@ -105,9 +140,6 @@ public:
     ///will be deleted as well. @warning Either protect ALL your sets by using reference-counting, or don't use it at all.
     void staticUnref();
   
-    ///Checks if this set is statically referenced, and if it isn't, delete it. This is equal to calling staticRef() and then staticUnref().
-    void checkDelete();
-    
   ///Returns a pointer to the repository this set belongs to. Returns zero when this set is not initialized yet.
   BasicSetRepository* repository() const;
 private:
@@ -158,6 +190,7 @@ public:
   ///Is called when this index is not part of any set any more
   virtual void itemRemovedFromSets(uint index);
   
+  const SetNodeData* nodeFromIndex(uint index) const;
 private:
   friend class Set;
   friend class Set::Iterator;
