@@ -46,7 +46,7 @@ public:
   /**
     * Merges the given set of macros into the environment. Does not modify m_environmentFile.
     * */
-  void merge( const Cpp::LazyMacroSet& macros );
+  void merge( const Cpp::ReferenceCountedMacroSet& macros );
   
   ///Merges the macros  from the given EnvironmentFile(including undef macros). Does not modify m_environmentFile.
   void merge( const Cpp::EnvironmentFile* file );
@@ -56,7 +56,7 @@ public:
   virtual int type() const;
 
   ///Does not include the names of undef macros
-  const Cpp::LazyStringSet& macroNameSet() const;
+  const Cpp::ReferenceCountedStringSet& macroNameSet() const;
 
   ///Restricts the header branching hash of searched contexts to the given number
   ///(Is only stored here, it is used in the environment-manager)
@@ -76,7 +76,7 @@ private:
     uint m_identityOffsetRestriction;
     bool m_identityOffsetRestrictionEnabled;
     bool m_finished;
-    Cpp::LazyStringSet m_macroNameSet;
+    Cpp::ReferenceCountedStringSet m_macroNameSet;
     mutable std::set<Utils::BasicSetRepository::Index> m_strings;
     mutable KSharedPtr<Cpp::EnvironmentFile> m_environmentFile;
 };

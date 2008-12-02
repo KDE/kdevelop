@@ -103,14 +103,14 @@ PreprocessedContents asBody(const char* lhs) {
   return convertFromByteArray(QByteArray(lhs));
 }
 
-void insertMacro(Cpp::LazyMacroSet& macros, const rpp::pp_dynamic_macro& macro)
+void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_dynamic_macro& macro)
 {
   rpp::pp_macro* m = makeConstant(&macro);
   macros.insert(*m);
   delete[] m;
 }
 
-bool setupStandardMacros(Cpp::LazyMacroSet& macros)
+bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
     //Used in several headers like sys/time.h

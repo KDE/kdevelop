@@ -161,7 +161,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_highlights = new CppHighlighting( this );
     m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
-    m_standardMacros = new Cpp::LazyMacroSet( &Cpp::EnvironmentManager::macroSetRepository );
+    m_standardMacros = new Cpp::ReferenceCountedMacroSet;
     m_standardIncludePaths = new QStringList;
     Cpp::EnvironmentManager::setSimplifiedMatching(true); ///@todo Make simplified matching optional.
 
@@ -437,7 +437,7 @@ CppLanguageSupport::~CppLanguageSupport()
 #endif
 }
 
-const Cpp::LazyMacroSet& CppLanguageSupport::standardMacros() const {
+const Cpp::ReferenceCountedMacroSet& CppLanguageSupport::standardMacros() const {
     return *m_standardMacros;
 }
 
@@ -953,7 +953,7 @@ QPair<SimpleRange, const rpp::pp_macro*> CppLanguageSupport::usedMacroForPositio
 
   //We need to do a flat search through all macros here, which really hurts
 
-  Cpp::MacroSetIterator it = p->usedMacros().iterator();
+  Cpp::ReferenceCountedMacroSet::Iterator it = p->usedMacros().iterator();
 
   while(it) {
     if(it.ref().name == word && !it.ref().isUndef())
@@ -1054,7 +1054,7 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
     return true;
 
   ///@todo somehow this check should also go into EnvironmentManager
-  for( Cpp::StringSetIterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
+  for( Cpp::ReferenceCountedStringSet::Iterator it = file->missingIncludeFiles().iterator(); it; ++it ) {
 
     ///@todo store IncludeLocal/IncludeGlobal somewhere
     QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, KUrl(), true );

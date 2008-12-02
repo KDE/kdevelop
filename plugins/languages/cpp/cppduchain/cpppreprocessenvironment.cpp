@@ -19,7 +19,7 @@
 ///@todo Make this configurable
 const bool onlyRecordImportantMacroUses = true;
 
-CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_identityOffsetRestrictionEnabled(false), m_macroNameSet(&Cpp::EnvironmentManager::stringSetRepository), m_environmentFile(environmentFile) {
+CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_identityOffsetRestrictionEnabled(false), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
     ///NOTE: m_environmentFile may be zero, this must be treated
 }
@@ -69,7 +69,7 @@ void CppPreprocessEnvironment::swapMacros( rpp::Environment* parentEnvironment )
     CppPreprocessEnvironment* env = dynamic_cast<CppPreprocessEnvironment*>(parentEnvironment);
     Q_ASSERT(env);
 
-    Cpp::LazyStringSet old = m_macroNameSet;
+    Cpp::ReferenceCountedStringSet old = m_macroNameSet;
     m_macroNameSet = env->m_macroNameSet;
     env->m_macroNameSet = old;
 
@@ -79,8 +79,8 @@ void CppPreprocessEnvironment::swapMacros( rpp::Environment* parentEnvironment )
 /**
   * Merges the given set of macros into the environment. Does not modify m_environmentFile
   * */
-void CppPreprocessEnvironment::merge( const Cpp::LazyMacroSet& macros ) {
-    for( Cpp::MacroSetIterator it(macros.set().iterator()); it; ++it ) {
+void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macros ) {
+    for( Cpp::ReferenceCountedMacroSet::Iterator it(macros.iterator()); it; ++it ) {
         rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
         if( !it.ref().isUndef() )
@@ -91,12 +91,12 @@ void CppPreprocessEnvironment::merge( const Cpp::LazyMacroSet& macros ) {
 }
 
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
-    for( Cpp::MacroSetIterator it(file->definedMacros().iterator()); it; ++it ) {
+    for( Cpp::ReferenceCountedMacroSet::Iterator it(file->definedMacros().iterator()); it; ++it ) {
         rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
         m_macroNameSet.insert(it.ref().name);
     }
-    for( Cpp::StringSetIterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
+    for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
         rpp::pp_dynamic_macro m(*it);
         m.defined = false;
         rpp::Environment::setMacro(makeConstant(&m)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
@@ -131,7 +131,7 @@ int CppPreprocessEnvironment::type() const {
     return KDevelop::CppParsingEnvironment;
 }
 
-const Cpp::LazyStringSet& CppPreprocessEnvironment::macroNameSet() const {
+const Cpp::ReferenceCountedStringSet& CppPreprocessEnvironment::macroNameSet() const {
     return m_macroNameSet;
 }
 

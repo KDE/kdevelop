@@ -138,6 +138,7 @@ TestExpressionParser::TestExpressionParser()
 
 void TestExpressionParser::initTestCase()
 {
+  DUChain::self()->disablePersistentStorage();
 }
 
 void TestExpressionParser::cleanupTestCase()
@@ -517,7 +518,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateExpression( "\"hello\"", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->toString().trimmed(), QString("char* const").trimmed());
+  QCOMPARE(result.type.type()->toString().trimmed(), QString("const char*").trimmed());
   QVERIFY(result.isInstance);
   lock.unlock();
 

@@ -182,7 +182,7 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
       DUChainReadLocker lock(DUChain::lock());
 /*    kDebug(9007) << "defined macros: " << file->definedMacros().size();*/
     //Copy in all macros from the file
-    for( Cpp::MacroSetIterator it( file->definedMacros().set() ); it; ++it ) {
+    for( Cpp::ReferenceCountedMacroSet::Iterator it( file->definedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         pp.environment()->setMacro( copyConstantMacro( &it.ref() ) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/
@@ -191,7 +191,7 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
       }
     }
 /*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
-    for( Cpp::MacroSetIterator it( file->usedMacros().set() ); it; ++it ) {
+    for( Cpp::ReferenceCountedMacroSet::Iterator it( file->usedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         pp.environment()->setMacro( copyConstantMacro(&it.ref()) );
 /*        kDebug(9007) << "adding macro " << (*it).name.str();*/

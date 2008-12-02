@@ -127,6 +127,7 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
+  DUChain::self()->disablePersistentStorage();
   typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
 
   addInclude( "testFile1.h", testFile1 );
@@ -787,11 +788,10 @@ void TestCppCodeCompletion::addInclude( const QString& identity, const QString& 
 }
 
 //Only for debugging
-QString print(const Cpp::LazyStringSet& set) {
-  Utils::Set s = set.set();
+QString print(const Cpp::ReferenceCountedStringSet& set) {
   QString ret;
   bool first = true;
-  Cpp::StringSetIterator it(s.iterator());
+  Cpp::ReferenceCountedStringSet::Iterator it(set.iterator());
   while(it) {
     if(!first)
       ret += ", ";
@@ -804,9 +804,9 @@ QString print(const Cpp::LazyStringSet& set) {
 }
 
 //Only for debugging
-QStringList toStringList( const Utils::Set& set ) {
+QStringList toStringList( const Cpp::ReferenceCountedStringSet& set ) {
   QStringList ret;
-  Cpp::StringSetIterator it(set.iterator());
+  Cpp::ReferenceCountedStringSet::Iterator it(set.iterator());
   while(it) {
     ret << (*it).str();
     ++it;

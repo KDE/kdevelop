@@ -44,7 +44,7 @@ public:
 
     /*! Creates and connects the QAction. Invoke this once. */
     void connectAction(KActionCollection*);
-    void setStandardMacros(Cpp::LazyMacroSet*); 
+    void setStandardMacros(Cpp::ReferenceCountedMacroSet*); 
     
 private slots:
     /*! Connected to the action's triggered() signal */
@@ -53,7 +53,7 @@ private slots:
 private:
     KDevelop::TopDUContext* documentContextFor(const KUrl& url);
     bool m_actionConnected;
-    Cpp::LazyMacroSet* m_standardMacros;
+    Cpp::ReferenceCountedMacroSet* m_standardMacros;
     bool m_buzzySwitching;
 };
 

@@ -108,7 +108,7 @@ public:
     
     static CppLanguageSupport* self();
 
-    const Cpp::LazyMacroSet& standardMacros() const;
+    const Cpp::ReferenceCountedMacroSet& standardMacros() const;
 
     const KDevelop::ParsingEnvironment* standardEnvironment() const;
     
@@ -168,7 +168,7 @@ private:
 
     CppHighlighting *m_highlights;
     KDevelop::CodeCompletion *m_cc;
-    Cpp::LazyMacroSet *m_standardMacros;
+    Cpp::ReferenceCountedMacroSet *m_standardMacros;
     const KDevelop::ParsingEnvironment *m_standardEnvironment;
     
     QStringList *m_standardIncludePaths;

@@ -69,6 +69,8 @@ struct IncludePathListItem {
     END_APPENDED_LISTS(IncludePathListItem, m_includePaths);
 };
 
+QMutex Cpp::SetMutexLocker::m_mutex(QMutex::Recursive);
+
 typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 
 typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData, false> IncludePathsRepository;
@@ -103,7 +105,6 @@ inline bool debugging() {
 
 using namespace Cpp;
 
-
 REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 
 //Repository that contains the actual macros, and maps them to indices
@@ -112,6 +113,15 @@ MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro reposito
 Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets", true);
 //Set-repository that contains the macro-sets
 Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets", true);
+
+namespace Cpp {
+  Utils::BasicSetRepository* StaticStringSetRepository::repository() {
+    return &Cpp::EnvironmentManager::stringSetRepository;
+  }
+  Utils::BasicSetRepository* StaticMacroSetRepository::repository() {
+    return &Cpp::EnvironmentManager::macroSetRepository;
+  }
+}
 
 const rpp::pp_macro& Cpp::MacroIndexConversion::toItem(uint index) const {
   return *EnvironmentManager::macroDataRepository.itemFromIndex( index );
@@ -126,11 +136,10 @@ QString id(const EnvironmentFile* file) {
   return file->url().str() + QString(" %1").arg((size_t)file) ;
 }
 
-//Only for debugging
-QString print(const Utils::Set& s) {
+QString print(const Cpp::ReferenceCountedStringSet& set) {
   QString ret;
   bool first = true;
-  StringSetIterator it( s );
+  Cpp::ReferenceCountedStringSet::Iterator it( set.iterator() );
   while(it) {
     if(!first)
       ret += ", ";
@@ -142,14 +151,10 @@ QString print(const Utils::Set& s) {
   return ret;
 }
 
-QString print(const Cpp::LazyStringSet& set) {
-  return print( set.set() );
-}
-
-QString print(const Cpp::LazyMacroSet& set) {
+QString print(const Cpp::ReferenceCountedMacroSet& set) {
   QString ret;
   bool first = true;
-  MacroSetIterator it( set.set() );
+  Cpp::ReferenceCountedMacroSet::Iterator it( set.iterator() );
   while(it) {
     if(!first)
       ret += ", ";
@@ -174,7 +179,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   if(!cppEnvironment)
     return false;
   
-  Utils::Set environmentMacroNames = cppEnvironment->macroNameSet().set();
+  ReferenceCountedStringSet environmentMacroNames = cppEnvironment->macroNameSet();
   
   if( cppEnvironment->identityOffsetRestrictionEnabled() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
 #ifdef LEXERCACHE_DEBUG
@@ -183,9 +188,9 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     return false;
   }
   
-  Utils::Set conflicts = (environmentMacroNames & strings()) - m_usedMacroNames.set();
+  ReferenceCountedStringSet conflicts = (environmentMacroNames & strings()) - d_func()->m_usedMacroNames;
 
-  for( StringSetIterator it( conflicts ); it; ++it ) {
+  for( ReferenceCountedStringSet::Iterator it(conflicts.iterator()); it; ++it ) {
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
     if(m && !m->isUndef()) {
       
@@ -204,7 +209,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   //ifDebug( Q_ASSERT(m_usedMacros.set().count() == m_usedMacroNames.set().count()) );
   ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << m_usedMacros.set().count() );
 
-  for ( MacroSetIterator it( m_usedMacros.set() ); it; ++it ) {
+  for ( ReferenceCountedMacroSet::Iterator it( d_func()->m_usedMacros.iterator() ); it; ++it ) {
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( it.ref().name );
     if ( !m || !(*m == it.ref()) ) {
       if( !m && it.ref().isUndef() ) {
@@ -229,7 +234,7 @@ bool EnvironmentFile::needsUpdate() const {
   return ParsingEnvironmentFile::needsUpdate();
 }
 
-EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url), /*m_includeFiles(&EnvironmentManager::stringSetRepository), */m_missingIncludeFiles(&EnvironmentManager::stringSetRepository), m_usedMacros(&EnvironmentManager::macroSetRepository), m_usedMacroNames(&EnvironmentManager::stringSetRepository), m_definedMacros(&EnvironmentManager::macroSetRepository), m_definedMacroNames(&EnvironmentManager::stringSetRepository), m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository) {
+EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
 
   d_func_dynamic()->setClassId(this);
   
@@ -242,34 +247,11 @@ EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) 
   clearModificationRevisions();
 }
 
-EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironmentFile(data) 
-//       , m_includeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_includeFiles, &EnvironmentManager::stringSetRepository)) 
-      , m_missingIncludeFiles(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_missingIncludeFiles, &EnvironmentManager::stringSetRepository))
-      , m_usedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_usedMacros, &EnvironmentManager::macroSetRepository))
-      , m_usedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_usedMacroNames, &EnvironmentManager::stringSetRepository))
-      , m_definedMacros(&EnvironmentManager::macroSetRepository, 0, Utils::Set(data.m_definedMacros, &EnvironmentManager::macroSetRepository))
-      , m_definedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_definedMacroNames, &EnvironmentManager::stringSetRepository))
-      , m_unDefinedMacroNames(&EnvironmentManager::stringSetRepository, 0, Utils::Set(data.m_unDefinedMacroNames, &EnvironmentManager::stringSetRepository))
+EnvironmentFile::EnvironmentFile( EnvironmentFileData& data ) : ParsingEnvironmentFile(data)
 {
 }
 
 EnvironmentFile::~EnvironmentFile() {
-}
-
-void EnvironmentFile::aboutToSave() {
-  ParsingEnvironmentFile::aboutToSave();
-  if(d_func()->m_missingIncludeFiles != m_missingIncludeFiles.set().setIndex())
-    d_func_dynamic()->m_missingIncludeFiles = m_missingIncludeFiles.set().setIndex();
-  if(d_func()->m_usedMacros != m_usedMacros.set().setIndex())
-    d_func_dynamic()->m_usedMacros = m_usedMacros.set().setIndex();
-  if(d_func()->m_usedMacroNames != m_usedMacroNames.set().setIndex())
-    d_func_dynamic()->m_usedMacroNames = m_usedMacroNames.set().setIndex();
-  if(d_func()->m_definedMacros != m_definedMacros.set().setIndex())
-    d_func_dynamic()->m_definedMacros = m_definedMacros.set().setIndex();
-  if(d_func()->m_definedMacroNames != m_definedMacroNames.set().setIndex())
-    d_func_dynamic()->m_definedMacroNames = m_definedMacroNames.set().setIndex();
-  if(d_func()->m_unDefinedMacroNames != m_unDefinedMacroNames.set().setIndex())
-    d_func_dynamic()->m_unDefinedMacroNames = m_unDefinedMacroNames.set().setIndex();
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
@@ -286,26 +268,26 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
   }
 #endif
-  if( previousOfSameName && m_definedMacros.contains(*previousOfSameName) ) ///@todo Make this faster. We cannot remove the definedMacros.contains(..), because else we get problems.
-    m_definedMacros.remove( *previousOfSameName );
-  else if( m_definedMacroNames.contains(macro.name) ) {
+  if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) ) ///@todo Make this faster. We cannot remove the definedMacros.contains(..), because else we get problems.
+    d_func_dynamic()->m_definedMacros.remove( *previousOfSameName );
+  else if( d_func()->m_definedMacroNames.contains(macro.name) ) {
     //Search if there is already a macro of the same name in the set, and remove it
     //This is slow, but should not happen too often
     ///@todo maybe give a warning, and find out how this can happen
-    for( MacroSetIterator it( m_definedMacros.set() ); it; ++it )
+    for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it )
       if( macro.name == it.ref().name )
-        m_definedMacros.remove(it.ref());
+        d_func_dynamic()->m_definedMacros.remove(it.ref());
   }
   
   if(macro.isUndef()) {
-    m_definedMacroNames.remove( macro.name );
+    d_func_dynamic()->m_definedMacroNames.remove( macro.name );
     
-    m_unDefinedMacroNames.insert( macro.name );
+    d_func_dynamic()->m_unDefinedMacroNames.insert( macro.name );
   } else {
-    m_unDefinedMacroNames.remove( macro.name );
-    m_definedMacroNames.insert( macro.name );
+    d_func_dynamic()->m_unDefinedMacroNames.remove( macro.name );
+    d_func_dynamic()->m_definedMacroNames.insert( macro.name );
     
-    m_definedMacros.insert( macro );
+    d_func_dynamic()->m_definedMacros.insert( macro );
   }
   
   //State: If it is an undef macro, it is not in m_definedMacroNames not in m_definedMacros, and it is in m_unDefinedMacroNames
@@ -313,15 +295,15 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
 }
 
 void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
-  if ( !m_definedMacroNames.contains( macro.name ) && !m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
+  if ( !d_func()->m_definedMacroNames.contains( macro.name ) && !d_func()->m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
     kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
   }
 #endif
-    m_usedMacros.insert( macro );
+    d_func_dynamic()->m_usedMacros.insert( macro );
   
-    m_usedMacroNames.insert( macro.name );
+    d_func_dynamic()->m_usedMacroNames.insert( macro.name );
   }
 }
 
@@ -329,33 +311,33 @@ void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
 //   return m_includeFiles;
 // }
 
-Utils::Set EnvironmentFile::strings() const {
-  return Utils::Set(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
+const ReferenceCountedStringSet& EnvironmentFile::strings() const {
+  return d_func()->m_strings;
 }
 
 
 ///Set of all defined macros, including those of all deeper included files
-const LazyMacroSet& EnvironmentFile::definedMacros() const {
-  return m_definedMacros;
+const ReferenceCountedMacroSet& EnvironmentFile::definedMacros() const {
+  return d_func()->m_definedMacros;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
-const LazyStringSet& EnvironmentFile::usedMacroNames() const {
-  return m_usedMacroNames;
+const ReferenceCountedStringSet& EnvironmentFile::usedMacroNames() const {
+  return d_func()->m_usedMacroNames;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
-const LazyStringSet& EnvironmentFile::definedMacroNames() const {
-  return m_definedMacroNames;
+const ReferenceCountedStringSet& EnvironmentFile::definedMacroNames() const {
+  return d_func()->m_definedMacroNames;
 }
 
-const LazyStringSet& EnvironmentFile::unDefinedMacroNames() const {
-  return m_unDefinedMacroNames;
+const ReferenceCountedStringSet& EnvironmentFile::unDefinedMacroNames() const {
+  return d_func()->m_unDefinedMacroNames;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
-const LazyMacroSet& EnvironmentFile::usedMacros() const {
-  return m_usedMacros;
+const ReferenceCountedMacroSet& EnvironmentFile::usedMacros() const {
+  return d_func()->m_usedMacros;
 }
 
 const QList<IndexedString> EnvironmentFile::includePaths() const {
@@ -389,17 +371,17 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
 
 void EnvironmentFile::addMissingIncludeFile(const IndexedString& file)
 {
-  m_missingIncludeFiles.insert(file);
+  d_func_dynamic()->m_missingIncludeFiles.insert(file);
 }
 
-const LazyStringSet& EnvironmentFile::missingIncludeFiles() const
+const ReferenceCountedStringSet& EnvironmentFile::missingIncludeFiles() const
 {
-  return m_missingIncludeFiles;
+  return d_func()->m_missingIncludeFiles;
 }
 
 void EnvironmentFile::clearMissingIncludeFiles()
 {
-  m_missingIncludeFiles.clear();
+  d_func_dynamic()->m_missingIncludeFiles = ReferenceCountedStringSet();
 }
 
 void EnvironmentFile::addIncludeFile( const IndexedString& file, const ModificationRevision& modificationTime ) {
@@ -409,12 +391,7 @@ void EnvironmentFile::addIncludeFile( const IndexedString& file, const Modificat
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
-  Utils::Set oldSet(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
-  Utils::Set newSet = (this->strings() + EnvironmentManager::stringSetRepository.createSet(strings));
-  d_func_dynamic()->m_strings = newSet.setIndex();
-
-/*  newSet.staticRef();
-  oldSet.staticUnref();*/
+  d_func_dynamic()->m_strings += ReferenceCountedStringSet( EnvironmentManager::stringSetRepository.createSet(strings) );
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
@@ -426,58 +403,52 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
   }
 #endif
-  {
-    Utils::Set oldSet(d_func()->m_strings, &EnvironmentManager::stringSetRepository);
-    Utils::Set newSet = (strings() + (file.strings() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set());
-    d_func_dynamic()->m_strings = newSet.setIndex();
-
-/*    newSet.staticRef();
-    oldSet.staticUnref();*/
-  }
+  d_func_dynamic()->m_strings = (d_func()->m_strings + (file.d_func()->m_strings - d_func()->m_definedMacroNames)) - d_func()->m_unDefinedMacroNames;
+  
   ///@todo Probably it's more efficient having 2 sets m_changedMacroNames and m_unDefinedMacroNames, where m_unDefinedMacroNames is a subset of m_changedMacroNames.  
   //Only add macros to the usedMacros-set that were not defined locally
-  m_usedMacroNames += (file.m_usedMacroNames.set() - m_definedMacroNames.set()) - m_unDefinedMacroNames.set();
+  d_func_dynamic()->m_usedMacroNames += (file.d_func()->m_usedMacroNames - d_func()->m_definedMacroNames) - d_func()->m_unDefinedMacroNames;
 
   ///Merge those used macros that were not defined within this environment
   //This is slightly inefficient, would be nicer to have a fast mechanism for this
   
   {
-    Utils::Set definedMacroNamesSet = m_definedMacroNames.set();
-    Utils::Set unDefinedMacroNamesSet = m_unDefinedMacroNames.set();
+    Utils::Set definedMacroNamesSet = d_func()->m_definedMacroNames.set();
+    Utils::Set unDefinedMacroNamesSet = d_func()->m_unDefinedMacroNames.set();
     
-    for(MacroSetIterator it( file.m_usedMacros.set() ); it; ++it) {
+    for(ReferenceCountedMacroSet::Iterator it( file.d_func()->m_usedMacros.iterator() ); it; ++it) {
       const rpp::pp_macro& macro(it.ref());
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
-        m_usedMacros.insertIndex( it.index() );
+        d_func_dynamic()->m_usedMacros.insertIndex( it.index() );
     }
   }
   
-  ifDebug( Q_ASSERT(m_usedMacroNames.set().count() == m_usedMacros.set().count()) );
+  ifDebug( Q_ASSERT(d_func()->m_usedMacroNames.set().count() == d_func()->m_usedMacros.set().count()) );
   
   ///Add defined macros from the merged file.
 
   {
-    Utils::Set otherDefinedMacroNamesSet = file.m_definedMacroNames.set();
-    Utils::Set otherUnDefinedMacroNamesSet = file.m_unDefinedMacroNames.set();
+    Utils::Set otherDefinedMacroNamesSet = file.d_func()->m_definedMacroNames.set();
+    Utils::Set otherUnDefinedMacroNamesSet = file.d_func()->m_unDefinedMacroNames.set();
     //Since merged macros overrule already stored ones, first remove the ones of the same name.
-    for( MacroSetIterator it( m_definedMacros.set() ); it; ++it ) {
+    for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it ) {
       const rpp::pp_macro& macro(it.ref());
       if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
-        m_definedMacros.remove(macro);
+        d_func_dynamic()->m_definedMacros.remove(macro);
     }
   }
 
   //Now merge in the new defined macros
   
-  m_unDefinedMacroNames += file.m_unDefinedMacroNames.set();
-  m_unDefinedMacroNames -= file.m_definedMacroNames.set();
-  m_definedMacroNames -= file.m_unDefinedMacroNames.set();
-  m_definedMacroNames += file.m_definedMacroNames.set();
-  m_definedMacros += file.m_definedMacros.set();
+  d_func_dynamic()->m_unDefinedMacroNames += file.d_func()->m_unDefinedMacroNames;
+  d_func_dynamic()->m_unDefinedMacroNames -= file.d_func()->m_definedMacroNames;
+  d_func_dynamic()->m_definedMacroNames -= file.d_func()->m_unDefinedMacroNames;
+  d_func_dynamic()->m_definedMacroNames += file.d_func()->m_definedMacroNames;
+  d_func_dynamic()->m_definedMacros += file.d_func()->m_definedMacros;
 
   ///Merge include-files, problems and other stuff
 //   m_includeFiles += file.m_includeFiles.set();
-  m_missingIncludeFiles += file.m_missingIncludeFiles.set();
+  d_func_dynamic()->m_missingIncludeFiles += file.d_func()->m_missingIncludeFiles;
   
   addModificationRevisions(file.allModificationRevisions());
 

@@ -40,7 +40,7 @@ namespace CppTools {
     * This function attempts to run a gcc command to retrieve the standard
     * c++ macro definitions.
     */
-    bool setupStandardMacros(Cpp::LazyMacroSet& macros);
+    bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros);
 
 }
 

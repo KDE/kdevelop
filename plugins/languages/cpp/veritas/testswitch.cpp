@@ -301,7 +301,7 @@ void TestSwitch::connectAction(KActionCollection* col)
 }
 
 
-void TestSwitch::setStandardMacros(Cpp::LazyMacroSet* macros)
+void TestSwitch::setStandardMacros(Cpp::ReferenceCountedMacroSet* macros)
 {
     m_standardMacros = macros;
 }

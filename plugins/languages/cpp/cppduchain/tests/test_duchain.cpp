@@ -161,6 +161,8 @@ void TestDUChain::initTestCase()
 {
   noDef = 0;
 
+  DUChain::self()->disablePersistentStorage();
+  
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 

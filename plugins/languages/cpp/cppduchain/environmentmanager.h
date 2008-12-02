@@ -127,11 +127,24 @@ struct KDEVCPPDUCHAIN_EXPORT MacroIndexConversion {
   uint toIndex(const rpp::pp_macro& _macro) const;
 };
 
-typedef Utils::ConvenientIterator<KDevelop::IndexedString, IndexedStringConversion> StringSetIterator;
-typedef Utils::LazySet<KDevelop::IndexedString, IndexedStringConversion> LazyStringSet;
+struct KDEVCPPDUCHAIN_EXPORT StaticStringSetRepository {
+  static Utils::BasicSetRepository* repository();
+};
 
-typedef Utils::ConvenientIterator<rpp::pp_macro, MacroIndexConversion> MacroSetIterator;
-typedef Utils::LazySet<rpp::pp_macro, MacroIndexConversion> LazyMacroSet;
+struct KDEVCPPDUCHAIN_EXPORT StaticMacroSetRepository {
+  static Utils::BasicSetRepository* repository();
+};
+
+class KDEVCPPDUCHAIN_EXPORT SetMutexLocker : public QMutexLocker {
+  public:
+    SetMutexLocker() : QMutexLocker(&m_mutex) {
+    }
+  private:
+  static QMutex m_mutex;
+};
+
+typedef Utils::StorableSet<KDevelop::IndexedString, IndexedStringConversion, StaticStringSetRepository, true, SetMutexLocker> ReferenceCountedStringSet;
+typedef Utils::StorableSet<rpp::pp_macro, MacroIndexConversion, StaticMacroSetRepository, true, SetMutexLocker> ReferenceCountedMacroSet;
 
 class EnvironmentManager;
 class MacroSet;
@@ -141,14 +154,7 @@ DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedS
 struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     EnvironmentFileData() {
       m_contentStartLine = 0;
-      m_strings = 0;
 //       m_includeFiles = 0;
-      m_missingIncludeFiles = 0;
-      m_usedMacros = 0;
-      m_usedMacroNames = 0;
-      m_definedMacros = 0;
-      m_definedMacroNames = 0;
-      m_unDefinedMacroNames = 0;
       m_identityOffset = 0;
       m_includePaths = 0;
     }
@@ -173,14 +179,13 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     uint m_identityOffset;
     //All the following sets get their reference-count increased whenever put in here
     //Set of all strings that can be affected by macros from outside
-    uint m_strings; //String-set
-//     uint m_includeFiles; //String-set
-    uint m_missingIncludeFiles; //String-set
-    uint m_usedMacros; //Macro-set
-    uint m_usedMacroNames; //String-set
-    uint m_definedMacros; //Macro-set
-    uint m_definedMacroNames; //String-set
-    uint m_unDefinedMacroNames; //String-set
+    ReferenceCountedStringSet m_strings;
+    ReferenceCountedStringSet m_missingIncludeFiles;
+    ReferenceCountedMacroSet m_usedMacros;
+    ReferenceCountedStringSet m_usedMacroNames;
+    ReferenceCountedMacroSet m_definedMacros;
+    ReferenceCountedStringSet m_definedMacroNames;
+    ReferenceCountedStringSet m_unDefinedMacroNames;
     uint m_includePaths; //Index in the internal include-paths repository
     int m_contentStartLine;
 };
@@ -204,12 +209,8 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
 
     void addIncludeFile( const KDevelop::IndexedString& file, const KDevelop::ModificationRevision& modificationTime );
 
-//     inline bool hasString( const KDevelop::IndexedString& string ) const {
-//       return m_strings[string];
-//     }
-
     ///Returns the set of all strings that can affect this file from outside.
-    Utils::Set strings() const;
+    const ReferenceCountedStringSet& strings() const;
     
     //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
     void merge( const EnvironmentFile& file );
@@ -229,22 +230,22 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     //const IndexedStringSet& includeFiles() const;
 
     void addMissingIncludeFile(const KDevelop::IndexedString& file);
-    const LazyStringSet& missingIncludeFiles() const;
+    const ReferenceCountedStringSet& missingIncludeFiles() const;
 
     void clearMissingIncludeFiles();
   
     ///Set of all defined macros, including those of all deeper included files
-    const LazyMacroSet& definedMacros() const;
+    const ReferenceCountedMacroSet& definedMacros() const;
 
     ///Set of all macros used from outside, including those used in deeper included files
-    const LazyMacroSet& usedMacros() const;
+    const ReferenceCountedMacroSet& usedMacros() const;
 
-    const LazyStringSet& usedMacroNames() const;
+    const ReferenceCountedStringSet& usedMacroNames() const;
     
-    const LazyStringSet& definedMacroNames() const;
+    const ReferenceCountedStringSet& definedMacroNames() const;
     
     ///Set of all macros undefined to the outside
-    const LazyStringSet& unDefinedMacroNames() const;
+    const ReferenceCountedStringSet& unDefinedMacroNames() const;
   
     ///Should return the include-paths that were used while parsing this file(as used/found in CppLanguageSupport)
     const QList<KDevelop::IndexedString> includePaths() const;
@@ -270,18 +271,10 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     };
     
   private:
-    virtual void aboutToSave();
     
     virtual int type() const;
 
     friend class EnvironmentManager;
-//     Cpp::LazyStringSet m_includeFiles; //Set of all files with absolute paths
-    Cpp::LazyStringSet m_missingIncludeFiles; //Set of relative file-names of missing includes
-    Cpp::LazyMacroSet m_usedMacros; //Set of all macros that were used, and were defined outside of this file
-    Cpp::LazyStringSet m_usedMacroNames; //Set the names of all used macros
-    Cpp::LazyMacroSet m_definedMacros; //Set of all macros that were defined while lexing this file
-    Cpp::LazyStringSet m_definedMacroNames;
-    Cpp::LazyStringSet m_unDefinedMacroNames; //Set of all macros that were undefined in this file, from outside perspective(not changed ones)
 
     DUCHAIN_DECLARE_DATA(EnvironmentFile)
     /*
