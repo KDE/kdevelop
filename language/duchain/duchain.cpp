@@ -248,7 +248,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information"), m_cleanupDisabled(false)
   {
     m_chainsByIndex.set_empty_key(0);
     m_chainsByIndex.set_deleted_key(0xffffffff);
@@ -277,13 +277,16 @@ public:
   void clear() {
     QMutexLocker l(&m_chainsMutex);
 
-    //Store all top-contexts to disk
-    for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
-      (*it).second->m_dynamicData->store();
+    if(!m_cleanupDisabled) {
+      //Store all top-contexts to disk
+      for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
+        (*it).second->m_dynamicData->store();
+    }
 
     for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       instance->removeDocumentChain((*it).second);
 
+    if(!m_cleanupDisabled)
     {
         DUChainWriteLocker writeLock(instance->lock());
         storeAllInformation(true, writeLock);
@@ -310,6 +313,7 @@ public:
   Definitions m_definitions;
   Uses m_uses;
   QSet<uint> m_loading;
+  bool m_cleanupDisabled;
 
   ///Used to keep alive the top-context that belong to documents loaded in the editor
   QSet<ReferencedTopDUContext> m_openDocumentContexts;
@@ -497,6 +501,8 @@ public:
   ///so the final step where the duchain is permanetly locked is much faster.
   void doMoreCleanup(int retries = 0, bool needLockRepository = true) {
     
+    if(m_cleanupDisabled)
+      return;
     
     //This mutex makes sure that there's never 2 threads at he same time trying to clean up
     static QMutex cleanupMutex(QMutex::Recursive);
@@ -834,7 +840,7 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 
     if(!context->isOnDisk()) {
       removeFromEnvironmentManager(context);
-    }else{
+    }else if(!sdDUChainPrivate->m_cleanupDisabled) {
       context->m_dynamicData->store();
     }
 
@@ -1251,6 +1257,11 @@ void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::F
     ICore::self()->languageController()->backgroundParser()->addDocument(document.toUrl(), minFeatures, 1, notifyReady);
   }
 }
+
+void DUChain::disablePersistentStorage() {
+  sdDUChainPrivate->m_cleanupDisabled = true;
+}
+
 
 }
 

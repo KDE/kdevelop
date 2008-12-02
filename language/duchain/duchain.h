@@ -197,6 +197,10 @@ public:
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();
   
+  ///If you call this, the persistent disk-storage structure will stay unaffected, and no duchain cleanup will be done.
+  ///Call this from within tests.
+  void disablePersistentStorage();
+  
 Q_SIGNALS:
   ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
   void declarationSelected(DeclarationPointer decl);
