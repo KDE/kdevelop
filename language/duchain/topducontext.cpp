@@ -65,7 +65,16 @@ namespace std {
 
 namespace KDevelop
 {
-  
+
+static Utils::BasicSetRepository* recursiveImportRepository() {
+  static Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", false);
+  return &recursiveImportRepository;
+}
+
+Utils::BasicSetRepository* RecursiveImportRepository::repository() {
+  return recursiveImportRepository();
+}
+
 struct DeclarationTopContextExtractor {
   static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
     return decl.indexedTopContext();
@@ -456,7 +465,7 @@ public:
   //What makes this most complicated is the fact that loops are allowed in the import structure.
   typedef QHash<const TopDUContext*, QPair<int, const TopDUContext*> > RecursiveImports;
   mutable RecursiveImports m_recursiveImports;
-  mutable ConvenientFreeListSet<IndexedTopDUContext, IndexedTopDUContextEmbeddedTreeHandler> m_indexedRecursiveImports;
+  mutable TopDUContext::IndexedRecursiveImports m_indexedRecursiveImports;
   private:
 
 //     void childClosure(QSet<TopDUContext*>& children) {
@@ -892,19 +901,17 @@ struct TopDUContext::FindDeclarationsAcceptor {
     if(!id.isEmpty())
       allDecls = PersistentSymbolTable::self().getDeclarations(id);
     
-    TopDUContext::IndexedRecursiveImports::Iterator imports (top->recursiveImportIndices().iterator());
-
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter;
+    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter;
     
     //This is used if filterung is disabled
     PersistentSymbolTable::Declarations::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck)
       unchecked = allDecls.iterator();
     else
-      filter = ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor>(allDecls.iterator(), imports);
+      filter = ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DeclarationTopContextExtractor>(allDecls.iterator(), top->m_local->m_indexedRecursiveImports);
                                  
     while(filter || unchecked) {
       
@@ -988,11 +995,9 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
     if(!id.isEmpty())
       allDecls = PersistentSymbolTable::self().getDeclarations(id);
     
-    TopDUContext::IndexedRecursiveImports::Iterator imports (recursiveImportIndices().iterator());
-
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter(allDecls.iterator(), imports);
+    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter(allDecls.iterator(), m_local->m_indexedRecursiveImports);
 
     if(filter) {
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
@@ -1080,11 +1085,9 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
     if(!id.isEmpty())
       allDecls = PersistentSymbolTable::self().getDeclarations(id);
     
-    TopDUContext::IndexedRecursiveImports::Iterator imports (recursiveImportIndices().iterator());
-
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter(allDecls.iterator(), imports);
+    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter(allDecls.iterator(), m_local->m_indexedRecursiveImports);
     
       
     if(filter) {
@@ -1159,19 +1162,17 @@ struct TopDUContext::FindContextsAcceptor {
     QualifiedIdentifier id = element.qualifiedIdentifier();
     allDecls = PersistentSymbolTable::self().getContexts(id);
     
-    TopDUContext::IndexedRecursiveImports::Iterator imports (top->recursiveImportIndices().iterator());
-
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DUContextTopContextExtractor> filter;
+    ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DUContextTopContextExtractor> filter;
     
     //This is used if filterung is disabled
     PersistentSymbolTable::Contexts::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck)
       unchecked = allDecls.iterator();
     else
-      filter = ConvenientEmbeddedSetFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DUContextTopContextExtractor>(allDecls.iterator(), imports);
+      filter = ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
+                                 IndexedRecursiveImports, DUContextTopContextExtractor>(allDecls.iterator(), top->m_local->m_indexedRecursiveImports);
 
     while(filter || unchecked) {
       

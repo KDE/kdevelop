@@ -81,12 +81,10 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
 
     PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
     
-    TopDUContext::IndexedRecursiveImports imports;
     if(top) {
-      imports = top->recursiveImportIndices();
       //Do filtering
-      ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter(decls.iterator(), imports.iterator());
+      ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> filter(decls.iterator(), top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -140,12 +138,10 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
 
     PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
     
-    TopDUContext::IndexedRecursiveImports imports;
     if(top) {
-      imports = top->recursiveImportIndices();
       //Do filtering
-      ConvenientEmbeddedSetFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedTopDUContextEmbeddedTreeHandler, DeclarationTopContextExtractor> filter(decls.iterator(), imports.iterator());
+      ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
+                                 TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> filter(decls.iterator(), top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {

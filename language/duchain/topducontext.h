@@ -22,7 +22,7 @@
 #include <QtCore/QMutex>
 
 #include "ducontext.h"
-#include <util/convenientfreelist.h>
+#include <language/util/setrepository.h>
 
 template< class T >
 class KSharedPtr;
@@ -40,6 +40,10 @@ namespace KDevelop
   class DeclarationChecker;
   class TopDUContext;
 
+  struct RecursiveImportRepository {
+    static Utils::BasicSetRepository* repository();
+  };
+  
   ///Maps an imported top-context to a pair:
   ///1. The distance to the top-context, and 2. The next step towards the top-context
   ///in the chain.
@@ -155,6 +159,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
   private:
   uint m_index;
   friend class IndexedTopDUContextEmbeddedTreeHandler;
+};
+
+struct IndexedTopDUContextIndexConversion {
+  static uint toIndex(const IndexedTopDUContext& top) {
+    return top.index();
+  }
+  
+  static IndexedTopDUContext toItem(uint index) {
+    return IndexedTopDUContext(index);
+  }
 };
 
 class IndexedTopDUContextEmbeddedTreeHandler {
@@ -369,7 +383,7 @@ public:
   ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
   virtual void clearImportedParentContexts();
   
-  typedef ConvenientFreeListSet<IndexedTopDUContext, IndexedTopDUContextEmbeddedTreeHandler> IndexedRecursiveImports;
+  typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportRepository, true> IndexedRecursiveImports;
   
   ///@todo Create a cache of recursive imports that is stored to disk, so we don't need to load all imports when loading a file
   ///A cached set of all top-contexts that are recursively imported into this one. It is updated when updateRecursiveImports() is called,
