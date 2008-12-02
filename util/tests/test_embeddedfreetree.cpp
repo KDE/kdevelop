@@ -15,6 +15,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+unsigned int extractor_div_with = 0;
+
 #include <QObject>
 #include <QtTest/QtTest>
 #include <QVector>
@@ -22,6 +25,7 @@
 #include <set>
 #include <util/embeddedfreetree.h>
 #include <util/convenientfreelist.h>
+#include <language/util/setrepository.h>
 #include <kdebug.h>
 #include <time.h>
 
@@ -40,7 +44,14 @@ struct TestItem {
     }
 };
 
-uint extractor_div_with = 0;
+struct TestItemConversion {
+    static uint toIndex(const TestItem& item) {
+        return item.value;
+    }
+    static TestItem toItem(uint index) {
+        return TestItem(index);
+    }
+};
 
 struct Extractor{
     static TestItem extract(const TestItem& item) {
@@ -284,6 +295,13 @@ float toSeconds(clock_t time) {
     return ((float)time) / CLOCKS_PER_SEC;
 }
 
+struct StaticRepository {
+    static Utils::BasicSetRepository* repository() {
+        static Utils::BasicSetRepository repository("test repository", false);
+        return &repository;
+    }
+};
+
 class TestEmbeddedFreeTree : public QObject {
   Q_OBJECT
   private slots:
@@ -374,12 +392,17 @@ class TestEmbeddedFreeTree : public QObject {
         set.add(9);
         set.verify();
     }
-    
    
     void testFiltering() {
-
         clock_t stdTime = 0;
         clock_t algoTime = 0;
+        clock_t treeAlgoTime = 0;
+        
+        clock_t insertionStdTime = 0;
+        clock_t insertionAlgoTime = 0;
+        clock_t insertionTreeAlgoTime = 0;
+        
+        typedef Utils::StorableSet<TestItem, TestItemConversion, StaticRepository> RepositorySet;
         
         uint cycles = 1000;
         
@@ -389,16 +412,18 @@ class TestEmbeddedFreeTree : public QObject {
         for(int a = 0; a < cycles; ++a) {
             KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set1;
             std::set<uint> testSet1;
+            
             KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set2;
             std::set<uint> testSet2;
+            RepositorySet repSet2;
             
             if(a % (cycles / 10) == 0)
                 kDebug() << "cycle" << a;
             
             //Build the sets
             extractor_div_with = (rand() % 10) + 1;
-            for(int a = 0; a < 4000; ++a) {
-                uint value = rand() % 1500;
+            for(int a = 0; a < 15000; ++a) {
+                uint value = rand() % 3000;
                 uint divValue = value/extractor_div_with;
                 if(!divValue)
                     continue;
@@ -410,13 +435,31 @@ class TestEmbeddedFreeTree : public QObject {
 
                 Q_ASSERT((pos != -1 && it != testSet1.end() && set1.data()[pos].value == *it) || (pos == -1 && it == testSet1.end()));
 
-                set1.insert(TestItem(value));
-                testSet1.insert(value);
+                if((rand() % 10) == 0) {
+                
+                    set1.insert(TestItem(value));
+                    testSet1.insert(value);
+                }
                 
                 //This is tuned so in the end, about 99% of all declarations are filtered out, like in the symbol table.
                 if((rand() % (extractor_div_with*100)) == 0) {
+                    
+                    clock_t start = clock();
+                    
                     set2.insert(TestItem(divValue));
+                    
+                    insertionStdTime += clock() - start;
+                    start = clock();
+                    
                     testSet2.insert(divValue);
+                    
+                    insertionAlgoTime += clock() - start;
+                    start = clock();
+                    
+                    repSet2.insert(TestItem(divValue));
+                    
+                    insertionTreeAlgoTime += clock() - start;
+                    start = clock();
                 }
             }
             
@@ -427,20 +470,39 @@ class TestEmbeddedFreeTree : public QObject {
             std::set<uint> verifySet2;
             for(KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler>::Iterator it = set2.iterator(); it; ++it)
                 verifySet2.insert(it->value);
+            
+            std::set<uint> verifyRepSet2;
+            for(RepositorySet::Iterator it = repSet2.iterator(); it; ++it)
+                verifyRepSet2.insert((*it).value);
+            
             QCOMPARE(verifySet1, testSet1);
             QCOMPARE(verifySet2, testSet2);
+            QCOMPARE(verifyRepSet2, testSet2);
 
             std::set<uint> algoFiltered;
+            std::set<uint> treeAlgoFiltered;
 
             {
                 //Do the filtering once without actions on the filtered items, just for calculating the time
                 clock_t start = clock();
                 
-                KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
-                while(filterIterator)
-                    ++filterIterator;
+                {
+                    KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
+                    while(filterIterator)
+                        ++filterIterator;
+                    
+                    algoTime += clock() - start;
+                }
                 
-                algoTime += clock() - start;
+                start = clock();
+                
+                {
+                    KDevelop::ConvenientEmbeddedSetTreeFilterIterator<TestItem, TestItemHandler, TestItem, RepositorySet, Extractor> filterIterator(set1.iterator(), repSet2);
+                    while(filterIterator)
+                        ++filterIterator;
+                    
+                    treeAlgoTime += clock() - start;
+                }
                 
                 std::set<uint> stdFiltered;
                 
@@ -454,11 +516,21 @@ class TestEmbeddedFreeTree : public QObject {
                 stdTime += clock() - start;
             }
 
-            KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
-            while(filterIterator) {
-                algoFiltered.insert(filterIterator->value);
-                ++filterIterator;
+            {
+                KDevelop::ConvenientEmbeddedSetFilterIterator<TestItem, TestItemHandler, TestItem, TestItemHandler, Extractor> filterIterator(set1.iterator(), set2.iterator());
+                while(filterIterator) {
+                    algoFiltered.insert(filterIterator->value);
+                    ++filterIterator;
+                }
             }
+            {
+                KDevelop::ConvenientEmbeddedSetTreeFilterIterator<TestItem, TestItemHandler, TestItem, RepositorySet, Extractor> filterIterator(set1.iterator(), repSet2);
+                while(filterIterator) {
+                    treeAlgoFiltered.insert((*filterIterator).value);
+                    ++filterIterator;
+                }
+            }
+            
             
             totalItems += testSet1.size();
             totalFilteredItems += algoFiltered.size();
@@ -467,14 +539,17 @@ class TestEmbeddedFreeTree : public QObject {
             std::set<uint> stdFiltered;
             
             for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {
-                if(testSet2.count((*it) / extractor_div_with) == 1)
+                if(testSet2.count((*it) / extractor_div_with) == 1) {
                     stdFiltered.insert(*it);
+                }
             }
             
             QCOMPARE(algoFiltered, stdFiltered);
+            QCOMPARE(treeAlgoFiltered, stdFiltered);
             
         }
-        kDebug() << "Filtering performance: embedded-list filtering:" << toSeconds(algoTime) << "std::set filtering:" << toSeconds(stdTime) << "total processed items:" << totalItems << "total items after filtering:" << totalFilteredItems;
+        kDebug() << "Filtering performance: embedded-list filtering:" << toSeconds(algoTime) << "set-repository filtering:" << toSeconds(treeAlgoTime) << "std::set filtering:" << toSeconds(stdTime) << "Normal -> Embedded speedup ratio:" << (toSeconds(stdTime) / toSeconds(algoTime)) << "Normal -> Repository speedup ratio:" << (toSeconds(stdTime) / toSeconds(treeAlgoTime)) << "total processed items:" << totalItems << "total items after filtering:" << totalFilteredItems;
+        kDebug() << "Insertion: embedded-list:" << toSeconds(insertionAlgoTime) << "set-repository:" << toSeconds(insertionTreeAlgoTime) << "std::set:" << toSeconds(insertionStdTime);
         
     }
 };

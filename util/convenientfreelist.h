@@ -103,10 +103,25 @@ namespace KDevelop {
                     return -1;
             }
             
-            int nextValidItem(int pos) {
-                for(; pos < (int)m_dataSize; ++pos)
-                    if(!Handler::isFree(m_data[pos]))
-                        return pos;
+            ///Returns the first valid item in the range [pos, end), or -1
+            int firstValidItem(int start, int end = -1) const {
+                if(end == -1)
+                    end = (int)m_dataSize;
+                for(; start < end; ++start)
+                    if(!Handler::isFree(m_data[start]))
+                        return start;
+
+                return -1;
+            }
+            
+            ///Returns the last valid item in the range [pos, end), or -1
+            int lastValidItem(int start = 0, int end = -1) const {
+                if(end == -1)
+                    end = (int)m_dataSize;
+                --end;
+                for(; end >= start; --end)
+                    if(!Handler::isFree(m_data[end]))
+                        return end;
 
                 return -1;
             }
@@ -158,11 +173,12 @@ namespace KDevelop {
     };
     
     
-    ///An iterator that allows matching between two lists with different data type.
-    ///Important: It must be possible to extract the data-type of the second list from this list,
-    ///and the this list must also be primarily sorted by that data. However the list is allowed to
-    ///be sub-ordered by something else, and multiple items are allowed to match one item in the second.
-    ///This iterator iterates through all items in this list that have extracted key-data that is in represented in the second.
+    ///An iterator that allows efficient matching between two lists with different data type.
+    ///Important: It must be possible to extract the data-type of the second list from the items in the first list
+    ///The second list must be sorted by that data.
+    ///The first list must primarily be sorted by that data, but is allowed to
+    ///be sub-ordered by something else, and multiple items in the first list are allowed to match one item in the second.
+    ///This iterator iterates through all items in the first list that have extracted key-data that is in represented in the second.
     template<class Data, class Handler, class Data2, class Handler2, class KeyExtractor>
     class ConvenientEmbeddedSetFilterIterator : public ConvenientEmbeddedSetIterator<Data, Handler> {
         public:
@@ -207,11 +223,30 @@ namespace KDevelop {
 
             uint ownStart = currentBounds.first.first, ownEnd = currentBounds.first.second;
             uint rhsStart = currentBounds.second.first, rhsEnd = currentBounds.second.second;
-
-            if(ownStart >= ownEnd)
+#if 0
+            //This code works, but it doesn't give a speedup
+            int ownFirstValid = this->firstValidItem(ownStart, ownEnd), ownLastValid = this->lastValidItem(ownStart, ownEnd);
+            int rhsFirstValid = m_rhs.firstValidItem(rhsStart, rhsEnd), rhsLastValid = m_rhs.lastValidItem(rhsStart, rhsEnd);
+            
+            if(ownFirstValid == -1 || rhsFirstValid == -1)
                 goto boundsUp;
-            if(rhsStart >= rhsEnd)
+            
+            
+            Data2 ownFirstValidData = extractData2(this->m_data[ownFirstValid]);
+            Data2 ownLastValidData = extractData2(this->m_data[ownLastValid]);
+            
+            Data2 commonStart = ownFirstValidData;
+            Data2 commonLast = ownLastValidData; //commonLast is also still valid
+            
+            if(commonStart < m_rhs.m_data[rhsFirstValid])
+                commonStart = m_rhs.m_data[rhsFirstValid];
+            
+            if(m_rhs.m_data[rhsLastValid] < commonLast)
+                commonLast = m_rhs.m_data[rhsLastValid];
+            
+            if(commonLast < commonStart)
                 goto boundsUp;
+#endif
             
             while(true) {
                 if(ownStart == ownEnd)
@@ -243,7 +278,7 @@ namespace KDevelop {
                     return;
                 }
 
-                if(bound == m_rhs.nextValidItem(rhsStart)) {
+                if(bound == m_rhs.firstValidItem(rhsStart)) {
                     //The bound is the first valid item of the second range.
                     //Discard left side and the matched left item, and continue.
                     
@@ -266,8 +301,181 @@ namespace KDevelop {
         KDevVarLengthArray<QPair<QPair<uint, uint>, QPair<uint, uint> > > boundStack;
         ConvenientEmbeddedSetIterator<Data2, Handler2> m_rhs;
         int m_match;
-    };    
-    
+    };
+
+    template<class Data, class Handler, class Data2, class TreeSet, class KeyExtractor>
+    class ConvenientEmbeddedSetTreeFilterIterator : public ConvenientEmbeddedSetIterator<Data, Handler> {
+        public:
+        ConvenientEmbeddedSetTreeFilterIterator() : m_match(-1) {
+        }
+        ConvenientEmbeddedSetTreeFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1) {
+            if(rhs.node().isValid()) {
+                boundStack.append( qMakePair( qMakePair(0u, this->m_dataSize), rhs.node() ) );
+            }
+            go();
+        }
+        
+        operator bool() const {
+            return m_match != -1;
+        }
+        
+        const Data* operator->() const {
+            Q_ASSERT(m_match != -1);
+            return &this->m_data[m_match];
+        }
+
+        const Data& operator*() const {
+            Q_ASSERT(m_match != -1);
+            return this->m_data[m_match];
+        }
+        
+        ConvenientEmbeddedSetTreeFilterIterator& operator++() {
+            Q_ASSERT(m_match != -1);
+            go();
+            return *this;
+        }
+        #define CHECK_BOUNDS Q_ASSERT(boundStack.back().first.first < 100000 && boundStack.back().first.second < 10000  && boundStack.back().second.first < 100000 && boundStack.back().second.second < 10000 );
+
+        private:
+        void go() {
+            if(m_match != -1) {
+                //Match multiple items in this list to one in the tree
+                m_match = this->firstValidItem(m_match+1, this->m_dataSize);
+                if(m_match != -1 && KeyExtractor::extract(this->m_data[m_match]) == m_matchingTo)
+                    return;
+            }
+            m_match = -1;
+            
+            boundsUp:
+            if(boundStack.isEmpty())
+                return;
+            QPair<QPair<uint, uint>, typename TreeSet::Node > currentBounds = boundStack.back();
+            boundStack.pop_back();
+
+            uint ownStart = currentBounds.first.first, ownEnd = currentBounds.first.second;
+            typename TreeSet::Node currentNode = currentBounds.second;
+
+            if(ownStart >= ownEnd)
+                goto boundsUp;
+            if(!currentNode.isValid())
+                goto boundsUp;
+            
+            while(true) {
+                if(ownStart == ownEnd)
+                    goto boundsUp;
+                
+                if(currentNode.isFinalNode()) {
+//                      kDebug() << ownStart << ownEnd << "final node" << currentNode.start() * extractor_div_with << currentNode.end() * extractor_div_with;
+                    //Check whether the item is contained
+                    int bound = lowerBound(*currentNode, ownStart, ownEnd);
+//                      kDebug() << "bound:" << bound << (extractData2(this->m_data[bound]) == *currentNode);
+                    if(bound != -1 && extractData2(this->m_data[bound]) == *currentNode) {
+                        //Got a match
+                        m_match = bound;
+                        m_matchingTo = *currentNode;
+                        m_matchBound = ownEnd;
+                        return;
+                    }else{
+                        //Mismatch
+                        goto boundsUp;
+                    }
+                }else{
+//                     kDebug() << ownStart << ownEnd << "node" << currentNode.start() * extractor_div_with << currentNode.end() * extractor_div_with;
+                    //This is not a final node, split up the search into the sub-nodes
+                    typename TreeSet::Node leftNode = currentNode.leftChild();
+                    typename TreeSet::Node rightNode = currentNode.rightChild();
+                    Q_ASSERT(leftNode.isValid());
+                    Q_ASSERT(rightNode.isValid());
+                    
+                    
+                    int rightSearchStart = lowerBound(rightNode.firstItem(), ownStart, ownEnd);
+                    int leftSearchStart = lowerBound(leftNode.firstItem(), ownStart, rightSearchStart != -1 ? rightSearchStart : ownEnd);
+                    int leftSearchLast = -1;
+                    int rightSearchLast = -1;
+                    
+                    if(leftSearchStart != -1)
+                        leftSearchLast = lowerBound(leftNode.lastItem(), leftSearchStart+1, rightSearchStart != -1 ? rightSearchStart : ownEnd);
+                    
+                    if(rightSearchStart != -1)
+                        rightSearchLast = lowerBound(rightNode.lastItem(), rightSearchStart+1, ownEnd);
+                    
+                    
+                    bool recurseLeft = false;
+                    if(leftSearchStart != -1) {
+                        Data2 leftFoundStartData = extractData2(this->m_data[leftSearchStart]);
+                        recurseLeft = leftFoundStartData < leftNode.lastItem() || leftFoundStartData == leftNode.lastItem();
+                    }
+                    bool recurseRight = false;
+                    if(rightSearchStart != -1) {
+                        Data2 rightFoundStartData = extractData2(this->m_data[rightSearchStart]);
+                        recurseRight = rightFoundStartData < rightNode.lastItem() || rightFoundStartData == rightNode.lastItem();
+                    }
+                    
+                    if(recurseLeft && recurseRight) {
+                        //Push the right branch onto the stack, and work in the left one
+                        boundStack.append( qMakePair( qMakePair( (uint)rightSearchStart, (uint)(rightSearchLast != -1 ? rightSearchLast+1 : ownEnd )), rightNode) );
+                    }
+                    
+                    if(recurseLeft) {
+                        currentNode = leftNode;
+                        ownStart = leftSearchStart;
+                        if(leftSearchLast != -1)
+                            ownEnd = leftSearchLast+1;
+                    }else if(recurseRight) {
+                        currentNode = rightNode;
+                        ownStart = rightSearchStart;
+                        if(rightSearchLast != -1)
+                            ownEnd =  rightSearchLast+1;
+                    }else{
+                        goto boundsUp;
+                    }
+                }
+            }
+        }
+        
+        ///Returns the first valid index that has an extracted data-value larger or equal to @param data.
+        ///Returns -1 if nothing is found.
+        int lowerBound(const Data2& data, int start, int end) {
+            int currentBound = -1;
+            while(1) {
+                if(start >= end)
+                    return currentBound;
+                
+                int center = (start + end)/2;
+                
+                //Skip free items, since they cannot be used for ordering
+                for(; center < end; ) {
+                    if(!Handler::isFree(this->m_data[center]))
+                        break;
+                    ++center;
+                }
+                
+                if(center == end) {
+                    end = (start + end)/2; //No non-free items found in second half, so continue search in the other
+                }else{
+                    Data2 centerData = KeyExtractor::extract(this->m_data[center]);
+                    //Even if the data equals we must continue searching to the left, since there may be multiple matching
+                    if(data == centerData || data < centerData) {
+                        currentBound = center;
+                        end = (start + end)/2;
+                    }else{
+                        //Continue search in second half
+                        start = center+1;
+                    }
+                }
+            }
+        }
+        
+        Data2 extractData2(const Data& data) const {
+            return KeyExtractor::extract(data);
+        }
+        //Bounds that yet need to be matched. Always a range in the own vector, and a node that all items in the range are contained in
+        KDevVarLengthArray<QPair<QPair<uint, uint>, typename TreeSet::Node > > boundStack;
+        TreeSet m_rhs;
+        int m_match, m_matchBound;
+        Data2 m_matchingTo;
+    };
+
     template<class Data, class Handler>
     ConvenientEmbeddedSetIterator<Data, Handler> ConstantConvenientEmbeddedSet<Data, Handler>::iterator() const {
         return ConvenientEmbeddedSetIterator<Data, Handler>(m_data, m_dataSize, m_centralFreeItem);

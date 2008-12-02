@@ -115,67 +115,61 @@ namespace KDevelop {
             ///Searches the given item within the specified bounds.
             int indexOf(const Data& data, uint start, uint end) {
                 while(1) {
-                    if(start == end)
-                        return -1;
-                    if(ItemHandler::equals(m_items[start], data))
-                        return start;
-                    if(end-start == 1) //The range only consists of 'start'
+                    if(start >= end)
                         return -1;
                     
+                    int center = (start + end)/2;
+                    
                     //Skip free items, since they cannot be used for ordering
-                    uint center = (start + end)/2;
                     for(; center < end; ) {
                         if(!ItemHandler::isFree(m_items[center]))
                             break;
                         ++center;
                     }
+                    
                     if(center == end) {
                         end = (start + end)/2; //No non-free items found in second half, so continue search in the other
                     }else{
-                        if(data < m_items[center]) {
+                        if(ItemHandler::equals(data, m_items[center])) {
+                            return center;
+                        }else if(data < m_items[center]) {
                             end = (start + end)/2;
                         }else{
                             //Continue search in second half
-                            start = center;
+                            start = center+1;
                         }
                     }
                 }
-                return -1;
             }
 
             ///Returns the first valid index that has a data-value larger or equal to @param data.
             ///Returns -1 if nothing is found.
-            int lowerBound(const Data& data, uint start, uint end) {
+            int lowerBound(const Data& data, int start, int end) {
                 int currentBound = -1;
                 while(1) {
-                    if(start == end)
+                    if(start >= end)
                         return currentBound;
-                    if(ItemHandler::equals(m_items[start], data))
-                        return start;
-                    if(end-start == 1) { //The range only consists of 'start'
-                        if(data < m_items[start])
-                            return start;
-                        else
-                            return currentBound;
-                    }
+                    
+                    int center = (start + end)/2;
                     
                     //Skip free items, since they cannot be used for ordering
-                    uint center = (start + end)/2;
                     for(; center < end; ) {
                         if(!ItemHandler::isFree(m_items[center]))
                             break;
                         ++center;
                     }
+                    
                     if(center == end) {
                         end = (start + end)/2; //No non-free items found in second half, so continue search in the other
                     }else{
-                        if(data < m_items[center]) {
-//                             Q_ASSERT(currentBound == -1 || currentBound > center);
+                        if(ItemHandler::equals(data, m_items[center])) {
+                            return center;
+                        }else if(data < m_items[center]) {
                             currentBound = center;
                             end = (start + end)/2;
                         }else{
                             //Continue search in second half
-                            start = center;
+                            start = center+1;
                         }
                     }
                 }
