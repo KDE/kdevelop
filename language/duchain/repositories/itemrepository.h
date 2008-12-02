@@ -191,7 +191,7 @@ class ExampleRequestItem {
   }
 };
 
-template<class Item, class ItemRequest, class DynamicData>
+template<class Item, class ItemRequest, class DynamicData, bool fixedItemSize>
 class Bucket {
   public:
     enum {
@@ -391,7 +391,8 @@ class Bucket {
         
         unsigned short freeChunkSize = 0;
         
-        while(currentIndex && freeSize(currentIndex) >= (totalSize-AdditionalSpacePerItem)) {
+        ///@todo Achieve this without full iteration
+        while(currentIndex && freeSize(currentIndex) > (totalSize-AdditionalSpacePerItem)) {
           unsigned short follower = followerIndex(currentIndex);
           if(follower && freeSize(follower) >= (totalSize-AdditionalSpacePerItem)) {
             //The item also fits into the smaller follower, so use that one
@@ -818,85 +819,96 @@ class Bucket {
     ///The given index itself should not be in the free items chain yet.
     ///Returns whether the item was inserted somewhere.
     void insertFreeItem(unsigned short index) {
-      unsigned short currentIndex = m_largestFreeItem;
-      unsigned short previousIndex = 0;
       
-      while(currentIndex) {
+      //If the item-size is fixed, we don't need to do any management. Just keep a list of free items. Items of other size will never be requested.
+      if(!fixedItemSize) {
+        unsigned short currentIndex = m_largestFreeItem;
+        unsigned short previousIndex = 0;
         
-        //Merge behind index
-        if(currentIndex == index + freeSize(index) + AdditionalSpacePerItem) {
+        while(currentIndex) {
+          ///@todo Achieve this without iterating through all items in the bucket(This is very slow)
+          //Merge behind index
+          if(currentIndex == index + freeSize(index) + AdditionalSpacePerItem) {
+            
+            //Remove currentIndex from the free chain, since it's merged backwards into index
+            if(previousIndex)
+              setFollowerIndex(previousIndex, followerIndex(currentIndex));
+            else
+              m_largestFreeItem = followerIndex(currentIndex);
+            
+            --m_freeItemCount; //One was removed
+            
+            //currentIndex is directly behind index, touching its space. Merge them.
+            setFreeSize(index, freeSize(index) + AdditionalSpacePerItem + freeSize(currentIndex));
+            
+            //Recurse to do even more merging
+            insertFreeItem(index);
+            return;
+          }
           
-          //Remove currentIndex from the free chain, since it's merged backwards into index
-          if(previousIndex)
-            setFollowerIndex(previousIndex, followerIndex(currentIndex));
-          else
-            m_largestFreeItem = followerIndex(currentIndex);
+          //Merge before index
+          if(index == currentIndex + freeSize(currentIndex) + AdditionalSpacePerItem) {
+            
+            //Remove currentIndex from the free chain, since insertFreeItem wants 
+            //it not to be in the chain, and it will be inserted in another place
+            if(previousIndex)
+              setFollowerIndex(previousIndex, followerIndex(currentIndex));
+            else
+              m_largestFreeItem = followerIndex(currentIndex);
+            
+            --m_freeItemCount; //One was removed
+            
+            //index is directly behind currentIndex, touching its space. Merge them.
+            setFreeSize(currentIndex, freeSize(currentIndex) + AdditionalSpacePerItem + freeSize(index));
+            
+            //Recurse to do even more merging
+            insertFreeItem(currentIndex);
+            
+            return;
+          }
           
-          --m_freeItemCount; //One was removed
-          
-          //currentIndex is directly behind index, touching its space. Merge them.
-          setFreeSize(index, freeSize(index) + AdditionalSpacePerItem + freeSize(currentIndex));
-          
-          //Recurse to do even more merging
-          insertFreeItem(index);
-          return;
+          previousIndex = currentIndex;
+          currentIndex = followerIndex(currentIndex);
         }
-        
-        //Merge before index
-        if(index == currentIndex + freeSize(currentIndex) + AdditionalSpacePerItem) {
-          
-          //Remove currentIndex from the free chain, since insertFreeItem wants 
-          //it not to be in the chain, and it will be inserted in another place
-          if(previousIndex)
-            setFollowerIndex(previousIndex, followerIndex(currentIndex));
-          else
-            m_largestFreeItem = followerIndex(currentIndex);
-          
-          --m_freeItemCount; //One was removed
-          
-          //index is directly behind currentIndex, touching its space. Merge them.
-          setFreeSize(currentIndex, freeSize(currentIndex) + AdditionalSpacePerItem + freeSize(index));
-          
-          //Recurse to do even more merging
-          insertFreeItem(currentIndex);
-          
-          return;
-        }
-        
-        previousIndex = currentIndex;
-        currentIndex = followerIndex(currentIndex);
       }
-      
       insertToFreeChain(index);
     }
     
     ///Only inserts the item in the correct position into the free chain. index must not be in the chain yet.
     void insertToFreeChain(unsigned short index) {
-      //Insert the free item into the chain opened by m_largestFreeItem
-      unsigned short currentIndex = m_largestFreeItem;
-      unsigned short previousIndex = 0;
-      
-      unsigned short size = freeSize(index);
-      
-      while(currentIndex && *(unsigned short*)(m_data + currentIndex) > size) {
-        Q_ASSERT(currentIndex != index); //must not be in the chain yet
-        previousIndex = currentIndex;
-        currentIndex = followerIndex(currentIndex);
+      if(!fixedItemSize) {
+        ///@todo Use some kind of tree to find the correct position in the chain(This is very slow)
+        //Insert the free item into the chain opened by m_largestFreeItem
+        unsigned short currentIndex = m_largestFreeItem;
+        unsigned short previousIndex = 0;
+        
+        unsigned short size = freeSize(index);
+        
+        while(currentIndex && *(unsigned short*)(m_data + currentIndex) > size) {
+          Q_ASSERT(currentIndex != index); //must not be in the chain yet
+          previousIndex = currentIndex;
+          currentIndex = followerIndex(currentIndex);
+        }
+        
+        setFollowerIndex(index, currentIndex);
+        
+        if(previousIndex)
+          setFollowerIndex(previousIndex, index);
+        else
+          //This item is larger than all already registered free items, or there are none.
+          m_largestFreeItem = index;
+      }else{
+        //When all items have the same size, just prepent to the front.
+        setFollowerIndex(index, m_largestFreeItem);
+        m_largestFreeItem = index;
       }
       
-      setFollowerIndex(index, currentIndex);
-      
-      if(previousIndex)
-        setFollowerIndex(previousIndex, index);
-      else
-        //This item is larger than all already registered free items, or there are none.
-        m_largestFreeItem = index;
-
       ++m_freeItemCount;
     }
     
     ///Returns true if the given index is right behind free space, and thus can be merged to the free space.
     bool isBehindFreeSpace(unsigned short index) const {
+      ///@todo Without iteration!
       unsigned short currentIndex = m_largestFreeItem;
       
       while(currentIndex) {
@@ -1005,16 +1017,20 @@ struct ReferenceCounting {
 ///@param DynamicData Can be used to attach additional metadata of constant size to each item. 
 ///                   That meta-data can be manipulated by giving manipulators to the ItemRepository Member functions. 
 ///                   This can be used to implement reference-counting, @see ReferenceCounting
+///@param fixedItemSize When this is true, all inserted items must have the same size.
+///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
 ///@param threadSafe Whether class access should be thread-safe
-template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, unsigned int targetBucketHashSize = 524288>
+template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, bool fixedItemSize = false, unsigned int targetBucketHashSize = 524288>
 class ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
   
+  typedef Bucket<Item, ItemRequest, DynamicData, fixedItemSize> MyBucket;
+  
   enum {
     //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
     //Must also be a multiple of Bucket::NextBucketHashSize, for the same reason.(Currently those are same)
-    bucketHashSize = (targetBucketHashSize / Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize) * Bucket<Item, ItemRequest, DynamicData>::ObjectMapSize
+    bucketHashSize = (targetBucketHashSize / MyBucket::ObjectMapSize) * MyBucket::ObjectMapSize
   };
   
   enum {
@@ -1076,7 +1092,7 @@ class ItemRepository : public AbstractItemRepository {
     
     while(previousBucketNumber) {
       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[previousBucketNumber];
+      MyBucket* bucketPtr = m_fastBuckets[previousBucketNumber];
       if(!bucketPtr) {
         initializeBucket(previousBucketNumber);
         bucketPtr = m_fastBuckets[previousBucketNumber];
@@ -1110,7 +1126,7 @@ class ItemRepository : public AbstractItemRepository {
     if(!pickedBucketInChain && useBucket == m_currentBucket) {
       //Try finding an existing bucket with deleted space to store the data into
       for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
-        Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+        MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
 
         if(bucketPtr->canAllocateItem(size)) {
           //The item fits into the bucket.
@@ -1137,7 +1153,7 @@ class ItemRepository : public AbstractItemRepository {
           memset(m_fastBuckets + oldBucketCount, 0, (m_bucketCount-oldBucketCount) * sizeof(void*));
         }
       }
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[useBucket];
+      MyBucket* bucketPtr = m_fastBuckets[useBucket];
       if(!bucketPtr) {
         initializeBucket(useBucket);
         bucketPtr = m_fastBuckets[useBucket];
@@ -1152,7 +1168,7 @@ class ItemRepository : public AbstractItemRepository {
       //can hold the data.
       if(bucketPtr->isEmpty() && !indexInBucket) {
         ///@todo Move this compound statement into an own function
-        uint totalSize = size + Bucket<Item, ItemRequest, DynamicData>::AdditionalSpacePerItem;
+        uint totalSize = size + MyBucket::AdditionalSpacePerItem;
         
         Q_ASSERT((totalSize > ItemRepositoryBucketSize));
         
@@ -1162,7 +1178,7 @@ class ItemRepository : public AbstractItemRepository {
         int rangeStart = -1;
         int rangeEnd = -1;
         for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
-          Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+          MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
           if(bucketPtr->isEmpty()) {
             //This bucket is a candidate for monster-bucket merging
             int index = (int)m_freeSpaceBuckets[a];
@@ -1174,7 +1190,7 @@ class ItemRepository : public AbstractItemRepository {
             }
             if(rangeStart != rangeEnd) {
               uint extent = rangeEnd - rangeStart - 1;
-              uint totalAvailableSpace = bucketForIndex(rangeStart)->available() + Bucket<Item, ItemRequest, DynamicData>::DataSize * (rangeEnd - rangeStart - 1);
+              uint totalAvailableSpace = bucketForIndex(rangeStart)->available() + MyBucket::DataSize * (rangeEnd - rangeStart - 1);
               if(totalAvailableSpace > totalSize) {
                 Q_ASSERT(extent);
                 ///We can merge these buckets into one monster-bucket that can hold the data
@@ -1191,7 +1207,7 @@ class ItemRepository : public AbstractItemRepository {
         }
         if(!useBucket) {
           //Create a new monster-bucket at the end of the data
-          uint needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / Bucket<Item, ItemRequest, DynamicData>::DataSize + 1;
+          uint needMonsterExtent = (totalSize - ItemRepositoryBucketSize) / MyBucket::DataSize + 1;
           Q_ASSERT(needMonsterExtent);
           if(m_currentBucket + needMonsterExtent + 1 > (uint)m_buckets.size()) {
             uint oldBucketCount = m_bucketCount;
@@ -1315,7 +1331,7 @@ class ItemRepository : public AbstractItemRepository {
     while(previousBucketNumber) {
       //We have a bucket that contains an item with the given hash % bucketHashSize, so check if the item is already there
       
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[previousBucketNumber];
+      MyBucket* bucketPtr = m_fastBuckets[previousBucketNumber];
       if(!bucketPtr) {
         initializeBucket(previousBucketNumber);
         bucketPtr = m_fastBuckets[previousBucketNumber];
@@ -1358,7 +1374,7 @@ class ItemRepository : public AbstractItemRepository {
     if(previousBucketNumber == bucket)
       previousBucketNumber = 0;
     
-    Bucket<Item, ItemRequest, DynamicData>* previousBucketPtr = 0;
+    MyBucket* previousBucketPtr = 0;
     
     //Apart from removing the item itself, we may have to recreate the nextBucketForHash link, so we need the previous bucket
     
@@ -1382,7 +1398,7 @@ class ItemRepository : public AbstractItemRepository {
     //Make sure the index was reachable through the hashes
     Q_ASSERT(previousBucketNumber || *bucketHashPosition == bucket);
     
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+    MyBucket* bucketPtr = m_fastBuckets[bucket];
     if(!bucketPtr) {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
@@ -1429,8 +1445,8 @@ class ItemRepository : public AbstractItemRepository {
         }
       }
     }else{
-      if(!bucketPtr->hasClashingItem(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize)) {
-//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, Bucket<Item, ItemRequest, DynamicData>::NextBucketHashSize));
+      if(!bucketPtr->hasClashingItem(hash, MyBucket::NextBucketHashSize)) {
+//         Q_ASSERT(!bucketPtr->hasClashingItemReal(hash, MyBucket::NextBucketHashSize));
         ///Debug: Check for infinite recursion
         walkBucketLinks(*bucketHashPosition, hash);
         
@@ -1479,7 +1495,7 @@ class ItemRepository : public AbstractItemRepository {
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
     
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+    MyBucket* bucketPtr = m_fastBuckets[bucket];
     Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
@@ -1500,7 +1516,7 @@ class ItemRepository : public AbstractItemRepository {
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
     
-    const Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+    const MyBucket* bucketPtr = m_fastBuckets[bucket];
     Q_ASSERT(bucket < m_bucketCount);
     if(!bucketPtr) {
       initializeBucket(bucket);
@@ -1565,11 +1581,11 @@ class ItemRepository : public AbstractItemRepository {
       if(m_fastBuckets[a] && m_fastBuckets[a]->monsterBucketExtent())
         loadedMonsterBuckets += m_fastBuckets[a]->monsterBucketExtent()+1;
     
-    uint usedBucketSpace = Bucket<Item, ItemRequest, DynamicData>::DataSize * m_currentBucket;
+    uint usedBucketSpace = MyBucket::DataSize * m_currentBucket;
     uint freeBucketSpace = 0, freeUnreachableSpace = 0;
     uint lostSpace = 0; //Should be zero, else something is wrong
     for(uint a = 1; a < m_currentBucket+1; ++a) {
-      Bucket<Item, ItemRequest, DynamicData>* bucket = bucketForIndex(a);
+      MyBucket* bucket = bucketForIndex(a);
       if(bucket) {
         uint bucketFreeSpace = bucket->totalFreeItemsSize() + bucket->available();
         freeBucketSpace += bucketFreeSpace;
@@ -1642,7 +1658,7 @@ class ItemRepository : public AbstractItemRepository {
     
     while(bucket) {
       
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+      MyBucket* bucketPtr = m_fastBuckets[bucket];
       if(!bucketPtr) {
         initializeBucket(bucket);
         bucketPtr = m_fastBuckets[bucket];
@@ -1752,11 +1768,11 @@ class ItemRepository : public AbstractItemRepository {
     unsigned int* freeSpaceBuckets = m_freeSpaceBuckets.data();
     
     Q_ASSERT(index < (uint)m_freeSpaceBucketsSize);
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(freeSpaceBuckets[index]);
+    MyBucket* bucketPtr = bucketForIndex(freeSpaceBuckets[index]);
     
     unsigned short largestFreeSize = bucketPtr->largestFreeSize();
     
-    if(largestFreeSize == 0 || (bucketPtr->freeItemCount() <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeItemsForHide && largestFreeSize <= Bucket<Item, ItemRequest, DynamicData>::MaxFreeSizeForHide)) {
+    if(largestFreeSize == 0 || (bucketPtr->freeItemCount() <= MyBucket::MaxFreeItemsForHide && largestFreeSize <= MyBucket::MaxFreeSizeForHide)) {
       //Remove the item from freeSpaceBuckets
       m_freeSpaceBuckets.remove(index);
       m_freeSpaceBucketsSize = m_freeSpaceBuckets.size();
@@ -1795,9 +1811,9 @@ class ItemRepository : public AbstractItemRepository {
   ///@warning During conversion, all the touched buckets are deleted and re-created
   ///@param extent When this is zero, the bucket is converted from monster-bucket to normal bucket.
   ///              When it is nonzero, it is converted to a monster-bucket.
-  Bucket<Item, ItemRequest, DynamicData>* convertMonsterBucket(short unsigned int bucketNumber, unsigned int extent) {
+  MyBucket* convertMonsterBucket(short unsigned int bucketNumber, unsigned int extent) {
     Q_ASSERT(bucketNumber);
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucketNumber];
+    MyBucket* bucketPtr = m_fastBuckets[bucketNumber];
     if(!bucketPtr) {
       initializeBucket(bucketNumber);
       bucketPtr = m_fastBuckets[bucketNumber];
@@ -1815,7 +1831,7 @@ class ItemRepository : public AbstractItemRepository {
       for(uint index = bucketNumber; index < bucketNumber + 1 + extent; ++index)
         deleteBucket(index);
       
-      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
+      m_fastBuckets[bucketNumber] = new MyBucket();
       
       m_fastBuckets[bucketNumber]->initialize(extent);
       
@@ -1834,7 +1850,7 @@ class ItemRepository : public AbstractItemRepository {
       
       for(uint index = bucketNumber; index < bucketNumber + 1 + oldExtent; ++index) {
         Q_ASSERT(!m_fastBuckets[index]);
-        m_fastBuckets[index] = new Bucket<Item, ItemRequest, DynamicData>();
+        m_fastBuckets[index] = new MyBucket();
         
         m_fastBuckets[index]->initialize(0);
         Q_ASSERT(!m_fastBuckets[index]->monsterBucketExtent());
@@ -1843,8 +1859,8 @@ class ItemRepository : public AbstractItemRepository {
     return m_fastBuckets[bucketNumber];
   }
 
-  Bucket<Item, ItemRequest, DynamicData>* bucketForIndex(short unsigned int index) const {
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[index];
+  MyBucket* bucketForIndex(short unsigned int index) const {
+    MyBucket* bucketPtr = m_fastBuckets[index];
     if(!bucketPtr) {
       initializeBucket(index);
       bucketPtr = m_fastBuckets[index];
@@ -1988,7 +2004,7 @@ class ItemRepository : public AbstractItemRepository {
     
     while(bucket) {
       
-      Bucket<Item, ItemRequest, DynamicData>* bucketPtr = m_fastBuckets[bucket];
+      MyBucket* bucketPtr = m_fastBuckets[bucket];
       if(!bucketPtr) {
         initializeBucket(bucket);
         bucketPtr = m_fastBuckets[bucket];
@@ -2008,7 +2024,7 @@ class ItemRepository : public AbstractItemRepository {
     if(!bucket)
       return true;
     
-    Bucket<Item, ItemRequest, DynamicData>* bucketPtr = bucketForIndex(bucket);
+    MyBucket* bucketPtr = bucketForIndex(bucket);
     
     AllItemsReachableVisitor visitor(this);
     return bucketPtr->visitAllItems(visitor);
@@ -2026,10 +2042,10 @@ class ItemRepository : public AbstractItemRepository {
 #endif
     
     if(!m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber] = new Bucket<Item, ItemRequest, DynamicData>();
+      m_fastBuckets[bucketNumber] = new MyBucket();
       if(m_file) {
         if(m_file->open( QFile::ReadOnly )) {
-          m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+          m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * MyBucket::DataSize);
           m_file->close();
         }else{
           kFatal() << "cannot open repository-file for reading";
@@ -2050,7 +2066,7 @@ class ItemRepository : public AbstractItemRepository {
   //m_file must be opened
   void storeBucket(unsigned int bucketNumber) const {
     if(m_file && m_fastBuckets[bucketNumber]) {
-      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * Bucket<Item, ItemRequest, DynamicData>::DataSize);
+      m_fastBuckets[bucketNumber]->store(m_file, BucketStartOffset + (bucketNumber-1) * MyBucket::DataSize);
     }
   }
   
@@ -2084,11 +2100,11 @@ class ItemRepository : public AbstractItemRepository {
     return qMakePair(0u, 0u);
   }
   
-  void putIntoFreeList(unsigned short bucket, Bucket<Item, ItemRequest, DynamicData>* bucketPtr) {
+  void putIntoFreeList(unsigned short bucket, MyBucket* bucketPtr) {
     Q_ASSERT(!bucketPtr->monsterBucketExtent());
     int indexInFree = m_freeSpaceBuckets.indexOf(bucket);
     
-    if(indexInFree == -1 && (bucketPtr->freeItemCount() >= Bucket<Item, ItemRequest, DynamicData>::MinFreeItemsForReuse || bucketPtr->largestFreeSize() >= Bucket<Item, ItemRequest, DynamicData>::MinFreeSizeForReuse)) {
+    if(indexInFree == -1 && (bucketPtr->freeItemCount() >= MyBucket::MinFreeItemsForReuse || bucketPtr->largestFreeSize() >= MyBucket::MinFreeSizeForReuse)) {
       
       //Add the bucket to the list of buckets from where to re-assign free space
       //We only do it when a specific threshold of empty items is reached, because that way items can stay "somewhat" semantically ordered.
@@ -2121,8 +2137,8 @@ class ItemRepository : public AbstractItemRepository {
   //List of buckets that have free space available that can be assigned. Sorted by size: Smallest space first. Second order sorting: Bucket index
   QVector<uint> m_freeSpaceBuckets;
   uint m_freeSpaceBucketsSize; //for speedup
-  mutable QVector<Bucket<Item, ItemRequest, DynamicData>* > m_buckets;
-  mutable Bucket<Item, ItemRequest, DynamicData>** m_fastBuckets; //For faster access
+  mutable QVector<MyBucket* > m_buckets;
+  mutable MyBucket** m_fastBuckets; //For faster access
   mutable uint m_bucketCount;
   uint m_statBucketHashClashes, m_statItemCount;
   unsigned int m_bucketHashSize;
