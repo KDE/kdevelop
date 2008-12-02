@@ -190,7 +190,7 @@ void PluginController::initialize()
         if( isGlobalPlugin( pi ) )
         {
             QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
-            if( it != pluginMap.constEnd() && it.value() && loadPluginInternal( pi.pluginName() ) != 0 )
+            if( pluginMap.isEmpty() || ( it != pluginMap.constEnd() && it.value() ) && loadPluginInternal( pi.pluginName() ) != 0 )
             {
                 grp.writeEntry( pi.pluginName()+"Enabled", true );
             }
