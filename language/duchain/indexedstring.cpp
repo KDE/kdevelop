@@ -19,7 +19,6 @@
 namespace KDevelop {
 //Using a function makes sure that initialization order cannot break anything
 static Repositories::StringRepository& globalStringRepository() {
-  ///@todo make the string-repository dynamically sizable
   static Repositories::StringRepository theGlobalStringRepository("String Index");
   return theGlobalStringRepository;
 }
