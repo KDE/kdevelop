@@ -67,7 +67,8 @@ void PluginPreferences::reparseConfig( const QByteArray& conf )
 
 void PluginPreferences::defaults()
 {
-    selector->defaults();
+    Core::self()->pluginControllerInternal()->resetToDefaults();
+    selector->load();
     KCModule::defaults();
 }
 
@@ -75,12 +76,12 @@ void PluginPreferences::save()
 {
     selector->save();
     KCModule::save();
+    Core::self()->pluginControllerInternal()->updateLoadedPlugins();
 }
 
 void PluginPreferences::load()
 {
     selector->load();
-    Core::self()->pluginControllerInternal()->updateLoadedPlugins();
     KCModule::load();
 }
 

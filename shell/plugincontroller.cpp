@@ -178,11 +178,19 @@ void PluginController::initialize()
             pluginMap.insert( key.left(key.length() - 7), grp.readEntry(key,false) );
     }
 
+    // If pluginMap is empty here (i.e. nothing in the session) use the list available
+    // from the shellextension
+    foreach( const QString& s, ShellExtension::getInstance()->defaultPlugins() )
+    {
+        pluginMap.insert( s, true );
+    }
+    
     foreach( const KPluginInfo& pi, d->plugins )
     {
-        if( isGlobalPlugin( pi ) && ( pluginMap.isEmpty() || pluginMap.value( pi.pluginName() ) ) )
+        if( isGlobalPlugin( pi ) )
         {
-            if( loadPluginInternal( pi.pluginName() ) != 0 && pluginMap.isEmpty() )
+            QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
+            if( it != pluginMap.constEnd() && it.value() && loadPluginInternal( pi.pluginName() ) != 0 )
             {
                 grp.writeEntry( pi.pluginName()+"Enabled", true );
             }
@@ -511,6 +519,27 @@ QList<KPluginInfo> PluginController::allPluginInfos() const
 
 void PluginController::updateLoadedPlugins()
 {
+}
+
+void PluginController::resetToDefaults()
+{
+    KSharedConfig::Ptr cfg = Core::self()->activeSession()->config();
+    cfg->deleteGroup( pluginControllerGrp );
+    cfg->sync();
+    KConfigGroup grp = cfg->group( pluginControllerGrp );
+    QStringList plugins = ShellExtension::getInstance()->defaultPlugins();
+    if( plugins.isEmpty() ) 
+    {
+        foreach( const KPluginInfo& info, d->plugins )
+        {
+            plugins << info.pluginName();
+        }
+    }
+    foreach( const QString& s, plugins )
+    {
+        grp.writeEntry( s+"Enabled", true );
+    }
+    grp.sync();
 }
 
 }

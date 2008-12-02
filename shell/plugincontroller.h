@@ -144,6 +144,8 @@ public:
     void loadProjectPlugins();
     void unloadProjectPlugins();
 
+    void resetToDefaults();
+
 
 private:
 
