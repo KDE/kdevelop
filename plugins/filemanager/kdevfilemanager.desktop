@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin brings a filemanager to KDevelop.
 Comment[el]=Αυτό το πρόσθετο ενσωματώνει ένα διαχειριστή αρχείων στο KDevelop
+Comment[es]=Este complemento proporciona un gestor de archivos a KDevelop.
 Comment[gl]=Esta extensión incorpora en KDevelop un xestor de ficheiros.
 Comment[nds]=Dit Moduul stellt en Dateipleger för KDevelop praat.
 Comment[pt]=Este 'plugin' oferece um gestor de ficheiros para o KDevelop.

@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Plugins
 Name[el]=Πρόσθετα
+Name[es]=Complementos
 Name[gl]=Extensións
 Name[nds]=Modulen
 Name[pt]='Plugins'
@@ -23,6 +24,7 @@ Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
 Comment=Configure Plugins
 Comment[el]=Ρύθμιση προσθέτων
+Comment[es]=Configurar complementos
 Comment[gl]=Configura as extensión
 Comment[nds]=Modulen instellen
 Comment[pt]=Configurar os 'Plugins'

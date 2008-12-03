@@ -5,6 +5,7 @@ Name[sv]=DevHelp-insticksmodul
 Name[x-test]=xxDevHelpPluginxx
 Comment=Documentation plugin for DevHelp documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για τεκμηρίωση DevHelp
+Comment[es]=Complemento para la documentación DevHelp
 Comment[gl]=Extensión para a documentación de DevHelp
 Comment[nds]=Dokmentatschoon-Moduul för DevHelp-Dokmentatschoon
 Comment[pt]='Plugin' de documentação para os documentos do DevHelp

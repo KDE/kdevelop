@@ -7,6 +7,7 @@ reading=true
 defaultMimetype=text/html
 Description=A kioslave for displaying WinHelp files
 Description[el]=Ένα kioslave για την εμφάνιση αρχείων WinHelp
+Description[es]=Un «kioslave» para mostrar archivos WinHelp
 Description[gl]=Un kioslave para mostrar ficheiros WinHelp
 Description[nds]=En In-/Utgaavmoduul för't Wiesen vun "WinHelp"-Dateien
 Description[nl]=Een kioslave voor het weergeven van WinHelp-bestanden

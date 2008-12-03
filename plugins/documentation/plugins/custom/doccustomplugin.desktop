@@ -6,6 +6,7 @@ Name[x-test]=xxDocCustomPluginxx
 Exec=blubb
 Comment=Documentation plugin for all types of documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για όλους τους τύπους τεκμηρίωσης
+Comment[es]=Complemento para todos los tipos de documentación
 Comment[gl]=Extensión de documentacion para todos os tipos de documentación
 Comment[nds]=Dokmentatschoon-Moduul för all Typen vun Dokmentatschoon
 Comment[pt]='Plugin' de documentação para todos os tipos de documentação

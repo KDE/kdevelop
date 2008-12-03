@@ -6,6 +6,7 @@ Name[x-test]=xxDocPDFPluginxx
 Exec=blubb
 Comment=Documentation plugin for PDF format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή PDF
+Comment[es]=Complemento para la documentación en formato PDF
 Comment[gl]=Extensión de documentación do formato PDF
 Comment[nds]=Dokmentatschoon-Moduul för't PDF-Formaat
 Comment[pt]='Plugin' de documentação para o formato PDF

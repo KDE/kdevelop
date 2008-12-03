@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin allows quick access to project files and language-items like classes/functions.
 Comment[el]=Το πρόσθετο αυτό επιτρέπει τη γρήγορη πρόσβαση σε αρχεία έργου και αντικείμενα γλώσσας όπως κλάσεις/συναρτήσεις.
+Comment[es]=Este complemento permite un rápido acceso a los archivos del proyecto y a elementos del lenguaje, como clases y funciones.
 Comment[gl]=Esta extensión permítelle aceder rapidamente a ficheiros de proxecto e itens da linguaxe como clases e funcións.
 Comment[nds]=Dit Moduul stellt Fixtogriep op Projektdateien un Spraakelementen as Klassen un Funkschonen praat.
 Comment[pt]=Este 'plugin' permite um acesso rápido aos ficheiros do projecto e aos itens das linguagens, como as classes/funções.

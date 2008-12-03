@@ -4,6 +4,7 @@ Exec=blubb
 Icon=kdevelop
 Comment=This plugin allows to format files using different backends for each file type.
 Comment[el]=Το πρόσθετο αυτό επιτρέπει τη διαμόρφωση αρχείων με χρήση διαφορετικών συστημάτων υποστήριξης για κάθε τύπο αρχείου.
+Comment[es]=Este complemento permite formatear archivos usando diferentes motores para cada tipo de archivo.
 Comment[gl]=Esta extensión permítelle formatar os ficheiros empregando diferentes infraestruturas segundo o tipo do ficheiro.
 Comment[nds]=Mit dit Moduul laat sik Dateien mit verscheden Hülpprogrammen för de Dateitypen formateren.
 Comment[pt]=Este 'plugin' permite formatar os ficheiros, usando diferentes infra-estruturas para cada tipo de ficheiro.

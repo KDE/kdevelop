@@ -6,6 +6,7 @@ Name[x-test]=xxDocDjvuPluginxx
 Exec=blubb
 Comment=Documentation plugin for djvu format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή djvu
+Comment[es]=Complemento para la documentación en formato djvu
 Comment[gl]=Extensión de documentación do formato djvu
 Comment[nds]=Dokmentatschoon-Moduul för't djvu-Formaat
 Comment[pt]='Plugin' de documentação para o formato DjVu

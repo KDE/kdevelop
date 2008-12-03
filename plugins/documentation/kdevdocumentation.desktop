@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=The Documentation plugin offers browsing and searching in local and online documentation with support for multiple documentation systems.
 Comment[el]=Το πρόσθετο τεκμηρίωσης προσφέρει περιήγηση και αναζήτηση σε τοπική και απομακρυσμένη τεκμηρίωση για πολλαπλά συστήματα τεκμηρίωσης.
+Comment[es]=El complemento de documentación ofrece navegación y búsqueda en la documentación local y en línea, y dispone de soporte para diversos sistemas de documentación.
 Comment[gl]=A extensión de documentacion permítelle facer procuras e estudar documentación tanto local como na rede, admitindo varios sistemas de documentación.
 Comment[nds]=Dat Dokmentatschoon-Moduul stellt dat Dörkieken vun un Söken binnen lokaal un feern Dokmentatschoon praat un deit en Reeg Dokmentatschoonsystemen ünnerstütten.
 Comment[pt]=O 'plugin' de Documentação oferece a navegação e pesquisa na documentação local e 'online', com o suporte para vários sistemas de documentação.

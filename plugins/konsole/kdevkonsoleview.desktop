@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin provides KDevelop with an embedded konsole for quick and easy command line access.
 Comment[el]=Αυτό το πρόσθετο προσφέρει στο KDevelop μια ενσωματωμένη konsole για γρήγορη και εύκολη πρόσβαση σε γραμμή εντολών.
+Comment[es]=Este complemento proporciona a KDevelop una consola empotrada para acceder rápida y fácilmente a la línea de órdenes.
 Comment[gl]=Esta extensión fornécelle a KDevelop un konsole integrado para dispor de aceso rápido e sinxelo á liña de comandos.
 Comment[nds]=Dit Moduul stellt en inbett Konsole för KDevelop praat, wat gau un eenfach Togriep op de Konsool verlöövt.
 Comment[pt]=Este 'plugin' oferece ao KDevelop uma consola incorporada para um acesso rápido e simples à linha de comandos.
