@@ -25,12 +25,13 @@ ADD_DEFINITIONS(-Wall ${KDE4_ENABLE_EXCEPTIONS})
 
 ######## next target ########
 
-ADD_LIBRARY( dynamictext SHARED ${dynamictext_SRCS} )
-TARGET_LINK_LIBRARIES( dynamictext ${COMMONCPP2_LIBRARIES} ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${QT_QTCORE_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-install(TARGETS dynamictext ${INSTALL_TARGETS_DEFAULT_ARGS})
+# This library only exists as a convenience library for the teamwork plugin, thus it is not SOVERSION'ed
+ADD_LIBRARY( kdevteamwork_dynamictext SHARED ${dynamictext_SRCS} )
+TARGET_LINK_LIBRARIES( kdevteamwork_dynamictext ${COMMONCPP2_LIBRARIES} ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${QT_QTCORE_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+install(TARGETS kdevteamwork_dynamictext ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ADD_EXECUTABLE( testexec main.cpp)
-TARGET_LINK_LIBRARIES( testexec dynamictext ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} dl ${ZLIB_LIBRARIES} )
+TARGET_LINK_LIBRARIES( testexec kdevteamwork_dynamictext ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} dl ${ZLIB_LIBRARIES} )
 
 #ADD_DEPENDENCIES( testexec, dynamictext )
 

@@ -31,15 +31,16 @@ ADD_DEFINITIONS(-Wall -ftemplate-depth-50 -D_REENTRANT -fexceptions)
 #list all source files here
 
 ###### First Target ##########
-ADD_LIBRARY( network SHARED ${libfiles} )
-TARGET_LINK_LIBRARIES( network ${COMMONCPP2_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${QT_QTCORE_LIBRARY})
+# This library only exists as a convenience library for the teamwork plugin, thus it is not SOVERSION'ed
+ADD_LIBRARY( kdevteamwork_network SHARED ${libfiles} )
+TARGET_LINK_LIBRARIES( kdevteamwork_network ${COMMONCPP2_LIBRARIES} ${Boost_SERIALIZATION_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${QT_QTCORE_LIBRARY})
 
-INSTALL(TARGETS network ${INSTALL_TARGETS_DEFAULT_ARGS})
+INSTALL(TARGETS kdevteamwork_network ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ###### Next Target ##########
 
 ADD_EXECUTABLE( kdevteamwork_server ${testfiles} )
-TARGET_LINK_LIBRARIES( kdevteamwork_server ${QT_QTCORE_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} dl )
+TARGET_LINK_LIBRARIES( kdevteamwork_server ${QT_QTCORE_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} kdevteamwork_network ${COMMONCPP2_LIBRARIES} ${ZLIB_LIBRARIES} dl )
 
 INSTALL(TARGETS kdevteamwork_server ${INSTALL_TARGETS_DEFAULT_ARGS})
 
