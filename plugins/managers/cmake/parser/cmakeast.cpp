@@ -503,10 +503,7 @@ void AddLibraryAst::writeBack( QString& ) const
 
 bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    if ( func.name.toLower() != "add_library" )
-        return false;
-
-    if ( func.arguments.size() < 1 )
+    if ( func.name.toLower() != "add_library" || func.arguments.isEmpty() )
         return false;
 
     bool libTypeSet = false;
@@ -549,18 +546,17 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             break;
     }
 
-    if ( it == itEnd && !m_isImported)
-        return false; //there are no sources
-
-    while ( it != itEnd )
+    if ( !m_isImported )
     {
-            m_sourceLists.append( it->value );
-            ++it;
+        while ( it != itEnd )
+        {
+                m_sourceLists.append( it->value );
+                ++it;
+        }
+
+        if ( m_sourceLists.isEmpty() )
+            return false;
     }
-
-    if ( m_sourceLists.isEmpty() )
-        return false;
-
     return true;
 
 }
@@ -1338,6 +1334,9 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case PATH_SUFFIXES:
                 m_pathSuffixes << it->value;
+                break;
+            case HINTS:
+                m_hints << it->value;
                 break;
         }
     }

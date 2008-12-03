@@ -107,10 +107,10 @@ void CMakeAstTest::testAddLibraryGoodParse()
 
 void CMakeAstTest::testAddLibraryGoodParse_data()
 {
-    CMakeFunctionDesc func, func2, func3, func4;
+    CMakeFunctionDesc func, func2, func3, func4, func5;
     QStringList argList, argList2, argList3, argList4;
 
-    func.name = func2.name = func3.name = func4.name =  "add_library";
+    func.name = func2.name = func3.name = func4.name = func5.name =  "add_library";
     argList << "foo" << "${SRCS}";
     func.addArguments( argList );
 
@@ -120,15 +120,17 @@ void CMakeAstTest::testAddLibraryGoodParse_data()
     argList3 << "foo3" << "EXCLUDE_FROM_ALL" << "${SRCS}";
     func3.addArguments( argList3 );
 
-    argList4 << "foo4" << "MODULE" << "EXCLUDE_FROM_ALL" << "foo.c"
-             << "bar.c" << "baz.c";
+    argList4 << "foo4" << "MODULE" << "EXCLUDE_FROM_ALL" << "foo.c" << "bar.c" << "baz.c";
     func4.addArguments( argList4 );
+    
+    func5.addArguments( QString("krossui SHARED IMPORTED").split(' ') );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "simple" ) << func;
     QTest::newRow( "shared" ) << func2;
     QTest::newRow( "exclude" ) << func3;
     QTest::newRow( "full" ) << func4;
+    QTest::newRow( "imported" ) << func5;
 }
 
 void CMakeAstTest::testAddLibraryBadParse()

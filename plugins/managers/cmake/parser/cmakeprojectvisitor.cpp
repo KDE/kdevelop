@@ -728,7 +728,8 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
     bool error=false;
     QStringList locationOptions = flib->path();
-    QStringList path, files=flib->filenames();
+    QStringList files=flib->filenames();
+    QString path;
 
     if(!flib->noDefaultPath())
     {
@@ -749,11 +750,15 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
                 }
                 else
                 {
-                    path += p1;
+                    path = p1;
                     break;
                 }
             }
+            if(!path.isEmpty())
+                break;
         }
+        if(!path.isEmpty())
+            break;
     }
 
     if(!path.isEmpty())
