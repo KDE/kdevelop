@@ -537,6 +537,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 path.addPath(s);
                 dir=path.toLocalFile();
             }
+            
+            KUrl simp(dir); //We use this to simplify dir
+            simp.cleanPath();
+            dir=simp.toLocalFile();
+            
             if(!directories.contains(dir))
                 directories.append(dir);
         }
