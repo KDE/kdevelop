@@ -690,7 +690,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
     {
-        QString p1=findFile(p, locationOptions, fpath->pathSuffixes(), true);
+        QString p1=findFile(p, fpath->hints()+locationOptions, fpath->pathSuffixes(), true);
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
@@ -741,7 +741,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         {
             foreach(const QString& suffix, m_vars->value("CMAKE_FIND_LIBRARY_SUFFIXES"))
             {
-                QString p1=findFile(prefix+p+suffix, locationOptions, flib->pathSuffixes());
+                QString p1=findFile(prefix+p+suffix, flib->hints()+locationOptions, flib->pathSuffixes());
                 if(p1.isEmpty())
                 {
                     kDebug(9042) << p << "not found";
@@ -785,7 +785,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     kDebug(9042) << "Find File:" << ffile->filenames();
     foreach(const QString& p, files)
     {
-        QString p1=findFile(p, locationOptions, ffile->pathSuffixes());
+        QString p1=findFile(p, ffile->hints()+locationOptions, ffile->pathSuffixes());
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
@@ -1007,6 +1007,10 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
 
 void usesForArguments(const QStringList& names, const QList<int>& args, const ReferencedTopDUContext& topctx, const CMakeFunctionDesc& func)
 {
+    //TODO: Should not return here
+    if(args.size()!=names.size())
+        return;
+        
     //We define the uses for the used variable without ${}
     foreach(int use, args)
     {
@@ -1051,7 +1055,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
         {
             inside--;
             if(inside<=0 && !it->arguments.isEmpty()) {
-                Q_ASSERT(!ini.isEmpty());
+//                 Q_ASSERT(!ini.isEmpty());
                 usesForArguments(ifast->condition(), ini, m_topctx, *it);     
                 break;
             }
@@ -1066,16 +1070,27 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             {
                 CMakeCondition cond(this);
                 IfAst myIf;
-                if(!myIf.parseFunctionInfo(*it))
-                    kDebug(9042) << "uncorrect condition correct" << it->writeBack();
-                result=cond.condition(myIf.condition());
-                QList<int> args=cond.variableArguments();
-                if(funcName=="if")
-                    ini=args;
-                usesForArguments(myIf.condition(), args, m_topctx, *it);
+                QStringList condition;
+                
+                if(funcName!="if")
+                {
+                    if(!myIf.parseFunctionInfo(resolveVariables(*it)))
+                        kDebug(9042) << "uncorrect condition correct" << it->writeBack();
+                    condition=myIf.condition();
+                }
+                else
+                {
+                    condition=ifast->condition();
+                    ini=cond.variableArguments();
+                }
+                result=cond.condition(condition);
+                    
+                usesForArguments(myIf.condition(), cond.variableArguments(), m_topctx, *it);
+                kDebug(9042) << ">> " << funcName << condition << result;
             }
             else if(funcName=="else")
             {
+                kDebug(9042) << ">> else";
                 result=true;
                 usesForArguments(ifast->condition(), ini, m_topctx, *it);
             }
@@ -1548,7 +1563,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     foreach(const QString& _in, sast->input())
                     {
                         QString in(_in);
-                        kDebug() << "regex" << sast->regex();
+                        
                         int idx = rx.indexIn(in);
                         QStringList info = rx.capturedTexts();
                         if(idx<0)
@@ -1571,7 +1586,8 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
-            m_vars->insert(sast->outputVariable(), QStringList(res));
+            kDebug() << "regex" << sast->regex() << res;
+            m_vars->insert(sast->outputVariable(), res);
         }
             break;
         case StringAst::REPLACE: {

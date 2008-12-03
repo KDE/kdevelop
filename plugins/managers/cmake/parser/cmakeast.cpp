@@ -117,7 +117,7 @@ void CMakeAst::writeBack(QString& ) const
 {
 }
 
-enum Stage {NAMES, PATHS, PATH_SUFFIXES};
+enum Stage {NAMES, PATHS, PATH_SUFFIXES, HINTS};
 
 CustomCommandAst::CustomCommandAst()
 {
@@ -1419,6 +1419,8 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1430,6 +1432,9 @@ bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case PATH_SUFFIXES:
                 m_pathSuffixes << it->value;
+                break;
+            case HINTS:
+                m_hints << it->value;
                 break;
         }
     }
@@ -1537,6 +1542,8 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1548,6 +1555,9 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case PATH_SUFFIXES:
                 m_pathSuffixes << it->value;
+                break;
+            case HINTS:
+                m_hints << it->value;
                 break;
         }
     }
@@ -1605,6 +1615,8 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             s=PATHS;
         else if(it->value=="PATH_SUFFIXES")
             s=PATH_SUFFIXES;
+        else if(it->value=="HINTS")
+            s=HINTS;
         else switch(s) {
             case NAMES:
                 m_filenames << it->value;
@@ -1614,6 +1626,9 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
             case PATH_SUFFIXES:
                 m_pathSuffixes << it->value;
+                break;
+            case HINTS:
+                m_hints << it->value;
                 break;
         }
     }
@@ -3112,6 +3127,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         {
             m_input += it->value;
         }
+        kDebug(9042) << "performing REGEX" << regexType << " : " << m_regex << " > "<< m_outputVariable << "result: ";
     }
     else if(stringType=="REPLACE")
     {
