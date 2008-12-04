@@ -277,20 +277,13 @@ public:
   void clear() {
     QMutexLocker l(&m_chainsMutex);
 
-    if(!m_cleanupDisabled) {
-      //Store all top-contexts to disk
-      for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
-        (*it).second->m_dynamicData->store();
-    }
+    if(!m_cleanupDisabled)
+      doMoreCleanup();
+    
+    DUChainWriteLocker writeLock(DUChain::lock());
 
     for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       instance->removeDocumentChain((*it).second);
-
-    if(!m_cleanupDisabled)
-    {
-        DUChainWriteLocker writeLock(instance->lock());
-        storeAllInformation(true, writeLock);
-    }
 
     m_fileEnvironmentInformations.clear();
 
@@ -833,11 +826,8 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 
     branchRemoved(context);
 
-    if(!context->isOnDisk()) {
+    if(!context->isOnDisk())
       removeFromEnvironmentManager(context);
-    }else if(!sdDUChainPrivate->m_cleanupDisabled) {
-//       context->m_dynamicData->store();
-    }
 
     context->deleteSelf();
 
@@ -1210,10 +1200,9 @@ Definitions* DUChain::definitions()
 void DUChain::aboutToQuit()
 {
   sdDUChainPrivate->doMoreCleanup();;
-  DUChainWriteLocker writeLock(lock());
   sdDUChainPrivate->m_openDocumentContexts.clear();
-  sdDUChainPrivate->clear();
   sdDUChainPrivate->m_destroyed = true;
+  sdDUChainPrivate->clear();
 }
 
 uint DUChain::newTopContextIndex() {
