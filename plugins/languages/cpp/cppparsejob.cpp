@@ -322,6 +322,14 @@ CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
 ///If @param ctx is a proxy-context, returns the target-context. Else returns ctx. @warning du-chain must be locked
 LineContextPair contentFromProxy(LineContextPair ctx) {
     if( ctx.context->parsingEnvironmentFile() && ctx.context->parsingEnvironmentFile()->isProxyContext() ) {
+        {
+          ReferencedTopDUContext ref(ctx.context);
+        }
+        if(ctx.context->importedParentContexts().isEmpty()) {
+          kDebug() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
+          Q_ASSERT(0);
+        }
+        
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
         return LineContextPair( dynamic_cast<TopDUContext*>(ctx.context->importedParentContexts().first().context(0)), ctx.sourceLine );
     }else{
@@ -370,14 +378,15 @@ void CPPInternalParseJob::run()
       * If simplified environment-matching is disabled, always remove the imports if the file is reparsed,
       * their new versions will be re-added.
       * */
+        DUChainWriteLocker lock(DUChain::lock());
       if(!parentJob()->keepDuchain() &&
         ((!parentJob()->masterJob()->wasUpdated(contentContext) && parentJob()->needUpdateEverything())
           || !proxyContext)) {
-          DUChainWriteLocker lock(DUChain::lock());
 
           foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
             contentContext->removeImportedParentContext(ctx.context(0));
           }
+          contentContext->updateImportsCache();
     }
 
     QList<LineContextPair> importedContentChains; //All content-chains imported while this parse-run. Also contains the temporary ones.
@@ -590,6 +599,12 @@ void CPPInternalParseJob::run()
               }
           }
       }
+      
+      if(contentContext) {
+        DUChainWriteLocker l(DUChain::lock());
+        contentContext->updateImportsCache();
+      }
+      
 
       if (!parentJob()->abortRequested()) {
         if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
@@ -627,6 +642,7 @@ void CPPInternalParseJob::run()
       foreach( const LineContextPair& import, importedContentChains )
           if(!import.temporary)
             contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
+      contentContext->updateImportsCache();
     }
 
     ///Build/update the proxy-context
@@ -641,8 +657,9 @@ void CPPInternalParseJob::run()
         
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
 
-        if(proxyContext->importedParentContexts().isEmpty()) //Failure
-          return;
+        if(proxyContext->importedParentContexts().isEmpty()) {
+          Q_ASSERT(0); //Failure
+        }
 
         Q_ASSERT(proxyContext->importedParentContexts()[0].context(0) == contentContext);
 
@@ -664,6 +681,8 @@ void CPPInternalParseJob::run()
             proxyContext->removeImportedParentContext(top);
         }
           
+        proxyContext->updateImportsCache();
+          
         proxyContext->clearProblems();
 
         //Put the problems into the proxy-context
@@ -677,6 +696,11 @@ void CPPInternalParseJob::run()
           proxyContext->addProblem(problem);
     }
 
+    if(proxyContext) {
+      DUChainReadLocker lock(DUChain::lock());
+      Q_ASSERT(!proxyContext->importedParentContexts().isEmpty());
+    }
+    
     ///In the end, mark the contexts as updated.
     if(contentContext)
       parentJob()->masterJob()->setWasUpdated(contentContext);

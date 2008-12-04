@@ -484,6 +484,8 @@ void TestCppCodeCompletion::testInclude() {
   DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
+  QVERIFY(c->topContext()->usingImportsCache());
+  
   Declaration* decl = findDeclaration(c, QualifiedIdentifier("globalHeinz"));
   QVERIFY(decl);
   QVERIFY(decl->abstractType());

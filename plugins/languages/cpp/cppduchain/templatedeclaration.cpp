@@ -559,6 +559,7 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
 ///@todo prevent endless recursion when resolving base-classes!(Parent is not yet in du-chain, so a base-class that references it will cause endless recursion)
 CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, Declaration* instantiatedDeclaration, Declaration* instantiatedFrom )
 {
+  Q_ASSERT(parentContext);
   TemplateDeclaration* instantiatedFromTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
 
   if(instantiatedFromTemplate) { //This makes sure that we don't try to do the same instantiation in the meantime
@@ -797,11 +798,19 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   }
 
   DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
+  if(!surroundingContext) {
+    kDebug() << "Declaration has no context:" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString() << dynamic_cast<Declaration*>(this)->toString();
+    return dynamic_cast<Declaration*>(this);
+  }
   {
     //Check whether the instantiation also instantiates the parent context, and if it does, replace surroundingContext with the instantiated version
     CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>*>(surroundingContext);
     if(parent && templateArguments.previousInstantiationInformation && templateArguments.previousInstantiationInformation != parent->instantiatedWith().index()) {
-      surroundingContext = parent->instantiate(IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source);
+      DUContext* surroundingCandidate = parent->instantiate(IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source);
+      if(surroundingCandidate)
+        surroundingContext = surroundingCandidate;
+      else
+        kDebug() << "could not instantiate surrounding context for" << dynamic_cast<Declaration*>(this)->qualifiedIdentifier().toString();
     }
   }
 

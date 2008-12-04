@@ -279,16 +279,20 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
 
       DUChain::self()->addDocumentChain(topLevelContext);
+      
+      topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
     }
 
-    if(content && !cppContext->imports(content.data(), SimpleCursor::invalid())) {
+    if(content) {
       cppContext->clearImportedParentContexts();
       cppContext->addImportedParentContext(content.data());
-    } else if(content) {
+      cppContext->updateImportsCache(); //Mark that we will use a cached import-structure
     } else {
       ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << file->url().str();
+      Q_ASSERT(0);
     }
+    Q_ASSERT(topLevelContext->importedParentContexts().count());
   }
 
   return topLevelContext;
@@ -347,6 +351,8 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
       topLevelContext->setLanguage(IndexedString("C++"));
       DUChain::self()->addDocumentChain(topLevelContext);
+    
+      topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
     }
 
     setEncountered(topLevelContext);
@@ -370,6 +376,8 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
 
       topLevelContext->addImportedParentContexts(realIncluded);
       topLevelContext->addImportedParentContexts(realTemporaryIncluded, true);
+      
+      topLevelContext->updateImportsCache();
     }
   }
 

@@ -1472,6 +1472,7 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(bar->uses().begin()->count(), 1);
+  kDebug() << findDeclaration(top, bar->identifier(), top->range().start)->qualifiedIdentifier().toString();
   QCOMPARE(findDeclaration(top, bar->identifier(), top->range().start), noDef);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar);
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);

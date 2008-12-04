@@ -169,7 +169,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   DUContext::DeclarationList tempDecls;
   if( !scopeContext ) {
     m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup );
-    if( tempDecls.isEmpty() ) {
+    if( tempDecls.isEmpty() && m_source != m_context ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
 
       DUContext::SearchItem::Ptr prependedSearch( new DUContext::SearchItem(m_context->scopeIdentifier(false)) );
@@ -179,18 +179,24 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
         insertToArray(allIdentifiers, prependedSearch, 0);
 
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
-      ImportTrace trace;
-      m_source->importTrace(m_context->topContext(), trace);
-      for( int a = trace.count()-1; a >= 0; --a ) {
-        const ImportTraceItem& traceItem(trace[a]);
-        DUContext::DeclarationList decls;
-        ///@todo Give a correctly modified trace(without the used items)
-        traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
-        if( !decls.isEmpty() ) {
-          tempDecls = decls;
-          break;
-        }
-      }
+      
+      DUContext::DeclarationList decls;
+      ///@todo do correct tracing for correct visibility
+      m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
+      if( !decls.isEmpty() )
+        tempDecls = decls;
+//       ImportTrace trace;
+//       m_source->importTrace(m_context->topContext(), trace);
+//       for( int a = trace.count()-1; a >= 0; --a ) {
+//         const ImportTraceItem& traceItem(trace[a]);
+//         DUContext::DeclarationList decls;
+//         ///@todo Give a correctly modified trace(without the used items)
+//         traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
+//         if( !decls.isEmpty() ) {
+//           tempDecls = decls;
+//           break;
+//         }
+//       }
     }
   } else { //Create a new trace, so template-parameters can be resolved globally
     scopeContext->findDeclarationsInternal( allIdentifiers, scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext(), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );

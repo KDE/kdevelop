@@ -151,13 +151,13 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
-        KDevelop::ImportTrace inclusion = m_includedFrom.data()->importTrace(t);
+/*        KDevelop::ImportTrace inclusion = m_includedFrom.data()->importTrace(t);
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
           FOREACH_ARRAY(KDevelop::ImportTraceItem s, inclusion)
             inclusionPath << KUrl(s.ctx->url().str());
-        }
+        }*/
       }
     }
   }else if( m_item.pathNumber == -1 && m_includedFrom )
@@ -171,13 +171,13 @@ QWidget* IncludeFileData::expandingWidget() const {
     {
       if( t->imports( m_includedFrom.data(), m_includedFrom->range().end ) )
       {
-        KDevelop::ImportTrace inclusion = t->importTrace(m_includedFrom.data());
+/*        KDevelop::ImportTrace inclusion = t->importTrace(m_includedFrom.data());
 
         if( inclusionPath.isEmpty() || inclusionPath.count() > inclusion.count() ) {
           inclusionPath.clear();
           FOREACH_ARRAY(KDevelop::ImportTraceItem s, inclusion)
             inclusionPath << KUrl(s.ctx->url().str());
-        }
+        }*/
       }
     }
   }
@@ -218,7 +218,7 @@ QString IncludeFileData::htmlDescription() const
     {
       if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
       {
-        QString ret = i18n("Included through") + " ";
+/*        QString ret = i18n("Included through") + " ";
         KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
         if(!inclusion.isEmpty()) {
           for(int a = 0; a < inclusion.size(); ++a) {
@@ -232,7 +232,7 @@ QString IncludeFileData::htmlDescription() const
             }
           }
           return ret;
-        }
+        }*/
       }
     }
     }else{
