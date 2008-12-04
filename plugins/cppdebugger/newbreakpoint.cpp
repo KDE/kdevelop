@@ -38,9 +38,7 @@ namespace GDBDebugger
 
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
                              GDBController* controller, kind_t kind)
-: TreeItem(model, parent), id_(-1), enabled_(true), 
-  controller_(controller), deleted_(false), hitCount_(0), kind_(kind),
-  pending_(false), pleaseEnterLocation_(false)
+: KDevelop::INewBreakpoint(model, parent, kind), controller_(controller)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
@@ -48,37 +46,14 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
                              GDBController* controller,
                              const KConfigGroup& config)
-: TreeItem(model, parent), id_(-1), enabled_(true), 
-  controller_(controller), deleted_(false), hitCount_(0),
-  pending_(false), pleaseEnterLocation_(false)
+: KDevelop::INewBreakpoint(model, parent, config), controller_(controller)
 {
-    QString kindString = config.readEntry("kind", "");
-    int i;
-    for (i = 0; i < last_breakpoint_kind; ++i)
-        if (string_kinds[i] == kindString)
-        {
-            kind_ = (kind_t)i;
-            break;
-        }
-    /* FIXME: maybe, should silently ignore this breakpoint.  */
-    Q_ASSERT(i < last_breakpoint_kind);
-    enabled_ = config.readEntry("enabled", false);
-
-    QString location = config.readEntry("location", "");
-    QString condition = config.readEntry("condition", "");
-
-    dirty_.insert(location_column);
-
-    setData(QVector<QString>() << "" << "" << "" << location << condition);
 }
 
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller)
-: TreeItem(model, parent), id_(-1), enabled_(true), 
-  controller_(controller), deleted_(false), hitCount_(0), 
-  kind_(code_breakpoint), pending_(false), pleaseEnterLocation_(true)
+: KDevelop::INewBreakpoint(model, parent), controller_(controller)
 {   
-    setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
 
 void NewBreakpoint::update(const GDBMI::Value &b)
@@ -173,128 +148,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
 #endif        
 }
 
-void NewBreakpoint::setColumn(int index, const QVariant& value)
-{
-    if (index == enable_column)
-    {
-        enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
-    }
-
-    /* Helper breakpoint becomes a real breakpoint only if user types
-       some real location.  */
-    if (pleaseEnterLocation_ && value.toString().isEmpty())
-        return;
-
-    if (index == location_column || index == condition_column)
-    {
-        itemData[index] = value;
-        if (pleaseEnterLocation_)
-        {
-            pleaseEnterLocation_ = false;
-            static_cast<Breakpoints*>(parentItem)->createHelperBreakpoint();
-        }
-    }
-
-    dirty_.insert(index);
-    errors_.remove(index);
-    reportChange();
-    sendToGDBMaybe();
-}
-
-void NewBreakpoint::markOut()
-{
-    id_ = -1;
-    dirty_.insert(location_column);
-    dirty_.insert(condition_column);
-}
-
-QVariant NewBreakpoint::data(int column, int role) const
-{
-    if (pleaseEnterLocation_)
-    {
-        if (column != location_column)
-        {
-            if (role == Qt::DisplayRole)
-                return QString();
-            else
-                return QVariant();
-        }
-        
-        if (role == Qt::DisplayRole)
-            return i18n("Double-click to create new code breakpoint");
-        if (role == Qt::ForegroundRole)
-            // FIXME: returning hardcoded gray is bad,
-            // but we don't have access to any widget, or pallette
-            // thereof, at this point.
-            return QColor(128, 128, 128);
-        if (role == Qt::EditRole)
-            return QString();
-    }
-
-    if (column == enable_column)
-    {
-        if (role == Qt::CheckStateRole)
-            return enabled_ ? Qt::Checked : Qt::Unchecked;
-        else if (role == Qt::DisplayRole)
-            return "";
-        else
-            return QVariant();
-    }
-
-    if (column == state_column)
-    {
-        if (role == Qt::DecorationRole)
-        {
-            if (dirty_.empty())
-            {
-                if (pending_)
-                    return KIcon("help-contents");            
-                return KIcon("dialog-apply");
-            }
-            else
-                return KIcon("system-switch-user");
-        }
-        else if (role == Qt::DisplayRole)
-            return "";
-        else
-            return QVariant();
-    }
-
-    if (column == type_column && role == Qt::DisplayRole)
-    {
-        return string_kinds[kind_];
-    }
-
-    if (role == Qt::DecorationRole)
-    {
-        if ((column == location_column && errors_.contains(location_column))
-            || (column == condition_column && errors_.contains(condition_column)))
-        {
-            /* FIXME: does this leak? Is this efficient? */
-            return KIcon("dialog-warning");
-        }
-        return QVariant();
-    }
-
-    if (column == location_column && role == Qt::DisplayRole
-        && !address_.isEmpty())
-        return QString("%1 (%2)").arg(itemData[location_column].toString())
-            .arg(address_);
-
-    return TreeItem::data(column, role);
-}
-
-void NewBreakpoint::setDeleted()
-{
-    deleted_ = true;
-}
-
-int NewBreakpoint::hitCount() const
-{
-    return hitCount_;
-}
-
-void NewBreakpoint::sendToGDBMaybe()
+void NewBreakpoint::sendMaybe()
 {
     if (pleaseEnterLocation_)
         return;
@@ -386,7 +240,7 @@ void NewBreakpoint::handleDeleted(const GDBMI::ResultRecord &v)
     else
     {
         id_ = -1;
-        sendToGDBMaybe();
+        sendMaybe();
     }
 }
 
@@ -397,8 +251,8 @@ void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
         errors_.insert(location_column);
         dirty_.remove(location_column);
         reportChange();        
-        emit static_cast<Breakpoints*>(parentItem)
-            ->error(this, r["msg"].literal(), location_column);
+        static_cast<Breakpoints*>(parentItem)
+            ->errorEmit(this, r["msg"].literal(), location_column);
     }
     else
     {
@@ -412,7 +266,7 @@ void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
             id_ = r["wpt"]["number"].toInt();
         }
         reportChange();
-        sendToGDBMaybe();
+        sendMaybe();
     }
 }
 
@@ -423,7 +277,7 @@ void NewBreakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
     // breakpoint itself cannot be inserted in the target.
     dirty_.remove(enable_column);
     reportChange();
-    sendToGDBMaybe();
+    sendMaybe();
 }
 
 void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
@@ -433,8 +287,8 @@ void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
         errors_.insert(condition_column);
         dirty_.remove(condition_column);
         reportChange();
-        emit static_cast<Breakpoints*>(parentItem)
-            ->error(this, r["msg"].literal(), condition_column);
+        static_cast<Breakpoints*>(parentItem)
+            ->errorEmit(this, r["msg"].literal(), condition_column);
     }
     else
     {
@@ -442,7 +296,7 @@ void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
            Presumably, it means that the condition is always what we want.  */
         dirty_.remove(condition_column);
         reportChange();
-        sendToGDBMaybe();
+        sendMaybe();
     }
 }
 
@@ -453,8 +307,8 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
         errors_.insert(location_column);
         dirty_.remove(location_column);
         reportChange();
-        emit static_cast<Breakpoints*>(parentItem)
-            ->error(this, r["msg"].literal(), location_column);
+        static_cast<Breakpoints*>(parentItem)
+            ->errorEmit(this, r["msg"].literal(), location_column);
     }
     else
     {
@@ -472,22 +326,6 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
                 opt + QString("*%1").arg(address_),
                 this, &NewBreakpoint::handleInserted, true));
     }
-}
-
-void NewBreakpoint::setLocation(const QString& location)
-{
-    itemData[location_column] = location;
-    dirty_.insert(location_column);
-    reportChange();
-    sendToGDBMaybe();
-}
-
-void NewBreakpoint::save(KConfigGroup& config)
-{
-    config.writeEntry("kind", string_kinds[kind_]);
-    config.writeEntry("enabled", enabled_);
-    config.writeEntry("location", itemData[location_column]);
-    config.writeEntry("condition", itemData[condition_column]);
 }
 
 }

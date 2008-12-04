@@ -360,7 +360,7 @@ namespace GDBDebugger
         }
 
     private:
-        void edit(NewBreakpoint *n)
+        void edit(KDevelop::INewBreakpoint *n)
         {
             QModelIndex index = controller_->breakpoints()
                 ->indexForItem(n, NewBreakpoint::location_column);
@@ -414,7 +414,7 @@ namespace GDBDebugger
                that is added in GDB outside kdevelop.  In this case we'll
                first try to find the breakpoint, and fail, and only then
                update the breakpoint table and notice the new one.  */
-            NewBreakpoint *b = controller_->breakpoints()->breakpointsItem()
+            KDevelop::INewBreakpoint *b = controller_->breakpoints()->breakpointsItem()
                 ->breakpointById(id);
             if (b)
             {

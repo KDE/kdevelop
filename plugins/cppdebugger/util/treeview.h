@@ -4,10 +4,10 @@
 
 #include <QTreeView>
 
+class TreeModel;
+
 namespace GDBDebugger
 {
-    class TreeModel;
-
     class AsyncTreeView : public QTreeView
     {
         Q_OBJECT

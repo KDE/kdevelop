@@ -9,8 +9,6 @@
 
 #include <iostream>
 
-namespace GDBDebugger {
-
 class TreeModel;
 
 class TreeItem: public QObject
@@ -89,7 +87,5 @@ protected:
     TreeItem *ellipsis_;
     bool expanded_;
 };
-
-}
 
 #endif

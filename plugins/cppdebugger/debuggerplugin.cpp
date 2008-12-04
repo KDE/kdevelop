@@ -124,6 +124,7 @@ public:
      work, but they don't need any toolbar.  So, suppress toolbar action.  */
   virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
   {
+      Q_UNUSED(viewWidget);
       return QList<QAction*>();
   }
   

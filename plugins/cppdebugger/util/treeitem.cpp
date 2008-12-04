@@ -7,8 +7,6 @@
 
 #include "kdebug.h"
 
-using namespace GDBDebugger;
-
 TreeItem::TreeItem(TreeModel* model, TreeItem *parent)
 : model_(model), more_(false), ellipsis_(0), expanded_(false)
 {

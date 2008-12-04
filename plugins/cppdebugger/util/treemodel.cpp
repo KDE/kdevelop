@@ -8,8 +8,6 @@
 
 #include "kdebug.h"
 
-using namespace GDBDebugger;
-
 TreeModel::TreeModel(const QVector<QString>& headers,
                      QObject *parent)
   : QAbstractItemModel(parent), headers_(headers), root_(NULL)

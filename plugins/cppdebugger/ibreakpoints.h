@@ -19,46 +19,44 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef BREAKPOINTS_H
-#define BREAKPOINTS_H
+#ifndef IBREAKPOINTS_H
+#define IBREAKPOINTS_H
 
-#include "ibreakpoints.h"
+#include "util/treeitem.h"
+#include "ibreakpointcontroller.h"
 
 class QModelIndex;
 
-namespace GDBMI { class ResultRecord; }
-
-namespace GDBDebugger
+namespace KDevelop
 {
-class GDBController;
-class NewBreakpoint;
-
-class Breakpoints : public KDevelop::IBreakpoints
+class INewBreakpoint;
+class IBreakpointController;
+    
+class IBreakpoints : public TreeItem
 {
     Q_OBJECT
 public:
-    Breakpoints(KDevelop::IBreakpointController *model, GDBController *controller);
+    IBreakpoints(IBreakpointController *model);
 
-    void sendToGDB();
     void markOut();
 
-    void update();
-    void fetchMoreChildren() {}
-    virtual void createHelperBreakpoint();
+    void remove(const QModelIndex &index);
+    virtual void update() =0;
     
-    KDevelop::INewBreakpoint* addCodeBreakpoint();
-    KDevelop::INewBreakpoint* addWatchpoint();
-    KDevelop::INewBreakpoint* addWatchpoint(const QString& expression);
-    KDevelop::INewBreakpoint* addReadWatchpoint();
+    virtual INewBreakpoint* addCodeBreakpoint()=0;
+    virtual INewBreakpoint* addWatchpoint()=0;
+    virtual INewBreakpoint* addWatchpoint(const QString& expression)=0;
+    virtual INewBreakpoint* addReadWatchpoint()=0;
+    virtual void createHelperBreakpoint()=0;
+    INewBreakpoint *breakpointById(int id);
+
+    void errorEmit(INewBreakpoint *b, const QString& message, int column) { emit error(b, message, column); }
+Q_SIGNALS:
+    void error(INewBreakpoint *b, const QString& message, int column);
 
 public slots:
-    void load();
-
-private:
-
-    void handleBreakpointList(const GDBMI::ResultRecord &r);
-
-    GDBController *controller_;
+    void save();
+    virtual void load()=0;
 };
 
 }

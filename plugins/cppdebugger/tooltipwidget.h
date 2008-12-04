@@ -12,10 +12,11 @@ class QItemSelectionModel;
 class QString;
 class QResizeEvent;
 
+class TreeModel;
+class TreeItem;
+
 namespace GDBDebugger
 {
-    class TreeModel;
-    class TreeItem;
     class GDBController;
     class Variable;
 

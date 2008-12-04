@@ -7,8 +7,6 @@
 #include <QVector>
 #include <QString>
 
-namespace GDBDebugger {
-
 class TreeItem;
 
 class TreeModel : public QAbstractItemModel
@@ -54,7 +52,5 @@ private:
     TreeItem *root_;
     bool editable_;
 };
-
-}
 
 #endif

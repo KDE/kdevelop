@@ -29,11 +29,11 @@
 #include "gdbglobal.h"
 #include "util/treeitem.h"
 
+class TreeModel;
+
 namespace GDBDebugger
 {
 class GDBController;
-class TreeItem;
-class TreeModel;
 
 class Thread : public TreeItem
 {
