@@ -811,7 +811,11 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  Q_ASSERT(!sdDUChainPrivate->m_referenceCounts.contains(context));
+  if(sdDUChainPrivate->m_referenceCounts.contains(context)) {
+  //This happens during shutdown, since everything is unloaded
+  kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
+  sdDUChainPrivate->m_referenceCounts.remove(context);
+  }
   
   uint index = context->ownIndex();
 
