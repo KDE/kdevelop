@@ -47,6 +47,7 @@ public:
     m_language = rhs.m_language;
     m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
     m_ownIndex = rhs.m_ownIndex;
+    m_importsCache = rhs.m_importsCache;
   }
   ~TopDUContextData() {
     freeAppendedLists();
@@ -61,6 +62,9 @@ public:
   IndexedString m_url;
   IndexedString m_language;
   uint m_ownIndex;
+  
+  ///If this is not empty, it means that the cache is used instead of the implicit structure.
+  TopDUContext::IndexedRecursiveImports m_importsCache;
 
   ///Is used to count up the used declarations while building uses
   uint m_currentUsedDeclarationIndex;
@@ -69,6 +73,10 @@ public:
   ///Maps a declarationIndex to a DeclarationId, which is used when the entry in m_usedDeclaration is zero.
   APPENDED_LIST_FIRST(TopDUContextData, DeclarationId, m_usedDeclarationIds);
   END_APPENDED_LISTS(TopDUContextData, m_usedDeclarationIds);
+  
+  private:
+  void updateImportCacheRecursion(IndexedTopDUContext currentContext);
+  friend class TopDUContext;
 };
 
 }

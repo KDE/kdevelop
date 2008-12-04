@@ -151,6 +151,10 @@ class StorableSet : public Conversion {
       insertIndex(Conversion::toIndex(t));
     }
     
+    bool isEmpty() const {
+        return m_setIndex == 0;
+    }
+    
     uint count() const {
         return set().count();
     }

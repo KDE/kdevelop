@@ -703,19 +703,25 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
 
      Checker checker(flags, dataType, position, type());
 
-     if(!m_dynamicData->m_hasLocalDeclarationsHash) {
+     if(m_dynamicData->m_hasLocalDeclarationsHash) {
        //Use a special hash that contains all declarations visible in this context
-      DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-      while(it) {
-        Declaration* declaration = *it;
-        if(declaration->indexedIdentifier() == indexedIdentifier) {
-          Declaration* checked = checker.check(declaration);
-          if(checked)
-              ret.append(checked);
+      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
+      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
+
+      for( ; it != end && it.key() == identifier; ++it ) {
+        Declaration* declaration = (*it).data();
+
+        if( !declaration ) {
+          //This should never happen, but let's see
+          kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
+          continue;
         }
-        ++it;
+
+        Declaration* checked = checker.check(declaration);
+        if(checked)
+            ret.append(checked);
       }
-     }else if(d_func()->m_inSymbolTable) {
+    }else if(d_func()->m_inSymbolTable) {
        //This context is in the symbol table, use the symbol-table to speed up the search
        QualifiedIdentifier id(scopeIdentifier(true) + identifier);
        
@@ -734,25 +740,19 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
            }
          }
        }
-     }else{
+     }else {
        //Iterate through all declarations
-      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
-      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
-
-      for( ; it != end && it.key() == identifier; ++it ) {
-        Declaration* declaration = (*it).data();
-
-        if( !declaration ) {
-          //This should never happen, but let's see
-          kDebug(9505) << "DUContext::findLocalDeclarationsInternal: Invalid declaration in local-declaration-hash";
-          continue;
+      DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+      while(it) {
+        Declaration* declaration = *it;
+        if(declaration->indexedIdentifier() == indexedIdentifier) {
+          Declaration* checked = checker.check(declaration);
+          if(checked)
+              ret.append(checked);
         }
-
-        Declaration* checked = checker.check(declaration);
-        if(checked)
-            ret.append(checked);
+        ++it;
       }
-    }
+     }
   }
 }
 

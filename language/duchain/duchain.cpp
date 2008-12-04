@@ -391,12 +391,14 @@ public:
         chain->setParsingEnvironmentFile(loadInformation(chain->url(), chain->ownIndex()));
 
         l.unlock();
-        //Also load all the imported chains, so they are in the symbol table and the import-structure is built
-        foreach(const DUContext::Import &import, chain->DUContext::importedParentContexts()) {
-          if(!loaded.contains(import.topContextIndex())) {
-            loadChain(import.topContextIndex(), loaded);
+        if(!chain->usingImportsCache()) {
+          //Eventually also load all the imported chains, so the import-structure is built
+          foreach(const DUContext::Import &import, chain->DUContext::importedParentContexts()) {
+            if(!loaded.contains(import.topContextIndex())) {
+              loadChain(import.topContextIndex(), loaded);
+            }
           }
-        }
+         }
         chain->rebuildDynamicImportStructure();
 
         chain->setInDuChain(true);
@@ -697,7 +699,6 @@ public:
   }
   
 private:
-  void addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current);
 
   template<class Entry>
   bool listContains(const Entry entry, const Entry* list, uint listSize) {
@@ -760,14 +761,6 @@ private:
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
 };
 
-void DUChainPrivate::addRecursiveImports(QSet<TopDUContext*>& contexts, TopDUContext* current) {
-  if(contexts.contains(current))
-    return;
-  contexts.insert(current);
-  for(RecursiveImports::const_iterator it = current->recursiveImports().constBegin(); it != current->recursiveImports().constEnd(); ++it)
-    addRecursiveImports(contexts, const_cast<TopDUContext*>(it.key()));
-}
-
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
 
 
@@ -825,6 +818,8 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
+  Q_ASSERT(!sdDUChainPrivate->m_referenceCounts.contains(context));
+  
   uint index = context->ownIndex();
 
 //   kDebug(9505) << "duchain: removing document" << context->url().str();
@@ -841,7 +836,7 @@ void DUChain::removeDocumentChain( TopDUContext* context )
     if(!context->isOnDisk()) {
       removeFromEnvironmentManager(context);
     }else if(!sdDUChainPrivate->m_cleanupDisabled) {
-      context->m_dynamicData->store();
+//       context->m_dynamicData->store();
     }
 
     context->deleteSelf();
@@ -1227,6 +1222,7 @@ uint DUChain::newTopContextIndex() {
 }
 
 void DUChain::refCountUp(TopDUContext* top) {
+  DUChainReadLocker l(lock());
   if(!sdDUChainPrivate->m_referenceCounts.contains(top))
     sdDUChainPrivate->m_referenceCounts.insert(top, 1);
   else
@@ -1234,6 +1230,7 @@ void DUChain::refCountUp(TopDUContext* top) {
 }
 
 void DUChain::refCountDown(TopDUContext* top) {
+  DUChainReadLocker l(lock());
   if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
     kWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
     return;

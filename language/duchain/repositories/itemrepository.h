@@ -1677,7 +1677,7 @@ class ItemRepository : public AbstractItemRepository {
     ThisLocker lock(&m_mutex);
     if(m_file) {
       if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite )) {
-        kWarning() << "cannot re-open repository file for storing";
+        kFatal() << "cannot re-open repository file for storing";
         return;
       }
       

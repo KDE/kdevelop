@@ -40,7 +40,7 @@ namespace KDevelop
   class DeclarationChecker;
   class TopDUContext;
 
-  struct RecursiveImportRepository {
+  struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportRepository {
     static Utils::BasicSetRepository* repository();
   };
   
@@ -121,6 +121,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     
     bool operator<(const IndexedTopDUContext& rhs) const {
       return m_index < rhs.m_index;
+    }
+    
+    bool isValid() const {
+      return m_index && !isDummy();
     }
     
     uint index() const {
@@ -285,8 +289,11 @@ public:
   void clearProblems();
 
   /**
-   * Determine if this chain imports another chain.
-   *
+   * Determine if this chain imports another chain recursively.
+   * 
+   * This uses the imports-cache for speedup if it is available, thus it is not necessarily 100% correct
+   * if the cache is not up-to-date.
+   * 
    * \note you must be holding a read but not a write chain lock when you access this function.
    */
   virtual bool imports(const DUContext* origin, const SimpleCursor& position) const;
@@ -296,10 +303,10 @@ public:
    * The positions in the returned trace may be invalid.
    * This is more efficient then the version below, because the trace doesn't need to be copied
    * */
-  void importTrace(const TopDUContext* target, ImportTrace& store) const;
+//   void importTrace(const TopDUContext* target, ImportTrace& store) const;
 
   ///More convenient version of the above
-  ImportTrace importTrace(const TopDUContext* target) const;
+//   ImportTrace importTrace(const TopDUContext* target) const;
 
   enum {
     Identity = 4
@@ -385,15 +392,6 @@ public:
   
   typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportRepository, true> IndexedRecursiveImports;
   
-  ///@todo Create a cache of recursive imports that is stored to disk, so we don't need to load all imports when loading a file
-  ///A cached set of all top-contexts that are recursively imported into this one. It is updated when updateRecursiveImports() is called,
-  ///when it is first used after an import was removed/added.
-//   RecursiveImportsIterator recursiveImportsCache();
-  
-  ///Updates the recursive imports cache. This needs to be called whenever the top-context or one of its imports has been updated.
-  ///The cache is automatically cleared when an import is added/removed
-//   void updateRecursiveImports();
-  
   virtual QVector<Import> importedParentContexts() const;
   
   virtual QVector<DUContext*> importers() const;
@@ -421,7 +419,26 @@ public:
     CacheData* d;
   };
   
+  ///Returns the set of all recursively imported top-contexts. If import-caching is used, this returns the cached set.
+  ///The list also contains this context itself. This set is used to determine declaration-visibility from within this top-context.
+  const IndexedRecursiveImports& recursiveImportIndices() const;
+
+  /**
+   * Updates the cache of recursive imports. When you call this, from that moment on the set returned by recursiveImportIndices() is fixed, until
+   * you call it again to update them. If your language has a very complex often-changing import-structure, 
+   * like for example in the case of C++, it is recommended to call this during while parsing, instead of using
+   * the expensive builtin implicit mechanism.
+   * Note that if you use caching, you _must_ call this before you see any visibility-effect after adding imports.
+   *
+   * Using import-caching has another big advantage: A top-context can be loaded without loading all its imports.
+   * 
+   * Note: This is relatively expensive since it requires loading all imported contexts.
+   * 
+   * When this is called, the top-context must already be registered in the duchain.
+   */
+  void updateImportsCache();
   
+  bool usingImportsCache() const;
 
   virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
 protected:
@@ -440,13 +457,6 @@ protected:
 protected:
 
   virtual ~TopDUContext();
-private:
-  ///Returns a set of all recursively imported top-contexts. Each imported top-context is mapped to the distance, and the direct
-  ///import through which the top-context is imported.
-  RecursiveImports recursiveImports() const;
-  ///Returns the indices of all recursively imported top-contexts
-  ///The list also contains this context itself
-  const IndexedRecursiveImports& recursiveImportIndices() const;
   
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
   //Must be called after all imported top-contexts were loaded into the du-chain

@@ -206,11 +206,15 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
 
     TopDUContextDynamicData& target(*ret->m_dynamicData);
     
+//     kDebug() << "loaded" << ret->url().str() << ret->ownIndex() << "import-count:" << ret->importedParentContexts().size() << ret->d_func()->m_importedContextsSize();
+    
     target.m_data.clear();
     target.m_dataLoaded = false;
     target.m_onDisk = true;
     ret->rebuildDynamicData(0, topContextIndex);
     target.m_topContextData.append(qMakePair(topContextData, (uint)0));
+    
+//     kDebug() << "loaded" << ret->url().str() << ret->ownIndex() << "import-count:" << ret->importedParentContexts().size() << ret->d_func()->m_importedContextsSize();
     
     return ret;
   }else{
@@ -224,6 +228,8 @@ bool TopDUContextDynamicData::isOnDisk() const {
 }
 
 void TopDUContextDynamicData::store() {
+//   kDebug() << "storing" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
+  
   if(m_onDisk) {
     //Check if something has changed. If nothing has changed, don't store to disk.
     bool someThingChanged = false;
@@ -352,6 +358,7 @@ void TopDUContextDynamicData::store() {
   }else{
     kWarning() << "Cannot open top-context for writing";
   }
+//   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }
 
 uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary) {
