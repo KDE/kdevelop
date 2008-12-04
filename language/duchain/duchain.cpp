@@ -1225,7 +1225,7 @@ void DUChain::refCountUp(TopDUContext* top) {
 void DUChain::refCountDown(TopDUContext* top) {
   DUChainReadLocker l(lock());
   if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
-    kWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
+    //kWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
     return;
   }
   --sdDUChainPrivate->m_referenceCounts[top];
