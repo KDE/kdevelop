@@ -105,6 +105,7 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier scopeIdentifier(bool x0=false) const { return wrapped->scopeIdentifier(x0); }
 		Q_SCRIPTABLE bool equalScopeIdentifier(const KDevelop::DUContext* x0) const { return wrapped->equalScopeIdentifier(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier localScopeIdentifier() const { return wrapped->localScopeIdentifier(); }
+		Q_SCRIPTABLE KDevelop::IndexedQualifiedIdentifier indexedLocalScopeIdentifier() const { return wrapped->indexedLocalScopeIdentifier(); }
 		Q_SCRIPTABLE void setLocalScopeIdentifier(const KDevelop::QualifiedIdentifier& x0) { wrapped->setLocalScopeIdentifier(x0); }
 		Q_SCRIPTABLE bool inSymbolTable() const { return wrapped->inSymbolTable(); }
 		Q_SCRIPTABLE void setInSymbolTable(bool x0) { wrapped->setInSymbolTable(x0); }

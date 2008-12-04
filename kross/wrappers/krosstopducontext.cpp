@@ -9,6 +9,18 @@
 #include <language/interfaces/iproblem.h>
 #include <language/editor/simplecursor.h>
 
+class KrossKDevelopRecursiveImportRepository : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopRecursiveImportRepository(KDevelop::RecursiveImportRepository* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::RecursiveImportRepository"); }
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE Utils::BasicSetRepository* repository() { return wrapped->repository(); }
+	private:
+		KDevelop::RecursiveImportRepository* wrapped;
+};
+
 class KrossKDevelopReferencedTopDUContext : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
@@ -38,6 +50,7 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedTopDUContext& x0) const { return wrapped->operator<(x0); }
+		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE unsigned int index() const { return wrapped->index(); }
 		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
 		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
@@ -46,6 +59,19 @@ class KrossKDevelopIndexedTopDUContext : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 	private:
 		KDevelop::IndexedTopDUContext* wrapped;
+};
+
+class KrossKDevelopIndexedTopDUContextIndexConversion : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopIndexedTopDUContextIndexConversion(KDevelop::IndexedTopDUContextIndexConversion* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedTopDUContextIndexConversion"); }
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE unsigned int toIndex(const KDevelop::IndexedTopDUContext& x0) { return wrapped->toIndex(x0); }
+		Q_SCRIPTABLE KDevelop::IndexedTopDUContext toItem(unsigned int x0) { return wrapped->toItem(x0); }
+	private:
+		KDevelop::IndexedTopDUContextIndexConversion* wrapped;
 };
 
 class KrossKDevelopIndexedTopDUContextEmbeddedTreeHandler : public QObject, public Kross::WrapperInterface
@@ -97,8 +123,6 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void addProblem(const KSharedPtr< KDevelop::Problem >& x0) { wrapped->addProblem(x0); }
 		Q_SCRIPTABLE void clearProblems() { wrapped->clearProblems(); }
 		Q_SCRIPTABLE bool imports(const KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1) const { return wrapped->imports(x0, x1); }
-		Q_SCRIPTABLE void importTrace(const KDevelop::TopDUContext* x0, KDevelop::ImportTrace& x1) const { wrapped->importTrace(x0, x1); }
-		Q_SCRIPTABLE KDevelop::ImportTrace importTrace(const KDevelop::TopDUContext* x0) const { return wrapped->importTrace(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Features features() const { return wrapped->features(); }
 		Q_SCRIPTABLE void setFeatures(KDevelop::TopDUContext::Features x0) { wrapped->setFeatures(x0); }
 		Q_SCRIPTABLE int indexForUsedDeclaration(KDevelop::Declaration* x0, bool x1=true) { return wrapped->indexForUsedDeclaration(x0, x1); }
@@ -117,6 +141,9 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
 		Q_SCRIPTABLE QList< KDevelop::DUContext* > loadedImporters() const { return wrapped->loadedImporters(); }
 		Q_SCRIPTABLE KDevelop::SimpleCursor importPosition(const KDevelop::DUContext* x0) const { return wrapped->importPosition(x0); }
+		Q_SCRIPTABLE Utils::StorableSet< KDevelop::IndexedTopDUContext, KDevelop::IndexedTopDUContextIndexConversion, KDevelop::RecursiveImportRepository, true, Utils::DummyLocker > recursiveImportIndices() const { return wrapped->recursiveImportIndices(); }
+		Q_SCRIPTABLE void updateImportsCache() { wrapped->updateImportsCache(); }
+		Q_SCRIPTABLE bool usingImportsCache() const { return wrapped->usingImportsCache(); }
 		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 >& x0, const KDevelop::SimpleCursor& x1, const TypePtr< KDevelop::AbstractType >& x2, KDevVarLengthArray< KDevelop::Declaration*, 40 >& x3, const KDevelop::TopDUContext* x4, QFlags< KDevelop::DUContext::SearchFlag > x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
 	private:
 		KDevelop::TopDUContext* wrapped;
@@ -174,6 +201,18 @@ bool b_KDevelopIndexedTopDUContextEmbeddedTreeHandler=krosstopducontext_register
 QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type){ return _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(type); }
 QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(const KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type) { return _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler((void*) type); }
 
+QVariant _kDevelopIndexedTopDUContextIndexConversionHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::IndexedTopDUContextIndexConversion* t=static_cast<KDevelop::IndexedTopDUContextIndexConversion*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::IndexedTopDUContextIndexConversion*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopIndexedTopDUContextIndexConversion(t, 0));
+}
+bool b_KDevelopIndexedTopDUContextIndexConversion1=krosstopducontext_registerHandler("IndexedTopDUContextIndexConversion*", _kDevelopIndexedTopDUContextIndexConversionHandler);
+bool b_KDevelopIndexedTopDUContextIndexConversion=krosstopducontext_registerHandler("KDevelop::IndexedTopDUContextIndexConversion*", _kDevelopIndexedTopDUContextIndexConversionHandler);
+QVariant kDevelopIndexedTopDUContextIndexConversionHandler(KDevelop::IndexedTopDUContextIndexConversion* type){ return _kDevelopIndexedTopDUContextIndexConversionHandler(type); }
+QVariant kDevelopIndexedTopDUContextIndexConversionHandler(const KDevelop::IndexedTopDUContextIndexConversion* type) { return _kDevelopIndexedTopDUContextIndexConversionHandler((void*) type); }
+
 QVariant _kDevelopIndexedTopDUContextHandler(void* type)
 {
 	if(!type) return QVariant();
@@ -197,6 +236,18 @@ bool b_KDevelopReferencedTopDUContext1=krosstopducontext_registerHandler("Refere
 bool b_KDevelopReferencedTopDUContext=krosstopducontext_registerHandler("KDevelop::ReferencedTopDUContext*", _kDevelopReferencedTopDUContextHandler);
 QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type){ return _kDevelopReferencedTopDUContextHandler(type); }
 QVariant kDevelopReferencedTopDUContextHandler(const KDevelop::ReferencedTopDUContext* type) { return _kDevelopReferencedTopDUContextHandler((void*) type); }
+
+QVariant _kDevelopRecursiveImportRepositoryHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::RecursiveImportRepository* t=static_cast<KDevelop::RecursiveImportRepository*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::RecursiveImportRepository*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopRecursiveImportRepository(t, 0));
+}
+bool b_KDevelopRecursiveImportRepository1=krosstopducontext_registerHandler("RecursiveImportRepository*", _kDevelopRecursiveImportRepositoryHandler);
+bool b_KDevelopRecursiveImportRepository=krosstopducontext_registerHandler("KDevelop::RecursiveImportRepository*", _kDevelopRecursiveImportRepositoryHandler);
+QVariant kDevelopRecursiveImportRepositoryHandler(KDevelop::RecursiveImportRepository* type){ return _kDevelopRecursiveImportRepositoryHandler(type); }
+QVariant kDevelopRecursiveImportRepositoryHandler(const KDevelop::RecursiveImportRepository* type) { return _kDevelopRecursiveImportRepositoryHandler((void*) type); }
 
 }
 #include "krosstopducontext.moc"
