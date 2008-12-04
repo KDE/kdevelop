@@ -660,6 +660,16 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
   return arrayToList(ret);
 }
 
+bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* context) {
+  if(childContext == context)
+    return true;
+  
+  if(childContext->parentContext())
+    return contextIsChildOrEqual(childContext->parentContext(), context);
+  else
+    return false;
+}
+
 void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
   IndexedIdentifier indexedIdentifier(identifier);
@@ -721,7 +731,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
         if(checked)
             ret.append(checked);
       }
-    }else if(d_func()->m_inSymbolTable) {
+    }else if(d_func()->m_inSymbolTable && !this->localScopeIdentifier().isEmpty() && !identifier.isEmpty()) {
        //This context is in the symbol table, use the symbol-table to speed up the search
        QualifiedIdentifier id(scopeIdentifier(true) + identifier);
        
@@ -731,9 +741,10 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
        const IndexedDeclaration* declarations;
        PersistentSymbolTable::self().declarations(id, count, declarations);
        for(uint a = 0; a < count; ++a) {
+         ///@todo Eventually do efficient iteration-free filtering
          if(declarations[a].topContextIndex() == top->ownIndex()) {
            Declaration* decl = LocalIndexedDeclaration(declarations[a].localIndex()).data(top);
-           if(decl) {
+           if(decl && contextIsChildOrEqual(decl->context(), this)) {
              Declaration* checked = checker.check(decl);
              if(checked)
                ret.append(checked);
