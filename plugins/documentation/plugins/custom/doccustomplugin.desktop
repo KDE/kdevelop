@@ -15,6 +15,7 @@ Comment[sv]=Dokumentationsinsticksmodul för alla typer av dokumentation
 Comment[tr]=Tüm belge tipleri için belgelendirme eklentisi
 Comment[uk]=Додаток для роботи з документацією всіх типів.
 Comment[x-test]=xxDocumentation plugin for all types of documentationxx
+Comment[zh_TW]=所有型態文件的外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdoccustomplugin

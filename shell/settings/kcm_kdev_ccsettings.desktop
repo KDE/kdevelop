@@ -22,6 +22,7 @@ Name[tr]=Kod Tamamlama
 Name[uk]=Автозавершення коду
 Name[x-test]=xxCode Completionxx
 Name[zh_CN]=代码补全
+Name[zh_TW]=程式碼補完
 Comment=Configure Code Completion settings
 Comment[el]=Ρυθμίσεις συμπλήρωσης κώδικα
 Comment[es]=Configurar las preferencias de la terminación de código
@@ -33,4 +34,5 @@ Comment[sv]=Anpassa inställningar av kodkomplettering
 Comment[tr]=Kod Tamamlama Ayarlarını Yapılandır
 Comment[uk]=Налаштування параметрів автозавершення коду
 Comment[x-test]=xxConfigure Code Completion settingsxx
+Comment[zh_TW]=設定程式碼補完
 

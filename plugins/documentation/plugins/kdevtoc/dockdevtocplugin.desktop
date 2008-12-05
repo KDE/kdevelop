@@ -15,6 +15,7 @@ Comment[sv]=Dokumentationsinsticksmodul för KDevelop innehållsförteckningsdok
 Comment[tr]=KDevelopTOC belgeleri için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі KDevelopTOC
 Comment[x-test]=xxDocumentation plugin for KDevelopTOC documentationxx
+Comment[zh_TW]=KDevelopTOC 文件的外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdockdevtocplugin

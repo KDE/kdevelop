@@ -23,6 +23,7 @@ Name[tr]=Kullanıcı Arayüzü
 Name[uk]=Інтерфейс користувача
 Name[x-test]=xxUser Interfacexx
 Name[zh_CN]=用户界面
+Name[zh_TW]=使用者介面
 Comment=Configure User Interface settings
 Comment[el]=Ρυθμίσεις περιβάλλοντος χρήστη
 Comment[es]=Configurar las preferencias de la interfaz de usuario
@@ -34,4 +35,5 @@ Comment[sv]=Anpassa inställningar av användargränssnitt
 Comment[tr]=Kullanıcı Arayüzü Ayarlarını Yapılandır
 Comment[uk]=Налаштування параметрів інтерфейсу користувача
 Comment[x-test]=xxConfigure User Interface settingsxx
+Comment[zh_TW]=設定使用者介面
 

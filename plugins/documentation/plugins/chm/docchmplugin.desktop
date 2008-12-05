@@ -15,6 +15,7 @@ Comment[sv]=Dokumentationsinsticksmodul för CHM-dokumentation
 Comment[tr]=CHM belgeleri için belgelendirme eklentisi
 Comment[uk]=Додаток для роботи з документацією CHM
 Comment[x-test]=xxDocumentation plugin for CHM documentationxx
+Comment[zh_TW]=CHM 的文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
 X-KDE-Library=libdocchmplugin

@@ -22,6 +22,7 @@ Name[tr]=Eklentiler
 Name[uk]=Додатки
 Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
+Name[zh_TW]=外掛程式
 Comment=Configure Plugins
 Comment[el]=Ρύθμιση προσθέτων
 Comment[es]=Configurar complementos
@@ -34,4 +35,5 @@ Comment[tr]=Eklentileri Yapılandır
 Comment[uk]=Налаштування додатків
 Comment[x-test]=xxConfigure Pluginsxx
 Comment[zh_CN]=配置插件
+Comment[zh_TW]=設定外掛程式
 

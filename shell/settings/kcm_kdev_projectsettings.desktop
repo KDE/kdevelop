@@ -22,6 +22,7 @@ Name[tr]=Proje
 Name[uk]=Проект
 Name[x-test]=xxProjectxx
 Name[zh_CN]=工程
+Name[zh_TW]=專案
 Comment=Configure Project settings
 Comment[el]=Ρυθμίσεις έργου
 Comment[es]=Configurar las preferencias del proyecto
@@ -34,4 +35,5 @@ Comment[tr]=Proje Ayarlarını Yapılandır
 Comment[uk]=Налаштування параметрів проекту
 Comment[x-test]=xxConfigure Project settingsxx
 Comment[zh_CN]=配置工程设置
+Comment[zh_TW]=設定專案
 

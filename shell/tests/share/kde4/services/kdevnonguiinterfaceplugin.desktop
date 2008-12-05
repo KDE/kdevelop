@@ -11,6 +11,7 @@ Comment[sv]=Insticksprogrammet är enbart avsett för enhetstest
 Comment[tr]=Bu eklenti tamamen birim-testleri içindir
 Comment[uk]=Цей додаток призначено лише для перевірки модулів
 Comment[x-test]=xxThis plugin is purely for unit-testxx
+Comment[zh_TW]=此外掛程式只是單純做測試
 Name=KDevNonGuiInterface
 Name[nds]=KDevKeenBöversiet
 Name[sv]=KDevelop icke grafiskt användargränssnitt

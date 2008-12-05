@@ -16,6 +16,7 @@ Comment[sv]=Dokumentationsinsticksmodul för Palmdoc-format
 Comment[tr]=Palmdoc biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Palmdoc
 Comment[x-test]=xxDocumentation plugin for Palmdoc formatxx
+Comment[zh_TW]=Palmdoc 格式的文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1
 X-KDE-Library=libdocpdbplugin

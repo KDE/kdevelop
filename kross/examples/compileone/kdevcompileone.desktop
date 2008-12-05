@@ -13,6 +13,7 @@ Comment[tr]=Bir dosya derle
 Comment[uk]=Компіляція файла
 Comment[x-test]=xxCompile a filexx
 Comment[zh_CN]=编译文件
+Comment[zh_TW]=編譯檔案
 Name=CompileOne
 Name[pt]=Compilação Única
 Name[pt_BR]=Compilação Única

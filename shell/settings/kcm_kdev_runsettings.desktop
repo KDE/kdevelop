@@ -22,6 +22,7 @@ Name[tr]=Çalıştırma Ayarları
 Name[uk]=Параметри запуску
 Name[x-test]=xxRun Settingsxx
 Name[zh_CN]=运行设置
+Name[zh_TW]=執行設定
 Comment=Configure Run Executable settings
 Comment[el]=Ρυθμίσεις εκτέλεσης του εκτελέσιμου
 Comment[es]=Configurar las preferencias del ejecución de programas
@@ -33,4 +34,5 @@ Comment[sv]=Anpassa inställningar för körning av program
 Comment[tr]=Çalıştırılabilir Dosya Çalıştırma Ayarlarını Yapılandır
 Comment[uk]=Налаштування параметрів інструменту «Виконати програму»
 Comment[x-test]=xxConfigure Run Executable settingsxx
+Comment[zh_TW]=設定如何執行
 

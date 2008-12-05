@@ -11,6 +11,7 @@ Comment[pt_BR]=Este 'plugin' mostra informações sobre o contexto actual da lin
 Comment[sv]=Insticksprogrammet visar information om nuvarande språksammanhang i en sidovy, och markerar relevanta deklarationer och användningar.
 Comment[uk]=За допомогою цього додатка можна переглянути у перегляді на бічній панелі відомості про поточний контекст мови, а також підсвітити пов’язані оголошення і випадки використання.
 Comment[x-test]=xxThis plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.xx
+Comment[zh_TW]=此外掛程式顯示關於目前語言的資訊，並將相關的宣告與使用突顯出來。
 Name=KDevContextBrowser
 Name[nds]=KDevKontextkieker
 Name[sv]=KDevelop-sammanhangsbläddrare

@@ -12,6 +12,7 @@ Comment[sv]=Inbäddningsbar HTML-hjälpvisning
 Comment[tr]=Gömülebilir HTMLHelp Görüntüleyici
 Comment[uk]=Придатний для вбудовування переглядач HTMLHelp
 Comment[x-test]=xxEmbeddable HTMLHelp Viewerxx
+Comment[zh_TW]=嵌入式 HTML 說明檢視器
 MimeType=application/chm
 Name=KChmPart
 Name[sv]=Kchm-delprogram

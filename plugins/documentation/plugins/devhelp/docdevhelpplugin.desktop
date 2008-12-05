@@ -14,6 +14,7 @@ Comment[sv]=Dokumentationsinsticksmodul för DevHelp-dokumentation
 Comment[tr]=DevHelp belgeleri için belgelendirme eklentisi
 Comment[uk]=Додаток для роботи з документацією DevHelp
 Comment[x-test]=xxDocumentation plugin for DevHelp documentationxx
+Comment[zh_TW]=DevHelp 文件的外掛程式
 Exec=blubb
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5
