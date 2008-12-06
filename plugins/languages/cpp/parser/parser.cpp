@@ -1724,6 +1724,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
 
         ADVANCE('>', ">");
 
+        // TODO add to AST
         if (session->token_stream->lookAhead() == Token_class)
           advance();
 
@@ -4517,7 +4518,7 @@ bool Parser::parseAssignmentExpression(ExpressionAST *&node)
   if(parseSignalSlotExpression(node))
     return true;
     //Parsed a signal/slot expression, fine
-  
+
   if (session->token_stream->lookAhead() == Token_throw && !parseThrowExpression(node))
     return false;
   else if (!parseConditionalExpression(node))
@@ -4560,24 +4561,24 @@ bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
     std::size_t start = session->token_stream->cursor();
     CHECK(Token___qt_sig_slot__);
     CHECK('(');
-    
+
     SignalSlotExpressionAST *ast = CreateNode<SignalSlotExpressionAST>(session->mempool);
     parseUnqualifiedName(ast->name, false);
     CHECK('(');
-    
+
     if(ast->name)
       parseTemplateArgumentList(ast->name->template_arguments);
-    
+
     CHECK(')');
-    
+
     if(ast->name)
       ast->name->end_token = _M_last_valid_token+1;
-    
+
     CHECK(')');
 
     UPDATE_POS(ast, start, _M_last_valid_token+1);
     node = ast;
-    
+
     return true;
   }else{
     return false;

@@ -26,6 +26,7 @@ set(kdevcppparser_LIB_SRCS
     type_compiler.cpp
     commentparser.cpp
     commentformatter.cpp
+    codegenerator.cpp
 )
 
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION

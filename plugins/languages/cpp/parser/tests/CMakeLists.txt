@@ -14,6 +14,15 @@ target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} $
 
 ########### next target ###############
 
+set(generatortest_SRCS test_generator.cpp)
+
+
+kde4_add_unit_test(generatortest ${generatortest_SRCS})
+target_link_libraries(generatortest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdev4cpprpp kdev4cppparser)
+
+
+########### next target ###############
+
 set(pooltest_SRCS test_pool.cpp)
 
 

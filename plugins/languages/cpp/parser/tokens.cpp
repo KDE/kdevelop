@@ -126,6 +126,111 @@ static char const * const _S_token_names[] = {
   "xor_eq"
 };
 
+static char const * const _S_token_texts[] = {
+  "K_DCOP",
+  "Q_OBJECT",
+  "__attribute__",
+  "__typeof",
+  "&&",
+  "&=",
+  ">",
+  "asm",
+  "==",
+  "auto",
+  "&",
+  "|",
+  "bool",
+  "break",
+  "case",
+  "catch",
+  "char",
+  "char_literal",
+  "class",
+  "comment",
+  "~",
+  "concat",
+  "const",
+  "const_cast",
+  "continue",
+  "--",
+  "default",
+  "delete",
+  "do",
+  "double",
+  "dynamic_cast",
+  "...",
+  "else",
+  "emit",
+  "enum",
+  "==",
+  "explicit",
+  "export",
+  "extern",
+  "false",
+  "float",
+  "for",
+  "friend",
+  ">=",
+  "goto",
+  "identifier",
+  "if",
+  "++",
+  "inline",
+  "int",
+  "k_dcop",
+  "k_dcop_signals",
+  "<=",
+  "long",
+  "mutable",
+  "namespace",
+  "new",
+  "!",
+  "!=",
+  "number_literal",
+  "operator",
+  "||",
+  "|=",
+  "preproc",
+  "private",
+  "protected",
+  "ptrmem",
+  "public",
+  "register",
+  "reinterpret_cast",
+  "return",
+  "scope",
+  "shift",
+  "short",
+  "signals",
+  "signed",
+  "sizeof",
+  "slots",
+  "static",
+  "static_cast",
+  "string_literal",
+  "struct",
+  "switch",
+  "template",
+  "this",
+  "throw",
+  "true",
+  "try",
+  "typedef",
+  "typeid",
+  "typename",
+  "union",
+  "unsigned",
+  "using",
+  "virtual",
+  "void",
+  "volatile",
+  "wchar_t",
+  "while",
+  "whitespaces",
+  "^",
+  "^="
+};
+
 static char _S_printable[][2] = {
   { char(32), '\0' },
   { char(33), '\0' },
@@ -244,3 +349,16 @@ char const *token_name(int token)
   return 0;
 }
 
+char const *token_text(int token)
+{
+  if (token >= 32 && token <= 127)
+    {
+      return _S_printable[token - 32];
+    }
+  else if (token >= 1000)
+    {
+      return _S_token_texts[token - 1000];
+    }
+
+  return 0;
+}

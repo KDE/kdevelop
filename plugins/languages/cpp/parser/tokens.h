@@ -138,5 +138,8 @@ enum TOKEN_KIND
 /**@return human-readable name of the token.*/
 KDEVCPPPARSER_EXPORT char const *token_name(int token);
 
+/**@return text corresponding to the token.*/
+KDEVCPPPARSER_EXPORT char const *token_text(int token);
+
 #endif
 
