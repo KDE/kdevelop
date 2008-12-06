@@ -92,7 +92,7 @@ void ProjectControllerTest::cleanup()
 
 #define WAIT_FOR_OPEN_SIGNAL \
 {\
-    bool gotSignal = kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 20000);\
+    bool gotSignal = kWaitForSignal(m_projCtrl, SIGNAL(projectOpened(KDevelop::IProject*)), 30000);\
     QVERIFY2(gotSignal, "Timeout while waiting for opened signal");\
 } void(0)
 
