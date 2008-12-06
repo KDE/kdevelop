@@ -17,6 +17,7 @@ Name=KDevMercurial
 Name[sv]=KDevelop-Mercurial
 Name[x-test]=xxKDevMercurialxx
 GenericName=Mercurial frontend
+GenericName[de]=Graphische für Mercurial
 GenericName[el]=Σύστημα περιβάλλοντος Mercurial
 GenericName[es]=Interfaz para Mercurial
 GenericName[gl]=Interface para Mercurial

@@ -17,6 +17,7 @@ Name=KDevGit
 Name[sv]=KDevelop-Git
 Name[x-test]=xxKDevGitxx
 GenericName=Git frontend
+GenericName[de]=Oberfläche für Git
 GenericName[el]=Σύστημα περιβάλλοντος Git
 GenericName[es]=Interfaz para Git
 GenericName[gl]=Interface para Git

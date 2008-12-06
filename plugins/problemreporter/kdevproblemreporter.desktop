@@ -17,6 +17,7 @@ Name[nds]=KDevProblemsöök
 Name[sv]=KDevelop-problemrapportör
 Name[x-test]=xxKDevProblemReporterxx
 GenericName=Class Browser
+GenericName[de]=Klassen-Browser
 GenericName[el]=Περιηγητής κλάσεων
 GenericName[es]=Navegador de clases
 GenericName[gl]=Navegador de clases

@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project
+Name[de]=Projekt
 Name[el]=Έργο
 Name[es]=Proyecto
 Name[gl]=Proxecto

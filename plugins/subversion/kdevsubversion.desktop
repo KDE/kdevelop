@@ -17,6 +17,7 @@ Name=KDevSubversion
 Name[sv]=KDevelop-Subversion
 Name[x-test]=xxKDevSubversionxx
 GenericName=Subversion frontend
+GenericName[de]=Oberfläche für Subversion
 GenericName[el]=Σύστημα περιβάλλοντος subversion
 GenericName[es]=Interfaz para Subversion
 GenericName[gl]=Interface para Subversion

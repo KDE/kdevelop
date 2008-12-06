@@ -17,6 +17,7 @@ Name[nds]=KDev-Klassenkieker
 Name[sv]=KDevelop-klassbläddrare
 Name[x-test]=xxKDevClassBrowserxx
 GenericName=Class Browser
+GenericName[de]=Klassen-Browser
 GenericName[el]=Περιηγητής κλάσεων
 GenericName[es]=Navegador de clases
 GenericName[gl]=Navegador de clases

@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Environment
+Name[de]=Umgebung
 Name[el]=Περιβάλλον
 Name[es]=Entorno
 Name[gl]=Entorno

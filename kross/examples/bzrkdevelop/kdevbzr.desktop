@@ -17,6 +17,7 @@ Name=KDevBzr
 Name[sv]=KDevelop-Bzr
 Name[x-test]=xxKDevBzrxx
 GenericName=Bzr frontend
+GenericName[de]=Oberfläche für Bzr
 GenericName[el]=Σύστημα περιβάλλοντος Bzr
 GenericName[es]=Interfaz para Bzr
 GenericName[gl]=Interface para Bzr

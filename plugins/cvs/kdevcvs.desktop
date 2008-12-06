@@ -18,6 +18,7 @@ Name[nds]=KDevCVS
 Name[sv]=KDevelop-CVS
 Name[x-test]=xxKDevCvsxx
 GenericName=CVS frontend
+GenericName[de]=Graphische Oberfläche für CVS
 GenericName[el]=Σύστημα περιβάλλοντος CVS
 GenericName[es]=Interfaz para CVS
 GenericName[gl]=Interface para CVS

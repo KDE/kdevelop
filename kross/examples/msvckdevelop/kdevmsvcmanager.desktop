@@ -15,6 +15,7 @@ Name[x-test]=xxKDevelop MSVC Managerxx
 Name[zh_CN]=KDevelop MSVC 管理器
 Name[zh_TW]=KDevelop MSVC 管理員
 Comment=Imports MSVC projects
+Comment[de]=Importiert MSVC-Projekte
 Comment[el]=Εισαγωγή έργων MSVC
 Comment[es]=Importa proyectos de MSVC
 Comment[gl]=Importa proxectos de MSVC

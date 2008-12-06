@@ -18,6 +18,7 @@ Name[nds]=KDevAllmeenVKS
 Name[sv]=KDevelop gemensam versionskontrollfunktion
 Name[x-test]=xxKDevVcsCommonxx
 GenericName=VcsCommon plugin
+GenericName[de]=VcsCommon-Modul
 GenericName[el]=Πρόσθετο VcsCommon
 GenericName[es]=Complemento VcsCommon
 GenericName[gl]=Extensión VcsCommon

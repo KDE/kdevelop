@@ -18,6 +18,7 @@ Name[nds]=KDevDateipleger
 Name[sv]=KDevelop-filhanterare
 Name[x-test]=xxKDevFileManagerxx
 GenericName=File Manager
+GenericName[de]=Dateimanager
 GenericName[el]=Διαχειριστής αρχείων
 GenericName[es]=Gestor de archivos
 GenericName[gl]=Xestor de ficheiros

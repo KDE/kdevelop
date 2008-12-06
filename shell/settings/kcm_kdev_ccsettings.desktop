@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Code Completion
+Name[de]=Codevervollständigung
 Name[el]=Συμπλήρωση κώδικα
 Name[es]=Terminación de código
 Name[gl]=Completado de código

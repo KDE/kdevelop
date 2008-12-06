@@ -17,6 +17,7 @@ Name=KDevBazaar
 Name[sv]=KDevelop-Bazaar
 Name[x-test]=xxKDevBazaarxx
 GenericName=Bazaar frontend
+GenericName[de]=Oberfläche für Bazaar
 GenericName[el]=Σύστημα περιβάλλοντος Bazaar
 GenericName[es]=Interfaz para Bazaar
 GenericName[gl]=Interface para Bazaar

@@ -17,6 +17,7 @@ Name[nds]=KDevKonsoleAnsicht
 Name[sv]=KDevelop-terminalvy
 Name[x-test]=xxKDevKonsoleViewxx
 GenericName=Embedded Konsole
+GenericName[de]=Eingebettete Konsole
 GenericName[el]=Ενσωματωμένη Konsole
 GenericName[es]=Consola empotrada
 GenericName[gl]=Konsole integrada

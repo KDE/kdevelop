@@ -17,6 +17,7 @@ Name[nds]=KDevKontextkieker
 Name[sv]=KDevelop-sammanhangsbläddrare
 Name[x-test]=xxKDevContextBrowserxx
 GenericName=ContextBrowser
+GenericName[de]=Kontext-Browser
 GenericName[el]=Περιηγητής περιεχομένου
 GenericName[gl]=Navegador de contextos
 GenericName[nds]=Kontextkieker
