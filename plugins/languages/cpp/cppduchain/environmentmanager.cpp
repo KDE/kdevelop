@@ -416,11 +416,14 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Utils::Set definedMacroNamesSet = d_func()->m_definedMacroNames.set();
     Utils::Set unDefinedMacroNamesSet = d_func()->m_unDefinedMacroNames.set();
     
+    std::set<uint> addUsedMacros;
+    
     for(ReferenceCountedMacroSet::Iterator it( file.d_func()->m_usedMacros.iterator() ); it; ++it) {
       const rpp::pp_macro& macro(it.ref());
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
-        d_func_dynamic()->m_usedMacros.insertIndex( it.index() );
+        addUsedMacros.insert(it.index());
     }
+    d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(addUsedMacros) );
   }
   
   ifDebug( Q_ASSERT(d_func()->m_usedMacroNames.set().count() == d_func()->m_usedMacros.set().count()) );
@@ -431,10 +434,15 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Utils::Set otherDefinedMacroNamesSet = file.d_func()->m_definedMacroNames.set();
     Utils::Set otherUnDefinedMacroNamesSet = file.d_func()->m_unDefinedMacroNames.set();
     //Since merged macros overrule already stored ones, first remove the ones of the same name.
+    
+    std::set<uint> removeDefinedMacros;
+    
     for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it ) {
       const rpp::pp_macro& macro(it.ref());
       if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
-        d_func_dynamic()->m_definedMacros.remove(macro);
+        removeDefinedMacros.insert(it.index());
+      
+      d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
     }
   }
 
