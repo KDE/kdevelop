@@ -42,7 +42,46 @@ private slots:
     QByteArray method("void test() { if (i == 0) { foo(); } else { foo2(); } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    dumper.dump(ast, lastSession->token_stream);
+    //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testFor()
+  {
+    QByteArray method("void test() { for (int i = 0; i < 4; ++i) { break; } }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testDo()
+  {
+    QByteArray method("void test() { do { foo(); } while (i < 0); }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testWhile()
+  {
+    QByteArray method("void test() { while (i & 3) { foo(); } }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    //dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);

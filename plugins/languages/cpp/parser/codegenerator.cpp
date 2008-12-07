@@ -591,13 +591,13 @@ void CodeGenerator::visitPtrOperator(PtrOperatorAST* node)
 void CodeGenerator::visitPtrToMember(PtrToMemberAST* node)
 {
   // TODO fix AST
-  print(Token_scope);
+  printToken(Token_scope);
   m_output << "*";
 }
 
 void CodeGenerator::visitReturnStatement(ReturnStatementAST* node)
 {
-  print(Token_return);
+  printToken(Token_return);
 
   DefaultVisitor::visitReturnStatement(node);
 
@@ -607,10 +607,11 @@ void CodeGenerator::visitReturnStatement(ReturnStatementAST* node)
 void CodeGenerator::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   visit(node->type_specifier);
+  m_output << " ";
   commaPrintNodes(this, node->init_declarators);
   visit(node->win_decl_specifiers);
 
-  m_output << ";";
+  //m_output << ";";
 }
 
 void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
@@ -632,7 +633,7 @@ void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 
 void CodeGenerator::visitSizeofExpression(SizeofExpressionAST* node)
 {
-  print(Token_sizeof);
+  printToken(Token_sizeof);
 
   if (node->type_id) {
     m_output << "(";
@@ -657,7 +658,7 @@ void CodeGenerator::visitSubscriptExpression(SubscriptExpressionAST* node)
 
 void CodeGenerator::visitSwitchStatement(SwitchStatementAST* node)
 {
-  print(Token_switch);
+  printToken(Token_switch);
 
   m_output << "(";
   visit(node->condition);
@@ -674,7 +675,7 @@ void CodeGenerator::visitTemplateArgument(TemplateArgumentAST* node)
 void CodeGenerator::visitTemplateDeclaration(TemplateDeclarationAST* node)
 {
   if (node->exported) {
-    print(Token_export);
+    printToken(Token_export);
   }
 
   if (node->template_parameters) {
@@ -693,7 +694,7 @@ void CodeGenerator::visitTemplateParameter(TemplateParameterAST* node)
 
 void CodeGenerator::visitThrowExpression(ThrowExpressionAST* node)
 {
-  print(Token_throw);
+  printToken(Token_throw);
 
   DefaultVisitor::visitThrowExpression(node);
 }
@@ -705,14 +706,14 @@ void CodeGenerator::visitTranslationUnit(TranslationUnitAST* node)
 
 void CodeGenerator::visitTryBlockStatement(TryBlockStatementAST* node)
 {
-  print(Token_try);
+  printToken(Token_try);
   visit(node->try_block);
   visitNodes(this, node->catch_blocks);
 }
 
 void CodeGenerator::visitCatchStatement(CatchStatementAST* node)
 {
-  print(Token_catch);
+  printToken(Token_catch);
 
   m_output << "(";
   visit(node->condition);
@@ -755,7 +756,7 @@ void CodeGenerator::visitTypeParameter(TypeParameterAST* node)
     commaPrintNodes(this, node->template_parameters);
     m_output << ">";
 
-    // TODO when AST ready: if (node->template_class_token) print(Token_class);
+    // TODO when AST ready: if (node->template_class_token) printToken(Token_class);
   }
 
   if (node->template_name) {
@@ -766,7 +767,7 @@ void CodeGenerator::visitTypeParameter(TypeParameterAST* node)
 
 void CodeGenerator::visitTypedef(TypedefAST* node)
 {
-  print( Token_typedef );
+  printToken( Token_typedef );
 
   visit(node->type_specifier);
 
@@ -798,7 +799,7 @@ void CodeGenerator::visitUnqualifiedName(UnqualifiedNameAST* node)
 
 void CodeGenerator::visitUsing(UsingAST* node)
 {
-  print(Token_using);
+  printToken(Token_using);
   print(node->type_name);
 
   DefaultVisitor::visitUsing(node);
@@ -808,7 +809,7 @@ void CodeGenerator::visitUsing(UsingAST* node)
 
 void CodeGenerator::visitUsingDirective(UsingDirectiveAST* node)
 {
-  print(Token_namespace);
+  printToken(Token_namespace);
 
   DefaultVisitor::visitUsingDirective(node);
 
@@ -817,7 +818,7 @@ void CodeGenerator::visitUsingDirective(UsingDirectiveAST* node)
 
 void CodeGenerator::visitWhileStatement(WhileStatementAST* node)
 {
-  print(Token_while);
+  printToken(Token_while);
   m_output << "(";
   visit(node->condition);
   m_output << ")";
