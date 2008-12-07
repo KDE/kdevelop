@@ -414,6 +414,8 @@ void CodeGenerator::visitJumpStatement(JumpStatementAST* node)
 
 void CodeGenerator::visitLabeledStatement(LabeledStatementAST* node)
 {
+  print(node->label, static_cast<bool>(node->expression));
+
   visit(node->expression);
 
   m_output << ":";

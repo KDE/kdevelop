@@ -89,6 +89,19 @@ private slots:
     kDebug() << cg.output();
   }
 
+  void testSwitch()
+  {
+    QByteArray method("void test() { switch (i) { case 1: break; case 2: return; default: goto foo; } foo: return; }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
 private:
   ParseSession* lastSession;
 

@@ -517,6 +517,7 @@ struct LabeledStatementAST: public StatementAST
 {
   DECLARE_AST_NODE(LabeledStatement)
 
+  std::size_t label;
   //The constant label expression
   ExpressionAST *expression;
   StatementAST* statement;
