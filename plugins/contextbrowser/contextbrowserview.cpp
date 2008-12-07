@@ -135,7 +135,7 @@ void ContextBrowserView::navigateAccept() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->accept();
 }
 
@@ -143,7 +143,7 @@ void ContextBrowserView::navigateBack() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->back();
 }
 
@@ -151,7 +151,7 @@ void ContextBrowserView::navigateDown() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->down();
 }
 
@@ -159,7 +159,7 @@ void ContextBrowserView::navigateLeft() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->previous();
 }
 
@@ -167,7 +167,7 @@ void ContextBrowserView::navigateRight() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->next();
 }
 
@@ -175,7 +175,7 @@ void ContextBrowserView::navigateUp() {
     if(!useNavigationFromView(sender()))
         return;
     
-    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget))
+    if(AbstractNavigationWidget* widget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data()))
         widget->up();
 }
 
@@ -507,7 +507,7 @@ void ContextBrowserView::resetWidget()
 void ContextBrowserView::declarationMenu() {
     DUChainReadLocker lock(DUChain::lock());
     
-    AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget);
+    AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
     if(navigationWidget) {
         AbstractDeclarationNavigationContext* navigationContext = dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
         if(navigationContext && navigationContext->declaration().data()) {
@@ -531,6 +531,9 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
 
     m_declarationCtrl = new DeclarationController();
     m_contextCtrl = new ContextController(this);
+    
+    connect(m_contextCtrl->browseManager(), SIGNAL(startDelayedBrowsing(KTextEditor::View*)), this, SIGNAL(startDelayedBrowsing(KTextEditor::View*)));
+    connect(m_contextCtrl->browseManager(), SIGNAL(stopDelayedBrowsing()), this, SIGNAL(stopDelayedBrowsing()));
     
     m_allowLockedUpdate = false;
     
@@ -593,7 +596,7 @@ bool ContextBrowserView::event(QEvent* event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
     
     if(hasFocus() && keyEvent) {
-        AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget);
+        AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
         if(navigationWidget && event->type() == QEvent::KeyPress) {
             int key = keyEvent->key();
             if(key == Qt::Key_Left)
@@ -710,6 +713,10 @@ void ContextBrowserView::allowLockedUpdate() {
     m_allowLockedUpdate = true;
 }
 
+void ContextBrowserView::setNavigationWidget(QWidget* widget) {
+    updateMainWidget(widget);
+}
+
 void ContextBrowserView::setContext(KDevelop::DUContext* context) {
     if(!context)
         return;
@@ -737,5 +744,10 @@ void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
         updateMainWidget(widget);
     }
 }
+
+BrowseManager* ContextController::browseManager() const {
+    return m_browseManager;
+}
+
 
 #include "contextbrowserview.moc"

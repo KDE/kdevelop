@@ -71,6 +71,9 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void nextContextShortcut();
 
   private slots:
+    void startDelayedBrowsing(KTextEditor::View* view);
+    void stopDelayedBrowsing();
+    
     void previousUseShortcut();
     void nextUseShortcut();
 
@@ -114,6 +117,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void updateBrowserWidgetFor(KTextEditor::View* view);
 
   private:
+    void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
     QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
     QSet<KTextEditor::View*> m_updateViews;
@@ -132,6 +136,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     KUrl m_mouseHoverDocument;
     SimpleCursor m_mouseHoverCursor;
     ContextBrowserViewFactory* m_viewFactory;
+    QPointer<QWidget> m_currentToolTip;
+    IndexedDeclaration m_currentToolTipDeclaration;
 };
 
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);

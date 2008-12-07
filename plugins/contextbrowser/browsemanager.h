@@ -69,9 +69,14 @@ class BrowseManager : public QObject {
     Q_SIGNALS:
         //Emitted whenever the shift-key has been pressed + released without any other key in between
         void shiftKeyTriggered();
+        //Emitted when browsing was started using the magic-modifier
+        void startDelayedBrowsing(KTextEditor::View* view);
+        void stopDelayedBrowsing();
     public slots:
         ///Enabled/disables the browsing mode
         void setBrowsing(bool);
+    private slots:
+        void eventuallyStartDelayedBrowsing();
     private:
         void viewAdded(KTextEditor::View* view);
         class Watcher : public EditorViewWatcher {
@@ -90,10 +95,12 @@ class BrowseManager : public QObject {
         virtual bool eventFilter(QObject * watched, QEvent * event) ;
         ContextController* m_controller;
         bool m_browsing;
-        bool m_browsingByKey; //Whether the browsing was started because of a key
+        int m_browsingByKey; //Whether the browsing was started because of a key
         Watcher m_watcher;
         //Maps widgets to their previously set cursors
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
+        QTimer* m_delayedBrowsingTimer;
+        QPointer<KTextEditor::View> m_browingStartedInView;
 };
 
 #endif

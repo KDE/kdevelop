@@ -61,6 +61,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
 
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(m_browser);
+  layout->setMargin(0);
   setLayout(layout);
 
   connect( m_browser, SIGNAL(anchorClicked(const QUrl&)), this, SLOT(anchorClicked(const QUrl&)) );

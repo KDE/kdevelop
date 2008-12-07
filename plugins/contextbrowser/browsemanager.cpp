@@ -40,6 +40,7 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
+#include <qtimer.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -93,7 +94,17 @@ QList<KTextEditor::View*> EditorViewWatcher::allViews() {
     return m_views;
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(false) {
+void BrowseManager::eventuallyStartDelayedBrowsing() {
+    if(m_browsingByKey && m_browingStartedInView)
+        emit startDelayedBrowsing(m_browingStartedInView);
+}
+
+BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(0) {
+    m_delayedBrowsingTimer = new QTimer(this);
+    m_delayedBrowsingTimer->setSingleShot(true);
+    
+    connect(m_delayedBrowsingTimer, SIGNAL(timeout()), this, SLOT(eventuallyStartDelayedBrowsing()));
+    
     foreach(KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
 }
@@ -118,10 +129,22 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
+    const int magicModifier = Qt::Key_Alt;
     
     //Eventually start key-browsing
-    if(keyEvent && keyEvent->key() == browseKey && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
-        m_browsingByKey = true;
+    if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
+        m_browsingByKey = keyEvent->key();
+        
+        if(keyEvent->key() == magicModifier) {
+            if(dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) && dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive())
+            {
+                //Do nothing, completion is active.
+            }else{
+                m_delayedBrowsingTimer->start(300);
+                m_browingStartedInView = view;
+            }
+        }
+        
         if(!m_browsing)
             m_controller->browseButton()->setChecked(true);
         
@@ -130,11 +153,12 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     
     //Eventually stop key-browsing
-    if((keyEvent && keyEvent->key() == browseKey && m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) || 
+    if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) || 
        (focusEvent && focusEvent->lostFocus())) {
         if(!m_browsing)
             m_controller->browseButton()->setChecked(false);
-        m_browsingByKey = false;
+        m_browsingByKey = 0;
+        emit stopDelayedBrowsing();
     }
     
     if(!m_browsing && !m_browsingByKey) {

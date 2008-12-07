@@ -54,6 +54,8 @@
 #include "contextbrowserview.h"
 #include <language/duchain/uses.h>
 #include <language/duchain/specializationstore.h>
+#include <language/util/navigationtooltip.h>
+#include <language/duchain/navigation/abstractnavigationwidget.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -62,6 +64,14 @@ using KTextEditor::Attribute;
 using KTextEditor::SmartInterface;
 using KTextEditor::View;
 
+bool toolTipEnabled = true;
+
+static QWidget* masterWidget(QWidget* w) {
+  while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
+    w = qobject_cast<QWidget*>(w->parent());
+  return w;
+}
+
 class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 {
 public:
@@ -69,7 +79,10 @@ public:
 
     virtual QWidget* create(QWidget */*parent*/ = 0)
     {
-        return new ContextBrowserView(m_plugin);
+        ContextBrowserView* ret = new ContextBrowserView(m_plugin);
+        QObject::connect(ret, SIGNAL(startDelayedBrowsing(KTextEditor::View*)), m_plugin, SLOT(startDelayedBrowsing(KTextEditor::View*)));
+        QObject::connect(ret, SIGNAL(stopDelayedBrowsing()), m_plugin, SLOT(stopDelayedBrowsing()));
+        return ret;
     }
 
     virtual Qt::DockWidgetArea defaultPosition()
@@ -195,7 +208,71 @@ void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, 
     m_updateViews << view;
   }
   m_updateTimer->start(1); // triggers updateViews()
+  
+  if(toolTipEnabled)
+    showToolTip(view, cursor);
 }
+
+void ContextBrowserPlugin::stopDelayedBrowsing() {
+  if(m_currentToolTip)
+    delete m_currentToolTip;
+}
+
+void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
+  if(!m_currentToolTip) {
+    showToolTip(view, view->cursorPosition());
+  }
+}
+
+void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
+  KUrl viewUrl(view->document()->url());
+  QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+  
+  QWidget* navigationWidget = 0;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    foreach( ILanguage* language, languages) {
+      navigationWidget = language->languageSupport()->specialLanguageObjectNavigationWidget(viewUrl, SimpleCursor(position));
+      if(navigationWidget)
+        break;
+    }
+    
+    if(!navigationWidget) {
+      Declaration* decl = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(viewUrl, SimpleCursor(position)) );
+      
+      if(decl) {
+        if(m_currentToolTipDeclaration == IndexedDeclaration(decl) && m_currentToolTip)
+          return;
+        m_currentToolTipDeclaration = IndexedDeclaration(decl);
+        navigationWidget = decl->context()->createNavigationWidget(decl);
+      }
+    }
+  }
+
+  if(navigationWidget) {
+
+    foreach(ContextBrowserView* contextView, m_views)
+      if(masterWidget(contextView) == masterWidget(view)) {
+        if(contextView->isVisible()) {
+          //There is a context-browser view visible, we don't need a tooltip
+          delete navigationWidget;
+          return;
+        }
+        contextView->setNavigationWidget(navigationWidget);
+      }
+      
+    if(m_currentToolTip)
+      delete m_currentToolTip;
+    
+    KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
+    tooltip->resize( 580, 230 );
+    kDebug() << tooltip->size();
+    m_currentToolTip = tooltip;
+  }else{
+    kDebug() << "not showing tooltip, no navigation-widget";
+  }
+}
+
 
 void ContextBrowserPlugin::clearMouseHover() {
   m_mouseHoverCursor = SimpleCursor::invalid();
@@ -283,12 +360,6 @@ void ContextBrowserPlugin::changeHighlight( View* view, KDevelop::Declaration* d
   if( FunctionDefinition* def = FunctionDefinition::definition(decl) )
     if( def->smartRange() )
       changeHighlight( def->smartRange(), highlight, false, mouseHighlight );
-}
-
-static QWidget* masterWidget(QWidget* w) {
-  while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
-    w = qobject_cast<QWidget*>(w->parent());
-  return w;
 }
 
 bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& position, ILanguage*& pickedLanguage)

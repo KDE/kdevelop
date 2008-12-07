@@ -64,6 +64,12 @@ class ContextBrowserView : public QWidget {
 
         ///Returns the currently locked declaration, or invalid of none is locked atm.
         KDevelop::IndexedDeclaration lockedDeclaration() const;
+
+        void setNavigationWidget(QWidget* widget);
+        
+    Q_SIGNALS:
+        void startDelayedBrowsing(KTextEditor::View*);
+        void stopDelayedBrowsing();
         
     public Q_SLOTS:
         void navigateLeft();
@@ -97,7 +103,7 @@ class ContextBrowserView : public QWidget {
         QToolButton* m_declarationMenuButton;
         
         QHBoxLayout* m_buttons;
-        QWidget* m_navigationWidget;
+        QPointer<QWidget> m_navigationWidget;
         KDevelop::DeclarationId m_navigationWidgetDeclaration;
         bool m_allowLockedUpdate;
         KDevelop::IndexedTopDUContext m_lastUsedTopContext;
@@ -141,6 +147,9 @@ class ContextController : public QObject {
         void updateDeclarationListBox(KDevelop::DUContext* context);
         
         QWidget* focusBackWidget();
+        
+        BrowseManager* browseManager() const;
+        
     public Q_SLOTS:
         void historyNext();
         void historyPrevious();

@@ -24,6 +24,7 @@ install(TARGETS kdevplatformutil ${INSTALL_TARGETS_DEFAULT_ARGS} )
 ########### install files ###############
 
 install( FILES
+    activetooltip.h
     processlinemaker.h
     commandexecutor.h
     utilexport.h

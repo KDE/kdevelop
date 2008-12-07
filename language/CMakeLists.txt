@@ -98,6 +98,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/overridespage.cpp
 
     util/setrepository.cpp
+    util/navigationtooltip.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -158,6 +159,7 @@ install(FILES
 )
 
 install(FILES
+    util/navigationtooltip.h
     util/setrepository.h
     util/basicsetrepository.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util
