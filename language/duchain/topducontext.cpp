@@ -725,34 +725,38 @@ struct TopDUContext::DeclarationChecker {
 
 const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndices() const
 {
-  ENSURE_CAN_READ
+//   No lock-check for performance reasons
   QMutexLocker lock(&importStructureMutex);
   if(!d_func()->m_importsCache.isEmpty())
     return d_func()->m_importsCache;
   
-  Q_ASSERT(m_local->m_indexedRecursiveImports.contains(ownIndex()));
   return m_local->m_indexedRecursiveImports;
 }
 
-void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentContext) {
-  if(m_importsCache.contains(currentContext))
+void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited) {
+  if(visited.find(currentContext.index()) != visited.end())
     return;
+  Q_ASSERT(currentContext.index()); //The top-context must be in the repository when this is called
   if(!currentContext.data()) {
     kDebug() << "importing invalid context";
     return;
   }
-  m_importsCache.insert(currentContext);
+  visited.insert(currentContext.index());
   foreach(DUContext::Import import, currentContext.data()->importedParentContexts()) {
     IndexedTopDUContext next(import.topContextIndex());
     if(next.isValid())
-      updateImportCacheRecursion(next);
+      updateImportCacheRecursion(next, visited);
   }
 }
 
 
 void TopDUContext::updateImportsCache() {
-  d_func_dynamic()->m_importsCache = IndexedRecursiveImports();
-  d_func_dynamic()->updateImportCacheRecursion(this);
+  QMutexLocker lock(&importStructureMutex);
+  std::set<uint> visited;
+  updateImportCacheRecursion(this, visited);
+  Q_ASSERT(visited.find(ownIndex()) != visited.end());
+  d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository()->createSet(visited));
+  Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
 }
@@ -1299,8 +1303,6 @@ QVector<DUContext::Import> TopDUContext::importedParentContexts() const
 
 bool TopDUContext::imports(const DUContext * origin, const SimpleCursor& position) const
 {
-  ENSURE_CAN_READ
-
   return importsPrivate(origin, position);
 }
 

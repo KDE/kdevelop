@@ -191,7 +191,7 @@ class ExampleRequestItem {
   }
 };
 
-template<class Item, class ItemRequest, class DynamicData, bool fixedItemSize>
+template<class Item, class ItemRequest, class DynamicData, uint fixedItemSize>
 class Bucket {
   public:
     enum {
@@ -200,7 +200,7 @@ class Bucket {
     enum {
       ObjectMapSize = (ItemRepositoryBucketSize / ItemRequest::AverageSize) + 1,
       MaxFreeItemsForHide = 0, //When less than this count of free items in one buckets is reached, the bucket is removed from the global list of buckets with free items
-      MaxFreeSizeForHide = 0, //Only when the largest free size is smaller then this, the bucket is taken from the free list
+      MaxFreeSizeForHide = fixedItemSize ? fixedItemSize : 0, //Only when the largest free size is smaller then this, the bucket is taken from the free list
       MinFreeItemsForReuse = 10,//When this count of free items in one bucket is reached, consider re-assigning them to new requests
       MinFreeSizeForReuse = ItemRepositoryBucketSize/20 //When the largest free item is bigger then this, the bucket is automatically added to the free list
     };
@@ -1020,7 +1020,7 @@ struct ReferenceCounting {
 ///@param fixedItemSize When this is true, all inserted items must have the same size.
 ///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
 ///@param threadSafe Whether class access should be thread-safe
-template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, bool fixedItemSize = false, unsigned int targetBucketHashSize = 524288>
+template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288>
 class ItemRepository : public AbstractItemRepository {
 
   typedef Locker<threadSafe> ThisLocker;
@@ -1127,6 +1127,7 @@ class ItemRepository : public AbstractItemRepository {
       //Try finding an existing bucket with deleted space to store the data into
       for(uint a = 0; a < m_freeSpaceBucketsSize; ++a) {
         MyBucket* bucketPtr = bucketForIndex(m_freeSpaceBuckets[a]);
+        Q_ASSERT(bucketPtr->largestFreeSize());
 
         if(bucketPtr->canAllocateItem(size)) {
           //The item fits into the bucket.

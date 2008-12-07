@@ -221,7 +221,7 @@ void SetNodeData::updateHash(const SetNodeData* left, const SetNodeData* right) 
 }
 
 class SetNodeDataRequest;
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, true> SetDataRepository;
+typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, sizeof(SetNodeData)> SetDataRepository;
 
 struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
@@ -937,11 +937,15 @@ bool SetRepositoryAlgorithms::set_contains(const SetNodeData* node, Index index)
 
     if(node->contiguous())
       return true;
+    
+    const SetNodeData* leftNode = nodeFromIndex(node->leftNode);
 
-    if(index < getLeftNode(node)->end)
-      node = nodeFromIndex(node->leftNode);
-    else
-      node = nodeFromIndex(node->rightNode);
+    if(index < leftNode->end)
+      node = leftNode;
+    else {
+      const SetNodeData* rightNode = nodeFromIndex(node->rightNode);
+      node = rightNode;
+    }
   }
   
   return false;

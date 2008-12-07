@@ -75,7 +75,6 @@ public:
   END_APPENDED_LISTS(TopDUContextData, m_usedDeclarationIds);
   
   private:
-  void updateImportCacheRecursion(IndexedTopDUContext currentContext);
   friend class TopDUContext;
 };
 
