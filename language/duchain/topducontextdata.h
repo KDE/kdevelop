@@ -75,6 +75,7 @@ public:
   END_APPENDED_LISTS(TopDUContextData, m_usedDeclarationIds);
   
   private:
+  static void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited);
   friend class TopDUContext;
 };
 

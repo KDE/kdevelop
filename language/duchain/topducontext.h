@@ -63,27 +63,27 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferencedTopDUContext {
     
     ReferencedTopDUContext& operator=(const ReferencedTopDUContext& rhs);
     
-    TopDUContext* data() const {
+    inline TopDUContext* data() const {
       return m_topContext;
     }
     
-    operator TopDUContext*() const {
+    inline operator TopDUContext*() const {
       return m_topContext;
     }
     
-    bool operator==(const ReferencedTopDUContext& rhs) const {
+    inline bool operator==(const ReferencedTopDUContext& rhs) const {
       return m_topContext == rhs.m_topContext;
     }
     
-    bool operator!=(const ReferencedTopDUContext& rhs) const {
+    inline bool operator!=(const ReferencedTopDUContext& rhs) const {
       return m_topContext != rhs.m_topContext;
     }
     
-    TopDUContext* operator->() const {
+    inline TopDUContext* operator->() const {
       return m_topContext;
     }
     
-    uint hash() const {
+    inline uint hash() const {
       return (uint)(((quint64)m_topContext) * 37);
     }
     
@@ -477,6 +477,7 @@ protected:
   //Most of these classes need access to m_dynamicData
   friend class DUChain;
   friend class DUChainPrivate;
+  friend class TopDUContextData;
   friend class TopDUContextLocalPrivate;
   friend class TopDUContextDynamicData;
   friend class Declaration;

@@ -76,13 +76,13 @@ Utils::BasicSetRepository* RecursiveImportRepository::repository() {
 }
 
 struct DeclarationTopContextExtractor {
-  static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
+  inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
     return decl.indexedTopContext();
   }
 };
 
 struct DUContextTopContextExtractor {
-  static IndexedTopDUContext extract(const IndexedDUContext& ctx) {
+  inline static IndexedTopDUContext extract(const IndexedDUContext& ctx) {
     return ctx.indexedTopContext();
   }
 };
@@ -733,7 +733,7 @@ const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndice
   return m_local->m_indexedRecursiveImports;
 }
 
-void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited) {
+void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited) {
   if(visited.find(currentContext.index()) != visited.end())
     return;
   Q_ASSERT(currentContext.index()); //The top-context must be in the repository when this is called
@@ -742,7 +742,8 @@ void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uin
     return;
   }
   visited.insert(currentContext.index());
-  foreach(DUContext::Import import, currentContext.data()->importedParentContexts()) {
+  const TopDUContextData* currentData = currentContext.data()->topContext()->d_func();
+  FOREACH_FUNCTION(const DUContext::Import& import, currentData->m_importedContexts) {
     IndexedTopDUContext next(import.topContextIndex());
     if(next.isValid())
       updateImportCacheRecursion(next, visited);
@@ -753,7 +754,7 @@ void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uin
 void TopDUContext::updateImportsCache() {
   QMutexLocker lock(&importStructureMutex);
   std::set<uint> visited;
-  updateImportCacheRecursion(this, visited);
+  TopDUContextData::updateImportCacheRecursion(this, visited);
   Q_ASSERT(visited.find(ownIndex()) != visited.end());
   d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository()->createSet(visited));
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
