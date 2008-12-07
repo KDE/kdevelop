@@ -42,7 +42,7 @@ private slots:
     QByteArray method("void test() { if (i == 0) { foo(); } else { foo2(); } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
+    dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);
@@ -94,7 +94,20 @@ private slots:
     QByteArray method("void test() { switch (i) { case 1: break; case 2: return; default: goto foo; } foo: return; }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    dumper.dump(ast, lastSession->token_stream);
+    //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testClass()
+  {
+    QByteArray method("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    //dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);

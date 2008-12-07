@@ -114,7 +114,7 @@ protected:
 private:
   void outputToken(std::size_t tokenPosition);
 
-  void print(const ListNode<std::size_t>* tokenList);
+  void print(const ListNode<std::size_t>* tokenList, bool followingSpace = false);
   void print(std::size_t token, bool followingSpace = false);
   void printToken(int token, bool followingSpace = false);
 

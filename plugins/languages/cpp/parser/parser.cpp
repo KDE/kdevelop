@@ -3154,6 +3154,7 @@ bool Parser::parseLabeledStatement(StatementAST *&node)
                 return true;
               }
           }
+          break;
       }
 
     case Token_case:

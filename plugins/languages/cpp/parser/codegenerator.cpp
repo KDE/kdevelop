@@ -58,7 +58,7 @@ void CodeGenerator::outputToken(std::size_t tokenPosition)
   }
 }
 
-void CodeGenerator::print(const ListNode<std::size_t>* tokenList)
+void CodeGenerator::print(const ListNode<std::size_t>* tokenList, bool followingSpace)
 {
   if (!tokenList)
     return;
@@ -70,6 +70,9 @@ void CodeGenerator::print(const ListNode<std::size_t>* tokenList)
     if (first) first = false; else m_output << " ";
     it = it->next;
   } while (it != end);
+
+  if (followingSpace)
+    m_output << " ";
 }
 
 void CodeGenerator::print(std::size_t token, bool followingSpace)
@@ -149,7 +152,7 @@ void CodeGenerator::visitClassMemberAccess(ClassMemberAccessAST* node)
 
 void CodeGenerator::visitClassSpecifier(ClassSpecifierAST* node)
 {
-  print(node->kind, true);
+  print(node->class_key, true);
 
   visit(node->win_decl_specifiers);
   visit(node->name);
@@ -327,7 +330,7 @@ void CodeGenerator::visitForStatement(ForStatementAST* node)
   printToken(Token_for);
   m_output << "(";
   visit(node->init_statement);
-  m_output << ";";
+  //m_output << ";";
   visit(node->condition);
   m_output << ";";
   visit(node->expression);
@@ -608,12 +611,14 @@ void CodeGenerator::visitReturnStatement(ReturnStatementAST* node)
 
 void CodeGenerator::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
+  print(node->storage_specifiers, true);
+  print(node->function_specifiers, true);
   visit(node->type_specifier);
   m_output << " ";
   commaPrintNodes(this, node->init_declarators);
   visit(node->win_decl_specifiers);
 
-  //m_output << ";";
+  m_output << ";";
 }
 
 void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
