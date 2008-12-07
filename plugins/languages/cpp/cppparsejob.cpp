@@ -125,8 +125,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_parseJob = 0;
         //The preprocessor will call parseForeground() to preprocess & parse instantly
     }
-
-    kDebug( 9007 ) << "Created job" << this << "pp" << m_preprocessJob << "parse" << parseJob();
 }
 
 void CPPParseJob::setKeepDuchain(bool b) {
@@ -205,8 +203,10 @@ const KUrl::List& CPPParseJob::includePathUrls() const {
 }
 
 const QList<IndexedString>& CPPParseJob::includePaths() const {
+    //If a lock was held here, we would get deadlocks
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
+            Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
             m_waitForIncludePathsMutex.lock();
             qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
             ///@todo Make sure this doesn't create problems in corner cases

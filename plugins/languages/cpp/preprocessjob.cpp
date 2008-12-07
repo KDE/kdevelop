@@ -105,8 +105,6 @@ void PreprocessJob::run()
     if (checkAbort())
         return;
 
-    m_firstEnvironmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
-
     {
       KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
@@ -115,7 +113,6 @@ void PreprocessJob::run()
             m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
             IndexedString u = parentJob()->document();
             m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
-            m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
         }
     }
 
@@ -150,8 +147,21 @@ void PreprocessJob::run()
             localPath.setFileName(QString());
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
             Q_ASSERT(cppEnv);
-            bool needsUpdate = CppLanguageSupport::self()->needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, parentJob()->includePathUrls());
+            //When possible, we determine whether an update is needed without getting the include-paths, because that's very expensive
+            bool needsUpdate = cppEnv->needsUpdate();
+              if(!cppEnv->missingIncludeFiles().isEmpty()) {
+                for(Cpp::ReferenceCountedStringSet::Iterator it = cppEnv->missingIncludeFiles().iterator(); it; ++it)
+                  kDebug(9007) << updatingEnvironmentFile->url().str() << "has missing include:" << (*it).str();
+                
+                readLock.unlock();
+                KUrl::List includePaths = parentJob()->includePathUrls();
+                readLock.lock();
+                
+                needsUpdate = CppLanguageSupport::self()->needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, includePaths);
+                
+              }
             
+                  
             if(!needsUpdate) {
               parentJob()->setNeedsUpdate(false);
               return;
@@ -160,6 +170,11 @@ void PreprocessJob::run()
         }
     }
     
+    //We do this down here, so we eventually can prevent determining the include-paths if nothing needs to be updated
+    m_firstEnvironmentFile->setIncludePaths( parentJob()->masterJob()->includePaths() );
+    
+    if(m_secondEnvironmentFile)
+      m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
     
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
