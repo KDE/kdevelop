@@ -682,8 +682,10 @@ void CodeGenerator::visitTemplateArgument(TemplateArgumentAST* node)
 void CodeGenerator::visitTemplateDeclaration(TemplateDeclarationAST* node)
 {
   if (node->exported) {
-    printToken(Token_export);
+    printToken(Token_export, true);
   }
+
+  printToken(Token_template, true);
 
   if (node->template_parameters) {
     m_output << "< ";
@@ -749,7 +751,7 @@ void CodeGenerator::visitTypeIdentification(TypeIdentificationAST* node)
 
 void CodeGenerator::visitTypeParameter(TypeParameterAST* node)
 {
-  print(node->type);
+  print(node->type, true);
 
   visit(node->name);
 

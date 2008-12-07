@@ -42,7 +42,7 @@ private slots:
     QByteArray method("void test() { if (i == 0) { foo(); } else { foo2(); } }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    dumper.dump(ast, lastSession->token_stream);
+    //dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);
@@ -52,7 +52,7 @@ private slots:
 
   void testFor()
   {
-    QByteArray method("void test() { for (int i = 0; i < 4; ++i) { break; } }");
+    QByteArray method("void test() { for (int i = 0; i < 4; ++i) { break; } for (j; j < 4; ) {return;} }");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     //dumper.dump(ast, lastSession->token_stream);
@@ -104,10 +104,23 @@ private slots:
 
   void testClass()
   {
-    QByteArray method("struct A { int i; A() : i(5) { } virtual void test() = 0; };");
+    QByteArray method("struct A : public B, virtual private C { int i; A() : i(5) { } virtual void test() = 0; };");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
     //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testTemplateClass()
+  {
+    QByteArray method("template <typename B> struct A : private C { B i; A() : i(5) { } virtual void test() = 0; };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);
