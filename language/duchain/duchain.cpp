@@ -375,7 +375,17 @@ public:
     QMutexLocker l(&m_chainsMutex);
 
     if(m_chainsByIndex.find(index) == m_chainsByIndex.end()) {
-      Q_ASSERT(!m_loading.contains(index)); //When this asserts, a chain was requested that is already being loaded. Must not happen.
+      if(m_loading.contains(index)) {
+        //It's probably being loaded by another thread. So wait until the load is ready
+        while(m_loading.contains(index)) {
+          l.unlock();
+          kDebug() << "waiting for another thread to load index" << index;
+          usleep(50000);
+          l.relock();
+        }
+        loaded.insert(index);
+        return;
+      }
       m_loading.insert(index);
       loaded.insert(index);
       TopDUContext* chain = TopDUContextDynamicData::load(index);
