@@ -27,6 +27,8 @@
 
 namespace KDevelop
 {
+class TopDUContext;
+class Declaration;
 /**
  * Represents a position in a document where a specific declaration is used.
  *
@@ -47,6 +49,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Use
 {
   Use(const SimpleRange& range = SimpleRange::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
   }
+  
+  Declaration* usedDeclaration(TopDUContext* topContext);
 
   SimpleRange m_range;
   int m_declarationIndex;

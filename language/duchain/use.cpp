@@ -17,12 +17,17 @@
 */
 
 #include "use.h"
+#include "topducontext.h"
 
 
 using namespace KTextEditor;
 
 namespace KDevelop
 {
+
+KDevelop::Declaration* Use::usedDeclaration(KDevelop::TopDUContext* topContext) {
+  return topContext->usedDeclarationForIndex(m_declarationIndex);
+}
 
 }
 
