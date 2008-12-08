@@ -44,6 +44,7 @@ public:
     QWidget* extraFunctionsContainer() const;
 
     virtual void initializePage();
+    virtual void cleanupPage();
     virtual bool validatePage();
     virtual void fetchInheritance(const QString& inheritedObject);
     virtual void fetchInheritanceFromClass(KDevelop::Declaration* decl);

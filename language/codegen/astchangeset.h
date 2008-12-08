@@ -23,7 +23,10 @@
 
 namespace KDevelop {
 
+template <typename AstNode>
 class AstChangeSet;
+
+
 class AstChange;
 
 /**
@@ -39,7 +42,7 @@ class AstChange;
 template <typename AstNode>
 class AstNodeRef
 {
-    friend class AstChangeSet;
+    friend class AstChangeSet<AstNode>;
 
 public:
     /// Destructor.
@@ -62,8 +65,7 @@ public:
     {
     public:
         enum ChangeTypes {
-            ListInsert,
-            ListRemove,
+            ListRewrite,
             ListClear,
             ItemReplace,
             ItemMove
@@ -128,7 +130,7 @@ public:
 
 protected:
     /// Default constructor. \todo is this needed?
-    AstNodeRef(AstChangeSet* set)
+    AstNodeRef(AstChangeSet<AstNode>* set)
         : m_changeSet(set)
         , m_node(0)
         , m_nodeRef(0)
@@ -137,7 +139,7 @@ protected:
     }
 
     /// Constructor.  Either takes an existing \a node (\a newNode = false), or a newly created \a node (\a newNode = true)
-    AstNodeRef(AstChangeSet* set, AstNode* node, bool newNode)
+    AstNodeRef(AstChangeSet<AstNode>* set, AstNode* node, bool newNode)
         : m_changeSet(set)
         , m_node(node)
         , m_nodeRef(0)
@@ -146,7 +148,7 @@ protected:
     }
 
     /// Constructor.  Takes another node reference.
-    AstNodeRef(AstChangeSet* set, AstNodeRef* original)
+    AstNodeRef(AstChangeSet<AstNode>* set, AstNodeRef* original)
         : m_changeSet(set)
         , m_node(0)
         , m_nodeRef(original)
@@ -155,7 +157,7 @@ protected:
     }
 
 private:
-    AstChangeSet* m_changeSet;
+    AstChangeSet<AstNode>* m_changeSet;
     AstNode* m_node;
     AstNodeRef* m_nodeRef;
     bool m_newNode;
@@ -171,7 +173,7 @@ private:
  * \author Hamish Rodda <rodda@kde.org>
  */
 template <typename AstNode>
-class KDEVPLATFORMLANGUAGE_EXPORT AstChangeSet
+class AstChangeSet
 {
 public:
     /**
@@ -200,9 +202,9 @@ public:
      *
      * \returns the new node that has been registered.
      */
-    AstNodeRef* registerNewNode(AstNode* node)
+    AstNodeRef<AstNode>* registerNewNode(AstNode* node)
     {
-        AstNodeRef* newRef = new AstNodeRef(this, node, true);
+        AstNodeRef<AstNode>* newRef = new AstNodeRef<AstNode>(this, node, true);
         m_nodeRefs.append(newRef);
         return newRef;
     }
@@ -215,7 +217,7 @@ public:
      *
      * \returns the new node reference
      */
-    AstNodeRef* registerNewRef(AstNodeRef* ref)
+    AstNodeRef<AstNode>* registerNewRef(AstNodeRef<AstNode>* ref)
     {
         m_nodeRefs.append(ref);
         return ref;
@@ -228,16 +230,16 @@ public:
     *
     * \returns a copy of \a source, which you may modify directly.
     */
-    AstNodeRef* copyNode(AstNode* source)
+    AstNodeRef<AstNode>* copyNode(AstNode* source)
     {
-        AstNodeRef* newRef = new AstNodeRef(this, source, false);
+        AstNodeRef<AstNode>* newRef = new AstNodeRef<AstNode>(this, source, false);
         m_nodeRefs.append(newRef);
         return newRef;
     }
 
 private:
     const AstNode* m_topNode;
-    QList<AstNodeRef*> m_nodeRefs;
+    QList<AstNodeRef<AstNode>*> m_nodeRefs;
 };
 
 }

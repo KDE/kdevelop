@@ -45,6 +45,8 @@ public:
 
     Ui::OverridesDialog* overrides;
     QList<KDevelop::Declaration*> overrideSuperclasses;
+    QMultiHash<Identifier, KDevelop::Declaration*> overriddenFunctions;
+    QList<KDevelop::Declaration*> chosenOverrides;
     QVariantList selectedOverrides;
 };
 
@@ -79,7 +81,17 @@ void OverridesPage::initializePage()
     QWizardPage::initializePage();
 
     d->overrideSuperclasses.clear();
+    d->overriddenFunctions.clear();
     overrideTree()->clear();
+
+    d->chosenOverrides.clear();
+    kDebug() << selectedOverrides().count();
+    foreach (const QVariant& override, selectedOverrides()) {
+        IndexedDeclaration id = qvariant_cast<IndexedDeclaration>(override);
+        if (Declaration* decl = id.declaration()) {
+            d->chosenOverrides.append(decl);
+        }
+    }
 
     foreach (const QString& inherited, field("classInheritance").toStringList())
         fetchInheritance(inherited);
@@ -101,9 +113,14 @@ bool OverridesPage::validatePage()
         }
     }
 
-    kDebug() << "Found" << d->selectedOverrides.count() << "requested overrides.";
-
     return true;
+}
+
+void OverridesPage::cleanupPage()
+{
+    kDebug();
+
+    validatePage();
 }
 
 void OverridesPage::fetchInheritance(const QString& inheritedObject)
@@ -165,6 +182,15 @@ void OverridesPage::fetchInheritanceFromClass(KDevelop::Declaration* decl)
 
 void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration)
 {
+    if (d->overriddenFunctions.contains(childDeclaration->identifier())) {
+        foreach (Declaration* decl, d->overriddenFunctions.values(childDeclaration->identifier()))
+            if (decl->indexedType() == childDeclaration->indexedType())
+                // This signature is already shown somewhere else
+                return;
+    }
+
+    d->overriddenFunctions.insert(childDeclaration->identifier(), childDeclaration);
+
     QString accessModifier;
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(childDeclaration)) {
         switch (member->accessPolicy()) {
@@ -177,14 +203,14 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
                 break;
 
             case Declaration::Private:
-                // You can't override a private virtual in a superclass
+                accessModifier = i18n("Private");
                 return;
         }
     }
 
     QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
     overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
-    overrideItem->setCheckState( 0, Qt::Unchecked );
+    overrideItem->setCheckState( 0, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked );
     overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration));
     overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration)));
     overrideItem->setText(1, accessModifier);

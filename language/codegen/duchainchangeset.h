@@ -61,7 +61,7 @@ public:
     const QList<DUChainChange*>& changes() const;
 
     /// Rename this object, if applicable
-    DUChainChange* renameObject(const QualifiedIdentifier& newIdentifier);
+    void renameObject(const QualifiedIdentifier& newIdentifier);
     /// Change the access policy
     void setAccessPolicy(Declaration::AccessPolicy newPolicy);
 
@@ -70,7 +70,9 @@ public:
 
     void deleteDeclaration(Declaration* declaration);
     void insertDeclaration(Declaration* declaration, DUChainBase* afterObject);
+    void appendDeclaration(Declaration* declaration);
 
+    AbstractType::Ptr currentType() const;
     void changeType(AbstractType::Ptr newType);
 
     /**
@@ -151,7 +153,8 @@ public:
 /**
  * \short A set of changes to a DUChain.
  *
- * This class holds a set of all changes to a DU Chain.
+ * This class holds a set of all changes to a DU Chain, and provides an interface
+ * to convenience functions provided by the specific language support involved.
  *
  * \author Hamish Rodda <rodda@kde.org>
  */
@@ -174,18 +177,23 @@ public:
     /**
      * Create a new declaration to be managed by this change set.
      *
-     * \returns the new declaration, which can be modified as desired.
+     * \returns the new declaration reference
      */
-    Declaration* newDeclaration();
+    virtual DUChainRef* newDeclaration() = 0;
 
     /**
-     * Register a new object that you have created to insert at some point in this DUChain.
-     * You may modify this object directly.  The change set takes ownership, so that
-     * the new object will be deleted when the change set is no longer needed.
+     * Create a new class to be managed by this change set.
      *
-     * \returns the new object that has been registered.
+     * \returns the new declaration reference
      */
-    DUChainRef* registerNewObject(DUChainBase* object);
+    virtual DUChainRef* newClass() = 0;
+
+    /**
+     * Create a new function to be managed by this change set.
+     *
+     * \returns the new declaration reference
+     */
+    virtual DUChainRef* newFunction() = 0;
 
     /**
      * Copy an existing object from a change set.
