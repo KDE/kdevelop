@@ -352,9 +352,6 @@ void CodeGenerator::visitFunctionCall(FunctionCallAST* node)
 void CodeGenerator::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
   visit(node->type_specifier);
-
-  m_output << " ";
-
   visit(node->init_declarator);
   visit(node->constructor_initializers);
   visit(node->function_body);

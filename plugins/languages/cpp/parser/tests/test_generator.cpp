@@ -78,8 +78,7 @@ private slots:
 
   void testIf()
   {
-    QByteArray method("void test() { if (i == 0) { foo(); } else { foo2(); } }");
-    parse(method);
+    parse(QByteArray("void test() { if (i == 0) { foo(); } else { foo2(); } }"));
   }
 
   void testFor()
@@ -167,6 +166,11 @@ private slots:
   void testDeclareUsingNamespace2()
   {
     parse(QByteArray("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } } namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }"));
+  }
+
+  void testFunctionDefinition3()
+  {
+    parse(QByteArray("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {} B::B(int) {} int B::test(int a){} int B::test(char a){} template<class T2, class T3> void B::test(T2 t, T3 t3) {} int B::test(Unknown k){} int B::test( Unknown2 k) {} "));
   }
 
 private:
