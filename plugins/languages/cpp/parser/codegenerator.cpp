@@ -247,6 +247,9 @@ void CodeGenerator::visitDeclarator(DeclaratorAST* node)
     visit(node->parameter_declaration_clause);
     m_output << ")";
   }
+
+  print(node->fun_cv, true);
+
   visit(node->exception_spec);
 }
 

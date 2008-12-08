@@ -173,6 +173,23 @@ private slots:
     parse(QByteArray("class B{template<class T> void test(T t); B(int i); int test(int a); int test(char a); template<class T2, class T3> void test(T2 t, T3 t3); int test(Unknown k); int test(Unknown2 k); }; template<class T> void B::test(T t) {} B::B(int) {} int B::test(int a){} int B::test(char a){} template<class T2, class T3> void B::test(T2 t, T3 t3) {} int B::test(Unknown k){} int B::test( Unknown2 k) {} "));
   }
 
+  void testTemplateEnums()
+  {
+    parse(QByteArray("template<bool num> struct No {};  No<true> n;"));
+    parse(QByteArray("template<int num=5> struct No {};  No n;"));
+    parse(QByteArray("template<int num> struct No {};  No<9> n;"));
+  }
+
+  void testDynamicArray()
+  {
+    parse(QByteArray("struct Bla { int val; } blaArray[] = { {5} };"));
+  }
+
+  void testSmartPointer()
+  {
+    parse(QByteArray("template<class T> struct SmartPointer { T* operator ->() const {} template<class Target> SmartPointer<Target> cast() {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;
