@@ -545,7 +545,7 @@ void CodeGenerator::visitOperator(OperatorAST* node)
 
 void CodeGenerator::visitOperatorFunctionId(OperatorFunctionIdAST* node)
 {
-  printToken(Token_operator);
+  printToken(Token_operator, true);
 
   DefaultVisitor::visitOperatorFunctionId( node );
 }

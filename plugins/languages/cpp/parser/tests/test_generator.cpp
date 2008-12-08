@@ -190,6 +190,16 @@ private slots:
     parse(QByteArray("template<class T> struct SmartPointer { T* operator ->() const {} template<class Target> SmartPointer<Target> cast() {} T& operator*() {}  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;"));
   }
 
+  void testSimpleExpression()
+  {
+    parse(QByteArray("struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c.b<Fulli>(); }"));
+  }
+
+  void testThis()
+  {
+    parse(QByteArray("struct Cont { operator int() {} }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }"), FlagAll);
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;
