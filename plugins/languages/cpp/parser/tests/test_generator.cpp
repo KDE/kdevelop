@@ -139,6 +139,11 @@ private slots:
     parse(QByteArray("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 2 }; union { int u1; float u2; };"));
   }
 
+  void testPublicFlags()
+  {
+    parse(QByteArray("class Foo { public: virtual void bar(); private: void baz(); protected: };"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;

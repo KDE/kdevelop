@@ -96,8 +96,7 @@ void CodeGenerator::printToken(int token, bool followingSpace)
 void CodeGenerator::visitAccessSpecifier(AccessSpecifierAST* node)
 {
   print(node->specs);
-
-  DefaultVisitor::visitAccessSpecifier(node);
+  m_output << ":";
 }
 
 void CodeGenerator::visitAsmDefinition(AsmDefinitionAST* node)
