@@ -66,8 +66,8 @@ void CodeGenerator::print(const ListNode<std::size_t>* tokenList, bool following
   const ListNode<std::size_t>* it = tokenList->toFront(), *end = it;
   bool first = true;
   do {
-    outputToken(it->element);
     if (first) first = false; else m_output << " ";
+    outputToken(it->element);
     it = it->next;
   } while (it != end);
 
@@ -416,7 +416,7 @@ void CodeGenerator::visitJumpStatement(JumpStatementAST* node)
 
 void CodeGenerator::visitLabeledStatement(LabeledStatementAST* node)
 {
-  print(node->label, static_cast<bool>(node->expression));
+  print(node->label, true);
 
   visit(node->expression);
 
@@ -626,7 +626,9 @@ void CodeGenerator::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
-  print(node->integrals);
+  print(node->cv, true);
+
+  print(node->integrals, true);
 
   print(node->type_of);
 

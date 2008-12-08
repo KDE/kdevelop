@@ -20,6 +20,19 @@
 #include <rpp/chartools.h>
 #include <rpp/pp-engine.h>
 
+bool operator==(const Token& t1, const Token& t2)
+{
+  return t1.kind == t2.kind && t1.symbolString() == t2.symbolString();
+}
+
+namespace QTest {
+  template<>
+  char* toString(const Token& t)
+  {
+    return qstrdup(QString("%1 [ %2 ]").arg(token_name(t.kind)).arg(t.symbolString()).toUtf8());
+  }
+}
+
 class TestGenerator : public QObject
 {
   Q_OBJECT
@@ -111,6 +124,11 @@ private slots:
     parse(method);
   }
 
+  void testIntegralTypes()
+  {
+    parse(QByteArray("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;
@@ -141,12 +159,10 @@ private:
       const Token& t1 = lastSession->token_stream->token( cursor );
       const Token& t2 = lastGeneratedSession->token_stream->token( cursor );
 
-      //kDebug() << cursor << t1.kind << t2.kind << t1.symbolString() << t2.symbolString();
-      QCOMPARE(t1.kind, t2.kind);
+      QCOMPARE(t1, t2);
       if (t1.kind == Token_EOF)
         break;
 
-      QCOMPARE(t1.symbolString(), t2.symbolString());
       ++cursor;
     }
   }
