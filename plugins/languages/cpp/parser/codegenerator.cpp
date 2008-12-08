@@ -340,8 +340,13 @@ void CodeGenerator::visitForStatement(ForStatementAST* node)
 {
   printToken(Token_for);
   m_output << "(";
-  visit(node->init_statement);
-  //m_output << ";";
+  if (node->init_statement) {
+    visit(node->init_statement);
+    // Init statement gives its own ;
+  } else {
+    m_output << ";";
+  }
+
   visit(node->condition);
   m_output << ";";
   visit(node->expression);
