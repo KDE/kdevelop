@@ -276,6 +276,8 @@ void CodeGenerator::visitDoStatement(DoStatementAST* node)
 
 void CodeGenerator::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
+  print(node->type, true);
+
   DefaultVisitor::visitElaboratedTypeSpecifier(node);
 }
 
@@ -828,7 +830,8 @@ void CodeGenerator::visitUsing(UsingAST* node)
 
 void CodeGenerator::visitUsingDirective(UsingDirectiveAST* node)
 {
-  printToken(Token_namespace);
+  printToken(Token_using, true);
+  printToken(Token_namespace, true);
 
   DefaultVisitor::visitUsingDirective(node);
 

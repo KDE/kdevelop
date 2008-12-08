@@ -161,7 +161,12 @@ private slots:
 
   void testUsingDeclarationInTemplate()
   {
-    parse(QByteArray("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<T>::i; };"), FlagAll);
+    parse(QByteArray("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<T>::i; };"));
+  }
+
+  void testDeclareUsingNamespace2()
+  {
+    parse(QByteArray("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } } namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }"));
   }
 
 private:
