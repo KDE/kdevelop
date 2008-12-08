@@ -262,6 +262,8 @@ void CodeGenerator::visitDeleteExpression(DeleteExpressionAST* node)
   print( node->lbracket_token );
   print( node->rbracket_token );
 
+  m_output << " ";
+
   DefaultVisitor::visitDeleteExpression(node);
 }
 

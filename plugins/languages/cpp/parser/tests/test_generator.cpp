@@ -150,7 +150,7 @@ private slots:
 
   void testVariableDeclaration()
   {
-    parse(QByteArray("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); }"));
+    parse(QByteArray("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); delete i; }"));
   }
 
   void testFriendDeclaration()
