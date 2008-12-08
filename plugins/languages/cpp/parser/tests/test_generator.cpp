@@ -144,6 +144,16 @@ private slots:
     parse(QByteArray("class Foo { public: virtual void bar(); private: void baz(); protected: };"));
   }
 
+  void testDeclareStruct()
+  {
+    parse(QByteArray("struct { short i; } instance;"));
+  }
+
+  void testVariableDeclaration()
+  {
+    parse(QByteArray("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); }"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;

@@ -499,7 +499,7 @@ void CodeGenerator::visitNewDeclarator(NewDeclaratorAST* node)
 void CodeGenerator::visitNewExpression(NewExpressionAST* node)
 {
   print(node->scope_token);
-  print(node->new_token);
+  print(node->new_token, true);
 
   if (node->expression) {
     m_output << "(";
