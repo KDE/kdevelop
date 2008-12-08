@@ -109,12 +109,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
     /**
      * By default should return the given type, and can return another type that the given should be replaced with.
      * Types should allow replacing all their held types using this from within their exchangeTypes function.
+     * The default-implementation recurses the exchange, so should be called from within the derived implementation if that is wished.
      * */
-    virtual AbstractType::Ptr exchange( const AbstractType::Ptr& ) = 0;
-    /**
-     * Should member-types be exchanged?(Like the types of a structure's members) If false, only types involved in the identity will be exchanged.
-     * */
-    virtual bool exchangeMembers() const = 0;
+    virtual AbstractType::Ptr exchange( const AbstractType::Ptr& );
+};
+
+///A simple type-exchanger that replaces one type with another
+class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeExchanger : public TypeExchanger {
+  public:
+    SimpleTypeExchanger(AbstractType::Ptr replace, AbstractType::Ptr replaceWith);
+    virtual AbstractType::Ptr exchange( const AbstractType::Ptr& ) ;
+  private:
+    AbstractType::Ptr m_replace, m_replaceWith;
 };
 
 }
