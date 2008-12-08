@@ -32,6 +32,32 @@ public:
   {
   }
 
+  enum ParseFlag {
+    FlagNone = 0,
+    DumpAST = 1,
+    PrintCode = 2,
+    FlagAll = 3
+  };
+  Q_DECLARE_FLAGS(ParseFlags, ParseFlag)
+
+  void parse(const QByteArray& unit, ParseFlags flags = static_cast<ParseFlags>(FlagNone))
+  {
+    TranslationUnitAST* ast = parseOriginal(unit);
+    if (flags & DumpAST)
+      dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    if (flags & PrintCode) {
+      kDebug() << unit;
+      kDebug() << cg.output();
+    }
+
+    parseGenerated( cg.output().toUtf8() );
+
+    compareTokenStreams();
+  }
+
 private slots:
   void initTestCase()
   {
@@ -40,116 +66,89 @@ private slots:
   void testIf()
   {
     QByteArray method("void test() { if (i == 0) { foo(); } else { foo2(); } }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testFor()
   {
     QByteArray method("void test() { for (int i = 0; i < 4; ++i) { break; } for (j; j < 4; ) {return;} }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testDo()
   {
     QByteArray method("void test() { do { foo(); } while (i < 0); }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testWhile()
   {
     QByteArray method("void test() { while (i & 3) { foo(); } }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testSwitch()
   {
     QByteArray method("void test() { switch (i) { case 1: break; case 2: return; default: goto foo; } foo: return; }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testClass()
   {
     QByteArray method("struct A : public B, virtual private C { int i; A() : i(5) { } virtual void test() = 0; };");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testTemplateClass()
   {
     QByteArray method("template <typename B> struct A : private C { B i; A() : i(5) { } virtual void test() = 0; };");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
   void testMethod()
   {
     QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
-    pool mem_pool;
-    TranslationUnitAST* ast = parse(method, &mem_pool);
-    //dumper.dump(ast, lastSession->token_stream);
-
-    CodeGenerator cg(lastSession);
-    cg.visit(ast);
-    kDebug() << method;
-    kDebug() << cg.output();
+    parse(method);
   }
 
 private:
   ParseSession* lastSession;
+  ParseSession* lastGeneratedSession;
 
-  TranslationUnitAST* parse(const QByteArray& unit, pool* mem_pool)
+  TranslationUnitAST* parseOriginal(const QByteArray& unit)
   {
     Parser parser(&control);
     lastSession = new ParseSession();
     lastSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
     return  parser.parse(lastSession);
+  }
+
+  TranslationUnitAST* parseGenerated(const QByteArray& unit)
+  {
+    Parser parser(&control);
+    lastGeneratedSession = new ParseSession();
+    lastGeneratedSession->setContentsAndGenerateLocationTable(tokenizeFromByteArray(unit));
+    return  parser.parse(lastGeneratedSession);
+  }
+
+  void compareTokenStreams()
+  {
+    std::size_t cursor = 1;
+    forever {
+      QVERIFY(cursor < lastSession->token_stream->size());
+      QVERIFY(cursor < lastGeneratedSession->token_stream->size());
+
+      const Token& t1 = lastSession->token_stream->token( cursor );
+      const Token& t2 = lastGeneratedSession->token_stream->token( cursor );
+
+      //kDebug() << cursor << t1.kind << t2.kind << t1.symbolString() << t2.symbolString();
+      QCOMPARE(t1.kind, t2.kind);
+      if (t1.kind == Token_EOF)
+        break;
+
+      QCOMPARE(t1.symbolString(), t2.symbolString());
+      ++cursor;
+    }
   }
 };
 

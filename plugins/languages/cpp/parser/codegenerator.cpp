@@ -130,7 +130,6 @@ void CodeGenerator::visitBinaryExpression(BinaryExpressionAST* node)
   visit(node->left_expression);
 
   // TODO whitespace
-  kDebug() << node->op << token_text( node->op );
   print(node->op);
 
   visit(node->right_expression);
