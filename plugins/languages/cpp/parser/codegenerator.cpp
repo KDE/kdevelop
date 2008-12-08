@@ -282,11 +282,15 @@ void CodeGenerator::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* nod
 
 void CodeGenerator::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  print( node->kind );
+  printToken(Token_enum, true);
 
   visit(node->name);
 
-  visitCommaPrint(node->enumerators);
+  if (node->enumerators) {
+    m_output << "{";
+    visitCommaPrint(node->enumerators);
+    m_output << "}";
+  }
 }
 
 void CodeGenerator::visitEnumerator(EnumeratorAST* node)

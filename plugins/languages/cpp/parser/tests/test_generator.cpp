@@ -134,6 +134,11 @@ private slots:
     parse(QByteArray("const unsigned int ArraySize = 3; int i[ArraySize];"));
   }
 
+  void testEnum()
+  {
+    parse(QByteArray("enum Enum { Value1 = 5, value2 }; enum Enum2 { Value21, value22 = 2 }; union { int u1; float u2; };"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;
