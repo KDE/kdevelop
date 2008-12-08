@@ -424,7 +424,7 @@ void RunnerWindow::displayCompleted() const
     if (!m_isRunning) return;
     progressBar()->setValue(progressBar()->maximum());
     enableControlsAfterRunning();
-    displayElapsed();
+    updateRunText();
     m_isRunning = false;
     emit runCompleted();
 }
@@ -440,10 +440,10 @@ void RunnerWindow::displayNumSelected(int numItems) const
     resetProgressBar();
 }
 
-void RunnerWindow::displayNumCompleted(int numItems) const
+void RunnerWindow::displayNumCompleted(int numItems)
 {
-    ui()->labelNumRun->setText(QString().setNum(numItems));
-    displayElapsed();
+    m_numItemsCompleted = numItems;
+    updateRunText();
 }
 
 void RunnerWindow::setGreenBar() const
@@ -554,15 +554,16 @@ void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
     enableTestSync(true);      // Enable selection handler again.
 }
 
-void RunnerWindow::displayElapsed() const
+void RunnerWindow::updateRunText() const
 {
+    QString elapsed;
     if (m_stopWatch.isValid()) {
         int mili = m_stopWatch.elapsed();
         QString elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
-        ui()->labelElapsed->setText(elapsed);
     } else {
-        ui()->labelElapsed->setText("0.000");
+        elapsed = "0.000";
     }
+    ui()->labelRunText->setText( i18ncp("%2 is a real number like 1.355", "Ran 1 test in %2 seconds", "Ran %1 tests in %2 seconds", m_numItemsCompleted, elapsed) );
 }
 
 void RunnerWindow::scrollToHighlightedRows() const
@@ -609,10 +610,10 @@ void RunnerWindow::runItems()
     }
     m_isRunning = true;
 
-    m_stopWatch.start();
+    m_stopWatch = QTime();
     setGreenBar();
     displayNumCompleted(0);
-    ui()->labelElapsed->setText("0.000");
+    m_stopWatch.start();
 
     disableControlsBeforeRunning();
     resultsModel()->clear();

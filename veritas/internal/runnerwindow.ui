@@ -144,52 +144,9 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="labelNumRunText" >
+          <widget class="QLabel" name="labelRunText" >
            <property name="text" >
-            <string>Ran</string>
-           </property>
-           <property name="textFormat" >
-            <enum>Qt::LogText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelNumRun" >
-           <property name="text" >
-            <string>0</string>
-           </property>
-           <property name="textFormat" >
-            <enum>Qt::LogText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelElapsedText" >
-           <property name="text" >
-            <string>tests in</string>
-           </property>
-           <property name="textFormat" >
-            <enum>Qt::LogText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="labelElapsed" >
-           <property name="text" >
-            <string>0.000</string>
-           </property>
-           <property name="textFormat" >
-            <enum>Qt::LogText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label" >
-           <property name="text" >
-            <string>seconds</string>
-           </property>
-           <property name="textFormat" >
-            <enum>Qt::LogText</enum>
+            <string>RanPlaceHolder</string>
            </property>
           </widget>
          </item>

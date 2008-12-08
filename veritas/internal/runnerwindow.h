@@ -113,7 +113,7 @@ private Q_SLOTS:
     void displayProgress(int numItems) const;
     void displayNumTotal(int numItems) const;
     void displayNumSelected(int numItems) const;
-    void displayNumCompleted(int numItems) const;
+    void displayNumCompleted(int numItems);
     void displayNumErrors(int numItems) const;
     void displayNumFatals(int numItems) const;
     void displayNumExceptions(int numItems) const;
@@ -193,7 +193,7 @@ private: // Operations
     // Copy and assignment not supported.
     RunnerWindow(const RunnerWindow&);
     RunnerWindow& operator=(const RunnerWindow&);
-    void displayElapsed() const;
+    void updateRunText() const;
     void setRedBar() const;
     void setGreenBar() const;
 
@@ -211,6 +211,7 @@ private:
     mutable bool m_isRunning;
     VerboseToggle* m_verboseToggle;
     KUrl m_currentProject;
+    int m_numItemsCompleted;
 };
 
 } // namespace
