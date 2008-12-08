@@ -32,6 +32,9 @@
 #include "cpptypes.h"
 #include "cppduchain.h"
 
+const int desiredArgumentTypeLength = 20;
+const int maxDefaultParameterLength = 30;
+
 using namespace KDevelop;
 using namespace Cpp;
 
@@ -117,13 +120,12 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         }
       }
 
-      if (argument)
+      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ )
+        ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength) + " " + (*paramNameIt)->identifier().toString();
+      else if (argument)
         ret += argument->toString();
       else
         ret += "<incomplete type>";
-
-      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ )
-        ret += " " + (*paramNameIt)->identifier().toString();
 
       if( doHighlight  )
       {
@@ -137,7 +139,14 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       }
 
       if( num >= firstDefaultParam ) {
-        ret += " = " + decl->defaultParameters()[defaultParamNum].str();
+        ret += " = ";
+        
+        QString defaultParam = decl->defaultParameters()[defaultParamNum].str();
+        if(defaultParam.length() <= maxDefaultParameterLength)
+          ret += defaultParam;
+        else
+          ret += "...";
+        
         ++defaultParamNum;
       }
 

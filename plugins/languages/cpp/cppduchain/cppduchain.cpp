@@ -35,6 +35,8 @@
 #include <parser/rpp/chartools.h>
 #include "templatedeclaration.h"
 #include "cppducontext.h"
+#include <language/duchain/use.h>
+#include "templateparameterdeclaration.h"
 
 
 using namespace Cpp;
@@ -225,5 +227,102 @@ QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunct
   return qMakePair(id, signature);
 }
 
+KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
+  KDevelop::Identifier ret(id);
+  ret.clearTemplateIdentifiers();
+  for(int a = 0; a < id.templateIdentifiersCount(); ++a)
+    ret.appendTemplateIdentifier(exchangeQualifiedIdentifier(id.templateIdentifier(a), replace, replaceWith));
+
+  return ret;
+}
+
+KDevelop::TypeIdentifier exchangeQualifiedIdentifier(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
+  KDevelop::TypeIdentifier ret(id);
+  while(ret.count())
+    ret.pop();
+  if(QualifiedIdentifier(id) == replace) {
+    for(int a = 0; a < replaceWith.count(); ++a)
+      ret.push(replaceWith.at(a));
+  }else{
+    for(int a = 0; a < id.count(); ++a)
+      ret.push(exchangeQualifiedIdentifier(id.at(a), replace, replaceWith));
+  }
+  return ret;
+}
+
+KDevelop::TypeIdentifier unTypedefType(Declaration* decl, KDevelop::TypeIdentifier type) {
+  for(int a = 0; a < decl->context()->usesCount(); ++a) {
+    Use use = decl->context()->uses()[a];
+    if(use.m_range.end > decl->range().start)
+      break;
+    Declaration* usedDecl = use.usedDeclaration(decl->topContext());
+    ///@todo Make this work nicely for template-parameters. We need to know from where they were instantiated to do this though.
+    if(usedDecl && usedDecl->isTypeAlias() && !dynamic_cast<TemplateParameterDeclaration*>(usedDecl) && TypeUtils::targetType(usedDecl->abstractType(), 0)) {
+      QualifiedIdentifier exchange(TypeUtils::targetType(usedDecl->abstractType(), 0)->toString());
+      QualifiedIdentifier exchangeWith(usedDecl->qualifiedIdentifier());
+      type = exchangeQualifiedIdentifier(type, exchange, exchangeWith);
+    }
+  }
+  return type;
+}
+
+TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPosition);
+
+Identifier removeTemplateParameters(Identifier id, int behindPosition) {
+  Identifier ret(id);
+  ret.clearTemplateIdentifiers();
+  for(int a = 0; a < id.templateIdentifiersCount(); ++a) {
+    TypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
+    if(a < behindPosition)
+      ret.appendTemplateIdentifier(replacement);
+    else {
+      ret.appendTemplateIdentifier(TypeIdentifier("..."));
+      break;
+    }
+  }
+  return ret;
+}
+
+TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPosition) {
+  TypeIdentifier ret(identifier);
+  while(ret.count())
+    ret.pop();
+  
+  for(int a = 0; a < identifier.count(); ++a)
+    ret.push(removeTemplateParameters(identifier.at(a), behindPosition));
+
+  return ret;
+}
+
+QString shortenedTypeString(Declaration* decl, int desiredLength) {
+  AbstractType::Ptr type = decl->abstractType();
+  if(decl->isFunctionDeclaration()) {
+    FunctionType::Ptr funType = decl->type<FunctionType>();
+    if(!funType)
+      return QString();
+    type = funType->returnType();
+  }
+  
+  if(!type)
+    return QString();
+
+  TypeIdentifier identifier = TypeIdentifier(type->toString());
+  
+  if(identifier.toString().length() > desiredLength)
+    identifier = Cpp::unTypedefType(decl, identifier);
+  
+  bool doneSomething = true;
+  
+  int removeTemplateParametersFrom = 10;
+  
+  ///@todo Remove namespace-prefixes
+  
+  while(identifier.toString().length() > desiredLength * 3 && removeTemplateParametersFrom >= 0) {
+    --removeTemplateParametersFrom;
+    identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
+  }
+  
+  return identifier.toString();
+}
 }
 

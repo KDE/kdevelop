@@ -42,6 +42,8 @@ namespace TypeUtils {
    */
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
 
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr pointsToType(const AbstractType::Ptr& type, const AbstractType::Ptr& pointsTo);
+
   /**
    * Returns whether the type is a pointer-type or reference to pointer-type.
    *

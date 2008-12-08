@@ -44,7 +44,7 @@ using namespace KDevelop;
 
     return base;
   }
-
+  
   bool isPointerType(const AbstractType::Ptr& type) {
     return realType(type, 0).cast<PointerType>();
   }

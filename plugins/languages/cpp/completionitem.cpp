@@ -36,6 +36,9 @@
 #include <language/duchain/duchainutils.h>
 #include <classdeclaration.h>
 #include "cppduchain/qtfunctiondeclaration.h"
+#include <language/duchain/use.h>
+#include <typeutils.h>
+#include <cppduchain.h>
 
 using namespace KDevelop;
 
@@ -43,6 +46,7 @@ using namespace KDevelop;
 //If this is true, the return-values of argument-hints will be just written as "..." if they are too long
 const bool shortenArgumentHintReturnValues = true;
 const int maximumArgumentHintReturnValueLength = 30;
+const int desiredTypeLength = 20;
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
@@ -331,7 +335,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
 
               if (functionType->returnType()) {
-                QString ret = indentation + functionType->returnType()->toString();
+                QString ret = indentation + Cpp::shortenedTypeString(dec, desiredTypeLength);
                 if(shortenArgumentHintReturnValues && argumentHintDepth() && ret.length() > maximumArgumentHintReturnValueLength)
                   return QString("...");
                 else
@@ -347,7 +351,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
             } else {
               QString ret = indentation;
-              return  ret + dec->abstractType()->toString();
+              return  ret + Cpp::shortenedTypeString(dec, desiredTypeLength);
             }
           } else {
             return indentation + "<incomplete type>";
