@@ -129,6 +129,11 @@ private slots:
     parse(QByteArray("const unsigned int i, k; volatile long double j; int* l; double * const * m; const int& n = l;"));
   }
 
+  void testArrayType()
+  {
+    parse(QByteArray("const unsigned int ArraySize = 3; int i[ArraySize];"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;

@@ -617,7 +617,6 @@ void CodeGenerator::visitSimpleDeclaration(SimpleDeclarationAST* node)
   print(node->storage_specifiers, true);
   print(node->function_specifiers, true);
   visit(node->type_specifier);
-  m_output << " ";
   commaPrintNodes(this, node->init_declarators);
   visit(node->win_decl_specifiers);
 
@@ -632,7 +631,10 @@ void CodeGenerator::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 
   print(node->type_of);
 
-  visit(node->name);
+  if (node->name) {
+    visit(node->name);
+    m_output << " ";
+  }
 
   if (node->type_id) {
     m_output << "(";
