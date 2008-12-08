@@ -36,6 +36,9 @@
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/persistentsymboltable.h>
+
+#include "../cppduchain/classdeclaration.h"
 
 using namespace KDevelop;
 
@@ -197,6 +200,58 @@ void CppNewClass::generateHeader()
 
   file.close();
 
+#if 0
+  {
+    // New generation code
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    DUChainChangeSet newHeaderChange(ReferencedTopDUContext());
+
+    QualifiedIdentifier classId(field("classIdentifier").toString());
+    DUChainRef* newClass = newHeaderChange.newClass(classId);
+
+    foreach (const QString& inherits, field("classInheritance").toStringList()) {
+      // TODO: properly strip qualifiers
+      // TODO: move lookup to CppClassIdentifierPage
+      Cpp::BaseClassInstance base;
+      if (inherits.beginsWith("protected "))
+        base.access = Declaration::Protected;
+      else if (inherits.beginsWith("private "))
+        base.access = Declaration::Private;
+      else
+        base.access = Declaration::Public;
+
+      if (inherits.contains(" virtual "))
+        base.virtualInheritance = true;
+
+      QString identifier = inherits;
+      identifier = identifier.remove("public ", Qt::CaseInsensitive).remove("protected ", Qt::CaseInsensitive).remove("private ", Qt::CaseInsensitive).simplified();
+
+      PersistentSymbolTable::Declarations declarations = PersistentSymbolTable::self().getDeclarations( IndexedQualifiedIdentifier( QualifiedIdentifier(identifier)) );
+
+      for (PersistentSymbolTable::Declarations::Iterator it = declarations.iterator(); it; ++it) {
+        Declaration* decl = it->declaration();
+        if (decl->isForwardDeclaration())
+          continue;
+
+        // Check if it's a class/struct/etc
+        if (decl->type<StructureType>()) {
+          base.baseClass = decl->type<StructureType>();
+
+          newClass->addBaseClass(base);
+          break;
+        }
+      }
+    }
+
+    foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
+      IndexedDeclaration id = qvariant_cast<IndexedDeclaration>(override);
+      if (id.isValid()) {
+        newClass->appendDeclaration( id->declaration() );
+      }
+    }
+  }
+#endif
+
   ICore::self()->documentController()->openDocument(url);
 }
 
@@ -234,6 +289,43 @@ void CppNewClass::generateImplementation()
     // Add using statement
     // TODO make configurable
     output << "using namespace " << id.toString() << "\n\n";
+
+  // Overrides
+  {
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
+    IndexedDeclaration indexedDecl = qvariant_cast<IndexedDeclaration>(override);
+    if (Declaration* d = indexedDecl.declaration()) {
+      FunctionType::Ptr type = d->type<FunctionType>();
+      output << type->returnType()->toString() << " " << classId.toString() << "::" << d->identifier().toString() << "(";
+      bool first = true;
+      foreach (const AbstractType::Ptr& arg, type->arguments()) {
+        output << arg->toString();
+        if (first) first = false; else output << ", ";
+      }
+      output << ")\n{\n  ";
+
+      // Generate default implementation
+      // TODO check for pure virtual first
+      IntegralType::Ptr returnType = IntegralType::Ptr::dynamicCast( type->returnType() );
+      if (!returnType || returnType->dataType() != IntegralType::TypeVoid) {
+        output << "return ";
+      }
+      // Find class
+      if (d->context()) {
+        Declaration* parentClass = d->context()->owner();
+        QualifiedIdentifier parentId = parentClass->qualifiedIdentifier();
+        if (parentId.beginsWith( id )) {
+            parentId = parentId.mid( id.count() );
+        }
+        output << parentId.toString() << "::" << d->identifier().toString() << "();\n";
+      }
+
+      output << "}\n\n";
+    }
+  }
+  }
 
   file.close();
 
