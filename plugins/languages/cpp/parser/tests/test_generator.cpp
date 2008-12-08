@@ -205,6 +205,11 @@ private slots:
     parse(QByteArray("struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }"));
   }
 
+  void testOperators()
+  {
+    parse(QByteArray("struct Cont2 {int operator[] {} operator()() {}}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;"));
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;
