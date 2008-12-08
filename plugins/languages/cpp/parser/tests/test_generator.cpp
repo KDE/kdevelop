@@ -154,6 +154,16 @@ private slots:
     parse(QByteArray("int c; A instance(c); A instance(2, 3); A instance(q); bla() {int* i = new A(c); }"));
   }
 
+  void testFriendDeclaration()
+  {
+    parse(QByteArray("class A { friend class F; }; "));
+  }
+
+  void testUsingDeclarationInTemplate()
+  {
+    parse(QByteArray("template<class T> class A { T i; }; template<class Q> struct B: private A<Q> { using A<T>::i; };"), FlagAll);
+  }
+
 private:
   ParseSession* lastSession;
   ParseSession* lastGeneratedSession;

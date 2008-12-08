@@ -818,7 +818,7 @@ void CodeGenerator::visitUnqualifiedName(UnqualifiedNameAST* node)
 
 void CodeGenerator::visitUsing(UsingAST* node)
 {
-  printToken(Token_using);
+  printToken(Token_using, true);
   print(node->type_name);
 
   DefaultVisitor::visitUsing(node);
