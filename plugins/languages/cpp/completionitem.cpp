@@ -390,37 +390,37 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       break;
     case CodeCompletionModel::HighlightingMethod:
     if( index.column() == CodeCompletionModel::Arguments ) {
-      if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+//       if( completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
         return QVariant(CodeCompletionModel::CustomHighlighting);
-      }else{
+/*      }else{
         return QVariant();
       }
-      break;
-    } else if(index.column() == CodeCompletionModel::Name) {
+      break;*/
+    } /*else if(index.column() == CodeCompletionModel::Name) {
       return QVariant(CodeCompletionModel::CustomHighlighting);
-    }
+    }*/
 
     break;
 
     case CodeCompletionModel::CustomHighlight:
-    if( index.column() == CodeCompletionModel::Arguments && completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess ) {
+    if( index.column() == CodeCompletionModel::Arguments /*&& completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess*/ ) {
       QString ret;
       QList<QVariant> highlight;
       createArgumentList(*this, ret, &highlight);
       return QVariant(highlight);
     }
-    if( index.column() == CodeCompletionModel::Name ) {
-      //Bold
-      QTextCharFormat boldFormat;
-      boldFormat.setFontWeight(QFont::Bold);
-
-      QList<QVariant> ret;
-      ret << 0;
-      ret << nameForDeclaration(dec).length();
-      ret << QVariant(boldFormat);
-
-      return QVariant(ret);
-    }
+//     if( index.column() == CodeCompletionModel::Name ) {
+//       //Bold
+//       QTextCharFormat boldFormat;
+//       boldFormat.setFontWeight((QFont::Normal + QFont::DemiBold)/2);
+// 
+//       QList<QVariant> ret;
+//       ret << 0;
+//       ret << nameForDeclaration(dec).length();
+//       ret << QVariant(boldFormat);
+// 
+//       return QVariant(ret);
+//     }
     break;
     case CodeCompletionModel::CompletionRole:
       return (int)completionProperties();

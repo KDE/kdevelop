@@ -51,6 +51,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   int textFormatStart = 0;
   QTextFormat normalFormat(QTextFormat::CharFormat);
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
+  QTextCharFormat boldFormat;
+  boldFormat.setFontWeight(QFont::Bold);
 
   AbstractFunctionDeclaration* decl = dynamic_cast<AbstractFunctionDeclaration*>(dec);
   FunctionType::Ptr functionType = dec->type<FunctionType>();
@@ -68,6 +70,16 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
     int firstDefaultParam = functionType->arguments().count() - decl->defaultParametersSize();
 
     ret = "(";
+    
+    if( highlighting && ret.length() != textFormatStart )
+    {
+      //Add a default-highlighting for the passed text
+      *highlighting <<  QVariant(textFormatStart);
+      *highlighting << QVariant(ret.length() - textFormatStart);
+      *highlighting << boldFormat;
+      textFormatStart = ret.length();
+    }
+    
     bool first = true;
     int num = 0;
 
@@ -154,12 +166,22 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       if( paramNameIt != parameters.end() )
         ++paramNameIt;
     }
+
+    if( highlighting && ret.length() != textFormatStart )
+    {
+      *highlighting <<  QVariant(textFormatStart);
+      *highlighting << QVariant(ret.length() - textFormatStart);
+      *highlighting << normalFormat;
+      textFormatStart = ret.length();
+    }
+    
     ret += ')';
 
-    if( highlighting && ret.length() != textFormatStart ) {
+    if( highlighting && ret.length() != textFormatStart )
+    {
       *highlighting <<  QVariant(textFormatStart);
-      *highlighting << QVariant(ret.length());
-      *highlighting << normalFormat;
+      *highlighting << QVariant(ret.length() - textFormatStart);
+      *highlighting << boldFormat;
       textFormatStart = ret.length();
     }
 
