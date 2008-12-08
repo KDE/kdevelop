@@ -197,7 +197,12 @@ private slots:
 
   void testThis()
   {
-    parse(QByteArray("struct Cont { operator int() {} }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }"), FlagAll);
+    parse(QByteArray("struct Cont { operator int() {} }; void test( int c = 5 ) { this->test( Cont(), 1, 5.5, 6); }"));
+  }
+
+  void testCasts()
+  {
+    parse(QByteArray("struct Cont2 {}; struct Cont { int& a; Cont* operator -> () {} double operator*(); }; Cont c; Cont* d = &c; void test() { c.a = 5; d->a = 5; (*d).a = 5; c.a(5, 1, c); c(); c.a = dynamic_cast<const Cont2*>(d); }"));
   }
 
 private:

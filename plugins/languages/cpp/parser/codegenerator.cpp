@@ -199,6 +199,8 @@ void CodeGenerator::visitConditionalExpression(ConditionalExpressionAST* node)
 
 void CodeGenerator::visitCppCastExpression(CppCastExpressionAST* node)
 {
+  print(node->op);
+
   m_output << "<";
 
   visit(node->type_id);
