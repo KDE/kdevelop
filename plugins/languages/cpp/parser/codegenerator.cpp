@@ -459,6 +459,7 @@ void CodeGenerator::visitName(NameAST* node)
 
   if (node->qualified_names) {
     commaPrintNodes( this, node->qualified_names, token_text( Token_scope ) );
+    printToken( Token_scope );
   }
 
   visit(node->unqualified_name);
@@ -547,7 +548,10 @@ void CodeGenerator::visitOperatorFunctionId(OperatorFunctionIdAST* node)
 
 void CodeGenerator::visitParameterDeclaration(ParameterDeclarationAST* node)
 {
-  visit(node->type_specifier);
+  if (node->type_specifier) {
+    visit(node->type_specifier);
+    m_output << " ";
+  }
   visit(node->declarator);
 
   if (node->expression) {
@@ -602,7 +606,7 @@ void CodeGenerator::visitPtrToMember(PtrToMemberAST* node)
 
 void CodeGenerator::visitReturnStatement(ReturnStatementAST* node)
 {
-  printToken(Token_return);
+  printToken(Token_return, true);
 
   DefaultVisitor::visitReturnStatement(node);
 

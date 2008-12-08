@@ -120,7 +120,20 @@ private slots:
     QByteArray method("template <typename B> struct A : private C { B i; A() : i(5) { } virtual void test() = 0; };");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
-    dumper.dump(ast, lastSession->token_stream);
+    //dumper.dump(ast, lastSession->token_stream);
+
+    CodeGenerator cg(lastSession);
+    cg.visit(ast);
+    kDebug() << method;
+    kDebug() << cg.output();
+  }
+
+  void testMethod()
+  {
+    QByteArray method("int A::test(int primitive, B* pointer) { return primitive; }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    //dumper.dump(ast, lastSession->token_stream);
 
     CodeGenerator cg(lastSession);
     cg.visit(ast);

@@ -198,7 +198,7 @@ static char const * const _S_token_texts[] = {
   "register",
   "reinterpret_cast",
   "return",
-  "scope",
+  "::",
   "shift",
   "short",
   "signals",
