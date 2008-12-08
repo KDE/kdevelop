@@ -766,7 +766,7 @@ void TestExpressionParser::testCasts() {
 void TestExpressionParser::testOperators() {
   TEST_FILE_PARSE_ONLY
 
-  QByteArray test = "struct Cont2 {operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
+  QByteArray test = "struct Cont2 {int operator[] {}; operator()() {};}; struct Cont3{}; struct Cont { Cont3 operator[](int i) {} Cont3 operator()() {} Cont3 operator+(const Cont3& c3 ) {} }; Cont c; Cont2 operator+( const Cont& c, const Cont& c2){} Cont3 c3;";
   DUContext* ctx = parse( test, DumpNone );
   DUChainWriteLocker lock(DUChain::lock());
 

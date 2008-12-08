@@ -162,7 +162,7 @@ void TestDUChain::initTestCase()
   noDef = 0;
 
   DUChain::self()->disablePersistentStorage();
-  
+
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
@@ -395,7 +395,7 @@ void TestDUChain::testConversionReturn() {
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 2);
-  
+
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   FunctionType::Ptr funType = top->childContexts()[1]->localDeclarations()[0]->type<KDevelop::FunctionType>();
   QVERIFY(funType);
@@ -422,7 +422,7 @@ void TestDUChain::testArrayType()
   kDebug() << top->localDeclarations()[0]->abstractType()->toString();
   QVERIFY(top->localDeclarations()[0]->uses().size());
   QVERIFY(top->localDeclarations()[0]->type<ConstantIntegralType>());
-  
+
   Declaration* defI = top->localDeclarations().last();
   QCOMPARE(defI->identifier(), Identifier("i"));
   QCOMPARE(findDeclaration(top, defI->identifier()), defI);
@@ -462,7 +462,7 @@ void TestDUChain::testBaseUses()
 
   QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->childContexts()[1]->usesCount(), 2);
-  
+
   release(top);
 }
 
@@ -588,7 +588,7 @@ void TestDUChain::testEnum()
   ///@todo Test for the enum ranges and fix them, they overlap
   kDebug() << top->childContexts()[0]->range().textRange();
   kDebug() << top->localDeclarations()[0]->range().textRange();
-  
+
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
   Declaration* enumDecl = decl;
   QVERIFY(decl);
@@ -665,8 +665,8 @@ void TestDUChain::testEnum()
 }
 
 /*! Custom assertion which verifies that @p topcontext contains a
- *  single class with a single memberfunction declaration in it. 
- *  @p memberFun is an output parameter and should have type 
+ *  single class with a single memberfunction declaration in it.
+ *  @p memberFun is an output parameter and should have type
  *  pointer to ClassFunctionDeclaration */
 #define ASSERT_SINGLE_MEMBER_FUNCTION_IN(topcontext, memberFun) \
 { \
@@ -681,8 +681,8 @@ void TestDUChain::testEnum()
 } (void)(0)
 
 /*! Custom assertion which verifies that @p topcontext contains a
- *  single class with two memberfunction declarations in it. 
- *  @p memberFun1 and @p memberFUn2 are output parameter and should 
+ *  single class with two memberfunction declarations in it.
+ *  @p memberFun1 and @p memberFUn2 are output parameter and should
  *  have type pointer to ClassFunctionDeclaration */
 #define ASSERT_TWO_MEMBER_FUNCTIONS_IN(topcontext, memberFun1, memberFun2) \
 { \
@@ -705,7 +705,7 @@ void TestDUChain::testVirtualMemberFunction()
     QByteArray text("class Foo { public: virtual void bar(); }; \n");
     TopDUContext* top = parse(text, DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
-  
+
     ClassFunctionDeclaration* memberFun; // filled by assert macro below
     ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
     QVERIFY(memberFun->isVirtual());
@@ -718,13 +718,13 @@ void TestDUChain::testVirtualMemberFunction()
     QByteArray text("class S; struct A { virtual S* ret(); }; struct S { }; struct B : public A { virtual S* ret(); };");
     TopDUContext* top = parse(text, DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
-    
+
     QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDeclarations().count(), 4);
     QCOMPARE(top->localDeclarations()[0]->indexedType(), top->localDeclarations()[2]->indexedType());
     QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
     QVERIFY(DUChainUtils::getOverridden(top->childContexts()[2]->localDeclarations()[0]));
-    
+
     release(top);
   }
 }
@@ -800,7 +800,7 @@ void TestDUChain::testMemberFunctionModifiers()
                       "class ZooLoo { void bar(); };\n\n"
                       "class MooFoo \n { public: void loo(); };\n"
                       "class GooRoo { void baz(); };\n"
-                      "class PooYoo { \n void zoo(); };\n"); 
+                      "class PooYoo { \n void zoo(); };\n");
       // at one point extra '\n' characters would affect these modifiers.
       TopDUContext* top = parse(text, DumpAll);
       DUChainWriteLocker lock(DUChain::lock());
@@ -876,7 +876,7 @@ void TestDUChain::testDeclareStruct()
     QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
     Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[0]);
     QVERIFY(classDecl);
-    
+
     QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
 
     release(top);
@@ -949,7 +949,7 @@ void TestDUChain::testDeclareStruct()
     Cpp::ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
     QVERIFY(classDecl);
     QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
-    
+
     DUContext* structA = top->childContexts().first();
     QVERIFY(structA->parentContext());
     QCOMPARE(structA->importedParentContexts().count(), 0);
@@ -994,7 +994,7 @@ void TestDUChain::testDeclareStruct()
     ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(defTest);
     QVERIFY(classFunDecl);
     QVERIFY(classFunDecl->isAbstract());
-    
+
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("i")), defI);
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("b")), defB);
     QCOMPARE(findDeclaration(ctorCtx,  Identifier("c")), defC);
@@ -1472,7 +1472,7 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(bar->uses().begin()->count(), 1);
-  kDebug() << findDeclaration(top, bar->identifier(), top->range().start)->qualifiedIdentifier().toString();
+  //kDebug() << findDeclaration(top, bar->identifier(), top->range().start)->qualifiedIdentifier().toString();
   QCOMPARE(findDeclaration(top, bar->identifier(), top->range().start), noDef);
   QCOMPARE(findDeclaration(top, bar->identifier()), bar);
   QCOMPARE(findDeclaration(top, bar->qualifiedIdentifier()), bar);
@@ -1498,14 +1498,14 @@ void TestDUChain::testDeclareUsingNamespace()
 void TestDUChain::testSignalSlotDeclaration() {
   {
     QByteArray text("#define Q___qt_sig_slot__S signals\n#define signals bla\n#undef signals\nclass C {Q___qt_sig_slot__S: void signal2(); public slots: void slot2();}; ");
-    
+
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
-    
+
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
     QVERIFY(classFun);
     QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Protected);
@@ -1515,12 +1515,12 @@ void TestDUChain::testSignalSlotDeclaration() {
     QVERIFY(classFun);
     QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Public);
     QVERIFY(classFun->isSlot());
-    
+
     release(top);
   }
   {
     QByteArray text("namespace A { class B;} class Q { public slots: void slot(A::B b, const Q* q); }; ");
-    
+
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1530,7 +1530,7 @@ void TestDUChain::testSignalSlotDeclaration() {
     QtFunctionDeclaration* qtDecl = dynamic_cast<QtFunctionDeclaration*>(top->childContexts()[1]->localDeclarations()[0]);
     QVERIFY(qtDecl);
     QCOMPARE(qtDecl->normalizedSignature().str(), QString("A::B,const Q*"));
-    
+
     release(top);
   }
 }
@@ -1538,7 +1538,7 @@ void TestDUChain::testSignalSlotDeclaration() {
 void TestDUChain::testSignalSlotUse() {
   {
     QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_sig_slot__( signal1(TE*, const char&)), this, __qt_sig_slot__(slot2(TE*))); \nconnect(this, __qt_sig_slot__(signal2()), \n__qt_sig_slot__(slot1())); } };");
-    
+
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1559,15 +1559,15 @@ void TestDUChain::testSignalSlotUse() {
     QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 31, 1, 38));
     QVERIFY(top->childContexts()[1]->localDeclarations()[3]->uses().count());
     QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), SimpleRange(2, 30, 2, 37));
-    
+
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 4);
-    
+
     release(top);
   }
   {
     QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class AA : public QObject { signals: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : public AA { public slots: void slot1(); void slot2(); signals: void signal1();public: void test() {T t;connect(t, __qt_sig_slot__(signal2()), this, __qt_sig_slot__(slot2()));connect(this, __qt_sig_slot__(signal1(int)), __qt_sig_slot__(slot1())); } }; ");
-    
+
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
     DUChainWriteLocker lock(DUChain::lock());
@@ -1577,14 +1577,14 @@ void TestDUChain::testSignalSlotUse() {
     QVERIFY(top->childContexts()[3]->localDeclarations()[0]->uses().count());
     QVERIFY(top->childContexts()[3]->localDeclarations()[1]->uses().count());
     QVERIFY(!top->childContexts()[3]->localDeclarations()[2]->uses().count()); //signal1() is not used
-    
+
     QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
 
     QVERIFY(top->childContexts()[1]->localDeclarations()[0]->uses().count());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
-    
+
     release(top);
-  }  
+  }
 }
 
 void TestDUChain::testFunctionDefinition() {
@@ -1685,7 +1685,7 @@ void TestDUChain::testFunctionDefinition2() {
     QCOMPARE(top->childContexts()[1]->range().end.column, 20);
 
     QVERIFY(!top->childContexts()[2]->inSymbolTable());
-    
+
     release(top);
   }
   {
@@ -1823,7 +1823,7 @@ void TestDUChain::testCodeModel() {
       ++validCount;
     }
   }
-  
+
   release(top);
 }
 
@@ -2083,8 +2083,8 @@ void TestDUChain::testTemplateEnums()
     QCOMPARE(top->childContexts().count(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
-    
-    
+
+
     QCOMPARE(top->usesCount(), 1);
     Declaration* used = top->usedDeclarationForIndex(top->uses()[0].m_declarationIndex);
     QVERIFY(used);
@@ -2150,7 +2150,7 @@ void TestDUChain::testTemplateEnums()
     tempDecl = findDeclaration( top, QualifiedIdentifier("Test<B, 9>::Sum") );
     QVERIFY(tempDecl->abstractType());
     QCOMPARE(value(tempDecl->abstractType()), 16);
-    
+
     release(top);
   }
 }
@@ -2239,12 +2239,12 @@ void TestDUChain::testTemplateFunctions() {
   QCOMPARE(visibleDecls[0].first->abstractType()->toString(), QString("A&"));
   QVERIFY(visibleDecls[1].first->abstractType());
   QCOMPARE(visibleDecls[1].first->abstractType()->toString(), QString("A"));
-  
+
   Declaration* found = findDeclaration(d->internalContext(), Identifier("q"));
   QVERIFY(found);
   QVERIFY(found->abstractType());
   QCOMPARE(found->abstractType()->toString(), QString("A&"));
-  
+
   release(top);
 }
 
