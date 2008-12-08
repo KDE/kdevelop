@@ -2,7 +2,7 @@
 #ifndef TOOLTIP_H_f2dc78af9cdf452ce712f673b2bbcd00
 #define TOOLTIP_H_f2dc78af9cdf452ce712f673b2bbcd00
 
-#include "util/activetooltip.h"
+#include <util/activetooltip.h>
 #include "util/treeview.h"
 #include "mi/gdbmi.h"
 
@@ -20,7 +20,7 @@ namespace GDBDebugger
     class GDBController;
     class Variable;
 
-    class VariableToolTip : public ActiveToolTip
+    class VariableToolTip : public KDevelop::ActiveToolTip
     {
         Q_OBJECT
         public:
