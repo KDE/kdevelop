@@ -98,7 +98,7 @@ struct KDEVCPPRPP_EXPORT pp_macro : public pp_macro_direct_data {
     return completeHash();
   }
   
-  short unsigned int itemSize() const;
+  unsigned int itemSize() const;
   
   private:
     Q_DISABLE_COPY(pp_macro)

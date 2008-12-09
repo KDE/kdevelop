@@ -25,7 +25,7 @@
 
 using namespace rpp;
 
-short unsigned int pp_macro::itemSize() const {
+unsigned int pp_macro::itemSize() const {
   return constantSize(this);
 }
 
