@@ -72,41 +72,41 @@ TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth, 
 
 QString IncludeNavigationContext::html(bool shorten)
 {
-  m_currentText  = "<html><body><p><small><small>";
-  m_linkCount = 0;
+  clear();
+  modifyHtml()  += "<html><body><p><small><small>";
   addExternalHtml(m_prefix);
 
   KUrl u(m_item.url());
   NavigationAction action(u, KTextEditor::Cursor(0,0));
   makeLink(u.fileName(), u.pathOrUrl(), action);
   QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
-  m_currentText += "<br />";
-  m_currentText += "path: " + u.pathOrUrl();
+  modifyHtml() += "<br />";
+  modifyHtml() += "path: " + u.pathOrUrl();
 
   //Pick the one duchain for this document that has the most child-contexts/declarations.
   //This prevents picking a context that is empty due to header-guards.
   TopDUContext* duchain = pickContextWithData(duchains, 2);
 
-  m_currentText += "<br />";
+  modifyHtml() += "<br />";
 
   if(duchain) {
     const Cpp::EnvironmentFile* f = dynamic_cast<const Cpp::EnvironmentFile*>(duchain->parsingEnvironmentFile().data());
     Q_ASSERT(f); //Should always be for c++
-    m_currentText += QString("%1: %2 %3: %4 %5: %6").arg(labelHighlight(i18nc("Headers included into this header", "Included"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this header was included into", "Included by")).arg(duchain->importers().count()).arg(i18nc("Count of macros defined in this header", "Defined macros")).arg(f->definedMacros().set().count());
-    m_currentText += "<br />";
+    modifyHtml() += QString("%1: %2 %3: %4 %5: %6").arg(labelHighlight(i18nc("Headers included into this header", "Included"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this header was included into", "Included by")).arg(duchain->importers().count()).arg(i18nc("Count of macros defined in this header", "Defined macros")).arg(f->definedMacros().set().count());
+    modifyHtml() += "<br />";
     if(!shorten) {
-      m_currentText += labelHighlight(i18n("Declarations:")) + "<br />";
+      modifyHtml() += labelHighlight(i18n("Declarations:")) + "<br />";
       bool first = true;
       addDeclarationsFromContext(duchain, first);
     }
   }else if(duchains.isEmpty()) {
-    m_currentText += i18n("not parsed yet");
+    modifyHtml() += i18n("not parsed yet");
   }
 
   addExternalHtml(m_suffix);
 
-  m_currentText += "</small></small></p></body></html>";
-  return m_currentText;
+  modifyHtml() += "</small></small></p></body></html>";
+  return currentHtml();
 }
 
 QString IncludeNavigationContext::name() const
@@ -116,7 +116,7 @@ QString IncludeNavigationContext::name() const
 
 void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent)
 {
-  //m_currentText += indent + ctx->localScopeIdentifier().toString() + "{<br />";
+  //modifyHtml() += indent + ctx->localScopeIdentifier().toString() + "{<br />";
   QVector<DUContext*> children = ctx->childContexts();
   QVector<Declaration*> declarations = ctx->localDeclarations();
 
@@ -139,11 +139,11 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
       if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty() && !(*declarationIterator)->range().isEmpty() && !(*declarationIterator)->isForwardDeclaration()) {
         //Show the declaration
         if(!first)
-          m_currentText += Qt::escape(", ");
+          modifyHtml() += Qt::escape(", ");
         else
           first = false;
 
-        m_currentText += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
+        modifyHtml() += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
       }
       ++declarationIterator;
@@ -154,7 +154,7 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
       ++childIterator;
     }
   }
-  //m_currentText += "}<br />";
+  //modifyHtml() += "}<br />";
 }
 
 }

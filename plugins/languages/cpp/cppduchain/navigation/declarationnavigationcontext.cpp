@@ -49,10 +49,10 @@ void DeclarationNavigationContext::htmlClass()
   Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(klass->declaration(m_topContext.data()));
   if(classDecl) {
     FOREACH_FUNCTION( const Cpp::BaseClassInstance& base, classDecl->baseClasses ) {
-      m_currentText += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
+      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
       eventuallyMakeTypeLinks(base.baseClass.type());
     }
-    m_currentText += " ";
+    modifyHtml() += " ";
   }
 }
 
@@ -62,7 +62,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
 
   if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration(m_topContext.data())) ) {
     if( templ->instantiatedFrom() ) {
-      m_currentText += Qt::escape("  <");
+      modifyHtml() += Qt::escape("  <");
 
       const Cpp::InstantiationInformation& params = templ->instantiatedWith().information();
       bool first = true;
@@ -70,17 +70,17 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
         if( first )
           first = false;
         else
-          m_currentText += ", ";
+          modifyHtml() += ", ";
 
         if( type ) {
           AbstractType::Ptr t = type.type();
           eventuallyMakeTypeLinks(t);
         }else{
-            m_currentText += "missing type";
+            modifyHtml() += "missing type";
         }
       }
 
-      m_currentText += Qt::escape(" >");
+      modifyHtml() += Qt::escape(" >");
     }
   }
 }
