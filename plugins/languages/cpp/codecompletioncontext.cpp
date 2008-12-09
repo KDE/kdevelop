@@ -963,7 +963,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   foreach(Declaration* decl, context->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     if(classFun) {
-      if(!classFun->isDefinition() && !FunctionDefinition::definition(classFun) && classFun->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
+      if(!classFun->isAbstract() && !classFun->isDefinition() && !FunctionDefinition::definition(classFun) && classFun->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
         ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(classFun), KSharedPtr<CodeCompletionContext>(this)));
       }
   }
