@@ -42,7 +42,7 @@ uint AbstractTypeData::classSize() const {
   return TypeSystem::self().dataClassSize(*this);
 }
 
-unsigned short AbstractTypeData::itemSize() const {
+unsigned int AbstractTypeData::itemSize() const {
   return TypeSystem::self().dynamicSize(*this);
 }
 
@@ -209,6 +209,7 @@ TypeVisitor::~TypeVisitor()
 
 TypePtr< KDevelop::AbstractType > TypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
   const_cast<AbstractType*>(type.unsafeData())->exchangeTypes(this);
+  return type;
 }
 
 TypePtr< KDevelop::AbstractType > SimpleTypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {

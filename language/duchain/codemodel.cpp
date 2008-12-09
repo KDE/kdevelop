@@ -92,7 +92,7 @@ class CodeModelRepositoryItem {
     return file.index();
   }
   
-  unsigned short int itemSize() const {
+  size_t itemSize() const {
     return dynamicSize();
   }
   
@@ -156,7 +156,6 @@ CodeModel::~CodeModel()
   delete d;
 }
 
-///@todo Sorting in the items list, so searches can be faster
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {
   ifDebug( kDebug() << "addItem" << file.str() << id.identifier().toString(); )

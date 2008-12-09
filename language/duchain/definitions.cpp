@@ -48,7 +48,7 @@ class DefinitionsItem {
     return declaration.hash();
   }
   
-  unsigned short int itemSize() const {
+  unsigned int itemSize() const {
     return dynamicSize();
   }
   

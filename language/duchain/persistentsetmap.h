@@ -73,7 +73,7 @@ class PersistentSetMapItem {
     return Hasher::hash(key);
   }
   
-  unsigned short int itemSize() const {
+  unsigned int itemSize() const {
     return dynamicSize();
   }
   

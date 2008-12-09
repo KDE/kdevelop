@@ -90,7 +90,7 @@ class EnvironmentInformationItem {
     return m_topContext;
   }
 
-  unsigned short int itemSize() const {
+  unsigned int itemSize() const {
     return sizeof(*this) + m_size;
   }
 

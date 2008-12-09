@@ -53,7 +53,7 @@ class PersistentSymbolTableItem {
     return id.index;
   }
   
-  unsigned short int itemSize() const {
+  unsigned int itemSize() const {
     return dynamicSize();
   }
   

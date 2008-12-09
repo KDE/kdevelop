@@ -601,7 +601,7 @@ class Bucket {
       m_lastUsed = 0;
       m_changed = true;
 
-      unsigned short size = itemFromIndex(index)->itemSize();
+      unsigned int size = itemFromIndex(index)->itemSize();
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
       unsigned short localHash = hash % m_objectMapSize;
       unsigned short currentIndex = m_objectMap[localHash];

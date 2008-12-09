@@ -30,7 +30,7 @@ using namespace KDevelop;
 
 struct StringData {
   unsigned short length;
-  unsigned short itemSize() const {
+  unsigned int itemSize() const {
     return sizeof(StringData) + length;
   }
   unsigned int hash() const {
