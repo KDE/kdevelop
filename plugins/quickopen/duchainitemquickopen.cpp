@@ -41,6 +41,11 @@ QString DUChainItemData::text() const {
   Declaration* decl = m_item.m_item.data();
   if(!decl)
     return i18n("Not available any more: %1", m_item.m_text);
+
+  if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl))
+      if(def->declaration())
+          decl = def->declaration();
+      
   QString text;
   TypePtr<FunctionType> function = decl->type<FunctionType>();
   if( function )
@@ -57,6 +62,9 @@ QList<QVariant> DUChainItemData::highlighting() const {
   Declaration* decl = m_item.m_item.data();
   if(!decl)
     return QList<QVariant>();
+  if(FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl))
+      if(def->declaration())
+          decl = def->declaration();
 
   TypePtr<FunctionType> function = decl->type<FunctionType>();
   if(!function)
