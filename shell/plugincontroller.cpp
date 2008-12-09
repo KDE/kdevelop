@@ -184,7 +184,7 @@ void PluginController::initialize()
     {
         pluginMap.insert( s, true );
     }
-    
+
     foreach( const KPluginInfo& pi, d->plugins )
     {
         if( isGlobalPlugin( pi ) )
@@ -192,6 +192,7 @@ void PluginController::initialize()
             QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
             if( pluginMap.isEmpty() || ( it != pluginMap.constEnd() && it.value() ) && loadPluginInternal( pi.pluginName() ) != 0 )
             {
+                loadPluginInternal( pi.pluginName() );
                 grp.writeEntry( pi.pluginName()+"Enabled", true );
             }
         }
