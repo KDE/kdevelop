@@ -85,7 +85,6 @@ struct FileModificationSetRepository : public Utils::BasicSetRepository {
   FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", true) {
   }
   virtual void itemRemovedFromSets(uint index) {
-    kDebug() << "item removed from file-modification repository:" << index;
     fileModificationPairRepository().deleteItem(index);
   }
 };
