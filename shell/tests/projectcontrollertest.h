@@ -32,6 +32,8 @@ class IProject;
 class ProjectController;
 }
 
+class FakeFileManager;
+
 class ProjectControllerTest : public QObject
 {
 Q_OBJECT
@@ -47,6 +49,10 @@ private slots:
     void reopen();
     void reopenWhileLoading();
 
+    void emptyProject();
+    void singleFile();
+    void singleDirectory();
+    void fileInSubdirectory();
 
 private:
     KUrl writeProjectConfig(const QString& name);
@@ -58,6 +64,9 @@ private:
     void assertProjectOpened(const QString& name, KDevelop::IProject*& proj);
     void assertSpyCaughtProject(QSignalSpy* spy, KDevelop::IProject* proj);
     void assertProjectClosed(KDevelop::IProject* proj);
+    void assertEmptyProjectModel();
+
+    FakeFileManager* createFileManager();
 
 private:
     KUrl m_projFileUrl;
@@ -66,6 +75,9 @@ private:
     QString m_projName;
     QList<KUrl> m_tmpConfigs;
     QDir m_scratchDir;
+    KUrl m_projFolder;
+
+    QList<FakeFileManager*> m_fileManagerGarbage;
 };
 
 #endif // KDEVELOP_SHELL_PROJECTCONTROLLERTEST_INCLUDED

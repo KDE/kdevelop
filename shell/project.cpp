@@ -176,6 +176,178 @@ public:
         projCtrl->projectModel()->appendRow(topItem);
         projCtrl->projectImportingFinished( project );
     }
+
+    void initProjectUrl(const KUrl& projectFileUrl_)
+    {
+        // helper method for open()
+        projectFileUrl = projectFileUrl_;
+        if ( projectFileUrl.isLocalFile() )
+        {
+            QString path = QFileInfo( projectFileUrl.toLocalFile() ).canonicalFilePath();
+            if ( !path.isEmpty() )
+                projectFileUrl.setPath( path );
+        }
+    }
+
+    bool initProjectFiles()
+    {
+        KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
+        if ( !statJob->exec() ) //be sync for right now
+        {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                            i18n( "Unable to load the project file %1",
+                                  projectFileUrl.pathOrUrl() ) );
+            return false;
+        }
+
+
+        developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) );
+        developerFileUrl.addPath(".kdev4");
+        developerFileUrl.addPath( projectFileUrl.fileName() );
+
+        statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
+        if( !statJob->exec() )
+        {
+            KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
+            statJob = KIO::stat( dir, KIO::HideProgressInfo );
+            if( !statJob->exec() )
+            {
+                KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
+                if( !mkdirJob->exec() )
+                {
+                    KMessageBox::sorry(
+                        Core::self()->uiController()->activeMainWindow(),
+                        i18n("Unable to create hidden dir (%1) for developer file",
+                        dir.pathOrUrl() )
+                        );
+                    return false;
+                }
+            }
+        }
+
+        if( !KIO::NetAccess::download( projectFileUrl, projectTempFile,
+                        Core::self()->uiController()->activeMainWindow() ) )
+        {
+            KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
+                            i18n("Unable to get project file: %1",
+                            projectFileUrl.pathOrUrl() ) );
+            return false;
+        }
+
+        statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
+        if( !statJob->exec() || !KIO::NetAccess::download( developerFileUrl, developerTempFile,
+            Core::self()->uiController()->activeMainWindow() ) )
+        {
+            tmp = new KTemporaryFile();
+            tmp->open();
+            developerTempFile = tmp->fileName();
+            tmp->close();
+        }
+        return true;
+    }
+
+    KConfigGroup initKConfigObject()
+    {
+        // helper method for open()
+        kDebug() << "Creating KConfig object for project files" << developerTempFile << projectTempFile;
+        m_cfg = KSharedConfig::openConfig( developerTempFile );
+        m_cfg->addConfigSources( QStringList() << projectTempFile );
+        KConfigGroup projectGroup( m_cfg, "Project" );
+        return projectGroup;
+    }
+
+    bool projectNameUsed(const KConfigGroup& projectGroup)
+    {
+        // helper method for open()
+        name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
+        if( Core::self()->projectController()->isProjectNameUsed( name ) ) 
+        {
+            kWarning() << "Trying to open a project with a name thats already used by another open project";
+            return true;
+        }
+        return false;
+    }
+
+    IProjectFileManager* fetchFileManager(const KConfigGroup& projectGroup)
+    {
+        if (manager)
+        {
+            IProjectFileManager* iface = 0;
+            iface = manager->extension<KDevelop::IProjectFileManager>();
+            Q_ASSERT(iface);
+            return iface;
+        }
+
+        // helper method for open()
+        QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
+
+        //Get our importer
+        IPluginController* pluginManager = Core::self()->pluginController();
+        manager = pluginManager->pluginForExtension( "org.kdevelop.IProjectFileManager", managerSetting );
+        IProjectFileManager* iface = 0;
+        if ( manager )
+            iface = manager->extension<IProjectFileManager>();
+        else
+        {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                            i18n( "Could not load project management plugin %1.",
+                                  managerSetting ) );
+            manager = 0;
+        }
+        if (iface == 0)
+        {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                            i18n( "project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting ) );
+            delete manager;
+            manager = 0;
+        }
+        return iface;
+    }
+
+    void loadVersionControlPlugin(KConfigGroup& projectGroup)
+    {
+        // helper method for open()
+        IPluginController* pluginManager = Core::self()->pluginController();
+        if( projectGroup.hasKey( "VersionControlSupport" ) )
+        {
+            QString vcsPluginName = projectGroup.readEntry("VersionControlSupport", "");
+            if( !vcsPluginName.isEmpty() )
+            {
+                vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPluginName );
+            }
+        } else 
+        {
+            foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
+            {
+                IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
+                if( iface && iface->isVersionControlled( topItem->url() ) )
+                {
+                    vcsPlugin = p;
+                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( vcsPlugin ).pluginName() );
+                    projectGroup.sync();
+                }
+            }
+        }
+
+    }
+
+    bool importTopItem(IProjectFileManager* fileManager)
+    {
+        if (!fileManager)
+        {
+            return false;
+        }
+        topItem = fileManager->import( project );
+        if( !topItem )
+        {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                i18n("Could not open project") );
+            return false;
+        }
+        topItem->setIcon();
+        return true;
+    }
+
 };
 
 Project::Project( QObject *parent )
@@ -234,169 +406,43 @@ void Project::reloadModel()
 
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
+
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
-    if( iface )
+    if (!d->importTopItem(iface))
     {
-        d->topItem = iface->import( this );
-        if( !d->topItem )
-        {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                i18n("Could not open project") );
             d->reloading = false;
             d->scheduleReload = false;
             return;
-        }
-        d->topItem->setIcon();
-        ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
-        connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
-        Core::self()->runController()->registerJob( importJob );
-     }
+    }
+
+    ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+    connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
+    Core::self()->runController()->registerJob( importJob );
 }
 
 bool Project::open( const KUrl& projectFileUrl_ )
 {
-    //Canonicalize the project url, because we do the same in many other cases with files,
-    //so we must canonicalize the project url too.
-    KUrl projectFileUrl = projectFileUrl_;
-
-    if ( projectFileUrl.isLocalFile() )
-    {
-        QString path = QFileInfo( projectFileUrl.toLocalFile() ).canonicalFilePath();
-        if ( !path.isEmpty() )
-            projectFileUrl.setPath( path );
-    }
-
-    KIO::StatJob* statJob = KIO::stat( projectFileUrl, KIO::HideProgressInfo );
-    if ( !statJob->exec() ) //be sync for right now
-    {
-        KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Unable to load the project file %1",
-                                  projectFileUrl.pathOrUrl() ) );
-        return false;
-    }
-
-    d->projectFileUrl = projectFileUrl;
-    d->developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) );
-    d->developerFileUrl.addPath(".kdev4");
-    d->developerFileUrl.addPath( projectFileUrl.fileName() );
-
-    statJob = KIO::stat( d->developerFileUrl, KIO::HideProgressInfo );
-    if( !statJob->exec() )
-    {
-        KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
-        statJob = KIO::stat( dir, KIO::HideProgressInfo );
-        if( !statJob->exec() )
-        {
-            KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
-            if( !mkdirJob->exec() )
-            {
-                KMessageBox::sorry(
-                        Core::self()->uiController()->activeMainWindow(),
-                        i18n("Unable to create hidden dir (%1) for developer file",
-                        dir.pathOrUrl() )
-                        );
-                return false;
-            }
-        }
-    }
-
-    if( !KIO::NetAccess::download( d->projectFileUrl, d->projectTempFile,
-                        Core::self()->uiController()->activeMainWindow() ) )
-    {
-        KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
-                            i18n("Unable to get project file: %1",
-                            d->projectFileUrl.pathOrUrl() ) );
+    d->initProjectUrl(projectFileUrl_);
+    if (!d->initProjectFiles())
         return false;
 
-    }
-
-    statJob = KIO::stat( d->developerFileUrl, KIO::HideProgressInfo );
-    if( !statJob->exec() || !KIO::NetAccess::download( d->developerFileUrl, d->developerTempFile,
-            Core::self()->uiController()->activeMainWindow() ) )
-    {
-
-        d->tmp = new KTemporaryFile();
-        d->tmp->open();
-        d->developerTempFile = d->tmp->fileName();
-        d->tmp->close();
-    }
-
-    kDebug() << "Creating KConfig object for project files" << d->developerTempFile << d->projectTempFile;
-    d->m_cfg = KSharedConfig::openConfig( d->developerTempFile );
-    d->m_cfg->addConfigSources( QStringList() << d->projectTempFile );
-
-    KConfigGroup projectGroup( d->m_cfg, "Project" );
-
-    d->name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
-    if( Core::self()->projectController()->isProjectNameUsed( d->name ) ) 
-    {
-        kWarning() << "Trying to open a project with a name thats already used by another open project";
+    KConfigGroup projectGroup = d->initKConfigObject();
+    if (d->projectNameUsed(projectGroup))
         return false;
-    }
-    d->folder = projectFileUrl.directory( KUrl::AppendTrailingSlash );
+    d->folder = d->projectFileUrl.directory( KUrl::AppendTrailingSlash );
 
-    QString managerSetting = projectGroup.readEntry( "Manager", "KDevGenericManager" );
-
-    //Get our importer
-    IPluginController* pluginManager = Core::self()->pluginController();
-    d->manager = pluginManager->pluginForExtension( "org.kdevelop.IProjectFileManager", managerSetting );
-    IProjectFileManager* iface = 0;
-    if ( d->manager )
-        iface = d->manager->extension<IProjectFileManager>();
-    else
-    {
-        KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Could not load project management plugin %1.",
-                                  managerSetting ) );
-        d->manager = 0;
+    IProjectFileManager* iface = d->fetchFileManager(projectGroup);
+    if (!iface)
         return false;
-    }
 
-    if ( d->manager && iface )
-    {
-        d->topItem = iface->import( this );
-        if( !d->topItem )
-        {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                i18n("Could not open project") );
-            return false;
-        }
-
-        if( projectGroup.hasKey( "VersionControlSupport" ) )
-        {
-            QString vcsPlugin = projectGroup.readEntry("VersionControlSupport", "");
-            if( !vcsPlugin.isEmpty() )
-            {
-                d->vcsPlugin = pluginManager->pluginForExtension( "org.kdevelop.IBasicVersionControl", vcsPlugin );
-            }
-        } else 
-        {
-            foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
-            {
-                IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-                if( iface && iface->isVersionControlled( d->topItem->url() ) )
-                {
-                    d->vcsPlugin = p;
-                    projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo( d->vcsPlugin ).pluginName() );
-                    projectGroup.sync();
-                }
-            }
-        }
-
-        d->topItem->setIcon();
-        ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
-        connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
-        Core::self()->runController()->registerJob( importJob );
-    }
-    else
-    {
-        KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting ) );
-        delete d->manager;
-        d->manager = 0;
+    Q_ASSERT(d->manager);
+    if (!d->importTopItem(iface) )
         return false;
-    }
-    
+
+    d->loadVersionControlPlugin(projectGroup);
+    ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+    connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
+    Core::self()->runController()->registerJob( importJob );
     return true;
 }
 
