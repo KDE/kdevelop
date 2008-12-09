@@ -17,6 +17,7 @@ class ProjectSelectionPage;
 }
 
 class ProjectTemplatesModel;
+class QModelIndex;
 class KUrl;
 
 class ProjectSelectionPage: public QWidget {
@@ -33,6 +34,7 @@ signals:
     void valid();
     void invalid();
 private slots:
+    void itemChanged( const QModelIndex&, const QModelIndex& );
     void urlEdited();
     void validateData();
 private:

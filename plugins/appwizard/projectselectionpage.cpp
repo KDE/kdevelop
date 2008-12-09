@@ -12,9 +12,12 @@
 #include <QDir>
 
 #include <klineedit.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
+#include "appwizardplugin.h"
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     :QWidget(parent), m_templatesModel(templatesModel), m_urlEditedByUser( false )
@@ -29,7 +32,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
              this, SLOT(urlEdited() ));
     connect( ui->templateView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( validateData() ) );
+             this, SLOT( itemChanged( const QModelIndex&, const QModelIndex& ) ) );
     connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
              this, SLOT( validateData() ) );
     ui->locationUrl->setPath(QDir::homePath());
@@ -38,6 +41,19 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 ProjectSelectionPage::~ProjectSelectionPage()
 {
     delete ui;
+}
+
+void ProjectSelectionPage::itemChanged( const QModelIndex& current, const QModelIndex& )
+{
+    KStandardDirs* dirs = m_templatesModel->plugin()->componentData().dirs();
+    QString picPath = dirs->findResource("apptemplate_previews", m_templatesModel->data( current, Qt::UserRole+2 ).toString() );
+    if( picPath.isEmpty() ) 
+    {
+        picPath = dirs->findResource("apptemplate_previews", "default-kdevelop.png");
+    }
+    ui->preview->setPixmap( QPixmap( picPath ) );
+    ui->description->setText( m_templatesModel->data( current ).toString() );
+    validateData();
 }
 
 QString ProjectSelectionPage::selectedTemplate()

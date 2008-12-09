@@ -5,21 +5,41 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
+    <width>637</width>
     <height>475</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <item>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item rowspan="2" row="0" column="0" >
     <widget class="QTreeView" name="templateView" />
    </item>
-   <item>
+   <item row="0" column="1" >
+    <widget class="QLabel" name="preview" >
+     <property name="minimumSize" >
+      <size>
+       <width>250</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="description" >
+     <property name="minimumSize" >
+      <size>
+       <width>250</width>
+       <height>150</height>
+      </size>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
     <widget class="QGroupBox" name="propertiesBox" >
      <property name="title" >
       <string>Properties</string>
@@ -51,7 +71,7 @@
       <item row="2" column="1" >
        <widget class="KSqueezedTextLabel" name="locationValidLabel" >
         <property name="text" >
-         <string>(invalid)</string>
+         <string>KSqueezedTextLabel</string>
         </property>
        </widget>
       </item>
@@ -64,6 +84,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KSqueezedTextLabel</class>
+   <extends>QLabel</extends>
+   <header>ksqueezedtextlabel.h</header>
+  </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>

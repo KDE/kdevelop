@@ -65,6 +65,7 @@ K_PLUGIN_FACTORY(AppWizardFactory,
     KStandardDirs *dirs = compData.dirs();
     dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
     dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");
+    dirs->addResourceType("apptemplate_previews","data", "kdevappwizard/template_previews/");
     dirs->addResourceType("appimports", "data", "kdevappwizard/imports/");
     dirs->addResourceType("appimportfiles", "data", "kdevappwizard/importfiles/");
     setComponentData(compData);

@@ -46,9 +46,11 @@ void ProjectTemplatesModel::refresh()
         KConfigGroup general(&templateConfig, "General");
         QString name = general.readEntry("Name");
         QString category = general.readEntry("Category");
+        QString icon = general.readEntry("Icon");
 
         ProjectTemplateItem *templateItem = createItem(name, category);
         templateItem->setData(templateDescription);
+        templateItem->setData(icon, Qt::UserRole+2);
     }
     setHorizontalHeaderLabels(QStringList() << i18n("Project Templates"));
 }

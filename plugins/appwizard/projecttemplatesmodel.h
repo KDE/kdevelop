@@ -22,6 +22,8 @@ public:
 
     void refresh();
 
+    AppWizardPlugin* plugin() { return m_plugin; }
+
 private:
     void extractTemplateDescriptions();
     ProjectTemplateItem *createItem(const QString &name, const QString &category);
