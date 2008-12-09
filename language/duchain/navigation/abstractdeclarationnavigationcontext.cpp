@@ -66,18 +66,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     return currentHtml();
   }
   
-  if( shorten && !m_declaration->comment().isEmpty() ) {
-    QString comment = m_declaration->comment();
-    if( comment.length() > 60 ) {
-      comment.truncate(60);
-      comment += "...";
-    }
-    comment.replace('\n', ' ');
-    comment.replace("<br />", " ");
-    comment.replace("<br/>", " ");
-    modifyHtml() += commentHighlight(Qt::escape(comment)) + "   ";
-  }
-  
   if( m_previousContext ) {
     modifyHtml() += navigationHighlight("Back to ");
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
@@ -159,7 +147,31 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += labelHighlight(i18n("Scope: ")) + Qt::escape(parent.toString()) + " ";
       }
     }
+  }else{
+    AbstractType::Ptr showType = m_declaration->abstractType();
+    if(showType && showType.cast<FunctionType>()) {
+      modifyHtml() += labelHighlight(i18n("Returns: "));
+      showType = showType.cast<FunctionType>()->returnType();
+    }else{
+      modifyHtml() += labelHighlight(i18n("Type: "));
+    }
+    
+    if(showType)
+      modifyHtml() += Qt::escape(showType->toString()) + " ";
   }
+  
+  if( shorten && !m_declaration->comment().isEmpty() ) {
+    QString comment = m_declaration->comment();
+    if( comment.length() > 60 ) {
+      comment.truncate(60);
+      comment += "...";
+    }
+    comment.replace('\n', ' ');
+    comment.replace("<br />", " ");
+    comment.replace("<br/>", " ");
+    modifyHtml() += commentHighlight(Qt::escape(comment)) + "   ";
+  }
+  
 
   QString access = stringFromAccess(m_declaration);
   if( !access.isEmpty() )
