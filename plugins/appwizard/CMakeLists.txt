@@ -35,3 +35,4 @@ install(TARGETS kdevappwizard DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 install( FILES kdevappwizard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevappwizard.rc DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard )
+install( FILES default-kdevelop.png DESTINATION ${DATA_INSTALL_DIR}/kdevappwizard/template_previews )

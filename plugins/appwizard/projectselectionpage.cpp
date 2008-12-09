@@ -14,6 +14,7 @@
 #include <klineedit.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <kdebug.h>
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
