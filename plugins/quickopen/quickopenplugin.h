@@ -110,7 +110,7 @@ class QuickOpenWidgetHandler : public QObject {
    * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
    * @param noSearchFied when this is true, no search-line is shown.
    * */
-  QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
+  QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidgetHandler();
 
   ///Shows the dialog

@@ -108,7 +108,7 @@ Declaration* cursorDeclaration() {
   return DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor( doc->url(), SimpleCursor(view->cursorPosition()) ) );
 }
 
-///The first declaration(or definition's declaration) that belongs to a context that surrounds the current cursor
+///The first definition that belongs to a context that surrounds the current cursor
 Declaration* cursorContextDeclaration() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(!doc)
@@ -145,7 +145,7 @@ Declaration* cursorContextDeclaration() {
   if(!definition)
     return 0;
 
-  return DUChainUtils::declarationForDefinition(definition);
+  return definition;
 }
 
 //Returns only the name, no template-parameters or scope
@@ -178,7 +178,7 @@ QString cursorItemText() {
   return QString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
+QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
   m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
 
   o.setupUi( m_dialog );
@@ -186,6 +186,8 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QuickOpenModel* model, const QSt
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
   connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
+
+  m_dialog->setWindowTitle(title);
 
   o.list->setItemDelegate( new QuickOpenDelegate( m_model, o.list ) );
 
@@ -527,10 +529,10 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
 
-    KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
-    quickOpenNavigate->setText( i18n("Navigate Declaration") );
-    quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
-    connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
+//     KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
+//     quickOpenNavigate->setText( i18n("Navigate Declaration") );
+//     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
+//     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
 
     KAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
@@ -597,7 +599,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
     useScopes << i18n("Currently Open");
 
-  m_currentWidgetHandler = new QuickOpenWidgetHandler( m_model, initialItems, useScopes );
+  m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Quick Open"), m_model, initialItems, useScopes );
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   m_currentWidgetHandler->run();
 }
@@ -810,7 +812,7 @@ void QuickOpenPlugin::quickOpenNavigate()
     }
 
     //Change the parent so there are no conflicts in destruction order
-    m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true, true );
+    m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Navigate"), model, QStringList(), QStringList(), true, true );
     model->setParent(m_currentWidgetHandler);
     model->setExpanded(model->index(0,0, QModelIndex()), true);
 
@@ -875,7 +877,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         return false;
     }
     virtual bool accept(DUContext* ctx) {
-      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global )
+      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other )
         return true;
       else
         return false;
@@ -894,7 +896,11 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
-  m_currentWidgetHandler = new QuickOpenWidgetHandler( model, QStringList(), QStringList(), true );
+  m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Outline"), model, QStringList(), QStringList(), true );
+  
+  model->setParent(m_currentWidgetHandler);
+  m_currentWidgetHandler->run();
+
   //Select the declaration that contains the cursor
   if(cursorDecl) {
     int num = 0;
@@ -906,8 +912,6 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
       ++num;
     }
   }
-  model->setParent(m_currentWidgetHandler);
-  m_currentWidgetHandler->run();
 }
 
 #include "quickopenplugin.moc"
