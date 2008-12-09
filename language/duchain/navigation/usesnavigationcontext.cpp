@@ -37,10 +37,11 @@ QString UsesNavigationContext::name() const {
 }
 
 QString UsesNavigationContext::html(bool) {
-  m_currentText  = "<html><body><p><small><small>";
+  clear();
+  modifyHtml()  += "<html><body><p><small><small>";
   
   if( m_previousContext ) {
-    m_currentText += navigationHighlight("Uses of ");
+    modifyHtml() += navigationHighlight("Uses of ");
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
   }else{
     KDevelop::DUChainReadLocker lock(DUChain::lock());
@@ -49,9 +50,9 @@ QString UsesNavigationContext::html(bool) {
     }
   }
   
-  m_currentText += "</small></small></p></body></html>";
+  modifyHtml() += "</small></small></p></body></html>";
 
-  return m_currentText;
+  return currentHtml();
 }
 
 QWidget* UsesNavigationContext::widget() const {

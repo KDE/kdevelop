@@ -68,6 +68,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 
     void nextLink();
     void previousLink();
+    void up();
+    void down();
     void setPrefixSuffix( const QString& prefix, const QString& suffix );
     NavigationContextPointer accept();
     NavigationContextPointer back();
@@ -89,6 +91,26 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     bool alreadyComputed() const;
     
   protected:
+    
+    struct TextHandler {
+      TextHandler(AbstractNavigationContext* c) : context(c) {
+      }
+      void operator+=(const QString& str) const {
+        context->addHtml(str);
+      }
+      AbstractNavigationContext* context;
+    };
+    
+    
+
+    ///Adds given the text to currentHtml()
+    void addHtml(QString html);
+    ///Returns the html text being built in its current state
+    QString currentHtml() const;
+    ///Returns a convenience object that allows writing "modifyHtml() += "Hallo";"
+    TextHandler modifyHtml() {
+      return TextHandler(this);
+    }
 
     //Clears the computed html and links
     void clear();
@@ -113,10 +135,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     NavigationContextPointer registerChild( AbstractNavigationContext* context );
     QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
 
+    int m_currentLine;
+
     //A counter used while building the html-code to count the used links.
     int m_linkCount;
-    QString m_currentText; //Here the text is built
+    //Something else than -1 if the current position is represented by a line-number, not a link.
+    int m_currentPositionLine;
     QMap<QString, NavigationAction> m_links;
+    QMap<int, int> m_linkLines; //Holds the line for each link
     QMap<int, NavigationAction> m_intLinks;
     AbstractNavigationContext* m_previousContext;
     QString m_prefix, m_suffix;
@@ -132,6 +158,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     static const Colorizer importantHighlight;
     static const Colorizer commentHighlight;
     static const Colorizer nameHighlight;
+  private:
+    QString m_currentText; //Here the text is built
 };
 
 }

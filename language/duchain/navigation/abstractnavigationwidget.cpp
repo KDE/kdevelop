@@ -43,12 +43,14 @@
 #include "useswidget.h"
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
+#include <qapplication.h>
 
 namespace KDevelop {
 
 AbstractNavigationWidget::AbstractNavigationWidget()
   : m_currentWidget(0)
 {
+  setPalette( QApplication::palette() );
 }
 
 void AbstractNavigationWidget::initBrowser(int height) {
@@ -95,7 +97,7 @@ void AbstractNavigationWidget::update() {
     m_browser->setHtml( m_context->html() );
 
     m_browser->verticalScrollBar()->setValue(scrollPos);
-    m_browser->scrollToAnchor("selectedItem");
+    m_browser->scrollToAnchor("currentPosition");
     m_browser->show();
   }else{
     m_browser->hide();
@@ -166,11 +168,15 @@ void AbstractNavigationWidget::back() {
 }
 
 void AbstractNavigationWidget::up() {
-  m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepSub );
+  DUChainReadLocker lock( DUChain::lock() );
+  m_context->up();
+  update();
 }
 
 void AbstractNavigationWidget::down() {
-  m_browser->verticalScrollBar()->triggerAction( QAbstractSlider::SliderSingleStepAdd );
+  DUChainReadLocker lock( DUChain::lock() );
+  m_context->down();
+  update();
 }
 
 void AbstractNavigationWidget::embeddedWidgetAccept() {

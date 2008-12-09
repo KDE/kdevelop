@@ -56,14 +56,14 @@ QString AbstractDeclarationNavigationContext::name() const
 
 QString AbstractDeclarationNavigationContext::html(bool shorten)
 {
-  m_linkCount = 0;
-  m_currentText  = "<html><body><p><small><small>";
+  clear();
+  modifyHtml()  += "<html><body><p><small><small>";
 
   addExternalHtml(m_prefix);
 
   if(!m_declaration.data()) {
-    m_currentText += i18n("<br /> lost declaration <br />");
-    return m_currentText;
+    modifyHtml() += i18n("<br /> lost declaration <br />");
+    return currentHtml();
   }
   
   if( shorten && !m_declaration->comment().isEmpty() ) {
@@ -75,13 +75,13 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     comment.replace('\n', ' ');
     comment.replace("<br />", " ");
     comment.replace("<br/>", " ");
-    m_currentText += commentHighlight(Qt::escape(comment)) + "   ";
+    modifyHtml() += commentHighlight(Qt::escape(comment)) + "   ";
   }
   
   if( m_previousContext ) {
-    m_currentText += navigationHighlight("Back to ");
+    modifyHtml() += navigationHighlight("Back to ");
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
-    m_currentText += "<br>";
+    modifyHtml() += "<br>";
   }
 
   if( !shorten ) {
@@ -90,14 +90,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       htmlFunction();
     } else if( m_declaration->isTypeAlias() || m_declaration->kind() == Declaration::Instance ) {
       if( m_declaration->isTypeAlias() )
-        m_currentText += importantHighlight("typedef ");
+        modifyHtml() += importantHighlight("typedef ");
 
       if(m_declaration->type<EnumeratorType>())
-        m_currentText += i18n("enumerator") + " ";
+        modifyHtml() += i18n("enumerator") + " ";
 
       eventuallyMakeTypeLinks( m_declaration->abstractType() );
 
-      m_currentText += " " + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
+      modifyHtml() += " " + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
     }else{
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();
@@ -105,18 +105,18 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
-        m_currentText += i18n("enumeration") + " " + Qt::escape(m_declaration->identifier().toString()) + "<br>";
+        modifyHtml() += i18n("enumeration") + " " + Qt::escape(m_declaration->identifier().toString()) + "<br>";
       }
 
       if(m_declaration->isForwardDeclaration()) {
         ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(m_declaration.data());
         Declaration* resolved = forwardDec->resolve(m_topContext.data());
         if(resolved) {
-          m_currentText += "(" + i18n("resolved forward-declaration") + ": ";
+          modifyHtml() += "(" + i18n("resolved forward-declaration") + ": ";
           makeLink(resolved->identifier().toString(), KDevelop::DeclarationPointer(resolved), NavigationAction::NavigateDeclaration );
-          m_currentText += ") ";
+          modifyHtml() += ") ";
         }else{
-          m_currentText += i18n("(unresolved forward-declaration)") + " ";
+          modifyHtml() += i18n("(unresolved forward-declaration)") + " ";
           QualifiedIdentifier id = forwardDec->qualifiedIdentifier();
           uint count;
           const IndexedDeclaration* decls;
@@ -124,14 +124,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
           bool had = false;
           for(uint a = 0; a < count; ++a) {
             if(decls[a].isValid() && !decls[a].data()->isForwardDeclaration()) {
-              m_currentText += "<br />";
+              modifyHtml() += "<br />";
               makeLink(i18n("possible resolution from"), KDevelop::DeclarationPointer(decls[a].data()), NavigationAction::NavigateDeclaration);
-              m_currentText += " " + decls[a].data()->url().str();
+              modifyHtml() += " " + decls[a].data()->url().str();
               had = true;
             }
           }
           if(had)
-            m_currentText += "<br />";
+            modifyHtml() += "<br />";
         }
       }
     }
@@ -147,23 +147,23 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
           decl = definition->declaration();
 
         if(decl->abstractType().cast<EnumerationType>())
-          m_currentText += labelHighlight(i18n("Enum: "));
+          modifyHtml() += labelHighlight(i18n("Enum: "));
         else
-          m_currentText += labelHighlight(i18n("Container: "));
+          modifyHtml() += labelHighlight(i18n("Container: "));
 
         makeLink( declarationName(DeclarationPointer(decl)), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
-        m_currentText += " ";
+        modifyHtml() += " ";
       } else {
         QualifiedIdentifier parent = identifier;
         parent.pop();
-        m_currentText += labelHighlight(i18n("Scope: ")) + Qt::escape(parent.toString()) + " ";
+        modifyHtml() += labelHighlight(i18n("Scope: ")) + Qt::escape(parent.toString()) + " ";
       }
     }
   }
 
   QString access = stringFromAccess(m_declaration);
   if( !access.isEmpty() )
-    m_currentText += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
+    modifyHtml() += labelHighlight(i18n("Access: ")) + propertyHighlight(Qt::escape(access)) + " ";
 
 
   ///@todo Enumerations
@@ -183,14 +183,14 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   QString kind = declarationKind(m_declaration);
   if( !kind.isEmpty() ) {
     if( !detailsHtml.isEmpty() )
-      m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + detailsHtml + " ";
+      modifyHtml() += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " " + detailsHtml + " ";
     else
-      m_currentText += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
+      modifyHtml() += labelHighlight(i18n("Kind: ")) + importantHighlight(Qt::escape(kind)) + " ";
   } else if( !detailsHtml.isEmpty() ) {
-    m_currentText += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
+    modifyHtml() += labelHighlight(i18n("Modifiers: ")) +  importantHighlight(Qt::escape(kind)) + " ";
   }
 
-  m_currentText += "<br />";
+  modifyHtml() += "<br />";
 
   if(!shorten)
     htmlAdditionalNavigation();
@@ -201,43 +201,43 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     comment.replace("<br/>", "\n");
     comment = Qt::escape(comment);
     comment.replace("\n", "<br />"); //Replicate newlines in html
-    m_currentText += commentHighlight(comment);
-    m_currentText += "<br />";
+    modifyHtml() += commentHighlight(comment);
+    modifyHtml() += "<br />";
   }
 
   if( !shorten ) {
     if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
-      m_currentText += labelHighlight(i18n( "Def.: " ));
+      modifyHtml() += labelHighlight(i18n( "Def.: " ));
     else
-      m_currentText += labelHighlight(i18n( "Decl.: " ));
+      modifyHtml() += labelHighlight(i18n( "Decl.: " ));
 
     makeLink( QString("%1 :%2").arg( KUrl(m_declaration->url().str()).fileName() ).arg( m_declaration->range().textRange().start().line()+1 ), m_declaration, NavigationAction::JumpToSource );
-    m_currentText += " ";
-    //m_currentText += "<br />";
+    modifyHtml() += " ";
+    //modifyHtml() += "<br />";
     if(!dynamic_cast<FunctionDefinition*>(m_declaration.data())) {
       if( FunctionDefinition* definition = FunctionDefinition::definition(m_declaration.data()) ) {
-        m_currentText += labelHighlight(i18n( " Def.: " ));
+        modifyHtml() += labelHighlight(i18n( " Def.: " ));
         makeLink( QString("%1 :%2").arg( KUrl(definition->url().str()).fileName() ).arg( definition->range().textRange().start().line()+1 ), DeclarationPointer(definition), NavigationAction::JumpToSource );
       }
     }
 
     if( FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(m_declaration.data()) ) {
       if(definition->declaration()) {
-        m_currentText += labelHighlight(i18n( " Decl.: " ));
+        modifyHtml() += labelHighlight(i18n( " Decl.: " ));
         makeLink( QString("%1 :%2").arg( KUrl(definition->declaration()->url().str()).fileName() ).arg( definition->declaration()->range().textRange().start().line()+1 ), DeclarationPointer(definition->declaration()), NavigationAction::JumpToSource );
       }
     }
     
-    m_currentText += " ";
+    modifyHtml() += " ";
     makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
-    //m_currentText += "<br />";
+    //modifyHtml() += "<br />";
 
   addExternalHtml(m_suffix);
 
-  m_currentText += "</small></small></p></body></html>";
+  modifyHtml() += "</small></small></p></body></html>";
 
-  return m_currentText;
+  return currentHtml();
 }
 
 void AbstractDeclarationNavigationContext::htmlFunction()
@@ -248,19 +248,19 @@ void AbstractDeclarationNavigationContext::htmlFunction()
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(m_declaration.data());
   const FunctionType::Ptr type = m_declaration->abstractType().cast<FunctionType>();
   if( !type ) {
-    m_currentText += errorHighlight("Invalid type<br />");
+    modifyHtml() += errorHighlight("Invalid type<br />");
     return;
   }
   if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
     eventuallyMakeTypeLinks( type->returnType() );
-    m_currentText += ' ' + nameHighlight(Qt::escape(m_declaration->identifier().toString()));
+    modifyHtml() += ' ' + nameHighlight(Qt::escape(m_declaration->identifier().toString()));
   }
 
   if( type->arguments().count() == 0 )
   {
-    m_currentText += "()";
+    modifyHtml() += "()";
   } else {
-    m_currentText += "( ";
+    modifyHtml() += "( ";
     bool first = true;
 
     KDevelop::DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data());
@@ -271,24 +271,24 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       foreach(Declaration* argument, argumentContext->localDeclarations()) {
         if( !first )
-          m_currentText += ", ";
+          modifyHtml() += ", ";
         first = false;
 
         AbstractType::Ptr argType = argument->abstractType();
 
         eventuallyMakeTypeLinks( argType );
-        m_currentText += " " + nameHighlight(Qt::escape(argument->identifier().toString()));
+        modifyHtml() += " " + nameHighlight(Qt::escape(argument->identifier().toString()));
 
         if( currentArgNum >= firstDefaultParam )
-          m_currentText += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
+          modifyHtml() += " = " + Qt::escape(function->defaultParameters()[ currentArgNum - firstDefaultParam ].str());
 
         ++currentArgNum;
       }
     }
 
-    m_currentText += " )";
+    modifyHtml() += " )";
   }
-  m_currentText += "<br />";
+  modifyHtml() += "<br />";
 }
 
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
@@ -300,12 +300,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     Declaration* overridden = DUChainUtils::getOverridden(m_declaration.data());
 
     if(overridden) {
-        m_currentText += i18n("Overrides a") + " ";
+        modifyHtml() += i18n("Overrides a") + " ";
         makeLink(i18n("function"), QString("jump_to_overridden"), NavigationAction(DeclarationPointer(overridden), KDevelop::NavigationAction::NavigateDeclaration));
-        m_currentText += " " + i18n("from") + " ";
+        modifyHtml() += " " + i18n("from") + " ";
         makeLink(overridden->context()->scopeIdentifier(true).toString(), QString("jump_to_overridden_container"), NavigationAction(DeclarationPointer(overridden->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
         
-        m_currentText += "<br />";
+        modifyHtml() += "<br />";
     }else{
       //Check if this declarations hides other declarations
       QList<Declaration*> decls;
@@ -315,12 +315,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
                                                 SimpleCursor::invalid(), AbstractType::Ptr(), m_topContext.data(), DUContext::DontSearchInParent);
       uint num = 0;
       foreach(Declaration* decl, decls) {
-        m_currentText += i18n("Hides a") + " ";
+        modifyHtml() += i18n("Hides a") + " ";
         makeLink(i18n("function"), QString("jump_to_hide_%1").arg(num), NavigationAction(DeclarationPointer(decl), KDevelop::NavigationAction::NavigateDeclaration));
-        m_currentText += " " + i18n("from") + " ";
+        modifyHtml() += " " + i18n("from") + " ";
         makeLink(decl->context()->scopeIdentifier(true).toString(), QString("jump_to_hide_container_%1").arg(num), NavigationAction(DeclarationPointer(decl->context()->owner()), KDevelop::NavigationAction::NavigateDeclaration));
         
-        m_currentText += "<br />";
+        modifyHtml() += "<br />";
         ++num;
       }
     }
@@ -333,17 +333,17 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
         QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
         
         if(!overriders.isEmpty()) {
-          m_currentText += i18n("Overridden in") + " ";
+          modifyHtml() += i18n("Overridden in") + " ";
           bool first = true;
           foreach(Declaration* overrider, overriders) {
             if(!first)
-              m_currentText += ", ";
+              modifyHtml() += ", ";
             first = false;
             
             QString name = overrider->context()->scopeIdentifier(true).toString();
             makeLink(name, name, NavigationAction(DeclarationPointer(overrider), NavigationAction::NavigateDeclaration));
           }
-          m_currentText += "<br />";
+          modifyHtml() += "<br />";
         }
         if(maxAllowedSteps == 0)
           createFullBackwardSearchLink(overriders.isEmpty() ? i18n("Overriders possible, show all") : i18n("More overriders possible, show all"));
@@ -356,17 +356,17 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
   QList<Declaration*> inheriters = DUChainUtils::getInheriters(m_declaration.data(), maxAllowedSteps);
   
   if(!inheriters.isEmpty()) {
-      m_currentText += i18n("Inherited by") + " ";
+      modifyHtml() += i18n("Inherited by") + " ";
       bool first = true;
       foreach(Declaration* importer, inheriters) {
         if(!first)
-          m_currentText += ", ";
+          modifyHtml() += ", ";
         first = false;
         
         QString importerName = importer->qualifiedIdentifier().toString();
         makeLink(importerName, importerName, NavigationAction(DeclarationPointer(importer), KDevelop::NavigationAction::NavigateDeclaration));
       }
-      m_currentText += "<br />";
+      modifyHtml() += "<br />";
   }
   if(maxAllowedSteps == 0)
     createFullBackwardSearchLink(inheriters.isEmpty() ? i18n("Inheriters possible, show all") : i18n("More inheriters possible, show all"));
@@ -375,7 +375,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString string)
 {
   makeLink(string, "m_fullBackwardSearch=true", NavigationAction("m_fullBackwardSearch=true"));
-  m_currentText += "<br />";
+  modifyHtml() += "<br />";
 }
 
 NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction( QString key )
@@ -393,7 +393,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
   Q_ASSERT(klass);
 
   ///@todo Use information from ClassDeclaration to print whether it's a struct/union/etc.
-  m_currentText += "class ";
+  modifyHtml() += "class ";
   eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 }
 
@@ -414,14 +414,14 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     //We leave out the * and & reference and pointer signs, those are added to the end
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
-    m_currentText += Qt::escape(type->toString());
+    modifyHtml() += Qt::escape(type->toString());
   }
 }
 
 void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType::Ptr type )
 {
   if( !type ) {
-    m_currentText += Qt::escape("<no type>");
+    modifyHtml() += Qt::escape("<no type>");
     return;
   }
   AbstractType::Ptr target = TypeUtils::targetType( type, m_topContext.data() );
@@ -431,7 +431,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     ///@todo This is C++ specific, move into subclass
     
     if(target->modifiers() & AbstractType::ConstModifier)
-      m_currentText += "const ";
+      modifyHtml() += "const ";
     
     htmlIdentifiedType(type, idType);
 
@@ -441,23 +441,23 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     //Add reference and pointer
     while(pointer || ref) {
       if(pointer) {
-        m_currentText += Qt::escape("*");
+        modifyHtml() += Qt::escape("*");
         if(pointer->modifiers() & AbstractType::ConstModifier)
-          m_currentText += " const";
+          modifyHtml() += " const";
         ref = pointer->baseType().cast<ReferenceType>();
         pointer = pointer->baseType().cast<PointerType>();
       }
       if(ref) {
-        m_currentText += Qt::escape("&");
+        modifyHtml() += Qt::escape("&");
         if(ref->modifiers() & AbstractType::ConstModifier)
-          m_currentText += " const";
+          modifyHtml() += " const";
         pointer = ref->baseType().cast<PointerType>();
         ref = ref->baseType().cast<ReferenceType>();
       }
     }
 
   } else {
-    m_currentText += Qt::escape(type->toString());
+    modifyHtml() += Qt::escape(type->toString());
   }
 }
 

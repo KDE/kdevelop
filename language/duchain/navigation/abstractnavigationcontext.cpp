@@ -42,7 +42,7 @@
 namespace KDevelop {
 
 AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : m_selectedLink(0), m_linkCount(-1),
+  : m_selectedLink(0), m_linkCount(-1), m_currentPositionLine(0),
     m_previousContext(previousContext), m_topContext(topContext)
 {
 }
@@ -53,7 +53,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
   int pos = 0;
   QString fileMark = "KDEV_FILE_LINK{";
   while( pos < text.length() && (pos = text.indexOf( fileMark, pos)) != -1 ) {
-    m_currentText += text.mid(lastPos, pos-lastPos);
+    modifyHtml() +=  text.mid(lastPos, pos-lastPos);
 
     pos += fileMark.length();
 
@@ -69,7 +69,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
     lastPos = pos;
   }
 
-  m_currentText += text.mid(lastPos, text.length()-lastPos);
+  modifyHtml() +=  text.mid(lastPos, text.length()-lastPos);
 }
 
 void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
@@ -83,12 +83,17 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
 {
   m_links[ targetId ] = action;
   m_intLinks[ m_linkCount ] = action;
+  m_linkLines[ m_linkCount ] = m_currentLine;
+  if(m_currentPositionLine == m_currentLine) {
+    m_currentPositionLine = -1;
+    m_selectedLink = m_linkCount;
+  }
 
   QString str = Qt::escape(name);
   if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
     str = "<font color=\"#880088\">" + str + "</font>";
 
-  m_currentText += "<a href=\"" + targetId + "\"" + (m_linkCount == m_selectedLink ? QString(" name = \"selectedItem\"") : QString()) + ">" + str + "</a>";
+  modifyHtml() +=  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QString(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
   if( m_selectedLink == m_linkCount )
     m_selectedLinkAction = action;
@@ -98,9 +103,11 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
 
 void AbstractNavigationContext::clear() {
     m_linkCount = 0;
+    m_currentLine = 0;
     m_currentText.clear();
     m_links.clear();
     m_intLinks.clear();
+    m_linkLines.clear();
 }
 
 NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key) {
@@ -182,12 +189,74 @@ NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPoi
   return ret;
 }
 
+const int lineJump = 3;
+
+void AbstractNavigationContext::down() {
+  //Make sure link-count is valid
+  if( m_linkCount == -1 )
+    html();
+  
+  int fromLine = m_currentPositionLine;
+  
+  if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
+  
+    if(fromLine == -1)
+      fromLine = m_linkLines[m_selectedLink];
+    
+    for(int newSelectedLink = m_selectedLink+1; newSelectedLink < m_linkCount; ++newSelectedLink) {
+      if(m_linkLines[newSelectedLink] > fromLine && m_linkLines[newSelectedLink] - fromLine <= lineJump) {
+        m_selectedLink = newSelectedLink;
+        m_currentPositionLine = -1;
+        return;
+      }
+    }
+  }
+  if(fromLine == -1)
+    fromLine = 0;
+
+  m_currentPositionLine = fromLine + lineJump;
+  
+  if(m_currentPositionLine > m_currentLine)
+    m_currentPositionLine = m_currentLine;
+}
+
+void AbstractNavigationContext::up() {
+  //Make sure link-count is valid
+  if( m_linkCount == -1 )
+    html();
+  
+  int fromLine = m_currentPositionLine;
+  
+  if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
+  
+    if(fromLine == -1)
+      fromLine = m_linkLines[m_selectedLink];
+    
+    for(int newSelectedLink = m_selectedLink-1; newSelectedLink >= 0; --newSelectedLink) {
+      if(m_linkLines[newSelectedLink] < fromLine && fromLine - m_linkLines[newSelectedLink] <= lineJump) {
+        m_selectedLink = newSelectedLink;
+        m_currentPositionLine = -1;
+        return;
+      }
+    }
+  }
+
+  if(fromLine == -1)
+    fromLine = m_currentLine;
+  
+  m_currentPositionLine = fromLine - lineJump;
+  if(m_currentPositionLine < 0)
+    m_currentPositionLine = 0;
+}
+
 void AbstractNavigationContext::nextLink()
 {
   //Make sure link-count is valid
   if( m_linkCount == -1 )
     html();
 
+  m_currentPositionLine = -1;
+  
   if( m_linkCount > 0 )
     m_selectedLink = (m_selectedLink+1) % m_linkCount;
 }
@@ -198,6 +267,8 @@ void AbstractNavigationContext::previousLink()
   if( m_linkCount == -1 )
     html();
 
+  m_currentPositionLine = -1;
+  
   if( m_linkCount > 0 ) {
     --m_selectedLink;
     if( m_selectedLink <  0 )
@@ -295,6 +366,37 @@ bool AbstractNavigationContext::alreadyComputed() const {
 QWidget* AbstractNavigationContext::widget() const {
   return 0;
 }
+
+///Splits the string by the given regular expression, but keeps the split-matches at the end of each line
+static QStringList splitAndKeep(QString str, QRegExp regExp) {
+  QStringList ret;
+  int place = regExp.indexIn(str);
+  while(place != -1) {
+    ret << str.left(place + regExp.matchedLength());
+    str = str.mid(place + regExp.matchedLength());
+    place = regExp.indexIn(str);
+  }
+  ret << str;
+  return ret;
+}
+
+void AbstractNavigationContext::addHtml(QString html) {
+  QRegExp newLineRegExp("<br>|<br */>");
+  foreach(QString line, splitAndKeep(html, newLineRegExp)) {
+    m_currentText +=  line;
+    if(line.indexOf(newLineRegExp) != -1) {
+      ++m_currentLine;
+      if(m_currentLine == m_currentPositionLine) {
+        m_currentText += "<font color=\"#880088\"> <a name = \"currentPosition\" >" + Qt::escape("<->") + "</a> </font>";
+      }
+    }
+  }
+}
+
+QString AbstractNavigationContext::currentHtml() const {
+  return m_currentText;
+}
+
 
 const Colorizer AbstractNavigationContext::errorHighlight("990000");
 const Colorizer AbstractNavigationContext::labelHighlight("000035");
