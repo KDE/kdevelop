@@ -393,7 +393,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
     if(!m_indexInTopContext) {
       allocateOwnIndex();
       if(m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
-        kFatal() << "Could not re-retrieve declaration";
+        kFatal() << "Could not re-retrieve declaration" << "index:" << m_indexInTopContext;
     }
     
     if(!d->m_anonymousInContext) {
