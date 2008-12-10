@@ -407,8 +407,10 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
     loadData();
   
   if(index < (0x0fffffff/2)) {
-    if(index == 0 || index > uint(m_fastDeclarationsSize))
+    if(index == 0 || index > uint(m_fastDeclarationsSize)) {
+      kWarning() << "index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
       return 0;
+    }
     else {
       uint realIndex = index-1;
       if(!m_fastDeclarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
