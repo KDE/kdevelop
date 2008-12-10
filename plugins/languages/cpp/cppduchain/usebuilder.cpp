@@ -181,8 +181,12 @@ void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
   UseBuilderBase::visitSimpleTypeSpecifier(node);
   
   UseExpressionVisitor visitor( editor()->parseSession(), this );
-  if( !node->ducontext )
-    node->ducontext = currentContext();
+  if( !node->ducontext ) {
+    if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
+      node->ducontext = lastContext();//Use the template-context so we can build uses for the template-parameters of template functions
+    else
+      node->ducontext = currentContext();
+  }
   
   visitor.parse( node );
 }

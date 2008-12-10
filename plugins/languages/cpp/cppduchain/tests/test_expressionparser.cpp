@@ -847,66 +847,94 @@ void TestExpressionParser::testOperators() {
 }
 
 void TestExpressionParser::testTemplateFunctions() {
-  QByteArray method("template<class T> class A { template<class T> T a(const T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T> q) {}; template<class T> T c(const A<T*&>& q) {}; A* aClass;");
+  {
+    QByteArray method("template<class T> T test(T t) {}");
 
-  DUContext* top = parse(method, DumpNone);
+    DUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 6);
-  Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
-  QVERIFY(d);
-  KDevelop::FunctionType::Ptr cppFunction = d->abstractType().cast<KDevelop::FunctionType>();
-  QVERIFY(cppFunction);
-  QCOMPARE(cppFunction->arguments().count(), 1);
-  QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->indexedType());
-  QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    
+    QCOMPARE(top->usesCount(), 1);
+    
+    Cpp::ExpressionParser parser(false, true);
 
-  Cpp::ExpressionParser parser(false, true);
+    Cpp::ExpressionEvaluationResult result;
 
-  Cpp::ExpressionEvaluationResult result;
+    result = parser.evaluateExpression( "test<int>()", KDevelop::DUContextPointer(top));
+ 
+    QVERIFY(result.isValid());
+    QVERIFY(result.type.type().cast<IntegralType>());
+    
+    result = parser.evaluateExpression( "test(5)", KDevelop::DUContextPointer(top));
+ 
+    QVERIFY(result.isValid());
+    QVERIFY(result.type.type().cast<IntegralType>());
+    
+    release(top);
+  }
+  {
+    QByteArray method("template<class T> class A { template<class T> T a(const T& q) {}; }; class C{}; template<class T> T a(T& q) {}; template<class T> T b(A<T> q) {}; template<class T> T c(const A<T*&>& q) {}; A* aClass;");
 
-  result = parser.evaluateExpression( "a(C())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+    DUContext* top = parse(method, DumpNone);
 
-  result = parser.evaluateExpression( "b<C>(A<C>())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 6);
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
+    QVERIFY(d);
+    KDevelop::FunctionType::Ptr cppFunction = d->abstractType().cast<KDevelop::FunctionType>();
+    QVERIFY(cppFunction);
+    QCOMPARE(cppFunction->arguments().count(), 1);
+    QCOMPARE(cppFunction->returnType()->indexed(), top->localDeclarations()[0]->indexedType());
+    QCOMPARE(cppFunction->arguments()[0]->toString(), QString("A&"));
 
-  result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  kDebug() << result.toString();
-/*  IdentifiedType* identified = dynamic_cast<IdentifiedType*>(result.type.type().data());
-  Q_ASSERT(identified);*/
-  //kDebug() << "identified:" << identified->qualifiedIdentifier();
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+    Cpp::ExpressionParser parser(false, true);
 
-  result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    Cpp::ExpressionEvaluationResult result;
 
-  result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
+    result = parser.evaluateExpression( "a(C())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
 
-  result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    result = parser.evaluateExpression( "b<C>(A<C>())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
 
-  result = parser.evaluateExpression( "a(A())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    result = parser.evaluateExpression( "b(A<C>())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    kDebug() << result.toString();
+  /*  IdentifiedType* identified = dynamic_cast<IdentifiedType*>(result.type.type().data());
+    Q_ASSERT(identified);*/
+    //kDebug() << "identified:" << identified->qualifiedIdentifier();
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
 
-  result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
-  kDebug() << result.type.type()->toString();
+    result = parser.evaluateExpression( "a<A>(A())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
-  //This test will succeed again once we have a working type repository!
-  result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
-  QVERIFY(result.isValid());
-  kDebug() << result.toString();
-  QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
-  release(top);
+    result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+
+    result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+
+    result = parser.evaluateExpression( "a(A())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+
+    result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    kDebug() << result.type.type()->toString();
+
+    //This test will succeed again once we have a working type repository!
+    result = parser.evaluateExpression( "c(A<C*&>())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    kDebug() << result.toString();
+    QCOMPARE(result.type.type()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+    release(top);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

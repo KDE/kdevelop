@@ -45,7 +45,7 @@ public:
   TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug = false);
 
   KDevelop::QualifiedIdentifier identifier() const;
-  inline QStringList qualifiedName() const { return _M_type.toStringList(); }
+  inline QStringList qualifiedName() const { return m_typeId.toStringList(); }
   inline QList<int> cv() const { return _M_cv; }
 
   bool isConstant() const;
@@ -55,6 +55,8 @@ public:
 
   void run(TypeSpecifierAST *node);
 
+  KDevelop::AbstractType::Ptr type() const;
+  
   QList<KDevelop::DeclarationPointer> declarations() const;
   
 protected:
@@ -72,7 +74,8 @@ private:
   KDevelop::SimpleCursor m_position;
   QList<KDevelop::DeclarationPointer> m_declarations;
   const KDevelop::TopDUContext* m_source;
-  KDevelop::QualifiedIdentifier _M_type;
+  KDevelop::QualifiedIdentifier m_typeId;
+  KDevelop::AbstractType::Ptr m_type;
   QList<int> _M_cv;
   bool m_debug;
 };

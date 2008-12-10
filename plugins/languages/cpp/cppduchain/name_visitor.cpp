@@ -160,10 +160,10 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     v.run( node->type_id->type_specifier );
 
     ExpressionEvaluationResult res;
-    if( !v.declarations().isEmpty() ) {
+    res.type = v.type()->indexed();
+    
+    if( v.type() ) {
       LOCKDUCHAIN;
-      if( v.declarations()[0] )
-        res.type = v.declarations()[0]->abstractType()->indexed();
 
       foreach(const DeclarationPointer &decl, v.declarations())
         if(decl)

@@ -41,7 +41,7 @@ TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* vi
 
 void TypeASTVisitor::run(TypeSpecifierAST *node)
 {
-  _M_type.clear();
+  m_typeId.clear();
   _M_cv.clear();
 
   visit(node);
@@ -77,6 +77,10 @@ void TypeASTVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *no
   visit(node->name);
 }
 
+TypePtr< KDevelop::AbstractType > TypeASTVisitor::type() const {
+  return m_type;
+}
+
 QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 {
   return m_declarations;
@@ -84,56 +88,83 @@ QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 
 void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
+  ///@todo Merge this with ExpressionVisitor::visitSimpleTypeSpecifier
   Cpp::FindDeclaration find( m_context, m_source, DUContext::NoSearchFlags, m_context->range().end );
   find.openQualifiedIdentifier(false);
   
   if (const ListNode<std::size_t> *it = node->integrals)
     {
-      it = it->toFront();
+      uint type = IntegralType::TypeNone;
+      uint modifiers = AbstractType::NoModifiers;
+
+      const ListNode<std::size_t> *it = node->integrals->toFront();
       const ListNode<std::size_t> *end = it;
-      do
-        {
-          std::size_t token = it->element;
-          // FIXME
-          Identifier id(token_name(m_session->token_stream->kind(token)));
-          find.openIdentifier(id);
-
-          {
-            LOCKDUCHAIN;
-            find.closeIdentifier(it == end);
-            _M_type.push(id);
-          }
-          
-          if( !find.lastDeclarations().isEmpty() ) {
-            bool had = false;
-            foreach(const DeclarationPointer &decl, find.lastDeclarations()) {
-              if(decl && !decl->isForwardDeclaration()) {
-                //Prefer registering non forward-declaration uses
-                m_visitor->newUse( node, token, token+1, decl );
-                had = true;
-                break;
-              }
-            }
-            
-            if(!had) //only forward-declarations, register to any.
-              m_visitor->newUse( node, token, token+1, find.lastDeclarations()[0] );
-          } else if( m_debug )
-            kDebug( 9007 ) << "failed to find " << id << " as part of " << decode( m_session, node) << ", searched in " << find.describeLastContext();
-
-          it = it->next;
+      do {
+        int kind = m_session->token_stream->kind(it->element);
+        switch (kind) {
+          case Token_char:
+            type = IntegralType::TypeChar;
+            break;
+          case Token_wchar_t:
+            type = IntegralType::TypeWchar_t;
+            break;
+          case Token_bool:
+            type = IntegralType::TypeBoolean;
+            break;
+          case Token_short:
+            modifiers |= AbstractType::ShortModifier;
+            break;
+          case Token_int:
+            type = IntegralType::TypeInt;
+            break;
+          case Token_long:
+            if (modifiers & AbstractType::LongModifier)
+              modifiers |= AbstractType::LongLongModifier;
+            else
+              modifiers |= AbstractType::LongModifier;
+            break;
+          case Token_signed:
+            modifiers |= AbstractType::SignedModifier;
+            break;
+          case Token_unsigned:
+            modifiers |= AbstractType::UnsignedModifier;
+            break;
+          case Token_float:
+            type = IntegralType::TypeFloat;
+            break;
+          case Token_double:
+            type = IntegralType::TypeDouble;
+            break;
+          case Token_void:
+            type = IntegralType::TypeVoid;
+            break;
         }
-      while (it != end);
+
+        it = it->next;
+      } while (it != end);
+
+      if(type == IntegralType::TypeNone)
+        type = IntegralType::TypeInt; //Happens, example: "unsigned short"
+
+      KDevelop::IntegralType::Ptr integral ( new KDevelop::IntegralType(type) );
+      integral->setModifiers(modifiers);
+      
+      m_type = integral.cast<AbstractType>();
+      
+      m_typeId = TypeIdentifier(integral->toString());
     }
   else if (node->type_of)
     {
       // ### implement me
-      _M_type.push(Identifier("typeof<...>"));
+      m_typeId.push(Identifier("typeof<...>"));
     }
 
   {
     LOCKDUCHAIN;
     find.closeQualifiedIdentifier();
     m_declarations = find.lastDeclarations();
+    if(!m_declarations.isEmpty())
+      m_type = m_declarations[0]->abstractType();
   }
   
   visit(node->name);
@@ -143,8 +174,10 @@ void TypeASTVisitor::visitName(NameAST *node)
 {
   NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_position, KDevelop::DUContext::NoSearchFlags, m_debug);
   name_cc.run(node);
-  _M_type = name_cc.identifier();
+  m_typeId = name_cc.identifier();
   m_declarations = name_cc.declarations();
+  if(!m_declarations.isEmpty())
+    m_type = m_declarations[0]->abstractType();
 }
 
 QStringList TypeASTVisitor::cvString() const
@@ -174,6 +207,6 @@ bool TypeASTVisitor::isVolatile() const
 
 QualifiedIdentifier TypeASTVisitor::identifier() const
 {
-  return _M_type;
+  return m_typeId;
 }
 

@@ -272,7 +272,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
 
 bool OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
 {
-//   kDebug() << "matching" << _argumentType->toString() << "to" << _parameterType->toString();
+//    kDebug() << "matching" << argumentType->toString() << "to" << parameterType->toString();
 
   if(!argumentType && !parameterType)
     return true;
@@ -354,7 +354,7 @@ AbstractType::Ptr getContainerType(AbstractType::Ptr type, int depth, TopDUConte
 
 bool OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
 {
-//   kDebug() << "1 matching" << argumentType->toString() << "to" << parameterType.toString();
+//    kDebug() << "1 matching" << argumentType->toString() << "to" << parameterType.toString();
   if(!argumentType)
     return true;
   if(instantiatedTypes.isEmpty())
@@ -392,22 +392,28 @@ bool OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
 
 bool OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
 {
-//   kDebug() << "2 matching" << _argumentType->toString() << "to" << parameterType.toString();
+//    kDebug() << "2 matching" << argumentType->toString() << "to" << parameterType.toString();
 
   if(!argumentType)
     return true;
   if(instantiatedTypes.isEmpty())
     return true;
 
-  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>(argumentType.unsafeData());
-///@todo really needed?
-  if( !identifiedArgument )
-    return true;
 
   if( instantiatedTypes.contains(parameterType.identifier()) ) {
+    if(ConstantIntegralType::Ptr integral = argumentType.cast<ConstantIntegralType>())
+      //Extract the actual type without the value
+      argumentType = AbstractType::Ptr(new IntegralType(*integral));
+    
     instantiatedTypes[parameterType.identifier()] = argumentType;
     return true;
-  } else if( identifiedArgument->qualifiedIdentifier().last().identifier() != parameterType.identifier() ) {
+  }
+
+  IdentifiedType* identifiedArgument = dynamic_cast<IdentifiedType*>(argumentType.unsafeData());
+  if(!identifiedArgument)
+    return false;
+  
+  if( identifiedArgument->qualifiedIdentifier().last().identifier() != parameterType.identifier() ) {
     return false;
   }
 
