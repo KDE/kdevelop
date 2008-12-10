@@ -390,11 +390,8 @@ void Declaration::setContext(DUContext* context, bool anonymous)
   m_context = context;
 
   if (context) {
-    if(!m_indexInTopContext) {
+    if(!m_indexInTopContext)
       allocateOwnIndex();
-      if(m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
-        kFatal() << "Could not re-retrieve declaration" << "index:" << m_indexInTopContext;
-    }
     
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
@@ -433,6 +430,10 @@ void Declaration::allocateOwnIndex() {
 
   m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || !context() || context()->isAnonymous());
   Q_ASSERT(m_indexInTopContext);
+  
+  if(!m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
+    kFatal() << "Could not re-retrieve declaration" << "index:" << m_indexInTopContext;
+  
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
