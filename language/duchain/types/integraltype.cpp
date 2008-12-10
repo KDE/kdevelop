@@ -30,7 +30,7 @@ namespace KDevelop
 
 REGISTER_TYPE(IntegralType);
 
-IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(copyData<IntegralTypeData>(*rhs.d_func())) {
+IntegralType::IntegralType(const IntegralType& rhs) : AbstractType(copyDataDownwards<IntegralType>(*rhs.d_func())) {
 }
 
 IntegralType::IntegralType(IntegralTypeData& data) : AbstractType(data) {

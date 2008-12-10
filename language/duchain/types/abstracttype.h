@@ -228,6 +228,13 @@ public:
     return *new (new char[size]) DataType(rhs);
   }
 
+  template<class Type>
+  static typename Type::Data& copyDataDownwards(const typename Type::Data& rhs) {
+    typename Type::Data& ret(copyData<typename Type::Data>(rhs));
+    ret.template setTypeClassId<Type>();
+    return ret;
+  }
+  
   /**
    * Method to create internal data structures. Use this in normal constructors.
    *
