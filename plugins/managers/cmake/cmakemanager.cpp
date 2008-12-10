@@ -330,13 +330,13 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
             Ui::CMakePossibleRoots ui;
             ui.setupUi(e);
             chooseRoot.setMainWidget(e);
-            KUrl aux=folderUrl;
-            for(; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
-            {
+            for(KUrl aux=folderUrl; QFile::exists(aux.toLocalFile()+"/CMakeLists.txt"); aux=aux.upUrl())
                 ui.candidates->addItem(aux.toLocalFile());
-            }
-            
-            if(ui.candidates->count()>1) {
+
+            if(ui.candidates->count()>1)
+            {
+                connect(ui.candidates, SIGNAL(itemActivated(QListWidgetItem*)), &chooseRoot,SLOT(accept()));
+                ui.candidates->setMinimumSize(384,192);
                 int a=chooseRoot.exec();
                 if(!a || !ui.candidates->currentItem())
                 {
