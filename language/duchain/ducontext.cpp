@@ -351,11 +351,17 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   bool inserted = false;
   for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
     Declaration* child = m_context->d_func_dynamic()->m_localDeclarations()[i].data(m_topContext);
-    Q_ASSERT(child);
+    if(!child) {
+      kWarning() << "child declaration number" << i << "of" << m_context->d_func_dynamic()->m_localDeclarationsSize() << "is invalid";
+      continue;
+    }
     if(child == newDeclaration)
       return;
     if (start > child->range().start) {
       insertToArray(m_context->d_func_dynamic()->m_localDeclarationsList(), newDeclaration, i+1);
+      if(!m_context->d_func()->m_localDeclarations()[i+1].data(m_topContext))
+        kFatal() << "Inserted a not addressable declaration";
+      
       inserted = true;
       break;
     }

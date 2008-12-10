@@ -93,6 +93,7 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
     : KTextEditor::SmartRangeWatcher(), d_ptr( useDataFrom.d_ptr ), dd_ptr( useDataFrom.dd_ptr ), m_ownsData(false)
 {
   Q_ASSERT(d_ptr);
+  Q_ASSERT(dd_ptr);
 }
 
 void DocumentRangeObject::setData(DocumentRangeObjectData* data)
