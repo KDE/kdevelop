@@ -24,6 +24,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/declaration.h>
 
 #include "../environmentmanager.h"
 

@@ -423,7 +423,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
         addUsedMacros.insert(it.index());
     }
-    d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(addUsedMacros) );
+    if(!addUsedMacros.empty())
+      d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(addUsedMacros) );
   }
   
   ifDebug( Q_ASSERT(d_func()->m_usedMacroNames.set().count() == d_func()->m_usedMacros.set().count()) );
@@ -442,7 +443,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
       if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
         removeDefinedMacros.insert(it.index());
       
-      d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
+      if(!removeDefinedMacros.empty())
+        d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
     }
   }
 
