@@ -1088,25 +1088,27 @@ Set BasicSetRepository::createSet(Index i) {
     return Set(d->dataRepository.index( SetNodeDataRequest(&data, d->dataRepository) ), this);
 }
 
-Set BasicSetRepository::createSet(const std::set<Index>& _indices) {
+Set BasicSetRepository::createSet(const std::set<Index>& indices) {
+  QMutexLocker lock(d->mutex);
   
-  std::set<Index> indices(_indices); //Create a copy to prevent strange problems
-  
-  std::vector<Index> ranges;
+  std::vector<Index> shortRanges(indices.size()*2);;
 
+  uint size = 0;
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
   {
-    if(ranges.empty() || ranges.back() != *it)
-    {
-      //Create new range
-      ranges.push_back(*it);
-      ranges.push_back(*it);
-    }
-    
-    ++ranges.back();
+    shortRanges[size] = *it;
+    ++size;
+    shortRanges[size] = *it+1;
+    ++size;
   }
 
-  return createSetFromRanges(ranges);
+  uint* ranges = &shortRanges[0];
+  
+  QVector<SplitTreeNode> splitTree;
+  
+  splitTreeForRanges(splitTree, &ranges, &size, 1);
+
+  return Set(d->dataRepository.index( SetNodeDataRequest(&splitTree[0], d->dataRepository) ), this);
 }
 
 BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name, doLocking)) {

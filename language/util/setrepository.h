@@ -73,7 +73,7 @@ class VirtualSetNode {
         inline VirtualSetNode(const SetNodeData* data = 0) : m_data(data) {
         }
         
-        bool isValid() const {
+        inline bool isValid() const {
             return (bool)m_data;
         }
         
@@ -83,26 +83,26 @@ class VirtualSetNode {
             return m_data->leftNode == 0;
         }
         
-        T firstItem() const {
+        inline T firstItem() const {
             return Conversion::toItem(start());
         }
         
-        T lastItem() const {
+        inline T lastItem() const {
             return Conversion::toItem(end()-1);
         }
         
-        T operator*() const {
+        inline T operator*() const {
             return Conversion::toItem(start());
         }
         
-        VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
+        inline VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
             if(m_data->leftNode)
                 return StaticRepository::repository()->nodeFromIndex(m_data->leftNode);
             else
                 return 0;
         }
         
-        VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
+        inline VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
             if(m_data->rightNode)
                 return StaticRepository::repository()->nodeFromIndex(m_data->rightNode);
             else
