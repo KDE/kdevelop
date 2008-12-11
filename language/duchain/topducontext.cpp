@@ -52,8 +52,7 @@
 
 using namespace KTextEditor;
 
-//Do visibility-caching when more than X items are found.
-const uint visibilityCachingMargin = 10;
+const uint maxApplyAliasesRecursion = 100;
 
 namespace std {
 #if defined(Q_OS_WIN)
@@ -1008,10 +1007,41 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
   return true;
 }
 
+//This is used to prevent endless recursion due to "using namespace .." declarations, by storing all imports that are already being used.
+struct TopDUContext::ApplyAliasesBuddyInfo {
+  ApplyAliasesBuddyInfo(uint importChainType, ApplyAliasesBuddyInfo* predecessor, IndexedQualifiedIdentifier importId) : m_importChainType(importChainType), m_predecessor(predecessor), m_importId(importId) {
+    if(m_predecessor && m_predecessor->m_importChainType != importChainType)
+      m_predecessor = 0;
+  }
+
+  //May also be called when this is zero.
+  bool alreadyImporting(IndexedQualifiedIdentifier id) {
+    ApplyAliasesBuddyInfo* current = this;
+    while(current) {
+      if(current->m_importId == id)
+        return true;
+      current = current->m_predecessor;
+    }
+    return false;
+  }
+  
+  uint m_importChainType;
+  ApplyAliasesBuddyInfo* m_predecessor;
+  IndexedQualifiedIdentifier m_importId;
+};
+
 ///@todo Implement a cache so at least the global import checks don't need to be done repeatedly. The cache should be thread-local, using DUChainPointer for the hashed items, and when an item was deleted, it should be discarded
 template<class Acceptor>
-void TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace ) const
+void TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
 {
+  if(recursionDepth > maxApplyAliasesRecursion) {
+    QList<QualifiedIdentifier> searches = identifier->toList();
+    QualifiedIdentifier id;
+    if(!searches.isEmpty())
+      id = searches.first();
+    
+    kDebug() << "maximum apply-aliases recursion reached while searching" << id;
+  }
   ///@todo explicitlyGlobal if the first identifier los global
   bool foundAlias = false;
 
@@ -1070,6 +1100,9 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           kDebug() << "found empty import";
           continue;
         }
+        
+        if(buddy->alreadyImporting( importIdentifier ))
+          continue; //This import has already been applied to this search
 
         //Create a chain of AliasChainElements that represent the identifier
         uint count = importIdentifier.count();
@@ -1081,13 +1114,15 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
         AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
 
+        ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
+        
         if(identifier->next.isEmpty()) {
           //Just insert the aliased namespace identifier
           accept(*newAliasedElement);
         }else{
           //Create an identifiers where namespace-alias part is replaced with the alias target
           FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
-            applyAliases(newAliasedElement, item, accept, position, canBeNamespace);
+            applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1);
         }
       }
     }
@@ -1098,7 +1133,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
       accept(newElement); //We're at the end of a qualified identifier, accept it
     } else {
       FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
-        applyAliases(&newElement, next, accept, position, canBeNamespace);
+        applyAliases(&newElement, next, accept, position, canBeNamespace, 0, recursionDepth+1);
     }
   }
 
@@ -1137,9 +1172,6 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         if(!importDecl)
           continue;
 
-        if(importDecl->identifier() != globalImportIdentifier) //We need to check, since we've only searched by hash
-          continue;
-
         //Search for the identifier with the import-identifier prepended
         Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
         NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
@@ -1155,6 +1187,11 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           continue;
         }
 
+        if(buddy->alreadyImporting( importIdentifier ))
+          continue; //This import has already been applied to this search
+
+        ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
+
         int count = importIdentifier.count();
         KDevVarLengthArray<AliasChainElement, 5> newChain;
         newChain.resize(importIdentifier.count());
@@ -1169,7 +1206,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 #endif
         //Prevent endless recursion by checking whether we're actually doing a change
         if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
-        applyAliases(newAliasedElement, identifier, accept, position, canBeNamespace);
+        applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1);
       }
     }
   }
@@ -1179,7 +1216,7 @@ template<class Acceptor>
 void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const
 {
   FOREACH_ARRAY(SearchItem::Ptr item, identifiers)
-    applyAliases(0, item, acceptor, position, canBeNamespace);
+    applyAliases(0, item, acceptor, position, canBeNamespace, 0, 0);
 }
 
 struct TopDUContext::FindContextsAcceptor {
