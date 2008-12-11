@@ -19,6 +19,7 @@
 #include "specializationstore.h"
 #include "declarationid.h"
 #include "ducontext.h"
+#include "declaration.h"
 
 namespace KDevelop {
 

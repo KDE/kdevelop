@@ -204,6 +204,7 @@ install(FILES
     duchain/persistentsymboltable.h
     duchain/specializationstore.h
     duchain/persistentsetmap.h
+    duchain/indexeditems.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
 )
 

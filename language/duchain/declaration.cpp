@@ -247,12 +247,6 @@ IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
   }
 }
 
-IndexedTopDUContext IndexedDeclaration::indexedTopContext() const {
-  if(isDummy())
-    return IndexedTopDUContext();
-  return IndexedTopDUContext(m_topContext);
-}
-
 Declaration* IndexedDeclaration::declaration() const {
   if(isDummy())
     return 0;

@@ -1342,7 +1342,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
   }
 }
 
-void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* source) const {
+void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* /*source*/) const {
 
   if(type() == Namespace) {
     QualifiedIdentifier localId = d_func()->m_scopeIdentifier;

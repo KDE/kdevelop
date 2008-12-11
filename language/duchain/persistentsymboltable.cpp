@@ -424,11 +424,16 @@ struct Visitor {
     
     for(uint a = 0; a < item->declarationsSize(); ++a) {
       IndexedDeclaration decl(item->declarations()[a]);
-      if(declarations.contains(decl)) {
-        kDebug() << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString();
-      }else{
-        declarations.insert(decl, id);
+      if(!decl.isDummy()) {
+        if(declarations.contains(decl)) {
+          kDebug() << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString();
+        }else{
+          declarations.insert(decl, id);
+        }
       }
+      if(decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier())
+        kDebug() << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier();
+      
       if(!decl.data() && !decl.isDummy()) {
         kDebug() << "Item in symbol-table is invalid:" << id.toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
       }
@@ -450,6 +455,8 @@ struct ContextVisitor {
     for(uint a = 0; a < item->contextsSize(); ++a) {
       if(!item->contexts()[a].data() && !!item->contexts()[a].isDummy()) {
         kDebug() << "Item in Context-table is invalid:" << id.toString() << item->contexts()[a].localIndex() << IndexedTopDUContext(item->contexts()[a].topContextIndex()).url().str();
+      }else if(item->contexts()[a].data() && item->contexts()[a].data()->scopeIdentifier(true) != id) {
+        kDebug() << item->contexts()[a].data()->url().str() << "context" << item->contexts()[a].data()->scopeIdentifier(true) << "is registered as" << id;
       }
     }
     return true;

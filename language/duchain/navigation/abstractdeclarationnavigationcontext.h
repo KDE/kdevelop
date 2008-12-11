@@ -22,8 +22,7 @@
 #include "abstractnavigationcontext.h"
 #include "../duchainpointer.h"
 #include "../types/structuretype.h"
-
-
+#include <language/duchain/declaration.h>
 
 namespace KDevelop {
 

@@ -23,7 +23,7 @@
 #include "../editor/simplecursor.h"
 
 #include "identifier.h"
-#include "declaration.h"
+#include "indexeditems.h"
 
 //krazy:excludeall=dpointer
 

@@ -31,6 +31,7 @@
 #include "types/abstracttype.h"
 #include "duchainpointer.h"
 #include "declarationid.h"
+#include "indexeditems.h"
 
 class QWidget;
 
