@@ -120,6 +120,7 @@ private slots:
   void testEnumOverride();
   void testDoWhile();
   void testCodeModel();
+  void testLoopNamespaceImport();
 
   void testSymbolTableValid();
   

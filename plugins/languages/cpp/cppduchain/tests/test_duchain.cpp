@@ -1804,6 +1804,18 @@ void TestDUChain::testFunctionDefinition6() {
   release(top);
 }
 
+void TestDUChain::testLoopNamespaceImport() {
+  QByteArray text("namespace A {int i;} namespace B { using namespace A; } namespace A{ using namespace B; }; using namespace B; void test() { i += 5; }");
+  TopDUContext* top = parse(text, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 5);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QVERIFY(!top->childContexts()[0]->localDeclarations()[0]->uses().isEmpty());
+
+  release(top);
+}
+
 void TestDUChain::testCodeModel() {
   QByteArray text("class C{}; void test() {}; ");
   TopDUContext* top = parse(text, DumpAll);
