@@ -30,6 +30,7 @@
 #include <kurl.h>
 
 #include <interfaces/iproject.h>
+#include <interfaces/istatus.h>
 
 #include "shellexport.h"
 
@@ -176,6 +177,32 @@ private:
     Q_PRIVATE_SLOT(d, void reloadDone())
 
     class ProjectPrivate* const d;
+};
+
+class ProjectProgress : public QObject, public IStatus
+{
+Q_OBJECT
+Q_INTERFACES(KDevelop::IStatus)
+
+public:
+    ProjectProgress();
+    virtual ~ProjectProgress();
+    virtual QString statusName() const;
+
+    /*! Show indeterminate mode progress bar */
+    void setBuzzy();
+
+    /*! Hide progress bar */
+    void setDone();
+
+    QString projectName;
+
+Q_SIGNALS:
+    void clearMessage();
+    void showMessage(const QString & message, int timeout = 0);
+    void showError(const QString & message, int timeout = 0);
+    void hideProgress();
+    void showProgress(int minimum, int maximum, int value);
 };
 
 } // namespace KDevelop
