@@ -232,8 +232,8 @@ namespace KDevelop {
                 goto boundsUp;
             
             
-            Data2 ownFirstValidData = extractData2(this->m_data[ownFirstValid]);
-            Data2 ownLastValidData = extractData2(this->m_data[ownLastValid]);
+            Data2 ownFirstValidData = KeyExtractor::extract(this->m_data[ownFirstValid]);
+            Data2 ownLastValidData = KeyExtractor::extract(this->m_data[ownLastValid]);
             
             Data2 commonStart = ownFirstValidData;
             Data2 commonLast = ownLastValidData; //commonLast is also still valid
@@ -257,7 +257,7 @@ namespace KDevelop {
                 if(ownMiddle == -1)
                     goto boundsUp; //No valid items in the range
                 
-                Data2 currentData2 = extractData2(this->m_data[ownMiddle]);
+                Data2 currentData2 = KeyExtractor::extract(this->m_data[ownMiddle]);
                 Q_ASSERT(!Handler2::isFree(currentData2));
                 
                 int bound = m_rhs.lowerBound(currentData2, rhsStart, rhsEnd);
@@ -294,9 +294,7 @@ namespace KDevelop {
                 rhsEnd = bound+1;
             }
         }
-        Data2 extractData2(const Data& data) const {
-            return KeyExtractor::extract(data);
-        }
+
         //Bounds that yet need to be matched.
         KDevVarLengthArray<QPair<QPair<uint, uint>, QPair<uint, uint> > > boundStack;
         ConvenientEmbeddedSetIterator<Data2, Handler2> m_rhs;
@@ -310,7 +308,16 @@ namespace KDevelop {
         }
         ConvenientEmbeddedSetTreeFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1) {
             if(rhs.node().isValid()) {
-                boundStack.append( qMakePair( qMakePair(0u, this->m_dataSize), rhs.node() ) );
+                //Correctly initialize the initial bounds
+                int ownStart = lowerBound(rhs.node().firstItem(), 0, this->m_dataSize);
+                if(ownStart == -1)
+                    return;
+                int ownEnd = lowerBound(rhs.node().lastItem(), ownStart, this->m_dataSize);
+                if(ownEnd == -1)
+                    ownEnd = this->m_dataSize;
+                else
+                    ownEnd += 1;
+                boundStack.append( qMakePair( qMakePair((uint)ownStart, (uint)ownEnd), rhs.node() ) );
             }
             go();
         }
@@ -368,8 +375,8 @@ namespace KDevelop {
 //                      kDebug() << ownStart << ownEnd << "final node" << currentNode.start() * extractor_div_with << currentNode.end() * extractor_div_with;
                     //Check whether the item is contained
                     int bound = lowerBound(*currentNode, ownStart, ownEnd);
-//                      kDebug() << "bound:" << bound << (extractData2(this->m_data[bound]) == *currentNode);
-                    if(bound != -1 && extractData2(this->m_data[bound]) == *currentNode) {
+//                      kDebug() << "bound:" << bound << (KeyExtractor::extract(this->m_data[bound]) == *currentNode);
+                    if(bound != -1 && KeyExtractor::extract(this->m_data[bound]) == *currentNode) {
                         //Got a match
                         m_match = bound;
                         m_matchingTo = *currentNode;
@@ -388,44 +395,40 @@ namespace KDevelop {
                     Q_ASSERT(rightNode.isValid());
                     
                     
+                    Data2 leftLastItem = leftNode.lastItem();
+                    
                     int rightSearchStart = lowerBound(rightNode.firstItem(), ownStart, ownEnd);
-                    int leftSearchStart = lowerBound(leftNode.firstItem(), ownStart, rightSearchStart != -1 ? rightSearchStart : ownEnd);
-                    int leftSearchLast = -1;
-                    int rightSearchLast = -1;
-                    
-                    if(leftSearchStart != -1)
-                        leftSearchLast = lowerBound(leftNode.lastItem(), leftSearchStart+1, rightSearchStart != -1 ? rightSearchStart : ownEnd);
-                    
-                    if(rightSearchStart != -1)
-                        rightSearchLast = lowerBound(rightNode.lastItem(), rightSearchStart+1, ownEnd);
-                    
+                    if(rightSearchStart == -1)
+                        rightSearchStart = ownEnd;
+                    int leftSearchLast = lowerBound(leftLastItem, ownStart, rightSearchStart != -1 ? rightSearchStart : ownEnd);
+                    if(leftSearchLast == -1)
+                        leftSearchLast = rightSearchStart-1;
                     
                     bool recurseLeft = false;
-                    if(leftSearchStart != -1) {
-                        Data2 leftFoundStartData = extractData2(this->m_data[leftSearchStart]);
-                        recurseLeft = leftFoundStartData < leftNode.lastItem() || leftFoundStartData == leftNode.lastItem();
+                    if(leftSearchLast > (int)ownStart) {
+                        recurseLeft = true; //There must be something in the range ownStart -> leftSearchLast that matches the range
+                    }else if((int)ownStart == leftSearchLast) {
+                        //Check if the one item item under leftSearchStart is contained in the range
+                        Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[ownStart]);
+                        recurseLeft = leftFoundStartData < leftLastItem || leftFoundStartData == leftLastItem;
                     }
+                    
                     bool recurseRight = false;
-                    if(rightSearchStart != -1) {
-                        Data2 rightFoundStartData = extractData2(this->m_data[rightSearchStart]);
-                        recurseRight = rightFoundStartData < rightNode.lastItem() || rightFoundStartData == rightNode.lastItem();
-                    }
+                    if(rightSearchStart < (int)ownEnd)
+                        recurseRight = true;
                     
                     if(recurseLeft && recurseRight) {
                         //Push the right branch onto the stack, and work in the left one
-                        boundStack.append( qMakePair( qMakePair( (uint)rightSearchStart, (uint)(rightSearchLast != -1 ? rightSearchLast+1 : ownEnd )), rightNode) );
+                        boundStack.append( qMakePair( qMakePair( (uint)rightSearchStart, ownEnd ), rightNode) );
                     }
                     
                     if(recurseLeft) {
                         currentNode = leftNode;
-                        ownStart = leftSearchStart;
                         if(leftSearchLast != -1)
                             ownEnd = leftSearchLast+1;
                     }else if(recurseRight) {
                         currentNode = rightNode;
                         ownStart = rightSearchStart;
-                        if(rightSearchLast != -1)
-                            ownEnd =  rightSearchLast+1;
                     }else{
                         goto boundsUp;
                     }
@@ -466,9 +469,6 @@ namespace KDevelop {
             }
         }
         
-        Data2 extractData2(const Data& data) const {
-            return KeyExtractor::extract(data);
-        }
         //Bounds that yet need to be matched. Always a range in the own vector, and a node that all items in the range are contained in
         KDevVarLengthArray<QPair<QPair<uint, uint>, typename TreeSet::Node > > boundStack;
         TreeSet m_rhs;

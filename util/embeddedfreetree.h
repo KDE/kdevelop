@@ -121,13 +121,13 @@ namespace KDevelop {
                     int center = (start + end)/2;
                     
                     //Skip free items, since they cannot be used for ordering
-                    for(; center < end; ) {
+                    for(; center < (int)end; ) {
                         if(!ItemHandler::isFree(m_items[center]))
                             break;
                         ++center;
                     }
                     
-                    if(center == end) {
+                    if(center == (int)end) {
                         end = (start + end)/2; //No non-free items found in second half, so continue search in the other
                     }else{
                         if(ItemHandler::equals(data, m_items[center])) {
@@ -738,7 +738,7 @@ namespace KDevelop {
             uint newItemCount() const {
                 uint maxFreeItems = ((m_itemCount / increaseFraction)*3)/2 + 1;
                 //First we approximate the count of free items using the insertion depth
-                if((1 << m_insertedAtDepth) >= maxFreeItems) {
+                if((1u << m_insertedAtDepth) >= maxFreeItems) {
                     uint freeCount = countFreeItems(*m_centralFreeItem);
                     if(freeCount > maxFreeItems || freeCount == m_itemCount) {
                         return m_itemCount - freeCount;
