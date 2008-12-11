@@ -1042,8 +1042,11 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
     return ParsingEnvironmentFilePointer();
 
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-
   QList< ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
+  l.unlock();
+  
+//   kDebug() << document.str() << ": matching" << list.size() << (onlyProxyContexts ? "proxy-contexts" : (noProxyContexts ? "content-contexts" : "contexts"));
+  
   QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
   while(it != list.constEnd()) {
     if(*it && (*it)->matchEnvironment(environment) && (!onlyProxyContexts || (*it)->isProxyContext()) && (!noProxyContexts || !(*it)->isProxyContext())) {
