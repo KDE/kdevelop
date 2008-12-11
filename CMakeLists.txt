@@ -8,10 +8,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 
 set(KDevPlatform_VERSION_MAJOR 0)
 set(KDevPlatform_VERSION_MINOR 9)
-set(KDevPlatform_VERSION_PATCH 83)
+set(KDevPlatform_VERSION_PATCH 84)
 
-set(KDE_MIN_VERSION "4.1.80")
-find_package(KDE4 4.1.80 REQUIRED)
+set(KDE_MIN_VERSION "4.1.85")
+find_package(KDE4 4.1.85 REQUIRED)
 find_package(ZLIB REQUIRED)
 
 include (KDE4Defaults)
