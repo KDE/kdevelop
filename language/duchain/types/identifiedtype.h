@@ -26,10 +26,11 @@
 
 namespace KDevelop
 {
-
+class DUContext;
 class Declaration;
 class DeclarationId;
 class TopDUContext;
+class AbstractType;
 
 /**
  * Data structure for identified types.
