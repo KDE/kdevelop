@@ -28,6 +28,7 @@
 #include <language/editor/simplecursor.h>
 #include <language/editor/documentcursor.h>
 #include "browsemanager.h"
+#include <language/duchain/indexedstring.h>
 
 class ContextBrowserPlugin;
 class QVBoxLayout;
