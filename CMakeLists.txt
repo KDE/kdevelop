@@ -6,10 +6,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDevelop_VERSION_MAJOR 3 )
 set( KDevelop_VERSION_MINOR 9 )
-set( KDevelop_VERSION_PATCH 83 )
+set( KDevelop_VERSION_PATCH 84 )
 
-set(KDE_MIN_VERSION "4.1.80")
-find_package(KDE4 4.1.80 REQUIRED)
+set(KDE_MIN_VERSION "4.1.85")
+find_package(KDE4 4.1.85 REQUIRED)
 #find_package(BerkeleyDB)
 #find_package(TDB)
 include (KDE4Defaults)
