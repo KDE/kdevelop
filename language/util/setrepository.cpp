@@ -1091,7 +1091,10 @@ Set BasicSetRepository::createSet(Index i) {
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   QMutexLocker lock(d->mutex);
   
-  std::vector<Index> shortRanges(indices.size()*2);;
+  if(indices.empty())
+      return Set();
+  
+  std::vector<Index> shortRanges(indices.size()*2);
 
   uint size = 0;
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
@@ -1101,7 +1104,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
     shortRanges[size] = *it+1;
     ++size;
   }
-
+  
   uint* ranges = &shortRanges[0];
   
   QVector<SplitTreeNode> splitTree;
