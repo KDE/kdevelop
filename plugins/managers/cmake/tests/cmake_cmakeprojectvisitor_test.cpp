@@ -24,6 +24,7 @@
 #include "cmakelistsparser.h"
 #include <QString>
 #include <qtest_kde.h>
+#include <language/duchain/indexedstring.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
