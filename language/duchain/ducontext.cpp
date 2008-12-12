@@ -174,7 +174,7 @@ DUContext* LocalIndexedDUContext::data(TopDUContext* top) const {
 DUContext* IndexedDUContext::context() const {
   if(isDummy())
     return 0;
-  ENSURE_CHAIN_READ_LOCKED
+//   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext)
     return 0;
 

@@ -250,7 +250,7 @@ IndexedDeclaration::IndexedDeclaration(Declaration* decl) {
 Declaration* IndexedDeclaration::declaration() const {
   if(isDummy())
     return 0;
-  ENSURE_CHAIN_READ_LOCKED
+//   ENSURE_CHAIN_READ_LOCKED
   if(!m_topContext || !m_declarationIndex)
     return 0;
 
@@ -474,7 +474,7 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
 
 DUContext * Declaration::internalContext() const
 {
-  ENSURE_CAN_READ
+//   ENSURE_CAN_READ
   return d_func()->m_internalContext.context();
 }
 
