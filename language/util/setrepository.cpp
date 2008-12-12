@@ -221,23 +221,13 @@ void SetNodeData::updateHash(const SetNodeData* left, const SetNodeData* right) 
 }
 
 class SetNodeDataRequest;
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, sizeof(SetNodeData)> SetDataRepository;
 
+    #define getLeftNode(node) repository.itemFromIndex(node->leftNode)
+    #define getRightNode(node) repository.itemFromIndex(node->rightNode)
+    #define nodeFromIndex(index) repository.itemFromIndex(index)
 struct SetRepositoryAlgorithms {
   SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
   }
-  
-//   inline const SetNodeData* getLeftNode(const SetNodeData* node) const {
-    #define getLeftNode(node) repository.itemFromIndex(node->leftNode)
-//   }
-  
-//   inline const SetNodeData* getRightNode(const SetNodeData* node) const {
-    #define getRightNode(node) repository.itemFromIndex(node->rightNode)
-//   }
-  
-//   inline const SetNodeData* nodeFromIndex(uint index) const {
-    #define nodeFromIndex(index) repository.itemFromIndex(index)
-//   }
   
   ///Expensive
   Index count(const SetNodeData* node) const;
@@ -268,102 +258,72 @@ private:
   SetDataRepository& repository;
 };
 
-struct SetNodeDataRequest {
-
-  enum {
-    AverageSize = sizeof(SetNodeData)
-  };
-  
-  //This constructor creates a request that finds or creates a node that equals the given node
-  //The m_hash must be up to dat, and the node must be split correctly around its splitPosition
-  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository), m_created(false) {
+SetNodeDataRequest::SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository), m_created(false) {
     ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
-  }
-  
-  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository), m_created(false) {
-  
+}
+
+SetNodeDataRequest::SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository), m_created(false) {
     data.start = splitNode->start;
     data.end = splitNode->end;
     data.m_hash = m_hash;
     if(splitNode->hasSlaves) {
-      data.leftNode = repository.index( SetNodeDataRequest( splitNode+1, repository) );
-      data.rightNode = repository.index( SetNodeDataRequest( splitNode+splitNode->rightChildOffset, repository) );
-      Q_ASSERT(data.leftNode);
-      Q_ASSERT(data.rightNode);
+        data.leftNode = repository.index( SetNodeDataRequest( splitNode+1, repository) );
+        data.rightNode = repository.index( SetNodeDataRequest( splitNode+splitNode->rightChildOffset, repository) );
+        Q_ASSERT(data.leftNode);
+        Q_ASSERT(data.rightNode);
     }else{
-      data.leftNode = 0;
-      data.rightNode = 0;
+        data.leftNode = 0;
+        data.rightNode = 0;
     }
-  }
-  
-  ~SetNodeDataRequest() {
+}
+
+SetNodeDataRequest::~SetNodeDataRequest() {
     //Eventually increase the reference-count of direct children
     if(m_created) {
-      if(data.leftNode)
+        if(data.leftNode)
         ++repository.dynamicItemFromIndex(data.leftNode)->m_refCount;
-      if(data.rightNode)
+        if(data.rightNode)
         ++repository.dynamicItemFromIndex(data.rightNode)->m_refCount;
     }
-  }
+}
 
-  typedef unsigned int HashType;
-  
-  //Should return the m_hash-value associated with this request(For example the m_hash of a string)
-  HashType hash() const {
-    return m_hash;
-  }
-  
-  //Should return the size of an item created with createItem
-  size_t itemSize() const {
-      return sizeof(SetNodeData);
-  }
-  //Should create an item where the information of the requested item is permanently stored. The pointer
-  //@param item equals an allocated range with the size of itemSize().
-  void createItem(SetNodeData* item) const {
+//Should create an item where the information of the requested item is permanently stored. The pointer
+//@param item equals an allocated range with the size of itemSize().
+void SetNodeDataRequest::createItem(SetNodeData* item) const {
     Q_ASSERT((data.rightNode && data.leftNode) || (!data.rightNode && !data.leftNode));
-    
+
     m_created = true;
-    
+
     *item = data;
-  
+
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
-    
-#ifdef DEBUG
+
+    #ifdef DEBUG
     //Make sure we split at the correct split position
     if(item->hasSlaves()) {
-      uint split = splitPositionForRange(data.start, data.end);
-      const SetNodeData* left = repository.itemFromIndex(item->leftNode);
-      const SetNodeData* right = repository.itemFromIndex(item->rightNode);
-      Q_ASSERT(item->m_hash == left->m_hash + right->m_hash);
-      Q_ASSERT(split >= left->end && split <= right->start);
+        uint split = splitPositionForRange(data.start, data.end);
+        const SetNodeData* left = repository.itemFromIndex(item->leftNode);
+        const SetNodeData* right = repository.itemFromIndex(item->rightNode);
+        Q_ASSERT(item->m_hash == left->m_hash + right->m_hash);
+        Q_ASSERT(split >= left->end && split <= right->start);
     }
-#endif
-  }
+    #endif
+}
   
-  //Should return whether the here requested item equals the given item
-  inline bool equals(const SetNodeData* item) const {
+bool SetNodeDataRequest::equals(const SetNodeData* item) const {
     Q_ASSERT((item->rightNode && item->leftNode) || (!item->rightNode && !item->leftNode));
     //Just compare child nodes, since data must be correctly split, this is perfectly ok
     //Since this happens in very tight loops, we don't call an additional function here, but just do the check.
     return item->leftNode == data.leftNode && item->rightNode == data.rightNode && item->start == data.start && item->end == data.end;
-  }
-  
-  SetNodeData data;
-  
-  const SplitTreeNode* splitNode;
-  uint m_hash;
-  mutable SetDataRepository& repository;
-  mutable bool m_created;
-};
+}
 
 struct BasicSetRepository::Private {
-  Private(QString _name, bool doLocking) : dataRepository(_name), mutex(doLocking ? new QMutex(QMutex::Recursive) : 0), name(_name) {
+  Private(QString _name, bool doLocking) : name(_name), mutex(doLocking ? new QMutex(QMutex::Recursive) : 0) {
   }
   ~Private() {
     delete mutex;
   }
 
-  SetDataRepository dataRepository;
   QMutex* mutex;
   QString name;
   private:
@@ -380,8 +340,8 @@ unsigned int Set::count() const {
     return 0;
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
-  return alg.count(m_repository->d->dataRepository.itemFromIndex(m_tree));
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  return alg.count(m_repository->dataRepository.itemFromIndex(m_tree));
 }
 
 Set::Set(uint treeNode, BasicSetRepository* repository) : m_tree(treeNode), m_repository(repository) {
@@ -405,7 +365,7 @@ QString Set::dumpDotGraph() const {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   return alg.dumpDotGraph(m_tree);
 }
 
@@ -518,7 +478,7 @@ struct Set::Iterator::IteratorPrivate {
       
       if(node->contiguous())
         break; //We need no finer granularity, because the range is contiguous
-      node = Set::Iterator::getPrivatePtr(repository)->dataRepository.itemFromIndex(node->leftNode);
+      node = repository->dataRepository.itemFromIndex(node->leftNode);
     } while(node);
     Q_ASSERT(currentIndex >= nodeStack[0]->start);
   }
@@ -580,9 +540,9 @@ Set::Iterator& Set::Iterator::operator++() {
     }else{
       //++d->nodeStackSize;
       //We were iterating the left slave of the node, now continue with the right.
-      ifDebug( const SetNodeData& left = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->leftNode); Q_ASSERT(left.end == d->currentIndex); )
+      ifDebug( const SetNodeData& left = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->leftNode); Q_ASSERT(left.end == d->currentIndex); )
       
-      const SetNodeData& right = *d->repository->d->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->rightNode);
+      const SetNodeData& right = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->rightNode);
       
       d->startAtNode(&right);
     }
@@ -610,7 +570,7 @@ Set::Iterator Set::iterator() const {
   ret.d->repository = m_repository;
   
   if(m_tree)
-    ret.d->startAtNode(m_repository->d->dataRepository.itemFromIndex(m_tree));
+    ret.d->startAtNode(m_repository->dataRepository.itemFromIndex(m_tree));
   return ret;
 }
 
@@ -1076,7 +1036,7 @@ Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
 
   //kDebug() << printSplitTree(splitTree.data());
   
-  return Set(d->dataRepository.index( SetNodeDataRequest(&splitTree[0], d->dataRepository) ), this);
+  return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
 }
 
 Set BasicSetRepository::createSet(Index i) {
@@ -1085,7 +1045,7 @@ Set BasicSetRepository::createSet(Index i) {
     data.end = i+1;
     data.updateHash(0, 0);
     
-    return Set(d->dataRepository.index( SetNodeDataRequest(&data, d->dataRepository) ), this);
+    return Set(dataRepository.index( SetNodeDataRequest(&data, dataRepository) ), this);
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
@@ -1111,10 +1071,10 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   
   splitTreeForRanges(splitTree, &ranges, &size, 1);
 
-  return Set(d->dataRepository.index( SetNodeDataRequest(&splitTree[0], d->dataRepository) ), this);
+  return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name, doLocking)) {
+BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name, doLocking)), dataRepository(name) {
 }
 
 struct StatisticsVisitor {
@@ -1135,8 +1095,8 @@ struct StatisticsVisitor {
 
 void BasicSetRepository::printStatistics() const {
   
-/*  StatisticsVisitor stats(d->dataRepository);
-  d->dataRepository.visitAllItems<StatisticsVisitor>(stats);
+/*  StatisticsVisitor stats(dataRepository);
+  dataRepository.visitAllItems<StatisticsVisitor>(stats);
   kDebug() << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount;*/
 }
 
@@ -1146,13 +1106,6 @@ BasicSetRepository::~BasicSetRepository() {
 }
 
 void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
-}
-#undef nodeFromIndex
-const SetNodeData* BasicSetRepository::nodeFromIndex(uint index) const {
-    if(index)
-        return d->dataRepository.itemFromIndex(index);
-    else
-        return 0;
 }
 
 ////////////Set convenience functions//////////////////
@@ -1164,8 +1117,8 @@ bool Set::contains(Index index) const
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
-  return alg.set_contains(m_repository->d->dataRepository.itemFromIndex(m_tree), index);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  return alg.set_contains(m_repository->dataRepository.itemFromIndex(m_tree), index);
 }
 
 Set Set::operator +(const Set& first) const
@@ -1179,9 +1132,9 @@ Set Set::operator +(const Set& first) const
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(first.m_tree));
+  uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   
   ifDebug(alg.check(retNode));
   
@@ -1199,9 +1152,9 @@ Set& Set::operator +=(const Set& first) {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  m_tree = alg.set_union(m_tree, first.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(first.m_tree));
+  m_tree = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   
   ifDebug(alg.check(m_tree));
   return *this;
@@ -1215,9 +1168,9 @@ Set Set::operator &(const Set& first) const {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(first.m_tree)), m_repository );
+  Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree)), m_repository );
   
   ifDebug(alg.check(ret.m_tree));
   
@@ -1234,9 +1187,9 @@ Set& Set::operator &=(const Set& first) {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(first.m_tree));
+  m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   ifDebug(alg.check(m_tree));
   return *this;
 }
@@ -1249,9 +1202,9 @@ Set Set::operator -(const Set& rhs) const {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
+  Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
   ifDebug( alg.check(ret.m_tree) );
   return ret;
 }
@@ -1264,9 +1217,9 @@ Set& Set::operator -=(const Set& rhs) {
   
   QMutexLocker lock(m_repository->d->mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->d->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
-  m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->d->dataRepository.itemFromIndex(m_tree), m_repository->d->dataRepository.itemFromIndex(rhs.m_tree));
+  m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree));
 
   ifDebug(alg.check(m_tree));
   return *this;
@@ -1279,7 +1232,7 @@ BasicSetRepository* Set::repository() const {
 void Set::staticRef() {
   if(!m_tree)
     return;
-    SetNodeData* data = m_repository->d->dataRepository.dynamicItemFromIndex(m_tree);
+    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(m_tree);
     ++data->m_refCount;
 }
 
@@ -1297,7 +1250,7 @@ void Set::staticUnref() {
       uint current = nextNodes.back();
       nextNodes.pop_back();
       
-      SetNodeData* data = m_repository->d->dataRepository.dynamicItemFromIndex(current);
+      SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(current);
       Q_ASSERT(data->m_refCount);
       --data->m_refCount;
       
@@ -1313,7 +1266,7 @@ void Set::staticUnref() {
           m_repository->itemRemovedFromSets(data->start);
         }
 
-        m_repository->d->dataRepository.deleteItem(current);
+        m_repository->dataRepository.deleteItem(current);
       }
     }
 }

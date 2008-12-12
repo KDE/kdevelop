@@ -17,6 +17,7 @@
 #include <set>
 #include <vector>
 #include "../languageexport.h"
+#include <language/duchain/repositories/itemrepository.h>
 
 /**
  * This file provides a set system that can be used to efficiently manage sub-sets of a set of global objects.
@@ -49,6 +50,8 @@ namespace Utils {
 
 class SetNode;
 class BasicSetRepository;
+class SplitTreeNode;
+class SetNodeDataRequest;
 
 ///Internal node representation, exported here for performance reason.
 struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
@@ -83,6 +86,48 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
   
   //Must always be called when an attribute was changed!
   void updateHash(const SetNodeData* left, const SetNodeData* right);
+};
+
+typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, sizeof(SetNodeData)> SetDataRepository;
+
+struct SetNodeDataRequest {
+
+  enum {
+    AverageSize = sizeof(SetNodeData)
+  };
+  
+  //This constructor creates a request that finds or creates a node that equals the given node
+  //The m_hash must be up to dat, and the node must be split correctly around its splitPosition
+  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository);
+  
+  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository);
+  
+  ~SetNodeDataRequest();
+
+  typedef unsigned int HashType;
+  
+  //Should return the m_hash-value associated with this request(For example the m_hash of a string)
+  inline HashType hash() const {
+    return m_hash;
+  }
+  
+  //Should return the size of an item created with createItem
+  inline size_t itemSize() const {
+      return sizeof(SetNodeData);
+  }
+  //Should create an item where the information of the requested item is permanently stored. The pointer
+  //@param item equals an allocated range with the size of itemSize().
+  void createItem(SetNodeData* item) const;
+  
+  //Should return whether the here requested item equals the given item
+  inline bool equals(const SetNodeData* item) const;
+  
+  SetNodeData data;
+  
+  const SplitTreeNode* splitNode;
+  uint m_hash;
+  mutable SetDataRepository& repository;
+  mutable bool m_created;
 };
 
 /**
@@ -190,12 +235,20 @@ public:
   ///Is called when this index is not part of any set any more
   virtual void itemRemovedFromSets(uint index);
   
-  const SetNodeData* nodeFromIndex(uint index) const;
+  inline const SetNodeData* nodeFromIndex(uint index) const {
+      if(index)
+          return dataRepository.itemFromIndex(index);
+      else
+          return 0;
+  }
 private:
   friend class Set;
   friend class Set::Iterator;
   class Private;
   Private* d;
+  SetDataRepository dataRepository;
+  
+//   SetNode
 };
 
 /**
