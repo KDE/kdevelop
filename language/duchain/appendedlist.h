@@ -66,14 +66,14 @@ class TemporaryDataManager {
     DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
   };
   public:
-    TemporaryDataManager(QString id = QString()) : m_id(id), m_itemsUsed(0), m_itemsSize(0), m_items(0) {
+    TemporaryDataManager(QString id = QString()) : m_itemsUsed(0), m_itemsSize(0), m_items(0), m_id(id) {
     }
     ~TemporaryDataManager() {
       uint cnt = usedItemCount();
       if(cnt) //Don't use kDebug, because that may not work during destruction
         std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
       
-      for(int a = 0; a < m_itemsUsed; ++a)
+      for(uint a = 0; a < m_itemsUsed; ++a)
         delete m_items[a];
     }
 
@@ -171,7 +171,7 @@ class TemporaryDataManager {
     
     uint usedItemCount() const {
       uint ret = 0;
-      for(int a = 0; a < m_itemsUsed; ++a)
+      for(uint a = 0; a < m_itemsUsed; ++a)
         if(m_items[a])
           ++ret;
       return ret - m_freeIndicesWithData.size();
