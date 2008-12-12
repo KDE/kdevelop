@@ -17,12 +17,15 @@
 #include "./modificationrevisionset.h"
 #include "../duchain/repositories/itemrepository.h"
 #include <duchain/indexedstring.h>
+#include <util/setrepository.h>
 
 //When uncommented, the reason for needed updates is printed
-#define DEBUG_NEEDSUPDATE
+// #define DEBUG_NEEDSUPDATE
 
 namespace KDevelop {
 
+QMutex modificationRevisionSetMutex;
+  
 struct FileModificationPair {
   KDevelop::IndexedString file;
   KDevelop::ModificationRevision revision;
@@ -81,6 +84,15 @@ static FileModificationPairRepository& fileModificationPairRepository() {
   return rep;
 }
 
+QHash<uint, bool> needsUpdateCache;
+
+void ModificationRevisionSet::clearCache() {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  ///@todo More intelligent clearing. We actually need to watch the directory for changes, and if there are changes, clear the cache.
+  needsUpdateCache.clear();
+  kDebug() << "clearing cache";
+}
+
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
   FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", true) {
   }
@@ -91,11 +103,18 @@ struct FileModificationSetRepository : public Utils::BasicSetRepository {
 
 FileModificationSetRepository fileModificationSetRepository;
 
-ModificationRevisionSet::ModificationRevisionSet(unsigned int index) : m_index(index) {
+struct FileModificationSetRepositoryRepresenter {
+  static FileModificationSetRepository& repository() {
+    return fileModificationSetRepository;
+  }
+};
 
+ModificationRevisionSet::ModificationRevisionSet(unsigned int index) : m_index(index) {
 }
 
 void ModificationRevisionSet::clear() {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
   if(m_index) {
     Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
     oldModificationTimes.staticUnref();
@@ -104,6 +123,8 @@ void ModificationRevisionSet::clear() {
 }
 
 void ModificationRevisionSet::addModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
   if(m_index == 0) {
     Utils::Set set = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
     set.staticRef();
@@ -125,6 +146,8 @@ void ModificationRevisionSet::addModificationRevision(const IndexedString& url, 
 }
 
 bool ModificationRevisionSet::removeModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
   if(!m_index)
     return false;
   
@@ -154,30 +177,69 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
 //   return ret;
 // }
 
-bool ModificationRevisionSet::needsUpdate() const {
+ typedef Utils::VirtualSetNode<uint, Utils::IdentityConversion<uint>, FileModificationSetRepositoryRepresenter> ModificationRevisionSetNode;
+// static bool (const Utils::SetNodeData* node) {
+//   ModificationRevisionSetNode
+//   if(!node)
+//     return false;
+// }
 
-  Utils::Set set(m_index, &fileModificationSetRepository);
+static bool nodeNeedsUpdate(uint index) {
+  QMutexLocker lock(&modificationRevisionSetMutex);
   
-  ///@todo Do caching for complete sets!
+  if(!index)
+    return false;
+  
+  QHash<uint, bool>::const_iterator cached = needsUpdateCache.constFind(index);
+  if(cached != needsUpdateCache.end())
+    return cached.value();
+  
+  bool result = false;
+  
+  const Utils::SetNodeData* nodeData = fileModificationSetRepository.nodeFromIndex(index);
+  if(nodeData->contiguous()) {
+    //Do  the actual checking
+    for(unsigned int a = nodeData->start; a < nodeData->end; ++a) {
+      const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(a);
+      ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
+      if( revision != data->revision ) {
+        result = true;
+        break;
+      }
+    }
+  }else{
+    result = nodeNeedsUpdate(nodeData->leftNode) || nodeNeedsUpdate(nodeData->rightNode);
+  }
+  
+  needsUpdateCache.insert(index, result);
+  
+  return result;
+}
+
+bool ModificationRevisionSet::needsUpdate() const {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
+  #ifdef DEBUG_NEEDSUPDATE
+  Utils::Set set(m_index, &fileModificationSetRepository);
   Utils::Set::Iterator it = set.iterator();
   while(it) {
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
     ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
     if( revision != data->revision ) {
-#ifdef DEBUG_NEEDSUPDATE
-      kDebug( 9007 ) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
-#endif
-      
-      return true;
+       kDebug( 9007 ) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
+       return true;
     }
-
     ++it;
   }
-  
   return false;
+  #else
+  return nodeNeedsUpdate(m_index);
+  #endif
 }
 
 ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationRevisionSet& rhs) {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
   Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
   Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &fileModificationSetRepository);
   
@@ -193,6 +255,8 @@ ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationR
 }
 
 ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationRevisionSet& rhs) {
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  
   Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
   Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &fileModificationSetRepository);
   

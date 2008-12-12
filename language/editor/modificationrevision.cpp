@@ -42,6 +42,7 @@ namespace std {
 #include "editorintegrator.h"
 #include "hashedstring.h"
 #include "../duchain/indexedstring.h"
+#include "modificationrevisionset.h"
 
 const int cacheModTimeForSeconds = 2;
 
@@ -89,7 +90,6 @@ QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
     }
   }
 
-  ///@todo support non-local files
   QFileInfo fileInfo( fileName.str() );
   fileModificationCache()[fileName].m_readTime = QDateTime::currentDateTime();
   fileModificationCache()[fileName].m_modificationTime = fileInfo.lastModified();
@@ -100,14 +100,15 @@ void ModificationRevision::clearModificationCache(const IndexedString& fileName)
   FileModificationMap::iterator it = fileModificationCache().find(fileName);
   if(it != fileModificationCache().end())
     fileModificationCache().erase(it);
+  
+  ModificationRevisionSet::clearCache();
 }
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url) {
 
   ModificationRevision ret(fileModificationTimeCached(url));
 
-  ///@todo prevent this conversion from IndexedString to HashedString
-  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(url.str()));
+  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(url);
   if( doc ) {
     KTextEditor::SmartInterface* smart =   dynamic_cast<KTextEditor::SmartInterface*>(doc);
     if( smart )

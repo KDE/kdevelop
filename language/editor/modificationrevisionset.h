@@ -28,6 +28,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
   public:
     ModificationRevisionSet(uint index = 0);
     
+    static void clearCache();
+    
     void clear();
     
     uint index() const {

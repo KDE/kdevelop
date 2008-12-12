@@ -237,6 +237,10 @@ class DUChainPrivate
           m_waitMutex.unlock();
           if(m_stopRunning)
             break;
+          
+          //Just to make sure the cache is cleared periodically
+          ModificationRevisionSet::clearCache();
+          
           m_data->doMoreCleanup(SOFT_CLEANUP_STEPS);
           if(m_stopRunning)
             break;
@@ -490,7 +494,7 @@ public:
   ///of the disk-storage is not guaranteed, but only few changes will be done during these steps,
   ///so the final step where the duchain is permanetly locked is much faster.
   void doMoreCleanup(int retries = 0, bool needLockRepository = true) {
-    
+
     if(m_cleanupDisabled)
       return;
     
@@ -500,6 +504,8 @@ public:
     
     Q_ASSERT(!instance->lock()->currentThreadHasReadLock() && !instance->lock()->currentThreadHasWriteLock());
     DUChainWriteLocker writeLock(instance->lock());
+    
+    ModificationRevisionSet::clearCache();
 
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.

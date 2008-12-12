@@ -53,6 +53,7 @@
 
 #include "parsejob.h"
 #include "parserdependencypolicy.h"
+#include <editor/modificationrevisionset.h>
 
 namespace KDevelop
 {
@@ -561,6 +562,9 @@ void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
 
 void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild)
 {
+    ///@todo The modification-revision set should also be cleared when data has been changed on disk
+    ModificationRevisionSet::clearCache();
+    
     QMutexLocker l(&d->m_mutex);
 
     // Smart mutex is already locked
