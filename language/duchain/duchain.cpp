@@ -433,26 +433,12 @@ public:
         EnvironmentInformationRequest req(it->data());
         uint index = m_environmentInfo.findIndex(req);
         
-        Q_ASSERT((*it)->d_func()->classId);
-        (*it)->aboutToSave();
-        Q_ASSERT((*it)->d_func()->classId);
-        
         if((*it)->d_func()->isDynamic()) {
           //This item has been changed, or isn't in the repositor yet
           
           //Eventually remove an old entry
-          if(index) {
-//           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
-//           DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
-//             
-//             foreach(ParsingEnvironmentFilePointer p, m_fileEnvironmentInformations.values())
-//               if(p != *it)
-//                 Q_ASSERT(p->d_func() != theData); //Make sure the data we're deleting isn't used by any other existing environment-info
-//             
+          if(index)
             m_environmentInfo.deleteItem(index);
-          }
-          
-          Q_ASSERT((*it)->d_func()->classId);
           
           //Add the new entry to the item repository
           index = m_environmentInfo.index(req);
@@ -468,7 +454,6 @@ public:
           Q_ASSERT(theData->classId == (*it)->d_func()->classId);
           
           (*it)->setData( theData );
-          Q_ASSERT((*it)->d_func()->classId);
           
           ++cnt;
         }else{
@@ -758,10 +743,10 @@ private:
   }
 
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
-  ///Maps filenames to a list of top-contexts/environment-informations
-  ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest> m_environmentListInfo;
-  ///Maps top-context-indices to environment-information item
-  ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest> m_environmentInfo;
+  ///Maps filenames to a list of top-contexts/environment-informations. Protected by m_chainsMutex
+  ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest, NoDynamicData, false> m_environmentListInfo;
+  ///Maps top-context-indices to environment-information item. Protected by m_chainsMutex
+  ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest, NoDynamicData, false> m_environmentInfo;
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)
