@@ -46,12 +46,11 @@ QString DUChainItemData::text() const {
       if(def->declaration())
           decl = def->declaration();
       
-  QString text;
+  QString text = decl->qualifiedIdentifier().toString();
+  
   TypePtr<FunctionType> function = decl->type<FunctionType>();
   if( function )
-    text  = QString("%1%2").arg(decl->qualifiedIdentifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
-  else
-    text = m_item.m_text;
+    text  += function->partToString( FunctionType::SignatureArguments );
 
   return text;
 }
@@ -66,17 +65,16 @@ QList<QVariant> DUChainItemData::highlighting() const {
       if(def->declaration())
           decl = def->declaration();
 
-  TypePtr<FunctionType> function = decl->type<FunctionType>();
-  if(!function)
-    return QList<QVariant>();
-
   QTextCharFormat boldFormat;
   boldFormat.setFontWeight(QFont::Bold);
   QTextCharFormat normalFormat;
 
   int prefixLength = 0;
 
-  QString signature = function->partToString( FunctionType::SignatureArguments );
+  QString signature;
+  TypePtr<FunctionType> function = decl->type<FunctionType>();
+  if(function)
+    signature = function->partToString( FunctionType::SignatureArguments );
 
   //Only highlight the last part of the qualified identifier, so the scope doesn't distract too much
   QualifiedIdentifier id = decl->qualifiedIdentifier();
@@ -94,9 +92,11 @@ QList<QVariant> DUChainItemData::highlighting() const {
   ret << prefixLength;
   ret << lastId.length();
   ret << QVariant(boldFormat);
-  ret << prefixLength + lastId.length();
-  ret << signature.length();
-  ret << QVariant(normalFormat);
+  if(!signature.isEmpty()) {
+    ret << prefixLength + lastId.length();
+    ret << signature.length();
+    ret << QVariant(normalFormat);
+  }
 
   return ret;
 

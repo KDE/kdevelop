@@ -175,7 +175,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const {
       foreach(Declaration* decl, decls) {
         DUChainItem item;
         item.m_item = decl;
-        item.m_text = decl->toString();
+        item.m_text = decl->qualifiedIdentifier().toString();
         //item.m_project =  .. @todo fill
         ret << QuickOpenDataPointer(new DUChainItemData(item, true));
       }
