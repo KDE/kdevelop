@@ -745,10 +745,11 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
 #endif
 
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
-        QFileInfo info(QDir(localPath.path()), includeName);
+      QString check = localPath.path(KUrl::AddTrailingSlash) + includeName;
+        QFileInfo info(check);
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.canonicalFilePath());
+            ret.first = KUrl(check); //canonicalFilePath is expensive, and why do we need it?
             ret.second = localPath;
             return ret;
         }
@@ -766,11 +767,12 @@ restart:
             }
         }
 
-        QFileInfo info(QDir( path.path() ), includeName);
+        QString check = path.path(KUrl::AddTrailingSlash) + includeName;
+        QFileInfo info(check);
 
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.canonicalFilePath());
+            ret.first = KUrl(check); //canonicalFilePath is expensive, and why do we need it?
             ret.second = path.path();
             return ret;
         }
@@ -787,7 +789,7 @@ restart:
         foreach( const KUrl& path, includePaths )
             kDebug(9007) << path;
     }
-
+    
     return ret;
 }
 
