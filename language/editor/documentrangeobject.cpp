@@ -57,6 +57,9 @@ DocumentRangeObjectDynamicPrivate::DocumentRangeObjectDynamicPrivate() : m_smart
 }
 
 void DocumentRangeObject::syncFromSmart() const {
+    if(!dd_ptr)
+      return;
+    
     QMutexLocker l(dd_ptr->m_smartMutex);
 
     if(!dd_ptr->m_smartRange)
@@ -66,6 +69,8 @@ void DocumentRangeObject::syncFromSmart() const {
 }
 
 void DocumentRangeObject::syncToSmart() const {
+    if(!dd_ptr)
+      return;
     QMutexLocker l(dd_ptr->m_smartMutex);
 
     if(!dd_ptr->m_smartRange)
@@ -75,14 +80,14 @@ void DocumentRangeObject::syncToSmart() const {
 }
 
 DocumentRangeObject::DocumentRangeObject(const SimpleRange& range)
-    : d_ptr( new DocumentRangeObjectData ), dd_ptr(new DocumentRangeObjectDynamicPrivate), m_ownsData(true)
+    : d_ptr( new DocumentRangeObjectData ), dd_ptr(0), m_ownsData(true)
 {
     if(range.isValid())
         d_ptr->m_range = range;
 }
 
 DocumentRangeObject::DocumentRangeObject(DocumentRangeObjectData& dd, const SimpleRange& range)
-    : d_ptr( &dd ), dd_ptr(new DocumentRangeObjectDynamicPrivate), m_ownsData(true)
+    : d_ptr( &dd ), dd_ptr(0), m_ownsData(true)
 {
   Q_ASSERT(d_ptr);
     if(range.isValid())
@@ -93,7 +98,6 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
     : KTextEditor::SmartRangeWatcher(), d_ptr( useDataFrom.d_ptr ), dd_ptr( useDataFrom.dd_ptr ), m_ownsData(false)
 {
   Q_ASSERT(d_ptr);
-  Q_ASSERT(dd_ptr);
 }
 
 void DocumentRangeObject::setData(DocumentRangeObjectData* data)
@@ -108,7 +112,7 @@ DocumentRangeObject::~ DocumentRangeObject( )
 {
     if(m_ownsData)
     {
-        if (dd_ptr->m_smartRange) {
+        if (dd_ptr && dd_ptr->m_smartRange) {
             QMutexLocker l(dd_ptr->m_smartMutex);
             dd_ptr->m_smartRange->removeWatcher(this);
 
@@ -131,6 +135,13 @@ void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOw
 {
     // If we're being called from anything but a copy constructor, the smart lock should already be held for
     // the new range.
+
+    if(!dd_ptr) {
+      if(!range)
+        return;
+      else
+        dd_ptr = new DocumentRangeObjectDynamicPrivate;
+    }
 
     if (dd_ptr->m_smartRange == range)
         return;
@@ -160,6 +171,8 @@ void DocumentRangeObject::setSmartRange(KTextEditor::SmartRange * range, RangeOw
     } else {
         dd_ptr->m_smartRange = 0;
         dd_ptr->m_smartMutex = 0;
+        delete dd_ptr;
+        dd_ptr = 0;
     }
 }
 
@@ -182,8 +195,10 @@ void DocumentRangeObject::setRange(const SimpleRange& range)
 
 SmartRange* DocumentRangeObject::smartRange() const
 {
-    /// \todo This is not very threadsafe, does it need to be?
-    return dd_ptr->m_smartRange;
+    if(dd_ptr)
+      return dd_ptr->m_smartRange;
+    else
+      return 0;
 }
 
 bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
@@ -195,26 +210,28 @@ bool DocumentRangeObject::contains(const SimpleCursor& cursor) const
 void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
 {
     // Already smart locked
+    Q_ASSERT(dd_ptr);
     Q_ASSERT(range == dd_ptr->m_smartRange);
     d_ptr->m_range = SimpleRange(*range);
-    dd_ptr->m_smartMutex = 0;
-    dd_ptr->m_smartRange = 0;
-    dd_ptr->m_ownsRange = Own;
+    delete dd_ptr;
+    dd_ptr = 0;
 }
 
 KTextEditor::SmartRange* DocumentRangeObject::takeRange()
 {
+    if(!dd_ptr)
+      return 0;
+    
     QMutexLocker l(dd_ptr->m_smartMutex);
     KTextEditor::SmartRange* ret;
 
     syncFromSmart();
+    
     ret = dd_ptr->m_smartRange;
-    if (dd_ptr->m_smartRange)
-    {
-        dd_ptr->m_smartRange = 0;
-    }
-
     ret->removeWatcher(this);
+    
+    delete dd_ptr;
+    dd_ptr = 0;
 
     return ret;
 }

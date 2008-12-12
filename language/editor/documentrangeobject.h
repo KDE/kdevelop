@@ -214,7 +214,7 @@ private:
     void syncFromSmart() const;
     void syncToSmart() const;
 
-    class DocumentRangeObjectDynamicPrivate* const dd_ptr;
+    class DocumentRangeObjectDynamicPrivate* dd_ptr;
     bool m_ownsData;
 };
 
