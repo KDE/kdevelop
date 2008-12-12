@@ -16,8 +16,11 @@
 #include <language/interfaces/iproblem.h>
 #include <parser/rpp/macrorepository.h>
 
-///@todo Make this configurable
-const bool onlyRecordImportantMacroUses = true;
+bool onlyRecordImportantMacroUses = true;
+
+void CppPreprocessEnvironment::setRecordOnlyImportantString(bool onlyImportant) {
+  onlyRecordImportantMacroUses = onlyImportant;
+}
 
 CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KSharedPtr<Cpp::EnvironmentFile> environmentFile ) : Environment(preprocessor), m_identityOffsetRestriction(0), m_finished(false), m_identityOffsetRestrictionEnabled(false), m_environmentFile(environmentFile) {
     //If this is included from another preprocessed file, take the current macro-set from there.
@@ -91,18 +94,17 @@ void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macro
 }
 
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
-    for( Cpp::ReferenceCountedMacroSet::Iterator it(file->definedMacros().iterator()); it; ++it ) {
+    for( Cpp::ReferenceCountedMacroSet::Iterator it(file->definedMacros().iterator()); it; ++it )
         rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-
-        m_macroNameSet.insert(it.ref().name);
-    }
+    
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
         rpp::pp_dynamic_macro m(*it);
         m.defined = false;
         rpp::Environment::setMacro(makeConstant(&m)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-
-        m_macroNameSet.remove(*it);
     }
+    
+    m_macroNameSet += file->definedMacroNames();
+    m_macroNameSet -= file->unDefinedMacroNames();
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {

@@ -865,6 +865,8 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
 
 void TestCppCodeCompletion::testEnvironmentMatching() {
     {
+      CppPreprocessEnvironment::setRecordOnlyImportantString(false);
+      
       addInclude("deep2.h", "#ifdef WANT_DEEP\nint x;\n#undef WANT_DEEP\n#endif\n");
       addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
       TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);

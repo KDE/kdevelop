@@ -72,6 +72,8 @@ public:
   ///Only use it if identityOffsetRestrictionEnabled() returns true
   uint identityOffsetRestriction() const;
   
+  static void setRecordOnlyImportantString(bool);
+  
 private:
     uint m_identityOffsetRestriction;
     bool m_identityOffsetRestrictionEnabled;
