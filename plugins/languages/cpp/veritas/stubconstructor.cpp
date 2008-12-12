@@ -68,13 +68,13 @@ MethodSkeleton fillMethod(ClassFunctionDeclaration* function)
     if (!type) { kDebug() << "Erm type == 0"; return ms; }
     ms.setName(function->identifier().toString());
     ms.setFunctionType(type);
+    ms.setConst(type->modifiers() & AbstractType::ConstModifier);
     return ms;
 }
 
 QString stubNameFor(ClassDeclaration* clazz)
 {
-    Identifier clzId = clazz->identifier();
-    return clzId.toString() + "Stub";
+    return clazz->qualifiedIdentifier().toString() + "Stub";
 }
 
 /*! add a data member to the class and return this in method ms.
@@ -82,8 +82,16 @@ QString stubNameFor(ClassDeclaration* clazz)
 void insertFakeMember(const QString& member, MethodSkeleton& ms, ClassSkeleton& cs, ConstructorSkeleton& constr)
 {
     ms.setBody("return " + member + ';');
-    cs.addMember(ms.returnType() + ' ' + member);
-    constr.addInitializer(member + "(0)");
+    QString type = ms.returnType();
+    if (type.startsWith("const ")) {
+        type = type.mid(6, -1);
+    }
+    cs.addMember(type + ' ' + member);
+    if (type == "bool") {
+        constr.addInitializer(member + "(false)");
+    } else if (type == "int" || type.contains("*")) {
+        constr.addInitializer(member + "(0)");
+    }
 }
 
 } // end anonymous namespace

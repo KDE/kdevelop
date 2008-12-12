@@ -40,7 +40,10 @@ private slots:
     void noMethods();
     void method();
     void constructor();
-
+    void constMethod();
+    void singleNamespace();
+    void nestedNamespace();
+    
 private:
     QRegExp whiteSpaceRegex(const QString& text);
     QString serialize(const ClassSkeleton& cs);

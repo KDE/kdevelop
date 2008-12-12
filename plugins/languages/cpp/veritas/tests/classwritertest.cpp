@@ -74,6 +74,47 @@ void ClassWriterTest::constructor()
     assertAlike(expected, actual);
 }
 
+void ClassWriterTest::constMethod()
+{
+    ClassSkeleton cs;
+    cs.setName("Foo");
+    MethodSkeleton ms;
+    ms.setName( "foo" );
+    ms.setConst( true );
+    ms.setReturnType( "void" );
+    cs.addMethod( ms );
+    
+    QString actual = serialize(cs);
+    QVERIFY(actual.contains( " const" ));    
+}
+
+void ClassWriterTest::singleNamespace()
+{
+    ClassSkeleton cs;
+    cs.setName("FooSpace::Foo");
+    
+    QString actual = serialize(cs);
+    QString expected =
+      "namespace FooSpace { "
+      "class Foo { }; } ";
+
+    assertAlike(expected, actual);
+}
+
+void ClassWriterTest::nestedNamespace()
+{
+    ClassSkeleton cs;
+    cs.setName("FooSpace::BarSpace::Foo");
+    
+    QString actual = serialize(cs);
+    QString expected =
+      "namespace FooSpace { namespace BarSpace { "
+      "class Foo { }; }} ";
+
+    assertAlike(expected, actual);
+}
+
+
 ////////////////////////// helpers ///////////////////////////////////////////
 
 /*! Construct a regular expression that is tolerant on

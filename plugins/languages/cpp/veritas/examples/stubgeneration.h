@@ -57,6 +57,7 @@ class Loo
 {
 public:
     virtual void moo();
+    virtual void boo() const;
 };
 }
 

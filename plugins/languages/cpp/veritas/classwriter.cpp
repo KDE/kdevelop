@@ -38,7 +38,12 @@ QString indent() { return INDENT; }
 
 void intro(const ClassSkeleton& source, QTextStream& str)
 {
-    str << "\nclass " << source.name();
+    QStringList qualifiedName = source.name().split("::");
+    Q_ASSERT(qualifiedName.size()>=1);
+    for (int i=0; i<qualifiedName.size()-1;i++) {
+        str << "\nnamespace " << qualifiedName[i] << " {";
+    }
+    str << "\nclass " << qualifiedName.last();
     if (!source.super().isEmpty()) {
         str << " : public " << source.super();
     }
@@ -67,8 +72,9 @@ void writeDestructor(const MethodSkeleton& destr, QTextStream& str)
 
 void writeMethod(const MethodSkeleton& mtd, QTextStream& str)
 {
+    QString const_ = mtd.isConst() ? " const " : "";
     str << indent() << "virtual " << mtd.returnType() 
-        << " " << mtd.name() << mtd.arguments() << " {\n";
+        << " " << mtd.name() << mtd.arguments() << const_ << " {\n";
     foreach(const QString& line, mtd.body().split('\n', QString::SkipEmptyParts)) {
         str << indent() << indent() << line << "\n";
     }
@@ -94,6 +100,11 @@ void ClassSerializer::write(const ClassSkeleton& source, QIODevice* target)
         }
     }
     str << "};\n";
+    int nrofNamespaces = source.name().split("::").size()-1;
+    for (int i=0; i<nrofNamespaces; i++) {
+      str << "}";
+    }
+    if (nrofNamespaces!=0) str << "\n";
     target->close();
 }
 
