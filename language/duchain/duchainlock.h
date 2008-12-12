@@ -65,6 +65,8 @@ public:
 namespace KDevelop
 {
 
+// #define NO_DUCHAIN_LOCK_TESTING
+
 /**
  * Macros for ensuring the DUChain is locked properly.
  *
@@ -72,7 +74,7 @@ namespace KDevelop
  * member on the DUChain or one of its contexts, if ENSURE_CAN_WRITE and ENSURE_CAN_READ do not apply.
  * From within a Declaration or DUContext, ENSURE_CAN_WRITE and ENSURE_CAN_READ should be used instead of these.
  */
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(NO_DUCHAIN_LOCK_TESTING)
 #define ENSURE_CHAIN_READ_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasReadLock() || DUChain::lock()->currentThreadHasWriteLock());
 #define ENSURE_CHAIN_WRITE_LOCKED Q_ASSERT(DUChain::lock()->currentThreadHasWriteLock());
 #else
@@ -217,7 +219,7 @@ private:
  * Those items must implement an inDUChain() function that returns whether the item is in the du-chain.
  * Examples for such detachable items are DUContext's and Declarations, they can be written as long as they are not in the DUChain.
  * */
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(NO_DUCHAIN_LOCK_TESTING)
 #define ENSURE_CAN_WRITE {if( inDUChain()) { ENSURE_CHAIN_WRITE_LOCKED }}
 #define ENSURE_CAN_READ {if( inDUChain()) { ENSURE_CHAIN_READ_LOCKED }}
 #else

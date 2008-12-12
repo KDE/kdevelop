@@ -51,6 +51,7 @@
 //#define SEARCH_DEADLOCKS
 
 #include <kdebug.h>
+#include <sys/time.h>
 
 namespace std {
 #if defined(Q_OS_WIN)
@@ -155,6 +156,10 @@ DUChainLock::~DUChainLock()
   delete d;
 }
 
+inline uint toMilliSeconds(timeval v) {
+  return v.tv_sec * 1000 + v.tv_usec / 1000;
+}
+
 bool DUChainLock::lockForRead(unsigned int timeout)
 {
 #ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
@@ -167,9 +172,20 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 
   bool locked = false;
 
-  QTime startTime = QTime::currentTime();
-  while((d->m_writer && d->m_writer != QThread::currentThreadId()) && (uint)startTime.msecsTo(QTime::currentTime()) < timeout)
-    d->m_waitForWriter.wait(&d->m_mutex, timeout);
+  timeval startTime;
+  gettimeofday(&startTime, 0);
+  
+  while((d->m_writer && d->m_writer != QThread::currentThreadId())) {
+    timeval currentTime;
+    gettimeofday(&currentTime, 0);
+    timeval waited;
+    timersub(&currentTime, &startTime, &waited);
+    
+    if(toMilliSeconds(waited) < timeout)
+      d->m_waitForWriter.wait(&d->m_mutex, timeout);
+    else
+      break;
+  }
   
   if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
     DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
