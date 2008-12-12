@@ -26,6 +26,7 @@
 #include "indexedstring.h"
 #include "topducontext.h"
 #include "duchainregister.h"
+#include <qthread.h>
 
 namespace KDevelop
 {
@@ -33,9 +34,6 @@ REGISTER_DUCHAIN_ITEM(DUChainBase);
 
 uint DUChainBaseData::classSize() const {
   return DUChainItemSystem::self().dataClassSize(*this);
-}
-
-void DUChainBase::aboutToSave() {
 }
 
 DUChainBase::DUChainBase(const SimpleRange& range)
@@ -68,11 +66,12 @@ IndexedString DUChainBase::url() const
     return IndexedString();
 }
 
-void DUChainBase::setData(DocumentRangeObjectData* data)
+void DUChainBase::setData(DocumentRangeObjectData* data, bool constructorCalled)
 {
-  KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
+  if(constructorCalled)
+    KDevelop::DUChainItemSystem::self().callDestructor(static_cast<DUChainBaseData*>(d_ptr));
   
-  DocumentRangeObject::setData(data);
+  DocumentRangeObject::setData(data, constructorCalled);
 }
 
 DUChainBase::~DUChainBase()
@@ -122,19 +121,25 @@ void DUChainBase::makeDynamic() {
   }
 }
 
-QThreadStorage<char*> shouldCreateConstantDataStorage;
+QMutex shouldCreateConstantDataStorageMutex;
+QSet<Qt::HANDLE> shouldCreateConstantDataStorage;
 
 bool DUChainBaseData::shouldCreateConstantData() {
-  return shouldCreateConstantDataStorage.hasLocalData();
+  shouldCreateConstantDataStorageMutex.lock();
+  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThreadId() );
+  shouldCreateConstantDataStorageMutex.unlock();
+  return ret;
 }
 
 void DUChainBaseData::setShouldCreateConstantData(bool should) {
-  if(should == shouldCreateConstantData())
-    return;
+  shouldCreateConstantDataStorageMutex.lock();
+  
   if(should)
-    shouldCreateConstantDataStorage.setLocalData(new char);
+    shouldCreateConstantDataStorage.insert(QThread::currentThreadId());
   else
-    shouldCreateConstantDataStorage.setLocalData(0);
+    shouldCreateConstantDataStorage.remove(QThread::currentThreadId());
+  
+  shouldCreateConstantDataStorageMutex.unlock();
 }
 
 }

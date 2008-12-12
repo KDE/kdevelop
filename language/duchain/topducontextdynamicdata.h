@@ -92,6 +92,7 @@ class TopDUContextDynamicData {
   bool m_deleting; ///Flag used during destruction
   
   private:
+
     void loadData() const;
     
     struct ItemDataInfo {
@@ -101,6 +102,12 @@ class TopDUContextDynamicData {
       uint dataOffset; //Offset of the data
       uint parentContext; //Parent context of the data
     };
+    
+    static void verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data);
+    
+    static const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset);
+
+    ItemDataInfo writeDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& oldData, uint& totalDataOffset);
 
     TopDUContext* m_topContext;
     //May contain zero contexts if they were deleted

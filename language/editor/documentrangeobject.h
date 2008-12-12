@@ -175,7 +175,9 @@ public:
 
     ///Sets a new data pointer. The data will be owned by this object if it is dynamic.
     ///The old data is deleted if it was dynamic.
-    virtual void setData(DocumentRangeObjectData*);
+    ///@param constructorCalled Whether the constructor of the data object was called while its creation.
+    ///                         If not, it means that the data is only moved into another place
+    virtual void setData(DocumentRangeObjectData*, bool constructorCalled = true);
 
 protected:
     /// Static shared mutex protecting internal data.  May be used to protect private data in subclasses. \returns the internal mutex

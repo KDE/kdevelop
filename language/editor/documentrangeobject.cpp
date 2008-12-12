@@ -100,7 +100,7 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
   Q_ASSERT(d_ptr);
 }
 
-void DocumentRangeObject::setData(DocumentRangeObjectData* data)
+void DocumentRangeObject::setData(DocumentRangeObjectData* data, bool constructorCalled)
 {
   Q_ASSERT(data);
   if(d_ptr->m_dynamic && m_ownsData)

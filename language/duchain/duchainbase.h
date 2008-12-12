@@ -118,9 +118,6 @@ public:
 
   virtual IndexedString url() const;
   
-  ///Is called immediately before this object is saved to disk. Remember calling the implementation of the parent!
-  virtual void aboutToSave();
-  
   enum {
     Identity = 1
   };
@@ -132,7 +129,7 @@ public:
   
   ///This must only be used to change the storage-location or storage-kind(dynamic/constant) of the data, but
   ///the data must always be equal!
-  virtual void setData(DocumentRangeObjectData*);
+  virtual void setData(DocumentRangeObjectData*, bool constructorCalled = true);
   
 protected:
   /**
