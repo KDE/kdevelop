@@ -113,7 +113,7 @@ class TemporaryDataManager {
           //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
           //Since it's only a few instructions from the moment m_items is read to the moment it's used,
           //deleting the old data after a few seconds should be safe.
-          m_deleteLater.append(qMakePair(time(0), newItems));
+          m_deleteLater.append(qMakePair(time(0), oldItems));
 
           //We do this in this place so it isn't called too often. The result is that we will always have some additional data around.
           //However the index itself should anyway not consume too much data.
