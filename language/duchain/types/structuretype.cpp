@@ -53,7 +53,7 @@ bool StructureType::equals(const AbstractType* _rhs) const
   if (!StructureTypeBase::equals(_rhs))
     return false;
 
-  Q_ASSERT(fastCast<const StructureType*>(_rhs));
+//   Q_ASSERT(fastCast<const StructureType*>(_rhs));
 
 //   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
 
