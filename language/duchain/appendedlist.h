@@ -66,38 +66,32 @@ class TemporaryDataManager {
     DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
   };
   public:
-    TemporaryDataManager(QString id = QString()) : m_id(id) {
+    TemporaryDataManager(QString id = QString()) : m_id(id), m_itemsUsed(0), m_itemsSize(0), m_items(0) {
     }
     ~TemporaryDataManager() {
       uint cnt = usedItemCount();
       if(cnt) //Don't use kDebug, because that may not work during destruction
         std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
       
-      foreach(T* item, m_items)
-        delete item;
+      for(int a = 0; a < m_itemsUsed; ++a)
+        delete m_items[a];
     }
 
-    T& getItem(uint index) {
+    inline T& getItem(uint index) {
+      //For performance reasons this function does not lock the mutex, it's called too often and must be
+      //extremely fast. There is special measures in alloc() to make this safe.
       Q_ASSERT(index & DynamicAppendedListMask);
-      index &= DynamicAppendedListRevertMask;
 
-      if(threadSafe)
-        m_mutex.lock();
-
-      T& ret(*m_items[index]);
-
-      if(threadSafe)
-        m_mutex.unlock();
-
-      return ret;
+      return *m_items[index & DynamicAppendedListRevertMask];
     }
 
     ///Allocates an item index, which from now on you can get using getItem, until you call free(..) on the index.
     ///The returned item is not initialized and may contain random older content, so you should clear it after getting it for the first time
     uint alloc() {
+
       if(threadSafe)
         m_mutex.lock();
-
+      
       uint ret;
       if(!m_freeIndicesWithData.isEmpty()) {
         ret = m_freeIndicesWithData.pop();
@@ -106,8 +100,40 @@ class TemporaryDataManager {
         Q_ASSERT(!m_items[ret]);
         m_items[ret] = new T;
       }else{
-        ret = m_items.size();
-        m_items.append(new T);
+        
+        if(m_itemsUsed >= m_itemsSize) {
+          //We need to re-allocate
+          uint newItemsSize = m_itemsSize + 20 + (m_itemsSize/3);
+          T** newItems = new T*[newItemsSize];
+          memcpy(newItems, m_items, sizeof(T*) * m_itemsSize);
+          
+          T** oldItems = m_items;
+          m_items = newItems;
+          m_itemsSize = newItemsSize;
+          //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
+          //Since it's only a few instructions from the moment m_items is read to the moment it's used,
+          //deleting the old data after a few seconds should be safe.
+          m_deleteLater.append(qMakePair(time(0), newItems));
+
+          //We do this in this place so it isn't called too often. The result is that we will always have some additional data around.
+          //However the index itself should anyway not consume too much data.
+          if(!m_deleteLater.isEmpty()) {
+            while(!m_deleteLater.isEmpty()) {
+              //We delete after 5 seconds
+              if(time(0) - m_deleteLater.first().first > 5) {
+                delete m_deleteLater.first().second;
+                m_deleteLater.removeFirst();
+              }else{
+                break;
+              }
+            }
+          }
+        }
+        
+        ret = m_itemsUsed;
+        m_items[m_itemsUsed] = new T;
+        ++m_itemsUsed;
+        Q_ASSERT(m_itemsUsed <= m_itemsSize);
       }
 
       if(threadSafe)
@@ -145,7 +171,7 @@ class TemporaryDataManager {
     
     uint usedItemCount() const {
       uint ret = 0;
-      for(int a = 0; a < m_items.size(); ++a)
+      for(int a = 0; a < m_itemsUsed; ++a)
         if(m_items[a])
           ++ret;
       return ret - m_freeIndicesWithData.size();
@@ -157,16 +183,20 @@ class TemporaryDataManager {
       item->clear(); ///@todo make this a template specialization that only does this for containers
     }
     
-    QVector<T*> m_items;
+    uint m_itemsUsed, m_itemsSize;
+    T** m_items;
     QStack<uint> m_freeIndicesWithData;
     QStack<uint> m_freeIndices;
     QMutex m_mutex;
     QString m_id;
+    QList<QPair<time_t, T**> > m_deleteLater;
 };
 
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
 //This might be a little slow
-#define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
+#define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1, containerSize = container ## Size(); a < containerSize; ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
+//More efficient version that does not repeatedly call functions on the container, but the syntax is a bit less nice
+// #define FOREACH_FUNCTION_EFFICIENT(itemType, itemName, container) for(itemType* start = container(), end = start + container ## Size(), fake = start; start != end; ++start) for( itemType itemName(*start); fake != end; fake = end)
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
     typedef TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
