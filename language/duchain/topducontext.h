@@ -41,8 +41,12 @@ namespace KDevelop
   class DeclarationChecker;
   class TopDUContext;
 
+  KDEVPLATFORMLANGUAGE_EXPORT extern Utils::BasicSetRepository recursiveImportRepository;
+  
   struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportRepository {
-    static Utils::BasicSetRepository* repository();
+    inline static Utils::BasicSetRepository* repository() {
+      return &recursiveImportRepository;
+    }
   };
   
   ///Maps an imported top-context to a pair:

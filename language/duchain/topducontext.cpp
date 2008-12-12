@@ -65,14 +65,7 @@ namespace std {
 namespace KDevelop
 {
 
-static Utils::BasicSetRepository* recursiveImportRepository() {
-  static Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", false);
-  return &recursiveImportRepository;
-}
-
-Utils::BasicSetRepository* RecursiveImportRepository::repository() {
-  return recursiveImportRepository();
-}
+Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", false);
 
 struct DeclarationTopContextExtractor {
   inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
@@ -742,8 +735,10 @@ void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentCon
   }
   visited.insert(currentContext.index());
   const TopDUContextData* currentData = currentContext.data()->topContext()->d_func();
-  FOREACH_FUNCTION(const DUContext::Import& import, currentData->m_importedContexts) {
-    IndexedTopDUContext next(import.topContextIndex());
+  const KDevelop::DUContext::Import* imports = currentData->m_importedContexts();
+  uint importsSize = currentData->m_importedContextsSize();
+  for(uint a = 0; a < importsSize; ++a) {
+    IndexedTopDUContext next(imports[a].topContextIndex());
     if(next.isValid())
       updateImportCacheRecursion(next, visited);
   }
@@ -755,7 +750,7 @@ void TopDUContext::updateImportsCache() {
   std::set<uint> visited;
   TopDUContextData::updateImportCacheRecursion(this, visited);
   Q_ASSERT(visited.find(ownIndex()) != visited.end());
-  d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository()->createSet(visited));
+  d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository.createSet(visited));
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
