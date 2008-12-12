@@ -1060,9 +1060,8 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
 
     ///@todo store IncludeLocal/IncludeGlobal somewhere
     QPair<KUrl, KUrl> included = findInclude( includePaths, localPath, (*it).str(), rpp::Preprocessor::IncludeLocal, KUrl(), true );
-    if(!included.first.isEmpty()) {
+    if(!included.first.isEmpty())
       return true;
-    }
   }
 
   return false;

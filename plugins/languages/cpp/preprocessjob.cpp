@@ -431,6 +431,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     
     KUrl fileNameUrl(_fileName);
     
+    TopDUContext::Features slaveMinimumFeatures = TopDUContext::VisibleDeclarationsAndContexts;
+    if((parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) == TopDUContext::AllDeclarationsContextsAndUsesForRecursive)
+      slaveMinimumFeatures = parentJob()->minimumFeatures();
+    
     QString fileName = fileNameUrl.pathOrUrl();
     
     if (checkAbort())
@@ -485,8 +489,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
-              if( includedEnvironment )
-                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls()) || !includedEnvironment->featuresSatisfied(parentJob()->minimumFeatures());
+              if( includedEnvironment ) {
+                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded |= !includedEnvironment->featuresSatisfied(slaveMinimumFeatures);
+              }
             }
         }
 
@@ -528,8 +534,8 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
             CPPParseJob* slaveJob = new CPPParseJob(includedFile, 0, this);
-            if((parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) == TopDUContext::AllDeclarationsContextsAndUsesForRecursive)
-              slaveJob->setMinimumFeatures(parentJob()->minimumFeatures());
+            
+            slaveJob->setMinimumFeatures(slaveMinimumFeatures);
 
             slaveJob->setIncludedFromPath(included.second);
 
