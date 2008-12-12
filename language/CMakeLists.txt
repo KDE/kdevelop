@@ -112,9 +112,16 @@ kde4_add_ui_files( kdevplatformlanguage_LIB_SRCS ${kdevplatformlanguage_LIB_UI} 
 
 
 kde4_add_library(kdevplatformlanguage SHARED ${kdevplatformlanguage_LIB_SRCS})
-target_link_libraries(kdevplatformlanguage ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} kdevplatforminterfaces kdevplatformutil)
+target_link_libraries(kdevplatformlanguage 
+        ${KDE4_KPARTS_LIBS} 
+        ${KDE4_KTEXTEDITOR_LIBS} 
+        ${KDE4_THREADWEAVER_LIBRARIES} 
+        kdevplatforminterfaces 
+        kdevplatformutil)
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
-target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES ${KDE4_KTEXTEDITOR+LIBS} ${KDE4_THREADWEAVER_LIBRARIES})
+target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES 
+        ${KDE4_KTEXTEDITOR+LIBS} 
+        ${KDE4_THREADWEAVER_LIBRARIES})
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

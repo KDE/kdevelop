@@ -55,7 +55,9 @@ target_link_libraries(kdevplatformvcs
     kdevplatformlanguage
 )
 # add kdevplatform* when they're exported targets
-target_link_libraries(kdevplatformvcs LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS})
+target_link_libraries(kdevplatformvcs LINK_INTERFACE_LIBRARIES 
+        ${KDE4_KIO_LIBS} 
+        ${KDE4_KPARTS_LIBS})
 set_target_properties(kdevplatformvcs PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformvcs ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

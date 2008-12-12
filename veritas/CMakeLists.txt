@@ -53,7 +53,11 @@ target_link_libraries(kdevplatformveritas
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS})
-target_link_libraries(kdevplatformveritas LINK_INTERFACE_LIBRARIES ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(kdevplatformveritas LINK_INTERFACE_LIBRARIES 
+        ${KDE4_KDECORE_LIBS} 
+        ${KDE4_KTEXTEDITOR_LIBS} 
+        ${KDE4_KDEUI_LIBS} 
+        ${QT_QTTEST_LIBRARY})
 qt4_automoc(${veritas_SRCS})
 install(TARGETS kdevplatformveritas ${INSTALL_TARGETS_DEFAULT_ARGS})
 

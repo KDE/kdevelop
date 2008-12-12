@@ -28,8 +28,19 @@ set(kdevplatforminterfaces_LIB_SRCS
 
 
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
-target_link_libraries(kdevplatforminterfaces ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} ${KDE4_KROSSCORE_LIBS})
-target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES ${KDE4_KPARTS_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTDESIGNER_LIBRARY})
+target_link_libraries(kdevplatforminterfaces 
+        ${KDE4_KIO_LIBS} 
+        ${KDE4_KUTILS_LIBS} 
+        ${KDE4_KPARTS_LIBS} 
+        ${KDE4_KNOTIFYCONFIG_LIBS} 
+        ${KDE4_KTEXTEDITOR_LIBS} 
+        ${KDE4_THREADWEAVER_LIBRARIES} 
+        ${QT_QTDESIGNER_LIBRARY} 
+        ${KDE4_KROSSCORE_LIBS})
+target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
+        ${KDE4_KPARTS_LIBS} 
+        ${KDE4_KTEXTEDITOR_LIBS} 
+        ${QT_QTDESIGNER_LIBRARY})
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatforminterfaces ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
