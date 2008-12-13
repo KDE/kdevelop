@@ -26,7 +26,6 @@ target_link_libraries(kdevveritascoverage
     ${KDevPlatform_SHELL_LIBRARY}
     ${KDevPlatform_OUTPUTVIEW_LIBRARY}
     ${KDevPlatform_UTIL_LIBRARY}
-    ${KDevPlatform_SUBLIME_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDECORE_LIBS}

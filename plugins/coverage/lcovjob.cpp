@@ -35,13 +35,8 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/iuicontroller.h>
 #include <util/processlinemaker.h>
 #include <shell/core.h>
-#include <shell/uicontroller.h>
-#include <sublime/view.h>
-#include <sublime/area.h>
-#include <sublime/tooldocument.h>
 
 #include <ktexteditor/annotationinterface.h>
 #include <ktexteditor/cursor.h>
@@ -54,7 +49,6 @@ using KDevelop::IDocumentController;
 using KDevelop::IOutputView;
 using KDevelop::IToolViewFactory;
 using KDevelop::ProcessLineMaker;
-using KDevelop::UiController;
 
 using KTextEditor::AnnotationModel;
 using KTextEditor::AnnotationInterface;
@@ -137,26 +131,6 @@ void LcovJob::initParser()
             m_parser, SLOT(parseLines(QStringList)));
 }
 
-namespace
-{
-class UiToolViewFactory: public Sublime::ToolFactory
-{
-public:
-    UiToolViewFactory(IToolViewFactory *factory): m_factory(factory) {}
-    ~UiToolViewFactory() { delete m_factory; }
-    virtual QWidget* create(Sublime::ToolDocument *doc, QWidget *parent = 0) {
-        Q_UNUSED(doc);
-        return m_factory->create(parent);
-    }
-    QList<QAction*> toolBarActions(QWidget* viewWidget) const {
-        return m_factory->toolBarActions(viewWidget);
-    }
-    QString id() const { return m_factory->id(); }
-
-private:
-    IToolViewFactory *m_factory;
-};
-}
 
 void LcovJob::start()
 {
@@ -164,7 +138,6 @@ void LcovJob::start()
     startOutput();
     initProcess();
     initParser();
-    //spawnCoverageTool();
     m_lcov->start();
 }
 
