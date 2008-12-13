@@ -233,8 +233,6 @@ void PreprocessJob::run()
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
     
-    KDevelop::ModificationRevision::clearModificationCache(parentJob()->document());
-
     if(m_secondEnvironmentFile) //Copy some information from the environment-file to its content-part
         m_secondEnvironmentFile->setModificationRevision(m_firstEnvironmentFile->modificationRevision());
 
