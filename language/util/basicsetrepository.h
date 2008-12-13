@@ -247,6 +247,7 @@ private:
   class Private;
   Private* d;
   SetDataRepository dataRepository;
+  QMutex* m_mutex;
   
 //   SetNode
 };

@@ -81,6 +81,7 @@ typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairReque
 
 static FileModificationPairRepository& fileModificationPairRepository() {
   static FileModificationPairRepository rep("file modification repository");
+  rep.setMutex(&modificationRevisionSetMutex);
   return rep;
 }
 

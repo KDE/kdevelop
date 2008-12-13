@@ -318,13 +318,11 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
 }
 
 struct BasicSetRepository::Private {
-  Private(QString _name, bool doLocking) : name(_name), mutex(doLocking ? new QMutex(QMutex::Recursive) : 0) {
+  Private(QString _name) : name(_name) {
   }
   ~Private() {
-    delete mutex;
   }
 
-  QMutex* mutex;
   QString name;
   private:
 };
@@ -338,7 +336,7 @@ Set::~Set() {
 unsigned int Set::count() const {
   if(!m_repository || !m_tree)
     return 0;
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   return alg.count(m_repository->dataRepository.itemFromIndex(m_tree));
@@ -363,7 +361,7 @@ QString Set::dumpDotGraph() const {
   if(!m_repository || !m_tree)
     return QString();
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   return alg.dumpDotGraph(m_tree);
@@ -523,8 +521,8 @@ Set::Iterator& Set::Iterator::operator++() {
   
   Q_ASSERT(d->nodeStackSize);
   
-  if(d->repository->d->mutex)
-    d->repository->d->mutex->lock();
+  if(d->repository->m_mutex)
+    d->repository->m_mutex->lock();
   
   ++d->currentIndex;
   
@@ -550,8 +548,8 @@ Set::Iterator& Set::Iterator::operator++() {
 
   Q_ASSERT(d->nodeStackSize == 0 || d->currentIndex < d->nodeStack[0]->end);
   
-  if(d->repository->d->mutex)
-    d->repository->d->mutex->unlock();
+  if(d->repository->m_mutex)
+    d->repository->m_mutex->unlock();
   
   return *this;
 }
@@ -564,7 +562,7 @@ Set::Iterator Set::iterator() const {
   if(!m_tree || !m_repository)
     return Iterator();
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   Iterator ret;
   ret.d->repository = m_repository;
@@ -1014,7 +1012,7 @@ uint SetRepositoryAlgorithms::set_subtract(uint firstNode, uint secondNode, cons
 }
 
 Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
-  QMutexLocker lock(d->mutex);
+  QMutexLocker lock(m_mutex);
   std::vector<Index> shortRanges; //Currently we only support ranges of length 1, so we actually do not support them
   
   for(uint a = 0; a < indices.size(); a += 2) {
@@ -1049,7 +1047,7 @@ Set BasicSetRepository::createSet(Index i) {
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
-  QMutexLocker lock(d->mutex);
+  QMutexLocker lock(m_mutex);
   
   if(indices.empty())
       return Set();
@@ -1074,7 +1072,9 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name, doLocking)), dataRepository(name) {
+BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name)), dataRepository(name), m_mutex(0) {
+    if(doLocking)
+        m_mutex = dataRepository.mutex();
 }
 
 struct StatisticsVisitor {
@@ -1115,7 +1115,7 @@ bool Set::contains(Index index) const
   if(!m_tree || !m_repository)
     return false;
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   return alg.set_contains(m_repository->dataRepository.itemFromIndex(m_tree), index);
@@ -1130,7 +1130,7 @@ Set Set::operator +(const Set& first) const
   
   Q_ASSERT(m_repository == first.m_repository);
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
@@ -1150,7 +1150,7 @@ Set& Set::operator +=(const Set& first) {
     return *this;
   }
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
@@ -1166,7 +1166,7 @@ Set Set::operator &(const Set& first) const {
   
   Q_ASSERT(m_repository);
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
@@ -1185,7 +1185,7 @@ Set& Set::operator &=(const Set& first) {
   
   Q_ASSERT(m_repository);
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
@@ -1200,7 +1200,7 @@ Set Set::operator -(const Set& rhs) const {
 
   Q_ASSERT(m_repository);
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   
@@ -1215,7 +1215,7 @@ Set& Set::operator -=(const Set& rhs) {
 
   Q_ASSERT(m_repository);
   
-  QMutexLocker lock(m_repository->d->mutex);
+  QMutexLocker lock(m_repository->m_mutex);
   
   SetRepositoryAlgorithms alg(m_repository->dataRepository);
   

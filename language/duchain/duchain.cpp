@@ -750,9 +750,9 @@ private:
 
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
   ///Maps filenames to a list of top-contexts/environment-informations. Protected by m_chainsMutex
-  ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest, NoDynamicData, false> m_environmentListInfo;
+  ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest, NoDynamicData> m_environmentListInfo;
   ///Maps top-context-indices to environment-information item. Protected by m_chainsMutex
-  ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest, NoDynamicData, false> m_environmentInfo;
+  ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest, NoDynamicData> m_environmentInfo;
 };
 
 K_GLOBAL_STATIC(DUChainPrivate, sdDUChainPrivate)

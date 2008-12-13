@@ -82,8 +82,7 @@ struct TypeRepositoryData {
   TypeRepositoryData() : repository("Type Repository") {
     repository.setUnloadingEnabled(false);
   }
-  QMutex mutex;
-  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData, false> repository;
+  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData> repository;
 };
 
 TypeRepositoryData& data() {
@@ -94,8 +93,6 @@ TypeRepositoryData& data() {
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
     return 0;
-
-  QMutexLocker(&data().mutex);
 
   uint i = data().repository.index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
@@ -116,11 +113,7 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
   if(index == 0)
     return AbstractType::Ptr();
 
-  TypeRepositoryData& _data(data());
-  _data.mutex.lock();
-  AbstractType::Ptr ret( TypeSystem::self().create(const_cast<AbstractTypeData*>(_data.repository.itemFromIndex(index))) );
-  _data.mutex.unlock();
-  return ret;
+  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(data().repository.itemFromIndex(index))) );
 }
 
 }

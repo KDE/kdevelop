@@ -1015,11 +1015,12 @@ struct ReferenceCounting {
 ///@param Item @see ExampleItem
 ///@param ItemRequest @see ExampleReqestItem
 ///@param DynamicData Can be used to attach additional metadata of constant size to each item. 
-///                   That meta-data can be manipulated by giving manipulators to the ItemRepository Member functions. 
+///                   That meta-data can be manipulated by giving manipulators to the ItemRepository Member functions.
 ///                   This can be used to implement reference-counting, @see ReferenceCounting
 ///@param fixedItemSize When this is true, all inserted items must have the same size.
 ///                     This greatly simplifies and speeds up the task of managing free items within the buckets.
-///@param threadSafe Whether class access should be thread-safe
+///@param threadSafe Whether class access should be thread-safe. Disabling this is dangerous when you do multi-threading.
+///                  You have to make sure that mutex() is locked whenever the repository is accessed.
 template<class Item, class ItemRequest, class DynamicData = NoDynamicData, bool threadSafe = true, uint fixedItemSize = 0, unsigned int targetBucketHashSize = 524288>
 class ItemRepository : public AbstractItemRepository {
 
@@ -1041,7 +1042,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
   ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_mutex(QMutex::Recursive), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
+  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_ownMutex(QMutex::Recursive), m_mutex(&m_ownMutex), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
     m_unloadingEnabled = true;
     m_metaDataChanged = true;
     m_buckets.resize(10);
@@ -1077,7 +1078,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param dynamic will be applied to the dynamic data of the found item
   unsigned int index(const ItemRequest& request, const DynamicData* dynamic = 0) {
     
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     
     unsigned int hash = request.hash();
     unsigned int size = request.itemSize();
@@ -1322,7 +1323,7 @@ class ItemRepository : public AbstractItemRepository {
   ///Returns zero if the item is not in the repository yet
   unsigned int findIndex(const ItemRequest& request) {
     
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     
     unsigned int hash = request.hash();
     
@@ -1358,7 +1359,7 @@ class ItemRepository : public AbstractItemRepository {
   
   ///Deletes the item from the repository.
   void deleteItem(unsigned int index) {
-    ThisLocker lock(&m_mutex); 
+    ThisLocker lock(m_mutex); 
     
     m_metaDataChanged = true;
     
@@ -1491,7 +1492,7 @@ class ItemRepository : public AbstractItemRepository {
   Item* dynamicItemFromIndex(unsigned int index, const DynamicData* dynamic = 0) {
     Q_ASSERT(index);
     
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
@@ -1512,7 +1513,7 @@ class ItemRepository : public AbstractItemRepository {
   const Item* itemFromIndex(unsigned int index, const DynamicData* dynamic = 0) const {
     Q_ASSERT(index);
     
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     
     unsigned short bucket = (index >> 16);
     Q_ASSERT(bucket); //We don't use zero buckets
@@ -1639,7 +1640,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param onlyInMemory If this is true, only items are visited that are currently in memory.
   template<class Visitor>
   void visitAllItems(Visitor& visitor, bool onlyInMemory = false) const {
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     for(uint a = 1; a <= m_currentBucket; ++a) {
       if(!onlyInMemory || m_buckets[a]) {
         if(bucketForIndex(a) && !bucketForIndex(a)->visitAllItems(visitor))
@@ -1653,7 +1654,7 @@ class ItemRepository : public AbstractItemRepository {
   ///               that returns whether more items are wanted.
   template<class Visitor>
   void visitItemsWithHash(Visitor& visitor, uint hash) const {
-    ThisLocker lock(&m_mutex);
+    ThisLocker lock(m_mutex);
     
     short unsigned int bucket = *(m_firstBucketForHash + (hash % bucketHashSize));
     
@@ -1675,8 +1676,9 @@ class ItemRepository : public AbstractItemRepository {
   ///Synchronizes the state on disk to the one in memory, and does some memory-management.
   ///Should be called on a regular basis. Can be called centrally from the global item repository registry.
   virtual void store() {
-    ThisLocker lock(&m_mutex);
+    QMutexLocker lock(m_mutex);
     if(m_file) {
+      
       if(!m_file->open( QFile::ReadWrite ) || !m_dynamicFile->open( QFile::ReadWrite )) {
         kFatal() << "cannot re-open repository file for storing";
         return;
@@ -1753,10 +1755,27 @@ class ItemRepository : public AbstractItemRepository {
 //         }
 //   #endif
       }
-      //To protect us from inconsistency due to crashes. flush() is not enough.
+      //To protect us from inconsistency due to crashes. flush() is not enough. We need to close.
       m_file->close();
       m_dynamicFile->close();
+      Q_ASSERT(!m_file->isOpen());
+      Q_ASSERT(!m_dynamicFile->isOpen());
     }
+  }
+  
+  ///This mutex is used for the thread-safe locking when threadSafe is true. Even if threadSafe is false, it is
+  ///always locked before storing to or loading from disk.
+  ///@warning If threadSafe is false, and you sometimes call store() from within another thread(As happens in duchain),
+  ///         you must always make sure that this mutex is locked before you access this repository.
+  ///         Else you will get crashes and inconsistencies.
+  ///         In KDevelop This means: Make sure you _always_ lock this mutex before accessing the repository.
+  QMutex* mutex() const {
+    return m_mutex;
+  }
+  
+  ///With this, you can replace the internal mutex with another one.
+  void setMutex(QMutex* mutex) {
+    m_mutex = mutex;
   }
 
   private:
@@ -1870,6 +1889,8 @@ class ItemRepository : public AbstractItemRepository {
   }
     
   virtual bool open(const QString& path) {
+    QMutexLocker lock(m_mutex);
+    
     close();
     m_currentOpenPath = path;
     //kDebug() << "opening repository" << m_repositoryName << "at" << path;
@@ -2131,7 +2152,8 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   bool m_metaDataChanged;
-  mutable QMutex m_mutex;
+  mutable QMutex m_ownMutex;
+  mutable QMutex* m_mutex;
   QString m_repositoryName;
   unsigned int m_size;
   mutable uint m_currentBucket;
