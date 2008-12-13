@@ -1783,7 +1783,10 @@ void TestDUChain::testFunctionDefinition5() {
 
 void TestDUChain::testFunctionDefinition6() {
   QByteArray text("class Class {Class(); void test();}; void Class::test(Class c) {int i;}");
-  TopDUContext* top = parse(text, DumpAll);
+  ReferencedTopDUContext top = parse(text, DumpAll);
+  
+  //Here we do an update, since there was a bug where updating caused problems here
+  parse(text, DumpAll, top.data());
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().count(), 3);
@@ -1797,11 +1800,12 @@ void TestDUChain::testFunctionDefinition6() {
   QVERIFY(dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]));
   QVERIFY(static_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0])->isConstructor());
   kDebug() << top->childContexts()[1]->localDeclarations()[0]->abstractType()->toString();
+  QCOMPARE(top->localDeclarations()[1], top->childContexts()[2]->owner());
   QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[2]), top->localDeclarations()[0]);
   QCOMPARE(Cpp::localClassFromCodeContext(top->childContexts()[1]), top->localDeclarations()[0]);
   QVERIFY(top->childContexts()[1]->importers().contains(top->childContexts()[2]));
   QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
-  release(top);
+  release(top.data());
 }
 
 void TestDUChain::testLoopNamespaceImport() {
@@ -3417,7 +3421,7 @@ void TestDUChain::testIndexedStrings() {
   kDebug() << a << "successful tests";
 }
 
-TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
+TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
@@ -3443,7 +3447,10 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump)
 
   DeclarationBuilder definitionBuilder(session);
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
-  TopDUContext* top = definitionBuilder.buildDeclarations(file, ast);
+  TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, 0, ReferencedTopDUContext(update));
+  if(update) {
+    Q_ASSERT(top == update);
+  }
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);

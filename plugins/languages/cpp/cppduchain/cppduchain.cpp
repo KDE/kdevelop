@@ -120,45 +120,40 @@ Declaration* localClassFromCodeContext(DUContext* context)
   if(!context)
     return 0;
   
-  DUContext* startContext = context;
-  
   while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
     context = context->parentContext();
   }
   
-  //Since declarations are assigned to the bodies, not to the argument contexts, go to the body context to make the step to the function
-  if(context->type() == DUContext::Function)
-    if(!context->importers().isEmpty())
-      context = context->importers().first();
-
-  if(!context) {
-    kDebug() << "problem";
-    return 0;
-  }
+  //For function declarations, this is the solution.
+  if(context->parentContext()->type() == DUContext::Class)
+    return context->parentContext()->owner();
   
-  ///Step 1: Find the function-declaration for the function we are in
-  Declaration* functionDeclaration = 0;
-
-  if( context->owner() && dynamic_cast<FunctionDefinition*>(context->owner()) )
-    functionDeclaration = static_cast<FunctionDefinition*>(context->owner())->declaration(startContext->topContext());
-  else{
-    ///Alternative way of finding the class, needed while building the duchain when the links are incomplete
-    QVector<DUContext::Import> imports = context->importedParentContexts();
-    foreach(const DUContext::Import& import, imports) {
-      DUContext* imp = import.context(context->topContext());
-      if(imp && imp->type() == DUContext::Class && imp->owner())
-        return imp->owner();
+  if(context->type() == DUContext::Other) {
+    //Jump from code-context to function-context
+    foreach(DUContext::Import import, context->importedParentContexts()) {
+      if(DUContext* i = import.context(context->topContext())) {
+        if(i->type() == DUContext::Function) {
+          context = i;
+          break;
+        }
+      }
     }
   }
+  
+  //For external function definitions, find the class-context by following the import-structure
+  if(context->type() == DUContext::Function) {
+    foreach(DUContext::Import import, context->importedParentContexts()) {
+      DUContext* ctx = import.context(context->topContext());
+      if(ctx->type() == DUContext::Class && ctx->owner())
+        return ctx->owner();
+    }
+    
+    if(!context->importers().isEmpty())
+      context = context->importers().first();
+  }
 
-  if( !functionDeclaration && context->owner() )
-    functionDeclaration = context->owner();
-
-  if(!functionDeclaration)
-    return 0;
-
-  return functionDeclaration->context()->owner();
+  return 0;
 }
 
 KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* /*fromContext*/, Declaration* /*declaration*/)
