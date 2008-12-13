@@ -27,7 +27,7 @@
 
 namespace KDevelop
 {
-// REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
+REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
 
 TopDUContext::Features ParsingEnvironmentFile::features() const {
   return d_func()->m_features;

@@ -183,6 +183,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
     void addModificationRevisions(const ModificationRevisionSet&);
     
+    enum {
+      Identity = 11
+    };
+    
     DUCHAIN_DECLARE_DATA(ParsingEnvironmentFile)
     
   private:
