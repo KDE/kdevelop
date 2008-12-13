@@ -43,6 +43,7 @@ namespace std {
 #include "hashedstring.h"
 #include "../duchain/indexedstring.h"
 #include "modificationrevisionset.h"
+#include <sys/time.h>
 
 const int cacheModTimeForSeconds = 2;
 
@@ -64,8 +65,10 @@ struct IndexedStringHash {
   #endif
 };
 
+QMutex fileModificationTimeCacheMutex;
+
 struct FileModificationCache {
-  QDateTime m_readTime;
+  timeval m_readTime;
   QDateTime m_modificationTime;
 };
 #ifdef Q_CC_MSVC
@@ -80,23 +83,29 @@ FileModificationMap& fileModificationCache() {
 }
 
 QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
-  QDateTime currentDateTime = QDateTime::currentDateTime(); ///@todo Use something faster than QDateTime for this
-
+  QMutexLocker lock(&fileModificationTimeCacheMutex);
+  
+  timeval currentTime;
+  gettimeofday(&currentTime, 0);
+  
   FileModificationMap::const_iterator it = fileModificationCache().find( fileName );
   if( it != fileModificationCache().end() ) {
     ///Use the cache for X seconds
-    if( (*it).second.m_readTime.secsTo( currentDateTime ) < cacheModTimeForSeconds ) {
+    timeval  age;
+    timersub(&currentTime, &(*it).second.m_readTime, &age);
+    if( age.tv_sec < cacheModTimeForSeconds )
       return (*it).second.m_modificationTime;
-    }
   }
 
   QFileInfo fileInfo( fileName.str() );
-  fileModificationCache()[fileName].m_readTime = QDateTime::currentDateTime();
+  fileModificationCache()[fileName].m_readTime = currentTime;
   fileModificationCache()[fileName].m_modificationTime = fileInfo.lastModified();
   return fileInfo.lastModified();
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName) {
+  QMutexLocker lock(&fileModificationTimeCacheMutex);
+
   FileModificationMap::iterator it = fileModificationCache().find(fileName);
   if(it != fileModificationCache().end())
     fileModificationCache().erase(it);
