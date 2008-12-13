@@ -44,12 +44,18 @@ private slots:
     void addFileToDirItem();
     void addMultipleFilesToDir();
 
+    void constructDirData();
+    void dirDataSetSloc();
+    void dirDataSetInstrumented();
+    void dirDataCoverage();
+
 private:
     void addCoverageDataTo(ReportDirItem& dir, const QString& path, int sloc, int instrumented);
     
 private:
     QList<QStandardItem*> m_garbage;
     QList<CoveredFile*> m_garbageFiles;
+
 };
 
 }

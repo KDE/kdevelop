@@ -46,6 +46,8 @@ DrillDownView::DrillDownView(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     resizeDirStateColumns();
+
+    setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 DrillDownView::~DrillDownView()
@@ -92,9 +94,11 @@ void DrillDownView::keyPressEvent(QKeyEvent *event)
         current = current.sibling(current.row(), 0);
         srcIndex = p->mapToSource(current);
         if (m->hasChildren(srcIndex)) slideRight(current);
+        return;
         break;
     case Qt::Key_Left:
         slideLeft();
+        return;
         break;
     case Qt::Key_Return:
         emit returnPressed(current);
@@ -137,12 +141,13 @@ void DrillDownView::slideRight(const QModelIndex& current)
         model()->fetchMore(current);
         return;
     }
-    selectionModel()->clear();
     setUpdatesEnabled(false);
+
+    leftSelection = selectionModel()->selection();
+    selectionModel()->clear();
+
     setRootIndex(current);
-    if (current.child(0, 0).isValid()) {
-        setCurrentIndex(current.child(0, 0));
-    }
+
     animateSlide(Qt::Key_Right);
     resizeFileStateColumns();
     setUpdatesEnabled(true);
@@ -154,10 +159,14 @@ void DrillDownView::slideLeft()
     QModelIndex current = currentIndex();
     QModelIndex root = rootIndex();
     if (!root.isValid()) return;
-    selectionModel()->clear();
     setUpdatesEnabled(false);
+
     setRootIndex(root.parent());
-    setCurrentIndex(root);
+
+    selectionModel()->clear();
+    selectionModel()->select(leftSelection, QItemSelectionModel::Select);
+    selectionModel()->setCurrentIndex(root, QItemSelectionModel::NoUpdate);
+
     animateSlide(Qt::Key_Left);
     resizeDirStateColumns();
     setUpdatesEnabled(true);

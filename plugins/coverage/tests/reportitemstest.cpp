@@ -8,6 +8,7 @@
 using Veritas::CoveredFile;
 using Veritas::ReportItemsTest;
 using Veritas::ReportValueItem;
+using Veritas::ReportDirData;
 using Veritas::ReportDirItem;
 using Veritas::ReportFileItem;
 using Veritas::ReportModel;
@@ -92,6 +93,41 @@ void ReportItemsTest::addMultipleFilesToDir()
     KOMPARE(5+5, dir->instrumented());
     KVERIFY(qAbs(100*((double)dir->instrumented()/dir->sloc()) - dir->coverage()) < 0.1);
     delete dir;
+}
+
+void ReportItemsTest::constructDirData()
+{
+    ReportDirData dirData;
+    KOMPARE(0, dirData.sloc());
+    KOMPARE(0, dirData.instrumented());
+}
+
+void ReportItemsTest::dirDataSetSloc()
+{
+    ReportDirData dirData;
+    dirData.setSloc(16);
+    KOMPARE(16, dirData.sloc());
+}
+
+void ReportItemsTest::dirDataSetInstrumented()
+{
+    ReportDirData dirData;
+    dirData.setInstrumented(23);
+    KOMPARE(23, dirData.instrumented());
+}
+
+void ReportItemsTest::dirDataCoverage()
+{
+    ReportDirData dirData;
+    KOMPARE(0, dirData.coverage());
+
+    dirData.setInstrumented(21);
+    dirData.setSloc(42);
+    KOMPARE(50, dirData.coverage());
+
+    dirData.setInstrumented(4);
+    dirData.setSloc(2500);
+    KOMPARE(0.16, dirData.coverage());
 }
 
 QTEST_KDEMAIN( ReportItemsTest, NoGUI)

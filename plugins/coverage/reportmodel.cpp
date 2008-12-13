@@ -24,6 +24,7 @@
 
 using Veritas::CoveredFile;
 using Veritas::ReportModel;
+using Veritas::ReportDirData;
 using Veritas::ReportDirItem;
 using Veritas::ReportFileItem;
 using Veritas::ReportValueItem;
@@ -91,29 +92,61 @@ int ReportFileItem::type() const
     return ReportModel::File;
 }
 
+ReportDirData::ReportDirData()
+{
+    m_sloc = 0;
+    m_instrumented = 0;
+}
+
+int ReportDirData::sloc() const
+{
+    return m_sloc;
+}
+
+int ReportDirData::instrumented() const
+{
+    return m_instrumented;
+}
+
+double ReportDirData::coverage() const
+{
+    return (m_sloc == 0) ? 0 : 100*double(m_instrumented)/double(m_sloc);
+}
+
+void ReportDirData::setSloc(int sloc)
+{
+    m_sloc = sloc;
+}
+
+void ReportDirData::setInstrumented(int instrumented)
+{
+    m_instrumented = instrumented;
+}
+
 ReportDirItem::ReportDirItem(const QString& dir)
     : QStandardItem(dir) {
     setEditable(false);
     setSelectable(true);
     setCheckable(false);
-    m_sloc = 0;
-    m_instrumented = 0;
 }
 
 void ReportDirItem::updateStats()
 {
-    m_sloc = 0;
-    m_instrumented = 0;
+    int sloc = 0;
+    int instrumented = 0;
     QStandardItem* si;
     ReportFileItem* rfi;
     for (int row=0; row<rowCount(); row++) {
         si = child(row, 0);
         if (si->type() == ReportModel::File) {
             rfi = static_cast<ReportFileItem*>(si);
-            m_instrumented += rfi->instrumentedItem()->value();
-            m_sloc += rfi->slocItem()->value();
+            instrumented += rfi->instrumentedItem()->value();
+            sloc += rfi->slocItem()->value();
         }
     }
+
+    m_reportDirData.setSloc(sloc);
+    m_reportDirData.setInstrumented(instrumented);
 }
 
 ReportDirItem::~ReportDirItem()
@@ -126,17 +159,22 @@ int ReportDirItem::type() const
 
 int ReportDirItem::sloc()
 {
-    return m_sloc;
+    return m_reportDirData.sloc();
 }
 
 int ReportDirItem::instrumented()
 {
-    return m_instrumented;
+    return m_reportDirData.instrumented();
 }
 
 double ReportDirItem::coverage()
 {
-    return (m_sloc == 0) ? 0 : 100*double(m_instrumented)/double(m_sloc);
+    return m_reportDirData.coverage();
+}
+
+const ReportDirData& ReportDirItem::reportDirData() const
+{
+    return m_reportDirData;
 }
 
 ReportValueItem::ReportValueItem(double value)

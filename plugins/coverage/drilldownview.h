@@ -24,11 +24,13 @@
 
 #include <QtGui/QtGui>
 
+#include "coverageexport.h"
+
 namespace Veritas
 {
 
 /*! Coverage report table */
-class DrillDownView: public QTableView
+class VERITAS_COVERAGE_EXPORT DrillDownView: public QTableView
 {
 Q_OBJECT
 
@@ -36,7 +38,19 @@ public:
     DrillDownView(QWidget *parent = 0);
     virtual ~DrillDownView();
     void resizeFileStateColumns();
+
+    /*!
+     * Shows the coverage data for directories.
+     * The selection is cleared, and then set again to the directories selected
+     * before sliding to the left (including the current index).
+     */
     void slideLeft();
+
+    /*!
+     * Shows the coverage data for the files in the currently selected
+     * directory.
+     * The selection is cleared.
+     */
     void slideRight(const QModelIndex&);
 
 Q_SIGNALS:
@@ -66,6 +80,12 @@ private:
     QPixmap oldView;
     QPixmap newView;
     int lastPosition;
+
+    /*!
+     * Stores the selection of directories to restore it when sliding left
+     * again.
+     */
+    QItemSelection leftSelection;
 };
 
 }

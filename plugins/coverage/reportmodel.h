@@ -33,6 +33,7 @@ namespace Veritas
 {
 
 class CoveredFile;
+class ReportDirData;
 class ReportDirItem;
 class ReportFileItem;
 class ReportValueItem;
@@ -93,6 +94,32 @@ private:
     QSet<int> m_reachableLines;
 };
 
+/*!
+ * Stores the data for the report of a directory.
+ * The data stored are the SLOC and the instrumented lines.
+ * Coverage percentage is calculated based on those values.
+ */
+class VERITAS_COVERAGE_EXPORT ReportDirData
+{
+public:
+
+    /*!
+     * Creates a new ReportDirData.
+     * All the values are initialized to 0.
+     */
+    ReportDirData();
+
+    int sloc() const;
+    int instrumented() const;
+    double coverage() const;
+    void setSloc(int sloc);
+    void setInstrumented(int instrumented);
+
+private:
+    int m_sloc;
+    int m_instrumented;
+};
+
 class VERITAS_COVERAGE_EXPORT ReportDirItem : public QStandardItem
 {
 public:
@@ -103,10 +130,10 @@ public:
     int sloc();
     int instrumented();
     double coverage();
+    const ReportDirData& reportDirData() const;
 
 private:
-    int m_sloc;
-    int m_instrumented;
+    ReportDirData m_reportDirData;
  };
 
 class VERITAS_COVERAGE_EXPORT ReportValueItem: public QStandardItem

@@ -62,6 +62,7 @@ using Veritas::DrillDownView;
 using Veritas::LcovInfoParser;
 using Veritas::LcovJob;
 using Veritas::ReportWidget;
+using Veritas::ReportDirData;
 using Veritas::ReportModel;
 using Veritas::ReportViewFactory;
 
@@ -160,12 +161,6 @@ void ReportWidget::init()
     l->addWidget(table());
     setLayout(l);
 
-    connect(table()->selectionModel(),
-            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            SLOT(dispatchSelectionSignal(QItemSelection,QItemSelection)));
-
-    connect(table(),  SIGNAL(clicked(QModelIndex)),
-            SLOT(dispatchClickedSignal(QModelIndex)));
     connect(table(), SIGNAL(doubleClicked(QModelIndex)),
             SLOT(dispatchDoubleClickedSignal(QModelIndex)));
 
@@ -218,18 +213,6 @@ void ReportWidget::dispatchSelectionSignal(const QItemSelection& selected, const
     }}
 }
 
-void ReportWidget::dispatchClickedSignal(const QModelIndex& index)
-{
-    switch(m_state) {
-    case DirView: {
-        setCoverageStatistics(index); break;
-    } case FileView: {
-        /*jumpToSource(index); */break;
-    } default: {
-        ILLEGAL_STATE;
-    }}
-}
-
 void ReportWidget::dispatchDoubleClickedSignal(const QModelIndex& index)
 {
     switch(m_state) {
@@ -271,9 +254,6 @@ void ReportWidget::reset_()
 {
     m_proxy->invalidate();
     filterBox()->clear();
-    table()->selectionModel()->clearSelection();
-    table()->selectionModel()->clear();
-    table()->selectionModel()->reset();
     table()->viewport()->update();
     m_timerTicks = 0;
     m_timer->start(); // TODO figure out the correct signal instead of this kludge
@@ -288,6 +268,13 @@ void ReportWidget::setDirViewState()
     table()->resizeDirStateColumns();
     filterBox()->setReadOnly(false);
     filterBox()->setText(m_oldDirFilter);
+
+    //When the view slides to the left, the previously selected directories are
+    //selected again. However, until the slide is completed we are in File
+    //state, so the statistics aren't updated.
+    m_sloc->setText("0");
+    m_instrumented->setText("0");
+    setCoverageStatistics(table()->selectionModel()->selection(), QItemSelection());
 }
 
 QLineEdit* ReportWidget::filterBox() const
@@ -304,6 +291,9 @@ void ReportWidget::setFileViewState()
     reset_();
     table()->resizeFileStateColumns();
     filterBox()->setReadOnly(true);
+
+    //Set the statistics for the current directory
+    setCoverageStatistics(table()->rootIndex());
 }
 
 ReportWidget::~ReportWidget()
@@ -321,31 +311,67 @@ QStandardItem* ReportWidget::getItemFromProxyIndex(const QModelIndex& index) con
     return item;
 }
 
-void ReportWidget::setCoverageStatistics(const QModelIndex& index)
+const ReportDirData* ReportWidget::getReportDirDataFromProxyIndex(const QModelIndex& index) const
 {
     QStandardItem* item = getItemFromProxyIndex(index);
-    if (!item || item->type() != ReportModel::Dir) return;
-    ReportDirItem* dir = static_cast<ReportDirItem*>(item);
-    Q_ASSERT(dir);
+    if (!item || item->type() != ReportModel::Dir) return 0;
 
-    m_coverage->setText(QString::number(dir->coverage(), 'f', 1) + " %");
+    return &static_cast<ReportDirItem*>(item)->reportDirData();
+}
+
+void ReportWidget::setCoverageStatistics(const ReportDirData& data)
+{
+    //QLocale used as QString::number does not honor the user's locale setting
+    m_coverage->setText(QLocale().toString(data.coverage(), 'f', 1) + " %");
     m_coverage->update();
-    m_sloc->setText(QString::number(dir->sloc()));
+    m_sloc->setText(QString::number(data.sloc()));
     m_sloc->update();
-    m_instrumented->setText(QString::number(dir->instrumented()));
+    m_instrumented->setText(QString::number(data.instrumented()));
     m_instrumented->update();
 }
 
+void ReportWidget::setCoverageStatistics(const QModelIndex& index)
+{
+    const ReportDirData* data = getReportDirDataFromProxyIndex(index);
+    if (!data) {
+        return;
+    }
+
+    setCoverageStatistics(*data);
+}
 
 void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const QItemSelection& deselected)
 {
-    Q_UNUSED(deselected);
-    QModelIndexList indexes = selected.indexes();
-    if (indexes.count() < 1) {
-        kDebug() << "Nothing selected";
-        return; // NO-OP if nothing selected
+    ReportDirData fullData;
+    if (m_sloc->text() != "-" && m_instrumented->text() != "-") {
+        fullData.setSloc(m_sloc->text().toInt());
+        fullData.setInstrumented(m_instrumented->text().toInt());
     }
-    setCoverageStatistics(indexes.first());
+
+    bool statisticsChanged = false;
+
+    QModelIndex index;
+    foreach (index, selected.indexes()) {
+        const ReportDirData* data = getReportDirDataFromProxyIndex(index);
+        if (data) {
+            statisticsChanged = true;
+            fullData.setSloc(fullData.sloc() + data->sloc());
+            fullData.setInstrumented(fullData.instrumented() + data->instrumented());
+        }
+    }
+
+    foreach (index, deselected.indexes()) {
+        const ReportDirData* data = getReportDirDataFromProxyIndex(index);
+        if (data) {
+            statisticsChanged = true;
+            fullData.setSloc(fullData.sloc() - data->sloc());
+            fullData.setInstrumented(fullData.instrumented() - data->instrumented());
+        }
+    }
+
+    if (statisticsChanged) {
+        setCoverageStatistics(fullData);
+    }
 }
 
 void ReportWidget::startLcovJob()
@@ -364,6 +390,13 @@ void ReportWidget::startLcovJob()
     m_proxy = new ReportProxyModel(this);
     table()->setModel(m_proxy);
     m_proxy->setSourceModel(m_model);
+
+    //Since Qt 4.1 (or maybe 4.0, but not documented), setting the model
+    //replaces the previous selection model, so it must be connected again
+    //http://doc.trolltech.com/4.1/qabstractitemview.html#setModel
+    connect(table()->selectionModel(),
+            SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            SLOT(dispatchSelectionSignal(QItemSelection,QItemSelection)));
 
     LcovJob* job = new LcovJob(m_targetDirectory->url(), m_delegate);
     LcovInfoParser* parser = new LcovInfoParser(job);

@@ -22,11 +22,13 @@
 
 #include <QSortFilterProxyModel>
 
+#include "coverageexport.h"
+
 namespace Veritas
 {
 
 /*! Used to filter coverage directories from the model */
-class ReportProxyModel : public QSortFilterProxyModel
+class VERITAS_COVERAGE_EXPORT ReportProxyModel : public QSortFilterProxyModel
 {
 Q_OBJECT
 public:

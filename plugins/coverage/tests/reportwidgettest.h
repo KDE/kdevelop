@@ -26,6 +26,10 @@
 namespace Veritas
 {
 
+class DrillDownView;
+class ReportModel;
+class ReportWidget;
+
 /*! @unitundertest Veritas::ReportWidget */
 class ReportWidgetTest : public QObject
 {
@@ -35,6 +39,33 @@ private slots:
     void cleanup();
 
     void someCmd();
+
+    void setCoverageStatisticsWithRawDataFloorRoundedCoverage();
+    void setCoverageStatisticsWithRawDataCeilRoundedCoverage();
+    void setCoverageStatisticsWithNewSelection();
+    void setCoverageStatisticsWithAddedSelection();
+    void setCoverageStatisticsWithRemovedSelection();
+    void setCoverageStatisticsWithChangedSelection();
+    void setCoverageStatisticsWithEmptySelection();
+    void setCoverageStatisticsWithInvalidSelection();
+    void setCoverageStatisticsWithDirectoriesAndFileSelection();
+    void setCoverageStatisticsWithIndex();
+    void setCoverageStatisticsWithInvalidIndex();
+    void setCoverageStatisticsWithFileIndex();
+
+    void statisticsSelectingSingleDirectory();
+    void statisticsSelectingSeveralDirectories();
+    void statisticsAfterSlidingRight();
+    void statisticsAfterSlidingLeft();
+
+    void assertStatistics(const ReportWidget& rw, int sloc, int instrumented, double coverage);
+    void assertEmptyStatistics(const ReportWidget& rw);
+
+    DrillDownView* table(const ReportWidget& rw);
+    void setStatistics(ReportWidget& rw, int sloc, int instrumented);
+    void setModelFor(ReportWidget& rw);
+    ReportModel* createReportModel();
+
 };
 
 }
