@@ -22,12 +22,12 @@ usage:
 3/ Build. Notice the gcov data file `main.gcno'
    in the project's directory
 4/ Run `is_prime'. Notice `main.gcda'
-5/ Right click on the project's root folder in the
-   projects toolview.
-6/ Choose Coverage -> Spawn Report
-7/ Use left and right arrow to navigate the report
-8/ Close this file
-9/ Double click 'main.cpp' to view coverage annotations
+5/ Add the coverage toolview. View -> Add Tool View -> Coverage
+6/ Enter the prime-projects root directory under 'Build Path:'
+7/ Hit the run coverage button, next to the breadcrumb widget
+8/ Use left and right arrow to navigate the report
+9/ Close this file
+10/ Double click 'main.cpp' to view coverage annotations
 */
 
 #include <stdio.h>

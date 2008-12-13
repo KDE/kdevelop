@@ -23,7 +23,6 @@
 #include "covoutputmodel.h"
 #include <QtGui/QPainter>
 #include <QtCore/QModelIndex>
-#include <KDebug>
 
 using Veritas::CovOutputDelegate;
 
@@ -43,7 +42,6 @@ void CovOutputDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     QStyleOptionViewItem opt = option;
     opt.palette.setBrush(QPalette::Text, textBrush.brush(option.palette));
     QString text = index.data().toString();
-    kDebug() << text;
     if (text.startsWith("Processing")) {
         opt.palette.setBrush(QPalette::Text, processBrush.brush(option.palette));
     } else if (text.contains("source file is newer than graph file")) {

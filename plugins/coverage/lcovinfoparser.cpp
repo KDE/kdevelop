@@ -22,8 +22,9 @@
 #include <QFile>
 #include <QTextStream>
 #include <QStringList>
-#include <QStringRef>
+#include <KDebug>
 #include "coveredfile.h"
+
 
 using Veritas::LcovInfoParser;
 using Veritas::CoveredFile;

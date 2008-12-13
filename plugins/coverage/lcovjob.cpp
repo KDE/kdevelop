@@ -32,7 +32,6 @@
 
 #include <KProcess>
 #include <KLocale>
-#include <KDebug>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -97,8 +96,6 @@ void LcovJob::setProcess(KProcess *proc)
 
 void LcovJob::initProcess()
 {
-    kDebug() << "";
-
     Q_ASSERT_X(m_lcov, "LcovJob::initProcess()", "illegal usage, set process first.");
     QStringList args;
     //m_tmpPath = QDir::tempPath() + QDir::separator() + "kdevcoverage.tmp";
@@ -126,8 +123,6 @@ void LcovJob::initProcess()
 
 void LcovJob::initOutputView()
 {
-    kDebug() << "";
-
     setToolTitle(i18n("Cov verbose output"));
     setViewType(KDevelop::IOutputView::HistoryView);
     setStandardToolView(KDevelop::IOutputView::TestView);
@@ -137,8 +132,6 @@ void LcovJob::initOutputView()
 
 void LcovJob::initParser()
 {
-    kDebug() << "";
-    
     Q_ASSERT(m_parser);
     connect(m_lineMaker, SIGNAL(receivedStdoutLines(QStringList)),
             m_parser, SLOT(parseLines(QStringList)));
@@ -167,14 +160,11 @@ private:
 
 void LcovJob::start()
 {
-    kDebug() << "";
     initOutputView();
     startOutput();
     initProcess();
     initParser();
     //spawnCoverageTool();
-
-    kDebug() << "Executing " << m_lcov->program().join(" ");
     m_lcov->start();
 }
 

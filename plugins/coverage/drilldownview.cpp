@@ -20,7 +20,6 @@
  ***************************************************************************/
 #include "drilldownview.h"
 
-#include <KDebug>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 #include <QAbstractScrollArea>

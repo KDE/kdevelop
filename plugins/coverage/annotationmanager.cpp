@@ -120,8 +120,6 @@ void AnnotationManager::addCoverageData(CoveredFile* f)
     QMap<int, int> cc = f->callCountMap();
     QMapIterator<int, int> it(cc);
     if (!m_files.contains(f->url())) {
-        kDebug() << "New coverage data for ["
-                 << f->url() << "]";
         CoveredFile* cf = new CoveredFile;
         cf->setUrl(f->url());
         while(it.hasNext()) {
@@ -130,8 +128,6 @@ void AnnotationManager::addCoverageData(CoveredFile* f)
         }
         m_files[f->url()] = cf;
     } else {
-        kDebug() << "Update coverage data for ["
-                 << f->url() << "]";
         CoveredFile* cf = m_files[f->url()];
         QSet<int> newLines = f->reachableLines() - cf->reachableLines();
         foreach(int line, newLines) {

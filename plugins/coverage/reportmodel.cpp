@@ -68,7 +68,6 @@ void ReportFileItem::addCoverageData(CoveredFile* f)
         m_coveredLines = f->coveredLines();
         m_reachableLines = f->reachableLines();
     } else {
-        kDebug() << "";
         m_coveredLines += f->coveredLines(); // set union
         m_reachableLines += f->reachableLines();
         int covered = m_coveredLines.count();

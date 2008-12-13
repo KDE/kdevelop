@@ -25,7 +25,7 @@
 #include <QList>
 #include <KUrl>
 #include <QMap>
-#include <KDebug>
+#include <QSet>
 
 namespace Veritas
 {

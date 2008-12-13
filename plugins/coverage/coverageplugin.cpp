@@ -30,7 +30,6 @@
 #include <KAboutData>
 #include <KActionCollection>
 #include <KActionMenu>
-#include <KDebug>
 #include <KLocale>
 #include <KPluginFactory>
 #include <KPluginLoader>
@@ -62,7 +61,6 @@ CoveragePlugin::~CoveragePlugin()
 
 QFileInfoList CoveragePlugin::findGcdaFilesIn(QDir& dir)
 {
-    kDebug() << dir.absolutePath();
     QFileInfoList gcdaFiles;
     QDir current(dir);
     current.setFilter(QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable | QDir::Writable);

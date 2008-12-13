@@ -261,7 +261,6 @@ void ReportWidget::reset_()
 
 void ReportWidget::setDirViewState()
 {
-    kDebug() << "switching to dir view state";
     m_state = ReportWidget::DirView;
     m_proxy->setDirViewState();
     reset_();
@@ -284,7 +283,6 @@ QLineEdit* ReportWidget::filterBox() const
 
 void ReportWidget::setFileViewState()
 {
-    kDebug() << "switching to file view state";
     m_state = ReportWidget::FileView;
     m_proxy->setFileViewState();
     m_oldDirFilter = filterBox()->text();
