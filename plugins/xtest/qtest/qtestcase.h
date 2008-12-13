@@ -39,6 +39,7 @@ namespace QTest
 class Suite;
 class OutputParser;
 class ISettings;
+class Executable;
 
 /*!
 QTestLib test class item in the test tree. This will invoke the
@@ -56,19 +57,28 @@ public:
     Case(const QString&, const QFileInfo&, Suite* parent=0);
     virtual ~Case();
 
+    /*! Copy this test and all it's children. */
+    Case* clone() const;
+    
     Command* child(int i) const;
-    QFileInfo executable();
-
+    QFileInfo executable() const;
+    Executable* exe();
+    
     virtual void kill();
     virtual bool shouldRun() const;
+    virtual void toSource() const;
+    virtual KUrl source() const;
 
+    void setSource(const KUrl& source);
+    
     /*! Client classes should instantiate a KProcess.
         Case takes ownership.
         Sole purpose is to increase testability. */
     void setProcess(KProcess*);
     void setOutputParser(OutputParser*);
     void setSettings(ISettings*);
-
+    void setExecutable(Executable*);
+    
     void initProcArguments();
     void setExecutable(const QFileInfo&);
 
@@ -113,6 +123,8 @@ private:
     static int s_count;        // used to get unique temp files.
     bool m_finished;
     QTimer* m_parserTimeout;
+    KUrl m_source;
+    Executable* m_executable;
 };
 
 } // end namespace QTest

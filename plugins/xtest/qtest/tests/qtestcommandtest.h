@@ -24,8 +24,11 @@
 #include <QtTest/QtTest>
 #include <qtestcommand.h>
 
-namespace QTest { namespace Test {
+namespace QTest {
 
+class CommandStub;
+
+/*! @unitundertest QTest::Command */
 class CommandTest : public QObject
 {
     Q_OBJECT
@@ -35,9 +38,18 @@ private slots:
     void cmdString();
     void cmdStringNoParent();
     void cmdStringNoSuite();
+
+    void sourceLocation_sunny();
+    void noToSource_noParent();
+    void noToSource_supportsToSourceDisabled();
+
+private:
+    void assertNoDocumentsOpened(QTest::CommandStub* cmd);
+    void assertDocumentOpened(const KUrl& soureLocation, QTest::CommandStub* cmd);
+
 };
 
-}}
+}
 
 
 #endif // QXQTEST_QTESTCOMMANDTEST_H

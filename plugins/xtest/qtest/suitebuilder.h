@@ -26,7 +26,7 @@
 #include <QObject>
 #include "qxqtestexport.h"
 
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class TestExecutableInfo; }
 
 class KUrl;
 namespace QTest
@@ -50,9 +50,11 @@ public:
     SuiteBuilder();
     virtual ~SuiteBuilder();
     /*! QTest executables */
-    void setTestExecutables(const QList<KUrl>&);
+    void setTestExecutables(const QList<Veritas::TestExecutableInfo>&);
     void setSettings(ISettings*);
 
+    void setPreviousRoot(Veritas::Test* root);
+    
     /*! Fetch the result. Ownership is passed to the caller. */
     Veritas::Test* root() const;
 
@@ -74,16 +76,17 @@ private:
     void constructCases();
     QString suiteNameForExe(const KUrl& testExe);
     QString suiteNameOneUp(const KUrl& suiteUrl);
-    void addSuiteName(const KUrl& exeUrl);
+    void addSuiteName(const Veritas::TestExecutableInfo& exeUrl);
 
 private:
-    QList<KUrl> m_testShellExes;
+    QList<Veritas::TestExecutableInfo> m_testExes;
     Veritas::Test* m_root;
     bool m_hasRun;
     QMap<QString, Suite*> m_suites;
     QMap<KUrl, QString> m_suiteNames;
     bool m_testExesSet;
     ISettings* m_settings;
+    Veritas::Test* m_previousRoot;
 };
 
 }

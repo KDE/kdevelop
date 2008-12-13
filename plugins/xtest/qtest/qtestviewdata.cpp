@@ -40,6 +40,9 @@
 #include <shell/core.h>
 #include <shell/documentcontroller.h>
 #include <veritas/test.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <interfaces/iplugincontroller.h>
+#include <KDebug>
 
 using namespace Veritas;
 using namespace KDevelop;
@@ -50,6 +53,31 @@ QTestViewData::QTestViewData(ITestFramework* framework)
       m_settings(0),
       m_lock(false)
 {
+    foreach(IPlugin* i, ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.IProjectBuilder" )) {
+        connectBuilderPlugin(i);
+    }
+    connect(ICore::self()->pluginController(), 
+            SIGNAL(pluginLoaded(KDevelop::IPlugin*)), 
+            SLOT(connectBuilderPlugin(KDevelop::IPlugin*)));
+}
+
+void QTestViewData::connectBuilderPlugin(IPlugin* plugin)
+{
+    kDebug() << plugin << plugin->extensions();
+    if (plugin->extensions().contains( "org.kdevelop.IProjectBuilder" )) {
+        kDebug() << "setup connection";
+        this->disconnect(plugin);
+        connect(plugin, SIGNAL(built(KDevelop::ProjectBaseItem*)), 
+                   SLOT(doReload(KDevelop::ProjectBaseItem*)));
+    }
+}
+
+void QTestViewData::doReload(KDevelop::ProjectBaseItem* item)
+{
+    kDebug() << "";
+    if (item->project() == project()) {
+        registerTests();
+    }
 }
 
 QTestViewData::~QTestViewData()

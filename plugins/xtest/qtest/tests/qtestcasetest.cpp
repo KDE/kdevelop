@@ -26,7 +26,7 @@
 
 using QTest::Case;
 using QTest::Command;
-using QTest::Test::CaseTest;
+using QTest::CaseTest;
 
 namespace
 {
@@ -83,6 +83,67 @@ void CaseTest::emptyOutputFiles()
 {
     KVERIFY(m_case->outFile().isEmpty());
     KVERIFY(m_case->errorFile().isEmpty());
+}
+
+void CaseTest::clone_noChildren()
+{
+    Q_ASSERT(m_case->childCount() == 0);
+
+    Case* clone = m_case->clone();
+    KVERIFY(clone != 0);
+    KVERIFY(clone != m_case); // pointer inequality
+    KOMPARE(m_case->name(), clone->name());
+    KOMPARE(0, clone->childCount());
+    KOMPARE(0, clone->parent());
+    KOMPARE(m_case->executable(), clone->executable());
+}
+
+void CaseTest::clone_singleChild()
+{
+    Command* child = new Command("child1", m_case);
+    m_case->addChild(child);
+
+    Case* clone = m_case->clone();
+    KVERIFY(clone != 0);
+    KOMPARE(1, clone->childCount());
+    kompareCloneChild(clone->child(0), child, clone);
+}
+
+void CaseTest::clone_multipleChildren()
+{
+    Command* child1 = new Command("child1", m_case);
+    m_case->addChild(child1);
+    Command* child2 = new Command("child2", m_case);
+    m_case->addChild(child2);
+
+    Case* clone = m_case->clone();
+    KVERIFY(clone != 0);
+    KOMPARE(2, clone->childCount());
+    kompareCloneChild(clone->child(0), child1, clone);
+    kompareCloneChild(clone->child(1), child2, clone);
+}
+
+void CaseTest::clone_properties()
+{
+    m_case->setSupportsToSource(true);
+    m_case->setSource(KUrl("/path/to/foo"));
+    Q_ASSERT(m_case->needSelectionToggle());
+    Q_ASSERT(m_case->needVerboseToggle());
+
+    Case* clone = m_case->clone();
+    KVERIFY(clone != 0);
+    KVERIFY(clone->supportsToSource());
+    KOMPARE(KUrl("/path/to/foo"), m_case->source());
+    KVERIFY(clone->needSelectionToggle());
+    KVERIFY(clone->needVerboseToggle());
+}
+
+void CaseTest::kompareCloneChild(Command* cloneChild, Command* original, Case* parentClone)
+{
+    KVERIFY(cloneChild != 0);
+    KVERIFY(cloneChild != original);
+    KOMPARE(original->name(), cloneChild->name());
+    KOMPARE(parentClone, cloneChild->parent());    
 }
 
 #include "qtestcasetest.moc"

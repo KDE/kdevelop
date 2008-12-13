@@ -19,16 +19,16 @@
  */
 
 #include "qtestcommandtest.h"
-#include <kasserts.h>
-#include <qtest_kde.h>
+#include "kdevtest.h"
 
 #include <qtestsuite.h>
 #include <qtestcase.h>
+#include <kurl.h>
 
 using QTest::Suite;
 using QTest::Case;
 using QTest::Command;
-using QTest::Test::CommandTest;
+using QTest::CommandTest;
 
 void CommandTest::construct()
 {
@@ -66,6 +66,81 @@ void CommandTest::cmdStringNoSuite()
     delete caze;
 }
 
+namespace QTest
+{
+
+class CommandStub : public Command
+{
+public:
+    CommandStub(const QString& name, Case* parent)
+    : Command(name, parent) {}
+    virtual ~CommandStub() {}
+    mutable KUrl::List openedDocs; // each time openDocument is called, the argument is appended here
+
+protected:
+    virtual void openDocument(const KUrl& url) const {
+         openedDocs << url;
+    }
+};
+
+}
+
+using QTest::CommandStub;
+
+// custom assertion
+void CommandTest::assertNoDocumentsOpened(CommandStub* cmd)
+{
+    // no documents opened means that CommandStub::openDocument() not called
+    // id est: openedDocs is empty
+    KVERIFY(cmd->openedDocs.isEmpty());
+}
+
+// custom assertion
+void CommandTest::assertDocumentOpened(const KUrl& sourceLocation, CommandStub* cmd)
+{
+    // the stub should have received a single 'openDocument' call
+    KOMPARE(1, cmd->openedDocs.size());
+    KOMPARE(sourceLocation, cmd->openedDocs[0]);
+}
+
+// test command
+void CommandTest::sourceLocation_sunny()
+{
+    Case* parent = new Case("parent", QFileInfo(""), 0);
+    parent->setSupportsToSource(true);
+    KUrl doc("/path/to/foo.cpp");
+    parent->setSource(doc);
+    CommandStub* cmd = new CommandStub("foo", parent);
+    cmd->setSupportsToSource(true);
+    
+    cmd->toSource();
+    assertDocumentOpened(doc, cmd);  
+    delete parent;
+}
+
+void CommandTest::noToSource_noParent()
+{
+    // a test command without a parent should do nothing when toSource is called
+    CommandStub* cmd = new CommandStub("foo",0);
+    cmd->setSupportsToSource(true);
+
+    cmd->toSource();
+    assertNoDocumentsOpened(cmd);
+    delete cmd;
+}
+
+void CommandTest::noToSource_supportsToSourceDisabled()
+{
+    Case* parent = new Case("parent", QFileInfo(""), 0);
+    parent->setSupportsToSource(true);
+    parent->setSource(KUrl("/path/to/foo"));
+    CommandStub* cmd = new CommandStub("foo", parent);
+    cmd->setSupportsToSource(false);
+
+    cmd->toSource();
+    assertNoDocumentsOpened(cmd);
+    delete parent;
+}
 
 #include "qtestcommandtest.moc"
 QTEST_KDEMAIN(CommandTest, NoGUI)

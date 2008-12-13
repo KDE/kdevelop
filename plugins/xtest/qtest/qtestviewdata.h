@@ -26,6 +26,7 @@
 
 namespace Veritas { class Test; class ITestFramework; }
 namespace QTest { class ISettings; }
+namespace KDevelop { class ProjectBaseItem; class IPlugin; }
 class QTestOutputDelegate;
 
 /*! Assorted qtest runner toolview data and operations */
@@ -41,6 +42,8 @@ public:
 
 private slots:
     void resetLock();
+    void doReload(KDevelop::ProjectBaseItem*);
+    void connectBuilderPlugin(KDevelop::IPlugin* plugin);
 
 private:
     QTest::ISettings* m_settings;

@@ -22,6 +22,8 @@
 #include <KProcess>
 #include <KDebug>
 #include <QFile>
+#include <QDateTime>
+#include <QFileInfo>
 
 using QTest::Executable;
 
@@ -71,4 +73,19 @@ KUrl Executable::location() const
 {
     ASSERT_SANE_LOCATION
     return m_location;
+}
+
+bool Executable::wasModified() const
+{
+    return lastModified() != m_timestamp;
+}
+    
+void Executable::updateTimestamp()
+{
+    m_timestamp = lastModified();
+}
+
+QDateTime Executable::lastModified() const
+{
+    return QFileInfo(m_location.fileName()).lastModified();
 }

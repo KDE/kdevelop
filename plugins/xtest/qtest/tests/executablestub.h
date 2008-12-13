@@ -23,14 +23,15 @@
 
 #include "../executable.h"
 
-namespace QTest { namespace Test {
+namespace QTest {
 
 class ExecutableStub : public QTest::Executable
 {
 public:
-    ExecutableStub() : m_fetchFunctions(0) {}
+    ExecutableStub() : m_fetchFunctions(0), fetchFunctionsCalled(false), m_wasModified(false) {}
     virtual ~ExecutableStub() {}
     virtual QStringList fetchFunctions() {
+        fetchFunctionsCalled = true;
         return m_fetchFunctions;
     }
     QStringList m_fetchFunctions;
@@ -41,8 +42,13 @@ public:
     virtual KUrl location() const {
         return KUrl();
     }
+    bool fetchFunctionsCalled;
+    virtual bool wasModified() const {
+        return m_wasModified;
+    }
+    bool m_wasModified;
 };
 
-}}
+}
 
 #endif // QTEST_EXECUTABLE_STUB_H

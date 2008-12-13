@@ -167,23 +167,31 @@ KUrl KDevRegister::buildRoot()
 
 void KDevRegister::fetchTestCommands(KJob*)
 {
-    kDebug() << "";
     Q_ASSERT(project());
     Q_ASSERT(m_reloading);
 
     KUrl buildRoot_ = buildRoot();
     if (!buildRoot_.isValid()) return;
     QDir buildDir(buildRoot_.path());
-    KUrl::List testExes;
+    QList<Veritas::TestExecutableInfo> testExes;
 
     QMap<KUrl, ProjectExecutableTargetItem*> exeTargets;
     foreach(ProjectExecutableTargetItem* exe, fetchAllExeTargets(project()->projectItem())) {
         exeTargets[exe->builtUrl()] = exe;
     }
-    foreach(const TestExecutableInfo& testInfo, m_testExes) {
+    foreach(TestExecutableInfo testInfo, m_testExes) {
         if (!KUrl(testInfo.command()).isValid()) continue;
         if (ProjectExecutableTargetItem* target = findTargetFor(testInfo, exeTargets)) {
-            testExes << target->builtUrl();
+            KUrl::List files;
+            foreach(KDevelop::ProjectFileItem* f, target->fileList()) {
+                files << f->url();
+            }
+            if (files.size() == 1) {
+                testInfo.setSource( files[0] );
+            }
+            testInfo.setCommand( target->builtUrl().fileName() );
+            testInfo.setWorkingDirectory( target->builtUrl().upUrl() );
+            testExes << testInfo;
         }
     }
 
@@ -205,7 +213,6 @@ void KDevRegister::fetchTestCommands(KJob*)
 
 void KDevRegister::suiteBuilderFinished()
 {
-    kDebug() << "";
     Q_ASSERT(m_runner);
     Q_ASSERT(m_reloading);
     Q_ASSERT(!m_runner->isRunning());

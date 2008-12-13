@@ -11,7 +11,7 @@ macro(kdev_add_test test_EXEC)
     target_link_libraries(qtest-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
         ${QT_QTXML_LIBRARY}
-		${QT_QTGUI_LIBRARY}
+        ${QT_QTGUI_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         ${KDevPlatform_VERITAS_LIBRARY}
         kdevqtest)

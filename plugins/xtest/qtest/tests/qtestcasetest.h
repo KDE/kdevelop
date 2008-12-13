@@ -26,7 +26,7 @@
 
 namespace QTest {
 class Case;
-namespace Test {
+class Command;
 
 /*! @unitundertest QTest::Case */
 class CaseTest : public QObject
@@ -40,12 +40,20 @@ private slots:
     void addCommands();
     void emptyOutputFiles();
 
+    void clone_noChildren();
+    void clone_singleChild();
+    void clone_multipleChildren();
+    void clone_properties();
+
+private:
+    void kompareCloneChild(Command* actualClone, Command* original, Case* parentClone);
+
 private:
     QFileInfo m_exe;
     QString m_name;
     QTest::Case* m_case;
 };
 
-}}
+}
 
 #endif // QXQTEST_QTESTCASETEST_H

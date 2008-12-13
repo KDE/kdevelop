@@ -28,8 +28,8 @@
 #include "executablestub.h"
 #include <veritas/test.h>
 
-using QTest::Test::CaseBuilderTest;
-using QTest::Test::ExecutableStub;
+using QTest::CaseBuilderTest;
+using QTest::ExecutableStub;
 using QTest::Case;
 using QTest::Command;
 using QTest::Executable;

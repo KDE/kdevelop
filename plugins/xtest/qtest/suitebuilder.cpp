@@ -27,6 +27,7 @@
 #include <interfaces/iplugin.h>
 #include "qtestsettings.h"
 #include <veritas/test.h>
+#include <veritas/testexecutableinfo.h>
 #include <KProcess>
 #include <KUrl>
 #include <KLocale>
@@ -42,10 +43,17 @@ using QTest::CaseBuilder;
 using QTest::ISettings;
 
 using Veritas::Test;
+using Veritas::TestExecutableInfo;
 
 SuiteBuilder::SuiteBuilder()
-    : m_root(0), m_hasRun(false), m_testExesSet(false), m_settings(0)
+    : m_root(0), m_hasRun(false), m_testExesSet(false), m_settings(0), m_previousRoot(0)
 {
+}
+
+void SuiteBuilder::setPreviousRoot(Test* previousRoot)
+{
+    Q_ASSERT(m_previousRoot == 0); Q_ASSERT(previousRoot != 0);
+    m_previousRoot = previousRoot;
 }
 
 void SuiteBuilder::initRoot()
@@ -79,12 +87,12 @@ QString SuiteBuilder::suiteNameOneUp(const KUrl& suiteUrl)
     return up.fileName() + '-' + dir.fileName();
 }
 
-void SuiteBuilder::addSuiteName(const KUrl& exeUrl)
+void SuiteBuilder::addSuiteName(const TestExecutableInfo& exe)
 {
-    KUrl suiteUrl = exeUrl.upUrl();
+    KUrl suiteUrl = exe.workingDirectory();
     if (m_suiteNames.contains(suiteUrl)) return;
     QMapIterator<KUrl, QString> it(m_suiteNames);
-    QString suiteName = suiteNameForExe(exeUrl);
+    QString suiteName = suiteNameForExe(KUrl(suiteUrl, exe.command()));
     KUrl collision;
     while(it.hasNext()) {
         it.next();
@@ -104,13 +112,13 @@ void SuiteBuilder::constructSuites()
 {
     // create a suite per test directory.
     Q_ASSERT(m_root); Q_ASSERT(m_testExesSet);
-    foreach(const KUrl& testExe, m_testShellExes) {
+    foreach(const TestExecutableInfo& testExe, m_testExes) {
         addSuiteName(testExe);
     }
-    foreach(const KUrl& testExe, m_testShellExes) {
-        QString suiteName = m_suiteNames[testExe.upUrl()];
+    foreach(const TestExecutableInfo& testExe, m_testExes) {
+        QString suiteName = m_suiteNames[testExe.workingDirectory()];
         if (!m_suites.contains(suiteName)) {
-            QFileInfo suiteDir(testExe.upUrl().path());
+            QFileInfo suiteDir(testExe.workingDirectory().path());
             Suite* suite = new Suite(suiteName, suiteDir, m_root);
             m_suites[suiteName] = suite;
         }
@@ -123,16 +131,25 @@ void SuiteBuilder::constructSuites()
 
 void SuiteBuilder::constructCases()
 {
-    int nrofShells = m_testShellExes.count();
+    int nrofShells = m_testExes.count();
     int count = 1;
-    foreach(const KUrl& testExe, m_testShellExes) {
+    foreach(const TestExecutableInfo& testExeInfo, m_testExes) {
+        KUrl testExe = KUrl(testExeInfo.workingDirectory(), testExeInfo.command());
+        kDebug() << testExe;
         QString suiteName = m_suiteNames[testExe.upUrl()];
         CaseBuilder* cb = createCaseBuilder(testExe);
         cb->setSuiteName(suiteName);
         Case* caze = cb->construct();
         delete cb;
         if (!caze) continue;
-
+        if (testExeInfo.source().isValid()) {
+            caze->setSupportsToSource( true );
+            caze->setSource( testExeInfo.source() );
+            for(int i=0; i<caze->childCount(); i++) {
+                Command* cmd = caze->child(i);
+                cmd->setSupportsToSource( true );
+            }
+        }
         Q_ASSERT(m_suites.contains(suiteName));
         Suite* suite = m_suites[suiteName];
         Q_ASSERT(suite);
@@ -165,10 +182,10 @@ void SuiteBuilder::setSettings(ISettings* settings)
     m_settings = settings;
 }
 
-void SuiteBuilder::setTestExecutables(const QList<KUrl>& testExes)
+void SuiteBuilder::setTestExecutables(const QList<Veritas::TestExecutableInfo>& testExes)
 {
     Q_ASSERT(!hasRun()); Q_ASSERT(!m_testExesSet);
-    m_testShellExes = testExes;
+    m_testExes = testExes;
     m_testExesSet = true;
 }
 

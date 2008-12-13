@@ -29,8 +29,6 @@ namespace QTest {
 class Suite;
 class Case;
 class Command;
-
-namespace Test {
 class CustomSuiteBuilder;
 class ExecutableStub;
 
@@ -46,6 +44,9 @@ private slots:
     void multiSuitesCasesCommands();
     void identicalSuiteNames();
 
+    void keepPreviousCase();
+//    void partialReload();
+
 private:
     Suite* fetchSuite(Veritas::Test* root, int nrofSuite);
     void verifySuite(Suite* suite, const QString name, int childCount);
@@ -57,6 +58,6 @@ private:
     ExecutableStub* m_exe;
 };
 
-}}
+}
 
 #endif // QTEST_CASERESOLVERTEST_H_INCLUDED

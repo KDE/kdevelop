@@ -25,7 +25,12 @@
 #include "qtestoutputmorpher.h"
 #include "qtestsettings.h"
 #include "qtestoutputjob.h"
+#include "executable.h"
+
 #include <veritas/testresult.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <QCoreApplication>
 #include <QDir>
@@ -41,8 +46,10 @@ using QTest::Command;
 using QTest::Suite;
 using QTest::OutputParser;
 using QTest::ISettings;
+using QTest::Executable;
 using Veritas::Test;
 using Veritas::TestResult;
+using KDevelop::ICore;
 
 int Case::s_count = 0;
 
@@ -53,7 +60,8 @@ Case::Case(const QString& name, const QFileInfo& exe, Suite* parent)
           m_proc(0),
           m_parser(0),
           m_timer(new QTimer(this)),
-          m_parserTimeout(new QTimer(this))
+          m_parserTimeout(new QTimer(this)),
+          m_executable(0)
 {
     setSelectionToggle(true);
     setVerboseToggle(true);
@@ -62,11 +70,55 @@ Case::Case(const QString& name, const QFileInfo& exe, Suite* parent)
     connect(m_parserTimeout, SIGNAL(timeout()), SLOT(closeOutputFile()));
 }
 
+void Case::setExecutable(Executable* exe)
+{
+    Q_ASSERT(m_executable == 0); Q_ASSERT(exe);
+    m_executable = exe;
+    m_executable->setLocation(executable().filePath());
+    m_executable->updateTimestamp();
+}
+
+Executable* Case::exe()
+{
+    return m_executable;
+}
+
+Case* Case::clone() const
+{
+    Case* clone = new Case(name(), executable(), 0);
+    clone->setSupportsToSource(supportsToSource());
+    clone->setSource(source());
+    for(int i=0; i<childCount(); i++) {
+        Q_ASSERT(child(i) != 0);
+        Command* childClone = child(i)->clone();
+        childClone->setParent(clone);
+        clone->addChild(childClone);
+    }
+    return clone;
+}
+
 void Case::removeFile(const QString& filePath)
 {
     if (!filePath.isNull()) {
         QFile::remove(filePath);
     }
+}
+
+KUrl Case::source() const
+{
+    return m_source;
+}
+
+void Case::toSource() const
+{
+    if (supportsToSource()) {
+        ICore::self()->documentController()->openDocument(m_source);
+    }
+}
+
+void Case::setSource(const KUrl& source)
+{
+    m_source = source;
 }
 
 void Case::removeTempFiles()
@@ -82,6 +134,7 @@ Case::~Case()
     removeTempFiles();
     if (m_output) delete m_output;
     if (m_parser) delete m_parser;
+    if (m_executable) delete m_executable;
 }
 
 bool Case::shouldRun() const
@@ -99,7 +152,7 @@ KUrl Case::errorFile() const
     return KUrl(m_stdErrFilePath);
 }
 
-QFileInfo Case::executable()
+QFileInfo Case::executable() const
 {
     QFileInfo exe(m_exe);
     Test* suite = parent();

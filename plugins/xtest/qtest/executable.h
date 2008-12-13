@@ -22,6 +22,7 @@
 #define VERITAS_QTEST_EXECUTABLE_H
 
 #include <KUrl>
+#include <QDateTime>
 #include "qxqtestexport.h"
 
 namespace QTest
@@ -49,8 +50,16 @@ public:
     /*! Deduce a test name from exe name */
     virtual QString name() const;
 
+    /*! Returns true if the stored timestamp is older than this
+     *  executable's last modification time. */
+    virtual bool wasModified() const;
+    virtual void updateTimestamp();
+    
 private:
+    QDateTime lastModified() const;
+    
     KUrl m_location;
+    QDateTime m_timestamp;
 };
 
 }

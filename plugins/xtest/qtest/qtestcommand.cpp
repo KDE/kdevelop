@@ -22,9 +22,13 @@
 #include "qtestsuite.h"
 #include "qtestcase.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+
 using QTest::Command;
 using QTest::Case;
 using Veritas::Test;
+using KDevelop::ICore;
 
 Command::Command(const QString& name, Case* parent)
     : Test(name, parent)
@@ -42,6 +46,27 @@ QString Command::command()
     cmd = qobject_cast<Case*>(caze)->executable();
 
     return cmd.filePath() + ' ' + name();
+}
+
+void Command::toSource() const
+{
+    if (supportsToSource() && parent() && parent()->supportsToSource()) {
+        Case* p = qobject_cast<Case*>(parent());
+        Q_ASSERT(p);
+        openDocument(p->source());
+    }
+}
+
+void Command::openDocument(const KUrl& doc) const
+{
+    ICore::self()->documentController()->openDocument(doc);
+}
+
+Command* Command::clone() const
+{
+    Command* clone = new Command(name(), 0);
+    clone->setSupportsToSource( supportsToSource() );
+    return clone;
 }
 
 #include "qtestcommand.moc"

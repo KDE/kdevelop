@@ -30,7 +30,6 @@ namespace QTest {
 class CaseBuilder;
 class Case;
 class Command;
-namespace Test {
 
 class ExecutableStub;
 /*! @unitundertest QTest::CaseBuilder */
@@ -71,6 +70,6 @@ private:
     Case* m_caze;
 };
 
-}}
+}
 
 #endif // QTEST_CASEBUILDERTEST_H_INCLUDED
