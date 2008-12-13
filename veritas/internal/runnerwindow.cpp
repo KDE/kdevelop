@@ -178,6 +178,8 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
 
     runnerView()->setSelectionMode(QAbstractItemView::SingleSelection);
     runnerView()->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    ui()->labelRunText->setText("");
 }
 
 void RunnerWindow::showVerboseTestOutput()
@@ -572,12 +574,10 @@ void RunnerWindow::syncTestWithResult(const QItemSelection& selected,
 
 void RunnerWindow::updateRunText() const
 {
-    QString elapsed;
+    QString elapsed = "0.000";
     if (m_stopWatch.isValid()) {
         int mili = m_stopWatch.elapsed();
-        QString elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
-    } else {
-        elapsed = "0.000";
+        elapsed = QString("%1.%2").arg(int(mili/1000)).arg(mili%1000);
     }
     ui()->labelRunText->setText( i18ncp("%2 is a real number like 1.355", "Ran 1 test in %2 seconds", "Ran %1 tests in %2 seconds", m_numItemsCompleted, elapsed) );
 }

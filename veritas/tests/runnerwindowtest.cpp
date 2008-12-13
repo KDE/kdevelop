@@ -21,6 +21,7 @@
 #include "runnerwindowtest.h"
 
 #include <KDebug>
+#include <QRegExp>
 #include "testutils.h"
 
 #include "modelcreation.h"
@@ -331,6 +332,14 @@ void RunnerWindowTest::infoResultShown()
     QModelIndex i = m_resultsProxy->index(0,0);
     KOMPARE("child11", i.data(Qt::DisplayRole));
     KOMPARE("FooBar", i.sibling(0,1).data(Qt::DisplayRole));
+}
+
+void RunnerWindowTest::testRanCaption()
+{
+    KOMPARE("", m_ui->labelRunText->text());
+    runAllTests();
+    QRegExp r("Ran [0-9] tests in [0-9]*.[0-9]* seconds");
+    KVERIFY_MSG(r.exactMatch(m_ui->labelRunText->text()), m_ui->labelRunText->text());
 }
 
 QTEST_KDEMAIN(RunnerWindowTest, GUI)

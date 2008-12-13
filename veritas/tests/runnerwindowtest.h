@@ -52,6 +52,7 @@ private slots:
     void clickRunnerResults();
     void progressBarMaxedOutAfterRun();
     void infoResultShown();
+    void testRanCaption();
 
 private:
     void expandSome();
