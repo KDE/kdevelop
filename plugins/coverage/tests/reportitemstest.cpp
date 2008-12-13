@@ -19,7 +19,12 @@ void ReportItemsTest::init()
 {}
 
 void ReportItemsTest::cleanup()
-{}
+{
+    qDeleteAll(m_garbage);
+    m_garbage.clear();
+    qDeleteAll(m_garbageFiles);
+    m_garbageFiles.clear();
+}
 
 ///////////////////////////// commands ////////////////////////////////////////
 
@@ -57,32 +62,36 @@ void ReportItemsTest::constructDirItem()
     KVERIFY(! dir.isCheckable());
 }
 
-void addCoverageDataTo(ReportDirItem& dir, const QString& path, int sloc, int instrumented)
+void ReportItemsTest::addCoverageDataTo(ReportDirItem& dir, const QString& path, int sloc, int instrumented)
 {
     CoveredFile* f = CoveredFileFactory::create(KUrl(path), sloc, instrumented);
     ReportFileItem* fItem = new ReportFileItem(KUrl(path));
     fItem->addCoverageData(f);
     dir.appendRow(fItem);
     dir.updateStats();
+    m_garbage << fItem->coverageItem() << fItem->slocItem() << fItem->instrumentedItem();
+    m_garbageFiles << f;
 }
 
 void ReportItemsTest::addFileToDirItem()
 {
-    ReportDirItem dir("/my/dir");
-    addCoverageDataTo(dir, "/my/dir/foo.cpp", 10, 5);
-    KOMPARE(10, dir.sloc());
-    KOMPARE(5, dir.instrumented());
-    KVERIFY(qAbs(100*5/10 - dir.coverage()) < 0.1);
+    ReportDirItem* dir = new ReportDirItem("/my/dir");
+    addCoverageDataTo(*dir, "/my/dir/foo.cpp", 10, 5);
+    KOMPARE(10, dir->sloc());
+    KOMPARE(5, dir->instrumented());
+    KVERIFY(qAbs(100*5/10 - dir->coverage()) < 0.1);
+    delete dir;
 }
 
 void ReportItemsTest::addMultipleFilesToDir()
 {
-    ReportDirItem dir("/my/dir");
-    addCoverageDataTo(dir, "/my/dir/foo.cpp", 10, 5);
-    addCoverageDataTo(dir, "/my/dir/bar.cpp", 20, 5);
-    KOMPARE(10+20, dir.sloc());
-    KOMPARE(5+5, dir.instrumented());
-    KVERIFY(qAbs(100*((double)dir.instrumented()/dir.sloc()) - dir.coverage()) < 0.1);
+    ReportDirItem* dir = new ReportDirItem("/my/dir");
+    addCoverageDataTo(*dir, "/my/dir/foo.cpp", 10, 5);
+    addCoverageDataTo(*dir, "/my/dir/bar.cpp", 20, 5);
+    KOMPARE(10+20, dir->sloc());
+    KOMPARE(5+5, dir->instrumented());
+    KVERIFY(qAbs(100*((double)dir->instrumented()/dir->sloc()) - dir->coverage()) < 0.1);
+    delete dir;
 }
 
 QTEST_KDEMAIN( ReportItemsTest, NoGUI)

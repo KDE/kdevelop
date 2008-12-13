@@ -83,7 +83,14 @@ void AnnotationManagerTest::init()
 
 void AnnotationManagerTest::cleanup()
 {
-    //if (m_manager) delete m_manager;
+    if (m_manager) delete m_manager;
+    if (m_widget) delete m_widget;
+    qDeleteAll(m_garbageFiles);
+    m_garbageFiles.clear();
+    qDeleteAll(m_garbageDocs);
+    m_garbageDocs.clear();
+    qDeleteAll(m_garbage);
+    m_garbage.clear();
 }
 
 ///////////////// commands ///////////////////////////////////////////////////
@@ -137,6 +144,7 @@ void AnnotationManagerTest::multipleViews()
     // inject another view in the stub
     TextDocument* tdoc = (TextDocument*)doc->textDocument();
     tdoc->m_createView = new TestStubs::TextView(0);
+    m_garbage << tdoc->m_createView;
     View* v2 = triggerAnnotationsOnView(doc);
     Q_ASSERT(v1 != v2);
 
@@ -234,10 +242,13 @@ void AnnotationManagerTest::initManager(CoveredFile* f)
 KDevDocument* AnnotationManagerTest::createKDevDocument(const KUrl& u)
 {
     TestStubs::KDevDocument* kdoc = new TestStubs::KDevDocument(m_core);
+    m_garbageDocs << kdoc;
     kdoc->m_url = u;
     TestStubs::TextDocument* doc = new TestStubs::TextDocument;
+    m_garbage << doc;
     kdoc->m_textDocument = doc;
     doc->m_createView = new TestStubs::TextView(0);
+    m_garbage << doc->m_createView;
     return kdoc;
 }
 
@@ -246,6 +257,7 @@ CoveredFile* AnnotationManagerTest::createCoveredFile(int line, int callCount, K
     CoveredFile* f = new CoveredFile();
     f->setUrl(url);
     f->setCallCount(line, callCount);
+    m_garbageFiles << f;
     return f;
 }
 

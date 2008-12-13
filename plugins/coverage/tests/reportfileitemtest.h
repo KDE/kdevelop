@@ -29,6 +29,7 @@ namespace Veritas
 {
 
 class ReportFileItem;
+class CoveredFile;
 class ReportFileItemTest : public QObject
 {
 Q_OBJECT
@@ -49,6 +50,7 @@ private:
     ReportFileItem* m_file;
     KUrl m_url;
     QString m_fileName;
+    QList<CoveredFile*> m_garbage;
 };
 
 }

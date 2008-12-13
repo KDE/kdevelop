@@ -46,6 +46,8 @@ void ReportModelTest::init()
 void ReportModelTest::cleanup()
 {
     if (m_model) delete m_model;
+    qDeleteAll(m_garbage);
+    m_garbage.clear();
 }
 
 ////////////////////////// commands ///////////////////////////////////////////
@@ -80,6 +82,8 @@ void ReportModelTest::addSingleCoverageData()
     
     KVERIFY(!m_model->index(1,0).isValid());
     KVERIFY(!m_model->index(1,0, dirIndex).isValid());
+    
+    m_garbage << f;
 }
 
 void ReportModelTest::multiCoverageOneFile()
@@ -109,6 +113,8 @@ void ReportModelTest::multiCoverageOneFile()
     
     KVERIFY(!m_model->index(1,0).isValid());
     KVERIFY(!m_model->index(1,0, dirIndex).isValid());
+    
+    m_garbage << f1 << f2;
 }
 
 void ReportModelTest::differentSlocSetOneFile()
@@ -136,6 +142,8 @@ void ReportModelTest::differentSlocSetOneFile()
     QModelIndex fileIndex = m_model->index(0,0,dirIndex);
     double expCoverage = 100*((double)expInstrumented/expSloc);
     assertFileAtEquals(fileIndex, m_fileName, expSloc, expInstrumented, expCoverage);
+    
+    m_garbage << f1 << f2;
 }
 
 ///////////////////////// helpers ////////////////////////////////////////////

@@ -53,6 +53,8 @@ private:
     KUrl m_fileUrl;
     QString m_fileDir;
     QString m_fileName;
+    
+    QList<CoveredFile*> m_garbage;
 };
 
 }

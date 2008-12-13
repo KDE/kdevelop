@@ -22,9 +22,13 @@
 #define QTEST_REPORTITEMSTEST_H_INCLUDED
 
 #include <QtCore/QObject>
+class QStandardItem;
 
 namespace Veritas
 {
+
+class CoveredFile;
+class ReportDirItem;
 
 class ReportItemsTest : public QObject
 {
@@ -39,6 +43,13 @@ private slots:
     void constructDirItem();
     void addFileToDirItem();
     void addMultipleFilesToDir();
+
+private:
+    void addCoverageDataTo(ReportDirItem& dir, const QString& path, int sloc, int instrumented);
+    
+private:
+    QList<QStandardItem*> m_garbage;
+    QList<CoveredFile*> m_garbageFiles;
 };
 
 }

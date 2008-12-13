@@ -63,8 +63,8 @@ void LcovInfoParserTest::singleCoveredFile()
         "LH:1\n"
         "end_of_record\n";
     QBuffer* buff = new QBuffer(&input);
-    m_parser->setSource(buff);
-    QList<CoveredFile*> files = m_parser->go();
+    m_parser->fto_setSource(buff);
+    QList<CoveredFile*> files = m_parser->fto_go();
     KOMPARE(1, files.count());
     CoveredFile* f = files[0];
     KVERIFY(f != 0);
@@ -78,7 +78,7 @@ void LcovInfoParserTest::singleCoveredFile()
     KVERIFY(f->callCountMap().contains(11));
     KOMPARE(5, f->callCountMap()[10]);
     KOMPARE(0, f->callCountMap()[11]);
-}
+ }
 
 void LcovInfoParserTest::multipleFiles()
 {
@@ -100,8 +100,8 @@ void LcovInfoParserTest::multipleFiles()
         "end_of_record\n";
 
     QBuffer* buff = new QBuffer(&input);
-    m_parser->setSource(buff);
-    QList<CoveredFile*> files = m_parser->go();
+    m_parser->fto_setSource(buff);
+    QList<CoveredFile*> files = m_parser->fto_go();
     KOMPARE(2, files.count());
 
     CoveredFile* actualFile1 = files[0];
@@ -123,6 +123,9 @@ void LcovInfoParserTest::multipleFiles()
     expCallCount[17] = 10;
     CoveredFile* expFile2 = CoveredFileFactory::create(url, expCallCount);
     assertCoveredFilesEqual(expFile2, actualFile2);
+    
+    delete expFile1;
+    delete expFile2;
 }
 
 QTEST_KDEMAIN( LcovInfoParserTest, NoGUI)

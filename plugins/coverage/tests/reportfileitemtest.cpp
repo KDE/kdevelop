@@ -39,7 +39,14 @@ void ReportFileItemTest::init()
 
 void ReportFileItemTest::cleanup()
 {
-    if (m_file) delete m_file;
+    if (m_file) {
+        delete m_file->coverageItem();
+        delete m_file->instrumentedItem();
+        delete m_file->slocItem();
+        delete m_file;
+    }
+    qDeleteAll(m_garbage);
+    m_garbage.clear();
 }
 
 void ReportFileItemTest::construct()
@@ -67,6 +74,8 @@ void ReportFileItemTest::addCoverage()
     assertSlocItem(2);
     assertInstrumentedItem(1);
     assertCoverageItem(100*(double)1/2);
+    
+    m_garbage << f;
 }
 
 void ReportFileItemTest::assertInstrumentedItem(int instrumented)
@@ -105,6 +114,8 @@ void ReportFileItemTest::addMultipleCoverage()
     assertInstrumentedItem(4);
     assertSlocItem(4);
     assertCoverageItem(100.0);
+    
+    m_garbage << f << f2;
 }
 
 

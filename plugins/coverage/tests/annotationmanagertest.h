@@ -69,6 +69,10 @@ private: // fixture
     QWidget* m_widget;
     int m_lineNr;       // source line number
     int m_nrofCalls;    // number of calls on this line
+    
+    QList<CoveredFile*> m_garbageFiles;
+    QList<TestStubs::KDevDocument*> m_garbageDocs;
+    QList<QObject*> m_garbage;
 };
 
 }
