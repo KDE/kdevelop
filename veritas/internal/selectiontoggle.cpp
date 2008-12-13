@@ -19,20 +19,15 @@
  ***************************************************************************/
 
 #include "selectiontoggle.h"
+#include "veritas/test.h"
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRect>
-#include <QTimer>
+#include <QEvent>
 #include <QTimeLine>
 
 #include <KDebug>
 #include <KGlobalSettings>
-#include <KIcon>
 #include <KIconLoader>
-#include <KIconEffect>
 #include <KLocale>
-#include "veritas/test.h"
 
 using Veritas::SelectionToggle;
 using Veritas::OverlayButton;
@@ -59,12 +54,6 @@ SelectionToggle::SelectionToggle(QWidget* parent) :
 SelectionToggle::~SelectionToggle()
 {
 }
-
-QSize SelectionToggle::sizeHint() const
-{
-    return QSize(16, 16);
-}
-
 
 bool SelectionToggle::eventFilter(QObject* obj, QEvent* event)
 {

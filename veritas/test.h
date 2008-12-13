@@ -66,6 +66,7 @@ class VERITAS_EXPORT Test : public QObject
 Q_OBJECT
 Q_PROPERTY(bool verboseToggle READ needVerboseToggle WRITE setVerboseToggle)
 Q_PROPERTY(bool selectionToggle READ needSelectionToggle WRITE setSelectionToggle)
+Q_PROPERTY(bool toSource READ supportsToSource WRITE setSupportsToSource)
 
 public Q_SLOTS:
 
@@ -78,6 +79,11 @@ public: // Operations
     void setVerboseToggle(bool);
     bool needSelectionToggle() const;
     void setSelectionToggle(bool);
+    bool supportsToSource() const;
+    void setSupportsToSource(bool);
+
+    /*! Open sourcelocation, to be implemented by concrete tests */
+    virtual void toSource() const;
 
     /*! Factory method that constructs a blank root test. Always use
      *  this method to construct test-tree roots. */

@@ -50,6 +50,11 @@ void OverlayButton::reset()
     hide();
 }
 
+QSize OverlayButton::sizeHint() const
+{
+    return QSize(16, 16);
+}
+
 
 void OverlayButton::setVisible(bool visible)
 {

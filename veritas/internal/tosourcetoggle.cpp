@@ -18,38 +18,55 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#include "verbosetoggle.h"
+#include "tosourcetoggle.h"
 #include "veritas/test.h"
 
 #include <QEvent>
 #include <QTimeLine>
+
 #include <KDebug>
 #include <KGlobalSettings>
 #include <KIconLoader>
 #include <KLocale>
 
-
-using Veritas::Test;
-using Veritas::VerboseToggle;
+using Veritas::ToSourceToggle;
 using Veritas::OverlayButton;
+using Veritas::Test;
 
-VerboseToggle::VerboseToggle(QWidget* parent) :
+bool ToSourceToggle::shouldShow(Test* t)
+{
+    return t != 0 && t->supportsToSource();
+}
+
+ToSourceToggle::ToSourceToggle(QWidget* parent) :
     OverlayButton(parent)
 {
     setFocusPolicy(Qt::NoFocus);
     parent->installEventFilter(this);
     resize(sizeHint());
-    setIconOverlay();
+    setIcon();
     connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
             this, SLOT(refreshIcon()));
-    setToolTip(i18nc("@info:tooltip", "Verbose Output"));
 }
 
-VerboseToggle::~VerboseToggle()
+ToSourceToggle::~ToSourceToggle()
 {
 }
 
-bool VerboseToggle::eventFilter(QObject* obj, QEvent* event)
+int ToSourceToggle::offset(Test* t)
+{
+    if (!t) return 0;
+    int offset = 17;
+    if (t->needSelectionToggle()) {
+        offset += 17;
+    }
+    if (t->needVerboseToggle()) {
+        offset += 17;
+    }
+    return offset;
+}
+
+bool ToSourceToggle::eventFilter(QObject* obj, QEvent* event)
 {
     if ((obj == parent()) && (event->type() == QEvent::Leave)) {
         hide();
@@ -57,38 +74,34 @@ bool VerboseToggle::eventFilter(QObject* obj, QEvent* event)
     return QAbstractButton::eventFilter(obj, event);
 }
 
-void VerboseToggle::enterEvent(QEvent* event)
+void ToSourceToggle::enterEvent(QEvent* event)
 {
     QAbstractButton::enterEvent(event);
 
-    // if the mouse cursor is above the toggle, display
+    // if the mouse cursor is above the selection toggle, display
     // it immediately without fading timer
     m_isHovered = true;
     if (m_fadingTimeLine != 0) {
         m_fadingTimeLine->stop();
     }
     m_fadingValue = 255;
+    setToolTip(i18nc("@info:tooltip", "To Source"));
     update();
 }
 
-bool VerboseToggle::shouldShow(Test* t)
+void ToSourceToggle::setIcon()
 {
-    return t!=0 && t->needVerboseToggle();
-}
-
-void VerboseToggle::setIconOverlay()
-{
-    m_icon = KIconLoader::global()->loadIcon(
-        "go-next-page",
-        KIconLoader::NoGroup,
-        KIconLoader::SizeSmall);
+    m_icon = KIconLoader::global()->loadIcon("text-x-c++src",
+                                             KIconLoader::NoGroup,
+                                             KIconLoader::SizeSmall);
     update();
 }
 
-void VerboseToggle::refreshIcon()
+
+
+void ToSourceToggle::refreshIcon()
 {
-    setIconOverlay();
+    setIcon();
 }
 
-
-#include "verbosetoggle.moc"
+#include "tosourcetoggle.moc"

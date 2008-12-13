@@ -46,10 +46,9 @@ Q_OBJECT
 public:
     explicit VerboseToggle(QWidget* parent);
     virtual ~VerboseToggle();
-    virtual QSize sizeHint() const;
 
     virtual bool shouldShow(Test*);
-    virtual int offset() { return 32; }
+    virtual int offset(Test*) { return 34; }
 
 protected:
     virtual bool eventFilter(QObject* obj, QEvent* event);

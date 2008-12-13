@@ -26,6 +26,7 @@
 #include <QTreeView>
 #include <QList>
 #include <QTime>
+#include <QProgressBar>
 #include <KUrl>
 #include "../veritasexport.h"
 
@@ -46,10 +47,12 @@ class ResultsModel;
 class ResultsProxyModel;
 class SelectionManager;
 class VerboseToggle;
+class ToSourceToggle;
 class ResultsWidget;
 class OverlayManager;
 class TestExecutor;
 class Test;
+class TestBar;
 
 /*!
  * \brief The RunnerWindow class defines the Veritas main toolwindow
@@ -99,12 +102,14 @@ public: // Operations
 
 Q_SIGNALS:
     void runCompleted() const;
+    void requestReload() const;
 
 public Q_SLOTS:
 
     void showVerboseTestOutput();
     void addProjectToPopup(KDevelop::IProject*);
     void rmProjectFromPopup(KDevelop::IProject*);
+    void openTestSource();
 
 private Q_SLOTS:
 
@@ -194,10 +199,8 @@ private: // Operations
     RunnerWindow(const RunnerWindow&);
     RunnerWindow& operator=(const RunnerWindow&);
     void updateRunText() const;
-    void setRedBar() const;
-    void setGreenBar() const;
 
-    QProgressBar* progressBar() const;
+    TestBar* progressBar() const;
 
 private:
     Ui::RunnerWindow *m_ui;            // QtDesigner main object
@@ -210,8 +213,19 @@ private:
     TestExecutor* m_executor;
     mutable bool m_isRunning;
     VerboseToggle* m_verboseToggle;
+    ToSourceToggle* m_toSourceToggle;
+    OverlayManager* m_toSource;
     KUrl m_currentProject;
     int m_numItemsCompleted;
+};
+
+class TestBar : public QProgressBar
+{
+public:
+    TestBar(QWidget* parent);
+    virtual ~TestBar();
+    void turnGreen();
+    void turnRed();
 };
 
 } // namespace

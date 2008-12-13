@@ -71,7 +71,7 @@ private:
     bool needVerboseToggle;
     bool needSelectionToggle;
     bool m_isRunning;
-
+    bool supportsToSource;
     static const int columnCount;
 };
 

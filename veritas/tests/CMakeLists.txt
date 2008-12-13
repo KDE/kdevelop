@@ -1,4 +1,5 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories(..)
 
 macro(kdev_add_test test_EXEC)
     set(test_SRCS ${ARGN})
@@ -6,7 +7,7 @@ macro(kdev_add_test test_EXEC)
     kde4_add_unit_test(veritas-${test_EXEC} ${test_SRCS})
     target_link_libraries(veritas-${test_EXEC}
         ${QT_QTTEST_LIBRARY}
-		${QT_QTGUI_LIBRARY}
+        ${QT_QTGUI_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         kdevplatformveritas)
 endmacro(kdev_add_test)

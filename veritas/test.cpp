@@ -67,6 +67,11 @@ Test::Test(const QString& name, Test* parent)
     d->check();
     d->needVerboseToggle = false;
     d->needSelectionToggle = false;
+    d->supportsToSource = false;
+}
+
+void Test::toSource() const
+{
 }
 
 QString Test::name() const
@@ -76,6 +81,17 @@ QString Test::name() const
 
 void Test::kill()
 {}
+
+bool Test::supportsToSource() const
+{
+    return d->supportsToSource;
+}
+
+void Test::setSupportsToSource(bool value)
+{
+    d->supportsToSource = value;
+}
+
 
 KJob* Test::createVerboseOutputJob()
 {

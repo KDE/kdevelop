@@ -32,6 +32,7 @@
 #include "selectionmanager.h"
 #include "verbosetoggle.h"
 #include "selectiontoggle.h"
+#include "tosourcetoggle.h"
 #include "testexecutor.h"
 
 #include <ktexteditor/cursor.h>
@@ -75,11 +76,38 @@ using Veritas::ResultsModel;
 using Veritas::ResultsProxyModel;
 using Veritas::TestExecutor;
 using Veritas::Test;
+using Veritas::TestBar;
 
 const Ui::RunnerWindow* RunnerWindow::ui() const
 {
     return m_ui;
 }
+
+TestBar::TestBar(QWidget* parent) : QProgressBar(parent)
+{
+    turnGreen();
+}
+
+TestBar::~TestBar()
+{
+}
+
+void TestBar::turnGreen()
+{
+    QPalette pal = palette();
+    QBrush brush(QColor("green"));
+    pal.setBrush( QPalette::Highlight, brush );
+    setPalette(pal);
+}
+
+void TestBar::turnRed()
+{
+    QPalette pal = palette();
+    QBrush brush(QColor("red"));
+    pal.setBrush( QPalette::Highlight, brush );
+    setPalette(pal);
+}
+
 
 RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags flags)
         : QWidget(parent, flags), m_executor(0), m_isRunning(false)
@@ -92,7 +120,6 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     runnerView()->setUniformRowHeights(true);
 
     connectFocusStuff();
-    setGreenBar();
     progressBar()->setTextVisible(false);
     progressBar()->show();
     addProjectMenu();
@@ -114,14 +141,20 @@ RunnerWindow::RunnerWindow(ResultsModel* rmodel, QWidget* parent, Qt::WFlags fla
     m_selection = new SelectionManager(runnerView());
     SelectionToggle* selectionToggle = new SelectionToggle(runnerView()->viewport());
     m_selection->setButton(selectionToggle);
+
     m_verbose = new OverlayManager(runnerView());
     m_verboseToggle = new VerboseToggle(runnerView()->viewport());
     connect(m_verboseToggle, SIGNAL(clicked(bool)),SLOT(showVerboseTestOutput()));
     m_verbose->setButton(m_verboseToggle);
 
+    m_toSource = new OverlayManager(runnerView());
+    m_toSourceToggle = new ToSourceToggle(runnerView()->viewport());
+    connect(m_toSourceToggle, SIGNAL(clicked(bool)), SLOT(openTestSource()));
+    m_toSource->setButton(m_toSourceToggle);
+
     QPixmap refresh = KIconLoader::global()->loadIcon("view-refresh", KIconLoader::Small);
     m_ui->actionReload->setIcon(refresh);
-    QPixmap run = KIconLoader::global()->loadIcon("system-run", KIconLoader::Small);
+    QPixmap run = KIconLoader::global()->loadIcon("arrow-right", KIconLoader::Small);
     m_ui->actionStart->setIcon(run);
     QPixmap stop = KIconLoader::global()->loadIcon("window-close", KIconLoader::Small);
     m_ui->actionStop->setIcon(stop);
@@ -159,6 +192,14 @@ void RunnerWindow::showVerboseTestOutput()
     }
 }
 
+void RunnerWindow::openTestSource()
+{
+    const QModelIndex index = m_toSourceToggle->index();
+    if (index.isValid()) {
+        m_toSource->index2Test(index)->toSource();
+    }
+}
+
 // helper for RunnerWindow(...)
 void RunnerWindow::addProjectMenu()
 {
@@ -178,6 +219,7 @@ void RunnerWindow::setSelectedProject(QAction* action)
     KUrl projectRoot = action->data().value<KUrl>();
     Q_ASSERT(m_project2action.contains(projectRoot));
     m_currentProject = projectRoot;
+    emit requestReload();
 }
 
 void RunnerWindow::addProjectToPopup(IProject* proj)
@@ -332,6 +374,7 @@ void RunnerWindow::stopPreviousModel()
         prevModel->disconnect();
         delete prevModel;
     }
+    m_isRunning = false;
 }
 
 // helper for setModel(RunnerModel*)
@@ -407,6 +450,7 @@ void RunnerWindow::setModel(RunnerModel* model)
     enableTestSync(true);
     m_verbose->makeConnections();
     m_selection->makeConnections();
+    m_toSource->makeConnections();
     runnerView()->resizeColumnToContents(0);
 }
 
@@ -446,52 +490,24 @@ void RunnerWindow::displayNumCompleted(int numItems)
     updateRunText();
 }
 
-void RunnerWindow::setGreenBar() const
-{
-    progressBar()->setStyleSheet(
-        QString("QProgressBar {"
-            "border: 1px solid grey;"
-            "border-radius: 2px;"
-            "text-align: center;"
-        "}"
-        "QProgressBar::chunk {"
-            "background-color: #009700;"
-            "width: 5px;"
-        "}"));
-}
-
-void RunnerWindow::setRedBar() const
-{
-    progressBar()->setStyleSheet(
-        QString("QProgressBar {"
-            "border: 1px solid grey;"
-            "border-radius: 2px;"
-            "text-align: center;"
-        "}"
-        "QProgressBar::chunk {"
-            "background-color: #DF1313;"
-            "width: 5px;"
-        "}"));
-}
-
 void RunnerWindow::displayNumErrors(int numItems) const
 {
-    if (numItems > 0) setRedBar();
+    if (numItems > 0) progressBar()->turnRed();
 }
 
-QProgressBar* RunnerWindow::progressBar() const
+TestBar* RunnerWindow::progressBar() const
 {
-    return ui()->progressRun;
+    return static_cast<TestBar*>(ui()->progressRun);
 }
 
 void RunnerWindow::displayNumFatals(int numItems) const
 {
-    if (numItems > 0) setRedBar();
+    if (numItems > 0) progressBar()->turnRed();
 }
 
 void RunnerWindow::displayNumExceptions(int numItems) const
 {
-    if (numItems > 0) setRedBar();
+    if (numItems > 0) progressBar()->turnRed();
 }
 
 namespace
@@ -611,7 +627,7 @@ void RunnerWindow::runItems()
     m_isRunning = true;
 
     m_stopWatch = QTime();
-    setGreenBar();
+    progressBar()->turnGreen();
     displayNumCompleted(0);
     m_stopWatch.start();
 

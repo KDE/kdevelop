@@ -167,6 +167,7 @@ QWidget* ITestRunner::runnerWidget()
 
     connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
             this, SLOT(reload()));
+    connect(d->window, SIGNAL(requestReload()), SLOT(reload()));
 
     reload();
     return d->window;

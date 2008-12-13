@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA            *
  ***************************************************************************/
 
-#ifndef VERITAS_SELECTIONTOGGLE_H
-#define VERITAS_SELECTIONTOGGLE_H
+#ifndef VERITAS_TOSOURCETOGGLE_H
+#define VERITAS_TOSOURCETOGGLE_H
 
 #include <QPixmap>
 #include <QModelIndex>
@@ -30,23 +30,16 @@ class QTimeLine;
 namespace Veritas
 {
 class Test;
-/**
- * @brief Toggle button for changing the selection of an hovered item.
- *
- * The toggle button is visually invisible until it is displayed at least
- * for one second.
- *
- * @see SelectionManager
- */
-class SelectionToggle : public OverlayButton
+
+class ToSourceToggle : public OverlayButton
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    explicit SelectionToggle(QWidget* parent);
-    virtual ~SelectionToggle();
-
-    virtual int offset(Test*) { return 17; }
+    explicit ToSourceToggle(QWidget* parent);
+    virtual ~ToSourceToggle();
+ 
+    virtual int offset(Test*);
     bool shouldShow(Test*);
 
 protected:
@@ -54,7 +47,7 @@ protected:
     virtual void enterEvent(QEvent* event);
 
 private slots:
-    void setIconOverlay(bool checked);
+    void setIcon();
     void refreshIcon();
 
 };

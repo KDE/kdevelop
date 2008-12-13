@@ -5,8 +5,10 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>574</width>
-    <height>581</height>
+    <!--<width>574</width>
+    <height>581</height> -->
+    <width>0</width>
+    <height>0</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -69,7 +71,7 @@
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_4" >
          <item>
-          <widget class="QProgressBar" name="progressRun" >
+          <widget class="Veritas::TestBar" name="progressRun" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
              <horstretch>1</horstretch>
@@ -212,6 +214,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="6" />
+ <customwidgets>
+  <customwidget>
+   <class>Veritas::TestBar</class>
+   <extends>QProgressBar</extends>
+   <header>internal/runnerwindow.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources/qxrunner.qrc" />
  </resources>

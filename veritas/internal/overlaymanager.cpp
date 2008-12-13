@@ -105,7 +105,7 @@ void OverlayManager::slotEntered(const QModelIndex& index)
         Test* t = index2Test(index);
         if (!m_toggle->shouldShow(t)) return;
         const QRect rect = m_view->visualRect(index);
-        const int x = rect.right() - m_toggle->offset();
+        const int x = rect.right() - m_toggle->offset(t);
         const int y = rect.top();
         m_toggle->move(QPoint(x, y));
         m_toggle->show();

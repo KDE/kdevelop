@@ -51,12 +51,16 @@ public:
     bool hasProperty(const QString& key) const;
     QVariant property(const QString& key) const;
 
+    void setSource(const KUrl& url);
+    KUrl source() const;
+
 private:
     QString m_command;
     QMap<QString, QVariant> m_properties;
     QStringList m_arguments;
     KUrl m_workingDirectory;
     QString m_name;
+    KUrl m_source;
 };
 
 } // Veritas

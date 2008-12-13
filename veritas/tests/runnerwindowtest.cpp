@@ -164,6 +164,7 @@ void RunnerWindowTest::collapseAll()
 void RunnerWindowTest::startItems()
 {
     runAllTests();
+    window->show();
 
     // check they got indeed executed
     // the rows of items that got executed are stored

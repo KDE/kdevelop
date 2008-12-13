@@ -89,3 +89,13 @@ void TestExecutableInfo::setWorkingDirectory(const KUrl& dir)
     m_workingDirectory = dir;
 }
 
+void TestExecutableInfo::setSource(const KUrl& source)
+{
+    m_source = source;
+}
+
+KUrl TestExecutableInfo::source() const
+{
+    return m_source;
+}
+

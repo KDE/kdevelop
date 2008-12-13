@@ -42,10 +42,13 @@ public:
      * visually invisible for at least one second after it is shown again. */
     virtual void reset();
 
-    virtual int offset() = 0;
+    /*! Distance between the icon and right border */
+    virtual int offset(Test*) = 0;
+
     virtual QModelIndex index();
     virtual void setIndex(const QModelIndex&);
     virtual bool shouldShow(Test*) = 0;
+    virtual QSize sizeHint() const;
 
 public slots:
     void setVisible(bool visible);
