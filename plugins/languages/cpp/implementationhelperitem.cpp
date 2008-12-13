@@ -83,7 +83,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       newText += scope.toString();
       
       QString arguments;
-      createArgumentList(*this, arguments, 0);
+      createArgumentList(*this, arguments, 0, false);
       newText += arguments;
       
       if(m_declaration->abstractType() && m_declaration->abstractType()->modifiers() & AbstractType::ConstModifier)

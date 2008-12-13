@@ -38,7 +38,7 @@ const int maxDefaultParameterLength = 30;
 using namespace KDevelop;
 using namespace Cpp;
 
-void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting )
+void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams )
 {
   ///@todo also highlight the matches of the previous arguments, they are given by ViableFunction
   Declaration* dec(item.m_declaration.data());
@@ -150,7 +150,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         }
       }
 
-      if( num >= firstDefaultParam ) {
+      if( num >= firstDefaultParam && includeDefaultParams ) {
         ret += " = ";
         
         QString defaultParam = decl->defaultParameters()[defaultParamNum].str();
