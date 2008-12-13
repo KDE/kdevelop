@@ -562,13 +562,14 @@ void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
 
 void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild)
 {
-    ///@todo The modification-revision set should also be cleared when data has been changed on disk
-    ModificationRevisionSet::clearCache();
-    
     QMutexLocker l(&d->m_mutex);
 
     // Smart mutex is already locked
     KUrl documentUrl = range->document()->url();
+
+    ///@todo Also detect these changes on-disk and do clearing
+    ModificationRevisionSet::clearCache();
+    KDevelop::ModificationRevision::clearModificationCache(IndexedString(documentUrl));
 
     if (d->m_parseJobs.contains(documentUrl)) {
         ParseJob* job = d->m_parseJobs[documentUrl];
