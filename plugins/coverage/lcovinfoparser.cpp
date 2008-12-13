@@ -29,7 +29,7 @@
 using Veritas::LcovInfoParser;
 using Veritas::CoveredFile;
 
-LcovInfoParser::LcovInfoParser(QObject* parent) : QObject(parent), m_sourceDev(0), m_current(0)
+LcovInfoParser::LcovInfoParser(QObject* parent) : QObject(parent), m_current(0)
 {}
 
 LcovInfoParser::~LcovInfoParser()
@@ -37,12 +37,6 @@ LcovInfoParser::~LcovInfoParser()
     foreach(CoveredFile* f, m_files) {
         f->deleteLater();
     }
-    if (m_sourceDev) delete m_sourceDev;
-}
-
-void LcovInfoParser::fto_setSource(QIODevice* device)
-{
-    m_sourceDev = device;
 }
 
 namespace
@@ -62,6 +56,31 @@ void LcovInfoParser::parseLines(const QStringList& lines)
 
 void LcovInfoParser::parseLine(const QString& line)
 {
+    // #   SF:<absolute path to the source file>
+// #   FN:<line number of function start>,<function name> for each function
+// #   DA:<line number>,<execution count> for each instrumented line
+// #   LH:<number of lines with an execution count> greater than 0
+// #   LF:<number of instrumented lines>
+
+// SF:/usr/include/QtCore/qstringlist.h
+// FN:69,_ZN11QStringListD1Ev
+// FN:73,_ZN11QStringListC1ERKS_
+// FN:69,_ZN11QStringListaSERKS_
+// FN:85,_ZNK11QStringListplERKS_
+// FN:72,_ZN11QStringListC1ERK7QString
+// DA:69,36
+// DA:71,113
+// DA:72,88
+// DA:73,90
+// DA:74,0
+// DA:85,0
+// DA:86,0
+// DA:88,24
+// DA:90,0
+// LF:9
+// LH:5
+// end_of_record
+    
     if (line.count() < 3) return;
     tmp_firstChar = line[0].toAscii();
     tmp_secondChar = line[1].toAscii();
@@ -107,56 +126,8 @@ void LcovInfoParser::parseLine(const QString& line)
     } default: {}}
 }
 
-QList<CoveredFile*> LcovInfoParser::fto_go()
+QList<CoveredFile*> LcovInfoParser::fto_coveredFiles()
 {
-// #   SF:<absolute path to the source file>
-// #   FN:<line number of function start>,<function name> for each function
-// #   DA:<line number>,<execution count> for each instrumented line
-// #   LH:<number of lines with an execution count> greater than 0
-// #   LF:<number of instrumented lines>
-
-// SF:/usr/include/QtCore/qstringlist.h
-// FN:69,_ZN11QStringListD1Ev
-// FN:73,_ZN11QStringListC1ERKS_
-// FN:69,_ZN11QStringListaSERKS_
-// FN:85,_ZNK11QStringListplERKS_
-// FN:72,_ZN11QStringListC1ERK7QString
-// DA:69,36
-// DA:71,113
-// DA:72,88
-// DA:73,90
-// DA:74,0
-// DA:85,0
-// DA:86,0
-// DA:88,24
-// DA:90,0
-// LF:9
-// LH:5
-// end_of_record
-
-    Q_ASSERT(m_sourceDev);
-    if (!m_sourceDev->isOpen()) {
-        m_sourceDev->open(QIODevice::ReadOnly);
-        if (!m_sourceDev->isOpen()) {
-            kError() << "Failed to open lcov info file for reading.";
-            return QList<CoveredFile*>();
-        }
-    }
-    this->disconnect(this);
-    connect(this, SIGNAL(parsedCoverageDataForFile(CoveredFile*)),
-            this, SLOT(appendCoverageData(CoveredFile*)));
-
-    QTextStream str(m_sourceDev);
-
-    m_files.clear();
-    m_current = 0;
-
-    QString line;
-    while (!str.atEnd()) {
-        line = str.readLine();
-        parseLine(line);
-    }
-
     return m_files;
 }
 

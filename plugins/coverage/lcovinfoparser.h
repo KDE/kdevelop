@@ -32,7 +32,8 @@ namespace Veritas
 class CoveredFile;
 
 /*! Parses lcov output into CoveredFile* and emits those as soon
- * as they are read */
+ * as they are read 
+ * @note instantiate a fresh parser for every lcov.info file */
 class VERITAS_COVERAGE_EXPORT LcovInfoParser : public QObject
 {
 Q_OBJECT
@@ -40,19 +41,21 @@ public:
     LcovInfoParser(QObject* parent=0);
     ~LcovInfoParser();
 
-    void fto_setSource(QIODevice*);
+    /*! Parse a single line of lcov output. The results are
+     *  emitted through `parsedCoverageData(CoveredFile*)' */
     void parseLine(const QString& line);
-    QList<CoveredFile*> fto_go();
-
+    
+    QList<CoveredFile*> fto_coveredFiles();
+    
 Q_SIGNALS:
-    void parsedCoverageData(CoveredFile*);
-    void finished();
-
+    /*! Emitted whenever a full coverage record was parsed.
+     *  @p file contains the parsed coverage information */
+    void parsedCoverageData(CoveredFile* file);
+    
 public Q_SLOTS:
     void parseLines(const QStringList& lines);
 
 private:
-    QIODevice* m_sourceDev;
     CoveredFile* m_current;
     QList<CoveredFile*> m_files;
 
@@ -60,7 +63,7 @@ private:
     char tmp_firstChar;
     char tmp_secondChar;
     QStringList tmp_s;
-    QStringList tmp_l; // temp variables
+    QStringList tmp_l;
     QString tmp_f;
 };
 

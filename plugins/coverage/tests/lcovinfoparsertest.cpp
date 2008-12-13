@@ -54,7 +54,7 @@ void LcovInfoParserTest::singleCoveredFile()
 {
     // just a quick test, needs to be extended and cleaned.
 
-    QByteArray input =
+    QString input =
         "SF:/path/to/foo.h\n"
         "FN:10,_ZN11QStringListD1Ev\n"
         "DA:10,5\n"
@@ -62,9 +62,9 @@ void LcovInfoParserTest::singleCoveredFile()
         "LF:2\n"
         "LH:1\n"
         "end_of_record\n";
-    QBuffer* buff = new QBuffer(&input);
-    m_parser->fto_setSource(buff);
-    QList<CoveredFile*> files = m_parser->fto_go();
+    
+    m_parser->parseLines( input.split( '\n' ) );
+    QList<CoveredFile*> files = m_parser->fto_coveredFiles();
     KOMPARE(1, files.count());
     CoveredFile* f = files[0];
     KVERIFY(f != 0);
@@ -82,7 +82,7 @@ void LcovInfoParserTest::singleCoveredFile()
 
 void LcovInfoParserTest::multipleFiles()
 {
-    QByteArray input =
+    QString input =
         "SF:/path/to/foo.h\n"
         "FN:10,functionFoo()\n"
         "DA:10,5\n"
@@ -99,9 +99,8 @@ void LcovInfoParserTest::multipleFiles()
         "LH:2\n"
         "end_of_record\n";
 
-    QBuffer* buff = new QBuffer(&input);
-    m_parser->fto_setSource(buff);
-    QList<CoveredFile*> files = m_parser->fto_go();
+    m_parser->parseLines( input.split( '\n' ) );
+    QList<CoveredFile*> files = m_parser->fto_coveredFiles();
     KOMPARE(2, files.count());
 
     CoveredFile* actualFile1 = files[0];
