@@ -39,10 +39,10 @@ Q_OBJECT
 public:
     LcovInfoParser(QObject* parent=0);
     ~LcovInfoParser();
-    void setSource(const KUrl&);
-    void setSource(QIODevice*);
+
+    void fto_setSource(QIODevice*);
     void parseLine(const QString& line);
-    QList<CoveredFile*> go();
+    QList<CoveredFile*> fto_go();
 
 Q_SIGNALS:
     void parsedCoverageData(CoveredFile*);

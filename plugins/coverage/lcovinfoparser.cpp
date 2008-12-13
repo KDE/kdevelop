@@ -36,14 +36,10 @@ LcovInfoParser::~LcovInfoParser()
     foreach(CoveredFile* f, m_files) {
         f->deleteLater();
     }
+    if (m_sourceDev) delete m_sourceDev;
 }
 
-void LcovInfoParser::setSource(const KUrl& source)
-{
-    m_sourceDev = new QFile(source.pathOrUrl());
-}
-
-void LcovInfoParser::setSource(QIODevice* device)
+void LcovInfoParser::fto_setSource(QIODevice* device)
 {
     m_sourceDev = device;
 }
@@ -110,7 +106,7 @@ void LcovInfoParser::parseLine(const QString& line)
     } default: {}}
 }
 
-QList<CoveredFile*> LcovInfoParser::go()
+QList<CoveredFile*> LcovInfoParser::fto_go()
 {
 // #   SF:<absolute path to the source file>
 // #   FN:<line number of function start>,<function name> for each function
