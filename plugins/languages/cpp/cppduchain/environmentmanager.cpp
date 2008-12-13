@@ -73,7 +73,7 @@ QMutex Cpp::SetMutexLocker::m_mutex(QMutex::Recursive);
 
 typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 
-typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData, false> IncludePathsRepository;
+typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData> IncludePathsRepository;
 IncludePathsRepository includePathsRepository("include path repository");
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
