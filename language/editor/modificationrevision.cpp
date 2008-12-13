@@ -65,7 +65,7 @@ struct IndexedStringHash {
   #endif
 };
 
-QMutex fileModificationTimeCacheMutex;
+QMutex fileModificationTimeCacheMutex(QMutex::Recursive);
 
 struct FileModificationCache {
   timeval m_readTime;

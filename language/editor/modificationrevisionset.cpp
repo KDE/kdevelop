@@ -24,7 +24,7 @@
 
 namespace KDevelop {
 
-QMutex modificationRevisionSetMutex;
+QMutex modificationRevisionSetMutex(QMutex::Recursive);
   
 struct FileModificationPair {
   KDevelop::IndexedString file;
