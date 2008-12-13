@@ -127,7 +127,7 @@ void ReportItemsTest::dirDataCoverage()
 
     dirData.setInstrumented(4);
     dirData.setSloc(2500);
-    KOMPARE(0.16, dirData.coverage());
+    QCOMPARE(0.16, dirData.coverage());
 }
 
 QTEST_KDEMAIN( ReportItemsTest, NoGUI)
