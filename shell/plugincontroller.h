@@ -90,7 +90,7 @@ public:
      * @param plugin The name of the plugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
-    void unloadPlugin( const QString & plugin );
+    bool unloadPlugin( const QString & plugin );
 
     enum PluginDeletion {
         Now,

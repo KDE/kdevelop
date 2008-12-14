@@ -81,7 +81,7 @@ public:
      * @param plugin The name of the plugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
-    virtual void unloadPlugin( const QString & plugin ) = 0;
+    virtual bool unloadPlugin( const QString & plugin ) = 0;
 
     /**
      * @brief Loads the plugin specified by @p pluginname

@@ -72,6 +72,7 @@ bool hasMandatoryProperties( const KPluginInfo& info )
            && version.isValid() && version.canConvert( QVariant::String );
 }
 
+
 class PluginControllerPrivate
 {
 public:
@@ -92,6 +93,39 @@ public:
         CleanupDone /**< the plugin manager has finished cleaning up */
     };
     CleanupMode cleanupMode;
+
+    bool canUnload( const KPluginInfo& plugin )
+    {
+        QStringList interfaces=plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        foreach( const KPluginInfo& info, loadedPlugins.keys() )
+        {
+            if( info.pluginName() != plugin.pluginName() ) 
+            {
+                QStringList dependencies = info.property( "X-KDevelop-IRequired" ).toStringList();
+                dependencies += info.property( "X-KDevelop-IOptional" ).toStringList();
+                foreach( const QString& dep, dependencies )
+                {
+                    if( interfaces.contains( dep ) && !canUnload( info ) )
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    KPluginInfo infoForId( const QString& id ) const
+    {
+        foreach( const KPluginInfo& info, plugins )
+        {
+            if( info.pluginName() == id )
+            {
+                return info;
+            }
+        }
+        return KPluginInfo();
+    }
 
     Core *core;
     QExtensionManager* m_manager;
@@ -206,12 +240,16 @@ QList<IPlugin *> PluginController::loadedPlugins() const
     return d->loadedPlugins.values();
 }
 
-void PluginController::unloadPlugin( const QString & pluginId )
+bool PluginController::unloadPlugin( const QString & pluginId )
 {
-    if( IPlugin *thePlugin = plugin( pluginId ) )
+    IPlugin *thePlugin = plugin( pluginId );
+    bool canUnload = d->canUnload( d->infoForId( pluginId ) );
+    if( thePlugin && canUnload )
     {
         unloadPlugin(thePlugin, Later);
+        return true;
     }
+    return (canUnload && thePlugin);
 }
 
 void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
@@ -520,6 +558,26 @@ QList<KPluginInfo> PluginController::allPluginInfos() const
 
 void PluginController::updateLoadedPlugins()
 {
+    QStringList defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    foreach( const KPluginInfo& info, d->plugins )
+    {
+        bool defaultEnabled = ( defaultPlugins.isEmpty() 
+                                || defaultPlugins.contains( info.pluginName() ) 
+                                || info.property( "X-KDevelop-Category" ).toString() == "Project" );
+        bool enabled = grp.readEntry( info.pluginName()+"Enabled", defaultEnabled );
+        if( d->loadedPlugins.contains( info ) && !enabled ) 
+        {
+            kDebug() << "unloading" << info.pluginName();
+            if( !unloadPlugin( info.pluginName() ) ) 
+            {
+                grp.writeEntry( info.pluginName()+"Enabled", false );
+            }
+        } else if( !d->loadedPlugins.contains( info ) && enabled ) 
+        {
+            loadPluginInternal( info.pluginName() );
+        }
+    }
 }
 
 void PluginController::resetToDefaults()
