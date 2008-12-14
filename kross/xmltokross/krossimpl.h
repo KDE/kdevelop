@@ -21,6 +21,7 @@
 #define KROSSIMPL_H
 
 #include "duchainreader.h"
+#include <qset.h>
 
 class KrossImpl : public DUChainReader
 {
@@ -116,6 +117,16 @@ class KrossImpl : public DUChainReader
         void writeEndDocument()
         {}
         
+        QString valueToVariant(const QString& type, const QString& varname)
+        {
+            QString ret;
+            if(type=="const QModelIndex&")
+                ret="QVariant()";
+            else
+                ret=type;
+            return ret;
+        }
+        
         void writeEndFunction(const method& m)
         {
             if(!m.isVirtual && !m.isConstructor)
@@ -138,7 +149,7 @@ class KrossImpl : public DUChainReader
                     rettype=rettype.replace("const ", QString());
                 output += "\t\t" + rettype +' '+ m.funcname+'(';
             }
-            QStringList values;
+            QStringList values, valuesVariant;
             
             int param=0;
             foreach(const method::argument& arg, m.args)
@@ -150,6 +161,7 @@ class KrossImpl : public DUChainReader
                     varname=QString("x%1").arg(param);
                 }
                 values += varname;
+                valuesVariant += valueToVariant(arg.type, varname);
                 output += arg.type +' '+ varname;
                 if(!arg.def.isEmpty())
                     output+='='+arg.def;
@@ -171,22 +183,40 @@ class KrossImpl : public DUChainReader
             {
                 if(m.isConst)
                     output+=" const";
-                output += " {\n";
+                output += "\n\t\t{\n"
+                          "\t\t\tKross::Object* p=const_cast<Kross::Object*>(obj.constData());\n";
                 
                 if(!m.isAbstract) {
-                    output+="\t\t\tif(!obj->methodNames().contains(\""+m.funcname+"\"))\n\t\t\t\t"+
-                        shouldReturn+definedClasses.last()+"::"+m.funcname+"("+params+");\n"
-                        "\t\t\telse\n\t";
+                    output+="\t\t\tif(!p->methodNames().contains(\""+m.funcname+"\"))\n\t\t\t\t"+
+                                shouldReturn+definedClasses.last()+"::"+m.funcname+"("+params+");\n"
+                            "\t\t\telse\n\t";
                 }
-                QString variantParameters="QVariantList() <<" + values.join(" << ");
+                
                 QString call;
-                if(values.isEmpty())
-                    call="obj->callMethod(\""+m.funcname+"\")";
+                if(valuesVariant.isEmpty())
+                    call="p->callMethod(\""+m.funcname+"\")";
                 else
-                    call="obj->callMethod(\""+m.funcname+"\", "+variantParameters+')';
-                output+="\t\t\t"+shouldReturn+call+".value<"+m.returnType+">();\n";
+                    call="p->callMethod(\""+m.funcname+"\", QVariantList() << " + valuesVariant.join(" << ")+')';
+                
+                if(shouldReturn.isEmpty())
+                    output+="\t\t\t"+shouldReturn+call+";\n";
+                else
+                {
+                    bool native=isNative(m.returnType);
+                    if(native)
+                        output+="\t\t\t"+shouldReturn+"dynamic_cast<"+m.returnType+">("+call+".value<QObject*>());\n";
+                    else
+                        output+="\t\t\t"+shouldReturn+call+".value<"+m.returnType+">();\n";
+                }
                 output += "\t\t}\n\n";
             }
+        }
+        
+        bool isNative(const QString & typeName)
+        {
+            static QSet<QString> nativeTypes=QSet<QString>() << "";
+            
+            return typeName.endsWith('*'); //we will assume for now that all pointers are QObjects
         }
 };
 
