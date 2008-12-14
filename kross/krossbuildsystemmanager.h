@@ -59,12 +59,6 @@ public:
     KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* );
     KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
     
-    KDevelop::ProjectFileItem* addFile(const QString& folder, const QString& targetName, const QString& filename);
-    KDevelop::ProjectTargetItem* addTarget(const QString& folder, const QString& targetName);
-    KDevelop::ProjectExecutableTargetItem* addExecutable(const QString& folder, const QString& targetName);
-    KDevelop::ProjectLibraryTargetItem* addLibrary(const QString& folder, const QString& targetName);
-    KDevelop::ProjectFolderItem* addFolder(const QString& folder);
-    
     bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
     bool removeFolder( KDevelop::ProjectFolderItem* );
     bool removeTarget( KDevelop::ProjectTargetItem* );

@@ -244,8 +244,6 @@ int DUChainReader::start()
 {
     inclass=0;
     
-    qDebug() << "pipipipipipipi" << m_top << m_top->childContexts();
-    
     QList<const Declaration*> decls=extractTypes(m_top);
     writeDocument();
     foreach(const Declaration* decl, decls)

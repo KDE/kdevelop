@@ -7,9 +7,6 @@
 
 namespace KDevelop { class RecursiveImportRepository; }
 namespace KDevelop { class ReferencedTopDUContext; }
-namespace KDevelop { class IndexedTopDUContext; }
-namespace KDevelop { class IndexedTopDUContextIndexConversion; }
-namespace KDevelop { class IndexedTopDUContextEmbeddedTreeHandler; }
 namespace KDevelop { class TopDUContext; }
 namespace KDevelop { class Cache; }
 namespace Handlers
@@ -21,18 +18,6 @@ namespace Handlers
 	QVariant _kDevelopTopDUContextHandler(void* type);
 	QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type);
 	QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type);
-
-	QVariant _kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(void* type);
-	QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type);
-	QVariant kDevelopIndexedTopDUContextEmbeddedTreeHandlerHandler(const KDevelop::IndexedTopDUContextEmbeddedTreeHandler* type);
-
-	QVariant _kDevelopIndexedTopDUContextIndexConversionHandler(void* type);
-	QVariant kDevelopIndexedTopDUContextIndexConversionHandler(KDevelop::IndexedTopDUContextIndexConversion* type);
-	QVariant kDevelopIndexedTopDUContextIndexConversionHandler(const KDevelop::IndexedTopDUContextIndexConversion* type);
-
-	QVariant _kDevelopIndexedTopDUContextHandler(void* type);
-	QVariant kDevelopIndexedTopDUContextHandler(KDevelop::IndexedTopDUContext* type);
-	QVariant kDevelopIndexedTopDUContextHandler(const KDevelop::IndexedTopDUContext* type);
 
 	QVariant _kDevelopReferencedTopDUContextHandler(void* type);
 	QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type);

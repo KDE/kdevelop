@@ -9,48 +9,6 @@
 #include <language/duchain/types/indexedtype.h>
 #include <language/duchain/topducontext.h>
 
-class KrossKDevelopIndexedDeclaration : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossKDevelopIndexedDeclaration(KDevelop::IndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IndexedDeclaration"); }
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE KDevelop::Declaration* declaration() const { return wrapped->declaration(); }
-		Q_SCRIPTABLE KDevelop::Declaration* data() const { return wrapped->data(); }
-		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
-		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
-		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDeclaration& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
-		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
-		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
-		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
-		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
-		Q_SCRIPTABLE QPair< unsigned int, unsigned int > dummyData() const { return wrapped->dummyData(); }
-		Q_SCRIPTABLE void setDummyData(QPair< unsigned int, unsigned int > x0) { wrapped->setDummyData(x0); }
-	private:
-		KDevelop::IndexedDeclaration* wrapped;
-};
-
-class KrossKDevelopLocalIndexedDeclaration : public QObject, public Kross::WrapperInterface
-{
-	Q_OBJECT
-	public:
-		KrossKDevelopLocalIndexedDeclaration(KDevelop::LocalIndexedDeclaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::LocalIndexedDeclaration"); }
-		void* wrappedObject() const { return wrapped; }
-
-		Q_SCRIPTABLE KDevelop::Declaration* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
-		Q_SCRIPTABLE bool operator==(const KDevelop::LocalIndexedDeclaration& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
-		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
-		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDeclaration& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
-		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
-	private:
-		KDevelop::LocalIndexedDeclaration* wrapped;
-};
-
 class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
@@ -131,30 +89,6 @@ bool b_KDevelopDeclaration1=krossdeclaration_registerHandler("Declaration*", _kD
 bool b_KDevelopDeclaration=krossdeclaration_registerHandler("KDevelop::Declaration*", _kDevelopDeclarationHandler);
 QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type){ return _kDevelopDeclarationHandler(type); }
 QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type) { return _kDevelopDeclarationHandler((void*) type); }
-
-QVariant _kDevelopLocalIndexedDeclarationHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::LocalIndexedDeclaration* t=static_cast<KDevelop::LocalIndexedDeclaration*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::LocalIndexedDeclaration*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopLocalIndexedDeclaration(t, 0));
-}
-bool b_KDevelopLocalIndexedDeclaration1=krossdeclaration_registerHandler("LocalIndexedDeclaration*", _kDevelopLocalIndexedDeclarationHandler);
-bool b_KDevelopLocalIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::LocalIndexedDeclaration*", _kDevelopLocalIndexedDeclarationHandler);
-QVariant kDevelopLocalIndexedDeclarationHandler(KDevelop::LocalIndexedDeclaration* type){ return _kDevelopLocalIndexedDeclarationHandler(type); }
-QVariant kDevelopLocalIndexedDeclarationHandler(const KDevelop::LocalIndexedDeclaration* type) { return _kDevelopLocalIndexedDeclarationHandler((void*) type); }
-
-QVariant _kDevelopIndexedDeclarationHandler(void* type)
-{
-	if(!type) return QVariant();
-	KDevelop::IndexedDeclaration* t=static_cast<KDevelop::IndexedDeclaration*>(type);
-	Q_ASSERT(dynamic_cast<KDevelop::IndexedDeclaration*>(t));
-	return qVariantFromValue((QObject*) new KrossKDevelopIndexedDeclaration(t, 0));
-}
-bool b_KDevelopIndexedDeclaration1=krossdeclaration_registerHandler("IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
-bool b_KDevelopIndexedDeclaration=krossdeclaration_registerHandler("KDevelop::IndexedDeclaration*", _kDevelopIndexedDeclarationHandler);
-QVariant kDevelopIndexedDeclarationHandler(KDevelop::IndexedDeclaration* type){ return _kDevelopIndexedDeclarationHandler(type); }
-QVariant kDevelopIndexedDeclarationHandler(const KDevelop::IndexedDeclaration* type) { return _kDevelopIndexedDeclarationHandler((void*) type); }
 
 }
 #include "krossdeclaration.moc"

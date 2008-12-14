@@ -31,6 +31,8 @@
 namespace Kross { class Action; }
 namespace KDevelop { class IDocument; }
 class KrossToolViewFactory;
+class QToolBar;
+class QMainWindow;
 
 class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
 {
@@ -47,6 +49,7 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
         Q_SCRIPTABLE void createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos);
         Q_SCRIPTABLE KUrl pluginDirectory() const { return m_pluginDir; }
         
+        Q_SCRIPTABLE static QToolBar* createToolBar(const QString& name, QMainWindow* parent);
     private:
         QList<KrossToolViewFactory*> m_toolFactories;
         Kross::Action* action;

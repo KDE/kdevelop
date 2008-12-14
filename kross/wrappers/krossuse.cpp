@@ -13,6 +13,7 @@ class KrossKDevelopUse : public QObject, public Kross::WrapperInterface
 		KrossKDevelopUse(KDevelop::Use* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Use"); }
 		void* wrappedObject() const { return wrapped; }
 
+		Q_SCRIPTABLE KDevelop::Declaration* usedDeclaration(KDevelop::TopDUContext* x0) { return wrapped->usedDeclaration(x0); }
 		typedef KDevelop::SimpleRange KDevelopSimpleRange;
 		Q_PROPERTY(KDevelopSimpleRange  m_range READ getm_range WRITE setm_range SCRIPTABLE true)
 		Q_SCRIPTABLE void setm_range(const KDevelopSimpleRange  val) { wrapped->m_range=val; }

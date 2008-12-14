@@ -31,6 +31,7 @@
 #include <kaboutdata.h>
 #include <KDebug>
 #include <KStandardDirs>
+#include <KToolBar>
 
 #include <language/duchain/duchain.h>
 #include <interfaces/icore.h>
@@ -112,5 +113,11 @@ void KrossPlugin::createToolViewFactory(const QString& method, const QString& id
     m_toolFactories.append(toolFactory);
 }
 
+QToolBar* KrossPlugin::createToolBar(const QString& name, QMainWindow* parent)
+{
+    KToolBar* t=new KToolBar(name, parent, Qt::AllToolBarAreas);
+    t->show();
+    return t;
+}
 
 #include "krossplugin.moc"
