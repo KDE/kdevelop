@@ -19,6 +19,7 @@
 #include "documentchangeset.h"
 #include "coderepresentation.h"
 #include <qstringlist.h>
+#include <editor/modificationrevisionset.h>
 
 namespace KDevelop {
 
@@ -139,6 +140,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     
     
     qDeleteAll(codeRepresentations);
+    ModificationRevisionSet::clearCache();
     return DocumentChangeSet::ChangeResult(true);
 }
 
