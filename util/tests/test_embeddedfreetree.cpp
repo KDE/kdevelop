@@ -297,7 +297,7 @@ float toSeconds(clock_t time) {
 
 struct StaticRepository {
     static Utils::BasicSetRepository* repository() {
-        static Utils::BasicSetRepository repository("test repository", false);
+        static Utils::BasicSetRepository repository("test repository");
         return &repository;
     }
 };
