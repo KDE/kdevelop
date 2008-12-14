@@ -110,6 +110,7 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
   Q_ASSERT(document->textDocument());
   m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
+  DUChainReadLocker lock(DUChain::lock());
   DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
