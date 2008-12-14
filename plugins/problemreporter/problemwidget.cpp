@@ -84,6 +84,10 @@ ProblemWidget::~ProblemWidget()
 
 void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, QSet<TopDUContext*>& hadContexts)
 {
+  if(!context) {
+      kDebug() << "collecting from bad context";
+      return;
+  }
   if(hadContexts.contains(context))
     return;
 
