@@ -278,12 +278,12 @@ void PreprocessJob::run()
 
     PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), contents);
 
-    m_currentEnvironment->finish();
-    
     if(!m_headerSectionEnded) {
       ifDebug( kDebug(9007) << parentJob()->document().str() << ": header-section was not ended"; )
       headerSectionEndedInternal(0);
     }
+    
+    m_currentEnvironment->finishEnvironment(m_currentEnvironment->environmentFile() == m_updatingEnvironmentFile);
     
     foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
       p->setLocationStack(parentJob()->includeStack());
@@ -301,6 +301,7 @@ void PreprocessJob::run()
 
     if( m_secondEnvironmentFile ) {
         //kDebug(9008) << parentJob()->document().str() << "Merging content-environment file into header environment-file";
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
         m_firstEnvironmentFile->merge(*m_secondEnvironmentFile);
         parentJob()->setContentEnvironmentFile(m_secondEnvironmentFile.data());
     }
@@ -309,6 +310,7 @@ void PreprocessJob::run()
         //If we are included from another preprocessor, give it back the modified macros,
         parentPreprocessor->m_currentEnvironment->swapMacros( m_currentEnvironment );
         //Merge include-file-set, defined macros, used macros, and string-set
+        KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
         parentPreprocessor->m_currentEnvironment->environmentFile()->merge(*m_firstEnvironmentFile);
     }else{
 /*        kDebug(9007) << "Macros:";
@@ -393,6 +395,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
+                m_updatingEnvironmentFile = m_secondEnvironmentFile;
                 
                 //Merge the macros etc. into the current environment
                 m_currentEnvironment->merge( m_secondEnvironmentFile.data() );
@@ -412,7 +415,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             ifDebug( kDebug(9007) << "could not find a matching content-context"; )
         }
 
-        m_currentEnvironment->finish();
+        m_currentEnvironment->finishEnvironment();
 
         m_currentEnvironment->setEnvironmentFile(m_secondEnvironmentFile);
     }
@@ -470,11 +473,14 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
           }
         }
       
-        if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
-          //We are finding a file that was not in the include-path last time
-          //All following contexts need to be updated, because they may contain references to missing declarations
-          parentJob()->masterJob()->setNeedUpdateEverything( true );
-          kDebug(9007) << "Marking every following encountered context to be updated";
+        {
+          DUChainReadLocker lock(DUChain::lock());
+          if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
+            //We are finding a file that was not in the include-path last time
+            //All following contexts need to be updated, because they may contain references to missing declarations
+            parentJob()->masterJob()->setNeedUpdateEverything( true );
+            kDebug(9007) << "Marking every following encountered context to be updated";
+          }
         }
 
         ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile; )

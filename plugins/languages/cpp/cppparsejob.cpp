@@ -68,6 +68,33 @@
 
 using namespace KDevelop;
 
+///Facilities to prevent multiple parse-jobs from processing the same url.
+QMutex urlParseMutex;
+QMap<IndexedString, QPair<Qt::HANDLE, uint> > parsingUrls;
+
+UrlParseLock::UrlParseLock(IndexedString url) : m_url(url) {
+  QMutexLocker lock(&urlParseMutex);
+  while(parsingUrls.contains(m_url) && parsingUrls[m_url].first != QThread::currentThreadId()) {
+    //Wait here until no other thread is updating parsing the url
+    lock.unlock();
+    sleep(1);
+    lock.relock();
+  }
+  if(parsingUrls.contains(m_url))
+    ++parsingUrls[m_url].second;
+  else
+    parsingUrls.insert(m_url, qMakePair(QThread::currentThreadId(), 1u));
+}
+
+UrlParseLock::~UrlParseLock() {
+  QMutexLocker lock(&urlParseMutex);
+  Q_ASSERT(parsingUrls.contains(m_url));
+  Q_ASSERT(parsingUrls[m_url].first == QThread::currentThreadId());
+  --parsingUrls[m_url].second;
+  if(parsingUrls[m_url].second == 0)
+    parsingUrls.remove(m_url);
+}
+
 bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
   foreach(const DUContext::Import &listCtx, contexts)
     if(listCtx.context(0) && listCtx.context(0)->imports(context))
@@ -339,6 +366,8 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 
 void CPPInternalParseJob::run()
 {
+    UrlParseLock urlLock(parentJob()->document());
+    
     if(!parentJob()->needsUpdate()) {
       kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
       return;
@@ -485,35 +514,10 @@ void CPPInternalParseJob::run()
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
-      if(contentContext) {
-
-        ///We're updating, wait until no other thread is updating this context, and then mark that we are updating it.
-        bool wait = true;
-
-        while(wait) {
-          DUChainWriteLocker l(DUChain::lock());
-          if( contentContext->flags() & TopDUContext::UpdatingContext )
-            wait = true;
-          else
-            wait = false;
-
-          if(!wait)
-            contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() | TopDUContext::UpdatingContext) );
-
-          if(wait) {
-            kDebug(9007) << "waiting while" << parentJob()->document().str() << "is being updated by another thread";
-            l.unlock();
-            sleep(1);
-          }
-        }
-
-        DUChainWriteLocker l(DUChain::lock());
-        contentContext->clearProblems();
-      }
-      
       uint oldItemCount = 0;
       if(contentContext) {
-        DUChainReadLocker l(DUChain::lock());
+        DUChainWriteLocker l(DUChain::lock());
+        contentContext->clearProblems();
         oldItemCount = contentContext->childContexts().size() + contentContext->localDeclarations().size();
       }
 

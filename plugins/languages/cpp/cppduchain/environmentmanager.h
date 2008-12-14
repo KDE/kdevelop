@@ -129,22 +129,22 @@ struct KDEVCPPDUCHAIN_EXPORT MacroIndexConversion {
 
 struct KDEVCPPDUCHAIN_EXPORT StaticStringSetRepository {
   static Utils::BasicSetRepository* repository();
+  struct Locker : public QMutexLocker {
+    Locker() : QMutexLocker(repository()->mutex()) {
+    }
+  };
 };
 
 struct KDEVCPPDUCHAIN_EXPORT StaticMacroSetRepository {
   static Utils::BasicSetRepository* repository();
-};
-
-class KDEVCPPDUCHAIN_EXPORT SetMutexLocker : public QMutexLocker {
-  public:
-    SetMutexLocker() : QMutexLocker(&m_mutex) {
+  struct Locker : public QMutexLocker {
+    Locker() : QMutexLocker(repository()->mutex()) {
     }
-  private:
-  static QMutex m_mutex;
+  };
 };
 
-typedef Utils::StorableSet<KDevelop::IndexedString, IndexedStringConversion, StaticStringSetRepository, true, SetMutexLocker> ReferenceCountedStringSet;
-typedef Utils::StorableSet<rpp::pp_macro, MacroIndexConversion, StaticMacroSetRepository, true, SetMutexLocker> ReferenceCountedMacroSet;
+typedef Utils::StorableSet<KDevelop::IndexedString, IndexedStringConversion, StaticStringSetRepository, true, StaticStringSetRepository::Locker> ReferenceCountedStringSet;
+typedef Utils::StorableSet<rpp::pp_macro, MacroIndexConversion, StaticMacroSetRepository, true, StaticMacroSetRepository::Locker> ReferenceCountedMacroSet;
 
 class EnvironmentManager;
 class MacroSet;

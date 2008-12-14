@@ -24,8 +24,14 @@
 #include "cppdebughelper.h"
 #include <language/duchain/arrayhelpers.h>
 #include <language/duchain/duchainregister.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 using namespace KDevelop;
+
+#define ENSURE_FILE_READ_LOCKED(file)   if((file).indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
+#define ENSURE_READ_LOCKED   ENSURE_FILE_READ_LOCKED(*this)
+#define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 
 DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
 
@@ -49,7 +55,7 @@ struct IncludePathListItem {
   
     uint hash() const {
       uint ret = 0;
-      for(int a = 0; a < m_includePathsSize(); ++a)
+      for(uint a = 0; a < m_includePathsSize(); ++a)
         ret = (m_includePaths()[a].hash() + ret) * 17;
       
       return ret;
@@ -68,8 +74,6 @@ struct IncludePathListItem {
     APPENDED_LIST_FIRST(IncludePathListItem, KDevelop::IndexedString, m_includePaths);
     END_APPENDED_LISTS(IncludePathListItem, m_includePaths);
 };
-
-QMutex Cpp::SetMutexLocker::m_mutex(QMutex::Recursive);
 
 typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 
@@ -110,9 +114,9 @@ REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 //Repository that contains the actual macros, and maps them to indices
 MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository");
 //Set-repository that contains the string-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets", true);
+Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets");
 //Set-repository that contains the macro-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets", true);
+Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets");
 
 namespace Cpp {
   Utils::BasicSetRepository* StaticStringSetRepository::repository() {
@@ -175,6 +179,7 @@ bool EnvironmentManager::isSimplifiedMatching() {
 }
 
 bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) const {
+  ENSURE_READ_LOCKED
   const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(_environment);
   if(!cppEnvironment)
     return false;
@@ -231,6 +236,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 }
 
 bool EnvironmentFile::needsUpdate() const {
+  ENSURE_READ_LOCKED
   return ParsingEnvironmentFile::needsUpdate();
 }
 
@@ -255,14 +261,17 @@ EnvironmentFile::~EnvironmentFile() {
 }
 
 void EnvironmentFile::setContentStartLine(int line) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_contentStartLine = line;
 }
 
 int EnvironmentFile::contentStartLine() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_contentStartLine;
 }
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
+  ENSURE_WRITE_LOCKED
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
@@ -295,6 +304,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
 }
 
 void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
+  ENSURE_WRITE_LOCKED
   if ( !d_func()->m_definedMacroNames.contains( macro.name ) && !d_func()->m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
@@ -312,35 +322,42 @@ void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
 // }
 
 const ReferenceCountedStringSet& EnvironmentFile::strings() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_strings;
 }
 
 
 ///Set of all defined macros, including those of all deeper included files
 const ReferenceCountedMacroSet& EnvironmentFile::definedMacros() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_definedMacros;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
 const ReferenceCountedStringSet& EnvironmentFile::usedMacroNames() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_usedMacroNames;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
 const ReferenceCountedStringSet& EnvironmentFile::definedMacroNames() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_definedMacroNames;
 }
 
 const ReferenceCountedStringSet& EnvironmentFile::unDefinedMacroNames() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_unDefinedMacroNames;
 }
 
 ///Set of all macros used from outside, including those used in deeper included files
 const ReferenceCountedMacroSet& EnvironmentFile::usedMacros() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_usedMacros;
 }
 
 const QList<IndexedString> EnvironmentFile::includePaths() const {
+  ENSURE_READ_LOCKED
   QList<IndexedString> ret;
   if(d_func()->m_includePaths) {
     const IncludePathListItem* item = includePathsRepository.itemFromIndex(d_func()->m_includePaths);
@@ -352,6 +369,10 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
 }
 
 void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
+  ENSURE_WRITE_LOCKED
+  
+  QMutexLocker lock(includePathsRepository.mutex());
+  
   if(d_func()->m_includePaths) {
     IncludePathListItem* item = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
     --item->m_refCount;
@@ -371,32 +392,39 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
 
 void EnvironmentFile::addMissingIncludeFile(const IndexedString& file)
 {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_missingIncludeFiles.insert(file);
 }
 
 const ReferenceCountedStringSet& EnvironmentFile::missingIncludeFiles() const
 {
+  ENSURE_READ_LOCKED
   return d_func()->m_missingIncludeFiles;
 }
 
 void EnvironmentFile::clearMissingIncludeFiles()
 {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_missingIncludeFiles = ReferenceCountedStringSet();
 }
 
 void EnvironmentFile::addIncludeFile( const IndexedString& file, const ModificationRevision& modificationTime ) {
 //   m_includeFiles.insert(file);
+  ENSURE_WRITE_LOCKED
 
   addModificationRevision(file, modificationTime);
 }
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_strings += ReferenceCountedStringSet( EnvironmentManager::stringSetRepository.createSet(strings) );
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
 void EnvironmentFile::merge( const EnvironmentFile& file ) {
-  ///@todo Do reference-counting, so no useless string-sets remain from the temporary operations done here
+  ENSURE_WRITE_LOCKED
+  //We have to read the other file
+  ENSURE_FILE_READ_LOCKED(file)
   
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
@@ -418,11 +446,18 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     
     std::set<uint> addUsedMacros;
     
+    ReferenceCountedMacroSet backup = file.d_func()->m_usedMacros;
+    Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
+    
     for(ReferenceCountedMacroSet::Iterator it( file.d_func()->m_usedMacros.iterator() ); it; ++it) {
       const rpp::pp_macro& macro(it.ref());
       if( !definedMacroNamesSet.contains(macro.name.index()) && !unDefinedMacroNamesSet.contains(macro.name.index()) )
         addUsedMacros.insert(it.index());
     }
+    
+    //Must not happen, since we hold the locks
+    Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
+    
     if(!addUsedMacros.empty())
       d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(addUsedMacros) );
   }
@@ -437,15 +472,23 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     //Since merged macros overrule already stored ones, first remove the ones of the same name.
     
     std::set<uint> removeDefinedMacros;
+    ReferenceCountedMacroSet backup = d_func()->m_definedMacros;
+    Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
+    
     
     for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it ) {
+      Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
       const rpp::pp_macro& macro(it.ref());
       if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
         removeDefinedMacros.insert(it.index());
-      
-      if(!removeDefinedMacros.empty())
-        d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
+      Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
     }
+    
+    //Must not happen, since we hold the locks
+    Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
+    
+    if(!removeDefinedMacros.empty())
+      d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
   }
 
   //Now merge in the new defined macros
@@ -481,13 +524,16 @@ size_t EnvironmentFile::hash() const {
 }
 
 uint EnvironmentFile::identityOffset() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_identityOffset;
 }
 
 void EnvironmentFile::setIdentityOffset(uint offset) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_identityOffset = offset;
 }
 
 int EnvironmentFile::type() const {
+  ENSURE_READ_LOCKED
   return CppParsingEnvironment;
 }

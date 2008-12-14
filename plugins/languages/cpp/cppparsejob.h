@@ -214,5 +214,11 @@ private:
     int m_priority;
 };
 
+struct UrlParseLock {
+  UrlParseLock(IndexedString url);
+  ~UrlParseLock();
+  IndexedString m_url;
+};
+
 #endif
 

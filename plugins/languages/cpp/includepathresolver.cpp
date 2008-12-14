@@ -529,6 +529,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
+  ifTest( cout << "full output" << fullOutput.toAscii().data() );
 
   int offset = 0;
   

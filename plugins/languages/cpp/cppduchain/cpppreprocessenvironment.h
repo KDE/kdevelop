@@ -34,7 +34,8 @@ public:
 
   ~CppPreprocessEnvironment();
 
-  void finish();
+  ///@param leaveEnvironmentFile Whether the environment-file should be left untouched
+  void finishEnvironment(bool leaveEnvironmentFile = false);
 
   virtual rpp::pp_macro* retrieveMacro( const KDevelop::IndexedString& name, bool isImportant ) const;
 

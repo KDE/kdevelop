@@ -306,9 +306,12 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
   Q_ASSERT(file);
   setCompilingContexts(true);
 
-  if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
-    kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
-    updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    if(updateContext && (updateContext->parsingEnvironmentFile() && updateContext->parsingEnvironmentFile()->isProxyContext())) {
+      kDebug(9007) << "updating a context " << file->url().str() << " from a proxy-context to a content-context";
+      updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
+    }
   }
 
   if(editor()->currentUrl() != file->url())

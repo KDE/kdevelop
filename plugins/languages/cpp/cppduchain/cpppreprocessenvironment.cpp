@@ -28,12 +28,12 @@ CppPreprocessEnvironment::CppPreprocessEnvironment( rpp::pp* preprocessor, KShar
 }
 
 CppPreprocessEnvironment::~CppPreprocessEnvironment() {
-    finish();
+    finishEnvironment();
 }
 
-void CppPreprocessEnvironment::finish() {
+void CppPreprocessEnvironment::finishEnvironment(bool leaveEnvironmentFile) {
     if(!m_finished) {
-        if(m_environmentFile)
+        if(m_environmentFile && !leaveEnvironmentFile)
             m_environmentFile->addStrings(m_strings);
         m_finished = true;
         m_strings.clear();
