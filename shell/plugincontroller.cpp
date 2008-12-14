@@ -573,20 +573,20 @@ void PluginController::updateLoadedPlugins()
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     foreach( const KPluginInfo& info, d->plugins )
     {
-        bool defaultEnabled = ( defaultPlugins.isEmpty() 
-                                || defaultPlugins.contains( info.pluginName() ) 
-                                || info.property( "X-KDevelop-Category" ).toString() == "Project" );
-        bool enabled = grp.readEntry( info.pluginName()+"Enabled", defaultEnabled );
-        if( d->loadedPlugins.contains( info ) && !enabled ) 
+        if( isGlobalPlugin( info ) )
         {
-            kDebug() << "unloading" << info.pluginName();
-            if( !unloadPlugin( info.pluginName() ) ) 
+            bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) );
+            if( d->loadedPlugins.contains( info ) && !enabled ) 
             {
-                grp.writeEntry( info.pluginName()+"Enabled", false );
+                kDebug() << "unloading" << info.pluginName();
+                if( !unloadPlugin( info.pluginName() ) ) 
+                {
+                    grp.writeEntry( info.pluginName()+"Enabled", false );
+                }
+            } else if( !d->loadedPlugins.contains( info ) && enabled ) 
+            {
+                loadPluginInternal( info.pluginName() );
             }
-        } else if( !d->loadedPlugins.contains( info ) && enabled ) 
-        {
-            loadPluginInternal( info.pluginName() );
         }
     }
 }
