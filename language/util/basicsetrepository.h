@@ -209,7 +209,7 @@ public:
   ///@param name The name must be unique, and is used for loading and storing the data
   ///@param doLocking Whether the repository should secured internally for multi-threading. If this is false, you need to secure it yourself
   ///@param dataSize Size of the internal data repository in bytes
-  BasicSetRepository(QString name, bool doLocking);
+  BasicSetRepository(QString name);
   virtual ~BasicSetRepository();
   typedef unsigned int Index;
 
@@ -241,6 +241,11 @@ public:
       else
           return 0;
   }
+  
+  inline QMutex* mutex() const {
+      return m_mutex;
+  }
+  
 private:
   friend class Set;
   friend class Set::Iterator;

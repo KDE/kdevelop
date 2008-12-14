@@ -21,19 +21,27 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "duchain.h"
+#include "duchainlock.h"
 #include "topducontextdata.h"
 #include <language/backgroundparser/parsejob.h>
 #include <editor/modificationrevisionset.h>
+
+#define ENSURE_READ_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
+#define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
+
 
 namespace KDevelop
 {
 REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
 
 TopDUContext::Features ParsingEnvironmentFile::features() const {
+  ENSURE_READ_LOCKED
+  
   return d_func()->m_features;
 }
 
 void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_features = features;
 }
 
@@ -44,18 +52,22 @@ ParsingEnvironment::~ParsingEnvironment() {
 }
 
 IndexedString ParsingEnvironmentFile::url() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_url;
 }
 
 bool ParsingEnvironmentFile::needsUpdate() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_allModificationRevisions.needsUpdate();
 }
 
 bool ParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* /*environment*/) const {
+  ENSURE_READ_LOCKED
   return true;
 }
 
 void ParsingEnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_topContext = context;
 }
 
@@ -64,10 +76,12 @@ KDevelop::IndexedTopDUContext ParsingEnvironmentFile::indexedTopContext() const 
 }
 
 const ModificationRevisionSet& ParsingEnvironmentFile::allModificationRevisions() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_allModificationRevisions;
 }
 
 void ParsingEnvironmentFile::addModificationRevisions(const ModificationRevisionSet& revisions) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_allModificationRevisions += revisions;
 }
 
@@ -91,6 +105,7 @@ ParsingEnvironmentFile::ParsingEnvironmentFile(const IndexedString& url) : DUCha
 }
 
 TopDUContext* ParsingEnvironmentFile::topContext() const {
+  ENSURE_READ_LOCKED
   return indexedTopContext().data();
 }
 
@@ -107,19 +122,23 @@ int ParsingEnvironment::type() const {
 }
 
 int ParsingEnvironmentFile::type() const {
+  ENSURE_READ_LOCKED
   return StandardParsingEnvironment;
 }
 
 bool ParsingEnvironmentFile::isProxyContext() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_isProxyContext;
 }
 
 void ParsingEnvironmentFile::setIsProxyContext(bool is) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_isProxyContext = is;
 }
 
 QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
-  
+  ENSURE_READ_LOCKED
+
   QList<IndexedDUContext> imp;
   IndexedTopDUContext top = indexedTopContext();
   if(top.isLoaded()) {
@@ -137,6 +156,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
 }
 
 QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() {
+  ENSURE_READ_LOCKED
   
   QList<IndexedDUContext> imp;
   IndexedTopDUContext top = indexedTopContext();
@@ -156,6 +176,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
 
 ///Makes sure the the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
 static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Features minimumFeatures, QSet<ParsingEnvironmentFilePointer>& checked) {
+  
   if(checked.contains(file))
     return true;
   
@@ -178,16 +199,19 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
 }
 
 bool ParsingEnvironmentFile::featuresSatisfied(TopDUContext::Features minimumFeatures) {
+  ENSURE_READ_LOCKED
   QSet<ParsingEnvironmentFilePointer> checked;
   return featuresMatch(ParsingEnvironmentFilePointer(this), minimumFeatures, checked);
 }
 
 void ParsingEnvironmentFile::clearModificationRevisions() {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_allModificationRevisions.clear();
   d_func_dynamic()->m_allModificationRevisions.addModificationRevision(d_func()->m_url, d_func()->m_modificationTime);
 }
 
 void ParsingEnvironmentFile::addModificationRevision(const IndexedString& url, const ModificationRevision& revision) {
+  ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_allModificationRevisions.addModificationRevision(url, revision);
   {
     //Test
@@ -198,6 +222,7 @@ void ParsingEnvironmentFile::addModificationRevision(const IndexedString& url, c
 }
 
 void ParsingEnvironmentFile::setModificationRevision( const KDevelop::ModificationRevision& rev ) {
+  ENSURE_WRITE_LOCKED
 
   Q_ASSERT(d_func_dynamic()->m_allModificationRevisions.index());
   Q_ASSERT( d_func_dynamic()->m_allModificationRevisions.removeModificationRevision(d_func()->m_url, d_func()->m_modificationTime) );
@@ -217,6 +242,7 @@ void ParsingEnvironmentFile::setModificationRevision( const KDevelop::Modificati
 }
 
 KDevelop::ModificationRevision ParsingEnvironmentFile::modificationRevision() const {
+  ENSURE_READ_LOCKED
   return d_func()->m_modificationTime;
 }
 

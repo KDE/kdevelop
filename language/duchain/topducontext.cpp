@@ -65,7 +65,7 @@ namespace std {
 namespace KDevelop
 {
 
-Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", false);
+Utils::BasicSetRepository recursiveImportRepository("Recursive Imports");
 
 struct DeclarationTopContextExtractor {
   inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {

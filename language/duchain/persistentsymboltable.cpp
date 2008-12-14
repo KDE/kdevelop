@@ -204,6 +204,8 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     if(alg.indexOf(declaration) != -1)
       return;
     
+    QMutexLocker lock(d->m_declarations.mutex());
+    
     PersistentSymbolTableItem* editableItem = d->m_declarations.dynamicItemFromIndex(index);
     
     EmbeddedTreeAddItem<IndexedDeclaration, IndexedDeclarationHandler> add(const_cast<IndexedDeclaration*>(editableItem->declarations()), editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
@@ -244,6 +246,8 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     
     if(alg.indexOf(declaration) == -1)
       return;
+    
+    QMutexLocker lock(d->m_declarations.mutex());
     
     PersistentSymbolTableItem* editableItem = d->m_declarations.dynamicItemFromIndex(index);
     
@@ -318,6 +322,8 @@ void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, con
     if(alg.indexOf(context) != -1)
       return;
     
+    QMutexLocker lock(d->m_contexts.mutex());
+    
     PersistentContextTableItem* editableItem = d->m_contexts.dynamicItemFromIndex(index);
     
     EmbeddedTreeAddItem<IndexedDUContext, IndexedDUContextHandler> add(const_cast<IndexedDUContext*>(editableItem->contexts()), editableItem->contextsSize(), editableItem->centralFreeItem, context);
@@ -358,6 +364,8 @@ void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, 
     
     if(alg.indexOf(context) == -1)
       return;
+    
+    QMutexLocker lock(d->m_contexts.mutex());
     
     PersistentContextTableItem* editableItem = d->m_contexts.dynamicItemFromIndex(index);
     

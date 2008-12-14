@@ -130,11 +130,13 @@ class StorableSet : public Conversion {
     typedef VirtualSetNode<T, Conversion, StaticRepository> Node;
     
     StorableSet(const StorableSet& rhs) : m_setIndex(rhs.m_setIndex) {
+        StaticAccessLocker lock;
         if(doReferenceCounting)
             set().staticRef();
     }
     
     StorableSet(const Set& base) : m_setIndex(base.setIndex()) {
+        StaticAccessLocker lock;
         if(doReferenceCounting)
             set().staticRef();
     }
@@ -143,6 +145,7 @@ class StorableSet : public Conversion {
     }
     
     ~StorableSet() {
+        StaticAccessLocker lock;
         if(doReferenceCounting)
             set().staticUnref();
     }

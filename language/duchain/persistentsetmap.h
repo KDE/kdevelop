@@ -160,6 +160,8 @@ void PersistentSetMap<Key, Data, Handler, Hasher>::addItem(const Key& key, const
     if(alg.indexOf(data) != -1)
       return;
     
+    QMutexLocker lock(m_repository.mutex());
+    
     PersistentSetMapItem<Key, Data, Hasher>* editableItem = m_repository.dynamicItemFromIndex(index);
     
     EmbeddedTreeAddItem<Data, Handler> add(const_cast<Data*>(editableItem->data()), editableItem->dataSize(), editableItem->centralFreeItem, data);
@@ -201,6 +203,8 @@ void PersistentSetMap<Key, Data, Handler, Hasher>::removeItem(const Key& key, co
     
     if(alg.indexOf(data) == -1)
       return;
+    
+    QMutexLocker lock(m_repository.mutex());
     
     PersistentSetMapItem<Key, Data, Hasher>* editableItem = m_repository.dynamicItemFromIndex(index);
     

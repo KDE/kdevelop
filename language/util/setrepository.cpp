@@ -1012,7 +1012,9 @@ uint SetRepositoryAlgorithms::set_subtract(uint firstNode, uint secondNode, cons
 }
 
 Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
+
   QMutexLocker lock(m_mutex);
+  
   std::vector<Index> shortRanges; //Currently we only support ranges of length 1, so we actually do not support them
   
   for(uint a = 0; a < indices.size(); a += 2) {
@@ -1038,6 +1040,9 @@ Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
 }
 
 Set BasicSetRepository::createSet(Index i) {
+    
+    QMutexLocker lock(m_mutex);
+  
     SetNodeData data;
     data.start = i;
     data.end = i+1;
@@ -1047,10 +1052,11 @@ Set BasicSetRepository::createSet(Index i) {
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
-  QMutexLocker lock(m_mutex);
   
   if(indices.empty())
       return Set();
+  
+  QMutexLocker lock(m_mutex);
   
   std::vector<Index> shortRanges(indices.size()*2);
 
@@ -1072,9 +1078,8 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, bool doLocking) : d(new Private(name)), dataRepository(name), m_mutex(0) {
-    if(doLocking)
-        m_mutex = dataRepository.mutex();
+BasicSetRepository::BasicSetRepository(QString name) : d(new Private(name)), dataRepository(name), m_mutex(0) {
+    m_mutex = dataRepository.mutex();
 }
 
 struct StatisticsVisitor {
@@ -1232,6 +1237,7 @@ BasicSetRepository* Set::repository() const {
 void Set::staticRef() {
   if(!m_tree)
     return;
+    QMutexLocker lock(m_repository->m_mutex);
     SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(m_tree);
     ++data->m_refCount;
 }
@@ -1243,6 +1249,8 @@ void Set::staticUnref() {
   if(!m_tree)
     return;
   
+    QMutexLocker lock(m_repository->m_mutex);
+    
     KDevVarLengthArray<uint, 3000> nextNodes;
     nextNodes.append(m_tree);
   

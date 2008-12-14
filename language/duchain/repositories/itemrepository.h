@@ -1489,6 +1489,8 @@ class ItemRepository : public AbstractItemRepository {
   ///or the equals(..) function. That would completely destroy the consistency.
   ///@param index The index. It must be valid(match an existing item), and nonzero.
   ///@param dynamic will be applied to the item.
+  ///@warning Use applyDynamicAction instead whenever possible! If you use this, make sure you lock mutex()
+  ///         before calling, and hold it at least until you're ready with any modifications.
   Item* dynamicItemFromIndex(unsigned int index, const DynamicData* dynamic = 0) {
     Q_ASSERT(index);
     
@@ -1506,6 +1508,29 @@ class ItemRepository : public AbstractItemRepository {
     bucketPtr->setChanged();
     unsigned short indexInBucket = index & 0xffff;
     return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket, dynamic));
+  }
+  
+  ///@param Action Must be an object that has an "operator()(Item&)" function.
+  ///That function is allowed to do any action on the item, except for anything that
+  ///changes its identity/hash-value
+  template<class Action>
+  void dynamicAction(unsigned int index, Action& action) {
+    Q_ASSERT(index);
+    
+    ThisLocker lock(m_mutex);
+    
+    unsigned short bucket = (index >> 16);
+    Q_ASSERT(bucket); //We don't use zero buckets
+    
+    MyBucket* bucketPtr = m_fastBuckets[bucket];
+    Q_ASSERT(bucket < m_bucketCount);
+    if(!bucketPtr) {
+      initializeBucket(bucket);
+      bucketPtr = m_fastBuckets[bucket];
+    }
+    bucketPtr->setChanged();
+    unsigned short indexInBucket = index & 0xffff;
+    action(const_cast<Item&>(*bucketPtr->itemFromIndex(indexInBucket, 0)));
   }
   
   ///@param index The index. It must be valid(match an existing item), and nonzero.

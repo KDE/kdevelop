@@ -305,7 +305,11 @@ public:
   DUChainLock lock;
   QMultiMap<IndexedString, TopDUContext*> m_chainsByUrl;
   google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash> m_chainsByIndex;
+  
+  //Must be locked before accessing m_referenceCounts
+  QMutex m_referenceCountsMutex;
   QHash<TopDUContext*, uint> m_referenceCounts;
+  
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
@@ -575,12 +579,16 @@ public:
           
           bool hasReference = false;
           
-          //Test if the context is imported by a referenced one
-          foreach(TopDUContext* context, m_referenceCounts.keys())
-            if(context == unload || context->imports(unload, SimpleCursor())) {
-              workOnContexts.remove(unload);
-              hasReference = true;
+          {
+            QMutexLocker l(&m_referenceCountsMutex);
+            //Test if the context is imported by a referenced one
+            foreach(TopDUContext* context, m_referenceCounts.keys()) {
+              if(context == unload || context->imports(unload, SimpleCursor())) {
+                workOnContexts.remove(unload);
+                hasReference = true;
+              }
             }
+          }
           
           if(!hasReference)
             ++hadUnloadable; //We have found a context that is not referenced
@@ -812,10 +820,14 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 {
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  if(sdDUChainPrivate->m_referenceCounts.contains(context)) {
-  //This happens during shutdown, since everything is unloaded
-  kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
-  sdDUChainPrivate->m_referenceCounts.remove(context);
+  {
+    QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
+    
+    if(sdDUChainPrivate->m_referenceCounts.contains(context)) {
+    //This happens during shutdown, since everything is unloaded
+    kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
+    sdDUChainPrivate->m_referenceCounts.remove(context);
+    }
   }
   
   uint index = context->ownIndex();
@@ -1219,7 +1231,7 @@ uint DUChain::newTopContextIndex() {
 }
 
 void DUChain::refCountUp(TopDUContext* top) {
-  DUChainReadLocker l(lock());
+  QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
   if(!sdDUChainPrivate->m_referenceCounts.contains(top))
     sdDUChainPrivate->m_referenceCounts.insert(top, 1);
   else
@@ -1227,7 +1239,7 @@ void DUChain::refCountUp(TopDUContext* top) {
 }
 
 void DUChain::refCountDown(TopDUContext* top) {
-  DUChainReadLocker l(lock());
+  QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
   if(!sdDUChainPrivate->m_referenceCounts.contains(top)) {
     //kWarning() << "tried to decrease reference-count for" << top->url().str() << "but this top-context is not referenced";
     return;
