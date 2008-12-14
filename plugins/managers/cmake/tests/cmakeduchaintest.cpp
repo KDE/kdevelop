@@ -258,6 +258,7 @@ void CMakeDUChainTest::testUses()
     }
 
     includedFile.remove();
+    DUChain::self()->removeDocumentChain(m_fakeContext);
 }
 
 #include "cmakeduchaintest.moc"
