@@ -45,6 +45,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <project/projectmodel.h>
 #include "cppnewclass.h"
+#include <language/duchain/functiondefinition.h>
 
 using namespace KDevelop;
 
@@ -195,6 +196,11 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   DUChainReadLocker lock(DUChain::lock());
 
   Declaration* declaration = decl.data();
+  if(!declaration)
+    return;
+
+  if(FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration))
+    declaration = definition->declaration(declaration->topContext());
 
   if(!declaration)
     return;
