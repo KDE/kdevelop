@@ -95,7 +95,7 @@ void ModificationRevisionSet::clearCache() {
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
-  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", true) {
+  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets") {
   }
   virtual void itemRemovedFromSets(uint index) {
     fileModificationPairRepository().deleteItem(index);
