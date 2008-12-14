@@ -48,6 +48,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
+    duchain/referencecountedindexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
 
@@ -206,6 +207,7 @@ install(FILES
     duchain/duchainutils.h
     duchain/dumpchain.h
     duchain/indexedstring.h
+    duchain/referencecountedindexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/duchainregister.h
