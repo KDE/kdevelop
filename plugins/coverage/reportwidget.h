@@ -136,8 +136,8 @@ private:
     friend class ReportViewFactory;
     DrillDownView* m_table;
     QLabel* m_sloc;
-    QLabel* m_coverage;
-    QLabel* m_instrumented;
+    QLabel* m_coverageRatio;
+    QLabel* m_nrofCoveredLines;
     enum State { DirView, FileView } m_state;
     AnnotationManager* m_manager;
     ReportProxyModel* m_proxy;

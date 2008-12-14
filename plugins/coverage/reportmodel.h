@@ -81,22 +81,22 @@ public:
 
     void addCoverageData(CoveredFile* f);
 
-    ReportValueItem* coverageItem() const;
+    ReportValueItem* coverageRatioItem() const;
     ReportValueItem* slocItem() const;
-    ReportValueItem* instrumentedItem() const;
+    ReportValueItem* nrofCoveredLinesItem() const;
 
 private:
     KUrl m_fullUrl;
-    ReportValueItem* m_coverageItem;
+    ReportValueItem* m_coverageRatioItem;
     ReportValueItem* m_slocItem;
-    ReportValueItem* m_instrumentedItem;
+    ReportValueItem* m_nrofCoveredLinesItem;
     QSet<int> m_coveredLines;
     QSet<int> m_reachableLines;
 };
 
 /*!
  * Stores the data for the report of a directory.
- * The data stored are the SLOC and the instrumented lines.
+ * The data stored are the SLOC and the number of covered lines.
  * Coverage percentage is calculated based on those values.
  */
 class VERITAS_COVERAGE_EXPORT ReportDirData
@@ -110,14 +110,14 @@ public:
     ReportDirData();
 
     int sloc() const;
-    int instrumented() const;
-    double coverage() const;
+    int nrofCoveredLines() const;
+    double coverageRatio() const;
     void setSloc(int sloc);
-    void setInstrumented(int instrumented);
+    void setNrofCoveredLines(int nrof);
 
 private:
     int m_sloc;
-    int m_instrumented;
+    int m_nrofCoveredLines;
 };
 
 class VERITAS_COVERAGE_EXPORT ReportDirItem : public QStandardItem
@@ -128,8 +128,8 @@ public:
     virtual int type() const;
     void updateStats();
     int sloc();
-    int instrumented();
-    double coverage();
+    int nrofCoveredLines();
+    double coverageRatio();
     const ReportDirData& reportDirData() const;
 
 private:

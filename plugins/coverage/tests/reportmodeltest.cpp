@@ -167,7 +167,7 @@ void ReportModelTest::assertDirAtEquals(const QModelIndex& i, QString path, int 
                 QString("Wrong display data for diritem: expected: %1 but got %2.").
                 arg(path).arg(actualPath));
     KOMPARE(sloc, dir->sloc());
-    KOMPARE(instrumented, dir->instrumented());
+    KOMPARE(instrumented, dir->nrofCoveredLines());
 
 }
 
@@ -181,9 +181,9 @@ void ReportModelTest::assertFileAtEquals(const QModelIndex& i, QString name, int
     KOMPARE(QVariant(name), file->data(Qt::DisplayRole));
     ReportValueItem* slocItem = file->slocItem();
     KOMPARE((double)sloc, slocItem->value());
-    ReportValueItem* instrumentedItem = file->instrumentedItem();
+    ReportValueItem* instrumentedItem = file->nrofCoveredLinesItem();
     KOMPARE((double)instrumented, instrumentedItem->value());
-    ReportValueItem* coverageItem = file->coverageItem();
+    ReportValueItem* coverageItem = file->coverageRatioItem();
     KVERIFY(qAbs(cov - coverageItem->value()) < 0.1);
 }
 

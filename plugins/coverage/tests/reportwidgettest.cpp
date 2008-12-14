@@ -67,7 +67,7 @@ void ReportWidgetTest::setCoverageStatisticsWithRawDataFloorRoundedCoverage()
 
     ReportDirData data;
     data.setSloc(10000);
-    data.setInstrumented(4223);
+    data.setNrofCoveredLines(4223);
     rw.setCoverageStatistics(data);
 
     assertStatistics(rw, 10000, 4223, 42.2);
@@ -80,7 +80,7 @@ void ReportWidgetTest::setCoverageStatisticsWithRawDataCeilRoundedCoverage()
 
     ReportDirData data;
     data.setSloc(100000);
-    data.setInstrumented(42160);
+    data.setNrofCoveredLines(42160);
     rw.setCoverageStatistics(data);
 
     assertStatistics(rw, 100000, 42160, 42.2);
@@ -330,15 +330,15 @@ void ReportWidgetTest::assertStatistics(const ReportWidget& rw, int sloc,
                                         int instrumented, double coverage)
 {
     QCOMPARE(rw.m_sloc->text(), QString::number(sloc));
-    QCOMPARE(rw.m_instrumented->text(), QString::number(instrumented));
-    QCOMPARE(rw.m_coverage->text(), QLocale().toString(coverage, 'f', 1) + " %");
+    QCOMPARE(rw.m_nrofCoveredLines->text(), QString::number(instrumented));
+    QCOMPARE(rw.m_coverageRatio->text(), QLocale().toString(coverage, 'f', 1) + " %");
 }
 
 void ReportWidgetTest::assertEmptyStatistics(const ReportWidget& rw)
 {
     QCOMPARE(rw.m_sloc->text(), QString("-"));
-    QCOMPARE(rw.m_instrumented->text(), QString("-"));
-    QCOMPARE(rw.m_coverage->text(), QString("-"));
+    QCOMPARE(rw.m_nrofCoveredLines->text(), QString("-"));
+    QCOMPARE(rw.m_coverageRatio->text(), QString("-"));
 }
 
 ////////////////////////////// Helpers ////////////////////////////////////////
@@ -351,7 +351,7 @@ DrillDownView* ReportWidgetTest::table(const ReportWidget& rw)
 void ReportWidgetTest::setStatistics(ReportWidget& rw, int sloc, int instrumented)
 {
     rw.m_sloc->setText(QString::number(sloc));
-    rw.m_instrumented->setText(QString::number(instrumented));
+    rw.m_nrofCoveredLines->setText(QString::number(instrumented));
 }
 
 void ReportWidgetTest::setModelFor(ReportWidget& rw)

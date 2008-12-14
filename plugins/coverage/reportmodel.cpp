@@ -31,9 +31,9 @@ using Veritas::ReportValueItem;
 
 ///////////////// ReportItems ////////////////////////////////////////////////
 
-ReportValueItem* ReportFileItem::coverageItem() const
+ReportValueItem* ReportFileItem::coverageRatioItem() const
 {
-    return m_coverageItem;
+    return m_coverageRatioItem;
 }
 
 ReportValueItem* ReportFileItem::slocItem() const
@@ -41,17 +41,17 @@ ReportValueItem* ReportFileItem::slocItem() const
     return m_slocItem;
 }
 
-ReportValueItem* ReportFileItem::instrumentedItem() const
+ReportValueItem* ReportFileItem::nrofCoveredLinesItem() const
 {
-    return m_instrumentedItem;
+    return m_nrofCoveredLinesItem;
 }
 
 ReportFileItem::ReportFileItem(const KUrl& url)
     : QStandardItem(url.fileName()),
       m_fullUrl(url),
-      m_coverageItem(0),
+      m_coverageRatioItem(0),
       m_slocItem(0),
-      m_instrumentedItem(0)
+      m_nrofCoveredLinesItem(0)
 {
     setEditable(false);
     setSelectable(true);
@@ -61,10 +61,10 @@ ReportFileItem::ReportFileItem(const KUrl& url)
 void ReportFileItem::addCoverageData(CoveredFile* f)
 {
     Q_ASSERT(f->url() == url());
-    if (!m_coverageItem) {
-        m_coverageItem = new ReportValueItem(f->coverage());
+    if (!m_coverageRatioItem) {
+        m_coverageRatioItem = new ReportValueItem(f->coverageRatio());
         m_slocItem = new ReportValueItem(f->sloc());
-        m_instrumentedItem = new ReportValueItem(f->instrumented());
+        m_nrofCoveredLinesItem = new ReportValueItem(f->nrofCoveredLines());
         m_coveredLines = f->coveredLines();
         m_reachableLines = f->reachableLines();
     } else {
@@ -72,9 +72,9 @@ void ReportFileItem::addCoverageData(CoveredFile* f)
         m_reachableLines += f->reachableLines();
         int covered = m_coveredLines.count();
         int reachable = m_reachableLines.count();
-        m_instrumentedItem->setValue(covered);
+        m_nrofCoveredLinesItem->setValue(covered);
         m_slocItem->setValue(reachable);
-        m_coverageItem->setValue(100*(double)covered/reachable);
+        m_coverageRatioItem->setValue(100*(double)covered/reachable);
     }
 }
 
@@ -94,7 +94,7 @@ int ReportFileItem::type() const
 ReportDirData::ReportDirData()
 {
     m_sloc = 0;
-    m_instrumented = 0;
+    m_nrofCoveredLines = 0;
 }
 
 int ReportDirData::sloc() const
@@ -102,14 +102,14 @@ int ReportDirData::sloc() const
     return m_sloc;
 }
 
-int ReportDirData::instrumented() const
+int ReportDirData::nrofCoveredLines() const
 {
-    return m_instrumented;
+    return m_nrofCoveredLines;
 }
 
-double ReportDirData::coverage() const
+double ReportDirData::coverageRatio() const
 {
-    return (m_sloc == 0) ? 0 : 100*double(m_instrumented)/double(m_sloc);
+    return (m_sloc == 0) ? 0 : 100*double(m_nrofCoveredLines)/double(m_sloc);
 }
 
 void ReportDirData::setSloc(int sloc)
@@ -117,9 +117,9 @@ void ReportDirData::setSloc(int sloc)
     m_sloc = sloc;
 }
 
-void ReportDirData::setInstrumented(int instrumented)
+void ReportDirData::setNrofCoveredLines(int nrof)
 {
-    m_instrumented = instrumented;
+    m_nrofCoveredLines = nrof;
 }
 
 ReportDirItem::ReportDirItem(const QString& dir)
@@ -132,20 +132,20 @@ ReportDirItem::ReportDirItem(const QString& dir)
 void ReportDirItem::updateStats()
 {
     int sloc = 0;
-    int instrumented = 0;
+    int nrofCoveredLines = 0;
     QStandardItem* si;
     ReportFileItem* rfi;
     for (int row=0; row<rowCount(); row++) {
         si = child(row, 0);
         if (si->type() == ReportModel::File) {
             rfi = static_cast<ReportFileItem*>(si);
-            instrumented += rfi->instrumentedItem()->value();
+            nrofCoveredLines += rfi->nrofCoveredLinesItem()->value();
             sloc += rfi->slocItem()->value();
         }
     }
 
     m_reportDirData.setSloc(sloc);
-    m_reportDirData.setInstrumented(instrumented);
+    m_reportDirData.setNrofCoveredLines(nrofCoveredLines);
 }
 
 ReportDirItem::~ReportDirItem()
@@ -161,14 +161,14 @@ int ReportDirItem::sloc()
     return m_reportDirData.sloc();
 }
 
-int ReportDirItem::instrumented()
+int ReportDirItem::nrofCoveredLines()
 {
-    return m_reportDirData.instrumented();
+    return m_reportDirData.nrofCoveredLines();
 }
 
-double ReportDirItem::coverage()
+double ReportDirItem::coverageRatio()
 {
-    return m_reportDirData.coverage();
+    return m_reportDirData.coverageRatio();
 }
 
 const ReportDirData& ReportDirItem::reportDirData() const
@@ -262,7 +262,7 @@ QList<QStandardItem*> ReportModel::createFileRow(CoveredFile* f)
     m_files.insert(f->url(), file);
     file->addCoverageData(f);
     QList<QStandardItem*> row;
-    row << file << file->coverageItem() << file->instrumentedItem() << file->slocItem();
+    row << file << file->coverageRatioItem() << file->nrofCoveredLinesItem() << file->slocItem();
     return row;
 }
 
@@ -308,10 +308,10 @@ void ReportModel::updateColoredCoverageColumn(ReportDirItem* dir)
     QModelIndex i = dir->index();
     i = i.sibling(i.row(), i.column()+1);
     QStandardItem* it = itemFromIndex(i);
-    QBrush b = brushForCoverage(dir->coverage());
+    QBrush b = brushForCoverage(dir->coverageRatio());
     it->setBackground(b);
     it->setForeground(b);
-    it->setData(dir->coverage(), Qt::DisplayRole);
+    it->setData(dir->coverageRatio(), Qt::DisplayRole);
 }
 
 

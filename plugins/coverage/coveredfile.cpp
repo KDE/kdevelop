@@ -22,7 +22,7 @@
 using Veritas::CoveredFile;
 
 CoveredFile::CoveredFile()
-    : m_nrofLines(0), m_nrofInstrumentedLines(0)
+    : m_nrofLines(0), m_nrofCoveredLines(0)
 {}
 
 CoveredFile::~CoveredFile()
@@ -46,7 +46,7 @@ void CoveredFile::setCallCount(int line, int count)
     m_nrofLines = m_reachableLines.count();
     if (count != 0) {
         m_coveredLines << line;
-        m_nrofInstrumentedLines = m_coveredLines.count();
+        m_nrofCoveredLines = m_coveredLines.count();
     }
 }
 
@@ -60,32 +60,21 @@ QSet<int> CoveredFile::reachableLines() const
     return m_reachableLines;
 }
 
-double CoveredFile::coverage() const
+double CoveredFile::coverageRatio() const
 {
     if (m_nrofLines == 0) return 0;
-    return 100*(double)m_nrofInstrumentedLines/(double)m_nrofLines;
+    return 100*(double)m_nrofCoveredLines/(double)m_nrofLines;
 }
 
 int CoveredFile::sloc() const
 {
-    //return reachableLines().count();
     return m_nrofLines;
 }
 
-int CoveredFile::instrumented() const
+int CoveredFile::nrofCoveredLines() const
 {
-    return m_nrofInstrumentedLines;
+    return m_nrofCoveredLines;
 }
-
-// void CoveredFile::setSloc(int nrofLines)
-// {
-//     m_nrofLines = nrofLines;
-// }
-// 
-// void CoveredFile::setInstrumented(int nrofLines)
-// {
-//     m_nrofInstrumentedLines = nrofLines;
-// }
 
 QMap<int, int> CoveredFile::callCountMap() const
 {

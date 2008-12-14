@@ -44,8 +44,8 @@ void LcovInfoParserTest::assertCoveredFilesEqual(CoveredFile* f1, CoveredFile* f
 {
     KOMPARE(f1->url(), f2->url());
     KOMPARE(f1->sloc(), f2->sloc());
-    KOMPARE(f1->instrumented(), f2->instrumented());
-    KVERIFY(qAbs(f1->coverage() - f2->coverage()) < 0.01);
+    KOMPARE(f1->nrofCoveredLines(), f2->nrofCoveredLines());
+    KVERIFY(qAbs(f1->coverageRatio() - f2->coverageRatio()) < 0.01);
     KOMPARE(f1->callCountMap(), f2->callCountMap());
     KOMPARE(f1->coveredLines(), f2->coveredLines());
 }
@@ -71,8 +71,8 @@ void LcovInfoParserTest::singleCoveredFile()
 
     KOMPARE(KUrl("/path/to/foo.h"), f->url());
     KOMPARE(2, f->sloc());
-    KOMPARE(1, f->instrumented());
-    KOMPARE(50, f->coverage());
+    KOMPARE(1, f->nrofCoveredLines());
+    KOMPARE(50, f->coverageRatio());
     KOMPARE(2, f->callCountMap().count());
     KVERIFY(f->callCountMap().contains(10));
     KVERIFY(f->callCountMap().contains(11));

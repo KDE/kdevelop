@@ -39,9 +39,9 @@ void CoveredFileTest::cleanup()
 void CoveredFileTest::construct()
 {
     KOMPARE(KUrl(), m_file->url());
-    KOMPARE(0, m_file->coverage());
+    KOMPARE(0, m_file->coverageRatio());
     KOMPARE(0, m_file->sloc());
-    KOMPARE(0, m_file->instrumented());
+    KOMPARE(0, m_file->nrofCoveredLines());
     KOMPARE(0, m_file->callCountMap().count());
 }
 
@@ -51,12 +51,12 @@ void CoveredFileTest::sunny()
     m_file->setCallCount(2,0);
     m_file->setCallCount(3,1);
     m_file->setCallCount(4,1);
-    KOMPARE(50.0, m_file->coverage());
+    KOMPARE(50.0, m_file->coverageRatio());
 }
 
 void CoveredFileTest::zeroSloc()
 {
-    KOMPARE(0, m_file->coverage());
+    KOMPARE(0, m_file->coverageRatio());
 }
 
 void CoveredFileTest::callCount()

@@ -43,14 +43,12 @@ public:
     void setUrl(const KUrl& url);
     void setCallCount(int line, int count);
     /*! line coverage percentage */
-    double coverage() const;
+    double coverageRatio() const;
     /*! number of source lines of code */
     int sloc() const;
-    //void setSloc(int nrofLines); // TODO should be removed
 
-    /*! number of visitted lines of code */
-    int instrumented() const;
-    //void setInstrumented(int nrofLines); // TODO should be removed
+    /*! number of visited lines of code */
+    int nrofCoveredLines() const;
 
     QMap<int, int> callCountMap() const;
     QSet<int> coveredLines() const;
@@ -62,7 +60,7 @@ public:
 private:
     QMap<int, int> m_nrofCalls; // { line x nrofcalls }
     int m_nrofLines;
-    int m_nrofInstrumentedLines;
+    int m_nrofCoveredLines;
     KUrl m_sourceLoc;
     QSet<int> m_coveredLines;
     QSet<int> m_reachableLines;

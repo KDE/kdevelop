@@ -130,11 +130,11 @@ void ReportWidget::init()
 
     QLabel* covTextLabel = new QLabel(i18n("Line Coverage:"), this);
     QLabel* slocTextLabel = new QLabel(i18n("Total SLOC:"), this);
-    QLabel* instrumentedLabel = new QLabel(i18n("Instrumented Lines:"), this);
+    QLabel* nrofCoveredLinesLabel = new QLabel(i18n("Covered Lines:"), this);
 
-    m_coverage = new QLabel("-", this);
+    m_coverageRatio = new QLabel("-", this);
     m_sloc = new QLabel("-", this);
-    m_instrumented = new QLabel("-", this);
+    m_nrofCoveredLines = new QLabel("-", this);
     QSpacerItem* s1 = new QSpacerItem(300,5, QSizePolicy::Expanding, QSizePolicy::Minimum);
     QSpacerItem* s2 = new QSpacerItem(300,5, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -151,9 +151,9 @@ void ReportWidget::init()
 
     const int FIRST_COL=1;
     gl->addWidget(covTextLabel, 1, FIRST_COL); // row, col, rowspan, colspan
-    gl->addWidget(m_coverage, 1, FIRST_COL+1);
-    gl->addWidget(instrumentedLabel, 2, FIRST_COL);
-    gl->addWidget(m_instrumented, 2, FIRST_COL+1);
+    gl->addWidget(m_coverageRatio, 1, FIRST_COL+1);
+    gl->addWidget(nrofCoveredLinesLabel, 2, FIRST_COL);
+    gl->addWidget(m_nrofCoveredLines, 2, FIRST_COL+1);
     gl->addWidget(slocTextLabel, 3, FIRST_COL);
     gl->addWidget(m_sloc, 3, FIRST_COL+1);
     gl->addItem(s2, 0, 3, 4, 1);
@@ -272,7 +272,7 @@ void ReportWidget::setDirViewState()
     //selected again. However, until the slide is completed we are in File
     //state, so the statistics aren't updated.
     m_sloc->setText("0");
-    m_instrumented->setText("0");
+    m_nrofCoveredLines->setText("0");
     setCoverageStatistics(table()->selectionModel()->selection(), QItemSelection());
 }
 
@@ -320,12 +320,12 @@ const ReportDirData* ReportWidget::getReportDirDataFromProxyIndex(const QModelIn
 void ReportWidget::setCoverageStatistics(const ReportDirData& data)
 {
     //QLocale used as QString::number does not honor the user's locale setting
-    m_coverage->setText(QLocale().toString(data.coverage(), 'f', 1) + " %");
-    m_coverage->update();
+    m_coverageRatio->setText(QLocale().toString(data.coverageRatio(), 'f', 1) + " %");
+    m_coverageRatio->update();
     m_sloc->setText(QString::number(data.sloc()));
     m_sloc->update();
-    m_instrumented->setText(QString::number(data.instrumented()));
-    m_instrumented->update();
+    m_nrofCoveredLines->setText(QString::number(data.nrofCoveredLines()));
+    m_nrofCoveredLines->update();
 }
 
 void ReportWidget::setCoverageStatistics(const QModelIndex& index)
@@ -341,9 +341,9 @@ void ReportWidget::setCoverageStatistics(const QModelIndex& index)
 void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const QItemSelection& deselected)
 {
     ReportDirData fullData;
-    if (m_sloc->text() != "-" && m_instrumented->text() != "-") {
+    if (m_sloc->text() != "-" && m_nrofCoveredLines->text() != "-") {
         fullData.setSloc(m_sloc->text().toInt());
-        fullData.setInstrumented(m_instrumented->text().toInt());
+        fullData.setNrofCoveredLines(m_nrofCoveredLines->text().toInt());
     }
 
     bool statisticsChanged = false;
@@ -354,7 +354,7 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
         if (data) {
             statisticsChanged = true;
             fullData.setSloc(fullData.sloc() + data->sloc());
-            fullData.setInstrumented(fullData.instrumented() + data->instrumented());
+            fullData.setNrofCoveredLines(fullData.nrofCoveredLines() + data->nrofCoveredLines());
         }
     }
 
@@ -363,7 +363,7 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
         if (data) {
             statisticsChanged = true;
             fullData.setSloc(fullData.sloc() - data->sloc());
-            fullData.setInstrumented(fullData.instrumented() - data->instrumented());
+            fullData.setNrofCoveredLines(fullData.nrofCoveredLines() - data->nrofCoveredLines());
         }
     }
 

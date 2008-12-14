@@ -56,8 +56,8 @@ void ReportItemsTest::constructDirItem()
     ReportDirItem dir("/my/dir");
     KVERIFY(ReportModel::Dir == dir.type());
     KOMPARE(0, dir.sloc());
-    KOMPARE(0, dir.instrumented());
-    KOMPARE(0, dir.coverage());
+    KOMPARE(0, dir.nrofCoveredLines());
+    KOMPARE(0, dir.coverageRatio());
     KVERIFY(! dir.isEditable());
     KVERIFY(dir.isSelectable());
     KVERIFY(! dir.isCheckable());
@@ -70,7 +70,7 @@ void ReportItemsTest::addCoverageDataTo(ReportDirItem& dir, const QString& path,
     fItem->addCoverageData(f);
     dir.appendRow(fItem);
     dir.updateStats();
-    m_garbage << fItem->coverageItem() << fItem->slocItem() << fItem->instrumentedItem();
+    m_garbage << fItem->coverageRatioItem() << fItem->slocItem() << fItem->nrofCoveredLinesItem();
     m_garbageFiles << f;
 }
 
@@ -79,8 +79,8 @@ void ReportItemsTest::addFileToDirItem()
     ReportDirItem* dir = new ReportDirItem("/my/dir");
     addCoverageDataTo(*dir, "/my/dir/foo.cpp", 10, 5);
     KOMPARE(10, dir->sloc());
-    KOMPARE(5, dir->instrumented());
-    KVERIFY(qAbs(100*5/10 - dir->coverage()) < 0.1);
+    KOMPARE(5, dir->nrofCoveredLines());
+    KVERIFY(qAbs(100*5/10 - dir->coverageRatio()) < 0.1);
     delete dir;
 }
 
@@ -90,8 +90,8 @@ void ReportItemsTest::addMultipleFilesToDir()
     addCoverageDataTo(*dir, "/my/dir/foo.cpp", 10, 5);
     addCoverageDataTo(*dir, "/my/dir/bar.cpp", 20, 5);
     KOMPARE(10+20, dir->sloc());
-    KOMPARE(5+5, dir->instrumented());
-    KVERIFY(qAbs(100*((double)dir->instrumented()/dir->sloc()) - dir->coverage()) < 0.1);
+    KOMPARE(5+5, dir->nrofCoveredLines());
+    KVERIFY(qAbs(100*((double)dir->nrofCoveredLines()/dir->sloc()) - dir->coverageRatio()) < 0.1);
     delete dir;
 }
 
@@ -99,7 +99,7 @@ void ReportItemsTest::constructDirData()
 {
     ReportDirData dirData;
     KOMPARE(0, dirData.sloc());
-    KOMPARE(0, dirData.instrumented());
+    KOMPARE(0, dirData.nrofCoveredLines());
 }
 
 void ReportItemsTest::dirDataSetSloc()
@@ -112,22 +112,22 @@ void ReportItemsTest::dirDataSetSloc()
 void ReportItemsTest::dirDataSetInstrumented()
 {
     ReportDirData dirData;
-    dirData.setInstrumented(23);
-    KOMPARE(23, dirData.instrumented());
+    dirData.setNrofCoveredLines(23);
+    KOMPARE(23, dirData.nrofCoveredLines());
 }
 
 void ReportItemsTest::dirDataCoverage()
 {
     ReportDirData dirData;
-    KOMPARE(0, dirData.coverage());
+    KOMPARE(0, dirData.coverageRatio());
 
-    dirData.setInstrumented(21);
+    dirData.setNrofCoveredLines(21);
     dirData.setSloc(42);
-    KOMPARE(50, dirData.coverage());
+    KOMPARE(50, dirData.coverageRatio());
 
-    dirData.setInstrumented(4);
+    dirData.setNrofCoveredLines(4);
     dirData.setSloc(2500);
-    QCOMPARE(0.16, dirData.coverage());
+    QCOMPARE(0.16, dirData.coverageRatio());
 }
 
 QTEST_KDEMAIN( ReportItemsTest, NoGUI)

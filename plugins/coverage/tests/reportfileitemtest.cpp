@@ -40,8 +40,8 @@ void ReportFileItemTest::init()
 void ReportFileItemTest::cleanup()
 {
     if (m_file) {
-        delete m_file->coverageItem();
-        delete m_file->instrumentedItem();
+        delete m_file->coverageRatioItem();
+        delete m_file->nrofCoveredLinesItem();
         delete m_file->slocItem();
         delete m_file;
     }
@@ -61,8 +61,8 @@ void ReportFileItemTest::construct()
 
     // Neighbour items should be initialized on 0
     KOMPARE(0, m_file->slocItem());
-    KOMPARE(0, m_file->coverageItem());
-    KOMPARE(0, m_file->instrumentedItem());
+    KOMPARE(0, m_file->coverageRatioItem());
+    KOMPARE(0, m_file->nrofCoveredLinesItem());
 }
 
 void ReportFileItemTest::addCoverage()
@@ -80,7 +80,7 @@ void ReportFileItemTest::addCoverage()
 
 void ReportFileItemTest::assertInstrumentedItem(int instrumented)
 {
-    ReportValueItem* instrumentedItem = m_file->instrumentedItem();
+    ReportValueItem* instrumentedItem = m_file->nrofCoveredLinesItem();
     KOMPARE(instrumented, instrumentedItem->value());
 }
 
@@ -92,7 +92,7 @@ void ReportFileItemTest::assertSlocItem(int sloc)
 
 void ReportFileItemTest::assertCoverageItem(double coverage)
 {
-    ReportValueItem* coverageItem = m_file->coverageItem();
+    ReportValueItem* coverageItem = m_file->coverageRatioItem();
     double actual = coverageItem->value();
     KVERIFY_MSG(qAbs(coverage - actual) < 0.1,
                 QString("\nWrong coverage percentage for coverage item.\n"
