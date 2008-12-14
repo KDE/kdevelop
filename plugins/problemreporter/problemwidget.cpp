@@ -141,9 +141,6 @@ void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
     //For now, only show problems from the current document
     if(active->url() == url && job->duChain()) {
       showProblems(job->duChain());
-    }else{
-      //Clear all problems
-      showProblems(0);
     }
   }
 }
