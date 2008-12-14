@@ -198,25 +198,33 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 
 void PluginController::initialize()
 {
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
-
-    QMap<QString, QString> entries = grp.entryMap();
-
     QMap<QString, bool> pluginMap;
+    // Get the default from the ShellExtension
+    foreach( const QString& s, ShellExtension::getInstance()->defaultPlugins() )
+    {
+        pluginMap.insert( s, true );
+    }
+
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    QMap<QString, QString> entries = grp.entryMap();
 
     QMap<QString, QString>::Iterator it;
     for ( it = entries.begin(); it != entries.end(); ++it )
     {
         QString key = it.key();
-        if ( key.endsWith( QLatin1String( "Enabled" ) ) )
-            pluginMap.insert( key.left(key.length() - 7), grp.readEntry(key,false) );
-    }
-
-    // If pluginMap is empty here (i.e. nothing in the session) use the list available
-    // from the shellextension
-    foreach( const QString& s, ShellExtension::getInstance()->defaultPlugins() )
-    {
-        pluginMap.insert( s, true );
+        if ( key.endsWith( QLatin1String( "Enabled" ) ) ) 
+        {
+            QString pluginid = key.left( key.length() - 7 );
+            bool defValue;
+            QMap<QString, bool>::const_iterator entry = pluginMap.constFind( pluginid );
+            if( entry != pluginMap.constEnd() )
+            {
+                defValue = entry.value();
+            } else {
+                defValue = false;
+            }
+            pluginMap.insert( key.left(key.length() - 7), grp.readEntry(key,defValue) );
+        }
     }
 
     foreach( const KPluginInfo& pi, d->plugins )
@@ -224,10 +232,13 @@ void PluginController::initialize()
         if( isGlobalPlugin( pi ) )
         {
             QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
-            if( pluginMap.isEmpty() || ( it != pluginMap.constEnd() && it.value() ) && loadPluginInternal( pi.pluginName() ) != 0 )
-            {
+            if( pluginMap.isEmpty() || ( it != pluginMap.constEnd() && it.value() ) )
+            { 
                 loadPluginInternal( pi.pluginName() );
-                grp.writeEntry( pi.pluginName()+"Enabled", true );
+                if( pluginMap.isEmpty() || it == pluginMap.constEnd() )
+                {
+                    grp.writeEntry( pi.pluginName()+"Enabled", true );
+                }
             }
         }
     }
