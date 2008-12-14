@@ -348,8 +348,7 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
 
     bool statisticsChanged = false;
 
-    QModelIndex index;
-    foreach (index, selected.indexes()) {
+    foreach (const QModelIndex& index, selected.indexes()) {
         const ReportDirData* data = getReportDirDataFromProxyIndex(index);
         if (data) {
             statisticsChanged = true;
@@ -358,7 +357,7 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
         }
     }
 
-    foreach (index, deselected.indexes()) {
+    foreach (const QModelIndex& index, deselected.indexes()) {
         const ReportDirData* data = getReportDirDataFromProxyIndex(index);
         if (data) {
             statisticsChanged = true;
