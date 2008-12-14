@@ -2,13 +2,11 @@
 import IPlugin
 import ICore
 import Kross
-import DUChain
 from urlparse import urlparse
 
 forms=Kross.module("forms")
 
 def compileCurrent():
-	print "triggered"
 	comp=ICore.documentController().activeDocument().url()
 	project=ICore.projectController().findProjectForUrl(comp)
 	
@@ -18,9 +16,6 @@ def compileCurrent():
 		for item in items:
 			builder=project.buildSystemManager().builder(item)
 			buildjob=builder.build(item)
-			
-			print "registering: "+str(buildjob)+"\n\n"
-			print "runco:"+ICore.runController().objectName
 			ICore.runController().registerJob(buildjob)
 
 def contextMenuExtension(ctx, cme):
@@ -30,7 +25,10 @@ def contextMenuExtension(ctx, cme):
 		cme.addAction(cme.ExtensionGroup, act)
 
 
-act=forms.createAction(ICore.uiController().activeMainWindow())
+act=forms.createAction(IPlugin)
 act.text="Compile this file"
 act.shortcut="Shift+F10"
 act.connect("triggered()", compileCurrent)
+
+toolBar=IPlugin.createToolBar("CompileOne", ICore.uiController().activeMainWindow())
+toolBar.addAction(act)
