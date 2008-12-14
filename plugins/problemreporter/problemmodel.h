@@ -46,7 +46,7 @@ public:
     };
     
     void addProblem(KDevelop::ProblemPointer problem);
-    void setProblems(const QList<KDevelop::ProblemPointer>& problems);
+    void setProblems(const QList<KDevelop::ProblemPointer>& problems, KUrl base);
   
     void clear();
 
@@ -63,6 +63,7 @@ private:
     ProblemReporterPlugin* plugin() const;
 
     QList<KDevelop::ProblemPointer> m_problems;
+    KUrl m_base;
 };
 
 #endif // PROBLEMMODEL_H

@@ -90,6 +90,7 @@ void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUCon
   hadContexts.insert(context);
 
   allProblems += context->problems();
+
   bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
   foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
     TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
@@ -109,8 +110,9 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
     QSet<TopDUContext*> hadContexts;
     DUChainReadLocker lock(DUChain::lock());
     collectProblems(allProblems, ctx, hadContexts);
-    model()->setProblems(allProblems);
-    resizeColumnToContents(0);
+    model()->setProblems(allProblems, m_activeDirectory);
+    for (int i = 0; i < model()->columnCount(); ++i)
+        resizeColumnToContents(i);
   }else{
     model()->clear();
   }
@@ -118,7 +120,7 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
 
 void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
 {
-  kDebug() << "activated document:" << doc->url();
+  m_activeDirectory = doc->url().upUrl();
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
@@ -137,7 +139,6 @@ void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
   IDocument* active = ICore::self()->documentController()->activeDocument();
 
   if(active) {
-    kDebug() << "active document:" << active->url() << "url:" << url;
     //For now, only show problems from the current document
     if(active->url() == url && job->duChain()) {
       showProblems(job->duChain());

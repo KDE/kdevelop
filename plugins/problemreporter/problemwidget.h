@@ -61,6 +61,7 @@ private Q_SLOTS:
 private:
   void showProblems(KDevelop::TopDUContext* ctx);
   ProblemReporterPlugin* m_plugin;
+  KUrl m_activeDirectory;
 };
 
 #endif

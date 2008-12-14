@@ -85,8 +85,13 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                         break;
                     case Error:
                         return p->description();
-                    case File:
-                        return p->finalLocation().document().str();
+                    case File: {
+                        QString relative = KUrl::relativePath(m_base.path(), p->finalLocation().document().str());
+                        if(relative.startsWith(".."))
+                            return p->finalLocation().document().str();
+                        else
+                            return relative;
+                    }
                     case Line:
                         if (p->finalLocation().isValid())
                             return QString::number(p->finalLocation().start().line() + 1);
@@ -111,9 +116,9 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                 switch (index.column()) {
                     case Error:
                         return i18n("In file included from:");
-                    case File:
-                        return p->locationStack().at(index.row()).document().str();
-                    case Line:
+                    case File: {
+                        return KUrl::relativePath(m_base.path(), p->locationStack().at(index.row()).document().str());
+                    } case Line:
                         if (p->finalLocation().isValid())
                             return QString::number(p->finalLocation().start().line() + 1);
                         break;
@@ -157,6 +162,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex & parent)
         ProblemPointer problem = problemForIndex(parent);
         if (row >= problem->locationStack().count())
             return QModelIndex();
+        ///@todo Make location-stack work again
 
         return createIndex(row, column, row);
     }
@@ -193,8 +199,9 @@ void ProblemModel::addProblem(KDevelop::ProblemPointer problem)
     endInsertRows();
 }
 
-void ProblemModel::setProblems(const QList<KDevelop::ProblemPointer>& problems)
+void ProblemModel::setProblems(const QList<KDevelop::ProblemPointer>& problems, KUrl base)
 {
+  m_base = base;
   m_problems = problems;
   reset();
 }
