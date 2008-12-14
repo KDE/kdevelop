@@ -67,6 +67,7 @@ public:
     enum {
         BestPriority = -10000,  ///Best possible job-priority. No jobs should actually have this.
         NormalPriority = 0,     ///Standard job-priority. This priority is used for parse-jobs caused by document-editing/opening.
+                                ///There is an additional parsing-thread reserved for jobs with this and better priority, to improve responsiveness.
         WorstPriority = 100000  ///Worst possible job-priority.
     };
     

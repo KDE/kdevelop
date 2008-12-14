@@ -64,6 +64,8 @@ public:
     BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
         :m_parser(parser), m_languageController(languageController)
     {
+        parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
+        
         m_timer.setSingleShot(true);
         m_delay = 500;
         m_threads = 1;
@@ -110,6 +112,7 @@ public:
             if (job) {
                 job->setChangedRanges(it.value()->changedRanges());
                 jobs.append(job);
+                specialParseJob = job;
             } else {
                 kWarning() << "No job created for url " << it.key();
             }
@@ -125,8 +128,11 @@ public:
             
             for(QSet<KUrl>::Iterator it = it1.value().begin(); it != it1.value().end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
-                if(this->m_parseJobs.size() + jobs.size() > (m_threads*2)+1)
+                if(m_parseJobs.count() >= m_threads+1)
                     break;
+                
+                if(m_parseJobs.count() >= m_threads && it1.key() > BackgroundParser::NormalPriority && !specialParseJob)
+                    break; //The additional parsing thread is reserved for higher priority parsing
                 
                 // When a document is scheduled for parsing while it is being parsed, it will be parsed
                 // again once the job finished, but not now.
@@ -134,9 +140,13 @@ public:
                     ++it;
                     continue;
                 }
-
-                kDebug(9505) << "creating parse-job" << *it;
+                
+                kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 ParseJob* job = createParseJob(*it, m_documents[*it].features(), m_documents[*it].notifyWhenReady());
+                
+                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
+                    specialParseJob = job; //This parse-job is allocated into the reserved thread
+                
                 if(job)
                     jobs.append(job);
                 
@@ -195,12 +205,13 @@ public:
 
     void loadSettings()
     {
+        ///@todo re-load settings when they have been changed!
         KConfigGroup config(KGlobal::config(), "Background Parser");
 
         m_delay = config.readEntry("Delay", 500);
         m_timer.setInterval(m_delay);
-        m_threads = config.readEntry("Real Number of Threads", 1);
-        m_weaver.setMaximumNumberOfThreads(m_threads);
+        m_threads = 0;
+        m_parser->setThreadCount(config.readEntry("Number of Threads", 1));
 
         if (config.readEntry("Enabled", true)) {
             resume();
@@ -238,6 +249,9 @@ public:
     BackgroundParser *m_parser;
     ILanguageController* m_languageController;
 
+    //Current parse-job that is executed in the additional thread
+    QPointer<ParseJob> specialParseJob;
+    
     QTimer m_timer;
     int m_delay;
     int m_threads;
@@ -536,7 +550,7 @@ void BackgroundParser::setThreadCount(int threadCount)
 {
     if (d->m_threads != threadCount) {
         d->m_threads = threadCount;
-        d->m_weaver.setMaximumNumberOfThreads(d->m_threads);
+        d->m_weaver.setMaximumNumberOfThreads(d->m_threads+1); //1 Additional thread for high-priority parsing
     }
 }
 
