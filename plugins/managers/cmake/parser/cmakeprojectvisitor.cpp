@@ -1015,7 +1015,7 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
     //TODO: Should not return here
     if(args.size()!=names.size())
         return;
-        
+    
     //We define the uses for the used variable without ${}
     foreach(int use, args)
     {
@@ -1077,20 +1077,22 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 IfAst myIf;
                 QStringList condition;
                 
-                if(funcName!="if")
+                if(funcName=="if")
+                {
+                    condition=ifast->condition();
+                    kDebug() << "iffffffff" << ini;
+                }
+                else
                 {
                     if(!myIf.parseFunctionInfo(resolveVariables(*it)))
                         kDebug(9042) << "uncorrect condition correct" << it->writeBack();
                     condition=myIf.condition();
                 }
-                else
-                {
-                    condition=ifast->condition();
-                    ini=cond.variableArguments();
-                }
                 result=cond.condition(condition);
+                if(funcName=="if")
+                    ini=cond.variableArguments();
                     
-                usesForArguments(myIf.condition(), cond.variableArguments(), m_topctx, *it);
+                usesForArguments(condition, cond.variableArguments(), m_topctx, *it);
                 kDebug(9042) << ">> " << funcName << condition << result;
             }
             else if(funcName=="else")

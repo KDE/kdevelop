@@ -38,8 +38,6 @@ Q_DECLARE_METATYPE(QList<SimpleRange>)
 
 CMakeDUChainTest::CMakeDUChainTest()
 {
-	DUChainWriteLocker lock(DUChain::lock());
-	m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
 }
 
 CMakeDUChainTest::~CMakeDUChainTest()
@@ -81,6 +79,12 @@ void CMakeDUChainTest::testDUChainWalk()
     QFETCH(QString, input);
     QFETCH(QList<SimpleRange>, ranges);
 
+    KDevelop::ReferencedTopDUContext m_fakeContext;
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+    }
+    
     QFile file("cmake_duchain_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
 
@@ -133,28 +137,55 @@ void CMakeDUChainTest::testDUChainWalk()
     }
 }
 
-void CMakeDUChainTest::testUses()
+void CMakeDUChainTest::testUses_data()
 {
-    QString input(
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QStringList>("decls");
+    QTest::addColumn<QList<SimpleRange> >("uses");
+
+    QStringList input= QStringList() <<
             "project(simpletest)\n"
             "set(var a b c)\n"
-            "set(var2 ${var})\n"
+            "set(var2 ${var})\n" <<
             
             "set(CMAKE_MODULE_PATH .)\n"
             "include(included)\n"
+            "set(usinginc aa${avalue})\n" <<
             
             "macro(bla kk)\n"
                 "message(STATUS ${kk})\n"
             "endmacro(bla)\n"
+            "bla(kk)\n" <<
             
-            "set(usinginc aa${avalue})\n"
-            "bla(kk)\n"
-            
+            "set(var 1)\n"
             "if(var)\n"
                 "message(STATUS \"life rocks\")\n"
             "endif(var)\n"
-            "message(STATUS \"------- done\")\n"
-            );
+            "message(STATUS \"------- done\")\n";
+            
+    QTest::newRow("empty") << QString("message(STATUS ueee)\n") << QStringList() << QList<SimpleRange>();
+    QTest::newRow("defanduse") << input[0] << (QStringList() << "var" << "var2") << (QList<SimpleRange>() << SimpleRange(2,11, 2,11+3) );
+//     QTest::newRow("include") << input[1] << (QStringList() << "CMAKE_MODULE_PATH" << "usinginc")
+//         << (QList<SimpleRange>() << SimpleRange(2,17, 2,17+6));
+//     
+//     QTest::newRow("macro") << input[2] << (QStringList() << "bla")
+//         << (QList<SimpleRange>() << SimpleRange(2,9, 2,9+3) << SimpleRange(3,0,  3,3)/* << SimpleRange(10,3, 10,3+3)*/);
+//         
+//     QTest::newRow("conditional") << input[3] << QStringList("var")
+//         << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
+}
+
+void CMakeDUChainTest::testUses()
+{
+    QFETCH(QString, input);
+    QFETCH(QStringList, decls);
+    QFETCH(QList<SimpleRange>, uses);
+
+    KDevelop::ReferencedTopDUContext m_fakeContext;
+    {
+        DUChainWriteLocker lock(DUChain::lock());
+        m_fakeContext = new TopDUContext(IndexedString("test"+input.mid(0,3)), SimpleRange(0,0,0,0));
+    }
 
     QFile file("cmake_duchain_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
@@ -172,7 +203,7 @@ void CMakeDUChainTest::testUses()
     out2 << inputIncluded;
     includedFile.close();
     
-    QVERIFY(code.count() != 0);
+    QVERIFY(!code.isEmpty());
 
     MacroMap mm;
     VariableMap vm;
@@ -197,8 +228,7 @@ void CMakeDUChainTest::testUses()
     dump.dump(ctx);
     QVector<Declaration*> declarations=ctx->localDeclarations();
     QCOMPARE(ctx->range().start.line, 0);
-    
-    QStringList decls=QStringList() << "var" << "var2" << "CMAKE_MODULE_PATH" << "bla" << "usinginc";
+   
     if(decls.count() != declarations.count())
     {
         for(int i=0; i<decls.count(); i++) {
@@ -213,24 +243,19 @@ void CMakeDUChainTest::testUses()
     
     for(int i=0; i<decls.count(); i++)
     {
+//         qDebug() << "yeeeeeeee" << decls[i] << ctx->findDeclarations(Identifier(decls[i]));
         QCOMPARE(decls[i], declarations[i]->identifier().toString());
-        QCOMPARE(1, ctx->findLocalDeclarations(Identifier(decls[i])).count());
-        QCOMPARE(1, ctx->findDeclarations(Identifier(decls[i])).count());
+        QCOMPARE(ctx->findDeclarations(Identifier(decls[i])).count(), 1);
+        QCOMPARE(ctx->findLocalDeclarations(Identifier(decls[i])).count(), 1);
     }
     
-    QList<SimpleRange> uses=QList<SimpleRange>() << SimpleRange(2,11, 2,11+3)
-                                                 << SimpleRange(7,9,  7,9+3)
-                                                 << SimpleRange(8,17, 8,17+6)
-                                                 << SimpleRange(9,0,  9,3)
-                                                 << SimpleRange(10,3, 10,3+3)
-                                                 << SimpleRange(12,6, 12,6+3);
+    QCOMPARE(ctx->usesCount(), uses.count());
     for(int i=0; i<ctx->usesCount(); i++)
     {
-        kDebug() << "use " << i << ctx->uses()[i].m_range.textRange()
+        qDebug() << "use" << i << ctx->uses()[i].m_range.textRange() << uses[i].textRange()
                  << ctx->usedDeclarationForIndex(ctx->uses()[i].m_declarationIndex)->identifier().toString();
         QCOMPARE(uses[i], ctx->uses()[i].m_range);
     }
-    QCOMPARE(ctx->usesCount(), uses.count());
 
     includedFile.remove();
 }
