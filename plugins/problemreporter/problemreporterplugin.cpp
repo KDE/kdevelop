@@ -109,13 +109,13 @@ void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
   Q_ASSERT(document->textDocument());
-  m_highlighters.insert(IndexedString(document->url().pathOrUrl()), new ProblemHighlighter(document->textDocument()));
+  m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
+  DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
-{
-  if (m_highlighters.contains(parseJob->document())) {
-    ProblemHighlighter* ph = m_highlighters[parseJob->document()];
+void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+  if (m_highlighters.contains(url)) {
+    ProblemHighlighter* ph = m_highlighters[url];
     if (!ph)
       return;
 
@@ -124,14 +124,18 @@ void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 
     {
       DUChainReadLocker lock(DUChain::lock());
-      if (!parseJob->duChain())
-        return;
 
-      ProblemWidget::collectProblems(allProblems, parseJob->duChain(), hadContexts);
+      ProblemWidget::collectProblems(allProblems, topContext.data(), hadContexts);
     }
 
     ph->setProblems(allProblems);
   }
+}
+
+void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
+{
+  if(parseJob->duChain())
+    updateReady(parseJob->document(), parseJob->duChain());
 }
 
 #include "problemreporterplugin.moc"

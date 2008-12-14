@@ -27,6 +27,7 @@
 #include <QtCore/QVariant>
 
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/topducontext.h>
 
 namespace KTextEditor { class Document; }
 namespace KDevelop { class IDocument; class ParseJob; }
@@ -45,6 +46,7 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     virtual void unload();
 
   private Q_SLOTS:
+    void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
     void documentAboutToBeDeleted(KTextEditor::Document* doc);
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
