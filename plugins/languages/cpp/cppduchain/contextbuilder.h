@@ -168,6 +168,7 @@ protected:
 
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.
+  ///The prefix-context will also import the context of the specific class-declaration, so the visibility matches.
   ///@param id should be the whole identifier. A prefix-context will only be created if it
   ///has more than 1 element.
   void openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos);

@@ -200,8 +200,11 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
 
     if(!decls.isEmpty()) {
       DUContext* classContext = decls.first()->logicalInternalContext(0);
-      if(classContext && classContext->type() == DUContext::Class)
+      if(classContext && classContext->type() == DUContext::Class) {
         import = classContext;
+        //Change the prefix-id so it respects namespace-imports
+        prefixId = classContext->scopeIdentifier(true);
+      }
     }
   }
 

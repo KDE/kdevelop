@@ -1017,6 +1017,31 @@ void TestDUChain::testDeclareStruct()
   }
 }
 
+void TestDUChain::testDeclareStructInNamespace()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  QByteArray method("namespace B {class C {struct A;void test();};};using namespace B;struct C::A {};");
+
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+  QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 2);
+  QVERIFY(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->isForwardDeclaration());
+  KDevelop::ForwardDeclaration* forward = dynamic_cast<KDevelop::ForwardDeclaration*>(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
+  QVERIFY(forward);
+  QVERIFY(forward->resolve(top));
+
+  release(top);
+}
 void TestDUChain::testCStruct()
 {
   TEST_FILE_PARSE_ONLY

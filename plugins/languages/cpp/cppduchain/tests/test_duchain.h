@@ -69,6 +69,7 @@ private slots:
   void testDeclareFor();
   void testVariableDeclaration();
   void testDeclareStruct();
+  void testDeclareStructInNamespace();
   void testDeclareClass();
   void testDeclareFriend();
   void testDeclareNamespace();
