@@ -29,6 +29,9 @@ Q_OBJECT
 public:
     ProjectInfoPage( QWidget* parent = 0 );
     void setProjectDir( const KUrl& );
+signals:
+    void projectNameChanged( const QString& );
+    void projectManagerChanged( const QString& );
 private:
     Ui::ProjectInfoPage* page_ui;
 };

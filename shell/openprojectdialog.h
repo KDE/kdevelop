@@ -32,10 +32,15 @@ private slots:
     void validateOpenUrl( const KUrl& );
     void gotFileList( KIO::Job*, const KIO::UDSEntryList& );
     void validateProjectFile( const QString& );
+    void validateProjectName( const QString& );
+    void validateProjectManager( const QString& );
 private:
+    void validateProjectInfo();
     KUrl directory;
     QString projectFile;
     QStringList entriesList;
+    QString projectName;
+    QString projectManager;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     KPageWidgetItem* filePage;

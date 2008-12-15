@@ -11,6 +11,12 @@
 #include "projectinfopage.h"
 #include "ui_projectinfopage.h"
 
+#include <kplugininfo.h>
+#include <kdebug.h>
+
+#include "core.h"
+#include "plugincontroller.h"
+
 namespace KDevelop
 {
 
@@ -19,10 +25,22 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
 {
     page_ui = new Ui::ProjectInfoPage;
     page_ui->setupUi( this );
+    connect( page_ui->nameEdit, SIGNAL( textEdited( const QString& ) ), 
+             this, SIGNAL( projectNameChanged( const QString& ) ) );
+    connect( page_ui->nameEdit, SIGNAL( textEdited( const QString& ) ), 
+             this, SIGNAL( projectNameChanged( const QString& ) ) );
+    connect( page_ui->managerCombo, SIGNAL( activated( const QString& ) ),
+             this, SIGNAL( projectManagerChanged( const QString& ) ) );
+    foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager", QStringList() ) )
+    {
+        page_ui->managerCombo->addItem( info.name() );
+    }
 }
 
 void ProjectInfoPage::setProjectDir( const KUrl& url )
 {
+    kDebug() << "setting project dir to:" << url;
+    page_ui->nameEdit->setText( url.fileName() );
 }
 
 }

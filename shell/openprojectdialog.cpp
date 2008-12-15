@@ -111,6 +111,23 @@ void OpenProjectDialog::gotFileList( KIO::Job*, const KIO::UDSEntryList& list )
     }
 }
 
+void OpenProjectDialog::validateProjectName( const QString& name )
+{
+    projectName = name;
+    validateProjectInfo();
+}
+
+void OpenProjectDialog::validateProjectInfo()
+{
+    setValid( projectInfoPage, !projectName.isEmpty() && !projectManager.isEmpty() );
+}
+
+void OpenProjectDialog::validateProjectManager( const QString& manager )
+{
+    projectManager = manager;
+    validateProjectInfo();
+}
+
 void OpenProjectDialog::validateProjectFile( const QString& file )
 {
     setAppropriate( projectInfoPage, false );

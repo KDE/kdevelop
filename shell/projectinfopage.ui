@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>ProjectInfoPage</class>
- <widget class="QWidget" name="Form" >
+ <widget class="QWidget" name="ProjectInfoPage" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -24,7 +24,7 @@
     </widget>
    </item>
    <item row="0" column="1" >
-    <widget class="QLineEdit" name="lineEdit" >
+    <widget class="QLineEdit" name="nameEdit" >
      <property name="toolTip" >
       <string>Provide a name for the project</string>
      </property>
@@ -41,7 +41,7 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QComboBox" name="comboBox" >
+    <widget class="QComboBox" name="managerCombo" >
      <property name="toolTip" >
       <string>Select the Management Plugin to use for this project</string>
      </property>
