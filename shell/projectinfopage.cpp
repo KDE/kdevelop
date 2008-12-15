@@ -27,20 +27,25 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
     page_ui->setupUi( this );
     connect( page_ui->nameEdit, SIGNAL( textEdited( const QString& ) ), 
              this, SIGNAL( projectNameChanged( const QString& ) ) );
-    connect( page_ui->nameEdit, SIGNAL( textEdited( const QString& ) ), 
-             this, SIGNAL( projectNameChanged( const QString& ) ) );
-    connect( page_ui->managerCombo, SIGNAL( activated( const QString& ) ),
-             this, SIGNAL( projectManagerChanged( const QString& ) ) );
+    connect( page_ui->managerCombo, SIGNAL( activated( int ) ),
+             this, SLOT( changeProjectManager( int ) ) );
     foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager", QStringList() ) )
     {
-        page_ui->managerCombo->addItem( info.name() );
+        page_ui->managerCombo->addItem( info.name(), info.pluginName() );
     }
+}
+
+void ProjectInfoPage::changeProjectManager( int idx )
+{
+    emit projectManagerChanged( page_ui->managerCombo->itemData( idx ).toString() );
 }
 
 void ProjectInfoPage::setProjectDir( const KUrl& url )
 {
     kDebug() << "setting project dir to:" << url;
     page_ui->nameEdit->setText( url.fileName() );
+    emit projectManagerChanged( page_ui->managerCombo->itemData( page_ui->managerCombo->currentIndex() ).toString() );
+    emit projectNameChanged( page_ui->nameEdit->text() );
 }
 
 }

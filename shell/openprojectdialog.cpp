@@ -66,9 +66,11 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( gotFileList( KIO::Job*, const KIO::UDSEntryList& ) ) );
         KIO::NetAccess::synchronousRun( job, Core::self()->uiControllerInternal()->defaultMainWindow() );
     }
+    kDebug() << "entries:" << entriesList;
     if( entriesList.isEmpty() )
     {
         setAppropriate( projectInfoPage, true );
+        setAppropriate( filePage, false );
         ProjectInfoPage* page = dynamic_cast<ProjectInfoPage*>( projectInfoPage->widget() );
         if( !page )
         {
@@ -93,9 +95,9 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         }
     }
     setValid( filePage, false );
-    setValid( projectInfoPage, false );
+    validateProjectInfo();
     setValid( openPage, true );
-    directory = url;
+    m_directory = url;
 }
 
 void OpenProjectDialog::gotFileList( KIO::Job*, const KIO::UDSEntryList& list )
@@ -113,18 +115,20 @@ void OpenProjectDialog::gotFileList( KIO::Job*, const KIO::UDSEntryList& list )
 
 void OpenProjectDialog::validateProjectName( const QString& name )
 {
-    projectName = name;
+    m_projectName = name;
     validateProjectInfo();
 }
 
 void OpenProjectDialog::validateProjectInfo()
 {
-    setValid( projectInfoPage, !projectName.isEmpty() && !projectManager.isEmpty() );
+    kDebug() << "valid?" << (!projectName().isEmpty() && !projectManager().isEmpty());
+    setValid( projectInfoPage, (!projectName().isEmpty() && !projectManager().isEmpty()) );
 }
 
 void OpenProjectDialog::validateProjectManager( const QString& manager )
 {
-    projectManager = manager;
+    kDebug() << "project manager:" << manager;
+    m_projectManager = manager;
     validateProjectInfo();
 }
 
@@ -132,7 +136,27 @@ void OpenProjectDialog::validateProjectFile( const QString& file )
 {
     setAppropriate( projectInfoPage, false );
     setValid( filePage, true );
-    projectFile = file;
+    m_projectFile = file;
+}
+
+QString OpenProjectDialog::projectFile()
+{
+    return m_projectFile;
+}
+
+KUrl OpenProjectDialog::directory()
+{
+    return m_directory;
+}
+
+QString OpenProjectDialog::projectName()
+{
+    return m_projectName;
+}
+
+QString OpenProjectDialog::projectManager()
+{
+    return m_projectManager;
 }
 
 }

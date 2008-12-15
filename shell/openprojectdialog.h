@@ -28,6 +28,10 @@ class OpenProjectDialog : public KAssistantDialog
 Q_OBJECT
 public:
     OpenProjectDialog( QWidget* parent = 0 );
+    QString projectFile();
+    KUrl directory();
+    QString projectName();
+    QString projectManager();
 private slots:
     void validateOpenUrl( const KUrl& );
     void gotFileList( KIO::Job*, const KIO::UDSEntryList& );
@@ -36,11 +40,11 @@ private slots:
     void validateProjectManager( const QString& );
 private:
     void validateProjectInfo();
-    KUrl directory;
-    QString projectFile;
+    KUrl m_directory;
+    QString m_projectFile;
     QStringList entriesList;
-    QString projectName;
-    QString projectManager;
+    QString m_projectName;
+    QString m_projectManager;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     KPageWidgetItem* filePage;

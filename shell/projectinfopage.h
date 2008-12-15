@@ -32,6 +32,8 @@ public:
 signals:
     void projectNameChanged( const QString& );
     void projectManagerChanged( const QString& );
+private slots:
+    void changeProjectManager( int );
 private:
     Ui::ProjectInfoPage* page_ui;
 };
