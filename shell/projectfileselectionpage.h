@@ -8,29 +8,35 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef PROJECTINFOPAGE_H
-#define PROJECTINFOPAGE_H
+#ifndef PROJECTFILESELECTIONPAGE_H
+#define PROJECTFILESELECTIONPAGE_H
 
 #include <QtGui/QWidget>
 
+class QStringListModel;
+class QModelIndex;
+
 namespace Ui
 {
-    class ProjectInfoPage;
+class ProjectFileSelectionPage;
 }
-
-class KUrl;
 
 namespace KDevelop
 {
 
-class ProjectInfoPage : public QWidget
+class ProjectFileSelectionPage : public QWidget
 {
 Q_OBJECT
 public:
-    ProjectInfoPage( QWidget* parent = 0 );
-    void setProjectDir( const KUrl& );
+    ProjectFileSelectionPage( QWidget* parent = 0 );
+    void setEntries( const QStringList& );
+signals:
+    void fileSelected( const QString& );
+private slots:
+    void currentChanged( const QModelIndex& );
 private:
-    Ui::ProjectInfoPage* page_ui;
+    Ui::ProjectFileSelectionPage* ui;
+    QStringListModel* model;
 };
 
 }

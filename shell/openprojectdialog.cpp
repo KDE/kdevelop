@@ -11,6 +11,7 @@
 #include "openprojectdialog.h"
 #include "openprojectpage.h"
 #include "projectinfopage.h"
+#include "projectfileselectionpage.h"
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
@@ -37,40 +38,58 @@ OpenProjectDialog::OpenProjectDialog( QWidget* parent )
     QWidget* page = new OpenProjectPage( this );
     connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
     openPage = addPage( page, "Select Directory/Project File" );
+    page = new ProjectFileSelectionPage( this );
+    connect( page, SIGNAL( fileSelected( const QString& ) ), this, SLOT( validateProjectFile( const QString& ) ) );
+    filePage = addPage( page, "Select Project file" );
     page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
-    connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManger( const QString& ) ) );
+    connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
     projectInfoPage = addPage( page, "Project Information" );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
+    setValid( filePage, false );
     setAppropriate( projectInfoPage, false );
+    setAppropriate( filePage, false );
     showButton( KDialog::Help, false );
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )
 {
     entriesList.clear();
-    kDebug() << "fetching files for:" << url;
     if( url.isLocalFile() )
     {
         QDir d( url.toLocalFile() );
-        kDebug() << "filtering for:" << QStringList() << "*."+ShellExtension::getInstance()->projectFileExtension();
         entriesList = d.entryList( QStringList() << "*."+ShellExtension::getInstance()->projectFileExtension(), QDir::Files | QDir::Readable );
-        kDebug() << "ok, got entries:" << entriesList;
     } else
     {
         KIO::ListJob* job = KIO::listDir( url );
         connect( job, SIGNAL( entries( KIO::Job*, const KIO::UDSEntryList& ) ), SLOT( gotFileList( KIO::Job*, const KIO::UDSEntryList& ) ) );
         KIO::NetAccess::synchronousRun( job, Core::self()->uiControllerInternal()->defaultMainWindow() );
     }
-    kDebug() << "got entries:" << entriesList;
-    setAppropriate( projectInfoPage, entriesList.isEmpty() );
-    ProjectInfoPage* page = dynamic_cast<ProjectInfoPage*>( projectInfoPage->widget() );
-    if( !page )
+    if( entriesList.isEmpty() )
     {
-        kFatal() << "Oops, project info page item doesn't contain a ProjectInfoPage. Serious problem.";
+        setAppropriate( projectInfoPage, true );
+        ProjectInfoPage* page = dynamic_cast<ProjectInfoPage*>( projectInfoPage->widget() );
+        if( !page )
+        {
+            kFatal() << "Oops, project info page item doesn't contain a ProjectInfoPage. Serious problem.";
+        }
+        page->setProjectDir( url );
+    } else
+    {
+        if( entriesList.count() > 1 )
+        {
+            setAppropriate( filePage, true );
+            ProjectFileSelectionPage* page = dynamic_cast<ProjectFileSelectionPage*>( filePage->widget() );
+            if( !page )
+            {
+                kFatal() << "Ooops, project file selection page item doesn't contain ProjectFileSelectionPage. Serious problem";
+            }
+            page->setEntries( entriesList );
+        }
     }
-    page->setProjectUrl( url );
+    setValid( filePage, false );
+    setValid( projectInfoPage, false );
     setValid( openPage, true );
     directory = url;
 }
@@ -86,6 +105,14 @@ void OpenProjectDialog::gotFileList( KIO::Job*, const KIO::UDSEntryList& list )
             entriesList << name;
         }
     }
+}
+
+void OpenProjectDialog::validateProjectFile( const QString& file )
+{
+    kDebug() << "validating project file" << file;
+    setAppropriate( projectInfoPage, false );
+    setValid( filePage, true );
+    projectFile = file;
 }
 
 }

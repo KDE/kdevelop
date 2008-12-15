@@ -21,7 +21,7 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
     page_ui->setupUi( this );
 }
 
-void ProjectInfoPage::setProjectUrl( const KUrl& url )
+void ProjectInfoPage::setProjectDir( const KUrl& url )
 {
 }
 

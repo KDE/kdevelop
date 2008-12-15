@@ -30,12 +30,15 @@ public:
     OpenProjectDialog( QWidget* parent = 0 );
 private slots:
     void validateOpenUrl( const KUrl& );
-    void gotFileList( KIO::Job*, const KIO::UDSEntryList& list );
+    void gotFileList( KIO::Job*, const KIO::UDSEntryList& );
+    void validateProjectFile( const QString& );
 private:
     KUrl directory;
+    QString projectFile;
     QStringList entriesList;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
+    KPageWidgetItem* filePage;
 };
 
 }
