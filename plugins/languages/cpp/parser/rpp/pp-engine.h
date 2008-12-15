@@ -196,7 +196,6 @@ public:
   void setEnvironment(Environment* env);
 
   const QList<KDevelop::ProblemPointer>& problems() const;
-  void problemEncountered(const KDevelop::Problem& problem);
   void problemEncountered(const KDevelop::ProblemPointer& problem);
 
   //Returns a hash-value computed from all until currently open branching-conditions and their decisions(like #ifdef's)

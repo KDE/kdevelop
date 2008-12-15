@@ -579,7 +579,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
     if(!gotPathsFromManager)
       kDebug(9007) << "Did not find a build-manager for" << source;
 
-    KDevelop::Problem problem;
+    KDevelop::ProblemPointer problem(new KDevelop::Problem);
 
     if( allPaths.isEmpty() || DEBUG_INCLUDE_PATHS ) {
         //Fallback-search using include-path resolver
@@ -591,7 +591,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             if(!projectDirectory.isEmpty() && problems) {
                 //Report that the build-manager did not return the build-directory, for debugging
                 KDevelop::Problem* newProblem = new Problem;
-                newProblem->setSource(KDevelop::Problem::Preprocessor);
+                newProblem->setSource(KDevelop::ProblemData::Preprocessor);
                 newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", projectName));
                 newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. Consider setting up a build directory in the project manager if you have not done so yet."));
                 newProblem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Range::invalid()));
@@ -629,12 +629,12 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
                         kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.pathOrUrl();
 
                         if( problems ) {
-                          KDevelop::Problem p;
-                          p.setSource(KDevelop::Problem::Preprocessor);
-                          p.setDescription(i18n("Build-manager did not return an include-path" ));
-                          p.setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.pathOrUrl()));
-                          p.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
-                          *problems << KDevelop::ProblemPointer( new KDevelop::Problem(p) );
+                          KDevelop::ProblemPointer p(new KDevelop::Problem);
+                          p->setSource(KDevelop::ProblemData::Preprocessor);
+                          p->setDescription(i18n("Build-manager did not return an include-path" ));
+                          p->setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.pathOrUrl()));
+                          p->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                          *problems << p;
                         }
                     }
                 }
@@ -649,15 +649,15 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& file, QList<KDevelop
             }
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
-            problem.setSource(KDevelop::Problem::Preprocessor);
-            problem.setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
-            problem.setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
-            problem.setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Range::invalid()));
+            problem->setSource(KDevelop::ProblemData::Preprocessor);
+            problem->setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
+            problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
+            problem->setFinalLocation(DocumentRange(source.pathOrUrl(), KTextEditor::Range::invalid()));
         }
     }
 
-    if( allPaths.isEmpty() && problem.source() != KDevelop::Problem::Unknown && problems )
-      *problems << KDevelop::ProblemPointer( new KDevelop::Problem(problem) );
+    if( allPaths.isEmpty() && problem->source() != KDevelop::ProblemData::Unknown && problems )
+      *problems << problem;
 
     if( allPaths.isEmpty() ) {
         ///Last chance: Take a parsed version of the file from the du-chain, and get its include-paths(We will then get the include-path that some time was used to parse the file)

@@ -83,9 +83,9 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
   uint formalsSize = m_frame->expandingMacro->formalsSize();
 
   if(name.isEmpty()) {
-    KDevelop::Problem problem;
-    problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-    problem.setDescription(i18n("Macro error"));
+    KDevelop::ProblemPointer problem(new KDevelop::Problem);
+    problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem->setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
     return pp_actual();
   }
@@ -95,10 +95,10 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
       if (index < (uint)m_frame->actuals.size())
         return m_frame->actuals[index];
       else {
-        KDevelop::Problem problem;
-        problem.setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-        problem.setDescription(i18n("Call to macro %1 missing argument number %2", IndexedString(name).str(), index));
-        problem.setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
+        KDevelop::ProblemPointer problem(new KDevelop::Problem);
+        problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem->setDescription(i18n("Call to macro %1 missing argument number %2", IndexedString(name).str(), index));
+        problem->setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
         m_engine->problemEncountered(problem);
       }
     }

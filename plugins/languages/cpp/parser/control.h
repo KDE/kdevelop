@@ -42,7 +42,6 @@ public:
 
   /**Adds a problem to the list of problems.*/
   void reportProblem(const KDevelop::ProblemPointer &problem);
-  void reportProblem(const KDevelop::Problem &problem);
 
 private:
   QList<KDevelop::ProblemPointer> _M_problems;

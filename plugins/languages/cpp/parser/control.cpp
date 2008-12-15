@@ -32,11 +32,6 @@ const QList<KDevelop::ProblemPointer>& Control::problems() const
   return _M_problems;
 }
 
-void Control::reportProblem(const KDevelop::Problem &problem)
-{
-  reportProblem(KDevelop::ProblemPointer(new KDevelop::Problem(problem)));
-}
-
 void Control::reportProblem(const KDevelop::ProblemPointer &problem)
 {
   _M_problems.append(problem);

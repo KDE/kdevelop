@@ -191,7 +191,7 @@ void PreprocessJob::run()
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             KDevelop::ProblemPointer p(new Problem());
-            p->setSource(KDevelop::Problem::Disk);
+            p->setSource(KDevelop::ProblemData::Disk);
             p->setDescription(i18n( "Could not open file '%1'", localFile ));
             switch (file.error()) {
               case QFile::ReadError:
@@ -287,7 +287,7 @@ void PreprocessJob::run()
     
     foreach (KDevelop::ProblemPointer p, preprocessor.problems()) {
       p->setLocationStack(parentJob()->includeStack());
-      p->setSource(KDevelop::Problem::Preprocessor);
+      p->setSource(KDevelop::ProblemData::Preprocessor);
       parentJob()->addPreprocessorProblem(p);
     }
 
@@ -462,7 +462,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
           while(current) {
             if(current->parentJob()->document() == indexedFile) {
               KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
-              p->setSource(KDevelop::Problem::Preprocessor);
+              p->setSource(KDevelop::ProblemData::Preprocessor);
               p->setDescription(i18n("File was included recursively from within itself: %1", fileName ));
               p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
               p->setLocationStack(parentJob()->includeStack());
@@ -558,7 +558,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
         KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
-        p->setSource(KDevelop::Problem::Preprocessor);
+        p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));

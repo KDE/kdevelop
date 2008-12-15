@@ -233,7 +233,7 @@ private:
   void scan_tilde();
   void scan_EOF();
 
-  KDevelop::Problem createProblem() const;
+  KDevelop::ProblemPointer createProblem() const;
 
 private:
   Control *control;
