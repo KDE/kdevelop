@@ -1021,26 +1021,48 @@ void TestDUChain::testDeclareStructInNamespace()
 {
   TEST_FILE_PARSE_ONLY
 
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("struct A {A(); struct B;}; struct A::B { struct C; }; struct A::B::C { A mem; };");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 1); //Only one declaration, because the others are nested within helper scope contexts
+    QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[2]->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 1);
+    
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[0]->indexedType());
+
+    release(top);
+  }  
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("namespace B {class C {struct A;void test();};};using namespace B;struct C::A {};");
+  {
+    QByteArray method("namespace B {class C {struct A;void test();};};using namespace B;struct C::A {};");
 
-  TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
-  DUChainWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
-  QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 2);
-  QCOMPARE(top->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
-  QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 2);
-  QVERIFY(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->isForwardDeclaration());
-  KDevelop::ForwardDeclaration* forward = dynamic_cast<KDevelop::ForwardDeclaration*>(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
-  QVERIFY(forward);
-  QVERIFY(forward->resolve(top));
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 2);
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->isForwardDeclaration());
+    KDevelop::ForwardDeclaration* forward = dynamic_cast<KDevelop::ForwardDeclaration*>(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
+    QVERIFY(forward);
+    QVERIFY(forward->resolve(top));
 
-  release(top);
+    release(top);
+  }
 }
 void TestDUChain::testCStruct()
 {
@@ -2860,7 +2882,7 @@ void TestDUChain::testForwardDeclaration3()
 {
   QByteArray method("namespace B {class Test;} B::Test t; namespace B { class Test {int i; class SubTest; };} B::Test::SubTest t2; namespace B {class Test::SubTest{ int i;};}");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -2879,6 +2901,11 @@ void TestDUChain::testForwardDeclaration3()
   CppClassType::Ptr type3 = top->childContexts()[1]->localDeclarations()[0]->type<CppClassType>();
   CppClassType::Ptr type4 = top->localDeclarations()[1]->type<CppClassType>();
   CppClassType::Ptr type5 = top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->type<CppClassType>();
+  
+  QCOMPARE(top->childContexts()[2]->localScopeIdentifier(), QualifiedIdentifier("B"));
+  QCOMPARE(top->childContexts()[2]->childContexts()[0]->type(), DUContext::Helper);
+  QCOMPARE(top->childContexts()[2]->childContexts()[0]->localScopeIdentifier(), QualifiedIdentifier("Test"));
+  
 
 
   QVERIFY(type1);
@@ -2894,9 +2921,10 @@ void TestDUChain::testForwardDeclaration3()
   QVERIFY(subType);
 
   QCOMPARE(type1->indexed(), type2->indexed());
-  QCOMPARE(type2->declaration(0)->abstractType()->indexed(), type3->indexed());
-  QCOMPARE(subType->declaration(0)->abstractType()->indexed(), type4->declaration(0)->abstractType()->indexed());
-  QCOMPARE(type4->declaration(0)->abstractType()->indexed(), type5->indexed());
+  QCOMPARE(type2->declaration(top)->abstractType()->indexed(), type3->indexed());
+  QCOMPARE(subType->declaration(top)->abstractType()->indexed(), type4->declaration(top)->abstractType()->indexed());
+  kDebug() << type4->declaration(top)->qualifiedIdentifier().toString() << type5->qualifiedIdentifier().toString();
+  QCOMPARE(type4->declaration(top)->abstractType()->indexed(), type5->indexed());
 
   release(top);
 }

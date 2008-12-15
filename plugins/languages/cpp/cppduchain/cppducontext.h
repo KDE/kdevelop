@@ -445,24 +445,35 @@ class CppDUContext : public BaseContext {
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
-          //This must be a function-definition, like void A::B::test() {}
-          KDevelop::DUContext* classContext  = 0;
+           
+          
+          DUContext* classContext = 0;
           
           if(type == DUContext::Helper) {
-            if(!BaseContext::importedParentContexts().isEmpty())
-              classContext = BaseContext::importedParentContexts()[0].context(source);
+            //This is a prefix-context for an external class-definition like "class A::B {..};"
+            classContext = BaseContext::importedParentContexts()[0].context(source);
           } else {
+            //This must be a function-definition, like void A::B::test() {}
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
             if(classDeclaration && classDeclaration->internalContext())
               classContext = classDeclaration->internalContext();
+            prefix.pop();
           }
           
           if(classContext) {
-            //If this is a definition of a class member, only add aliases for the namespace elements(The class scope will be
-            //searched using then normal import logic)
-            prefix = classContext->scopeIdentifier(false);
-          }else{
-            prefix.pop();
+            
+            while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
+              prefix.pop();
+              
+              //This way we can correctly resolve the namespace-component for multiple externally defined classes,
+              //see testDeclareStructInNamespace() in test_duchain.cpp
+              if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper) {
+                classContext = BaseContext::importedParentContexts()[0].context(source);
+                continue;
+              }
+              
+              break;
+            }
           }
           
           if(!prefix.isEmpty()) {

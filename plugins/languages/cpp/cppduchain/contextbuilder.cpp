@@ -192,7 +192,9 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
   {
     DUChainReadLocker lock(DUChain::lock());
 
-    QualifiedIdentifier globalId = currentContext()->scopeIdentifier(true);
+    QualifiedIdentifier currentScopeId = currentContext()->scopeIdentifier(true);
+    
+    QualifiedIdentifier globalId = currentScopeId;
     globalId += prefixId;
     globalId.setExplicitlyGlobal(true);
 
@@ -203,7 +205,12 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
       if(classContext && classContext->type() == DUContext::Class) {
         import = classContext;
         //Change the prefix-id so it respects namespace-imports
+        
         prefixId = classContext->scopeIdentifier(true);
+        if(prefixId.count() >= currentScopeId.count())
+          prefixId = prefixId.mid(currentScopeId.count());
+        else
+          kDebug() << "resolved bad prefix context. Should start with" << currentScopeId.toString() << "but is" << prefixId.toString();
       }
     }
   }
