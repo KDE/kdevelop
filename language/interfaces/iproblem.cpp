@@ -40,7 +40,7 @@ KDevelop::IndexedString KDevelop::Problem::url() const
     return d_func()->url;
 }
 
-const DocumentRange & Problem::finalLocation() const
+DocumentRange Problem::finalLocation() const
 {
     return DocumentRange(d_func()->url.str(), range().textRange());
 }
@@ -72,7 +72,7 @@ void Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
 //     d_func()->locationStack = locationStack;
 }
 
-const QString & Problem::description() const
+QString Problem::description() const
 {
     return d_func()->description.str();
 }
@@ -82,7 +82,7 @@ void Problem::setDescription(const QString & description)
     d_func_dynamic()->description = ReferenceCountedIndexedString(description);
 }
 
-const QString & Problem::explanation() const
+QString Problem::explanation() const
 {
     return d_func()->explanation.str();
 }

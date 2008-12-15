@@ -90,19 +90,19 @@ public:
     /**
      * Location where this problem occured
      * */
-    const DocumentRange & finalLocation() const;
+    DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange & location);
     
     /**
      * A brief description of the problem.
      */
-    const QString& description() const;
+    QString description() const;
     void setDescription(const QString& description);
 
     /**
      * A (detailed) explanation of why the problem occurred.
      */
-    const QString& explanation() const;
+    QString explanation() const;
     void setExplanation(const QString& explanation);
 
     enum {
