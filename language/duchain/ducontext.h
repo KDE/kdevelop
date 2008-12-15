@@ -236,7 +236,10 @@ public:
     Function  /**< A context that declares function-arguments */,
     Template  /**< A context that declares template-parameters */,
     Enum      /**< A context that contains a list of enumerators */,
-    Helper    /**< A helper context, used for language-specific tweaks */,
+    Helper    /**< A helper context. This context is treated specially during search:
+               *   when searching within the imports of a context, and that context's parent
+               *   is a context of type DUContext::Helper, then the upwards search is continued
+               *   into that helper(The decision happens in shouldSearchInParent)  */,
     Other     /**< Represents executable code, like for example within a compound-statement */
   };
 

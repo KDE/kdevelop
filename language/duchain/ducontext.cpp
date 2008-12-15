@@ -1423,7 +1423,8 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
 
 bool DUContext::shouldSearchInParent(SearchFlags flags) const
 {
-  return !(flags & InImportedParentContext);
+  return (parentContext() && parentContext()->type() == DUContext::Helper && (flags & InImportedParentContext)) ||
+         !(flags & InImportedParentContext);
 }
 
 const Use* DUContext::uses() const
