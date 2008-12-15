@@ -104,13 +104,13 @@ QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName) {
+  ModificationRevisionSet::clearCache();
+  
   QMutexLocker lock(&fileModificationTimeCacheMutex);
 
   FileModificationMap::iterator it = fileModificationCache().find(fileName);
   if(it != fileModificationCache().end())
     fileModificationCache().erase(it);
-  
-  ModificationRevisionSet::clearCache();
 }
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url) {
