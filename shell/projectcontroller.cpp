@@ -37,10 +37,14 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguiwindow.h>
 #include <kfiledialog.h>
 #include <kactioncollection.h>
+#include <ktemporaryfile.h>
 #include <kservicetypetrader.h>
 #include <krecentfilesaction.h>
 #include <kactionmenu.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 #include <ksettings/dialog.h>
+#include <kio/netaccess.h>
 #include <kstandarddirs.h>
 
 #include "sublime/area.h"
@@ -147,24 +151,46 @@ ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) 
 ProjectDialogProvider::~ProjectDialogProvider()
 {}
 
+void writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QString& manager )
+{
+    KConfigGroup grp = cfg->group( "Project" );
+    grp.writeEntry( "Name", name );
+    grp.writeEntry( "Manager", manager );
+    cfg->sync();
+}
+
 KUrl ProjectDialogProvider::askProjectConfigLocation()
 {
     Q_ASSERT(d);
-    /*KSharedConfig * config = KGlobal::config().data();
-    KConfigGroup group = config->group( "General Options" );
-    QString dir = group.readEntry( "DefaultProjectsDirectory",
-                                     QDir::homePath() );
-
-    QString projectFileInfo = ShellExtension::getInstance()->projectFileExtension()
-        + "|" + ShellExtension::getInstance()->projectFileDescription()
-        + "\n";
-    KUrl response = KFileDialog::getOpenUrl( dir, projectFileInfo,
-        d->m_core->uiControllerInternal()->defaultMainWindow(),
-        i18n( "Open Project" ) );
-    return response;*/
     OpenProjectDialog* dlg = new OpenProjectDialog( Core::self()->uiController()->activeMainWindow() );
     dlg->exec();
-    return KUrl();
+    KUrl dir = dlg->directory();
+    QString file = dlg->projectFile();
+    kDebug() << "selected project:" << dir << file << dlg->projectName() << dlg->projectManager();
+    if( file.isEmpty() )
+    {
+        dir.addPath( dir.fileName() + ".kdev4" );
+        if( dir.isLocalFile() )
+        {
+            writeNewProjectFile( KSharedConfig::openConfig( dir.toLocalFile(), KConfig::SimpleConfig ),
+                            dlg->projectName(),
+                            dlg->projectManager() );
+        } else
+        {
+            KTemporaryFile tmp;
+            tmp.setAutoRemove( false );
+            tmp.open();
+            tmp.close();
+            writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
+                            dlg->projectName(),
+                            dlg->projectManager() );
+            KIO::NetAccess::upload( tmp.fileName(), dir, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        }
+    } else 
+    {
+        dir.addPath( file );
+    }
+    return dir;
 }
 
 bool ProjectDialogProvider::userWantsReopen()

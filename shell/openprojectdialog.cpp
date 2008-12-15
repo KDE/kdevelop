@@ -92,6 +92,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         } else 
         {
             setAppropriate( filePage, false );
+            setAppropriate( projectInfoPage, false );
+            m_projectFile = entriesList.first();
         }
     }
     setValid( filePage, false );
@@ -134,6 +136,7 @@ void OpenProjectDialog::validateProjectManager( const QString& manager )
 
 void OpenProjectDialog::validateProjectFile( const QString& file )
 {
+    kDebug() << "validating file:";
     setAppropriate( projectInfoPage, false );
     setValid( filePage, true );
     m_projectFile = file;
