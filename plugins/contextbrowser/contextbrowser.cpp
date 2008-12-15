@@ -286,7 +286,8 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
     standardAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
-  }
+    standardAttribute->setForeground(Qt::black); 
+}
   return standardAttribute;
 }
 
