@@ -45,6 +45,7 @@ Boston, MA 02110-1301, USA.
 
 #include "sublime/area.h"
 #include <interfaces/iplugin.h>
+#include <interfaces/isession.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -244,7 +245,7 @@ ProjectController::~ProjectController()
 
 void ProjectController::cleanup()
 {
-    KSharedConfig * config = KGlobal::config().data();
+    KSharedConfig::Ptr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
 
     KUrl::List openProjects;
@@ -260,7 +261,7 @@ void ProjectController::cleanup()
 void ProjectController::initialize()
 {
     if (d->reopenProjectsOnStartup) {
-        KSharedConfig * config = KGlobal::config().data();
+        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
         KConfigGroup group = config->group( "General Options" );
         KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
