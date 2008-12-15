@@ -126,7 +126,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   }
   
   //For function declarations, this is the solution.
-  if(context->parentContext()->type() == DUContext::Class)
+  if(context->parentContext() && context->parentContext()->type() == DUContext::Class)
     return context->parentContext()->owner();
   
   if(context->type() == DUContext::Other) {
