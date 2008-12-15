@@ -317,7 +317,7 @@ int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
     if (data()->documents.contains(url)) {
       EditorIntegratorStatic::DocumentInfo& i = data()->documents[url];
       if (i.revision != -1)
-        smart->releaseRevision(i.revision);
+        smart->releaseRevision(i.revision); ///@todo This doesn't work and leads to crashes if multiple threads parse the some document at a time!
 
       i.revision = smart->currentRevision();
       kDebug(9506) << "Saved revision" << i.revision;
