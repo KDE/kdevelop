@@ -42,9 +42,8 @@ public:
 public:
     KDevDocumentViewPlugin( QObject *parent, const QVariantList& args );
     virtual ~KDevDocumentViewPlugin();
+    virtual void unload();
 
-    // KDevelop::Plugin methods
-    virtual bool isCentralPlugin() const;
 private:
     KDevDocumentViewPluginFactory* factory;
 };

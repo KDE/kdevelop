@@ -97,12 +97,10 @@ KDevDocumentViewPlugin::~KDevDocumentViewPlugin()
 {
 }
 
-bool KDevDocumentViewPlugin::isCentralPlugin() const
+void KDevDocumentViewPlugin::unload()
 {
-    return true;
+    core()->uiController()->removeToolView( factory );
 }
-
-
 
 #include "kdevdocumentviewplugin.moc"
 
