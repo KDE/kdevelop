@@ -73,12 +73,7 @@ the <a href="http://www.kdevelop.org/">KDevelop website</a>.
 
 \section expand How to extend KDevelop
 
-First of all read the \ref architecture (doc/api/Architecture.dox file) then you can find more information on how to extend %KDevelop:
-  - \ref howToAddPlugins (doc/api/HowToAddPlugins.dox file)
-  - \ref howToAddProgrammingLanguages (doc/api/HowToAddProgrammingLanguages.dox file)
-  - \ref howToAddApplicationTemplates (doc/api/HowToAddApplicationTemplates.dox file)
-  - \ref howToAddFileTemplates (doc/api/HowToAddFileTemplates.dox file)
-  - \ref howToAddGenericBuildTools (doc/api/HowToAddGenericBuildTools.dox file)
+Read the <a href="http://api.kde.org/4.x-api/kdevplatform-apidocs/">KDevPlatform apidocs</a> and look into the <a href="http://www.kdevelop.org/mediawiki/index.php/KDevelop_4">KDevelop4 Wiki</a>.
 
 Additionally you may also want to find out \ref howToDocument (doc/api/HowToDocument.dox file).
 

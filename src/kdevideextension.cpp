@@ -51,7 +51,7 @@ KDevelop::AreaParams KDevIDEExtension::defaultArea()
 
 QString KDevIDEExtension::projectFileExtension()
 {
-    return i18n("*.kdev4");
+    return i18n("kdev4");
 }
 
 QString KDevIDEExtension::projectFileDescription()
