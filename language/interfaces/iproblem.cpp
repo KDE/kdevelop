@@ -18,104 +18,88 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "iproblem.h"
+#include <duchain/duchainregister.h>
+
+namespace KDevelop {
+REGISTER_DUCHAIN_ITEM(Problem);
+}
 
 using namespace KDevelop;
 
-class Problem::Private
-{
-public:
-    Private()
-        : source(Unknown)
-    {
-    }
-
-    Source source;
-    DocumentRange finalLocation;
-    QStack<DocumentCursor> locationStack;
-    QString description;
-    QString explanation;
-};
-
 Problem::Problem()
-    : d(new Private)
+    : DUChainBase(*new ProblemData)
 {
+    d_func_dynamic()->setClassId(this);
 }
 
-Problem::Problem(const Problem& other)
-    : QSharedData(), d(new Private(*other.d))
-{
+KDevelop::Problem::Problem(KDevelop::ProblemData& data) : DUChainBase(data) {
 }
 
-Problem::~Problem()
+KDevelop::IndexedString KDevelop::Problem::url() const
 {
-    delete d;
+    return d_func()->url;
 }
 
 const DocumentRange & Problem::finalLocation() const
 {
-    return d->finalLocation;
+    return DocumentRange(d_func()->url.str(), range().textRange());
 }
 
 void Problem::setFinalLocation(const DocumentRange & location)
 {
-    d->finalLocation.setRange(location);
-    d->finalLocation.setDocument(location.document());
+    setRange(SimpleRange(location));
+    d_func_dynamic()->url = IndexedString(location.document().str());
 }
 
 const QStack< DocumentCursor > & Problem::locationStack() const
 {
-    return d->locationStack;
+    return QStack< DocumentCursor >();
+//     return d_func()->locationStack;
 }
 
 void Problem::addLocation(const DocumentCursor & cursor)
 {
-    d->locationStack.push(DocumentCursor(cursor));
+//     d_func()->locationStack.push(DocumentCursor(cursor));
 }
 
 void Problem::clearLocationStack()
 {
-    d->locationStack.clear();
-}
-
-const QString & Problem::description() const
-{
-    return d->description;
-}
-
-void Problem::setDescription(const QString & description)
-{
-    d->description = description;
-}
-
-const QString & Problem::explanation() const
-{
-    return d->explanation;
-}
-
-void Problem::setExplanation(const QString & explanation)
-{
-    d->explanation = explanation;
-}
-
-Problem& Problem::operator=(const Problem& rhs)
-{
-    *d = *rhs.d;
-    return *this;
+//     d_func()->locationStack.clear();
 }
 
 void Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
 {
-    d->locationStack = locationStack;
+//     d_func()->locationStack = locationStack;
 }
 
-Problem::Source Problem::source() const
+const QString & Problem::description() const
 {
-    return d->source;
+    return d_func()->description.str();
 }
 
-void Problem::setSource(Source source)
+void Problem::setDescription(const QString & description)
 {
-    d->source = source;
+    d_func_dynamic()->description = ReferenceCountedIndexedString(description);
+}
+
+const QString & Problem::explanation() const
+{
+    return d_func()->explanation.str();
+}
+
+void Problem::setExplanation(const QString & explanation)
+{
+    d_func_dynamic()->explanation = ReferenceCountedIndexedString(explanation);
+}
+
+ProblemData::Source Problem::source() const
+{
+    return d_func()->source;
+}
+
+void Problem::setSource(ProblemData::Source source)
+{
+    d_func_dynamic()->source = source;
 }
 
 /*

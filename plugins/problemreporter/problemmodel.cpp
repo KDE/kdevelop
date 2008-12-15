@@ -68,18 +68,18 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                 switch (index.column()) {
                     case Source:
                         switch (p->source()) {
-                            case Problem::Unknown:
+                            case ProblemData::Unknown:
                             default:
                                 return i18n("Unknown");
-                            case Problem::Disk:
+                            case ProblemData::Disk:
                                 return i18n("Disk");
-                            case Problem::Preprocessor:
+                            case ProblemData::Preprocessor:
                                 return i18n("Preprocessor");
-                            case Problem::Lexer:
+                            case ProblemData::Lexer:
                                 return i18n("Lexer");
-                            case Problem::Parser:
+                            case ProblemData::Parser:
                                 return i18n("Parser");
-                            case Problem::DUChainBuilder:
+                            case ProblemData::DUChainBuilder:
                                 return i18n("Definition-Use Chain");
                         }
                         break;

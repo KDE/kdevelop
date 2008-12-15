@@ -262,7 +262,6 @@ public:
     qRegisterMetaType<TopDUContextPointer>("KDevelop::TopDUContextPointer");
     qRegisterMetaType<DeclarationPointer>("KDevelop::DeclarationPointer");
     qRegisterMetaType<FunctionDeclarationPointer>("KDevelop::FunctionDeclarationPointer");
-    qRegisterMetaType<Problem>("KDevelop::Problem");
     qRegisterMetaType<KDevelop::IndexedString>("KDevelop::IndexedString");
     qRegisterMetaType<KDevelop::IndexedTopDUContext>("KDevelop::IndexedTopDUContext");
     qRegisterMetaType<KDevelop::ReferencedTopDUContext>("KDevelop::ReferencedTopDUContext");
