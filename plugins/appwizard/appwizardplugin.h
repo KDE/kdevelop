@@ -31,7 +31,6 @@ public:
 
 private slots:
     void slotNewProject();
-    void slotImportProject();
 
 private:
     QString createProject(const ApplicationInfo& );

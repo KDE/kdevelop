@@ -49,7 +49,6 @@
 #include "projectselectionpage.h"
 #include "projectvcspage.h"
 #include "projecttemplatesmodel.h"
-#include "importproject.h"
 
 using KDevelop::IBasicVersionControl;
 using KDevelop::ICentralizedVersionControl;
@@ -66,8 +65,6 @@ K_PLUGIN_FACTORY(AppWizardFactory,
     dirs->addResourceType("apptemplates", "data", "kdevappwizard/templates/");
     dirs->addResourceType("apptemplate_descriptions","data", "kdevappwizard/template_descriptions/");
     dirs->addResourceType("apptemplate_previews","data", "kdevappwizard/template_previews/");
-    dirs->addResourceType("appimports", "data", "kdevappwizard/imports/");
-    dirs->addResourceType("appimportfiles", "data", "kdevappwizard/importfiles/");
     setComponentData(compData);
 )
 K_EXPORT_PLUGIN(AppWizardFactory(KAboutData("kdevappwizard","kdevappwizard", ki18n("Project Wizard"), "0.1", ki18n("Support for creating and importing projects"), KAboutData::License_GPL)))
@@ -86,12 +83,6 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.</p>") );
-
-    action = actionCollection()->addAction( "project_import" );
-    action->setIcon(KIcon("document-import"));
-    action->setText(i18n( "&Import Existing Project..." ));
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( slotImportProject() ) );
-    action->setToolTip( i18n( "Import existing project" ) );
 
     m_templatesModel = new ProjectTemplatesModel(this);
 }
@@ -112,12 +103,6 @@ void AppWizardPlugin::slotNewProject()
         if (!project.isEmpty())
             core()->projectController()->openProject(KUrl::fromPath(project));
     }
-}
-
-void AppWizardPlugin::slotImportProject()
-{
-    ImportProject import(this, QApplication::activeWindow());
-    import.exec();
 }
 
 namespace

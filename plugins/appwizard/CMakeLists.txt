@@ -9,13 +9,11 @@ set(kdevappwizard_PART_SRCS
     projectselectionpage.cpp
     projecttemplatesmodel.cpp
     projecttemplateitem.cpp
-    importproject.cpp
     projectvcspage.cpp
 )
 
 set(kdevappwizard_PART_UI
     projectselectionpage.ui
-    importproject.ui
     projectvcspage.ui
 )
 
