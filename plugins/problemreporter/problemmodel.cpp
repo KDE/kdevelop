@@ -57,7 +57,8 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    DUChainReadLocker lock(DUChain::lock());
+//     Locking the duchain here leads to a deadlock, because kate triggers some paint to the outside while holding the smart-lock
+//     DUChainReadLocker lock(DUChain::lock());
 
     ProblemPointer p = problemForIndex(index);
 
