@@ -508,8 +508,6 @@ public:
     Q_ASSERT(!instance->lock()->currentThreadHasReadLock() && !instance->lock()->currentThreadHasWriteLock());
     DUChainWriteLocker writeLock(instance->lock());
     
-    ModificationRevisionSet::clearCache();
-
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.
     QList<ILanguage*> lockedParseMutexes;
