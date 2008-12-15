@@ -451,7 +451,7 @@ CppLanguageSupport* CppLanguageSupport::self() {
 
 KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 {
-    return new CPPParseJob( url, this );
+    return new CPPParseJob( url );
 }
 
 const KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const

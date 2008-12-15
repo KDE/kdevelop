@@ -537,7 +537,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
             ///The second parameter is zero because we are in a background-thread and we here
             ///cannot create a slave of the foreground cpp-support-part.
-            CPPParseJob* slaveJob = new CPPParseJob(includedFile, 0, this);
+            CPPParseJob* slaveJob = new CPPParseJob(includedFile, this);
             
             slaveJob->setMinimumFeatures(slaveMinimumFeatures);
 

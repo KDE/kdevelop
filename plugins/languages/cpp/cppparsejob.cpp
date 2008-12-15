@@ -133,8 +133,8 @@ void CPPParseJob::setNeedUpdateEverything(bool need) {
 }
 
 CPPParseJob::CPPParseJob( const KUrl &url,
-                    CppLanguageSupport *parent, PreprocessJob* parentPreprocessor )
-        : KDevelop::ParseJob( url, parent ),
+                    PreprocessJob* parentPreprocessor )
+        : KDevelop::ParseJob( url, 0 ),
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
@@ -285,11 +285,7 @@ ReferencedTopDUContext CPPParseJob::updatingContentContext() const {
 
 CppLanguageSupport * CPPParseJob::cpp() const
 {
-    Q_ASSERT( parent() || parentPreprocessor() );
-    if( parent() )
-        return static_cast<CppLanguageSupport*>(const_cast<QObject*>(parent()));
-    else
-        return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->cpp();
+  return CppLanguageSupport::self();
 }
 
 void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine) {

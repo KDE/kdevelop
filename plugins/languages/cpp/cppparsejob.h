@@ -57,7 +57,7 @@ public:
      * If parentPreprocessor is set, no jobs will be automatically created, since everything should be parsed in foreground.
      * Instead the preprocessor should call parseForeground();
      * */
-    CPPParseJob( const KUrl &url, CppLanguageSupport* parent, PreprocessJob* parentPreprocessor = 0  );
+    CPPParseJob( const KUrl &url, PreprocessJob* parentPreprocessor = 0  );
 
 //  CPPParseJob( KDevelop::Document* document, CppLanguageSupport* parent );
 
