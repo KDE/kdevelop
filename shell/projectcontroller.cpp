@@ -169,7 +169,7 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
     kDebug() << "selected project:" << dir << file << dlg->projectName() << dlg->projectManager();
     if( file.isEmpty() )
     {
-        dir.addPath( dir.fileName() + ".kdev4" );
+        dir.addPath( dir.fileName() + ShellExtension::getInstance()->projectFileExtension() );
         if( dir.isLocalFile() )
         {
             writeNewProjectFile( KSharedConfig::openConfig( dir.toLocalFile(), KConfig::SimpleConfig ),
