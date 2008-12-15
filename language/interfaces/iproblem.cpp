@@ -51,7 +51,7 @@ void Problem::setFinalLocation(const DocumentRange & location)
     d_func_dynamic()->url = IndexedString(location.document().str());
 }
 
-const QStack< DocumentCursor > & Problem::locationStack() const
+QStack< DocumentCursor > Problem::locationStack() const
 {
     return QStack< DocumentCursor >();
 //     return d_func()->locationStack;

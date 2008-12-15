@@ -82,7 +82,7 @@ public:
      * Returns the stack of locations via which the error occurred.
      * @todo Make the location-stack functional again. Currently these functions don't do anything.
      */
-    const QStack<DocumentCursor>& locationStack() const;
+    QStack<DocumentCursor> locationStack() const;
     void addLocation(const DocumentCursor& cursor);
     void setLocationStack(const QStack<DocumentCursor>& locationStack);
     void clearLocationStack();
