@@ -73,8 +73,6 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
     historyCombo->setDuplicatesEnabled( false );
     vlay->addWidget( historyCombo, 0 );
 
-    setLayout( layout );
-
     activateUrl( dir );
 
     // Setup connections
