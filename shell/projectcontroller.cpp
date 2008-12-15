@@ -58,6 +58,7 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
+#include "openprojectdialog.h"
 
 namespace KDevelop
 {
@@ -149,7 +150,7 @@ ProjectDialogProvider::~ProjectDialogProvider()
 KUrl ProjectDialogProvider::askProjectConfigLocation()
 {
     Q_ASSERT(d);
-    KSharedConfig * config = KGlobal::config().data();
+    /*KSharedConfig * config = KGlobal::config().data();
     KConfigGroup group = config->group( "General Options" );
     QString dir = group.readEntry( "DefaultProjectsDirectory",
                                      QDir::homePath() );
@@ -160,8 +161,11 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
     KUrl response = KFileDialog::getOpenUrl( dir, projectFileInfo,
         d->m_core->uiControllerInternal()->defaultMainWindow(),
         i18n( "Open Project" ) );
-    return response;
-    }
+    return response;*/
+    OpenProjectDialog* dlg = new OpenProjectDialog( Core::self()->uiController()->activeMainWindow() );
+    dlg->exec();
+    return KUrl();
+}
 
 bool ProjectDialogProvider::userWantsReopen()
 {
