@@ -92,7 +92,7 @@ inline QByteArray arrayFromItem(const ReferenceCountedStringData* item) {
   
 //Using a function makes sure that initialization order cannot break anything
 static ReferenceCountedStringRepository& globalReferenceCountedStringRepository() {
-  static ReferenceCountedStringRepository theGlobalReferenceCountedStringRepository("String Index");
+  static ReferenceCountedStringRepository theGlobalReferenceCountedStringRepository("Reference Counted String Index");
   return theGlobalReferenceCountedStringRepository;
 }
 
