@@ -79,6 +79,11 @@ public:
 
         loadSettings(); // Start the weaver
     }
+    
+    void startTimerThreadSafe() {
+        QMetaObject::invokeMethod(m_parser, "startTimer", Qt::QueuedConnection);
+    }
+    
     ~BackgroundParserPrivate()
     {
         suspend();
@@ -426,9 +431,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
 //             kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
         }
 
-        if (!d->m_timer.isActive()) {
-            d->m_timer.start();
-        }
+        d->startTimerThreadSafe();
     }
 }
 
@@ -496,8 +499,7 @@ void BackgroundParser::setNeededPriority(int priority)
 {
     QMutexLocker lock(&d->m_mutex);
     d->m_neededPriority = priority;
-    if(!d->m_timer.isActive())
-        d->m_timer.start();
+    d->startTimerThreadSafe();
 }
 
 void BackgroundParser::suspend()
@@ -605,9 +607,14 @@ void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTex
 
     newTracker->addChangedRange( mostSpecificChild );
     
+    d->startTimerThreadSafe();
+}
+
+void BackgroundParser::startTimer() {
     if (!d->m_timer.isActive())
         d->m_timer.start(d->m_delay);
 }
+
 
 }
 
