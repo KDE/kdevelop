@@ -1143,7 +1143,7 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
     if (returnLocationTable)
       *returnLocationTable = preprocessor.environment()->takeLocationTable();
 
-    //currentEnvironment->finish();
+    currentEnvironment->finishEnvironment();
 
     if( parent ) {
       preprocessor.environment()->swapMacros(parent->environment());
