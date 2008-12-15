@@ -6,30 +6,56 @@
 #include <kross/core/wrapperinterface.h>
 #include <language/interfaces/iproblem.h>
 
-class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
+class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	Q_ENUMS(Source)
 	Q_FLAGS(Source Unknown Disk Preprocessor Lexer Parser DUChainBuilder)
 
 	public:
-		enum KrossSource { Unknown=KDevelop::Problem::Unknown, Disk=KDevelop::Problem::Disk, Preprocessor=KDevelop::Problem::Preprocessor, Lexer=KDevelop::Problem::Lexer, Parser=KDevelop::Problem::Parser, DUChainBuilder=KDevelop::Problem::DUChainBuilder };
+		enum KrossSource { Unknown=KDevelop::ProblemData::Unknown, Disk=KDevelop::ProblemData::Disk, Preprocessor=KDevelop::ProblemData::Preprocessor, Lexer=KDevelop::ProblemData::Lexer, Parser=KDevelop::ProblemData::Parser, DUChainBuilder=KDevelop::ProblemData::DUChainBuilder };
+		KrossKDevelopProblemData(KDevelop::ProblemData* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProblemData"); }
+		void* wrappedObject() const { return wrapped; }
+
+		typedef KDevelop::ProblemData::Source KDevelopProblemDataSource;
+		Q_PROPERTY(KDevelopProblemDataSource  source READ getsource WRITE setsource SCRIPTABLE true)
+		Q_SCRIPTABLE void setsource(const KDevelopProblemDataSource  val) { wrapped->source=val; }
+		Q_SCRIPTABLE KDevelopProblemDataSource  getsource() const { return wrapped->source; }
+		typedef KDevelop::IndexedString KDevelopIndexedString;
+		Q_PROPERTY(KDevelopIndexedString  url READ geturl WRITE seturl SCRIPTABLE true)
+		Q_SCRIPTABLE void seturl(const KDevelopIndexedString  val) { wrapped->url=val; }
+		Q_SCRIPTABLE KDevelopIndexedString  geturl() const { return wrapped->url; }
+		typedef KDevelop::ReferenceCountedIndexedString KDevelopReferenceCountedIndexedString;
+		Q_PROPERTY(KDevelopReferenceCountedIndexedString  description READ getdescription WRITE setdescription SCRIPTABLE true)
+		Q_SCRIPTABLE void setdescription(const KDevelopReferenceCountedIndexedString  val) { wrapped->description=val; }
+		Q_SCRIPTABLE KDevelopReferenceCountedIndexedString  getdescription() const { return wrapped->description; }
+		Q_PROPERTY(KDevelopReferenceCountedIndexedString  explanation READ getexplanation WRITE setexplanation SCRIPTABLE true)
+		Q_SCRIPTABLE void setexplanation(const KDevelopReferenceCountedIndexedString  val) { wrapped->explanation=val; }
+		Q_SCRIPTABLE KDevelopReferenceCountedIndexedString  getexplanation() const { return wrapped->explanation; }
+	private:
+		KDevelop::ProblemData* wrapped;
+};
+
+class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
 		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Problem"); }
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE KDevelop::Problem::Source source() const { return wrapped->source(); }
-		Q_SCRIPTABLE void setSource(KDevelop::Problem::Source x0) { wrapped->setSource(x0); }
-		Q_SCRIPTABLE KDevelop::DocumentRange finalLocation() const { return wrapped->finalLocation(); }
-		Q_SCRIPTABLE void setFinalLocation(const KDevelop::DocumentRange& x0) { wrapped->setFinalLocation(x0); }
+		Q_SCRIPTABLE KDevelop::ProblemData::Source source() const { return wrapped->source(); }
+		Q_SCRIPTABLE void setSource(KDevelop::ProblemData::Source x0) { wrapped->setSource(x0); }
+		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE QStack< KDevelop::DocumentCursor > locationStack() const { return wrapped->locationStack(); }
 		Q_SCRIPTABLE void addLocation(const KDevelop::DocumentCursor& x0) { wrapped->addLocation(x0); }
 		Q_SCRIPTABLE void setLocationStack(const QStack< KDevelop::DocumentCursor >& x0) { wrapped->setLocationStack(x0); }
 		Q_SCRIPTABLE void clearLocationStack() { wrapped->clearLocationStack(); }
+		Q_SCRIPTABLE KDevelop::DocumentRange finalLocation() const { return wrapped->finalLocation(); }
+		Q_SCRIPTABLE void setFinalLocation(const KDevelop::DocumentRange& x0) { wrapped->setFinalLocation(x0); }
 		Q_SCRIPTABLE QString description() const { return wrapped->description(); }
 		Q_SCRIPTABLE void setDescription(const QString& x0) { wrapped->setDescription(x0); }
 		Q_SCRIPTABLE QString explanation() const { return wrapped->explanation(); }
 		Q_SCRIPTABLE void setExplanation(const QString& x0) { wrapped->setExplanation(x0); }
-		Q_SCRIPTABLE KDevelop::Problem operator=(const KDevelop::Problem& x0) { return wrapped->operator=(x0); }
 	private:
 		KDevelop::Problem* wrapped;
 };
@@ -50,6 +76,18 @@ bool b_KDevelopProblem1=krossiproblem_registerHandler("Problem*", _kDevelopProbl
 bool b_KDevelopProblem=krossiproblem_registerHandler("KDevelop::Problem*", _kDevelopProblemHandler);
 QVariant kDevelopProblemHandler(KDevelop::Problem* type){ return _kDevelopProblemHandler(type); }
 QVariant kDevelopProblemHandler(const KDevelop::Problem* type) { return _kDevelopProblemHandler((void*) type); }
+
+QVariant _kDevelopProblemDataHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProblemData* t=static_cast<KDevelop::ProblemData*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProblemData*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProblemData(t, 0));
+}
+bool b_KDevelopProblemData1=krossiproblem_registerHandler("ProblemData*", _kDevelopProblemDataHandler);
+bool b_KDevelopProblemData=krossiproblem_registerHandler("KDevelop::ProblemData*", _kDevelopProblemDataHandler);
+QVariant kDevelopProblemDataHandler(KDevelop::ProblemData* type){ return _kDevelopProblemDataHandler(type); }
+QVariant kDevelopProblemDataHandler(const KDevelop::ProblemData* type) { return _kDevelopProblemDataHandler((void*) type); }
 
 }
 #include "krossiproblem.moc"

@@ -92,27 +92,31 @@ void DUChainReader::foundClass(const Declaration* decl)
     QList<QStringList> enums;
     foreach(const Declaration* declEnum, decl->internalContext()->localDeclarations())
     {
-        const AbstractType::Ptr t = declEnum->abstractType();
-        const EnumerationType* en = dynamic_cast<const EnumerationType*>(t.unsafeData());
-        if(en)
+        if(declEnum->kind()==Declaration::Type && declEnum->internalContext())
         {
-            QStringList anEnum;
-            if(!declEnum->identifier().identifier().isEmpty()) {
-                anEnum+=en->qualifiedIdentifier().toString();
-                
-                foreach(const Declaration* declFlag, declEnum->internalContext()->localDeclarations())
-                {
-                    const AbstractType::Ptr t = declFlag->abstractType();
-                    const EnumeratorType* enor = dynamic_cast<const EnumeratorType*>(t.unsafeData());
-    //                 Q_ASSERT(enor);
-                    if(!enor) {
-                        qDebug() << "found a null enumerator";
-                        continue;
-                    }
+            const AbstractType::Ptr t = declEnum->abstractType();
+            const EnumerationType* en = dynamic_cast<const EnumerationType*>(t.unsafeData());
+        
+            if(en)
+            {
+                QStringList anEnum;
+                if(!declEnum->identifier().identifier().isEmpty()) {
+                    anEnum+=en->qualifiedIdentifier().toString();
                     
-                    anEnum += enor->qualifiedIdentifier().toString();
+                    foreach(const Declaration* declFlag, declEnum->internalContext()->localDeclarations())
+                    {
+                        const AbstractType::Ptr t = declFlag->abstractType();
+                        const EnumeratorType* enor = dynamic_cast<const EnumeratorType*>(t.unsafeData());
+        //                 Q_ASSERT(enor);
+                        if(!enor) {
+                            qDebug() << "found a null enumerator";
+                            continue;
+                        }
+                        
+                        anEnum += enor->qualifiedIdentifier().toString();
+                    }
+                    enums += anEnum;
                 }
-                enums += anEnum;
             }
         }
     }

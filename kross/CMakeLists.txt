@@ -28,7 +28,8 @@ if(KDEVCPPDUCHAIN)
                             ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${theImpl} ${interface}
                                 -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath}
                                 -o${CMAKE_SOURCE_DIR}/kross/wrappers/${weFile}.cpp
-                            DEPENDS ${interface} xmltokross/duchaintokross )
+                        #    DEPENDS ${interface} xmltokross/duchaintokross
+                         )
         add_dependencies(krossWrappers ${weFile})
     endmacro(kdev_create_kross_iface)
 

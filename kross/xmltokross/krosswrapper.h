@@ -28,6 +28,7 @@ class KrossWrapper : public DUChainReader
         KrossWrapper(KDevelop::TopDUContext* top) : DUChainReader(top) {}
         QString output;
         QString handlersHeader;
+        QSet<QString> typedefedTypes;
         
         void writeDocument()
         {
@@ -110,8 +111,11 @@ class KrossWrapper : public DUChainReader
             QString write;
             if(!isConst)
                 write=" WRITE set"+name;
-            if(_type.contains("::"))
+            if(_type.contains("::") && !typedefedTypes.contains(_type))
+            {
                 output += QString("\t\ttypedef %1 %2;\n").arg(typeName).arg(type);
+                typedefedTypes.insert(_type);
+            }
             output += "\t\tQ_PROPERTY("+(isConst? "const " : QString())+type+(isPtr ? '*':' ')+' '+name+" READ get"+name+write+" SCRIPTABLE true)\n";
             if(!isConst) {
                 QString setType="const "+type;
