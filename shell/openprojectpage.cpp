@@ -94,7 +94,6 @@ void OpenProjectPage::expandTreeView( const QModelIndex& idx )
 
 void OpenProjectPage::changeUrl( const KUrl& url )
 {
-    kDebug() << "changing url to" << url << sender();
     bool blocked = filePlacesView->blockSignals( true );
     filePlacesView->setUrl( url );
     filePlacesView->blockSignals( blocked );

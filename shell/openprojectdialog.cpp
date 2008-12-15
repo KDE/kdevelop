@@ -77,6 +77,7 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         page->setProjectDir( url );
     } else
     {
+        setAppropriate( projectInfoPage, false );
         if( entriesList.count() > 1 )
         {
             setAppropriate( filePage, true );
@@ -86,6 +87,9 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
                 kFatal() << "Ooops, project file selection page item doesn't contain ProjectFileSelectionPage. Serious problem";
             }
             page->setEntries( entriesList );
+        } else 
+        {
+            setAppropriate( filePage, false );
         }
     }
     setValid( filePage, false );
@@ -109,7 +113,6 @@ void OpenProjectDialog::gotFileList( KIO::Job*, const KIO::UDSEntryList& list )
 
 void OpenProjectDialog::validateProjectFile( const QString& file )
 {
-    kDebug() << "validating project file" << file;
     setAppropriate( projectInfoPage, false );
     setValid( filePage, true );
     projectFile = file;
