@@ -3169,7 +3169,7 @@ void TestDUChain::testStringSets() {
   const unsigned int choiceCount = 40;
   const unsigned int itemCount = 120;
 
-  BasicSetRepository rep("test repository", false);
+  BasicSetRepository rep("test repository");
 
 //  kDebug() << "Start repository-layout: \n" << rep.dumpDotGraph();
 
