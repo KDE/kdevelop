@@ -72,7 +72,7 @@ class TemporaryDataManager {
       uint cnt = usedItemCount();
       if(cnt) //Don't use kDebug, because that may not work during destruction
         std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
-      
+
       for(uint a = 0; a < m_itemsUsed; ++a)
         delete m_items[a];
     }
@@ -91,7 +91,7 @@ class TemporaryDataManager {
 
       if(threadSafe)
         m_mutex.lock();
-      
+
       uint ret;
       if(!m_freeIndicesWithData.isEmpty()) {
         ret = m_freeIndicesWithData.pop();
@@ -100,13 +100,13 @@ class TemporaryDataManager {
         Q_ASSERT(!m_items[ret]);
         m_items[ret] = new T;
       }else{
-        
+
         if(m_itemsUsed >= m_itemsSize) {
           //We need to re-allocate
           uint newItemsSize = m_itemsSize + 20 + (m_itemsSize/3);
           T** newItems = new T*[newItemsSize];
           memcpy(newItems, m_items, sizeof(T*) * m_itemsSize);
-          
+
           T** oldItems = m_items;
           m_items = newItems;
           m_itemsSize = newItemsSize;
@@ -121,7 +121,7 @@ class TemporaryDataManager {
             while(!m_deleteLater.isEmpty()) {
               //We delete after 5 seconds
               if(time(0) - m_deleteLater.first().first > 5) {
-                delete m_deleteLater.first().second;
+                delete[] m_deleteLater.first().second;
                 m_deleteLater.removeFirst();
               }else{
                 break;
@@ -129,7 +129,7 @@ class TemporaryDataManager {
             }
           }
         }
-        
+
         ret = m_itemsUsed;
         m_items[m_itemsUsed] = new T;
         ++m_itemsUsed;
@@ -143,7 +143,7 @@ class TemporaryDataManager {
 
       return ret | DynamicAppendedListMask;
     }
-    
+
     void free(uint index) {
       Q_ASSERT(index & DynamicAppendedListMask);
       index &= DynamicAppendedListRevertMask;
@@ -152,7 +152,7 @@ class TemporaryDataManager {
         m_mutex.lock();
 
       freeItem(m_items[index]);
-      
+
       m_freeIndicesWithData.push(index);
 
       //Hold the amount of free indices with data between 100 and 200
@@ -164,11 +164,11 @@ class TemporaryDataManager {
           m_freeIndices.push(deleteIndexData);
         }
       }
-      
+
       if(threadSafe)
         m_mutex.unlock();
     }
-    
+
     uint usedItemCount() const {
       uint ret = 0;
       for(uint a = 0; a < m_itemsUsed; ++a)
@@ -182,7 +182,7 @@ class TemporaryDataManager {
     void freeItem(T* item) {
       item->clear(); ///@todo make this a template specialization that only does this for containers
     }
-    
+
     uint m_itemsUsed, m_itemsSize;
     T** m_items;
     QStack<uint> m_freeIndicesWithData;
@@ -231,14 +231,14 @@ bool appendedListsDynamic() const { return m_dynamic; }
 ///use this if the class does not have a base class that also uses appended lists
 #define START_APPENDED_LISTS(container) \
 unsigned int offsetBehindBase() const { return 0; } \
-void freeDynamicData() { freeAppendedLists(); } 
+void freeDynamicData() { freeAppendedLists(); }
 
 ///Use this if one of the base-classes of the container also has the appended lists interfaces implemented.
 ///To reduce the probability of future problems, you should give the direct base class this one inherits from.
 ///@note: Multiple inheritance is not supported, however it will work ok if only one of the base-classes uses appended lists.
 #define START_APPENDED_LISTS_BASE(container, base) \
 unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } \
-void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); } 
+void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
 
 
 #define APPENDED_LIST_COMMON(container, type, name) \
