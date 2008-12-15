@@ -109,21 +109,28 @@ public:
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
         QList<ParseJob*> jobs;
-        QHashIterator<KUrl, DocumentChangeTracker*> it = m_delayedParseJobs;
-        while (it.hasNext()) {
-            ParseJob* job = createParseJob(it.next().key(), 
-                                           TopDUContext::AllDeclarationsContextsAndUses,
-                                           QList<QPointer<QObject> >());
-            if (job) {
-                job->setChangedRanges(it.value()->changedRanges());
-                jobs.append(job);
-                specialParseJob = job;
-            } else {
-                kWarning() << "No job created for url " << it.key();
+        
+        for(QHash<KUrl, DocumentChangeTracker*>::iterator it = m_delayedParseJobs.begin(); it != m_delayedParseJobs.end(); ) {
+            KUrl url(it.key());
+            
+            if(m_parseJobs.contains(url)) {
+                kDebug() << "already parsing" << url << ", delaying the parse-job";
+                ++it; //Add the delayed job later
+            }else{
+                ParseJob* job = createParseJob(url, 
+                                            TopDUContext::AllDeclarationsContextsAndUses,
+                                            QList<QPointer<QObject> >());
+                if (job) {
+                    job->setChangedRanges(it.value()->changedRanges());
+                    jobs.append(job);
+                    specialParseJob = job;
+                } else {
+                    kWarning() << "No job created for url " << it.key();
+                }
+                delete *it;
+                it = m_delayedParseJobs.erase(it);
             }
         }
-        qDeleteAll(m_delayedParseJobs);
-        m_delayedParseJobs.clear();
 
         for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
