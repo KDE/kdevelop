@@ -1024,25 +1024,46 @@ void TestDUChain::testDeclareStructInNamespace()
   {
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("struct A {A(); struct B;}; struct A::B { B(); struct C; }; struct A::B::C { A mem; B mem2; };");
+    QByteArray method("struct A {A(); struct B;}; struct A::B { B(); struct C; }; struct A::B::C { A mem; B mem2; void test(A param); }; void A::B::C::test(A param) {};");
 
     TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
 
     QVERIFY(!top->parentContext());
-    QCOMPARE(top->childContexts().count(), 3);
-    QCOMPARE(top->localDeclarations().count(), 1); //Only one declaration, because the others are nested within helper scope contexts
-    QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 5);
+    QCOMPARE(top->localDeclarations().count(), 2); //Only one declaration, because the others are nested within helper scope contexts
+    
     QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[3]->localDeclarations().count(), 1);
+    
+    QCOMPARE(top->childContexts()[2]->localScopeIdentifier(), QualifiedIdentifier("A::B"));
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localScopeIdentifier(), QualifiedIdentifier("C"));
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->scopeIdentifier(true), QualifiedIdentifier("A::B::C"));
+    QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->qualifiedIdentifier(), QualifiedIdentifier("A::B::C"));
+    QVERIFY(top->childContexts()[2]->inSymbolTable());
+    QVERIFY(top->childContexts()[2]->childContexts()[0]->inSymbolTable());
+    QVERIFY(top->childContexts()[2]->localDeclarations()[0]->inSymbolTable());
+    
+    QualifiedIdentifier search("::A::B::C");
+    Declaration* cDecl = findDeclaration(top, search);
+    QVERIFY(cDecl->logicalInternalContext(top));
+    QVERIFY(cDecl);
+    QVERIFY(!cDecl->isForwardDeclaration());
+    QVERIFY(cDecl->internalContext());
+    
     QCOMPARE(top->childContexts()[2]->childContexts().count(), 1);
-    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 3);
     
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[0]->indexedType());
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[1]->indexedType(), top->childContexts()[1]->localDeclarations()[0]->indexedType());
+    kDebug() << top->childContexts()[3]->localDeclarations()[0]->abstractType()->toString();
+    kDebug() << top->localDeclarations()[0]->abstractType()->toString();
+    QCOMPARE(top->childContexts()[3]->localDeclarations()[0]->indexedType(), top->localDeclarations()[0]->indexedType());
 
     release(top);
-  }  
+  }
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
   {

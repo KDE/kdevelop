@@ -223,10 +223,6 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
       kDebug() << "prevented endless recursive import";
     }else{
       addImportedParentContextSafely(currentContext(), import);
-      
-      //By doing this, we make sure that we also have correct visibility when multiple recursive external class-declarations are used
-      if(import->parentContext()->type() == DUContext::Helper)
-        addImportedParentContextSafely(currentContext(), import->parentContext());
     }
   }
 }
@@ -557,15 +553,24 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   if (compilingContexts() && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     functionName = identifierForNode(node->init_declarator->declarator->id);
     if (functionName.count() >= 2) {
+      
       // This is a class function definition
       DUChainReadLocker lock(DUChain::lock());
-      QualifiedIdentifier className = currentContext()->scopeIdentifier(false) + functionName;
+      QualifiedIdentifier currentScope = currentContext()->scopeIdentifier(true);
+      QualifiedIdentifier className = currentScope + functionName;
       className.pop();
       className.setExplicitlyGlobal(true);
-
+      
       QList<Declaration*> classDeclarations = currentContext()->findDeclarations(className);
-      if (classDeclarations.count() != 0 && classDeclarations.first()->internalContext())
+      
+      if (classDeclarations.count() != 0 && classDeclarations.first()->internalContext()) {
         m_importedParentContexts.append(classDeclarations.first()->internalContext());
+        
+        QualifiedIdentifier newFunctionName(className);
+        newFunctionName.push(functionName.last());
+        if(newFunctionName.count() > currentScope.count())
+          functionName = newFunctionName.mid(currentScope.count());
+      }
     }
   }
   visitFunctionDeclaration(node);

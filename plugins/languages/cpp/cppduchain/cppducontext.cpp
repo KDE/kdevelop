@@ -23,6 +23,7 @@
 #include "navigation/macronavigationcontext.h"
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/topducontextdata.h>
+#include <language/duchain/forwarddeclaration.h>
 
 namespace Cpp {
 
@@ -127,6 +128,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
         continue;
       
       scopeContext = decl->logicalInternalContext(topContext());
+      
 
       if( !scopeContext || scopeContext->type() == DUContext::Template ) {
         AbstractType::Ptr t = decl->abstractType();
@@ -172,12 +174,6 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
     if( tempDecls.isEmpty() && m_source != m_context ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
 
-      DUContext::SearchItem::Ptr prependedSearch( new DUContext::SearchItem(m_context->scopeIdentifier(false)) );
-      prependedSearch->addToEachNode( allIdentifiers[0] );
-      
-      if(!prependedSearch->next.isEmpty()) //Can happen when explicitly global is set
-        insertToArray(allIdentifiers, prependedSearch, 0);
-
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
       
       DUContext::DeclarationList decls;
@@ -206,6 +202,12 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
     s.result.clear();
     //instantiate template declarations
     FOREACH_ARRAY(Declaration* decl, tempDecls) {
+      if(decl->isForwardDeclaration() && scopeContext && scopeContext->type() == DUContext::Class) {
+        //We found a forward-declaration within a class. Resolve it with its real declaration.
+        Declaration* resolution = dynamic_cast<ForwardDeclaration*>(decl)->resolve(m_source);
+        if(resolution)
+          decl = resolution;
+      }
       if( !s.templateParameters.isValid() ) {
         s.result << DeclarationPointer(decl);
       }else{

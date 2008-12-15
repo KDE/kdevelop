@@ -445,7 +445,6 @@ class CppDUContext : public BaseContext {
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
-           
           
           DUContext* classContext = 0;
           
@@ -455,13 +454,12 @@ class CppDUContext : public BaseContext {
           } else {
             //This must be a function-definition, like void A::B::test() {}
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
-            if(classDeclaration && classDeclaration->internalContext())
-              classContext = classDeclaration->internalContext();
+            if(classDeclaration)
+              classContext = classDeclaration->logicalInternalContext(source);
             prefix.pop();
           }
           
           if(classContext) {
-            
             while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
               prefix.pop();
               
@@ -507,7 +505,7 @@ class CppDUContext : public BaseContext {
     
     virtual bool shouldSearchInParent(typename BaseContext::SearchFlags flags) const {
       //If the parent context is a class context, we should even search it from an import
-      return !(flags & DUContext::InImportedParentContext) || (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class);
+      return (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class) || BaseContext::shouldSearchInParent(flags);
     }
 
     virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
