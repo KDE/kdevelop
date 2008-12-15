@@ -223,6 +223,10 @@ void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedId
       kDebug() << "prevented endless recursive import";
     }else{
       addImportedParentContextSafely(currentContext(), import);
+      
+      //By doing this, we make sure that we also have correct visibility when multiple recursive external class-declarations are used
+      if(import->parentContext()->type() == DUContext::Helper)
+        addImportedParentContextSafely(currentContext(), import->parentContext());
     }
   }
 }

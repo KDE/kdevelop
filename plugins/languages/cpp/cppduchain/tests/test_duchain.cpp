@@ -1024,7 +1024,7 @@ void TestDUChain::testDeclareStructInNamespace()
   {
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("struct A {A(); struct B;}; struct A::B { struct C; }; struct A::B::C { A mem; };");
+    QByteArray method("struct A {A(); struct B;}; struct A::B { B(); struct C; }; struct A::B::C { A mem; B mem2; };");
 
     TopDUContext* top = parse(method, DumpAll);
 
@@ -1034,10 +1034,12 @@ void TestDUChain::testDeclareStructInNamespace()
     QCOMPARE(top->childContexts().count(), 3);
     QCOMPARE(top->localDeclarations().count(), 1); //Only one declaration, because the others are nested within helper scope contexts
     QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[2]->childContexts().count(), 1);
-    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 2);
     
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[0]->indexedType());
+    QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[1]->indexedType(), top->childContexts()[1]->localDeclarations()[0]->indexedType());
 
     release(top);
   }  
