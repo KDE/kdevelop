@@ -81,6 +81,8 @@ class ExecuteCompositeJob : public KCompositeJob
     public:
         ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs) : KCompositeJob(parent)
         {
+            setCapabilities(Killable);
+
             qDebug() << "execute composite" << jobs;
             foreach(KJob* job, jobs) {
                 addSubjob(job);
@@ -109,6 +111,13 @@ class ExecuteCompositeJob : public KCompositeJob
             } else {
                 emitResult();
             }
+        }
+
+    protected:
+        virtual bool doKill()
+        {
+            if(hasSubjobs())
+                subjobs().first()->kill();
         }
 };
 
@@ -328,7 +337,7 @@ IRun KDevelop::RunController::defaultRun() const
             {
                 KMessageBox::error(0, i18n("Target '%1' is not executable.", target));
             }
-        } else 
+        } else
         {
             KMessageBox::error(0, i18n("Target '%1' could not be found.", target));
         }
