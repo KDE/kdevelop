@@ -34,9 +34,10 @@
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
 
-TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_debug(debug)
+TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_debug(debug), m_flags(KDevelop::DUContext::NoSearchFlags)
 {
   m_position = m_context->range().end;
+  m_stopSearch = false;
 }
 
 void TypeASTVisitor::run(TypeSpecifierAST *node)
@@ -64,32 +65,46 @@ void TypeASTVisitor::run(TypeSpecifierAST *node)
 
 void TypeASTVisitor::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  if(m_stopSearch)
+    return;
   visit(node->name);
 }
 
 void TypeASTVisitor::visitEnumSpecifier(EnumSpecifierAST *node)
 {
+  if(m_stopSearch)
+    return;
   visit(node->name);
 }
 
 void TypeASTVisitor::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  if(m_stopSearch)
+    return;
   visit(node->name);
 }
 
 TypePtr< KDevelop::AbstractType > TypeASTVisitor::type() const {
+  if(m_stopSearch)
+    return TypePtr< KDevelop::AbstractType >();
   return m_type;
 }
 
 QList<KDevelop::DeclarationPointer> TypeASTVisitor::declarations() const
 {
+  if(m_stopSearch)
+    return QList<KDevelop::DeclarationPointer>();
+  
   return m_declarations;
 }
 
 void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
+  if(m_stopSearch)
+    return;
+  
   ///@todo Merge this with ExpressionVisitor::visitSimpleTypeSpecifier
-  Cpp::FindDeclaration find( m_context, m_source, DUContext::NoSearchFlags, m_context->range().end );
+  Cpp::FindDeclaration find( m_context, m_source, m_flags, m_context->range().end );
   find.openQualifiedIdentifier(false);
   
   if (const ListNode<std::size_t> *it = node->integrals)
@@ -172,8 +187,15 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
 void TypeASTVisitor::visitName(NameAST *node)
 {
-  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_position, KDevelop::DUContext::NoSearchFlags, m_debug);
+  if(m_stopSearch)
+    return;
+  
+  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_position, m_flags, m_debug);
   name_cc.run(node);
+  if(name_cc.stoppedSearch()) {
+    m_stopSearch = true;
+    return;
+  }
   m_typeId = name_cc.identifier();
   m_declarations = name_cc.declarations();
   if(!m_declarations.isEmpty())
@@ -182,6 +204,9 @@ void TypeASTVisitor::visitName(NameAST *node)
 
 QStringList TypeASTVisitor::cvString() const
 {
+  if(m_stopSearch)
+    return QStringList();
+  
   QStringList lst;
 
   foreach (int q, cv())
@@ -197,16 +222,25 @@ QStringList TypeASTVisitor::cvString() const
 
 bool TypeASTVisitor::isConstant() const
 {
+  if(m_stopSearch)
+    return false;
+  
     return _M_cv.contains(Token_const);
 }
 
 bool TypeASTVisitor::isVolatile() const
 {
+  if(m_stopSearch)
+    return false;
+  
     return _M_cv.contains(Token_volatile);
 }
 
 QualifiedIdentifier TypeASTVisitor::identifier() const
 {
+  if(m_stopSearch)
+    return QualifiedIdentifier();
+  
   return m_typeId;
 }
 

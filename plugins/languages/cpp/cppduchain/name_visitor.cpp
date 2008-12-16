@@ -40,6 +40,8 @@ using namespace Cpp;
 NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
 : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
 {
+  m_flags = localSearchFlags;
+  m_stopSearch = false;
 }
 
 QString decode(ParseSession* session, AST* ast, bool without_spaces)
@@ -61,6 +63,8 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces)
 
 void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 {
+  if(m_stopSearch)
+    return;
   IndexedString tmp_name;
 
   if (node->id)
@@ -111,14 +115,16 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
     foreach(const DeclarationPointer &decl, m_find.lastDeclarations()) {
       if(decl && !decl->isForwardDeclaration()) {
         //Prefer registering non forward-declaration uses
-        m_visitor->newUse( node, node->id, node->id+1, decl );
+        if(m_visitor)
+          m_visitor->newUse( node, node->id, node->id+1, decl );
         had = true;
         break;
       }
     }
 
     if(!had) //only forward-declarations, register to any.
-      m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
+      if(m_visitor)
+        m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
   } else if( m_debug )
     kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
 
@@ -128,16 +134,28 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 }
 
 TypeSpecifierAST* NameASTVisitor::lastTypeSpecifier() const {
+  if(m_stopSearch)
+    return 0;
   return m_typeSpecifier;
 }
 
 void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
 {
+  if(m_stopSearch)
+    return;
+  processTemplateArgument(node);
+}
+
+ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgumentAST *node)
+{
+  if(m_stopSearch)
+    return ExpressionEvaluationResult();
+  
+  ExpressionEvaluationResult res;
   bool opened = false;
   if( node->expression ) {
     m_visitor->visit( node->expression );
 
-    ExpressionEvaluationResult res;
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
       res.type = m_visitor->lastType()->indexed();
@@ -157,9 +175,14 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
   } else if( node->type_id )
   {
     TypeASTVisitor v( m_session, m_visitor, m_context, m_source, m_debug );
+    v.setSearchFlags(m_flags);
     v.run( node->type_id->type_specifier );
 
-    ExpressionEvaluationResult res;
+    if(v.stoppedSearch()) {
+      m_stopSearch = true;
+      return ExpressionEvaluationResult();
+    }
+    
     res.type = v.type()->indexed();
     
     if( v.type() ) {
@@ -215,10 +238,13 @@ void NameASTVisitor::visitTemplateArgument(TemplateArgumentAST *node)
     m_find.closeQualifiedIdentifier();
 
   m_currentIdentifier.appendTemplateIdentifier( typeIdentifierFromTemplateArgument(m_session, node) );
+  return res;
 }
 
 const QualifiedIdentifier& NameASTVisitor::identifier() const
 {
+  if(m_stopSearch)
+    return QualifiedIdentifier();
   return _M_name;
 }
 
@@ -234,13 +260,23 @@ void NameASTVisitor::run(UnqualifiedNameAST *node, bool skipThisName)
     DefaultVisitor::visitUnqualifiedName(node);
   else
     visit(node);
+
+  if(m_stopSearch)
+    return;
   
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();
+  
+  if(m_find.lastDeclarations().isEmpty() && (m_flags & DUContext::NoUndefinedTemplateParams)) {
+    m_stopSearch = true;
+    return;
+  }
 }
 
 QList<KDevelop::DeclarationPointer> NameASTVisitor::declarations() const
 {
+  if(m_stopSearch)
+    return QList<KDevelop::DeclarationPointer>();
   return m_find.lastDeclarations();
 }
 
@@ -259,6 +295,9 @@ void NameASTVisitor::run(NameAST *node, bool skipLastNamePart)
   else
     visit(node);
 
+  if(m_stopSearch)
+    return;
+  
   _M_name.setExplicitlyGlobal( node->global );
   LOCKDUCHAIN;
   m_find.closeQualifiedIdentifier();

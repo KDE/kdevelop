@@ -45,8 +45,8 @@ public:
   TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug = false);
 
   KDevelop::QualifiedIdentifier identifier() const;
-  inline QStringList qualifiedName() const { return m_typeId.toStringList(); }
-  inline QList<int> cv() const { return _M_cv; }
+  inline QStringList qualifiedName() const { if(m_stopSearch) return QStringList(); return m_typeId.toStringList(); }
+  inline QList<int> cv() const { if(m_stopSearch) return QList<int>(); return _M_cv; }
 
   bool isConstant() const;
   bool isVolatile() const;
@@ -58,6 +58,14 @@ public:
   KDevelop::AbstractType::Ptr type() const;
   
   QList<KDevelop::DeclarationPointer> declarations() const;
+  
+  void setSearchFlags(KDevelop::DUContext::SearchFlags flags) {
+    m_flags = flags;
+  }
+  
+  bool stoppedSearch() const {
+    return m_stopSearch;
+  }
   
 protected:
   virtual void visitClassSpecifier(ClassSpecifierAST *node);
@@ -76,8 +84,10 @@ private:
   const KDevelop::TopDUContext* m_source;
   KDevelop::QualifiedIdentifier m_typeId;
   KDevelop::AbstractType::Ptr m_type;
+  KDevelop::DUContext::SearchFlags m_flags;
   QList<int> _M_cv;
   bool m_debug;
+  bool m_stopSearch;
 };
 
 #endif // TYPE_VISITOR_H

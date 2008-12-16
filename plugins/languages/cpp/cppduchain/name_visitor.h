@@ -47,8 +47,8 @@ public:
   ///@param skipThisName if this is true, only the template-parameters of the given node are processed
   void run(UnqualifiedNameAST *node, bool skipThisName = false);
 
-  QString name() const { return _M_name.toString(); }
-  QStringList qualifiedName() const { return _M_name.toStringList(); }
+  QString name() const { if(m_stopSearch) return QString(); return _M_name.toString(); }
+  QStringList qualifiedName() const { if(m_stopSearch) return QStringList(); return _M_name.toStringList(); }
 
   const KDevelop::QualifiedIdentifier& identifier() const;
 
@@ -60,11 +60,18 @@ public:
 
   ///Retrieve the declarations found for the name
   QList<KDevelop::DeclarationPointer> declarations() const;
+
+  bool stoppedSearch() const {
+    return m_stopSearch;
+  }
   
+  ///This can be used from outside to only process the type of a template-argument.
+  ///This NameASTVisitor will be in an invalid state after this is called, so don't continue using it!
+  Cpp::ExpressionEvaluationResult processTemplateArgument(TemplateArgumentAST *node);
 protected:
   virtual void visitUnqualifiedName(UnqualifiedNameAST *node);
-  virtual void visitTemplateArgument(TemplateArgumentAST *node);
-
+  void visitTemplateArgument(TemplateArgumentAST *node);
+  
 private:
   ParseSession* m_session;
   Cpp::ExpressionVisitor* m_visitor;
@@ -76,6 +83,8 @@ private:
   Cpp::FindDeclaration m_find;
   bool m_debug;
   UnqualifiedNameAST* m_finalName;
+  KDevelop::DUContext::SearchFlags m_flags;
+  bool m_stopSearch;
 };
 
 QString decode(ParseSession* session, AST* ast, bool without_spaces = false);
