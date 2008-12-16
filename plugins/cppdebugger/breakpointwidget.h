@@ -109,8 +109,7 @@ namespace GDBDebugger
                 status_->setText("Breakpoint is active");
 
             if (b->hitCount())
-                // FIXME: i18n
-                hits_->setText(QString("Hit %1 times").arg(b->hitCount()));
+                hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
             else
                 hits_->setText(i18n("Not hit yet"));
 
