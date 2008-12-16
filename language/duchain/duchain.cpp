@@ -99,7 +99,7 @@ class EnvironmentInformationItem {
 };
 
 struct ItemRepositoryIndexHash
-{ 
+{
   size_t
   operator()(unsigned int __x) const
   { return 173*(__x>>2) + 11 * (__x >> 16); }
@@ -127,10 +127,10 @@ class EnvironmentInformationRequest {
   size_t itemSize() const {
     return sizeof(EnvironmentInformationItem) + DUChainItemSystem::self().dynamicSize(*m_file->d_func());
   }
-  
+
   void createItem(EnvironmentInformationItem* item) const {
     new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
-    
+
     DUChainItemSystem::self().copy(*m_file->d_func(), *(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem)), true);
     Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).m_range == m_file->d_func()->m_range);
     Q_ASSERT((*(DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem))).classId == m_file->d_func()->classId);
@@ -222,13 +222,13 @@ class DUChainPrivate
     public:
       CleanupThread(DUChainPrivate* data) : m_stopRunning(false), m_data(data) {
       }
-      
+
       void stopThread() {
         m_stopRunning = true;
         m_wait.wakeAll(); //Wakes the thread up, so it notices it should exit
         wait();
       }
-      
+
     private:
       void run() {
         while(1) {
@@ -237,10 +237,10 @@ class DUChainPrivate
           m_waitMutex.unlock();
           if(m_stopRunning)
             break;
-          
+
           //Just to make sure the cache is cleared periodically
           ModificationRevisionSet::clearCache();
-          
+
           m_data->doMoreCleanup(SOFT_CLEANUP_STEPS);
           if(m_stopRunning)
             break;
@@ -265,7 +265,7 @@ public:
     qRegisterMetaType<KDevelop::IndexedString>("KDevelop::IndexedString");
     qRegisterMetaType<KDevelop::IndexedTopDUContext>("KDevelop::IndexedTopDUContext");
     qRegisterMetaType<KDevelop::ReferencedTopDUContext>("KDevelop::ReferencedTopDUContext");
-    
+
     notifier = new DUChainObserver();
     instance = new DUChain();
     m_cleanup = new CleanupThread(this);
@@ -282,7 +282,7 @@ public:
 
     if(!m_cleanupDisabled)
       doMoreCleanup();
-    
+
     DUChainWriteLocker writeLock(DUChain::lock());
 
     for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
@@ -299,16 +299,16 @@ public:
   QMutex m_chainsMutex;
 
   CleanupThread* m_cleanup;
-  
+
   DUChain* instance;
   DUChainLock lock;
   QMultiMap<IndexedString, TopDUContext*> m_chainsByUrl;
   google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash> m_chainsByIndex;
-  
+
   //Must be locked before accessing m_referenceCounts
   QMutex m_referenceCountsMutex;
   QHash<TopDUContext*, uint> m_referenceCounts;
-  
+
   DUChainObserver* notifier;
   Definitions m_definitions;
   Uses m_uses;
@@ -319,59 +319,59 @@ public:
   QSet<ReferencedTopDUContext> m_openDocumentContexts;
 
   bool m_destroyed;
-  
+
   ParsingEnvironmentFile* findEnvironmentFor(IndexedTopDUContext top) {
     IndexedString url = top.url();
-    
+
     QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
     QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
-    
+
     while(start != end) {
       if((*start)->indexedTopContext().index() == top.index())
         return start->data();
       ++start;
     }
-    
+
     return 0;
   }
-  
+
   ///The item must not be stored yet
   void addEnvironmentInformation(ParsingEnvironmentFilePointer info) {
     Q_ASSERT(!findEnvironmentFor(info->indexedTopContext()));
     Q_ASSERT(m_environmentInfo.findIndex(info->indexedTopContext().index()) == 0);
-    
+
     m_fileEnvironmentInformations.insert(info->url(), info);
     Q_ASSERT(info->d_func()->classId);
   }
 
   ///The item must be managed currently
   void removeEnvironmentInformation(ParsingEnvironmentFilePointer info) {
-    
+
     info->makeDynamic(); //By doing this, we make sure the data is actually being destroyed in the destructor
-    
+
     bool removed = (bool)m_fileEnvironmentInformations.remove(info->url(), info);
     uint index = m_environmentInfo.findIndex(info->indexedTopContext().index());
     if(index) {
       m_environmentInfo.deleteItem(index);
     }
-    
+
     Q_ASSERT(index || removed);
   }
 
   QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(IndexedString url) {
     QList<ParsingEnvironmentFilePointer> ret;
-    
+
     uint listIndex = m_environmentListInfo.findIndex(url);
-    
+
     if(listIndex) {
       const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
-    
+
       FOREACH_FUNCTION(uint topContextIndex, item->items)
         ret << ParsingEnvironmentFilePointer(loadInformation(url, topContextIndex));
     }
     //Add those informations that have not been added to the stored lists yet
     ret += m_fileEnvironmentInformations.values(url);
-    
+
     return ret;
   }
 
@@ -427,47 +427,47 @@ public:
 //     QMutexLocker l(&m_chainsMutex);
 
     uint cnt = 0;
-    
+
     QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
-    
+
     foreach(const IndexedString &url, urls) {
-      
+
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
-      
+
       for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it  != end; ++it) {
-        
+
         EnvironmentInformationRequest req(it->data());
         uint index = m_environmentInfo.findIndex(req);
-        
+
         if((*it)->d_func()->isDynamic()) {
           //This item has been changed, or isn't in the repositor yet
-          
+
           //Eventually remove an old entry
           if(index)
             m_environmentInfo.deleteItem(index);
-          
+
           //Add the new entry to the item repository
           index = m_environmentInfo.index(req);
           Q_ASSERT(index);
-          
+
           EnvironmentInformationItem* item = const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
           DUChainBaseData* theData = (DUChainBaseData*)(((char*)item) + sizeof(EnvironmentInformationItem));
           static DUChainBaseData* dataCopy;
           dataCopy = theData;
-          
+
           Q_ASSERT(theData->m_range == (*it)->d_func()->m_range);
           Q_ASSERT(theData->m_dynamic == false);
           Q_ASSERT(theData->classId == (*it)->d_func()->classId);
-          
+
           (*it)->setData( theData );
-          
+
           ++cnt;
         }else{
           m_environmentInfo.itemFromIndex(index); //Prevent unloading of the data, by accessing the item
         }
       }
-      
+
       ///We must not release the lock while holding a reference to a ParsingEnvironmentFilePointer, else we may miss the deletion of an
       ///information, and will get crashes.
       if(!atomic && (cnt % 100 == 0)) {
@@ -500,52 +500,54 @@ public:
 
     if(m_cleanupDisabled)
       return;
-    
+
     //This mutex makes sure that there's never 2 threads at he same time trying to clean up
     static QMutex cleanupMutex(QMutex::Recursive);
     QMutexLocker lockCleanupMutex(&cleanupMutex);
-    
+
     Q_ASSERT(!instance->lock()->currentThreadHasReadLock() && !instance->lock()->currentThreadHasWriteLock());
     DUChainWriteLocker writeLock(instance->lock());
-    
+
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.
     QList<ILanguage*> lockedParseMutexes;
-    
+
     QList<QReadWriteLock*> locked;
-    
+
     if(needLockRepository) {
-      
-      lockedParseMutexes = ICore::self()->languageController()->loadedLanguages();
-      
+
+      if (ICore* core = ICore::self())
+        if (ILanguageController* lc = core->languageController())
+          lockedParseMutexes = lc->loadedLanguages();
+
       writeLock.unlock();
-      
+
       //Here we wait for all parsing-threads to stop their processing
       foreach(ILanguage* language, lockedParseMutexes) {
         language->parseLock()->lockForWrite();
         locked << language->parseLock();
       }
-      
+
       writeLock.lock();
-      
+
       globalItemRepositoryRegistry().lockForWriting();
       kDebug(9505) << "starting cleanup";
     }
-    
+
     QTime startTime = QTime::currentTime();
 
     storeAllInformation(!retries, writeLock); //Puts environment-information into a repository
 
     //We don't need to increase the reference-count, since the cleanup-mutex is locked
     QSet<TopDUContext*> workOnContexts;
-      
+
     for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
       workOnContexts << (*it).second;
-    
+
     foreach(TopDUContext* context, workOnContexts) {
-      
+
       context->m_dynamicData->store();
-      
+
       if(retries) {
         //Eventually give other threads a chance to access the duchain
         writeLock.unlock();
@@ -559,9 +561,9 @@ public:
 
       QSet<IndexedString> unloadedNames;
       bool unloadedOne = true;
-      
+
       bool unloadAllUnreferenced = !retries;
-      
+
       //Now unload contexts, but only ones that are not imported by any other currently loaded context
       //The complication: Since during the lock-break new references may be added, we must never keep
       //the du-chain in an invalid state. Thus we can only unload contexts that are not imported by any
@@ -569,13 +571,13 @@ public:
       while(unloadedOne) {
         unloadedOne = false;
         int hadUnloadable = 0;
-      
+
         unloadContexts:
-        
+
         foreach(TopDUContext* unload, workOnContexts) {
-          
+
           bool hasReference = false;
-          
+
           {
             QMutexLocker l(&m_referenceCountsMutex);
             //Test if the context is imported by a referenced one
@@ -586,23 +588,23 @@ public:
               }
             }
           }
-          
+
           if(!hasReference)
             ++hadUnloadable; //We have found a context that is not referenced
           else
             continue; //This context is referenced
-          
+
           bool isImportedByLoaded = !unload->loadedImporters().isEmpty();
-          
+
           //If we unload a context that is imported by other contexts, we create a bad loaded state
           if(isImportedByLoaded && !unloadAllUnreferenced)
             continue;
-          
+
           unloadedNames.insert(unload->url());
           instance->removeDocumentChain(unload);
           workOnContexts.remove(unload);
           unloadedOne = true;
-  
+
           if(!unloadAllUnreferenced) {
             //Eventually give other threads a chance to access the duchain
             writeLock.unlock();
@@ -619,8 +621,8 @@ public:
           goto unloadContexts;
         }
       }
-      
-      
+
+
       if(retries == 0) {
         //Do this atomically, since we must be sure that _everything_ is already saved
         for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
@@ -637,12 +639,12 @@ public:
           }
         }
       }
-  
+
       if(retries)
         writeLock.unlock();
-      
+
       globalItemRepositoryRegistry().store(); //Stores all repositories
-      
+
       if(retries) {
         doMoreCleanup(retries-1, false);
         writeLock.lock();
@@ -650,7 +652,7 @@ public:
 
       if(needLockRepository) {
         globalItemRepositoryRegistry().unlockForWriting();
-      
+
         int elapsedSeconds = startTime.secsTo(QTime::currentTime());
         kDebug(9505) << "seconds spent doing cleanup: " << elapsedSeconds;
       }
@@ -658,26 +660,26 @@ public:
         int elapesedMilliSeconds = startTime.msecsTo(QTime::currentTime());
         kDebug(9505) << "milliseconds spent doing cleanup with locked duchain: " << elapesedMilliSeconds;
       }
-      
+
       foreach(QReadWriteLock* lock, locked)
         lock->unlock();
   }
-  
+
   ///Loads/gets the environment-information for the given top-context index, or returns zero if none exists
   ParsingEnvironmentFile* loadInformation(IndexedString url, uint topContextIndex) {
-    
+
     {
       //Step one: Check if the info is already loaded on m_fileEnvironmentInformations
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
       QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
-      
+
       while(start != end) {
         if((*start)->indexedTopContext().index() == topContextIndex)
           return start->data();
         ++start;
       }
     }
-    
+
     //Step two: Check if it is on disk, and if is, load it
     uint dataIndex = m_environmentInfo.findIndex(EnvironmentInformationRequest(topContextIndex));
     if(!dataIndex) {
@@ -686,17 +688,17 @@ public:
     }
 
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
-    
+
     ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
     if(ret) {
       Q_ASSERT(ret->d_func()->classId);
-      
+
       m_fileEnvironmentInformations.insert(url, ParsingEnvironmentFilePointer(ret));
       Q_ASSERT(ret->url() == url);
     }
     return ret;
   }
-  
+
 private:
 
   template<class Entry>
@@ -706,7 +708,7 @@ private:
         return true;
     return false;
   }
-  
+
   ///Stores the environment-information for the given url
   void storeInformationList(IndexedString url) {
 
@@ -729,23 +731,23 @@ private:
         }
       }
     }
-    
+
     if(listChanged) {
       ///Update/insert a new list
       uint index = m_environmentListInfo.findIndex(url);
       EnvironmentInformationListItem item;
-      
+
       if(index) {
         item.copyListsFrom(*m_environmentListInfo.itemFromIndex(index));
         m_environmentListInfo.deleteItem(index); //Remove the previous item
       }
 
       Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)) == 0);
-      
+
       for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it)
         if(!listContains((*it)->indexedTopContext().index(), item.items(), item.itemsSize()))
           item.itemsList().append( (*it)->indexedTopContext().index() );
-      
+
       //Insert the new item
       m_environmentListInfo.index(EnvironmentInformationListRequest(url, item));
     }
@@ -795,7 +797,7 @@ QList<TopDUContext*> DUChain::allChains() const
   QList<TopDUContext*> ret;
   for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it)
     ret << (*it).second;
-    
+
   return ret;
 }
 
@@ -819,19 +821,19 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 
   {
     QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
-    
+
     if(sdDUChainPrivate->m_referenceCounts.contains(context)) {
     //This happens during shutdown, since everything is unloaded
     kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
     sdDUChainPrivate->m_referenceCounts.remove(context);
     }
   }
-  
+
   uint index = context->ownIndex();
 
 //   kDebug(9505) << "duchain: removing document" << context->url().str();
   google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
-  
+
   if (it != sdDUChainPrivate->m_chainsByIndex.end()) {
     sdDUChainPrivate->m_chainsByUrl.remove(context->url(), context);
 
@@ -899,8 +901,8 @@ void DUChain::addToEnvironmentManager( TopDUContext * chain ) {
   ParsingEnvironmentFilePointer file = chain->parsingEnvironmentFile();
   if( !file )
     return; //We don't need to manage
-  
-  if(ParsingEnvironmentFile* alreadyHave = sdDUChainPrivate->findEnvironmentFor(file->indexedTopContext())) 
+
+  if(ParsingEnvironmentFile* alreadyHave = sdDUChainPrivate->findEnvironmentFor(file->indexedTopContext()))
   {
     ///If this triggers, there has already been another environment-information registered for this top-context.
     ///removeFromEnvironmentManager should have been called before to remove the old environment-information.
@@ -1044,9 +1046,9 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
   QList< ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
   l.unlock();
-  
+
 //   kDebug() << document.str() << ": matching" << list.size() << (onlyProxyContexts ? "proxy-contexts" : (noProxyContexts ? "content-contexts" : "contexts"));
-  
+
   QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
   while(it != list.constEnd()) {
     if(*it && (*it)->matchEnvironment(environment) && (!onlyProxyContexts || (*it)->isProxyContext()) && (!noProxyContexts || !(*it)->isProxyContext())) {
@@ -1068,7 +1070,7 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(IndexedTopDUCo
      return ParsingEnvironmentFilePointer();
 
    QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-   
+
    return ParsingEnvironmentFilePointer(sdDUChainPrivate->loadInformation(topContext.url(), topContext.index()));
 }
 
@@ -1124,7 +1126,7 @@ QList<KUrl> DUChain::documents() const
     return false;
   }
 }*/
-  
+
 void DUChain::documentActivated(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
@@ -1165,7 +1167,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
     return;
   DUChainWriteLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-  
+
   // Convert any duchains to the smart equivalent first
   EditorIntegrator editor;
   if(doc->textDocument())
@@ -1178,7 +1180,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
-    
+
     {
       ///Make the standard-context editor-smart
       SmartConverter sc(&editor);
@@ -1190,9 +1192,9 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       }
       ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
     }
-    
+
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
-    
+
     foreach( KDevelop::ILanguage* language, languages)
       if(language->languageSupport() && language->languageSupport()->codeHighlighting())
         language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
