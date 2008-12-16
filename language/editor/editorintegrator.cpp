@@ -123,23 +123,38 @@ Document * EditorIntegrator::documentForUrl(const IndexedString& url)
 
 LockedSmartInterface EditorIntegrator::smart() const
 {
-  ///@todo This can lead to deadlock situations: Sometimes calls are done from outside where the smart-mutex is already held,
-  ///      and data()->mutex is being locked(for example in saveCurrentRevision)!
-  QMutexLocker lock(data()->mutex);
-  return LockedSmartInterface(d->m_smart, d->m_currentDocument);
+  SmartInterface* iface = 0;
+  KTextEditor::Document* doc = 0;
+  {
+    ///@todo This opens a very short window where the document could eventually be deleted
+    ///      But it prevents a much more probable deadlock.
+    QMutexLocker lock(data()->mutex);
+    iface = d->m_smart;
+    doc = d->m_currentDocument;
+  }
+  
+  return LockedSmartInterface(iface, doc);
 }
 
 LockedSmartInterface EditorIntegrator::smart(const KUrl& url)
 {
-  QMutexLocker lock(data()->mutex);
+  SmartInterface* iface = 0;
+  KTextEditor::Document* doc = 0;
 
-  IndexedString indexedUrl(url.pathOrUrl());
-  if (data()->documents.contains(indexedUrl)) {
-    EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
-    return LockedSmartInterface(dynamic_cast<KTextEditor::SmartInterface*>(i.document), i.document);
+  {
+    QMutexLocker lock(data()->mutex);
+    ///@todo This opens a very short window where the document could eventually be deleted
+    ///      But it prevents a much more probable deadlock.
+
+    IndexedString indexedUrl(url.pathOrUrl());
+    if (data()->documents.contains(indexedUrl)) {
+      EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
+      iface = dynamic_cast<KTextEditor::SmartInterface*>(i.document);
+      doc = i.document;
+    }
   }
 
-  return LockedSmartInterface();
+  return LockedSmartInterface(iface, doc);
 }
 
 SmartCursor* EditorIntegrator::createCursor(const LockedSmartInterface& iface, const KTextEditor::Cursor& position)
