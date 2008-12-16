@@ -119,8 +119,16 @@ class ExecuteCompositeJob : public KCompositeJob
         virtual bool doKill()
         {
             m_killing = true;
-            if(hasSubjobs())
-                subjobs().first()->kill();
+            if(hasSubjobs()) {
+                KJob* j = subjobs().first();
+                if (j->kill()) {
+                    removeSubjob(j);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            return true;
         }
 
     private:
