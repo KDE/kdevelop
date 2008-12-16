@@ -119,7 +119,7 @@ public:
       if (view->widget()->metaObject()->indexOfSignal(SIGNAL(requestRaise())) != -1)
           QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
-  
+
   /* At present, some debugger widgets (e.g. breakpoint) contain actions so that shortcuts
      work, but they don't need any toolbar.  So, suppress toolbar action.  */
   virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const
@@ -127,7 +127,7 @@ public:
       Q_UNUSED(viewWidget);
       return QList<QAction*>();
   }
-  
+
 private:
   CppDebuggerPlugin* m_plugin;
   GDBController* m_controller;
@@ -513,6 +513,8 @@ void CppDebuggerPlugin::setupController()
     // TODO: reimplement / re-enable
     //connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
     //connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
+
+    connect(this, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), controller->breakpoints(), SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
 }
 
 bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)

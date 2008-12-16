@@ -29,6 +29,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KParts/Part>
+#include <KTextEditor/Cursor>
 
 #include "mi/gdbmi.h"
 #include "gdbglobal.h"
@@ -68,15 +69,18 @@ public:
     void removeBreakpoint(Breakpoint *bp);
 
     QList<Breakpoint*> breakpoints() const { return m_breakpoints; }
-    
+
     void removeAllBreakpoints();
-    
+
 public slots:
     void slotEvent(event_t);
     void slotBreakpointModified(Breakpoint* b);
     void slotBreakpointEnabledChanged(Breakpoint* b);
     void slotUpdateBreakpointMarks(KParts::Part* part);
-    
+
+    void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
+    void slotToggleBreakpoint(const QString &filename, int lineNum);
+
 private:
     void adjustMark(Breakpoint* bp, bool add);
     void handleBreakpointList(const GDBMI::ResultRecord& r);

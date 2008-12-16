@@ -54,7 +54,7 @@ BreakpointController::BreakpointController(GDBController* parent)
             SIGNAL(partAdded(KParts::Part*)),
             this,
             SLOT(slotUpdateBreakpointMarks(KParts::Part*)));
-    
+
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(parent,     SIGNAL(event(event_t)),
@@ -362,6 +362,20 @@ Watchpoint* BreakpointController::findWatchpointByAddress(quint64 address) const
     return false;
 }
 
+void BreakpointController::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
+{
+    slotToggleBreakpoint(url.path(), cursor.line() + 1);
+}
+
+void BreakpointController::slotToggleBreakpoint(const QString &fileName, int lineNum)
+{
+    FilePosBreakpoint *fpBP = findBreakpoint(fileName, lineNum);
+
+    if (fpBP)
+        removeBreakpoint(fpBP);
+    else
+        addBreakpoint(new FilePosBreakpoint(this, fileName, lineNum));
+}
 
 
 void BreakpointController::slotBreakpointModified(Breakpoint* b)
