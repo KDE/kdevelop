@@ -123,6 +123,8 @@ Document * EditorIntegrator::documentForUrl(const IndexedString& url)
 
 LockedSmartInterface EditorIntegrator::smart() const
 {
+  ///@todo This can lead to deadlock situations: Sometimes calls are done from outside where the smart-mutex is already held,
+  ///      and data()->mutex is being locked(for example in saveCurrentRevision)!
   QMutexLocker lock(data()->mutex);
   return LockedSmartInterface(d->m_smart, d->m_currentDocument);
 }
