@@ -202,9 +202,9 @@ namespace GDBDebugger
                     this, SLOT(slotBreakpointHit(int)));
 
             connect(controller->breakpoints()->breakpointsItem(),
-                    SIGNAL(error(NewBreakpoint *, const QString&, int)),
+                    SIGNAL(error(KDevelop::INewBreakpoint *, const QString&, int)),
                     this,
-                    SLOT(breakpointError(NewBreakpoint *, const QString&, int)));
+                    SLOT(breakpointError(KDevelop::INewBreakpoint *, const QString&, int)));
 
             setupPopupMenu();
         }
@@ -438,7 +438,7 @@ namespace GDBDebugger
                     controller_->breakpoints()->itemForIndex(index)));
         }
 
-        void breakpointError(NewBreakpoint *b, const QString& msg, int column)
+        void breakpointError(KDevelop::INewBreakpoint *b, const QString& msg, int column)
         {
             // FIXME: we probably should prevent this error notification during
             // initial setting of breakpoint, to avoid a cloud of popups.

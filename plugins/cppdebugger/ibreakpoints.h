@@ -31,7 +31,7 @@ namespace KDevelop
 {
 class INewBreakpoint;
 class IBreakpointController;
-    
+
 class IBreakpoints : public TreeItem
 {
     Q_OBJECT
@@ -42,7 +42,7 @@ public:
 
     void remove(const QModelIndex &index);
     virtual void update() =0;
-    
+
     virtual INewBreakpoint* addCodeBreakpoint()=0;
     virtual INewBreakpoint* addWatchpoint()=0;
     virtual INewBreakpoint* addWatchpoint(const QString& expression)=0;
@@ -52,7 +52,7 @@ public:
 
     void errorEmit(INewBreakpoint *b, const QString& message, int column) { emit error(b, message, column); }
 Q_SIGNALS:
-    void error(INewBreakpoint *b, const QString& message, int column);
+    void error(KDevelop::INewBreakpoint *b, const QString& message, int column);
 
 public slots:
     void save();
