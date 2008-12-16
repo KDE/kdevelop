@@ -79,7 +79,7 @@ EditorIntegrator::~ EditorIntegrator()
 {
   {
     LockedSmartInterface locked(smart());
-    
+
     QMutexLocker lock(data()->mutex);
 
     if (d->m_currentDocument) {
@@ -116,7 +116,7 @@ Document * EditorIntegrator::documentForUrl(const IndexedString& url)
   QMutexLocker lock(data()->mutex);
 
   if (data()->documents.contains(url))
-    return data()->documents[url].document;
+    return data()->documents[url];
 
   return 0;
 }
@@ -141,17 +141,10 @@ LockedSmartInterface EditorIntegrator::smart(const KUrl& url)
   SmartInterface* iface = 0;
   KTextEditor::Document* doc = 0;
 
-  {
-    QMutexLocker lock(data()->mutex);
-    ///@todo This opens a very short window where the document could eventually be deleted
-    ///      But it prevents a much more probable deadlock.
-
-    IndexedString indexedUrl(url.pathOrUrl());
-    if (data()->documents.contains(indexedUrl)) {
-      EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
-      iface = dynamic_cast<KTextEditor::SmartInterface*>(i.document);
-      doc = i.document;
-    }
+  IndexedString indexedUrl(url.pathOrUrl());
+  if (data()->documents.contains(indexedUrl)) {
+    KTextEditor::Document* doc = data()->documents[indexedUrl];
+    return LockedSmartInterface(dynamic_cast<KTextEditor::SmartInterface*>(doc), doc);
   }
 
   return LockedSmartInterface(iface, doc);
@@ -328,17 +321,17 @@ IndexedString EditorIntegrator::currentUrl() const
 int EditorIntegrator::saveCurrentRevision(KTextEditor::Document* document)
 {
   if (KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(document)) {
-    QMutexLocker lock(data()->mutex);
+    QMutexLocker lock(data()->mutex2);
     IndexedString url(document->url().pathOrUrl());
 
-    if (data()->documents.contains(url)) {
-      EditorIntegratorStatic::DocumentInfo& i = data()->documents[url];
-      if (i.revision != -1)
-        smart->releaseRevision(i.revision); ///@todo This doesn't work and leads to crashes if multiple threads parse the some document at a time!
+    if (data()->revisions.contains(document)) {
+      int rev = data()->revisions[document];
+      if (rev != -1)
+        smart->releaseRevision(rev); ///@todo This doesn't work and leads to crashes if multiple threads parse the some document at a time!
 
-      i.revision = smart->currentRevision();
-      kDebug(9506) << "Saved revision" << i.revision;
-      return i.revision;
+      data()->revisions[document] = smart->currentRevision();
+      kDebug(9506) << "Saved revision" << rev;
+      return rev;
     }
   }
 
@@ -364,14 +357,19 @@ void EditorIntegrator::setCurrentUrl(const IndexedString& url, bool useSmart)
   IndexedString indexedUrl(url.str());
 
   if (useSmart && data()->documents.contains(indexedUrl)) {
-    EditorIntegratorStatic::DocumentInfo i = data()->documents[indexedUrl];
-    d->m_currentDocument = i.document;
+    d->m_currentDocument = data()->documents[indexedUrl];
     data()->editorIntegrators.insert(d->m_currentDocument, this);
 
     d->m_smart = dynamic_cast<KTextEditor::SmartInterface*>(d->m_currentDocument);
-    if (d->m_smart && i.revision != -1) {
-//       kDebug(9506) << "Using revision" << i.revision;
-      d->m_smart->useRevision(i.revision);
+    int rev = -1;
+    {
+      QMutexLocker lock(data()->mutex2);
+      if (data()->revisions.contains(d->m_currentDocument))
+        rev = data()->revisions[d->m_currentDocument];
+    }
+    if (d->m_smart && rev != -1) {
+//       kDebug(9506) << "Using revision" << rev;
+      d->m_smart->useRevision(rev);
     }
   }else{
     d->m_smart = 0;

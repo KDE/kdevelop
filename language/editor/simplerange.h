@@ -26,12 +26,15 @@
 
 namespace KDevelop {
 struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
-    
+
     SimpleCursor start, end;
 
     SimpleRange(const SimpleCursor& _start, const SimpleCursor& _end) : start(_start), end(_end) {
     }
-    
+
+    SimpleRange(const SimpleCursor& _start, int length) : start(_start), end(_start.line, _start.column + length) {
+    }
+
     SimpleRange() {
     }
 
@@ -48,15 +51,15 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
     bool isValid() const {
         return start.column != -1 || start.line != -1 || end.column != -1 || end.line != -1;
     }
-    
+
     bool isEmpty() const {
         return start == end;
     }
-    
+
     bool contains(const SimpleCursor& position) const {
         return position >= start && position < end;
     }
-    
+
     bool contains(const SimpleRange& range) const {
         return range.start >= start && range.end <= end;
     }
@@ -64,7 +67,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
     bool operator ==( const SimpleRange& rhs ) const {
         return start == rhs.start && end == rhs.end;
     }
-    
+
     bool operator !=( const SimpleRange& rhs ) const {
         return !(*this == rhs);
     }
