@@ -98,7 +98,10 @@ void StatusBar::registerStatus(QObject* status)
     connect(status, SIGNAL(showMessage(const QString&, int)), SLOT(showMessage(const QString&, int)));
     connect(status, SIGNAL(hideProgress()), SLOT(hideProgress()));
     connect(status, SIGNAL(showProgress(int, int, int)), SLOT(showProgress(int, int, int)));
-    connect(status, SIGNAL(showErrorMessage(const QString&, int)), SLOT(showErrorMessage(const QString&, int)));
+
+    // Don't try to connect when the status object doesn't provide an error message signal (ie. avoid warning)
+    if (status->metaObject()->indexOfSignal(SIGNAL(showErrorMessage(const QString&, int))) != -1)
+        connect(status, SIGNAL(showErrorMessage(const QString&, int)), SLOT(showErrorMessage(const QString&, int)));
 }
 
 QWidget* errorMessage(QWidget* parent, const QString& text)
