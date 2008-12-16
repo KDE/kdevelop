@@ -79,7 +79,9 @@ RunController::RunController(QObject *parent)
 class ExecuteCompositeJob : public KCompositeJob
 {
     public:
-        ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs) : KCompositeJob(parent)
+        ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
+            : KCompositeJob(parent)
+            , m_killing(false)
         {
             setCapabilities(Killable);
 
@@ -103,7 +105,7 @@ class ExecuteCompositeJob : public KCompositeJob
             kDebug() << "finished: "<< job << job->error() << error();
             KCompositeJob::slotResult(job);
 
-            if(hasSubjobs() && !error())
+            if(hasSubjobs() && !error() && !m_killing)
             {
                 kDebug() << "remaining: " << subjobs().count() << subjobs();
                 KJob* nextJob=subjobs().first();
@@ -116,9 +118,13 @@ class ExecuteCompositeJob : public KCompositeJob
     protected:
         virtual bool doKill()
         {
+            m_killing = true;
             if(hasSubjobs())
                 subjobs().first()->kill();
         }
+
+    private:
+        bool m_killing;
 };
 
 KJob* RunController::execute(const IRun & run)
