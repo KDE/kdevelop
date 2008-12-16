@@ -362,6 +362,9 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 
 void CPPInternalParseJob::run()
 {
+    //If we have a parent, the parse-mutex is already locked
+    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
+    
     UrlParseLock urlLock(parentJob()->document());
     
     if(!parentJob()->needsUpdate()) {
@@ -382,9 +385,6 @@ void CPPInternalParseJob::run()
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
 
-    //If we have a parent, the parse-mutex is already locked
-    QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
-    
     ReferencedTopDUContext updatingProxyContext = parentJob()->updatingProxyContext().data();
     ReferencedTopDUContext updatingContentContext = parentJob()->updatingContentContext().data();
 
