@@ -119,7 +119,6 @@ class ExecuteCompositeJob : public KCompositeJob
         virtual bool doKill()
         {
             m_killing = true;
-            setError( KJob::KilledJobError );
             if(hasSubjobs()) {
                 KJob* j = subjobs().first();
                 if (j->kill()) {
@@ -362,7 +361,6 @@ IRun KDevelop::RunController::defaultRun() const
     run.setWorkingDirectory(group.readEntry("Working Directory", QString()));
     run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
     if (group.readEntry("Start In Terminal", false))
-        // TODO: start in terminal rather than output view
         run.setInstrumentor("konsole");
     else
         run.setInstrumentor("default");
@@ -620,6 +618,7 @@ void KDevelop::RunJob::slotFinished(KJob * job)
 
 bool KDevelop::RunJob::doKill()
 {
+    setError(KJob::KilledJobError);
     m_provider->abort(this);
 
     return true;
