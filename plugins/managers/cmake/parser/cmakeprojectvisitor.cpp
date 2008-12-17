@@ -88,7 +88,7 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                 gotDollar=true;
                 break;
             case '{':
-                if(gotDollar) 
+                if(gotDollar)
                 {
                     opened.push(i);
                 }
@@ -100,7 +100,7 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
                 break;
         }
     }
-    
+
     for(int i=pos.count()-1; i>=0 && !opened.isEmpty(); i--)
     {
         if(pos[i].first==opened.top())
@@ -130,7 +130,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     }
     else
         kDebug() << "error: I do not understand the key: " << type;
-    
+
 //     qDebug() << "solving: " << var << vars << exp;
     return vars;
 }
@@ -151,7 +151,7 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     {
         invars+=poss[desired+1];
     }
-    
+
     if(invars.count()>1)
     {
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
@@ -162,14 +162,14 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
             const IntPair& subvar=*it;
             int dollar=var.lastIndexOf('$', subvar.first);
             QString id=var.mid(dollar, subvar.second-dollar+1), value=theValue(var, subvar).join(QChar(';'));
-            
+
             int diff=value.size()-id.size();
             for(QList<IntPair>::iterator it=itBegin; it!=itEnd; ++it)
             {
                 if(it->first > subvar.first) it->first += diff;
                 if(it->second> subvar.second) it->second+= diff;
             }
-            
+
             var=replaceOne(var, id, value, dollar);
         }
     }
@@ -184,20 +184,20 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
 
     int i=0;
     IntPair last(-1,-1, 0);
-    
+
     for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
     {
         while(it!=var.constEnd() && it->level>1)
             ++it;
-        
+
         const IntPair& p=*it;
 //         qDebug () << "reeeeeet" << ret << exp.value << p.print();
         int dollar=exp.value.lastIndexOf('$', p.first);
         QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
-        
+
         QStringList vars = value(exp.value, var, i);
 //         qDebug() << "aaaaaaaaaA" << vars;
-        
+
         if(!vars.isEmpty())
         {
             pre+=vars.takeFirst();
@@ -208,7 +208,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
         i++;
     }
     ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
-    
+
     if(exp.quoted)
     {
         ret=QStringList(ret.join(QChar(';')));
@@ -273,10 +273,10 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 {
     kDebug(9042) << "adding subdirectory" << subd->sourceDir();
-    
+
     VisitorState p=stackTop();
     m_folderDesc[subd->sourceDir()]=p.code->at(p.line);
-    
+
     m_subdirectories += subd->sourceDir();
     return 1;
 }
@@ -504,7 +504,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         return 1;
     QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
-    
+
     QStringList possibs;
     if(pack->noModule())
     {
@@ -514,9 +514,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             instPath = m_vars->value(var)[0];
         else if(m_cache->contains(var))
             instPath = m_cache->value(var);
-        
+
         kDebug(9042) << "config mode" << m_vars->value(var)[0] << m_cache->value(var) << instPath;
-        
+
 #if defined(Q_OS_WIN)
         modulePath.prepend(instPath);
         modulePath.prepend(instPath+"/cmake");
@@ -529,7 +529,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             modulePath.prepend(instPath+"/lib/"+name.toLower()+post);
         }
 #endif
-        
+
         possibs+=QString("%1Config.cmake").arg(pack->name());
         possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
     }
@@ -541,7 +541,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         possib.prepend("Find");
         possibs += possib;
     }
-    
+
     QString path;
     foreach(const QString& possib, possibs)
     {
@@ -549,7 +549,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         if(!path.isEmpty())
             break;
     }
-    
+
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
@@ -589,7 +589,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             kDebug(9032) << "error: find_package. Parsing error." << path;
         }
-        
+
         if(pack->noModule())
         {
             m_vars->insert(QString("%1_CONFIG"), QStringList(path));
@@ -602,7 +602,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
     }
     kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
-    
+
     return 1;
 }
 
@@ -855,7 +855,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     {
         Declaration *d = new Declaration(sr, m_topctx);
         d->setIdentifier( Identifier(id) );
-        
+
         FunctionType* func=new FunctionType();
         foreach(const QString& arg, args)
         {
@@ -916,7 +916,7 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
         ++lines;
     }
     ++lines; //We do not want to return to endmacro
-    
+
     if(it!=itEnd)
     {
         m_macros->insert(func->name(), m);
@@ -951,7 +951,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
                     m_topctx->createUse(idx, call->content()[call->line()].nameRange(), 0);
                 }
             }
-            
+
             //Giving value to parameters
             QStringList::const_iterator mit = code.knownArgs.constBegin();
             QStringList::const_iterator cit = call->arguments().constBegin();
@@ -1015,7 +1015,7 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
     //TODO: Should not return here
     if(args.size()!=names.size())
         return;
-    
+
     //We define the uses for the used variable without ${}
     foreach(int use, args)
     {
@@ -1023,7 +1023,7 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
         QString var=names[use];
         QList<Declaration*> decls=topctx->findDeclarations(Identifier(var));
 
-        if(!decls.isEmpty())
+        if(!decls.isEmpty() && func.arguments.count() > use)
         {
             CMakeFunctionArgument arg=func.arguments[use];
             int idx=topctx->indexForUsedDeclaration(decls.first());
@@ -1035,7 +1035,7 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
 int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 {
     int lines=ifast->line();
-    if( ifast->condition().isEmpty() ) 
+    if( ifast->condition().isEmpty() )
     {
         const CMakeFunctionDesc d = ifast->content().at( ifast->line() );
         kWarning() << "Parser couldn't parse condition of an IF in file:" << ifast->condition() << d.filePath << d.line;
@@ -1061,22 +1061,22 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
             inside--;
             if(inside<=0 && !it->arguments.isEmpty()) {
 //                 Q_ASSERT(!ini.isEmpty());
-                usesForArguments(ifast->condition(), ini, m_topctx, *it);     
+                usesForArguments(ifast->condition(), ini, m_topctx, *it);
                 break;
             }
 //                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;
         }
-        
+
         if(inside==1)
         {
             bool result;
-            
+
             if(funcName=="if" || funcName=="elseif")
             {
                 CMakeCondition cond(this);
                 IfAst myIf;
                 QStringList condition;
-                
+
                 if(funcName=="if")
                 {
                     condition=ifast->condition();
@@ -1091,7 +1091,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 result=cond.condition(condition);
                 if(funcName=="if")
                     ini=cond.variableArguments();
-                    
+
                 usesForArguments(condition, cond.variableArguments(), m_topctx, *it);
                 kDebug(9042) << ">> " << funcName << condition << result;
             }
@@ -1101,22 +1101,22 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 result=true;
                 usesForArguments(ifast->condition(), ini, m_topctx, *it);
             }
-            
+
             if(!visited && result)
             {
                 kDebug(9042) << "About to visit " << funcName << "?" << result;
-                
+
                 int oldpos=lines;
                 lines = walk(ifast->content(), lines+1)-1;
-                
+
                 it+=lines-oldpos;
-                
+
                 visited=true;
 //                 kDebug(9042) << "Visited. now in" << it->name;
             }
         }
     }
-    
+
     if(it==itEnd)
     {
         kDebug() << "error. found an unfinished endif";
@@ -1570,7 +1570,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     foreach(const QString& _in, sast->input())
                     {
                         QString in(_in);
-                        
+
                         int idx = rx.indexIn(in);
                         QStringList info = rx.capturedTexts();
                         if(idx<0)
@@ -1639,7 +1639,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 bool ok;
                 res += QChar(ascii.toInt(&ok, 10));
             }
-            
+
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
         case StringAst::CONFIGURE:
@@ -1797,7 +1797,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     CMakeCondition cond(this);
     bool result=cond.condition(whileast->condition());
     usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
-    
+
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
     if(result)
     {
@@ -1815,7 +1815,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
         else if(funcName=="endwhile")
             inside--;
     }
-    
+
     if(it!=itEnd) {
         usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
     }
@@ -1868,7 +1868,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             DUChain::self()->addDocumentChain(m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
         }
-        
+
         m_topctx->addImportedParentContext(m_parentCtx);
     }
     VisitorState p;
@@ -1963,7 +1963,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
     {
         if(!arg.isCorrect() || !arg.value.contains('$'))
             continue;
-        
+
         QList< IntPair > var = parseArgument(arg.value);
         for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
         {
