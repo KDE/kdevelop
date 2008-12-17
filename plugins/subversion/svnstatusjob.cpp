@@ -132,6 +132,7 @@ SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Status );
     m_job = new SvnInternalStatusJob( this );
+    setObjectName(i18n("Subversion Status"));
 }
 
 QVariant SvnStatusJob::fetchResults()

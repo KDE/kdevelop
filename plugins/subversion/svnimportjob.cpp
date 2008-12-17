@@ -90,6 +90,7 @@ SvnImportJob::SvnImportJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Import );
     m_job = new SvnImportInternalJob( this );
+    setObjectName(i18n("Subversion Import"));
 }
 
 QVariant SvnImportJob::fetchResults()

@@ -116,6 +116,8 @@ SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Log );
     m_job = new SvnInternalLogJob( this );
+
+    setObjectName(i18n("Subversion Log"));
 }
 
 QVariant SvnLogJob::fetchResults()

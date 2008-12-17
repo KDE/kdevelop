@@ -246,6 +246,8 @@ SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalDiffJob( this );
+
+    setObjectName(i18n("Subversion Diff"));
 }
 
 QVariant SvnDiffJob::fetchResults()

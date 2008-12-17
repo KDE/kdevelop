@@ -96,6 +96,7 @@ SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
     m_job = new SvnInternalInfoJob( this );
     connect( m_job, SIGNAL( gotInfo( const SvnInfoHolder& ) ),
              this, SLOT( setInfo( const SvnInfoHolder& ) ), Qt::QueuedConnection );
+    setObjectName(i18n("Subversion Info"));
 }
 
 QVariant SvnInfoJob::fetchResults()

@@ -85,6 +85,7 @@ SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Copy );
     m_job = new SvnInternalCopyJob( this );
+    setObjectName(i18n("Subversion Copy"));
 }
 
 QVariant SvnCopyJob::fetchResults()

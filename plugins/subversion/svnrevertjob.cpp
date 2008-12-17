@@ -90,6 +90,7 @@ SvnRevertJob::SvnRevertJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalRevertJob( this );
+    setObjectName(i18n("Subversion Revert"));
 }
 
 QVariant SvnRevertJob::fetchResults()

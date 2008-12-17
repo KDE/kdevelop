@@ -97,6 +97,7 @@ SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Move );
     m_job = new SvnInternalMoveJob( this );
+    setObjectName(i18n("Subversion Move"));
 }
 
 QVariant SvnMoveJob::fetchResults()

@@ -103,6 +103,7 @@ SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Annotate );
     m_job = new SvnInternalBlameJob( this );
+    setObjectName(i18n("Subversion Annotate"));
 }
 
 QVariant SvnBlameJob::fetchResults()

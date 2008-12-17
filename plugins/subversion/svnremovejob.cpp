@@ -92,6 +92,7 @@ SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalRemoveJob( this );
+    setObjectName(i18n("Subversion Remove"));
 }
 
 QVariant SvnRemoveJob::fetchResults()

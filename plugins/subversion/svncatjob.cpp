@@ -116,6 +116,7 @@ SvnCatJob::SvnCatJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Cat );
     m_job = new SvnInternalCatJob( this );
+    setObjectName(i18n("Subversion Cat"));
 }
 
 QVariant SvnCatJob::fetchResults()

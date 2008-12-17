@@ -86,6 +86,7 @@ SvnAddJob::SvnAddJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalAddJob( this );
+    setObjectName(i18n("Subversion Add"));
 }
 
 QVariant SvnAddJob::fetchResults()

@@ -123,6 +123,7 @@ SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalUpdateJob( this );
+    setObjectName(i18n("Subversion Update"));
 }
 
 QVariant SvnUpdateJob::fetchResults()

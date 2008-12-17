@@ -80,6 +80,7 @@ SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Import );
     m_job = new SvnInternalCheckoutJob( this );
+    setObjectName(i18n("Subversion Checkout"));
 }
 
 QVariant SvnCheckoutJob::fetchResults()
