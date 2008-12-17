@@ -357,7 +357,7 @@ void ReportWidgetTest::setStatistics(ReportWidget& rw, int sloc, int instrumente
 void ReportWidgetTest::setModelFor(ReportWidget& rw)
 {
     ReportModel* model = createReportModel();
-    ReportProxyModel* proxyModel = new ReportProxyModel(0);
+    ReportProxyModel* proxyModel = new ReportProxyModel(this);
     proxyModel->setSourceModel(model);
 
     rw.table()->setModel(proxyModel);
@@ -380,7 +380,7 @@ void ReportWidgetTest::setModelFor(ReportWidget& rw)
 // dir4File1: sloc 1, instrumented 0, coverage 0.0 %
 ReportModel* ReportWidgetTest::createReportModel()
 {
-    ReportModel* model = new ReportModel(0);
+    ReportModel* model = new ReportModel(this);
 
     CoveredFile dir1File1;
     dir1File1.setUrl(KUrl("/dir1/file1"));

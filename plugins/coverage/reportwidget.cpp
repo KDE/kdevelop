@@ -188,8 +188,8 @@ ReportWidget::ReportWidget(QWidget* parent) :
     m_manager(0),
     m_proxy(0),
     m_model(0),
-    m_timer(new QTimer),
-    m_delegate(new CovOutputDelegate)
+    m_timer(new QTimer(this)),
+    m_delegate(new CovOutputDelegate(this))
 {
     setObjectName("Coverage Report");
     setWindowIcon(SmallIcon("system-file-manager"));
