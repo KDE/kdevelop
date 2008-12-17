@@ -164,7 +164,7 @@ Declaration::~Declaration()
   // always delete the declaration, to not create crashes within more complex code like C++ template stuff.
   if (context() && !d_func()->m_anonymousInContext) {
     if(!topContext->deleting() || !topContext->isOnDisk() || context()->d_func()->isDynamic())
-      Q_ASSERT(context()->m_dynamicData->removeDeclaration(this));
+      context()->m_dynamicData->removeDeclaration(this);
   }
     
   clearOwnIndex();
@@ -221,10 +221,9 @@ LocalIndexedDeclaration::LocalIndexedDeclaration(uint declarationIndex) : m_decl
 }
 
 Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const {
-  if(m_declarationIndex)
-    return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
-  else
+  if(!m_declarationIndex)
     return 0;
+  return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
 }
 
 bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const {
