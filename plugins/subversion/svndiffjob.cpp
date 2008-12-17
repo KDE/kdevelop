@@ -347,6 +347,12 @@ void SvnDiffJob::setDiff( const QString& diff )
         pos += fileRe.matchedLength();
     }
 
+    if (paths.isEmpty()) {
+        internalJobDone( m_job );
+        emit resultsReady( this );
+        return;
+    }
+
     foreach( const QString &s, paths )
     {
         if( !s.isEmpty() )
