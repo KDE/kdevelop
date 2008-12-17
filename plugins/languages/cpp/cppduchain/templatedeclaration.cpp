@@ -926,7 +926,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   }*/
 ///@todo Make default-parameters be respected for the specialization picking code. Problem: They may be
 ///locally dependent on each other, and thus need the partially instantiated local context.
-  if( m_instantiatedFrom && !!forceLocal)
+  if( m_instantiatedFrom && !forceLocal)
     return m_instantiatedFrom->instantiate( templateArguments, source );
 
   {
