@@ -59,7 +59,7 @@ AbstractType::WhichType DelayedType::whichType() const
 
 QString DelayedType::toString() const
 {
-  return (d_func()->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + identifier().toString();
+  return AbstractType::toString(false) + (d_func()->m_kind == Delayed ? "<delayed> " : "<unresolved> ") + identifier().toString();
 }
 
 DelayedType::Kind DelayedType::kind() const {

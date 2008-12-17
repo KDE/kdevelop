@@ -87,6 +87,29 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractItemRepository {
     virtual void store() = 0;
 };
 
+///Internal helper class that wraps around a repository object and manages its lifetime
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager {
+  public:
+    AbstractRepositoryManager() : m_repository(0) {
+    }
+    
+    virtual ~AbstractRepositoryManager() {
+    }
+    
+    void deleteRepository() {
+      delete m_repository;
+      m_repository = 0;
+      
+      repositoryDeleted();
+    }
+    
+    virtual void repositoryDeleted() {
+    }
+    
+  protected:
+    mutable AbstractItemRepository* m_repository;
+};
+
 /**
  * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
  * Does not automatically store contained repositories on destruction.
@@ -106,7 +129,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///@warning The current state is not stored to disk.
     void close();
     ///The registered repository will automatically be opened with the current path, if one is set.
-    void registerRepository(AbstractItemRepository* repository);
+    void registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager);
     ///The registered repository will automatically be closed if it was open.
     void unRegisterRepository(AbstractItemRepository* repository);
     ///Returns the path currently set
@@ -123,10 +146,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///Returns a custom counter, identified by the given identity, that is persistently stored in the repository directory.
     ///If the counter didn't exist before, it will be initialized with initialValue
     QAtomicInt& getCustomCounter(const QString& identity, int initialValue);
+    
+    ///Returns the global item-repository mutex. This can be used to protect the initialization.
+    QMutex& mutex();
   private:
     void deleteDataDirectory();
     QString m_path;
-    QList<AbstractItemRepository*> m_repositories;
+    QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
     KLockFile::Ptr m_lock;
     mutable QMutex m_mutex;
@@ -134,6 +160,44 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
 
 ///The global item-repository registry that is used by default
 KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
+
+///This class helps managing the lifetime of a global item repository, and protecting the consistency.
+///Especially it helps doing thread-safe lazy repository-creation
+template<class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = true>
+struct RepositoryManager : public AbstractRepositoryManager{
+  public:
+    RepositoryManager(QString name, int version = 1, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(registry) {
+      if(!lazy)
+        createRepository();
+    }
+    
+    ~RepositoryManager() {
+      deleteRepository();
+    }
+    
+    inline ItemRepositoryType* operator->() const {
+      if(!m_repository)
+        createRepository();
+      
+      return static_cast<ItemRepositoryType*>(m_repository);
+    }
+    
+  private:
+    
+    void createRepository() const {
+      if(!m_repository) {
+        QMutexLocker lock(&m_registry.mutex());
+        if(!m_repository) {
+          m_repository = new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
+          (*this)->setUnloadingEnabled(unloadingEnabled);
+        }
+      }
+    }
+    
+    QString m_name;
+    int m_version;
+    mutable ItemRepositoryRegistry& m_registry;
+};
 
   ///This is the actual data that is stored in the repository. All the data that is not directly in the class-body,
   ///like the text of a string, can be stored behind the item in the same memory region. The only important thing is
@@ -1042,7 +1106,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param registry May be zero, then the repository will not be registered at all. Else, the repository will register itself to that registry.
   ///                If this is zero, you have to care about storing the data using store() and/or close() by yourself. It does not happen automatically.
   ///                For the global standard registry, the storing/loading is triggered from within duchain, so you don't need to care about it.
-  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1) : m_ownMutex(QMutex::Recursive), m_mutex(&m_ownMutex), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion) {
+  ItemRepository(QString repositoryName, ItemRepositoryRegistry* registry  = &globalItemRepositoryRegistry(), uint repositoryVersion = 1, AbstractRepositoryManager* manager = 0) : m_ownMutex(QMutex::Recursive), m_mutex(&m_ownMutex), m_repositoryName(repositoryName), m_registry(registry), m_file(0), m_dynamicFile(0), m_repositoryVersion(repositoryVersion), m_manager(manager) {
     m_unloadingEnabled = true;
     m_metaDataChanged = true;
     m_buckets.resize(10);
@@ -1058,7 +1122,7 @@ class ItemRepository : public AbstractItemRepository {
     m_statBucketHashClashes = m_statItemCount = 0;
     m_currentBucket = 1; //Skip the first bucket, we won't use it so we have the zero indices for special purposes
     if(m_registry)
-      m_registry->registerRepository(this);
+      m_registry->registerRepository(this, m_manager);
   }
   
   ~ItemRepository() {
@@ -2201,6 +2265,7 @@ class ItemRepository : public AbstractItemRepository {
   QFile* m_dynamicFile;
   uint m_repositoryVersion;
   bool m_unloadingEnabled;
+  AbstractRepositoryManager* m_manager;
 };
 
 }

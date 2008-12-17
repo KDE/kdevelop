@@ -35,7 +35,7 @@ namespace KDevelop {
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 39;
+  return 40;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
@@ -44,6 +44,10 @@ AbstractItemRepository::~AbstractItemRepository() {
 ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr lock) : m_mutex(QMutex::Recursive) {
   if(!openPath.isEmpty())
     open(openPath, false, lock);
+}
+
+QMutex& ItemRepositoryRegistry::mutex() {
+  return m_mutex;
 }
 
 QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, int initialValue) {
@@ -73,7 +77,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
     for(int a = 0; a < 100; ++a) {
       QString specificDir = baseDir + QString("/%1").arg(a);
       KStandardDirs::makeDir(specificDir);
-      kDebug() << "making" << specificDir;
+      kDebug() << "testing" << specificDir;
        lock = new KLockFile(specificDir + "/lock", component);
        KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
 
@@ -84,7 +88,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
          QString hostname, appname;
          if(lock->getLockInfo(pid, hostname, appname)) {
            if(!processExists(pid)) {
-             kDebug() << "The process holding" << specificDir << "does not exists any more. Re-using the directory.";
+             kDebug() << "The process holding" << specificDir << "with pid" << pid << "does not exists any more. Re-using the directory.";
              QFile::remove(specificDir + "/lock");
              useDir = true;
              if(lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) != KLockFile::LockOK) {
@@ -122,9 +126,9 @@ ItemRepositoryRegistry& globalItemRepositoryRegistry() {
   return global;
 }
 
-void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository) {
+void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager) {
   QMutexLocker lock(&m_mutex);
-  m_repositories << repository;
+  m_repositories.insert(repository, manager);
   if(!m_path.isEmpty()) {
     if(!repository->open(m_path)) {
       deleteDataDirectory();
@@ -157,7 +161,7 @@ void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* reposi
   QMutexLocker lock(&m_mutex);
   Q_ASSERT(m_repositories.contains(repository));
   repository->close();
-  m_repositories.removeAll(repository);
+  m_repositories.remove(repository);
 }
 
 //Recursive delete, copied from a mailing-list
@@ -223,7 +227,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
       deleteDataDirectory();
   }
   
-  foreach(AbstractItemRepository* repository, m_repositories) {
+  foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     if(!repository->open(path)) {
       deleteDataDirectory();
       kError() << "failed to open a repository";
@@ -256,7 +260,7 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
 
 void ItemRepositoryRegistry::store() {
   QMutexLocker lock(&m_mutex);
-  foreach(AbstractItemRepository* repository, m_repositories)
+  foreach(AbstractItemRepository* repository, m_repositories.keys())
     repository->store();
 
   QFile versionFile(m_path + QString("/version_%1").arg(staticItemRepositoryVersion()));
@@ -284,7 +288,7 @@ void ItemRepositoryRegistry::close() {
 
   QMutexLocker lock(&m_mutex);
     
-  foreach(AbstractItemRepository* repository, m_repositories)
+  foreach(AbstractItemRepository* repository, m_repositories.keys())
     repository->close();
   
   m_path = QString();

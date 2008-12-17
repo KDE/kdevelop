@@ -110,20 +110,16 @@ struct IdentifierItemRequest {
   const DynamicIdentifierPrivate& m_identifier;
 };
 
-ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest>& identifierRepository() {
-  static ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest> rep("Identifier Repository");
-  rep.setUnloadingEnabled(false);
-  return rep;
-}
-///@todo Think about enabling unloading
+RepositoryManager< ItemRepository<ConstantIdentifierPrivate, IdentifierItemRequest>, false> identifierRepository("Identifier Repository");
 
+///This has to be initialized now, else we will get a crash when multiple threads try accessing it for the first time in the same moment
 uint emptyConstantIdentifierPrivateIndex() {
-  static uint index = identifierRepository().index(DynamicIdentifierPrivate());
+  static uint index = identifierRepository->index(DynamicIdentifierPrivate());
   return index;
 }
 
 const ConstantIdentifierPrivate* emptyConstantIdentifierPrivate() {
-  return identifierRepository().itemFromIndex(emptyConstantIdentifierPrivateIndex());
+  return identifierRepository->itemFromIndex(emptyConstantIdentifierPrivateIndex());
 }
 
 bool IndexedIdentifier::isEmpty() const {
@@ -239,19 +235,15 @@ struct QualifiedIdentifierItemRequest {
   const DynamicQualifiedIdentifierPrivate& m_identifier;
 };
 
-ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest>& qualifiedidentifierRepository() {
-  static ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest> rep("Qualified Identifier Repository", &globalItemRepositoryRegistry(), 2);
-  rep.setUnloadingEnabled(false);
-  return rep;
-}
+RepositoryManager< ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest>, false> qualifiedidentifierRepository("Qualified Identifier Repository");
 
 uint emptyConstantQualifiedIdentifierPrivateIndex() {
-   static uint index = qualifiedidentifierRepository().index(DynamicQualifiedIdentifierPrivate());
+   static uint index = qualifiedidentifierRepository->index(DynamicQualifiedIdentifierPrivate());
    return index;
 }
 
 const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivate() {
-  return qualifiedidentifierRepository().itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex());
+  return qualifiedidentifierRepository->itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex());
 }
 
 uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
@@ -266,7 +258,7 @@ Identifier::Identifier(const Identifier& rhs) {
 
 Identifier::Identifier(uint index) : m_index(index) {
   Q_ASSERT(m_index);
-  cd = identifierRepository().itemFromIndex(index);
+  cd = identifierRepository->itemFromIndex(index);
 }
 
 Identifier::~Identifier() {
@@ -470,9 +462,9 @@ uint QualifiedIdentifier::index() const {
 void Identifier::makeConstant() const {
   if(m_index)
     return;
-  m_index = identifierRepository().index( IdentifierItemRequest(*dd) );
+  m_index = identifierRepository->index( IdentifierItemRequest(*dd) );
   delete dd;
-  cd = identifierRepository().itemFromIndex( m_index );
+  cd = identifierRepository->itemFromIndex( m_index );
 }
 
 void Identifier::prepareWrite() {
@@ -490,7 +482,7 @@ void Identifier::prepareWrite() {
   dd->clearHash();
 }
 
-QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedidentifierRepository().itemFromIndex(index) ) {
+QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedidentifierRepository->itemFromIndex(index) ) {
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const QString& id)
@@ -810,7 +802,7 @@ struct Visitor {
 void QualifiedIdentifier::findByHash(HashType hash, KDevVarLengthArray<QualifiedIdentifier>& target)
 {
   Visitor v(target, hash);
-  qualifiedidentifierRepository().visitItemsWithHash<Visitor>(v, hash);
+  qualifiedidentifierRepository->visitItemsWithHash<Visitor>(v, hash);
 }
 
 uint QualifiedIdentifier::hash() const {
@@ -974,9 +966,9 @@ const Identifier QualifiedIdentifier::at(int i) const
 void QualifiedIdentifier::makeConstant() const {
   if(m_index)
     return;
-  m_index = qualifiedidentifierRepository().index( QualifiedIdentifierItemRequest(*dd) );
+  m_index = qualifiedidentifierRepository->index( QualifiedIdentifierItemRequest(*dd) );
   delete dd;
-  cd = qualifiedidentifierRepository().itemFromIndex( m_index );
+  cd = qualifiedidentifierRepository->itemFromIndex( m_index );
 }
 
 void QualifiedIdentifier::prepareWrite() {
