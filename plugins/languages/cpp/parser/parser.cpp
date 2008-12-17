@@ -1306,7 +1306,7 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
 
   const ListNode<std::size_t> *cv = 0;
   parseCvQualify(cv);
-
+  
   TypeSpecifierAST *ast = 0;
   if (!parseElaboratedTypeSpecifier(ast) && !parseSimpleTypeSpecifier(ast))
     {
@@ -1316,7 +1316,8 @@ bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
 
   parseCvQualify(cv);
   ast->cv = cv;
-
+  UPDATE_POS(ast, start, _M_last_valid_token+1);
+  
   node = ast;
 
   return true;
