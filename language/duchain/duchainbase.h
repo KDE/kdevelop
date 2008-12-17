@@ -24,6 +24,7 @@
 #include "../editor/hashedstring.h"
 #include "../languageexport.h"
 #include "appendedlist.h"
+#include "duchainpointer.h"
 
 namespace KDevelop
 {
@@ -31,7 +32,6 @@ namespace KDevelop
 class DUContext;
 class TopDUContext;
 class DUChainBase;
-class DUChainPointerData;
 class IndexedString;
 
 ///Use this to declare the data functions in your DUChainBase based class. @warning Behind this macro, the access will be "public".
