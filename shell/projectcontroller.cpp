@@ -163,7 +163,9 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
 {
     Q_ASSERT(d);
     OpenProjectDialog* dlg = new OpenProjectDialog( Core::self()->uiController()->activeMainWindow() );
-    dlg->exec();
+    if(dlg->exec() == QDialog::Rejected)
+        return KUrl();
+    
     KUrl dir = dlg->directory();
     QString file = dlg->projectFile();
     kDebug() << "selected project:" << dir << file << dlg->projectName() << dlg->projectManager();
