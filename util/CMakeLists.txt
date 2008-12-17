@@ -7,6 +7,7 @@ set(kdevplatformutil_LIB_SRCS
     commandexecutor.cpp
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
+    activetooltip.cpp
 )
 
 set (kdevplatformutil_LIB_UI

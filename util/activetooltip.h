@@ -20,14 +20,7 @@
 #define ACTIVE_TOOLTIP_H
 
 #include <QWidget>
-#include <QPoint>
-#include <QPalette>
-#include <QApplication>
-#include <QEvent>
-#include <QMouseEvent>
 #include "utilexport.h"
-#include <limits>
-#include <kdebug.h>
 
 namespace KDevelop {
 
@@ -46,111 +39,23 @@ namespace KDevelop {
     and extend the area we can interact with to cover the widget.  */
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
+Q_OBJECT
 public:
     /* position must be in global coordinates.  */
-    ActiveToolTip(QWidget *parent, const QPoint& position)
-    : QWidget(parent, Qt::ToolTip), mouseOut_(0)
-    {
-        previousDistance_ = std::numeric_limits<uint>::max();
-        setAttribute(Qt::WA_DeleteOnClose);
-        setMouseTracking(true);
-        rect_ = QRect(position, position);
-        rect_.adjust(-10, -10, 10, 10);
-        move(position);
+    ActiveToolTip(QWidget *parent, const QPoint& position);
 
-        QPalette p;
-        p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
-        p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
-        setPalette(p);
+    bool eventFilter(QObject *object, QEvent *e);
+    
+    bool insideThis(QObject* object);
 
-        qApp->installEventFilter(this);
-    }
+    void showEvent(QShowEvent*);
 
-    bool eventFilter(QObject *object, QEvent *e)
-    {
-        switch (e->type()) {
+    void resizeEvent(QResizeEvent*);
 
-        case QEvent::WindowActivate:
-        case QEvent::WindowDeactivate:
-            close();
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        case QEvent::Wheel:
-            /* If the click is within tooltip, it's fine.
-               Clicks outside close it.  */
-            if (!insideThis(object))
-                close();
-
-        // FIXME: revisit this code later.
-#if 0
-        case QEvent::FocusIn:
-        case QEvent::FocusOut:
-            close();
-            break;
-#endif
-        case QEvent::MouseMove:
-            if (!rect_.isNull() 
-                && !rect_.contains(static_cast<QMouseEvent*>(e)->globalPos())) {
-                
-                int distance = (rect_.center() - static_cast<QMouseEvent*>(e)->globalPos()).manhattanLength();
-                
-                // On X, when the cursor leaves the tooltip and enters
-                // the parent, we sometimes get some wrong Y coordinate.
-                // Don't know why, so wait for two out-of-range mouse
-                // positions before closing.
-                
-                //Additional test: When the cursor has been moved towards the tooltip, don't close it.
-                if(distance > previousDistance_)
-                    ++mouseOut_;
-                else
-                    previousDistance_ = distance;
-            } else               
-                mouseOut_ = 0;
-            if (mouseOut_ == 2) {
-                close();
-            }
-        default:
-            break;
-        }
-        return false;
-    }
-
-    bool insideThis(QObject* object)
-    {
-        while (object)
-        {
-            if (object == this)
-            {
-                return true;
-            }
-            object = object->parent();
-        }
-        return false;
-    }
-
-    void showEvent(QShowEvent*)
-    {        
-        adjustRect();
-    }
-
-    void resizeEvent(QResizeEvent*)
-    {
-        adjustRect();
-    }
-
-    void adjustRect()
-    {
-        // For tooltip widget, geometry() returns global coordinates.
-        QRect r = geometry();
-        r.adjust(-10, -10, 10, 10);
-        rect_ = r;
-    }
+    void adjustRect();
 
 private:
-    uint previousDistance_;
-    QRect rect_;
-    int mouseOut_;
+    class ActiveToolTipPrivate* const d;
 };
 
 }
