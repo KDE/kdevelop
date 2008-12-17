@@ -112,10 +112,10 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       uint type = IntegralType::TypeNone;
       uint modifiers = AbstractType::NoModifiers;
 
-      const ListNode<std::size_t> *it = node->integrals->toFront();
+      const ListNode<std::size_t> *it2 = node->integrals->toFront();
       const ListNode<std::size_t> *end = it;
       do {
-        int kind = m_session->token_stream->kind(it->element);
+        int kind = m_session->token_stream->kind(it2->element);
         switch (kind) {
           case Token_char:
             type = IntegralType::TypeChar;
@@ -155,8 +155,8 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
             break;
         }
 
-        it = it->next;
-      } while (it != end);
+        it2 = it2->next;
+      } while (it2 != end);
 
       if(type == IntegralType::TypeNone)
         type = IntegralType::TypeInt; //Happens, example: "unsigned short"
