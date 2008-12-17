@@ -115,11 +115,11 @@ void pp::handle_directive(uint directive, Stream& input, Stream& output)
   if(directive == defineDirective)
       if (! skipping ())
         return handle_define(input);
-  
+
   if(directive == includeDirective || directive == includeNextDirective)
       if (! skipping ())
         return handle_include (directive == includeNextDirective, input, output);
-  
+
   if(directive == undefDirective)
       if (! skipping ())
         return handle_undef(input);
@@ -224,7 +224,7 @@ void pp::operator () (Stream& input, Stream& output)
 
       Anchor inputPosition = input.inputPosition();
       KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
-      
+
       PreprocessedContents skipped;
       {
         Stream ss(&skipped);
@@ -319,7 +319,7 @@ void pp::handle_define (Stream& input)
   {
     if(input == '/' && (input.peekNextCharacter() == '/' || input.peekNextCharacter() == '*')) {
       skip_comment_or_divop(input, devnull());
-      if(input != '\n')
+      if(!input.atEnd() && input != '\n')
         skip_blanks (input, devnull());
       continue;
     }
@@ -959,7 +959,7 @@ void pp::handle_undef(Stream& input)
   macro.defined = false;
 
   m_environment->setMacro(makeConstant(&macro));
-  
+
   //m_environment->clearMacro(macro_name);
 }
 
