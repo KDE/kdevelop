@@ -54,12 +54,18 @@ void ExecutePlugin::unload()
 
 QStringList ExecutePlugin::instrumentorsProvided() const
 {
-    return QStringList() << "default";
+    return QStringList() << "default" << "konsole";
 }
 
-QString ExecutePlugin::translatedInstrumentor(const QString&) const
+QString ExecutePlugin::translatedInstrumentor(const QString& instrumentor) const
 {
-    return i18n("Run");
+    if (instrumentor == "default")
+        return i18n("Run");
+
+    if (instrumentor == "konsole")
+        return i18n("Run in external konsole");
+
+    return i18n("Unsupported instrumentor");
 }
 
 bool ExecutePlugin::execute(const IRun & run, KJob* job)
@@ -80,9 +86,27 @@ bool ExecutePlugin::execute(const IRun & run, KJob* job)
     process->setWorkingDirectory(run.workingDirectory().path());
 
     process->setProperty("executable", run.executable().path());
-    process->start(run.executable().path(), run.arguments());
 
-    kDebug() << "Started process" << run.executable().path() << "with arguments" << run.arguments();
+    QString executable;
+    QStringList args;
+
+    if (run.instrumentor() == "konsole") {
+        executable = "konsole";
+        // Don't fork, so we can still kill it via our job system
+        //args << "--nofork";
+        // Provide the executable to run
+        args << "-e" << run.executable().path();
+        // Provide the regular arguments to the executable
+        args << run.arguments();
+
+    } else {
+        executable = run.executable().path();
+        args = run.arguments();
+    }
+
+    process->start(executable, args);
+
+    kDebug() << "Started process" << executable << "with arguments" << args;
 
     return true;
 }
