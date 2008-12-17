@@ -53,6 +53,8 @@ public:
 
   QStringList cvString() const;
 
+  void run(TypeIdAST *node);
+  
   void run(TypeSpecifierAST *node);
 
   KDevelop::AbstractType::Ptr type() const;

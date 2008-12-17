@@ -108,6 +108,7 @@ private slots:
   void testForwardDeclaration3();
   void testTemplateForwardDeclaration();
   void testTemplateForwardDeclaration2();
+  void testTemplateInternalSearch();
   void testStringSets();
   void testIndexedStrings();
   void testEnum();

@@ -206,7 +206,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
   if( kind == Token_typename ) {
     //For typename, just find the type and return
-    bool openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
+    bool openedType = openTypeFromName(node->name, parseConstVolatile(editor()->parseSession(), node->cv));
 
     TypeBuilderBase::visitElaboratedTypeSpecifier(node);
 
@@ -315,7 +315,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     if(type == IntegralType::TypeNone)
       type = IntegralType::TypeInt; //Happens, example: "unsigned short"
 
-    modifiers |= parseConstVolatile(node->cv);
+    modifiers |= parseConstVolatile(editor()->parseSession(), node->cv);
 
     IntegralType::Ptr integral(new IntegralType(type));
     integral->setModifiers(modifiers);
@@ -323,7 +323,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     openType(integral);
     
   } else if (node->name) {
-    openedType = openTypeFromName(node->name, parseConstVolatile(node->cv));
+    openedType = openTypeFromName(node->name, parseConstVolatile(editor()->parseSession(), node->cv));
   }
 
   TypeBuilderBase::visitSimpleTypeSpecifier(node);
@@ -509,14 +509,14 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     if (!op.isEmpty())
       if (op[0] == '&') {
         ReferenceType::Ptr pointer(new ReferenceType());
-        pointer->setModifiers(parseConstVolatile(node->cv));
+        pointer->setModifiers(parseConstVolatile(editor()->parseSession(), node->cv));
         pointer->setBaseType(lastType());
         openType(pointer);
         typeOpened = true;
 
       } else if (op[0] == '*') {
         PointerType::Ptr pointer(new PointerType());
-        pointer->setModifiers(parseConstVolatile(node->cv));
+        pointer->setModifiers(parseConstVolatile(editor()->parseSession(), node->cv));
         pointer->setBaseType(lastType());
         openType(pointer);
         typeOpened = true;
@@ -534,7 +534,7 @@ FunctionType* TypeBuilder::openFunction(DeclaratorAST *node)
   FunctionType* functionType = new FunctionType();
 
   if (node->fun_cv)
-    functionType->setModifiers(parseConstVolatile(node->fun_cv));
+    functionType->setModifiers(parseConstVolatile(editor()->parseSession(), node->fun_cv));
 
   if (lastType())
     functionType->setReturnType(lastType());
@@ -597,7 +597,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     closeType();
 }
 
-uint TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
+uint TypeBuilder::parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
 {
   uint ret = AbstractType::NoModifiers;
 
@@ -605,7 +605,7 @@ uint TypeBuilder::parseConstVolatile(const ListNode<std::size_t> *cv)
     const ListNode<std::size_t> *it = cv->toFront();
     const ListNode<std::size_t> *end = it;
     do {
-      int kind = editor()->parseSession()->token_stream->kind(it->element);
+      int kind = session->token_stream->kind(it->element);
       if (kind == Token_const)
         ret |= AbstractType::ConstModifier;
       else if (kind == Token_volatile)

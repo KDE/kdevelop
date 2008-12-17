@@ -416,7 +416,7 @@ void TestExpressionParser::testSimpleExpression() {
   result = parser.evaluateType( "const Cont", KDevelop::DUContextPointer(testContext));
   lock.lock();
   QVERIFY(result.isValid());
-  QCOMPARE(result.type.type()->toString(), QString("Cont")); ///@todo Change this to "const Cont" once we parse const correctly
+  QCOMPARE(result.type.type()->toString(), QString("const Cont"));
   QVERIFY(!result.isInstance);
   lock.unlock();
 

@@ -40,6 +40,8 @@ class KDEVCPPDUCHAIN_EXPORT TypeBuilder: public TypeBuilderBase
 public:
   TypeBuilder();
 
+  static uint parseConstVolatile(ParseSession* session, const ListNode<std::size_t>* cv);
+  
 protected:
   ///Returns either the current context, or the last importend parent-context(needed to find template-argument function return-values)
   virtual KDevelop::DUContext* searchContext() const;
@@ -80,8 +82,6 @@ protected:
 
 
   KDevelop::FunctionType* openFunction(DeclaratorAST *node);
-
-  uint parseConstVolatile(const ListNode<std::size_t>* cv);
 
   int m_currentEnumeratorValue;
 

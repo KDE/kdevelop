@@ -972,7 +972,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   {
     PushPositiveContext pushContext( m_currentContext, ast->ducontext );
 
-    ///@todo cv-qualifiers
     clearLast();
 
     TypeASTVisitor comp(m_session, this, m_currentContext, topContext());
@@ -982,10 +981,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     QList<DeclarationPointer> decls = comp.declarations();
 
+    m_lastType = comp.type();
+    
     if( !decls.isEmpty() )
     {
       m_lastDeclarations = decls;
-      m_lastType = decls.first()->abstractType();
+//       m_lastType = decls.first()->abstractType(); If we do this, we may lose modifiers and such
 
       if( decls.first()->kind() == Declaration::Type )
         m_lastInstance = Instance(false);
@@ -1011,7 +1012,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-
+///@todo Use TypeASTVisitor
     clearLast();
 
     if (node->integrals) {
@@ -1093,7 +1094,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     LOCKDUCHAIN;
     if( node->array_dimensions ) {
-      ///@todo cv-qualifiers
       ArrayType::Ptr p( new ArrayType() );
       p->setElementType( m_lastType );
 
@@ -1168,11 +1168,27 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     LOCKDUCHAIN;
-    ///@todo cv-qualifiers
-    PointerType::Ptr p( new PointerType() );
-    p->setBaseType( m_lastType );
-
-    m_lastType = p.cast<AbstractType>();
+    
+    static IndexedString ref("&");
+    static IndexedString ptr("*");
+    
+    IndexedString op = m_session->token_stream->token(node->op).symbol();
+    
+    
+    if(op == ptr) {
+    
+      PointerType::Ptr p( new PointerType() );
+      p->setBaseType( m_lastType );
+      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+  
+      m_lastType = p.cast<AbstractType>();
+    }else{
+      ReferenceType::Ptr p( new ReferenceType() );
+      p->setBaseType( m_lastType );
+      p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
+  
+      m_lastType = p.cast<AbstractType>();
+    }
     m_lastInstance = Instance(false);
   }
 

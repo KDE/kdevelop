@@ -137,6 +137,10 @@ extern QMutex cppDuContextInstantiationsMutex;
         const TopDUContext* topContext() const {
           return m_source;
         }
+        
+        uint currentLength() const {
+          return m_states.size();
+        }
 
       private:
 
@@ -194,6 +198,34 @@ class CppDUContext : public BaseContext {
     ///Overridden to take care of templates and other c++ specific things
     virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags ) const
     {
+      if(identifiers.count() == 1 && this->owner() && !identifiers[0]->hasNext() && !(basicFlags & DUContext::OnlyFunctions)) {
+        
+        //Check whether we're searching for just the name of this context's class. If yes, return this context's owner.
+        Identifier searchId = identifiers[0]->identifier;
+        if(searchId.identifier() == this->owner()->identifier().identifier() && !searchId.templateIdentifiersCount()) {
+          
+          if(basicFlags & DUContext::NoUndefinedTemplateParams) {
+            //If no undefined template parameters are allowed, make sure this template has all parameters assigned.
+            TemplateDeclaration* templateOwner = dynamic_cast<TemplateDeclaration*>(this->owner());
+            if(templateOwner) {
+              if(!templateOwner->instantiatedFrom())
+                return false;
+              DUContext* templateContext = templateOwner->templateContext(source);
+              if(templateContext) {
+                foreach(Declaration* decl, templateContext->localDeclarations()) {
+                  if(decl->type<CppTemplateParameterType>()) {
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+          
+          ret << this->owner();
+          return true;
+        }
+      }
+      
       if( basicFlags & BaseContext::DirectQualifiedLookup ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use DirectQualifiedLookup to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.

@@ -128,8 +128,6 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   } else if( m_debug )
     kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
 
-
-
   _M_name.push(m_currentIdentifier);
 }
 
@@ -154,10 +152,18 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
   ExpressionEvaluationResult res;
   bool opened = false;
   if( node->expression ) {
+    bool ownVisitor = false;
+    if(!m_visitor) {
+      m_visitor = new ExpressionVisitor(m_session, m_source);
+      ownVisitor = true;
+      node->expression->ducontext = const_cast<DUContext*>(m_context);
+    }
+    
     m_visitor->visit( node->expression );
 
     if( m_visitor->lastType() ) {
       LOCKDUCHAIN;
+      
       res.type = m_visitor->lastType()->indexed();
       foreach(const DeclarationPointer &decl, m_visitor->lastDeclarations())
         if(decl)
@@ -169,14 +175,21 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
 
       m_find.openQualifiedIdentifier(res);
       opened = true;
+        
     }else if( m_debug ) {
       kDebug(9007) << "Failed to resolve template-argument " << decode(m_session, node->expression);
     }
+    
+    if(ownVisitor) {
+      delete m_visitor;
+      m_visitor = 0;
+    }
+    
   } else if( node->type_id )
   {
     TypeASTVisitor v( m_session, m_visitor, m_context, m_source, m_debug );
     v.setSearchFlags(m_flags);
-    v.run( node->type_id->type_specifier );
+    v.run( node->type_id );
 
     if(v.stoppedSearch()) {
       m_stopSearch = true;
@@ -185,47 +198,16 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
     
     res.type = v.type()->indexed();
     
-    if( v.type() ) {
+    if( res.type ) {
       LOCKDUCHAIN;
-
       foreach(const DeclarationPointer &decl, v.declarations())
         if(decl)
           res.allDeclarationsList().append(decl->id());
-
-      if( node->type_id->declarator && node->type_id->declarator->ptr_ops ) {
-        //Apply pointer operators
-        const ListNode<PtrOperatorAST*> *it = node->type_id->declarator->ptr_ops->toFront(), *end = it;
-
-        do
-          {
-            PtrOperatorAST* ptrOp = it->element;
-            if (ptrOp && ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
-              IndexedString op = m_session->token_stream->token(ptrOp->op).symbol();
-              static IndexedString ref("&");
-              static IndexedString ptr("*");
-              if (!op.isEmpty()) {
-                if (op == ref) {
-                  ReferenceType::Ptr pointer(new ReferenceType());
-                  pointer->setModifiers(parseConstVolatile(m_session, ptrOp->cv));
-                  pointer->setBaseType(res.type.type());
-                  res.type = pointer->indexed();
-                } else if (op == ptr) {
-                  PointerType::Ptr pointer(new PointerType());
-                  pointer->setModifiers(parseConstVolatile(m_session, ptrOp->cv));
-                  pointer->setBaseType(res.type.type());
-                  res.type = pointer->indexed();
-                }
-              }
-            }
-            it = it->next;
-          }
-        while (it != end);
-      }
-
-
+      
       m_find.openQualifiedIdentifier(res);
       opened = true;
     }
+
   }else{
     LOCKDUCHAIN;
     m_find.openQualifiedIdentifier(false);

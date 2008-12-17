@@ -116,7 +116,7 @@ bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
   if( this == rhs )
     return true;
 
-  return IdentifiedType::equals(rhs);
+  return IdentifiedType::equals(rhs) && AbstractType::equals(rhs);
 }
 
 AbstractType::Ptr CppTypeAliasType::type() const
@@ -151,7 +151,7 @@ TemplateParameterDeclaration* CppTemplateParameterType::declaration(const TopDUC
 }
 
 QString CppTemplateParameterType::toString() const {
-  return "<template> " + IdentifiedType::qualifiedIdentifier().toString();
+  return AbstractType::toString(false) + "<template> " + IdentifiedType::qualifiedIdentifier().toString();
 }
 
 void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
@@ -160,5 +160,5 @@ void CppTemplateParameterType::accept0 (KDevelop::TypeVisitor *v) const {
 }
 
 uint CppTemplateParameterType::hash() const {
-  return 41*IdentifiedType::hash();
+  return 41*IdentifiedType::hash() + AbstractType::hash();
 }

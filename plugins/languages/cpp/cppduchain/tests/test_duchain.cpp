@@ -2112,29 +2112,113 @@ void TestDUChain::testContextAssignment() {
 }
 
 void TestDUChain::testSpecializedTemplates() {
-  QByteArray text("class A{}; class B{}; class C{}; template<class T,class T2> class E{typedef A Type1;}; template<class T2> class E<A,T2> { typedef B Type2;}; template<class T2> class E<T2,A> { typedef C Type3; };");
-  TopDUContext* top = parse(text, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
-
-  QCOMPARE(top->localDeclarations().count(), 6);
-  Declaration* ADecl = top->localDeclarations()[0];
-  Declaration* BDecl = top->localDeclarations()[1];
-  Declaration* CDecl = top->localDeclarations()[2];
-  Declaration* EDecl = top->localDeclarations()[3];
-  Declaration* E1Decl = top->localDeclarations()[4];
-  Declaration* E2Decl = top->localDeclarations()[5];
-
-  TemplateDeclaration* templateEDecl = dynamic_cast<TemplateDeclaration*>(EDecl);
-  TemplateDeclaration* templateE1Decl = dynamic_cast<TemplateDeclaration*>(E1Decl);
-  TemplateDeclaration* templateE2Decl = dynamic_cast<TemplateDeclaration*>(E2Decl);
-  QVERIFY(templateEDecl);
-  QVERIFY(templateE1Decl);
-  QVERIFY(templateE2Decl);
-
-  QCOMPARE(templateE1Decl->specializedFrom(), templateEDecl);
-  QCOMPARE(templateE2Decl->specializedFrom(), templateEDecl);
-
-  release(top);
+  {
+    QByteArray text("struct C{}; template<class T>class AsPointer {typedef T* Ptr;}; template<class T>class AsPointer<T*> {typedef T* Ptr;}; template<class T>class AsPointer<const T*> {typedef T* Ptr2;}; template<class T>class AsPointer<const T> {typedef T* Ptr2;};");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QCOMPARE(top->localDeclarations().count(), 5);
+    TemplateDeclaration* base = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[1]);
+    QVERIFY(base);
+    QCOMPARE(base->specializationsSize(), 3u);
+    
+    TemplateDeclaration* sp3AsTemplate = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[3]);
+    //Must be const T*
+    QVERIFY(sp3AsTemplate);
+    QCOMPARE(sp3AsTemplate->specializedWith().information().templateParametersSize(), 1u);
+    kDebug() << "specialized with" << sp3AsTemplate->specializedWith().information().templateParameters()[0].type()->toString();
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>());
+    QVERIFY(! (sp3AsTemplate->specializedWith().information().templateParameters()[0].type()->modifiers() & AbstractType::ConstModifier) );
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType().cast<DelayedType>());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType().cast<DelayedType>()->identifier().isConstant());
+    
+    
+    
+    Declaration* decl2 = findDeclaration(top, QualifiedIdentifier("AsPointer<const C>::Ptr2"));
+    Declaration* decl1 = findDeclaration(top, QualifiedIdentifier("AsPointer<C>::Ptr"));
+    Declaration* decl3 = findDeclaration(top, QualifiedIdentifier("AsPointer<C*>::Ptr"));
+    Declaration* decl4 = findDeclaration(top, QualifiedIdentifier("AsPointer<const C*>::Ptr2"));
+    
+    QVERIFY(decl1);
+    QVERIFY(decl2);
+    QVERIFY(decl3);
+    QVERIFY(decl4);
+    
+    QVERIFY(decl1->type<PointerType>());
+    QCOMPARE(decl1->indexedType(), decl2->indexedType());
+    QCOMPARE(decl1->indexedType(), decl3->indexedType());
+    QCOMPARE(decl1->indexedType(), decl4->indexedType());
+    
+    release(top);
+  }
+  {
+    QByteArray text("class A{}; class B{}; class C{}; template<class T,class T2> class E{typedef A Type1;}; template<class T2> class E<A,T2> { typedef B Type2; typedef T2 NotA; }; template<class T2> class E<T2,A> { typedef C Type3; typedef T2 NotA; };");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QCOMPARE(top->localDeclarations().count(), 6);
+    Declaration* ADecl = top->localDeclarations()[0];
+    Declaration* BDecl = top->localDeclarations()[1];
+    Declaration* CDecl = top->localDeclarations()[2];
+    
+    Declaration* EDecl = top->localDeclarations()[3];
+    Declaration* E1Decl = top->localDeclarations()[4];
+    Declaration* E2Decl = top->localDeclarations()[5];
+  
+    QVERIFY(EDecl->internalContext());
+    QVERIFY(EDecl->internalContext()->importedParentContexts().count());
+    QVERIFY(EDecl->internalContext()->importedParentContexts()[0].context(top)->type() == DUContext::Template);
+    QCOMPARE(EDecl->internalContext()->importedParentContexts()[0].context(top)->localDeclarations().count(), 2);
+  
+    QVERIFY(E1Decl->internalContext());
+    QCOMPARE(E1Decl->internalContext()->importedParentContexts().count(), 1);
+    QCOMPARE(E1Decl->internalContext()->importedParentContexts()[0].context(top)->type(), DUContext::Template);
+    QCOMPARE(E1Decl->internalContext()->importedParentContexts()[0].context(top)->localDeclarations().count(), 1);
+    QCOMPARE(E1Decl->internalContext()->localDeclarations().count(), 2);
+    QCOMPARE(E1Decl->identifier().templateIdentifiersCount(), 2u);
+    QVERIFY(E2Decl->internalContext());
+    QCOMPARE(E2Decl->internalContext()->importedParentContexts().count(), 1);
+    QCOMPARE(E2Decl->internalContext()->importedParentContexts()[0].context(top)->type(), DUContext::Template);
+    QCOMPARE(E2Decl->internalContext()->importedParentContexts()[0].context(top)->localDeclarations().count(), 1);
+    QCOMPARE(E2Decl->identifier().templateIdentifiersCount(), 2u);
+    
+    TemplateDeclaration* templateEDecl = dynamic_cast<TemplateDeclaration*>(EDecl);
+    TemplateDeclaration* templateE1Decl = dynamic_cast<TemplateDeclaration*>(E1Decl);
+    TemplateDeclaration* templateE2Decl = dynamic_cast<TemplateDeclaration*>(E2Decl);
+    kDebug() << E1Decl->identifier().toString(); 
+    QVERIFY(templateEDecl);
+    QVERIFY(templateE1Decl);
+    QVERIFY(templateE2Decl);
+    QCOMPARE(templateE1Decl->specializedWith().information().templateParametersSize(), 2u);
+    QCOMPARE(templateE2Decl->specializedWith().information().templateParametersSize(), 2u);
+    QVERIFY(!templateE1Decl->specializedWith().information().templateParameters()[0].type().cast<DelayedType>());
+    kDebug() << typeid(*templateE1Decl->specializedWith().information().templateParameters()[1].type()).name();
+    QVERIFY(templateE1Decl->specializedWith().information().templateParameters()[1].type().cast<DelayedType>());
+    QVERIFY(templateE2Decl->specializedWith().information().templateParameters()[0].type().cast<DelayedType>());
+    QVERIFY(!templateE2Decl->specializedWith().information().templateParameters()[1].type().cast<DelayedType>());
+  
+    QCOMPARE(dynamic_cast<TemplateDeclaration*>(templateE1Decl->specializedFrom().data()), templateEDecl);
+    QCOMPARE(dynamic_cast<TemplateDeclaration*>(templateE2Decl->specializedFrom().data()), templateEDecl);
+    
+    Declaration* foundE1Specialization = findDeclaration(top, QualifiedIdentifier("E<A,C>::Type2"));
+    QVERIFY(foundE1Specialization);
+    Declaration* foundE1Specialization2 = findDeclaration(top, QualifiedIdentifier("E<A,C>::NotA"));
+    QVERIFY(foundE1Specialization2);
+    QCOMPARE(foundE1Specialization2->indexedType(), top->localDeclarations()[2]->indexedType());
+  
+    Declaration* foundE2Specialization = findDeclaration(top, QualifiedIdentifier("E<C,A>::Type3"));
+    QVERIFY(foundE2Specialization);
+    Declaration* foundE2Specialization2 = findDeclaration(top, QualifiedIdentifier("E<C,A>::NotA"));
+    QVERIFY(foundE2Specialization2);
+    QCOMPARE(foundE2Specialization2->indexedType(), top->localDeclarations()[2]->indexedType());
+  
+    QVERIFY(findDeclaration(top, QualifiedIdentifier("E<C,A>")));
+    QCOMPARE(findDeclaration(top, QualifiedIdentifier("E<C,A>"))->identifier(), Identifier("E<C,A>"));
+    
+    release(top);
+  }
 }
 
 int value( const AbstractType::Ptr& type ) {
@@ -2348,6 +2432,34 @@ void TestDUChain::testTemplateDependentClass() {
   release(top);
 }
 
+void TestDUChain::testTemplateInternalSearch() {
+  QByteArray method("class A {}; template<class T> class B { B mem(); const B mem2;}; ");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 2);
+  QVERIFY(top->childContexts()[2]->localDeclarations()[1]->type<DelayedType>());
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->type<FunctionType>());
+  QVERIFY(top->childContexts()[2]->localDeclarations()[0]->type<FunctionType>()->returnType().cast<DelayedType>());
+  
+  Declaration* d = findDeclaration(top, QualifiedIdentifier("B<A>::mem"));
+  QVERIFY(d);
+  kDebug() << d->toString();
+  FunctionType::Ptr fType = d->type<FunctionType>();
+  QVERIFY(fType);
+  QVERIFY(fType->returnType());
+  kDebug() << fType->toString();
+  QCOMPARE(fType->returnType()->toString(), QString("B< A >"));
+  
+  d = findDeclaration(top, QualifiedIdentifier("B<A>::mem2"));
+  QVERIFY(d);
+  QCOMPARE(d->abstractType()->toString(), QString("const B< A >"));
+
+  release(top);
+}
+
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
@@ -2426,6 +2538,8 @@ void TestDUChain::testTemplates() {
     AbstractType::Ptr t = instanceDefClassA->abstractType();
     IdentifiedType* identifiedType = dynamic_cast<IdentifiedType*>(t.unsafeData());
     QVERIFY(identifiedType);
+    QVERIFY(identifiedType->declaration(top));
+    kDebug() << identifiedType->declaration(top)->toString() << identifiedType->declaration(top)->range().textRange() << instanceDefClassA->toString() << instanceDefClassA->range().textRange();
     QCOMPARE(identifiedType->declaration(top), instanceDefClassA);
     QCOMPARE(identifiedType->qualifiedIdentifier().toString(), Identifier("A<B,C>").toString());
     QVERIFY(instanceDefClassA->internalContext());
@@ -2436,34 +2550,19 @@ void TestDUChain::testTemplates() {
     QCOMPARE(instanceDefClassA->internalContext()->importedParentContexts().front().context(0)->type(), DUContext::Template);
     QVERIFY(defClassA->internalContext()->importedParentContexts().front().context(0) != instanceDefClassA->internalContext()->importedParentContexts().front().context(0)); //The template-context has been instantiated
 
-    //Make sure the first template-parameter has been resolved to class B
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context(0)->localDeclarations()[0]->abstractType()->indexed(), defClassB->abstractType()->indexed() );
-    //Make sure the second template-parameter has been resolved to class C
-    QCOMPARE( instanceDefClassA->internalContext()->importedParentContexts()[0].context(0)->localDeclarations()[1]->abstractType()->indexed(), defClassC->abstractType()->indexed() );
-
     QualifiedIdentifier ident2(ident);
     ident2.push(Identifier("Template1"));
 
     Declaration* template1InstanceDecl1 = findDeclaration(instanceDefClassA->internalContext(), Identifier("Template1"));
-    QVERIFY(template1InstanceDecl1);
-    QCOMPARE(template1InstanceDecl1->abstractType()->toString(), QString("B"));
+    QVERIFY(!template1InstanceDecl1);
 
     Declaration* template1InstanceDecl2 = findDeclaration(instanceDefClassA->internalContext(), Identifier("a"));
-    QVERIFY(template1InstanceDecl2);
-    QCOMPARE(template1InstanceDecl2->abstractType()->toString(), QString("C"));
+    QVERIFY(!template1InstanceDecl2);
 
-/*    kDebug(9007) << "searching for" << ident2.toString();
-    kDebug(9007) << "Part 1:" << ident2.at(0).toString() << "templates:" << ident2.at(0).templateIdentifiers().count();
-    kDebug(9007) << "Part 2:" << ident2.at(1).toString();*/
     Declaration* template1InstanceDecl = findDeclaration(top, ident2);
-    QVERIFY(template1InstanceDecl);
-/*    kDebug(9007) << "found:" << template1InstanceDecl->toString();*/
-    QCOMPARE(template1InstanceDecl->abstractType()->toString(), QString("B"));
+    QVERIFY(!template1InstanceDecl);
   }
 
-/*  QCOMPARE(findDeclaration(top,  Identifier("B"))->abstractType(), defClassA->abstractType());
-  QVERIFY(findDeclaration(top,  Identifier("B"))->isTypeAlias());
-  QCOMPARE(findDeclaration(top,  Identifier("B"))->kind(), Declaration::Type);*/
   release(top);
 }
 

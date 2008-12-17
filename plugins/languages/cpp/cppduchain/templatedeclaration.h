@@ -46,9 +46,9 @@ namespace  KDevelop {
 namespace Cpp {
   class IndexedInstantiationInformation;
   
-  DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
+  KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
   
-  struct InstantiationInformation {
+  struct KDEVCPPDUCHAIN_EXPORT InstantiationInformation {
     InstantiationInformation();
     ///@todo include some information for instantiation only with default parameters
     InstantiationInformation(const InstantiationInformation& rhs);
@@ -95,7 +95,7 @@ namespace Cpp {
     IndexedInstantiationInformation indexed() const;
   };
   
-  class IndexedInstantiationInformation {
+  class KDEVCPPDUCHAIN_EXPORT IndexedInstantiationInformation {
     public:
       IndexedInstantiationInformation();
       IndexedInstantiationInformation(uint index);
@@ -125,7 +125,7 @@ namespace Cpp {
   template<class Base>
   class CppDUContext;
   
-  struct TemplateDeclarationData {
+  struct KDEVCPPDUCHAIN_EXPORT TemplateDeclarationData {
     TemplateDeclarationData() {
     }
     TemplateDeclarationData(const TemplateDeclarationData& rhs) : m_parameterContext(rhs.m_parameterContext) {
@@ -156,16 +156,14 @@ namespace Cpp {
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
        * The template-arguments must chained up with the template-arguments of the parent, if the parent is a template class.
+       * @param forceLocal if this is true, it is this exact declaration that is instantiated. Else, this declaration is instantiated again.
        * */
-      KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source );
+      KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool forceLocal = false );
 
       ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
 
       void setSpecializedFrom(TemplateDeclaration* other);
-
-      ///@return Zero, or a non-specialized(thus also non-instantiated) template-class, which this was explicitly specialized from.
-      TemplateDeclaration* specializedFrom() const;
 
       IndexedInstantiationInformation instantiatedWith() const;
       
@@ -173,6 +171,8 @@ namespace Cpp {
       ///the cache to make sure that we don't instantiate the same declaration again in the meantime.
       void reserveInstantiation(const IndexedInstantiationInformation& info);
 
+      ///An instantiation is an additional temporary version of this declaration that was created given some template-parameters.
+      ///Opposed to that a specialization is a real declaration that was created by the user, that specializes this declaration.
       ///Returns all current instantiations of this declaration
       ///@warning Some instantiations may have the value zero when an instantiation is currently happening.
        InstantiationsHash instantiations() const;
@@ -183,33 +183,79 @@ namespace Cpp {
       
       Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance);
     
-    private:
+      //Duchain must be write-locked
+      void deleteAllInstantiations();
+      
+      ///Returns the template-context that belongs to this template declaration, or zero
+      DUContext* templateContext(const TopDUContext* source) const;
+      
+      ///@return The declaration this one was explicitly specialized from.
+      ///Zero, or a non-specialized(thus also non-instantiated) template-class, which this was explicitly specialized from.
+      virtual IndexedDeclaration specializedFrom() = 0;
+      virtual const IndexedDeclaration* specializations() const = 0;
+      virtual uint specializationsSize() const = 0;
+      
+      ///These are internal, do not use them. They have to be public so they are visible from SpecialTemplateDeclaration.
+      virtual void setSpecializedFromInternal(IndexedDeclaration decl) = 0;
+      virtual void addSpecializationInternal(IndexedDeclaration decl) = 0;
+      virtual void removeSpecializationInternal(IndexedDeclaration decl) = 0;
+      
+      virtual void setSpecializedWith(IndexedInstantiationInformation info) = 0;
+      virtual IndexedInstantiationInformation specializedWith() const = 0;
+      
+    protected:
+      //Matches the given instantiation-information to this declarations local specialization information
+      QPair<unsigned int, TemplateDeclaration*> matchTemplateParameters(InstantiationInformation info, const TopDUContext* source);
+      
       virtual TemplateDeclarationData* dynamicTemplateData() = 0;
       virtual const TemplateDeclarationData* templateData() const = 0;
 
       TemplateDeclaration* m_instantiatedFrom;
-      TemplateDeclaration* m_specializedFrom; 
-      IndexedInstantiationInformation m_instantiatedWith;
 
+      IndexedInstantiationInformation m_instantiatedWith;
+      
       static QMutex instantiationsMutex;
       ///Every access to m_instantiations must be serialized through instantiationsMutex!
       
       InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
-      QList<TemplateDeclaration*> m_specializations; ///Explicit specializations
   };
   
+  
+    KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(SpecialTemplateDeclarationData, m_specializations, IndexedDeclaration)
   
     template<class Base>
     class SpecialTemplateDeclarationData : public Base, public TemplateDeclarationData
     {
     public:
     SpecialTemplateDeclarationData() {
+      initializeAppendedLists();
     }
     
     ~SpecialTemplateDeclarationData() {
+      freeAppendedLists();
     }
     
     SpecialTemplateDeclarationData(const SpecialTemplateDeclarationData& rhs) : Base(rhs), TemplateDeclarationData(rhs) {
+      initializeAppendedLists();
+      copyListsFrom(rhs);
+      m_specializedFrom = rhs.m_specializedFrom;
+      m_specializedWith = rhs.m_specializedWith;
+    }
+    
+    uint classSize() const {
+      return Base::classSize();
+    }
+
+    IndexedDeclaration m_specializedFrom;
+    IndexedInstantiationInformation m_specializedWith;
+
+    START_APPENDED_LISTS_BASE(SpecialTemplateDeclarationData, Base);
+    APPENDED_LIST_FIRST(SpecialTemplateDeclarationData, IndexedDeclaration, m_specializations);
+    END_APPENDED_LISTS(SpecialTemplateDeclarationData, m_specializations);
+
+    //Just for visibility
+    static bool appendedListDynamicDefault() {
+      return Base::appendedListDynamicDefault();
     }
     };
 
@@ -225,9 +271,16 @@ namespace Cpp {
     template<class Data>
     SpecialTemplateDeclaration(Data& data) : BaseDeclaration(data) {
     }
+
+    typedef SpecialTemplateDeclarationData<typename BaseDeclaration::Data> Data;
+    
     ///Copy-constructor for cloning
     SpecialTemplateDeclaration(const SpecialTemplateDeclaration<BaseDeclaration>& rhs) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>(*rhs.d_func())), TemplateDeclaration(rhs) {
-      static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
+      DUChainBaseData* data = static_cast<DUChainBase*>(this)->d_func_dynamic();
+      data->setClassId(this);
+      //To keep link-consistency these specialization links are cleared in copies/instantiations
+      static_cast<Data*>(data)->m_specializedFrom = IndexedDeclaration();
+      static_cast<Data*>(data)->m_specializationsList().clear();
     }
     ///Arguments are passed to the base
     SpecialTemplateDeclaration( const KDevelop::SimpleRange& range, KDevelop::DUContext* context ) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>()) {
@@ -238,7 +291,39 @@ namespace Cpp {
       if(context)
         this->setContext(context);
     }
+    
+    ~SpecialTemplateDeclaration() {
+      TopDUContext* top = this->topContext();
+      Q_ASSERT(top);
 
+      //This actually belongs into ~TemplateDeclaration, but we do it here because here we do not need to go through virtual
+      //functions or dynamic casts, because those are not guaranteed to work from within destructors.
+      if(!top->deleting() || !top->isOnDisk()) {
+        ///When the declaration is being deleted, disconnect the links on both sides
+        Declaration* specializedFromDeclaration = static_cast<const Data*>(this->DUChainBase::d_func())->m_specializedFrom.data();
+        if(TemplateDeclaration* specializedFromTemplate = dynamic_cast<TemplateDeclaration*>(specializedFromDeclaration))
+          specializedFromTemplate->removeSpecializationInternal(IndexedDeclaration(this));
+        
+        FOREACH_FUNCTION(IndexedDeclaration decl, static_cast<const Data*>(this->DUChainBase::d_func())->m_specializations) {
+          TemplateDeclaration* tDecl = dynamic_cast<TemplateDeclaration*>(decl.data());
+          if(tDecl)
+            tDecl->setSpecializedFrom(0);
+        }    
+      }
+    }
+
+    virtual IndexedDeclaration specializedFrom() {
+      return static_cast<const Data*>(this->DUChainBase::d_func())->m_specializedFrom;
+    }
+    virtual const IndexedDeclaration* specializations() const {
+      return static_cast<const Data*>(this->DUChainBase::d_func())->m_specializations();
+    }
+    virtual uint specializationsSize() const {
+      return static_cast<const Data*>(this->DUChainBase::d_func())->m_specializationsSize();
+    }
+    virtual IndexedInstantiationInformation specializedWith() const {
+      return static_cast<const Data*>(this->DUChainBase::d_func())->m_specializedWith;
+    }
     virtual bool inDUChain() const {
       return instantiatedFrom() || BaseDeclaration::inDUChain();
     }
@@ -269,6 +354,20 @@ namespace Cpp {
     };
     
     private:
+    virtual void setSpecializedFromInternal(IndexedDeclaration decl) {
+      static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializedFrom = decl;
+    }
+    virtual void addSpecializationInternal(IndexedDeclaration decl) {
+      static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializationsList().append(decl);
+    }
+    virtual void removeSpecializationInternal(IndexedDeclaration decl) {
+      bool result = static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializationsList().removeOne(decl);
+      Q_ASSERT(result);
+    }
+    virtual void setSpecializedWith(IndexedInstantiationInformation info) {
+      static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializedWith = info;
+    }
+      
     virtual TemplateDeclarationData* dynamicTemplateData() {
         return d_func_dynamic();
     }

@@ -25,9 +25,10 @@
 #include "parsesession.h"
 #include "cppduchain.h"
 #include "expressionvisitor.h"
+#include "typebuilder.h"
 #include <language/duchain/duchainlock.h>
 
-
+using namespace Cpp;
 
 #include <QtCore/QString>
 
@@ -40,6 +41,47 @@ TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* vi
   m_stopSearch = false;
 }
 
+void TypeASTVisitor::run(TypeIdAST *node)
+{
+  run(node->type_specifier);
+
+  if(node->declarator && m_type) {
+    if( m_type ) {
+      LOCKDUCHAIN;
+      
+      if( node->declarator && node->declarator->ptr_ops ) {
+        //Apply pointer operators
+        const ListNode<PtrOperatorAST*> *it = node->declarator->ptr_ops->toFront(), *end = it;
+
+        do
+          {
+            PtrOperatorAST* ptrOp = it->element;
+            if (ptrOp && ptrOp->op) { ///@todo check ordering, eventually walk the chain in reversed order
+              IndexedString op = m_session->token_stream->token(ptrOp->op).symbol();
+              static IndexedString ref("&");
+              static IndexedString ptr("*");
+              if (!op.isEmpty()) {
+                if (op == ref) {
+                  ReferenceType::Ptr pointer(new ReferenceType());
+                  pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
+                  pointer->setBaseType(m_type);
+                  m_type = pointer.cast<AbstractType>();
+                } else if (op == ptr) {
+                  PointerType::Ptr pointer(new PointerType());
+                  pointer->setModifiers(TypeBuilder::parseConstVolatile(m_session, ptrOp->cv));
+                  pointer->setBaseType(m_type);
+                  m_type = pointer.cast<AbstractType>();
+                }
+              }
+            }
+            it = it->next;
+          }
+        while (it != end);
+      }
+    }
+  }
+}
+
 void TypeASTVisitor::run(TypeSpecifierAST *node)
 {
   m_typeId.clear();
@@ -47,20 +89,12 @@ void TypeASTVisitor::run(TypeSpecifierAST *node)
 
   visit(node);
 
-  if (node && node->cv)
-    {
-      const ListNode<std::size_t> *it = node->cv->toFront();
-      const ListNode<std::size_t> *end = it;
-      do
-        {
-          int kind = m_session->token_stream->kind(it->element);
-          if (! _M_cv.contains(kind))
-            _M_cv.append(kind);
-
-          it = it->next;
-        }
-      while (it != end);
-    }
+  
+  if (node && node->cv && m_type) {
+      LOCKDUCHAIN;
+      m_type->setModifiers((AbstractType::CommonModifiers)(m_type->modifiers() | TypeBuilder::parseConstVolatile(m_session, node->cv)));
+  }
+  
 }
 
 void TypeASTVisitor::visitClassSpecifier(ClassSpecifierAST *node)
@@ -107,13 +141,13 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   Cpp::FindDeclaration find( m_context, m_source, m_flags, m_context->range().end );
   find.openQualifiedIdentifier(false);
   
-  if (const ListNode<std::size_t> *it = node->integrals)
+  if (node->integrals)
     {
       uint type = IntegralType::TypeNone;
       uint modifiers = AbstractType::NoModifiers;
 
       const ListNode<std::size_t> *it2 = node->integrals->toFront();
-      const ListNode<std::size_t> *end = it;
+      const ListNode<std::size_t> *end = it2;
       do {
         int kind = m_session->token_stream->kind(it2->element);
         switch (kind) {

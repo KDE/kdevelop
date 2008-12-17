@@ -97,6 +97,7 @@ public:
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
+  virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
 
 private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
@@ -135,6 +136,9 @@ private:
 
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return ((KDevelop::Declaration::AccessPolicy)((m_accessPolicyStack.top() & (~((uint)FunctionIsSignal))) & (~((uint)FunctionIsSlot)))); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
+
+  Cpp::InstantiationInformation createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext);
+  Cpp::IndexedInstantiationInformation createSpecializationInformation(NameAST* name, DUContext* templateContext);
 
   void parseComments(const ListNode<size_t> *comments);
 

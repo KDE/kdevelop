@@ -57,6 +57,7 @@
 #include "classdeclaration.h"
 
 #include "cppdebughelper.h"
+#include "name_visitor.h"
 
 const Identifier& castIdentifier() {
   static Identifier id("operator{...cast...}");
@@ -443,6 +444,10 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
          )
       {
         // Match
+        TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(dec);
+        if(templateDecl)
+          templateDecl->deleteAllInstantiations(); //Delete all instantiations so we have a fresh start
+        
         declaration = dynamic_cast<T*>(dec);
         break;
       }
@@ -500,7 +505,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
     for(int a = backup.size()-1; a >= 0; --a)
       editor()->setCurrentRange(iface, backup[a]);
-
+  
     Q_ASSERT(editor()->currentRange(iface) == prior);
 
     declaration = new T(newRange, currentContext());
@@ -534,7 +539,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
             break;
           }
 
-        if( !templateDecl->specializedFrom() )
+        if( !templateDecl->specializedFrom().isValid() )
           kDebug(9007) << "Could not find valid specialization-base" << localId.toString() << "for" << declaration->toString();
       }
     } else {
@@ -712,6 +717,85 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   closeDeclaration();
 }
 
+///Replaces a CppTemplateParameterType with a DelayedType
+struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
+
+  TemplateTypeExchanger(TopDUContext* top) : m_top(top) {
+  }
+
+  virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
+  {
+    if(CppTemplateParameterType::Ptr templateParamType = type.cast<CppTemplateParameterType>()) {
+      Declaration* decl = templateParamType->declaration(m_top);
+      if(decl) {
+        DelayedType::Ptr newType(new DelayedType());
+        
+        TypeIdentifier id(QualifiedIdentifier(decl->identifier()));
+        
+        if(type->modifiers() & AbstractType::ConstModifier)
+            id.setIsConstant(true);
+           
+        newType->setIdentifier(id);
+        newType->setKind(KDevelop::DelayedType::Delayed);
+        
+        return newType.cast<AbstractType>();
+      }
+    }
+    return type;
+  }
+  private:
+    TopDUContext* m_top;;
+};
+
+Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
+    if(name->template_arguments || base.isValid()) 
+    {
+      //Append a scope part
+      InstantiationInformation newCurrent;
+      newCurrent.previousInstantiationInformation = base.indexed().index();
+      if(!name->template_arguments)
+        return newCurrent;
+      //Process the template arguments if they exist
+      const ListNode<TemplateArgumentAST*> * start = name->template_arguments->toFront();
+      const ListNode<TemplateArgumentAST*> * current = start;
+      do {
+        NameASTVisitor visitor(editor()->parseSession(), 0, templateContext, currentContext()->topContext(), templateContext->range().end/*, DUContext::NoUndefinedTemplateParams*/);
+        ExpressionEvaluationResult res = visitor.processTemplateArgument(current->element);
+        AbstractType::Ptr type = res.type.type();
+        
+        TemplateTypeExchanger exchanger(currentContext()->topContext());
+        
+        if(type) {
+          type = exchanger.exchange(type);
+          type->exchangeTypes(&exchanger);
+        }
+        
+        newCurrent.templateParametersList().append(type->indexed());
+
+        current = current->next;
+      }while(current != start);
+      return newCurrent;
+    }else{
+      return base;
+    }
+}
+
+Cpp::IndexedInstantiationInformation DeclarationBuilder::createSpecializationInformation(NameAST* name, DUContext* templateContext)
+{
+  InstantiationInformation currentInfo;
+  if(name->qualified_names) {
+    const ListNode<UnqualifiedNameAST*> * start = name->qualified_names->toFront();
+    const ListNode<UnqualifiedNameAST*> * current = start;
+    do {
+      currentInfo = createSpecializationInformation(currentInfo, current->element, templateContext);
+      current = current->next;
+    }while(current != start);
+  }
+  if(name->unqualified_name)
+    currentInfo = createSpecializationInformation(currentInfo, name->unqualified_name, templateContext);
+  return currentInfo.indexed();
+}
+
 void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 {
   //Ugly hack: Since we want the identifier only to have the range of the id(not
@@ -745,6 +829,13 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   }
 }
 
+void DeclarationBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* context) {
+  
+  //We need to set this early, so we can do correct search while building
+  DUChainWriteLocker lock(DUChain::lock());
+  currentDeclaration()->setInternalContext(context);
+}
+
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
@@ -756,10 +847,16 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
 
+  IndexedInstantiationInformation specializedWith;
+  
   QualifiedIdentifier id;
   if( node->name ) {
     id = identifierForNode(node->name);
     openPrefixContext(node, id, pos);
+    DUChainReadLocker lock(DUChain::lock());
+    if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts)) {
+      specializedWith = createSpecializationInformation(node->name, templateContext);
+    }
   }
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
@@ -846,8 +943,14 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   }//node-name
 
+  TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration());
+  
+  if(tempDecl) {
+    DUChainWriteLocker lock(DUChain::lock());
+    tempDecl->setSpecializedWith(specializedWith);
+  }
   closeDeclaration();
-
+  
   if(node->name)
     closePrefixContext(id);
 
@@ -925,7 +1028,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
     if(!declarations.isEmpty()) {
       decl->setAliasedDeclaration(declarations[0]);
     }else{
-      kDebug() << "Aliased declaration not found:" << id.toString();
+      kDebug(9007) << "Aliased declaration not found:" << id.toString();
     }
   }
 

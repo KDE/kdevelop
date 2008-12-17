@@ -203,6 +203,8 @@ protected:
   virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
+  virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
+  
   TopDUContext* topContext() {
     return currentContext()->topContext();
   }

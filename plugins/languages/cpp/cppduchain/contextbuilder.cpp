@@ -507,6 +507,10 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   closeContext();
 }
 
+void ContextBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* context)
+{
+}
+
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 {
   //We only use the local identifier here, because we build a prefix-context around
@@ -531,6 +535,8 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
       currentContext()->setPropagateDeclarations(true);
     }
   }
+  
+  classContextOpened(node, currentContext());
 
   DefaultVisitor::visitClassSpecifier (node);
 
