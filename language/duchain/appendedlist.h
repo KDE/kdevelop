@@ -26,6 +26,7 @@
 #include <kdebug.h>
 #include <util/kdevvarlengtharray.h>
 #include <iostream>
+#include <time.h>
 
 namespace KDevelop {
 
