@@ -30,6 +30,9 @@ public:
 public slots:
     void setDirectory( const KUrl &dirUrl );
 
+protected:
+    virtual bool eventFilter( QObject *obj, QEvent *e );
+
 private :
     class KDevKonsoleViewPrivate* const d;
 

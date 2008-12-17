@@ -16,6 +16,8 @@
 #include <QFrame>
 #include <QLayout>
 #include <QVBoxLayout>
+#include <QKeyEvent>
+#include <QApplication>
 
 #include <kurl.h>
 #include <kicon.h>
@@ -53,6 +55,7 @@ public:
 
             konsolepart->widget() ->setFocusPolicy( Qt::WheelFocus );
             konsolepart->widget() ->setFocus();
+            konsolepart->widget() ->installEventFilter( m_view );
 
             if ( QFrame * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
                 frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
@@ -119,6 +122,30 @@ void KDevKonsoleView::setDirectory( const KUrl &url )
 
     if ( d->konsolepart && url != d->konsolepart->url() )
         d->konsolepart->openUrl( url );
+}
+
+bool KDevKonsoleView::eventFilter( QObject* obj, QEvent *e )
+{
+    kDebug();
+    switch( e->type() ) {
+        case QEvent::ShortcutOverride: {
+            QKeyEvent *k = static_cast<QKeyEvent *>(e);
+
+            // Don't propagate Esc to the top level, it should be used by konsole
+            if (k->key() == Qt::Key_Escape) {
+                if (d->konsolepart && d->konsolepart->widget()) {
+                    e->accept();
+                    return true;
+                }
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return QWidget::eventFilter( obj, e );
 }
 
 #include "kdevkonsoleview.moc"
