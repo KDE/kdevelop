@@ -29,7 +29,7 @@ class IRun::IRunPrivate : public QSharedData
 {
     public:
         KUrl executable, workingDirectory;
-        QString instrumentor, environmentKey;
+        QString instrumentor, environmentKey, runAsUser;
         QStringList arguments, instrumentorArguments;
         QList<KJob*> dependencies;
 };
@@ -149,3 +149,12 @@ void IRun::setDependencies(const QList<KJob*>& deps)
     d->dependencies=deps;
 }
 
+QString KDevelop::IRun::runAsUser() const
+{
+    return d->runAsUser;
+}
+
+void KDevelop::IRun::setRunAsUser(const QString& user)
+{
+    d->runAsUser = user;
+}

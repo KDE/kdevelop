@@ -87,22 +87,25 @@ bool ExecutePlugin::execute(const IRun & run, KJob* job)
 
     process->setProperty("executable", run.executable().path());
 
-    QString executable;
+    QString executable = run.executable().path();
     QStringList args;
 
+    if (!run.runAsUser().isEmpty()) {
+        args << "-u" << run.runAsUser();
+        args << "-c" << executable;
+        executable = "kdesudo";
+    }
+
     if (run.instrumentor() == "konsole") {
-        executable = "konsole";
         // Don't fork, so we can still kill it via our job system
         //args << "--nofork";
         // Provide the executable to run
-        args << "-e" << run.executable().path();
-        // Provide the regular arguments to the executable
-        args << run.arguments();
+        args << "-e" << executable;
 
-    } else {
-        executable = run.executable().path();
-        args = run.arguments();
+        executable = "konsole";
     }
+
+    args << run.arguments();
 
     process->start(executable, args);
 

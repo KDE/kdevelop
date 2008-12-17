@@ -364,6 +364,7 @@ IRun KDevelop::RunController::defaultRun() const
         run.setInstrumentor("konsole");
     else
         run.setInstrumentor("default");
+    run.setRunAsUser(group.readEntry("Run As User", QString()));
 
     QStringList compileItems=group.readEntry("Compile Items", QStringList());
     int actionDeps=group.readEntry("BeforeExecute", 1);

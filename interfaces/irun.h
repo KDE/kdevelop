@@ -137,6 +137,15 @@ public:
      */
     QList<KJob*> dependencies() const;
 
+    /**
+     * Returns the user name or id under whose credentials the program should be run.
+     */
+    QString runAsUser() const;
+
+    /**
+     * Set the user name or id under whose credentials the program should be run.
+     */
+    void setRunAsUser(const QString& user);
 
 private:
     class IRunPrivate;
