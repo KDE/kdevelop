@@ -119,6 +119,7 @@ class ExecuteCompositeJob : public KCompositeJob
         virtual bool doKill()
         {
             m_killing = true;
+            setError( KJob::KilledJobError );
             if(hasSubjobs()) {
                 KJob* j = subjobs().first();
                 if (j->kill()) {
@@ -362,9 +363,6 @@ IRun KDevelop::RunController::defaultRun() const
     run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
     if (group.readEntry("Start In Terminal", false))
         // TODO: start in terminal rather than output view
-#ifdef __GNUC__
-		#warning Implement a Konsole instrumentor
-#endif
         run.setInstrumentor("konsole");
     else
         run.setInstrumentor("default");
@@ -578,11 +576,15 @@ void KDevelop::RunJob::start()
 
     m_provider->execute(m_run, this);
 
-    setStandardToolView(IOutputView::RunView);
-    setDelegate(m_controller->delegate());
-    setTitle(m_run.executable().path());
-    setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    startOutput();
+    // TODO should this really be hard-coded? or should the provider get a say...
+    // Don't show the run output if the process is being run in konsole
+    if (m_run.instrumentor() != "konsole") {
+        setStandardToolView(IOutputView::RunView);
+        setDelegate(m_controller->delegate());
+        setTitle(m_run.executable().path());
+        setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+        startOutput();
+    }
 }
 
 QList< KJob * > KDevelop::RunController::currentJobs() const
