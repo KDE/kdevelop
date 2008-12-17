@@ -74,7 +74,8 @@ namespace Cpp {
         SignalAccess,  ///All signals from MemberAccessContainer should be listed
         SlotAccess,     ///All slots from MemberAccessContainer should be listed
         IncludeListAccess, ///A list of include-files should be presented. Get the list through includeItems()
-        ReturnAccess
+        ReturnAccess,
+        DeleteAccess   /// Any item which can be deleted or provide deletable results should be listed
       };
       /**
        * The first context created will never be a FunctionCallAccess
@@ -214,7 +215,7 @@ namespace Cpp {
       AdditionalContextType m_contextType;
 
       QList<Function> m_functions;
-      
+
       //If a signal/slot access is performed, and a slot is being connected to a signal, this contains the identifier and the signature
       Identifier m_connectedSignalIdentifier;
       QByteArray m_connectedSignalNormalizedSignature;

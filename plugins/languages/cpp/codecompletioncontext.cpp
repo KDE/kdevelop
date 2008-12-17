@@ -131,7 +131,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global))
       m_onlyShowTypes = true;
   }
-  
+
   m_followingText = followingText;
 
   if(depth > 10) {
@@ -285,12 +285,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ///Handle signal/slot access
   if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
     LOCKDUCHAIN;
-    
+
     if(parentContext()->functionName() == "SIGNAL" || parentContext()->functionName() == "SLOT") {
       kDebug() << "skipping parents";
       m_parentContext = parentContext()->m_parentContext; //Ignore the SIGNAL and SLOT parts
     }
-    
+
     if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
       foreach(const Cpp::OverloadResolutionFunction &function, parentContext()->functions()) {
         if(function.function.declaration() && (function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect" || function.function.declaration()->qualifiedIdentifier().toString() == "QObject::disconnect")) {
@@ -301,7 +301,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
               m_memberAccessOperation = SignalAccess;
             }else if(funType->arguments()[function.matchedArguments] && funType->arguments()[function.matchedArguments]->toString() == "const char*") {
               m_memberAccessOperation = SlotAccess;
-              
+
               if(parentContext()->m_knownArgumentExpressions.size() > 1) {
                 QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
                 if(connectedSignal.startsWith("SIGNAL(") && connectedSignal.endsWith(")")) {
@@ -314,7 +314,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                 }
               }
             }
-            
+
             if(m_memberAccessOperation == SignalAccess || m_memberAccessOperation == SlotAccess) {
               if(function.matchedArguments == 2) {
                 //The function that does not take the target-argument is being used
@@ -355,6 +355,15 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       m_parentContext = new CodeCompletionContext( m_duContext, "return", QString(), depth+1 );
     }else{
       m_memberAccessOperation = ReturnAccess;
+    }
+  }
+  if( expr.startsWith("delete") )  {
+    expr = expr.right( expr.length() - 6 );
+    if(!expr.isEmpty() || depth == 0) {
+      //Create a new context for the "delete"
+      m_parentContext = new CodeCompletionContext( m_duContext, "delete", QString(), depth+1 );
+    }else{
+      //m_memberAccessOperation = DeleteAccess;
     }
   }
   if( expr.startsWith("throw") )  {
@@ -687,7 +696,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
         overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext)));
     }
   }
-  
+
   foreach(const DUContext::Import &import, current->importedParentContexts())
     getOverridable(base, import.context(base->topContext()), overridable, completionContext);
 }
@@ -704,7 +713,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     typedef QPair<Declaration*, int> DeclarationDepthPair;
 
     bool ignoreParentContext = false;
-    
+
     if(!m_storedItems.isEmpty()) {
       items = m_storedItems;
     }else{
@@ -747,7 +756,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             } else {
               kDebug(9007) << "setContext: no container-type";
             }
-          }          
+          }
           break;
         case ReturnAccess:
           {
@@ -783,7 +792,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                 ++num;
               }
             }
-            
+
             if(additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
               //Argument-hints for builtin operators
               AbstractType::Ptr type = m_expressionResult.type.type();
@@ -798,24 +807,24 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   if(!conv.implicitConversion(m_expressionResult.type, integral->indexed()))
                     integral = IntegralType::Ptr(); //No conversion possible
                 }
-                
+
                 if( m_operator == "=" || integral ) {
                   ///Conversion to the left operand-type, builtin operators on integral types
                   IndexedType useType = integral ? integral->indexed() : m_expressionResult.type;
                   QString showName = functionName();
                   if(useType.type())
                     showName = useType.type()->toString() + " " + m_operator;
-                  
+
                   if(useType == m_expressionResult.type && m_expressionResult.allDeclarations.size() == 1) {
                     Declaration* decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());
                     if(decl)
                       showName = decl->toString() + " " + m_operator;
                   }
-                  
+
                   items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth() ) );
                 }
               }
-              
+
 //                 items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = functionName();
             }
           }
@@ -834,7 +843,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               ++cnt;
             }
             kDebug(9007) << "Added " << cnt << " include-files to completion-list";
-          }          
+          }
           break;
         case SignalAccess:
         case SlotAccess:
@@ -911,7 +920,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           break;
       }
     }
-      
+
     if(!ignoreParentContext && fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
       items = parentContext()->completionItems( position, shouldAbort, fullCompletion ) + items;
 
@@ -921,12 +930,12 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         QString totalExpression = m_expression + "::" + m_followingText.trimmed();
         items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
       }
-      
+
       if(items.isEmpty() && (memberAccessOperation() == StaticMemberChoose || memberAccessOperation() == MemberChoose || memberAccessOperation() == MemberAccess || memberAccessOperation() == ArrowMemberAccess)) {
         kDebug() << "doing missing-include completion for" << m_expression;
         items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, memberAccessOperation() == StaticMemberChoose);
       }
-      
+
       if(m_duContext->type() == DUContext::Class) {
         //Show override helper items
         QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
@@ -934,7 +943,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           getOverridable(m_duContext.data(), import.context(m_duContext->topContext()), overridable, Ptr(this));
         items += overridable.values();
       }
-      
+
       if(m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)
         items += getImplementationHelpers();
     }
@@ -949,17 +958,17 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
     KUrl headerUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
     searchInContext = CppLanguageSupport::self()->standardContext(headerUrl);
   }
-  
+
   if(searchInContext) {
     return getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
   }
-#endif  
+#endif
   return QList<CompletionTreeItemPointer>();
 }
 
 QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context) {
   QList<CompletionTreeItemPointer> ret;
-  
+
   foreach(Declaration* decl, context->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     if(classFun) {
@@ -967,7 +976,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
         ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(classFun), KSharedPtr<CodeCompletionContext>(this)));
       }
   }
-  
+
   foreach(DUContext* child, context->childContexts())
     if(child->type() == DUContext::Namespace || child->type() == DUContext::Class)
       ret += getImplementationHelpersInternal(minimumScope, child);
@@ -998,7 +1007,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   typedef QPair<Declaration*, int> DeclarationDepthPair;
 
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
-  
+
   //Collect the contents of unnamed namespaces
   QList<DUContext*> unnamed = m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(), position);
   foreach(DUContext* ns, unnamed)
@@ -1034,7 +1043,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
     if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration())
       if(filterDeclaration(decl.first))
         decls << decl;
-  
+
   decls = Cpp::hideOverloadedDeclarations(decls);
 
   foreach( const DeclarationDepthPair& decl, decls )
