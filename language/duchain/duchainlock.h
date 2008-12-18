@@ -21,47 +21,6 @@
 
 #include "../languageexport.h"
 
-
-/**
- * In a DEBUG build, keeps track of additional locking information.
- * In a non-DEBUG build, is actually a QReadWriteLock.
- */
-#if 0
-
-//krazy:excludeall=dpointer
-
-#include <QtCore/QReadWriteLock>
-
-namespace KDevelop
-{
-
-#define ENSURE_CHAIN_READ_LOCKED
-#define ENSURE_CHAIN_WRITE_LOCKED
-
-
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainLock : public QReadWriteLock //krazy:exclude=dpointer
-{
-public:
-  DUChainLock() : QReadWriteLock() {}
-  ~DUChainLock() {}
-};
-
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainReadLocker : public QReadLocker //krazy:exclude=dpointer
-{
-public:
-  DUChainReadLocker(DUChainLock* duChainLock) : QReadLocker(duChainLock) {}
-  ~DUChainReadLocker() {}
-};
-
-class KDEVPLATFORMLANGUAGE_EXPORT DUChainWriteLocker : public QWriteLocker //krazy:exclude=dpointer
-{
-public:
-  DUChainWriteLocker(DUChainLock* duChainLock) : QWriteLocker(duChainLock) {}
-  ~DUChainWriteLocker() {}
-};
-
-#else
-
 namespace KDevelop
 {
 
@@ -211,8 +170,6 @@ public:
 private:
   class DUChainWriteLockerPrivate* const d;
 };
-
-#endif // NDEBUG
 
 /**
  * Like the ENSURE_CHAIN_WRITE_LOCKED and .._READ_LOCKED, except that this should be used in items that can be detached from the du-chain, like DOContext's and Declarations.
