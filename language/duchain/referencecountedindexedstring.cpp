@@ -89,12 +89,8 @@ inline QByteArray arrayFromItem(const ReferenceCountedStringData* item) {
   return QByteArray((char*)textPos, item->length);
 }  
 }
-  
-//Using a function makes sure that initialization order cannot break anything
-static ReferenceCountedStringRepository& globalReferenceCountedStringRepository() {
-  static ReferenceCountedStringRepository theGlobalReferenceCountedStringRepository("Reference Counted String Index");
-  return theGlobalReferenceCountedStringRepository;
-}
+
+RepositoryManager< ReferenceCountedStringRepository > globalReferenceCountedStringRepository("Reference Counted String Index");
 
 ReferenceCountedIndexedString::ReferenceCountedIndexedString() : m_index(0) {
 }
@@ -107,10 +103,10 @@ ReferenceCountedIndexedString::ReferenceCountedIndexedString( const char* str, u
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
     
-    m_index = globalReferenceCountedStringRepository().index(ReferenceCountedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    m_index = globalReferenceCountedStringRepository->index(ReferenceCountedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
@@ -130,9 +126,9 @@ ReferenceCountedIndexedString::ReferenceCountedIndexedString( const KUrl& url ) 
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    m_index = globalReferenceCountedStringRepository().index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, size), size));
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    m_index = globalReferenceCountedStringRepository->index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, size), size));
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
@@ -148,9 +144,9 @@ ReferenceCountedIndexedString::ReferenceCountedIndexedString( const QString& str
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    m_index = globalReferenceCountedStringRepository().index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, size), size));
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    m_index = globalReferenceCountedStringRepository->index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, size), size));
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
@@ -161,9 +157,9 @@ ReferenceCountedIndexedString::ReferenceCountedIndexedString( const char* str) {
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    m_index = globalReferenceCountedStringRepository().index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, length), length));
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    m_index = globalReferenceCountedStringRepository->index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, length), length));
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
@@ -178,25 +174,25 @@ ReferenceCountedIndexedString::ReferenceCountedIndexedString( const QByteArray& 
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    m_index = globalReferenceCountedStringRepository().index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, length), length));
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    m_index = globalReferenceCountedStringRepository->index(ReferenceCountedStringRepositoryItemRequest(str, hashString(str, length), length));
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
 ReferenceCountedIndexedString::~ReferenceCountedIndexedString() {
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    uint refCount = --globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    uint refCount = --globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
     if(!refCount)
-      globalReferenceCountedStringRepository().deleteItem(m_index);
+      globalReferenceCountedStringRepository->deleteItem(m_index);
   }
 }
 
 ReferenceCountedIndexedString::ReferenceCountedIndexedString( const ReferenceCountedIndexedString& rhs ) : m_index(rhs.m_index) {
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
 }
 
@@ -204,17 +200,17 @@ ReferenceCountedIndexedString& ReferenceCountedIndexedString::operator=(const Re
   if(m_index == rhs.m_index)
     return *this;
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    uint refCount = --globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    uint refCount = --globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
     if(!refCount)
-      globalReferenceCountedStringRepository().deleteItem(m_index);
+      globalReferenceCountedStringRepository->deleteItem(m_index);
   }
   
   m_index = rhs.m_index;
   
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
-    QMutexLocker lock(globalReferenceCountedStringRepository().mutex());
-    ++globalReferenceCountedStringRepository().dynamicItemFromIndex(m_index)->refCount;
+    QMutexLocker lock(globalReferenceCountedStringRepository->mutex());
+    ++globalReferenceCountedStringRepository->dynamicItemFromIndex(m_index)->refCount;
   }
   
   return *this;
@@ -232,7 +228,7 @@ QString ReferenceCountedIndexedString::str() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff));
   else
-    return stringFromItem(globalReferenceCountedStringRepository().itemFromIndex(m_index));
+    return stringFromItem(globalReferenceCountedStringRepository->itemFromIndex(m_index));
 }
 
 int ReferenceCountedIndexedString::length() const {
@@ -241,7 +237,7 @@ int ReferenceCountedIndexedString::length() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return 1;
   else
-    return globalReferenceCountedStringRepository().itemFromIndex(m_index)->length;
+    return globalReferenceCountedStringRepository->itemFromIndex(m_index)->length;
 }
 
 QByteArray ReferenceCountedIndexedString::byteArray() const {
@@ -250,7 +246,7 @@ QByteArray ReferenceCountedIndexedString::byteArray() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff)).toUtf8();
   else
-    return arrayFromItem(globalReferenceCountedStringRepository().itemFromIndex(m_index));
+    return arrayFromItem(globalReferenceCountedStringRepository->itemFromIndex(m_index));
 }
 
 unsigned int ReferenceCountedIndexedString::hashString(const char* str, unsigned short length) {

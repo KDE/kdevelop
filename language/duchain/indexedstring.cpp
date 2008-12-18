@@ -18,10 +18,7 @@
 
 namespace KDevelop {
 //Using a function makes sure that initialization order cannot break anything
-static Repositories::StringRepository& globalStringRepository() {
-  static Repositories::StringRepository theGlobalStringRepository("String Index");
-  return theGlobalStringRepository;
-}
+RepositoryManager< Repositories::StringRepository > globalStringRepository("String Index");
 
 IndexedString::IndexedString() : m_index(0) {
 }
@@ -34,7 +31,7 @@ IndexedString::IndexedString( const char* str, unsigned short length, unsigned i
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+    m_index = globalStringRepository->index(Repositories::StringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
 }
 
 IndexedString::IndexedString( char c ) {
@@ -53,7 +50,7 @@ IndexedString::IndexedString( const KUrl& url ) {
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, size), size));
+    m_index = globalStringRepository->index(Repositories::StringRepositoryItemRequest(str, hashString(str, size), size));
 }
 
 IndexedString::IndexedString( const QString& string ) {
@@ -68,7 +65,7 @@ IndexedString::IndexedString( const QString& string ) {
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, size), size));
+    m_index = globalStringRepository->index(Repositories::StringRepositoryItemRequest(str, hashString(str, size), size));
 }
 
 IndexedString::IndexedString( const char* str) {
@@ -78,7 +75,7 @@ IndexedString::IndexedString( const char* str) {
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
+    m_index = globalStringRepository->index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
 }
 
 IndexedString::IndexedString( const QByteArray& str) {
@@ -88,7 +85,7 @@ IndexedString::IndexedString( const QByteArray& str) {
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else
-    m_index = globalStringRepository().index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
+    m_index = globalStringRepository->index(Repositories::StringRepositoryItemRequest(str, hashString(str, length), length));
 }
 
 KUrl IndexedString::toUrl() const {
@@ -102,7 +99,7 @@ QString IndexedString::str() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff));
   else
-    return Repositories::stringFromItem(globalStringRepository().itemFromIndex(m_index));
+    return Repositories::stringFromItem(globalStringRepository->itemFromIndex(m_index));
 }
 
 int IndexedString::length() const {
@@ -111,7 +108,7 @@ int IndexedString::length() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return 1;
   else
-    return globalStringRepository().itemFromIndex(m_index)->length;
+    return globalStringRepository->itemFromIndex(m_index)->length;
 }
 
 QByteArray IndexedString::byteArray() const {
@@ -120,7 +117,7 @@ QByteArray IndexedString::byteArray() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff)).toUtf8();
   else
-    return Repositories::arrayFromItem(globalStringRepository().itemFromIndex(m_index));
+    return Repositories::arrayFromItem(globalStringRepository->itemFromIndex(m_index));
 }
 
 unsigned int IndexedString::hashString(const char* str, unsigned short length) {
