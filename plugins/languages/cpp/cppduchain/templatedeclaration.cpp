@@ -405,9 +405,6 @@ TemplateDeclaration::~TemplateDeclaration()
 {
   InstantiationsHash instantiations;
   {
-    QMutexLocker l(&instantiationsMutex);
-    instantiations = m_instantiations;
-
     ///Unregister at the declaration this one is instantiated from
     if( m_instantiatedFrom ) {
       InstantiationsHash::iterator it = m_instantiatedFrom->m_instantiations.find(m_instantiatedWith);
@@ -420,15 +417,7 @@ TemplateDeclaration::~TemplateDeclaration()
     }
   }
 
-  ///Delete all slave-declarations
-  foreach( TemplateDeclaration* decl, instantiations ) {
-    decl->m_instantiatedFrom = 0;
-    Declaration* realDecl = dynamic_cast<Declaration*>(decl);
-    
-    //Only delete real insantiations, not specializations
-    if(!decl->specializedFrom().isValid())
-      delete decl; //It may as well be just a specialization, then we should keep it
-  }
+  deleteAllInstantiations();
 }
 
 TemplateDeclaration* TemplateDeclaration::instantiatedFrom() const {
@@ -835,8 +824,13 @@ void TemplateDeclaration::deleteAllInstantiations()
     Declaration* realDecl = dynamic_cast<Declaration*>(decl);
     
     //Only delete real insantiations, not specializations
-    if(!decl->specializedFrom().isValid())
+    if(!decl->specializedFrom().isValid()) {
+      Declaration* realDecl = dynamic_cast<Declaration*>(decl);
+      IndexedDeclaration indexedDecl(realDecl);
+      
       delete decl; //It may as well be just a specialization, then we should keep it
+      Q_ASSERT(!indexedDecl.data());
+    }
   }
 }
 
