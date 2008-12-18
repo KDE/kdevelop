@@ -483,7 +483,8 @@ class CppDUContext : public BaseContext {
           
           if(type == DUContext::Helper) {
             //This is a prefix-context for an external class-definition like "class A::B {..};"
-            classContext = BaseContext::importedParentContexts()[0].context(source);
+            if(BaseContext::importedParentContexts().size())
+              classContext = BaseContext::importedParentContexts()[0].context(source);
           } else {
             //This must be a function-definition, like void A::B::test() {}
             Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
