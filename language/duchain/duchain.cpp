@@ -1114,7 +1114,7 @@ void DUChain::branchRemoved(DUContext* context)
 
 QList<KUrl> DUChain::documents() const
 {
-  QMutexLocker l(&m_chainsMutex);
+  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
   
   QList<KUrl> ret;
   for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it) {
