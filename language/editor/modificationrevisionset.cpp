@@ -121,6 +121,7 @@ void ModificationRevisionSet::clear() {
     oldModificationTimes.staticUnref();
     m_index = 0;
   }
+  clearCache();
 }
 
 void ModificationRevisionSet::addModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
@@ -151,6 +152,8 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
   
   if(!m_index)
     return false;
+
+  clearCache();
   
   Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
   Utils::Set newModificationTimes = oldModificationTimes;
@@ -252,6 +255,8 @@ ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationR
   
   m_index = newModificationTimes.setIndex();
   
+  clearCache();
+  
   return *this;
 }
 
@@ -268,6 +273,8 @@ ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationR
   oldModificationTimes.staticUnref();
   
   m_index = newModificationTimes.setIndex();
+
+  clearCache();
   
   return *this;
 }
