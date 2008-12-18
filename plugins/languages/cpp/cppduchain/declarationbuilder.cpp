@@ -744,7 +744,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
     return type;
   }
   private:
-    TopDUContext* m_top;;
+    TopDUContext* m_top;
 };
 
 Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext) {
