@@ -91,7 +91,7 @@ void ModificationRevisionSet::clearCache() {
   QMutexLocker lock(&modificationRevisionSetMutex);
   ///@todo More intelligent clearing. We actually need to watch the directory for changes, and if there are changes, clear the cache.
   needsUpdateCache.clear();
-  kDebug() << "clearing cache";
+//   kDebug() << "clearing cache";
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
@@ -195,7 +195,7 @@ static bool nodeNeedsUpdate(uint index) {
     return false;
   
   QHash<uint, bool>::const_iterator cached = needsUpdateCache.constFind(index);
-  if(cached != needsUpdateCache.end())
+  if(cached != needsUpdateCache.constEnd())
     return cached.value();
   
   bool result = false;
