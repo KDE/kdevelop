@@ -388,8 +388,9 @@ class CppDUContext : public BaseContext {
               }else{
                 copy = templateDecl->instantiate(memberInstantiationInformation, source);
               }
-              if(copy->context() != this)
-                kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
+              //This can happen in case of explicit specializations
+//               if(copy->context() != this)
+//                 kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
 
               ret.append(copy);
             }
