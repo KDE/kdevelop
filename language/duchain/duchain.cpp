@@ -543,8 +543,12 @@ public:
     //We don't need to increase the reference-count, since the cleanup-mutex is locked
     QSet<TopDUContext*> workOnContexts;
 
-    for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
-      workOnContexts << (*it).second;
+    {
+      QMutexLocker l(&m_chainsMutex);
+      
+      for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
+        workOnContexts << (*it).second;
+    }
 
     foreach(TopDUContext* context, workOnContexts) {
 
@@ -1110,6 +1114,8 @@ void DUChain::branchRemoved(DUContext* context)
 
 QList<KUrl> DUChain::documents() const
 {
+  QMutexLocker l(&m_chainsMutex);
+  
   QList<KUrl> ret;
   for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = sdDUChainPrivate->m_chainsByIndex.begin(); it != sdDUChainPrivate->m_chainsByIndex.end(); ++it) {
     ret << KUrl((*it).second->url().str());
