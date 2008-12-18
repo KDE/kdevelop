@@ -14,7 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include <kurl.h>
-#include <kdevplatform/language/interfaces/iproblem.h>
+#include <language/interfaces/iproblem.h>
 #include "includepathresolver.h"
 
 #ifndef INCLUDEPATHCOMPUTER_H
