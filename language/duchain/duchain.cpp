@@ -72,6 +72,8 @@ Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
 //short times, which leads to no lockup in the UI.
 const int SOFT_CLEANUP_STEPS = 1;
 
+const uint cleanupEverySeconds = 300;
+
 namespace KDevelop
 {
 //This thing is not actually used, but it's needed for compiling
@@ -233,7 +235,7 @@ class DUChainPrivate
       void run() {
         while(1) {
           m_waitMutex.lock();
-          m_wait.wait(&m_waitMutex, 1000 * 90); //Wait 90s by default
+          m_wait.wait(&m_waitMutex, 1000 * cleanupEverySeconds);
           m_waitMutex.unlock();
           if(m_stopRunning)
             break;
