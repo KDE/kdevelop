@@ -826,10 +826,7 @@ void TemplateDeclaration::deleteAllInstantiations()
     //Only delete real insantiations, not specializations
     if(!decl->specializedFrom().isValid()) {
       Declaration* realDecl = dynamic_cast<Declaration*>(decl);
-      IndexedDeclaration indexedDecl(realDecl);
-      
-      delete decl; //It may as well be just a specialization, then we should keep it
-      Q_ASSERT(!indexedDecl.data());
+      delete realDecl; //It may as well be just a specialization, then we should keep it
     }
   }
 }
