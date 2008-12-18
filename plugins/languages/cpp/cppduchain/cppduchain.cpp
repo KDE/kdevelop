@@ -145,7 +145,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   if(context->type() == DUContext::Function) {
     foreach(DUContext::Import import, context->importedParentContexts()) {
       DUContext* ctx = import.context(context->topContext());
-      if(ctx->type() == DUContext::Class && ctx->owner())
+      if(ctx && ctx->type() == DUContext::Class && ctx->owner())
         return ctx->owner();
     }
     
