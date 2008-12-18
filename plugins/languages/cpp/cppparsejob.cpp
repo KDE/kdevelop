@@ -362,8 +362,12 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
 
 void CPPInternalParseJob::run()
 {
+    if(!CppLanguageSupport::self())
+      return;
     //If we have a parent, the parse-mutex is already locked
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
+    if(!CppLanguageSupport::self())
+      return;
     
     UrlParseLock urlLock(parentJob()->document());
     
@@ -617,7 +621,7 @@ void CPPInternalParseJob::run()
         if (!parentJob()->abortRequested() && editor.smart()) {
           editor.smart()->clearRevision();
 
-          if ( parentJob()->cpp()->codeHighlighting() )
+          if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
           {
               parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
           }

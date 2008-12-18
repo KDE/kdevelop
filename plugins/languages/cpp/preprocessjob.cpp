@@ -90,9 +90,15 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::run()
 {
+    if(!CppLanguageSupport::self())
+      return;
+  
     //If we have a parent, that parent already has locked the parse-lock
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
   
+    if(!CppLanguageSupport::self())
+      return;
+    
     //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
     //It must be low so the GUI stays fluid.
     if(QThread::currentThread())
