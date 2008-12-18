@@ -278,9 +278,9 @@ inline uint incrementIfSuccessful(uint val) {
 }
 
 #define ifDebugOverloadResolution(x)
-//#define ifDebugOverloadResolution(x) x
+// #define ifDebugOverloadResolution(x) x
 
-uint OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
+uint OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const
 {
 
   if(!argumentType && !parameterType)
@@ -295,25 +295,25 @@ uint OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType
 
   DelayedType::Ptr delayed = parameterType.cast<DelayedType>();
   if(delayed)
-    return incrementIfSuccessful( matchParameterTypes( argumentType, delayed->identifier(), instantiatedTypes ) );
+    return incrementIfSuccessful( matchParameterTypes( argumentType, delayed->identifier(), instantiatedTypes , keepValue) );
 
   ///In case of references on both sides, match the target-types
   ReferenceType::Ptr argumentRef = argumentType.cast<ReferenceType>();
   ReferenceType::Ptr parameterRef = parameterType.cast<ReferenceType>();
 
   if( argumentRef && parameterRef )
-    return incrementIfSuccessful( matchParameterTypes( argumentRef->baseType(), parameterRef->baseType(), instantiatedTypes ) );
+    return incrementIfSuccessful( matchParameterTypes( argumentRef->baseType(), parameterRef->baseType(), instantiatedTypes, keepValue ) );
   else if(argumentRef)
-    return incrementIfSuccessful( matchParameterTypes( argumentRef->baseType(), parameterType, instantiatedTypes ) );
+    return incrementIfSuccessful( matchParameterTypes( argumentRef->baseType(), parameterType, instantiatedTypes, keepValue ) );
   else if(parameterRef)
-    return incrementIfSuccessful( matchParameterTypes( argumentType, parameterRef->baseType(), instantiatedTypes ) );
+    return incrementIfSuccessful( matchParameterTypes( argumentType, parameterRef->baseType(), instantiatedTypes, keepValue ) );
 
   ///In case of pointers on both sides, match the target-types
   PointerType::Ptr argumentPointer = argumentType.cast<PointerType>();
   PointerType::Ptr parameterPointer = parameterType.cast<PointerType>();
 
   if( argumentPointer && parameterPointer && ((argumentPointer->modifiers() & AbstractType::ConstModifier) == (parameterPointer->modifiers() & AbstractType::ConstModifier)) )
-    return incrementIfSuccessful( matchParameterTypes( argumentPointer->baseType(), parameterPointer->baseType(), instantiatedTypes ) );
+    return incrementIfSuccessful( matchParameterTypes( argumentPointer->baseType(), parameterPointer->baseType(), instantiatedTypes, keepValue ) );
 
   
   if(CppTemplateParameterType::Ptr templateParam = parameterType.cast<CppTemplateParameterType>()) {
@@ -356,7 +356,7 @@ uint OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType
       uint matchDepth = 1;
       
       for(uint a = 0; a < argumentInstantiatedWith.templateParametersSize(); ++a) {
-        uint localMatchDepth = matchParameterTypes(argumentInstantiatedWith.templateParameters()[a].type(), parameterInstantiatedWith.templateParameters()[a].type(), instantiatedTypes);
+        uint localMatchDepth = matchParameterTypes(argumentInstantiatedWith.templateParameters()[a].type(), parameterInstantiatedWith.templateParameters()[a].type(), instantiatedTypes, keepValue);
         if(!localMatchDepth)
           return 0;
         matchDepth += localMatchDepth;
@@ -387,7 +387,7 @@ AbstractType::Ptr getContainerType(AbstractType::Ptr type, int depth, TopDUConte
   return type;
 }
 
-uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
+uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const
 {
   ifDebugOverloadResolution( kDebug() << "1 matching" << argumentType->toString() << "to" << parameterType.toString() << parameterType.pointerDepth(); )
   if(!argumentType)
@@ -427,7 +427,7 @@ uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
   for( int a = 0; a < parameterType.count(); ++a ) {
     ///@todo Think about this
     AbstractType::Ptr pType = getContainerType(argumentType, parameterType.count() - a - 1, m_topContext.data());
-    uint localDepth = matchParameterTypes(pType, parameterType.at(a), instantiatedTypes);
+    uint localDepth = matchParameterTypes(pType, parameterType.at(a), instantiatedTypes, keepValue);
 //     if(!localDepth)
 //       return 0;
     matchDepth += localDepth;
@@ -435,7 +435,7 @@ uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
   return matchDepth;
 }
 
-uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const
+uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const
 {
   ifDebugOverloadResolution( kDebug() << "2 matching" << argumentType->toString() << "to" << parameterType.toString(); )
 
@@ -446,9 +446,9 @@ uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
 
 
   if( instantiatedTypes.contains(parameterType.identifier()) ) {
-    if(ConstantIntegralType::Ptr integral = argumentType.cast<ConstantIntegralType>())
-      //Extract the actual type without the value
-      argumentType = AbstractType::Ptr(new IntegralType(*integral));
+    if(!keepValue) //Extract the actual type without the value
+      if(ConstantIntegralType::Ptr integral = argumentType.cast<ConstantIntegralType>())
+        argumentType = AbstractType::Ptr(new IntegralType(*integral));
     
     instantiatedTypes[parameterType.identifier()] = argumentType;
     return 1;
@@ -477,7 +477,7 @@ uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
         matchLength = parameterType.templateIdentifiersCount();
 
       for( int a = 0; a < matchLength; ++a )
-        matchDepth += matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType(), parameterType.templateIdentifier(a), instantiatedTypes );
+        matchDepth += matchParameterTypes( argumentTemplateDeclarationContext->localDeclarations()[a]->abstractType(), parameterType.templateIdentifier(a), instantiatedTypes, keepValue );
     }else{
        kDebug(9007) << "Template-declaration missing template-parameter context";
     }

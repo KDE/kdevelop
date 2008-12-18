@@ -147,9 +147,11 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * This extracts the template-parameters. It does not do any actual checking whether non-template types are equal or match each other.
      * @param argumentType The type actually given
      * @param parameterType The type argumentType should be matched to. Once CppTemplateParameterType's are encountered here, they will be instantiated in instantiatedTypes
+     * @param keepValue If this is true, and a matched type is a constant integral type, it is kept as that exact type including value. Else, the constant integral type is converted
+     *                  to the matching value-less integral type. This is typically needed for template-parameter instantiation, which keepValue=false is needed for implicit argument instantiation.
      * @return false if the matching failed
      * */
-    uint matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
+    uint matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue = false) const;
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors
     void expandDeclarations( const QList<Declaration*>& from, QSet<Declaration*>& to );
@@ -157,8 +159,8 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     ///Returns zero if applying failed. Returns the given declaration if it isn't a template function.
     Declaration* applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const;
 
-    uint matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
-    uint matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes) const;
+    uint matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const;
+    uint matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const;
 
     DUContextPointer m_context;
     TopDUContextPointer m_topContext;

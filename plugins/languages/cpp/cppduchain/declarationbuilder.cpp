@@ -664,32 +664,43 @@ void DeclarationBuilder::classTypeOpened(AbstractType::Ptr type) {
 
 void DeclarationBuilder::closeDeclaration(bool forceInstance)
 {
-  if (lastType()) {
+  {
     DUChainWriteLocker lock(DUChain::lock());
+      
+    if (lastType()) {
 
-    AbstractType::Ptr type = lastType();
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
-    DelayedType::Ptr delayed = type.cast<DelayedType>();
+      AbstractType::Ptr type = lastType();
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+      DelayedType::Ptr delayed = type.cast<DelayedType>();
 
-    //When the given type has no declaration yet, assume we are declaring it now.
-    //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
-    if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed ) {
-        idType->setDeclaration( currentDeclaration() );
-        //Q_ASSERT(idType->declaration() == currentDeclaration());
+      //When the given type has no declaration yet, assume we are declaring it now.
+      //If the type is a delayed type, it is a searched type, and not a declared one, so don't set the declaration then.
+      if( !forceInstance && idType && !idType->declarationId().isValid() && !delayed ) {
+          idType->setDeclaration( currentDeclaration() );
+          //Q_ASSERT(idType->declaration() == currentDeclaration());
+      }
+
+      if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
+        //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
+        if( (((!idType) || (idType && idType->declarationId() != currentDeclaration()->id())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) || forceInstance )
+          currentDeclaration()->setKind(Declaration::Instance);
+        else
+          currentDeclaration()->setKind(Declaration::Type);
+      }
+
+      currentDeclaration()->setType(lastType());
+    }else{
+      currentDeclaration()->setAbstractType(AbstractType::Ptr());
     }
-
-    if(currentDeclaration()->kind() != Declaration::NamespaceAlias && currentDeclaration()->kind() != Declaration::Alias) {
-      //If the type is not identified, it is an instance-declaration too, because those types have no type-declarations.
-      if( (((!idType) || (idType && idType->declarationId() != currentDeclaration()->id())) && !currentDeclaration()->isTypeAlias() && !currentDeclaration()->isForwardDeclaration() ) || dynamic_cast<AbstractFunctionDeclaration*>(currentDeclaration()) || forceInstance )
-        currentDeclaration()->setKind(Declaration::Instance);
+    if(TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration())) {
+      //The context etc. may have been filled with new items, and the declaration may have been searched unsuccessfully, or wrong instantiations created.
+      if(templateDecl->instantiatedFrom())
+        templateDecl->instantiatedFrom()->deleteAllInstantiations();
+      else if(templateDecl->specializedFrom().data())
+        dynamic_cast<TemplateDeclaration*>(templateDecl->specializedFrom().data())->deleteAllInstantiations();
       else
-        currentDeclaration()->setKind(Declaration::Type);
+        templateDecl->deleteAllInstantiations();
     }
-
-    currentDeclaration()->setType(lastType());
-  }else{
-    DUChainWriteLocker lock(DUChain::lock());
-    currentDeclaration()->setAbstractType(AbstractType::Ptr());
   }
 
   eventuallyAssignInternalContext();

@@ -530,7 +530,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     clearLast();
-
+    
     if( node->literal ) {
       visit( node->literal );
       return; //We had a string-literal
@@ -806,7 +806,13 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   for( size_t s = node->start_token; s < node->end_token; ++s )
     id += m_session->token_stream->token(s).symbolString();
 
-  QualifiedIdentifier ident( id );
+  //We have  to prevent automatic parsing and splitting by QualifiedIdentifier and Identifier
+  Identifier idd;
+  idd.setIdentifier(id);
+  
+  QualifiedIdentifier ident;
+  ident.push(idd);
+  
   ident.setIsExpression( expression );
   type->setIdentifier( ident );
   m_lastType = type.cast<AbstractType>();
@@ -902,7 +908,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = leftType;
       return;
     }
-
+    
     if( dynamic_cast<DelayedType*>(rightType.unsafeData()) || dynamic_cast<DelayedType*>(leftType.unsafeData()) ) {
       m_lastInstance = Instance(true);
       createDelayedType(node);
@@ -910,6 +916,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     int tokenKind = tokenFromIndex(node->op).kind;
+    
     if(rightType && leftType && rightInstance && leftInstance) {
       LOCKDUCHAIN;
       //Test if there is a builtin operator that can be used. If it is, this will also evaluate the values of constant expressions.
@@ -1272,8 +1279,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     //Also visit the not interesting parts, so they are evaluated
     clearLast();
+    
     visit(node->condition);
 
+    
     if( dynamic_cast<DelayedType*>(m_lastType.unsafeData()) ) {
       //Store the expression so it's evaluated later
       m_lastInstance = Instance(true);

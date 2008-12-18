@@ -2432,6 +2432,126 @@ void TestDUChain::testTemplateDependentClass() {
   release(top);
 }
 
+void TestDUChain::testMetaProgramming() {
+  QByteArray method("template<int value> class Factorial{ enum { Value = value * Factorial<value-1>::Value };}; template<> class Factorial<0> { enum { Value = 1 };};");
+  
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  TemplateDeclaration* templateBase = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[0]);
+  TemplateDeclaration* templateSpecialization = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(templateBase);
+  QVERIFY(templateSpecialization);
+  QVERIFY(templateBase->specializationsSize() == 1);
+  QCOMPARE(templateSpecialization->specializedFrom().data(), top->localDeclarations()[0]);
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParametersSize(), 1u);
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].type());
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].type().cast<ConstantIntegralType>());
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[0].type().cast<ConstantIntegralType>()->value<int>(), 0);
+  kDebug() << "searching";
+  Declaration* factorial0Container = findDeclaration(top, QualifiedIdentifier("Factorial<0>"));
+  QCOMPARE(factorial0Container, top->localDeclarations()[1]);
+  QVERIFY(factorial0Container);
+  QCOMPARE(factorial0Container->internalContext()->childContexts().count(), 1);
+  QCOMPARE(factorial0Container->internalContext()->childContexts()[0]->localDeclarations().count(), 1);
+  QVERIFY(factorial0Container->internalContext()->childContexts()[0]->localDeclarations()[0]->type<ConstantIntegralType>());
+  
+  Declaration* factorial0 = findDeclaration(top, QualifiedIdentifier("Factorial<0>::Value"));
+  QVERIFY(factorial0);
+  QVERIFY(factorial0->type<ConstantIntegralType>());
+  QCOMPARE(factorial0->type<ConstantIntegralType>()->value<int>(), 1);
+  
+  Declaration* factorial2 = findDeclaration(top, QualifiedIdentifier("Factorial<2>::Value"));
+  QVERIFY(factorial2);
+  QVERIFY(factorial2->type<ConstantIntegralType>());
+  QCOMPARE(factorial2->type<ConstantIntegralType>()->value<int>(), 2);
+  
+  Declaration* factorial3 = findDeclaration(top, QualifiedIdentifier("Factorial<3>::Value"));
+  QVERIFY(factorial3);
+  QVERIFY(factorial3->type<ConstantIntegralType>());
+  QCOMPARE(factorial3->type<ConstantIntegralType>()->value<int>(), 6);  
+  
+  Declaration* factorial4 = findDeclaration(top, QualifiedIdentifier("Factorial<4>::Value"));
+  QVERIFY(factorial4);
+  QVERIFY(factorial4->type<ConstantIntegralType>());
+  QCOMPARE(factorial4->type<ConstantIntegralType>()->value<int>(), 24);  
+  
+  release(top);
+}
+
+void TestDUChain::testMetaProgramming3() {
+  QByteArray method("template<int value, int than>class bigger_than {enum {Result = ((value > than) ? 2 : ((value == than) ? 0 : -2))};};");
+  
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 1);
+
+  kDebug() << "test 1";
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("bigger_than<5, 3>::Result"));
+  QVERIFY(decl);
+  QVERIFY(decl->type<ConstantIntegralType>());
+  QCOMPARE(decl->type<ConstantIntegralType>()->value<int>(), 2);
+  kDebug() << "test 2";
+  decl = findDeclaration(top, QualifiedIdentifier("bigger_than<5, 5>::Result"));
+  QVERIFY(decl);
+  QVERIFY(decl->type<ConstantIntegralType>());
+  QCOMPARE(decl->type<ConstantIntegralType>()->value<int>(), 0);
+  
+  decl = findDeclaration(top, QualifiedIdentifier("bigger_than<5, 6>::Result"));
+  QVERIFY(decl);
+  QVERIFY(decl->type<ConstantIntegralType>());
+  QCOMPARE(decl->type<ConstantIntegralType>()->value<int>(), -2);
+  
+  release(top);
+}
+
+
+void TestDUChain::testMetaProgramming2() {
+  QByteArray method("template<int N, int R>class Permutations {public:enum { value = N*(Permutations<N-1,R-1>::value) };};template<int N>class Permutations<N, 0> {public:enum { value = 1 };};");
+  
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  TemplateDeclaration* templateBase = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[0]);
+  TemplateDeclaration* templateSpecialization = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(templateBase);
+  QVERIFY(templateSpecialization);
+  QVERIFY(templateBase->specializationsSize() == 1);
+  QCOMPARE(templateSpecialization->specializedFrom().data(), top->localDeclarations()[0]);
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParametersSize(), 2u);
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].type());
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].type().cast<ConstantIntegralType>());
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[1].type().cast<ConstantIntegralType>()->value<int>(), 0);
+
+  Declaration* permutations0 = findDeclaration(top, QualifiedIdentifier("Permutations<5, 0>::value"));
+  QVERIFY(permutations0);
+  QVERIFY(permutations0->type<ConstantIntegralType>());
+  QCOMPARE(permutations0->type<ConstantIntegralType>()->value<int>(), 1);
+  
+  Declaration* permutations2 = findDeclaration(top, QualifiedIdentifier("Permutations<2, 1>::value"));
+  QVERIFY(permutations2);
+  QVERIFY(permutations2->type<ConstantIntegralType>());
+  QCOMPARE(permutations2->type<ConstantIntegralType>()->value<int>(), 2);
+  
+  Declaration* permutations3 = findDeclaration(top, QualifiedIdentifier("Permutations<4, 2>::value"));
+  QVERIFY(permutations3);
+  QVERIFY(permutations3->type<ConstantIntegralType>());
+  QCOMPARE(permutations3->type<ConstantIntegralType>()->value<int>(), 12);
+  
+  Declaration* permutations4 = findDeclaration(top, QualifiedIdentifier("Permutations<10, 5>::value"));
+  QVERIFY(permutations4);
+  QVERIFY(permutations4->type<ConstantIntegralType>());
+  kDebug() << permutations4->abstractType()->toString();
+  QCOMPARE(permutations4->type<ConstantIntegralType>()->value<int>(), 30240);  
+  
+  release(top);
+}
 void TestDUChain::testTemplateInternalSearch() {
   QByteArray method("class A {}; template<class T> class B { B mem(); const B mem2;}; ");
 

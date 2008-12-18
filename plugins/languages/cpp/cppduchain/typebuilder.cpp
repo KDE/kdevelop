@@ -136,7 +136,6 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     Cpp::ExpressionEvaluationResult res;
 
     bool delay = false;
-
     if(!delay) {
       DUChainReadLocker lock(DUChain::lock());
       node->expression->ducontext = currentContext();
@@ -145,14 +144,19 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       //Delay the type-resolution of template-parameters
       if( res.allDeclarations.size() ) {
         Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
-        if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
+        if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl)) {
           delay = true;
+        }
       }
 
       if ( !delay && res.isValid() && res.isInstance ) {
         AbstractType::Ptr resType = res.type.type();
         if( ConstantIntegralType::Ptr iType = resType.cast<ConstantIntegralType>() ) {
           m_currentEnumeratorValue = (int)iType->value<qint64>();
+          EnumeratorType::Ptr enumerator(new EnumeratorType());
+          enumerator->setValue<qint64>(m_currentEnumeratorValue);
+          openedType = true;
+          openType(enumerator);
         } else if( DelayedType::Ptr dType = resType.cast<DelayedType>() ) {
           openType(dType.cast<AbstractType>()); ///@todo Make this an enumerator-type that holds the same information
           openedType = true;

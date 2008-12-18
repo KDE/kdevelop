@@ -289,7 +289,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
   virtual AbstractType::Ptr exchange( const AbstractType::Ptr& type )
   {
     AtomicIncrementer inc(&depth_counter);
-    if( depth_counter > 20 ) {
+    if( depth_counter > 30 ) {
       kDebug(9007) << "Too much depth in DelayedTypeResolver::exchange, while exchanging" << (type ? type->toString() : QString("(null)"));
       return type;
     }
@@ -437,6 +437,15 @@ TemplateDeclaration* TemplateDeclaration::instantiatedFrom() const {
 
 void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
   
+  if(other && other->instantiatedFrom()) {
+    setSpecializedFrom(other->instantiatedFrom());
+    return;
+  }
+  if(other && other->specializedFrom().data()) {
+    setSpecializedFrom(dynamic_cast<TemplateDeclaration*>(other->specializedFrom().data()));
+    return;
+  }
+  
   IndexedDeclaration indexedSelf(dynamic_cast<Declaration*>(this));
   IndexedDeclaration indexedOther(dynamic_cast<Declaration*>(other));
   Q_ASSERT(indexedSelf.data());
@@ -446,8 +455,10 @@ void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
 
   setSpecializedFromInternal(indexedOther);
 
-  if( TemplateDeclaration* otherTemplate = dynamic_cast<TemplateDeclaration*>(indexedOther.data()) )
+  if( TemplateDeclaration* otherTemplate = dynamic_cast<TemplateDeclaration*>(indexedOther.data()) ) {
     otherTemplate->addSpecializationInternal(indexedSelf);
+    otherTemplate->deleteAllInstantiations();
+  }
 }
 
 void TemplateDeclaration::reserveInstantiation(const IndexedInstantiationInformation& info) {
@@ -829,7 +840,7 @@ void TemplateDeclaration::deleteAllInstantiations()
   }
 }
 
-//  #define ifDebugMatching(x) x
+// #define ifDebugMatching(x) x
 #define ifDebugMatching(x)
 
 QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(Cpp::InstantiationInformation info, const TopDUContext* source) {
@@ -840,7 +851,7 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
    ifDebugMatching( kDebug() << "matching to" << thisDecl->toString() << "parameters:" << info.toString(); )
 
   if(info.templateParametersSize() != specializedWith.templateParametersSize()) {
-     ifDebugMatching( kDebug() << "template-parameter count doesn't match"; )
+     ifDebugMatching( kDebug() << "template-parameter count doesn't match" << info.toString() << specializedWith.toString(); )
     return qMakePair(0u, (TemplateDeclaration*)0);
   }
   
@@ -862,7 +873,7 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   uint matchDepth = 1;
   
   for(uint a = 0; a < info.templateParametersSize(); ++a) {
-    uint localMatchDepth = resolver.matchParameterTypes(info.templateParameters()[a].type(), specializedWith.templateParameters()[a].type(), instantiatedParameters);
+    uint localMatchDepth = resolver.matchParameterTypes(info.templateParameters()[a].type(), specializedWith.templateParameters()[a].type(), instantiatedParameters, true);
     if(!localMatchDepth) {
       ifDebugMatching( kDebug() << "mismatch in parameter" << a; )
       return qMakePair(0u, (TemplateDeclaration*)0);
@@ -950,6 +961,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& t
   //Check whether there is a specialization that matches the template parameters
   FOREACH_FUNCTION(IndexedDeclaration decl, specializations) {
     //We only use visible specializations here
+    
     if(source->recursiveImportIndices().contains(decl.indexedTopContext())) {
       TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl.data());
       if(tempDecl) {

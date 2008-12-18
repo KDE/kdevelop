@@ -100,6 +100,9 @@ private slots:
   void testFunctionDefinition4();
   void testFunctionDefinition5();
   void testFunctionDefinition6();
+  void testMetaProgramming();
+  void testMetaProgramming2();
+  void testMetaProgramming3();
   void testSignalSlotDeclaration();
   void testSignalSlotUse();
   void testBaseClasses();
