@@ -72,7 +72,7 @@ Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
 //short times, which leads to no lockup in the UI.
 const int SOFT_CLEANUP_STEPS = 1;
 
-const uint cleanupEverySeconds = 300;
+const uint cleanupEverySeconds = 140;
 
 namespace KDevelop
 {
