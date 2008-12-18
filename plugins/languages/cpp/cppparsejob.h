@@ -47,6 +47,8 @@ namespace KDevelop {
     class TopDUContext;
 }
 
+class IncludePathComputer;
+
 class CPPParseJob : public KDevelop::ParseJob
 {
     Q_OBJECT
@@ -83,7 +85,7 @@ public:
     PreprocessJob* parentPreprocessor() const;
 
     //Feedback from CppLanguageSupport, don't use for other purposes
-    void gotIncludePaths(const KUrl::List& paths);
+    void gotIncludePaths(IncludePathComputer* comp);
     
     void requestDependancies();
 
@@ -184,7 +186,7 @@ private:
     mutable QList<ProblemPointer> m_preprocessorProblems;
   
     KUrl m_includedFromPath;
-    mutable bool m_includePathsComputed;
+    mutable IncludePathComputer* m_includePathsComputed;
     mutable QList<IndexedString> m_includePaths; //Only a master-job has this set
     mutable KUrl::List m_includePathUrls; //Only a master-job has this set
     bool m_keepDuchain, m_keepEverything;

@@ -67,6 +67,8 @@ using namespace std;
 ///After how many seconds should we retry?
 #define CACHE_FAIL_FOR_SECONDS 200
 
+
+
 namespace CppTools {
   ///Helper-class used to fake file-modification times
   class FileModificationTimeWrapper {
@@ -216,6 +218,9 @@ namespace CppTools {
 }
 
 using namespace CppTools;
+
+IncludePathResolver::Cache IncludePathResolver::m_cache;
+QMutex IncludePathResolver::m_cacheMutex;
 
 bool IncludePathResolver::executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const
 {

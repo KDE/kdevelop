@@ -16,6 +16,7 @@ add_subdirectory(tests)
 
 set(kdevcpplanguagesupport_PART_SRCS
     cpplanguagesupport.cpp
+    includepathcomputer.cpp
     cppparsejob.cpp
     preprocessjob.cpp
     cpphighlighting.cpp

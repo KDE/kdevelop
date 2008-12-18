@@ -67,8 +67,8 @@ namespace CppTools {
         QDateTime failTime;
       };
       typedef QMap<QString, CacheEntry> Cache;
-      Cache m_cache;
-      QMutex m_cacheMutex;
+      static Cache m_cache;
+      static QMutex m_cacheMutex;
 
       KUrl mapToBuild(const KUrl& url);
 

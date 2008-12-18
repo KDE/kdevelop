@@ -61,6 +61,7 @@
 #include <unistd.h>
 #include <qwaitcondition.h>
 #include <language/duchain/duchainutils.h>
+#include "includepathcomputer.h"
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
@@ -139,7 +140,7 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
         m_readFromDisk( false ),
-        m_includePathsComputed( false ),
+        m_includePathsComputed( 0 ),
         m_keepDuchain( false ),
         m_parsedIncludes( 0 ),
         m_needsUpdate( true )
@@ -214,10 +215,8 @@ PreprocessJob* CPPParseJob::parentPreprocessor() const {
     return m_parentPreprocessor;
 }
 
-void CPPParseJob::gotIncludePaths(const KUrl::List& paths) {
-  m_includePathsComputed = true;
-  m_includePathUrls = paths;
-  m_includePaths = convertFromUrls(m_includePathUrls);
+void CPPParseJob::gotIncludePaths(IncludePathComputer* comp) {
+  m_includePathsComputed = comp;
   m_waitForIncludePathsMutex.lock(); //This makes sure that the parse thread goes into the waiting state first
   m_waitForIncludePathsMutex.unlock();
   m_waitForIncludePaths.wakeAll();
@@ -241,6 +240,11 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             //Will be woken once the include-paths are computed
             m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex);
             m_waitForIncludePathsMutex.unlock();
+            Q_ASSERT(m_includePathsComputed);
+            m_includePathsComputed->computeBackground();
+            m_includePathUrls = m_includePathsComputed->result();
+            m_includePaths = convertFromUrls(m_includePathUrls);
+            
         }
         return m_includePaths;
     } else {
@@ -250,6 +254,7 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
 
 CPPParseJob::~CPPParseJob()
 {
+  delete m_includePathsComputed;
   delete m_session;
 }
 

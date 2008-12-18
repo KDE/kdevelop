@@ -36,6 +36,9 @@ class AST;
 class TranslationUnitAST;
 class IncludeFileDataProvider;
 
+extern QStringList headerExtensions;
+extern QStringList sourceExtensions;
+
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer;}
 namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
@@ -136,6 +139,8 @@ public:
   
   ///Returns true if the given url is a header, looking at he known file extensions
   bool isHeader(const KUrl &url) const;
+  
+  QStringList standardIncludePaths() const;
   
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
