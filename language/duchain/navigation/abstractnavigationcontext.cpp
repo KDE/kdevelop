@@ -111,6 +111,7 @@ void AbstractNavigationContext::clear() {
 }
 
 NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key) {
+  Q_UNUSED(key);
   return NavigationContextPointer(this);
 }
 
@@ -121,8 +122,8 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
 
   if(action.type == NavigationAction::ExecuteKey)
     return executeKeyAction(action.key);
-  
-  
+
+
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
       kDebug(9007) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
@@ -157,7 +158,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
               else*/
                 cursor = action.decl->range().textRange().start();
             }
-    
+
             action.decl->activateSpecialization();
           }
         }
@@ -195,14 +196,14 @@ void AbstractNavigationContext::down() {
   //Make sure link-count is valid
   if( m_linkCount == -1 )
     html();
-  
+
   int fromLine = m_currentPositionLine;
-  
+
   if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
-  
+
     if(fromLine == -1)
       fromLine = m_linkLines[m_selectedLink];
-    
+
     for(int newSelectedLink = m_selectedLink+1; newSelectedLink < m_linkCount; ++newSelectedLink) {
       if(m_linkLines[newSelectedLink] > fromLine && m_linkLines[newSelectedLink] - fromLine <= lineJump) {
         m_selectedLink = newSelectedLink;
@@ -215,7 +216,7 @@ void AbstractNavigationContext::down() {
     fromLine = 0;
 
   m_currentPositionLine = fromLine + lineJump;
-  
+
   if(m_currentPositionLine > m_currentLine)
     m_currentPositionLine = m_currentLine;
 }
@@ -224,14 +225,14 @@ void AbstractNavigationContext::up() {
   //Make sure link-count is valid
   if( m_linkCount == -1 )
     html();
-  
+
   int fromLine = m_currentPositionLine;
-  
+
   if(m_selectedLink >= 0 && m_selectedLink < m_linkCount) {
-  
+
     if(fromLine == -1)
       fromLine = m_linkLines[m_selectedLink];
-    
+
     for(int newSelectedLink = m_selectedLink-1; newSelectedLink >= 0; --newSelectedLink) {
       if(m_linkLines[newSelectedLink] < fromLine && fromLine - m_linkLines[newSelectedLink] <= lineJump) {
         m_selectedLink = newSelectedLink;
@@ -243,7 +244,7 @@ void AbstractNavigationContext::up() {
 
   if(fromLine == -1)
     fromLine = m_currentLine;
-  
+
   m_currentPositionLine = fromLine - lineJump;
   if(m_currentPositionLine < 0)
     m_currentPositionLine = 0;
@@ -256,7 +257,7 @@ void AbstractNavigationContext::nextLink()
     html();
 
   m_currentPositionLine = -1;
-  
+
   if( m_linkCount > 0 )
     m_selectedLink = (m_selectedLink+1) % m_linkCount;
 }
@@ -268,7 +269,7 @@ void AbstractNavigationContext::previousLink()
     html();
 
   m_currentPositionLine = -1;
-  
+
   if( m_linkCount > 0 ) {
     --m_selectedLink;
     if( m_selectedLink <  0 )
