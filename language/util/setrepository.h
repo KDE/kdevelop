@@ -26,7 +26,7 @@ class ConvenientIterator : public Conversion {
     }
     ConvenientIterator(const Set& set) : m_it(set.iterator()) {
     }
-    
+
     operator bool() const {
       return m_it;
     }
@@ -43,7 +43,7 @@ class ConvenientIterator : public Conversion {
     const T& ref() const {
       return Conversion::toItem(*m_it);
     }
-    
+
     uint index() const {
       return *m_it;
     }
@@ -72,53 +72,53 @@ class VirtualSetNode {
     public:
         inline VirtualSetNode(const SetNodeData* data = 0) : m_data(data) {
         }
-        
+
         inline bool isValid() const {
             return (bool)m_data;
         }
-        
+
         ///If this returns false, a left and a right node are available.
         ///If this returns true, this node represents a single item, that can be retrieved by calling item() or operator*.
         inline bool isFinalNode() const {
             return m_data->leftNode == 0;
         }
-        
+
         inline T firstItem() const {
             return Conversion::toItem(start());
         }
-        
+
         inline T lastItem() const {
             return Conversion::toItem(end()-1);
         }
-        
+
         inline T operator*() const {
             return Conversion::toItem(start());
         }
-        
+
         inline VirtualSetNode<T, Conversion, StaticRepository> leftChild() const {
             if(m_data->leftNode)
                 return StaticRepository::repository()->nodeFromIndex(m_data->leftNode);
             else
                 return 0;
         }
-        
+
         inline VirtualSetNode<T, Conversion, StaticRepository> rightChild() const {
             if(m_data->rightNode)
                 return StaticRepository::repository()->nodeFromIndex(m_data->rightNode);
             else
                 return 0;
         }
-        
+
         ///Returns the start of this node's range. If this is a final node, the length of the range is 1.
         inline uint start() const {
             return m_data->start;
         }
-        
+
         ///Returns the end of this node's range.
         inline uint end() const {
             return m_data->end;
         }
-        
+
     private:
         const SetNodeData* m_data;
 };
@@ -126,44 +126,48 @@ class VirtualSetNode {
 template<class T, class Conversion, class StaticRepository, bool doReferenceCounting = false, class StaticAccessLocker = DummyLocker>
 class StorableSet : public Conversion {
   public:
-      
+
     typedef VirtualSetNode<T, Conversion, StaticRepository> Node;
-    
+
     StorableSet(const StorableSet& rhs) : m_setIndex(rhs.m_setIndex) {
         StaticAccessLocker lock;
+        Q_UNUSED(lock);
         if(doReferenceCounting)
             set().staticRef();
     }
-    
+
     StorableSet(const Set& base) : m_setIndex(base.setIndex()) {
         StaticAccessLocker lock;
+        Q_UNUSED(lock);
         if(doReferenceCounting)
             set().staticRef();
     }
-    
+
     StorableSet() : m_setIndex(0) {
     }
-    
+
     ~StorableSet() {
         StaticAccessLocker lock;
+        Q_UNUSED(lock);
         if(doReferenceCounting)
             set().staticUnref();
     }
-    
+
     void insert(const T& t) {
       insertIndex(Conversion::toIndex(t));
     }
-    
+
     bool isEmpty() const {
         return m_setIndex == 0;
     }
-    
+
     uint count() const {
         return set().count();
     }
 
     void insertIndex(uint index) {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set addedSet = StaticRepository::repository()->createSet(index);
@@ -171,20 +175,21 @@ class StorableSet : public Conversion {
           addedSet.staticRef();
       set += addedSet;
       m_setIndex = set.setIndex();
-      
+
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
           addedSet.staticUnref();
       }
     }
-    
+
     void remove(const T& t) {
       removeIndex(Conversion::toIndex(t));
     }
 
     void removeIndex(uint index) {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set removedSet = StaticRepository::repository()->createSet(index);
@@ -193,7 +198,7 @@ class StorableSet : public Conversion {
       }
       set -= removedSet;
       m_setIndex = set.setIndex();
-      
+
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
@@ -211,57 +216,62 @@ class StorableSet : public Conversion {
 
     bool containsIndex(uint index) const {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       return set.contains(index);
     }
 
     StorableSet& operator +=(const StorableSet& rhs) {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set otherSet(rhs.m_setIndex, StaticRepository::repository());
       set += otherSet;
       m_setIndex = set.setIndex();
-      
+
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
       }
       return *this;
     }
-    
+
     StorableSet& operator -=(const StorableSet& rhs) {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set otherSet(rhs.m_setIndex, StaticRepository::repository());
       set -= otherSet;
       m_setIndex = set.setIndex();
-      
+
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
       }
       return *this;
     }
-    
+
     StorableSet& operator &=(const StorableSet& rhs) {
       StaticAccessLocker lock;
+      Q_UNUSED(lock);
       Set set(m_setIndex, StaticRepository::repository());
       Set oldSet(set);
       Set otherSet(rhs.m_setIndex, StaticRepository::repository());
       set &= otherSet;
       m_setIndex = set.setIndex();
-      
+
       if(doReferenceCounting) {
           set.staticRef();
           oldSet.staticUnref();
       }
       return *this;
     }
-    
+
     StorableSet& operator=(const StorableSet& rhs) {
-      StaticAccessLocker lock;
+        StaticAccessLocker lock;
+        Q_UNUSED(lock);
         if(doReferenceCounting)
             set().staticUnref();
         m_setIndex = rhs.m_setIndex;
@@ -275,25 +285,25 @@ class StorableSet : public Conversion {
       ret += rhs;
       return ret;
     }
-    
+
     StorableSet operator -(const StorableSet& rhs) const {
       StorableSet ret(*this);
       ret -= rhs;
       return ret;
     }
-    
+
     StorableSet operator &(const StorableSet& rhs) const {
       StorableSet ret(*this);
       ret &= rhs;
       return ret;
     }
-    
+
     typedef ConvenientIterator<T, Conversion> Iterator;
 
     Iterator iterator() const {
       return ConvenientIterator<T, Conversion>(set());
     }
-    
+
     Node node() const {
         return Node(StaticRepository::repository()->nodeFromIndex(m_setIndex));
     }
@@ -301,16 +311,16 @@ class StorableSet : public Conversion {
   private:
 
     uint m_setIndex;
-  };  
+  };
     /** This is a helper-class that helps inserting a bunch of items into a set without caring about grouping them together.
      *
      * It creates a much better tree-structure if many items are inserted at one time, and this class helps doing that in
      * cases where there is no better choice then storing a temporary list of items and inserting them all at once.
      *
      * This set will then care about really inserting them into the repository once the real set is requested.
-     * 
+     *
      * @todo eventually make this unnecessary
-     * 
+     *
      * @param T Should be the type that should be dealt
      * @param Conversion Should be a class that has a toIndex member function that takes an object of type T as parameter, and returns an index,
      *                   and a toItem member function that takes an index, and returns an item of type T.
@@ -338,13 +348,13 @@ class LazySet : public Conversion {
         apply();
       m_temporaryIndices.insert(index);
     }
-    
+
     void remove(const T& t) {
       if(!m_temporaryIndices.empty())
         apply();
       m_temporaryRemoveIndices.insert(Conversion::toIndex(t));
     }
-    
+
     ///Returns the set this LazySet represents. When this is called, the set is constructed in the repository.
     Set set() const {
       apply();
@@ -360,10 +370,10 @@ class LazySet : public Conversion {
         //Simplification without creating the set
         if(m_temporaryIndices.find(index) != m_temporaryIndices.end())
           return true;
-        
+
         return m_set.contains(index);
       }
-      
+
       return set().contains(index);
     }
 
@@ -374,7 +384,7 @@ class LazySet : public Conversion {
       m_set += set;
       return *this;
     }
-    
+
     LazySet& operator -=(const Set& set) {
       if(!m_temporaryIndices.empty())
         apply();
@@ -389,7 +399,7 @@ class LazySet : public Conversion {
       Set ret = m_set + set;
       return LazySet(m_rep, m_lockBeforeAccess, ret);
     }
-    
+
     LazySet operator -(const Set& set) const {
       apply();
       QMutexLocker l(m_lockBeforeAccess);
