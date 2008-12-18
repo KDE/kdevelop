@@ -23,7 +23,9 @@ kdev_add_test(unit-coveredfile coveredfiletest.cpp)
 kdev_add_test(unit-reportmodel reportmodeltest.cpp)
 kdev_add_test(unit-reportitems reportitemstest.cpp)
 kdev_add_test(unit-reportfileitem reportfileitemtest.cpp)
+if(NOT MSVC)
 kdev_add_test(unit-reportwidget reportwidgettest.cpp)
+endif(NOT MSVC)
 
 macro(coverage_add_mem_test test_EXEC prefix)
     add_test(gcov-mem-${test_EXEC}
