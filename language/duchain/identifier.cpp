@@ -520,9 +520,14 @@ QualifiedIdentifier::~QualifiedIdentifier() {
 
 QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
 {
-  id.makeConstant();
-  m_index = id.m_index;
-  cd = id.cd;
+  if(id.m_index) {
+    m_index = id.m_index;
+    cd = id.cd;
+  }else{
+    m_index = 0;
+    dd = new QualifiedIdentifierPrivate<true>(*id.dd);
+  }
+
   if( cd->m_pointerConstantMask || cd->m_isReference || cd->m_pointerDepth || cd->m_isConstant ) {
     //When copying from a type-identifier, do not share the d-pointer, because it contains invalid information.
     prepareWrite();
