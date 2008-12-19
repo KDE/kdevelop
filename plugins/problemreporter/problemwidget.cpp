@@ -53,6 +53,7 @@
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
+#include <kaction.h>
 
 //#include "modeltest.h"
 
@@ -69,6 +70,13 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     setWhatsThis( i18n( "Problems" ) );
     setModel(new ProblemModel(m_plugin));
 
+    m_fullUpdateAction = new KAction(this);
+    m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_fullUpdateAction->setText(i18n("Force Full Update"));
+    m_fullUpdateAction->setToolTip(i18n("Re-parse the current file and all its imports."));
+    m_fullUpdateAction->setIcon(KIcon("dirsync"));
+    connect(m_fullUpdateAction, SIGNAL(triggered(bool)), this, SLOT(forceFullUpdate()));
+    addAction(m_fullUpdateAction);
     //new ModelTest(model());
 
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
@@ -107,6 +115,12 @@ void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUCon
   }
 }
 
+void ProblemWidget::forceFullUpdate() {
+    kDebug() << "forcing full update";
+    DUChainReadLocker lock(DUChain::lock());
+    DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), KDevelop::TopDUContext::ForceUpdateRecursive);
+}
+
 void ProblemWidget::showProblems(TopDUContext* ctx)
 {
   if(ctx) {
@@ -125,6 +139,7 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
 void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
 {
   m_activeDirectory = doc->url().upUrl();
+  m_activeUrl = doc->url();
 
   QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 

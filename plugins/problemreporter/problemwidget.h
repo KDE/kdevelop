@@ -58,10 +58,15 @@ private Q_SLOTS:
   void parseJobFinished(KDevelop::ParseJob* job);
 
   void documentActivated(KDevelop::IDocument*);
+  
+  void forceFullUpdate();
+  
 private:
   void showProblems(KDevelop::TopDUContext* ctx);
   ProblemReporterPlugin* m_plugin;
   KUrl m_activeDirectory;
+  KUrl m_activeUrl;
+  KAction* m_fullUpdateAction;
 };
 
 #endif
