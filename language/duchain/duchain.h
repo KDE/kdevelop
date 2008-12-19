@@ -69,7 +69,8 @@ public:
    * If the context is already up to date, the given QObject is notified directly.
    *
    * @param topContext The context to update
-   * @param features The requested features
+   * @param features The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
+   *                 If you want to force an update including all imports, use TopDUContext::ForceUpdateRecursive.
    * @param notifyReady An optional pointer to a QObject that should contain a slot
    *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
    *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context

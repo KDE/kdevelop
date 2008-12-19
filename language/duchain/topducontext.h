@@ -215,7 +215,9 @@ public:
     ///When this flag is set, also _all_ recursive imports have to be computed with AllDeclarationsContextsAndUses
     ///This flag can not be set on a context, it is only used as a parameter to several updating functions. When you set it
     ///on a top-context, its flag will be AllDeclarationsContextsAndUses.
-    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses
+    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses,
+    ForceUpdate = 16, //This flag can not be set on a context, but is only used during updating
+    ForceUpdateRecursive = ForceUpdate | 32  //This flag can not be set on a context, but is only used during updating
   };
   
   Features features() const;

@@ -185,9 +185,8 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
   ///Locally we don't require the "recursive" condition, that only counts when we also have imports
   TopDUContext::Features localRequired = (TopDUContext::Features)(minimumFeatures & TopDUContext::AllDeclarationsContextsAndUses);
   localRequired = (TopDUContext::Features) (localRequired | ParseJob::staticMinimumFeatures(file->url()));
-  if(!((file->features() & localRequired) == localRequired )) {
+  if(!((file->features() & localRequired) == localRequired ))
     return false;
-  }
   
   ///@todo Before recursing, do a fast check whether one of the imports has special rules stored. Else it's not neede.
   if(minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive || ParseJob::hasStaticMinimumFeatures())
@@ -201,6 +200,8 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
 bool ParsingEnvironmentFile::featuresSatisfied(TopDUContext::Features minimumFeatures) {
   ENSURE_READ_LOCKED
   QSet<ParsingEnvironmentFilePointer> checked;
+  if(minimumFeatures & TopDUContext::ForceUpdate)
+    return false;
   return featuresMatch(ParsingEnvironmentFilePointer(this), minimumFeatures, checked);
 }
 

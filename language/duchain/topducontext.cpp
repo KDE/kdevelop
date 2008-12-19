@@ -924,6 +924,7 @@ TopDUContext::Features TopDUContext::features() const
 void TopDUContext::setFeatures(Features features)
 {
   features = (TopDUContext::Features)(features & (~((uint)8))); //Remove the "Recursive" flag since that's only for searching
+  features = (TopDUContext::Features)(features & (~ForceUpdateRecursive)); //Remove the update flags
   d_func_dynamic()->m_features = features;
   
   //Replicate features to ParsingEnvironmentFile
