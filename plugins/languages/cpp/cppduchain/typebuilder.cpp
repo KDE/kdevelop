@@ -108,7 +108,9 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     if( openedType ) {
       closeType();
     } else { //A case for the problem-reporter
-      kDebug(9007) << "Could not find base declaration for" << identifierForNode(node->name);
+      QualifiedIdentifier id;
+      identifierForNode(node->name, id);
+      kDebug(9007) << "Could not find base declaration for" << id;
     }
   }
 
@@ -385,7 +387,8 @@ void TypeBuilder::closeTypeForInitializer(InitializerAST */*node*/) {
 }
 
 bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {
-  QualifiedIdentifier id = identifierForNode(name);
+  QualifiedIdentifier id;
+  identifierForNode(name, id);
 
   bool openedType = false;
 

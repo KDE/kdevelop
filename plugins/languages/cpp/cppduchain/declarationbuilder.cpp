@@ -262,7 +262,11 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
       DUChainWriteLocker lock(DUChain::lock());
       //We have to search for the fully qualified identifier, so we always get the correct class
-      QualifiedIdentifier id = currentContext()->scopeIdentifier(false) + identifierForNode(node->id);
+      QualifiedIdentifier id = currentContext()->scopeIdentifier(false);
+      QualifiedIdentifier id2;
+      identifierForNode(node->id, id2);
+      id += id2;
+      
       id.setExplicitlyGlobal(true);
 
       if (id.count() > 1 ||
@@ -400,7 +404,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     if(name->unqualified_name && name->unqualified_name->operator_id)
       visit(name->unqualified_name->operator_id);
     
-    QualifiedIdentifier id = identifierForNode(name);
+    QualifiedIdentifier id;
+    identifierForNode(name, id);
 
     if(localId.isEmpty())
       localId = id.last();
@@ -600,7 +605,8 @@ Declaration* DeclarationBuilder::openNormalDeclaration(NameAST* name, AST* range
 
 Declaration* DeclarationBuilder::openFunctionDeclaration(NameAST* name, AST* rangeNode) {
 
-   QualifiedIdentifier id = identifierForNode(name);
+   QualifiedIdentifier id;
+   identifierForNode(name, id);
    Identifier localId = id.last(); //This also copies the template arguments
    if(id.count() > 1) {
      //Merge the scope of the declaration, and put them tog. Add semicolons instead of the ::, so you can see it's not a qualified identifier.
@@ -862,7 +868,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   
   QualifiedIdentifier id;
   if( node->name ) {
-    id = identifierForNode(node->name);
+    identifierForNode(node->name, id);
     openPrefixContext(node, id, pos);
     DUChainReadLocker lock(DUChain::lock());
     if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts)) {
@@ -1027,7 +1033,8 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
 {
   DeclarationBuilderBase::visitUsing(node);
 
-  QualifiedIdentifier id = identifierForNode(node->name);
+  QualifiedIdentifier id;
+  identifierForNode(node->name, id);
 
   ///@todo only use the last name component as range
   AliasDeclaration* decl = openDeclaration<AliasDeclaration>(0, node->name ? (AST*)node->name : (AST*)node, id.last());
@@ -1063,7 +1070,9 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, globalImportIdentifier);
     {
       DUChainWriteLocker lock(DUChain::lock());
-      decl->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->name), currentDeclaration()->range().start) );
+      QualifiedIdentifier id;
+      identifierForNode(node->name, id);
+      decl->setImportIdentifier( resolveNamespaceIdentifier(id, currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }
@@ -1093,7 +1102,9 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
     NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()));
     {
       DUChainWriteLocker lock(DUChain::lock());
-      decl->setImportIdentifier( resolveNamespaceIdentifier(identifierForNode(node->alias_name), currentDeclaration()->range().start) );
+      QualifiedIdentifier id;
+      identifierForNode(node->alias_name, id);
+      decl->setImportIdentifier( resolveNamespaceIdentifier(id, currentDeclaration()->range().start) );
     }
     closeDeclaration();
   }
@@ -1116,7 +1127,8 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
   bool openedDeclaration = false;
 
   if (node->name) {
-    QualifiedIdentifier id = identifierForNode(node->name);
+    QualifiedIdentifier id;
+    identifierForNode(node->name, id);
 
     bool forwardDeclarationGlobal = false;
 

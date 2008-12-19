@@ -133,7 +133,8 @@ public:
   void setOnlyComputeVisible(bool onlyVisible);
 
 protected:
-  virtual KDevelop::QualifiedIdentifier identifierForNode(NameAST* id);
+  QualifiedIdentifier identifierForNode(NameAST* id);
+  void identifierForNode(NameAST* id, QualifiedIdentifier& target);
   virtual void startVisiting( AST* node );
   virtual void setContextOnNode( AST* node, DUContext* ctx );
   virtual DUContext* contextFromNode( AST* node );
@@ -147,8 +148,9 @@ protected:
    * \note this reference will only be valid until the next time the function
    * is called, so you need to create a copy (store as non-reference).
    * @param typeSpecifier a pointer that will eventually be filled with a type-specifier that can be found in the name(for example the return-type of a cast-operator)
+   * @param target Place where the identifier will be written.
    */
-  KDevelop::QualifiedIdentifier identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier);
+  void identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier, QualifiedIdentifier& target);
 
   virtual void addBaseType( Cpp::BaseClassInstance base ) {
 	DUChainWriteLocker lock(DUChain::lock());

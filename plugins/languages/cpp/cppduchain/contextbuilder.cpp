@@ -145,9 +145,15 @@ void addImportedParentContextSafely(DUContext* context, DUContext* import) {
   }
 }
 
-KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode(NameAST* id)
+QualifiedIdentifier ContextBuilder::identifierForNode(NameAST* id) {
+  QualifiedIdentifier ret;
+  identifierForNode(id, ret);
+  return ret;
+}
+
+void ContextBuilder::identifierForNode(NameAST* id, QualifiedIdentifier& target)
 {
-  return identifierForNode(id, 0);
+  return identifierForNode(id, 0, target);
 }
 
 void ContextBuilder::startVisiting( AST* node )
@@ -557,7 +563,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
 
   QualifiedIdentifier functionName;
   if (compilingContexts() && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
-    functionName = identifierForNode(node->init_declarator->declarator->id);
+    identifierForNode(node->init_declarator->declarator->id, functionName);
     if (functionName.count() >= 2) {
       
       // This is a class function definition
@@ -757,7 +763,9 @@ public:
   virtual void visitName (NameAST * node)
   {
     if (result) {
-      if (!builder->currentContext()->findDeclarations(builder->identifierForNode(node), cursor).isEmpty()) {
+      QualifiedIdentifier id;
+      builder->identifierForNode(node, id);
+      if (!builder->currentContext()->findDeclarations(id, cursor).isEmpty()) {
         result = false;
       }else{
       }
@@ -1037,15 +1045,15 @@ bool ContextBuilder::createContextIfNeeded(AST* node, const QList<DUContext*>& i
   return contextNeeded;
 }
 
-QualifiedIdentifier ContextBuilder::identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier)
+void ContextBuilder::identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier, QualifiedIdentifier& target)
 {
-  if( !id )
-    return QualifiedIdentifier();
+  if( !id ) {
+    target = QualifiedIdentifier();
+  }
 
-  m_nameCompiler->run(id);
+  m_nameCompiler->run(id, &target);
   if( typeSpecifier )
     *typeSpecifier = m_nameCompiler->lastTypeSpecifier();
-  return m_nameCompiler->identifier();
 }
 
 bool ContextBuilder::smart() const {
