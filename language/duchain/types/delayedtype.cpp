@@ -101,7 +101,7 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 
 uint DelayedType::hash() const
 {
-  return AbstractType::hash() + 37*(d_func()->m_identifier.identifier().hash() + (uint)d_func()->m_kind);
+  return AbstractType::hash() + 37*((d_func()->m_identifier.index>>1) + (uint)d_func()->m_kind);
 }
 
 }

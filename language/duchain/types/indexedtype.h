@@ -66,7 +66,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
 
     /// Access the type's hash value. \returns the hash value.
     uint hash() const {
-      return m_index;
+      return m_index>>1;
     }
 
     /// Access the type's index. \returns the index.

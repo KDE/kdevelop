@@ -195,8 +195,7 @@ AbstractType::WhichType FunctionType::whichType() const
 uint FunctionType::hash() const
 {
   uint hash_value = AbstractType::hash();
-  if(returnType())
-    hash_value += returnType()->hash();
+  hash_value += d_func()->m_returnType.hash() * 859321;
 
   FOREACH_FUNCTION(IndexedType t, d_func()->m_arguments) {
     hash_value = (hash_value << 5) - hash_value + t.hash();

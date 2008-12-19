@@ -100,7 +100,7 @@ AbstractType::WhichType ReferenceType::whichType() const
 
 uint ReferenceType::hash() const
 {
-  return AbstractType::hash() + (baseType() ? baseType()->hash() : 1) * 29;
+  return AbstractType::hash() + (d_func()->m_baseType.hash()+1) * 29;
 }
 
 }

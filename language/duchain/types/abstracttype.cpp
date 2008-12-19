@@ -115,18 +115,20 @@ uint AbstractType::hash() const
 
   uint hash = 0;
 
-  if (modifiers() & ShortModifier)
+  uint mod = d_func()->m_modifiers;
+  
+  if (mod & ShortModifier)
     hash += 0x1;
-  if (modifiers() & LongModifier)
+  if (mod & LongModifier)
     hash += 0x2;
-  if (modifiers() & LongLongModifier)
+  if (mod & LongLongModifier)
     hash += 0x4;
-  if (modifiers() & SignedModifier)
+  if (mod & SignedModifier)
     hash += 0x8;
-  if (modifiers() & UnsignedModifier)
+  if (mod & UnsignedModifier)
     hash += 0x10;
 
-  return (modifiers() & ConstModifier ? 7 : 0) + (modifiers() & VolatileModifier ? 3 : 0) + 83 * hash;
+  return (mod & ConstModifier ? 7 : 0) + (mod & VolatileModifier ? 3 : 0) + 83 * hash;
 }
 
 QString AbstractType::toString() const
