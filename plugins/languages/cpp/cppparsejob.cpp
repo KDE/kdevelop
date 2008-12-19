@@ -532,6 +532,9 @@ void CPPInternalParseJob::run()
       if(contentContext)
         newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
       
+      if(newFeatures & TopDUContext::ForceUpdate)
+        kDebug() << "update enforced";
+      
       ///At some point, we have to give up on features again, else processing will be just too slow.
       ///Simple solution for now: Always go down to the minimum required level.
       ///@todo Think of a good mechanism to decide when we want to drop features, and when we want to keep them.

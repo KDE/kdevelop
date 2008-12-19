@@ -442,6 +442,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if((parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) == TopDUContext::AllDeclarationsContextsAndUsesForRecursive)
       slaveMinimumFeatures = parentJob()->minimumFeatures();
     
+    if(parentJob()->minimumFeatures() & TopDUContext::ForceUpdateRecursive)
+      slaveMinimumFeatures = (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::ForceUpdateRecursive);
+    
     QString fileName = fileNameUrl.pathOrUrl();
     
     if (checkAbort())
@@ -501,7 +504,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
                 updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
-                updateNeeded |= !includedEnvironment->featuresSatisfied(slaveMinimumFeatures);
+                updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
+                //Do not update again if ForceUpdate is given and the context was already updated during this run
+                updateNeeded |= (slaveMinimumFeatures & TopDUContext::ForceUpdate) && !parentJob()->masterJob()->wasUpdated(includedContext.data());
               }
             }
         }
