@@ -638,8 +638,8 @@ bool ContextBrowserView::eventFilter(QObject* object, QEvent* event) {
 
 void ContextBrowserView::showEvent(QShowEvent* event) {
     DUChainReadLocker lock(DUChain::lock());
-    if(m_navigationWidgetDeclaration.isValid() && m_navigationWidgetDeclaration.getDeclaration(top)) {
-        TopDUContext* top = m_lastUsedTopContext.data();
+    TopDUContext* top = m_lastUsedTopContext.data();
+    if(top && m_navigationWidgetDeclaration.isValid() && m_navigationWidgetDeclaration.getDeclaration(top)) {
         if(top) {
             //Update the navigation-widget
             Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
