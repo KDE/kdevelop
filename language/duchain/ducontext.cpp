@@ -589,9 +589,9 @@ DUContext::~DUContext( )
     if (m_dynamicData->m_parentContext)
       m_dynamicData->m_parentContext->m_dynamicData->removeChildContext(this);
     //DUChain::contextChanged(this, DUChainObserver::Deletion, DUChainObserver::NotApplicable);
-
-    top->m_dynamicData->clearContextIndex(this);
   }
+  
+  top->m_dynamicData->clearContextIndex(this);
   
   Q_ASSERT(d_func()->isDynamic() == (!top->deleting() || !top->isOnDisk() || top->m_dynamicData->isTemporaryContextIndex(m_dynamicData->m_indexInTopContext)));
 }
