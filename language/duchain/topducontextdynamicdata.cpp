@@ -119,6 +119,20 @@ TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_t
 }
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
+  
+  //Due to template specialization it's possible that a declaration is not reachable through the normal context structure.
+  //For that reason we have to check here, and delete all remaining declarations.
+  for(int a = 0; a < m_temporaryContexts.size(); ++a)
+    delete m_temporaryContexts[a];
+  
+  for(int a = 0; a < m_temporaryDeclarations.size(); ++a)
+    delete m_temporaryDeclarations[a];
+  
+  for(int a = 0; a < m_contexts.size(); ++a)
+    delete m_contexts[a];
+  
+  for(int a = 0; a < m_declarations.size(); ++a)
+    delete m_declarations[a];
 }
 
 QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
