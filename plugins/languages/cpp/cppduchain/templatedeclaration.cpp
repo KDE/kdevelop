@@ -344,6 +344,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
 };
 
 AtomicIncrementer::Int DelayedTypeResolver::depth_counter = Q_BASIC_ATOMIC_INITIALIZER(0);
+AtomicIncrementer::Int alias_depth_counter = Q_BASIC_ATOMIC_INITIALIZER(0);
 
 // bool operator==( const ExpressionEvaluationResult& left, const ExpressionEvaluationResult& right ) {
 //  return left.type == right.type && left.isInstance == right.isInstance;
@@ -717,13 +718,18 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
         ///an AliasDeclaration represents a C++ "using bla::bla;" declaration.
         if(AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(instantiatedDeclaration)) {
-          ///For alias declaration, we resolve the declaration that is aliased instead of a type.
-          ///For this reason, template alias-declarations have a DelayedType assigned
-          DelayedType::Ptr delayed = alias->type<DelayedType>();
-          if(delayed) {
-            QList<Declaration*> declarations = parentContext->findDeclarations(delayed->identifier());
-            if(!declarations.isEmpty())
-              alias->setAliasedDeclaration(declarations.first());
+          AtomicIncrementer safety(&alias_depth_counter);
+          if(alias_depth_counter > 30) {
+            kWarning() << "depth-limit reached while resolving alias-declaration" << alias->identifier().toString() << "within" << parentContext->scopeIdentifier(true).toString();
+          }else {
+            ///For alias declaration, we resolve the declaration that is aliased instead of a type.
+            ///For this reason, template alias-declarations have a DelayedType assigned
+            DelayedType::Ptr delayed = alias->type<DelayedType>();
+            if(delayed) {
+              QList<Declaration*> declarations = parentContext->findDeclarations(delayed->identifier());
+              if(!declarations.isEmpty())
+                alias->setAliasedDeclaration(declarations.first());
+            }
           }
         }else{
           TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
