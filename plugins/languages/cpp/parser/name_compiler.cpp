@@ -182,5 +182,5 @@ void NameCompiler::run(NameAST *node, QualifiedIdentifier* target)
   else
     _M_name = &m_localName;
     
-  m_typeSpecifier = 0; internal_run(node); if(node->global) _M_name->setExplicitlyGlobal( node->global );
+  m_typeSpecifier = 0; internal_run(node); if(node && node->global) _M_name->setExplicitlyGlobal( node->global );
 }
