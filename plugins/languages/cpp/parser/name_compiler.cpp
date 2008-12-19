@@ -110,13 +110,13 @@ TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, Templat
 }
 
 NameCompiler::NameCompiler(ParseSession* session)
-  : m_session(session)
+  : m_session(session), _M_name(&m_localName)
 {
 }
 
 void NameCompiler::internal_run(AST *node)
 {
-  _M_name.clear();
+  _M_name->clear();
   visit(node);
 }
 
@@ -158,7 +158,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
       m_currentIdentifier.appendTemplateIdentifier( TypeIdentifier() );
     }
 
-  _M_name.push(m_currentIdentifier);
+  _M_name->push(m_currentIdentifier);
 }
 
 TypeSpecifierAST* NameCompiler::lastTypeSpecifier() const {
@@ -172,10 +172,15 @@ void NameCompiler::visitTemplateArgument(TemplateArgumentAST *node)
 
 const QualifiedIdentifier& NameCompiler::identifier() const
 {
-  return _M_name;
+  return *_M_name;
 }
 
-void NameCompiler::run(NameAST *node)
+void NameCompiler::run(NameAST *node, QualifiedIdentifier* target)
 {
-  m_typeSpecifier = 0; internal_run(node); _M_name.setExplicitlyGlobal( node->global );
+  if(target)
+    _M_name = target;
+  else
+    _M_name = &m_localName;
+    
+  m_typeSpecifier = 0; internal_run(node); if(node->global) _M_name->setExplicitlyGlobal( node->global );
 }

@@ -32,11 +32,12 @@ class KDEVCPPPARSER_EXPORT NameCompiler: protected DefaultVisitor
 public:
   NameCompiler(ParseSession* session);
 
-  void run(NameAST *node);
+  ///@param target If this is nonzero, the identifier will be written to that place without any copying.
+  void run(NameAST *node, KDevelop::QualifiedIdentifier* target = 0);
   void run(UnqualifiedNameAST *node) { m_typeSpecifier = 0; internal_run(node); }
 
-  QString name() const { return _M_name.toString(); }
-  QStringList qualifiedName() const { return _M_name.toStringList(); }
+  QString name() const { return _M_name->toString(); }
+  QStringList qualifiedName() const { return _M_name->toStringList(); }
 
   const KDevelop::QualifiedIdentifier& identifier() const;
 
@@ -57,7 +58,8 @@ private:
   TypeSpecifierAST* m_typeSpecifier;
   KDevelop::QualifiedIdentifier m_base;
   KDevelop::Identifier m_currentIdentifier;
-  KDevelop::QualifiedIdentifier _M_name;
+  KDevelop::QualifiedIdentifier* _M_name;
+  KDevelop::QualifiedIdentifier m_localName;
 };
 
 //Extracts a type-identifier from a template argument
