@@ -188,6 +188,7 @@ public:
   ///Returns a pointer to the repository this set belongs to. Returns zero when this set is not initialized yet.
   BasicSetRepository* repository() const;
 private:
+  void unrefNode(uint);
   friend class BasicSetRepository;
   
   uint m_tree;

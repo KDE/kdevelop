@@ -1237,9 +1237,32 @@ BasicSetRepository* Set::repository() const {
 void Set::staticRef() {
   if(!m_tree)
     return;
-    QMutexLocker lock(m_repository->m_mutex);
+    m_repository->m_mutex->lock();
     SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(m_tree);
     ++data->m_refCount;
+    m_repository->m_mutex->unlock();
+}
+
+///Mutex must be locked
+void Set::unrefNode(uint current) {
+    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(current);
+    Q_ASSERT(data->m_refCount);
+    --data->m_refCount;
+
+    if(data->m_refCount == 0) {
+
+        if(data->rightNode){
+            unrefNode(data->rightNode);
+        }else if(data->leftNode){
+            unrefNode(data->leftNode);
+        }else {
+            //Deleting a leaf
+            Q_ASSERT(data->end - data->start == 1);
+            m_repository->itemRemovedFromSets(data->start);
+        }
+
+    m_repository->dataRepository.deleteItem(current);
+    }
 }
 
 ///Decrease the static reference-count of this set by one. This set must have a reference-count > 1.
@@ -1249,34 +1272,11 @@ void Set::staticUnref() {
   if(!m_tree)
     return;
   
-    QMutexLocker lock(m_repository->m_mutex);
+    m_repository->m_mutex->lock();
     
-    KDevVarLengthArray<uint, 3000> nextNodes;
-    nextNodes.append(m_tree);
-  
-    while(!nextNodes.isEmpty()) {
-      uint current = nextNodes.back();
-      nextNodes.pop_back();
-      
-      SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(current);
-      Q_ASSERT(data->m_refCount);
-      --data->m_refCount;
-      
-      if(data->m_refCount == 0) {
-        if(data->rightNode)
-          nextNodes.append(data->rightNode);
-        if(data->leftNode)
-          nextNodes.append(data->leftNode);
-        
-        if(!data->leftNode && !data->rightNode) {
-          //Deleting a leaf
-          Q_ASSERT(data->end - data->start == 1);
-          m_repository->itemRemovedFromSets(data->start);
-        }
-
-        m_repository->dataRepository.deleteItem(current);
-      }
-    }
+    unrefNode(m_tree);
+    
+    m_repository->m_mutex->unlock();
 }
 
 }
