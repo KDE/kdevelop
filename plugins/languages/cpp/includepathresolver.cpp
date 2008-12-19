@@ -53,8 +53,10 @@
 #ifdef TEST
 #include <iostream>
 #include <QApplication>
+#include <iostream>
 using namespace std;
 #endif
+#include <iostream>
 
 //#define VERBOSE
 
@@ -67,7 +69,7 @@ using namespace std;
 ///After how many seconds should we retry?
 #define CACHE_FAIL_FOR_SECONDS 200
 
-
+const int processTimeoutSeconds = 40000;
 
 namespace CppTools {
   ///Helper-class used to fake file-modification times
@@ -235,7 +237,7 @@ bool IncludePathResolver::executeCommand( const QString& command, const QString&
   QString prog = args.takeFirst();
   proc.setProgram(prog, args);
 
-  int status = proc.execute(10000); // 10 second timeout
+  int status = proc.execute(processTimeoutSeconds * 1000);
   result = proc.readAll();
 
   return status == 0;
