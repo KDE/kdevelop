@@ -76,6 +76,7 @@ public:
   
   private:
   static void updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited);
+  static void updateImportCacheRecursion(uint baseIndex, IndexedTopDUContext currentContext, TopDUContext::IndexedRecursiveImports& imports);
   friend class TopDUContext;
 };
 

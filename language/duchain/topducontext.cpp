@@ -725,6 +725,33 @@ const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndice
   return m_local->m_indexedRecursiveImports;
 }
 
+void TopDUContextData::updateImportCacheRecursion(uint baseIndex, IndexedTopDUContext currentContext, TopDUContext::IndexedRecursiveImports& visited) {
+  if(visited.contains(currentContext.index()))
+    return;
+  Q_ASSERT(currentContext.index()); //The top-context must be in the repository when this is called
+  if(!currentContext.data()) {
+    kDebug() << "importing invalid context";
+    return;
+  }
+  visited.insert(currentContext.index());
+  
+  const TopDUContextData* currentData = currentContext.data()->topContext()->d_func();
+  if(currentData->m_importsCache.contains(baseIndex) || currentData->m_importsCache.isEmpty())
+  {
+    //If we have a loop or no imports-cache is used, we have to look at each import separately.
+    const KDevelop::DUContext::Import* imports = currentData->m_importedContexts();
+    uint importsSize = currentData->m_importedContextsSize();
+    for(uint a = 0; a < importsSize; ++a) {
+      IndexedTopDUContext next(imports[a].topContextIndex());
+      if(next.isValid())
+        updateImportCacheRecursion(baseIndex, next, visited);
+    }
+  }else{
+    //If we don't have a loop with baseIndex, we can safely just merge with the imported importscache
+    visited += currentData->m_importsCache;
+  }
+}
+
 void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentContext, std::set<uint>& visited) {
   if(visited.find(currentContext.index()) != visited.end())
     return;
@@ -745,12 +772,22 @@ void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentCon
 }
 
 
+
 void TopDUContext::updateImportsCache() {
   QMutexLocker lock(&importStructureMutex);
-  std::set<uint> visited;
-  TopDUContextData::updateImportCacheRecursion(this, visited);
-  Q_ASSERT(visited.find(ownIndex()) != visited.end());
-  d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository.createSet(visited));
+  
+  
+  const bool use_fully_recursive_import_cache_computation = false;
+  
+  if(use_fully_recursive_import_cache_computation) {
+    std::set<uint> visited;
+    TopDUContextData::updateImportCacheRecursion(this, visited);
+    Q_ASSERT(visited.find(ownIndex()) != visited.end());
+    d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository.createSet(visited));
+  }else{
+    d_func_dynamic()->m_importsCache = IndexedRecursiveImports();
+    TopDUContextData::updateImportCacheRecursion(ownIndex(), this, d_func_dynamic()->m_importsCache);
+  }
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
