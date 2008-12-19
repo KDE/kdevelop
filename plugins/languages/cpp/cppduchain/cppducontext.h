@@ -82,18 +82,18 @@ extern QMutex cppDuContextInstantiationsMutex;
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
           QualifiedIdentifier i;
           i.setExplicitlyGlobal( isExplicitlyGlobal );
-          State s;
-          s.identifier = i;
+          StatePtr s(new State);
+          s->identifier = i;
           m_states << s;
         }
 
         ///Can be used to just append a result that was computed outside. closeQualifiedIdentifier(...) must still be called.
         void openQualifiedIdentifier( const ExpressionEvaluationResult& result ) {
-          State s;
-          s.expressionResult = result;
-          s.result.clear();
+          StatePtr s(new State);
+          s->expressionResult = result;
+          s->result.clear();
           foreach(const DeclarationId& decl, result.allDeclarations)
-          s.result << DeclarationPointer( decl.getDeclaration(const_cast<TopDUContext*>(topContext())) );
+          s->result << DeclarationPointer( decl.getDeclaration(const_cast<TopDUContext*>(topContext())) );
           
           m_states << s;
         }
@@ -107,7 +107,7 @@ extern QMutex cppDuContextInstantiationsMutex;
          * The identifier must not have template identifiers, those need to be added using openQualifiedIdentifier(..) and closeQualifiedIdentifier(..)
          * */
         void openIdentifier( const Identifier& identifier ) {
-         m_states.top().identifier.push(identifier);
+         m_states.top()->identifier.push(identifier);
         }
         /**
          * When closeIdentifier() is called, the last opened identifier is searched, and can be retrieved using lastDeclarations().
@@ -147,7 +147,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         ///Uses the instantiation-information from the context of decl as parent of templateArguments.
         Declaration* instantiateDeclaration( Declaration* decl, const InstantiationInformation& templateArguments ) const;
         
-        struct State {
+        struct State : public KShared {
           State() {
           }
           QualifiedIdentifier identifier; //identifier including eventual namespace prefix
@@ -157,7 +157,10 @@ extern QMutex cppDuContextInstantiationsMutex;
           QList<DeclarationPointer> result;
           ExpressionEvaluationResult expressionResult;
         };
-        QStack<State> m_states;
+        
+        typedef KSharedPtr<State> StatePtr;
+        
+        QStack<StatePtr> m_states;
         const DUContext* m_context;
         const TopDUContext* m_source;
         DUContext::SearchFlags m_flags;

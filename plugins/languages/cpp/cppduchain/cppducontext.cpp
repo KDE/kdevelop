@@ -84,13 +84,14 @@ Declaration* FindDeclaration::instantiateDeclaration( Declaration* decl, const I
 }
 
 void FindDeclaration::closeQualifiedIdentifier() {
-  State s = m_states.top();
+  StatePtr sPtr(m_states.back());
+  State& s (*sPtr);
   m_lastDeclarations = s.result;
-  m_states.pop();
+  m_states.pop_back();
   if( !m_states.isEmpty() ) {
     //Append template-parameter to parent
     if( s.expressionResult.isValid() ) {
-      m_states.top().templateParameters.templateParametersList().append(s.expressionResult.type.type()->indexed());
+      m_states.back()->templateParameters.templateParametersList().append(s.expressionResult.type.type()->indexed());
     } else {
       ExpressionEvaluationResult res;
       if( !s.result.isEmpty() ) {
@@ -104,13 +105,13 @@ void FindDeclaration::closeQualifiedIdentifier() {
           res.isInstance = s.result[0]->kind() != Declaration::Type;
         }
       }
-      m_states.top().templateParameters.templateParametersList().append(res.type.type()->indexed());
+      m_states.back()->templateParameters.templateParametersList().append(res.type.type()->indexed());
     }
   }
 }
 
 bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
-  State& s = m_states.top();
+  State& s = *m_states.back();
   QualifiedIdentifier lookup = s.identifier;
   
   DUContext::SearchItem::PtrList allIdentifiers;
