@@ -1155,9 +1155,14 @@ void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
     return;
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
-  //We do not unconvert the smart-ranges here, because editor-integrators may not notice that,
-  //and would crash.
-  
+  EditorIntegrator editor;
+  SmartConverter sc(&editor);
+
+  foreach (TopDUContext* top, chains) {
+    DUChainWriteLocker lock( DUChain::lock() );
+    sc.deconvertDUChain( top );
+  }
+
   foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts) {
     if(top->url().str() == doc->url().pathOrUrl())
       sdDUChainPrivate->m_openDocumentContexts.remove(top);
