@@ -297,6 +297,10 @@ class StorableSet : public Conversion {
       ret &= rhs;
       return ret;
     }
+    
+    bool operator==(const StorableSet& rhs) const {
+        return m_setIndex == rhs.m_setIndex;
+    }
 
     typedef ConvenientIterator<T, Conversion> Iterator;
 
@@ -307,11 +311,20 @@ class StorableSet : public Conversion {
     Node node() const {
         return Node(StaticRepository::repository()->nodeFromIndex(m_setIndex));
     }
+    
+    uint setIndex() const {
+        return m_setIndex;
+    }
 
   private:
 
     uint m_setIndex;
   };
+  
+template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>
+uint qHash(const StorableSet<T, Conversion, StaticRepository, doReferenceCounting, StaticAccessLocker>& set) {
+    return set.setIndex();
+}
     /** This is a helper-class that helps inserting a bunch of items into a set without caring about grouping them together.
      *
      * It creates a much better tree-structure if many items are inserted at one time, and this class helps doing that in

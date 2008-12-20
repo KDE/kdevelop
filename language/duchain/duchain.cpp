@@ -54,6 +54,7 @@
 #include "smartconverter.h"
 #include "duchainutils.h"
 #include "duchainregister.h"
+#include "persistentsymboltable.h"
 #include "repositories/itemrepository.h"
 #include <util/google/dense_hash_map>
 #include <qthread.h>
@@ -509,6 +510,7 @@ public:
 
     Q_ASSERT(!instance->lock()->currentThreadHasReadLock() && !instance->lock()->currentThreadHasWriteLock());
     DUChainWriteLocker writeLock(instance->lock());
+    PersistentSymbolTable::self().clearCache();
 
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
     //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.

@@ -67,18 +67,6 @@ namespace KDevelop
 
 Utils::BasicSetRepository recursiveImportRepository("Recursive Imports");
 
-struct DeclarationTopContextExtractor {
-  inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
-    return decl.indexedTopContext();
-  }
-};
-
-struct DUContextTopContextExtractor {
-  inline static IndexedTopDUContext extract(const IndexedDUContext& ctx) {
-    return ctx.indexedTopContext();
-  }
-};
-
 ReferencedTopDUContext::ReferencedTopDUContext(TopDUContext* context) : m_topContext(context) {
   if(m_topContext)
     DUChain::self()->refCountUp(m_topContext);
@@ -964,20 +952,17 @@ struct TopDUContext::FindDeclarationsAcceptor {
     PersistentSymbolTable::Declarations allDecls;
     
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    if(!id.isEmpty())
-      allDecls = PersistentSymbolTable::self().getDeclarations(id);
     
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter;
+    PersistentSymbolTable::FilteredDeclarationIterator filter;
     
     //This is used if filterung is disabled
     PersistentSymbolTable::Declarations::Iterator unchecked;
-    if(check.flags & DUContext::NoImportsCheck)
+    if(check.flags & DUContext::NoImportsCheck) {
+      allDecls = PersistentSymbolTable::self().getDeclarations(id);
       unchecked = allDecls.iterator();
-    else
-      filter = ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DeclarationTopContextExtractor>(allDecls.iterator(), top->recursiveImportIndices());
+    } else
+      filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
                                  
     while(filter || unchecked) {
       
@@ -1086,15 +1071,10 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
-    PersistentSymbolTable::Declarations allDecls;
-    
     QualifiedIdentifier id = newElement.qualifiedIdentifier();
-    if(!id.isEmpty())
-      allDecls = PersistentSymbolTable::self().getDeclarations(id);
     
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter(allDecls.iterator(), recursiveImportIndices());
+    PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
 
     if(filter) {
       DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
@@ -1183,13 +1163,8 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
     QualifiedIdentifier id = importChainItem.qualifiedIdentifier();
     
-    PersistentSymbolTable::Declarations allDecls;
-    if(!id.isEmpty())
-      allDecls = PersistentSymbolTable::self().getDeclarations(id);
-    
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DeclarationTopContextExtractor> filter(allDecls.iterator(), recursiveImportIndices());
+    PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
     
       
     if(filter) {
@@ -1264,19 +1239,17 @@ struct TopDUContext::FindContextsAcceptor {
     PersistentSymbolTable::Contexts allDecls;
     
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    allDecls = PersistentSymbolTable::self().getContexts(id);
     
     //This iterator efficiently filters the visible declarations out of all declarations
-    ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DUContextTopContextExtractor> filter;
+    PersistentSymbolTable::FilteredDUContextIterator filter;
     
     //This is used if filterung is disabled
     PersistentSymbolTable::Contexts::Iterator unchecked;
-    if(check.flags & DUContext::NoImportsCheck)
+    if(check.flags & DUContext::NoImportsCheck) {
+      allDecls = PersistentSymbolTable::self().getContexts(id);
       unchecked = allDecls.iterator();
-    else
-      filter = ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, 
-                                 IndexedRecursiveImports, DUContextTopContextExtractor>(allDecls.iterator(), top->recursiveImportIndices());
+    } else
+      filter = PersistentSymbolTable::self().getFilteredContexts(id, top->recursiveImportIndices());
 
     while(filter || unchecked) {
       

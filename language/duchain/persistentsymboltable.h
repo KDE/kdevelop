@@ -100,6 +100,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
     }
 };
 
+struct DeclarationTopContextExtractor {
+  inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
+    return decl.indexedTopContext();
+  }
+};
+
+struct DUContextTopContextExtractor {
+  inline static IndexedTopDUContext extract(const IndexedDUContext& ctx) {
+    return ctx.indexedTopContext();
+  }
+};
+
 /**
  * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
  * */
@@ -127,6 +139,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     Declarations getDeclarations(const IndexedQualifiedIdentifier& id) const;
 
+    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
+    ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
+    ///This is very efficient since it uses a cache
+    ///The returned iterator is valid as long as the duchain read lock is held
+    FilteredDeclarationIterator getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
     
     void addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
 
@@ -145,10 +162,21 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
     ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
     Contexts getContexts(const IndexedQualifiedIdentifier& id) const;
     
+    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, TopDUContext::IndexedRecursiveImports, DUContextTopContextExtractor> FilteredDUContextIterator;
+    
+    ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
+    ///This is very efficient since it uses a cache
+    ///The returned iterator is valid as long as the duchain read lock is held
+    FilteredDUContextIterator getFilteredContexts(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
+    
     static PersistentSymbolTable& self();
 
     //Very expensive: Checks for problems in the symbol table
     void selfAnalysis();
+    
+    //Clears the internal cache. Should be called regularly to save memory
+    //The duchain must be read-locked
+    void clearCache();
     
     private:
       class PersistentSymbolTablePrivate* d;

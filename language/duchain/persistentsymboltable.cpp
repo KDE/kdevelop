@@ -27,7 +27,11 @@
 #include "identifier.h"
 #include "ducontext.h"
 #include "topducontext.h"
+#include "duchain.h"
+#include "duchainlock.h"
 #include <util/embeddedfreetree.h>
+
+const uint MinimumCountForCache = 20;
 
 namespace KDevelop {
 
@@ -169,14 +173,38 @@ class PersistentContextTableRequestItem {
   const PersistentContextTableItem& m_item;
 };
 
+template<class ValueType>
+struct CacheEntry {
+  
+  typedef KDevVarLengthArray<ValueType> Data;
+  typedef QHash<TopDUContext::IndexedRecursiveImports, Data > DataHash;
+  
+  DataHash m_hash;
+};
 
 struct PersistentSymbolTablePrivate {
   PersistentSymbolTablePrivate() : m_declarations("Persistent Declaration Table"), m_contexts("Persistent Context Table") {
   }
   //Maps declaration-ids to declarations
-  ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem> m_declarations;
-  ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem> m_contexts;
+  ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, KDevelop::NoDynamicData, false> m_declarations;
+  ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem, KDevelop::NoDynamicData, false> m_contexts;
+  
+  QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration> > m_declarationsCache;
+  QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDUContext> > m_contextsCache;
 };
+
+void PersistentSymbolTable::clearCache()
+{
+  ENSURE_CHAIN_WRITE_LOCKED
+  {
+    QMutexLocker lock(d->m_declarations.mutex());
+    d->m_declarationsCache.clear();
+  }
+  {
+    QMutexLocker lock(d->m_contexts.mutex());
+    d->m_contextsCache.clear();
+  }
+}
 
 PersistentSymbolTable::PersistentSymbolTable() : d(new PersistentSymbolTablePrivate())
 {
@@ -189,6 +217,10 @@ PersistentSymbolTable::~PersistentSymbolTable()
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
+  QMutexLocker lock(d->m_declarations.mutex());
+  
+  d->m_declarationsCache.remove(id);
+  
   PersistentSymbolTableItem item;
   item.id = id;
   PersistentSymbolTableRequestItem request(item);
@@ -232,6 +264,11 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
 
 void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
+  QMutexLocker lock(d->m_declarations.mutex());
+  
+  d->m_declarationsCache.remove(id);
+  Q_ASSERT(!d->m_declarationsCache.contains(id));
+  
   PersistentSymbolTableItem item;
   item.id = id;
   PersistentSymbolTableRequestItem request(item);
@@ -272,7 +309,61 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     d->m_declarations.index(request);
 }
 
+PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
+  
+  QMutexLocker lock(d->m_declarations.mutex());
+  Declarations decls = getDeclarations(id).iterator();
+  
+  if(decls.dataSize() > MinimumCountForCache)
+  {
+    //Do visibility caching
+    CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
+    CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
+    if(cacheIt != cached.m_hash.end())
+      return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), visibility);
+
+    CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDeclaration>());
+    
+    KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
+    
+    for(FilteredDeclarationIterator it(decls.iterator(), visibility); it; ++it)
+      cache.append(*it);
+    
+    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), visibility);
+  }else{
+    return FilteredDeclarationIterator(decls.iterator(), visibility);
+  }
+}
+
+PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilteredContexts(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
+  QMutexLocker lock(d->m_contexts.mutex());
+  
+  Contexts contexts = getContexts(id);
+  
+  if(contexts.dataSize() > MinimumCountForCache)
+  {
+    //Do visibility caching
+    CacheEntry<IndexedDUContext>& cached(d->m_contextsCache[id]);
+    CacheEntry<IndexedDUContext>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
+    if(cacheIt != cached.m_hash.end())
+      return FilteredDUContextIterator(Contexts::Iterator(cacheIt->constData(), cacheIt->size(), -1), visibility);
+
+    CacheEntry<IndexedDUContext>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDUContext>());
+    
+    KDevVarLengthArray<IndexedDUContext>& cache(*insertIt);
+    
+    for(FilteredDUContextIterator it(contexts.iterator(), visibility); it; ++it)
+      cache.append(*it);
+    
+    return FilteredDUContextIterator(Contexts::Iterator(cache.constData(), cache.size(), -1), visibility);
+  }else{
+    return FilteredDUContextIterator(contexts.iterator(), visibility);
+  }
+}
+
 PersistentSymbolTable::Declarations PersistentSymbolTable::getDeclarations(const IndexedQualifiedIdentifier& id) const {
+  QMutexLocker lock(d->m_declarations.mutex());
+  
   PersistentSymbolTableItem item;
   item.id = id;
   PersistentSymbolTableRequestItem request(item);
@@ -289,6 +380,8 @@ PersistentSymbolTable::Declarations PersistentSymbolTable::getDeclarations(const
 
 void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget) const
 {
+  QMutexLocker lock(d->m_declarations.mutex());
+  
   PersistentSymbolTableItem item;
   item.id = id;
   PersistentSymbolTableRequestItem request(item);
@@ -307,6 +400,10 @@ void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, u
 
 void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context)
 {
+  QMutexLocker lock(d->m_contexts.mutex());
+  
+  d->m_contextsCache.remove(id);
+  
   PersistentContextTableItem item;
   item.id = id;
   PersistentContextTableRequestItem request(item);
@@ -350,6 +447,10 @@ void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, con
 
 void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context)
 {
+  QMutexLocker lock(d->m_contexts.mutex());
+  
+  d->m_contextsCache.remove(id);
+  
   PersistentContextTableItem item;
   item.id = id;
   PersistentContextTableRequestItem request(item);
@@ -391,6 +492,8 @@ void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, 
 }
 
 PersistentSymbolTable::Contexts PersistentSymbolTable::getContexts(const IndexedQualifiedIdentifier& id) const {
+  QMutexLocker lock(d->m_contexts.mutex());
+  
   PersistentContextTableItem item;
   item.id = id;
   PersistentContextTableRequestItem request(item);
@@ -406,6 +509,8 @@ PersistentSymbolTable::Contexts PersistentSymbolTable::getContexts(const Indexed
 }
 
 void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDUContext*& contextsTarget) const {
+  QMutexLocker lock(d->m_contexts.mutex());
+  
   PersistentContextTableItem item;
   item.id = id;
   PersistentContextTableRequestItem request(item);
@@ -474,6 +579,8 @@ struct ContextVisitor {
 
 void PersistentSymbolTable::selfAnalysis() {
   {
+    QMutexLocker lock(d->m_declarations.mutex());
+    
     Visitor v;
     kDebug() << d->m_declarations.statistics();
     d->m_declarations.visitAllItems(v);
@@ -481,6 +588,8 @@ void PersistentSymbolTable::selfAnalysis() {
   }
 
   {
+    QMutexLocker lock(d->m_contexts.mutex());
+    
     ContextVisitor v;
     kDebug() << d->m_contexts.statistics();
     d->m_contexts.visitAllItems(v);

@@ -28,12 +28,6 @@
 
 namespace KDevelop {
 
-struct DeclarationTopContextExtractor {
-  static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
-    return decl.indexedTopContext();
-  }
-};
-
 DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, uint specialization)
   : m_direct(false), m_specialization(specialization)
 {
@@ -79,12 +73,9 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
-    PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
-    
     if(top) {
       //Do filtering
-      ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> filter(decls.iterator(), top->recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -94,6 +85,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       }
     }else{
       //Just accept anything
+      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
@@ -136,12 +128,9 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
     //Find the declaration by its qualified identifier and additionalIdentity
     QualifiedIdentifier id(indirect.m_identifier);
 
-    PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
-    
     if(top) {
       //Do filtering
-      ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, 
-                                 TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> filter(decls.iterator(), top->recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && indirect.m_additionalIdentity == decl->additionalIdentity()) {
@@ -153,6 +142,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
       }
     }else{
       //Just accept anything
+      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
