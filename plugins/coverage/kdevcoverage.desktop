@@ -15,6 +15,7 @@ Comment[sv]=Gcov C(++)-täckningsverktyg
 Comment[tr]=Gcov C(++) kapsamı
 Comment[uk]=Покриття Gcov C(++)
 Comment[x-test]=xxGcov C(++) coveragexx
+Comment[zh_CN]=Gcov C(++) 覆盖率
 Comment[zh_TW]=Gcov C/C++ 範圍
 
 Name=Code coverage report
@@ -30,6 +31,7 @@ Name[sv]=Kodtäckningsstöd
 Name[tr]=Kod kapsam raporu
 Name[uk]=Звіт щодо покриття коду
 Name[x-test]=xxCode coverage reportxx
+Name[zh_CN]=代码覆盖率汇报
 Name[zh_TW]=源碼範圍報告
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcoverage
