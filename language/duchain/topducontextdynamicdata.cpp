@@ -208,7 +208,8 @@ void TopDUContextDynamicData::loadData() const {
   
   QString fileName = baseDir + "/" + QString("%1").arg(m_topContext->ownIndex());
   QFile file(fileName);
-  Q_ASSERT(file.open(QIODevice::ReadOnly));
+  bool open = file.open(QIODevice::ReadOnly);
+  Q_ASSERT(open);
   Q_ASSERT(file.size());
   
   //Skip the offsets, we're already read them
