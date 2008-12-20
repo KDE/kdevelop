@@ -531,7 +531,6 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
 }
 
 KDevelop::IndexedType TypeConversionCompletionItem::typeForArgumentMatching() const {
-  kDebug() <<  "returning type";
   return m_type;
 }
 
