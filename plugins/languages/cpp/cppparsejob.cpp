@@ -625,9 +625,8 @@ void CPPInternalParseJob::run()
             UseBuilder useBuilder(&editor);
             useBuilder.buildUses(ast);
         }
-
+        
         if (!parentJob()->abortRequested() && editor.smart()) {
-          editor.smart()->clearRevision();
 
           if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
           {

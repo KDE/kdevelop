@@ -408,6 +408,7 @@ class CppDUContext : public BaseContext {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
       foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
         ctx->deleteUses();
+      BaseContext::deleteUses();
     }
     
     virtual bool foundEnough( const DUContext::DeclarationList& decls, DUContext::SearchFlags flags ) const
