@@ -104,6 +104,13 @@ ParseJob::ParseJob( const KUrl &url,
 
 ParseJob::~ParseJob()
 {
+    //Here we release the revision
+    EditorIntegrator editor;
+    editor.setCurrentUrl(d->document);
+    
+    if(KDevelop::LockedSmartInterface smart = editor.smart())
+        smart->clearRevision();
+    
     {
         //Only for testing
         DUChainReadLocker lock(DUChain::lock());
@@ -180,6 +187,7 @@ bool ParseJob::contentsAvailableFromEditor()
         SmartInterface* iface = qobject_cast<SmartInterface*>(doc);
         if (iface) {
             QMutexLocker smartLock(iface->smartMutex());
+            //Here we save the revision
             d->revisionToken = EditorIntegrator::saveCurrentRevision(doc);
 
             // You must have called contentsAvailableFromEditor, it sets state

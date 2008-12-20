@@ -82,11 +82,8 @@ EditorIntegrator::~ EditorIntegrator()
 
     QMutexLocker lock(data()->mutex);
 
-    if (d->m_currentDocument) {
+    if (d->m_currentDocument)
       data()->editorIntegrators.remove(d->m_currentDocument, this);
-      if (d->m_smart)
-        d->m_smart->clearRevision();
-    }
   }
 
   delete d;

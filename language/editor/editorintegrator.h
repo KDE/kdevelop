@@ -137,6 +137,8 @@ public:
    * Save the current revision of the given \a document.  You should have the smart mutex locked so
    * when you retrieve the text, it is at the same revision still ;)
    *
+   * @warning Don't use this by yourself, it's done automatically within KDevelop::ParseJob!
+   *
    * \Returns the revision retrieved, or -1 if there was an error.
    */
   static int saveCurrentRevision(KTextEditor::Document* document);

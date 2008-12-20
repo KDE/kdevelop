@@ -126,7 +126,7 @@ public:
       }
       if( top )
       {
-        kDebug() << "re-compiling";
+//         kDebug() << "re-compiling";
         m_recompiling = true;
         if( m_compilingContexts )
         {
@@ -139,7 +139,7 @@ public:
         }
       }else
       {
-        kDebug() << "compiling";
+//         kDebug() << "compiling";
         LockedSmartInterface iface = m_editor->smart();
         top = newTopContext( iface.currentDocument()
                                     ? SimpleRange( iface.currentDocument()->documentRange() )
@@ -708,9 +708,15 @@ protected:
         // have occurred since the text was fetched.
         SimpleRange translated = m_editor->translate(iface, range);
 
-        for ( ; nextContextIndex() < childContexts.count(); ++nextContextIndex() )
+//         if(iface)
+//           kDebug() << "translated by" << (translated.start.textCursor() - range.start.textCursor()) << (translated.end.textCursor() - range.end.textCursor()) << "to revision" << iface->currentRevision();
+        
+        int currentIndex = nextContextIndex();
+        int lookingAhead = 0;
+        
+        for ( ; currentIndex < childContexts.count(); ++currentIndex )
         {
-          DUContext* child = childContexts.at( nextContextIndex() );
+          DUContext* child = childContexts.at( currentIndex );
 
 //           if ( child->range().start > translated.end && child->smartRange() ) {
 // #ifdef DEBUG_UPDATE_MATCHING
@@ -737,7 +743,7 @@ protected:
 
             ret->clearImportedParentContexts();
             m_editor->setCurrentRange( iface, ret->smartRange() );
-            ++nextContextIndex();
+            ++currentIndex;
             break;
           }else{
 #ifdef DEBUG_UPDATE_MATCHING
@@ -748,12 +754,20 @@ protected:
           if(translated != child->range())
             kDebug() << "range mismatch" << child->range().textRange() << translated.textRange();
 
-            kDebug() << "skipping range" << childContexts.at(nextContextIndex())->localScopeIdentifier() << childContexts.at(nextContextIndex())->range().textRange();
+            kDebug() << "skipping range" << childContexts.at(currentIndex)->localScopeIdentifier() << childContexts.at(currentIndex)->range().textRange();
 #endif
-	  if ( child->range().start > translated.end && child->smartRange() && (nextContextIndex()+1 == childContexts.count() || (childContexts.at(nextContextIndex()+1)->localScopeIdentifier() != identifier || childContexts.at(nextContextIndex()+1)->type() != type)) )
-	    break; //Don't move the nextContextIndex() too far
+          if ( child->range().start > translated.end && child->smartRange() && (currentIndex+1 == childContexts.count() || (childContexts.at(currentIndex+1)->localScopeIdentifier() != identifier || childContexts.at(currentIndex+1)->type() != type)) ) {
+            ++lookingAhead;
+            const int maxLookahead = 5;
+            if(lookingAhead > maxLookahead)
+              break; //Don't move the currentIndex too far
+          }
           }
         }
+        if(ret)
+          nextContextIndex() = currentIndex; //If we had a match, jump forward to that position
+        else
+          ++nextContextIndex();   //If we did not have a match, just increment by 1
       }
 
       if ( !ret )

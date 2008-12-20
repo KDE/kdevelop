@@ -660,6 +660,16 @@ public:
   virtual void deleteUses();
 
   /**
+   * Returns the smart-ranges associated to the uses
+   */
+  QVector<KTextEditor::SmartRange*> useRanges();
+  
+  /**
+   * Takes the smart-ranges away from the uses, without deleting them.
+   */
+  QVector<KTextEditor::SmartRange*> takeUseRanges();
+  
+  /**
    * Can be specialized by languages to create a navigation/information-widget.
    * Ideally, the widget would be based on KDevelop::QuickOpenEmbeddedWidgetInterface
    * for user-interaction within the quickopen list.

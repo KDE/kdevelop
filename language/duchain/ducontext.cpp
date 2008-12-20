@@ -579,7 +579,10 @@ DUContext::~DUContext( )
 
   deleteChildContextsRecursively();
 
-  deleteUses();
+  if(!topContext()->deleting() || !topContext()->isOnDisk())
+    deleteUses();
+  else
+    clearUseSmartRanges();
 
   deleteLocalDeclarations();
 
@@ -1235,15 +1238,26 @@ void DUContext::deleteUse(int index)
   }
 }
 
+QVector<KTextEditor::SmartRange*> DUContext::takeUseRanges()
+{
+  ENSURE_CAN_WRITE
+  QVector<KTextEditor::SmartRange*> ret = m_dynamicData->m_rangesForUses;
+  m_dynamicData->m_rangesForUses.clear();
+  return ret;
+}
+
+QVector<KTextEditor::SmartRange*> DUContext::useRanges()
+{
+  ENSURE_CAN_READ
+  return m_dynamicData->m_rangesForUses;
+}
+
 void DUContext::deleteUses()
 {
   ENSURE_CAN_WRITE
   
-  if(!topContext()->deleting() || !topContext()->isOnDisk())
-  {
-    DUCHAIN_D_DYNAMIC(DUContext);
-    d->m_usesList().clear();
-  }
+  DUCHAIN_D_DYNAMIC(DUContext);
+  d->m_usesList().clear();
 
   clearUseSmartRanges();
 }

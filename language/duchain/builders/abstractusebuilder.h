@@ -26,6 +26,7 @@
 #include "../duchainlock.h"
 
 #include <language/editor/editorintegrator.h>
+#include <ktexteditor/smartinterface.h>
 
 namespace KDevelop {
 
@@ -75,6 +76,12 @@ protected:
    *
    * \param node AST node which both represents a use and the identifier for the declaration which is being used.
    */
+  
+  struct ContextUseTracker {
+    QSet<KTextEditor::SmartRange*> reuseRanges;
+    QList<QPair<KDevelop::Use, KTextEditor::SmartRange*> > createUses;
+  };
+  
   void newUse(NameT* name)
   {
     QualifiedIdentifier id = identifierForNode(name);
@@ -128,7 +135,12 @@ protected:
       //We've got to consider the translated range, and while we use it, the smart-mutex needs to be locked
       LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
       SimpleRange translated = LanguageSpecificUseBuilderBase::editor()->translate(iface, newRange);
-
+      
+//       if(iface)
+//         kDebug() << "translated by" << (translated.start.textCursor() - newRange.start.textCursor()) << (translated.end.textCursor() - newRange.end.textCursor()) << "to revision" << iface->currentRevision();
+      
+      KTextEditor::Range textTranslated  = translated.textRange();
+      
       /*
       * We need to find a context that this use fits into, which must not necessarily be the current one.
       * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
@@ -141,67 +153,49 @@ protected:
         ++contextUpSteps;
         newContext = LanguageSpecificUseBuilderBase::contextStack()[LanguageSpecificUseBuilderBase::contextStack().size()-1-contextUpSteps];
       }
+      
+      KTextEditor::SmartRange* use = 0;
 
       if (contextUpSteps) {
         LanguageSpecificUseBuilderBase::editor()->setCurrentRange(iface, newContext->smartRange()); //We have to do this, because later we will call closeContext(), and that will close one smart-range
         m_finishContext = false;
         openContext(newContext);
         m_finishContext = true;
-        nextUseIndex() = m_nextUseStack.at(m_nextUseStack.size()-contextUpSteps-2);
-        skippedUses() = m_skippedUses.at(m_skippedUses.size()-contextUpSteps-2);
+        currentUseTracker() = m_trackerStack.at(m_trackerStack.size()-contextUpSteps-2);
 
-        Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
-        Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->usesCount() >= nextUseIndex());
+        Q_ASSERT(m_contexts[m_trackerStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
       }
 
-      if (LanguageSpecificUseBuilderBase::recompiling()) {
+      if (LanguageSpecificUseBuilderBase::recompiling() && this->currentContext()->smartRange()) {
 
-        const Use* uses = LanguageSpecificUseBuilderBase::currentContext()->uses();
-        // Translate cursor to take into account any changes the user may have made since the text was retrieved
-
-        for (; nextUseIndex() < LanguageSpecificUseBuilderBase::currentContext()->usesCount(); ++nextUseIndex()) {
-          const Use& use = uses[nextUseIndex()];
-
-          //Thanks to the preprocessor, it's possible that uses are created in a wrong order. We do this anyway.
-          if (use.m_range.start > translated.end && LanguageSpecificUseBuilderBase::editor()->smart() ) {
-#ifdef DEBUG_UPDATE_MATCHING
-            kDebug() << "use of" << (declaration ? declaration->qualifiedIdentifier().toString() : QString()) << "with range" << translated.textRange() << "found use of" << (LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex) ? LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex)->qualifiedIdentifier().toString() : QString()) << "with range" << use.m_range.textRange() << ", stopping";
-#endif
-            break;
-          }
-
-          if (use.m_range == translated)
-          {
-            LanguageSpecificUseBuilderBase::currentContext()->setUseDeclaration(nextUseIndex(), declarationIndex);
-            ++nextUseIndex();
-            // Match
-            encountered = true;
-
-            break;
-          }
-#ifdef DEBUG_UPDATE_MATCHING
-            kDebug() << "use of" << (declaration ? declaration->qualifiedIdentifier().toString() : QString()) << "with range" << translated.textRange() << "skipping use of" << (LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex) ? LanguageSpecificUseBuilderBase::currentContext()->topContext()->usedDeclarationForIndex(use.m_declarationIndex)->qualifiedIdentifier().toString() : QString()) << "with range" << use.m_range.textRange();
-#endif
-          //Not encountered, and before the current range. Remove all intermediate uses.
-          skippedUses().append(nextUseIndex());
+        //Find a smart-range that we can reuse
+        KTextEditor::SmartRange* containerRange = this->currentContext()->smartRange();
+        KTextEditor::SmartRange* child  = containerRange->mostSpecificRange(textTranslated);
+        while(child && child->parentRange() != containerRange)
+          child = child->parentRange();
+        
+        //Solution for multiple equal ranges or ranges ending at the same position
+        while(child && child->end() == textTranslated.end() && (!currentUseTracker().reuseRanges.contains(child) || *child != textTranslated))
+          child = containerRange->childAfter(child);
+        
+        if(child && *child == textTranslated && currentUseTracker().reuseRanges.contains(child)) {
+          //We found a range to re-use
+          currentUseTracker().reuseRanges.remove(child);
+          use = child;
         }
       }
-    }
-
-    if (!encountered) {
-      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
-      KTextEditor::SmartRange* use = LanguageSpecificUseBuilderBase::editor()->currentRange(iface) ? LanguageSpecificUseBuilderBase::editor()->createRange(iface, newRange.textRange()) : 0;
-      LanguageSpecificUseBuilderBase::editor()->exitCurrentRange(iface);
-
-      LanguageSpecificUseBuilderBase::currentContext()->createUse(declarationIndex, newRange, use, nextUseIndex());
-      ++nextUseIndex();
+      if (!encountered) {
+        if(!use) {
+          use = LanguageSpecificUseBuilderBase::editor()->currentRange(iface) ? LanguageSpecificUseBuilderBase::editor()->createRange(iface, newRange.textRange()) : 0;
+          LanguageSpecificUseBuilderBase::editor()->exitCurrentRange(iface);
+        }
+        currentUseTracker().createUses << qMakePair(KDevelop::Use(newRange, declarationIndex), use);
+      }
     }
 
     if (contextUpSteps) {
-      Q_ASSERT(m_contexts[m_nextUseStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
-      Q_ASSERT(LanguageSpecificUseBuilderBase::currentContext()->usesCount() >= nextUseIndex());
-      m_nextUseStack[m_nextUseStack.size()-contextUpSteps-2] = nextUseIndex();
-      m_skippedUses[m_skippedUses.size()-contextUpSteps-2] = skippedUses();
+      Q_ASSERT(m_contexts[m_trackerStack.size()-contextUpSteps-2] == LanguageSpecificUseBuilderBase::currentContext());
+      m_trackerStack[m_trackerStack.size()-contextUpSteps-2] = currentUseTracker();
       m_finishContext = false;
       closeContext();
       m_finishContext = true;
@@ -215,9 +209,15 @@ protected:
   {
     LanguageSpecificUseBuilderBase::openContext(newContext);
 
+    LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
+    
+    ContextUseTracker newTracker;
+    DUChainWriteLocker lock(DUChain::lock());
+    foreach(KTextEditor::SmartRange* range, newContext->useRanges())
+      newTracker.reuseRanges.insert(range);
+    
+    m_trackerStack.push(newTracker);
     m_contexts.push(newContext);
-    m_nextUseStack.push(0);
-    m_skippedUses.push(QVector<int>());
   }
 
   /**
@@ -228,26 +228,47 @@ protected:
     if(m_finishContext) {
       DUChainWriteLocker lock(DUChain::lock());
 
-      //Delete all uses that were not encountered
-      //That means: All uses in skippedUses, and all uses from nextUseIndex() to LanguageSpecificUseBuilderBase::currentContext()->usesCount()
-      for(int a = LanguageSpecificUseBuilderBase::currentContext()->usesCount()-1; a >= nextUseIndex(); --a)
-        LanguageSpecificUseBuilderBase::currentContext()->deleteUse(a);
-      for(int a = skippedUses().count()-1; a >= 0; --a)
-        LanguageSpecificUseBuilderBase::currentContext()->deleteUse(skippedUses()[a]);
+      LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
+      //Delete all ranges that were not re-used
+      if(this->currentContext()->smartRange()) {
+        this->currentContext()->takeUseRanges();
+        foreach(KTextEditor::SmartRange* range, currentUseTracker().reuseRanges) {
+#ifdef DEBUG_UPDATE_MATCHING
+          if(!range->isEmpty()) //we cannot find empty ranges, so don't give warnings for them
+            kDebug() << "deleting not re-used range:" << *range;
+#endif
+          delete range;
+        }
+      }
+      
+      this->currentContext()->deleteUses();
+      
+      Q_ASSERT(this->currentContext()->usesCount() == 0);
+      
+      ContextUseTracker& tracker(currentUseTracker());
+      for(int a = 0; a < tracker.createUses.size(); ++a) {
+        KTextEditor::SmartRange* range = 0;
+        
+        if(this->currentContext()->smartRange()) {
+          range = tracker.createUses[a].second;
+          Q_ASSERT(range);
+        }
+        
+        Q_ASSERT(this->currentContext()->usesCount() == a);
+        this->currentContext()->createUse(tracker.createUses[a].first.m_declarationIndex, tracker.createUses[a].first.m_range, range);
+      }
+      
     }
 
     LanguageSpecificUseBuilderBase::closeContext();
 
+    m_trackerStack.pop();
     m_contexts.pop();
-    m_nextUseStack.pop();
-    m_skippedUses.pop();
   }
 
 private:
-  inline int& nextUseIndex() { return m_nextUseStack.top(); }
-  inline QVector<int>& skippedUses() { return m_skippedUses.top(); }
-  QStack<int> m_nextUseStack;
-  QStack<QVector<int> > m_skippedUses;
+  inline ContextUseTracker& currentUseTracker() { return m_trackerStack.top(); }
+  QStack<ContextUseTracker> m_trackerStack;
   QStack<KDevelop::DUContext*> m_contexts;
 
   //Whether not encountered uses should be deleted during closeContext()
