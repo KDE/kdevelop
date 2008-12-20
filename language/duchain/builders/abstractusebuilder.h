@@ -209,10 +209,10 @@ protected:
   {
     LanguageSpecificUseBuilderBase::openContext(newContext);
 
+    DUChainWriteLocker lock(DUChain::lock());
     LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
     
     ContextUseTracker newTracker;
-    DUChainWriteLocker lock(DUChain::lock());
     foreach(KTextEditor::SmartRange* range, newContext->useRanges())
       newTracker.reuseRanges.insert(range);
     
