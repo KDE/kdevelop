@@ -1083,9 +1083,11 @@ BasicSetRepository::BasicSetRepository(QString name) : d(new Private(name)), dat
 }
 
 struct StatisticsVisitor {
-  StatisticsVisitor(const SetDataRepository& _rep) : nodeCount(0), badSplitNodeCount(0), rep(_rep) {
+  StatisticsVisitor(const SetDataRepository& _rep) : nodeCount(0), badSplitNodeCount(0), zeroRefCountNodes(0), rep(_rep) {
   }
   bool operator() (const SetNodeData* item) {
+    if(item->m_refCount == 0)
+        ++zeroRefCountNodes;
     ++nodeCount;
     uint split = splitPositionForRange(item->start, item->end);
     if(item->hasSlaves())
@@ -1095,14 +1097,15 @@ struct StatisticsVisitor {
   }
   uint nodeCount;
   uint badSplitNodeCount;
+  uint zeroRefCountNodes;
   const SetDataRepository& rep;
 };
 
 void BasicSetRepository::printStatistics() const {
   
-/*  StatisticsVisitor stats(dataRepository);
+  StatisticsVisitor stats(dataRepository);
   dataRepository.visitAllItems<StatisticsVisitor>(stats);
-  kDebug() << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount;*/
+  kDebug() << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount << "count of nodes with zero reference-count:" << stats.zeroRefCountNodes;
 }
 
 BasicSetRepository::~BasicSetRepository() {
@@ -1251,9 +1254,9 @@ void Set::unrefNode(uint current) {
 
     if(data->m_refCount == 0) {
 
-        if(data->rightNode){
+        if(data->leftNode){
+            Q_ASSERT(data->rightNode);
             unrefNode(data->rightNode);
-        }else if(data->leftNode){
             unrefNode(data->leftNode);
         }else {
             //Deleting a leaf

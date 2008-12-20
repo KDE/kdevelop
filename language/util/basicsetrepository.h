@@ -247,6 +247,11 @@ public:
       return m_mutex;
   }
   
+  ///Only public to get statistics and such
+  const SetDataRepository& getDataRepository() const {
+      return dataRepository;
+  }
+  
 private:
   friend class Set;
   friend class Set::Iterator;
