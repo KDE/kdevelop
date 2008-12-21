@@ -48,6 +48,7 @@ namespace KDevelop {
 
       virtual ~AbstractNavigationWidget();
 
+      QSize sizeHint() const;
     public slots:
       ///Keyboard-action "next"
       virtual void next();

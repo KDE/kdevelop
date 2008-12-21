@@ -48,9 +48,19 @@
 namespace KDevelop {
 
 AbstractNavigationWidget::AbstractNavigationWidget()
-  : m_currentWidget(0)
+  : m_currentWidget(0), m_browser(0)
 {
   setPalette( QApplication::palette() );
+}
+
+QSize AbstractNavigationWidget::sizeHint() const
+{
+  if(m_browser) {
+    QSize s = m_browser->document()->size().toSize();
+    s.setHeight(qMin(s.height(), 600));
+    return s;
+  } else
+    return QWidget::sizeHint();
 }
 
 void AbstractNavigationWidget::initBrowser(int height) {
@@ -58,7 +68,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
-  resize(height, 100);
+  m_browser->document()->setPageSize(QSizeF(height, 200));
   //m_browser->setNotifyClick(true);
 
   QVBoxLayout* layout = new QVBoxLayout;
@@ -94,7 +104,7 @@ void AbstractNavigationWidget::update() {
   QString html = m_context->html();
   if(!html.isEmpty()) {
     int scrollPos = m_browser->verticalScrollBar()->value();
-    m_browser->setHtml( m_context->html() );
+    m_browser->setHtml( html );
 
     m_browser->verticalScrollBar()->setValue(scrollPos);
     m_browser->scrollToAnchor("currentPosition");
