@@ -98,6 +98,7 @@ void CodeCompletionModel::initialize() {
 CodeCompletionModel::~CodeCompletionModel()
 {
   m_thread->quit();
+  m_thread->wait();
   
   delete m_thread;
   delete m_mutex;
