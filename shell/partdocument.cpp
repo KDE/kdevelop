@@ -145,6 +145,10 @@ bool PartDocument::close(DocumentSaveMode mode)
     return true;
 }
 
+void PartDocument::closeDocument() {
+    close();
+}
+
 void PartDocument::reload()
 {
     //part document is read-only so do nothing here

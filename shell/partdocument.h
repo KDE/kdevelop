@@ -65,6 +65,9 @@ public:
     virtual void setCursorPosition(const KTextEditor::Cursor &cursor);
     virtual void setTextSelection(const KTextEditor::Range &range);
 
+    //Overridden from Sublime::Document
+    virtual void closeDocument();
+    
 private:
     class PartDocumentPrivate * const d;
 };

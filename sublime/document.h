@@ -65,6 +65,10 @@ public:
     /**@return the specifics of this document which can be written to config.*/
     virtual QString documentSpecifier() const = 0;
 
+    /**Should try closing the document, eventually asking the user for feedback.*/
+    virtual void closeDocument() {
+    }
+    
 Q_SIGNALS:
     /**Emitted when the view is added or deleted. Use Document::views to find out
     which views and how many of them are still there.*/
