@@ -57,7 +57,7 @@ QSize AbstractNavigationWidget::sizeHint() const
 {
   if(m_browser) {
     QSize s = m_browser->document()->size().toSize();
-    s.setHeight(qMin(s.height(), 600));
+    s.setHeight(qMin(s.height(), 300));
     return s;
   } else
     return QWidget::sizeHint();
@@ -68,7 +68,7 @@ void AbstractNavigationWidget::initBrowser(int height) {
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
-  m_browser->document()->setPageSize(QSizeF(height, 200));
+  m_browser->document()->setPageSize(QSizeF(height, 580));
   //m_browser->setNotifyClick(true);
 
   QVBoxLayout* layout = new QVBoxLayout;
