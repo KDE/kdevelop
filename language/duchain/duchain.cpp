@@ -281,10 +281,11 @@ public:
   }
 
   void clear() {
-    QMutexLocker l(&m_chainsMutex);
 
     if(!m_cleanupDisabled)
       doMoreCleanup();
+    
+    QMutexLocker l(&m_chainsMutex);
 
     DUChainWriteLocker writeLock(DUChain::lock());
 
