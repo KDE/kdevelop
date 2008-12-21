@@ -119,7 +119,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
   private:
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
-    QMap<KTextEditor::SmartRange*, KTextEditor::Attribute::Ptr> m_backups;
+    //Contains the range, the old attribute, and the attribute it was replaced with
+    QMap<KTextEditor::SmartRange*, QPair<KTextEditor::Attribute::Ptr,KTextEditor::Attribute::Ptr> > m_backups;
     QSet<KTextEditor::View*> m_updateViews;
     QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
     QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range

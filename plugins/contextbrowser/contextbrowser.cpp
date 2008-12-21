@@ -317,25 +317,27 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
   if( !range )
     return;
 
-  Attribute::Ptr attrib;
   if( highlight ) {
-    if( !m_backups.contains(range) ) {
-      m_backups[range] = range->attribute();
-      watchRange(range);
-    }
 /*    if( declaration )
       attrib = highlightedDeclarationAttribute();
     else*/
-      attrib = highlightedUseAttribute(mouseHighlight);
+
+    Attribute::Ptr attrib = highlightedUseAttribute(mouseHighlight);
+    
+    if( !m_backups.contains(range) ) {
+      m_backups[range] = qMakePair(attrib, range->attribute());
+      watchRange(range);
+    }
+    range->setAttribute(attrib);
   }else{
-    if( m_backups.contains(range) ) {
-      attrib = m_backups[range];
+    //Reset old highlighting, if our set attribute is still on the range
+    if( m_backups.contains(range) && m_backups[range].first == range->attribute() ) {
+      range->setAttribute(m_backups[range].second);
       m_backups.remove(range);
     }
     ignoreRange(range);
   }
 
-  range->setAttribute(attrib);
 }
 
 void ContextBrowserPlugin::changeHighlight( View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight ) {
