@@ -72,11 +72,14 @@ namespace KDevelop {
       
       NavigationContextPointer context();
       
+    Q_SIGNALS:
+      void sizeHintChanged();
     public slots:
       void navigateDeclaration(KDevelop::IndexedDeclaration decl);
     private slots:
       void anchorClicked(const QUrl&);
     protected:
+      void updateIdealSize() const;
       virtual void keyPressEvent(QKeyEvent* event);
 
       void initBrowser(int height);
@@ -90,6 +93,8 @@ namespace KDevelop {
 
       QPointer<QTextBrowser> m_browser;
       QWidget* m_currentWidget;
+      QString m_currentText;
+      mutable QSize m_idealTextSize;
 
   };
 }

@@ -139,6 +139,7 @@ namespace KDevelop {
               virtual void progress(uint processed, uint total);
               UsesWidget* m_widget;
             };
+            virtual QSize sizeHint () const;
             ///@param customCollector allows specifying an own subclass of UsesWidgetCollector. The object will be owned
             ///@param showDeclarations whether all declarations used for the search should be shown as well in the list
             ///by this widget, and will be deleted on destruction.

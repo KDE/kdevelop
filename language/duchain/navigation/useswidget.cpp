@@ -575,6 +575,12 @@ void UsesWidget::UsesWidgetCollector::processUses( KDevelop::ReferencedTopDUCont
     m_widget->addItem(widget, toFront ? 0 : -1);
 }
 
+QSize KDevelop::UsesWidget::sizeHint() const {
+  QSize ret = QWidget::sizeHint();
+  if(ret.height() < 300)
+    ret.setHeight(300);
+  return ret;
+}
 
 
 #include "useswidget.moc"

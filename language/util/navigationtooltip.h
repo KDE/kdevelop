@@ -29,11 +29,14 @@ class AbstractNavigationWidget;
 ///A tooltip that just emebed the given widget.
 class KDEVPLATFORMLANGUAGE_EXPORT NavigationToolTip : public ActiveToolTip
 {
+    Q_OBJECT
 public:
     ///@param parent The parent.
     ///@param point Global coordinate of the point where the tooltip should be shown.
     ///@param navigationWidget The widget that should be embedded.
     NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget);
+    private slots:
+        void sizeHintChanged();
     private:
         void setNavigationWidget(QWidget*);
         QWidget* m_navigationWidget;

@@ -51,14 +51,19 @@ AbstractNavigationWidget::AbstractNavigationWidget()
   : m_currentWidget(0), m_browser(0)
 {
   setPalette( QApplication::palette() );
+  resize(100, 100);
 }
+
+const int maxNavigationWidgetWidth = 580;
 
 QSize AbstractNavigationWidget::sizeHint() const
 {
   if(m_browser) {
-    QSize s = m_browser->document()->size().toSize();
-    s.setHeight(qMin(s.height(), 300));
-    return s;
+    updateIdealSize();
+    QSize ret = QSize(qMin(m_idealTextSize.width(), maxNavigationWidgetWidth), qMin(m_idealTextSize.height(), 300));
+    if(m_currentWidget)
+      ret.setHeight( ret.height() + m_currentWidget->sizeHint().height() );
+    return ret;
   } else
     return QWidget::sizeHint();
 }
@@ -68,8 +73,6 @@ void AbstractNavigationWidget::initBrowser(int height) {
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
-  m_browser->document()->setPageSize(QSizeF(height, 580));
-  //m_browser->setNotifyClick(true);
 
   QVBoxLayout* layout = new QVBoxLayout;
   layout->addWidget(m_browser);
@@ -95,6 +98,22 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context)
     return;
   m_context = context;
   update();
+  
+  emit sizeHintChanged();
+}
+
+void AbstractNavigationWidget::updateIdealSize() const {
+  if(m_context && !m_idealTextSize.isValid()) {
+    QTextDocument doc;
+    doc.setHtml(m_currentText);
+    if(doc.idealWidth() > maxNavigationWidgetWidth) {
+      doc.setPageSize( QSize(maxNavigationWidgetWidth, 30) );
+      m_idealTextSize.setWidth(maxNavigationWidgetWidth);
+    }else{
+      m_idealTextSize.setWidth(doc.idealWidth());    
+    }
+    m_idealTextSize.setHeight(doc.size().height());
+  }
 }
 
 void AbstractNavigationWidget::update() {
@@ -104,7 +123,11 @@ void AbstractNavigationWidget::update() {
   QString html = m_context->html();
   if(!html.isEmpty()) {
     int scrollPos = m_browser->verticalScrollBar()->value();
+    
     m_browser->setHtml( html );
+    
+    m_currentText = html;
+    m_idealTextSize = QSize();
 
     m_browser->verticalScrollBar()->setValue(scrollPos);
     m_browser->scrollToAnchor("currentPosition");
