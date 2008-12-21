@@ -33,7 +33,6 @@
 #include <KLocale>
 #include <KPluginFactory>
 #include <KPluginLoader>
-#include <QDir>
 
 using KDevelop::ICore;
 using KDevelop::IUiController;
