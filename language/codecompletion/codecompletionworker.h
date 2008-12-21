@@ -31,6 +31,7 @@
 
 #include "../languageexport.h"
 #include "../duchain/duchainpointer.h"
+#include "../codecompletion/codecompletioncontext.h"
 
 class QMutex;
 
@@ -62,7 +63,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     bool fullCompletion() const;
 
   Q_SIGNALS:
-    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
+    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
 
   protected:
     

@@ -70,10 +70,10 @@ struct CompletionWorkerThread : public QThread {
      if(!m_worker)
       m_worker = m_model->createCompletionWorker();
      
-    //We connect directly, so we can do the pre-grouping within the background thread
-    connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
+     //We connect directly, so we can do the pre-grouping within the background thread
+     connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
 
-    connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
+     connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
      
      exec();
    }
@@ -89,6 +89,7 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   , m_thread(0)
 {
   qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
+  qRegisterMetaType<KSharedPtr<CodeCompletionContext> >("KSharedPtr<CodeCompletionContext>");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 }
 
@@ -159,10 +160,11 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   completionInvokedInternal(view, range, invocationType, url);
 }
 
-void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, void* completionContext)
+void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, KSharedPtr<CodeCompletionContext> completionContext)
 {
   m_completionItems = items;
-  m_completionContext = KSharedPtr<CodeCompletionContext>((CodeCompletionContext*)completionContext);
+  m_completionContext = completionContext;
+
   reset();
 
 /*  if (completionContext == m_completionContext.data()) {
