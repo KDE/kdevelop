@@ -54,6 +54,9 @@
 
 using namespace KTextEditor;
 
+//Multi-threaded completion creates some multi-threading related crashes, and sometimes shows the completions in the wrong position if the cursor was moved
+// #define SINGLE_THREADED_COMPLETION
+
 namespace KDevelop {
 
 struct CompletionWorkerThread : public QThread {
@@ -64,7 +67,8 @@ struct CompletionWorkerThread : public QThread {
    }
    
    virtual void run () {
-     m_worker = m_model->createCompletionWorker();
+     if(!m_worker)
+      m_worker = m_model->createCompletionWorker();
      
     //We connect directly, so we can do the pre-grouping within the background thread
     connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
@@ -91,6 +95,9 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
 void CodeCompletionModel::initialize() {
   if(!m_thread) {
     m_thread = new CompletionWorkerThread(this);
+#ifdef SINGLE_THREADED_COMPLETION
+    m_thread->m_worker = createCompletionWorker();
+#endif
     m_thread->start();
   }
 }
