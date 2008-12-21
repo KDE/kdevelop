@@ -1194,12 +1194,13 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
     {
       ///Make the standard-context editor-smart
       SmartConverter sc(&editor);
-      if(!standardContext->smartRange()) {
-        sc.convertDUChain(standardContext);
-        Q_ASSERT(standardContext->smartRange());
-      }else{
-        kWarning() << "Strange: context already has smart-range";
+      
+      if(standardContext->smartRange()) {
+        kWarning() << "Strange: context already has smart-range! Probably another document is already open for it. Deconverting";
+        sc.deconvertDUChain(standardContext);
       }
+      sc.convertDUChain(standardContext);
+      Q_ASSERT(standardContext->smartRange());
       ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
     }
 
