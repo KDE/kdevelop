@@ -44,6 +44,7 @@ namespace KDevelop
 class DUContext;
 class Declaration;
 class CodeCompletionWorker;
+class CompletionWorkerThread;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
 {
@@ -53,8 +54,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     CodeCompletionModel(QObject* parent);
     virtual ~CodeCompletionModel();
     
-    void setCompletionWorker(CodeCompletionWorker* worker);
-
+    ///This MUST be called after the creation of this completion-model.
+    ///If use use the KDevelop::CodeCompletion helper-class, that one cares about it.
+    virtual void initialize();
+    
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
 
     virtual QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
@@ -92,10 +95,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
     QList< KSharedPtr<CompletionTreeElement> > m_completionItems;
 
+    //Should create a completion-worker. The worker must be created right within this function, so it is assigned to the correct rhread.
+    virtual CodeCompletionWorker* createCompletionWorker() = 0;
+    friend class CompletionWorkerThread;
+    
   private:
+    CodeCompletionWorker* worker();
     bool m_fullCompletion;
     QMutex* m_mutex;
-    CodeCompletionWorker* m_worker;
+    CompletionWorkerThread* m_thread;
     KDevelop::TopDUContextPointer m_currentTopContext;
 };
 

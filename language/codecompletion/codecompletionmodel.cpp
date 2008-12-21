@@ -56,42 +56,51 @@ using namespace KTextEditor;
 
 namespace KDevelop {
 
+struct CompletionWorkerThread : public QThread {
+   CompletionWorkerThread(CodeCompletionModel* model) : QThread(model), m_model(model), m_worker(0) {
+   }
+   ~CompletionWorkerThread() {
+     delete m_worker;
+   }
+   
+   virtual void run () {
+     m_worker = m_model->createCompletionWorker();
+     
+    //We connect directly, so we can do the pre-grouping within the background thread
+    connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
+
+    connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
+     
+     exec();
+   }
+   
+   CodeCompletionModel* m_model;
+   CodeCompletionWorker* m_worker;
+};
+
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
   , m_fullCompletion(true)
   , m_mutex(new QMutex)
-  , m_worker(0)
+  , m_thread(0)
 {
   qRegisterMetaType<QList<CompletionTreeElement> >("QList<KSharedPtr<CompletionTreeElement> >");
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 }
 
-CodeCompletionModel::~CodeCompletionModel()
-{
-  // Let it leak...??
-  if (m_worker) {
-    m_worker->setParent(0L);
-    m_worker->quit();
+void CodeCompletionModel::initialize() {
+  if(!m_thread) {
+    m_thread = new CompletionWorkerThread(this);
+    m_thread->start();
   }
-
-  delete m_mutex;
 }
 
-void CodeCompletionModel::setCompletionWorker(CodeCompletionWorker* worker)
+CodeCompletionModel::~CodeCompletionModel()
 {
-  if (m_worker) {
-    kWarning() << "Already have a current code completion worker!";
-    return;
-  }
-
-  m_worker = worker;
-
-  //We connect directly, so we can do the pre-grouping within the background thread
-  connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), this, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void*)), Qt::QueuedConnection);
-
-  connect(this, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
-
-  m_worker->start();
+  m_thread->quit();
+  
+  delete m_thread;
+  delete m_mutex;
 }
 
 void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const
@@ -100,14 +109,20 @@ void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* eleme
   m_navigationWidgets[element] = widget;
 }
 
+
 bool CodeCompletionModel::fullCompletion() const
 {
   return m_fullCompletion;
 }
 
+KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() {
+  return m_thread->m_worker;
+}
 
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
+  //If this triggers, initialize() has not been called after creation.
+  Q_ASSERT(m_thread);
   
   KDevelop::ICompletionSettings::CompletionLevel level = KDevelop::ICore::self()->languageController()->completionSettings()->completionLevel();
   if(level == KDevelop::ICompletionSettings::AlwaysFull || (invocationType != AutomaticInvocation && level == KDevelop::ICompletionSettings::MinimalWhenAutomatic))
@@ -120,7 +135,7 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   
   Q_UNUSED(invocationType)
 
-  if (!m_worker)
+  if (!worker())
     kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
 
   m_navigationWidgets.clear();
@@ -128,8 +143,8 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
 
   reset();
 
-  m_worker->abortCurrentCompletion();
-  m_worker->setFullCompletion(m_fullCompletion);
+  worker()->abortCurrentCompletion();
+  worker()->setFullCompletion(m_fullCompletion);
 
   KUrl url = view->document()->url();
 

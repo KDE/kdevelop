@@ -47,7 +47,8 @@ class CodeCompletion;
 
 class CompletionTreeElement;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
+
+class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
 {
   Q_OBJECT
 
@@ -64,7 +65,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QThread
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, void* completionContext);
 
   protected:
-    virtual void run();
     
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText) = 0;
 

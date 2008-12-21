@@ -33,6 +33,7 @@
 
 #include "../duchain/duchain.h"
 #include "../duchain/topducontext.h"
+#include "codecompletionmodel.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -40,6 +41,9 @@ using namespace KDevelop;
 CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel* aModel, const QString& language)
   : QObject(parent), m_model(aModel), m_language(language)
 {
+  KDevelop::CodeCompletionModel* kdevModel = dynamic_cast<KDevelop::CodeCompletionModel*>(aModel);
+  if(kdevModel)
+    kdevModel->initialize();
   connect (KDevelop::ICore::self()->partController(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
   aModel->setParent(this);

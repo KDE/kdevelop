@@ -35,9 +35,8 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-CodeCompletionWorker::CodeCompletionWorker(QObject* parent)
-  : QThread(parent)
-  , m_mutex(new QMutex())
+CodeCompletionWorker::CodeCompletionWorker(QObject* parent) :
+  m_mutex(new QMutex())
   , m_abort(false)
   , m_fullCompletion(true)
 {
@@ -89,11 +88,6 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     return;
 
   computeCompletions(context, position, view, range, text);
-}
-
-void CodeCompletionWorker::run()
-{
-  exec();
 }
 
 void CodeCompletionWorker::abortCurrentCompletion()
