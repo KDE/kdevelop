@@ -17,8 +17,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_COVERAGE_COVOUTPUTJOB_H
-#define VERITAS_COVERAGE_COVOUTPUTJOB_H
+#ifndef VERITAS_COVERAGE_LCOVJOB_H
+#define VERITAS_COVERAGE_LCOVJOB_H
 
 #include <interfaces/iplugin.h>
 #include <outputview/outputjob.h>
@@ -79,4 +79,4 @@ private:
 
 }
 
-#endif // VERITAS_COVERAGE_COVOUTPUTJOB_H
+#endif // VERITAS_COVERAGE_LCOVJOB_H
