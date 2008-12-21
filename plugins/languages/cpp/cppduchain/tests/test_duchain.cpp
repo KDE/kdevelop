@@ -2994,6 +2994,62 @@ struct TestContext {
   QList<TestContext*> importers;
 };
 
+void collectReachableNodes(QSet<uint>& reachableNodes, uint currentNode) {
+  if(!currentNode)
+    return;
+  reachableNodes.insert(currentNode);
+  const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
+  Q_ASSERT(node);
+  collectReachableNodes(reachableNodes, node->leftNode);
+  collectReachableNodes(reachableNodes, node->rightNode);
+}
+
+uint collectNaiveNodeCount(uint currentNode) {
+  if(!currentNode)
+    return 0;
+  uint ret = 1;
+  const Utils::SetNodeData* node = KDevelop::RecursiveImportRepository::repository()->nodeFromIndex(currentNode);
+  Q_ASSERT(node);
+  ret += collectNaiveNodeCount(node->leftNode);
+  ret += collectNaiveNodeCount(node->rightNode);
+  return ret;
+}
+
+void TestDUChain::testImportCache()
+{
+  KDevelop::RecursiveImportRepository::repository()->printStatistics();
+  
+  KDevelop::RecursiveImportRepository::repository()->getDataRepository().statistics().print();
+  
+  //Analyze the whole existing import-cache
+  //This is very expensive, since it involves loading all existing top-contexts
+  uint topContextCount = DUChain::self()->newTopContextIndex();
+  
+  uint analyzedCount = 0;
+  uint totalImportCount = 0;
+  uint naiveNodeCount = 0;
+  QSet<uint> reachableNodes;
+  
+  DUChainReadLocker lock(DUChain::lock());
+  for(uint a = 0; a < topContextCount; ++a) {
+    if(a % (topContextCount / 100) == 0) {
+      kDebug() << "progress:" << (a * 100) / topContextCount;
+    }
+    TopDUContext* context = DUChain::self()->chainForIndex(a);
+    if(context) {
+      TopDUContext::IndexedRecursiveImports imports = context->recursiveImportIndices();
+      ++analyzedCount;
+      totalImportCount += imports.set().count();
+      collectReachableNodes(reachableNodes, imports.setIndex());
+      naiveNodeCount += collectNaiveNodeCount(imports.setIndex());
+    }
+  }
+  
+  kDebug() << "average total count of imports:" << totalImportCount / analyzedCount;
+  kDebug() << "count of reachable nodes:" << reachableNodes.size();
+  kDebug() << "naive node-count:" << naiveNodeCount << "sharing compression factor:" << ((float)reachableNodes.size()) / ((float)naiveNodeCount);
+}
+
 void TestDUChain::testImportStructure()
 {
   clock_t startClock = clock();

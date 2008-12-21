@@ -119,6 +119,7 @@ private slots:
   void testSizeofUse();
   void testDefinitionUse();
   void testImportStructure();
+  void testImportCache();
   void testDeclareSubClass();
   void testDeclarationId();
   void testConst();
