@@ -1206,11 +1206,15 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 
-    foreach( KDevelop::ILanguage* language, languages)
-      if(language->languageSupport() && language->languageSupport()->codeHighlighting())
-        language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
-
-    if(!standardContext->smartRange() || (standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate()) || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses))
+    bool needsUpdate = standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate();
+    if(!needsUpdate) {
+        //Only apply the highlighting if we don't need to update, else we might highlight total crap
+        foreach( KDevelop::ILanguage* language, languages)
+          if(language->languageSupport() && language->languageSupport()->codeHighlighting())
+            language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+    }
+    
+    if(needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses))
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
