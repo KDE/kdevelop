@@ -91,7 +91,7 @@ void LcovInfoParser::parseLine(const QString& line)
         Q_ASSERT(m_current);
         //l = line.split(":");
         tmp_f = line.mid(3, -1);
-        tmp_s = tmp_f.split(",");
+        tmp_s = tmp_f.split(',');
         int lineNumber = tmp_s.value(0).toInt();
         int callCount = tmp_s.value(1).toInt();
         m_current->setCallCount(lineNumber, callCount);
@@ -102,7 +102,7 @@ void LcovInfoParser::parseLine(const QString& line)
         // SF:<absolute path to the source file>
         Q_ASSERT(m_current == 0);
         m_current = new CoveredFile;
-        m_current->setUrl(KUrl(line.split(":").value(1)));
+        m_current->setUrl(KUrl(line.split(':').value(1)));
         break;
     } case 'L': {
         /*if (tmp_secondChar == 'F') {
