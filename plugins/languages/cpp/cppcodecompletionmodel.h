@@ -66,6 +66,7 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
     QVariant getIncludeData(const QModelIndex& index, int role) const;
   
   protected:
+    virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
     virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
 
   private:

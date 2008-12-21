@@ -68,7 +68,10 @@ using namespace TypeUtils;
 CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
-  setCompletionWorker(new CppCodeCompletionWorker(this));
+}
+
+KDevelop::CodeCompletionWorker* CppCodeCompletionModel::createCompletionWorker() {
+  return new CppCodeCompletionWorker(this);
 }
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
