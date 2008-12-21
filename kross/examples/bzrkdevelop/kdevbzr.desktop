@@ -13,6 +13,7 @@ Comment[sv]=Insticksprogrammet integrerar Bazaar i KDevelop
 Comment[tr]=Bu eklenti Bazaar uygulamasını KDevelop ile bütünleştirir
 Comment[uk]=За допомогою цього додатка можна інтегрувати Bazaar до KDevelop
 Comment[x-test]=xxThis plugin integrates Bazaar to KDevelopxx
+Comment[zh_CN]=此插件对 KDevelop 整合 Bazaar
 Comment[zh_TW]=此外掛程式將 Bazaar 整合進 KDevelop 內
 Name=KDevBzr
 Name[sv]=KDevelop-Bzr

@@ -13,6 +13,7 @@ Comment[sv]=Insticksprogrammet integrerar CVS i KDevelop
 Comment[tr]=Bu eklenti CVS uygulamasını KDevelop ile bütünleştirir
 Comment[uk]=За допомогою цього додатка можна інтегрувати CVS до KDevelop
 Comment[x-test]=xxThis plugin integrates CVS to KDevelopxx
+Comment[zh_CN]=此插件对 KDevelop 整合 CVS
 Comment[zh_TW]=此外掛程式將 CVS 整合進 KDevelop 內。
 Name=KDevCvs
 Name[nds]=KDevCVS

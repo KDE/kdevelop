@@ -29,6 +29,7 @@ GenericName[sv]=Kör
 GenericName[tr]=Çalıştır
 GenericName[uk]=Виконати
 GenericName[x-test]=xxExecutexx
+GenericName[zh_CN]=执行
 GenericName[zh_TW]=執行
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevexecute

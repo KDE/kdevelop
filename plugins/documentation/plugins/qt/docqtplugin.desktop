@@ -15,6 +15,7 @@ Comment[sv]=Dokumentationsinsticksmodul för Qt DCF-dokumentation
 Comment[tr]=Qt DCF  belgeleri için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі Qt DCF
 Comment[x-test]=xxDocumentation plugin for Qt DCF documentationxx
+Comment[zh_CN]=Qt DCF 文档的文档插件
 Comment[zh_TW]=Qt DCF 文件的外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=5

@@ -17,5 +17,6 @@ Description[sv]=En I/O-slav för att visa WinHelp-filer
 Description[tr]=WinHelp dosyalarını göstermek için bir kioslave
 Description[uk]=Підлеглий В/В для перегляду файлів WinHelp
 Description[x-test]=xxA kioslave for displaying WinHelp filesxx
+Description[zh_CN]=显示 WinHelp 文件的 kioslave
 Description[zh_TW]=顯示 WinHelp 檔案的 kioslave
 Icon=help

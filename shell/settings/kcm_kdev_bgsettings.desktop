@@ -21,6 +21,7 @@ Name[sv]=Bakgrundstolk
 Name[tr]=Arkaplan Ayrıştırıcı
 Name[uk]=Інструмент фонової обробки
 Name[x-test]=xxBackground Parserxx
+Name[zh_CN]=后台解析
 Name[zh_TW]=背景剖析器
 Comment=Configure Background Parser settings
 Comment[el]=Ρυθμίσεις αναλυτή παρασκηνίου
@@ -33,5 +34,6 @@ Comment[sv]=Anpassa inställningar för bakgrundstolk
 Comment[tr]=Arkaplan Ayrıştırıcı Ayarlarını Yapılandır
 Comment[uk]=Налаштування інструменту фонової обробки
 Comment[x-test]=xxConfigure Background Parser settingsxx
+Comment[zh_CN]=配置后台解析设置
 Comment[zh_TW]=設定背景剖析
 

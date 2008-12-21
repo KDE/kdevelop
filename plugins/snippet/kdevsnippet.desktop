@@ -29,6 +29,7 @@ GenericName[sv]=Kodsnuttar
 GenericName[tr]=Kod Parçacıkları
 GenericName[uk]=Фрагменти коду
 GenericName[x-test]=xxCode Snippetsxx
+GenericName[zh_CN]=代码片断
 GenericName[zh_TW]=程式碼片段
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsnippet

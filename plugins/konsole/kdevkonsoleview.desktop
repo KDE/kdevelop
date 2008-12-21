@@ -29,6 +29,7 @@ GenericName[sv]=Inbäddad terminal
 GenericName[tr]=Gömülü Konsole
 GenericName[uk]=Вбудована Konsole
 GenericName[x-test]=xxEmbedded Konsolexx
+GenericName[zh_CN]=嵌入式 Konsole
 GenericName[zh_TW]=嵌入式 konsole
 Icon=konsole
 ServiceTypes=KDevelop/Plugin

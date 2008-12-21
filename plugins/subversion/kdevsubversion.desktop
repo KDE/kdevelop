@@ -13,6 +13,7 @@ Comment[sv]=Insticksprogrammet integrerar Subversion i KDevelop
 Comment[tr]=Bu eklenti Subversion ile KDevelop uygulamasını bütünleştirir
 Comment[uk]=За допомогою цього додатка можна інтегрувати subversion (SVN) до KDevelop.
 Comment[x-test]=xxThis plugin integrates subversion to KDevelop.xx
+Comment[zh_CN]=此插件对 KDevelop 整合 subversion。
 Comment[zh_TW]=此外掛程式將 subversion 整合進 KDevelop。
 Name=KDevSubversion
 Name[sv]=KDevelop-Subversion

@@ -31,6 +31,7 @@ GenericName[ro]=ExempluGUI
 GenericName[sv]=Exempel på grafiskt användargränssnitt
 GenericName[tr]=Grafiksel Kullanıcı Arayüzü Örneği
 GenericName[x-test]=xxGUIExamplexx
+GenericName[zh_CN]=GUI 示例
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevexamplegui
 X-KDE-PluginInfo-Name=GUIExample

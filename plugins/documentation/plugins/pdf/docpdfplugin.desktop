@@ -15,6 +15,7 @@ Comment[sv]=Dokumentationsinsticksmodul för PDF-format
 Comment[tr]=PDF biçimi için belgelendirme eklentisi
 Comment[uk]=Додаток для перегляду документації у форматі PDF
 Comment[x-test]=xxDocumentation plugin for PDF formatxx
+Comment[zh_CN]=PDF 格式的文档插件
 Comment[zh_TW]=PDF 格式的文件外掛程式
 ServiceTypes=KDevelop/DocumentationPlugins
 X-KDevelop-Version=1

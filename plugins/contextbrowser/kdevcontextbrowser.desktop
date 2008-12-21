@@ -28,6 +28,7 @@ GenericName[sv]=Sammanhangsbläddrare
 GenericName[tr]=Durum Tarayıcı
 GenericName[uk]=Переглядач контексту
 GenericName[x-test]=xxContextBrowserxx
+GenericName[zh_CN]=上下文浏览器
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcontextbrowser
 X-KDevelop-Version=6

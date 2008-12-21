@@ -28,6 +28,7 @@ GenericName[sv]=Definition-användningskedjevy
 GenericName[tr]=DUChain Görünümü
 GenericName[uk]=Перегляд ВВ-ланцюжка
 GenericName[x-test]=xxDUChain Viewxx
+GenericName[zh_CN]=定义使用链查看
 GenericName[zh_TW]=DUChain 檢視
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevduchainview

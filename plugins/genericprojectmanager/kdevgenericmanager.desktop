@@ -12,6 +12,7 @@ Name[sv]=KDevelop generell import
 Name[tr]=KDevelop Genel İçeriye Aktarıcı
 Name[uk]=Загальний інструмент імпорту до KDevelop
 Name[x-test]=xxKDevelop Generic Importerxx
+Name[zh_CN]=KDevelop 常规导入器
 Name[zh_TW]=KDevelop 一般匯入器
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων

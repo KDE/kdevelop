@@ -25,6 +25,7 @@ GenericName[pt_BR]=Interface Não-Gráfica
 GenericName[sv]=Icke grafiskt användargränssnitt
 GenericName[tr]=Grafiksel Olmayan Arayüz
 GenericName[x-test]=xxNonGuiInterfacexx
+GenericName[zh_CN]=非图形用户界面
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=/home/andreas/src/build/kdevplatform/lib/kdevnonguiinterface
 X-KDevelop-Version=6
