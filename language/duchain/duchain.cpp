@@ -555,7 +555,11 @@ public:
     foreach(TopDUContext* context, workOnContexts) {
 
       context->m_dynamicData->store();
+      ///@todo Check if the top-context needs to be removed, and eventually remove it right in tis place.
+      ///      It has to be removed right after storing within the same write-lock, else data may have become dynamic again,
+      ///      and we'll get inconsistencies/crashes. Currently the parse-lock protects us from this problem, still it should be fixed properly.
 
+      
       if(retries) {
         //Eventually give other threads a chance to access the duchain
         writeLock.unlock();
