@@ -265,8 +265,8 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
       delete m_currentToolTip;
     
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
-    tooltip->resize( 580, 230 );
-    kDebug() << tooltip->size();
+    tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
+    kDebug() << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
   }else{
     kDebug() << "not showing tooltip, no navigation-widget";
@@ -276,7 +276,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
 
 void ContextBrowserPlugin::clearMouseHover() {
   m_mouseHoverCursor = SimpleCursor::invalid();
-  m_mouseHoverDocument = KUrl();
+  m_mouseHoverDocument.clear();
 }
 
 
