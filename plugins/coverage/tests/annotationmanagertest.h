@@ -50,7 +50,7 @@ private slots:
     void stopWatching();
     void multiCoverageOneFile();
 
-    // TODO existing view -> open coverage. currently doesnt add annotations [=bug].
+    // TODO existing view -> open coverage. currently doesn't add annotations [=bug].
 
 private: // helpers
     void initManager(Veritas::CoveredFile* f);
