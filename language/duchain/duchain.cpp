@@ -290,13 +290,48 @@ public:
     DUChainWriteLocker writeLock(DUChain::lock());
 
     for(google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::const_iterator it = m_chainsByIndex.begin(); it != m_chainsByIndex.end(); ++it)
-      instance->removeDocumentChain((*it).second);
+      removeDocumentChainFromMemory((*it).second);
 
     m_fileEnvironmentInformations.clear();
 
     Q_ASSERT(m_fileEnvironmentInformations.isEmpty());
     Q_ASSERT(m_chainsByUrl.isEmpty());
     Q_ASSERT(m_chainsByIndex.empty());
+  }
+  
+  void removeDocumentChainFromMemory(TopDUContext* context) {
+    QMutexLocker l(&m_chainsMutex);
+
+    {
+      QMutexLocker l(&m_referenceCountsMutex);
+
+      if(m_referenceCounts.contains(context)) {
+      //This happens during shutdown, since everything is unloaded
+      kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
+      m_referenceCounts.remove(context);
+      }
+    }
+
+    uint index = context->ownIndex();
+
+  //   kDebug(9505) << "duchain: removing document" << context->url().str();
+    google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::iterator it = m_chainsByIndex.find(index);
+
+    if (it != m_chainsByIndex.end()) {
+      m_chainsByUrl.remove(context->url(), context);
+
+      if (context->smartRange())
+        ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
+
+      instance->branchRemoved(context);
+
+      if(!context->isOnDisk())
+        instance->removeFromEnvironmentManager(context);
+
+      context->deleteSelf();
+
+      m_chainsByIndex.erase(it);
+    }
   }
 
   ///Must be locked before accessing content of this class
@@ -614,7 +649,7 @@ public:
             continue;
 
           unloadedNames.insert(unload->url());
-          instance->removeDocumentChain(unload);
+          removeDocumentChainFromMemory(unload);
           workOnContexts.remove(unload);
           unloadedOne = true;
 
@@ -830,38 +865,9 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
 
 void DUChain::removeDocumentChain( TopDUContext* context )
 {
-  QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
-
-  {
-    QMutexLocker l(&sdDUChainPrivate->m_referenceCountsMutex);
-
-    if(sdDUChainPrivate->m_referenceCounts.contains(context)) {
-    //This happens during shutdown, since everything is unloaded
-    kDebug() << "removed a top-context that was reference-counted:" << context->url().str() << context->ownIndex();
-    sdDUChainPrivate->m_referenceCounts.remove(context);
-    }
-  }
-
-  uint index = context->ownIndex();
-
-//   kDebug(9505) << "duchain: removing document" << context->url().str();
-  google::dense_hash_map<uint, TopDUContext*, ItemRepositoryIndexHash>::iterator it = sdDUChainPrivate->m_chainsByIndex.find(index);
-
-  if (it != sdDUChainPrivate->m_chainsByIndex.end()) {
-    sdDUChainPrivate->m_chainsByUrl.remove(context->url(), context);
-
-    if (context->smartRange())
-      ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
-
-    branchRemoved(context);
-
-    if(!context->isOnDisk())
-      removeFromEnvironmentManager(context);
-
-    context->deleteSelf();
-
-    sdDUChainPrivate->m_chainsByIndex.erase(it);
-  }
+  ENSURE_CHAIN_WRITE_LOCKED;
+  context->m_dynamicData->deleteOnDisk();
+  sdDUChainPrivate->removeDocumentChainFromMemory(context);
 }
 
 void DUChain::addDocumentChain( TopDUContext * chain )

@@ -71,6 +71,9 @@ class TopDUContextDynamicData {
   ///Stores this top-context to disk
   void store();
   
+  ///Stores all remainings of this top-context that are on disk. The top-context will be fully dynamic after this.
+  void deleteOnDisk();
+  
   ///Whether this top-context is on disk(Either has been loaded, or has been stored)
   bool isOnDisk() const;
   
@@ -92,6 +95,7 @@ class TopDUContextDynamicData {
   bool m_deleting; ///Flag used during destruction
   
   private:
+    QString filePath() const;
 
     void loadData() const;
     

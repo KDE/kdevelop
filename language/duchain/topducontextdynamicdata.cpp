@@ -298,6 +298,35 @@ bool TopDUContextDynamicData::isOnDisk() const {
   return m_onDisk;
 }
 
+void TopDUContextDynamicData::deleteOnDisk() {
+  if(!isOnDisk())
+    return;
+  
+  if(!m_dataLoaded)
+    loadData();
+  
+  for(int a = 0; a < m_fastContextsSize; ++a)
+    if(m_fastContexts[a])
+      m_fastContexts[a]->makeDynamic();
+    
+  for(int a = 0; a < m_fastDeclarationsSize; ++a)
+    if(m_fastDeclarations[a])
+      m_fastDeclarations[a]->makeDynamic();
+
+  m_topContext->makeDynamic();
+    
+  m_onDisk = false;
+  
+  bool successfullyRemoved = QFile::remove(filePath());
+  Q_ASSERT(successfullyRemoved);
+}
+
+QString KDevelop::TopDUContextDynamicData::filePath() const {
+  QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
+  KStandardDirs::makeDir(baseDir);
+  return baseDir + "/" + QString("%1").arg(m_topContext->ownIndex());
+}
+
 void TopDUContextDynamicData::store() {
 //   kDebug() << "storing" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
   
@@ -334,8 +363,6 @@ void TopDUContextDynamicData::store() {
     contentDataChanged = true;
   }
   
-  QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
-  KStandardDirs::makeDir(baseDir);
   
     ///@todo Save the meta-data into a repository, and only the actual content data into a file.
     ///      This will make saving+loading more efficient, and will reduce the disk-usage.
@@ -343,7 +370,7 @@ void TopDUContextDynamicData::store() {
   if(!m_dataLoaded)
     loadData();
   
-  QFile file(baseDir + "/" + QString("%1").arg(m_topContext->ownIndex()));
+  QFile file(filePath());
   if(file.open(QIODevice::WriteOnly)) {
     
     file.resize(0);
