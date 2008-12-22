@@ -74,4 +74,4 @@ install(FILES
     testexecutableinfo.h
     ctestfileparser.h
     tests/runnertesthelper.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/veritas COMPONENT Devel )

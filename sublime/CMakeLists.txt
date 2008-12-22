@@ -52,4 +52,4 @@ install(FILES
     switcher.h
     tooldocument.h
     view.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/sublime COMPONENT Devel)

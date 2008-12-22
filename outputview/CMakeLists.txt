@@ -24,4 +24,4 @@ install(TARGETS kdevplatformoutputview ${INSTALL_TARGETS_DEFAULT_ARGS} )
           ioutputviewmodel.h
           outputviewexport.h
           outputjob.h
-          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview )
+          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/outputview COMPONENT Devel)

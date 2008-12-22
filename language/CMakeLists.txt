@@ -130,7 +130,7 @@ install(TARGETS kdevplatformlanguage ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     languageexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language COMPONENT Devel
 )
 
 install(FILES
@@ -142,7 +142,7 @@ install(FILES
     interfaces/iproblem.h
     interfaces/codecontext.h
     interfaces/editorcontext.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
 install(FILES
@@ -157,21 +157,21 @@ install(FILES
     editor/modificationrevision.h
     editor/modificationrevisionset.h
     editor/editorrevisiontracker.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor COMPONENT Devel
 )
 
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
     backgroundparser/documentchangetracker.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser COMPONENT Devel
 )
 
 install(FILES
     util/navigationtooltip.h
     util/setrepository.h
     util/basicsetrepository.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
 )
 
 install(FILES
@@ -215,7 +215,7 @@ install(FILES
     duchain/specializationstore.h
     duchain/persistentsetmap.h
     duchain/indexeditems.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain COMPONENT Devel
 )
 
 install(FILES
@@ -238,7 +238,7 @@ install(FILES
     duchain/types/enumeratortype.h
     duchain/types/alltypes.h
     duchain/types/typeutils.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/types COMPONENT Devel
 )
 
 install(FILES
@@ -246,13 +246,13 @@ install(FILES
     duchain/builders/abstractdeclarationbuilder.h
     duchain/builders/abstracttypebuilder.h
     duchain/builders/abstractusebuilder.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
 )
 
 install(FILES
     duchain/repositories/itemrepository.h
     duchain/repositories/typerepository.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/repositories COMPONENT Devel
 )
 
 install(FILES
@@ -261,7 +261,7 @@ install(FILES
     codecompletion/codecompletionmodel.h
     codecompletion/codecompletionitem.h
     codecompletion/codecompletioncontext.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion COMPONENT Devel
 )
 
 install(FILES
@@ -272,7 +272,7 @@ install(FILES
     codegen/codegenerator.h
     codegen/documentchangeset.h
     codegen/coderepresentation.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
 install(FILES
@@ -283,5 +283,6 @@ install(FILES
     duchain/navigation/navigationaction.h
     duchain/navigation/useswidget.h
     duchain/navigation/usescollector.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation COMPONENT Devel
 )
+

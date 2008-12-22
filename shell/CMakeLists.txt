@@ -92,5 +92,5 @@ install(FILES
     shellexport.h
     testshellexport.h
     testcore.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )

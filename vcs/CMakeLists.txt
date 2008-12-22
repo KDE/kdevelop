@@ -71,7 +71,7 @@ install(FILES
     vcsstatusinfo.h
     vcsmapping.h
     vcslocation.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs COMPONENT Devel
 )
 
 install(FILES
@@ -80,7 +80,7 @@ install(FILES
     widgets/vcseventwidget.h
     widgets/vcsdiffwidget.h
     widgets/vcscommitdialog.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets COMPONENT Devel
 )
 
 
@@ -88,7 +88,7 @@ install(FILES
     models/vcsannotationmodel.h
     models/vcseventmodel.h
     models/vcsitemeventmodel.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/models COMPONENT Devel
 )
 
 install(FILES
@@ -98,12 +98,12 @@ install(FILES
     interfaces/ibranchingversioncontrol.h
     interfaces/ibrowsableversioncontrol.h
     interfaces/irepositoryversioncontrol.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/interfaces COMPONENT Devel
 )
 
 install(FILES
     dvcs/dvcsjob.h
     dvcs/dvcsplugin.h
     dvcs/idvcsexecutor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs COMPONENT Devel
 )

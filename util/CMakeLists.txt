@@ -44,7 +44,7 @@ install( FILES
     kdevvarlengtharray.h
     embeddedfreetree.h
     convenientfreelist.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES
     google/dense_hash_map
@@ -54,11 +54,11 @@ install( FILES
     google/sparsetable
     google/type_traits.h
     google/hash_fun.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google)
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google COMPONENT Devel)
 
 install( FILES
     google/sparsehash/densehashtable.h
     google/sparsehash/sparseconfig.h
     google/sparsehash/sparseconfig_windows.h
     google/sparsehash/sparsehashtable.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google/sparsehash )
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util/google/sparsehash COMPONENT Devel)

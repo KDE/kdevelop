@@ -29,7 +29,7 @@ install(FILES
     interfaces/iprojectbuilder.h
     interfaces/iprojectfilemanager.h
     interfaces/ibuildsystemmanager.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project/interfaces COMPONENT Devel
  )
 
 install(FILES
@@ -38,5 +38,5 @@ install(FILES
     projectmodel.h
     projectkcmodule.h
     projectexport.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

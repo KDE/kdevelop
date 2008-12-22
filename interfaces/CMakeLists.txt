@@ -67,7 +67,7 @@ install(FILES
     irunprovider.h
     icompletionsettings.h
     contextmenuextension.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
 install(FILES
