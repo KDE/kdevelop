@@ -20,6 +20,7 @@
 #include <language/duchain/duchainutils.h>
 #include "completionhelpers.h"
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/classfunctiondeclaration.h>
 
 ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
 }
@@ -40,18 +41,32 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
   return ret;
 }
 
+QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
+  KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+  QString ret;
+  createArgumentList(*this, ret, 0, false);
+  if(m_declaration->abstractType() && m_declaration->abstractType()->modifiers() & AbstractType::ConstModifier)
+    ret += " const";
+  return ret;
+}
+
 void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+  
   QString newText;
   if(!m_declaration)
     return;
 
   if(m_type == Override) {
     if(!useAlternativeText) {
-      KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
       if(m_declaration) {
-        newText = "virtual " + m_declaration->toString();
-        if(m_declaration->abstractType() && m_declaration->abstractType()->modifiers() & AbstractType::ConstModifier)
-          newText += " const";
+        newText = "virtual ";
+        FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
+        if(asFunction && asFunction->returnType())
+            newText += asFunction->returnType()->toString() + " ";
+        
+        newText += m_declaration->identifier().toString();
+        newText += signaturePart(true);
         newText += ";";
       } else {
         kDebug() << "Declaration disappeared";
@@ -61,7 +76,6 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       newText = alternativeText;
     }
   }else if(m_type == CreateDefinition) {
-      KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
       QualifiedIdentifier localScope;
       TopDUContext* topContext = DUChainUtils::standardContextForUrl(document->url());
       if(topContext) {
@@ -78,19 +92,57 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       scope = scope.mid( localScope.count() );
       
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
+      
       if(asFunction && asFunction->returnType())
           newText += asFunction->returnType()->toString() + " ";
       newText += scope.toString();
+      newText += signaturePart(false);
+      newText += " {\n";
       
-      QString arguments;
-      createArgumentList(*this, arguments, 0, false);
-      newText += arguments;
+      if(asFunction) {
       
-      if(m_declaration->abstractType() && m_declaration->abstractType()->modifiers() & AbstractType::ConstModifier)
-        newText += " const";
+        ClassFunctionDeclaration* overridden = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::getOverridden(m_declaration.data()));
+        if(overridden && !overridden->isAbstract()) {
+          if(asFunction->returnType() && asFunction->returnType()->toString() != "void") {
+            newText += "return ";
+          }
+          QualifiedIdentifier baseScope = overridden->qualifiedIdentifier();
+          bool foundShorter = true;
+          do {
+            foundShorter = false;
+            QualifiedIdentifier candidate = baseScope;
+            if(candidate.count() > 2) {
+              candidate.pop();
+              QList<Declaration*> decls = m_declaration->context()->findDeclarations(candidate);
+              if(decls.contains(overridden)) {
+                foundShorter = true;
+                baseScope = candidate;
+              }
+            }
+          }while(foundShorter);
+          
+          newText += baseScope.toString() + "(";
+          
+          DUContext* ctx = m_declaration->internalContext();
+          if(ctx->type() == DUContext::Function) {
+            bool first = true;
+            foreach(Declaration* decl, ctx->localDeclarations()) {
+              if(!first)
+                newText += ", ";
+              first = false;
+              newText += decl->identifier().toString();
+            }
+          }
+          
+          newText += ");";
+        }
+      }
       
-      newText += " {\n\n}\n";
+      newText += "\n}\n";
   }
 
+  lock.unlock();
+  
   document->replaceText(word, newText);
 }
+

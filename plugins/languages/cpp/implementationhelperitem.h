@@ -32,6 +32,8 @@ public:
   
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  //Arguments + "const"
+  QString signaturePart(bool includeDefaultParams);
   HelperType m_type;
 };
 
