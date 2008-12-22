@@ -99,8 +99,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual CodeCompletionWorker* createCompletionWorker() = 0;
     friend class CompletionWorkerThread;
     
-  private:
     CodeCompletionWorker* worker();
+  private:
     bool m_fullCompletion;
     QMutex* m_mutex;
     CompletionWorkerThread* m_thread;
