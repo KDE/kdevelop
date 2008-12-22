@@ -99,8 +99,11 @@ public:
     virtual QString viewState() const;
     virtual void setState(const QString& state);
 
+    void setInitialRange(KTextEditor::Range range);
+    
 private Q_SLOTS:
     void sendStatusChanged();
+    void editorDestroyed(QObject* obj);
 
 private:
     class TextViewPrivate* const d;

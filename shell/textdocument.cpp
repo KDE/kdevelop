@@ -161,6 +161,7 @@ class TextViewPrivate
 public:
     TextViewPrivate() : editor(0) {}
     TextEditorWidget* editor;
+    KTextEditor::Range initialRange;
 };
 
 class TextEditorWidgetPrivate
@@ -483,11 +484,26 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
     TextDocument* doc = static_cast<TextDocument*>(document());
     KTextEditor::View* view = static_cast<KTextEditor::View*>(doc->createViewWidget(parent));
+    if(d->initialRange.isValid()) {
+        if(d->initialRange.isEmpty())
+            view->setCursorPosition(d->initialRange.start());
+        else
+            view->setSelection(d->initialRange);
+    }
     TextEditorWidget* teWidget = new TextEditorWidget(parent);
     teWidget->setEditorView(view);
     connect(teWidget, SIGNAL(statusChanged()),
             this, SLOT(sendStatusChanged()));
+            
+    d->editor = teWidget;
+    connect(d->editor, SIGNAL(destroyed(QObject*)), this, SLOT(editorDestroyed(QObject*)));
+    
     return teWidget;
+}
+
+void KDevelop::TextView::editorDestroyed(QObject* obj) {
+    if(obj == d->editor)
+        d->editor = 0;
 }
 
 QString KDevelop::TextView::viewState() const
@@ -501,6 +517,10 @@ QString KDevelop::TextView::viewState() const
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
     }
+}
+
+void KDevelop::TextView::setInitialRange(KTextEditor::Range range) {
+    d->initialRange = range;
 }
 
 void KDevelop::TextView::setState(const QString & state)

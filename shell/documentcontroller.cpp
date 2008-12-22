@@ -385,21 +385,37 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                 break;
             }
         }
+        bool addView = false, applyRange = true;
         if (!partView)
         {
             //no view currently shown for this url
             partView = sdoc->createView();
-
+            addView = true;
+        }
+        
+        KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
+        if(textView && textView->textView()) {
+            applyRange = false;
+            if (range.isEmpty())
+                textView->textView()->setCursorPosition( range.start() );
+            else
+                textView->textView()->setSelection( range );
+        }else if(textView) {
+            textView->setInitialRange(range);
+        }
+        
+        if(addView) {
             //add view to the area
             area->addView(partView, uiController->activeSublimeWindow()->activeView());
         }
+        
         if (!activationParams.testFlag(IDocumentController::DoNotActivate))
         {
             uiController->activeSublimeWindow()->activateView(partView);
         }
         d->fileOpenRecent->addUrl( url );
 
-        if( range.isValid() )
+        if( applyRange && range.isValid() )
         {
             if (range.isEmpty())
                 doc->setCursorPosition( range.start() );
@@ -427,7 +443,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         if(doc->textDocument() && doc->textDocument()->activeView())
             activePosition = doc->textDocument()->activeView()->cursorPosition();
         
-        emit documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
+        emit documentJumpPerformed(doc, range.start(), previousActiveDocument, previousActivePosition);
     }
     
     return doc;
