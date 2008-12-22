@@ -643,7 +643,7 @@ void ContextBrowserView::showEvent(QShowEvent* event) {
         if(top) {
             //Update the navigation-widget
             Declaration* decl = m_navigationWidgetDeclaration.getDeclaration(top);
-            
+            setDeclaration(decl, top, true);
             //Update the declaration combo-box
             DUContext* context = 0;
             KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
