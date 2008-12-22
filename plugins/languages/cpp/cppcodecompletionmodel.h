@@ -32,6 +32,7 @@
 #include <language/codecompletion/codecompletioncontext.h>
 #include "includeitem.h"
 #include "completionitem.h"
+#include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 
 class QIcon;
 class QString;
@@ -54,7 +55,7 @@ namespace KDevelop {
   class CompletionTreeElement;
 }
 
-class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
+class CppCodeCompletionModel : public KDevelop::CodeCompletionModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
   Q_OBJECT
 
@@ -62,10 +63,9 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
-        ///getData(..) for include-file completion
-    QVariant getIncludeData(const QModelIndex& index, int role) const;
-  
   protected:
+    virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
+    virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
     virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
 

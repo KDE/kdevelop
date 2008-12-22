@@ -186,6 +186,8 @@ void CppCodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> ite
    * 3. Group by simplified attributes
    * */
   ItemGrouper<ArgumentHintDepthExtractor, ItemGrouper<InheritanceDepthExtractor, ItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, 0, items);
+  if(aborting())
+    return;
   emit foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
 }
 
