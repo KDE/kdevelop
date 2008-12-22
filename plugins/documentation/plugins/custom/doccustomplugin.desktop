@@ -7,6 +7,7 @@ Exec=blubb
 Comment=Documentation plugin for all types of documentation
 Comment[el]=Πρόσθετο τεκμηρίωσης για όλους τους τύπους τεκμηρίωσης
 Comment[es]=Complemento para todos los tipos de documentación
+Comment[fr]=Module externe Documentation pour tous les types de documentation
 Comment[gl]=Extensión de documentacion para todos os tipos de documentación
 Comment[nds]=Dokmentatschoon-Moduul för all Typen vun Dokmentatschoon
 Comment[pt]='Plugin' de documentação para todos os tipos de documentação

@@ -5,6 +5,7 @@ X-KDE-Derived=KDevelop/Plugin
 Name=KDevelop Documentation Plugin Interface
 Name[el]=Διασύνδεση πρόσθετου τεκμηρίωσης KDevelop
 Name[es]=Interfaz del complemento de documentación de KDevelop
+Name[fr]=Interface du module externe Documentation de KDevelop
 Name[gl]=Interface da extensión de documentación para KDevelop
 Name[nds]=KDevelop-Dokmentatschoonmoduul-Koppelsteed
 Name[pt]=Interface de 'Plugins' de Documentação do KDevelop

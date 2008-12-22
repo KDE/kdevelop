@@ -8,6 +8,7 @@ Exec=blubb
 Comment=Documentation plugin for Palmdoc format
 Comment[el]=Πρόσθετο τεκμηρίωσης για τη μορφή Palmdoc
 Comment[es]=Complemento para la documentación en formato Palmdoc
+Comment[fr]=Module externe Documentation pour le format Palmdoc
 Comment[gl]=Extensión de documentación do formato Palmdoc
 Comment[nds]=Dokmentatschoon-Moduul för't Palmdoc-Formaat
 Comment[pt]='Plugin' de documentação para o formato PalmDoc
