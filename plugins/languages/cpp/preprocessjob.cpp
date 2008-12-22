@@ -482,16 +482,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
           }
         }
       
-        {
-          DUChainReadLocker lock(DUChain::lock());
-          if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
-            //We are finding a file that was not in the include-path last time
-            //All following contexts need to be updated, because they may contain references to missing declarations
-            parentJob()->masterJob()->setNeedUpdateEverything( true );
-            kDebug(9007) << "Marking every following encountered context to be updated";
-          }
-        }
-
         ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": found include-file" << fileName << ":" << includedFile; )
 
         KDevelop::ReferencedTopDUContext includedContext;
@@ -566,6 +556,17 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             delete slaveJob;
         }
         ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included"; )
+    
+        {
+          DUChainReadLocker lock(DUChain::lock());
+          if( m_updatingEnvironmentFile && m_updatingEnvironmentFile->missingIncludeFiles().contains(IndexedString(fileName)) ) {
+            //We are finding a file that was not in the include-path last time
+            //All following contexts need to be updated, because they may contain references to missing declarations
+            parentJob()->masterJob()->setNeedUpdateEverything( true );
+            kDebug(9007) << "Marking every following encountered context to be updated";
+          }
+        }
+    
     } else {
         kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": include not found:" << fileName;
         KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
@@ -580,7 +581,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         ///Before doing that, model findInclude(..) exactly after the standard
         m_firstEnvironmentFile->addMissingIncludeFile(IndexedString(fileName));
     }
-
+    
     return 0;
 }
 
