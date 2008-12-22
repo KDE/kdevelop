@@ -43,7 +43,7 @@ target_link_libraries( kcm_kdev_qmakebuilder ${KDE4_KIO_LIBS} ${KDevPlatform_INT
 
 ########### install files ###############
 install( FILES kdevqmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES iqmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/qmake )
+install( FILES iqmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/qmake COMPONENT Devel)
 install( TARGETS kcm_kdev_qmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kcm_kdev_qmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevqmakebuilder )
