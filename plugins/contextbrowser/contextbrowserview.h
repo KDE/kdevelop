@@ -133,6 +133,7 @@ class ContextController : public QObject {
         struct HistoryEntry {
             //Duchain must be locked
             HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KDevelop::SimpleCursor& cursorPosition = KDevelop::SimpleCursor());
+            HistoryEntry(KDevelop::DocumentCursor pos);
             //Duchain must be locked
             void setCursorPosition(const KDevelop::SimpleCursor& cursorPosition);
 
@@ -183,7 +184,6 @@ class ContextController : public QObject {
         KDevelop::IndexedString m_listUrl;
         BrowseManager* m_browseManager;
         //Used to not record jumps triggered by the context-browser as history entries
-        KUrl m_ignoreJump;
         QPointer<QWidget> m_focusBackWidget;
 };
 

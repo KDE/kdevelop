@@ -180,31 +180,32 @@ void ContextBrowserView::navigateUp() {
 }
 
 void ContextController::documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor) {
-    if(newCursor.isValid() && previousCursor.isValid()) {
         
-        KUrl oldIgnore = m_ignoreJump;
-        m_ignoreJump = KUrl();
-        if(newDocument->url() == oldIgnore)
-            return;
-        
-        DUChainReadLocker lock(DUChain::lock());
-        
-        DUContext* newContext = 0;
-        if(newDocument && newCursor.isValid()) {
-            newContext = getContextAt(newDocument->url(), newCursor);
-            
-            if(newContext && isPreviousEntry(newContext, SimpleCursor(newCursor))) {
-                //The jump has already been noticed, and thus we remove the last history element
-                --m_nextHistoryIndex;
-                m_history.resize(m_nextHistoryIndex);
-            }
+    kDebug() << "jump from" << (previousDocument ? previousDocument->url().prettyUrl() : QString()) << "to" << (newDocument ? newDocument->url().prettyUrl() : QString());
+    
+    DUChainReadLocker lock(DUChain::lock());
+    
+    if(previousDocument && previousCursor.isValid()) {
+        DUContext* context = getContextAt(previousDocument->url(), previousCursor);
+        if(context) {
+            updateHistory(context, SimpleCursor(previousCursor), true);
+        }else{
+            //We just want this place in the history
+            m_history.resize(m_nextHistoryIndex); // discard forward history
+            m_history.append(HistoryEntry(DocumentCursor(previousDocument->url().prettyUrl(), previousCursor)));
+            ++m_nextHistoryIndex;
         }
-        
-        if(previousDocument && previousCursor.isValid())
-            updateHistory(getContextAt(previousDocument->url(), previousCursor), SimpleCursor(previousCursor), true);
-        
-        if(newContext)
-            updateHistory(newContext, SimpleCursor(newCursor), true);
+    }
+    if(newDocument && newCursor.isValid()) {
+        DUContext* context = getContextAt(newDocument->url(), newCursor);
+        if(context) {
+            updateHistory(context, SimpleCursor(newCursor), true);
+        }else{
+            //We just want this place in the history
+            m_history.resize(m_nextHistoryIndex); // discard forward history
+            m_history.append(HistoryEntry(DocumentCursor(newDocument->url().prettyUrl(), newCursor)));
+            ++m_nextHistoryIndex;
+        }
     }
 }
 
@@ -266,8 +267,12 @@ void ContextController::openDocument(int historyIndex) {
     Q_ASSERT_X(historyIndex < m_history.size(), "openDocument", "history index out of range");
     DocumentCursor c = m_history[historyIndex].computePosition();
     if (c.isValid() && !c.document().str().isEmpty()) {
-        m_ignoreJump = KUrl(c.document().str());
-        ICore::self()->documentController()->openDocument(m_ignoreJump, c);
+        
+        disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
+        
+        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
+        
+        connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
 
         KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
         updateDeclarationListBox(m_history[historyIndex].context.data());
@@ -358,6 +363,9 @@ void ContextController::actionTriggered() {
         openDocument(historyPosition);
         updateButtonState();
     }
+}
+
+ContextController::HistoryEntry::HistoryEntry(KDevelop::DocumentCursor pos) : absoluteCursorPosition(pos) {
 }
 
 ContextController::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KDevelop::SimpleCursor& cursorPosition) : context(ctx) {
