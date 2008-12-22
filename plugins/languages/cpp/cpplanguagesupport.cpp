@@ -370,9 +370,14 @@ void CppLanguageSupport::switchDefinitionDeclaration()
       KUrl url(declaration->url().str());
       kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
       lock.unlock();
-      KDevelop::IDocument* document = core()->documentController()->openDocument(url);
-      if(document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))
-        document->textDocument()->activeView()->setCursorPosition(normalizeCursor(targetRange.start()));
+
+      KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
+      
+      if(!document || 
+          (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
+        KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
+        core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
+      }
       return;
     }else{
       kDebug(9007) << "Definition has no assigned declaration";
@@ -397,9 +402,13 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     }
     lock.unlock();
 
-    KDevelop::IDocument* document = core()->documentController()->openDocument(url);
-    if(document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))
-      document->textDocument()->activeView()->setCursorPosition(normalizeCursor(targetRange.start()));
+    KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
+    
+    if(!document || 
+        (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
+      KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
+      core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
+    }
     return;
   }else{
     kWarning(9007) << "Found no definition assigned to cursor position";
