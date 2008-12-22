@@ -28,6 +28,6 @@ install(TARGETS kdevcmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 install( FILES kdevcmakebuilder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( FILES icmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cmake )
+install( FILES icmakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/cmake COMPONENT Devel )
 install( FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakebuilder )
 
