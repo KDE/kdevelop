@@ -1,4 +1,4 @@
-/* KDevelop xUnit plugin
+/* KDevelop coverage plugin
  *    Copyright 1999-2001 Bernd Gehrmann and the KDevelop Team <bernd@kdevelop.org>
  *    Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>
  *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>

@@ -1,4 +1,4 @@
-/* KDevelop xUnit plugin
+/* KDevelop coverage plugin
  *
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *

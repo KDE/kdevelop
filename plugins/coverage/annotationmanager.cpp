@@ -1,5 +1,4 @@
-/*
- * KDevelop xUnit plugin
+/* KDevelop coverage plugin
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
