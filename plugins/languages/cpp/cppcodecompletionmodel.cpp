@@ -72,19 +72,21 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 
 bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
-  if(inserted.trimmed().endsWith( '(' ))
+  if(inserted.trimmed().endsWith( '(' ) || inserted.trimmed().endsWith(',') || inserted.trimmed().endsWith('<') )
     return true;
   
   return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, position);
 }
 
-bool CppCodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
-  bool ret = CodeCompletionModelControllerInterface::shouldAbortCompletion(view, range, currentCompletion);
-  
-  if(ret) {
+void CppCodeCompletionModel::aborted(KTextEditor::View* view) {
     kDebug() << "aborting";
     worker()->abortCurrentCompletion();
-  }
+    
+    KTextEditor::CodeCompletionModelControllerInterface::aborted(view);
+}
+
+bool CppCodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
+  bool ret = CodeCompletionModelControllerInterface::shouldAbortCompletion(view, range, currentCompletion);
   
   return ret;
 }

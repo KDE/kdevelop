@@ -60,10 +60,12 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel, public KTex
   Q_OBJECT
 
   public:
+    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface);
     CppCodeCompletionModel(QObject* parent);
     virtual ~CppCodeCompletionModel();
 
   protected:
+    virtual void aborted(KTextEditor::View* view);
     virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();

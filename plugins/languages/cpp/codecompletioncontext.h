@@ -167,8 +167,6 @@ namespace Cpp {
       bool  filterDeclaration(Declaration* decl);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
-      ///@return the extracted expression, without any access-operation
-      QString expression() const;
 
       ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
       void standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items);
