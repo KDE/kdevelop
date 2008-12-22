@@ -1475,7 +1475,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
 if(!declaration)
   return std::numeric_limits<int>::max();
   
-  if(declaration->topContext() == this) {
+  if(declaration->topContext() == this && !declaration->inSymbolTable()) {
     uint index = declaration->ownIndex();
     Q_ASSERT(!(index & (1<<31)));
     return (int)(index | (1<<31)); //We don't put context-local declarations into the list, that's a waste. We just use the mark them with the highest bit.
