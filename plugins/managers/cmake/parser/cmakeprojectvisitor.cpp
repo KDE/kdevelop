@@ -44,6 +44,8 @@
 #include <QFileInfo>
 #include <QScriptEngine>
 #include <QScriptValue>
+#include <language/editor/editorintegrator.h>
+#include <language/duchain/smartconverter.h>
 
 using namespace KDevelop;
 
@@ -450,23 +452,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             ReferencedTopDUContext aux=m_topctx;
             if(m_topctx)
             {
-                DUChainWriteLocker lock(DUChain::lock());
-                m_topctx=DUChain::self()->chainForDocument(KUrl(include.first().filePath));
-                if(!m_topctx)
-                {
-                    m_topctx=new TopDUContext(IndexedString(KUrl(include.first().filePath).pathOrUrl()),
-                            SimpleRange(0,0, include.last().endColumn, include.last().endLine));
-                    DUChain::self()->addDocumentChain(m_topctx);
-
-                    Q_ASSERT(DUChain::self()->chainForDocument(KUrl(include.first().filePath)));
-                }
-                else
-                {
-                    m_topctx->deleteLocalDeclarations();
-                    m_topctx->deleteChildContextsRecursively();
-                    m_topctx->deleteUses();
-                }
-                aux->addImportedParentContext(m_topctx);
+                m_topctx=createContext(KUrl(include.first().filePath), aux, include.last().endLine-1, include.last().endColumn-1);
             }
             kDebug(9042) << "including:" << path;
             walk(include, 0);
@@ -563,25 +549,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
             ReferencedTopDUContext aux=m_topctx;
-            {
-                DUChainWriteLocker lock(DUChain::lock());
-                m_topctx=DUChain::self()->chainForDocument(KUrl(path));
-                if(!m_topctx)
-                {
-                    m_topctx=new TopDUContext(IndexedString(path),
-                            SimpleRange(0,0, package.last().endColumn, package.last().endLine));
-                    DUChain::self()->addDocumentChain(m_topctx);
-
-                    Q_ASSERT(DUChain::self()->chainForDocument(KUrl(path)));
-                    aux->addImportedParentContext(m_topctx);
-                }
-                else
-                {
-                    m_topctx->deleteLocalDeclarations();
-                    m_topctx->deleteChildContextsRecursively();
-                    m_topctx->deleteUses();
-                }
-            }
+            m_topctx=createContext(KUrl(path), aux, package.last().endColumn, package.last().endLine);
             walk(package, 0);
             m_topctx=aux;
         }
@@ -604,6 +572,34 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
 
     return 1;
+}
+
+KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux, int endl ,int endc)
+{
+    DUChainWriteLocker lock(DUChain::lock());
+    KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
+    if(!topctx)
+    {
+        topctx=new TopDUContext(IndexedString(path),
+                SimpleRange(0,0, endl, endc));
+        DUChain::self()->addDocumentChain(topctx);
+
+        Q_ASSERT(DUChain::self()->chainForDocument(path));
+        aux->addImportedParentContext(topctx);
+    }
+    else
+    {
+        topctx->deleteLocalDeclarations();
+        topctx->deleteChildContextsRecursively();
+        topctx->deleteUses();
+        
+        EditorIntegrator editor;
+        editor.setCurrentUrl(IndexedString(topctx->url().toUrl()));
+        
+        SmartConverter converter(&editor);
+        converter.deconvertDUChain(topctx);
+    }
+    return topctx;
 }
 
 bool CMakeProjectVisitor::haveToFind(const QString &varName)
@@ -1856,26 +1852,8 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 {
     if(!m_topctx)
     {
-        DUChainWriteLocker lock(DUChain::lock());
         KUrl url(fc[0].filePath);
-        IndexedString pathOrUrl(url.pathOrUrl());
-        m_topctx=DUChain::self()->chainForDocument(pathOrUrl);
-        if(!m_topctx)
-        {
-            m_topctx=new TopDUContext(IndexedString(pathOrUrl.str()),
-                    SimpleRange(0,0, fc.last().endLine-1, fc.last().endColumn-1));
-
-            DUChain::self()->addDocumentChain(m_topctx);
-            Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
-        }
-        else
-        {
-            m_topctx->deleteLocalDeclarations();
-            m_topctx->deleteChildContextsRecursively();
-            m_topctx->deleteUses();
-        }
-
-        m_topctx->addImportedParentContext(m_parentCtx);
+        m_topctx=createContext(url, m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1);
     }
     VisitorState p;
     p.code = &fc;

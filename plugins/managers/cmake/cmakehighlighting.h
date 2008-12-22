@@ -64,7 +64,7 @@ public:
         NamespaceContext,
         ReferenceContext
     };
-    CMakeHighlighting(QObject* parent);
+    CMakeHighlighting(QObject* parent=0);
     virtual ~CMakeHighlighting();
 
     void highlightTree(KTextEditor::SmartRange* topRange) const;

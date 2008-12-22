@@ -71,6 +71,8 @@
 #include "icmakebuilder.h"
 
 #include "ui_cmakepossibleroots.h"
+#include <language/editor/editorintegrator.h>
+#include <language/duchain/smartconverter.h>
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -480,6 +482,17 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         vm->remove("CMAKE_CURRENT_LIST_FILE");
         vm->remove("CMAKE_CURRENT_SOURCE_DIR");
         vm->remove("CMAKE_CURRENT_BINARY_DIR");
+        
+        EditorIntegrator editor;
+        editor.setCurrentUrl(IndexedString(v.context()->url().toUrl()));
+        LockedSmartInterface smart(editor.smart());
+        if(smart) {
+            DUChainWriteLocker lock(DUChain::lock());
+            SmartConverter converter(&editor);
+            converter.convertDUChain(v.context());
+            CMakeHighlighting highlight;
+            highlight.highlightDUChain(v.context());
+        }
 
         /*{
         kDebug() << "dumpiiiiiing" << folder->url();

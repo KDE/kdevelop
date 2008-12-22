@@ -31,7 +31,6 @@
 #include "cmakelistsparser.h"
 #include "cmaketypes.h"
 #include <language/duchain/topducontext.h>
-
 class CMakeFunctionDesc;
 
 namespace KDevelop
@@ -156,6 +155,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static QList< IntPair > parseArgument(const QString &exp);
         
     private:
+        static KDevelop::ReferencedTopDUContext
+            createContext(const KUrl& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc);
+        
         void macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
         QStringList value(const QString& exp, const QList<IntPair>& poss, int desired) const;
