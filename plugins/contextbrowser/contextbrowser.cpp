@@ -646,6 +646,10 @@ void ContextBrowserPlugin::nextUseShortcut()
   switchUse(true);
 }
 
+KTextEditor::Range cursorToRange(SimpleCursor cursor) {
+  return KTextEditor::Range(cursor.textCursor(), cursor.textCursor());
+}
+
 void ContextBrowserPlugin::switchUse(bool forward)
 {
   if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView()) {
@@ -669,6 +673,28 @@ void ContextBrowserPlugin::switchUse(bool forward)
       if(!decl) //Try finding a declaration under the cursor
         decl = DUChainUtils::itemUnderCursor(doc->url(), c);
       
+      if(decl) {
+        
+        Declaration* target = 0;
+        if(forward)
+          //Try jumping from definition to declaration
+          target = DUChainUtils::declarationForDefinition(decl, chosen);
+        else if(decl->url().toUrl() == doc->url() && decl->range().contains(c))
+          //Try jumping from declaration to definition
+          target = FunctionDefinition::definition(decl);
+        
+          if(target && target != decl) {
+            SimpleCursor jumpTo = target->range().start;
+            KUrl document = target->url().toUrl();
+            lock.unlock();
+            core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
+            return;
+          }else{
+            //Always work with the declaration instead of the definition
+            decl = DUChainUtils::declarationForDefinition(decl, chosen);
+          }
+      }
+      
       if(!decl) {
         //Pick the last use we have highlighted
         decl = m_lastHighlightedDeclaration.data();
@@ -688,9 +714,10 @@ void ContextBrowserPlugin::switchUse(bool forward)
               QList<SimpleRange> useRanges = allUses(top, decl, true);
               qSort(useRanges);
               if(!useRanges.isEmpty()) {
+                KUrl url = top->url().toUrl();
                 SimpleRange selectUse = forward ? useRanges.first() : useRanges.back();
                 lock.unlock();
-                core()->documentController()->openDocument(KUrl(top->url().str()), KTextEditor::Range(selectUse.start.textCursor(), selectUse.start.textCursor()));
+                core()->documentController()->openDocument(url, cursorToRange(selectUse.start));
               }
             }
           }
@@ -753,7 +780,12 @@ void ContextBrowserPlugin::switchUse(bool forward)
               kDebug() << "current file" << indexInFiles << "nextFile" << nextFile;
               
               if(nextFile < 0 || nextFile >= usingFiles.size()) {
-                //Open the declaration
+                //Open the declaration, or the definition
+                if(nextFile >= usingFiles.size()) {
+                  Declaration* definition = FunctionDefinition::definition(decl);
+                  if(definition)
+                    decl = definition;
+                }
                 KUrl u(decl->url().str());
                 SimpleRange range = decl->range();
                 range.end = range.start;
