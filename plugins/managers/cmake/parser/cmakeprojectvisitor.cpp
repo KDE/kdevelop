@@ -1868,6 +1868,12 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             DUChain::self()->addDocumentChain(m_topctx);
             Q_ASSERT(DUChain::self()->chainForDocument(pathOrUrl));
         }
+        else
+        {
+            m_topctx->deleteLocalDeclarations();
+            m_topctx->deleteChildContextsRecursively();
+            m_topctx->deleteUses();
+        }
 
         m_topctx->addImportedParentContext(m_parentCtx);
     }
