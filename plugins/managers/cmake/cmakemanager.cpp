@@ -837,7 +837,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     }
     else if(it)
     {
-        qDebug() << "reloading";
+//         qDebug() << "reloading";
         reload(proj->projectItem());
     }
     else
@@ -1006,11 +1006,9 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 {
     QString txt=doc->text(r.textRange());
     bool ret=false;
-    qDebug() << "txxxxxxxxxt" << txt;
     if(txt.contains(name))
     {
         txt.replace(name, QString());
-        qDebug() << "replaced: " << txt;
         doc->replaceText(r.textRange(), txt);
         ret=true;
     }
@@ -1056,7 +1054,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
 bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
 {
-    qDebug() << "1111111111111111111" << it;
     if(!static_cast<ProjectBaseItem*>(it->parent())->target())
         return true; //It is not a cmake-managed file
     
@@ -1078,7 +1075,7 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
         bool saved=e.document()->documentSave();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not save the change."));
+                                  i18n("Cannot save the change."));
     }
     else
     {
