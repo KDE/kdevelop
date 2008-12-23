@@ -393,7 +393,7 @@ void ProjectManagerViewPlugin::removeFolderFromContextMenu()
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the directory from the filesystem too?"));
-            if(q)
+            if(q==KMessageBox::Yes)
             {
                 if ( !KIO::NetAccess::del( item->folder()->url(), window ) ) {
                     KMessageBox::error( window, i18n( "Cannot remove folder." ) );
@@ -413,7 +413,7 @@ void ProjectManagerViewPlugin::removeFileFromContextMenu()
         if ( item->file() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the file from the filesystem too?"));
-            if(q)
+            if(q==KMessageBox::Yes)
             {
                 if ( !KIO::NetAccess::del( item->file()->url(), window ) ) {
                     KMessageBox::error( window, i18n( "Cannot remove the file." ) );
