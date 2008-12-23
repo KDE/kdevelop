@@ -828,9 +828,8 @@ void TemplateDeclaration::deleteAllInstantiations()
   foreach( TemplateDeclaration* decl, instantiations ) {
     decl->m_instantiatedFrom = 0;
     Declaration* realDecl = dynamic_cast<Declaration*>(decl);
-    
     //Only delete real insantiations, not specializations
-    if(!decl->specializedFrom().isValid()) {
+    if(realDecl->isAnonymous()) {
       Declaration* realDecl = dynamic_cast<Declaration*>(decl);
       delete realDecl; //It may as well be just a specialization, then we should keep it
     }

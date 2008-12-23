@@ -621,7 +621,10 @@ class CppDUContext : public BaseContext {
       }
       foreach( CppDUContext<BaseContext>* instatiation, instatiations ) {
         Q_ASSERT(instatiation != this);
-        delete instatiation;
+        if(instatiation->isAnonymous())
+          delete instatiation;
+        else
+          instatiation->setInstantiatedFrom(0, InstantiationInformation());
       }
     }
 
