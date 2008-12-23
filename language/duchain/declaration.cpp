@@ -348,6 +348,11 @@ DUContext * Declaration::context() const
   return m_context;
 }
 
+bool Declaration::isAnonymous() const
+{
+  return d_func()->m_anonymousInContext;
+}
+
 void Declaration::setContext(DUContext* context, bool anonymous)
 {
   Q_ASSERT(!context || context->topContext());

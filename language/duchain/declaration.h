@@ -374,6 +374,9 @@ public:
    */
   uint ownIndex() const;
 
+  ///Whether this declaration has been inserted anonymously into its parent-context
+  bool isAnonymous() const;
+  
   /**
    * Clear the index for this declaration in the top context that was allocated with allocateOwnIndex().
    */
