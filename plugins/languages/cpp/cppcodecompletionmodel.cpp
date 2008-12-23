@@ -70,12 +70,12 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 {
 }
 
-bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, const KTextEditor::Cursor& position) {
+bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
-  if(inserted.trimmed().endsWith( '(' ) || inserted.trimmed().endsWith(',') || inserted.trimmed().endsWith('<') )
+  if(inserted.trimmed().endsWith( '(' ) || inserted.trimmed().endsWith(',') || inserted.trimmed().endsWith('<') || inserted.trimmed().endsWith(":") )
     return true;
   
-  return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, position);
+  return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
 void CppCodeCompletionModel::aborted(KTextEditor::View* view) {
