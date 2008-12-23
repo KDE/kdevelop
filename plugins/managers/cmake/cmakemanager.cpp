@@ -70,13 +70,14 @@
 #include "cmakecodecompletionmodel.h"
 #include "icmakebuilder.h"
 
-#include "ui_cmakepossibleroots.h"
-#include <language/editor/editorintegrator.h>
-#include <language/duchain/smartconverter.h>
-
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
 #endif
+
+#include "ui_cmakepossibleroots.h"
+#include <language/editor/editorintegrator.h>
+#include <language/duchain/smartconverter.h>
+#include <language/duchain/use.h>
 
 using namespace KDevelop;
 
@@ -999,6 +1000,92 @@ bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
                                   i18n("Could not save the change."));
     }
     return 0;
+}
+
+bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists)
+{
+    QString txt=doc->text(r.textRange());
+    bool ret=false;
+    qDebug() << "txxxxxxxxxt" << txt;
+    if(txt.contains(name))
+    {
+        txt.replace(name, QString());
+        qDebug() << "replaced: " << txt;
+        doc->replaceText(r.textRange(), txt);
+        ret=true;
+    }
+    else
+    {
+        KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(lists);
+        for(int i=0; i<topctx->usesCount(); i++)
+        {
+            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            Use u = topctx->uses()[i];
+            
+            if(!r.contains(u.m_range))
+                continue; //We just want the uses in the range, not the whole file
+            
+            Declaration* d=u.usedDeclaration(topctx);
+            
+            if(d->context()->topContext()->url().toUrl()!=lists)
+                continue; //Let's just stay in the same file for now
+            
+            r.start=d->range().end;
+            
+            for(int l=r.start.line; ;l++)
+            {
+                QString line=doc->line(l);
+                int c;
+                if((c=line.indexOf(')'))>=0) {
+                    r.end=SimpleCursor(l,c);
+                    break;
+                } else if(line.isEmpty()) {
+                    r=SimpleRange();
+                    break;
+                }
+            }
+            
+            if(!r.isEmpty())
+            {
+                ret = ret || followUses(doc, r, name, lists);
+            }
+        }
+    }
+    return ret;
+}
+
+bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
+{
+    qDebug() << "1111111111111111111" << it;
+    if(!static_cast<ProjectBaseItem*>(it->parent())->target())
+        return true; //It is not a cmake-managed file
+    
+    ProjectTargetItem* target=static_cast<ProjectTargetItem*>(it->parent());
+    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
+    
+    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
+    SimpleRange r=desc->descriptor().range();
+    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+    
+    KUrl lists=folder->url();
+    lists.addPath("CMakeLists.txt");
+    
+    ApplyChangesWidget e(i18n("Remove a file called '%1'.", it->text()), lists);
+    
+    bool ret=followUses(e.document(), r, it->text(), lists);
+    if(ret && e.exec())
+    {
+        bool saved=e.document()->documentSave();
+        if(!saved)
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                  i18n("Could not save the change."));
+    }
+    else
+    {
+        KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                              i18n("Cannot remove the file."));
+    }
+    return ret;
 }
 
 #include "cmakemanager.moc"

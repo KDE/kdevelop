@@ -1076,7 +1076,6 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
                 if(funcName=="if")
                 {
                     condition=ifast->condition();
-                    kDebug() << "iffffffff" << ini;
                 }
                 else
                 {

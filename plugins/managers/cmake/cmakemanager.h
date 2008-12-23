@@ -90,7 +90,7 @@ public:
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
 
-    virtual bool removeFile( KDevelop::ProjectFileItem* ) { return false; }
+    virtual bool removeFile( KDevelop::ProjectFileItem* );
     virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*,
                                        KDevelop::ProjectTargetItem* ) { return false; }
 
