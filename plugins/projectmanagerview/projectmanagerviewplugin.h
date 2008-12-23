@@ -76,6 +76,7 @@ protected Q_SLOTS:
     void createFolderFromContextMenu();
     void createFileFromContextMenu();
     void removeFolderFromContextMenu();
+    void removeFileFromContextMenu();
 
 private:
     static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );

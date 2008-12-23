@@ -210,6 +210,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
+        if ( item->file() )
+        {
+            KAction* action = new KAction( i18n( "Remove File" ), this );
+            connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+        }
+        
         if(!hasTargets && item->executable())
         {
             KAction* action = new KAction( i18n("Run"), this );
@@ -389,12 +396,32 @@ void ProjectManagerViewPlugin::removeFolderFromContextMenu()
             if(q)
             {
                 if ( !KIO::NetAccess::del( item->folder()->url(), window ) ) {
-                    KMessageBox::error( window, i18n( "Can't remove folder." ) );
+                    KMessageBox::error( window, i18n( "Cannot remove folder." ) );
                     continue;
                 }
             }
             
             item->project()->projectFileManager()->removeFolder(item->folder());
+        }
+    }
+}
+
+void ProjectManagerViewPlugin::removeFileFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        if ( item->file() ) {
+            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+            int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the file from the filesystem too?"));
+            if(q)
+            {
+                if ( !KIO::NetAccess::del( item->file()->url(), window ) ) {
+                    KMessageBox::error( window, i18n( "Cannot remove the file." ) );
+                    continue;
+                }
+            }
+            
+            item->project()->projectFileManager()->removeFile(item->file());
         }
     }
 }
