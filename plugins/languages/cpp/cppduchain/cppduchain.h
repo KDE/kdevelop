@@ -33,6 +33,7 @@ namespace KTextEditor {
 
 namespace KDevelop {
   class Declaration;
+  class ClassMemberDeclaration;
   class DUContext;
   class TopDUContext;
   class Identifier;
@@ -75,7 +76,7 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop:
  * Returns whether the given declaration can be accessed from the given context. Checks for private/protected and such stuff.
  * Not implemented yet.
  * */
-KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::Declaration* declaration);
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::ClassMemberDeclaration* declaration);
 
 /**
  * Preprocesses the given string, taking the environment from the given environment-file.

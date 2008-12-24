@@ -40,6 +40,7 @@
 #include "cpplanguagesupport.h"
 #include "cppduchain.h"
 #include <language/editor/hashedstring.h>
+#include <language/duchain/classmemberdeclaration.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -476,8 +477,9 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
    *
    * */
 
-  if(!Cpp::isAccessible(context, dec))
-    return ErrorVariableType;
+//   if(ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(dec))
+//     if(!Cpp::isAccessible(context, classMember))
+//       return ErrorVariableType;
 
   Types type = LocalVariableType;
   if (context) {

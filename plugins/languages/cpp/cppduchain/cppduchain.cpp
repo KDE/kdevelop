@@ -156,10 +156,39 @@ Declaration* localClassFromCodeContext(DUContext* context)
   return 0;
 }
 
-KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* /*fromContext*/, Declaration* /*declaration*/)
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDeclaration* declaration)
 {
-  ///@todo implement
-  return true;
+  if(declaration->accessPolicy() == ClassMemberDeclaration::Public)
+    return true;
+  
+  if(!fromContext)
+    return false;
+  
+  if(fromContext->type() == DUContext::Other || fromContext->type() == DUContext::Function) {
+    Declaration* classDecl = localClassFromCodeContext(fromContext);
+    if(!classDecl || !classDecl->internalContext()) {
+      return false;
+    }
+    
+    return isAccessible(classDecl->internalContext(), declaration);
+  }
+  
+  if(fromContext->type() != DUContext::Class)
+    return false;
+  
+  if(declaration->accessPolicy() == ClassMemberDeclaration::Protected) {
+    if(fromContext->imports( declaration->context() )) {
+      return true;
+    }
+  }else if(declaration->accessPolicy() == ClassMemberDeclaration::Private) {
+    if(fromContext == declaration->context())
+      return true;
+  }
+  
+  if(fromContext->parentContext() && fromContext->parentContext()->type() == DUContext::Class)
+    return isAccessible(fromContext->parentContext(), declaration);
+  
+  return false;
 }
 
 /**
@@ -305,8 +334,6 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
   
   if(identifier.toString().length() > desiredLength)
     identifier = Cpp::unTypedefType(decl, identifier);
-  
-  bool doneSomething = true;
   
   int removeTemplateParametersFrom = 10;
   

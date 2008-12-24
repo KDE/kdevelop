@@ -105,7 +105,10 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
     KDevelop::IndexedType type() const;
     virtual KDevelop::IndexedType typeForArgumentMatching() const;
+    void setPrefix(QString s);
+    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
   private:
+    QString m_prefix;
     QString m_text;
     KDevelop::IndexedType m_type;
     int m_argumentHintDepth;

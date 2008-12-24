@@ -164,7 +164,8 @@ namespace Cpp {
     private:
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
-      bool  filterDeclaration(Declaration* decl);
+      bool  filterDeclaration(Declaration* decl, bool dynamic = true);
+      bool  filterDeclaration(ClassMemberDeclaration* decl);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
 
@@ -218,6 +219,8 @@ namespace Cpp {
       Identifier m_connectedSignalIdentifier;
       QByteArray m_connectedSignalNormalizedSignature;
 
+      DUContextPointer m_localClass;
+      
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes;
   };

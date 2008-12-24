@@ -46,6 +46,9 @@
 #include <interfaces/idocumentcontroller.h>
 #include "implementationhelperitem.h"
 #include <qtfunctiondeclaration.h>
+#include <language/duchain/duchainutils.h>
+
+// #define ifDebug(x) x
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -53,6 +56,8 @@
 const bool assistAccessType = true;
 ///If this is enabled, no chain of useless argument-hints for binary operators is created.
 const bool noMultipleBinaryOperators = true;
+///Whether only items that are allowed to be accessed should be shown
+const bool doAccessFiltering = true;
 #ifdef TEST_COMPLETION
 //Stub implementation that does nothing
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool namespaceAllowed) {
@@ -130,6 +135,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     LOCKDUCHAIN;
     if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global))
       m_onlyShowTypes = true;
+
+    Declaration* classDecl = Cpp::localClassFromCodeContext(m_duContext.data());
+    if(classDecl) {
+      kDebug() << "local class:" << classDecl->qualifiedIdentifier().toString(  );
+      m_localClass = DUContextPointer(classDecl->internalContext());
+    }
   }
 
   m_followingText = followingText;
@@ -737,10 +748,15 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
                 foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
                   //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
+                  
+                  ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
+
+                  if(classMember && !filterDeclaration(classMember))
+                    continue;
+                    
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
                     if(decl.first->kind() != Declaration::Instance)
                       continue;
-                    ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
                     if(classMember && classMember->isStatic())
                       continue; //Skip static class members when not doing static access
                     if(decl.first->abstractType().cast<EnumeratorType>())
@@ -883,7 +899,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             if(decl && decl->internalContext()) {
               foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
-                  if(classFun->isSignal() || (memberAccessOperation() == SlotAccess && classFun->isSlot())) {
+                  if(classFun->isSignal() || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
                     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), CodeCompletionContext::Ptr(this), candidate.second );
                     item->m_isQtSignalSlotCompletion = true;
                     if(!m_connectedSignalIdentifier.isEmpty()) {
@@ -1006,6 +1022,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   //Normal case: Show all visible declarations
   typedef QPair<Declaration*, int> DeclarationDepthPair;
 
+  kDebug() << "halo";
+  
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
@@ -1081,6 +1099,26 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
       }
     }
   }
+  
+
+  //Eventually add a "this" item
+  DUContext* functionContext = m_duContext.data();
+  while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext()->type() == DUContext::Other)
+    functionContext = functionContext->parentContext();
+
+  ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(functionContext->owner(), m_duContext->topContext()));
+  
+  if(classFun && !classFun->isStatic() && classFun->context()->owner()) {
+    AbstractType::Ptr classType = classFun->context()->owner()->abstractType();
+    if(classFun->abstractType()->modifiers() & AbstractType::ConstModifier)
+      classType->setModifiers((AbstractType::CommonModifiers)(classType->modifiers() | AbstractType::ConstModifier));
+    PointerType::Ptr thisPointer(new PointerType());
+    thisPointer->setModifiers(AbstractType::ConstModifier);
+    thisPointer->setBaseType(classType);
+    KSharedPtr<TypeConversionCompletionItem> item( new TypeConversionCompletionItem("this", thisPointer->indexed(), 0) );
+    item->setPrefix(thisPointer->toString());
+    items += CompletionTreeItemPointer(item.data());
+  }
 
   //Eventually add missing include-completion in cases like NotIncludedClass|
   if(!m_followingText.trimmed().isEmpty()) {
@@ -1091,10 +1129,29 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   }
 }
 
-bool  CodeCompletionContext::filterDeclaration(Declaration* decl) {
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) {
+  if(!decl)
+    return true;
+  
   if(m_onlyShowTypes)
     return decl->kind() == Declaration::Type; //Only show type declarations within class contexts
+  
+  if(dynamic && decl->context()->type() == DUContext::Class) {
+    ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
+    if(classMember)
+      return filterDeclaration(classMember);
+  }
+  
   return true;
+}
+
+bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl) {
+    
+  if(m_localClass && doAccessFiltering && decl) {
+    if(!Cpp::isAccessible(m_localClass.data(), decl))
+      return false;
+  }
+  return filterDeclaration((Declaration*)decl, false);
 }
 
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)

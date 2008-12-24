@@ -47,6 +47,7 @@ using namespace KDevelop;
 const bool shortenArgumentHintReturnValues = true;
 const int maximumArgumentHintReturnValueLength = 30;
 const int desiredTypeLength = 20;
+const int normalBestMatchesCount = 5;
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
@@ -238,7 +239,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
   switch (role) {
     case CodeCompletionModel::BestMatchesCount:
-      return QVariant(5);
+      return QVariant(normalBestMatchesCount);
     break;
     case CodeCompletionModel::MatchQuality:
     {
@@ -530,6 +531,10 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
   document->replaceText(word, newText);
 }
 
+void TypeConversionCompletionItem::setPrefix(QString s) {
+  m_prefix = s;
+}
+
 KDevelop::IndexedType TypeConversionCompletionItem::typeForArgumentMatching() const {
   return m_type;
 }
@@ -538,17 +543,23 @@ KDevelop::IndexedType TypeConversionCompletionItem::type() const {
   return m_type;
 }
 
+void TypeConversionCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  if(argumentHintDepth() == 0)
+    document->replaceText( word, m_text );
+}
+
 QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   switch (role) {
     case CodeCompletionModel::SetMatchContext:
       currentMatchContext = CompletionTreeItemPointer(const_cast<TypeConversionCompletionItem*>(this));
       return QVariant(1);
-    
+    case CodeCompletionModel::BestMatchesCount:
+      return QVariant(normalBestMatchesCount);
     case Qt::DisplayRole:
       switch (index.column()) {
         case CodeCompletionModel::Prefix:
-          return QVariant();
+          return QVariant(m_prefix);
         case CodeCompletionModel::Name: {
           return m_text;
         }
@@ -556,6 +567,18 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
       break;
     case CodeCompletionModel::ItemSelected:
       return QVariant();
+    case CodeCompletionModel::MatchQuality:
+    {
+      if( currentMatchContext && currentMatchContext->typeForArgumentMatching().isValid() ) {
+        
+        Cpp::TypeConversion conv(model->currentTopContext().data());
+
+        ///@todo fill the lvalue-ness correctly
+        int quality = ( conv.implicitConversion( typeForArgumentMatching(), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        return QVariant(quality);
+      }
+    }
+    return QVariant();
   }
 
   return QVariant();
