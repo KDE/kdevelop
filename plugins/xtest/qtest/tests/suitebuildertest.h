@@ -44,7 +44,7 @@ private slots:
     void multiSuitesCasesCommands();
     void identicalSuiteNames();
 
-    void keepPreviousCase();
+//    void keepPreviousCase();
 //    void partialReload();
 
 private:

@@ -119,11 +119,42 @@ void KDevRegister::reload()
         CTestfileParser parser(fsm);
         parser.parse(buildRoot());
         m_testExes = parser.testExecutables();
+        KConfigGroup veriConf = project()->projectConfiguration()->group( "Veritas" );
+        veriConf.writeEntry( "framework", "QTest" );
+        QStringList exes;
+        foreach(const TestExecutableInfo& te, m_testExes) {
+            exes << te.command();
+        }
+        veriConf.writeEntry( "executables", exes);
         delete fsm;
-    } else { // TODO
-        emit reloadFailed();
-        emit showErrorMessage(i18n("Failed to fetch test locations. Not a CMake project [todo]"), 5);
-        return;
+    } else {
+        KConfigGroup veriConf = project()->projectConfiguration()->group( "Veritas" );
+        if (!veriConf.exists()) {
+            emit reloadFailed();
+            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
+            return;
+        }
+        if (veriConf.readEntry( "framework" ) != "QTest") {
+            emit reloadFailed();
+            emit showErrorMessage(i18n("Failed to load test suite. Wrong framework."), 5);
+            return;            
+        }
+        QStringList exes = veriConf.readEntry<QStringList>( "executables", QStringList() );
+        m_testExes.clear();
+        foreach(const QString& exe, exes) {
+            TestExecutableInfo te;
+            KUrl testUrl(exe);
+            if (!testUrl.isValid()) continue;
+            te.setCommand(exe);
+            te.setName(testUrl.fileName());
+            te.setWorkingDirectory(testUrl.upUrl());
+            m_testExes << te;
+        }
+        if (m_testExes.isEmpty()) {
+            emit reloadFailed();
+            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
+            return;            
+        }
     }
 
     fetchTestCommands(0);
@@ -175,6 +206,8 @@ void KDevRegister::fetchTestCommands(KJob*)
     QDir buildDir(buildRoot_.path());
     QList<Veritas::TestExecutableInfo> testExes;
 
+    KConfigGroup proj = project()->projectConfiguration()->group("Project");
+    if (proj.readEntry("Manager") == "KDevCMakeManager") {
     QMap<KUrl, ProjectExecutableTargetItem*> exeTargets;
     foreach(ProjectExecutableTargetItem* exe, fetchAllExeTargets(project()->projectItem())) {
         exeTargets[exe->builtUrl()] = exe;
@@ -193,6 +226,8 @@ void KDevRegister::fetchTestCommands(KJob*)
             testInfo.setWorkingDirectory( target->builtUrl().upUrl() );
             testExes << testInfo;
         }
+    }} else {
+        testExes = m_testExes;
     }
 
     if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;

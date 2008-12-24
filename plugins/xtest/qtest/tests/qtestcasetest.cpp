@@ -96,6 +96,8 @@ void CaseTest::clone_noChildren()
     KOMPARE(0, clone->childCount());
     KOMPARE(0, clone->parent());
     KOMPARE(m_case->executable(), clone->executable());
+
+    delete clone;
 }
 
 void CaseTest::clone_singleChild()
@@ -107,6 +109,8 @@ void CaseTest::clone_singleChild()
     KVERIFY(clone != 0);
     KOMPARE(1, clone->childCount());
     kompareCloneChild(clone->child(0), child, clone);
+
+    delete clone;
 }
 
 void CaseTest::clone_multipleChildren()
@@ -121,6 +125,8 @@ void CaseTest::clone_multipleChildren()
     KOMPARE(2, clone->childCount());
     kompareCloneChild(clone->child(0), child1, clone);
     kompareCloneChild(clone->child(1), child2, clone);
+
+    delete clone;
 }
 
 void CaseTest::clone_properties()
@@ -136,6 +142,8 @@ void CaseTest::clone_properties()
     KOMPARE(KUrl("/path/to/foo"), m_case->source());
     KVERIFY(clone->needSelectionToggle());
     KVERIFY(clone->needVerboseToggle());
+
+    delete clone;
 }
 
 void CaseTest::kompareCloneChild(Command* cloneChild, Command* original, Case* parentClone)

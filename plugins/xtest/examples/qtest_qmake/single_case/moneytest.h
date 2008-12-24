@@ -15,28 +15,20 @@
 * 02110-1301, USA.
 */
 
-#include "money.h"
-#include <gtest/gtest.h>
+/*! Example QTest testcase intended to showcase the KDevelop4 xTest runner */
 
-TEST(MoneyTest, create) {
-    Money m(5, "USD");
-    EXPECT_TRUE(m.isValid());
-    EXPECT_EQ(5, m.amount());
-    EXPECT_EQ(std::string("USD"), m.currency());
-}
+#ifndef MONEYTEST_H
+#define MONEYTEST_H
 
-TEST(MoneyTest, negative) {
-    Money m(-5, "USD");
-    EXPECT_FALSE(m.isValid());
-}
+#include <QObject>
 
-TEST(MoneyTest, zero) {
-    Money m(0, "USD");
-    EXPECT_TRUE(m.isValid());
-    EXPECT_EQ(0, m.amount());
-}
+class MoneyTest : public QObject
+{
+Q_OBJECT
+private slots:
+    void create();
+    void negative();
+    void zero();
+};
 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+#endif // MONEYTEST_H

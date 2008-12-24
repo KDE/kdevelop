@@ -198,38 +198,40 @@ void SuiteBuilderTest::identicalSuiteNames()
     verifyCommand(0, barC, "barcommand");
 }
 
-void SuiteBuilderTest::keepPreviousCase()
-{
-    // a single testcase that did not change (timestamp equal).
-    // expected is that the executable is not rerun
-
-    Test* prevRoot = new Test("root", 0);
-    Suite* prevSuite = new Suite("foosuite", QFileInfo("/path/to/foosuite/"), prevRoot);
-    prevRoot->addChild(prevSuite);
-    Case* prevCase = new Case("footest", QFileInfo("/path/to/foosuite/footest.shell"), prevSuite);
-    prevSuite->addChild(prevCase);
-    m_exe->m_wasModified = false;
-    prevCase->setExecutable(m_exe);
-    m_exe->m_name = "footest";
-    m_exe->setLocation( KUrl("/path/to/foosuite/") );
-    m_exe->m_fetchFunctions = QStringList() << "foocommand()";
-
-    m_builder->m_exes = QList<ExecutableStub*>() << m_exe; // inject
-    m_builder->setPreviousRoot(prevRoot);
-    setTestExecutables( m_builder, QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell"));
-
-    m_builder->start();
-    Veritas::Test* root = m_builder->root();
-
-    KVERIFY(root);
-    KOMPARE(1, root->childCount());
-
-    Suite* suite = fetchSuite(root, 0);
-    verifySuite(suite, "foosuite", 1);
-    Case* caze = suite->child(0);
-    verifyCaze(caze, "footest", 1);
-    KVERIFY(!m_exe->fetchFunctionsCalled); // Should not have been called, since we specifically set 
-}
+// void SuiteBuilderTest::keepPreviousCase()
+// {
+//     // a single testcase that did not change (timestamp equal).
+//     // expected is that the executable is not rerun
+// 
+//     Test* prevRoot = new Test("root", 0);
+//     Suite* prevSuite = new Suite("foosuite", QFileInfo("/path/to/foosuite/"), prevRoot);
+//     prevRoot->addChild(prevSuite);
+//     Case* prevCase = new Case("footest", QFileInfo("/path/to/foosuite/footest.shell"), prevSuite);
+//     prevSuite->addChild(prevCase);
+//     m_exe->m_wasModified = false;
+//     prevCase->setExecutable(m_exe);
+//     m_exe->m_name = "footest";
+//     m_exe->setLocation( KUrl("/path/to/foosuite/") );
+//     m_exe->m_fetchFunctions = QStringList() << "foocommand()";
+// 
+//     m_builder->m_exes = QList<ExecutableStub*>() << m_exe; // inject
+//     m_builder->setPreviousRoot(prevRoot);
+//     setTestExecutables( m_builder, QList<KUrl>() << KUrl("/path/to/foosuite/footest.shell"));
+// 
+//     m_builder->start();
+//     Veritas::Test* root = m_builder->root();
+// 
+//     KVERIFY(root);
+//     KOMPARE(1, root->childCount());
+// 
+//     Suite* suite = fetchSuite(root, 0);
+//     verifySuite(suite, "foosuite", 1);
+//     Case* caze = suite->child(0);
+//     verifyCaze(caze, "footest", 1);
+//     KVERIFY(!m_exe->fetchFunctionsCalled); // Should not have been called, since we specifically set 
+// 
+//     delete prevRoot;
+// }
 
 // void SuiteBuilderTest::partialReload()
 // {

@@ -78,8 +78,10 @@ void ConfigWidget::addTestExecutableField(const KUrl& testExecutable)
     lay->addWidget(remove);
     m_removeButtons << remove;
 
-    QVBoxLayout* exeFields = m_ui->executableFieldsLayout; // contains all the KUrlRequesters (in their own QHBoxLayout)
+    QVBoxLayout* exeFields = qobject_cast<QVBoxLayout*>(executableFieldsLayout()); // contains all the KUrlRequesters (in their own QHBoxLayout)
+    Q_ASSERT(exeFields);
     int newIndex = exeFields->count()-1; // the last item is a spacer, insert in front of that.
+    //int newIndex = exeFields->count();
     exeFields->insertLayout(newIndex, lay);
     connect(remove, SIGNAL(clicked(bool)), SLOT(removeTestExecutableField()));
 
@@ -181,7 +183,7 @@ QToolButton* ConfigWidget::addExecutableButton() const
 
 QLayout* ConfigWidget::executableFieldsLayout() const
 {
-    return m_ui->executableFieldsLayout;
+    return m_ui->scrollExeLayout;
 }
 
 QToolButton* ConfigWidget::removeExecutableButton(int fieldIndex) const
