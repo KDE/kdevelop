@@ -91,8 +91,7 @@ public:
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
 
     virtual bool removeFile( KDevelop::ProjectFileItem* );
-    virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*,
-                                       KDevelop::ProjectTargetItem* ) { return false; }
+    virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
 
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }

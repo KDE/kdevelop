@@ -1058,6 +1058,14 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
         return true; //It is not a cmake-managed file
     
     ProjectTargetItem* target=static_cast<ProjectTargetItem*>(it->parent());
+    return removeFileFromTarget(it, target);
+}
+
+bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+{
+    if(it->parent()!=target)
+        return false; //It is not a cmake-managed file
+    
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
     
     DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
@@ -1069,7 +1077,7 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
     
     ApplyChangesWidget e(i18n("Remove a file called '%1'.", it->text()), lists);
     
-    bool ret=followUses(e.document(), r, it->text(), lists);
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists);
     if(ret && e.exec())
     {
         bool saved=e.document()->documentSave();
