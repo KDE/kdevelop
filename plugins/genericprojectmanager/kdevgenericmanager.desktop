@@ -1,20 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=None
-Name[el]=Γενικευμένος εισαγωγέας KDevelop
-Name[es]=Importador genérico de KDevelop
-Name[fr]=Importateur générique pour KDevelop
-Name[gl]=Importador xenérico de KDevelop
-Name[nds]=KDevelop-Allmeenimport
-Name[pt]=Importação Genérica do KDevelop
-Name[pt_BR]=Importação Genérica do KDevelop
-Name[ro]=Importator generic KDevelop
-Name[sv]=KDevelop generell import
-Name[tr]=KDevelop Genel İçeriye Aktarıcı
-Name[uk]=Загальний інструмент імпорту до KDevelop
-Name[x-test]=xxKDevelop Generic Importerxx
-Name[zh_CN]=KDevelop 常规导入器
-Name[zh_TW]=KDevelop 一般匯入器
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos
