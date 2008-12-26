@@ -79,12 +79,12 @@ set(kdevcppdebugger_PART_UI
 kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})
 kde4_add_plugin(kdevcppdebugger ${kdevcppdebugger_PART_SRCS})
 target_link_libraries(kdevcppdebugger sublime
-    ${KDevPlatform_INTERFACES_LIBRARY}
-    ${KDevPlatform_PROJECT_LIBRARY}
-    ${KDevPlatform_LANGUAGE_LIBRARY}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDevPlatform_UTIL_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBRARY}
 )

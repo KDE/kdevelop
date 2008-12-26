@@ -10,7 +10,7 @@ macro(kdev_add_test test_EXEC test_SRCS)
         ${QT_QTTEST_LIBRARY}
         ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}
-		${KDevPlatform_LANGUAGE_LIBRARY}
+		${KDEVPLATFORM_LANGUAGE_LIBRARY}
         ${KDE4_KTEXTEDITOR_LIBRARY})
 endmacro(kdev_add_test)
 

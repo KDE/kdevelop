@@ -17,10 +17,10 @@ target_link_libraries(kdevmakebuilder
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
-        ${KDevPlatform_INTERFACES_LIBRARY}
-        ${KDevPlatform_PROJECT_LIBRARY}
-        ${KDevPlatform_OUTPUTVIEW_LIBRARY}
-        ${KDevPlatform_UTIL_LIBRARY}
+        ${KDEVPLATFORM_INTERFACES_LIBRARY}
+        ${KDEVPLATFORM_PROJECT_LIBRARY}
+        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+        ${KDEVPLATFORM_UTIL_LIBRARY}
 )
 
 install(TARGETS kdevmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -38,7 +38,7 @@ set( makebuilder_cfg_UI
 kde4_add_ui_files( makebuilder_cfg_SRCS ${makebuilder_cfg_UI} )
 kde4_add_kcfg_files( makebuilder_cfg_SRCS makebuilderconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_makebuilder ${makebuilder_cfg_SRCS} )
-target_link_libraries( kcm_kdev_makebuilder ${KDE4_KIO_LIBS} ${KDevPlatform_INTERFACES_LIBRARY} ${KDevPlatform_PROJECT_LIBRARY} ${KDevPlatform_UTIL_LIBRARY} )
+target_link_libraries( kcm_kdev_makebuilder ${KDE4_KIO_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_UTIL_LIBRARY} )
 
 install( TARGETS kcm_kdev_makebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )
 

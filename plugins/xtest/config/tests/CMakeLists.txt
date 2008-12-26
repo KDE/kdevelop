@@ -13,7 +13,7 @@ macro(kdev_add_test test_EXEC)
 		${KDE4_KDEUI_LIBS}
 		${KDE4_KIO_LIBS}
         ${KDE4_KDECORE_LIBS}
-        ${KDevPlatform_VERITAS_LIBRARY}
+        ${KDEVPLATFORM_VERITAS_LIBRARY}
         kdevqtest)
 endmacro(kdev_add_test)
 

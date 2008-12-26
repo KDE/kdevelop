@@ -32,8 +32,8 @@ target_link_libraries(veritascpp
     kdev4cppduchain
     kdev4cppparser
     kdev4cpprpp
-    ${KDevPlatform_LANGUAGE_LIBRARY}
-    ${KDevPlatform_INTERFACES_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+    ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS})
 install(TARGETS veritascpp ${INSTALL_TARGETS_DEFAULT_ARGS})
 

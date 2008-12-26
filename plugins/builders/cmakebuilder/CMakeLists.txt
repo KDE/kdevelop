@@ -18,10 +18,10 @@ target_link_libraries(
     kdevcmakebuilder
         ${KDE4_KDEUI_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
-        ${KDevPlatform_INTERFACES_LIBRARY}
-        ${KDevPlatform_OUTPUTVIEW_LIBRARY}
-        ${KDevPlatform_UTIL_LIBRARY}
-        ${KDevPlatform_PROJECT_LIBRARY}
+        ${KDEVPLATFORM_INTERFACES_LIBRARY}
+        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARY}
+        ${KDEVPLATFORM_UTIL_LIBRARY}
+        ${KDEVPLATFORM_PROJECT_LIBRARY}
 )
 
 install(TARGETS kdevcmakebuilder DESTINATION ${PLUGIN_INSTALL_DIR} )

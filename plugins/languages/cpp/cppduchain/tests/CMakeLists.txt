@@ -12,7 +12,7 @@ set(expressionparsertest_SRCS test_expressionparser.cpp)
 
 kde4_add_unit_test(cppexpressionparsertest ${expressionparsertest_SRCS})
 target_link_libraries(cppexpressionparsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp ${KDevPlatform_LANGUAGE_LIBRARY} kdev4cppduchain  )
+    kdev4cppparser kdev4cpprpp ${KDEVPLATFORM_LANGUAGE_LIBRARY} kdev4cppduchain  )
 
 
 include_directories(
@@ -27,7 +27,7 @@ set(duchaintest_SRCS test_duchain.cpp)
 
 kde4_add_unit_test(duchaintest ${duchaintest_SRCS})
 target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
-    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDevPlatform_LANGUAGE_LIBRARY})
+    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARY})
 
 ########### next target ###############
 
@@ -35,4 +35,4 @@ set(itemrepositorytest_SRCS test_itemrepository.cpp)
 
 
 kde4_add_unit_test(itemrepositorytest ${itemrepositorytest_SRCS})
-target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDevPlatform_LANGUAGE_LIBRARY})
+target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY})

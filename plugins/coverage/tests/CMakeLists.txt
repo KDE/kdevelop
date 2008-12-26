@@ -5,8 +5,8 @@ macro(kdev_add_test test_EXEC test_SRCS)
     kde4_add_unit_test(gcov-${test_EXEC} ${test_SRCS} )
     target_link_libraries(gcov-${test_EXEC}
         kdevveritascoverage
-        ${KDevPlatform_SUBLIME_LIBRARY}
-        ${KDevPlatform_INTERFACES_LIBRARY}
+        ${KDEVPLATFORM_SUBLIME_LIBRARY}
+        ${KDEVPLATFORM_INTERFACES_LIBRARY}
         ${KDE4_KTEXTEDITOR_LIBRARY}
         ${KDE4_KPARTS_LIBRARY}
         ${QT_QTGUI_LIBRARY}

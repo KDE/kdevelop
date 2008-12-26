@@ -13,7 +13,7 @@ macro(kdev_add_test test_EXEC)
         ${QT_QTXML_LIBRARY}
         ${QT_QTGUI_LIBRARY}
         ${KDE4_KDECORE_LIBS}
-        ${KDevPlatform_VERITAS_LIBRARY}
+        ${KDEVPLATFORM_VERITAS_LIBRARY}
         kdevqtest)
 endmacro(kdev_add_test)
 
@@ -36,7 +36,7 @@ target_link_libraries(qtestrunner
         ${QT_QTXML_LIBRARY}
         ${KDE4_KDECORE_LIBS}
         ${KDE4_KDEUI_LIBS}
-        ${KDevPlatform_VERITAS_LIBRARY}
+        ${KDEVPLATFORM_VERITAS_LIBRARY}
         kdevqtest)
 
 add_executable(parserstresstest parserstresstest.cpp qtestoutputparsertest.cpp)
@@ -45,7 +45,7 @@ target_link_libraries(parserstresstest
     ${KDE4_KDECORE_LIBS}
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
-    ${KDevPlatform_VERITAS_LIBRARY}
+    ${KDEVPLATFORM_VERITAS_LIBRARY}
     kdevqtest)
 
 add_test(qtest-fuzz-validxml ${CMAKE_CURRENT_BINARY_DIR}/parserstresstest valid --quiet)
