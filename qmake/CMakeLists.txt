@@ -29,7 +29,7 @@ set(kdevqmakemanager_PART_SRCS
 
 
 kde4_add_plugin(kdevqmakemanager ${kdevqmakemanager_PART_SRCS})
-target_link_libraries( kdevqmakemanager ${KDE4_KDEUI_LIBS} ${KDevPlatform_INTERFACES_LIBRARY} ${KDevPlatform_PROJECT_LIBRARY} ${KDevPlatform_LANGUAGE_LIBRARY} kdev4qmakeparser )
+target_link_libraries( kdevqmakemanager ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY} kdev4qmakeparser )
 
 ########### install files ###############
 
