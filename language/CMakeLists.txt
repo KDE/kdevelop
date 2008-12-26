@@ -124,7 +124,7 @@ target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
         ${KDE4_KTEXTEDITOR+LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES})
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformlanguage ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 

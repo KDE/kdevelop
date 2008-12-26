@@ -42,7 +42,7 @@ target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${QT_QTDESIGNER_LIBRARY})
 set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatforminterfaces ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
     context.h

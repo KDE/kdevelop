@@ -54,3 +54,7 @@ install( FILES
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
+
+install( EXPORT KDevPlatformTargets
+         DESTINATION ${LIB_INSTALL_DIR}/kdevplatform
+         FILE KDevPlatformTargets.cmake )

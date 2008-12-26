@@ -35,12 +35,13 @@ set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../include/kdevpl
 
 endif(NOT WIN32)
 
-macro( _kdevplatform_set_lib_vars _prefix _lib )
-find_library( KDEVPLATFORM_${_prefix}_LIBRARY ${_lib}
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.."
-        DOC "KDevPlatform ${_lib} library" )
-endmacro( _kdevplatform_set_lib_vars )
+if( NOT TARGET kdevplatforminterfaces )
+    include("${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformTargets.cmake")
+endif( NOT TARGET kdevplatforminterfaces )
 
+macro( _kdevplatform_set_lib_vars _prefix _lib )
+  set( KDEVPLATFORM_${_prefix}_LIBRARY ${_lib} )
+endmacro( _kdevplatform_set_lib_vars )
 
 _kdevplatform_set_lib_vars( INTERFACES kdevplatforminterfaces )
 _kdevplatform_set_lib_vars( PROJECT kdevplatformproject )

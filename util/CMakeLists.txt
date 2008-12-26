@@ -29,7 +29,7 @@ target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES
         ${KDE4_KDEUI_LIBS} 
         ${KDE4_KUTILS_LIBRARY})
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
-install(TARGETS kdevplatformutil ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
