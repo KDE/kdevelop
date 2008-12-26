@@ -35,49 +35,24 @@ set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../include/kdevpl
 
 endif(NOT WIN32)
 
-find_library( KDEVPLATFORM_INTERFACES_LIBRARY kdevplatforminterfaces 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform interfaces library" )
+macro( _kdevplatform_set_lib_vars _prefix _lib )
+find_library( KDEVPLATFORM_${_prefix}_LIBRARY ${_lib}
+        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.."
+        DOC "KDevPlatform ${_lib} library" )
+endmacro( _kdevplatform_set_lib_vars )
 
-find_library( KDEVPLATFORM_UTIL_LIBRARY kdevplatformutil 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform util library" )
 
-find_library( KDEVPLATFORM_LANGUAGE_LIBRARY kdevplatformlanguage 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform language library" )
-
-find_library( KDEVPLATFORM_OUTPUTVIEW_LIBRARY kdevplatformoutputview 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform outputview library" )
-
-find_library( KDEVPLATFORM_PROJECT_LIBRARY kdevplatformproject 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform project library" )
-
-find_library( KDEVPLATFORM_SUBLIME_LIBRARY sublime 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform sublime library" )
-
-find_library( KDEVPLATFORM_SHELL_LIBRARY kdevplatformshell 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform shell library" )
-
-find_library( KDEVPLATFORM_TESTSHELL_LIBRARY kdevplatformtestshell 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform testshell library" )
-
-find_library( KDEVPLATFORM_VCS_LIBRARY kdevplatformvcs 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform vcs library" )
-
-find_library( KDEVPLATFORM_VERITAS_LIBRARY kdevplatformveritas 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform veritas library" )
-
-find_library( KDEVPLATFORM_SOURCEFORMATTER_LIBRARY kdevplatformsourceformatter 
-        HINTS "${_KDEVPLATFORM_CURRENT_DIR}/.." 
-        DOC "KDevPlatform sourceformatter library" )
+_kdevplatform_set_lib_vars( INTERFACES kdevplatforminterfaces )
+_kdevplatform_set_lib_vars( PROJECT kdevplatformproject )
+_kdevplatform_set_lib_vars( LANGUAGE kdevplatformlanguage )
+_kdevplatform_set_lib_vars( UTIL kdevplatformutil ) 
+_kdevplatform_set_lib_vars( SHELL kdevplatformshell )
+_kdevplatform_set_lib_vars( SUBLIME sublime )
+_kdevplatform_set_lib_vars( VERITAS kdevplatformveritas )
+_kdevplatform_set_lib_vars( VCS kdevplatformvcs )
+_kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
+_kdevplatform_set_lib_vars( SHELL kdevplatformtestshell )
+_kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 
 mark_as_advanced(
     KDEVPLATFORM_INTERFACES_LIBRARY
