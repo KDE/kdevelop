@@ -61,40 +61,6 @@
 namespace KDevelop
 {
 
-ProjectProgress::ProjectProgress()
-{
-}
-
-ProjectProgress::~ProjectProgress()
-{
-}
-
-QString ProjectProgress::statusName() const
-{
-    return i18n("Project Progress");
-}
-
-void ProjectProgress::setBuzzy()
-{
-    // show an indeterminate progressbar
-    emit showProgress(0,0,0);
-    emit showMessage(i18n("Loading") + " " + projectName);
-}
-
-void ProjectProgress::setDone()
-{
-    // first show 100% bar for a second, then hide.
-    emit showProgress(0,1,1);
-    QTimer* t = new QTimer;
-    t->setSingleShot( true );
-    t->setInterval( 1000 );
-    connect(t, SIGNAL(timeout()),SIGNAL(hideProgress()));
-    connect(t, SIGNAL(timeout()),SIGNAL(clearMessage()));
-    connect(t, SIGNAL(timeout()),t, SLOT(deleteLater()));
-    t->start();
-}
-
-
 class ProjectPrivate
 {
 public:
@@ -113,11 +79,9 @@ public:
     QSet<KDevelop::IndexedString> fileSet;
     bool reloading;
     bool scheduleReload;
-    ProjectProgress* progress;
 
     void reloadDone()
     {
-        progress->setDone();
         reloading = false;
         Core::self()->projectController()->projectModel()->appendRow(topItem);
         if (scheduleReload) {
@@ -208,7 +172,6 @@ public:
 
     void importDone( KJob* )
     {
-        progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
         projCtrl->projectModel()->appendRow(topItem);
         projCtrl->projectImportingFinished( project );
@@ -297,7 +260,6 @@ public:
     {
         // helper method for open()
         name = projectGroup.readEntry( "Name", projectFileUrl.fileName() );
-        progress->projectName = name;
         if( Core::self()->projectController()->isProjectNameUsed( name ) ) 
         {
             kWarning() << "Trying to open a project with a name thats already used by another open project";
@@ -401,13 +363,10 @@ Project::Project( QObject *parent )
     d->vcsPlugin = 0;
     d->reloading = false;
     d->scheduleReload = false;
-    d->progress = new ProjectProgress;
-    Core::self()->uiController()->registerStatus( d->progress );
 }
 
 Project::~Project()
 {
-    delete d->progress;
     delete d;
 }
 
@@ -456,7 +415,6 @@ void Project::reloadModel()
             return;
     }
 
-    d->progress->setBuzzy();
     ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
     connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
     Core::self()->runController()->registerJob( importJob );
@@ -482,7 +440,6 @@ bool Project::open( const KUrl& projectFileUrl_ )
         return false;
 
     d->loadVersionControlPlugin(projectGroup);
-    d->progress->setBuzzy();
     ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
     connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
     Core::self()->runController()->registerJob( importJob );
