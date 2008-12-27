@@ -13,6 +13,7 @@ Comment[pt_BR]=Este 'plugin' permite formatar os ficheiros, usando diferentes in
 Comment[sv]=Insticksprogrammet gör det möjligt att formatera filer med olika gränssnitt för varje filtyp.
 Comment[uk]=За допомогою цього додатка можна виконувати форматування файлів різних типів за допомогою відповідного до типу файла сервера форматування.
 Comment[x-test]=xxThis plugin allows to format files using different backends for each file type.xx
+Comment[zh_CN]=此插件可为每种文件类型使用不同的后端格式化文件。
 Comment[zh_TW]=此外掛程式依不同檔案型態提供不同的後端介面來做檔案格式化。
 Name=KDevSourceFormatter
 Name[nds]=KDevBornformateren

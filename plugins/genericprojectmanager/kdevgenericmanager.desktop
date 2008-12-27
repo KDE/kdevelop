@@ -1,6 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=None
+Name[gl]=Nengún
+Name[nds]=Keen
+Name[pt]=Nenhum
+Name[pt_BR]=Nenhum
+Name[uk]=Немає
+Name[x-test]=xxNonexx
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos
@@ -14,6 +20,7 @@ Comment[sv]=Tillåter att KDevelop hanterar generella projekt
 Comment[tr]=KDevelop uygulamasının genel projeleri yönetmesine izin ver
 Comment[uk]=За допомогою цього додатка можна увімкнути керування загальними проектами у KDevelop
 Comment[x-test]=xxAllow KDevelop to manage generic projectsxx
+Comment[zh_CN]=允许 KDevelop 管理常规工程
 Comment[zh_TW]=讓 KDevelop 管理一般的專案
 Icon=gear
 ServiceTypes=KDevelop/Plugin
