@@ -1,6 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=Custom Makefile
+Name[gl]=Makefile personalizado
+Name[nds]=Topasst Makefile
+Name[pt]=Makefile Personalizada
+Name[pt_BR]=Makefile Personalizada
+Name[uk]=Власний Makefile
+Name[x-test]=xxCustom Makefilexx
 Comment=Imports and edits custom make projects
 Comment[de]=Importiert und bearbeitet benutzerdefinierte Make-Projekte
 Comment[el]=Εισαγωγή και επεξεργασία έργων προσαρμοσμένου make
