@@ -569,6 +569,12 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
       return QVariant();
     case CodeCompletionModel::MatchQuality:
     {
+      DUChainReadLocker lock(DUChain::lock(), 500);
+      if(!lock.locked()) {
+        kDebug(9007) << "Failed to lock the du-chain in time";
+        return QVariant();
+      }
+      
       if( currentMatchContext && currentMatchContext->typeForArgumentMatching().isValid() ) {
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
