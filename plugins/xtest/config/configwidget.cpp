@@ -37,10 +37,24 @@ ConfigWidget::ConfigWidget(QWidget* parent)
     connect(frameworkBox(), SIGNAL(activated(QString)),
             SIGNAL(frameworkSelected(QString)));
     expandDetailsButton()->setEnabled(false);
+    m_allowUserModification = true;
 }
 
 ConfigWidget::~ConfigWidget()
 {
+}
+
+void ConfigWidget::setReadOnly()
+{
+    m_allowUserModification = false;
+    addExecutableButton()->setEnabled(false);
+    QList<KUrlRequester*> requesters = findChildren<KUrlRequester*>();
+    foreach(KUrlRequester* req, requesters) {
+        req->setEnabled(false);
+    }
+    foreach(QToolButton* rem, m_removeButtons) {
+        rem->setEnabled( false );
+    }
 }
 
 void ConfigWidget::setDetailsWidget(QWidget* detailsWidget)
@@ -71,7 +85,9 @@ void ConfigWidget::addTestExecutableField(const KUrl& testExecutable)
     KUrlRequester* req = new KUrlRequester(this);
     connect(req, SIGNAL(textChanged(QString)), SIGNAL(changed()));
     req->setUrl(testExecutable);
+    req->setEnabled(m_allowUserModification);
     QToolButton* remove = new QToolButton(this);
+    remove->setEnabled(m_allowUserModification);
     remove->setToolButtonStyle( Qt::ToolButtonIconOnly );
     remove->setIcon(KIcon("list-remove"));
     lay->addWidget(req);
@@ -81,7 +97,6 @@ void ConfigWidget::addTestExecutableField(const KUrl& testExecutable)
     QVBoxLayout* exeFields = qobject_cast<QVBoxLayout*>(executableFieldsLayout()); // contains all the KUrlRequesters (in their own QHBoxLayout)
     Q_ASSERT(exeFields);
     int newIndex = exeFields->count()-1; // the last item is a spacer, insert in front of that.
-    //int newIndex = exeFields->count();
     exeFields->insertLayout(newIndex, lay);
     connect(remove, SIGNAL(clicked(bool)), SLOT(removeTestExecutableField()));
 

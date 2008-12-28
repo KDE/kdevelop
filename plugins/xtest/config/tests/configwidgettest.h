@@ -52,11 +52,14 @@ private slots:
     void multipleFrameworksComboBox();
 
     void executableContents();
+    void buttonsDisabledInReadOnlyMode();
 
 private:
     void assertDetailsCollapsed();
     void assertDetailsExpanded();
     void assertTestExeFieldsShown(int numberOf);
+    void assertChildWidgetsDisabled();
+    void assertChildWidgetsEnabled();
 
 private:
     ConfigWidget* m_config;

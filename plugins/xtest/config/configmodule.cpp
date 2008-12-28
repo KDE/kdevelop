@@ -28,14 +28,17 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
 #include <veritas/itestframework.h>
 
 #include "configwidget.h"
+#include <interfaces/iprojectcontroller.h>
 
 using KDevelop::ICore;
 using KDevelop::IPlugin;
 using KDevelop::IPluginController;
 using KDevelop::ProjectConfigSkeleton;
+using KDevelop::IProject;
 using Veritas::ConfigModule;
 using Veritas::ITestFramework;
 
@@ -58,13 +61,35 @@ QList<ITestFramework*> fetchTestFrameworks()
     }
     return frameworks;
 }
+
+/*! Retrieves the project for the current configmodule.*/
+IProject* retrieveProject()
+{
+    KUrl projectUrl = VeritasConfig::self()->projectFileUrl();
+    foreach(IProject* proj, ICore::self()->projectController()->projects()) {
+        if (proj->projectFileUrl() == projectUrl) {
+            return proj;
+        }
+    }
+    Q_ASSERT(0 && "Errr, project kcmodule without associated project."); 
+    return 0;
 }
+
+bool isCMakeProject()
+{
+    IProject* proj = retrieveProject();
+    KConfigGroup cfg = proj->projectConfiguration()->group( "Project" );
+    return cfg.readEntry("Manager") == "KDevCMakeManager";
+}
+
+} // end anonymous namespace
 
 ConfigModule::ConfigModule(QWidget* parent, const QVariantList& args)
     : ProjectKCModule<VeritasConfig>(VeritasConfigFactory::componentData(), parent, args)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
     m_widget = new ConfigWidget;
+    if (isCMakeProject()) m_widget->setReadOnly();
     l->addWidget(m_widget);
 
     QList<ITestFramework*> frameworks = fetchTestFrameworks();

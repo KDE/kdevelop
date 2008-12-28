@@ -26,6 +26,7 @@
 #include "fakedetailswidget.h"
 #include <QLabel>
 #include <KUrlRequester>
+#include <qtoolbutton.h>
 
 using Veritas::ConfigWidgetTest;
 using Veritas::ConfigWidget;
@@ -127,6 +128,7 @@ void ConfigWidgetTest::addTwoTestExeFields()
     m_config->fto_clickAddTestExeField();
     m_config->fto_clickAddTestExeField();
     assertTestExeFieldsShown(2);
+    assertChildWidgetsEnabled();
 }
 
 // command
@@ -220,6 +222,38 @@ void ConfigWidgetTest::executableContents()
     KOMPARE(2, executables.count());
     KVERIFY(executables.contains(KUrl("/foo")));
     KVERIFY(executables.contains(KUrl("http://bar")));
+}
+
+// command
+void ConfigWidgetTest::buttonsDisabledInReadOnlyMode()
+{
+    assertChildWidgetsEnabled();
+    m_config->setReadOnly();
+    assertChildWidgetsDisabled();
+    m_config->addTestExecutableField(KUrl("/foo"));
+    assertChildWidgetsDisabled();
+}
+
+// helper
+void ConfigWidgetTest::assertChildWidgetsDisabled()
+{
+    QList<KUrlRequester*> exes = m_config->findChildren<KUrlRequester*>();
+    foreach(KUrlRequester* exe, exes) {
+       KVERIFY(!exe->isEnabled());
+    }
+    KVERIFY(!m_config->addExecutableButton()->isEnabled());
+    foreach(QToolButton* b, m_config->m_removeButtons) {
+       KVERIFY(!b->isEnabled());
+    }
+}
+
+// helper
+void ConfigWidgetTest::assertChildWidgetsEnabled()
+{
+    QList<QWidget*> children = m_config->findChildren<QWidget*>();
+    foreach(QWidget* child, children) {
+        KVERIFY_MSG(child->isEnabled(), child->metaObject()->className());
+    }
 }
 
 QTEST_KDEMAIN( ConfigWidgetTest, GUI )

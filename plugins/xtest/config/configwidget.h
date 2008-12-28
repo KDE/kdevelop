@@ -59,6 +59,10 @@ public:
      *  Must be previously added to this box with appendFramework */
     void setCurrentFramework(const QString& name);
 
+    /*! Do not allow the user to modify the test executables, only show them.
+     *  The config widget goes into read-only mode. */
+    void setReadOnly();
+    
 public Q_SLOTS:
     /*! Adds a gui element where a single test executable location can be
      *  configured. This widget contains an urlrequester and remove button.
@@ -90,7 +94,8 @@ private:
     Ui::VeritasConfig* m_ui;
     QWidget* m_details; // framework specific details widget
     QList<QToolButton*> m_removeButtons; // used to retrieve exe-url bar location in the widget
-
+    bool m_allowUserModification;
+    
 private:
     friend class ConfigWidgetTest;
 
