@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Custom Makefile
+Name[el]=Προσαρμοσμένο Makefile
 Name[gl]=Makefile personalizado
 Name[nds]=Topasst Makefile
 Name[pt]=Makefile Personalizada
