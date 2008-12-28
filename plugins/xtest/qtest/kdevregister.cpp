@@ -123,7 +123,7 @@ void KDevRegister::reload()
         veriConf.writeEntry( "framework", "QTest" );
         QStringList exes;
         foreach(const TestExecutableInfo& te, m_testExes) {
-            exes << te.command();
+            exes << te.workingDirectory().resolved(te.command()).path();
         }
         veriConf.writeEntry( "executables", exes);
         delete fsm;
@@ -169,7 +169,9 @@ typedef QMap<KUrl, ProjectExecutableTargetItem*> ExeTargetMap;
 
 ProjectExecutableTargetItem* findTargetFor(const TestExecutableInfo& test, const ExeTargetMap& exeTargets)
 {
-    KUrl testCmd(test.command());
+    //If test.command() isn't relative, test.command() is used. Otherwise, the 
+    //merged path with the working directory is used.
+    KUrl testCmd(test.workingDirectory().resolved(test.command()));
     QString testFile = testCmd.fileName();
     ProjectExecutableTargetItem* exe = 0;
     if (testFile.endsWith(".shell")) {
