@@ -42,8 +42,8 @@ public:
     }
 
     virtual bool changeDir(const KUrl& dir) {
-         m_changedToDirs << dir;
-         m_currentDirectory = dir;
+         m_changedToDirs << m_currentDirectory.resolved(dir);
+         m_currentDirectory = m_currentDirectory.resolved(dir);
          return true;
     }
 
@@ -53,7 +53,7 @@ public:
 
     virtual QIODevice* file(const QString& name) {
         m_filesAccessed << name;
-        return m_files[name];
+        return m_files[m_currentDirectory.resolved(name).path()];
     }
 
     virtual KUrl currentDirectory() const {
@@ -94,7 +94,7 @@ void CTestfileParserTest::emptyDirectory()
 void CTestfileParserTest::emptyCTestfile()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake", "\n");
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(), "\n");
 
     m_parser->parse(m_someDir);
 
@@ -105,7 +105,7 @@ void CTestfileParserTest::emptyCTestfile()
 void CTestfileParserTest::subdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake", "SUBDIRS(foobar)\n");
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(), "SUBDIRS(foobar)\n");
 
     m_parser->parse(m_someDir);
 
@@ -120,7 +120,7 @@ void CTestfileParserTest::subdir()
 void CTestfileParserTest::multipleSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake", 
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "SUBDIRS(foo)\n"
                            "SUBDIRS(bar)\n");
 
@@ -134,20 +134,20 @@ void CTestfileParserTest::multipleSubdir()
 void CTestfileParserTest::addtest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n");
 
     m_parser->parse(m_someDir);
 
     assertSingleCTestfileAccessed();
     assertNumberOfTestsEquals(1, m_parser);
-    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe");
+    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe", m_someDir);
 }
 
 void CTestfileParserTest::multipleAddtest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "ADD_TEST(bar \"bar.exe\")\n");
 
@@ -155,14 +155,14 @@ void CTestfileParserTest::multipleAddtest()
 
     assertSingleCTestfileAccessed();
     assertNumberOfTestsEquals(2, m_parser);
-    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe");
-    assertTestFound(m_parser, 1, "bar", "bar.exe");
+    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe", m_someDir);
+    assertTestFound(m_parser, 1, "bar", "bar.exe", m_someDir);
 }
 
 void CTestfileParserTest::mixedAddtestSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "SUBDIRS(foobar)\n"
                            "ADD_TEST(moo \"/path/to/moo.exe\")\n"
@@ -172,15 +172,39 @@ void CTestfileParserTest::mixedAddtestSubdir()
 
     assertSingleCTestfileAccessed();
     assertNumberOfTestsEquals(2, m_parser);
-    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe");
-    assertTestFound(m_parser, 1, "moo", "/path/to/moo.exe");
+    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe", m_someDir);
+    assertTestFound(m_parser, 1, "moo", "/path/to/moo.exe", m_someDir);
     assertSubdirAccessed(KUrl::List() << KUrl(m_someDir, "foobar/") << KUrl(m_someDir, "zoo/"));
+}
+
+void CTestfileParserTest::addtestInSubdirs()
+{
+    initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
+    initializeDirectoryContents(KUrl(m_someDir, "foobar/"), QStringList() << "CTestTestfile.cmake");
+    initializeDirectoryContents(KUrl(m_someDir, "moobaz/"), QStringList() << "CTestTestfile.cmake");
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+                           "ADD_TEST(foo \"/path/to/foo.exe\")\n"
+                           "SUBDIRS(foobar)\n"
+                           "SUBDIRS(moobaz)\n");
+    initializeFileContents(KUrl(m_someDir, "foobar/CTestTestfile.cmake").path(),
+                           "ADD_TEST(moo \"/path/to/moo.exe\")\n"
+                           "SUBDIRS(zoo)\n");
+    initializeFileContents(KUrl(m_someDir, "moobaz/CTestTestfile.cmake").path(),
+                           "ADD_TEST(bar \"bar.exe\")\n");
+
+    m_parser->parse(m_someDir);
+
+    assertNumberOfTestsEquals(3, m_parser);
+    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe", m_someDir);
+    assertTestFound(m_parser, 1, "moo", "/path/to/moo.exe", KUrl(m_someDir, "foobar/"));
+    assertTestFound(m_parser, 2, "bar", "bar.exe", KUrl(m_someDir, "moobaz/"));
+    assertSubdirAccessed(KUrl::List() << KUrl(m_someDir, "foobar/") << KUrl(m_someDir, "foobar/zoo/")<< KUrl(m_someDir, "moobaz/"));
 }
 
 void CTestfileParserTest::garbageLines()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "// comment here\n"
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "just some garbage\n"
@@ -193,22 +217,22 @@ void CTestfileParserTest::garbageLines()
 
     assertSingleCTestfileAccessed();
     assertNumberOfTestsEquals(2, m_parser);
-    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe");
-    assertTestFound(m_parser, 1, "moo", "/path/to/moo.exe");
+    assertTestFound(m_parser, 0, "foo", "/path/to/foo.exe", m_someDir);
+    assertTestFound(m_parser, 1, "moo", "/path/to/moo.exe", m_someDir);
     assertSubdirAccessed(KUrl::List() << KUrl(m_someDir, "foobar/") << KUrl(m_someDir, "zoo/"));
 }
 
 void CTestfileParserTest::addTestMultipleArguments()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "ADD_TEST(zoo \"/path/to/zoo\" \"arg1\" \"arg2\")\n");
 
     m_parser->parse(m_someDir);
 
     assertSingleCTestfileAccessed();
     assertNumberOfTestsEquals(1, m_parser);
-    assertTestFound(m_parser, 0, "zoo", "/path/to/zoo");
+    assertTestFound(m_parser, 0, "zoo", "/path/to/zoo", m_someDir);
     TestExecutableInfo test = m_parser->testExecutables()[0];
     kDebug() << test.arguments().size();
     KOMPARE_MSG(QStringList() << "arg1" << "arg2", test.arguments(), test.arguments().join("<>"));
@@ -217,7 +241,7 @@ void CTestfileParserTest::addTestMultipleArguments()
 void CTestfileParserTest::illFormattedAddTest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "ADD_TEST(foobar)\n" // No test exe location
                            "ADD_TEST()\n"
                            "ADD_TES(moo \"/path/to/moo.exe\")\n" // missing T in ADD_TES
@@ -233,7 +257,7 @@ void CTestfileParserTest::illFormattedAddTest()
 void CTestfileParserTest::illFormattedSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents("CTestTestfile.cmake",
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
                            "SUBDIRS()\n" // No dir name
                            "SUBDIR(moo)\n" // missing S in SUBDIRS
                            "SUBDIRS(zoo\n"); // no ending ')'
@@ -257,13 +281,14 @@ void CTestfileParserTest::assertNoTestsFound(CTestfileParser* parser)
     assertNumberOfTestsEquals(0, parser);
 }
 
-void CTestfileParserTest::assertTestFound(CTestfileParser* parser, int num, QString name, QString exe)
+void CTestfileParserTest::assertTestFound(CTestfileParser* parser, int num, QString name, QString exe, KUrl workingDirectory)
 {
     QList<TestExecutableInfo> tests = parser->testExecutables();
     KVERIFY(num < tests.size());
     TestExecutableInfo test = tests[num];
     KOMPARE(name, test.name());
     KOMPARE(exe, test.command());
+    KOMPARE(workingDirectory, test.workingDirectory());
 }
 
 void CTestfileParserTest::assertSubdirAccessed(KUrl::List dirs)

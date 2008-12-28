@@ -45,6 +45,7 @@ private slots:
     void multipleAddtest();
     void addTestMultipleArguments();
     void mixedAddtestSubdir();
+    void addtestInSubdirs();
 
     void garbageLines();
     void illFormattedAddTest();
@@ -55,7 +56,7 @@ private:
     void initializeFileContents(const QString& file, const QString& contents);
 
     void assertNoTestsFound(CTestfileParser* parser);
-    void assertTestFound(CTestfileParser* parser, int num, QString name, QString exe);
+    void assertTestFound(CTestfileParser* parser, int num, QString name, QString exe, KUrl workingDirectory);
     void assertSingleCTestfileAccessed();
     void assertSubdirAccessed(KUrl::List dirs);
     void assertNumberOfTestsEquals(int num, CTestfileParser* parser);

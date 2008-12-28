@@ -98,6 +98,7 @@ void CTestfileParser::readCTestfile(KUrl::List& subDirs, QList<TestExecutableInf
         } else if (line_.startsWith("ADD_TEST(")) {
             TestExecutableInfo ti = processAddTestLine(line_);
             if (!ti.name().isEmpty()) {
+                ti.setWorkingDirectory(m_dirAccess->currentDirectory());
                 tests << ti;
             }
         }
