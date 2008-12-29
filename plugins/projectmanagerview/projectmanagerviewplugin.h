@@ -75,6 +75,7 @@ protected Q_SLOTS:
     void reloadFromContextMenu();
     void createFolderFromContextMenu();
     void createFileFromContextMenu();
+    void createFileInTargetFromContextMenu();
     void removeFolderFromContextMenu();
     void removeFileFromContextMenu();
 

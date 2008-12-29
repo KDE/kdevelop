@@ -216,8 +216,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
-        if(!hasTargets && item->executable())
+        else if ( item->target() )
+        {
+            KAction* action = new KAction( i18n( "Create File" ), this );
+            connect( action, SIGNAL(triggered()), this, SLOT(createFileInTargetFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+        }
+        else if(!hasTargets && item->executable())
         {
             KAction* action = new KAction( i18n("Run"), this );
             connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
@@ -426,39 +431,61 @@ void ProjectManagerViewPlugin::removeFileFromContextMenu()
     }
 }
 
+ProjectFileItem* createFile(const ProjectFolderItem* item)
+{
+    QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
+    QString name = QInputDialog::getText(window, i18n("Create File"), i18n("File Name"));
+    
+    if(name.isEmpty())
+        return 0;
+    
+    KUrl url=item->url();
+    url.addPath( name );
+
+    if (KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, window )) {
+        KMessageBox::error( window, i18n( "This file exists already." ) );
+        return 0;
+    }
+
+    KSaveFile file(url.path());
+    if ( ! file.open() ) {
+        KMessageBox::error( window, i18n( "Can't create file." ) );
+        return 0;
+    }
+    file.finalize();
+    file.close();
+
+    ProjectFileItem* ret=item->project()->projectFileManager()->addFile( url, item->folder() );
+    ICore::self()->documentController()->openDocument( url );
+    return ret;
+}
+
 void ProjectManagerViewPlugin::createFileFromContextMenu( )
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         if ( item->folder() ) {
-            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            QString name = QInputDialog::getText ( window,
-                                i18n ( "Create File" ), i18n ( "File Name" ) );
-            if (!name.isEmpty()) {
-                KUrl url = item->folder()->url();
-                url.addPath( name );
-
-                if (KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, window )) {
-                    KMessageBox::error( window, i18n( "This file exists already." ) );
-                    continue;
-                }
-
-                KSaveFile file(url.path());
-                if ( ! file.open() ) {
-                    KMessageBox::error( window, i18n( "Can't create file." ) );
-                    continue;
-                }
-                file.finalize();
-                file.close();
-
-                item->project()->projectFileManager()->addFile( url, item->folder() );
-                ICore::self()->documentController()->openDocument( url );
-            }
+            createFile(item->folder());
         }
     }
 }
 
-
+void ProjectManagerViewPlugin::createFileInTargetFromContextMenu( )
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        if ( item->target() )
+        {
+            ProjectFolderItem* folder=dynamic_cast<ProjectFolderItem*>(item->parent());
+            if(folder)
+            {
+                ProjectFileItem* f=createFile(folder);
+                if(f)
+                    item->project()->buildSystemManager()->addFileToTarget(f, item->target());
+            }
+        }
+    }
+}
 
 #include "projectmanagerviewplugin.moc"
 
