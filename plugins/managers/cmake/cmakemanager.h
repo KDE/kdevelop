@@ -77,19 +77,12 @@ public:
     virtual QHash<QString, QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
-
-    virtual KDevelop::ProjectTargetItem* createTarget( const QString&,
-            KDevelop::ProjectFolderItem* ) { return false; }
-
-    virtual KDevelop::ProjectFileItem* addFile( const KUrl&,
-                                          KDevelop::ProjectFolderItem* ) { return false; }
-
-    virtual bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* ) { return false; }
+    virtual KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* );
+    virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
+    virtual bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
 
     virtual bool removeFolder( KDevelop::ProjectFolderItem* );
-
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-
     virtual bool removeFile( KDevelop::ProjectFileItem* );
     virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
 

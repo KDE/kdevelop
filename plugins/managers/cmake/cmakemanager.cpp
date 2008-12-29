@@ -617,20 +617,19 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
         if( item->hasFileOrFolder( entry ) )
             continue;
 
-        KUrl folderurl = item->url();
-        folderurl.addPath( entry );
+        KUrl fileurl = item->url();
+        fileurl.addPath( entry );
 
-        KUrl cache=folderurl;
+        KUrl cache=fileurl;
         cache.addPath("CMakeCache.txt");
-        if( QFileInfo( folderurl.toLocalFile() ).isDir())
+        if( QFileInfo( fileurl.toLocalFile() ).isDir())
         {
             if(!QFile::exists(cache.toLocalFile()))
-                folderList.append(new KDevelop::ProjectFolderItem( item->project(), folderurl, item ));
+                folderList.append(new KDevelop::ProjectFolderItem( item->project(), fileurl, item ));
         }
         else
         {
-            new KDevelop::ProjectFileItem( item->project(), folderurl, item );
-            item->project()->addToFileSet( KDevelop::IndexedString( folderurl ) );
+            addFile(fileurl, item);
         }
     }
 
@@ -985,6 +984,11 @@ bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
 {
     KUrl lists=it->url().upUrl();
     lists.addPath("CMakeLists.txt");
+    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
+    {
+        it->parent()->removeRow(it->row());
+        return true;
+    }
     
     ApplyChangesWidget e(i18n("Remove a folder called '%1'.", it->text()), lists);
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
@@ -1002,11 +1006,12 @@ bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
     return 0;
 }
 
-bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists)
+bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add)
 {
+    qDebug() << "ooooooooooo" << lists;
+    bool ret=true;
     QString txt=doc->text(r.textRange());
-    bool ret=false;
-    if(txt.contains(name))
+    if(!add && txt.contains(name))
     {
         txt.replace(name, QString());
         doc->replaceText(r.textRange(), txt);
@@ -1014,10 +1019,11 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
     }
     else
     {
+        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
         KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(lists);
+        QList<Declaration*> decls;
         for(int i=0; i<topctx->usesCount(); i++)
         {
-            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
             Use u = topctx->uses()[i];
             
             if(!r.contains(u.m_range))
@@ -1025,15 +1031,25 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
             
             Declaration* d=u.usedDeclaration(topctx);
             
-            if(d->context()->topContext()->url().toUrl()!=lists)
-                continue; //Let's just stay in the same file for now
-            
+            if(d->context()->topContext()->url().toUrl()==lists)
+                decls += d;
+        }
+        
+        qDebug() << "iiiiiiiiiiiiii" << add << decls << txt;
+        if(add && decls.isEmpty())
+        {
+            doc->insertText(r.textRange().start(), name);
+            ret=true;
+        }
+        else foreach(Declaration* d, decls)
+        {
             r.start=d->range().end;
             
             for(int l=r.start.line; ;l++)
             {
                 QString line=doc->line(l);
                 int c;
+                qDebug() << "llllllll" << line;
                 if((c=line.indexOf(')'))>=0) {
                     r.end=SimpleCursor(l,c);
                     break;
@@ -1043,9 +1059,12 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
                 }
             }
             
+            qDebug() << "kkkkkkkkkk" << r.textRange() << r.isEmpty();
+            
             if(!r.isEmpty())
             {
-                ret = ret || followUses(doc, r, name, lists);
+                qDebug() << "mmmmmmmm" << doc;
+                ret = ret && followUses(doc, r, name, lists, add);
             }
         }
     }
@@ -1054,11 +1073,17 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
 bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
 {
+    bool ret=true;
     if(!static_cast<ProjectBaseItem*>(it->parent())->target())
-        return true; //It is not a cmake-managed file
-    
-    ProjectTargetItem* target=static_cast<ProjectTargetItem*>(it->parent());
-    return removeFileFromTarget(it, target);
+    {
+        it->parent()->removeRow(it->row());
+    }
+    else
+    {
+        ProjectTargetItem* target=static_cast<ProjectTargetItem*>(it->parent());
+        ret = removeFileFromTarget(it, target);
+    }
+    return ret;
 }
 
 bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
@@ -1077,18 +1102,57 @@ bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, K
     
     ApplyChangesWidget e(i18n("Remove a file called '%1'.", it->text()), lists);
     
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists);
-    if(ret && e.exec())
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false);
+    if(ret)
     {
-        bool saved=e.document()->documentSave();
-        if(!saved)
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Cannot save the change."));
+        if(e.exec())
+        {
+            bool saved=e.document()->documentSave();
+            if(!saved)
+                KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                    i18n("Cannot save the change."));
+        }
     }
     else
     {
         KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                               i18n("Cannot remove the file."));
+    }
+    return ret;
+}
+
+//This is being called from ::parse() so we shouldn't make it block the ui
+KDevelop::ProjectFileItem* CMakeProjectManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
+{
+    ProjectFileItem* it = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+    parent->project()->addToFileSet( KDevelop::IndexedString( url ) );
+    return it;
+}
+
+bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+{
+    if(it->parent()==target)
+        return true; //It already is in the target
+    
+    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
+    
+    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
+    SimpleRange r=desc->descriptor().range();
+    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+    
+    KUrl lists=folder->url();
+    lists.addPath("CMakeLists.txt");
+    
+    ApplyChangesWidget e(i18n("Add a file called '%1' to target '%2'.", it->text(), target->text()), lists);
+    
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists, true);
+    
+    if(e.exec())
+    {
+        bool saved=e.document()->documentSave();
+        if(!saved)
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                  i18n("Cannot save the change."));
     }
     return ret;
 }

@@ -90,6 +90,10 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 
     KDevelop::SimpleRange range() const
     { return KDevelop::SimpleRange(line-1, column-1, endLine-1, endColumn); }
+    
+    KDevelop::SimpleRange argRange() const
+    { return KDevelop::SimpleRange(arguments.first().range().start,
+                                   arguments.last().range().end); }
 
     bool operator==(const CMakeFunctionDesc &other) const;
     void addArguments( const QStringList& );
