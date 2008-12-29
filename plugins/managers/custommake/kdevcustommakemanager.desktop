@@ -2,12 +2,15 @@
 Type=Service
 Name=Custom Makefile
 Name[el]=Προσαρμοσμένο Makefile
+Name[fr]=Personnaliser un Makefile
 Name[gl]=Makefile personalizado
+Name[lv]=Pielāgots Make fails
 Name[nds]=Topasst Makefile
 Name[pt]=Makefile Personalizada
 Name[pt_BR]=Makefile Personalizada
 Name[uk]=Власний Makefile
 Name[x-test]=xxCustom Makefilexx
+Name[zh_TW]=自訂 Makefile
 Comment=Imports and edits custom make projects
 Comment[de]=Importiert und bearbeitet benutzerdefinierte Make-Projekte
 Comment[el]=Εισαγωγή και επεξεργασία έργων προσαρμοσμένου make
