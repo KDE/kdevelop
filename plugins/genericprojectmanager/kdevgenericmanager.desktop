@@ -2,12 +2,14 @@
 Type=Service
 Name=None
 Name[el]=Κανένα
+Name[fr]=Aucun
 Name[gl]=Nengún
 Name[nds]=Keen
 Name[pt]=Nenhum
 Name[pt_BR]=Nenhum
 Name[uk]=Немає
 Name[x-test]=xxNonexx
+Name[zh_TW]=無
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos
