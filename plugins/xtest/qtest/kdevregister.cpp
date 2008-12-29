@@ -100,7 +100,7 @@ if (X) {\
     m_reloading = false; \
     emit reloadFailed(); \
     kDebug() << MSG; \
-    emit showError(MSG, 5); \
+    emit showErrorMessage(MSG, 5); \
     return KUrl(); \
 } else void(0)
 
@@ -131,12 +131,12 @@ void KDevRegister::reload()
         KConfigGroup veriConf = project()->projectConfiguration()->group( "Veritas" );
         if (!veriConf.exists()) {
             emit reloadFailed();
-            emit showError(i18n("Failed to load test suite. No test executables configured."), 5);
+            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
             return;
         }
         if (veriConf.readEntry( "framework" ) != "QTest") {
             emit reloadFailed();
-            emit showError(i18n("Failed to load test suite. Wrong framework."), 5);
+            emit showErrorMessage(i18n("Failed to load test suite. Wrong framework."), 5);
             return;            
         }
         QStringList exes = veriConf.readEntry<QStringList>( "executables", QStringList() );
@@ -152,7 +152,7 @@ void KDevRegister::reload()
         }
         if (m_testExes.isEmpty()) {
             emit reloadFailed();
-            emit showError(i18n("Failed to load test suite. No test executables configured."), 5);
+            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
             return;            
         }
     }
