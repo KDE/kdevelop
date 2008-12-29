@@ -1008,7 +1008,6 @@ bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
 
 bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add)
 {
-    qDebug() << "ooooooooooo" << lists;
     bool ret=true;
     QString txt=doc->text(r.textRange());
     if(!add && txt.contains(name))
@@ -1035,7 +1034,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
                 decls += d;
         }
         
-        qDebug() << "iiiiiiiiiiiiii" << add << decls << txt;
         if(add && decls.isEmpty())
         {
             doc->insertText(r.textRange().start(), name);
@@ -1049,7 +1047,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
             {
                 QString line=doc->line(l);
                 int c;
-                qDebug() << "llllllll" << line;
                 if((c=line.indexOf(')'))>=0) {
                     r.end=SimpleCursor(l,c);
                     break;
@@ -1059,11 +1056,8 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
                 }
             }
             
-            qDebug() << "kkkkkkkkkk" << r.textRange() << r.isEmpty();
-            
             if(!r.isEmpty())
             {
-                qDebug() << "mmmmmmmm" << doc;
                 ret = ret && followUses(doc, r, name, lists, add);
             }
         }
