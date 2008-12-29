@@ -60,10 +60,10 @@ public:
     void viewChanged(Sublime::View* view);
 
 private Q_SLOTS:
-    void clearMessage( IStatus* );
-    void showMessage( IStatus*, const QString & message, int timeout);
-    void hideProgress( IStatus* );
-    void showProgress( IStatus*, int minimum, int maximum, int value);
+    void clearMessage( KDevelop::IStatus* );
+    void showMessage( KDevelop::IStatus*, const QString & message, int timeout);
+    void hideProgress( KDevelop::IStatus* );
+    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
     void slotTimeout();
     void viewStatusChanged(Sublime::View* view);
     void showErrorMessage(const QString& message, int timeout);

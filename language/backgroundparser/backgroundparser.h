@@ -124,10 +124,10 @@ Q_SIGNALS:
     void parseJobFinished(KDevelop::ParseJob* job);
 
     // Implementations of IStatus signals
-    void clearMessage();
-    void showMessage(const QString & message, int timeout = 0);
-    void hideProgress();
-    void showProgress(int minimum, int maximum, int value);
+    void clearMessage( KDevelop::IStatus* );
+    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0);
+    void hideProgress( KDevelop::IStatus* );
+    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
 
 public Q_SLOTS:
 
