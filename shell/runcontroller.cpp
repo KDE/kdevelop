@@ -32,6 +32,8 @@ Boston, MA 02110-1301, USA.
 #include <KDebug>
 #include <KColorScheme>
 #include <KCompositeJob>
+#include <kdialogjobuidelegate.h>
+
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
 #include <outputview/ioutputview.h>
@@ -442,6 +444,8 @@ void KDevelop::RunController::registerJob(KJob * job)
         stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
         d->stopAction->addAction(stopJobAction);
         connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
+
+        job->setUiDelegate( new KDialogJobUiDelegate() );
 
         d->jobs.insert(job, stopJobAction);
 
