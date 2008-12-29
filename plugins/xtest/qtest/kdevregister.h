@@ -55,11 +55,11 @@ public:
     virtual QString statusName() const;
 
 Q_SIGNALS:
-    void clearMessage();
-    void showMessage(const QString&, int timeout=0);
-    void hideProgress();
-    void showProgress(int minimum, int maximum, int value);
-    void showErrorMessage(QString, int timeout);
+    void clearMessage(KDevelop::IStatus*);
+    void showMessage(KDevelop::IStatus*, const QString&, int timeout=0);
+    void hideProgress(KDevelop::IStatus*);
+    void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value);
+    void showError(QString, int timeout);
 // IStatus
 
 private slots:

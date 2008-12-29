@@ -101,10 +101,10 @@ public:
     virtual QString statusName() const;
 
 Q_SIGNALS:
-    void clearMessage();
-    void showMessage(const QString & message, int timeout = 0);
-    void hideProgress();
-    void showProgress(int minimum, int maximum, int value);
+    void clearMessage(KDevelop::IStatus*);
+    void showMessage(KDevelop::IStatus*, const QString & message, int timeout = 0);
+    void hideProgress(KDevelop::IStatus*);
+    void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value);
     //END IStatus
 
     void raiseOutputViews();
@@ -148,6 +148,8 @@ private Q_SLOTS:
 
     void applicationStandardOutputLines(const QStringList& lines);
     void applicationStandardErrorLines(const QStringList& lines);
+
+    void controllerMessage(const QString&, int);
 
 Q_SIGNALS:
     void startDebugger(const KDevelop::IRun & run, KJob* job);

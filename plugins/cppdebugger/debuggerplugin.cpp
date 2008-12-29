@@ -499,7 +499,7 @@ void CppDebuggerPlugin::setupController()
     connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
              this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
 
-    connect(controller, SIGNAL(showMessage(const QString&, int)), this, SIGNAL(showMessage(const QString&, int)));
+    connect(controller, SIGNAL(showMessage(const QString&, int)), this, SLOT(controllerMessage(const QString&, int)));
 
     // controller -> procLineMaker
     connect( controller,            SIGNAL(ttyStdout(const QByteArray&)),
@@ -554,13 +554,13 @@ void CppDebuggerPlugin::projectClosed()
 
 void CppDebuggerPlugin::slotExamineCore()
 {
-    emit showMessage(i18n("Choose a core file to examine..."), 1000);
+    emit showMessage(this, i18n("Choose a core file to examine..."), 1000);
 
     KUrl coreFile = KFileDialog::getOpenUrl(QDir::homePath());
     if (!coreFile.isValid())
         return;
 
-    emit showMessage(i18n("Examining core file %1", coreFile.url()), 1000);
+    emit showMessage(this, i18n("Examining core file %1", coreFile.url()), 1000);
 
     controller->examineCoreFile(coreFile);
 }
@@ -568,7 +568,7 @@ void CppDebuggerPlugin::slotExamineCore()
 
 void CppDebuggerPlugin::slotAttachProcess()
 {
-    emit showMessage(i18n("Choose a process to attach to..."), 1000);
+    emit showMessage(this, i18n("Choose a process to attach to..."), 1000);
 
     ProcessSelectionDialog dlg;
     if (!dlg.exec() || !dlg.pidSelected())
@@ -580,7 +580,7 @@ void CppDebuggerPlugin::slotAttachProcess()
 
 void CppDebuggerPlugin::attachProcess(int pid)
 {
-    emit showMessage(i18n("Attaching to process %1", pid), 1000);
+    emit showMessage(this, i18n("Attaching to process %1", pid), 1000);
 
     controller->attachToProcess(pid);
 }
@@ -782,7 +782,7 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
     kDebug(9012) << "   " << message;
 
     if (!message.isEmpty())
-        emit showMessage(message, 3000);
+        emit showMessage(this, message, 3000);
 }
 
 void CppDebuggerPlugin::demandAttention() const
@@ -803,6 +803,11 @@ void CppDebuggerPlugin::applicationStandardErrorLines(const QStringList& lines)
 {
     foreach (const QString& line, lines)
         emit output(controller->job(), line, KDevelop::IRunProvider::StandardError);
+}
+
+void CppDebuggerPlugin::controllerMessage( const QString& msg, int timeout )
+{
+    emit showMessage(this, msg, timeout);
 }
 
 }
