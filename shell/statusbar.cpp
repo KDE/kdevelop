@@ -184,20 +184,16 @@ void StatusBar::updateMessage()
     }
 }
 
-void StatusBar::clearMessage()
+void StatusBar::clearMessage( IStatus* status )
 {
-    IStatus* status = qobject_cast<IStatus*>(sender());
-
     if (m_messages.contains(status)) {
         m_messages.remove(status);
         updateMessage();
     }
 }
 
-void StatusBar::showMessage(const QString & message, int timeout)
+void StatusBar::showMessage( IStatus* status, const QString & message, int timeout)
 {
-    IStatus* status = qobject_cast<IStatus*>(sender());
-
     Message m;
     m.text = message;
     m.timeout = timeout;
@@ -207,20 +203,16 @@ void StatusBar::showMessage(const QString & message, int timeout)
     updateMessage();
 }
 
-void StatusBar::hideProgress()
+void StatusBar::hideProgress( IStatus* status )
 {
-    IStatus* status = qobject_cast<IStatus*>(sender());
-
     if (m_progressBars.contains(status)) {
         delete m_progressBars[status];
         m_progressBars.remove(status);
     }
 }
 
-void StatusBar::showProgress(int minimum, int maximum, int value)
+void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int value)
 {
-    IStatus* status = qobject_cast<IStatus*>(sender());
-
     QProgressBar* bar;
 
     if (m_progressBars.contains(status)) {
