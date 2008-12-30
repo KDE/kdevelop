@@ -21,6 +21,8 @@
 
 #include "../types/structuretype.h"
 #include "../declaration.h"
+#include "../duchain.h"
+#include "../duchainlock.h"
 
 namespace KDevelop {
 
