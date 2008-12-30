@@ -54,7 +54,6 @@ QStringList Executable::fetchFunctions()
 
     KProcess proc;
     proc.setProgram(m_location.pathOrUrl(), QStringList() << "-functions");
-    kDebug() << "executing " << proc.program().join(" ");
     proc.setOutputChannelMode(KProcess::SeparateChannels);
     proc.start();
     proc.waitForFinished(-1);

@@ -65,6 +65,7 @@ Q_SIGNALS:
 private slots:
     void fetchTestCommands(KJob*);
     void suiteBuilderFinished();
+    void slotShowProgress(int minimum, int maximum, int value);
 
 private:
     KUrl buildRoot();

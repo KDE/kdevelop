@@ -72,7 +72,9 @@ Case* CaseBuilder::construct()
             caze->addChild(foo);
             success = true;
         } else { // garbage
-            kDebug() << "Garbage line:\n" << line;
+            if (!line.isEmpty()) {
+                kDebug() << "Garbage line:\n" << line;
+            }
         }
     }
     if (success) {
