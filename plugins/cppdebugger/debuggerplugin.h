@@ -105,6 +105,7 @@ Q_SIGNALS:
     void showMessage(KDevelop::IStatus*, const QString & message, int timeout = 0);
     void hideProgress(KDevelop::IStatus*);
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value);
+    void showErrorMessage(const QString&, int);
     //END IStatus
 
     void raiseOutputViews();
