@@ -212,7 +212,9 @@ void SourceFormatterSettings::populateStyleList()
 {
 	listStyles->clear();
 	//add predefined styles
-	QMap<QString, QString> map = m_currentFormatter->predefinedStyles(m_currentMimeType);
+	QMap<QString, QString> map;
+	if(m_currentFormatter)
+		m_currentFormatter->predefinedStyles(m_currentMimeType);
 	QMap<QString, QString>::const_iterator it = map.constBegin();
 	for (; it != map.constEnd(); ++it)
 		addItemInStyleList(it.value(), it.key());
@@ -363,7 +365,8 @@ void SourceFormatterSettings::formattersChanged(int idx)
 	populateStyleList();
 
 	//update description label
-	lblDescription->setText(m_currentFormatter->description());
+	if(m_currentFormatter)
+		lblDescription->setText(m_currentFormatter->description());
 	updatePreviewText();
 	changed();
 }
@@ -376,9 +379,11 @@ void SourceFormatterSettings::setActiveLanguage(const QString &lang, const QStri
 
 	m_currentFormatter = manager->activeFormatter();
 	m_currentMimeType = KMimeType::mimeType(manager->mimeTypeForLanguage(lang));
-	m_previewText = m_currentFormatter->previewText(m_currentMimeType);
-	QString mode = m_currentFormatter->highlightModeForMime(m_currentMimeType);
-	m_document->setHighlightingMode(mode);
+	if(m_currentFormatter) {
+		m_previewText = m_currentFormatter->previewText(m_currentMimeType);
+		QString mode = m_currentFormatter->highlightModeForMime(m_currentMimeType);
+		m_document->setHighlightingMode(mode);
+	}
 	m_currentLang = lang;
 }
 
