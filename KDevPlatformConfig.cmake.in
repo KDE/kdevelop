@@ -52,7 +52,7 @@ _kdevplatform_set_lib_vars( SUBLIME sublime )
 _kdevplatform_set_lib_vars( VERITAS kdevplatformveritas )
 _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
-_kdevplatform_set_lib_vars( SHELL kdevplatformtestshell )
+_kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 
 mark_as_advanced(
