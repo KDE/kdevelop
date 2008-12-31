@@ -26,15 +26,9 @@
 #include "lcovinfoparser.h"
 #include "lcovjob.h"
 #include "covoutputdelegate.h"
+#include "ui_reportwidget.h"
 
 #include <QTimer>
-#include <QLabel>
-#include <QLineEdit>
-#include <QGridLayout>
-#include <QScrollArea>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <KIconLoader>
 #include <KLocale>
 #include <KIcon>
 #include <KProcess>
@@ -66,15 +60,6 @@ using Veritas::ReportDirData;
 using Veritas::ReportModel;
 using Veritas::ReportViewFactory;
 
-namespace {
-class FilterBox : public QLineEdit
-{
-public:
-    FilterBox(QWidget* parent) : QLineEdit(parent) {}
-    QSize sizeHint() const { return QSize(500, 20); }
-};
-}
-
 //////////////////////////////// ReportWidget ///////////////////////////////
 
 void ReportWidget::resizeEvent(QResizeEvent* event)
@@ -99,68 +84,23 @@ bool ReportWidget::eventFilter(QObject* obj, QEvent* event)
 
 DrillDownView* ReportWidget::table() const
 {
-    return m_table;
+    return m_ui->table;
 }
 
 void ReportWidget::init()
 {
-    QVBoxLayout *l = new QVBoxLayout();
-    l->setMargin(5);
-    l->setSpacing(5);
+    m_ui = new Ui::ReportWidget();
+    m_ui->setupUi(this);
 
-    QFrame* sel = new QFrame(this); // uppermost frame. contains a breadcrumb selector widget + 'go' button
-    sel->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    l->addWidget(sel);
-    QHBoxLayout* selLay = new QHBoxLayout;
-    sel->setLayout(selLay);
-    QLabel* buildDir = new QLabel(i18n("Build Path: "), this);
-    selLay->addWidget(buildDir);
+    //KUrlNavigator can't be set using a placeholder in Qt Designer as there is 
+    //no KUrlNavigator(QWidget*) constructor
+    int startButtonIndex = m_ui->buildPathFrameLayout->indexOf(m_ui->startButton);
     m_targetDirectory = new KUrlNavigator(0, KUrl(QDir::homePath()), this);
-    selLay->addWidget(m_targetDirectory);
-    m_startButton = new QPushButton(KIcon("arrow-right"), QString(), this);
-    selLay->addWidget(m_startButton);
-    connect(m_startButton, SIGNAL(clicked(bool)), SLOT(startLcovJob()));
+    m_ui->buildPathFrameLayout->insertWidget(startButtonIndex, m_targetDirectory);
     
-    QFrame* f = new QFrame(this); // frame that shows filter box + Line Coverage; Instrumented lines & sloc metrics
-    f->setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-    l->addWidget(f);
-
-    QGridLayout* gl = new QGridLayout;
-    f->setLayout(gl);
-
-    QLabel* covTextLabel = new QLabel(i18n("Line Coverage:"), this);
-    QLabel* slocTextLabel = new QLabel(i18n("Total SLOC:"), this);
-    QLabel* nrofCoveredLinesLabel = new QLabel(i18n("Covered Lines:"), this);
-
-    m_coverageRatio = new QLabel("-", this);
-    m_sloc = new QLabel("-", this);
-    m_nrofCoveredLines = new QLabel("-", this);
-    QSpacerItem* s1 = new QSpacerItem(300,5, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    QSpacerItem* s2 = new QSpacerItem(300,5, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-    // gl | <-s1-> lineedit     <-s2->|
-    //    |        label1: val1       |
-    //    |        label2: val2       |
-    //    |        label3: val3       |
-
-
-    gl->addItem(s1, 0, 0, 4, 1); // rowspan 4    
-    m_filterBox = new FilterBox(this);
-    m_filterBox->resize(250, m_filterBox->height());
-    gl->addWidget(m_filterBox, 0, 1, 1, 2);
-
-    const int FIRST_COL=1;
-    gl->addWidget(covTextLabel, 1, FIRST_COL); // row, col, rowspan, colspan
-    gl->addWidget(m_coverageRatio, 1, FIRST_COL+1);
-    gl->addWidget(nrofCoveredLinesLabel, 2, FIRST_COL);
-    gl->addWidget(m_nrofCoveredLines, 2, FIRST_COL+1);
-    gl->addWidget(slocTextLabel, 3, FIRST_COL);
-    gl->addWidget(m_sloc, 3, FIRST_COL+1);
-    gl->addItem(s2, 0, 3, 4, 1);
-
-    l->addWidget(table());
-    setLayout(l);
-
+    m_ui->startButton->setIcon(KIcon("arrow-right"));
+    connect(m_ui->startButton, SIGNAL(clicked(bool)), SLOT(startLcovJob()));
+    
     connect(table(), SIGNAL(doubleClicked(QModelIndex)),
             SLOT(dispatchDoubleClickedSignal(QModelIndex)));
 
@@ -182,19 +122,18 @@ void ReportWidget::updateTableView()
 }
 
 ReportWidget::ReportWidget(QWidget* parent) : 
-    QWidget(parent), 
-    m_table(new  DrillDownView(this)),
+    QWidget(parent),
     m_state(ReportWidget::DirView),
     m_manager(0),
     m_proxy(0),
     m_model(0),
     m_timer(new QTimer(this)),
-    m_delegate(new CovOutputDelegate(this))
+    m_targetDirectory(0),
+    m_delegate(new CovOutputDelegate(this)),
+    m_ui(0)
 {
     setObjectName("Coverage Report");
     setWindowIcon(SmallIcon("system-file-manager"));
-    setWindowTitle(i18n("Coverage Report"));
-    setWhatsThis(i18n("GCOV code coverage statistics."));
 }
 
 #define ILLEGAL_STATE \
@@ -271,14 +210,14 @@ void ReportWidget::setDirViewState()
     //When the view slides to the left, the previously selected directories are
     //selected again. However, until the slide is completed we are in File
     //state, so the statistics aren't updated.
-    m_sloc->setText("0");
-    m_nrofCoveredLines->setText("0");
+    m_ui->sloc->setText("0");
+    m_ui->nrofCoveredLines->setText("0");
     setCoverageStatistics(table()->selectionModel()->selection(), QItemSelection());
 }
 
 QLineEdit* ReportWidget::filterBox() const
 {
-    return m_filterBox;
+    return m_ui->filterBox;
 }
 
 void ReportWidget::setFileViewState()
@@ -295,7 +234,9 @@ void ReportWidget::setFileViewState()
 }
 
 ReportWidget::~ReportWidget()
-{}
+{
+    delete m_ui;
+}
 
 QStandardItem* ReportWidget::getItemFromProxyIndex(const QModelIndex& index) const
 {
@@ -320,12 +261,12 @@ const ReportDirData* ReportWidget::getReportDirDataFromProxyIndex(const QModelIn
 void ReportWidget::setCoverageStatistics(const ReportDirData& data)
 {
     //QLocale used as QString::number does not honor the user's locale setting
-    m_coverageRatio->setText(QLocale().toString(data.coverageRatio(), 'f', 1) + " %");
-    m_coverageRatio->update();
-    m_sloc->setText(QString::number(data.sloc()));
-    m_sloc->update();
-    m_nrofCoveredLines->setText(QString::number(data.nrofCoveredLines()));
-    m_nrofCoveredLines->update();
+    m_ui->coverageRatio->setText(QLocale().toString(data.coverageRatio(), 'f', 1) + " %");
+    m_ui->coverageRatio->update();
+    m_ui->sloc->setText(QString::number(data.sloc()));
+    m_ui->sloc->update();
+    m_ui->nrofCoveredLines->setText(QString::number(data.nrofCoveredLines()));
+    m_ui->nrofCoveredLines->update();
 }
 
 void ReportWidget::setCoverageStatistics(const QModelIndex& index)
@@ -341,9 +282,9 @@ void ReportWidget::setCoverageStatistics(const QModelIndex& index)
 void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const QItemSelection& deselected)
 {
     ReportDirData fullData;
-    if (m_sloc->text() != "-" && m_nrofCoveredLines->text() != "-") {
-        fullData.setSloc(m_sloc->text().toInt());
-        fullData.setNrofCoveredLines(m_nrofCoveredLines->text().toInt());
+    if (m_ui->sloc->text() != "-" && m_ui->nrofCoveredLines->text() != "-") {
+        fullData.setSloc(m_ui->sloc->text().toInt());
+        fullData.setNrofCoveredLines(m_ui->nrofCoveredLines->text().toInt());
     }
 
     bool statisticsChanged = false;
@@ -373,8 +314,8 @@ void ReportWidget::setCoverageStatistics(const QItemSelection& selected, const Q
 
 void ReportWidget::startLcovJob()
 {
-    Q_ASSERT(m_delegate); Q_ASSERT(m_targetDirectory); Q_ASSERT(m_startButton->isEnabled());
-    m_startButton->setEnabled(false);
+    Q_ASSERT(m_delegate); Q_ASSERT(m_targetDirectory); Q_ASSERT(m_ui->startButton->isEnabled());
+    m_ui->startButton->setEnabled(false);
     m_state = DirView;
     
     if (m_model) delete m_model;
@@ -401,7 +342,7 @@ void ReportWidget::startLcovJob()
     connect(parser, SIGNAL(parsedCoverageData(CoveredFile*)), m_model, SLOT(addCoverageData(CoveredFile*)));
     connect(parser, SIGNAL(parsedCoverageData(CoveredFile*)), m_manager, SLOT(addCoverageData(CoveredFile*)));
     connect(m_model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateColumns()));
-    connect(m_filterBox, SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
+    connect(filterBox(), SIGNAL(textChanged(QString)), m_proxy, SLOT(setFilterWildcard(QString)));
 
     job->setDelegate(m_delegate);
     job->setProcess(new KProcess);
@@ -422,8 +363,8 @@ void ReportWidget::updateColumns()
 
 void ReportWidget::jobFinished()
 {
-    Q_ASSERT(!m_startButton->isEnabled());
-    m_startButton->setEnabled(true);
+    Q_ASSERT(!m_ui->startButton->isEnabled());
+    m_ui->startButton->setEnabled(true);
 }
 
 #include "reportwidget.moc"

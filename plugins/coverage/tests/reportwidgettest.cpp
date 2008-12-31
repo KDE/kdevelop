@@ -30,6 +30,7 @@
 #include "../drilldownview.h"
 #include "../reportmodel.h"
 #include "../reportproxymodel.h"
+#include "../ui_reportwidget.h"
 #include <QtTest/QTest>
 #include <QtTest/QTestKeyClicksEvent>
 #include <qtest_kde.h>
@@ -255,6 +256,7 @@ void ReportWidgetTest::statisticsSelectingSingleDirectory()
     //time before triggering the click. Is there a way for this to work without
     //showing the widget and waiting?
     rw.show();
+    table(rw)->setFocus();
     QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
 
     assertStatistics(rw, 3, 2, 66.7);
@@ -268,6 +270,7 @@ void ReportWidgetTest::statisticsSelectingSeveralDirectories()
     setModelFor(rw);
 
     rw.show();
+    table(rw)->setFocus();
     QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
     QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
     QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
@@ -284,6 +287,7 @@ void ReportWidgetTest::statisticsAfterSlidingRight()
     setModelFor(rw);
 
     rw.show();
+    table(rw)->setFocus();
     QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
     QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
 
@@ -301,6 +305,7 @@ void ReportWidgetTest::statisticsAfterSlidingLeft()
     setModelFor(rw);
 
     rw.show();
+    table(rw)->setFocus();
     QTest::keyClick(table(rw), Qt::Key_Down, Qt::NoModifier, 500);
     QTest::keyClick(table(rw), Qt::Key_Down);
     QTest::keyClick(table(rw), Qt::Key_Down);
@@ -329,16 +334,16 @@ void ReportWidgetTest::statisticsAfterSlidingLeft()
 void ReportWidgetTest::assertStatistics(const ReportWidget& rw, int sloc,
                                         int instrumented, double coverage)
 {
-    QCOMPARE(rw.m_sloc->text(), QString::number(sloc));
-    QCOMPARE(rw.m_nrofCoveredLines->text(), QString::number(instrumented));
-    QCOMPARE(rw.m_coverageRatio->text(), QLocale().toString(coverage, 'f', 1) + " %");
+    QCOMPARE(rw.m_ui->sloc->text(), QString::number(sloc));
+    QCOMPARE(rw.m_ui->nrofCoveredLines->text(), QString::number(instrumented));
+    QCOMPARE(rw.m_ui->coverageRatio->text(), QLocale().toString(coverage, 'f', 1) + " %");
 }
 
 void ReportWidgetTest::assertEmptyStatistics(const ReportWidget& rw)
 {
-    QCOMPARE(rw.m_sloc->text(), QString("-"));
-    QCOMPARE(rw.m_nrofCoveredLines->text(), QString("-"));
-    QCOMPARE(rw.m_coverageRatio->text(), QString("-"));
+    QCOMPARE(rw.m_ui->sloc->text(), QString("-"));
+    QCOMPARE(rw.m_ui->nrofCoveredLines->text(), QString("-"));
+    QCOMPARE(rw.m_ui->coverageRatio->text(), QString("-"));
 }
 
 ////////////////////////////// Helpers ////////////////////////////////////////
@@ -350,8 +355,8 @@ DrillDownView* ReportWidgetTest::table(const ReportWidget& rw)
 
 void ReportWidgetTest::setStatistics(ReportWidget& rw, int sloc, int instrumented)
 {
-    rw.m_sloc->setText(QString::number(sloc));
-    rw.m_nrofCoveredLines->setText(QString::number(instrumented));
+    rw.m_ui->sloc->setText(QString::number(sloc));
+    rw.m_ui->nrofCoveredLines->setText(QString::number(instrumented));
 }
 
 void ReportWidgetTest::setModelFor(ReportWidget& rw)

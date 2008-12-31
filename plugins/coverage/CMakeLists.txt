@@ -20,6 +20,8 @@ set(veritascoverage_SRCS
     tests/viewstub.cpp
     tests/pluginstub.cpp)
 
+kde4_add_ui_files(veritascoverage_SRCS reportwidget.ui)
+
 kde4_add_library(kdevveritascoverage SHARED ${veritascoverage_SRCS})
 target_link_libraries(kdevveritascoverage
     ${KDEVPLATFORM_INTERFACES_LIBRARY}

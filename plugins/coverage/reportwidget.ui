@@ -1,0 +1,194 @@
+<ui version="4.0" >
+ <class>ReportWidget</class>
+ <widget class="QWidget" name="ReportWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>357</width>
+    <height>498</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Coverage Report</string>
+  </property>
+  <property name="whatsThis" >
+   <string>GCOV code coverage statistics.</string>
+  </property>
+  <layout class="QVBoxLayout" name="reportWidgetLayout" >
+   <item>
+    <widget class="QFrame" name="buildPathFrame" >
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="buildPathFrameLayout" >
+      <item>
+       <widget class="QLabel" name="buildPathTextLabel" >
+        <property name="text" >
+         <string>Build Path: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="startButton" >
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="statisticsFrame" >
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="statisticsFrameLayout" >
+      <item>
+       <spacer name="horizontalSpacer_3" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>71</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout" >
+        <item>
+         <widget class="KLineEdit" name="filterBox" />
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout" >
+          <item>
+           <spacer name="horizontalSpacer" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout" >
+            <item row="0" column="0" >
+             <widget class="QLabel" name="coverageRatioTextLabel" >
+              <property name="text" >
+               <string>Line Coverage:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QLabel" name="coverageRatio" >
+              <property name="text" >
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="nrofCoveredLinesTextLabel" >
+              <property name="text" >
+               <string>Covered Lines:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QLabel" name="nrofCoveredLines" >
+              <property name="text" >
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" >
+             <widget class="QLabel" name="slocTextLabel" >
+              <property name="text" >
+               <string>Total SLOC:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" >
+             <widget class="QLabel" name="sloc" >
+              <property name="text" >
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>30</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>71</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Veritas::DrillDownView" name="table" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends></extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Veritas::DrillDownView</class>
+   <extends>QTableView</extends>
+   <header>drilldownview.h</header>
+   <slots>
+    <signal>completedSlideLeft()</signal>
+    <signal>completedSlideRight()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>startButton</tabstop>
+  <tabstop>filterBox</tabstop>
+  <tabstop>table</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

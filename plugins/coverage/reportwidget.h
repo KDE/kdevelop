@@ -27,13 +27,16 @@
 
 class QAbstractItemView;
 class QItemSelection;
-class QLabel;
 class QLineEdit;
 class QModelIndex;
 class QStandardItem;
 class QTableView;
-class QPushButton;
 class KUrlNavigator;
+
+namespace Ui
+{
+class ReportWidget;
+}
 
 namespace Veritas
 {
@@ -134,21 +137,16 @@ protected:
 
 private:
     friend class ReportViewFactory;
-    DrillDownView* m_table;
-    QLabel* m_sloc;
-    QLabel* m_coverageRatio;
-    QLabel* m_nrofCoveredLines;
     enum State { DirView, FileView } m_state;
     AnnotationManager* m_manager;
     ReportProxyModel* m_proxy;
     ReportModel* m_model;
-    QLineEdit* m_filterBox;
     QTimer* m_timer;
     int m_timerTicks;
     QString m_oldDirFilter;
     KUrlNavigator* m_targetDirectory; // lets the user select a directory to run coverage on
     CovOutputDelegate* m_delegate;
-    QPushButton* m_startButton;
+    Ui::ReportWidget* m_ui;
 };
 
 }
