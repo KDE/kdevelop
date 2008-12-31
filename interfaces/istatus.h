@@ -49,7 +49,7 @@ Q_SIGNALS:
     /**
      * Request the current message for this plugin to be cleared.
      */
-    void clearMessage( IStatus* );
+    virtual void clearMessage( IStatus* ) = 0;
 
     /**
      * Request a status \a message to be shown for this plugin, with a given \a timeout.
@@ -57,7 +57,7 @@ Q_SIGNALS:
      * \param message Message to display
      * \param timeout Timeout in miliseconds, or pass 0 for no timeout.
      */
-    void showMessage( IStatus*, const QString & message, int timeout = 0);
+    virtual void showMessage( IStatus*, const QString & message, int timeout = 0) = 0;
 
     /**
      * Request an error \a message to be shown for this plugin, with a given \a timeout.
@@ -65,17 +65,17 @@ Q_SIGNALS:
      * \param message Message to display
      * \param timeout Timeout in miliseconds, or pass 0 for no timeout.
      */
-    void showErrorMessage(const QString & message, int timeout = 0);
+    virtual void showErrorMessage(const QString & message, int timeout = 0) = 0;
 
     /**
      * Hide the progress bar.
      */
-    void hideProgress( IStatus* );
+    virtual void hideProgress( IStatus* ) = 0;
 
     /**
      * Show a progress bar, with the given \a percentage.
      */
-    void showProgress( IStatus*, int minimum, int maximum, int value);
+    virtual void showProgress( IStatus*, int minimum, int maximum, int value) = 0;
 };
 
 }
