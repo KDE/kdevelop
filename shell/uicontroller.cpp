@@ -77,6 +77,13 @@ public:
         a->setDesiredToolViews(desired);
         controller->addDefaultArea(a);
 
+        desired.clear();
+        desired["org.kdevelop.QTestTestRunner"] = Sublime::Right;
+        desired["org.kdevelop.CoverageReport"] = Sublime::Right;
+        a = new Sublime::Area(m_controller, "test", i18n("Test"));
+        a->setDesiredToolViews(desired);
+        controller->addDefaultArea(a);        
+
         if(!(Core::self()->setupFlags() & Core::NoUi)) 
         {
             defaultMainWindow = new MainWindow(controller);
