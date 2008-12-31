@@ -45,11 +45,11 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 	Q_FLAGS(Flags NoFlags UpdatingContext LastFlag)
 
 	Q_ENUMS(Features)
-	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AllDeclarationsContextsAndUsesForRecursive)
+	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AllDeclarationsContextsAndUsesForRecursive ForceUpdate ForceUpdateRecursive)
 
 	public:
 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
-		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AllDeclarationsContextsAndUsesForRecursive=KDevelop::TopDUContext::AllDeclarationsContextsAndUsesForRecursive };
+		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AllDeclarationsContextsAndUsesForRecursive=KDevelop::TopDUContext::AllDeclarationsContextsAndUsesForRecursive, ForceUpdate=KDevelop::TopDUContext::ForceUpdate, ForceUpdateRecursive=KDevelop::TopDUContext::ForceUpdateRecursive };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 

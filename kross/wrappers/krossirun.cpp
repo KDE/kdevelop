@@ -33,6 +33,8 @@ class KrossKDevelopIRun : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDependencies(const QList< KJob* >& x0) { wrapped->setDependencies(x0); }
 		Q_SCRIPTABLE void clearDependencies() { wrapped->clearDependencies(); }
 		Q_SCRIPTABLE QList< KJob* > dependencies() const { return wrapped->dependencies(); }
+		Q_SCRIPTABLE QString runAsUser() const { return wrapped->runAsUser(); }
+		Q_SCRIPTABLE void setRunAsUser(const QString& x0) { wrapped->setRunAsUser(x0); }
 	private:
 		KDevelop::IRun* wrapped;
 };

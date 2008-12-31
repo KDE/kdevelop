@@ -148,6 +148,8 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE int createUse(int x0, const KDevelop::SimpleRange& x1, KTextEditor::SmartRange* x2, int x3=-1) { return wrapped->createUse(x0, x1, x2, x3); }
 		Q_SCRIPTABLE void deleteUse(int x0) { wrapped->deleteUse(x0); }
 		Q_SCRIPTABLE void deleteUses() { wrapped->deleteUses(); }
+		Q_SCRIPTABLE QVector< KTextEditor::SmartRange* > useRanges() { return wrapped->useRanges(); }
+		Q_SCRIPTABLE QVector< KTextEditor::SmartRange* > takeUseRanges() { return wrapped->takeUseRanges(); }
 		Q_SCRIPTABLE QWidget* createNavigationWidget(KDevelop::Declaration* x0=0, KDevelop::TopDUContext* x1=0, const QString& x2=QString(), const QString& x3=QString()) const { return wrapped->createNavigationWidget(x0, x1, x2, x3); }
 		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 >& x0, const KDevelop::SimpleCursor& x1, const TypePtr< KDevelop::AbstractType >& x2, KDevVarLengthArray< KDevelop::Declaration*, 40 >& x3, const KDevelop::TopDUContext* x4, QFlags< KDevelop::DUContext::SearchFlag > x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
 		Q_SCRIPTABLE void squeeze() { wrapped->squeeze(); }
@@ -167,7 +169,6 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedDUContext indexedContext() const { return wrapped->indexedContext(); }
 		Q_SCRIPTABLE bool isBackwardMapped() const { return wrapped->isBackwardMapped(); }
-		typedef KDevelop::SimpleCursor KDevelopSimpleCursor;
 		Q_PROPERTY(KDevelopSimpleCursor  position READ getposition WRITE setposition SCRIPTABLE true)
 		Q_SCRIPTABLE void setposition(const KDevelopSimpleCursor  val) { wrapped->position=val; }
 		Q_SCRIPTABLE KDevelopSimpleCursor  getposition() const { return wrapped->position; }

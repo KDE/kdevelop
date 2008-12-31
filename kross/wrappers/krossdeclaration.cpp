@@ -65,6 +65,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE unsigned int specialization() const { return wrapped->specialization(); }
 		Q_SCRIPTABLE KDevelop::DeclarationId id(bool x0=false) const { return wrapped->id(x0); }
 		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
+		Q_SCRIPTABLE bool isAnonymous() const { return wrapped->isAnonymous(); }
 		Q_SCRIPTABLE void clearOwnIndex() { wrapped->clearOwnIndex(); }
 		Q_SCRIPTABLE void allocateOwnIndex() { wrapped->allocateOwnIndex(); }
 		Q_SCRIPTABLE KDevelop::Declaration* clone() const { return wrapped->clone(); }
