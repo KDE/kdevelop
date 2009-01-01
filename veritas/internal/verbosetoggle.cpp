@@ -79,7 +79,7 @@ bool VerboseToggle::shouldShow(Test* t)
 void VerboseToggle::setIconOverlay()
 {
     m_icon = KIconLoader::global()->loadIcon(
-        "go-next-page",
+        "utilities-log-viewer",
         KIconLoader::NoGroup,
         KIconLoader::SizeSmall);
     update();
