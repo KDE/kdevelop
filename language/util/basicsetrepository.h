@@ -208,9 +208,8 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT BasicSetRepository {
 public:
   ///@param name The name must be unique, and is used for loading and storing the data
-  ///@param doLocking Whether the repository should secured internally for multi-threading. If this is false, you need to secure it yourself
-  ///@param dataSize Size of the internal data repository in bytes
-  BasicSetRepository(QString name);
+  ///@param registry Where the repository should be registered. If you give zero, it won't be registered, and thus won't be saved to disk.
+  BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry  = &KDevelop::globalItemRepositoryRegistry());
   virtual ~BasicSetRepository();
   typedef unsigned int Index;
 

@@ -1078,7 +1078,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
 }
 
-BasicSetRepository::BasicSetRepository(QString name) : d(new Private(name)), dataRepository(name), m_mutex(0) {
+BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry) : d(new Private(name)), dataRepository(name, registry), m_mutex(0) {
     m_mutex = dataRepository.mutex();
 }
 

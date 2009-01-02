@@ -35,6 +35,8 @@ const uint MinimumCountForCache = 20;
 
 namespace KDevelop {
 
+Utils::BasicSetRepository recursiveImportCacheRepository("Recursive Imports Cache", 0);
+
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 
 class PersistentSymbolTableItem {
@@ -184,13 +186,18 @@ struct CacheEntry {
 
 struct PersistentSymbolTablePrivate {
   PersistentSymbolTablePrivate() : m_declarations("Persistent Declaration Table"), m_contexts("Persistent Context Table") {
+    m_contexts.setMutex(m_declarations.mutex());
   }
   //Maps declaration-ids to declarations
   ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, KDevelop::NoDynamicData, false> m_declarations;
   ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem, KDevelop::NoDynamicData, false> m_contexts;
   
+  
   QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration> > m_declarationsCache;
   QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDUContext> > m_contextsCache;
+  
+  //We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache utilization
+  QHash<TopDUContext::IndexedRecursiveImports, PersistentSymbolTable::CachedIndexedRecursiveImports> m_importsCache;
 };
 
 void PersistentSymbolTable::clearCache()
@@ -198,11 +205,9 @@ void PersistentSymbolTable::clearCache()
   ENSURE_CHAIN_WRITE_LOCKED
   {
     QMutexLocker lock(d->m_declarations.mutex());
-    d->m_declarationsCache.clear();
-  }
-  {
-    QMutexLocker lock(d->m_contexts.mutex());
+    d->m_importsCache.clear();
     d->m_contextsCache.clear();
+    d->m_declarationsCache.clear();
   }
 }
 
@@ -314,24 +319,34 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
   QMutexLocker lock(d->m_declarations.mutex());
   Declarations decls = getDeclarations(id).iterator();
   
+  CachedIndexedRecursiveImports cachedImports;
+  
+  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.find(visibility);
+  if(it != d->m_importsCache.end()) {
+    cachedImports = *it;
+  }else{
+    cachedImports = CachedIndexedRecursiveImports(recursiveImportCacheRepository.createSet(visibility.set().stdSet()));
+    d->m_importsCache.insert(visibility, cachedImports);
+  }
+  
   if(decls.dataSize() > MinimumCountForCache)
   {
     //Do visibility caching
     CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
     CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
     if(cacheIt != cached.m_hash.end())
-      return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), visibility);
+      return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
 
     CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDeclaration>());
     
     KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
     
-    for(FilteredDeclarationIterator it(decls.iterator(), visibility); it; ++it)
+    for(FilteredDeclarationIterator it(decls.iterator(), cachedImports); it; ++it)
       cache.append(*it);
     
-    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), visibility);
+    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), cachedImports);
   }else{
-    return FilteredDeclarationIterator(decls.iterator(), visibility);
+    return FilteredDeclarationIterator(decls.iterator(), cachedImports);
   }
 }
 
@@ -340,24 +355,34 @@ PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilte
   
   Contexts contexts = getContexts(id);
   
+  CachedIndexedRecursiveImports cachedImports;
+  
+  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.find(visibility);
+  if(it != d->m_importsCache.end()) {
+    cachedImports = *it;
+  }else{
+    cachedImports = CachedIndexedRecursiveImports(recursiveImportCacheRepository.createSet(visibility.set().stdSet()));
+    d->m_importsCache.insert(visibility, cachedImports);
+  }
+  
   if(contexts.dataSize() > MinimumCountForCache)
   {
     //Do visibility caching
     CacheEntry<IndexedDUContext>& cached(d->m_contextsCache[id]);
     CacheEntry<IndexedDUContext>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
     if(cacheIt != cached.m_hash.end())
-      return FilteredDUContextIterator(Contexts::Iterator(cacheIt->constData(), cacheIt->size(), -1), visibility);
+      return FilteredDUContextIterator(Contexts::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
 
     CacheEntry<IndexedDUContext>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDUContext>());
     
     KDevVarLengthArray<IndexedDUContext>& cache(*insertIt);
     
-    for(FilteredDUContextIterator it(contexts.iterator(), visibility); it; ++it)
+    for(FilteredDUContextIterator it(contexts.iterator(), cachedImports); it; ++it)
       cache.append(*it);
     
-    return FilteredDUContextIterator(Contexts::Iterator(cache.constData(), cache.size(), -1), visibility);
+    return FilteredDUContextIterator(Contexts::Iterator(cache.constData(), cache.size(), -1), cachedImports);
   }else{
-    return FilteredDUContextIterator(contexts.iterator(), visibility);
+    return FilteredDUContextIterator(contexts.iterator(), cachedImports);
   }
 }
 

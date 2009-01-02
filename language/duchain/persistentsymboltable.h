@@ -112,6 +112,14 @@ struct DUContextTopContextExtractor {
   }
 };
 
+KDEVPLATFORMLANGUAGE_EXPORT extern Utils::BasicSetRepository recursiveImportCacheRepository;
+
+struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
+  inline static Utils::BasicSetRepository* repository() {
+    return &recursiveImportCacheRepository;
+  }
+};
+
 /**
  * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
  * */
@@ -139,7 +147,9 @@ struct DUContextTopContextExtractor {
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     Declarations getDeclarations(const IndexedQualifiedIdentifier& id) const;
 
-    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, TopDUContext::IndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
+    typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true> CachedIndexedRecursiveImports;
+    
+    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
@@ -162,7 +172,7 @@ struct DUContextTopContextExtractor {
     ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
     Contexts getContexts(const IndexedQualifiedIdentifier& id) const;
     
-    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, TopDUContext::IndexedRecursiveImports, DUContextTopContextExtractor> FilteredDUContextIterator;
+    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DUContextTopContextExtractor> FilteredDUContextIterator;
     
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
     ///This is very efficient since it uses a cache
