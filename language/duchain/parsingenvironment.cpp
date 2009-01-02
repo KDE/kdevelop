@@ -56,7 +56,7 @@ IndexedString ParsingEnvironmentFile::url() const {
   return d_func()->m_url;
 }
 
-bool ParsingEnvironmentFile::needsUpdate() const {
+bool ParsingEnvironmentFile::needsUpdate(const ParsingEnvironment* /*environment*/) const {
   ENSURE_READ_LOCKED
   return d_func()->m_allModificationRevisions.needsUpdate();
 }
@@ -150,8 +150,14 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
   }
   
   QList< KSharedPtr<ParsingEnvironmentFile> > ret;
-  foreach(const IndexedDUContext &ctx, imp)
-    ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+  foreach(const IndexedDUContext &ctx, imp) {
+    KSharedPtr<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+    if(item) {
+      ret << item;
+    }else{
+      kDebug() << "missing environment-file for import";
+    }
+  }
   return ret;
 }
 
