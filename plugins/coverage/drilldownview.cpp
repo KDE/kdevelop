@@ -190,7 +190,9 @@ void DrillDownView::animateSlide(int moveDirection)
 
 void DrillDownView::mousePressEvent(QMouseEvent* event)
 {
-    selectionModel()->clearSelection();
+    if (selectionModel()) {
+        selectionModel()->clearSelection();
+    }
     QTableView::mousePressEvent(event);
 }
 
