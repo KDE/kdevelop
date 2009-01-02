@@ -1023,6 +1023,8 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
     return ret;
   } else {
     QualifiedIdentifier ret = contexts.first()->scopeIdentifier(true);
+    if(ret.isEmpty())
+        return ret;
     Q_ASSERT(ret.count());
     ret.setExplicitlyGlobal(true);
     return ret;
