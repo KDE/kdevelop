@@ -216,8 +216,6 @@ void ReportWidgetTest::setCoverageStatisticsWithFileIndex()
     assertEmptyStatistics(m_reportWidget);
 }
 
-#if 0
-
 //Selects first directory
 void ReportWidgetTest::statisticsSelectingSingleDirectory()
 {
@@ -294,8 +292,6 @@ void ReportWidgetTest::statisticsAfterSlidingLeft()
 
     assertStatistics(m_reportWidget, 3, 1, 33.3);
 }
-
-#endif
 
 ////////////////////////////// Asserts ////////////////////////////////////////
 

@@ -51,12 +51,10 @@ private slots:
     void setCoverageStatisticsWithInvalidIndex();
     void setCoverageStatisticsWithFileIndex();
 
-    #if 0
    void statisticsSelectingSingleDirectory();
    void statisticsSelectingSeveralDirectories();
    void statisticsAfterSlidingRight();
    void statisticsAfterSlidingLeft();
-#endif
 
 private:
         
