@@ -344,6 +344,7 @@ const KTextEditor::Range& CPPParseJob::textRangeToParse() const
 CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_priority(0)
+    , m_initialized(false)
 {
 }
 
@@ -365,6 +366,23 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
     }
 }
 
+void CPPInternalParseJob::initialize() {
+    if(m_initialized)
+      return;
+    m_initialized = true;
+    
+    updatingProxyContext = parentJob()->updatingProxyContext().data();
+    updatingContentContext = parentJob()->updatingContentContext().data();
+
+    proxyContext = updatingProxyContext;
+    contentContext = updatingContentContext;
+/*    if(!contentContext)
+      contentContext = ContextBuilder::createEmptyTopContext(parentJob()->document());
+   
+    if(!proxyContext && Cpp::EnvironmentManager::isSimplifiedMatching())
+      proxyContext = ContextBuilder::createEmptyTopContext(parentJob()->document());*/
+}
+
 void CPPInternalParseJob::run()
 {
     if(!CppLanguageSupport::self())
@@ -377,6 +395,7 @@ void CPPInternalParseJob::run()
     UrlParseLock urlLock(parentJob()->document());
     
     if(!parentJob()->needsUpdate()) {
+      parentJob()->processDelayedImports();
       kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
       return;
     }
@@ -394,11 +413,7 @@ void CPPInternalParseJob::run()
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
 
-    ReferencedTopDUContext updatingProxyContext = parentJob()->updatingProxyContext().data();
-    ReferencedTopDUContext updatingContentContext = parentJob()->updatingContentContext().data();
-
-    ReferencedTopDUContext proxyContext = updatingProxyContext; //Proxy-context if simplified environment-matching is enabled, else zero.
-    ReferencedTopDUContext contentContext= updatingContentContext;  //The actual context that contains the data.
+    initialize();
 
     Cpp::EnvironmentFilePointer proxyEnvironmentFile(parentJob()->proxyEnvironmentFile());
     Cpp::EnvironmentFilePointer contentEnvironmentFile(parentJob()->contentEnvironmentFile());
@@ -734,11 +749,12 @@ void CPPInternalParseJob::run()
         //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
 
-
     //DumpTree dumpTree;
 
     kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
 
+    parentJob()->processDelayedImports();
+    
     //Check the import structure
 /*    if(parentJob()->masterJob() == parentJob()) {
       DUChainReadLocker l(DUChain::lock());
@@ -755,6 +771,41 @@ void CPPInternalParseJob::run()
     }*/
 }
 
+void CPPParseJob::processDelayedImports() {
+  if(!m_delayedImports.isEmpty()) {
+    foreach(LineJobPair job, m_delayedImports)
+      job.first->addDelayedImporter(LineContextPair(m_parseJob->proxyContext ? m_parseJob->proxyContext : m_parseJob->contentContext, job.second));
+    m_delayedImports.clear();
+  }
+  if(!m_delayedImporters.isEmpty()) {
+    DUChainWriteLocker l(DUChain::lock());
+    foreach(LineContextPair context, m_delayedImporters) {
+      Q_ASSERT(context.context->parsingEnvironmentFile());
+      if(context.context->parsingEnvironmentFile()->isProxyContext()) {
+        Q_ASSERT(m_parseJob->proxyContext);
+        context.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(context.sourceLine, 0));
+        Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(context.context->parsingEnvironmentFile().data());
+        Q_ASSERT(cppEnvFile);
+        cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->proxyContext->parsingEnvironmentFile().data()));
+      }
+      Q_ASSERT(m_parseJob->contentContext);
+      LineContextPair content = contentFromProxy(context);
+      Q_ASSERT(content.context);
+      content.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(content.sourceLine, 0));
+      Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(content.context->parsingEnvironmentFile().data());
+      Q_ASSERT(cppEnvFile);
+      cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->contentContext->parsingEnvironmentFile().data()));
+    }
+  }
+}
+
+void CPPParseJob::addDelayedImport(LineJobPair job) {
+  m_delayedImports << job;
+}
+
+void CPPParseJob::addDelayedImporter(LineContextPair duChain) {
+  m_delayedImporters << duChain;
+}
 
 void CPPParseJob::requestDependancies()
 {

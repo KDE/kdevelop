@@ -40,6 +40,17 @@ void CppPreprocessEnvironment::finishEnvironment(bool leaveEnvironmentFile) {
     }
 }
 
+void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
+  m_macroNameSet.remove(macroName);
+  rpp::pp_dynamic_macro m;
+  m.name = macroName;
+  m.defined = false;
+  rpp::Environment::setMacro(makeConstant(&m));
+}
+
+void CppPreprocessEnvironment::removeString(KDevelop::IndexedString str) {
+  m_strings.erase(str.index());
+}
 
 rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const {
     //note all strings that can be affected by macros

@@ -76,10 +76,12 @@ private slots:
   void testForwardDeclaration();
   void testAcrossHeaderReferences();
   void testAcrossHeaderTemplateReferences();
+  void testHeaderGuards();
   void testEnvironmentMatching();
   void testUsesThroughMacros();
   void testMacroExpansionRanges();
   void testPreprocessor();
+  void testNaiveMatching();
 
 public:
   enum DumpArea {

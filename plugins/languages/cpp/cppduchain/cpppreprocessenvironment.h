@@ -59,6 +59,10 @@ public:
   ///Does not include the names of undef macros
   const Cpp::ReferenceCountedStringSet& macroNameSet() const;
 
+  void removeString(KDevelop::IndexedString str);
+  
+  void removeMacro(KDevelop::IndexedString macroName);
+  
   ///Restricts the header branching hash of searched contexts to the given number
   ///(Is only stored here, it is used in the environment-manager)
   void setIdentityOffsetRestriction(uint value);

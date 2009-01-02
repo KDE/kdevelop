@@ -172,6 +172,7 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
       m_topContext = rhs.m_topContext;
       m_identityOffset = rhs.m_identityOffset;
       m_includePaths = rhs.m_includePaths;
+      m_guard = rhs.m_guard;
     }
     
     ~EnvironmentFileData() {
@@ -188,6 +189,9 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     ReferenceCountedStringSet m_unDefinedMacroNames;
     uint m_includePaths; //Index in the internal include-paths repository
     int m_contentStartLine;
+    
+    //Name of the header-guard macro that protects this file
+    KDevelop::IndexedString m_guard;
 };
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
@@ -234,6 +238,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
 
     void clearMissingIncludeFiles();
   
+    KDevelop::IndexedString headerGuard() const;
+    void setHeaderGuard( KDevelop::IndexedString guardName );
+    
     ///Set of all defined macros, including those of all deeper included files
     const ReferenceCountedMacroSet& definedMacros() const;
 
@@ -264,7 +271,7 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     
     virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const;
     
-    virtual bool needsUpdate() const;
+    virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const;
     
     enum {
       Identity = 73
@@ -303,7 +310,23 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
     static void setSimplifiedMatching(bool simplified);
     static bool isSimplifiedMatching();
     
+    enum MatchingLevel {
+      IgnoreGuardsForImporting = 1,
+      
+      Disabled = IgnoreGuardsForImporting | (1<<5),
+      Naive = IgnoreGuardsForImporting | (1<<6),
+      Full = 1 << 7
+    };
+    
+    static bool ignoreGuardsForImporting() {
+      return matchingLevel() & IgnoreGuardsForImporting;
+    }
+    
+    static void setMatchingLevel(MatchingLevel level);
+    static MatchingLevel matchingLevel();
+    
     static bool m_simplifiedMatching;
+    static MatchingLevel m_matchingLevel;
 };
 
 }

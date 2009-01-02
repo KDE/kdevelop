@@ -53,6 +53,9 @@ class CPPParseJob : public KDevelop::ParseJob
 {
     Q_OBJECT
 public:
+  
+    typedef QPair<CPPParseJob*, int> LineJobPair;
+  
     /**
      * @param parentPreprocessor May be the preprocess-job that created this parse-job.
      * Defined macros will be imported from that preprocess-job.
@@ -78,6 +81,13 @@ public:
     void addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine);
     const IncludeFileList& includedFiles() const;
 
+    ///When this parse-job is ready, the resulting top-context will be imported into the given one.
+    ///This can be used to delay the importing in case of recursion
+    void addDelayedImporter(LineContextPair duChain);
+    
+    ///When this parse-job is ready, import the result of the given job into the current top-context
+    void addDelayedImport(LineJobPair job);
+    
     const QStack<DocumentCursor>& includeStack() const;
     void setIncludeStack(const QStack<DocumentCursor>& includeStack);
 
@@ -159,7 +169,14 @@ public:
     void setNeedsUpdate(bool needs);
     bool needsUpdate() const;
     
+    //Called when the internal parse-job is complete, to apply the delayed imports/importers
+    void processDelayedImports();
+    
 private:
+
+    QList<LineJobPair> m_delayedImports;
+    QList<LineContextPair> m_delayedImporters;
+    
     friend class PreprocessJob; //So it can access includePaths()
     //Only use from within the background thread, and make sure no mutexes are locked when calling it
     const QList<IndexedString>& includePaths() const;
@@ -212,7 +229,16 @@ public:
     //Must only be called for direct parsing when the job is not queued
     virtual void run();
 
+    //Called as soon as the first updated context has been set
+    void initialize();
+
+    ReferencedTopDUContext proxyContext;
+    ReferencedTopDUContext contentContext;
 private:
+    ReferencedTopDUContext updatingProxyContext;
+    ReferencedTopDUContext updatingContentContext;
+
+    bool m_initialized;
     int m_priority;
 };
 

@@ -33,6 +33,8 @@ using namespace KDevelop;
 #define ENSURE_READ_LOCKED   ENSURE_FILE_READ_LOCKED(*this)
 #define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 
+// #define LEXERCACHE_DEBUG
+
 DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
 
 struct IncludePathListItem {
@@ -81,6 +83,7 @@ typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDeve
 IncludePathsRepository includePathsRepository("include path repository");
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
+Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::m_matchingLevel = Cpp::EnvironmentManager::Full;
 //  #define LEXERCACHE_DEBUG
 //  #define ifDebug(X) X
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
@@ -88,7 +91,7 @@ bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 // #define DYNAMIC_DEBUGGING
 
 #ifdef DYNAMIC_DEBUGGING
-volatile bool is_debugging = false;
+volatile bool is_debugging = true;
 
 bool debugging() {
   return is_debugging;
@@ -174,6 +177,14 @@ void EnvironmentManager::setSimplifiedMatching(bool simplified) {
   m_simplifiedMatching = simplified;
 }
 
+Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::matchingLevel() {
+  return m_matchingLevel;
+}
+
+void Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::MatchingLevel level) {
+  m_matchingLevel = level;
+}
+
 bool EnvironmentManager::isSimplifiedMatching() {
   return m_simplifiedMatching;
 }
@@ -183,15 +194,28 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(_environment);
   if(!cppEnvironment)
     return false;
-  
-  ReferenceCountedStringSet environmentMacroNames = cppEnvironment->macroNameSet();
-  
+
   if( cppEnvironment->identityOffsetRestrictionEnabled() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
 #ifdef LEXERCACHE_DEBUG
     kDebug( 9007 ) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
 #endif
     return false;
   }
+  
+  if(EnvironmentManager::matchingLevel() == EnvironmentManager::Disabled)
+    return true;
+  
+  //Consider files that are out-guarded by the header-guard as a match, without looking into their content
+  ///@todo Pick the version that is already in the environment if there is multiple
+  if(EnvironmentManager::matchingLevel() == EnvironmentManager::Naive)
+    if(cppEnvironment->macroNameSet().contains(headerGuard())) {
+#ifdef LEXERCACHE_DEBUG
+      kDebug( 9007 ) << "file" << url().str() << "environment contains the header-guard, returning true";
+#endif
+      return true;
+    }
+  
+  ReferenceCountedStringSet environmentMacroNames = cppEnvironment->macroNameSet();
   
   ReferenceCountedStringSet conflicts = (environmentMacroNames & strings()) - d_func()->m_usedMacroNames;
 
@@ -235,9 +259,16 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   return true;
 }
 
-bool EnvironmentFile::needsUpdate() const {
+bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
   ENSURE_READ_LOCKED
-  return ParsingEnvironmentFile::needsUpdate();
+  const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(environment);
+  
+  //When in naive matching mode, we even use the non-guarded version when inappropriate. We must make sure not to update it in such
+  //a situation.
+  if(cppEnvironment && EnvironmentManager::matchingLevel() <= EnvironmentManager::Naive && !headerGuard().isEmpty() && cppEnvironment->macroNameSet().contains(headerGuard()))
+    return false;
+  
+  return ParsingEnvironmentFile::needsUpdate(environment);
 }
 
 EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
@@ -390,6 +421,16 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   }
 }
 
+KDevelop::IndexedString Cpp::EnvironmentFile::headerGuard() const {
+  ENSURE_READ_LOCKED
+  return d_func()->m_guard;
+}
+
+void Cpp::EnvironmentFile::setHeaderGuard(KDevelop::IndexedString guardName) {
+  ENSURE_WRITE_LOCKED
+  d_func_dynamic()->m_guard = guardName;
+}
+
 void EnvironmentFile::addMissingIncludeFile(const IndexedString& file)
 {
   ENSURE_WRITE_LOCKED
@@ -428,7 +469,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(m_definedMacroNames)  << "defined macros in other:" << print(file.m_definedMacroNames) << "undefined macros in other:" << print(file.m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
+  kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(d_func()->m_definedMacroNames)  << "defined macros in other:" << print(file.d_func()->m_definedMacroNames) << "undefined macros in other:" << print(file.d_func()->m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
   }
 #endif
   d_func_dynamic()->m_strings = (d_func()->m_strings + (file.d_func()->m_strings - d_func()->m_definedMacroNames)) - d_func()->m_unDefinedMacroNames;
@@ -507,12 +548,12 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
 
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug( 9007 ) << id(this) << ": defined macro names in this after merge:" << m_definedMacroNames.set().count() << print(m_definedMacroNames);
-  kDebug( 9007 ) << id(this) << ": defined in this after merge:" << m_definedMacros.set().count() << print(m_definedMacros);
-  ifDebug( Q_ASSERT(m_definedMacros.set().count() == m_definedMacroNames.set().count()) );
-  kDebug( 9007 ) << id(this) << ": undefined in this after merge:" << print(m_unDefinedMacroNames);
+  kDebug( 9007 ) << id(this) << ": defined macro names in this after merge:" << d_func()->m_definedMacroNames.set().count() << print(d_func()->m_definedMacroNames);
+  kDebug( 9007 ) << id(this) << ": defined in this after merge:" << d_func()->m_definedMacros.set().count() << print(d_func()->m_definedMacros);
+  ifDebug( Q_ASSERT(d_func()->m_definedMacros.set().count() == d_func()->m_definedMacroNames.set().count()) );
+  kDebug( 9007 ) << id(this) << ": undefined in this after merge:" << print(d_func()->m_unDefinedMacroNames);
   kDebug( 9007 ) << id(this) << ": strings in this after merge:" << print(strings());
-  kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(m_usedMacroNames);
+  kDebug( 9007 ) << id(this) << ": macros used in this after merge:" << print(d_func()->m_usedMacroNames);
   }
 #endif
 }
@@ -532,6 +573,7 @@ void EnvironmentFile::setIdentityOffset(uint offset) {
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_identityOffset = offset;
 }
+
 
 int EnvironmentFile::type() const {
   ENSURE_READ_LOCKED

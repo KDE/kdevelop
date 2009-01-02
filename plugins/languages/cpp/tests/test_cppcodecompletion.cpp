@@ -863,6 +863,70 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
 }
 }
 
+void TestCppCodeCompletion::testNaiveMatching() {
+    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
+    {
+      addInclude("recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
+      addInclude("recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");
+      
+      TopDUContext* test1 = parse(QByteArray("#include \"recursive_test_1.h\"\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      QCOMPARE(test1->recursiveImportIndices().count(), 3u);
+      QCOMPARE(test1->importedParentContexts().count(), 1);
+      QCOMPARE(test1->importedParentContexts()[0].indexedContext().context()->importedParentContexts().count(), 1);
+      QCOMPARE(test1->importedParentContexts()[0].indexedContext().context()->importedParentContexts()[0].indexedContext().context()->importedParentContexts().count(), 1);
+      QCOMPARE(test1->importedParentContexts()[0].indexedContext().context()->importedParentContexts()[0].indexedContext().context()->importedParentContexts()[0].indexedContext().context()->importedParentContexts().count(), 1);
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QVERIFY(envFile1->headerGuard().isEmpty());
+      release(test1);
+    }
+
+}
+
+void TestCppCodeCompletion::testHeaderGuards() {
+    {
+      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n#define BLA\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QVERIFY(envFile1->headerGuard().isEmpty());
+      release(test1);
+    }
+    {
+      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5;\n#ifndef GUARD\n#define GUARD\n#endif\n#if defined(TEST)\n int q = 4;#endif\n#endif\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QCOMPARE(envFile1->headerGuard().str(), QString("GUARD"));
+      release(test1);
+    }
+    {
+      TopDUContext* test1 = parse(QByteArray("int x;\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QVERIFY(envFile1->headerGuard().isEmpty());
+      release(test1);
+    }
+    {
+      TopDUContext* test1 = parse(QByteArray("#define X\n#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QVERIFY(envFile1->headerGuard().isEmpty());
+      release(test1);
+    }
+    {
+      TopDUContext* test1 = parse(QByteArray("#ifndef GUARD\n#define GUARD\nint x = 5; \n#endif\nint o;\n"), DumpNone);
+      DUChainWriteLocker l(DUChain::lock());
+      Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      QVERIFY(envFile1);
+      QVERIFY(envFile1->headerGuard().isEmpty());
+      release(test1);
+    }
+}
+
 void TestCppCodeCompletion::testEnvironmentMatching() {
     {
       CppPreprocessEnvironment::setRecordOnlyImportantString(false);
@@ -1102,6 +1166,10 @@ struct TestPreprocessor : public rpp::Preprocessor {
       environmentFile->setContentStartLine( stream.originalInputPosition().line );
     if(stopAfterHeaders)
       stream.toEnd();
+  }
+  
+  virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName) {
+    environmentFile->setHeaderGuard(guardName);
   }
 };
 

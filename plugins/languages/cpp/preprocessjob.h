@@ -71,6 +71,8 @@ public:
 
     virtual void headerSectionEnded(rpp::Stream& stream);
     
+    virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName);
+    
     /**
      * Returns the standard-environment used for parsing c++ files(all other environments are based on that one)
      * The returned environment can be dynamic_casted to rpp::Environment.

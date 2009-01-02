@@ -160,7 +160,14 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
     m_standardMacros = new Cpp::ReferenceCountedMacroSet;
     m_standardIncludePaths = new QStringList;
-    Cpp::EnvironmentManager::setSimplifiedMatching(true); ///@todo Make simplified matching optional.
+    
+    Cpp::EnvironmentManager::setSimplifiedMatching(true);
+    
+    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Disabled);
+    
+//     Cpp::EnvironmentManager::setSimplifiedMatching(true);
+//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
+//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     m_includeResolver = new CppTools::IncludePathResolver;
     // Retrieve the standard include paths & macro definitions for this machine.
@@ -584,7 +591,8 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
         QFileInfo info(check);
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(check); //canonicalFilePath is expensive, and why do we need it?
+            ret.first = KUrl(info.absoluteFilePath());
+            ret.first.cleanPath();
             ret.second = localPath;
             return ret;
         }
@@ -607,7 +615,8 @@ restart:
 
         if (info.exists() && info.isReadable()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(check); //canonicalFilePath is expensive, and why do we need it?
+            ret.first = KUrl(info.absoluteFilePath());
+            ret.first.cleanPath();
             ret.second = path.path();
             return ret;
         }

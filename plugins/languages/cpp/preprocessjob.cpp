@@ -58,6 +58,8 @@
 
 // #define ifDebug(x) x
 
+const uint maxIncludeDepth = 50;
+
 QString urlsToString(const QList<KUrl>& urlList) {
   QString paths;
   foreach( const KUrl& u, urlList )
@@ -88,6 +90,17 @@ CPPParseJob * PreprocessJob::parentJob() const
     return static_cast<CPPParseJob*>(const_cast<QObject*>(parent()));
 }
 
+void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName)
+{
+  KDevelop::DUChainWriteLocker lock(KDevelop::DUChain::lock());
+  
+  m_currentEnvironment->environmentFile()->setHeaderGuard(guardName);
+  
+  //In naive matching mode, we ignore the dependence on header-guards
+  if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive)
+    m_currentEnvironment->removeString(guardName);
+}
+
 void PreprocessJob::run()
 {
     if(!CppLanguageSupport::self())
@@ -114,12 +127,12 @@ void PreprocessJob::run()
     {
       KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-    if(Cpp::EnvironmentManager::isSimplifiedMatching()) {
+      if(Cpp::EnvironmentManager::isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
-            m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
-            IndexedString u = parentJob()->document();
-            m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
-        }
+        m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
+        IndexedString u = parentJob()->document();
+        m_secondEnvironmentFile = new Cpp::EnvironmentFile(  u, 0 );
+      }
     }
 
     rpp::pp preprocessor(this);
@@ -137,6 +150,8 @@ void PreprocessJob::run()
         m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
         delete standardEnv;
     }
+    
+    Cpp::ReferenceCountedStringSet macroNamesAtBeginning = m_currentEnvironment->macroNameSet();
     
     KDevelop::ParsingEnvironmentFilePointer updatingEnvironmentFile;
     
@@ -164,10 +179,8 @@ void PreprocessJob::run()
                 readLock.lock();
                 
                 needsUpdate = CppLanguageSupport::self()->needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, includePaths);
-                
               }
             
-                  
             if(!needsUpdate) {
               parentJob()->setNeedsUpdate(false);
               return;
@@ -187,6 +200,7 @@ void PreprocessJob::run()
 
     QByteArray contents;
 
+    
     QString localFile(parentJob()->document().toUrl().toLocalFile());
   
     QFileInfo fileInfo( localFile );
@@ -239,9 +253,6 @@ void PreprocessJob::run()
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
     }
     
-    if(m_secondEnvironmentFile) //Copy some information from the environment-file to its content-part
-        m_secondEnvironmentFile->setModificationRevision(m_firstEnvironmentFile->modificationRevision());
-
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()
     << "<== readFromDisk:" << readFromDisk
@@ -250,6 +261,7 @@ void PreprocessJob::run()
 
     if (checkAbort())
         return;
+    
 
     // Create a new macro block if this is the master preprocess-job
     if( parentJob()->masterJob() == parentJob() )
@@ -284,6 +296,14 @@ void PreprocessJob::run()
 
     PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), contents);
 
+    if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
+      if(macroNamesAtBeginning.contains(m_firstEnvironmentFile->headerGuard())) {
+        //Remove the header-guard, and re-preprocess, since we don't do real environment-management(We don't allow empty versions)
+        m_currentEnvironment->removeMacro(m_firstEnvironmentFile->headerGuard());
+        result = preprocessor.processFile(parentJob()->document().str(), contents);
+      }
+    }
+    
     if(!m_headerSectionEnded) {
       ifDebug( kDebug(9007) << parentJob()->document().str() << ": header-section was not ended"; )
       headerSectionEndedInternal(0);
@@ -300,11 +320,21 @@ void PreprocessJob::run()
     parentJob()->parseSession()->setContents( result, m_currentEnvironment->takeLocationTable() );
     parentJob()->parseSession()->setUrl( parentJob()->document() );
 
+    
     if(m_secondEnvironmentFile)
       parentJob()->setProxyEnvironmentFile( m_firstEnvironmentFile.data() );
     else
       parentJob()->setContentEnvironmentFile( m_firstEnvironmentFile.data() );
-
+    
+    if(m_secondEnvironmentFile) {//Copy some information from the environment-file to its content-part
+        KDevelop::DUChainWriteLocker readLock(KDevelop::DUChain::lock());
+        m_secondEnvironmentFile->setModificationRevision(m_firstEnvironmentFile->modificationRevision());
+        if(m_firstEnvironmentFile->headerGuard().isEmpty())
+          m_firstEnvironmentFile->setHeaderGuard(m_secondEnvironmentFile->headerGuard());
+        else
+          m_secondEnvironmentFile->setHeaderGuard(m_firstEnvironmentFile->headerGuard());
+    }
+    
     if( m_secondEnvironmentFile ) {
         //kDebug(9008) << parentJob()->document().str() << "Merging content-environment file into header environment-file";
         KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -435,6 +465,19 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, int sourceLine, bool skipCurrentPath)
 {
     Q_UNUSED(type)
+    if(0){
+      uint currentDepth = 0;
+      CPPParseJob* job = parentJob();
+      while(job->parentPreprocessor()) {
+        ++currentDepth;
+        job = job->parentPreprocessor()->parentJob();
+      }
+      if(currentDepth > maxIncludeDepth) {
+        kDebug(9007) << "maximum depth reached while including" << _fileName << "into" << parentJob()->document().str();
+        return 0;
+      }
+    }
+    
     
     KUrl fileNameUrl(_fileName);
     
@@ -486,10 +529,41 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
         KDevelop::ReferencedTopDUContext includedContext;
         bool updateNeeded = false;
+        bool updateForbidden = false;
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
             includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
+            
+            //Check if the same file is being processed by one of the parents, and if it is, import it later on
+            if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive) {
+              
+              CPPParseJob* job = parentJob();
+              while(job->parentPreprocessor()) {
+                job = job->parentPreprocessor()->parentJob();
+                if(job->document() == IndexedString(includedFile)) {
+                  parentJob()->addDelayedImport(CPPParseJob::LineJobPair(job, sourceLine));
+                  return 0;
+                }
+              }
+              
+              if(!includedContext) {
+                //Check if there is a parsed version that is disabled by its header-guard right now, and enventually use that one.
+                QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(IndexedString(includedFile));
+                foreach(ParsingEnvironmentFilePointer version, allVersions) {
+                  Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(version.data());
+                  
+                  if(envFile && (envFile->isProxyContext() || !m_secondEnvironmentFile) && !envFile->headerGuard().isEmpty()) {
+                    if(m_currentEnvironment->macroNameSet().contains(envFile->headerGuard())) {
+                      includedContext = envFile->topContext();
+                      
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+            
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
@@ -497,11 +571,19 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
                 //Do not update again if ForceUpdate is given and the context was already updated during this run
                 updateNeeded |= (slaveMinimumFeatures & TopDUContext::ForceUpdate) && !parentJob()->masterJob()->wasUpdated(includedContext.data());
+                
+                ///NEVER update when the file is header-guarded in the current environment, because else it will be emptied
+                if(!includedEnvironment->headerGuard().isEmpty() && m_currentEnvironment->macroNameSet().contains(includedEnvironment->headerGuard())) {
+                  updateForbidden = true;
+//                   kDebug() << "forbidding update of" << includedFile;
+                  updateNeeded = false;
+                }
               }
             }
         }
 
-        if( includedContext && !updateNeeded && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(includedContext)) ) {
+        if( includedContext && (updateForbidden ||
+                               (!updateNeeded && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(includedContext))) )) {
             ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName; )
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -516,9 +598,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }
         } else {
+            Q_ASSERT(!updateForbidden);
             if(updateNeeded)
               kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": need to update" << includedFile;
-            else if(parentJob()->masterJob()->needUpdateEverything())
+            else if(parentJob()->masterJob()->needUpdateEverything() && includedContext)
               kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": needUpateEverything, updating" << includedFile;
             else
               kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": no fitting entry for" << includedFile << "in du-chain, parsing";
