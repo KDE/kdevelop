@@ -230,6 +230,54 @@ void AnnotationManagerTest::stopWatching()
     KVERIFY(! model);
 }
 
+void AnnotationManagerTest::annotationsOnExistingView()
+{
+    // create and activate a text view _before_ activating coverage
+    // annotations on the document
+    
+    // setup
+    CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
+    m_manager->addCoverageData(f);
+    KDevDocument* doc = createKDevDocument(f->url());
+
+    // create a view
+    m_docCtrl->emitTextDocumentCreated(doc);
+    QTest::qWait(50);
+    KTextEditor::Document* tdoc = doc->textDocument();
+    KTextEditor::View* v = tdoc->createView(m_widget);
+    QTest::qWait(50);
+
+    // exercise
+    m_manager->watch(doc);
+
+    // verify
+    KTextEditor::AnnotationViewInterface *anno =
+            qobject_cast<KTextEditor::AnnotationViewInterface*>(v);
+    Q_ASSERT_X(anno, "annotationsOnExistingView", "Err?");
+    KVERIFY(anno->isAnnotationBorderVisible());
+    AnnotationModel* model = anno->annotationModel();
+    KVERIFY(model);
+    
+    assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);
+}
+
+void AnnotationManagerTest::addRemoveAndReAddAnnotations()
+{
+    // setup
+    CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
+    m_manager->addCoverageData(f);
+    KDevDocument* doc = createKDevDocument(f->url());
+
+    // exercise
+    m_manager->watch(doc);
+    View* v = triggerAnnotationsOnView(doc);
+    m_manager->stopWatching(doc);
+    m_manager->watch(doc);
+    
+    // verify
+    assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);
+}
+
 ////////////////// setup helpers /////////////////////////////////////////////
 
 void AnnotationManagerTest::initManager(CoveredFile* f)

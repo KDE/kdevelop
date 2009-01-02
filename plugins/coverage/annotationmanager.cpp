@@ -77,6 +77,11 @@ void AnnotationManager::watch(IDocument* doc)
     Q_ASSERT_X(doc, "AnotationManager::watch()", "got null document.");
     Q_ASSERT(doc->isTextDocument());
     m_docs << doc;
+    if (!doc->textDocument()) return;
+    m_textDocUrls[doc->textDocument()] = doc->url();
+    foreach(KTextEditor::View* view, doc->textDocument()->views()) {
+        fixAnnotation(doc->textDocument(), view);
+    }
 }
 
 void AnnotationManager::fixAnnotation(KTextEditor::Document* doc, KTextEditor::View* view)
