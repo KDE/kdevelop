@@ -74,7 +74,7 @@ void AnnotationManagerTest::initTestCase()
 
 void AnnotationManagerTest::init()
 {
-    m_manager = new AnnotationManager;
+    m_annotationManager = new AnnotationManager;
     m_someUrl = KUrl("foo.cpp");
     m_widget = new QWidget;
     m_lineNr = 10;
@@ -83,7 +83,7 @@ void AnnotationManagerTest::init()
 
 void AnnotationManagerTest::cleanup()
 {
-    if (m_manager) delete m_manager;
+    if (m_annotationManager) delete m_annotationManager;
     if (m_widget) delete m_widget;
     qDeleteAll(m_garbageFiles);
     m_garbageFiles.clear();
@@ -98,19 +98,19 @@ void AnnotationManagerTest::cleanup()
 void AnnotationManagerTest::instantiate()
 {
     QMap<KUrl, CoveredFile*> files;
-    m_manager->setCoveredFiles(files);
+    m_annotationManager->setCoveredFiles(files);
     KDevDocument* doc = createKDevDocument(m_someUrl); 
-    m_manager->watch(doc);
-    m_manager->stopWatching(doc);
+    m_annotationManager->watch(doc);
+    m_annotationManager->stopWatching(doc);
 }
 
 void AnnotationManagerTest::singleLine()
 {
     // setup
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     View* v = triggerAnnotationsOnView(doc);                // exercise
     assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);    // verify
@@ -122,9 +122,9 @@ void AnnotationManagerTest::multipleLines()
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
     int line2 = 20, callCount2 = 10;
     f->setCallCount(line2, callCount2);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     View* v = triggerAnnotationsOnView(doc);                 // exercise
     assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);     // verify
@@ -135,9 +135,9 @@ void AnnotationManagerTest::multipleViews()
 {
     // setup
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     // exercise
     View* v1 = triggerAnnotationsOnView(doc);
@@ -157,15 +157,15 @@ void AnnotationManagerTest::multipleFiles()
 {
     // setup
     CoveredFile* f1  = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f1);
+    m_annotationManager->addCoverageData(f1);
     int line2 = 20, nrofCalls2 = 5;
     CoveredFile* f2 = createCoveredFile(line2, nrofCalls2, KUrl("bar.cpp"));
-    m_manager->addCoverageData(f2);
+    m_annotationManager->addCoverageData(f2);
 
     KDevDocument* doc1 = createKDevDocument(f1->url());
-    m_manager->watch(doc1);
+    m_annotationManager->watch(doc1);
     KDevDocument* doc2 = createKDevDocument(f2->url());
-    m_manager->watch(doc2);
+    m_annotationManager->watch(doc2);
 
     // exercise
     View* v1 = triggerAnnotationsOnView(doc1);
@@ -181,9 +181,9 @@ void AnnotationManagerTest::notCovered()
     // setup
     m_lineNr = 5;
     CoveredFile* f  = createCoveredFile(5, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     // exercise
     View* v = triggerAnnotationsOnView(doc);
@@ -198,10 +198,10 @@ void AnnotationManagerTest::multiCoverageOneFile()
 {
     CoveredFile* f1 = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
     CoveredFile* f2 = createCoveredFile(m_lineNr+1, m_nrofCalls+1, m_someUrl);
-    m_manager->addCoverageData(f1);
-    m_manager->addCoverageData(f2);
+    m_annotationManager->addCoverageData(f1);
+    m_annotationManager->addCoverageData(f2);
     KDevDocument* doc = createKDevDocument(m_someUrl);
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     View* v = triggerAnnotationsOnView(doc);
     assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);
@@ -213,13 +213,13 @@ void AnnotationManagerTest::stopWatching()
 {
     // setup
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     // exercise
     View* v = triggerAnnotationsOnView(doc);
-    m_manager->stopWatching(doc);
+    m_annotationManager->stopWatching(doc);
 
     // verify
     KTextEditor::AnnotationViewInterface *anno =
@@ -237,7 +237,7 @@ void AnnotationManagerTest::annotationsOnExistingView()
     
     // setup
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
 
     // create a view
@@ -248,7 +248,7 @@ void AnnotationManagerTest::annotationsOnExistingView()
     QTest::qWait(50);
 
     // exercise
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
 
     // verify
     KTextEditor::AnnotationViewInterface *anno =
@@ -265,14 +265,14 @@ void AnnotationManagerTest::addRemoveAndReAddAnnotations()
 {
     // setup
     CoveredFile* f = createCoveredFile(m_lineNr, m_nrofCalls, m_someUrl);
-    m_manager->addCoverageData(f);
+    m_annotationManager->addCoverageData(f);
     KDevDocument* doc = createKDevDocument(f->url());
 
     // exercise
-    m_manager->watch(doc);
+    m_annotationManager->watch(doc);
     View* v = triggerAnnotationsOnView(doc);
-    m_manager->stopWatching(doc);
-    m_manager->watch(doc);
+    m_annotationManager->stopWatching(doc);
+    m_annotationManager->watch(doc);
     
     // verify
     assertAnnoCallCountEquals(m_lineNr, m_nrofCalls, v);

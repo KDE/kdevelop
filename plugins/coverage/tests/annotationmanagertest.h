@@ -62,7 +62,7 @@ private: // helpers
     void assertAnnotationsGone(KTextEditor::View* v);
 
 private: // fixture
-    AnnotationManager* m_manager;
+    AnnotationManager* m_annotationManager;
     TestStubs::Core* m_core;
     TestStubs::DocumentController* m_docCtrl;
     KUrl m_someUrl;
