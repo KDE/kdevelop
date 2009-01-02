@@ -34,6 +34,7 @@ Q_OBJECT
 private slots:
     void init();
     void cleanup();
+    void cleanupTestCase();
 
     void singleCoveredFile();
     void multipleFiles();

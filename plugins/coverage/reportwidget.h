@@ -57,7 +57,7 @@ class VERITAS_COVERAGE_EXPORT ReportWidget : public QWidget
 {
 Q_OBJECT
 public:
-    ReportWidget(QWidget* parent);
+    explicit ReportWidget(QWidget* parent = 0);
     virtual ~ReportWidget();
 
     /*! initialize child widgets and connects signals.

@@ -34,6 +34,7 @@ LcovInfoParser::LcovInfoParser(QObject* parent) : QObject(parent), m_current(0)
 
 LcovInfoParser::~LcovInfoParser()
 {
+    if (m_current) m_current->deleteLater();
     foreach(CoveredFile* f, m_files) {
         f->deleteLater();
     }

@@ -31,6 +31,7 @@
 #include "../reportmodel.h"
 #include "../reportproxymodel.h"
 #include "../ui_reportwidget.h"
+
 #include <QtTest/QTest>
 #include <QtTest/QTestKeyClicksEvent>
 #include <qtest_kde.h>
@@ -47,331 +48,298 @@ using Veritas::ReportWidgetTest;
 
 void ReportWidgetTest::init()
 {
+    m_reportWidget = new ReportWidget(0);
+    m_reportWidget->init();
 }
 
 void ReportWidgetTest::cleanup()
 {
-}
-
-void ReportWidgetTest::someCmd()
-{
-    ReportWidget* rw = new ReportWidget(0);
-    rw->init();
-//    rw->show();
-//    QTest::qWait(20000);
+    delete m_reportWidget;
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithRawDataFloorRoundedCoverage()
 {
-    ReportWidget rw(0);
-    rw.init();
 
     ReportDirData data;
     data.setSloc(10000);
     data.setNrofCoveredLines(4223);
-    rw.setCoverageStatistics(data);
+    m_reportWidget->setCoverageStatistics(data);
 
-    assertStatistics(rw, 10000, 4223, 42.2);
+    assertStatistics(m_reportWidget, 10000, 4223, 42.2);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithRawDataCeilRoundedCoverage()
 {
-    ReportWidget rw(0);
-    rw.init();
-
     ReportDirData data;
     data.setSloc(100000);
     data.setNrofCoveredLines(42160);
-    rw.setCoverageStatistics(data);
+    m_reportWidget->setCoverageStatistics(data);
 
-    assertStatistics(rw, 100000, 42160, 42.2);
+    assertStatistics(m_reportWidget, 100000, 42160, 42.2);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithNewSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
     QItemSelection selection;
-    QModelIndex topLeft = table(rw)->model()->index(0, 0);
-    QModelIndex bottomRight = table(rw)->model()->index(3, 1);
+    QModelIndex topLeft = table(m_reportWidget)->model()->index(0, 0);
+    QModelIndex bottomRight = table(m_reportWidget)->model()->index(3, 1);
     selection.select(topLeft, bottomRight);
 
-    rw.setCoverageStatistics(selection, QItemSelection());
+    m_reportWidget->setCoverageStatistics(selection, QItemSelection());
 
-    assertStatistics(rw, 8, 4, 50.0);
+    assertStatistics(m_reportWidget, 8, 4, 50.0);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithAddedSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    setStatistics(rw, 12, 12);
+    setStatistics(m_reportWidget, 12, 12);
 
     QItemSelection selection;
-    QModelIndex first = table(rw)->model()->index(0, 0);
-    QModelIndex second = table(rw)->model()->index(1, 0);
+    QModelIndex first = table(m_reportWidget)->model()->index(0, 0);
+    QModelIndex second = table(m_reportWidget)->model()->index(1, 0);
     selection.select(first, second);
 
-    rw.setCoverageStatistics(selection, QItemSelection());
+    m_reportWidget->setCoverageStatistics(selection, QItemSelection());
 
-    assertStatistics(rw, 16, 15, 93.8);
+    assertStatistics(m_reportWidget, 16, 15, 93.8);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithRemovedSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    setStatistics(rw, 8, 6);
+    setStatistics(m_reportWidget, 8, 6);
 
     QItemSelection deselection;
-    QModelIndex second = table(rw)->model()->index(1, 0);
-    QModelIndex third = table(rw)->model()->index(2, 0);
+    QModelIndex second = table(m_reportWidget)->model()->index(1, 0);
+    QModelIndex third = table(m_reportWidget)->model()->index(2, 0);
     deselection.select(second, third);
 
-    rw.setCoverageStatistics(QItemSelection(), deselection);
+    m_reportWidget->setCoverageStatistics(QItemSelection(), deselection);
 
-    assertStatistics(rw, 4, 4, 100.0);
+    assertStatistics(m_reportWidget, 4, 4, 100.0);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithChangedSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    setStatistics(rw, 16, 15);
+    setStatistics(m_reportWidget, 16, 15);
 
     QItemSelection selection;
-    QModelIndex first = table(rw)->model()->index(0, 0);
+    QModelIndex first = table(m_reportWidget)->model()->index(0, 0);
     selection.select(first, first);
 
     QItemSelection deselection;
-    QModelIndex fourth = table(rw)->model()->index(3, 0);
+    QModelIndex fourth = table(m_reportWidget)->model()->index(3, 0);
     deselection.select(fourth, fourth);
 
-    rw.setCoverageStatistics(selection, deselection);
+    m_reportWidget->setCoverageStatistics(selection, deselection);
 
-    assertStatistics(rw, 18, 17, 94.4);
+    assertStatistics(m_reportWidget, 18, 17, 94.4);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithEmptySelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.setCoverageStatistics(QItemSelection(), QItemSelection());
+    m_reportWidget->setCoverageStatistics(QItemSelection(), QItemSelection());
 
-    assertEmptyStatistics(rw);
+    assertEmptyStatistics(m_reportWidget);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithInvalidSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
     QItemSelection selection;
     QModelIndex index;
     selection.select(index, index);
 
-    rw.setCoverageStatistics(selection, QItemSelection());
+    m_reportWidget->setCoverageStatistics(selection, QItemSelection());
 
-    assertEmptyStatistics(rw);
+    assertEmptyStatistics(m_reportWidget);
 }
 
 //Shouldn't happen, but just in case... it should ignore file items and only
 //take into account directory items
 void ReportWidgetTest::setCoverageStatisticsWithDirectoriesAndFileSelection()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
     QItemSelection selection;
-    QModelIndex first = table(rw)->model()->index(0, 0);
+    QModelIndex first = table(m_reportWidget)->model()->index(0, 0);
     selection.select(first, first);
 
-    QModelIndex third = table(rw)->model()->index(2, 1);
-    QModelIndex thirdFile1 = table(rw)->model()->index(0, 0, third);
+    QModelIndex third = table(m_reportWidget)->model()->index(2, 1);
+    QModelIndex thirdFile1 = table(m_reportWidget)->model()->index(0, 0, third);
     selection.select(thirdFile1, thirdFile1);
 
-    QModelIndex fourth = table(rw)->model()->index(3, 0);
+    QModelIndex fourth = table(m_reportWidget)->model()->index(3, 0);
     selection.select(fourth, fourth);
 
-    rw.setCoverageStatistics(selection, QItemSelection());
+    m_reportWidget->setCoverageStatistics(selection, QItemSelection());
 
-    assertStatistics(rw, 4, 2, 50.0);
+    assertStatistics(m_reportWidget, 4, 2, 50.0);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithIndex()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.setCoverageStatistics(table(rw)->model()->index(0, 0));
+    m_reportWidget->setCoverageStatistics(table(m_reportWidget)->model()->index(0, 0));
 
-    assertStatistics(rw, 3, 2, 66.7);
+    assertStatistics(m_reportWidget, 3, 2, 66.7);
 }
 
 void ReportWidgetTest::setCoverageStatisticsWithInvalidIndex()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.setCoverageStatistics(QModelIndex());
+    m_reportWidget->setCoverageStatistics(QModelIndex());
 
-    assertEmptyStatistics(rw);
+    assertEmptyStatistics(m_reportWidget);
 }
 
 //Shouldn't modify the statistics
 void ReportWidgetTest::setCoverageStatisticsWithFileIndex()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    QModelIndex dirIndex = table(rw)->model()->index(0, 0);
-    rw.setCoverageStatistics(table(rw)->model()->index(0, 0, dirIndex));
+    QModelIndex dirIndex = table(m_reportWidget)->model()->index(0, 0);
+    m_reportWidget->setCoverageStatistics(table(m_reportWidget)->model()->index(0, 0, dirIndex));
 
-    assertEmptyStatistics(rw);
+    assertEmptyStatistics(m_reportWidget);
 }
+
+#if 0
 
 //Selects first directory
 void ReportWidgetTest::statisticsSelectingSingleDirectory()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
     //TODO I can't get it to work without showing the widget and waiting some
     //time before triggering the click. Is there a way for this to work without
     //showing the widget and waiting?
-    rw.show();
-    table(rw)->setFocus();
-    QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Space, Qt::NoModifier, 500);
 
-    assertStatistics(rw, 3, 2, 66.7);
+    assertStatistics(m_reportWidget, 3, 2, 66.7);
 }
 
 //Selects all directories
 void ReportWidgetTest::statisticsSelectingSeveralDirectories()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.show();
-    table(rw)->setFocus();
-    QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Space, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ShiftModifier);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ShiftModifier);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ShiftModifier);
 
-    assertStatistics(rw, 8, 4, 50.0);
+    assertStatistics(m_reportWidget, 8, 4, 50.0);
 }
 
 //Selects first and second directory, and slides in second directory
 void ReportWidgetTest::statisticsAfterSlidingRight()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.show();
-    table(rw)->setFocus();
-    QTest::keyClick(table(rw), Qt::Key_Space, Qt::NoModifier, 500);
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::ShiftModifier);
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Space, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ShiftModifier);
 
-    QTest::keyClick(table(rw), Qt::Key_Right);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Right);
 
-    assertStatistics(rw, 1, 1, 100.0);
+    assertStatistics(m_reportWidget, 1, 1, 100.0);
 }
 
 //Selects fourth, third and second directory, slides in second directory, 
 //selects first file, slides left, and selects third directory
+
 void ReportWidgetTest::statisticsAfterSlidingLeft()
 {
-    ReportWidget rw(0);
-    rw.init();
-    setModelFor(rw);
+    setModelFor(m_reportWidget);
 
-    rw.show();
-    table(rw)->setFocus();
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::NoModifier, 500);
-    QTest::keyClick(table(rw), Qt::Key_Down);
-    QTest::keyClick(table(rw), Qt::Key_Down);
-    QTest::keyClick(table(rw), Qt::Key_Up, Qt::ShiftModifier);
-    QTest::keyClick(table(rw), Qt::Key_Up, Qt::ShiftModifier);
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Up, Qt::ShiftModifier);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Up, Qt::ShiftModifier);
 
-    QTest::keyClick(table(rw), Qt::Key_Right);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Right);
 
     //Wait to avoid the slide to eat the event
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::NoModifier, 500);
 
-    assertStatistics(rw, 1, 1, 100.0);
+    assertStatistics(m_reportWidget, 1, 1, 100.0);
 
-    QTest::keyClick(table(rw), Qt::Key_Left);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Left);
 
-    assertStatistics(rw, 5, 2, 40.0);
+    assertStatistics(m_reportWidget, 5, 2, 40.0);
 
     //Wait to avoid the slide to eat the event
-    QTest::keyClick(table(rw), Qt::Key_Down, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::NoModifier, 500);
 
-    assertStatistics(rw, 3, 1, 33.3);
+    assertStatistics(m_reportWidget, 3, 1, 33.3);
 }
+
+#endif
 
 ////////////////////////////// Asserts ////////////////////////////////////////
 
-void ReportWidgetTest::assertStatistics(const ReportWidget& rw, int sloc,
+void ReportWidgetTest::assertStatistics(ReportWidget* rw, int sloc,
                                         int instrumented, double coverage)
 {
-    QCOMPARE(rw.m_ui->sloc->text(), QString::number(sloc));
-    QCOMPARE(rw.m_ui->nrofCoveredLines->text(), QString::number(instrumented));
-    QCOMPARE(rw.m_ui->coverageRatio->text(), QLocale().toString(coverage, 'f', 1) + " %");
+    QCOMPARE(rw->m_ui->sloc->text(), QString::number(sloc));
+    QCOMPARE(rw->m_ui->nrofCoveredLines->text(), QString::number(instrumented));
+    QCOMPARE(rw->m_ui->coverageRatio->text(), QLocale().toString(coverage, 'f', 1) + " %");
 }
 
-void ReportWidgetTest::assertEmptyStatistics(const ReportWidget& rw)
+void ReportWidgetTest::assertEmptyStatistics(ReportWidget* rw)
 {
-    QCOMPARE(rw.m_ui->sloc->text(), QString("-"));
-    QCOMPARE(rw.m_ui->nrofCoveredLines->text(), QString("-"));
-    QCOMPARE(rw.m_ui->coverageRatio->text(), QString("-"));
+    QCOMPARE(rw->m_ui->sloc->text(), QString("-"));
+    QCOMPARE(rw->m_ui->nrofCoveredLines->text(), QString("-"));
+    QCOMPARE(rw->m_ui->coverageRatio->text(), QString("-"));
 }
 
 ////////////////////////////// Helpers ////////////////////////////////////////
 
-DrillDownView* ReportWidgetTest::table(const ReportWidget& rw)
+DrillDownView* ReportWidgetTest::table(ReportWidget* rw)
 {
-    return rw.table();
+    return rw->table();
 }
 
-void ReportWidgetTest::setStatistics(ReportWidget& rw, int sloc, int instrumented)
+void ReportWidgetTest::setStatistics(ReportWidget* rw, int sloc, int instrumented)
 {
-    rw.m_ui->sloc->setText(QString::number(sloc));
-    rw.m_ui->nrofCoveredLines->setText(QString::number(instrumented));
+    rw->m_ui->sloc->setText(QString::number(sloc));
+    rw->m_ui->nrofCoveredLines->setText(QString::number(instrumented));
 }
 
-void ReportWidgetTest::setModelFor(ReportWidget& rw)
+void ReportWidgetTest::setModelFor(ReportWidget* rw)
 {
     ReportModel* model = createReportModel();
     ReportProxyModel* proxyModel = new ReportProxyModel(this);
     proxyModel->setSourceModel(model);
 
-    rw.table()->setModel(proxyModel);
-    rw.m_proxy = proxyModel;
-    rw.m_model = model;
+    rw->table()->setModel(proxyModel);
+    rw->m_proxy = proxyModel;
+    rw->m_model = model;
 
-    connect(rw.table()->selectionModel(),
+    connect(rw->table()->selectionModel(),
             SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            &rw,
+            rw,
             SLOT(dispatchSelectionSignal(QItemSelection,QItemSelection)));
 }
 

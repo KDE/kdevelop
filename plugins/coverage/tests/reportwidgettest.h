@@ -38,8 +38,6 @@ private slots:
     void init();
     void cleanup();
 
-    void someCmd();
-
     void setCoverageStatisticsWithRawDataFloorRoundedCoverage();
     void setCoverageStatisticsWithRawDataCeilRoundedCoverage();
     void setCoverageStatisticsWithNewSelection();
@@ -53,19 +51,23 @@ private slots:
     void setCoverageStatisticsWithInvalidIndex();
     void setCoverageStatisticsWithFileIndex();
 
-    void statisticsSelectingSingleDirectory();
-    void statisticsSelectingSeveralDirectories();
-    void statisticsAfterSlidingRight();
-    void statisticsAfterSlidingLeft();
+    #if 0
+   void statisticsSelectingSingleDirectory();
+   void statisticsSelectingSeveralDirectories();
+   void statisticsAfterSlidingRight();
+   void statisticsAfterSlidingLeft();
+#endif
 
-    void assertStatistics(const ReportWidget& rw, int sloc, int instrumented, double coverage);
-    void assertEmptyStatistics(const ReportWidget& rw);
+private:
+        
+    void assertStatistics(ReportWidget* rw, int sloc, int instrumented, double coverage);
+    void assertEmptyStatistics(ReportWidget* rw);
 
-    DrillDownView* table(const ReportWidget& rw);
-    void setStatistics(ReportWidget& rw, int sloc, int instrumented);
-    void setModelFor(ReportWidget& rw);
+    DrillDownView* table(ReportWidget* rw);
+    void setStatistics(ReportWidget* rw, int sloc, int instrumented);
+    void setModelFor(ReportWidget* rw);
     ReportModel* createReportModel();
-
+    ReportWidget* m_reportWidget;
 };
 
 }

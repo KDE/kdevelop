@@ -22,7 +22,7 @@
 #include "../lcovinfoparser.h"
 #include "../coveredfile.h"
 #include "coveredfilefactory.h"
-
+#include <KDebug>
 #include "testutils.h"
 
 using Veritas::CoveredFile;
@@ -37,7 +37,14 @@ void LcovInfoParserTest::init()
 
 void LcovInfoParserTest::cleanup()
 {
-    delete m_parser;
+//    delete m_parser;
+    m_parser->deleteLater();
+}
+
+void LcovInfoParserTest::cleanupTestCase()
+{
+    QTimer::singleShot(0, QCoreApplication::instance(), SLOT(quit()));
+    QCoreApplication::exec();
 }
 
 void LcovInfoParserTest::assertCoveredFilesEqual(CoveredFile* f1, CoveredFile* f2)
@@ -127,5 +134,6 @@ void LcovInfoParserTest::multipleFiles()
     delete expFile2;
 }
 
-QTEST_KDEMAIN( LcovInfoParserTest, NoGUI)
+
+QTEST_MAIN( LcovInfoParserTest )
 #include "lcovinfoparsertest.moc"

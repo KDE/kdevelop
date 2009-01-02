@@ -89,6 +89,8 @@ class BackTrace:
                     return False # something Qt-Font related, not interested in this
                 if frame.func.find('__nss_database_lookup') != -1:
                     return False # more crap
+                if frame.func.find('HB_OpenTypePosition') != -1 and frame.sfile.find("harfbuzz-shaper.cpp") != -1:
+                    return False
             if frame.sfile:
                 if frame.sfile.find("xtest") != -1 or frame.sfile.find("veritas") != -1:
                     is_interesting = True

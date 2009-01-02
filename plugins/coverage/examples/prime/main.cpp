@@ -60,3 +60,5 @@ bool is_prime(long number)
     }
     return true;
 }
+
+//krazy:skip
