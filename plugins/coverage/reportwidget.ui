@@ -13,7 +13,11 @@
    <string>Coverage Report</string>
   </property>
   <property name="whatsThis" >
-   <string>GCOV code coverage statistics.</string>
+   <string>GCOV code coverage statistics.
+
+Set the directory to generate the report for and start the scan. 
+
+Once finished, you can select the directories in the coverage report to see their statistics. A more detailed report can be seen for each directory, showing all the covered files in it. Each file can also be shown in the editor, annotated with line by line coverage information.</string>
   </property>
   <layout class="QVBoxLayout" name="reportWidgetLayout" >
    <item>
@@ -27,6 +31,9 @@
      <layout class="QHBoxLayout" name="buildPathFrameLayout" >
       <item>
        <widget class="QLabel" name="buildPathTextLabel" >
+        <property name="whatsThis" >
+         <string>The directory to scan for .gcda files.</string>
+        </property>
         <property name="text" >
          <string>Build Path: </string>
         </property>
@@ -34,6 +41,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="startButton" >
+        <property name="toolTip" >
+         <string>Start coverage analysis</string>
+        </property>
+        <property name="whatsThis" >
+         <string>Start coverage analysis in the specified path.
+
+The directory and, recursively, its subdirectories are scanned for .gcda files.</string>
+        </property>
         <property name="text" >
          <string/>
         </property>
@@ -67,7 +82,16 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout" >
         <item>
-         <widget class="KLineEdit" name="filterBox" />
+         <widget class="KLineEdit" name="filterBox" >
+          <property name="toolTip" >
+           <string>Filter directories by name</string>
+          </property>
+          <property name="whatsThis" >
+           <string>When the report is in directory mode, only those containing the specified text in their path are shown.
+
+In file mode, the filter has no effect.</string>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout" >
@@ -88,6 +112,9 @@
            <layout class="QGridLayout" name="gridLayout" >
             <item row="0" column="0" >
              <widget class="QLabel" name="coverageRatioTextLabel" >
+              <property name="whatsThis" >
+               <string>Percentage of covered lines in the selected directories.</string>
+              </property>
               <property name="text" >
                <string>Line Coverage:</string>
               </property>
@@ -95,6 +122,9 @@
             </item>
             <item row="0" column="1" >
              <widget class="QLabel" name="coverageRatio" >
+              <property name="whatsThis" >
+               <string>Percentage of covered lines in the selected directories.</string>
+              </property>
               <property name="text" >
                <string>-</string>
               </property>
@@ -102,6 +132,11 @@
             </item>
             <item row="1" column="0" >
              <widget class="QLabel" name="nrofCoveredLinesTextLabel" >
+              <property name="whatsThis" >
+               <string>Number of covered lines in the selected directories.
+
+Covered lines are those that were executed at least once.</string>
+              </property>
               <property name="text" >
                <string>Covered Lines:</string>
               </property>
@@ -109,6 +144,11 @@
             </item>
             <item row="1" column="1" >
              <widget class="QLabel" name="nrofCoveredLines" >
+              <property name="whatsThis" >
+               <string>Number of covered lines in the selected directories.
+
+Covered lines are those that were executed at least once.</string>
+              </property>
               <property name="text" >
                <string>-</string>
               </property>
@@ -116,6 +156,11 @@
             </item>
             <item row="2" column="0" >
              <widget class="QLabel" name="slocTextLabel" >
+              <property name="whatsThis" >
+               <string>Total number of lines of code in the selected directories.
+
+Note that it only includes executable lines. That is, things like comments, macros, forward declarations... aren't taken into account.</string>
+              </property>
               <property name="text" >
                <string>Total SLOC:</string>
               </property>
@@ -123,6 +168,11 @@
             </item>
             <item row="2" column="1" >
              <widget class="QLabel" name="sloc" >
+              <property name="whatsThis" >
+               <string>Total number of lines of code in the selected directories.
+
+Note that it only includes executable lines. That is, things like comments, macros, forward declarations... aren't taken into account.</string>
+              </property>
               <property name="text" >
                <string>-</string>
               </property>
@@ -164,7 +214,17 @@
     </widget>
    </item>
    <item>
-    <widget class="Veritas::DrillDownView" name="table" />
+    <widget class="Veritas::DrillDownView" name="table" >
+     <property name="whatsThis" >
+      <string>Coverage report.
+
+In directory mode, the report summarizes the coverage with a list of all the directories that contain at least one covered file. It could include directories out of the specified path, depending on the files included in the source code.
+
+In file mode, all the files of the selected directory are shown. If several directories are selected, only the files of the last selected directory are shown. Double clicking on any of the items shows the associated file in the editor, annotated with the coverage information.
+
+You can change between directory and file mode using left and right keys.</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
