@@ -66,6 +66,7 @@ public Q_SLOTS:
 protected:
     virtual void paintEvent(QPaintEvent * event);
     virtual void keyPressEvent(QKeyEvent *event);
+    virtual void mousePressEvent(QMouseEvent* event);
 
 private Q_SLOTS:
     void slide(int x);

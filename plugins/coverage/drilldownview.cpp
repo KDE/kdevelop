@@ -188,6 +188,12 @@ void DrillDownView::animateSlide(int moveDirection)
     animation.start();
 }
 
+void DrillDownView::mousePressEvent(QMouseEvent* event)
+{
+    selectionModel()->clearSelection();
+    QTableView::mousePressEvent(event);
+}
+
 bool DrillDownView::isBusy()
 {
     return animation.state() == QTimeLine::Running;
