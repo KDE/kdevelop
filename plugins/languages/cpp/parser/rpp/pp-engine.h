@@ -136,6 +136,8 @@ class KDEVCPPRPP_EXPORT pp
   int nextToken;
   bool haveNextToken;
   bool hideNext;
+  bool hadGuardCandidate, checkGuardEnd;
+  KDevelop::IndexedString guardCandidate;
 
   union {
     long token_value;

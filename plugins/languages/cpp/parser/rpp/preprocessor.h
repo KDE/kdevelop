@@ -24,6 +24,11 @@
 
 #include <QtCore/QString>
 #include <cppparserexport.h>
+
+namespace KDevelop {
+  class IndexedString;
+};
+
 namespace rpp {
 
 class Stream;
@@ -66,6 +71,11 @@ public:
      * It ends as soon as anything else is found. You can use stream.toEnd() to stop the preprocessing.
      * */
     virtual void headerSectionEnded(rpp::Stream& stream);
+    
+    /**
+     * Is called when a header-guard protection has been detected for the currently processed file
+     * */
+    virtual void foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName);
 };
 
 }

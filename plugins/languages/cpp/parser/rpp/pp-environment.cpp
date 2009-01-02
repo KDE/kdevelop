@@ -201,7 +201,6 @@ void Environment::setMacro(pp_macro* macro)
 /*  if( !macro->defined )
     clearMacro(macro->name);
   else*/
-  Q_ASSERT(m_environment.size() < 50000);
     m_environment.insert(macro->name, macro);
 }
 

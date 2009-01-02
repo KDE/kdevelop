@@ -89,6 +89,18 @@ public:
   void skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro,
                                 Stream& input, Stream& output);
 
+  bool in_header_section() const {
+    return m_in_header_section;
+  }
+  
+  bool foundSignificantContent() const {
+    return m_found_significant_content;
+  }
+  
+  void startSignificantContentSearch() {
+    m_search_significant_content = true;
+  }
+  
 private:
   pp* m_engine;
   pp_frame* m_frame;
@@ -103,6 +115,7 @@ private:
   pp_skip_whitespaces skip_whitespaces;
 
   bool m_in_header_section;
+  bool m_search_significant_content, m_found_significant_content;
 };
 
 }

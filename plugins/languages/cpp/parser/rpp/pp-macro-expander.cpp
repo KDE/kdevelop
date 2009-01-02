@@ -111,16 +111,24 @@ pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderS
   : m_engine(engine)
   , m_frame(frame)
   , m_in_header_section(inHeaderSection)
+  , m_search_significant_content(false)
+  , m_found_significant_content(false)
 {
+  if(m_in_header_section)
+    m_search_significant_content = true; //Find the end of the header section
 }
 
 //A header-section ends when the first non-directive and non-comment occurs
 #define check_header_section \
-  if( m_in_header_section ) \
+  if( m_search_significant_content ) \
   { \
      \
-    m_in_header_section = false; \
-    m_engine->preprocessor()->headerSectionEnded(input); \
+    if(m_in_header_section) { \
+      m_in_header_section = false; \
+      m_engine->preprocessor()->headerSectionEnded(input); \
+    } \
+    m_found_significant_content = true;  \
+    m_search_significant_content = false; \
     if( input.atEnd() ) \
       continue; \
   } \

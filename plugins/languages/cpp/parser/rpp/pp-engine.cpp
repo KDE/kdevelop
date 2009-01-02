@@ -47,6 +47,8 @@ pp::pp(Preprocessor* preprocessor)
   , nextToken(0)
   , haveNextToken(false)
   , hideNext(false)
+  , hadGuardCandidate(false)
+  , checkGuardEnd(false)
 {
   iflevel = 0;
   _M_skipping[iflevel] = 0;
@@ -111,7 +113,14 @@ uint includeNextDirective = KDevelop::IndexedString("include_next").index();
 void pp::handle_directive(uint directive, Stream& input, Stream& output)
 {
   skip_blanks (input, output);
-
+  if(!(directive == ifndefDirective)) {
+    hadGuardCandidate = true; //Too late, the guard must be the first directive
+  }
+  if(checkGuardEnd) {
+    guardCandidate = KDevelop::IndexedString();
+    checkGuardEnd = false;
+  }
+  
   if(directive == defineDirective)
       if (! skipping ())
         return handle_define(input);
@@ -244,9 +253,22 @@ void pp::operator () (Stream& input, Stream& output)
 
     } else {
       output.mark(input.inputPosition());
+      if(checkGuardEnd) {
+        expand.startSignificantContentSearch();
+      }
+      
       expand (input, output);
+      if(checkGuardEnd) {
+        if(expand.foundSignificantContent() || !input.atEnd()) {
+          guardCandidate = KDevelop::IndexedString();
+        }
+        checkGuardEnd = false;
+      }
     }
   }
+  
+  if(!guardCandidate.isEmpty())
+    preprocessor()->foundHeaderGuard(input, guardCandidate);
 
   if (iflevel != previousIfLevel && !input.skippedToEnd())
     createProblem(input, i18n("Unterminated #if statement"));
@@ -827,6 +849,9 @@ void pp::handle_if (Stream& input)
 
 void pp::handle_else(int sourceLine)
 {
+  if(iflevel == 1)
+    guardCandidate = KDevelop::IndexedString();
+
   if (iflevel == 0 && !skipping ())
   {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
@@ -849,6 +874,9 @@ void pp::handle_else(int sourceLine)
 
 void pp::handle_elif(Stream& input)
 {
+  if(iflevel == 1)
+    guardCandidate = KDevelop::IndexedString();
+  
   RETURN_ON_FAIL(iflevel > 0);
 
   if (iflevel == 0 && !skipping())
@@ -906,6 +934,11 @@ void pp::handle_endif(Stream& input, Stream& output)
     _M_true_test[iflevel] = 0;
 
     --iflevel;
+    if(iflevel == 0) {
+      if(!guardCandidate.isEmpty()) {
+        checkGuardEnd = true;
+      }
+    }
   }
 }
 
@@ -926,6 +959,13 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
   KDevelop::IndexedString macro_name(skip_identifier(input));
 ///@todo eventually fix the block description
+  if(check_undefined && expand.in_header_section() && guardCandidate.isEmpty() && !hadGuardCandidate && iflevel == 0) {
+    //It's the first #ifndef and the header-section hasn't ended yet, assume it to be the header-guard
+    guardCandidate = macro_name;
+  }
+
+  hadGuardCandidate = true;
+  
   environment()->enterBlock(input.inputPosition().line);//, QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name).toUtf8());
 
   if (test_if_level())

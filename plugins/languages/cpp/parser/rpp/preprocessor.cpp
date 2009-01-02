@@ -62,3 +62,7 @@ void Preprocessor::headerSectionEnded(rpp::Stream& stream)
 {
   Q_UNUSED(stream)
 }
+
+void Preprocessor::foundHeaderGuard(rpp::Stream& /*stream*/, KDevelop::IndexedString /*guardName*/)
+{
+}
