@@ -1054,10 +1054,11 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
         }
         else if(funcName=="endif")
         {
-            inside--;
-            if(inside<=0 && !it->arguments.isEmpty()) {
+            inside--; 
+            if(inside<=0) {
 //                 Q_ASSERT(!ini.isEmpty());
-                usesForArguments(ifast->condition(), ini, m_topctx, *it);
+                if(!it->arguments.isEmpty())
+                    usesForArguments(ifast->condition(), ini, m_topctx, *it);
                 break;
             }
 //                 kDebug(9042) << "found an endif at:" << lines << "but" << inside;

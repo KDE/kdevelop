@@ -831,7 +831,7 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
         QStandardItem *parent=it->parent();
         parent->removeRow(it->row());
         CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
-        reimport(fi);
+        reload(fi);
         m_folderPerUrl[dir]=fi;
     }
     else if(it)

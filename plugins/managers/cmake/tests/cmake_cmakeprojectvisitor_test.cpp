@@ -287,6 +287,15 @@ void CMakeProjectVisitorTest::testRun_data()
                                "set(res 0)\n"
                                "set(VAR FALSE)\n"
                              << cacheValues << results;
+                             
+    results.clear();
+    results << StringPair("VAR", "FALSE");
+    QTest::newRow("weirdIf") <<
+                            "set(VAR FALSE)\n"
+                            "if(VAR)\n"
+                            "set(VAR a)\n"
+                            "endif()\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
