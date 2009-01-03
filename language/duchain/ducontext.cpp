@@ -1242,6 +1242,11 @@ QVector<KTextEditor::SmartRange*> DUContext::takeUseRanges()
 {
   ENSURE_CAN_WRITE
   QVector<KTextEditor::SmartRange*> ret = m_dynamicData->m_rangesForUses;
+  
+  foreach(KTextEditor::SmartRange* range, ret)
+    if(range)
+      range->removeWatcher(this);
+    
   m_dynamicData->m_rangesForUses.clear();
   return ret;
 }
