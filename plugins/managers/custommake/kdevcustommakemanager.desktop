@@ -2,6 +2,7 @@
 Type=Service
 Name=Custom Makefile
 Name[el]=Προσαρμοσμένο Makefile
+Name[es]=Makefile personalizado
 Name[et]=Kohandatud Makefile
 Name[fr]=Personnaliser un Makefile
 Name[gl]=Makefile personalizado
