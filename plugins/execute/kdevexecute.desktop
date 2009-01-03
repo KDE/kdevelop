@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin allows running of programs with no instrumentor, ie. natively by the current host.
 Comment[el]=Αυτό το πρόσθετο επιτρέπει την εκτέλεση προγραμμάτων χωρίς οργανωτή, πχ. εγγενώς από τον τρέχων υπολογιστή.
+Comment[es]=Este complemento permite ejecutar programas sin instrumentor (es decir, de forma nativa por la máquina actual).
 Comment[fr]=Ce module externe permet le lancement de programmes sans instrumenteur, c'est-à-dire nativement par l'hôte actuel.
 Comment[gl]=Esta extensión permíte executar programas sen instrumentador, i.e. de xeito nativo na máquina actual.
 Comment[nds]=Dit Moduul föhrt Programmen ahn Utstatter ut, d.h. bloots mit den aktuellen Reekner.
