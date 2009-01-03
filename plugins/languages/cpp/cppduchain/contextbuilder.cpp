@@ -988,13 +988,19 @@ void ContextBuilder::visitTryBlockStatement(TryBlockStatementAST *node)
 {
   QList<DUContext*> parentContextsToImport = m_importedParentContexts;
 
-  openContext(node->try_block, DUContext::Other, m_openingFunctionBody);
-  m_openingFunctionBody.clear();
-  addImportedContexts();
+  if(node->try_block->kind != AST::Kind_CompoundStatement) {
+    openContext(node->try_block, DUContext::Other, m_openingFunctionBody);
+    m_openingFunctionBody.clear();
+    addImportedContexts();
 
-  visit(node->try_block);
+    visit(node->try_block);
 
-  closeContext();
+    closeContext();
+  }else{
+    //Do not double-open a context on the same node, because that will lead to problems in the mapping
+    //and failures in use-building
+    visit(node->try_block);
+  }
 
   m_tryParentContexts.push(parentContextsToImport);
 

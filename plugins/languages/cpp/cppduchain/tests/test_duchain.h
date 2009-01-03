@@ -113,6 +113,7 @@ private slots:
   void testTemplateForwardDeclaration2();
   void testTemplateInternalSearch();
   void testStringSets();
+  void testTryCatch();
   void testIndexedStrings();
   void testEnum();
   void testCaseUse();

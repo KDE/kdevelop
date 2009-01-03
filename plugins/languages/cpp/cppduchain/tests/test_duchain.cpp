@@ -845,6 +845,22 @@ void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memb
     QVERIFY(!isStatic);
 }
 
+void TestDUChain::testTryCatch() {
+  TEST_FILE_PARSE_ONLY
+  {
+    QByteArray method("void test() { try{ int o = 3; o += 3; } catch (...) { } }");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->type(), DUContext::Other);
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts()[0]->usesCount(), 1);
+    release(top);
+  }
+}
+
 void TestDUChain::testDeclareStruct()
 {
   TEST_FILE_PARSE_ONLY
