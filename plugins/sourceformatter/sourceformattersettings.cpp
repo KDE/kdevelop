@@ -266,7 +266,7 @@ void SourceFormatterSettings::deleteStyle()
 {
 
 	int res = KMessageBox::questionYesNo(this, i18n("Are you sure you"
-	        " want to delete this style?", i18n("Delete style")));
+	        " want to delete this style?"), i18n("Delete style"));
 	if (res == KMessageBox::No)
 		return;
 
