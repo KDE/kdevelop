@@ -223,7 +223,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
 
   if(abstractNavigationWidget) { //So the context-links work
-    connect(&uses, SIGNAL(navigateDeclaration(IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(IndexedDeclaration)));
+    connect(&uses, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)), abstractNavigationWidget, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
 //     connect(uses, SIGNAL(navigateDeclaration(IndexedDeclaration)), tabWidget, SLOT(setCurrentIndex(...)));
 ///@todo Switch the tab in the tab-widget, so the user will notice that the declaration is being shown
   }
@@ -276,7 +276,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
     return;
 
   //Now just start doing the actual changes, no matter whether the collector is ready or not
-  CollectorProgressDialog collectorProgress(i18n("Searching uses of \"%1\"", originalName), *collector);
+  CollectorProgressDialog collectorProgress(i18n("Renaming \"%1\" to \"%2\"", originalName, replacementName), *collector);
   if(!collector->isReady()) {
     collectorProgress.exec();
     if(collectorProgress.result() != QDialog::Accepted) {

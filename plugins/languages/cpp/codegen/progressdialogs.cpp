@@ -46,15 +46,18 @@ void StringProgressBar::setText(IndexedString text) {
 RefactoringProgressDialog::RefactoringProgressDialog(QString action) {
   
   QHBoxLayout* layout = new QHBoxLayout();
+  QVBoxLayout* layoutV = new QVBoxLayout;
   layout->addWidget(new QLabel(action));
+  layoutV->addLayout(layout);
   
   m_progressBar = new StringProgressBar;
-  layout->addWidget(m_progressBar);
+  layoutV->addWidget(m_progressBar);
   
   m_cancelButton = new QPushButton(i18n("Cancel"));
-  layout->addWidget(m_cancelButton);
+  layout->addWidget(m_cancelButton, 0, Qt::AlignRight);
   
-  resize(300, 60);
+  resize(380, 90);//layoutV->sizeHint().height());
+  setLayout(layoutV);
   
   connect(m_cancelButton, SIGNAL(clicked(bool)), this, SLOT(reject()));
 }
@@ -62,6 +65,7 @@ RefactoringProgressDialog::RefactoringProgressDialog(QString action) {
 void RefactoringProgressDialog::progress(uint done, uint max) {
 
   m_progressBar->setValue(done);
+  m_progressBar->setMaximum((int)max);
 
   if(done == max)
     accept();
@@ -79,9 +83,9 @@ void RefactoringProgressDialog::setProcessing(IndexedString processing) {
 
 CollectorProgressDialog::CollectorProgressDialog(QString action, UsesCollector& collector) : RefactoringProgressDialog(action), m_collector(collector) {
   
-  connect(&m_collector, SIGNAL(processUsesSignal(ReferencedTopDUContext)), this, SLOT(processUses(ReferencedTopDUContext)));
+  connect(&m_collector, SIGNAL(processUsesSignal(KDevelop::ReferencedTopDUContext)), this, SLOT(processUses(KDevelop::ReferencedTopDUContext)));
   connect(&m_collector, SIGNAL(progressSignal(uint, uint)), this, SLOT(progress(uint, uint)));
-  connect(&m_collector, SIGNAL(maximumProgressSignal(uint, uint)), this, SLOT(maximumProgress(uint, uint)));
+  connect(&m_collector, SIGNAL(maximumProgressSignal(uint)), this, SLOT(maximumProgress(uint)));
 }
     
 void CollectorProgressDialog::processUses(ReferencedTopDUContext context) {
