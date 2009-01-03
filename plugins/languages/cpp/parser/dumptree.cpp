@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include "rpp/chartools.h"
 
-static char const * const names[] = {
+char const * const names[] = {
   0,
   "AccessSpecifier",
   "AsmDefinition",

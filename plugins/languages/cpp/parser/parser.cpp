@@ -3577,6 +3577,8 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
 
   while (session->token_stream->lookAhead() == Token_catch)
     {
+      std::size_t catchStart = session->token_stream->cursor();
+      
       advance();
       ADVANCE('(', "(");
       ConditionAST *cond = 0;
@@ -3584,7 +3586,9 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
         {
           advance();
         }
-      else if (!parseCondition(cond, false))
+      else if(session->token_stream->lookAhead() == ')') {
+        //Do nothing, this is equivalent to ellipsis
+      } else if (!parseCondition(cond, false))
         {
           reportError(("condition expected"));
           return false;
@@ -3601,6 +3605,7 @@ bool Parser::parseTryBlockStatement(StatementAST *&node)
       CatchStatementAST *catch_ast = CreateNode<CatchStatementAST>(session->mempool);
       catch_ast->condition = cond;
       catch_ast->statement = body;
+      UPDATE_POS(catch_ast, catchStart, _M_last_valid_token+1);
 
       ast->catch_blocks = snoc(ast->catch_blocks, catch_ast, session->mempool);
     }

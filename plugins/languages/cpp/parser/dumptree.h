@@ -25,6 +25,9 @@
 
 class TokenStream;
 
+//Contains the name for each AST kind enumerator
+KDEVCPPPARSER_EXPORT extern char const * const names[];
+
 class KDEVCPPPARSER_EXPORT DumpTree: protected DefaultVisitor
 {
 public:
