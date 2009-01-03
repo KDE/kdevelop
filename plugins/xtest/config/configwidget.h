@@ -26,6 +26,7 @@
 
 class QToolButton;
 class QComboBox;
+class KUrlRequester;
 namespace Ui { class VeritasConfig; }
 
 namespace Veritas
@@ -62,6 +63,10 @@ public:
     /*! Do not allow the user to modify the test executables, only show them.
      *  The config widget goes into read-only mode. */
     void setReadOnly();
+
+    /*! Configure the project folder. This folder is used as default value
+     *  for the test url requester file dialogs */
+    void setProjectFolder(const KUrl&);
     
 public Q_SLOTS:
     /*! Adds a gui element where a single test executable location can be
@@ -81,6 +86,11 @@ private Q_SLOTS:
      *  being removed is accessed through sender(), which is the remove
      *  button right next to the urlrequester. */
     void removeTestExecutableField();
+    
+    /*! Sets the project folder as default location for a given KUrlRequester.
+     *  This should only trigger when the requester is still empty, else 
+     *  this folder is set from the requester's content */
+    void initializeFileDialogFor(KUrlRequester*);
 
 private:
     void setupButtons();
@@ -89,12 +99,14 @@ private:
     QToolButton* removeExecutableButton(int fieldIndex) const;
     QLayout* executableFieldsLayout() const;
     QComboBox* frameworkBox() const;
-
+    KUrl projectFolder() const;
+    
 private:
     Ui::VeritasConfig* m_ui;
     QWidget* m_details; // framework specific details widget
     QList<QToolButton*> m_removeButtons; // used to retrieve exe-url bar location in the widget
     bool m_allowUserModification;
+    KUrl m_projectFolder;
     
 private:
     friend class ConfigWidgetTest;

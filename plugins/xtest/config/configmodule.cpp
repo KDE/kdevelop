@@ -33,6 +33,7 @@
 
 #include "configwidget.h"
 #include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
 
 using KDevelop::ICore;
 using KDevelop::IPlugin;
@@ -90,6 +91,7 @@ ConfigModule::ConfigModule(QWidget* parent, const QVariantList& args)
     QVBoxLayout* l = new QVBoxLayout(this);
     m_widget = new ConfigWidget;
     if (isCMakeProject()) m_widget->setReadOnly();
+    m_widget->setProjectFolder(retrieveProject()->projectItem()->url());
     l->addWidget(m_widget);
 
     QList<ITestFramework*> frameworks = fetchTestFrameworks();

@@ -22,6 +22,9 @@
 #define QTEST_CONFIGWIDGETTEST_H_INCLUDED
 
 #include <QtCore/QObject>
+#include <KUrl>
+
+class KUrlRequester;
 
 namespace Veritas
 {
@@ -54,15 +57,26 @@ private slots:
     void executableContents();
     void buttonsDisabledInReadOnlyMode();
 
+    void initializeFileDialogWithProjectFolder();
+    void keepExistingFileDialogContent();
+
 private:
     void assertDetailsCollapsed();
     void assertDetailsExpanded();
     void assertTestExeFieldsShown(int numberOf);
     void assertChildWidgetsDisabled();
     void assertChildWidgetsEnabled();
+    KUrlRequester* fetchFirstTestExeRequester();
+
+public slots:
+    /*! Verify that the file dialog (associated with m_testExeInputField) has 
+     *  a default folder that equals m_expectedFolder. */
+    void assertFileDialogFolderEquals();
 
 private:
     ConfigWidget* m_config;
+    KUrl m_expectedFolder; // input variable for assertFileDialogFolderEquals
+    KUrlRequester* m_testExeInputField; // idem
 };
 
 }

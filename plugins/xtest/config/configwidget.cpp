@@ -25,6 +25,7 @@
 #include <QToolButton>
 #include <KUrlRequester>
 #include <QLabel>
+#include <kfiledialog.h>
 
 using Veritas::ConfigWidget;
 
@@ -79,10 +80,34 @@ void ConfigWidget::expandDetails(bool checked)
     repaint();
 }
 
+void ConfigWidget::setProjectFolder(const KUrl& folder)
+{
+    m_projectFolder = folder;
+}
+
+KUrl ConfigWidget::projectFolder() const
+{
+    return m_projectFolder;
+}
+
+void ConfigWidget::initializeFileDialogFor(KUrlRequester* testExeInput)
+{
+    Q_ASSERT(testExeInput);
+    Q_ASSERT_X(m_allowUserModification, "initializeFileDialogFor",
+               "Err, user modification off, so the urlrequester should have been disabled.");
+    if (testExeInput->url() == KUrl()) {
+        // no executable set yet in the urlrequester, initialize it
+        // with this project's root folder
+        testExeInput->fileDialog()->setUrl(projectFolder());
+    }
+}
+
 void ConfigWidget::addTestExecutableField(const KUrl& testExecutable)
 {
     QHBoxLayout* lay = new QHBoxLayout();
     KUrlRequester* req = new KUrlRequester(this);
+    connect(req, SIGNAL(openFileDialog(KUrlRequester*)),
+            SLOT(initializeFileDialogFor(KUrlRequester*)));
     connect(req, SIGNAL(textChanged(QString)), SIGNAL(changed()));
     req->setUrl(testExecutable);
     req->setEnabled(m_allowUserModification);

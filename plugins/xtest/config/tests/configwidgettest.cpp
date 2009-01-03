@@ -20,6 +20,7 @@
 
 #include "configwidgettest.h"
 #include <QtTest/QTest>
+#include <QtTest/QTestKeyClicksEvent>
 #include <qtest_kde.h>
 #include "../../kasserts.h"
 #include "../configwidget.h"
@@ -27,6 +28,7 @@
 #include <QLabel>
 #include <KUrlRequester>
 #include <qtoolbutton.h>
+#include <KFileDialog>
 
 using Veritas::ConfigWidgetTest;
 using Veritas::ConfigWidget;
@@ -234,7 +236,53 @@ void ConfigWidgetTest::buttonsDisabledInReadOnlyMode()
     assertChildWidgetsDisabled();
 }
 
-// helper
+// command
+void ConfigWidgetTest::initializeFileDialogWithProjectFolder()
+{
+    // The config's test exe file dialogs should be initialized with
+    // the projects root folder. Only for empty test exe fields though,
+    // non empty ones are properly initialized already
+    KUrl somePath(QDir::tempPath() + "/");
+
+    // exercise
+    m_config->addTestExecutableField(KUrl()); // empty field
+    m_config->setProjectFolder(somePath);
+
+    KUrlRequester* testExeInput = fetchFirstTestExeRequester();
+    m_expectedFolder = somePath; // input to assertFileDialogFolderEquals
+    m_testExeInputField = testExeInput;   // idem
+    QTimer::singleShot(300, this, SLOT(assertFileDialogFolderEquals()));
+
+    // spawn the file dialog, this blocks hence the kludge with timers
+    QTest::mouseClick(testExeInput->button(), Qt::LeftButton);
+}
+
+// command
+void ConfigWidgetTest::keepExistingFileDialogContent()
+{
+    // if a test exe input field is non-empty then it's file dialog
+    // default folder should not be reinitialized, but instead use
+    // the folder of the test exe itself as default [which is the default
+    // behaviou for KUrlRequesters]
+
+    KUrl somePath(QDir::tempPath()+"/");
+    KUrl someOtherPath(QDir::homePath());
+
+    // exercise
+    m_config->addTestExecutableField(KUrl(somePath, "foo")); // non-empty field
+    m_config->setProjectFolder(someOtherPath);
+
+    KUrlRequester* testExeInput = fetchFirstTestExeRequester();
+    m_expectedFolder = somePath; // input to assertFileDialogFolderEquals
+    m_testExeInputField = testExeInput;   // idem
+    QTimer::singleShot(300, this, SLOT(assertFileDialogFolderEquals()));
+
+    // spawn the file dialog, this blocks hence the kludge with timers
+    QTest::mouseClick(testExeInput->button(), Qt::LeftButton);
+}
+
+/////////////// CUSTOM ASSERTIONS ////////////////////////////////////////////
+
 void ConfigWidgetTest::assertChildWidgetsDisabled()
 {
     QList<KUrlRequester*> exes = m_config->findChildren<KUrlRequester*>();
@@ -247,13 +295,33 @@ void ConfigWidgetTest::assertChildWidgetsDisabled()
     }
 }
 
-// helper
 void ConfigWidgetTest::assertChildWidgetsEnabled()
 {
     QList<QWidget*> children = m_config->findChildren<QWidget*>();
     foreach(QWidget* child, children) {
         KVERIFY_MSG(child->isEnabled(), child->metaObject()->className());
     }
+}
+
+void ConfigWidgetTest::assertFileDialogFolderEquals()
+{
+    KFileDialog* dlg = m_testExeInputField->fileDialog();
+    KUrl actualFolder = dlg->baseUrl();
+    // close the file dialog since this blocks
+    QTest::mouseClick(dlg->cancelButton(), Qt::LeftButton, 0, QPoint(), 100);
+    actualFolder.adjustPath( KUrl::AddTrailingSlash );
+    m_expectedFolder.adjustPath( KUrl::AddTrailingSlash );
+    KOMPARE(actualFolder, m_expectedFolder);    
+}
+
+////////////////////////// HELPERS ///////////////////////////////////////////
+
+KUrlRequester* ConfigWidgetTest::fetchFirstTestExeRequester()
+{
+    QList<KUrlRequester*> reqs = m_config->findChildren<KUrlRequester*>();
+    Q_ASSERT(reqs.size() == 1);
+    KUrlRequester* req = reqs[0];
+    return req;
 }
 
 QTEST_KDEMAIN( ConfigWidgetTest, GUI )
