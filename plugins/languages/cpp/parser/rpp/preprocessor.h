@@ -27,7 +27,7 @@
 
 namespace KDevelop {
   class IndexedString;
-};
+}
 
 namespace rpp {
 
