@@ -123,6 +123,11 @@ void SelectionStoreTest::testTreeWithIdenticalNames()
 
 void SelectionStoreTest::saveRecursive()
 {
+    /* child1      checked
+     * child2      not checked
+     *   - child21 not checked
+     */
+
     Test* child1 = new Test("test2", m_root);
     Test* child2 = new Test("test3", m_root);
     Test* child21 = new Test("test21", child2);
@@ -188,7 +193,7 @@ void SelectionStoreTest::restoreRecursive()
     KVERIFY(child1->internal()->isChecked());
     KVERIFY(!child2->internal()->isChecked());
     KVERIFY(!child21->internal()->isChecked());
-    KVERIFY(!child22->internal()->isChecked());
+    KVERIFY(child22->internal()->isChecked()); // newly added test, so checked
     KVERIFY(child3->internal()->isChecked());
 }
 
@@ -211,6 +216,38 @@ void SelectionStoreTest::ignoreRoot()
     KVERIFY(root2->internal()->isChecked());
 
     delete root2;
+}
+
+void SelectionStoreTest::selectedChildDeselectedParent()
+{
+    /* parent       deselected
+     *   - child    selected
+     *
+     * First serialize the selection state of this test-tree
+     * then restore it. Parent should be deselected & child selected.
+     */
+    Test* parent = new Test("parent", m_root);
+    m_root->addChild(parent);
+    Test* child = new Test("child", parent);
+    parent->addChild(child);
+
+    parent->internal()->unCheck();
+    child->internal()->check();
+
+    m_store->saveTree(m_root);
+
+    // reset the tree
+    delete m_root;
+    m_root = new Test("root", 0);
+    parent = new Test("parent", m_root);
+    m_root->addChild(parent);
+    child = new Test("child", parent);
+    parent->addChild(child);
+
+    m_store->restoreTree(m_root);
+
+    KVERIFY(!parent->internal()->isChecked());
+    KVERIFY(child->internal()->isChecked());
 }
 
 QTEST_MAIN( SelectionStoreTest )

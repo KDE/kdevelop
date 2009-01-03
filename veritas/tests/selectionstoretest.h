@@ -46,6 +46,7 @@ private slots:
     void saveRecursive();
     void restoreRecursive();
     void ignoreRoot();
+    void selectedChildDeselectedParent();
 
 private:
     SelectionStore* m_store;

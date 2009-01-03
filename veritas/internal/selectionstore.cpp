@@ -48,7 +48,7 @@ public:
         Q_ASSERT(m_store);
         kDebug() << t->name() << m_store->wasDeselected(t);
         if (m_store->wasDeselected(t)) {
-            t->internal()->unCheck();
+            t->internal()->unCheckNonRecursive();
         }
     }
     SelectionStore* m_store;

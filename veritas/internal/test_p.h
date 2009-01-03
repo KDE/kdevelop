@@ -53,6 +53,8 @@ public:
     void check();
     /*! Recursively lift check state */
     void unCheck();
+    /*! Uncheck only this test, not it's children */
+    void unCheckNonRecursive();
 
     bool isRunning() const;
     void setIsRunning(bool);

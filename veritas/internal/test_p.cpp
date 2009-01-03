@@ -81,6 +81,11 @@ void Test::Internal::check()
     }
 }
 
+void Test::Internal::unCheckNonRecursive()
+{
+    isChecked_ = false;
+}
+
 void Test::Internal::unCheck()
 {
     isChecked_ = false;
