@@ -435,9 +435,11 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 CppLanguageSupport::~CppLanguageSupport()
 {
     ILanguage* lang = language();
-    lang->parseLock()->lockForWrite();
-    m_self = 0; //By locking the parse-mutexes, we make sure that parse- and preprocess-jobs get a chance to finish in a good state
-    lang->parseLock()->unlock();
+    if (lang) {
+        lang->parseLock()->lockForWrite();
+        m_self = 0; //By locking the parse-mutexes, we make sure that parse- and preprocess-jobs get a chance to finish in a good state
+        lang->parseLock()->unlock();
+    }
 
     delete m_quickOpenDataProvider;
 
