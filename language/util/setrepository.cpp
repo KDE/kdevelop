@@ -206,8 +206,8 @@ QString printSplitTree(SplitTreeNode* tree, QString prefix = "") {
     QString ret = prefix + QString("%1 -> %2\n").arg(tree->start).arg(tree->end);
     if(tree->hasSlaves) {
         Q_ASSERT(tree->rightChildOffset);
-        ret += printSplitTree(tree+1, prefix+" ");
-        ret += printSplitTree(tree+tree->rightChildOffset, prefix+" ");
+        ret += printSplitTree(tree+1, prefix+' ');
+        ret += printSplitTree(tree+tree->rightChildOffset, prefix+' ');
     }
     return ret;
 }

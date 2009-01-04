@@ -119,7 +119,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
   text += sizePrefix;
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range.end.column) {
 
-    text += " " + highlightAndEscapeUseText(m_sourceLine, 0, m_range);
+    text += ' ' + highlightAndEscapeUseText(m_sourceLine, 0, m_range);
 
     //Useful tooltip:
     int start = m_range.start.line - tooltipContextSize;
@@ -129,7 +129,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString documen
     for(int a = start; a < end; ++a) {
       QString lineText = code.line(a);
       if(!lineText.isEmpty())
-        toolTipText += lineText + "\n";
+        toolTipText += lineText + '\n';
     }
     setToolTip(toolTipText);
   }
@@ -157,11 +157,11 @@ void OneUseWidget::resizeEvent ( QResizeEvent * event ) {
   int maxCutOff = m_sourceLine.length() - (m_range.end.column - m_range.start.column);
 
   //Reset so we also get more context while up-sizing
-  setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line+1) + " " + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
+  setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line+1) + ' ' + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
 
   while(sizeHint().width() > size.width() && cutOff < maxCutOff) {
     //We've got to save space
-    setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line+1) + " " + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
+    setText(i18n("<a href='open'>Line <b>%1</b></a>", m_range.start.line+1) + ' ' + highlightAndEscapeUseText(m_sourceLine, cutOff, m_range));
     cutOff += 5;
   }
 

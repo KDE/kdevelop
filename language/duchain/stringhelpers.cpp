@@ -287,7 +287,7 @@ QString clearComments( QString str, QChar replacement ) {
   lastPos = 0;
   while( (pos = str.indexOf( "//", lastPos )) != -1 ) {
     if( !s ) return str;
-    int i = str.indexOf( "\n", pos );
+    int i = str.indexOf( '\n', pos );
     if( i != -1 && i <= len - 1 ) {
       fillString( str, pos, i+1, replacement );
       lastPos = i+1;
@@ -365,7 +365,7 @@ QString formatComment( const QString& comment ) {
       ret = comment.mid( i );
   } else {
       ///remove the star in each line
-      QStringList lines = comment.split( "\n", QString::KeepEmptyParts );
+      QStringList lines = comment.split( '\n', QString::KeepEmptyParts );
 
       if( lines.isEmpty() ) return ret;
 

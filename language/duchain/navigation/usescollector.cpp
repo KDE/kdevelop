@@ -38,9 +38,9 @@ using namespace KDevelop;
 ///@todo make this language-neutral
 static Identifier destructorForName(Identifier name) {
   QString str = name.identifier().str();
-  if(str.startsWith("~"))
+  if(str.startsWith('~'))
     return Identifier(str);
-  return Identifier("~"+str);
+  return Identifier('~'+str);
 }
 
 template<class ImportanceChecker>

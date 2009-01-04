@@ -139,7 +139,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIn
   QList<IndexedDUContext> ret;
   
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
-  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QString fileName = baseDir + '/' + QString("%1").arg(topContextIndex);
   QFile file(fileName);
   if(file.open(QIODevice::ReadOnly)) {
      uint readValue;
@@ -160,7 +160,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
   QList<IndexedDUContext> ret;
   
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
-  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QString fileName = baseDir + '/' + QString("%1").arg(topContextIndex);
   QFile file(fileName);
   if(file.open(QIODevice::ReadOnly)) {
      uint readValue;
@@ -180,7 +180,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
 IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
-  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QString fileName = baseDir + '/' + QString("%1").arg(topContextIndex);
   QFile file(fileName);
   if(file.open(QIODevice::ReadOnly)) {
      uint readValue;
@@ -206,7 +206,7 @@ void TopDUContextDynamicData::loadData() const {
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);
   
-  QString fileName = baseDir + "/" + QString("%1").arg(m_topContext->ownIndex());
+  QString fileName = baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
   QFile file(fileName);
   bool open = file.open(QIODevice::ReadOnly);
   Q_ASSERT(open);
@@ -246,7 +246,7 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);
   
-  QString fileName = baseDir + "/" + QString("%1").arg(topContextIndex);
+  QString fileName = baseDir + '/' + QString("%1").arg(topContextIndex);
   QFile file(fileName);
   if(file.open(QIODevice::ReadOnly)) {
     if(file.size() == 0) {
@@ -324,7 +324,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
 QString KDevelop::TopDUContextDynamicData::filePath() const {
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
   KStandardDirs::makeDir(baseDir);
-  return baseDir + "/" + QString("%1").arg(m_topContext->ownIndex());
+  return baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
 }
 
 void TopDUContextDynamicData::store() {

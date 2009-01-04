@@ -59,7 +59,7 @@ QString ForwardDeclaration::toString() const
   if(context() )
     return qualifiedIdentifier().toString();
   else
-    return i18n("context-free forward-declaration") + " " + identifier().toString();
+    return i18n("context-free forward-declaration") + ' ' + identifier().toString();
 }
 
 Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const

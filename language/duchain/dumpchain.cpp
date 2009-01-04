@@ -70,7 +70,7 @@ void DumpChain::dump( DUContext * context, bool imported )
     case Helper: type = "Helper"; break;
     case Other: type = "Other"; break;
   }
-  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << " " << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
 
       
   if( !context )
@@ -113,9 +113,9 @@ QString DumpChain::dumpRanges(KTextEditor::SmartRange* range, QString indent)
 {
   QString ret;
   QTextStream stream(&ret);
-  stream << indent << range << "(" << range->start().line() << ", " <<  range->start().column() << ") -> (" << range->end().line() << ", " <<  range->end().column() << ")" << "\n";
+  stream << indent << range << "(" << range->start().line() << ", " <<  range->start().column() << ") -> (" << range->end().line() << ", " <<  range->end().column() << ')' << "\n";
   foreach(KTextEditor::SmartRange* child, range->childRanges())
-    stream << dumpRanges(child, indent + " ");
+    stream << dumpRanges(child, indent + ' ');
   
   return ret;
 }
