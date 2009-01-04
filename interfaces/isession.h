@@ -33,6 +33,9 @@ namespace KDevelop
 
 class IPlugin;
 
+/**
+ * @class ISession
+ */
 class KDEVPLATFORMINTERFACES_EXPORT ISession : public QObject
 {
     Q_OBJECT

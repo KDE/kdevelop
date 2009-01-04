@@ -39,7 +39,9 @@ public:
     virtual IDocument* create(const KUrl&, ICore* ) = 0;
 };
 
-
+/**
+ * @class IDocumentController
+ */
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentController: public QObject {
     Q_OBJECT
 public:

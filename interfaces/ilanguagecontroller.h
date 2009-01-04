@@ -32,6 +32,9 @@ class ILanguage;
 class BackgroundParser;
 class ICompletionSettings;
 
+/**
+ * @class ILanguageController
+ */
 class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
     Q_OBJECT
 public:
