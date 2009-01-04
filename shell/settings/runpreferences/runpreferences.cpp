@@ -103,6 +103,7 @@ void TargetProperties::upClicked()
     int curr=preferencesDialog->compileItems->currentRow();
     QListWidgetItem* it=preferencesDialog->compileItems->takeItem(curr);
     preferencesDialog->compileItems->insertItem(curr+1, it);
+    emit changed(true);
 }
 
 void TargetProperties::downClicked()
@@ -110,6 +111,7 @@ void TargetProperties::downClicked()
     int curr=preferencesDialog->compileItems->currentRow();
     QListWidgetItem* it=preferencesDialog->compileItems->takeItem(curr);
     preferencesDialog->compileItems->insertItem(curr-1, it);
+    emit changed(true);
 }
 
 void TargetProperties::save() const
