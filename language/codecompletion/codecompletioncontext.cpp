@@ -67,6 +67,16 @@ void CodeCompletionContext::log( const QString& str ) const {
   kDebug() << "CodeCompletionContext:" << str;
 }
 
+void KDevelop::CodeCompletionContext::setParentContext(KSharedPtr< KDevelop::CodeCompletionContext > newParent) {
+  m_parentContext = newParent;
+  int newDepth = m_depth+1;
+  while(newParent) {
+    newParent->m_depth = newDepth;
+    ++newDepth;
+    newParent = newParent->m_parentContext;
+  }
+}
+
 CodeCompletionContext* CodeCompletionContext::parentContext()
 {
   return m_parentContext.data();

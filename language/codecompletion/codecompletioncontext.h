@@ -67,6 +67,9 @@ namespace KDevelop {
        * */
       virtual CodeCompletionContext* parentContext();
 
+      ///Sets the new parent context, and also updates the depth
+      void setParentContext(KSharedPtr<CodeCompletionContext> newParent);
+      
     protected:
       void log( const QString& str ) const;
       
