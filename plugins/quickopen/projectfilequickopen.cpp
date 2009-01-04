@@ -47,7 +47,7 @@ KUrl ProjectFileData::totalUrl() const {
 }
 
 QString ProjectFileData::htmlDescription() const {
-  return "<small><small>" + i18n("Project") + " " + m_file.m_project.str() + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
+  return "<small><small>" + i18n("Project") + ' ' + m_file.m_project.str() + /*", " + i18n("path") + totalUrl().path() +*/ "</small></small>"; //Show only the path because of limited space
 }
 
 bool ProjectFileData::execute( QString& /*filterText*/ ) {
@@ -95,11 +95,11 @@ QWidget* ProjectFileData::expandingWidget() const {
 
   
   if( chosen )
-    return chosen->createNavigationWidget(0, 0, "<small><small>" + i18n("Project") + " " + m_file.m_project.str() + "<br>" + "</small></small>");
+    return chosen->createNavigationWidget(0, 0, "<small><small>" + i18n("Project") + ' ' + m_file.m_project.str() + "<br>" + "</small></small>");
   else {
     QTextBrowser* ret = new QTextBrowser();
     ret->resize(400, 100);
-    ret->setText("<small><small>" + i18n("Project") + " " + m_file.m_project.str() + "<br>" + /*i18n("Url") + " " + totalUrl().prettyUrl() + "<br>" +*/ i18n("Not parsed yet") + "</small></small>");
+    ret->setText("<small><small>" + i18n("Project") + ' ' + m_file.m_project.str() + "<br>" + /*i18n("Url") + " " + totalUrl().prettyUrl() + "<br>" +*/ i18n("Not parsed yet") + "</small></small>");
     return ret;
   }
   

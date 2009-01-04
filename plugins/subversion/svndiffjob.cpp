@@ -371,7 +371,7 @@ void SvnDiffJob::setDiff( const QString& diff )
                     l.setRepositoryServer( l.repositoryServer() );
                 }else
                 {
-                    l.setRepositoryServer( l.repositoryServer() + "/" + s );
+                    l.setRepositoryServer( l.repositoryServer() + '/' + s );
                 }
             }
 

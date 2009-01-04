@@ -29,7 +29,7 @@ class EditCatalogDlg : public EditCatalogBase
     Q_OBJECT
 public:
     EditCatalogDlg(DocumentationPlugin *plugin, 
-        QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+        QWidget* parent = 0, const char* name = 0, bool modal = false, WFlags fl = 0);
     ~EditCatalogDlg();
     /*$PUBLIC_FUNCTIONS$*/
 
@@ -38,14 +38,14 @@ public:
     QString url() const;
     void setURL(const QString &url);
     
-public slots:
+public Q_SLOTS:
     /*$PUBLIC_SLOTS$*/
     virtual void locationURLChanged(const QString &text);
 
 protected:
   /*$PROTECTED_FUNCTIONS$*/
 
-protected slots:
+protected Q_SLOTS:
   /*$PROTECTED_SLOTS$*/
     virtual void accept();
 

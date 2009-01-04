@@ -30,7 +30,7 @@ class FindDocumentationOptions : public FindDocumentationOptionsBase
 {
 Q_OBJECT
 public:
-    FindDocumentationOptions(QWidget* parent = 0, const char* name = 0, bool modal = FALSE);
+    FindDocumentationOptions(QWidget* parent = 0, const char* name = 0, bool modal = false);
     ~FindDocumentationOptions();
     /*$PUBLIC_FUNCTIONS$*/
     virtual bool isContents( QCheckListItem * item );

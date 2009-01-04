@@ -103,7 +103,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
 
     QByteArray ba = (KStandardDirs::locateLocal("tmp","")+"kdevelop_svn_diff" ).toUtf8();
     
-    error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", FALSE, pool );
+    error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
     if( error != 0 )
     {
@@ -111,7 +111,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
         throw svn::ClientException( error );
     }
 
-    error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", FALSE, pool );
+    error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", false, pool );
 
     if( error != 0 )
     {
@@ -181,7 +181,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
 
     QByteArray ba = KStandardDirs::locateLocal("tmp","").toUtf8();
 
-    error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", FALSE, pool );
+    error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 
     if( error != 0 )
     {
@@ -189,7 +189,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
         throw svn::ClientException( error );
     }
 
-    error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", FALSE, pool );
+    error = svn_io_open_unique_file( &errfile, &errfileName, ba.data(), ".tmp", false, pool );
 
     if( error != 0 )
     {

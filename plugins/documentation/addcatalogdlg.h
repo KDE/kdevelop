@@ -30,7 +30,7 @@ class AddCatalogDlg: public AddCatalogDlgBase
 {
 	Q_OBJECT
 	public:
-		AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
+		AddCatalogDlg( QValueList<DocumentationPlugin*> const & plugins, QWidget* parent = 0, const char* name = 0, bool modal = false, WFlags fl = 0);
 		~AddCatalogDlg();
 	
 		QString title() const;
@@ -39,11 +39,11 @@ class AddCatalogDlg: public AddCatalogDlgBase
 		void setURL(const QString &url);
 		DocumentationPlugin * plugin();
 		
-	public slots:
+	public Q_SLOTS:
 		virtual void locationURLChanged(const QString &text);
 		virtual void docTypeChanged( const QString & );
 	
-	protected slots:
+	protected Q_SLOTS:
 		virtual void accept();
 	
 	private:

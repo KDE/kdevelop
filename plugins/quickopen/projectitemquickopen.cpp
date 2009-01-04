@@ -59,11 +59,11 @@ void ProjectItemDataProvider::setFilterText( const QString& text ) {
 
   QStringList search(text.split("::", QString::SkipEmptyParts));
   for(int a = 0; a < search.count(); ++a) {
-    if(search[a].endsWith(":")) //Don't get confused while the :: is being typed
+    if(search[a].endsWith(':')) //Don't get confused while the :: is being typed
       search[a] = search[a].left(search[a].length()-1);
   }
   bool mustMatchEnd = false;
-  if(!search.isEmpty() && search.back().endsWith("(")) {
+  if(!search.isEmpty() && search.back().endsWith('(')) {
     mustMatchEnd = true;
     search.back() = search.back().left(search.back().length()-1);
   }
