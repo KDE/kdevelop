@@ -216,7 +216,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
       if( !arg.isEmpty() )
         skippedArguments.push_front( escapeFromBracketMatching(arg) ); //We are processing the reversed reverseding, so push to front
     }
-    if( reversed[pos] == ')' )
+    if( reversed[pos] == ')' || reversed[pos] == '>' )
       break;
     else
       ++pos;
