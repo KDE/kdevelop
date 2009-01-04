@@ -1412,10 +1412,15 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
       if(ast) {
         if(m_collectQtFunctionSignature) {
           size_t endToken = ast->end_token;
-          if(ast->expression)
-            endToken = ast->expression->start_token;
-          if(ast->declarator && ast->declarator->id)
-            endToken = ast->declarator->id->start_token;
+          
+          if(ast->type_specifier)
+            endToken = ast->type_specifier->end_token;
+          if(ast->declarator) {
+            if(ast->declarator->id)
+              endToken = ast->declarator->id->start_token;
+            else
+              endToken = ast->declarator->end_token;
+          }
           
           if(!m_qtFunctionSignature.isEmpty())
             m_qtFunctionSignature += ", ";
