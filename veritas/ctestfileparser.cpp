@@ -113,7 +113,7 @@ KUrl CTestfileParser::processSubDirLine(const QString& line)
     if (!line.endsWith(")\n")) return KUrl();
     QString dir_ = line.mid(8, line.size()-2-8);
     if (dir_.isEmpty()) return KUrl();
-    KUrl dir(m_dirAccess->currentDirectory(), dir_ + "/");
+    KUrl dir(m_dirAccess->currentDirectory(), dir_ + '/');
     return dir;
 }
 

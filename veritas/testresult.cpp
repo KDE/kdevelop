@@ -138,7 +138,7 @@ void TestResult::setFile(const KUrl& file)
 void TestResult::clear()
 {
     d->state = Veritas::NoResult;
-    d->message = QString();
+    d->message.clear();
     d->line = 0;
     d->file = KUrl();
     d->children.clear();
