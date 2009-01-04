@@ -54,7 +54,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		*/
 		virtual QString save() = 0;
 
-	signals:
+	Q_SIGNALS:
 		/** Emits this signal when a setting was changed and the preview
 		* needs to be updated. \arg text is the text that will be shown in the
 		* editor. One might want to show different text
