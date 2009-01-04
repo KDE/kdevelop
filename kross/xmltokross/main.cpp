@@ -112,7 +112,7 @@ class KrossWrapper : public XmlToKross
             output += "QVariant _"+handlername+"Handler(void* type)\n"
             "{\n"
             "\tif(!type) return QVariant();\n"
-            "\t"+(classNS.isEmpty() ? QString() : (classNS))+classname+"* t=static_cast<"+classNS+classname+"*>(type);\n"
+            '\t'+(classNS.isEmpty() ? QString() : (classNS))+classname+"* t=static_cast<"+classNS+classname+"*>(type);\n"
             "\treturn qVariantFromValue((QObject*) new Kross"+classname+"(t, 0));\n"
             "}\n"
             "bool b_"+classname+"="+filename+"_registerHandler(\""+classNS+classname+"*\", _"+handlername+"Handler);\n\n";
@@ -138,7 +138,7 @@ class KrossWrapper : public XmlToKross
         void writeEndFunction(const method& m)
         {
             QString rettype=m.returnType;
-            rettype=rettype.replace('&', QString());
+            rettype=rettype.remove('&');
             output += "\t\tQ_SCRIPTABLE " + rettype +' '+ m.funcname+'(';
             QStringList values;
             

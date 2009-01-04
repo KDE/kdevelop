@@ -233,7 +233,7 @@ void DUChainReader::foundClass(const Declaration* decl)
             bool isReadOnly=atype->modifiers() & AbstractType::ConstModifier;
             QString type=member->abstractType()->toString();
             if(type.contains("const ")) {
-                type=type.replace("const ", QString());
+                type=type.remove("const ");
                 isReadOnly=true;
             }
             
