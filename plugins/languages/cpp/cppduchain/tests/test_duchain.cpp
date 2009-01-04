@@ -320,6 +320,15 @@ void TestDUChain::testDeclareInt()
   release(top);
 }
 
+void TestDUChain::testContextSearch() {
+  QByteArray method("typedef union { char __size[2]; long int __align; } pthread_attr_t; struct Stru {};");
+  
+  TopDUContext* top = parse(method, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->findContexts(DUContext::Class, QualifiedIdentifier("Stru") ).count(), 1);
+  QCOMPARE(top->findContexts(DUContext::Namespace, QualifiedIdentifier("Stru") ).count(), 0);
+}
+
 void TestDUChain::testIntegralTypes()
 {
   TEST_FILE_PARSE_ONLY

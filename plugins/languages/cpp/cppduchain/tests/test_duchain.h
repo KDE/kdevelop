@@ -143,6 +143,8 @@ private slots:
 
   void testMemberFunctionModifiers();
 
+  void testContextSearch();
+  
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 

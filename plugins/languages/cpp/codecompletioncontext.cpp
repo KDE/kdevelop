@@ -52,6 +52,14 @@
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
+QString last5Lines(QString str) {
+  QStringList lines = str.split("\n");
+  if(lines.count() < 5)
+    return str;
+  else
+    return QStringList(lines.mid(lines.count()-5, 5)).join("\n");
+}
+
 ///If this is enabled, KDevelop corrects wrong member access operators like "." on a pointer automatically
 const bool assistAccessType = true;
 ///If this is enabled, no chain of useless argument-hints for binary operators is created.
@@ -129,7 +137,7 @@ bool isKeyword(QString str) {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false)
 {
   if(m_duContext) {
     LOCKDUCHAIN;
@@ -166,14 +174,17 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     return;
   }
 
-  ifDebug( log( "non-processed text: " + m_text ); )
-   preprocessText( line );
-
-   m_text = clearComments( m_text );
-   m_text = clearStrings( m_text );
+//   ifDebug( log( "non-processed text: " + m_text ); )
+  if(depth == 0) {
+    preprocessText( line );
+    m_text = clearComments( m_text );
+    m_text = clearStrings( m_text );
+  }
+    
    m_text = stripFinalWhitespace( m_text );
+   m_text = last5Lines(m_text);
 
-  ifDebug( log( "processed text: " + m_text ); )
+  ifDebug( log( QString("depth %1").arg(depth) + " end of processed text: " + m_text ); )
 
   ///@todo template-parameters
 
@@ -215,17 +226,19 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
       m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
-      return;
+      m_text.clear();
+    }else{
+      kDebug()<< "FunctionCallAccess";
+      m_contextType = FunctionCall;
+      m_memberAccessOperation = FunctionCallAccess;
+      m_text = m_text.left( m_text.length()-1 );
+
+      ///Compute the types of the argument-expressions
+      ExpressionParser expressionParser;
+
+      for( QStringList::const_iterator it = m_knownArgumentExpressions.begin(); it != m_knownArgumentExpressions.end(); ++it )
+        m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
     }
-    m_contextType = FunctionCall;
-    m_memberAccessOperation = FunctionCallAccess;
-    m_text = m_text.left( m_text.length()-1 );
-
-    ///Compute the types of the argument-expressions
-    ExpressionParser expressionParser;
-
-    for( QStringList::const_iterator it = m_knownArgumentExpressions.begin(); it != m_knownArgumentExpressions.end(); ++it )
-      m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
   }
 
   ///Now find out where the expression starts
@@ -294,12 +307,17 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 
   ///Handle signal/slot access
-  if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
+  if(depth == 0 && m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
     LOCKDUCHAIN;
 
     if(parentContext()->functionName() == "SIGNAL" || parentContext()->functionName() == "SLOT") {
-      kDebug() << "skipping parents";
-      m_parentContext = parentContext()->m_parentContext; //Ignore the SIGNAL and SLOT parts
+      if(parentContext()->functionName() == "SIGNAL")
+        m_onlyShowSignals = true;
+      if(parentContext()->functionName() == "SLOT") {
+        m_onlyShowSlots = true;
+      }
+      
+      setParentContext(KSharedPtr<KDevelop::CodeCompletionContext>(parentContext()->parentContext()));
     }
 
     if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
@@ -315,7 +333,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
               if(parentContext()->m_knownArgumentExpressions.size() > 1) {
                 QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
-                if(connectedSignal.startsWith("SIGNAL(") && connectedSignal.endsWith(")")) {
+                if(connectedSignal.startsWith("SIGNAL") && connectedSignal.endsWith(")") && connectedSignal.length() > 8) {
                   connectedSignal = connectedSignal.mid(7);
                   connectedSignal = connectedSignal.left(connectedSignal.length()-1);
                   //Now connectedSignal is something like myFunction(...), and we want the "...".
@@ -351,13 +369,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ///Now care about m_expression. It may still contain keywords like "new "
 
-  bool isEmit = false, isThrow = false;
+  bool isThrow = false;
 
   QString expr = m_expression.trimmed();
 
   if( expr.startsWith("emit") )  {
-    isEmit = true; //When isEmit is true, we should filter the result so only signals are left
     expr = expr.right( expr.length() - 4 );
+    m_onlyShowSignals = true;
   }
   if( expr.startsWith("return") )  {
     expr = expr.right( expr.length() - 6 );
@@ -381,7 +399,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     isThrow = true;
     expr = expr.right( expr.length() - 5 );
   }
-
+  if( expr.startsWith("new") ) {
+    m_onlyShowTypes = true;
+    expr = expr.right( expr.length() - 3 );
+  }
   ExpressionParser expressionParser/*(false, true)*/;
 
   ifDebug( kDebug(9007) << "expression: " << expr; )
@@ -393,6 +414,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       if( m_memberAccessOperation != StaticMemberChoose ) {
         log( QString("expression \"%1\" could not be evaluated").arg(expr) );
         m_valid = false;
+        if(m_memberAccessOperation == FunctionCallAccess)
+          m_functionName = m_expression;
         return;
       } else {
         //It may be an access to a namespace, like "MyNamespace::".
@@ -626,6 +649,10 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
       }
     }
   }
+  
+//   foreach(DUContext* context, ret) {
+//     kDebug() << "member-access container:" << context->url().str() << context->range().textRange() << context->scopeIdentifier(true).toString();
+//   }
 
   return ret;
 }
@@ -683,8 +710,13 @@ void CodeCompletionContext::preprocessText( int line ) {
 
   LOCKDUCHAIN;
 
+  QSet<IndexedString> disableMacros;
+  disableMacros.insert(IndexedString("SIGNAL"));
+  disableMacros.insert(IndexedString("SLOT"));
+  disableMacros.insert(IndexedString("emit"));
+  
   if( m_duContext ) {
-  m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line );
+  m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line, disableMacros );
   }else{
     kWarning() << "error: no ducontext";
   }
@@ -736,6 +768,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           if( memberAccessContainer().isValid() ||memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
           {
             QList<DUContext*> containers = memberAccessContainers();
+            ifDebug( kDebug() << "got" << containers.size() << "member-access containers"; )
             if( !containers.isEmpty() ) {
               QSet<DUContext*> had;
               foreach(DUContext* ctx, containers) {
@@ -864,7 +897,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         case SignalAccess:
         case SlotAccess:
         if(!m_connectedSignalIdentifier.isEmpty()) {
-          //Create an additional argument-hint context that shows information about the signal we connect to
+          ///Create an additional argument-hint context that shows information about the signal we connect to
           if(parentContext() && parentContext()->m_knownArgumentTypes.count() > 1 && parentContext()->m_knownArgumentTypes[0].type.isValid()) {
             StructureType::Ptr signalContainerType = TypeUtils::targetType(parentContext()->m_knownArgumentTypes[0].type.type(), m_duContext->topContext()).cast<StructureType>();
            if(signalContainerType) {
@@ -891,7 +924,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           }
         }
         if( memberAccessContainer().isValid() ) {
-          //Collect all slots
+          ///Collect all slots/signals to show
           AbstractType::Ptr type = memberAccessContainer().type.type();
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified) {
@@ -899,7 +932,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             if(decl && decl->internalContext()) {
               foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
-                  if(classFun->isSignal() || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
+                  if((classFun->isSignal() && !m_onlyShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
                     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), CodeCompletionContext::Ptr(this), candidate.second );
                     item->m_isQtSignalSlotCompletion = true;
                     if(!m_connectedSignalIdentifier.isEmpty()) {
@@ -932,7 +965,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 //         if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
 //           break;
         default:
-          standardAccessCompletionItems(position, items);
+          if(depth() == 0)
+            standardAccessCompletionItems(position, items);
           break;
       }
     }
@@ -1018,12 +1052,30 @@ QualifiedIdentifier CodeCompletionContext::requiredPrefix(Declaration* decl) con
   }
 }
 
+QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::specialItemsForArgumentType(TypePtr< KDevelop::AbstractType > type) {
+  QList< KSharedPtr< KDevelop::CompletionTreeItem > > items;
+  if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
+    Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
+    if(enumDecl && enumDecl->internalContext()) {
+
+      QualifiedIdentifier prefix = requiredPrefix(enumDecl);
+
+      DUContext* enumInternal = enumDecl->internalContext();
+      foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
+        QualifiedIdentifier id = prefix + enumerator->identifier();
+        items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), Ptr(this), 0 ));
+        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
+        static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
+      }
+    }
+  }
+  return items;
+}
+
 void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items) {
   //Normal case: Show all visible declarations
   typedef QPair<Declaration*, int> DeclarationDepthPair;
 
-  kDebug() << "halo";
-  
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
@@ -1067,44 +1119,28 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   foreach( const DeclarationDepthPair& decl, decls )
     items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), Ptr(this), decl.second ) );
 
+  ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();
   if(parent) {
     if(parent->memberAccessOperation() == FunctionCallAccess) {
-        foreach(const Cpp::OverloadResolutionFunction& function, parent->functions()) {
-          if(function.function.isValid() && function.function.isViable() && function.function.declaration()) {
-            //uint parameterNumber = parent->m_knownArgumentExpressions.size() + function.matchedArguments;
-            Declaration* functionDecl = function.function.declaration().data();
-            if(functionDecl->type<FunctionType>()->arguments().count() > function.matchedArguments) {
-              //Eventually pick additional specificly known items for the type
-              AbstractType::Ptr type = functionDecl->type<FunctionType>()->arguments()[function.matchedArguments];
-              if(type) {
-                if(EnumerationType::Ptr enumeration = TypeUtils::realType(type, m_duContext->topContext()).cast<EnumerationType>()) {
-                  Declaration* enumDecl = enumeration->declaration(m_duContext->topContext());
-                  if(enumDecl && enumDecl->internalContext()) {
-
-                    QualifiedIdentifier prefix = requiredPrefix(enumDecl);
-
-                    DUContext* enumInternal = enumDecl->internalContext();
-                    foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
-                      QualifiedIdentifier id = prefix + enumerator->identifier();
-                      items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), Ptr(this), 0 ));
-                      static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
-                      static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
-                    }
-                  }
-                }
-              }
-            }
+      foreach(const Cpp::OverloadResolutionFunction& function, parent->functions()) {
+        if(function.function.isValid() && function.function.isViable() && function.function.declaration()) {
+          //uint parameterNumber = parent->m_knownArgumentExpressions.size() + function.matchedArguments;
+          Declaration* functionDecl = function.function.declaration().data();
+          if(functionDecl->type<FunctionType>()->arguments().count() > function.matchedArguments) {
+            items += specialItemsForArgumentType(functionDecl->type<FunctionType>()->arguments()[function.matchedArguments]);
           }
+        }
       }
     }
   }
-  
 
-  //Eventually add a "this" item
+  ///Eventually add a "this" item
   DUContext* functionContext = m_duContext.data();
-  while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext()->type() == DUContext::Other)
-    functionContext = functionContext->parentContext();
+  if(!m_onlyShowSignals && !m_onlyShowSlots && !m_onlyShowTypes) {
+    while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext()->type() == DUContext::Other)
+      functionContext = functionContext->parentContext();
+  }
 
   ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(functionContext->owner(), m_duContext->topContext()));
   
@@ -1133,8 +1169,14 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) 
   if(!decl)
     return true;
   
-  if(m_onlyShowTypes)
-    return decl->kind() == Declaration::Type; //Only show type declarations within class contexts
+  if(m_onlyShowTypes && decl->kind() != Declaration::Type)
+    return false;
+    
+  if(m_onlyShowSignals || m_onlyShowSlots) {
+    Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
+    if(!qtFunction || (m_onlyShowSignals && !qtFunction->isSignal()) || (m_onlyShowSlots && !qtFunction->isSlot()))
+      return false;
+  }
   
   if(dynamic && decl->context()->type() == DUContext::Class) {
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);

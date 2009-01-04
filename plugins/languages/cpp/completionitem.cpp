@@ -50,6 +50,7 @@ const int desiredTypeLength = 20;
 const int normalBestMatchesCount = 5;
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  //We have to use word directly, because it may be a smart-range that is updated during insertions and such
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
   bool spaceBetweenParens = true;
   bool spaceBetweenEmptyParens = false;
@@ -58,6 +59,22 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     return; //Do not replace any text when it is an argument-hint
 
   if(m_isQtSignalSlotCompletion) {
+    bool addSignalSlot = true;
+    {
+      //Check whether we need to add SLOT( or SIGNAL(
+      QString prefixText = document->text(KTextEditor::Range(word.start().line(), 0, word.start().line(), word.start().column()));
+      kDebug() << "prefix" << prefixText;
+      QRegExp signalRegExp("SIGNAL(\\s)*\\(");
+      QRegExp slotRegExp("SLOT(\\s)*\\(");
+      int signalAt = signalRegExp.lastIndexIn(prefixText);
+      kDebug() << "signalRegExp found at" << signalAt;
+      if(signalAt != -1 && prefixText.mid(signalAt + signalRegExp.matchedLength()).trimmed().isEmpty())
+        addSignalSlot = false;
+      int slotAt = slotRegExp.lastIndexIn(prefixText);
+      if(slotAt != -1 && prefixText.mid(slotAt + slotRegExp.matchedLength()).trimmed().isEmpty())
+        addSignalSlot = false;
+    }
+    
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     QString functionSignature;
     Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
@@ -65,10 +82,15 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       ///@todo Replace previous signal/slot specifications
       functionSignature = classFun->identifier().toString();
       functionSignature += "(" + classFun->normalizedSignature().str() + ")";
-      if(classFun->isSignal())
-        functionSignature = "SIGNAL(" + functionSignature + ")";
-      else
-        functionSignature = "SLOT(" + functionSignature + ")";
+      if(addSignalSlot) {
+        if(classFun->isSignal())
+          functionSignature = "SIGNAL(" + functionSignature + ")";
+        else
+          functionSignature = "SLOT(" + functionSignature + ")";
+      }else{
+        //Only add a closing )
+        functionSignature += ")";
+      }
     }
     lock.unlock();
     document->replaceText(word, functionSignature);

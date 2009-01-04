@@ -178,6 +178,9 @@ namespace Cpp {
       //In worst case, it is the scope prefix of the declaration.
       QualifiedIdentifier requiredPrefix(Declaration* decl) const;
 
+      ///@param type The type of the argument the items are matched to.
+      QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
+      
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
       ///Should preprocess the given text(replace macros with their body etc.)
@@ -222,7 +225,7 @@ namespace Cpp {
       DUContextPointer m_localClass;
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
-      bool m_onlyShowTypes;
+      bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;
   };
 }
 
