@@ -1532,7 +1532,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
 {
-    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->input().isEmpty();
+    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->input();
     switch(sast->type())
     {
         case StringAst::REGEX:
@@ -1563,25 +1563,20 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 }
                 case StringAst::REGEX_REPLACE:
                 {
-                    foreach(const QString& _in, sast->input())
+                    foreach(const QString& in, sast->input())
                     {
-                        QString in(_in);
-
-                        int idx = rx.indexIn(in);
+                        rx.indexIn(in);
                         QStringList info = rx.capturedTexts();
-                        if(idx<0)
+                        int idx=0, count=0, last=0;
+                        
+                        QString tmp = sast->replace();
+                        for(int i = 1; i < info.count(); i++)
                         {
-                            res.append(in);
+                            tmp.replace(QString("\\%1").arg(i), info.at(i));
                         }
-                        else
-                        {
-                            QString tmp = sast->replace();
-                            for(int i = 1; i < info.count(); i++)
-                            {
-                                tmp.replace(QString("\\%1").arg(i), info.at(i));
-                            }
-                            res.append(in.left(idx)+tmp+in.right(in.length()-idx-rx.matchedLength()));
-                        }
+                        
+                        QString toret=in;
+                        res.append(toret.replace(rx, tmp));
                     }
                 }
                     break;
@@ -1589,7 +1584,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
-            kDebug() << "regex" << sast->regex() << res;
+            kDebug() << "regex" << sast->outputVariable() << "=" << sast->regex() << res;
             m_vars->insert(sast->outputVariable(), res);
         }
             break;

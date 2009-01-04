@@ -25,6 +25,9 @@ QHash<QString, QStringList>::iterator VariableMap::insert(const QString & varNam
     QStringList ret;
     foreach(const QString& v, value)
     {
+        if(v.isEmpty())
+            continue;
+        
         if(v.contains(';'))
             ret += v.split(';');
         else
@@ -39,6 +42,9 @@ QHash<QString, QStringList>::iterator VariableMap::insertMulti(const QString & v
     QStringList ret;
     foreach(const QString& v, value)
     {
+        if(v.isEmpty())
+            continue;
+        
         if(v.contains(';'))
             ret += v.split(';');
         else

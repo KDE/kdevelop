@@ -52,7 +52,8 @@ void CMakeProjectVisitorTest::testVariables_data()
     QTest::newRow("mess") << "{}{}{}}}}{{{{}${a}\n" << QStringList("a");
     QTest::newRow("Nothing") << "aaaa${aaaa" << QStringList();
     QTest::newRow("varinvar") << "${${${a}}}" << (QStringList() << "${${a}}" << "${a}" << "a");
-    QTest::newRow("varinvar") << "${${a}${b}a" << (QStringList() << "a" << "b");
+    QTest::newRow("varsinvar") << "${${a}${b}a" << (QStringList() << "a" << "b");
+    QTest::newRow("varsinvar") << "${a${b}a}${a${b}a}" << (QStringList() << "a${b}a" << "b" << "a${b}a" << "b");
 }
 
 void CMakeProjectVisitorTest::testVariables()
@@ -295,6 +296,25 @@ void CMakeProjectVisitorTest::testRun_data()
                             "if(VAR)\n"
                             "set(VAR a)\n"
                             "endif()\n"
+                            << cacheValues << results;
+                            
+    results.clear();
+    results << StringPair("GOOD", "TRUE");
+    QTest::newRow("twoconditions") <<
+                            "set(GOOD FALSE)\n"
+                            "set(aaa ca)\n"
+                            "set(aab co)\n"
+                            "set(b a)\n"
+                            "if(\"${a${b}a}${a${b}b}\" STREQUAL caco )\n"
+                            "  set(GOOD TRUE)\n"
+                            "endif()\n"
+                            << cacheValues << results;
+                            results.clear();
+                            
+    results << StringPair("str", "babababababa");
+    QTest::newRow("replace") <<
+                            "set(str tatatttatatttata)\n"
+                            "string(REGEX REPLACE \"t+\" \"b\" str ${str})\n"
                             << cacheValues << results;
 }
 

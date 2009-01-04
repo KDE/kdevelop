@@ -132,10 +132,10 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
     while(!done && itBegin!=itEnd)
     {
         QStringList::const_iterator it2 = prevOperator(itEnd, itBegin);
-//         qDebug() << "yyy" << *it2;
         
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
+        qDebug() << "yyy" << *it2 << last;
         
         switch(c)
         {
@@ -182,10 +182,11 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case MATCHES: {
                 QRegExp rx(*(it2+1));
                 if(m_vars->contains(*(it2-1)))
-                    rx.indexIn(m_vars->value(*(it2-1)).join(""));
+                    rx.indexIn(m_vars->value(*(it2-1)).join(QString()));
                 else
                     rx.indexIn(*(it2-1));
                 last=rx.matchedLength()>0;
+                
                 itEnd=it2-1;
             }   break;
             case LESS: {
@@ -234,9 +235,11 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case STREQUAL: {
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
+                
                 if(m_vars->contains(strA))
                     strA=m_vars->value(strA).join(";");
                 last= (strA==strB);
+                
                 itEnd=it2-1;
             }   break;
             case IS_NEWER_THAN: {
