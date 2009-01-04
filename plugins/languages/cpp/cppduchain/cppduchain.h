@@ -26,6 +26,8 @@
 #include <QList>
 #include <QPair>
 #include "cppduchainexport.h"
+#include <language/duchain/indexedstring.h>
+#include <QSet>
 
 namespace KTextEditor {
   class Cursor;
@@ -81,8 +83,9 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevel
 /**
  * Preprocesses the given string, taking the environment from the given environment-file.
  * DUChain does not need to be locked.
+ * @param line All macros that are defined before this line are used
  * */
-KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line );
+KDEVCPPDUCHAIN_EXPORT QString preprocess( const QString& text, EnvironmentFile* file, int line, QSet<KDevelop::IndexedString> disableMacros = QSet<KDevelop::IndexedString>() );
 
 ///Extracts a normalized signature and identifier from a specifier like "mySignal(int)"
 KDEVCPPDUCHAIN_EXPORT QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunction);

@@ -199,7 +199,7 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
  * @todo maybe implement a version of rpp::Environment that directly works on EnvironmentFile,
  * without needing to copy all macros.
  * */
-QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) {
+QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, QSet<IndexedString> disableMacros ) {
 
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
@@ -210,19 +210,14 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line ) 
     //Copy in all macros from the file
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->definedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
-        pp.environment()->setMacro( copyConstantMacro( &it.ref() ) );
-/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
-      } else {
-/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
+        if(!disableMacros.contains( it.ref().name ))
+          pp.environment()->setMacro( copyConstantMacro( &it.ref() ) );
       }
     }
-/*    kDebug(9007) << "used macros: " << file->usedMacros().size();*/
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->usedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
-        pp.environment()->setMacro( copyConstantMacro(&it.ref()) );
-/*        kDebug(9007) << "adding macro " << (*it).name.str();*/
-      } else {
-/*        kDebug(9007) << "leaving macro " << (*it).name.str();*/
+        if(!disableMacros.contains( it.ref().name ))
+          pp.environment()->setMacro( copyConstantMacro(&it.ref()) );
       }
     }
   }
