@@ -156,7 +156,7 @@ public:
     Q_SCRIPTABLE KIconLoader* iconLoader() const;
 
     /**
-     * Provides access to the ICore implemenation
+     * Provides access to the ICore implementation
      */
     Q_SCRIPTABLE ICore *core() const;
 
@@ -174,7 +174,7 @@ public:
      * ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.
      * @param context the context describing where the context menu was requested
-     * @returns a container descriping which actions to merge into which context menu part
+     * @returns a container describing which actions to merge into which context menu part
      */
     virtual ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 

@@ -49,7 +49,7 @@ Type=QString
 Type=QString
 
 # optional, Interfaces that a plugin implements
-# usualy values start with org.kdevelop
+# usually values start with org.kdevelop
 [PropertyDef::X-KDevelop-Interfaces]
 Type=QStringList
 

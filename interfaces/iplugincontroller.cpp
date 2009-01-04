@@ -66,7 +66,7 @@ QStringList IPluginController::argumentsFromService( const KService::Ptr &servic
         return args;
     QVariant prop = service->property( "X-KDevelop-Args" );
     if ( prop.isValid() )
-        args = prop.toString().split( " " );
+        args = prop.toString().split( ' ' );
     return args;
 }
 
