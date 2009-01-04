@@ -41,7 +41,7 @@ public:
     IProjectDialogProvider();
     virtual ~IProjectDialogProvider();
 
-public slots:
+public Q_SLOTS:
     virtual KUrl askProjectConfigLocation() = 0;
     virtual bool userWantsReopen() = 0;
 };
@@ -112,7 +112,7 @@ public:
     virtual ~ProjectDialogProvider();
     ProjectControllerPrivate* const d;
 
-public slots:
+public Q_SLOTS:
     virtual KUrl askProjectConfigLocation();
     virtual bool userWantsReopen();
 };

@@ -177,8 +177,8 @@ QString SessionController::cloneSession( const QString& sessionName )
 {
     Session* origSession = session( sessionName );
     QUuid id = QUuid::createUuid();
-    KIO::NetAccess::dircopy( KUrl( sessionDirectory() + "/" + origSession->id().toString() ), 
-                             KUrl( sessionDirectory() + "/" + id.toString() ), 
+    KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
+                             KUrl( sessionDirectory() + '/' + id.toString() ), 
                              Core::self()->uiController()->activeMainWindow() );
     Session* newSession = new Session( id );
     d->availableSessions << newSession;

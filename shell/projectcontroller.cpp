@@ -127,7 +127,7 @@ public:
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
         kDebug() << "managerplugin:" << project->managerPlugin();
-        for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); it++ )
+        for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();

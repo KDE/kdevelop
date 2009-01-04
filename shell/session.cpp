@@ -47,7 +47,7 @@ public:
     KUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo( plugin ).pluginName();
-        QFileInfo fi( sessionDirectory + "/" + name );
+        QFileInfo fi( sessionDirectory + '/' + name );
         if( !fi.exists() )
         {
             QDir d( sessionDirectory );
@@ -59,7 +59,7 @@ public:
 
     void initialize()
     {
-        sessionDirectory = SessionController::sessionDirectory() + "/" + id.toString();
+        sessionDirectory = SessionController::sessionDirectory() + '/' + id.toString();
         kDebug() << "got dir:" << sessionDirectory;
         if( !QFileInfo( sessionDirectory ).exists() )
         {
