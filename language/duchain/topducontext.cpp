@@ -49,7 +49,7 @@
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
-
+//  #define DEBUG_SEARCH
 using namespace KTextEditor;
 
 const uint maxApplyAliasesRecursion = 100;
@@ -177,7 +177,8 @@ struct TopDUContext::AliasChainElement {
         return current;
     }
     
-    //We do this so we don't create crap items in the qualified-identifier repository while searching
+    //We do this so we don't create crap items in the qualified-identifier repository while searching.
+    //When the qualified identifier doesn't exist, we don't need to search it.
     return QualifiedIdentifier();
   }
 
@@ -953,6 +954,10 @@ struct TopDUContext::FindDeclarationsAcceptor {
     
     QualifiedIdentifier id = element.qualifiedIdentifier();
     
+    //If the identifier wasn't found in the identifier repository, the item cannot exist.
+    if(id.isEmpty() && !element.identifier.isEmpty())
+      return;
+    
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDeclarationIterator filter;
     
@@ -1072,72 +1077,77 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
     QualifiedIdentifier id = newElement.qualifiedIdentifier();
-    
+
+    if(!id.isEmpty()) {
     //This iterator efficiently filters the visible declarations out of all declarations
-    PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
 
-    if(filter) {
-      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
+      if(filter) {
+        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
 
-      //The first part of the identifier has been found as a namespace-alias.
-      //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-      for(; filter; ++filter)
-      {
-        IndexedDeclaration iDecl(*filter);
-        
-        if(!check(iDecl))
-          continue;
+        //The first part of the identifier has been found as a namespace-alias.
+        //In c++, we only need the first alias. However, just to be correct, follow them all for now.
+        for(; filter; ++filter)
+        {
+          IndexedDeclaration iDecl(*filter);
+          
+          if(!check(iDecl))
+            continue;
 
-        Declaration* aliasDecl = iDecl.data();
-        if(!aliasDecl)
-          continue;
+          Declaration* aliasDecl = iDecl.data();
+          if(!aliasDecl)
+            continue;
 
-        if(aliasDecl->kind() != Declaration::NamespaceAlias)
-          continue;
+          if(aliasDecl->kind() != Declaration::NamespaceAlias)
+            continue;
 
-        if(foundAlias)
-            break;
+          if(foundAlias)
+              break;
 
-        if(aliasDecl->identifier() != newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
-          continue;
+          if(aliasDecl->identifier() != newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
+            continue;
 
-        Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
+          Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
 
-        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
+          NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
 
-        foundAlias = true;
+          foundAlias = true;
 
-        QualifiedIdentifier importIdentifier = alias->importIdentifier();
+          QualifiedIdentifier importIdentifier = alias->importIdentifier();
 
-        if(importIdentifier.isEmpty()) {
-          kDebug() << "found empty import";
-          continue;
-        }
-        
-        if(buddy->alreadyImporting( importIdentifier ))
-          continue; //This import has already been applied to this search
+          if(importIdentifier.isEmpty()) {
+            kDebug() << "found empty import";
+            continue;
+          }
+          
+          if(buddy->alreadyImporting( importIdentifier ))
+            continue; //This import has already been applied to this search
 
-        //Create a chain of AliasChainElements that represent the identifier
-        uint count = importIdentifier.count();
+          //Create a chain of AliasChainElements that represent the identifier
+          uint count = importIdentifier.count();
 
-        KDevVarLengthArray<AliasChainElement, 5> newChain;
-        newChain.resize(count);
-        for(uint a = 0; a < count; ++a)
-          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
+          KDevVarLengthArray<AliasChainElement, 5> newChain;
+          newChain.resize(count);
+          for(uint a = 0; a < count; ++a)
+            newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
 
-        AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
+          AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
 
-        ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
-        
-        if(identifier->next.isEmpty()) {
-          //Just insert the aliased namespace identifier
-          accept(*newAliasedElement);
-        }else{
-          //Create an identifiers where namespace-alias part is replaced with the alias target
-          FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
-            applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1);
+          ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
+          
+          if(identifier->next.isEmpty()) {
+            //Just insert the aliased namespace identifier
+            accept(*newAliasedElement);
+          }else{
+            //Create an identifiers where namespace-alias part is replaced with the alias target
+            FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
+              applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1);
+          }
         }
       }
+    }else{
+      //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
+      return;
     }
   }
 
@@ -1163,58 +1173,60 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
     QualifiedIdentifier id = importChainItem.qualifiedIdentifier();
     
-    //This iterator efficiently filters the visible declarations out of all declarations
-    PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
-    
+    if(!id.isEmpty()) {
+      //This iterator efficiently filters the visible declarations out of all declarations
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
       
-    if(filter) {
-      DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
+        
+      if(filter) {
+        DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
 
-      for(; filter; ++filter)
-      {
-        //We must never break or return from this loop, because else we might be creating a bad cache
-        if(!check(*filter))
-          continue;
+        for(; filter; ++filter)
+        {
+          //We must never break or return from this loop, because else we might be creating a bad cache
+          if(!check(*filter))
+            continue;
 
-        Declaration* importDecl = filter->data();
-        if(!importDecl)
-          continue;
+          Declaration* importDecl = filter->data();
+          if(!importDecl)
+            continue;
 
-        //Search for the identifier with the import-identifier prepended
-        Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
-        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+          //Search for the identifier with the import-identifier prepended
+          Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
+          NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
 
-#ifdef DEBUG_SEARCH
-        kDebug() << "found import of" << alias->importIdentifier().toString();
-#endif
+  #ifdef DEBUG_SEARCH
+          kDebug() << "found import of" << alias->importIdentifier().toString();
+  #endif
 
-        QualifiedIdentifier importIdentifier = alias->importIdentifier();
+          QualifiedIdentifier importIdentifier = alias->importIdentifier();
 
-        if(importIdentifier.isEmpty()) {
-          kDebug() << "found empty import";
-          continue;
+          if(importIdentifier.isEmpty()) {
+            kDebug() << "found empty import";
+            continue;
+          }
+
+          if(buddy->alreadyImporting( importIdentifier ))
+            continue; //This import has already been applied to this search
+
+          ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
+
+          int count = importIdentifier.count();
+          KDevVarLengthArray<AliasChainElement, 5> newChain;
+          newChain.resize(importIdentifier.count());
+
+          for(int a = 0; a < count; ++a)
+            newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
+
+          AliasChainElement* newAliasedElement = &newChain[count-1];
+
+  #ifdef DEBUG_SEARCH
+          kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
+  #endif
+          //Prevent endless recursion by checking whether we're actually doing a change
+          if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
+          applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1);
         }
-
-        if(buddy->alreadyImporting( importIdentifier ))
-          continue; //This import has already been applied to this search
-
-        ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
-
-        int count = importIdentifier.count();
-        KDevVarLengthArray<AliasChainElement, 5> newChain;
-        newChain.resize(importIdentifier.count());
-
-        for(int a = 0; a < count; ++a)
-          newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
-
-        AliasChainElement* newAliasedElement = &newChain[count-1];
-
-#ifdef DEBUG_SEARCH
-        kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
-#endif
-        //Prevent endless recursion by checking whether we're actually doing a change
-        if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
-        applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1);
       }
     }
   }
@@ -1239,6 +1251,10 @@ struct TopDUContext::FindContextsAcceptor {
     PersistentSymbolTable::Contexts allDecls;
     
     QualifiedIdentifier id = element.qualifiedIdentifier();
+    
+    //If the identifier wasn't found in the identifier repository, the item cannot exist.
+    if(id.isEmpty() && !element.identifier.isEmpty())
+      return;
     
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDUContextIterator filter;
