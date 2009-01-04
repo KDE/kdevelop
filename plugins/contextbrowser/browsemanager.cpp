@@ -99,7 +99,7 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
         emit startDelayedBrowsing(m_browingStartedInView);
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_watcher(this), m_browsing(false), m_browsingByKey(0) {
+BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
     
