@@ -63,7 +63,7 @@
       <bool>false</bool>
      </property>
      <property name="title" >
-      <string>Location within exisiting file(s)</string>
+      <string>Location within existing file(s)</string>
      </property>
      <property name="flat" >
       <bool>true</bool>
