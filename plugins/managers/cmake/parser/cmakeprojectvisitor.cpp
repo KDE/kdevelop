@@ -676,7 +676,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     }
 
     bool error=false;
-    QStringList locationOptions = fpath->path();
+    QStringList locationOptions = fpath->path()+fpath->hints();
     QStringList path, files=fpath->filenames();
 
     if(!fpath->noDefaultPath()) {
@@ -686,7 +686,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
     {
-        QString p1=findFile(p, fpath->hints()+locationOptions, fpath->pathSuffixes(), true);
+        QString p1=findFile(p, locationOptions, fpath->pathSuffixes(), true);
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
@@ -723,13 +723,14 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     }
 
     bool error=false;
-    QStringList locationOptions = flib->path();
+    QStringList locationOptions = flib->path()+flib->hints();
     QStringList files=flib->filenames();
     QString path;
 
     if(!flib->noDefaultPath())
     {
         locationOptions += m_defaultPaths;
+        locationOptions += m_vars->value("CMAKE_INSTALL_PREFIX").join(QString())+"/lib";
     }
 
     foreach(const QString& p, files)
@@ -738,7 +739,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         {
             foreach(const QString& suffix, m_vars->value("CMAKE_FIND_LIBRARY_SUFFIXES"))
             {
-                QString p1=findFile(prefix+p+suffix, flib->hints()+locationOptions, flib->pathSuffixes());
+                QString p1=findFile(prefix+p+suffix, locationOptions, flib->pathSuffixes());
                 if(p1.isEmpty())
                 {
                     kDebug(9042) << p << "not found";
@@ -780,13 +781,13 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     }
 
     bool error=false;
-    QStringList locationOptions = ffile->path();
+    QStringList locationOptions = ffile->path()+ffile->hints();
     QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
     foreach(const QString& p, files)
     {
-        QString p1=findFile(p, ffile->hints()+locationOptions, ffile->pathSuffixes());
+        QString p1=findFile(p, locationOptions, ffile->pathSuffixes());
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
