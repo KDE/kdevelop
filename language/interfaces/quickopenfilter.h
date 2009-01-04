@@ -60,7 +60,7 @@ class Filter {
     ///Clears the filter, but not the data.
     void clearFilter() {
       m_filtered = m_items;
-      m_oldFilterText = QString();
+      m_oldFilterText.clear();
     }
 
     ///Clears the filter and sets new data. The filter-text will be lost.

@@ -291,7 +291,7 @@ void ItemRepositoryRegistry::close() {
   foreach(AbstractItemRepository* repository, m_repositories.keys())
     repository->close();
   
-  m_path = QString();
+  m_path.clear();
 }
 
 ItemRepositoryRegistry::~ItemRepositoryRegistry() {

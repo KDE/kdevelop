@@ -2075,7 +2075,7 @@ class ItemRepository : public AbstractItemRepository {
   virtual void close(bool doStore = false) {
     if(!m_currentOpenPath.isEmpty()) {
     }
-    m_currentOpenPath = QString();
+    m_currentOpenPath.clear();
 
     if(doStore)
       store();
