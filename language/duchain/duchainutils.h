@@ -73,7 +73,7 @@ namespace DUChainUtils {
 
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
 
-  ///Uses the persistent symbol table to find all occurences of this declaration, based on its identifier.
+  ///Uses the persistent symbol table to find all occurrences of this declaration, based on its identifier.
   ///The result should be filtered to make sure that the declaration is actually useful to you.
   KDEVPLATFORMLANGUAGE_EXPORT QList<IndexedDeclaration> collectAllVersions(Declaration* decl);
 
@@ -90,7 +90,7 @@ namespace DUChainUtils {
   ///Returns whether the given context or any of its child-contexts contain a use of the given declaration. This is relatively expensive.
   KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);
 
-  ///Returns the toal count of uses of the gien declaration under the given context
+  ///Returns the total count of uses of the given declaration under the given context
   KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);
 
   ///Returns the declaration that is overridden by the given one, or zero.

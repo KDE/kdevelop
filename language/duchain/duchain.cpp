@@ -480,7 +480,7 @@ public:
         uint index = m_environmentInfo.findIndex(req);
 
         if((*it)->d_func()->isDynamic()) {
-          //This item has been changed, or isn't in the repositor yet
+          //This item has been changed, or isn't in the repository yet
 
           //Eventually remove an old entry
           if(index)
@@ -534,7 +534,7 @@ public:
   ///@param retries When this is nonzero, then doMoreCleanup will do the specified amount of cycles
   ///doing the cleanup without permanently locking the du-chain. During these steps the consistency
   ///of the disk-storage is not guaranteed, but only few changes will be done during these steps,
-  ///so the final step where the duchain is permanetly locked is much faster.
+  ///so the final step where the duchain is permanently locked is much faster.
   void doMoreCleanup(int retries = 0, bool needLockRepository = true) {
 
     if(m_cleanupDisabled)
@@ -549,7 +549,7 @@ public:
     PersistentSymbolTable::self().clearCache();
 
     //This is used to stop all parsing before starting to do the cleanup. This way less happens during the
-    //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be wriitten.
+    //soft cleanups, and we have a good chance that during the "hard" cleanup only few data has to be written.
     QList<ILanguage*> lockedParseMutexes;
 
     QList<QReadWriteLock*> locked;
@@ -591,7 +591,7 @@ public:
     foreach(TopDUContext* context, workOnContexts) {
 
       context->m_dynamicData->store();
-      ///@todo Check if the top-context needs to be removed, and eventually remove it right in tis place.
+      ///@todo Check if the top-context needs to be removed, and eventually remove it right in this place.
       ///      It has to be removed right after storing within the same write-lock, else data may have become dynamic again,
       ///      and we'll get inconsistencies/crashes. Currently the parse-lock protects us from this problem, still it should be fixed properly.
 

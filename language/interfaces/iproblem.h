@@ -88,7 +88,7 @@ public:
     void clearLocationStack();
 
     /**
-     * Location where this problem occured
+     * Location where this problem occurred
      * */
     DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange & location);

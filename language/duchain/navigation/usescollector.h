@@ -56,7 +56,7 @@ namespace KDevelop {
             void setCollectOverloads(bool collect);
             
             ///If this is true, all definitions are loaded too, and part of the processed declarations.
-            ///This also meeans that the collector will first jump from any definition to its declaration, and start
+            ///This also means that the collector will first jump from any definition to its declaration, and start
             ///collecting from there.
             ///They are also returned in declarations():
             ///The default is "true"
@@ -124,4 +124,3 @@ namespace KDevelop {
             bool m_processDeclarations;
     };
 }
-
