@@ -787,11 +787,13 @@ void CPPParseJob::processDelayedImports() {
         Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(context.context->parsingEnvironmentFile().data());
         Q_ASSERT(cppEnvFile);
         cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->proxyContext->parsingEnvironmentFile().data()));
+        context.context->updateImportsCache();
       }
       Q_ASSERT(m_parseJob->contentContext);
       LineContextPair content = contentFromProxy(context);
       Q_ASSERT(content.context);
       content.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(content.sourceLine, 0));
+      content.context->updateImportsCache();
       Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(content.context->parsingEnvironmentFile().data());
       Q_ASSERT(cppEnvFile);
       cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->contentContext->parsingEnvironmentFile().data()));
