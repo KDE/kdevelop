@@ -781,8 +781,8 @@ struct TemplateParameterAST: public AST
 {
   DECLARE_AST_NODE(TemplateParameter)
 
-  TypeParameterAST *type_parameter;
-  ParameterDeclarationAST *parameter_declaration; //Default-parameter
+  TypeParameterAST *type_parameter; //This is used if this is a template-parameter like "class A"
+  ParameterDeclarationAST *parameter_declaration; //This is used if this is a template-parameter like "int a"
 };
 
 struct ThrowExpressionAST: public ExpressionAST
