@@ -463,13 +463,14 @@ void CPPInternalParseJob::run()
               //As above, we work with the content-contexts.
               LineContextPair context = contentFromProxy(topContext);
               DUContextPointer ptr(context.context);
-//               if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
-//                   if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
+              if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
+                if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
+                    //This must be conditional, else we might remove needed includes later because we think they were purely temporary
                     importedContentChains << context;
                     importedContentChains.back().temporary = true;
                     importedTemporaryChains << context.context;
-//                   }
-//               }
+                }
+              }
           }
           if(currentJob->parentPreprocessor())
             currentJob = currentJob->parentPreprocessor()->parentJob();
@@ -632,7 +633,6 @@ void CPPInternalParseJob::run()
         contentContext->updateImportsCache();
       }
       
-
       if (!parentJob()->abortRequested()) {
         if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
             parentJob()->setLocalProgress(0.5, i18n("Building uses"));
@@ -669,6 +669,17 @@ void CPPInternalParseJob::run()
           if(!import.temporary)
             contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
       contentContext->updateImportsCache();
+    }
+
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      foreach(LineContextPair import, parentJob()->includedFiles()) {
+        if(import.temporary)
+          continue;
+        LineContextPair context = contentFromProxy(import);
+        Q_ASSERT(context.context);
+        Q_ASSERT(contentContext->imports(context.context.data(), SimpleCursor::invalid()));
+      }
     }
 
     ///Build/update the proxy-context
