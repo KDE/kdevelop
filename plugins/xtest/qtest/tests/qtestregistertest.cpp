@@ -21,9 +21,10 @@
 #include "qtestregistertest.h"
 #include <qtest_kde.h>
 #include "../xmlregister.h"
-#include "../qtestsuite.h"
-#include "../qtestcase.h"
-#include "../qtestcommand.h"
+#include "../qtestsettings.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
 
 #include <kasserts.h>
 
@@ -35,6 +36,7 @@ using QTest::XmlRegister;
 using QTest::Suite;
 using QTest::Case;
 using QTest::Command;
+using QTest::ISettings;
 using QTest::Test::QTestRegisterTest;
 
 // <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -73,11 +75,21 @@ QByteArray cazeStart = "<case name=\"test1\" exe=\"t.sh\" >";
 QByteArray cazeEnd = "</case>";
 QByteArray cmd1 = "<command name=\"cmd11\" />";
 QByteArray cmd2 = "<command name=\"cmd12\" />";
+
+class FakeSettings : public ISettings
+{
+    virtual bool printAsserts() const { return false; }
+    virtual bool printSignals() const { return false; }
+    virtual QString makeBinary() const { return QString(); }
+    virtual KUrl cmakeProjectLibraryPath() const { return KUrl(); }
+};
+
 }
 
 void QTestRegisterTest::init()
 {
     reg = new XmlRegister();
+    reg->setSettings( new FakeSettings() );
 }
 
 void QTestRegisterTest::cleanup()
@@ -125,7 +137,6 @@ void QTestRegisterTest::parseMultiSuitesXml()
 void QTestRegisterTest::compareCase(Case* expected, Case* actual)
 {
     KOMPARE(expected->name(), actual->name());
-    KOMPARE(expected->executable(),  actual->executable());
     KOMPARE(expected->parent(), actual->parent());
 }
 
@@ -159,7 +170,7 @@ Veritas::Test* QTestRegisterTest::registerTests(QByteArray& xml)
 {
     QBuffer buff(&xml);
     reg->setSource(&buff);
-    reg->reload();
+    reg->reload(0);
     return reg->root();
 }
 

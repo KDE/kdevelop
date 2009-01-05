@@ -24,14 +24,24 @@
 #include <KUrl>
 #include <QDateTime>
 #include "qxqtestexport.h"
+#include <QProcess>
+
+class QFile;
+class QTimer;
+class KProcess;
 
 namespace QTest
 {
 
+class OutputParser;
+class ISettings;
+class Case;
+
 /*! Wraps a QTest executable. Currently only used to retrieve
 test commands (aka functions) for a given testcase. */
-class QXQTEST_EXPORT Executable
+class QXQTEST_EXPORT Executable : public QObject
 {
+Q_OBJECT
 public:
     Executable();
     virtual ~Executable();
@@ -55,11 +65,59 @@ public:
     virtual bool wasModified() const;
     virtual void updateTimestamp();
     
+    void setOutputParser(OutputParser*);
+    void setSettings(ISettings*);
+
+    void kill();
+    int run();
+
+    bool fto_outputFileClosed();
+    
+    KUrl outFile() const;
+    KUrl errorFile() const;
+
+    void setCase(Case*);
+    
+private:
+    void removeTempFiles();
+
+    // preconditions for run()
+    inline void assertProcessSet();
+    inline void assertOutputParserSet();
+
+    // helpers for run()
+    void initTempOutputFile();
+    void executeProc();
+    void removeFile(const QString& filePath);
+    void initProcArguments();
+    
+private slots:
+    void morphXmlToText();
+    void closeOutputFile();
+    void processError(QProcess::ProcessError);
+
 private:
     QDateTime lastModified() const;
     
     KUrl m_location;
     QDateTime m_timestamp;
+    
+    ISettings* m_settings;     // Settings wrapper.
+
+    QFile* m_output;           // temp file with qtest xml output.
+    QString m_stdOutFilePath;  // unused.
+    QString m_outputPath;      // path to temp file with xml output
+    QString m_textOutFilePath; // path to temp file with ascii output
+    QString m_stdErrFilePath;  // path to temp file with standard error
+
+    KProcess* m_proc;          // this will execute the qtest-exe.
+    OutputParser* m_parser;
+    QTimer* m_timer;
+    static int s_count;        // used to get unique temp files.
+    bool m_finished;
+    QTimer* m_parserTimeout;
+
+    Case* m_currentCase;
 };
 
 }

@@ -27,6 +27,7 @@
 namespace QTest {
 class Case;
 class Command;
+class Executable;
 
 /*! @unitundertest QTest::Case */
 class CaseTest : public QObject
@@ -38,7 +39,6 @@ private slots:
     void construct();
     void addCommand();
     void addCommands();
-    void emptyOutputFiles();
 
     void clone_noChildren();
     void clone_singleChild();
@@ -51,7 +51,8 @@ private:
 private:
     QFileInfo m_exe;
     QString m_name;
-    QTest::Case* m_case;
+    Case* m_case;
+    Executable* m_executable;
 };
 
 }

@@ -31,7 +31,7 @@ class IOutputView;
 class IProject;
 }
 
-namespace QTest { class Case; }
+namespace QTest { class Executable; }
 
 class KProcess;
 class QTestOutputModel;
@@ -43,7 +43,7 @@ class QXQTEST_EXPORT QTestOutputJob : public KDevelop::OutputJob
     Q_OBJECT
 
 public:
-    QTestOutputJob(QTest::Case*);
+    QTestOutputJob(QTest::Executable*);
     virtual void start();
 
 protected:
@@ -53,7 +53,7 @@ private:
     void outputFile(const KUrl& path);
 
 private:
-    QTest::Case* m_caze;
+    QTest::Executable* m_executable;
 };
 
 #endif // QTEST_QTESTOUTPUTJOB_H

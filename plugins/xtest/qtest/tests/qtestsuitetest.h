@@ -22,7 +22,7 @@
 #define QXQTEST_QTESTSUITETEST_H
 
 #include <QtTest/QtTest>
-#include <qtestsuite.h>
+#include <qtestmodelitems.h>
 
 namespace QTest { namespace Test {
 

@@ -27,15 +27,29 @@
 #include <KLocale>
 
 #include "../xmlregister.h"
-#include "../qtestcase.h"
+#include "../qtestmodelitems.h"
 #include "../qtestoutputparser.h"
+#include "../executable.h"
+#include "../qtestsettings.h"
 
 #include <veritas/test.h>
 #include <veritas/testresult.h>
 #include <veritas/runnertesthelper.h>
 
 using Veritas::RunnerTestHelper;
-using QTest::Test::QTestRunnerTest;
+using QTest::QTestRunnerTest;
+using namespace QTest;
+
+namespace
+{
+class FakeSettings : public ISettings
+{
+    virtual bool printAsserts() const { return false; }
+    virtual bool printSignals() const { return false; }
+    virtual QString makeBinary() const { return QString(); }
+    virtual KUrl cmakeProjectLibraryPath() const { return KUrl(); }
+};
+}
 
 Q_DECLARE_METATYPE(QList<QStringList>)
 
@@ -242,7 +256,7 @@ void QTestRunnerTest::nonexistantTestExe()
     m_runner->runTests(); // should not timeout
 
     QStringList result;
-    result << "foobar" << i18n("Failed to start test executable.") << "foobar_this_exe_does_not_exist" << "0";
+    result << "foobar" << i18n("Failed to start test executable.") << "/suite1/foobar_this_exe_does_not_exist" << "0";
     m_runner->verifyResultItems(QList<QStringList>() << result);
 }
 
@@ -401,7 +415,8 @@ Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
     QBuffer buff(&testRegistrationXml);
     XmlRegister reg;
     reg.setSource(&buff);
-    reg.reload();
+    reg.setSettings(new FakeSettings());
+    reg.reload(0);
     return reg.root();
 }
 
@@ -416,7 +431,7 @@ void QTestRunnerTest::assertAllFilesClosed(Veritas::Test* root)
             Veritas::Test* test = suite->child(i);
             Case* caze = qobject_cast<Case*>(test);
             KVERIFY_MSG(caze, "Not a Case on lvl2 of the test tree? (cast failed)");
-            KVERIFY_MSG(caze->fto_outputFileClosed(), caze->name());
+            KVERIFY_MSG(caze->executable()->fto_outputFileClosed(), caze->name());
         }
     }
 }

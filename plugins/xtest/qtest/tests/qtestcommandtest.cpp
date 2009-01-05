@@ -21,14 +21,15 @@
 #include "qtestcommandtest.h"
 #include "kdevtest.h"
 
-#include <qtestsuite.h>
-#include <qtestcase.h>
+#include <qtestmodelitems.h>
+#include "../executable.h"
 #include <kurl.h>
 
 using QTest::Suite;
 using QTest::Case;
 using QTest::Command;
 using QTest::CommandTest;
+using QTest::Executable;
 
 void CommandTest::construct()
 {
@@ -40,6 +41,9 @@ void CommandTest::cmdString()
 {
     Suite* suite = new Suite("s1", QFileInfo("/a/b/"), 0);
     Case* caze = new Case("c1", QFileInfo("c.sh"), suite);
+    Executable* exe = new Executable;
+    exe->setLocation(KUrl("/a/b/c.sh"));
+    caze->setExecutable( exe );
     Command* cmd = new Command("cmd", caze);
     suite->addChild(caze);
     caze->addChild(cmd);
@@ -59,9 +63,12 @@ void CommandTest::cmdStringNoParent()
 void CommandTest::cmdStringNoSuite()
 {
     Case* caze = new Case("c1", QFileInfo("c.sh"), 0);
+    Executable* exe = new Executable;
+    exe->setLocation(KUrl("/a/b/c.sh"));
+    caze->setExecutable( exe );
     Command* cmd = new Command("cmd1", caze);
     caze->addChild(cmd);
-    KOMPARE("c.sh cmd1", cmd->command());
+    KOMPARE("/a/b/c.sh cmd1", cmd->command());
 
     delete caze;
 }

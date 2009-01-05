@@ -25,9 +25,12 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <interfaces/iplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <veritas/ctestfileparser.h>
-#include <interfaces/icore.h>
+
 #include <KDebug>
 #include <QThread>
 #include <QDir>
@@ -36,9 +39,10 @@
 #include <KLocale>
 #include <KConfigGroup>
 
-using QTest::KDevRegister;
+using QTest::ModelBuilder;
 using QTest::SuiteBuilder;
 using QTest::Settings;
+using QTest::ISettings;
 using Veritas::Test;
 using Veritas::TestExecutableInfo;
 using Veritas::CTestfileParser;
@@ -80,38 +84,34 @@ public:
     SuiteBuilder* m_suiteBuilder;
 };
 
-
-KDevRegister::KDevRegister()
-    : m_root(0), m_runner(new SuiteBuilderRunner), m_reloading(false)
+void ModelBuilder::connectBuilderPlugin(IPlugin* plugin)
 {
-    IUiController* uic = ICore::self()->uiController();
-    uic->registerStatus(this);
+    kDebug() << plugin << plugin->extensions();
+    if (plugin->extensions().contains( "org.kdevelop.IProjectBuilder" )) {
+        kDebug() << "setup connection";
+        this->disconnect(plugin);
+        connect(plugin, SIGNAL(built(KDevelop::ProjectBaseItem*)), 
+                   SLOT(doReload(KDevelop::ProjectBaseItem*)));
+    }
 }
 
-KDevRegister::~KDevRegister()
+void ModelBuilder::doReload(KDevelop::ProjectBaseItem* item)
 {
-    if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
-    delete m_runner;
+    if (item->project() == project()) {
+        reload(project());
+    }
 }
 
-#define STOP_IF(X, MSG) \
-if (X) {\
-    m_root = new Test("");\
-    m_reloading = false; \
-    emit reloadFailed(); \
-    kDebug() << MSG; \
-    emit showErrorMessage(MSG, 5); \
-    return KUrl(); \
-} else void(0)
-
-void KDevRegister::reload()
+void ModelBuilder::reload(KDevelop::IProject* project_)
 {
-    Q_ASSERT(project());
-    Q_ASSERT(m_runner);
+    if (!project_) return;
     if (m_reloading) return;
+    m_reloading = true;    
+    m_currentProject = project_;
     Q_ASSERT(!m_runner->isRunning());
-
-    m_reloading = true;
+    
+    if (m_settings) delete m_settings;
+    m_settings = new Settings(project());
 
     KConfigGroup proj = project()->projectConfiguration()->group("Project");
     if (proj.readEntry("Manager") == "KDevCMakeManager") {
@@ -160,7 +160,43 @@ void KDevRegister::reload()
     fetchTestCommands(0);
 }
 
-QString KDevRegister::statusName() const
+ModelBuilder::ModelBuilder()
+    : m_root(0),
+      m_runner(new SuiteBuilderRunner),
+      m_reloading(false),
+      m_settings(0)
+{
+    foreach(IPlugin* i, ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.IProjectBuilder" )) {
+        connectBuilderPlugin(i);
+    }
+    connect(ICore::self()->pluginController(), 
+            SIGNAL(pluginLoaded(KDevelop::IPlugin*)), 
+            SLOT(connectBuilderPlugin(KDevelop::IPlugin*)));
+    IUiController* uic = ICore::self()->uiController();
+    uic->registerStatus(this);
+    
+    connect(m_runner, SIGNAL(finished()),
+            SLOT(suiteBuilderFinished()));
+}
+
+ModelBuilder::~ModelBuilder()
+{
+    if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
+    delete m_runner;
+    if (m_settings) delete m_settings;
+}
+
+#define STOP_IF(X, MSG) \
+if (X) {\
+    m_root = new Test("");\
+    m_reloading = false; \
+    emit reloadFailed(); \
+    kDebug() << MSG; \
+    emit showErrorMessage(MSG, 5); \
+    return KUrl(); \
+} else void(0)
+
+QString ModelBuilder::statusName() const
 {
     return i18n("xTest");
 }
@@ -186,7 +222,7 @@ ProjectExecutableTargetItem* findTargetFor(const TestExecutableInfo& test, const
     return exe;
 }
 
-KUrl KDevRegister::buildRoot()
+KUrl ModelBuilder::buildRoot()
 {
     IBuildSystemManager* bm = project()->buildSystemManager();
     STOP_IF(!bm, "Build system manager zero");
@@ -198,7 +234,7 @@ KUrl KDevRegister::buildRoot()
     return buildRoot;
 }
 
-void KDevRegister::fetchTestCommands(KJob*)
+void ModelBuilder::fetchTestCommands(KJob*)
 {
     Q_ASSERT(project());
     Q_ASSERT(m_reloading);
@@ -235,22 +271,25 @@ void KDevRegister::fetchTestCommands(KJob*)
     if (m_runner->m_suiteBuilder) delete m_runner->m_suiteBuilder;
     SuiteBuilder* sb = new SuiteBuilder;
     sb->setTestExecutables(testExes);
-    sb->setSettings(settings());
+    sb->setSettings(m_settings);
 
     m_runner->m_suiteBuilder = sb;
-    connect(m_runner, SIGNAL(finished()),
-            SLOT(suiteBuilderFinished()));
     connect(sb, SIGNAL(progress(int,int,int)),
             SLOT(slotShowProgress(int,int,int)), Qt::QueuedConnection);
     m_runner->start();
 }
 
-void KDevRegister::slotShowProgress(int minimum, int maximum, int value)
+KDevelop::IProject* ModelBuilder::project() const
+{
+    return m_currentProject;
+}
+
+void ModelBuilder::slotShowProgress(int minimum, int maximum, int value)
 {
     emit showProgress(this, minimum,maximum,value);
 }
 
-void KDevRegister::suiteBuilderFinished()
+void ModelBuilder::suiteBuilderFinished()
 {
     Q_ASSERT(m_runner);
     Q_ASSERT(m_reloading);
@@ -262,10 +301,10 @@ void KDevRegister::suiteBuilderFinished()
     m_reloading = false;
 }
 
-Test* KDevRegister::root() const
+Test* ModelBuilder::root() const
 {
     Q_ASSERT(m_root);
     return m_root;
 }
 
-
+#include "kdevregister.moc"

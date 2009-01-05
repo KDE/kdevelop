@@ -20,8 +20,8 @@
 
 #include "qtestoutputparsertest.h"
 #include "../qtestoutputparser.h"
-#include "../qtestcase.h"
-#include "../qtestcommand.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
 
 #include "kdevtest.h"
 

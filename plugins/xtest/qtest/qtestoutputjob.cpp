@@ -24,16 +24,17 @@
 #include "qtestoutputmodel.h"
 #include "qtestoutputdelegate.h"
 
-#include "qtestcase.h"
+#include "executable.h"
 
 #include <KLocale>
 #include <KDebug>
 #include <QTextStream>
+#include <QFile>
 
 #include <interfaces/icore.h>
 
 using namespace KDevelop;
-using QTest::Case;
+using QTest::Executable;
 
 namespace
 {
@@ -47,8 +48,8 @@ QTestOutputDelegate* delegate()
 }
 }
 
-QTestOutputJob::QTestOutputJob(Case* caze)
-        : OutputJob(0), m_caze(caze) // TODO leaks?
+QTestOutputJob::QTestOutputJob(Executable* exe)
+        : OutputJob(0), m_executable(exe)
 {}
 
 void QTestOutputJob::start()
@@ -62,11 +63,11 @@ void QTestOutputJob::start()
     setDelegate(delegate(), KDevelop::IOutputView::KeepOwnership);
 
     startOutput();
-    if (!m_caze->outFile().isEmpty()) {
-        outputFile(m_caze->outFile());
+    if (!m_executable->outFile().isEmpty()) {
+        outputFile(m_executable->outFile());
     }
-    if (!m_caze->errorFile().isEmpty()) {
-        outputFile(m_caze->errorFile());
+    if (!m_executable->errorFile().isEmpty()) {
+        outputFile(m_executable->errorFile());
     }
     model()->slotCompleted();
     emitResult();

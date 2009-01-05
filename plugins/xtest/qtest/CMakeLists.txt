@@ -5,11 +5,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
 set(kdevqtest_SRCS
     qtestoutputparser.cpp
-    qtestcase.cpp
-    qtestcommand.cpp
-    qtestsuite.cpp
-    qtestviewdata.cpp
-    iregister.cpp
+    qtestmodelitems.cpp
     xmlregister.cpp
     qtestoutputmorpher.cpp
     kdevregister.cpp

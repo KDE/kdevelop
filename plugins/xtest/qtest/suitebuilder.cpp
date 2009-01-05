@@ -20,9 +20,8 @@
 
 #include "suitebuilder.h"
 #include "casebuilder.h"
-#include "qtestcase.h"
+#include "qtestmodelitems.h"
 #include "qtestoutputparser.h"
-#include "qtestsuite.h"
 #include "executable.h"
 #include <interfaces/iplugin.h>
 #include "qtestsettings.h"
@@ -155,9 +154,6 @@ void SuiteBuilder::constructCases()
         Q_ASSERT(suite);
         suite->addChild(caze);
         caze->setParent(suite);
-        caze->setProcess(new KProcess);
-        caze->setOutputParser(new OutputParser);
-        caze->setSettings(m_settings);
         emit progress(0, nrofShells, count);
         count++;
     }
@@ -200,7 +196,9 @@ CaseBuilder* SuiteBuilder::createCaseBuilder(const KUrl& testLocation) const
     Q_ASSERT(!hasRun());
     CaseBuilder* cb = new CaseBuilder();
     Executable* exe = new Executable();
-    exe->setLocation(testLocation);
+    exe->setSettings( m_settings );
+    kDebug() << testLocation;
+    exe->setLocation( testLocation );
     cb->setExecutable(exe);
     return cb;
 }

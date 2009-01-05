@@ -20,10 +20,9 @@
 
 #include "xmlregister.h"
 
-#include "qtestcase.h"
-#include "qtestcommand.h"
+#include "qtestmodelitems.h"
 #include "qtestoutputparser.h"
-#include "qtestsuite.h"
+#include "executable.h"
 
 #include <KDebug>
 #include <KLocalizedString>
@@ -37,6 +36,7 @@ using QTest::OutputParser;
 using QTest::XmlRegister;
 using QTest::Suite;
 using QTest::ISettings;
+using QTest::Executable;
 
 using Veritas::Test;
 
@@ -84,7 +84,7 @@ bool XmlRegister::isEndElement_(const QString& elem)
     return isEndElement() && (name() == elem);
 }
 
-void XmlRegister::reload()
+void XmlRegister::reload(KDevelop::IProject*)
 {
     Q_ASSERT(device());// Q_ASSERT(m_settings);
     device()->close();
@@ -129,11 +129,20 @@ void XmlRegister::processSuite()
 
 Case* XmlRegister::instantiateCase(Suite* parent)
 {
-    Case* caze = new Case(fetchName(), fetchExe(), parent);
+    QFileInfo exeLocation = fetchExe();
+    Case* caze = new Case(fetchName(), exeLocation, parent);
     parent->addChild(caze);
-    caze->setSettings(m_settings);
-    caze->setProcess(new KProcess(caze));
-    caze->setOutputParser(new OutputParser);
+    Executable* exe = new Executable();
+    exe->setCase(caze);
+    exe->setSettings( m_settings );
+    exe->setOutputParser( new OutputParser );
+    KUrl dir(qobject_cast<Suite*>(caze->parent())->path().absoluteFilePath());
+    dir.adjustPath( KUrl::AddTrailingSlash );
+    KUrl exeUrl(dir, exeLocation.fileName());
+    kDebug() << exeUrl;
+    exe->setLocation(exeUrl);
+    
+    caze->setExecutable(exe);
     kDebug() << caze->name();
     return caze;
 }

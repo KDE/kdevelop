@@ -48,13 +48,15 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectfilemanager.h>
+
 #include <veritas/test.h>
-
 #include <veritas/testtoolviewfactory.h>
+#include <veritas/itestrunner.h>
 
-#include "qtestviewdata.h"
 #include "qtestoutputdelegate.h"
 #include "qtestconfig.h"
+#include "kdevregister.h"
+
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
 K_EXPORT_PLUGIN(QTestPluginFactory(KAboutData("kdevqtest","kdevxtest", ki18n("QTest test"), "0.1", ki18n("Support for running QTest unit tests"), KAboutData::License_GPL)))
@@ -83,7 +85,9 @@ QString QTestPlugin::name() const
 
 Veritas::ITestRunner* QTestPlugin::createRunner()
 {
-    return new QTestViewData(this);
+    QTest::ModelBuilder *testTreeBuilder = new QTest::ModelBuilder;
+    Veritas::ITestRunner *runner = new ITestRunner(this, testTreeBuilder);
+    return runner;
 }
 
 QWidget* QTestPlugin::createConfigWidget()

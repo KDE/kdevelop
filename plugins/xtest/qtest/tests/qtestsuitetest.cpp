@@ -22,7 +22,7 @@
 
 #include <kasserts.h>
 #include <qtest_kde.h>
-#include <qtestcase.h>
+#include <qtestmodelitems.h>
 
 using QTest::Suite;
 using QTest::Case;

@@ -39,6 +39,7 @@ class IProject;
 }
 
 namespace Veritas { class Test; }
+namespace QTest { class KDevRegister; }
 
 /*! Makes the QTestRunner toolview available */
 class QTestPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -62,7 +63,7 @@ private slots:
 private:
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
-    KDevelop::IProject* m_proj;
+    KDevelop::IProject* m_proj; // scratch variable
 };
 
 #endif // QTEST_QTESTPLUGIN_H

@@ -20,8 +20,8 @@
 
 #include "casebuildertest.h"
 #include "kdevtest.h"
-#include "../qtestcase.h"
-#include "../qtestcommand.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
 #include "../executable.h"
 #include "../casebuilder.h"
 #include <KDebug>
@@ -47,10 +47,13 @@ if (m_stop) { \
 
 void CaseBuilderTest::init()
 {
+    kDebug() << "FOO";
     m_builder = new CaseBuilder;
+    kDebug() << "FOO2";
     m_caseExeStub = new ExecutableStub;
     m_stop = false;
     m_caze = 0;
+    kDebug() << "FOO3";
 }
 
 void CaseBuilderTest::cleanup()

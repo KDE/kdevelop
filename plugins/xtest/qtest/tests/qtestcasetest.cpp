@@ -19,14 +19,16 @@
  */
 
 #include "qtestcasetest.h"
-#include "../qtestcommand.h"
-#include "../qtestcase.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
+#include "../executable.h"
 
 #include "kdevtest.h"
 
 using QTest::Case;
 using QTest::Command;
 using QTest::CaseTest;
+using QTest::Executable;
 
 namespace
 {
@@ -40,7 +42,10 @@ void CaseTest::init()
 {
     m_exe = QFileInfo("my.exe");
     m_name = "test1";
+    m_executable = new Executable();
+    m_executable->setLocation( KUrl("/path/to/my.exe" ));
     m_case = new Case(m_name, m_exe, 0);
+    m_case->setExecutable( m_executable );
 }
 
 void CaseTest::cleanup()
@@ -52,7 +57,6 @@ void CaseTest::construct()
 {
     KOMPARE(m_case->childCount(), 0);
     KOMPARE(m_case->name(), m_name);
-    KOMPARE(m_case->executable(), m_exe);
 }
 
 void CaseTest::addCommand()
@@ -70,19 +74,13 @@ void CaseTest::addCommands()
     KOMPARE(m_case->childCount(), 0);
     Command* c1 = new Command(someCmd(), m_case);
     m_case->addChild(c1);
-    Command* c2 = new Command(someCmd(), m_case);
+    Command* c2 = new Command(someCmd() + "2", m_case);
     m_case->addChild(c2);
 
     KOMPARE(m_case->childCount(), 2);
     KOMPARE(m_case->child(0), c1);
     KOMPARE(m_case->child(1), c2);
 
-}
-
-void CaseTest::emptyOutputFiles()
-{
-    KVERIFY(m_case->outFile().isEmpty());
-    KVERIFY(m_case->errorFile().isEmpty());
 }
 
 void CaseTest::clone_noChildren()
@@ -95,7 +93,6 @@ void CaseTest::clone_noChildren()
     KOMPARE(m_case->name(), clone->name());
     KOMPARE(0, clone->childCount());
     KOMPARE(0, clone->parent());
-    KOMPARE(m_case->executable(), clone->executable());
 
     delete clone;
 }

@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <KUrl>
+#include "qxqtestexport.h"
 
 namespace KDevelop { class IProject; }
 
@@ -32,7 +33,7 @@ namespace QTest
 /*!
  * Decouples config from implementation
  */
-class ISettings
+class QXQTEST_EXPORT ISettings
 {
 public:
     ISettings();

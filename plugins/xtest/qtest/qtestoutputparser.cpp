@@ -19,7 +19,7 @@
  */
 
 #include "qtestoutputparser.h"
-#include "qtestcase.h"
+#include "qtestmodelitems.h"
 
 #include <veritas/test.h>
 

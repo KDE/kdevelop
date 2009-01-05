@@ -22,7 +22,7 @@
 #define QXQTEST_QTESTCOMMANDTEST_H
 
 #include <QtTest/QtTest>
-#include <qtestcommand.h>
+#include <qtestmodelitems.h>
 
 namespace QTest {
 

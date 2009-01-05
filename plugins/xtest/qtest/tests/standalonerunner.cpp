@@ -69,7 +69,7 @@ void Boot::load()
     m_reg = new XmlRegister;
     m_reg->setRootDir(rootDir);
     m_reg->setSource(&f);
-    m_reg->reload();
+    m_reg->reload(0);
     connect(m_reg, SIGNAL(reloadFinished(Veritas::Test*)),
             this, SLOT(showWindow()));
 

@@ -19,13 +19,16 @@
  */
 
 #include "casebuilder.h"
-#include "qtestcase.h"
+#include "qtestmodelitems.h"
 #include "executable.h"
+#include "qtestoutputparser.h"
 #include <KDebug>
+#include <KProcess>
 
 using QTest::CaseBuilder;
 using QTest::Case;
 using QTest::Executable;
+using QTest::OutputParser;
 
 CaseBuilder::CaseBuilder()
     : m_executable(0)
@@ -33,7 +36,7 @@ CaseBuilder::CaseBuilder()
 
 CaseBuilder::~CaseBuilder()
 {
-    if (m_executable) delete m_executable;
+//    if (m_executable) delete m_executable;
 }
 
 void CaseBuilder::setExecutable(Executable* exe)
@@ -61,7 +64,11 @@ Case* CaseBuilder::construct()
     }
 
     Case* caze = new Case(cazeName, exeLocation);
-
+    caze->setExecutable( m_executable );
+    Executable* exe = m_executable;
+    //exe->setLocation(KUrl(exeLocation.absoluteFilePath()));
+    m_executable->setCase(caze);
+    exe->setOutputParser( new OutputParser);
     QStringList exeFunctionOut = m_executable->fetchFunctions();
     bool success = false;
     foreach(QString line, exeFunctionOut) {

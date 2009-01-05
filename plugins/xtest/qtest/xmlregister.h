@@ -25,8 +25,8 @@
 #include <QList>
 #include <QString>
 #include <QFileInfo>
+#include <veritas/itesttreebuilder.h>
 
-#include "iregister.h"
 #include "qxqtestexport.h"
 
 class QIODevice;
@@ -35,28 +35,28 @@ namespace Veritas { class Test; }
 
 namespace QTest
 {
-
 class ISettings;
 class Suite;
 class Case;
-class IRegister;
+
 
 /*! Reads a QTest suite's structure from XML. After parsing the root of the
-generated test tree is available through the 'root()' member function. */
-class QXQTEST_EXPORT XmlRegister : public IRegister, public QXmlStreamReader
+ *  generated test tree is available through the 'root()' member function. */
+class QXQTEST_EXPORT XmlRegister : public Veritas::ITestTreeBuilder, public QXmlStreamReader
 {
 public:
     XmlRegister();
     virtual ~XmlRegister();
 
-    virtual void reload();
-    /*! Caller should de-allocate this */
+    virtual void reload(KDevelop::IProject*);
+    
+    /*! Ownership is passed to the caller */
     virtual Veritas::Test* root() const;
 
     void setRootDir(const QString&);
     void setSource(QIODevice*);
-    void setSettings(ISettings*); // TODO this is wrong
-
+    void setSettings(ISettings*);
+    
 private: // helpers
     bool isStartElement_(const QString& elem);
     bool isEndElement_(const QString& elem);
@@ -72,6 +72,7 @@ private: // state
     Veritas::Test* m_rootItem;
     QString m_root;
     ISettings* m_settings;
+    
 
 private: // some xml constants
     static const QString c_suite;

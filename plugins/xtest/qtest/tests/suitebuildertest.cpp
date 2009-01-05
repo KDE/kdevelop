@@ -23,9 +23,9 @@
 #include "executablestub.h"
 #include "../casebuilder.h"
 #include "../suitebuilder.h"
-#include "../qtestsuite.h"
-#include "../qtestcase.h"
-#include "../qtestcommand.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
+#include "../qtestmodelitems.h"
 #include <project/projectmodel.h>
 #include <veritas/test.h>
 #include <veritas/testexecutableinfo.h>
