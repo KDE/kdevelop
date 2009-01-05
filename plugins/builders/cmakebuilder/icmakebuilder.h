@@ -22,9 +22,6 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iextension.h>
 
-class IProject;
-class ProjectItem;
-
 /**
 @author Andreas Pakulat
 */
