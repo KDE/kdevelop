@@ -133,7 +133,7 @@ void ChmProtocol::get( const KURL& url )
         for ( it = m_dirMap.begin(); it != m_dirMap.end(); ++it) {
             u.setPath(bigpath);
             u.addPath(it.key());
-            output += u.prettyURL() + "\n";
+            output += u.prettyURL() + '\n';
         }
         
         data(output.local8Bit());
@@ -147,7 +147,7 @@ void ChmProtocol::get( const KURL& url )
     ChmDirectoryMap::Iterator it;
     for ( it = m_dirMap.begin(); it != m_dirMap.end(); ++it) {
         tmpstr.sprintf("%s", it.key().latin1());
-        if ((m_strIndex == "") && 
+        if (m_strIndex.isEmpty() && 
                         (tmpstr.endsWith(".htm") || tmpstr.endsWith(".html")))
         m_strIndex = tmpstr;
         if ((tmpstr == "/index.htm") || (tmpstr == "/index.html")) {
@@ -212,7 +212,7 @@ void ChmProtocol::get( const KURL& url )
                     local = localParam.cap(1);
                     //output += "<a href=\"" + local + "\">" + name + "</a>";
                     //added by lucida lucida@users.sf.net
-                    if (local != "" && local != "/") {
+                    if (!local.isEmpty() && local != "/") {
                         if(!catalog) {
                             output += "<a target=\"browse\" href=\"" + url.url() + local + "\">" + name + "</a>";
                         }else{
@@ -222,10 +222,10 @@ void ChmProtocol::get( const KURL& url )
                             u.setPath(bigpath + local);
                             QString str;
                             output += str.sprintf("%i\n%i\n", parents.top(), current);
-                            output += name + "\n" + u.prettyURL() + "\n";
+                            output += name + '\n' + u.prettyURL() + '\n';
                         }
                         m_bIndex = 1;
-                        if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
+                        if (firstPage.isEmpty()) firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
                     }
                     else 
                         if(htmlOutput) output += name;
@@ -240,7 +240,7 @@ void ChmProtocol::get( const KURL& url )
                 //output += " (<a href=\"" + path + href + "\">link</a>)";
                 m_bIndex = 1;
                 output += " (<a target=\"browse\" href=\"" + url.url() + path + href + "\">link</a>)";
-                if (firstPage == "") firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
+                if (firstPage.isEmpty()) firstPage = url.url()+QString::fromLocal8Bit(local.latin1());
             }
         }
         if(htmlOutput) output += s.mid(old);

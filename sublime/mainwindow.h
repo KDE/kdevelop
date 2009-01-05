@@ -69,7 +69,7 @@ public:
        set, to prevent saving a half-broken state.  */
     void enableAreaSettingsSave();
 
-public slots:
+public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);
 

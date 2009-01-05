@@ -157,7 +157,7 @@ void QuickOpenModel::textChanged( const QString& str )
 void QuickOpenModel::restart(bool keepFilterText)
 {
   if(!keepFilterText)
-    m_filterText = QString();
+    m_filterText.clear();
   
   bool anyEnabled = false;
 

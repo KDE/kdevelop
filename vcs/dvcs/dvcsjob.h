@@ -215,7 +215,7 @@ public Q_SLOTS:
      */
     bool isRunning() const;
 
-signals:
+Q_SIGNALS:
     void readyForParsing(DVCSjob *job);
 
 private Q_SLOTS:

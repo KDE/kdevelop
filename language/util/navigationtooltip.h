@@ -35,7 +35,7 @@ public:
     ///@param point Global coordinate of the point where the tooltip should be shown.
     ///@param navigationWidget The widget that should be embedded.
     NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget);
-    private slots:
+    private Q_SLOTS:
         void sizeHintChanged();
     private:
         void setNavigationWidget(QWidget*);

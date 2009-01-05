@@ -115,9 +115,9 @@ QString DUChainItemData::htmlDescription() const {
   QString text;
 
   if( function && function->returnType() )
-    text  = i18n("Return:") + " " + function->partToString(FunctionType::SignatureReturn);
+    text  = i18n("Return:") + ' ' + function->partToString(FunctionType::SignatureReturn);
 
-  text += " " + i18n("File:") + " " + decl->url().str();
+  text += " " + i18n("File:") + ' ' + decl->url().str();
 //   TypePtr<FunctionType> function = decl->type<FunctionType>();
 //   if( function )
 //     text  = QString("%1 %2%3").arg(function->partToString( FunctionType::SignatureReturn)).arg(decl->identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
@@ -126,7 +126,7 @@ QString DUChainItemData::htmlDescription() const {
 
   QString ret = "<small><small>" + text;
   if(!m_item.m_project.isEmpty()) {
-      ret = i18n("Project") + " " + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
+      ret = i18n("Project") + ' ' + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
   }
 
   ret += "</small></small>";
@@ -169,7 +169,7 @@ QWidget* DUChainItemData::expandingWidget() const {
   if( !decl || !decl->context() )
     return 0;
 
-  return decl->context()->createNavigationWidget( decl, decl->topContext(), m_item.m_project.isEmpty() ? QString() : ("<small><small>" + i18n("Project") + " " + m_item.m_project + "<br>" + "</small></small>"));
+  return decl->context()->createNavigationWidget( decl, decl->topContext(), m_item.m_project.isEmpty() ? QString() : ("<small><small>" + i18n("Project") + ' ' + m_item.m_project + "<br>" + "</small></small>"));
 }
 
 QIcon DUChainItemData::icon() const {

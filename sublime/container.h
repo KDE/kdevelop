@@ -65,7 +65,7 @@ protected:
 Q_SIGNALS:
   void activateView(Sublime::View* view);
 
-private slots:
+private Q_SLOTS:
   void widgetActivated(int idx);
   void documentTitleChanged(Sublime::Document* doc);
 private:
