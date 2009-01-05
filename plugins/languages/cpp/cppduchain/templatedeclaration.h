@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/instantiationinformation.h>
 
 
 namespace KTextEditor {
@@ -44,84 +45,8 @@ namespace  KDevelop {
 }
 
 namespace Cpp {
-  class IndexedInstantiationInformation;
-  
-  KDEVCPPDUCHAIN_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
-  
-  struct KDEVCPPDUCHAIN_EXPORT InstantiationInformation {
-    InstantiationInformation();
-    ///@todo include some information for instantiation only with default parameters
-    InstantiationInformation(const InstantiationInformation& rhs);
-    
-    ~InstantiationInformation();
-    
-    InstantiationInformation& operator=(const InstantiationInformation& rhs);
-
-    bool operator==(const InstantiationInformation& rhs) const;
-    
-    uint hash() const;
-    
-    bool isValid() const {
-      return previousInstantiationInformation || templateParametersSize();
-    }
-    
-    ///Applies this instantiation information to the given QualifiedIdentifier.
-    ///The template parameters of the qualified identifier will be marked as expressions, thus the qualified identifier is not "clean".
-    ///Should only be used for displaying.
-    ///This only adds template-parameters in places where none are known yet.
-    QualifiedIdentifier applyToIdentifier(const QualifiedIdentifier& id) const;
-    
-    ///@param local If this is true, only the template-parameters of this scope are printed, but not the parent ones
-    QString toString(bool local = false) const;
-    
-    ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
-    uint previousInstantiationInformation;
-    
-    START_APPENDED_LISTS(InstantiationInformation)
-    
-    static size_t classSize() {
-      return sizeof(InstantiationInformation);
-    }
-    
-    short unsigned int itemSize() const {
-      return dynamicSize();
-    }
-    
-    ///templateParameters contains the template-parameters used for the instantiation
-    APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
-    
-    END_APPENDED_LISTS(InstantiationInformation, templateParameters);
-    
-    IndexedInstantiationInformation indexed() const;
-  };
-  
-  class KDEVCPPDUCHAIN_EXPORT IndexedInstantiationInformation {
-    public:
-      IndexedInstantiationInformation();
-      IndexedInstantiationInformation(uint index);
-      
-      const InstantiationInformation& information() const;
-      
-      uint hash() const {
-        return m_index * 73;
-      }
-      
-      //Is always zero for the empty information
-      uint index() const {
-        return m_index;
-      }
-      
-      bool operator==(const IndexedInstantiationInformation& rhs) const {
-        return m_index == rhs.m_index;
-      }
-      
-      //Returns true if one of the values represented by this information is non-default
-      bool isValid() const;
-    
-    private:
-      uint m_index;
-  };
-  
+  using KDevelop::InstantiationInformation;
+  using KDevelop::IndexedInstantiationInformation;
   template<class Base>
   class CppDUContext;
   
@@ -216,7 +141,8 @@ namespace Cpp {
       
       static QMutex instantiationsMutex;
       ///Every access to m_instantiations must be serialized through instantiationsMutex!
-      
+      typedef QHash<IndexedInstantiationInformation, IndexedInstantiationInformation> DefaultParameterInstantiationHash;
+      DefaultParameterInstantiationHash m_defaultParameterInstantiations;
       InstantiationsHash m_instantiations; ///Every declaration nested within a template declaration knows all its instantiations.
   };
   
@@ -413,11 +339,11 @@ namespace Cpp {
    * @param templateArguments The template-arguments that will be used to instantiate the input-context. If this is empty, the intersting context will be only copied without specialization. If it contains exactly one argument, and that argument is invalid, the context is instantiated without arguments(default-arguments are used). Default-arguments will be used if needed.
    * @param instantiatedDeclaration The copied declaration this should belong to. If this is set, the created context will be made the given declaration's internal-context, and its parent-context will be set to the given context's parent-context. Also delayed types in the declaration will be resolved(The declaration will be changed)
    * @param instantiatedFrom The declaration instantiatedDeclaration should be/is instantiated from. This is needed to eventually change the declaration of in IdentifiedType
-   * @param visible Whether the created declaration should be non-anonymous in its parent context(thus findable)
+   * @param doNotRegister If this is true, the context will not be registered anywhere, and can be deleted at will.
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom );
+  CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom, bool doNotRegister = false );
 
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
