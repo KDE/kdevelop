@@ -116,6 +116,15 @@ namespace TypeUtils {
    * Returns @param actual if nothing better was found
    */
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::Ptr& matchTo, const KDevelop::AbstractType::Ptr& actual, const KDevelop::TopDUContext* topContext);
+
+
+  KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* getDeclaration( const KDevelop::AbstractType::Ptr& type, KDevelop::TopDUContext* top );
+
+  ///@param useOperator whether operator* should be used
+  ///Returns the zero pointer on problems
+  KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr decreasePointerDepth(KDevelop::AbstractType::Ptr type, KDevelop::TopDUContext* top, bool useOperator = false);
+
+  KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr increasePointerDepth(KDevelop::AbstractType::Ptr type);
 }
 
 #endif

@@ -210,4 +210,47 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
   return actual;
 }
 
+Declaration* getDeclaration( const AbstractType::Ptr& type, TopDUContext* top ) {
+  if( !type) return 0;
+
+  const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.unsafeData());
+  if( idType ) {
+    return idType->declaration(top);
+  } else {
+    return 0;
+  }
+}
+
+AbstractType::Ptr decreasePointerDepth(AbstractType::Ptr type, TopDUContext* top, bool useOperator) {
+  type = realType(type, top);
+  
+  if( PointerType::Ptr pt = type.cast<PointerType>() )
+  {
+    //Dereference
+    return pt->baseType();
+  }else if( ArrayType::Ptr pt = type.cast<ArrayType>() ) {
+    return pt->elementType();
+  }else{
+    if(useOperator) {
+      Declaration* decl = getDeclaration(type, top);
+      if(decl && decl->internalContext()) {
+        QList<Declaration*> decls = decl->internalContext()->findDeclarations(Identifier("operator*"), SimpleCursor::invalid(), top, DUContext::DontSearchInParent);
+        if(!decls.isEmpty()) {
+          FunctionType::Ptr fun = decls.first()->type<FunctionType>();
+          if(fun)
+            return fun->returnType();
+        }
+      }
+    }
+  }
+  return AbstractType::Ptr();
+}
+
+AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
+    AbstractType::Ptr oldType = realType(type, 0); ///Dereference references
+    PointerType::Ptr newPointer(new PointerType());
+    newPointer->setBaseType( oldType );
+    return newPointer.cast<AbstractType>();
+}
+
 }
