@@ -71,6 +71,7 @@ namespace Cpp {
         StaticMemberChoose, /// Class::
         MemberChoose, /// klass->ParentClass::
         FunctionCallAccess,  ///"function(". Will never appear as initial access-operation, but as parentContext() access-operation.
+        TemplateAccess,  ///bla<. Will never appear as initial access-operation, but as parentContext() access-operation.
         SignalAccess,  ///All signals from MemberAccessContainer should be listed
         SlotAccess,     ///All slots from MemberAccessContainer should be listed
         IncludeListAccess, ///A list of include-files should be presented. Get the list through includeItems()
@@ -161,6 +162,11 @@ namespace Cpp {
        * All those types should used to highlight the best matching item in the list created.
        * */
 //       QList<KDevelop::AbstractType::Ptr> additionalMatchTypes() const;
+
+      int matchPosition() const;
+
+      KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type) const;
+      
     private:
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
@@ -223,6 +229,8 @@ namespace Cpp {
       QByteArray m_connectedSignalNormalizedSignature;
 
       DUContextPointer m_localClass;
+      
+      int m_pointerConversionsBeforeMatching; //0 = No conversion, +1, +2, .. = increase pointer level = &, -1, -2, .. = decrease pointer level = *
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;

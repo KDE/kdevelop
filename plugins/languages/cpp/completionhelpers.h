@@ -37,6 +37,8 @@ namespace KDevelop {
 
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true );
 
+void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true );
+
 ///Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 KDevelop::AbstractType::Ptr effectiveType( KDevelop::Declaration* decl );
 

@@ -137,7 +137,7 @@ bool isKeyword(QString str) {
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_pointerConversionsBeforeMatching(0)
 {
   if(m_duContext) {
     LOCKDUCHAIN;
@@ -210,37 +210,67 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_text = m_text.left( m_text.length()-2 );
   }
 
-  if( endsWithOperator( m_text ) ) {
-    if( depth == 0 ) {
-      //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
-      return;
-    }
-    m_memberAccessOperation = FunctionCallAccess;
-    m_contextType = BinaryOperatorFunctionCall;
-    m_operator = getEndFunctionOperator(m_text);
-    m_text = m_text.left( m_text.length() - getEndOperator(m_text).length() );
-  }
-
-  if( m_text.endsWith('(') ) {
+  if( m_text.endsWith('(') || m_text.endsWith( '<' ) ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
       m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
       m_text.clear();
     }else{
-      kDebug()<< "FunctionCallAccess";
-      m_contextType = FunctionCall;
-      m_memberAccessOperation = FunctionCallAccess;
-      m_text = m_text.left( m_text.length()-1 );
+      ExpressionParser expressionParser;
+      
+      if(m_text.endsWith('(')) {
+        m_contextType = FunctionCall;
+        m_memberAccessOperation = FunctionCallAccess;
+        m_text = m_text.left( m_text.length()-1 );
+      }else{
+        //We need to check here whether this really is a template access, or whether it is a "smaller" operator,
+        //which is handled below
+        int start_expr = Utils::expressionAt( m_text, m_text.length()-1 );
+
+        QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();        
+        
+        Cpp::ExpressionEvaluationResult result = expressionParser.evaluateExpression(expr.toUtf8(), m_duContext);
+        if(result.isValid() && (!result.isInstance || result.type.type().cast<FunctionType>())) {
+          m_memberAccessOperation = TemplateAccess;
+          m_text = m_text.left( m_text.length()-1 );
+        }
+      }
 
       ///Compute the types of the argument-expressions
-      ExpressionParser expressionParser;
 
       for( QStringList::const_iterator it = m_knownArgumentExpressions.begin(); it != m_knownArgumentExpressions.end(); ++it )
         m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
     }
   }
 
+  if( endsWithOperator( m_text ) ) {
+    if( depth == 0 ) {
+      //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
+      m_text.clear();
+    }else{
+      m_memberAccessOperation = FunctionCallAccess;
+      m_contextType = BinaryOperatorFunctionCall;
+      m_operator = getEndFunctionOperator(m_text);
+      m_text = m_text.left( m_text.length() - getEndOperator(m_text).length() );
+    }
+  }
+
+  ///Eventually take preceding "*" and/or "&" operators and use them for pointer depth conversion of the completion items
+  while(parentContext() && parentContext()->m_memberAccessOperation == FunctionCallAccess && parentContext()->m_contextType == BinaryOperatorFunctionCall && parentContext()->m_expression.isEmpty()) {
+    if(parentContext()->m_operator == "*") {
+      --m_pointerConversionsBeforeMatching;
+      setParentContext(parentContext()->m_parentContext);
+      continue;
+    }
+    if(parentContext()->m_operator == "&") {
+      ++m_pointerConversionsBeforeMatching;
+      setParentContext(parentContext()->m_parentContext);
+      continue;
+    }
+    break;
+  }
+  
   ///Now find out where the expression starts
 
   /**
@@ -290,7 +320,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
-  if( expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
+  if( expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
 
@@ -360,6 +390,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       }
     }
   }
+  
+  if(depth == 0 && parentContext() && parentContext()->memberAccessOperation() == TemplateAccess)
+    m_onlyShowTypes = true; ///@todo Check the current item whether it's int or bool, and then also allow constants/enumerators
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) || expressionPrefix.endsWith("return") ) {
@@ -401,6 +434,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
   if( expr.startsWith("new") ) {
     m_onlyShowTypes = true;
+    m_pointerConversionsBeforeMatching = 1;
     expr = expr.right( expr.length() - 3 );
   }
   ExpressionParser expressionParser/*(false, true)*/;
@@ -513,6 +547,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     break;
     case FunctionCallAccess:
       processFunctionCallAccess();
+    break;
+    case TemplateAccess:
+      //Nothing to do for now
     break;
   }
 }
@@ -655,6 +692,30 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 //   }
 
   return ret;
+}
+
+KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type) const {
+  if(m_pointerConversionsBeforeMatching == 0)
+    return type;
+  AbstractType::Ptr t = type.type();
+  if(!t)
+    return KDevelop::IndexedType();
+  
+  if(m_pointerConversionsBeforeMatching > 0) {
+    for(int a = 0; a < m_pointerConversionsBeforeMatching; ++a) {
+      t = TypeUtils::increasePointerDepth(t);
+      if(!t)
+        return IndexedType();
+    }
+  }else{
+    for(int a = m_pointerConversionsBeforeMatching; a < 0; ++a) {
+      t = TypeUtils::decreasePointerDepth(t, m_duContext->topContext());
+      if(!t)
+        return IndexedType();
+    }
+  }
+  
+  return t->indexed();
 }
 
 CodeCompletionContext::~CodeCompletionContext() {
@@ -816,12 +877,28 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               FunctionType::Ptr funType = functionContext->owner()->type<FunctionType>();
               if(funType) {
                 if(funType->returnType()) {
-                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + funType->returnType()->toString(), funType->returnType()->indexed(), depth() ) );
+                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( "return " + funType->returnType()->toString(), funType->returnType()->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
                 }
               }
             }
           }
         break;
+        case TemplateAccess:
+          {
+            AbstractType::Ptr type = m_expressionResult.type.type();
+            IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+            Declaration* decl = 0;
+            if(identified)
+              decl = identified->declaration( m_duContext->topContext());
+            if(!decl && !m_expressionResult.allDeclarations.isEmpty())
+              decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());
+            if(decl) {
+              NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(decl),  KSharedPtr <Cpp::CodeCompletionContext >(this), 0, 0 );
+              item->m_isTemplateCompletion = true;
+              items << CompletionTreeItemPointer( item );
+            }
+          }
+          break;
         case FunctionCallAccess:
           {
             //Don't show annoying empty argument-hints
@@ -870,7 +947,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                       showName = decl->toString() + " " + m_operator;
                   }
 
-                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth() ) );
+                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, useType, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
                 }
               }
 
@@ -1151,7 +1228,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
     PointerType::Ptr thisPointer(new PointerType());
     thisPointer->setModifiers(AbstractType::ConstModifier);
     thisPointer->setBaseType(classType);
-    KSharedPtr<TypeConversionCompletionItem> item( new TypeConversionCompletionItem("this", thisPointer->indexed(), 0) );
+    KSharedPtr<TypeConversionCompletionItem> item( new TypeConversionCompletionItem("this", thisPointer->indexed(), 0, KSharedPtr <Cpp::CodeCompletionContext >(this)) );
     item->setPrefix(thisPointer->toString());
     items += CompletionTreeItemPointer(item.data());
   }
@@ -1212,6 +1289,10 @@ void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
       }
     }
   }
+}
+
+int CodeCompletionContext::matchPosition() const {
+  return m_knownArgumentExpressions.count();
 }
 
 

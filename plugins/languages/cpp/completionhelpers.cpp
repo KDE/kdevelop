@@ -31,6 +31,8 @@
 #include "overloadresolution.h"
 #include "cpptypes.h"
 #include "cppduchain.h"
+#include <templatedeclaration.h>
+#include <templateparameterdeclaration.h>
 
 const int desiredArgumentTypeLength = 20;
 const int maxDefaultParameterLength = 30;
@@ -40,7 +42,6 @@ using namespace Cpp;
 
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams )
 {
-  ///@todo also highlight the matches of the previous arguments, they are given by ViableFunction
   Declaration* dec(item.m_declaration.data());
 
   Cpp::CodeCompletionContext::Function f;
@@ -48,7 +49,6 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   if( item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
     f = item.completionContext->functions()[item.listOffset];
 
-  int textFormatStart = 0;
   QTextFormat normalFormat(QTextFormat::CharFormat);
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
   QTextCharFormat boldFormat;
@@ -69,7 +69,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
     int firstDefaultParam = functionType->arguments().count() - decl->defaultParametersSize();
 
-    ret = "(";
+    int textFormatStart = ret.length();
+    ret += "(";
     
     if( highlighting && ret.length() != textFormatStart )
     {
@@ -189,6 +190,104 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   }
 }
 
+void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams )
+{
+  Declaration* dec(item.m_declaration.data());
+
+  QTextFormat normalFormat(QTextFormat::CharFormat);
+  QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
+  QTextCharFormat boldFormat;
+  boldFormat.setFontWeight(QFont::Bold);
+
+  TemplateDeclaration* tempDecl(dynamic_cast<TemplateDeclaration*>(dec));
+  if(!tempDecl)
+    return;
+  
+  DUContext* templateContext = tempDecl->templateContext( dec->topContext() );
+  
+  if(!templateContext)
+    return;
+  
+  
+  QVector<Declaration*> parameters = templateContext->localDeclarations();
+
+  int textFormatStart = ret.length();
+  ret += "<";
+  
+  if( highlighting && ret.length() != textFormatStart )
+  {
+    //Add a default-highlighting for the passed text
+    *highlighting <<  QVariant(textFormatStart);
+    *highlighting << QVariant(ret.length() - textFormatStart);
+    *highlighting << boldFormat;
+    textFormatStart = ret.length();
+  }
+  
+  bool first = true;
+  int num = 0;
+  foreach(Declaration* decl, parameters) 
+  {
+    if (first)
+      first = false;
+    else
+      ret += ", ";
+    
+    ///@todo Find out whether it's class or another type
+    if(decl->abstractType() && !decl->type<CppTemplateParameterType>())
+      ret += decl->abstractType()->toString();
+    else
+      ret += "class";
+    
+    ret += " ";
+    
+    if( highlighting && ret.length() != textFormatStart )
+    {
+      *highlighting <<  QVariant(textFormatStart);
+      *highlighting << QVariant(ret.length() - textFormatStart);
+      *highlighting << normalFormat;
+      textFormatStart = ret.length();
+    }
+    
+    ret += decl->identifier().toString();
+
+    if( highlighting && ret.length() != textFormatStart )
+    {
+      *highlighting <<  QVariant(textFormatStart);
+      *highlighting << QVariant(ret.length() - textFormatStart);
+      if(item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::TemplateAccess && num == item.completionContext->matchPosition())
+        *highlighting << highlightFormat;
+      else
+        *highlighting << normalFormat;
+      textFormatStart = ret.length();
+    }
+    
+    TemplateParameterDeclaration* paramDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
+    if(!paramDecl->defaultParameter().isEmpty())
+      ret += " = " + paramDecl->defaultParameter().toString();
+    
+    ++num;
+  }
+  
+  if( highlighting && ret.length() != textFormatStart )
+  {
+    *highlighting <<  QVariant(textFormatStart);
+    *highlighting << QVariant(ret.length() - textFormatStart);
+    *highlighting << normalFormat;
+    textFormatStart = ret.length();
+  }
+
+  ret += '>';
+
+  if( highlighting && ret.length() != textFormatStart )
+  {
+    *highlighting <<  QVariant(textFormatStart);
+    *highlighting << QVariant(ret.length() - textFormatStart);
+    *highlighting << boldFormat;
+    textFormatStart = ret.length();
+  }
+
+  return;
+}
 
 //Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 AbstractType::Ptr effectiveType( Declaration* decl )

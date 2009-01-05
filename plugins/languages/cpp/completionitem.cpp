@@ -39,6 +39,7 @@
 #include <language/duchain/use.h>
 #include <typeutils.h>
 #include <cppduchain.h>
+#include <templatedeclaration.h>
 
 using namespace KDevelop;
 
@@ -52,7 +53,7 @@ const int normalBestMatchesCount = 5;
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   //We have to use word directly, because it may be a smart-range that is updated during insertions and such
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
-  bool spaceBetweenParens = true;
+  bool spaceBetweenParens = false;
   bool spaceBetweenEmptyParens = false;
 
   if( completionContext && completionContext->depth() != 0 )
@@ -112,9 +113,23 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 
   document->replaceText(word, newText);
+  
+  bool jumpForbidden = false;
+  
+  KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+  Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
+  if(templateDecl) {
+    DUContext* context = templateDecl->templateContext(m_declaration->topContext());
+    if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
+      jumpForbidden = true;
+      lock.unlock();
+      document->insertText( word.end(), "<>" );
+      document->activeView()->setCursorPosition( word.end() - KTextEditor::Cursor(0, 1) );
+      lock.lock();
+    }
+  }
 
   if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
-    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     bool haveArguments = false;
     if( m_declaration && m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->indexedArgumentsSize() )
       haveArguments = true;
@@ -149,8 +164,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
 
       lock.unlock();
       document->insertText( word.end(), openingParen + closingParen );
-      if( document->activeView() )
-        document->activeView()->setCursorPosition( jumpPos );
+      if(!jumpForbidden) {
+        if( document->activeView() )
+          document->activeView()->setCursorPosition( jumpPos );
+      }
     }
   }
 }
@@ -215,6 +232,20 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   return p;
 }
 
+bool declarationNeedsTemplateParameters(Declaration* decl) {
+  Cpp::TemplateDeclaration* asTemplate = dynamic_cast<Cpp::TemplateDeclaration*>(decl);
+  if(asTemplate) {
+    DUContext* templateContext = asTemplate->templateContext(decl->topContext());
+    if(templateContext) {
+      foreach(Declaration* decl, templateContext->localDeclarations()) {
+        if(decl->type<CppTemplateParameterType>())
+          return true;
+      }
+    }
+  }
+  return false;
+}
+
 KDevelop::IndexedType NormalDeclarationCompletionItem::typeForArgumentMatching() const {
   if( m_declaration && completionContext && completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && listOffset < completionContext->functions().count() )
   {
@@ -271,9 +302,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       if( currentMatchContext && currentMatchContext->typeForArgumentMatching().isValid()) {
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
-
+ 
         ///@todo fill the lvalue-ness correctly
-        int quality = ( conv.implicitConversion( effectiveType(dec)->indexed(), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(effectiveType(dec)->indexed()), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
         return QVariant(quality);
       }
     }
@@ -397,11 +428,17 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           return nameForDeclaration(dec);
 
         case CodeCompletionModel::Arguments:
-          if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
-            QString ret;
+        {
+          QString ret;
+          
+          if(m_isTemplateCompletion || declarationNeedsTemplateParameters(dec))
+            createTemplateArgumentList(*this, ret, 0);
+          
+          if (dec->type<FunctionType>())
             createArgumentList(*this, ret, 0);
-            return ret;
-          }
+          
+          return ret;
+        }
         break;
         case CodeCompletionModel::Postfix:
           if (FunctionType::Ptr functionType = dec->type<FunctionType>()) {
@@ -429,7 +466,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     if( index.column() == CodeCompletionModel::Arguments /*&& completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess*/ ) {
       QString ret;
       QList<QVariant> highlight;
-      createArgumentList(*this, ret, &highlight);
+      if(m_isTemplateCompletion || declarationNeedsTemplateParameters(dec))
+        createTemplateArgumentList(*this, ret, &highlight);
+      
+      if (dec->type<FunctionType>())
+        createArgumentList(*this, ret, &highlight);
       return QVariant(highlight);
     }
 //     if( index.column() == CodeCompletionModel::Name ) {
@@ -477,7 +518,7 @@ int IncludeFileCompletionItem::inheritanceDepth() const
 
 int NormalDeclarationCompletionItem::argumentHintDepth() const
 {
-  if( completionContext && completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
+  if( completionContext )
       return completionContext->depth();
     else
       return 0;
@@ -602,7 +643,7 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
         Cpp::TypeConversion conv(model->currentTopContext().data());
 
         ///@todo fill the lvalue-ness correctly
-        int quality = ( conv.implicitConversion( typeForArgumentMatching(), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(typeForArgumentMatching()), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
         return QVariant(quality);
       }
     }
@@ -616,5 +657,5 @@ int TypeConversionCompletionItem::argumentHintDepth() const {
   return m_argumentHintDepth;
 }
 
-TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth) {
+TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
 }
