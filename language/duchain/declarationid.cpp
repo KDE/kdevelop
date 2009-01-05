@@ -24,6 +24,7 @@
 #include "declaration.h"
 #include "persistentsymboltable.h"
 #include "arrayhelpers.h"
+#include "instantiationinformation.h"
 #include <util/convenientfreelist.h>
 
 namespace KDevelop {
@@ -175,13 +176,22 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
 }
 
 QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
-  Declaration* decl = getDeclaration(0);
-  if(decl)
-    return decl->qualifiedIdentifier();
-  else if(m_direct)
+  
+  if(!m_direct) {
+    QualifiedIdentifier baseIdentifier = indirect.m_identifier.identifier();
+    if(!m_specialization)
+      return baseIdentifier;
+    ///@todo Fix m_specialization to IndexedInstantiationInformation for security
+    return IndexedInstantiationInformation(m_specialization).information().applyToIdentifier(baseIdentifier);
+  } else {
+    Declaration* decl = getDeclaration(0);
+    if(decl)
+      return decl->qualifiedIdentifier();    
+    
     return QualifiedIdentifier(QString("(unknown direct declaration)"));
-  else
-    return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier.identifier();
+  }
+  
+  return QualifiedIdentifier(QString("(missing)")) + indirect.m_identifier.identifier();
 }
 
 }

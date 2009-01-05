@@ -51,6 +51,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/referencecountedindexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
+    duchain/instantiationinformation.cpp
 
     duchain/types/typesystem.cpp
     duchain/types/typeregister.cpp
@@ -212,6 +213,7 @@ install(FILES
     duchain/appendedlist.h
     duchain/duchainregister.h
     duchain/persistentsymboltable.h
+    duchain/instantiationinformation.h
     duchain/specializationstore.h
     duchain/persistentsetmap.h
     duchain/indexeditems.h
