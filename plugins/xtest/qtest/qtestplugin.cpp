@@ -51,7 +51,7 @@
 
 #include <veritas/test.h>
 #include <veritas/testtoolviewfactory.h>
-#include <veritas/itestrunner.h>
+#include <veritas/testrunner.h>
 
 #include "qtestoutputdelegate.h"
 #include "qtestconfig.h"
@@ -83,10 +83,10 @@ QString QTestPlugin::name() const
     return s_name;
 }
 
-Veritas::ITestRunner* QTestPlugin::createRunner()
+Veritas::TestRunner* QTestPlugin::createRunner()
 {
     QTest::ModelBuilder *testTreeBuilder = new QTest::ModelBuilder;
-    Veritas::ITestRunner *runner = new ITestRunner(this, testTreeBuilder);
+    Veritas::TestRunner *runner = new TestRunner(this, testTreeBuilder);
     return runner;
 }
 

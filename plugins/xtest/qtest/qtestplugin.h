@@ -52,7 +52,7 @@ public:
     virtual ~QTestPlugin();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     virtual QString name() const;
-    virtual Veritas::ITestRunner* createRunner();
+    virtual Veritas::TestRunner* createRunner();
 
     virtual QWidget* createConfigWidget();
     virtual KDevelop::ProjectConfigSkeleton* configSkeleton(const QVariantList& args);
