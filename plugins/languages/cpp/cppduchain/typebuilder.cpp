@@ -633,14 +633,15 @@ void TypeBuilder::openDelayedType(const TypeIdentifier& identifier, AST* /*node*
   openType(type);
 }
 
-
 void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
 {
-  openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
+//   if(!ast->parameter_declaration)
+    openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
 
   TypeBuilderBase::visitTemplateParameter(ast);
-
-  closeType();
+  
+//   if(!ast->parameter_declaration)
+    closeType();
 }
 
 

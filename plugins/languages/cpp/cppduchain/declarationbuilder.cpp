@@ -134,10 +134,10 @@ ReferencedTopDUContext DeclarationBuilder::buildDeclarations(const Cpp::Environm
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   
   //Backup and zero the parameter declaration, because we will handle it here directly, and don't want a normal one to be created
-  ParameterDeclarationAST* paramAST = ast->parameter_declaration;
-  ast->parameter_declaration = 0;
+  
+  m_ignoreDeclarators = true;
   DeclarationBuilderBase::visitTemplateParameter(ast);
-  ast->parameter_declaration = paramAST;
+  m_ignoreDeclarators = false;
   
   if( ast->type_parameter || ast->parameter_declaration ) {
     ///@todo deal with all the other stuff the AST may contain
@@ -1330,6 +1330,7 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
 
 void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
   DeclarationBuilderBase::visitParameterDeclaration(node);
+  
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
 
   if( function ) {
