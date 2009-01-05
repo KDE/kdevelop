@@ -367,8 +367,6 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_projectCache[project]=readCache(cachefile);
         initializeProject(project, folderUrl);
 
-        m_folderPerUrl[folderUrl]=m_rootItem;
-        
         m_watchers[project]->disconnect( SIGNAL(dirty() ), this, SLOT(dirtyFile(QString)));
         connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
         Q_ASSERT(m_rootItem->rowCount()==0);
@@ -430,7 +428,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
         Q_ASSERT(folder->rowCount()==0);
-        m_folderPerUrl[item->url()]=folder;
 
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
@@ -799,49 +796,46 @@ void CMakeProjectManager::reimport(CMakeFolderItem* fi)
 
 void CMakeProjectManager::dirtyFile(const QString & dirty)
 {
-    KUrl dir(dirty);
-    dir=dir.upUrl();
-    dir.adjustPath(KUrl::RemoveTrailingSlash);
-    KUrl dir2(dir);
-    dir2.adjustPath(KUrl::AddTrailingSlash);
-
-    CMakeFolderItem *it=0;
-    if(m_folderPerUrl.contains(dir))
-        it=m_folderPerUrl[dir];
-    else if(m_folderPerUrl.contains(dir2))
-        it=m_folderPerUrl[dir2];
-    else
-        kDebug(9032) << "Couldn't find the item for" << dir << dir2 << m_folderPerUrl;
-    kDebug(9042) << dir << " is dirty" << it << m_folderPerUrl;
-    Q_ASSERT(it);
-    KDevelop::IProject* proj=it->project();
-    KUrl projectBaseUrl=m_realRoot[proj];
-    projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
-
-    kDebug(9042) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
-    if(KUrl(dirty).fileName() == "CMakeLists.txt" && dir!=projectBaseUrl)
+    KUrl dirtyFile(dirty);
+    KUrl dir(dirtyFile.upUrl());
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
+    
+    if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
-#if 0
-        KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
-        initializeProject(proj, dir);
-        KUrl current=projectBaseUrl;
-        QStringList subs=relative.toLocalFile().split("/");
-        subs.append(QString());
-        for(; !subs.isEmpty(); current.cd(subs.takeFirst()))
+        QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
+        kDebug(9042) << dir << " is dirty" << files;
+        
+        Q_ASSERT(!files.isEmpty());
+        CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
+        
+        KDevelop::IProject* proj=it->project();
+        KUrl projectBaseUrl=m_realRoot[proj];
+        projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
+
+        kDebug(9042) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
+        if(dir!=projectBaseUrl)
         {
-            parseOnly(proj, current);
-        }
+#if 0
+            KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
+            initializeProject(proj, dir);
+            KUrl current=projectBaseUrl;
+            QStringList subs=relative.toLocalFile().split("/");
+            subs.append(QString());
+            for(; !subs.isEmpty(); current.cd(subs.takeFirst()))
+            {
+                parseOnly(proj, current);
+            }
 #endif
-        QStandardItem *parent=it->parent();
-        parent->removeRow(it->row());
-        CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
-        reload(fi);
-        m_folderPerUrl[dir]=fi;
-    }
-    else if(it)
-    {
-//         qDebug() << "reloading";
-        reload(proj->projectItem());
+            QStandardItem *parent=it->parent();
+            parent->removeRow(it->row());
+            CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
+            reload(fi);
+        }
+        else
+        {
+    //         qDebug() << "reloading";
+            reload(proj->projectItem());
+        }
     }
     else
     {

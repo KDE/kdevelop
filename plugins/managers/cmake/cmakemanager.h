@@ -137,8 +137,6 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KDevelop::IProject*, KUrl> m_realRoot;
     QMap<KDevelop::IProject*, KUrl> m_subprojectRoot;
-    
-    QMap<KUrl, CMakeFolderItem*> m_folderPerUrl;
 
     QStringList cmakeInitScripts;
     ICMakeBuilder* m_builder;
