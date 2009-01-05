@@ -91,6 +91,7 @@ private slots:
   void testTemplatesRebind();
   void testTemplatesRebind2();
   void testTemplateDefaultParameters();
+  void testTemplateParameters();
   void testFunctionTemplates();
   void testContextAssignment();
   void testSpecializedTemplates();

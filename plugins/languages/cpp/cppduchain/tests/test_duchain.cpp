@@ -2711,6 +2711,34 @@ void TestDUChain::testTemplates() {
   release(top);
 }
 
+void TestDUChain::testTemplateParameters() {
+  return;
+  QByteArray method("template<class T, class N = T, int q = 5> class A {};");
+
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[0]->type(), DUContext::Template);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 3);
+  
+  Declaration* param1 = top->childContexts()[0]->localDeclarations()[0];
+  QVERIFY(param1->type<CppTemplateParameterType>());
+  
+  Declaration* param2 = top->childContexts()[0]->localDeclarations()[1];
+  QVERIFY(param2->type<CppTemplateParameterType>());
+  TemplateParameterDeclaration* param2Decl = dynamic_cast<TemplateParameterDeclaration*>(param2);
+  QVERIFY(param2Decl);
+  QVERIFY(!param2Decl->defaultParameter().isEmpty());
+  
+  Declaration* param3 = top->childContexts()[0]->localDeclarations()[2];
+  QVERIFY(param3->type<IntegralType>());
+  TemplateParameterDeclaration* param3Decl = dynamic_cast<TemplateParameterDeclaration*>(param3);
+  QVERIFY(param3Decl);
+  QVERIFY(!param3Decl->defaultParameter().isEmpty());
+  
+}
+
 void TestDUChain::testTemplateDefaultParameters() {
   QByteArray method("struct S {} ; namespace std { template<class T> class Template1 { }; } template<class _TT, typename TT2 = std::Template1<_TT> > class Template2 { typedef TT2 T1; };");
 
