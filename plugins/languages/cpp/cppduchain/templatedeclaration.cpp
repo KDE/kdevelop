@@ -782,7 +782,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   if( instantiatedDeclaration ) {
     TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
 
-    if(instantiatedTemplate) { //Since this is also called for normal members, this does not have to be the case.
+    if(instantiatedTemplate && templateArguments.templateParametersSize()) { //Since this is also called for normal members, this does not have to be the case.
 
       ///Change the identifier to reflect the used template-arguments
       KDevelop::Identifier id = instantiatedDeclaration->identifier();
