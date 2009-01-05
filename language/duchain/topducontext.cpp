@@ -1146,8 +1146,8 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         }
       }
     }else{
-      //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
-      return;
+      if(!identifier->identifier.isEmpty())
+        return; //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
     }
   }
 
