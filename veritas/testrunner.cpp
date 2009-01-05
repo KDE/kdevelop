@@ -19,7 +19,7 @@
  */
 
 // veritas
-#include "itestrunner.h"
+#include "testrunner.h"
 #include "itestframework.h"
 #include "itesttreebuilder.h"
 #include "internal/toolviewdata.h"
@@ -66,11 +66,11 @@ using Veritas::Test;
 using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::ResultsModel;
-using Veritas::ITestRunner;
+using Veritas::TestRunner;
 using Veritas::ITestTreeBuilder;
 using Veritas::ITestFramework;
 
-class ITestRunner::Private
+class TestRunner::Private
 {
 public:
     Private() :
@@ -90,7 +90,7 @@ public:
     ResultsModel *resultsModel;
     Test* previousRoot;
     ITestFramework* framework;
-    ITestRunner* self;
+    TestRunner* self;
     ITestTreeBuilder* treeBuilder;
 
     QString resultsViewId() const {
@@ -102,8 +102,8 @@ public:
 
 };
 
-ITestRunner::ITestRunner(ITestFramework* framework, ITestTreeBuilder* builder)
-    : QObject(0), d(new ITestRunner::Private)
+TestRunner::TestRunner(ITestFramework* framework, ITestTreeBuilder* builder)
+    : QObject(0), d(new TestRunner::Private)
 {
     d->self = this;
     d->framework = framework;
@@ -127,7 +127,7 @@ ITestRunner::ITestRunner(ITestFramework* framework, ITestTreeBuilder* builder)
             SLOT(reloadTree()));
 }
 
-void ITestRunner::setupToolView(Veritas::Test* root)
+void TestRunner::setupToolView(Veritas::Test* root)
 {
     if (!root) { kDebug() << "root null"; return; }
     if (d->previousRoot) {
@@ -145,24 +145,24 @@ void ITestRunner::setupToolView(Veritas::Test* root)
     if (!d->resultsView) spawnResultsView();
 }
 
-ITestRunner::~ITestRunner()
+TestRunner::~TestRunner()
 {
     delete d;
 }
 
-QWidget* ITestRunner::resultsWidget()
+QWidget* TestRunner::resultsWidget()
 {
     return d->window->resultsWidget();
 }
 
-void ITestRunner::removeResultsView()
+void TestRunner::removeResultsView()
 {
     if (d->resultsView && d->resultsArea) {
         d->resultsArea->removeToolView(d->resultsView);
     }
 }
 
-QWidget* ITestRunner::runnerWidget()
+QWidget* TestRunner::runnerWidget()
 {
     IProjectController* ipc = ICore::self()->projectController();
     foreach(IProject* proj, ipc->projects()) {
@@ -176,12 +176,12 @@ QWidget* ITestRunner::runnerWidget()
     return d->window;
 }
 
-void ITestRunner::reloadTree()
+void TestRunner::reloadTree()
 {
     d->treeBuilder->reload(project());
 }
 
-IProject* ITestRunner::project() const
+IProject* TestRunner::project() const
 {
     return d->window->selectedProject();
 }
@@ -203,7 +203,7 @@ public:
 class ResultsViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    ResultsViewFactory(const QString& id, ITestRunner *runner): m_runner(runner), m_id(id) {}
+    ResultsViewFactory(const QString& id, TestRunner *runner): m_runner(runner), m_id(id) {}
 
     virtual QWidget* create(QWidget *parent = 0) {
         Q_UNUSED(parent);
@@ -236,7 +236,7 @@ public:
     }
 
 private:
-    ITestRunner *m_runner;
+    TestRunner *m_runner;
     QString m_id;
 };
 
@@ -281,7 +281,7 @@ public:
     bool found;
 };
 
-void ITestRunner::spawnResultsView()
+void TestRunner::spawnResultsView()
 {
     // only allow a single view.
     IUiController* uic = ICore::self()->uiController();
@@ -318,4 +318,4 @@ void ITestRunner::spawnResultsView()
     fac->viewCreated(d->resultsView);
 }
 
-#include "itestrunner.moc"
+#include "testrunner.moc"

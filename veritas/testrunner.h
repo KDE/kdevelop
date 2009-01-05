@@ -34,21 +34,18 @@ class Test;
 class ITestFramework;
 class ITestTreeBuilder;
 
-/*! Abstract test runner. A test runner has of 2 kdevelop toolviews:
+/*! This Test runner combines 2 toolviews:
  *  (i)  a runner-toolview which contains the test-tree
  *  (ii) a results-toolview that holds test status information,
  *       for example failure message, location and so on.
  *
- * ITestRunner objects belong to an ITestFramework (plugin). One single
- * framework can have multiple ITestRunners active at the same time.
- *
- *  for example implementations see kdevelop/plugins/xtest/qtest. */
-class VERITAS_EXPORT ITestRunner : public QObject
+ * TestRunner objects belong to an ITestFramework (plugin). */
+class VERITAS_EXPORT TestRunner : public QObject
 {
 Q_OBJECT
 public:
-    ITestRunner(ITestFramework*, ITestTreeBuilder*);
-    virtual ~ITestRunner();
+    TestRunner(ITestFramework*, ITestTreeBuilder*);
+    virtual ~TestRunner();
 
     /*! Create a new test runner widget
         Call this in your toolview factory's create() member. */

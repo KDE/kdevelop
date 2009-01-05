@@ -31,7 +31,7 @@ namespace KDevelop { class ProjectConfigSkeleton; }
 namespace Veritas
 {
 
-class ITestRunner;
+class TestRunner;
 
 /*! An extension interface for (xUnit) test frameworks. Plugins that implement this
  *  will have access to the veritas runner & result toolview.
@@ -50,7 +50,7 @@ public:
 
     /*! Factory method which constructs a test runner. To be implemented
      *  by concrete frameworks. @see Veritas::ITestRunner */
-    virtual ITestRunner* createRunner() = 0;
+    virtual TestRunner* createRunner() = 0;
 
     /*! Factory method which constructs a configuration widget for this framework.
      *  Implementations should both create the widget and set the current configuration

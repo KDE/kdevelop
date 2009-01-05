@@ -9,7 +9,7 @@ set(veritas_SRCS
     test.cpp
     testresult.cpp
     internal/testexecutor.cpp
-    itestrunner.cpp
+    testrunner.cpp
     itesttreebuilder.cpp
     itestframework.cpp
     testexecutableinfo.cpp
@@ -66,7 +66,7 @@ install(FILES
     test.h
     veritasexport.h
     testresult.h
-    itestrunner.h
+    testrunner.h
     itestframework.h
     itesttreebuilder.h
     testtoolviewfactory.h

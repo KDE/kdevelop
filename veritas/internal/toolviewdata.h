@@ -23,7 +23,7 @@
 
 #include <QMap>
 #include <sublime/view.h>
-#include "../itestrunner.h"
+#include "../testrunner.h"
 #include "../itestframework.h"
 
 namespace Veritas
@@ -42,7 +42,7 @@ struct ToolViewData
                            // result toolview. To be removed one day.
     QMap<Sublime::View*, int> view2id; // more of the above, maps sublime views 
                                        // to their id
-    QMap<ITestRunner*, int> runner2id;
+    QMap<TestRunner*, int> runner2id;
 
     void registerToolView(Sublime::View* v) {
         view2id[v] = runnerToolCounter-1;

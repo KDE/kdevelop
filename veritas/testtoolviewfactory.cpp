@@ -20,7 +20,7 @@
 
 #include "testtoolviewfactory.h"
 #include "itestframework.h"
-#include "itestrunner.h"
+#include "testrunner.h"
 #include "internal/toolviewdata.h"
 
 #include <sublime/view.h>
@@ -29,7 +29,7 @@
 #include <QMap>
 
 using Veritas::ITestFramework;
-using Veritas::ITestRunner;
+using Veritas::TestRunner;
 using Veritas::TestToolViewFactory;
 
 class TestToolViewFactory::TestToolViewFactoryPrivate
@@ -53,7 +53,7 @@ TestToolViewFactory::~TestToolViewFactory()
 QWidget* TestToolViewFactory::create(QWidget *parent)
 {
     Q_UNUSED(parent);
-    ITestRunner* runner = d->framework->createRunner();
+    TestRunner* runner = d->framework->createRunner();
     QWidget* runnerWidget = runner->runnerWidget();
     QObject::connect(runnerWidget, SIGNAL(destroyed(QObject*)),
                      runner, SLOT(deleteLater()));
