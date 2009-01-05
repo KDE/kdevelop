@@ -326,6 +326,8 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
     return QString();
 
   TypeIdentifier identifier = TypeIdentifier(type->toString());
+  if(type.cast<DelayedType>())
+    identifier = type.cast<DelayedType>()->identifier();
   
   if(identifier.toString().length() > desiredLength)
     identifier = Cpp::unTypedefType(decl, identifier);
@@ -341,5 +343,6 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
   
   return identifier.toString();
 }
+
 }
 
