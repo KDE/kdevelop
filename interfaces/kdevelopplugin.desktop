@@ -67,3 +67,8 @@ Type=QStringList
 # optional, mimetypes supported by a language plugin
 [PropertyDef::X-KDevelop-SupportedMimeTypes]
 Type=QStringList
+
+# optional, language supported by a language plugin
+[PropertyDef::X-KDevelop-Language]
+Type=QString
+
