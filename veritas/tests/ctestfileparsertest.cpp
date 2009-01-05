@@ -269,6 +269,65 @@ void CTestfileParserTest::illFormattedSubdir()
     assertSubdirAccessed(KUrl::List());
 }
 
+void createFile(QString name, QString content);
+void removeFile(QDir dir, QString name);
+
+void createFile(QDir dir, QString name, QByteArray content)
+{
+    QFile f(dir.absoluteFilePath(name));
+    f.open(QIODevice::WriteOnly| QIODevice::Text);
+    f.write(content);
+    f.close();
+}
+
+void removeFile(QDir dir, QString name)
+{
+    QFile f(dir.absoluteFilePath(name));
+    f.remove();
+}
+
+void CTestfileParserTest::testRealFileSystemAccess()
+{
+    // all tests above use a FileSystemAccessMock that doesn't factually
+    // touch the filesystem. This test verifies that the real implemention,
+    // 'FileSystemAccess' does the right thing.
+    
+    // setup - make a /tmp/foo subdirectory and add two files
+    QString dirName("__foo-bar");
+    QDir tmp(QDir::temp());
+    tmp.mkdir(dirName);
+    tmp.cd(dirName);
+    createFile(tmp, "foo", "foo_content"); 
+    createFile(tmp, "bar", "bar_content");
+
+    // exercise + verify
+    FilesystemAccess fsa;
+    KOMPARE(KUrl(), fsa.currentDirectory()); // no default directory set on creation
+
+    KUrl tmpUrl(tmp.absolutePath());
+    tmpUrl.adjustPath( KUrl::AddTrailingSlash );
+    fsa.changeDir(tmpUrl);
+    KOMPARE(tmpUrl, fsa.currentDirectory());
+
+    KVERIFY(fsa.listing().contains( "foo" ));
+    KVERIFY(fsa.listing().contains( "bar" ));
+    KVERIFY_MSG(2 <= fsa.listing().size(), fsa.listing().join( "\n" ));
+ 
+    QFile* foo_ = qobject_cast<QFile*>(fsa.file( "foo" ));
+    KVERIFY(foo_);
+    KVERIFY(foo_->exists());
+    foo_->open(QIODevice::ReadOnly | QIODevice::Text);
+    QCOMPARE(QByteArray("foo_content"), foo_->readLine());
+
+    // teardown
+    foo_->close();
+    delete foo_;
+    removeFile(tmp, "foo");
+    removeFile(tmp, "bar");
+    tmp.cdUp();
+    tmp.rmdir(dirName);
+}
+
 ////////////////// HELPER METHODS ////////////////////////////////////////////
 
 void CTestfileParserTest::initializeDirectoryContents(const KUrl& someDir, QStringList files)

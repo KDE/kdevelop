@@ -19,6 +19,8 @@
  */
 
 #include "overlaytoggle.h"
+#include "../test.h"
+
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRect>
@@ -32,7 +34,11 @@
 #include <KIconEffect>
 #include <KLocale>
 
+using Veritas::SelectionToggle;
+using Veritas::VerboseToggle;
+using Veritas::ToSourceToggle;
 using Veritas::OverlayButton;
+using Veritas::Test;
 
 QModelIndex OverlayButton::index()
 {
@@ -42,6 +48,10 @@ QModelIndex OverlayButton::index()
 void OverlayButton::setIndex(const QModelIndex& index)
 {
     m_index = index;
+}
+
+OverlayButton::~OverlayButton()
+{
 }
 
 void OverlayButton::reset()
@@ -122,7 +132,6 @@ void OverlayButton::paintEvent(QPaintEvent* event)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-    // draw an alpha blended circle as background
     const QPalette& palette = parentWidget()->palette();
 
     const QBrush& backgroundBrush = palette.brush(QPalette::Normal, QPalette::Window);
@@ -134,8 +143,6 @@ void OverlayButton::paintEvent(QPaintEvent* event)
     QColor foreground = foregroundBrush.color();
     foreground.setAlpha(m_fadingValue / 4);
     painter.setPen(foreground);
-
-    //painter.drawEllipse(0, 0, width(), height());
 
     // draw the icon overlay
     if (m_isHovered) {
@@ -156,6 +163,160 @@ void OverlayButton::paintEvent(QPaintEvent* event)
             painter.drawPixmap(0, 0, m_icon);
         }
     }
+}
+
+void OverlayButton::enterEvent(QEvent* event)
+{
+    QAbstractButton::enterEvent(event);
+
+    // if the mouse cursor is above the selection toggle, display
+    // it immediately without fading timer
+    m_isHovered = true;
+    if (m_fadingTimeLine != 0) {
+        m_fadingTimeLine->stop();
+    }
+    m_fadingValue = 255;
+    update();
+}
+
+
+bool OverlayButton::eventFilter(QObject* obj, QEvent* event)
+{
+    if ((obj == parent()) && (event->type() == QEvent::Leave)) {
+        hide();
+    }
+    return QAbstractButton::eventFilter(obj, event);
+}
+
+//////////////////////////// SelectionToggle /////////////////////////////////
+
+bool SelectionToggle::shouldShow(Test* t)
+{
+    return t != 0 && t->needSelectionToggle();
+}
+
+SelectionToggle::SelectionToggle(QWidget* parent) :
+    OverlayButton(parent)
+{
+    setFocusPolicy(Qt::NoFocus);
+    parent->installEventFilter(this);
+    resize(sizeHint());
+    setIconOverlay(isChecked());
+    connect(this, SIGNAL(toggled(bool)),
+            this, SLOT(setIconOverlay(bool)));
+    connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
+            this, SLOT(refreshIcon()));
+}
+
+SelectionToggle::~SelectionToggle()
+{
+}
+
+void SelectionToggle::setIconOverlay(bool checked)
+{
+    const char* icon = 0;
+    if (checked) icon = "list-remove";
+    else         icon = "list-add";
+    m_icon = KIconLoader::global()->loadIcon(icon,
+                                             KIconLoader::NoGroup,
+                                             KIconLoader::SizeSmall);
+    setToolTip(checked ? i18nc("@info:tooltip", "Deselect Item") :
+                             i18nc("@info:tooltip", "Select Item"));
+    update();
+}
+
+void SelectionToggle::refreshIcon()
+{
+    setIconOverlay(isChecked());
+}
+
+////////// VerboseToggle /////////////////////////////////////////////////////
+
+
+VerboseToggle::VerboseToggle(QWidget* parent) :
+    OverlayButton(parent)
+{
+    setFocusPolicy(Qt::NoFocus);
+    parent->installEventFilter(this);
+    resize(sizeHint());
+    setIconOverlay();
+    connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
+            this, SLOT(setIconOverlay()));
+    setToolTip(i18nc("@info:tooltip", "Verbose Output"));
+}
+
+VerboseToggle::~VerboseToggle()
+{
+}
+
+bool VerboseToggle::shouldShow(Test* t)
+{
+    return t!=0 && t->needVerboseToggle();
+}
+
+void VerboseToggle::setIconOverlay()
+{
+    m_icon = KIconLoader::global()->loadIcon(
+        "utilities-log-viewer",
+        KIconLoader::NoGroup,
+        KIconLoader::SizeSmall);
+    update();
+}
+
+int VerboseToggle::offset(Test*)
+{
+    return 34;
+}
+
+//////////////// ToSourceToggle //////////////////////////////////////////////
+
+bool ToSourceToggle::shouldShow(Test* t)
+{
+    return t != 0 && t->supportsToSource();
+}
+
+ToSourceToggle::ToSourceToggle(QWidget* parent) :
+    OverlayButton(parent)
+{
+    setFocusPolicy(Qt::NoFocus);
+    parent->installEventFilter(this);
+    resize(sizeHint());
+    setIcon();
+    setToolTip(i18nc("@info:tooltip", "To Source"));
+    connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)),
+            this, SLOT(refreshIcon()));
+}
+
+ToSourceToggle::~ToSourceToggle()
+{
+}
+
+int ToSourceToggle::offset(Test* t)
+{
+    if (!t) return 0;
+    int offset = 17;
+    if (t->needSelectionToggle()) {
+        offset += 17;
+    }
+    if (t->needVerboseToggle()) {
+        offset += 17;
+    }
+    return offset;
+}
+
+void ToSourceToggle::setIcon()
+{
+    m_icon = KIconLoader::global()->loadIcon("text-x-c++src",
+                                             KIconLoader::NoGroup,
+                                             KIconLoader::SizeSmall);
+    update();
+}
+
+
+
+void ToSourceToggle::refreshIcon()
+{
+    setIcon();
 }
 
 

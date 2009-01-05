@@ -1,6 +1,6 @@
-/* KDevelop xUnit plugin
+/* This file is part of KDevelop
  *
- * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ * Copyright 2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,47 +18,31 @@
  * 02110-1301, USA.
  */
 
-#ifndef VERITAS_TESTTEST_H
-#define VERITAS_TESTTEST_H
+#ifndef QTEST_TESTRESULTTEST_H_INCLUDED
+#define QTEST_TESTRESULTTEST_H_INCLUDED
 
 #include <QtCore/QObject>
-#include <QtTest/QtTest>
 
-namespace Veritas {
-class TestFake;
-
-class TestTest : public QObject
+namespace Veritas
 {
-    Q_OBJECT
+class TestResult;
 
+/*! @unitundertest Veritas::TestResult */
+class TestResultTest : public QObject
+{
+Q_OBJECT
 private slots:
     void init();
     void cleanup();
 
-    void simpleRoot();
-    void multipleColumns();
-    void accessIllegalColumn();
-    void resetValue();
-    void appendChildren();
-    void retrieveLeaves();
-    void reparent();
-
-    void childByNameSunny();
-    void childByNameNonExistantShouldReturnNull();
-    void addIdenticallyNamedChildShouldFail();
+    void defaultResultShouldBeEmpty();
+    void resettedResultShouldBeEmpty();
+    void setOwnerShouldBeRecursive();
 
 private:
-    void assertNrofChildren(TestFake*, int nrof);
-    void assertDefaultResult(TestFake*);
-
-private:
-    QList<QVariant> columns;
-    QVariant column1;
-    QVariant column2;
-    QVariant column3;
-    TestFake* m_root;
+    TestResult* m_testResult;
 };
 
 }
 
-#endif // VERITAS_TESTTEST_H
+#endif // QTEST_TESTRESULTTEST_H_INCLUDED

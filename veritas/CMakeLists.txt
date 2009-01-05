@@ -10,6 +10,7 @@ set(veritas_SRCS
     testresult.cpp
     internal/testexecutor.cpp
     itestrunner.cpp
+    itesttreebuilder.cpp
     itestframework.cpp
     testexecutableinfo.cpp
     ctestfileparser.cpp
@@ -23,13 +24,10 @@ set(veritas_SRCS
     internal/runnerproxymodel.cpp
     internal/runnerwindow.cpp
     internal/selectionmanager.cpp
-    internal/selectiontoggle.cpp
-    internal/verbosetoggle.cpp
     internal/overlaymanager.cpp
     internal/overlaytoggle.cpp
     internal/resultswidget.cpp
     internal/itestframework_p.cpp
-    internal/tosourcetoggle.cpp
     internal/test_p.cpp
     tests/runnertesthelper.cpp # Actual tests of concrete frameworks use these.
     tests/testutils.cpp)       # eg QTestRunnerTest, CppUnitRunnerTest
@@ -70,6 +68,7 @@ install(FILES
     testresult.h
     itestrunner.h
     itestframework.h
+    itesttreebuilder.h
     testtoolviewfactory.h
     testexecutableinfo.h
     ctestfileparser.h

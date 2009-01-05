@@ -53,50 +53,50 @@ void TestTest::init()
     column2 = "one";
     column3 = 3.0;
     columns << column1 << column2 << column3;
-    root = new TestFake(columns);
+    m_root = new TestFake(columns);
 }
 
 void TestTest::cleanup()
 {
-    delete root;
+    delete m_root;
 }
 
 // test command
 void TestTest::simpleRoot()
 {
-    assertNrofChildren(root, 0);
-    assertDefaultResult(root);
-    KVERIFY_MSG(root->internal()->isChecked(), "Not selected. Item should be enabled by default");
-    KOMPARE_MSG(0, root->row(), "No parent so should surely be the first row");
-    KOMPARE(NULL, root->parent());
-    KOMPARE("", root->name());
+    assertNrofChildren(m_root, 0);
+    assertDefaultResult(m_root);
+    KVERIFY_MSG(m_root->internal()->isChecked(), "Not selected. Item should be enabled by default");
+    KOMPARE_MSG(0, m_root->row(), "No parent so should surely be the first row");
+    KOMPARE(NULL, m_root->parent());
+    KOMPARE("", m_root->name());
 }
 
 // test command
 void TestTest::multipleColumns()
 {
-    KOMPARE(column1, root->internal()->data(0));
-    KOMPARE(column2, root->internal()->data(1));
-    KOMPARE(column3, root->internal()->data(2));
+    KOMPARE(column1, m_root->internal()->data(0));
+    KOMPARE(column2, m_root->internal()->data(1));
+    KOMPARE(column3, m_root->internal()->data(2));
 }
 
 // test command
 void TestTest::accessIllegalColumn()
 {
-    root->internal()->data(-1);
-    root->internal()->data(3);
-    root->internal()->data(10);
+    m_root->internal()->data(-1);
+    m_root->internal()->data(3);
+    m_root->internal()->data(10);
 }
 
 // test command
 void TestTest::resetValue()
 {
-    root->internal()->clear();
+    m_root->internal()->clear();
     QVariant empty = "";
 
-    assertDefaultResult(root);
-    KOMPARE(empty, root->internal()->data(1));
-    KOMPARE(empty, root->internal()->data(2));
+    assertDefaultResult(m_root);
+    KOMPARE(empty, m_root->internal()->data(1));
+    KOMPARE(empty, m_root->internal()->data(2));
 }
 
 // test command
@@ -104,17 +104,17 @@ void TestTest::appendChildren()
 {
     QList<QVariant> child1Columns;
     child1Columns << "col1" << "col2" << "col3";
-    TestFake* child1 = new TestFake(child1Columns, root);
-    root->addChild(child1);
+    TestFake* child1 = new TestFake(child1Columns, m_root);
+    m_root->addChild(child1);
 
-    TestFake* child2 = new TestFake("child2", root);
-    root->addChild(child2);
+    TestFake* child2 = new TestFake("child2", m_root);
+    m_root->addChild(child2);
 
-    assertNrofChildren(root, 2);
+    assertNrofChildren(m_root, 2);
     assertNrofChildren(child1, 0);
     assertNrofChildren(child2, 0);
-    KOMPARE(root, child1->parent());
-    KOMPARE(root, child2->parent());
+    KOMPARE(m_root, child1->parent());
+    KOMPARE(m_root, child2->parent());
     KOMPARE(0, child1->row());
     KOMPARE(1, child2->row());
     KOMPARE("child2", child2->name());
@@ -142,20 +142,20 @@ void TestTest::assertDefaultResult(TestFake* item)
 // command
 void TestTest::retrieveLeaves()
 {
-    QList<Test*> leafs = root->leafs();
+    QList<Test*> leafs = m_root->leafs();
     KOMPARE(0, leafs.size());
 
     // single lvl1 item
-    TestFake* child1 = new TestFake("child1", root);
-    root->addChild(child1);
-    leafs = root->leafs();
+    TestFake* child1 = new TestFake("child1", m_root);
+    m_root->addChild(child1);
+    leafs = m_root->leafs();
     KOMPARE(1, leafs.size());
     KOMPARE("child1", leafs[0]->name());
 
     // two lvl1 items
-    TestFake* child2 = new TestFake("child2", root);
-    root->addChild(child2);
-    leafs = root->leafs();
+    TestFake* child2 = new TestFake("child2", m_root);
+    m_root->addChild(child2);
+    leafs = m_root->leafs();
     KOMPARE(2, leafs.size());
     KOMPARE("child1", leafs[0]->name());
     KOMPARE("child2", leafs[1]->name());
@@ -163,7 +163,7 @@ void TestTest::retrieveLeaves()
     // add lvl2 item
     TestFake* child11 = new TestFake("child11", child1);
     child1->addChild(child11);
-    leafs = root->leafs();
+    leafs = m_root->leafs();
     KOMPARE(2, leafs.size());
     KOMPARE("child11", leafs[0]->name());
     KOMPARE("child2", leafs[1]->name());
@@ -171,7 +171,7 @@ void TestTest::retrieveLeaves()
     // nother lvl2
     TestFake* child12 = new TestFake("child12", child1);
     child1->addChild(child12);
-    leafs = root->leafs();
+    leafs = m_root->leafs();
     KOMPARE(3, leafs.size());
     KOMPARE("child11", leafs[0]->name());
     KOMPARE("child12", leafs[1]->name());
@@ -184,6 +184,7 @@ void TestTest::retrieveLeaves()
     KOMPARE("child12", leafs[1]->name());
 }
 
+// command
 void TestTest::reparent()
 {
     Test* test = new Test("foo", 0);
@@ -193,6 +194,39 @@ void TestTest::reparent()
     KOMPARE(parent, test->parent());
 
     delete parent;
+}
+
+// command
+void TestTest::childByNameSunny()
+{
+    // exercise
+    Test* foo = new Test("foo", m_root);
+    m_root->addChild(foo);
+    Test* bar = new Test("bar", m_root);
+    m_root->addChild(bar);
+
+    // verify
+    KOMPARE(foo, m_root->childNamed("foo"));
+    KOMPARE(bar, m_root->childNamed("bar"));
+}
+
+// command
+void TestTest::childByNameNonExistantShouldReturnNull()
+{
+    KOMPARE(0, m_root->childNamed("non_existant_child"));
+    
+    Test* foo = new Test("foo", m_root);
+    m_root->addChild(foo);
+
+    KOMPARE(0, m_root->childNamed("non_existant_child"));
+}
+
+// command
+void TestTest::addIdenticallyNamedChildShouldFail()
+{
+    Test* foo = new Test("foo", m_root);
+    KVERIFY(m_root->addChild(foo));
+    KVERIFY(!m_root->addChild(foo));
 }
 
 QTEST_KDEMAIN(TestTest, NoGUI)

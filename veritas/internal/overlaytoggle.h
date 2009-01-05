@@ -30,48 +30,118 @@ class QTimeLine;
 namespace Veritas
 {
 class Test;
+
+/*! @unittest Veritas::OverlayButton */
 class OverlayButton : public QAbstractButton
 {
 Q_OBJECT
 
 public:
     OverlayButton(QWidget* parent);
-    virtual ~OverlayButton() {}
+    virtual ~OverlayButton();
 
     /*! Resets the selection toggle so that it is hidden and stays
      * visually invisible for at least one second after it is shown again. */
     virtual void reset();
 
-    /*! Distance between the icon and right border */
+    /*! Distance between the icon and right border of the widget it is
+     *  attached to. */
     virtual int offset(Test*) = 0;
 
     virtual QModelIndex index();
     virtual void setIndex(const QModelIndex&);
+
+
     virtual bool shouldShow(Test*) = 0;
     virtual QSize sizeHint() const;
 
 public slots:
     void setVisible(bool visible);
 
-protected slots:
+protected:
+    virtual void leaveEvent(QEvent* event);
+    virtual void paintEvent(QPaintEvent* event);
+    virtual void enterEvent(QEvent* event);
+
+    bool eventFilter(QObject* obj, QEvent* event);
+
+protected:
+    QModelIndex m_index;
+    QPixmap m_icon;
+
+private slots:
     /**
      * Sets the alpha value for the fading animation and is
      * connected with m_fadingTimeLine.
      */
     void setFadingValue(int value);
 
-protected:
-    virtual void leaveEvent(QEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
+private:
     void startFading();
     void stopFading();
 
-protected:
-    QModelIndex m_index;
+private:
+    bool m_isHovered;
     int m_fadingValue;
     QTimeLine* m_fadingTimeLine;
-    bool m_isHovered;
-    QPixmap m_icon;
+};
+
+/**
+ * @brief Toggle button for changing the selection of an hovered item.
+ *
+ * The toggle button is visually invisible until it is displayed at least
+ * for one second.
+ *
+ * @see SelectionManager
+ */
+class SelectionToggle : public OverlayButton
+{
+    Q_OBJECT
+
+public:
+    explicit SelectionToggle(QWidget* parent);
+    virtual ~SelectionToggle();
+
+    virtual int offset(Test*) { return 17; }
+    bool shouldShow(Test*);
+
+private slots:
+    void setIconOverlay(bool checked);
+    void refreshIcon();
+
+};
+
+/*! Opens verbose test output, typically in a seperate outputview */
+class VerboseToggle : public OverlayButton
+{
+Q_OBJECT
+
+public:
+    explicit VerboseToggle(QWidget* parent);
+    virtual ~VerboseToggle();
+
+    virtual bool shouldShow(Test*);
+    virtual int offset(Test*);
+
+private slots:
+    void setIconOverlay();
+};
+
+/*! Open source file associated with this test-item */
+class ToSourceToggle : public OverlayButton
+{
+Q_OBJECT
+
+public:
+    explicit ToSourceToggle(QWidget* parent);
+    virtual ~ToSourceToggle();
+ 
+    virtual int offset(Test*);
+    bool shouldShow(Test*);
+
+private slots:
+    void setIcon();
+    void refreshIcon();
 
 };
 

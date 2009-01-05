@@ -48,7 +48,8 @@ const int AllStates = RunSuccess | RunSuccess | RunError | RunFatal | RunExcepti
 class TestResultPrivate;
 class Test;
 
-/*! Holds state, descriptive message and location */
+/*! Holds state, descriptive message and location
+ *  @unittest Veritas::TestResultTest */
 class VERITAS_EXPORT TestResult
 {
 public:

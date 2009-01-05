@@ -1,4 +1,4 @@
-/* KDevelop xUnit plugin
+/* This file is part of KDevelop
  *
  * Copyright 2006 Ernst Huber <qxrunner@systest.ch>
  * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
@@ -55,6 +55,7 @@ namespace Veritas
  * Subclasses must reimplement the abstract run() method to do useful
  * application specific work.
  *
+ * @unittest Veritas::TestTest
  */
 // TODO Factually there are 3 kinds of tests
 //        -> aggregates without associated executable
@@ -118,13 +119,16 @@ public: // Operations
      * Eg a suite can be parent of a case */
     Test* parent() const;
 
-    /*! Append a child test */
-    void addChild(Test* child);
+    /*! Append a child test.
+     *  Return true if succesful, false if an equally named child
+     *  exists. */
+    bool addChild(Test* child);
 
     /*! Retrieve the row-th child */
     Test* child(int row) const;
 
-    /*! Find the (first) direct child with the specified name. */
+    /*! Find the direct child with the specified name. 
+     *  If no such child exists, 0 is returned. */
     Test* childNamed(const QString& name) const;
 
     /*! The number of children */

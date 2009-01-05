@@ -21,6 +21,7 @@
 // veritas
 #include "itestrunner.h"
 #include "itestframework.h"
+#include "itesttreebuilder.h"
 #include "internal/toolviewdata.h"
 #include "test.h"
 #include "internal/selectionstore.h"
@@ -66,6 +67,7 @@ using Veritas::RunnerModel;
 using Veritas::RunnerWindow;
 using Veritas::ResultsModel;
 using Veritas::ITestRunner;
+using Veritas::ITestTreeBuilder;
 using Veritas::ITestFramework;
 
 class ITestRunner::Private
@@ -89,6 +91,7 @@ public:
     Test* previousRoot;
     ITestFramework* framework;
     ITestRunner* self;
+    ITestTreeBuilder* treeBuilder;
 
     QString resultsViewId() const {
         Q_ASSERT(g_toolViewStore.contains(framework));
@@ -99,11 +102,12 @@ public:
 
 };
 
-ITestRunner::ITestRunner(ITestFramework* framework)
+ITestRunner::ITestRunner(ITestFramework* framework, ITestTreeBuilder* builder)
     : QObject(0), d(new ITestRunner::Private)
 {
     d->self = this;
     d->framework = framework;
+    d->treeBuilder = builder;
     Q_ASSERT(g_toolViewStore.contains(framework));
     ToolViewData& tvd = g_toolViewStore[framework];
     tvd.runner2id[this] = tvd.runnerToolCounter;
@@ -115,8 +119,12 @@ ITestRunner::ITestRunner(ITestFramework* framework)
     d->resultsModel = new ResultsModel(resultHeaders, this);
     d->window = new RunnerWindow(d->resultsModel);
 
-    connect(this, SIGNAL(registerFinished(Veritas::Test*)),
+    connect(d->treeBuilder, SIGNAL(reloadFinished(Veritas::Test*)),
             this, SLOT(setupToolView(Veritas::Test*)));
+    connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
+            SLOT(reloadTree()));
+    connect(d->window, SIGNAL(requestReload()), 
+            SLOT(reloadTree()));
 }
 
 void ITestRunner::setupToolView(Veritas::Test* root)
@@ -165,19 +173,12 @@ QWidget* ITestRunner::runnerWidget()
     connect(ipc, SIGNAL(projectClosed(KDevelop::IProject*)),
             d->window, SLOT(rmProjectFromPopup(KDevelop::IProject*)));
 
-    connect(d->window->ui()->actionReload, SIGNAL(triggered(bool)),
-            this, SLOT(reload()));
-    connect(d->window, SIGNAL(requestReload()), SLOT(reload()));
-
-    reload();
     return d->window;
-
 }
 
-/*! TODO rename this a bit. just make reload() pure virtual instead of registerTests */
-void ITestRunner::reload()
+void ITestRunner::reloadTree()
 {
-    registerTests(); // implemented by concrete plugins
+    d->treeBuilder->reload(project());
 }
 
 IProject* ITestRunner::project() const

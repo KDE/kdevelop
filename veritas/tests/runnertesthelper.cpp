@@ -75,7 +75,7 @@ void RunnerTestHelper::checkResultItem(int num, const QStringList& item)
         QString("Test name does not match for result item %1").arg(num));
     KOMPARE_MSG(item[1], results->data(results->index(num, 1)), // failure message
         QString("Descriptive message does not match for result item %1").arg(num));
-    KOMPARE_MSG(item[2], results->data(results->index(num, 2)), // filename
+    KVERIFY_MSG(results->data(results->index(num, 2)).toString().endsWith(item[2]), // filename
         QString("Filename does not match for result item %1").arg(num));
     KOMPARE_MSG(item[3], results->data(results->index(num, 3)),  // line number
         QString("Line number does not match for result item %1").arg(num));
@@ -87,7 +87,7 @@ void RunnerTestHelper::nrofMessagesEquals(int num)
     for (int i = 0; i < num; i++) {
         KVERIFY(results->index(i, 0).isValid());
     }
-    KVERIFY(!results->index(num, 0).isValid());
+    KVERIFY_MSG(!results->index(num, 0).isValid(), QString("num: %1 %2").arg(num).arg(results->index(num,0).data().toString()));
 }
 
 void RunnerTestHelper::triggerRunAction()

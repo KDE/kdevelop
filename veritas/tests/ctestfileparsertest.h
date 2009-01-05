@@ -51,6 +51,8 @@ private slots:
     void illFormattedAddTest();
     void illFormattedSubdir();
 
+    void testRealFileSystemAccess();
+
 private:
     void initializeDirectoryContents(const KUrl& dir, QStringList files);
     void initializeFileContents(const QString& file, const QString& contents);

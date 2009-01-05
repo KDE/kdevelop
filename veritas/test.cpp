@@ -72,6 +72,8 @@ Test::Test(const QString& name, Test* parent)
 
 void Test::toSource() const
 {
+    // default NO-OP implementation.
+    // to be implemented by subclasses
 }
 
 QString Test::name() const
@@ -152,11 +154,14 @@ Test* Test::childNamed(const QString& name) const
     return d->childMap[name];
 }
 
-void Test::addChild(Test* item)
+bool Test::addChild(Test* child)
 {
-    Test* t = qobject_cast<Test*>(item);
-    d->children.append(t);
-    d->childMap[t->name()] = t;
+    if (d->childMap.contains(child->name())) {
+        return false;
+    }
+    d->children.append(child);
+    d->childMap[child->name()] = child;
+    return true;
 }
 
 int Test::childCount() const

@@ -30,9 +30,7 @@
 #include "runnermodel.h"
 #include "runnerproxymodel.h"
 #include "selectionmanager.h"
-#include "verbosetoggle.h"
-#include "selectiontoggle.h"
-#include "tosourcetoggle.h"
+#include "overlaytoggle.h"
 #include "testexecutor.h"
 
 #include <ktexteditor/cursor.h>

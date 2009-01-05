@@ -32,6 +32,7 @@ namespace Veritas
 {
 class Test;
 class ITestFramework;
+class ITestTreeBuilder;
 
 /*! Abstract test runner. A test runner has of 2 kdevelop toolviews:
  *  (i)  a runner-toolview which contains the test-tree
@@ -46,7 +47,7 @@ class VERITAS_EXPORT ITestRunner : public QObject
 {
 Q_OBJECT
 public:
-    ITestRunner(ITestFramework*);
+    ITestRunner(ITestFramework*, ITestTreeBuilder*);
     virtual ~ITestRunner();
 
     /*! Create a new test runner widget
@@ -57,20 +58,15 @@ public:
         This shows assertion failures with source location */
     QWidget* resultsWidget();
 
-protected:
-    /*! Reload the test tree.
-     * To be implemented by concrete plugins. */
-    virtual void registerTests() = 0;
+public Q_SLOTS:
+    void setupToolView(Veritas::Test*);
 
+protected:
     KDevelop::IProject* project() const;
 
-Q_SIGNALS:
-    void registerFinished(Veritas::Test* root);
-
 private Q_SLOTS:
-    void reload();
     void removeResultsView();
-    void setupToolView(Veritas::Test*);
+    void reloadTree();
 
 private:
     void spawnResultsView();
