@@ -135,7 +135,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
         
         done=(itBegin==it2);
         conditionToken c = typeName(*it2);
-        qDebug() << "yyy" << *it2 << last;
         
         switch(c)
         {
