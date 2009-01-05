@@ -507,9 +507,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
       
+        IndexedString indexedFile(includedFile);
+        
         {
           //Prevent recursion that may cause a crash
-          IndexedString indexedFile(includedFile);
           PreprocessJob* current = this;
           while(current) {
             if(current->parentJob()->document() == indexedFile) {
@@ -541,27 +542,27 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               CPPParseJob* job = parentJob();
               while(job->parentPreprocessor()) {
                 job = job->parentPreprocessor()->parentJob();
-                if(job->document() == IndexedString(includedFile)) {
+                if(job->document() == indexedFile) {
                   parentJob()->addDelayedImport(CPPParseJob::LineJobPair(job, sourceLine));
                   return 0;
                 }
               }
               
-              if(!includedContext) {
-                //Check if there is a parsed version that is disabled by its header-guard right now, and enventually use that one.
-                QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(IndexedString(includedFile));
-                foreach(ParsingEnvironmentFilePointer version, allVersions) {
-                  Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(version.data());
-                  
-                  if(envFile && (envFile->isProxyContext() || !m_secondEnvironmentFile) && !envFile->headerGuard().isEmpty()) {
-                    if(m_currentEnvironment->macroNameSet().contains(envFile->headerGuard())) {
-                      includedContext = envFile->topContext();
-                      
-                      break;
-                    }
-                  }
-                }
-              }
+//               if(!includedContext) {
+//                 //Check if there is a parsed version that is disabled by its header-guard right now, and enventually use that one.
+//                 QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(indexedFile);
+//                 foreach(ParsingEnvironmentFilePointer version, allVersions) {
+//                   Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(version.data());
+//                   
+//                   if(envFile && (envFile->isProxyContext() || !m_secondEnvironmentFile) && !envFile->headerGuard().isEmpty()) {
+//                     if(m_currentEnvironment->macroNameSet().contains(envFile->headerGuard())) {
+//                       includedContext = envFile->topContext();
+//                       
+//                       break;
+//                     }
+//                   }
+//                 }
+//               }
             }
             
             if(includedContext) {
