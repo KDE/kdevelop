@@ -24,7 +24,7 @@ Name[zh_TW]=KDevelop 外掛程式
 [PropertyDef::X-KDevelop-Version]
 Type=int
 
-# optional, determines wether a plugin is loaded only after
+# optional, determines whether a plugin is loaded only after
 # a project is opened, or is a global plugin.
 # If it is not set, the plugin can only be loaded by the
 # user or via requesting one of its dependencies
@@ -32,7 +32,7 @@ Type=int
 [PropertyDef::X-KDevelop-Category]
 Type=QString
 
-# mandatory, GUI-Operation Mode, determines wether a plugin
+# mandatory, GUI-Operation Mode, determines whether a plugin
 # can work without having a mainwindow/partcontroller
 # running
 # allowed values: GUI, NoGUI
