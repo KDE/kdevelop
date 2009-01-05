@@ -347,7 +347,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           isConst = isConstant(pnt.cast<AbstractType>());
           //It is a pointer, reduce the pointer-depth by one
           m_lastType = pnt->baseType();
-          m_lastInstance = Instance( getDeclaration(node, m_lastType) );
+          m_lastInstance = Instance( getDeclaration(m_lastType) );
         } else {
           findMember( node, m_lastType, Identifier("operator->") ); ///@todo respect const
           if( !m_lastType ) {
@@ -405,7 +405,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       if( constant )
         (*constant) |= (pnt->modifiers() & AbstractType::ConstModifier);
       m_lastType = pnt->baseType();
-      m_lastInstance = Instance(getDeclaration(node, m_lastType));
+      m_lastInstance = Instance(getDeclaration(m_lastType));
       return true;
     } else {
       LOCKDUCHAIN;
@@ -414,8 +414,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     }
   }
 
-  Declaration* ExpressionVisitor::getDeclaration( AST* node, const AbstractType::Ptr& base ) {
-    Q_UNUSED(node)
+  Declaration* ExpressionVisitor::getDeclaration( const AbstractType::Ptr& base ) {
     if( !base ) return 0;
 
     const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(base.unsafeData());
@@ -1355,20 +1354,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
   bool ExpressionVisitor::dereferenceLastPointer(AST* node) {
     if( PointerType::Ptr pt = realLastType().cast<PointerType>() )
-    { ///@todo what about const in pointer?
+    {
       //Dereference
       m_lastType = pt->baseType();
-      m_lastInstance = Instance( getDeclaration(node,m_lastType) );
+      m_lastInstance = Instance( getDeclaration(m_lastType) );
       return true;
     }else if( ArrayType::Ptr pt = realLastType().cast<ArrayType>() ) {
       m_lastType = pt->elementType();
-      m_lastInstance = Instance( getDeclaration(node,m_lastType) );
+      m_lastInstance = Instance( getDeclaration(m_lastType) );
       return true;
     }else{
       return false;
     }
   }
-
+  
   /**
    * partially have test */
   void ExpressionVisitor::visitUnaryExpression(UnaryExpressionAST* node)
@@ -1417,13 +1416,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     break;
     case '&':
     {
-      bool constant = false;
-      AbstractType::Ptr oldType = realLastType(&constant); ///Dereference references
-      PointerType::Ptr newPointer(new PointerType());
-      if (constant)
-        newPointer->setModifiers(AbstractType::ConstModifier);
-      newPointer->setBaseType( oldType );
-      m_lastType = newPointer.cast<AbstractType>();
+      m_lastType = increasePointerDepth(m_lastType);
       //m_lastInstance will be left alone as it was before. A pointer is not identified, and has no declaration.
     }
     break;

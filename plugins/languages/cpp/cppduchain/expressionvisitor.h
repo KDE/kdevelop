@@ -241,7 +241,7 @@ private:
    *  !!DU-Chain must be locked!
    *  Note that this may return zero even when base is valid, it needs to be an instance of IdentifiedType to be able to retrieve a declaration.
    **/
-  Declaration* getDeclaration( AST* node, const AbstractType::Ptr& base );
+  Declaration* getDeclaration( const AbstractType::Ptr& base );
 
   /**
    *  m_lastType must be a function.
