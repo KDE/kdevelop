@@ -171,9 +171,17 @@ QWidget* TestRunner::runnerWidget()
     connect(ipc, SIGNAL(projectOpened(KDevelop::IProject*)),
             d->window, SLOT(addProjectToPopup(KDevelop::IProject*)));
     connect(ipc, SIGNAL(projectClosed(KDevelop::IProject*)),
-            d->window, SLOT(rmProjectFromPopup(KDevelop::IProject*)));
-
+            this, SLOT(resetOnProjectClose(KDevelop::IProject*)));
     return d->window;
+}
+
+void TestRunner::resetOnProjectClose(KDevelop::IProject* closingProject)
+{
+    if (closingProject->name() == d->window->loadedProjectName()) {
+        // set empty tree
+        setupToolView(Test::createRoot());
+    }
+    d->window->rmProjectFromPopup(closingProject);
 }
 
 void TestRunner::reloadTree()

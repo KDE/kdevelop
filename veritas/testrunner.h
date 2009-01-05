@@ -64,6 +64,7 @@ protected:
 private Q_SLOTS:
     void removeResultsView();
     void reloadTree();
+    void resetOnProjectClose(KDevelop::IProject*);
 
 private:
     void spawnResultsView();

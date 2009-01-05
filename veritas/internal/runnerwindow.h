@@ -99,6 +99,7 @@ public: // Operations
 
     void resetProgressBar() const;
     KDevelop::IProject* selectedProject() const;
+    QString loadedProjectName() const;
 
 Q_SIGNALS:
     void runCompleted() const;
@@ -208,14 +209,14 @@ private:
     SelectionManager* m_selection;     // is responsable for the fade-in out selection thingy
     OverlayManager* m_verbose;
     KSelectAction* m_projectPopup;     // a dropdown box to select the 'current' project
-    QMap<KUrl, QAction*> m_project2action;
+    QMap<QString, QAction*> m_project2action;
     QTime m_stopWatch;                 // times test-runs, shown in the gui
     TestExecutor* m_executor;
     mutable bool m_isRunning;
     VerboseToggle* m_verboseToggle;
     ToSourceToggle* m_toSourceToggle;
     OverlayManager* m_toSource;
-    KUrl m_currentProject;
+    QString m_currentProject;
     int m_numItemsCompleted;
 };
 

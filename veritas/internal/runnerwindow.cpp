@@ -216,9 +216,9 @@ void RunnerWindow::addProjectMenu()
 void RunnerWindow::setSelectedProject(QAction* action)
 {
     if (!action) return;
-    KUrl projectRoot = action->data().value<KUrl>();
-    Q_ASSERT(m_project2action.contains(projectRoot));
-    m_currentProject = projectRoot;
+    QString project = action->data().value<QString>();
+    Q_ASSERT(m_project2action.contains(project));
+    m_currentProject = project;
     emit requestReload();
 }
 
@@ -226,28 +226,33 @@ void RunnerWindow::addProjectToPopup(IProject* proj)
 {
     QAction* p = new QAction(proj->name(), this);
     QVariant v;
-    v.setValue(proj->folder());
+    v.setValue(proj->name());
     p->setData(v);
     m_projectPopup->addAction(p);
-    m_project2action[proj->folder()] = p;
+    m_project2action[proj->name()] = p;
+}
+
+QString RunnerWindow::loadedProjectName() const
+{
+    return m_currentProject;
 }
 
 void RunnerWindow::rmProjectFromPopup(IProject* proj)
 {
-    KUrl projectRoot = proj->folder();
-    if (m_project2action.contains(projectRoot)) {
-        QAction* p = m_project2action[projectRoot];
+    QString projectName = proj->name();
+    if (m_project2action.contains(projectName)) {
+        QAction* p = m_project2action[projectName];
         m_projectPopup->removeAction(p);
-        m_project2action.remove(projectRoot);
+        m_project2action.remove(projectName);
     }
 }
 
 IProject* RunnerWindow::selectedProject() const
 {
-    if (!m_currentProject.isValid()) return 0;
+    if (m_currentProject.isEmpty()) return 0;
     IProject* selected = 0;
     foreach(IProject* proj, ICore::self()->projectController()->projects()) {
-        if (m_currentProject == proj->folder()) {
+        if (m_currentProject == proj->name()) {
             selected = proj;
             break;
         }
