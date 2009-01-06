@@ -28,7 +28,7 @@ QVariant CvsDiffJob::fetchResults()
 
     diff.setDiff( output() );
 
-    /// @todo check ouput of "cvs diff" if it reported binary files
+    /// @todo check output of "cvs diff" if it reported binary files
     diff.setContentType( KDevelop::VcsDiff::Text );
 
     /// @todo hmmm, we always call "cvs diff" with it's -u option
@@ -45,7 +45,7 @@ KDevelop::VcsJob::JobStatus CvsDiffJob::status() const
     // CVS has a bit of a weird return value handling.
     // Although cvs diff went ok it still returns non-zero
     if (rv == KDevelop::VcsJob::JobFailed) {
-        // so if the ouput contains the "Index:" mark the diff seams to be ok 
+        // so if the output contains the "Index:" mark the diff seams to be ok 
         // -> change the return value according to this
         if (output().contains("Index:")) {
             rv = KDevelop::VcsJob::JobSucceeded;
