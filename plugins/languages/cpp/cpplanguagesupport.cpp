@@ -163,9 +163,9 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     
     Cpp::EnvironmentManager::setSimplifiedMatching(true);
     
-//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Disabled);
+    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Disabled);
 //     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
-    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Full);
+//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     m_includeResolver = new CppTools::IncludePathResolver;
     // Retrieve the standard include paths & macro definitions for this machine.
