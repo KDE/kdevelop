@@ -111,7 +111,7 @@ private slots:
 
 };
 
-/*! Opens verbose test output, typically in a seperate outputview */
+/*! Opens verbose test output, typically in a separate outputview */
 class VerboseToggle : public OverlayButton
 {
 Q_OBJECT

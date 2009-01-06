@@ -120,7 +120,7 @@ public: // Operations
     Test* parent() const;
 
     /*! Append a child test.
-     *  Return true if succesful, false if an equally named child
+     *  Return true if successful, false if an equally named child
      *  exists. */
     bool addChild(Test* child);
 
