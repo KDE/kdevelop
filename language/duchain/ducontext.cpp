@@ -1645,10 +1645,13 @@ void DUContext::clearImportedParentContexts()
   DUCHAIN_D_DYNAMIC(DUContext);
 
   while( d->m_importedContextsSize() != 0 ) {
-    if( d->m_importedContexts()[0].isBackwardMapped() && d->m_importedContexts()[0].context(0) )
-      removeImportedParentContext(d->m_importedContexts()[0].context(0));
-    else
-      d->m_importedContextsList().removeOne(d->m_importedContexts()[0]);
+    if( d->m_importedContexts()[0].isBackwardMapped() ) {
+      DUContext* ctx = d->m_importedContexts()[0].context(0);
+      if(ctx)
+        ctx->m_dynamicData->removeImportedChildContext(this);
+    }
+    
+    d->m_importedContextsList().removeOne(d->m_importedContexts()[0]);
   }
 }
 
