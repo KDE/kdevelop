@@ -18,6 +18,8 @@
 
 #include "itemrepository.h"
 
+#include <fcntl.h>
+
 #include <QDataStream>
 
 #include <kstandarddirs.h>
@@ -25,6 +27,7 @@
 #include <klockfile.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <kde_file.h>
 
 #include <interfaces/icore.h>
 
@@ -43,7 +46,7 @@ AbstractItemRepository::~AbstractItemRepository() {
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(QString openPath, KLockFile::Ptr lock) : m_mutex(QMutex::Recursive) {
   if(!openPath.isEmpty())
-    open(openPath, false, lock);
+      KDE_open(openPath.toLocal8Bit(), false, lock);
 }
 
 QMutex& ItemRepositoryRegistry::mutex() {
