@@ -174,8 +174,16 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
     m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup );
     if( tempDecls.isEmpty() && m_source != m_context ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
-
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
+      
+      QualifiedIdentifier prepend = m_context->scopeIdentifier(false);
+      if(!prepend.isEmpty()) {
+        prepend.setExplicitlyGlobal(true);
+        DUContext::SearchItem::Ptr newItem(new DUContext::SearchItem(prepend));
+        newItem->addToEachNode(allIdentifiers);
+        
+        allIdentifiers.append(newItem);
+      }
       
       DUContext::DeclarationList decls;
       ///@todo do correct tracing for correct visibility
@@ -236,7 +244,6 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
     ///We filter out declarations without contexts, because in some places in C++ those should not be considered as scope-parts
     if(!hadNamespaceAlias) {
       if(!isFinalIdentifier && !hadScopeDeclaration) {
-        kDebug() << "filtering out while searching" << lookup.toString();
         s.result.clear();
         return true;
       }else{
