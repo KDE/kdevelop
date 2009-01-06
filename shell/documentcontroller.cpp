@@ -555,8 +555,8 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
         QList<IDocument*> checkSave = modifiedDocuments(list);
 
         if (!checkSave.isEmpty()) {
-            KSaveSelectDialog* dialog = new KSaveSelectDialog(checkSave, qApp->activeWindow());
-            if (dialog->exec() == QDialog::Rejected)
+            KSaveSelectDialog dialog(checkSave, qApp->activeWindow());
+            if (dialog.exec() == QDialog::Rejected)
                 return false;
         }
     }
