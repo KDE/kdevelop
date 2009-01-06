@@ -323,14 +323,14 @@ QStringList GitExecutor::branches(const QString &repository)
     QStringList branchList;
     foreach(QString branch, branchListDirty)
     {
-        if (branch.contains("*"))
+        if (branch.contains('*'))
         {
             branch = branch.prepend('\n').section("\n*", 1);
             branch = branch.trimmed();
         }
         else
         {
-            branch = branch.prepend('\n').section("\n", 1);
+            branch = branch.prepend('\n').section('\n', 1);
             branch = branch.trimmed();
         }
         branchList<<branch;
