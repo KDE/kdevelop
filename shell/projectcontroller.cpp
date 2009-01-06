@@ -163,21 +163,21 @@ void writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QSt
 KUrl ProjectDialogProvider::askProjectConfigLocation()
 {
     Q_ASSERT(d);
-    OpenProjectDialog* dlg = new OpenProjectDialog( Core::self()->uiController()->activeMainWindow() );
-    if(dlg->exec() == QDialog::Rejected)
+    OpenProjectDialog dlg( Core::self()->uiController()->activeMainWindow() );
+    if(dlg.exec() == QDialog::Rejected)
         return KUrl();
     
-    KUrl dir = dlg->directory();
-    QString file = dlg->projectFile();
-    kDebug() << "selected project:" << dir << file << dlg->projectName() << dlg->projectManager();
+    KUrl dir = dlg.directory();
+    QString file = dlg.projectFile();
+    kDebug() << "selected project:" << dir << file << dlg.projectName() << dlg.projectManager();
     if( file.isEmpty() )
     {
         dir.addPath( dir.fileName() + ShellExtension::getInstance()->projectFileExtension() );
         if( dir.isLocalFile() )
         {
             writeNewProjectFile( KSharedConfig::openConfig( dir.toLocalFile(), KConfig::SimpleConfig ),
-                            dlg->projectName(),
-                            dlg->projectManager() );
+                            dlg.projectName(),
+                            dlg.projectManager() );
         } else
         {
             KTemporaryFile tmp;
@@ -185,8 +185,8 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
             tmp.open();
             tmp.close();
             writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
-                            dlg->projectName(),
-                            dlg->projectManager() );
+                            dlg.projectName(),
+                            dlg.projectManager() );
             KIO::NetAccess::upload( tmp.fileName(), dir, Core::self()->uiControllerInternal()->defaultMainWindow() );
         }
     } else 
