@@ -76,6 +76,7 @@ private slots:
   void testForwardDeclaration();
   void testAcrossHeaderReferences();
   void testAcrossHeaderTemplateReferences();
+  void testAcrossHeaderTemplateResolution();
   void testHeaderGuards();
   void testEnvironmentMatching();
   void testUsesThroughMacros();

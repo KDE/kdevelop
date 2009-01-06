@@ -734,6 +734,23 @@ void TestCppCodeCompletion::testAcrossHeaderReferences()
   release(top);
 }
 
+void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
+  addInclude("acrossheaderresolution1.h", "class C {}; namespace std { template<class T> class A {  }; }");
+  addInclude("acrossheaderresolution2.h", "namespace std { template<class T> class B { typedef A<T> Type; }; }");
+  
+  QByteArray method("#include \"acrossheaderresolution1.h\"\n#include \"acrossheaderresolution2.h\"\n std::B<C>::Type t;");
+  
+  DUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  Declaration* decl = findDeclaration(top, QualifiedIdentifier("t"), top->range().end);
+  QVERIFY(decl);
+  QCOMPARE(QualifiedIdentifier(decl->abstractType()->toString()), QualifiedIdentifier("std::A<C>"));
+  
+  release(top);
+}
+
 void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
 {
   addInclude( "acrossheader1.h", "class Dummy { }; template<class Q> class Test{ };" );
