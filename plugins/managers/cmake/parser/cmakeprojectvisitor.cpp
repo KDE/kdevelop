@@ -501,7 +501,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         else if(m_cache->contains(var))
             instPath = m_cache->value(var);
 
-        kDebug(9042) << "config mode" << m_vars->value(var)[0] << m_cache->value(var) << instPath;
+//         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var) << instPath;
 
 #if defined(Q_OS_WIN)
         modulePath.prepend(instPath);
