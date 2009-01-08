@@ -21,7 +21,7 @@
 
 class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
-    CompletionSettings() : m_level(AlwaysFull), m_automatic(true) {
+    CompletionSettings() : m_level(AlwaysFull), m_automatic(true), m_enableSemanticHighlighting(true), m_localVariableColorizationLevel(120) {
     }
     
     virtual CompletionLevel completionLevel() const {
@@ -36,8 +36,17 @@ public:
         emit settingsChanged(this);
     }
     
+    virtual int localVariableColorizationLevel() const {
+        return m_localVariableColorizationLevel;
+    }
+    
+    virtual bool semanticHighlightingEnabled() const {
+        return m_enableSemanticHighlighting;
+    }
+    
     static CompletionSettings& self();
     
     CompletionLevel m_level;
-    bool m_automatic;
+    bool m_automatic, m_enableSemanticHighlighting;
+    int m_localVariableColorizationLevel;
 };

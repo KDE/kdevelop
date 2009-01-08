@@ -38,6 +38,10 @@ namespace KDevelop {
             
             Q_SCRIPTABLE virtual bool automaticCompletionEnabled() const = 0;
             
+            Q_SCRIPTABLE virtual bool semanticHighlightingEnabled() const = 0;
+            
+            Q_SCRIPTABLE virtual int localVariableColorizationLevel() const = 0;
+            
         Q_SIGNALS:
             void settingsChanged(ICompletionSettings*);
     };

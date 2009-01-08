@@ -2,6 +2,7 @@
 *
 * Copyright 2006  Matt Rogers <mattr@kde.org>
 * Copyright 2007  Hamish Rodda <rodda@kde.org>
+* Copyright 2009  David Nolden <david.nolden.kdevelop@art-master.de>
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -48,7 +49,7 @@ namespace KDevelop
 {
 
 K_PLUGIN_FACTORY(CCPreferencesFactory, registerPlugin<CCPreferences>();)
-K_EXPORT_PLUGIN(CCPreferencesFactory(KAboutData("kcm_kdev_ccsettings", "kdevplatform", ki18n("Code Completion Settings"), "0.1")))
+K_EXPORT_PLUGIN(CCPreferencesFactory(KAboutData("kcm_kdev_ccsettings", "kdevplatform", ki18n("Language Support Settings"), "0.1")))
 
 CCPreferences::CCPreferences( QWidget *parent, const QVariantList &args )
  : KCModule( CCPreferencesFactory::componentData(), parent, args )
@@ -82,7 +83,10 @@ void CCPreferences::writeToSettings()
     if(preferencesDialog->kcfg_alwaysMinimalCompletion->isChecked())
         settings.m_level = ICompletionSettings::Minimal;
     
-    settings.emitChanged();
+    settings.m_enableSemanticHighlighting = preferencesDialog->kcfg_enableSemanticHighlighting->isChecked();
+    settings.m_localVariableColorizationLevel = preferencesDialog->kcfg_localVariableColorization->value();
+    
+    emit settings.emitChanged();
 }
 
 CCPreferences::~CCPreferences( )

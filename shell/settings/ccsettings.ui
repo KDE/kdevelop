@@ -5,56 +5,114 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>252</height>
+    <width>501</width>
+    <height>376</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2" >
+  <layout class="QGridLayout" name="gridLayout_4" >
    <item row="0" column="0" >
-    <widget class="QCheckBox" name="kcfg_automaticInvocation" >
-     <property name="text" >
-      <string>Enable Automatic Invocation</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="completionLevelGroup" >
+    <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Code Completion Level</string>
+      <string>Code Completion</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout" >
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="kcfg_minimalAutomaticCompletion" >
-        <property name="toolTip" >
-         <string>Use minimal completion when the completion is automatic, and full completion when it is triggered manually</string>
+     <layout class="QGridLayout" name="gridLayout_2" >
+      <item row="1" column="0" >
+       <widget class="QGroupBox" name="completionLevelGroup" >
+        <property name="title" >
+         <string>Level</string>
         </property>
-        <property name="text" >
-         <string>Minimal Automatic Completion</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QRadioButton" name="kcfg_alwaysFullCompletion" >
-        <property name="acceptDrops" >
-         <bool>false</bool>
-        </property>
-        <property name="toolTip" >
-         <string>When this is enabled, the completion-box will always show full type-information and argument-hints</string>
-        </property>
-        <property name="text" >
-         <string>Always Full Completion</string>
-        </property>
+        <layout class="QGridLayout" name="gridLayout" >
+         <item row="1" column="0" >
+          <widget class="QRadioButton" name="kcfg_minimalAutomaticCompletion" >
+           <property name="toolTip" >
+            <string>Use minimal completion when the completion is automatic, and full completion when it is triggered manually</string>
+           </property>
+           <property name="text" >
+            <string>Minimal Automatic Completion</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0" >
+          <widget class="QRadioButton" name="kcfg_alwaysFullCompletion" >
+           <property name="acceptDrops" >
+            <bool>false</bool>
+           </property>
+           <property name="toolTip" >
+            <string>When this is enabled, the completion-box will always show full type-information and argument-hints</string>
+           </property>
+           <property name="text" >
+            <string>Always Full Completion</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" >
+          <widget class="QRadioButton" name="kcfg_alwaysMinimalCompletion" >
+           <property name="toolTip" >
+            <string>Do not show type-information or argument-hints</string>
+           </property>
+           <property name="text" >
+            <string>Always Minimal Completion</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item row="0" column="0" >
-       <widget class="QRadioButton" name="kcfg_alwaysMinimalCompletion" >
-        <property name="toolTip" >
-         <string>Do not show type-information or argument-hints</string>
-        </property>
+       <widget class="QCheckBox" name="kcfg_automaticInvocation" >
         <property name="text" >
-         <string>Always Minimal Completion</string>
+         <string>Enable Automatic Invocation</string>
         </property>
        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Semantic Code Highlighting</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="kcfg_enableSemanticHighlighting" >
+        <property name="text" >
+         <string>Enable Semantic Code Highlighting</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <layout class="QHBoxLayout" name="horizontalLayout" >
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="toolTip" >
+           <string/>
+          </property>
+          <property name="text" >
+           <string>Local Variable Colorization Intensity</string>
+          </property>
+          <property name="buddy" >
+           <cstring>kcfg_localVariableColorization</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="kcfg_localVariableColorization" >
+          <property name="maximum" >
+           <number>255</number>
+          </property>
+          <property name="singleStep" >
+           <number>3</number>
+          </property>
+          <property name="pageStep" >
+           <number>25</number>
+          </property>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </widget>

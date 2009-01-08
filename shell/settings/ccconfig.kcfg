@@ -2,7 +2,7 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
   <kcfgfile name="kdeveloprc"/>
-  <group name="Code Completion">
+  <group name="Language Support">
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
     <default>false</default>
 </entry>
@@ -14,6 +14,12 @@
 </entry>
     <entry name="alwaysMinimalCompletion" key="alwaysMinimalCompletion" type="Bool">
     <default>false</default>
+    </entry>
+    <entry name="enableSemanticHighlighting" key="enableSemanticHighlighting" type="Bool">
+    <default>true</default>
+    </entry>
+    <entry name="localVariableColorization" key="localVariableColorization" type="Int">
+    <default>120</default>
     </entry>
   </group>
 </kcfg>
