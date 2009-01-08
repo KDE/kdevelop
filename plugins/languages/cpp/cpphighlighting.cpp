@@ -41,6 +41,9 @@
 #include "cppduchain.h"
 #include <language/editor/hashedstring.h>
 #include <language/duchain/classmemberdeclaration.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -50,8 +53,8 @@ using namespace KDevelop;
 QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
 uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
-uchar foregroundRatio = 100; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
-uchar backgroundRatio = 5; ///Mixing in background color makes the colors less annoying
+uchar foregroundRatio = 140; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+uchar backgroundRatio = 0; ///Mixing in background color makes the colors less annoying
 
 ///@param ratio ratio between 0 and 0xff
 uint mix(uint color1, uint color2, uchar ratio) {
@@ -103,10 +106,15 @@ void generateColors(int count) {
   validColorCount = colors.count()-1;
 }
 
+void regenerateColors() {
+  foregroundRatio = 255-ICore::self()->languageController()->completionSettings()->localVariableColorizationLevel();
+  generateColors(10);
+}
+
 CppHighlighting::CppHighlighting( QObject * parent )
   : QObject(parent), m_localColorization(true), m_useClassCache(false)
 {
-  generateColors(10);
+  regenerateColors();
 }
 
 CppHighlighting::~CppHighlighting( )
@@ -285,6 +293,14 @@ void CppHighlighting::highlightDUChain(TopDUContext* context) const
 
   DUChainReadLocker lock(DUChain::lock());
 
+  regenerateColors();
+  
+  if(!ICore::self()->languageController()->completionSettings()->semanticHighlightingEnabled()) {
+    kDebug( 9007 ) << "highighting disabled";
+    deleteHighlighting(context);
+    return;
+  }
+  
   m_contextClasses.clear();
   m_useClassCache = true;
 
