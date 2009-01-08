@@ -497,7 +497,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         QString var="CMAKE_INSTALL_PREFIX";
         QString instPath;
         if(m_vars->contains(var))
-            instPath = m_vars->value(var)[0];
+            instPath = m_vars->value(var).join(QString());
         else if(m_cache->contains(var))
             instPath = m_cache->value(var);
 
@@ -1873,10 +1873,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             element = new MacroCallAst;
 
         createUses(*it);
-//         kDebug(9042) << "resolving:" << it->writeBack();
+        kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
-//         kDebug(9042) << "resolved:" << func.writeBack() << correct;
+        kDebug(9042) << "resolved:" << func.writeBack() << correct;
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl
