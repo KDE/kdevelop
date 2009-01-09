@@ -62,7 +62,7 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 
 		void formatFiles(KUrl::List &list);
 
-	public slots:
+	public Q_SLOTS:
 		/** Formats the file in the currently active document, or only
 		* the selected part if a selection exists. In this case, the indentation of
 		* the selection is kept.
@@ -89,8 +89,8 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 		*/
 		QString addIndentation(QString input, const QString indentWith);
 
-	protected slots:
-		void activePartChanged(KParts::Part *part);
+	protected Q_SLOTS:
+		void activeDocumentChanged(KDevelop::IDocument *doc);
 
 	private:
 		KAction *m_formatTextAction;
@@ -102,4 +102,4 @@ class SourceFormatterPlugin : public KDevelop::IPlugin
 
 #endif // SOURCEFORMATTERPLUGIN_H
 
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

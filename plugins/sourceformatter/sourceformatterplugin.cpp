@@ -84,8 +84,8 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 	m_formatTextAction->setEnabled(false);
 	m_formatFilesAction->setEnabled(true);
 
-	connect(core()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
-	        this, SLOT(activePartChanged(KParts::Part*)));
+	connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
+	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
 }
 
 SourceFormatterPlugin::~SourceFormatterPlugin()
@@ -187,17 +187,16 @@ QString SourceFormatterPlugin::addIndentation(QString input, const QString inden
 	return output;
 }
 
-void SourceFormatterPlugin::activePartChanged(KParts::Part *part)
+void SourceFormatterPlugin::activeDocumentChanged(KDevelop::IDocument *doc)
 {
 	bool enabled = false;
-	KParts::ReadWritePart *rw_part = dynamic_cast<KParts::ReadWritePart*>(part);
-	if (rw_part) {
-		KTextEditor::Document *doc = dynamic_cast<KTextEditor::Document*>(rw_part);
-		if (doc) {
-			KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
-			if (KDevelop::ICore::self()->sourceFormatterController()->isMimeTypeSupported(mime))
-				enabled = true;
-		}
+
+	if (doc) {
+		kDebug() << "doc is not null" << endl;
+		KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+		kDebug() << "doc is not null " << mime->name()  << endl;
+		if (KDevelop::ICore::self()->sourceFormatterController()->isMimeTypeSupported(mime))
+			enabled = true;
 	}
 
 	m_formatTextAction->setEnabled(enabled);
