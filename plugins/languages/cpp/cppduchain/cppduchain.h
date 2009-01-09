@@ -76,7 +76,8 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop:
 
 /**
  * Returns whether the given declaration can be accessed from the given context. Checks for private/protected and such stuff.
- * Not implemented yet.
+ * @param fromContext The scope-context from where to check. May be zero.
+ * @param declaration The declaration to check access to. Must not be zero.
  * */
 KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::ClassMemberDeclaration* declaration);
 

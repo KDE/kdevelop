@@ -1266,7 +1266,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) 
 
 bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl) {
     
-  if(m_localClass && doAccessFiltering && decl) {
+  if(doAccessFiltering && decl) {
     if(!Cpp::isAccessible(m_localClass.data(), decl))
       return false;
   }
