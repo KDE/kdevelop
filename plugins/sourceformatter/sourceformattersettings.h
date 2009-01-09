@@ -91,7 +91,7 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 	private:
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
-                KDevelop::ISourceFormatter* m_currentFormatter;
+		KDevelop::ISourceFormatter* m_currentFormatter;
 		int m_numberOfPredefinedStyles;
 		KMimeType::Ptr m_currentMimeType;
 		QString m_previewText;

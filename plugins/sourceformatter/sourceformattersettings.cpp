@@ -291,7 +291,19 @@ void SourceFormatterSettings::addStyle()
 	if (!ok) // dialog aborted
 		return;
 
-	EditStyleDialog dialog(m_currentFormatter, m_currentMimeType);
+	ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
+	QString styleName, styleContent;
+	QListWidgetItem *item = listStyles->currentItem();
+	// if user has selected a style, use it as base
+	if(item) {
+		if(listStyles->currentRow() < m_numberOfPredefinedStyles)
+			styleName = item->data(STYLE_ROLE).toString();
+		else
+			styleContent = manager->configGroup().readEntry(item->data(STYLE_ROLE).toString());
+	} else // just use first predefined style as base
+		styleName = manager->activeFormatter()->predefinedStyles(m_currentMimeType).values().first();
+
+	EditStyleDialog dialog(m_currentFormatter, m_currentMimeType, styleContent, styleName);
 	if (dialog.exec() == QDialog::Accepted) {
 		ISourceFormatterController *manager = ICore::self()->sourceFormatterController();
 		QString name = manager->nameForNewStyle();

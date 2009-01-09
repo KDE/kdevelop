@@ -43,7 +43,7 @@ class EditStyleDialog : public KDialog
 
 	public:
 		EditStyleDialog(KDevelop::ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-		        const QString &content = QString(), QWidget *parent = 0);
+		        const QString &content = QString(), const QString &name = QString(), QWidget *parent = 0);
 		virtual ~EditStyleDialog();
 
 		/** \return The string representing the style given by the \ref SettingsWidget.
@@ -67,4 +67,4 @@ class EditStyleDialog : public KDialog
 };
 
 #endif // EDITSTYLEDIALOG_H
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 
+// kate: indent-mode cstyle; space-indent off; tab-width 4;

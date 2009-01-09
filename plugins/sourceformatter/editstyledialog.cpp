@@ -33,7 +33,7 @@ using KDevelop::ISourceFormatter;
 using KDevelop::SettingsWidget;
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-        const QString &content, QWidget *parent)
+        const QString &content, const QString &name, QWidget *parent)
 		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime)
 {
 	m_content = new QWidget();
@@ -41,8 +41,8 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::P
 	setMainWidget(m_content);
 
 	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
-	if (m_settingsWidget && !content.isEmpty())
-		m_settingsWidget->load(QString(), content);
+	if (m_settingsWidget)
+		m_settingsWidget->load(name, content);
 	init();
 }
 
