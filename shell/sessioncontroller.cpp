@@ -70,6 +70,7 @@ SessionController::SessionController( QObject *parent )
 
 SessionController::~SessionController()
 {
+    delete d;
 }
 
 void SessionController::cleanup()
