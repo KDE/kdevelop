@@ -111,10 +111,13 @@ void ConfigWidget::addTestExecutableField(const KUrl& testExecutable)
     connect(req, SIGNAL(textChanged(QString)), SIGNAL(changed()));
     req->setUrl(testExecutable);
     req->setEnabled(m_allowUserModification);
+    req->setWhatsThis(i18n("The path to this test executable."));
     QToolButton* remove = new QToolButton(this);
     remove->setEnabled(m_allowUserModification);
     remove->setToolButtonStyle( Qt::ToolButtonIconOnly );
     remove->setIcon(KIcon("list-remove"));
+    remove->setToolTip(i18n("Remove this test executable"));
+    remove->setWhatsThis(i18n("Remove this test executable from the list of tests."));
     lay->addWidget(req);
     lay->addWidget(remove);
     m_removeButtons << remove;

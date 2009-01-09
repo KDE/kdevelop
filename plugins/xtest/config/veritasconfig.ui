@@ -9,6 +9,15 @@
     <height>497</height>
    </rect>
   </property>
+  <property name="whatsThis" >
+   <string>Test settings.
+
+Select the test framework used in the project and set its detailed configuration.
+
+Then you can add, edit and remove the test executables to be run. Once added, they can be run in the tool view of the framework test.
+
+Note that you may not be able to add, edit or remove tests if the test framework and the build manager support automatic test discovery. In that case, just select the project in the tool view of the framework test and the test executables will be added automatically.</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3" >
    <item>
     <widget class="QFrame" name="frameworkPanel" >
@@ -22,10 +31,26 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout" >
         <item>
-         <widget class="QComboBox" name="frameworkSelection" />
+         <widget class="QComboBox" name="frameworkSelection" >
+          <property name="toolTip" >
+           <string>Test framework to use</string>
+          </property>
+          <property name="whatsThis" >
+           <string>Select the text framework used in this project.</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QToolButton" name="addExecutable" >
+          <property name="toolTip" >
+           <string>Add a new test executable</string>
+          </property>
+          <property name="whatsThis" >
+           <string>Add a new test executable to be run.
+The executable must use the specified framework. 
+
+Note that you may not be able to add a new test if the test framework and the build manager support automatic test discovery. In that case, just select the project in the tool view of the framework test and the test executables will be added automatically.</string>
+          </property>
           <property name="text" >
            <string/>
           </property>
@@ -33,6 +58,12 @@
         </item>
         <item>
          <widget class="QToolButton" name="expandDetails" >
+          <property name="toolTip" >
+           <string>Expand framework details</string>
+          </property>
+          <property name="whatsThis" >
+           <string>Expand the framework configuration details.</string>
+          </property>
           <property name="text" >
            <string/>
           </property>
@@ -55,6 +86,11 @@
    </item>
    <item>
     <widget class="QFrame" name="executables" >
+     <property name="whatsThis" >
+      <string>The list of test executables for the selected framework.
+
+The list may be disabled if the test framework and the build manager support automatic test discovery.</string>
+     </property>
      <property name="frameShape" >
       <enum>QFrame::StyledPanel</enum>
      </property>
