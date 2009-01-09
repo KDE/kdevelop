@@ -20,11 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "sessiondialog.h"
 #include "ui_sessiondialog.h"
 
-#include <QtCore/QDebug>
-
-#include <kmessagebox.h>
 #include <kcolorscheme.h>
-#include <kdebug.h>
 #include <kglobalsettings.h>
 
 #include "core.h"
@@ -34,8 +30,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-QString defaultNewButtonTooltip = "";
-QString defaultNewButtonWhatsthis = "";
 const QString newSessionName = "New Session";
 
 SessionModel::SessionModel( QObject* parent )
@@ -183,8 +177,6 @@ SessionDialog::SessionDialog( QWidget* parent )
     setCaption( i18n( "Configure Sessions" ) );
     m_ui->setupUi( mainWidget() );
     m_ui->sessionList->setModel( m_model );
-    defaultNewButtonTooltip = m_ui->newButton->toolTip();
-    defaultNewButtonWhatsthis = m_ui->newButton->whatsThis();
     connect( m_ui->newButton, SIGNAL(clicked()), this, SLOT(createSession()) );
     connect( m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteSession()) );
     connect( m_ui->activateButton, SIGNAL(clicked()), this, SLOT(activateSession()) );
