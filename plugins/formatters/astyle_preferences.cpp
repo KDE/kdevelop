@@ -78,30 +78,30 @@ void AStylePreferences::init()
         item->setFlags(Qt::ItemIsUserCheckable|Qt::ItemIsEnabled);
         item->setCheckState(Qt::Checked);
     }
-    
+
     connect(tabWidget, SIGNAL(currentChanged(QWidget*)), this, SLOT(currentTabChanged()));
-    
+
     connect(cbIndentType, SIGNAL(currentIndexChanged(int)), this, SLOT(indentChanged()));
     connect(inpNuberSpaces, SIGNAL(valueChanged(int)), this, SLOT(indentChanged()));
     connect(chkConvertTabs, SIGNAL(stateChanged(int)), this, SLOT(indentChanged()));
     connect(chkFillEmptyLines, SIGNAL(stateChanged(int)), this, SLOT(indentChanged()));
-    
-    connect(listIdentObjects, SIGNAL(itemChanged(QListWidgetItem*)), 
+
+    connect(listIdentObjects, SIGNAL(itemChanged(QListWidgetItem*)),
              this, SLOT(indentObjectsChanged(QListWidgetItem*)));
-             
+
     connect(inpMaxStatement, SIGNAL(valueChanged(int)), this, SLOT(minMaxValuesChanged()));
     connect(inpMinConditional, SIGNAL(valueChanged(int)), this, SLOT(minMaxValuesChanged()));
-    
+
     connect(cbBrackets, SIGNAL(currentIndexChanged(int)), this, SLOT(bracketsChanged()));
     connect(chkBracketsCloseHeaders, SIGNAL(stateChanged(int)), this, SLOT(bracketsChanged()));
-    
+
     connect(chkBlockBreak, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
     connect(chkBlockBreakAll, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
     connect(chkBlockIfElse, SIGNAL(stateChanged(int)), this, SLOT(blocksChanged()));
-    
+
     connect(cbParenthesisPadding, SIGNAL(currentIndexChanged(int)), this, SLOT(paddingChanged()));
     connect(chkPadOperators, SIGNAL(stateChanged(int)), this, SLOT(paddingChanged()));
-    
+
     connect(chkKeepStatements, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
     connect(chkKeepBlocks, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
 }
@@ -147,9 +147,9 @@ void AStylePreferences::updateWidgets()
     setItemChecked(INDENT_CLASS, m_formatter->option("IndentClasses").toBool());
     setItemChecked(INDENT_LABEL, m_formatter->option("IndentLabels").toBool());
     setItemChecked(INDENT_NAMESPACE, m_formatter->option("IndentNamespaces").toBool());
-    setItemChecked(INDENT_PREPROCESSOR, m_formatter->option("IndentClasses").toBool());
+    setItemChecked(INDENT_PREPROCESSOR, m_formatter->option("IndentPreprocessors").toBool());
     setItemChecked(INDENT_SWITCH, m_formatter->option("IndentSwitches").toBool());
-    
+
     inpMaxStatement->setValue(m_formatter->option("MaxStatement").toInt());
     inpMinConditional->setValue(m_formatter->option("MinConditional").toInt());
 
@@ -172,7 +172,7 @@ void AStylePreferences::updateWidgets()
     chkBlockIfElse->setChecked(m_formatter->option("BlockIfElse").toBool());
     // enable or not chkBlockBreakAll
     chkBlockBreakAll->setEnabled(chkBlockBreak->isChecked());
-    
+
     // padding
     bool padin = m_formatter->option("PadParenthesesIn").toBool();
     bool padout = m_formatter->option("PadParenthesesOut").toBool();
@@ -203,11 +203,11 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
     QListWidgetItem *item = listIdentObjects->item(idx);
     if(!item)
         return;
-    
+
     if(checked)
         item->setCheckState(Qt::Checked);
     else
-        item->setCheckState(Qt::Unchecked);    
+        item->setCheckState(Qt::Unchecked);
 }
 
 void AStylePreferences::updatePreviewText(bool emitChangedSignal)
@@ -232,19 +232,19 @@ void AStylePreferences::indentChanged()
 {
     if(!m_enableWidgetSignals)
         return;
-    
+
     switch(cbIndentType->currentIndex()) {
-        case INDENT_TABS: 
+        case INDENT_TABS:
             m_formatter->setTabIndentation(inpNuberSpaces->value(), false);
             break;
-        case INDENT_TABSFORCE: 
+        case INDENT_TABSFORCE:
             m_formatter->setTabIndentation(inpNuberSpaces->value(), true);
             break;
-        case INDENT_SPACES: 
-            m_formatter->setSpaceIndentation(inpNuberSpaces->value()); 
+        case INDENT_SPACES:
+            m_formatter->setSpaceIndentation(inpNuberSpaces->value());
             break;
     }
-    
+
     updatePreviewText();
 }
 
@@ -252,9 +252,9 @@ void AStylePreferences::indentObjectsChanged(QListWidgetItem *item)
 {
     if(!m_enableWidgetSignals)
         return;
-    if(!item) 
+    if(!item)
         return;
-    
+
     bool checked = (item->checkState() == Qt::Checked);
     switch(listIdentObjects->row(item)) {
         case INDENT_BLOCK: m_formatter->setBlockIndent(checked); break;
@@ -266,7 +266,7 @@ void AStylePreferences::indentObjectsChanged(QListWidgetItem *item)
         case INDENT_PREPROCESSOR: m_formatter->setPreprocessorIndent(checked); break;
         case INDENT_SWITCH: m_formatter->setSwitchIndent(checked); break;
     }
-    
+
     updatePreviewText();
 }
 
@@ -276,7 +276,7 @@ void AStylePreferences::minMaxValuesChanged()
         return;
     m_formatter->setMaxInStatementIndentLength(inpMaxStatement->value());
     m_formatter->setMinConditionalIndentLength(inpMinConditional->value());
-    
+
     updatePreviewText();
 }
 
@@ -290,9 +290,9 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
         case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::BDAC_MODE); break;
     }
-    
+
     m_formatter->setBreakClosingHeaderBracketsMode(chkBracketsCloseHeaders->isChecked());
-    
+
     updatePreviewText();
 }
 
@@ -303,9 +303,9 @@ void AStylePreferences::blocksChanged()
     m_formatter->setBreakBlocksMode(chkBlockBreak->isChecked());
     m_formatter->setBreakClosingHeaderBlocksMode(chkBlockBreakAll->isChecked());
     m_formatter->setBreakElseIfsMode(chkBlockIfElse->isChecked());
-    
+
     chkBlockBreakAll->setEnabled(chkBlockBreak->isChecked());
-    
+
     updatePreviewText();
 }
 
@@ -314,35 +314,35 @@ void AStylePreferences::paddingChanged()
     if(!m_enableWidgetSignals)
         return;
     switch(cbParenthesisPadding->currentIndex()) {
-        case PADDING_NOCHANGE: 
-            m_formatter->setParensUnPaddingMode(false); 
+        case PADDING_NOCHANGE:
+            m_formatter->setParensUnPaddingMode(false);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(false);
             break;
-        case PADDING_NO: 
-            m_formatter->setParensUnPaddingMode(true); 
+        case PADDING_NO:
+            m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(false);
             break;
         case PADDING_IN:
-            m_formatter->setParensUnPaddingMode(true); 
+            m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(true);
             m_formatter->setParensOutsidePaddingMode(false);
             break;
         case PADDING_OUT:
-            m_formatter->setParensUnPaddingMode(true); 
+            m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(false);
             m_formatter->setParensOutsidePaddingMode(true);
             break;
         case PADDING_INOUT:
-            m_formatter->setParensUnPaddingMode(true); 
+            m_formatter->setParensUnPaddingMode(true);
             m_formatter->setParensInsidePaddingMode(true);
             m_formatter->setParensOutsidePaddingMode(true);
             break;
     }
-    
+
     m_formatter->setOperatorPaddingMode(chkPadOperators->isChecked());
-    
+
     updatePreviewText();
 }
 
@@ -352,7 +352,7 @@ void AStylePreferences::onelinersChanged()
         return;
     m_formatter->setSingleStatementsMode(!chkKeepStatements->isChecked());
     m_formatter->setBreakOneLineBlocksMode(!chkKeepBlocks->isChecked());
-    
+
     updatePreviewText();
 }
 
