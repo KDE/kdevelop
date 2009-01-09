@@ -117,19 +117,6 @@ QList<QString> SessionController::sessions() const
     return l;
 }
 
-QString getNewSessionDirName( const QString& sname )
-{
-    QDir sdir( SessionController::sessionDirectory() );
-    QString newname = sname;
-    int i = 0;
-    while( sdir.exists( newname ) ) 
-    {
-        newname = QString("%1_%2").arg( sname ).arg( i );
-        ++i;
-    }
-    return newname;
-}
-
 Session* SessionController::createSession( const QString& name )
 {
     Session* s = new Session( QUuid::createUuid() );
