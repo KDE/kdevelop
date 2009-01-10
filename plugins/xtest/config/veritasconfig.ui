@@ -36,7 +36,7 @@ Note that you may not be able to add, edit or remove tests if the test framework
            <string>Test framework to use</string>
           </property>
           <property name="whatsThis" >
-           <string>Select the text framework used in this project.</string>
+           <string>Select the test framework used in this project.</string>
           </property>
          </widget>
         </item>
