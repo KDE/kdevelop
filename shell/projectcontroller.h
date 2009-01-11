@@ -103,7 +103,9 @@ private:
 private:
     Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )
     Q_PRIVATE_SLOT(d, void unloadAllProjectPlugins() )
+    Q_PRIVATE_SLOT(d, void notifyProjectConfigurationChanged() )
     class ProjectControllerPrivate* const d;
+    friend class ProjectControllerPrivate;
 };
 
 class ProjectDialogProvider : public IProjectDialogProvider

@@ -48,7 +48,9 @@ Boston, MA 02110-1301, USA.
 #include <kstandarddirs.h>
 #include <kpassivepopup.h>
 
-#include "sublime/area.h"
+#include <ksettings/dispatcher.h>
+
+#include <sublime/area.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 #include <project/interfaces/iprojectfilemanager.h>
@@ -94,6 +96,13 @@ public:
     QPointer<QAction> m_closeAllProjects;
     IProjectDialogProvider* dialog;
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
+    IProject* m_configuringProject;
+    ProjectController* q;
+
+    ProjectControllerPrivate( ProjectController* p )
+        : q(p)
+    {
+    }
 
     void unloadAllProjectPlugins()
     {
@@ -129,7 +138,9 @@ public:
                                               << proj->projectFileUrl().url()
                                               << proj->developerFileUrl().url() );
         }
-        m_cfgDlgs[proj]->show();
+        m_configuringProject = proj;
+        m_cfgDlgs[proj]->exec();
+        m_configuringProject = 0;
     }
     QStringList findPluginsForProject( IProject* project )
     {
@@ -147,6 +158,15 @@ public:
 
         return pluginnames;
     }
+
+    void notifyProjectConfigurationChanged()
+    {
+        if( m_configuringProject )
+        {
+            emit q->projectConfigurationChanged( m_configuringProject );
+        }
+    }
+
 };
 
 IProjectDialogProvider::IProjectDialogProvider()
@@ -227,7 +247,7 @@ void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 }
 
 ProjectController::ProjectController( Core* core )
-        : IProjectController( core ), d( new ProjectControllerPrivate )
+        : IProjectController( core ), d( new ProjectControllerPrivate( this ) )
 {
     setObjectName("ProjectController");
     d->m_core = core;
@@ -237,6 +257,9 @@ ProjectController::ProjectController( Core* core )
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
+    KSettings::Dispatcher::registerComponent( KComponentData( "kdevplatformproject" ), 
+                                              this, 
+                                              "notifyProjectConfigurationChanged" );
 }
 
 void ProjectController::setupActions()
