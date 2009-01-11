@@ -129,6 +129,7 @@ void TargetProperties::save() const
         group.deleteEntry("Compile Items");
     else
         group.writeEntry("Compile Items", itemsFound);
+    group.sync();
 }
 
 void TargetProperties::load()
