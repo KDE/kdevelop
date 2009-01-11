@@ -54,7 +54,6 @@ StatusBar::StatusBar(QWidget* parent)
 
     registerStatus(Core::self()->languageController()->backgroundParser());
 
-    insertPermanentItem(i18n("No View Selected"), 0);
     connect(m_errorRemovalMapper, SIGNAL(mapped(QWidget*)), SLOT(removeError(QWidget*)));
 }
 
@@ -75,8 +74,6 @@ void StatusBar::viewChanged(Sublime::View* view)
         connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(viewStatusChanged(Sublime::View*)));
         changeItem(view->viewStatus(), 0);
 
-    } else {
-        changeItem(i18n("No View Selected"), 0);
     }
 }
 

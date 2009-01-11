@@ -107,8 +107,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         lastXMLGUIClientView = NULL;
     }
 
-    m_statusBar->viewChanged(view);
-
     if (!view)
         return;
 
