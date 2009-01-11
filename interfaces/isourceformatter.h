@@ -19,9 +19,9 @@
 #ifndef ISOURCEFORMATTER_H
 #define ISOURCEFORMATTER_H
 
-#include <QWidget>
-#include <QStringList>
-#include <KMimeType>
+#include <QtGui/QWidget>
+#include <QtCore/QStringList>
+#include <KDE/KMimeType>
 
 #include "iextension.h"
 #include "interfacesexport.h"

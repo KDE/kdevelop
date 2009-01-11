@@ -20,10 +20,10 @@ Boston, MA 02110-1301, USA.
 #ifndef ISOURCEFORMATTERCONTROLLER_H
 #define ISOURCEFORMATTERCONTROLLER_H
 
-#include <QHash>
-#include <QList>
-#include <KMimeType>
-#include <KConfigGroup>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <KDE/KMimeType>
+#include <KDE/KConfigGroup>
 
 #include "interfacesexport.h"
 

@@ -20,7 +20,7 @@
 #ifndef ICOMPLETIONSETTINGS_H
 #define ICOMPLETIONSETTINGS_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "interfacesexport.h"
 
 namespace KDevelop {

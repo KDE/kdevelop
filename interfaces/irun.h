@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include <QtCore/QSharedDataPointer>
 
-#include <KUrl>
+#include <KDE/KUrl>
 
 #include "interfacesexport.h"
 class KJob;
