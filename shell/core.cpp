@@ -44,6 +44,7 @@
 #include "documentcontroller.h"
 #include "runcontroller.h"
 #include "sourceformattercontroller.h"
+#include "selectioncontroller.h"
 #include "core_p.h"
 
 namespace KDevelop {
@@ -103,6 +104,11 @@ void CorePrivate::initialize(Core::Setup mode)
         sourceFormatterController = new SourceFormatterController(m_core);
     }
 
+    if( !selectionController )
+    {
+        selectionController = new SelectionController(m_core);
+    }
+
     kDebug() << "initializing ui controller";
     sessionController->initialize();
     if(!(mode & Core::NoUi)) uiController->initialize();
@@ -132,9 +138,11 @@ void CorePrivate::initialize(Core::Setup mode)
     }
     runController->initialize();
     sourceFormatterController->initialize();
+    selectionController->initialize();
 }
 CorePrivate::~CorePrivate()
 {
+    delete selectionController;
     delete projectController;
     delete languageController;
     delete pluginController;
@@ -187,6 +195,7 @@ Core::Setup Core::setupFlags() const
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
+        d->selectionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
 
@@ -291,6 +300,11 @@ RunController *Core::runControllerInternal()
 ISourceFormatterController* Core::sourceFormatterController()
 {
     return d->sourceFormatterController;
+}
+
+ISelectionController* Core::selectionController()
+{
+    return d->selectionController;
 }
 
 }

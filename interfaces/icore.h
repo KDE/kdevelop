@@ -47,6 +47,7 @@ class ISessionController;
 class IRunController;
 class ISourceFormatterController;
 class ISession;
+class ISelectionController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -101,6 +102,9 @@ public:
 
     /** @return the sourceformatter controller */
     Q_SCRIPTABLE virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
+
+    /** @return the selection controller */
+    Q_SCRIPTABLE virtual KDevelop::ISelectionController* selectionController() = 0;
 
     /** @return the component data of the framework, different from the main component which is created by the application */
     virtual KComponentData componentData() const = 0;

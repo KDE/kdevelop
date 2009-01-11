@@ -21,6 +21,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     isourceformattercontroller.cpp
     contextmenuextension.cpp
     icompletionsettings.cpp
+    iselectioncontroller.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
     #scripting/scriptingmanager.cpp
@@ -66,6 +67,7 @@ install(FILES
     iruncontroller.h
     irunprovider.h
     icompletionsettings.h
+    iselectioncontroller.h
     contextmenuextension.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )

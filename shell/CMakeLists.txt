@@ -30,6 +30,7 @@ set(kdevplatformshell_LIB_SRCS
     openprojectpage.cpp
     openprojectdialog.cpp
     projectinfopage.cpp
+    selectioncontroller.cpp
 )
 
 set(kdevplatformshell_UI
@@ -88,6 +89,7 @@ install(FILES
     sourceformattercontroller.h
     language.h
     shellexport.h
+    selectioncontroller.h
     testshellexport.h
     testcore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel

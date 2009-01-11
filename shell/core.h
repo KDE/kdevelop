@@ -35,6 +35,7 @@ class RunController;
 class SessionController;
 class CorePrivate;
 class SourceFormatterController;
+class SelectionController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -73,6 +74,9 @@ public:
 
     /** @copydoc ICore::sourceFormatterController() */
     virtual ISourceFormatterController* sourceFormatterController();
+
+    /** @copydoc ICore::selectionController() */
+    virtual ISelectionController* selectionController();
 
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
