@@ -25,7 +25,9 @@
 #include <kconfiggroup.h>
 #include <kaction.h>
 
-#include <ktexteditor/markinterface.h>
+#include <ktexteditor/annotationinterface.h>
+#include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
 #include <kparts/mainwindow.h>
 
@@ -44,7 +46,7 @@
 #include <language/interfaces/codecontext.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/widgets/vcscommitdialog.h>
-#include <vcs/widgets/vcsannotationwidget.h>
+#include <vcs/models/vcsannotationmodel.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsdiff.h>
@@ -324,27 +326,22 @@ void KDevVcsCommonPlugin::annotation()
     if( doc && doc->textDocument() )
     {
         KDevelop::VcsJob* job = iface->annotate( url );
-        KTextEditor::MarkInterface* markiface = 0;
-        //qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-        if( markiface )
+        KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
+        KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
+        if( annotateiface && viewiface )
         {
-            //@TODO: Work with Kate devs towards a new interface for adding
-            //       annotation information to the KTE's in KDE 4.1
+            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel( job, url, doc->textDocument() );
+            annotateiface->setAnnotationModel( model );
+            viewiface->setAnnotationBorderVisible( true );
         }else
         {
-            KDialog* dlg = new KDialog();
-            dlg->setButtons( KDialog::Close );
-            dlg->setCaption( i18n("Annotation (%1)", url.pathOrUrl() ) );
-            KDevelop::VcsAnnotationWidget* w = new KDevelop::VcsAnnotationWidget( url, job, dlg );
-            dlg->setMainWidget( w );
-            connect( dlg, SIGNAL( closeClicked() ), job, SLOT( deleteLater() ) );
-            dlg->show();
+            KMessageBox::error( 0, i18n( "Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor" ) );
+            delete job;
         }
     }else
     {
         KMessageBox::error( 0, i18n("Cannot execute annotate action because the "
-        "document wasn't found or was not a text "
-        "document:\n%1", url.pathOrUrl() ) );
+        "document wasn't found or was not a text document:\n%1", url.pathOrUrl() ) );
     }
 }
 

@@ -187,5 +187,10 @@ VcsAnnotation& VcsAnnotation::operator=( const VcsAnnotation& rhs)
     return *this;
 }
 
+bool VcsAnnotation::containsLine( int lineno ) const
+{
+    return d->lines.contains( lineno );
+}
+
 }
 

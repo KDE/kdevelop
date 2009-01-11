@@ -134,6 +134,8 @@ public:
      */
     void setLocation( const KUrl& );
 
+    bool containsLine( int lineno ) const;
+
     VcsAnnotation& operator=( const VcsAnnotation& rhs);
 private:
     class VcsAnnotationPrivate* const d;

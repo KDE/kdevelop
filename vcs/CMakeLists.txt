@@ -3,7 +3,6 @@ add_subdirectory(dvcs/test2)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
 
 set(kdevplatformvcs_UIS
-    widgets/vcsannotationwidget.ui
     widgets/vcscommitdialog.ui
     widgets/vcseventwidget.ui
     widgets/vcsdiffwidget.ui
@@ -24,7 +23,6 @@ set(kdevplatformvcs_LIB_SRCS
     vcsmapping.cpp
     vcsstatusinfo.cpp
     widgets/vcsimportmetadatawidget.cpp
-    widgets/vcsannotationwidget.cpp
     widgets/vcseventwidget.cpp
     widgets/vcsdiffwidget.cpp
     widgets/vcscommitdialog.cpp

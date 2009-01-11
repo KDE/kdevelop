@@ -21,7 +21,7 @@
 #ifndef VCSANNOTATIONMODEL_H
 #define VCSANNOTATIONMODEL_H
 
-#include <QAbstractTableModel>
+#include <ktexteditor/annotationinterface.h>
 #include "../vcsexport.h"
 
 class QModelIndex;
@@ -33,25 +33,21 @@ namespace KDevelop
 
 class VcsAnnotation;
 class VcsAnnotationLine;
+class VcsJob;
     
-class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public QAbstractTableModel
+class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel
 {
 Q_OBJECT
 public:
-    VcsAnnotationModel( const KUrl& );
+    VcsAnnotationModel( VcsJob* job, const KUrl&, QObject* );
     virtual ~VcsAnnotationModel();
 
-    void addLines( const QList<KDevelop::VcsAnnotationLine>& );
-    KDevelop::VcsAnnotation annotation() const;
-
-    int rowCount( const QModelIndex& = QModelIndex() ) const;
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const;
-
+    QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const;
 
 private:
+    Q_PRIVATE_SLOT( d, void addLines( VcsJob*) )
     class VcsAnnotationModelPrivate* const d;
+    friend class VcsAnnotationModelPrivate;
 };
 
 }

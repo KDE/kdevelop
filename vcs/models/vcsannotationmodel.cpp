@@ -22,6 +22,7 @@
 
 #include "../vcsannotation.h"
 #include "../vcsrevision.h"
+#include "../vcsjob.h"
 
 #include <QDateTime>
 #include <QtGlobal>
@@ -32,128 +33,80 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
+
 namespace KDevelop
 {
 
 class VcsAnnotationModelPrivate
 {
 public:
+    VcsAnnotationModelPrivate( VcsAnnotationModel* q_ ) : q(q_) {}
     KDevelop::VcsAnnotation m_annotation;
     QHash<KDevelop::VcsRevision,QBrush> m_brushes;
+    VcsAnnotationModel* q;
+    VcsJob* job;
+    void addLines( VcsJob* job )
+    {
+        if( job == this->job )
+        {
+            foreach( const QVariant& v, job->fetchResults().toList() )
+            {
+                if( v.canConvert<KDevelop::VcsAnnotationLine>() )
+                {
+                    VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
+                    if( !m_brushes.contains( l.revision() ) )
+                    {
+                        int r = ( float(qrand()) / RAND_MAX ) * 255;
+                        int g = ( float(qrand()) / RAND_MAX ) * 255;
+                        int b = ( float(qrand()) / RAND_MAX ) * 255;
+                        m_brushes.insert( l.revision(), QBrush( QColor( r, g, b, 80 ) ) );
+                    }
+                    m_annotation.insertLine( l.lineNumber(), l );
+                    emit q->lineChanged( l.lineNumber() );
+                }
+            }
+        }
+    }
 };
 
-VcsAnnotationModel::VcsAnnotationModel( const KUrl& url )
-    : d( new VcsAnnotationModelPrivate )
+VcsAnnotationModel::VcsAnnotationModel( VcsJob* job, const KUrl& url, QObject* parent )
+    : d( new VcsAnnotationModelPrivate( this ) )
 {
+    setParent( parent );
     d->m_annotation.setLocation( url );
+    d->job = job;
     qsrand( QDateTime().toTime_t() );
+    connect( d->job, SIGNAL(resultsReady(VcsJob*)),SLOT(addLines(VcsJob*)) );
+    d->job->setAutoDelete( false );
+    ICore::self()->runController()->registerJob( d->job );
 }
 VcsAnnotationModel::~VcsAnnotationModel()
 {
+    delete d->job;
     delete d;
 }
 
-int VcsAnnotationModel::rowCount( const QModelIndex& ) const
+QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 {
-    return d->m_annotation.lineCount();
-}
-
-int VcsAnnotationModel::columnCount( const QModelIndex& ) const
-{
-    return 3;
-}
-
-QVariant VcsAnnotationModel::data( const QModelIndex& idx, int role ) const
-{
-    if( !idx.isValid() ||
-         ( role != Qt::DisplayRole && role != Qt::ToolTipRole && role != Qt::BackgroundRole ) )
+    if( line < 0 || !d->m_annotation.containsLine( line ) )
+    {
         return QVariant();
+    }
 
-    if( idx.row() < 0 || idx.row() >= rowCount() || idx.column() < 0 || idx.column() >= columnCount() )
-        return QVariant();
-
-    KDevelop::VcsAnnotationLine line = d->m_annotation.line( idx.row() );
+    KDevelop::VcsAnnotationLine aline = d->m_annotation.line( line );
     if( role == Qt::BackgroundRole )
     {
-        return QVariant( d->m_brushes[line.revision()] );
-    }else
+        return QVariant( d->m_brushes[aline.revision()] );
+    } else if( role == Qt::DisplayRole )
     {
-        switch( idx.column() )
-        {
-            case 0:
-                if( role == Qt::DisplayRole )
-                    return QVariant( line.lineNumber() );
-                break;
-            case 1:
-                if( role == Qt::ToolTipRole )
-                {
-                    return QVariant( i18n("Author:%1\nDate:%2", line.author(), line.date().toString() ) );
-                }else
-                {
-                    return QVariant( line.revision().revisionValue() );
-                }
-                break;
-            case 2:
-                if( role == Qt::ToolTipRole )
-                {
-                    return QVariant( i18n("Author:%1\nDate:%2", line.author(), line.date().toString() ) );
-                }else
-                {
-                    return QVariant( line.text() );
-                }
-                break;
-            default:
-                break;
-        }
+        return QVariant( aline.revision().revisionValue() );
+    } else if( role == Qt::ToolTipRole )
+    {
+        return QVariant( i18n("Author:%1\nDate:%2", aline.author(), aline.date().toString() ) );
     }
     return QVariant();
-}
-
-QVariant VcsAnnotationModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    if( section < 0 || section >= columnCount() || orientation != Qt::Horizontal || role != Qt::DisplayRole )
-        return QVariant();
-    switch( section )
-    {
-        case 0:
-            return QVariant( i18nc("number of a line in a file", "Line") );
-        case 1:
-            return QVariant( i18n("Revision") );
-            break;
-        case 2:
-            return QVariant( i18nc("content of a line in a file", "Text") );
-            break;
-        default:
-            break;
-    }
-    return QVariant();
-}
-
-void VcsAnnotationModel::addLines( const QList<KDevelop::VcsAnnotationLine>& list )
-{
-    if( list.isEmpty() )
-        return;
-    if( rowCount() > 0 )
-        beginInsertRows( QModelIndex(), rowCount(), rowCount()+list.count()-1 );
-    else
-        beginInsertRows( QModelIndex(), rowCount(), list.count() );
-    foreach( const KDevelop::VcsAnnotationLine &l, list )
-    {
-        if( !d->m_brushes.contains( l.revision() ) )
-        {
-            int r = ( float(qrand()) / RAND_MAX ) * 255;
-            int g = ( float(qrand()) / RAND_MAX ) * 255;
-            int b = ( float(qrand()) / RAND_MAX ) * 255;
-            d->m_brushes.insert( l.revision(), QBrush( QColor( r, g, b, 80 ) ) );
-        }
-        d->m_annotation.insertLine( l.lineNumber(), l );
-    }
-    endInsertRows();
-}
-
-KDevelop::VcsAnnotation VcsAnnotationModel::annotation() const
-{
-    return d->m_annotation;
 }
 
 }
