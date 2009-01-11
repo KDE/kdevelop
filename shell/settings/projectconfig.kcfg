@@ -18,5 +18,8 @@
         support part.  This will enable more complete language support, but may
         be slower.</whatsthis>
     </entry>
+    <entry name="projectsBaseDirectory" key="Projects Base Directory" type="Url">
+        <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
+    </entry>
   </group>
 </kcfg>

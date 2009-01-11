@@ -71,6 +71,8 @@ public:
     virtual bool isProjectNameUsed( const QString& name ) const;
     void setDialogProvider(IProjectDialogProvider*);
 
+    KUrl projectsBaseDirectory() const;
+
 public Q_SLOTS:
     virtual bool openProject( const KUrl &KDev4ProjectFile = KUrl() );
     virtual bool projectImportingFinished( IProject* );

@@ -68,7 +68,7 @@ set( projectsettings_cfg_UI
 kde4_add_ui_files( projectsettings_cfg_SRCS ${projectsettings_cfg_UI} )
 kde4_add_kcfg_files( projectsettings_cfg_SRCS projectconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_projectsettings ${projectsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell)
+target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell)
 
 ########### Run Options
 

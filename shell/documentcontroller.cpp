@@ -43,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include "core.h"
 #include "mainwindow.h"
@@ -284,19 +285,13 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
     if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
     {
-        KSharedConfig * config = KGlobal::config().data();
-        KConfigGroup group = config->group( "General Options" );
-        QString dir;
-        if( group.hasKey( "DefaultProjectsDirectory" ) )
+        KUrl dir;
+        if( activeDocument() )
         {
-            dir = group.readEntry( "DefaultProjectsDirectory",
-                                             QDir::homePath() );
-        }else if( activeDocument() )
-        {
-            dir = activeDocument()->url().directory();
+            dir = KUrl( activeDocument()->url().directory() );
         }else
         {
-            dir = QDir::homePath();
+            dir = Core::self()->projectController()->projectsBaseDirectory();
         }
 
         url = KFileDialog::getOpenUrl( dir, i18n( "*.*|Text File\n" ),

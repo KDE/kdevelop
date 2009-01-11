@@ -106,6 +106,8 @@ public Q_SLOTS:
     virtual bool configureProject( IProject* ) = 0;
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
+    virtual KUrl projectsBaseDirectory() const = 0;
+
 Q_SIGNALS:
     /**
      * emitted after a project is completely opened and the project model
