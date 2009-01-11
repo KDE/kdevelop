@@ -22,10 +22,9 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QMutexLocker>
 
-#include <KUrl>
-
-#include <ktexteditor/range.h>
-#include <ktexteditor/smartrange.h>
+#include <KDE/KUrl>
+#include <KDE/KTextEditor/Range>
+#include <KDE/KTextEditor/SmartRange>
 
 #include "documentcursor.h"
 #include "simplerange.h"

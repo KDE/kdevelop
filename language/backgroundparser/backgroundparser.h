@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVBACKGROUNDPARSER_H
-#define KDEVBACKGROUNDPARSER_H
+#ifndef BACKGROUNDPARSER_H
+#define BACKGROUNDPARSER_H
 
 #include <QtCore/QMap>
 #include <QtCore/QPair>
@@ -30,9 +30,9 @@
 #include <QtCore/QHash>
 #include <QtCore/QPointer>
 
-#include <KUrl>
+#include <KDE/KUrl>
 
-#include <KTextEditor/SmartRangeWatcher>
+#include <KDE/KTextEditor/SmartRangeWatcher>
 
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
@@ -208,4 +208,3 @@ private:
 
 }
 #endif
-

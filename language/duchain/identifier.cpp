@@ -18,7 +18,7 @@
 
 #include "identifier.h"
 
-#include <QHash>
+#include <QtCore/QHash>
 #include "stringhelpers.h"
 #include "indexedstring.h"
 #include "appendedlist_static.h"

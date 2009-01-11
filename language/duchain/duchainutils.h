@@ -22,7 +22,7 @@
 #ifndef DUCHAINUTILS_H
 #define DUCHAINUTILS_H
 
-#include <KIcon>
+#include <KDE/KIcon>
 
 #include <ktexteditor/codecompletionmodel.h>
 

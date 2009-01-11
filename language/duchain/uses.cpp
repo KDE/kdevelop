@@ -16,10 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QHash>
-#include <QVector>
-
 #include "uses.h"
+
+#include <QtCore/QHash>
+#include <QtCore/QVector>
+
 #include "declarationid.h"
 #include "duchainpointer.h"
 #include "repositories/itemrepository.h"

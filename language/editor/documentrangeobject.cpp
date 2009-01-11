@@ -19,7 +19,7 @@
 
 #include "documentrangeobject.h"
 
-#include <QMutexLocker>
+#include <QtCore/QMutexLocker>
 
 #include <kglobal.h>
 

@@ -19,7 +19,7 @@
 #ifndef KDEVELOP_OVERRIDESPAGE_H
 #define KDEVELOP_OVERRIDESPAGE_H
 
-#include <QWizardPage>
+#include <QtGui/QWizardPage>
 
 #include "../duchain/declaration.h"
 

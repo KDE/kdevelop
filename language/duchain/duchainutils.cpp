@@ -35,7 +35,6 @@
 #include "ducontext.h"
 #include "duchain.h"
 #include "use.h"
-#include "declaration.h"
 #include "duchainlock.h"
 #include "classmemberdeclaration.h"
 #include "functiondefinition.h"

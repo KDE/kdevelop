@@ -19,10 +19,10 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_DOCUMENTCHANGETRACKER_H
-#define KDEV_DOCUMENTCHANGETRACKER_H
+#ifndef DOCUMENTCHANGETRACKER_H
+#define DOCUMENTCHANGETRACKER_H
 
-#include <KTextEditor/SmartRangeWatcher>
+#include <KDE/KTextEditor/SmartRangeWatcher>
 
 #include "../languageexport.h"
 
@@ -85,4 +85,3 @@ private:
 
 }
 #endif
-

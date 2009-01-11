@@ -19,8 +19,9 @@
 #ifndef DOCUMENTRANGEOBJECT_P
 #define DOCUMENTRANGEOBJECT_P
 
+#include <KDE/KTextEditor/SmartRange>
+
 #include "documentrangeobject.h"
-#include <ktexteditor/smartrange.h>
 #include "simplerange.h"
 #include "../duchain/appendedlist.h"
 

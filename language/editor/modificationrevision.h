@@ -19,7 +19,7 @@
 #ifndef MODIFICATIONREVISION_H
 #define MODIFICATIONREVISION_H
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 #include <kdebug.h>
 #include "../languageexport.h"
 

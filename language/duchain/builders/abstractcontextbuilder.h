@@ -20,8 +20,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEV_ABSTRACTCONTEXTBUILDER_H
-#define KDEV_ABSTRACTCONTEXTBUILDER_H
+#ifndef ABSTRACTABSTRACTCONTEXTBUILDER_H
+#define ABSTRACTABSTRACTCONTEXTBUILDER_H
 
 #include <climits>
 

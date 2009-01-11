@@ -23,11 +23,11 @@
 #ifndef KDEV_CODECOMPLETIONMODEL_H
 #define KDEV_CODECOMPLETIONMODEL_H
 
-#include <QPair>
-#include <QMap>
-#include <QPointer>
-#include <KTextEditor/CodeCompletionModel>
-#include <KSharedPtr>
+#include <QtCore/QPair>
+#include <QtCore/QMap>
+#include <QtCore/QPointer>
+#include <KDE/KTextEditor/CodeCompletionModel>
+#include <KDE/KSharedPtr>
 
 #include "../duchain/duchainpointer.h"
 #include "../languageexport.h"

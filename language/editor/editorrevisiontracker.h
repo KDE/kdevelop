@@ -19,9 +19,9 @@
 #ifndef EDITORREVISIONTRACKER_H
 #define EDITORREVISIONTRACKER_H
 
-#include <QObject>
-#include <KUrl>
-#include <KTextEditor/Cursor>
+#include <QtCore/QObject>
+#include <KDE/KUrl>
+#include <KDE/KTextEditor/Cursor>
 
 #include "../languageexport.h"
 

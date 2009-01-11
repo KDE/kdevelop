@@ -20,7 +20,7 @@
 #include "declaration.h"
 #include "declarationdata.h"
 
-#include <QByteArray>
+#include <QtCore/QByteArray>
 
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
@@ -44,7 +44,6 @@
 #include "types/structuretype.h"
 #include "functiondefinition.h"
 #include "codemodel.h"
-#include "functiondefinition.h"
 #include "specializationstore.h"
 
 using namespace KTextEditor;

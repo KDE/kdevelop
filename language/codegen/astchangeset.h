@@ -19,7 +19,7 @@
 #ifndef ASTCHANGESET_H
 #define ASTCHANGESET_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 namespace KDevelop {
 

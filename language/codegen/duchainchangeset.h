@@ -19,7 +19,7 @@
 #ifndef DUCHAINCHANGESET_H
 #define DUCHAINCHANGESET_H
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 #include "../duchain/identifier.h"
 #include "../duchain/topducontext.h"

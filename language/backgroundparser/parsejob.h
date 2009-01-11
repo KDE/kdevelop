@@ -20,17 +20,17 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPARSEJOB_H
-#define KDEVPARSEJOB_H
+#ifndef PARSEJOB_H
+#define PARSEJOB_H
 
-#include <KUrl>
+#include <QtCore/QPointer>
+#include <KDE/KUrl>
 
 #include <threadweaver/JobSequence.h>
 
 #include "../duchain/indexedstring.h"
 #include "documentchangetracker.h"
 #include <language/duchain/topducontext.h>
-#include <QPointer>
 
 namespace KDevelop
 {
@@ -142,4 +142,3 @@ private:
 
 }
 #endif
-

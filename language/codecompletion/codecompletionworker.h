@@ -23,11 +23,11 @@
 #ifndef KDEV_CODECOMPLETIONWORKER_H
 #define KDEV_CODECOMPLETIONWORKER_H
 
-#include <QThread>
-#include <QList>
+#include <QtCore/QThread>
+#include <QtCore/QList>
 
-#include <KTextEditor/Cursor>
-#include <KTextEditor/Range>
+#include <KDE/KTextEditor/Cursor>
+#include <KDE/KTextEditor/Range>
 
 #include "../languageexport.h"
 #include "../duchain/duchainpointer.h"

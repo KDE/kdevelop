@@ -19,10 +19,10 @@
 #ifndef KDEV_CREATECLASS_H
 #define KDEV_CREATECLASS_H
 
-#include <QWizard>
+#include <QtGui/QWizard>
+#include <KDE/KUrl>
 
 #include "../languageexport.h"
-#include <kurl.h>
 
 class KLineEdit;
 class KUrl;

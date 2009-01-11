@@ -21,9 +21,9 @@
 
 #include <QtCore/QObject>
 
-#include <KUrl>
+#include <KDE/KUrl>
 
-#include <KTextEditor/Range>
+#include <KDE/KTextEditor/Range>
 
 #include "duchainpointer.h"
 #include "../interfaces/iproblem.h"

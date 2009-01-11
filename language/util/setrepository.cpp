@@ -13,13 +13,13 @@
 
 #include "setrepository.h"
 #include <list>
-#include <QString>
+#include <QtCore/QString>
 #include <util/kdevvarlengtharray.h>
 #include <iostream>
 #include <limits>
 #include <language/duchain/repositories/itemrepository.h>
-#include <QMutex>
-#include <QStack>
+#include <QtCore/QMutex>
+#include <QtCore/QStack>
 
 //#define DEBUG
 
