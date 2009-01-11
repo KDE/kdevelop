@@ -442,6 +442,7 @@ AddExecutableAst::AddExecutableAst()
     m_isWin32 = false;
     m_isOsXBundle = false;
     m_excludeFromAll = false;
+    m_isImported = false;
 }
 
 AddExecutableAst::~AddExecutableAst()
@@ -473,6 +474,8 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_isOsXBundle = true;
         else if ( it->value == "EXCLUDE_FROM_ALL" )
             m_excludeFromAll = true;
+        else if ( it->value == "IMPORTED")
+            m_isImported = true;
         else
             m_sourceLists.append( it->value );
     }

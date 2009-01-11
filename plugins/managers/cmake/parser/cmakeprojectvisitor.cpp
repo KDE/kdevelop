@@ -340,7 +340,8 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
-    defineTarget(exec->executable(), exec->sourceLists(), Executable);
+    if(!exec->isImported())
+        defineTarget(exec->executable(), exec->sourceLists(), Executable);
     kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
         << "was" << exec->content()[exec->line()].writeBack();
     return 1;
