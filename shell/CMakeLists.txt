@@ -30,7 +30,6 @@ set(kdevplatformshell_LIB_SRCS
     openprojectpage.cpp
     openprojectdialog.cpp
     projectinfopage.cpp
-    jobtrackertoolview.cpp
 )
 
 set(kdevplatformshell_UI
