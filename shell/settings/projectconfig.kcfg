@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
+  <include>QtCore/QDir</include>
   <kcfgfile name="kdeveloprc"/>
   <group name="Project Manager">
     <entry name="reopenProjectsOnStartup" key="Reopen Projects On Startup" type="Bool">
@@ -19,6 +20,7 @@
         be slower.</whatsthis>
     </entry>
     <entry name="projectsBaseDirectory" key="Projects Base Directory" type="Url">
+        <default code="true">QDir::homePath()+"/projects"</default>
         <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
     </entry>
   </group>

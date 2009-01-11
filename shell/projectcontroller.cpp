@@ -68,6 +68,18 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+bool reopenProjectsOnStartup()
+{
+    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
+    return group.readEntry( "Reopen Projects On Startup", false );
+}
+
+bool parseAllProjectSources()
+{
+    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
+    return group.readEntry( "Parse All Project Sources", false );
+}
+
 class ProjectControllerPrivate
 {
 public:
@@ -82,9 +94,6 @@ public:
     QPointer<QAction> m_closeAllProjects;
     IProjectDialogProvider* dialog;
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
-
-    bool reopenProjectsOnStartup;
-    bool parseAllProjectSources;
 
     void unloadAllProjectPlugins()
     {
@@ -221,8 +230,6 @@ ProjectController::ProjectController( Core* core )
         : IProjectController( core ), d( new ProjectControllerPrivate )
 {
     setObjectName("ProjectController");
-    d->reopenProjectsOnStartup = false;
-    d->parseAllProjectSources = false;
     d->m_core = core;
     d->model = new ProjectModel();
     d->selectionModel = new QItemSelectionModel(d->model);
@@ -299,7 +306,7 @@ void ProjectController::cleanup()
 
 void ProjectController::initialize()
 {
-    if (d->reopenProjectsOnStartup) {
+    if (reopenProjectsOnStartup()) {
         KSharedConfig::Ptr config = Core::self()->activeSession()->config();
         KConfigGroup group = config->group( "General Options" );
         KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
@@ -312,11 +319,6 @@ void ProjectController::initialize()
 void ProjectController::loadSettings( bool projectIsLoaded )
 {
     Q_UNUSED(projectIsLoaded)
-
-    KConfigGroup config(KGlobal::config(), "Project Manager");
-
-    d->reopenProjectsOnStartup = config.readEntry("Reopen Projects On Startup", false);
-    d->parseAllProjectSources = config.readEntry("Parse All Project Sources", false);
 }
 
 void ProjectController::saveSettings( bool projectIsLoaded )
@@ -423,7 +425,7 @@ bool ProjectController::projectImportingFinished( IProject* project )
     emit projectOpened( project );
 
     KUrl::List parseList;
-    if (d->parseAllProjectSources)
+    if (parseAllProjectSources())
     {
         // Add the project files to the background parser to be parsed.
         QList<ProjectFileItem*> files = project->files();
@@ -612,6 +614,7 @@ KUrl ProjectController::projectsBaseDirectory() const
     return group.readEntry( "Projects Base Directory",
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
+
 
 }
 
