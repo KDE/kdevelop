@@ -100,7 +100,7 @@ public:
     ProjectController* q;
 
     ProjectControllerPrivate( ProjectController* p )
-        : q(p)
+        : q(p), m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0)
     {
     }
 
