@@ -157,13 +157,6 @@ UiController::UiController(Core *core)
     :Sublime::Controller(0), IUiController(), d(new UiControllerPrivate(this))
 {
     setObjectName("UiController");
-    // FIXME: restore.
-#if 0
-    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(),
-                                    defaultMainWindow(), "loadSettings" );
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
-                                    defaultMainWindow(), "loadSettings" );
-#endif
     d->core = core;
     connect( QApplication::instance(),
              SIGNAL( focusChanged( QWidget*, QWidget* ) ),

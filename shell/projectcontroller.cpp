@@ -257,7 +257,7 @@ ProjectController::ProjectController( Core* core )
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
-    KSettings::Dispatcher::registerComponent( KComponentData( "kdevplatformproject" ), 
+    KSettings::Dispatcher::registerComponent( Core::self()->componentData(), 
                                               this, 
                                               "notifyProjectConfigurationChanged" );
 }
