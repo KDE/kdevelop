@@ -123,7 +123,6 @@ public Q_SLOTS:
 
     // invoked by context-menu
     void ctxHistory();
-    void ctxBlame();
     void ctxCommit();
     void ctxUpdate();
     void ctxAdd();
