@@ -49,3 +49,5 @@ X-KDevelop-Version=6
 X-KDevelop-Interfaces=org.kdevelop.IBuildSystemManager,org.kdevelop.IProjectFileManager
 X-KDevelop-IRequired=org.kdevelop.IMakeBuilder
 X-KDevelop-Mode=NoGUI
+X-KDevelop-ProjectFilesFilter=GNUmakefile,Makefile,makefile,GNUmakefile.*,Makefile.*,makefile.*
+X-KDevelop-ProjectFilesFilterDescription=Makefiles
