@@ -16,6 +16,9 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
 #include "appwizardplugin.h"
@@ -28,6 +31,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->templateView->setModel(templatesModel);
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
+    ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
     connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(const QString&)),
              this, SLOT(urlEdited() ));
     connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
@@ -36,7 +40,6 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, SLOT( itemChanged( const QModelIndex&, const QModelIndex& ) ) );
     connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
              this, SLOT( validateData() ) );
-    ui->locationUrl->setPath(QDir::homePath());
 }
 
 ProjectSelectionPage::~ProjectSelectionPage()
