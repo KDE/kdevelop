@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<gui name="guibuilder" version="6">
+<gui name="guibuilder" version="7">
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">File</text>
@@ -26,6 +26,7 @@
     <Separator/>
     <Action name="adjust_size"/>
     <Separator/>
+    <Action name="widgeteditor"/>
     <Action name="signaleditor"/>
     <Action name="buddyeditor"/>
     <Action name="tabordereditor"/>

@@ -86,25 +86,67 @@ void QtDesignerWidget::setupActions()
     ac->addAction( "designer_undo", manager->actionUndo() );
     ac->addAction( "designer_redo", manager->actionRedo() );
     ac->addAction( "designer_select_all", manager->actionSelectAll() );
+    KAction* action = ac->addAction( "widgeteditor" );
+    action->setCheckable( true );
+    action->setChecked( true );
+    action->setText( "Edit Widgets" );
+    connect( action, SIGNAL(triggered()), SLOT(editWidgets()));
     foreach (QObject *plugin, QPluginLoader::staticInstances())
     {
+        kDebug() << "checking plugin:" << plugin;
         QDesignerFormEditorPluginInterface *fep;
 
         if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
         {
             fep->action()->setCheckable(true);
-            if( fep->action()->text() == "Edit Signals/Slots" )
+            if( fep->action()->text() == "Edit Signals/Slots" ) {
+                connect(fep->action(), SIGNAL(triggered()), SLOT(editSignals()));
                 actionCollection()->addAction("signaleditor", fep->action());
-            if( fep->action()->text() == "Edit Buddies" )
+            }
+            if( fep->action()->text() == "Edit Buddies" ) {
+                connect(fep->action(), SIGNAL(triggered()), SLOT(editBuddys()));
                 actionCollection()->addAction("buddyeditor", fep->action());
-            if( fep->action()->text() == "Edit Tab Order" )
+            }
+            if( fep->action()->text() == "Edit Tab Order" ) {
+                connect(fep->action(), SIGNAL(triggered()), SLOT(editTabOrder()));
                 actionCollection()->addAction("tabordereditor", fep->action());
+            }
 
             kDebug(9038) << "Added action:" << fep->action()->objectName() << "|" << fep->action()->text();
         }
     }
 
 
+}
+
+void QtDesignerWidget::editWidgets()
+{
+    QDesignerFormWindowInterface* form = m_document->form();
+    form->editWidgets();
+    actionCollection()->action("signaleditor")->setChecked(false);
+    actionCollection()->action("buddyeditor")->setChecked(false);
+    actionCollection()->action("tabordereditor")->setChecked(false);
+}
+
+void QtDesignerWidget::editBuddys()
+{
+    actionCollection()->action("widgeteditor")->setChecked(false);
+    actionCollection()->action("signaleditor")->setChecked(false);
+    actionCollection()->action("tabordereditor")->setChecked(false);
+}
+
+void QtDesignerWidget::editSignals()
+{
+    actionCollection()->action("widgeteditor")->setChecked(false);
+    actionCollection()->action("buddyeditor")->setChecked(false);
+    actionCollection()->action("tabordereditor")->setChecked(false);
+}
+
+void QtDesignerWidget::editTabOrder()
+{
+    actionCollection()->action("widgeteditor")->setChecked(false);
+    actionCollection()->action("buddyeditor")->setChecked(false);
+    actionCollection()->action("signaleditor")->setChecked(false);
 }
 
 void QtDesignerWidget::save() 

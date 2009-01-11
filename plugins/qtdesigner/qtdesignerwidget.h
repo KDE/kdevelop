@@ -33,6 +33,10 @@ class QtDesignerWidget : public QMdiArea, public KXMLGUIClient
         QtDesignerWidget( QWidget* parent, QtDesignerDocument* document );
     private slots:
         void save();
+        void editWidgets();
+        void editBuddys();
+        void editSignals();
+        void editTabOrder();
     private:
         void setupActions();
         QtDesignerDocument* m_document;
