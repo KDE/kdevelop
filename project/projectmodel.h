@@ -25,8 +25,8 @@
 #include <QtGui/QStandardItem>
 #include <QtGui/QStandardItemModel>
 #include "projectexport.h"
-#include <kurl.h>
-#include <ksharedconfig.h>
+#include <KDE/KUrl>
+#include <KDE/KSharedConfig>
 
 template<typename T1,typename T2> class QPair;
 template<typename T> class QList;
@@ -259,7 +259,7 @@ private:
 
 /**
  * Class providing some convenience methods for accessing the project model
- * @TODO: maybe switch to QAbstractItemModel, would make the implementation
+ * @todo: maybe switch to QAbstractItemModel, would make the implementation
  *        for at least the checkbox-behaviour easier
  */
 class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel

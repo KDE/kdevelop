@@ -1,7 +1,7 @@
 /***************************************************************************
- *   Copyright 2006 Hamish Rodda <rodda@kde.org>                    *
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2006 Hamish Rodda <rodda@kde.org>                           *
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -144,7 +144,7 @@ public:
     /**
      * Set the current text selection, if possible.
      *
-     * \param cursor new cursor position.
+     * \param range new cursor position.
      */
     virtual void setTextSelection(const KTextEditor::Range &range) = 0;
 

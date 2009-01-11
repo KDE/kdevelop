@@ -27,10 +27,10 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 
-#include <kurl.h>
-#include <kservice.h>
-#include <kplugininfo.h>
-#include <kservicetypetrader.h>
+#include <KDE/KUrl>
+#include <KDE/KService>
+#include <KDE/KPluginInfo>
+#include <KDE/KServiceTypeTrader>
 
 #include <interfaces/iplugincontroller.h>
 
@@ -110,10 +110,10 @@ public:
 
 
     /**
-     * Directly unload the given \a plugin, either deleting it now or \a later.
+     * Directly unload the given \a plugin, either deleting it now or \a deletion.
      *
      * \param plugin plugin to unload
-     * \param later if true, delete the plugin later, if false, delete it now.
+     * \param deletion if true, delete the plugin later, if false, delete it now.
      */
     void unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
 

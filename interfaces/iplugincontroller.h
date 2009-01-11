@@ -108,7 +108,6 @@ public:
      * will be returned. Any plugin can be an extension, only the "ServiceTypes=..." entry is
      * required in .desktop file for that plugin.
      * @param extension The extension interface
-     * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
     virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList()) = 0;

@@ -35,9 +35,9 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QStringList>
 
-#include <kurl.h>
-#include <ktexteditor/cursor.h>
-#include <ktexteditor/view.h>
+#include <KDE/KUrl>
+#include <KDE/KTextEditor/Cursor>
+#include <KDE/KTextEditor/View>
 
 template <typename T> class QList;
 
@@ -147,7 +147,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ProjectItemContext : public Context
 {
 public:
     /**Builds the context.
-        @param item The item to build the context from.*/
+        @param items The items to build the context from.*/
     ProjectItemContext( const QList<ProjectBaseItem*> &items );
 
     /**Destructor.*/

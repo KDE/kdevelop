@@ -60,11 +60,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		*/
 		virtual bool isMimeTypeSupported(const KMimeType::Ptr &mime) = 0;
 
-		/** A ist of all languages (corresponding to a
+		/** A list of all languages (corresponding to a
 		* \ref KDevelop::ILanguageSupport) supported by loaded plugins.
 		*/
 		virtual QStringList languages() = 0;
-		/** \return the language name corresponding to the mime type \arg name.
+		/** \return the language name corresponding to the mime type \arg mime.
 		*/
 		virtual QString languageNameForMimeType(const KMimeType::Ptr &mime) = 0;
 		/** \return All loaded plugins for this \arg lang.

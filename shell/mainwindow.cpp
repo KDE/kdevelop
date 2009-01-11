@@ -26,8 +26,8 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QDockWidget>
 #include <QtGui/QStackedWidget>
 
-#include <KApplication>
-#include <KActionCollection>
+#include <KDE/KApplication>
+#include <KDE/KActionCollection>
 #include <kmenu.h>
 #include <kglobal.h>
 #include <klocale.h>
