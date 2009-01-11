@@ -46,11 +46,29 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "projectcontroller.h"
 #include "mainwindow.h"
+#include "jobtrackertoolview.h"
 
 using namespace KDevelop;
 
 typedef QPair<QString, IProject*> Target;
 Q_DECLARE_METATYPE(Target)
+
+class JobTrackerToolViewFactory : public IToolViewFactory
+{
+public:
+    JobTrackerToolViewFactory() {}
+    virtual QWidget* create( QWidget* parent = 0 ) {
+        return new JobTrackerToolView( parent );
+    }
+    virtual QString id() const
+    {
+        return "org.kdevelop.JobTrackerToolView";
+    }
+    virtual Qt::DockWidgetArea defaultPosition()
+    {
+        return Qt::BottomDockWidgetArea;
+    }
+};
 
 class RunController::RunControllerPrivate
 {
@@ -76,6 +94,11 @@ RunController::RunController(QObject *parent)
     d->delegate = new RunDelegate(this);
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+}
+
+void RunController::initialize()
+{
+    Core::self()->uiController()->addToolView( i18n("Running Jobs"), new JobTrackerToolViewFactory() );
 }
 
 class ExecuteCompositeJob : public KCompositeJob

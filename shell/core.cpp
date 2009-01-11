@@ -130,6 +130,7 @@ void CorePrivate::initialize(Core::Setup mode)
         uiController->loadAllAreas(KGlobal::config());
         uiController->defaultMainWindow()->show();
     }
+    runController->initialize();
     sourceFormatterController->initialize();
 }
 CorePrivate::~CorePrivate()

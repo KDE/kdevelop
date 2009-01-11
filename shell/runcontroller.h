@@ -58,6 +58,8 @@ public:
 
     IRunProvider* findProvider(const QString& instrumentor);
 
+    void initialize();
+
     QItemDelegate* delegate() const;
 
 public Q_SLOTS:
