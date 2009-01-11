@@ -127,6 +127,13 @@ Q_SIGNALS:
      * @param project the project that has been closed.
      */
     void projectClosed( KDevelop::IProject* project );
+
+    /**
+     * emitted whenever the project configuration dialog accepted 
+     * changes
+     * @param project the project whose configuration has changed
+     */
+    void projectConfigurationChanged( KDevelop::IProject* project );
 };
 
 }
