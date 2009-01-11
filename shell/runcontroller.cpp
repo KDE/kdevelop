@@ -34,8 +34,6 @@ Boston, MA 02110-1301, USA.
 #include <KCompositeJob>
 #include <kdialogjobuidelegate.h>
 
-#include <ksettings/dispatcher.h>
-
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
 #include <outputview/ioutputview.h>
@@ -78,7 +76,6 @@ RunController::RunController(QObject *parent)
     d->delegate = new RunDelegate(this);
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
-    KSettings::Dispatcher::registerComponent( KComponentData( "kdevplatformproject" ), this, "slotConfigurationChanged" );
 }
 
 void RunController::initialize()
@@ -207,12 +204,30 @@ void RunController::setupActions()
             this, SLOT(slotProjectOpened(KDevelop::IProject*)));
     connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
             this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged( KDevelop::IProject* ) ),
+            SLOT(slotProjectOpened(KDevelop::IProject*)));
 }
 
 QAction* KDevelop::RunController::addTarget(KDevelop::IProject * project, const QString& targetName)
 {
-    QAction* action = d->currentTargetAction->addAction(i18n("%1 : %2", project->name(), targetName));
-    action->setData(qVariantFromValue<Target>(Target(targetName, project)));
+    // First check wether we already have the action, if there's a large number
+    // we might need to use a map/hash for storing the data instead of
+    // QAction::data()
+    bool found = false;
+    foreach( const QAction* a, d->currentTargetAction->actions() ) {
+        Target t = qVariantValue<Target>( a->data() );
+        if( t.first == targetName && t.second == project )
+        {
+            found = true;
+            break;
+        }
+    }
+    QAction* action = 0;
+    if( !found )
+    {
+        action = d->currentTargetAction->addAction(i18n("%1 : %2", project->name(), targetName));
+        action->setData(qVariantFromValue<Target>(Target(targetName, project)));
+    }
     return action;
 }
 
@@ -240,19 +255,6 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                 if (!d->currentTargetAction->actions().isEmpty())
                     d->currentTargetAction->actions().first()->setChecked(true);
         }
-    }
-}
-
-void KDevelop::RunController::slotConfigurationChanged()
-{
-    //if we could check what project changed we wouldn't need to regenerate everything
-    foreach (QAction* action, d->currentTargetAction->actions()) {
-        delete action;
-    }
-
-
-    foreach (IProject* project, Core::self()->projectController()->projects()) {
-        slotProjectOpened(project);
     }
 }
 
