@@ -19,7 +19,7 @@
 #ifndef ACTIVE_TOOLTIP_H
 #define ACTIVE_TOOLTIP_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include "utilexport.h"
 
 namespace KDevelop {

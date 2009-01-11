@@ -18,8 +18,9 @@
  * 02110-1301, USA.
  */
 
-#include <QMap>
 #include "toolviewdata.h"
+
+#include <QtCore/QMap>
 
 namespace Veritas
 {

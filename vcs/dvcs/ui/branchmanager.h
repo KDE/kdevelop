@@ -21,8 +21,8 @@
 #ifndef BRANCH_DIALOG_H
 #define BRANCH_DIALOG_H
 
-#include <KDialog>
-#include <QStringListModel>
+#include <QtGui/QStringListModel>
+#include <KDE/KDialog>
 
 #include "ui_branchmanager.h"
 

@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef QUICKOPEN_PART_H
-#define QUICKOPEN_PART_H
+#ifndef QUICKOPENPLUGIN_H
+#define QUICKOPENPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/iquickopen.h>
@@ -138,6 +138,6 @@ class QuickOpenWidgetHandler : public QObject {
   Ui::QuickOpen o;
 };
 
-#endif // DUCHAINVIEW_PART_H
+#endif // QUICKOPENPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

@@ -24,8 +24,10 @@
 
 #include "vcsexport.h"
 #include <QtCore/QList>
-#include <kurl.h>
-#include <QHash>
+#include <QtCore/QHash>
+
+#include <KDE/KUrl>
+
 
 namespace KDevelop
 {

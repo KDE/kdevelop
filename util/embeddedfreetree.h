@@ -22,7 +22,7 @@
 #include <sys/types.h>
 #include <limits>
 #include <stdlib.h>
-#include <QPair>
+#include <QtCore/QPair>
 #include "kdevvarlengtharray.h"
 #include <iostream>
 

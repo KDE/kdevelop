@@ -17,6 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef COMPLETIONSETTINGS_H
+#define COMPLETIONSETTINGS_H
+
 #include <interfaces/icompletionsettings.h>
 
 class CompletionSettings : public KDevelop::ICompletionSettings {
@@ -50,3 +53,5 @@ public:
     bool m_automatic, m_enableSemanticHighlighting;
     int m_localVariableColorizationLevel;
 };
+
+#endif

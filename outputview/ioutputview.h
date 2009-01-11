@@ -21,10 +21,10 @@
 #ifndef KDEVIOUTPUTVIEW_H
 #define KDEVIOUTPUTVIEW_H
 
-#include <interfaces/iextension.h>
+#include <QtCore/QFlags>
+#include <KDE/KIcon>
 
-#include <QFlags>
-#include <KIcon>
+#include <interfaces/iextension.h>
 
 class QString;
 class QAbstractItemModel;

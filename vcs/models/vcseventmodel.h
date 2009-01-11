@@ -21,7 +21,7 @@
 #ifndef VCSEVENTMODEL_H
 #define VCSEVENTMODEL_H
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 
 #include "../vcsexport.h"
 

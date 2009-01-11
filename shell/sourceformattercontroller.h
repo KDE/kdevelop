@@ -22,10 +22,10 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/isourceformattercontroller.h>
 
-#include <QHash>
-#include <QList>
-#include <KMimeType>
-#include <KConfigGroup>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <KDE/KMimeType>
+#include <KDE/KConfigGroup>
 
 #include "shellexport.h"
 

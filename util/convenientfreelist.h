@@ -19,11 +19,13 @@
 #ifndef CONVENIENTFREELIST_H
 #define CONVENIENTFREELIST_H
 
-#include "embeddedfreetree.h"
-#include <qvector.h>
-#include "kdevvarlengtharray.h"
-#include <qpair.h>
+#include <QtCore/QVector>
+#include <QtCore/QPair>
+
 #include <kdebug.h>
+
+#include "embeddedfreetree.h"
+#include "kdevvarlengtharray.h"
 
 namespace KDevelop {
     

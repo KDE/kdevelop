@@ -21,8 +21,8 @@
 #ifndef VERITAS_ITESTFRAMEWORK_H
 #define VERITAS_ITESTFRAMEWORK_H
 
+#include <QtCore/QVariantList>
 #include <interfaces/iextension.h>
-#include <QVariantList>
 #include "veritasexport.h"
 
 

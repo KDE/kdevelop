@@ -22,7 +22,7 @@
 #define VCSITEMEVENTMODEL_H
 
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 #include "../vcsexport.h"
 
 template <typename T> class QList;

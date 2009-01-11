@@ -26,7 +26,7 @@
 #include "areaindex.h"
 #include "sublimedefs.h"
 
-#include <KConfigGroup>
+#include <KDE/KConfigGroup>
 
 namespace Sublime {
 

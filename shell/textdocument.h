@@ -19,8 +19,8 @@
 #ifndef KDEV_TEXTDOCUMENT_H
 #define KDEV_TEXTDOCUMENT_H
 
-#include <QWidget>
-#include <KXMLGUIClient>
+#include <QtGui/QWidget>
+#include <KDE/KXMLGUIClient>
 
 #include <sublime/view.h>
 

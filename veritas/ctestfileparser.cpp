@@ -20,8 +20,8 @@
 
 #include "ctestfileparser.h"
 #include "testexecutableinfo.h"
-#include <KDebug>
-#include <QDir>
+#include <KDE/KDebug>
+#include <QtCore/QDir>
 
 using Veritas::TestExecutableInfo;
 using Veritas::FilesystemAccess;

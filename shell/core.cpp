@@ -19,8 +19,8 @@
  ***************************************************************************/
 #include "core.h"
 
-#include <QApplication>
-#include <QPointer>
+#include <QtGui/QApplication>
+#include <QtCore/QPointer>
 
 #include <kdebug.h>
 #include <kglobal.h>

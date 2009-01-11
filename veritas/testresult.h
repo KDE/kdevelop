@@ -28,7 +28,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QFileInfo>
 #include <QtCore/QByteArray>
-#include <KUrl>
+#include <KDE/KUrl>
 
 namespace Veritas
 {
