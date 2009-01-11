@@ -199,7 +199,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
             extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
         }
 
-        KAction* projectConfig = new KAction(i18n("Configure Project "), this);
+        KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
         connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
         projectActions << projectConfig;
 
