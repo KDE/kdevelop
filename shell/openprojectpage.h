@@ -13,11 +13,9 @@
 
 #include <QtGui/QWidget>
 
-class KFilePlacesView;
-class KFileTreeView;
-class KHistoryComboBox;
 class KUrl;
-class QModelIndex;
+class KFileItem;
+class KFileWidget;
 
 namespace KDevelop
 {
@@ -30,14 +28,12 @@ public:
 signals:
     void urlSelected( const KUrl& );
 private slots:
-    void changeUrl( const KUrl& );
-    void expandTreeView( const QModelIndex& idx );
-    void changeUrl( const QString& );
-    void activateUrl( const QString& );
+    void highlightFile(const QString&);
+    void opsEntered(const KUrl& item );
+    void comboTextChanged(const QString& );
 private:
-    KFilePlacesView* filePlacesView;
-    KFileTreeView* fileTreeView;
-    KHistoryComboBox* historyCombo;
+    KUrl getAbsoluteUrl( const QString& ) const;
+    KFileWidget* fileWidget;
 };
 
 }

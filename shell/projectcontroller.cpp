@@ -160,6 +160,17 @@ void writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QSt
     cfg->sync();
 }
 
+bool projectFileExists( const KUrl& u )
+{
+    if( u.isLocalFile() ) 
+    {
+        return QFileInfo( u.toLocalFile() ).exists();
+    } else
+    {
+        return KIO::NetAccess::exists( u, KIO::NetAccess::DestinationSide, Core::self()->uiControllerInternal()->activeMainWindow() );
+    }
+}
+
 KUrl ProjectDialogProvider::askProjectConfigLocation()
 {
     Q_ASSERT(d);
@@ -167,15 +178,13 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
     if(dlg.exec() == QDialog::Rejected)
         return KUrl();
     
-    KUrl dir = dlg.directory();
-    QString file = dlg.projectFile();
-    kDebug() << "selected project:" << dir << file << dlg.projectName() << dlg.projectManager();
-    if( file.isEmpty() )
+    KUrl projectFileUrl = dlg.projectFileUrl();
+    kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
+    if( !projectFileExists( projectFileUrl ) )
     {
-        dir.addPath( dir.fileName() + '.' + ShellExtension::getInstance()->projectFileExtension() );
-        if( dir.isLocalFile() )
+        if( projectFileUrl.isLocalFile() )
         {
-            writeNewProjectFile( KSharedConfig::openConfig( dir.toLocalFile(), KConfig::SimpleConfig ),
+            writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
                             dlg.projectName(),
                             dlg.projectManager() );
         } else
@@ -187,13 +196,10 @@ KUrl ProjectDialogProvider::askProjectConfigLocation()
             writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
                             dlg.projectName(),
                             dlg.projectManager() );
-            KIO::NetAccess::upload( tmp.fileName(), dir, Core::self()->uiControllerInternal()->defaultMainWindow() );
+            KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
         }
-    } else 
-    {
-        dir.addPath( file );
     }
-    return dir;
+    return projectFileUrl;
 }
 
 bool ProjectDialogProvider::userWantsReopen()

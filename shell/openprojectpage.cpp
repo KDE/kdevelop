@@ -15,19 +15,21 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHeaderView>
 
-#include <kfiletreeview.h>
-#include <khistorycombobox.h>
-#include <kfileplacesview.h>
-#include <kfileplacesmodel.h>
 #include <kconfiggroup.h>
 #include <kurlcompletion.h>
+#include <kurlcombobox.h>
 #include <kurlpixmapprovider.h>
 #include <kglobal.h>
+#include <kfileitem.h>
 #include <ksharedconfig.h>
 #include <kdebug.h>
+#include <kplugininfo.h>
+#include <kfilewidget.h>
 
 #include "shellextension.h"
-
+#include "core.h"
+#include "projectcontroller.h"
+#include "plugincontroller.h"
 
 namespace KDevelop
 {
@@ -36,94 +38,75 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
         : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
-    KSharedConfig::Ptr config = KGlobal::config();
-    KConfigGroup group = config->group( "General Options" );
-    QString dir = group.readEntry( "DefaultProjectsDirectory",
-                                     QDir::homePath() );
 
-    filePlacesView = new KFilePlacesView( this );
-    filePlacesView->setObjectName( "places" );
-    filePlacesView->setModel( new KFilePlacesModel( filePlacesView ) );
-    layout->addWidget( filePlacesView, 2 );
+    fileWidget = new KFileWidget( Core::self()->projectController()->projectsBaseDirectory(), this);
 
-    QVBoxLayout* vlay = new QVBoxLayout( this );
-    layout->addLayout( vlay, 5 );
-
-    fileTreeView = new KFileTreeView( this );
-    fileTreeView->setObjectName( "treeview" );
-    fileTreeView->setDirOnlyMode( true );
-    fileTreeView->header()->setResizeMode(0, QHeaderView::ResizeToContents );
-    for (int i = 1; i < fileTreeView->model()->columnCount(); ++i)
+    QStringList filters;
+    QStringList allEntry;
+    allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
+    filters << "*."+ShellExtension::getInstance()->projectFileExtension() +"|"+ShellExtension::getInstance()->projectFileDescription();
+    KPluginInfo::List plugins = PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" );
+    kDebug() << "checking plugins for files filter:" << plugins.size();
+    foreach(const KPluginInfo& info, PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
-        fileTreeView->hideColumn(i);
+        kDebug() << "Checking plugin:" << info.name();
+        QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
+        QVariant desc = info.property("X-KDevelop-ProjectFilesFilterDescription");
+        kDebug() << "filter:" << filter << "desc:" << desc;
+        QString filterline;
+        if( filter.isValid() && desc.isValid() )
+        {
+            allEntry.append( filter.toString() );
+            filters << filter.toStringList().join(" ")+"|"+desc.toString();
+        }
     }
-    vlay->addWidget( fileTreeView, 1 );
 
-    historyCombo = new KHistoryComboBox( this );
-    historyCombo->setObjectName( "combo" );
-    historyCombo->setLayoutDirection( Qt::LeftToRight );
-    historyCombo->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLength );
-    historyCombo->setTrapReturnKey( true );
-    historyCombo->setPixmapProvider( new KUrlPixmapProvider() );
-    KUrlCompletion* comp = new KUrlCompletion();
-    comp->setMode( KUrlCompletion::DirCompletion );
-    comp->setIgnoreCase( true );
-    historyCombo->setCompletionObject( comp, true );
-    historyCombo->setAutoDeleteCompletionObject( true );
-    historyCombo->setDuplicatesEnabled( false );
-    vlay->addWidget( historyCombo, 0 );
+    filters.prepend( allEntry.join(" ")+"|All Project Files" );
 
-    activateUrl( dir );
+    fileWidget->setFilter( filters.join("\n") );
 
-    // Setup connections
-    connect( filePlacesView, SIGNAL( urlChanged( const KUrl& ) ), SLOT( changeUrl( const KUrl& ) ) );
+    fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
+    layout->addWidget( fileWidget );
 
-    connect( fileTreeView, SIGNAL( activated( const QModelIndex& ) ), SLOT( expandTreeView( const QModelIndex& ) ) );
-    connect( fileTreeView, SIGNAL( currentChanged( const KUrl& ) ), SLOT( changeUrl( const KUrl& ) ) );
+    QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );
+    // Emitted for changes in the places view, the url navigator and when using the back/forward/up buttons
+    connect( ops, SIGNAL(urlEntered(const KUrl&)), SLOT(opsEntered(const KUrl&)));
 
-    connect( historyCombo, SIGNAL( editTextChanged( const QString& ) ), SLOT( changeUrl( const QString& ) ) );
-    connect( historyCombo, SIGNAL( activated( const QString& ) ), SLOT( activateUrl( const QString& ) ) );
-    connect( historyCombo, SIGNAL( returnPressed( const QString& ) ), SLOT( activateUrl( const QString& ) ) );
+    // Emitted when selecting an entry from the "Name" box or editing in there
+    connect( fileWidget->locationEdit(), SIGNAL(editTextChanged(const QString&)), 
+             SLOT(comboTextChanged(const QString&)));
 
+    // Emitted when clicking on a file in the fileview area
+    connect( fileWidget, SIGNAL(fileHighlighted(const QString&)), SLOT(highlightFile(const QString&)) );
 }
 
-void OpenProjectPage::expandTreeView( const QModelIndex& idx )
+KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
 {
-    fileTreeView->setExpanded( idx, !fileTreeView->isExpanded( idx ) );
-}
-
-void OpenProjectPage::changeUrl( const KUrl& url )
-{
-    bool blocked = filePlacesView->blockSignals( true );
-    filePlacesView->setUrl( url );
-    filePlacesView->blockSignals( blocked );
-    if( fileTreeView->currentUrl() != url )
+    KUrl u(file);
+    if( u.isRelative() )
     {
-        blocked = fileTreeView->blockSignals( true );
-        fileTreeView->setCurrentUrl( url );
-        fileTreeView->blockSignals( blocked );
+        u = fileWidget->baseUrl();
+        u.addPath( file );
     }
-    blocked = historyCombo->blockSignals( true );
-    if( url.isLocalFile() && historyCombo->currentText() != url.path() )
-    {
-       historyCombo->setEditText( url.path() );
-    } else if( !url.isLocalFile() && historyCombo->currentText() != url.prettyUrl() )
-    {
-       historyCombo->setEditText( url.prettyUrl() );
-    } 
-    historyCombo->blockSignals( blocked );
-    emit urlSelected( url );
+    return u;
 }
 
-void OpenProjectPage::changeUrl( const QString& url )
+void OpenProjectPage::highlightFile( const QString& file )
 {
-    changeUrl( KUrl( url ) );
+    kDebug() << "highlightfile:" << file << fileWidget->selectedUrl();
+    emit urlSelected( getAbsoluteUrl( file ) );
 }
 
-void OpenProjectPage::activateUrl( const QString& url )
+void OpenProjectPage::opsEntered( const KUrl& url )
 {
-    changeUrl( url );
-    historyCombo->addToHistory( KUrl(url).prettyUrl() );
+    kDebug() << "entered:" << url << fileWidget->selectedUrl();
+    emit urlSelected( getAbsoluteUrl( url.url() ) );
+}
+
+void OpenProjectPage::comboTextChanged( const QString& file )
+{
+    kDebug() << "Text changed:" << file << fileWidget->selectedUrl();
+    emit urlSelected( getAbsoluteUrl( file ) );
 }
 
 }
