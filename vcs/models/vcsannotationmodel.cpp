@@ -47,7 +47,7 @@ public:
     QHash<KDevelop::VcsRevision,QBrush> m_brushes;
     VcsAnnotationModel* q;
     VcsJob* job;
-    void addLines( VcsJob* job )
+    void addLines( KDevelop::VcsJob* job )
     {
         if( job == this->job )
         {
@@ -78,13 +78,13 @@ VcsAnnotationModel::VcsAnnotationModel( VcsJob* job, const KUrl& url, QObject* p
     d->m_annotation.setLocation( url );
     d->job = job;
     qsrand( QDateTime().toTime_t() );
-    connect( d->job, SIGNAL(resultsReady(VcsJob*)),SLOT(addLines(VcsJob*)) );
+    connect( d->job, SIGNAL(resultsReady(KDevelop::VcsJob*)),SLOT(addLines(KDevelop::VcsJob*)) );
     d->job->setAutoDelete( false );
     ICore::self()->runController()->registerJob( d->job );
 }
 VcsAnnotationModel::~VcsAnnotationModel()
 {
-    delete d->job;
+    d->job->deleteLater();
     delete d;
 }
 

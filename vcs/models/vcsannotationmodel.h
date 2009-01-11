@@ -45,7 +45,7 @@ public:
     QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const;
 
 private:
-    Q_PRIVATE_SLOT( d, void addLines( VcsJob*) )
+    Q_PRIVATE_SLOT( d, void addLines( KDevelop::VcsJob*) )
     class VcsAnnotationModelPrivate* const d;
     friend class VcsAnnotationModelPrivate;
 };
