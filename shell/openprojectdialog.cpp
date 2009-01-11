@@ -11,7 +11,6 @@
 #include "openprojectdialog.h"
 #include "openprojectpage.h"
 #include "projectinfopage.h"
-#include "projectfileselectionpage.h"
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>

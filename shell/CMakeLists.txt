@@ -30,14 +30,12 @@ set(kdevplatformshell_LIB_SRCS
     openprojectpage.cpp
     openprojectdialog.cpp
     projectinfopage.cpp
-    projectfileselectionpage.cpp
     jobtrackertoolview.cpp
 )
 
 set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui
-    projectfileselectionpage.ui
 )
 
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
