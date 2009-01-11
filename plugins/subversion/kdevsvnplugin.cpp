@@ -391,14 +391,6 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension( KDevelop::Co
         action = new KAction(i18n("Move..."), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxMove()) );
         menu->addAction( action );
-//
-//         action = new KAction(i18n("History..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxHistory()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
-//
-//         action = new KAction(i18n("Annotation..."), this);
-//         connect( action, SIGNAL(triggered()), this, SLOT(ctxBlame()) );
-//         menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, action );
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
 
@@ -423,53 +415,7 @@ void KDevSvnPlugin::ctxHistory()
     connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
     dlg->show();
 }
-void KDevSvnPlugin::ctxBlame()
-{
-    if( m_ctxUrlList.count() > 1 ){
-        KMessageBox::error( 0, i18n("Please select only one item for this operation") );
-        return;
-    }
 
-    if( !m_ctxUrlList.first().isLocalFile() )
-    {
-        KMessageBox::error( 0, i18n("Annotate is only supported on local files") );
-        return;
-    }
-
-    KDevelop::IDocument* doc = core()->documentController()->documentForUrl( m_ctxUrlList.first() );
-    if( !doc )
-        doc = core()->documentController()->openDocument( m_ctxUrlList.first() );
-
-    if( doc && doc->textDocument() )
-    {
-        KDevelop::VcsRevision head;
-        head.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( KDevelop::VcsRevision::Head ),
-                            KDevelop::VcsRevision::Special );
-        KDevelop::VcsJob* job = annotate( m_ctxUrlList.first(), head );
-        KTextEditor::MarkInterface* markiface = 0;
-                //qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-        if( markiface )
-        {
-            //@TODO: Work with Kate devs towards a new interface for adding
-            //       annotation information to the KTE's in KDE 4.1
-        }else
-        {
-            KDialog* dlg = new KDialog();
-            dlg->setButtons( KDialog::Close );
-            dlg->setCaption( i18n("Annotation (%1)", m_ctxUrlList.first().prettyUrl() ) );
-            KDevelop::VcsAnnotationWidget* w = new KDevelop::VcsAnnotationWidget( m_ctxUrlList.first(), job, dlg );
-            dlg->setMainWidget( w );
-            connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
-            dlg->show();
-        }
-    }else
-    {
-        KMessageBox::error( 0, i18n("Cannot execute annotate action because the "
-                                    "document wasn't found or was not a text "
-                                    "document:\n%1", m_ctxUrlList.first().prettyUrl() ) );
-    }
-
-}
 void KDevSvnPlugin::ctxCommit()
 {
     if( !m_ctxUrlList.isEmpty() )
