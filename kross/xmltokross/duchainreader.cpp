@@ -28,8 +28,8 @@
 #include <language/duchain/declaration.h>
 #include "classdeclaration.h"
 #include <templatedeclaration.h>
-#include <KDebug>
-#include <QQueue>
+#include <KDE/KDebug>
+#include <QtCore/QQueue>
 
 using namespace KDevelop;
 
