@@ -12,6 +12,7 @@
 #define OPENPROJECTPAGE_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QMap>
 
 class KUrl;
 class KFileItem;
@@ -25,6 +26,7 @@ class OpenProjectPage : public QWidget
 Q_OBJECT
 public:
     OpenProjectPage( QWidget* parent = 0 );
+    QMap<QString,QStringList> projectFilters() const;
 signals:
     void urlSelected( const KUrl& );
 private slots:
@@ -34,6 +36,7 @@ private slots:
 private:
     KUrl getAbsoluteUrl( const QString& ) const;
     KFileWidget* fileWidget;
+    QMap<QString,QStringList> m_projectFilters;
 };
 
 }

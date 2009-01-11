@@ -53,7 +53,6 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
 {
     bool isDir = false;
     QString extension;
-    kDebug() << "checking url:" << url << url.isLocalFile();
     if( url.isLocalFile() )
     {
         isDir = QFileInfo( url.toLocalFile() ).isDir();
@@ -82,7 +81,40 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         {
              m_url = m_url.upUrl();
         }
-        kDebug() << "m_url:" << m_url << m_url.fileName();
+        ProjectInfoPage* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
+        if( page )
+        {
+            page->setProjectName( m_url.fileName() );
+            OpenProjectPage* page2 = qobject_cast<OpenProjectPage*>( openPage->widget() );
+            if( page2 )
+            {
+                if( !isDir )
+                {
+                    bool managerFound = false;
+                    foreach( const QString& manager, page2->projectFilters().keys() )
+                    {
+                        foreach( const QString& filter, page2->projectFilters()[manager] )
+                        {
+                            QRegExp r( filter );
+                            r.setPatternSyntax( QRegExp::Wildcard );
+                            if( r.exactMatch( url.fileName() ) )
+                            {
+                                page->setProjectManager( manager );
+                                managerFound = true;
+                                break;
+                            }
+                        }
+                        if( managerFound ) 
+                        {
+                            break;
+                        }
+                    }
+                } else
+                {
+                    page->setProjectManager( "Generic Project Manager" );
+                }
+            }
+        }
         m_url.addPath( m_url.fileName()+"."+ShellExtension::getInstance()->projectFileExtension() );
     } else
     {
@@ -101,13 +133,11 @@ void OpenProjectDialog::validateProjectName( const QString& name )
 
 void OpenProjectDialog::validateProjectInfo()
 {
-    kDebug() << "valid?" << (!projectName().isEmpty() && !projectManager().isEmpty());
     setValid( projectInfoPage, (!projectName().isEmpty() && !projectManager().isEmpty()) );
 }
 
 void OpenProjectDialog::validateProjectManager( const QString& manager )
 {
-    kDebug() << "project manager:" << manager;
     m_projectManager = manager;
     validateProjectInfo();
 }

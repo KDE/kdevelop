@@ -29,7 +29,7 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
              this, SIGNAL( projectNameChanged( const QString& ) ) );
     connect( page_ui->managerCombo, SIGNAL( activated( int ) ),
              this, SLOT( changeProjectManager( int ) ) );
-    foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager", QStringList() ) )
+    foreach( const KPluginInfo& info, Core::self()->pluginControllerInternal()->queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         page_ui->managerCombo->addItem( info.name(), info.pluginName() );
     }
@@ -40,12 +40,20 @@ void ProjectInfoPage::changeProjectManager( int idx )
     emit projectManagerChanged( page_ui->managerCombo->itemData( idx ).toString() );
 }
 
-void ProjectInfoPage::setProjectDir( const KUrl& url )
+void ProjectInfoPage::setProjectName( const QString& name )
 {
-    kDebug() << "setting project dir to:" << url;
-    page_ui->nameEdit->setText( url.fileName() );
-    emit projectManagerChanged( page_ui->managerCombo->itemData( page_ui->managerCombo->currentIndex() ).toString() );
+    page_ui->nameEdit->setText( name );
     emit projectNameChanged( page_ui->nameEdit->text() );
+}
+
+void ProjectInfoPage::setProjectManager( const QString& name )
+{
+    int idx = page_ui->managerCombo->findText( name );
+    if( idx != -1 )
+    {
+        page_ui->managerCombo->setCurrentIndex( idx );
+        changeProjectManager( idx );
+    }
 }
 
 }

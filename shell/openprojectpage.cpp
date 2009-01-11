@@ -46,16 +46,14 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
     filters << "*."+ShellExtension::getInstance()->projectFileExtension() +"|"+ShellExtension::getInstance()->projectFileDescription();
     KPluginInfo::List plugins = PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" );
-    kDebug() << "checking plugins for files filter:" << plugins.size();
     foreach(const KPluginInfo& info, PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
-        kDebug() << "Checking plugin:" << info.name();
         QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
         QVariant desc = info.property("X-KDevelop-ProjectFilesFilterDescription");
-        kDebug() << "filter:" << filter << "desc:" << desc;
         QString filterline;
         if( filter.isValid() && desc.isValid() )
         {
+            m_projectFilters.insert( info.name(), filter.toStringList() );
             allEntry.append( filter.toString() );
             filters << filter.toStringList().join(" ")+"|"+desc.toString();
         }
@@ -93,20 +91,22 @@ KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
 
 void OpenProjectPage::highlightFile( const QString& file )
 {
-    kDebug() << "highlightfile:" << file << fileWidget->selectedUrl();
     emit urlSelected( getAbsoluteUrl( file ) );
 }
 
 void OpenProjectPage::opsEntered( const KUrl& url )
 {
-    kDebug() << "entered:" << url << fileWidget->selectedUrl();
     emit urlSelected( getAbsoluteUrl( url.url() ) );
 }
 
 void OpenProjectPage::comboTextChanged( const QString& file )
 {
-    kDebug() << "Text changed:" << file << fileWidget->selectedUrl();
     emit urlSelected( getAbsoluteUrl( file ) );
+}
+
+QMap<QString,QStringList> OpenProjectPage::projectFilters() const
+{
+    return m_projectFilters;
 }
 
 }

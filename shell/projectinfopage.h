@@ -28,7 +28,8 @@ class ProjectInfoPage : public QWidget
 Q_OBJECT
 public:
     ProjectInfoPage( QWidget* parent = 0 );
-    void setProjectDir( const KUrl& );
+    void setProjectName( const QString& );
+    void setProjectManager( const QString& );
 signals:
     void projectNameChanged( const QString& );
     void projectManagerChanged( const QString& );
