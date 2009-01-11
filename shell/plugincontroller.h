@@ -131,7 +131,7 @@ public:
 
     QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList());
 
-    static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints);
+    static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints = QStringList());
 
     QExtensionManager* extensionManager();
 
