@@ -34,6 +34,8 @@ Boston, MA 02110-1301, USA.
 #include <KCompositeJob>
 #include <kdialogjobuidelegate.h>
 
+#include <ksettings/dispatcher.h>
+
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
 #include <outputview/ioutputview.h>
@@ -76,6 +78,7 @@ RunController::RunController(QObject *parent)
     d->delegate = new RunDelegate(this);
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+    KSettings::Dispatcher::registerComponent( KComponentData( "kdevplatformproject" ), this, "slotConfigurationChanged" );
 }
 
 void RunController::initialize()
@@ -242,11 +245,11 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 
 void KDevelop::RunController::slotConfigurationChanged()
 {
-    kDebug() << "updating runcontroller configuration";
     //if we could check what project changed we wouldn't need to regenerate everything
     foreach (QAction* action, d->currentTargetAction->actions()) {
         delete action;
     }
+
 
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
