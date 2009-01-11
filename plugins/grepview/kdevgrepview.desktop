@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=Integrates "find|grep" in KDevelop - allows fast searching of multiple files using patterns or regular expressions.
+Comment=Allows fast searching of multiple files using patterns or regular expressions.
 Comment[da]=Integrerer "find|grep" i KDevelop - tillader hurtig søgning i flere filer ved brug af mønstre eller regulære udtryk.
 Comment[de]=Integration von „find|grep“ in KDevelop - dies erlaubt schnelles Suchen über mehrere Dateien nach Mustern und Regulären Ausdrücken.
 Comment[el]=Ενσωματώνει τα "find|grep" στο KDevelop - επιτρέπει τη γρήγορη αναζήτηση σε πολλαπλά αρχεία χρησιμοποιώντας μοτίβα ή κανονικές εκφράσεις.
@@ -32,7 +32,7 @@ Comment[uk]=Додає до KDevelop можливість використанн
 Comment[x-test]=xxIntegrates "find|grep" in KDevelop - allows fast searching of multiple files using patterns or regular expressions.xx
 Comment[zh_CN]=在 KDevelop 中集成 find 和 grep” - 可以使用模式或正则表达式在多个文件中快速查找。
 Comment[zh_TW]=將 find|grep 整合進 KDevelop - 允許使用樣式或正規表示式來快速搜尋多個檔案。
-Name=KDevGrepView
+Name=File Searching Support
 Name[da]=KDevelop Grep-visning
 Name[hi]=के-डेव-ग्रेप-व्यू
 Name[nds]=KDevelop-Grepkieker

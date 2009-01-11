@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more. http://sources.redhat.com/gdb/
+Comment=This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.
 Comment[da]=Dette plugin sørger for en brugerflade til GDB, en fejlretter til C, C++ og mere. http://sources.redhat.com/gdb/
 Comment[de]=Dieses Modul stellt eine Oberfläche für GDB zur Verfügung. GDB ist ein Debugger für C, C++ und weitere. http://sources.redhat.com/gdb/
 Comment[el]=Αυτό το πρόσθετο προσφέρει ένα σύστημα περιβάλλοντος για το GDB, έναν αποσφαλματωτή επιπέδου πηγαίου κώδικα για τις C, C++ και άλλες γλώσσες. http://sources.redhat.com/gdb/
@@ -33,7 +33,7 @@ Comment[uk]=Цей додаток надає можливість користу
 Comment[x-test]=xxThis plugin provides a frontend for GDB, a source-level debugger for C, C++ and more. http://sources.redhat.com/gdb/xx
 Comment[zh_CN]=此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。http://sources.redhat.com/gdb/
 Comment[zh_TW]=這個外掛程式提供 GDB 的前端介面。關於 GDB 請參考 http://sources.redhat.com/gdb/
-Name=KDevDebugger
+Name=GDB Support
 Name[da]=KDevelop Debugger
 Name[hi]=के-डेव-डिबगर
 Name[nds]=KDevelop-Debugger
