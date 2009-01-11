@@ -78,7 +78,12 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     {
         setAppropriate( projectInfoPage, true );
         m_url = url;
-        m_url.addPath( url.fileName()+"."+ShellExtension::getInstance()->projectFileExtension() );
+        if( !isDir )
+        {
+             m_url = m_url.upUrl();
+        }
+        kDebug() << "m_url:" << m_url << m_url.fileName();
+        m_url.addPath( m_url.fileName()+"."+ShellExtension::getInstance()->projectFileExtension() );
     } else
     {
         setAppropriate( projectInfoPage, false );
