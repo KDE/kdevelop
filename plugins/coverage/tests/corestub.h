@@ -54,11 +54,15 @@ public:
         m_uiController(0),
         m_runController(0),
         m_session(0),
-        m_partController(0) {}
+        m_partController(0),
+        m_selectionController(0) {}
 
     virtual ~Core() {}
     virtual KDevelop::IDocumentController *documentController() {
         return m_documentController;
+    }
+    virtual KDevelop::ISelectionController *selectionController() {
+        return m_selectionController;
     }
     virtual KDevelop::ILanguageController *languageController() {
         return m_languageController;
@@ -95,6 +99,7 @@ public:
     KDevelop::IProjectController* m_projectController;
     KDevelop::IUiController* m_uiController;
     KDevelop::IRunController* m_runController;
+    KDevelop::ISelectionController* m_selectionController;
     KDevelop::ISession* m_session;
     KParts::PartManager* m_partController;
 };
