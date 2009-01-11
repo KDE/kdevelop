@@ -17,11 +17,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_PROBLEM_H
-#define KDEV_PROBLEM_H
+#ifndef I_PROBLEM_H
+#define I_PROBLEM_H
 
 
-#include <QStack>
+#include <QtCore/QStack>
 
 #include <ksharedptr.h>
 
@@ -120,4 +120,4 @@ typedef KSharedPtr<Problem> ProblemPointer;
 
 }
 
-#endif // KDEV_PROBLEM_H
+#endif // I_PROBLEM_H

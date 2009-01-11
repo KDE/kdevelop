@@ -19,8 +19,8 @@
 #ifndef IQUICKOPEN_H
 #define IQUICKOPEN_H
 
-#include <KUrl>
-#include <QSet>
+#include <QtCore/QSet>
+#include <KDE/KUrl>
 #include <interfaces/iextension.h>
 #include "../languageexport.h"
 

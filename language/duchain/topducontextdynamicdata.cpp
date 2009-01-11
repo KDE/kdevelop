@@ -16,12 +16,13 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "topducontextdynamicdata.h"
+
 #include <kstandarddirs.h>
 #include <typeinfo>
-#include <QFile>
-#include <QByteArray>
+#include <QtCore/QFile>
+#include <QtCore/QByteArray>
 
-#include "topducontextdynamicdata.h"
 #include "declaration.h"
 #include "declarationdata.h"
 #include "ducontext.h"

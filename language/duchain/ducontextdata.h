@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef ducontext_p_H
-#define ducontext_p_H
+#ifndef ducontextdata_H
+#define ducontextdata_H
 
 #include <QtCore/QMutex>
 #include <QtCore/QMultiHash>

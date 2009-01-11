@@ -62,14 +62,14 @@ QString InstantiationInformation::toString(bool local) const {
     QString ret;
     if(previousInstantiationInformation && !local)
         ret = IndexedInstantiationInformation(previousInstantiationInformation).information().toString() + "::";
-    ret += "<";
+    ret += '<';
     for(int a = 0; a < templateParametersSize(); ++a) {
         if(a)
             ret += ", ";
         if(templateParameters()[a].type())
           ret += templateParameters()[a].type()->toString();
     }
-    ret += ">";
+    ret += '>';
     return ret;
 }
 

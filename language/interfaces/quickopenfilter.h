@@ -22,7 +22,7 @@
 #ifndef QUICKOPEN_FILTER_H
 #define QUICKOPEN_FILTER_H
 
-#include <QRegExp>
+#include <QtCore/QRegExp>
 
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.

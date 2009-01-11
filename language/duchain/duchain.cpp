@@ -20,16 +20,16 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
-#include <QCoreApplication>
-#include <QHash>
-#include <QMultiMap>
-#include <QTimer>
-#include <QReadWriteLock>
-#include <qatomic.h>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QHash>
+#include <QtCore/QMultiMap>
+#include <QtCore/QTimer>
+#include <QtCore/QReadWriteLock>
+#include <QtCore/qatomic.h>
 
 #include <kglobal.h>
 
-#include <KTextEditor/Document>
+#include <KDE/KTextEditor/Document>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -52,14 +52,13 @@
 #include "uses.h"
 #include "abstractfunctiondeclaration.h"
 #include "smartconverter.h"
-#include "duchainutils.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "repositories/itemrepository.h"
 #include <util/google/dense_hash_map>
-#include <qthread.h>
-#include <qwaitcondition.h>
-#include <qmutex.h>
+#include <QtCore/qthread.h>
+#include <QtCore/qwaitcondition.h>
+#include <QtCore/qmutex.h>
 #include <unistd.h>
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)

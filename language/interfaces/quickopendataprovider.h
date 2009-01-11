@@ -21,10 +21,10 @@
 #ifndef QUICKOPENDATAPROVIDER_H
 #define QUICKOPENDATAPROVIDER_H
 
-#include <QList>
-#include <QObject>
-#include <QSet>
-#include <KUrl>
+#include <QtCore/QList>
+#include <QtCore/QObject>
+#include <QtCore/QSet>
+#include <KDE/KUrl>
 
 #include <ksharedptr.h>
 #include "../languageexport.h"

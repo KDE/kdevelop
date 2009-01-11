@@ -16,8 +16,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QObject>
-#include <QSet>
+#ifndef USESCOLLECTOR_H
+#define USESCOLLECTOR_H
+
+#include <QtCore/QObject>
+#include <QtCore/QSet>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/indexedstring.h>
 
@@ -124,3 +127,5 @@ namespace KDevelop {
             bool m_processDeclarations;
     };
 }
+
+#endif
