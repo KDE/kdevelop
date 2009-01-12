@@ -82,15 +82,15 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     if(classFun && classFun->type<FunctionType>() && (classFun->isSignal() || classFun->isSlot())) {
       ///@todo Replace previous signal/slot specifications
       functionSignature = classFun->identifier().toString();
-      functionSignature += "(" + classFun->normalizedSignature().str() + ")";
+      functionSignature += '(' + classFun->normalizedSignature().str() + ')';
       if(addSignalSlot) {
         if(classFun->isSignal())
-          functionSignature = "SIGNAL(" + functionSignature + ")";
+          functionSignature = "SIGNAL(" + functionSignature + ')';
         else
-          functionSignature = "SLOT(" + functionSignature + ")";
+          functionSignature = "SLOT(" + functionSignature + ')';
       }else{
         //Only add a closing )
-        functionSignature += ")";
+        functionSignature += ')';
       }
     }
     lock.unlock();
@@ -135,7 +135,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       haveArguments = true;
     //Need to have a paren behind
     QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
-    if( suffix.trimmed().startsWith("(") ) {
+    if( suffix.trimmed().startsWith('(') ) {
       //Move the cursor behind the opening paren
       if( document->activeView() )
         document->activeView()->setCursorPosition( word.end() + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
@@ -145,16 +145,16 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       if( spaceBeforeParen )
         openingParen = " (";
       else
-        openingParen = "(";
+        openingParen = '(';
 
       if( spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens) )
-        openingParen += " ";
+        openingParen += ' ';
 
       QString closingParen;
       if( spaceBetweenParens && (haveArguments) ) {
         closingParen = " )";
       } else
-        closingParen = ")";
+        closingParen = ')';
 
       KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
 
@@ -558,7 +558,7 @@ QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, con
           else
             return QVariant("file");
         case CodeCompletionModel::Name: {
-          return item.isDirectory ? item.name + "/" : item.name;
+          return item.isDirectory ? item.name + '/' : item.name;
         }
       }
       break;
@@ -575,7 +575,7 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
 
   KTextEditor::Range word(_word);
 
-  QString newText = includeItem.isDirectory ? includeItem.name + "/" : includeItem.name;
+  QString newText = includeItem.isDirectory ? includeItem.name + '/' : includeItem.name;
 
   if(!includeItem.isDirectory) {
     //Add suffix and newline

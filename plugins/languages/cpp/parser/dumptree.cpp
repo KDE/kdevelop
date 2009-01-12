@@ -125,7 +125,7 @@ void DumpTree::visit(AST *node)
   if( m_tokenStream && node ) {
     for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
       const Token& tok( m_tokenStream->token((int) a) );
-      nodeText += tok.symbolString() + " ";
+      nodeText += tok.symbolString() + ' ';
     }
   }
   if (node)

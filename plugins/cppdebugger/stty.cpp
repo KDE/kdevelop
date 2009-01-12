@@ -154,7 +154,7 @@ STTY::~STTY()
 int STTY::findTTY()
 {
     int ptyfd = -1;
-    bool needGrantPty = TRUE;
+    bool needGrantPty = true;
 
     // Find a master pty that we can open ////////////////////////////////
 
@@ -167,7 +167,7 @@ int STTY::findTTY()
     strncpy(tty_slave, ptsname(ptyfd), 50);
     grantpt(ptyfd);
     unlockpt(ptyfd);
-    needGrantPty = FALSE;
+    needGrantPty = false;
 #endif
 
     // first we try UNIX PTY's
@@ -181,7 +181,7 @@ int STTY::findTTY()
             struct stat sbuf;
             sprintf(tty_slave,"/dev/pts/%d",ptyno);
             if (stat(tty_slave,&sbuf) == 0 && S_ISCHR(sbuf.st_mode))
-                needGrantPty = FALSE;
+                needGrantPty = false;
             else {
                 close(ptyfd);
                 ptyfd = -1;
@@ -226,7 +226,7 @@ int STTY::findTTY()
     }
 
     if (ptyfd >= 0) {
-        if (needGrantPty && !chownpty(ptyfd, TRUE)) {
+        if (needGrantPty && !chownpty(ptyfd, true)) {
             fprintf(stderr,"kdevelop: chownpty failed for device %s::%s.\n",pty_master,tty_slave);
             fprintf(stderr,"        : This means the session can be eavesdroped.\n");
             fprintf(stderr,"        : Make sure konsole_grantpty is installed and setuid root.\n");

@@ -65,7 +65,7 @@ QString MacroNavigationContext::html(bool shorten)
       args += IndexedString(b).str();
     }
 
-    args += ")";
+    args += ')';
   }
 
   modifyHtml() += (m_macro->function_like ? i18n("Function macro") : i18n("Macro")) + " " + importantHighlight(m_macro->name.str()) + " " + args +  "<br />";

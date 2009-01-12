@@ -151,7 +151,7 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
     } else {
       //Eventually Recurse into the context
       if((*childIterator)->type() == DUContext::Global || (*childIterator)->type() == DUContext::Namespace /*|| (*childIterator)->type() == DUContext::Class*/)
-        addDeclarationsFromContext(*childIterator, first, indent + " ");
+        addDeclarationsFromContext(*childIterator, first, indent + ' ');
       ++childIterator;
     }
   }

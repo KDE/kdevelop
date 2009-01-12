@@ -41,7 +41,7 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
     }
   } else {
     for( size_t a = ast->start_token; a < ast->end_token; a++ ) {
-      ret += session->token_stream->token(a).symbolString() + " ";
+      ret += session->token_stream->token(a).symbolString() + ' ';
     }
   }
   return ret;
@@ -128,7 +128,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     tmp_name = m_session->token_stream->token(node->id).symbol();
 
   if (node->tilde)
-    tmp_name = IndexedString("~" + tmp_name.byteArray());
+    tmp_name = IndexedString('~' + tmp_name.byteArray());
 
   if (OperatorFunctionIdAST *op_id = node->operator_id)
     {

@@ -125,7 +125,7 @@ QString pp_macro::toString() const {
   if(!defined)
     ret = "undef " + ret;
   if(function_like) {
-    ret += "(";
+    ret += '(';
     bool first = true;
     for(uint a = 0; a < formalsSize(); ++a) {
       if(!first)
@@ -134,9 +134,9 @@ QString pp_macro::toString() const {
       
       ret += KDevelop::IndexedString(formals()[a]).str();
     }
-    ret += ")";
+    ret += ')';
   }
-  ret += " " + QString::fromUtf8(stringFromContents(definition(), definitionSize()));
+  ret += ' ' + QString::fromUtf8(stringFromContents(definition(), definitionSize()));
   
   return ret;
 }
@@ -146,7 +146,7 @@ QString pp_dynamic_macro::toString() const {
   if(!defined)
     ret = "undef " + ret;
   if(function_like) {
-    ret += "(";
+    ret += '(';
     bool first = true;
     foreach(uint str, formals) {
       if(!first)
@@ -155,7 +155,7 @@ QString pp_dynamic_macro::toString() const {
       
       ret += KDevelop::IndexedString(str).str();
     }
-    ret += ")";
+    ret += ')';
   }
   ret += QString::fromUtf8(stringFromContents(definition));
   
