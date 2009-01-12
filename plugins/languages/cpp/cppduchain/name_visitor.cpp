@@ -125,8 +125,17 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
     if(!had) //only forward-declarations, register to any.
       if(m_visitor)
         m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
-  } else if( m_debug )
-    kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
+  } else {
+    if(node == m_finalName) {
+      if(m_visitor) { //Create a zero use, which will be highlighted as an error
+        m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
+        ///@todo Eventually report a problem, but then we don't need the zero use
+      }
+      
+      if( m_debug )
+        kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
+    }
+  }
 
   _M_name.push(m_currentIdentifier);
 }

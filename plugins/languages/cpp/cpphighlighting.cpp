@@ -50,6 +50,37 @@ using namespace KDevelop;
 
 #define LOCK_SMART(range) KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(range->document()); QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
+namespace KDevelop {
+class ConfigurableHighlightingColors {
+  public:
+    ConfigurableHighlightingColors(QString highlightingName) : m_highlightingName(highlightingName) {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      setDefaultAttribute(a);
+    }
+    
+    void addAttribute(int number, KTextEditor::Attribute::Ptr attribute) {
+      m_attributes[number] = attribute;
+    }
+    
+    KTextEditor::Attribute::Ptr getAttribute(int number) const {
+      return m_attributes[number];
+    }
+    
+    void setDefaultAttribute(KTextEditor::Attribute::Ptr defaultAttrib) {
+      m_defaultAttribute = defaultAttrib;
+    }
+    
+    KTextEditor::Attribute::Ptr defaultAttribute() const {
+      return m_defaultAttribute;
+    }
+    
+  private:
+    KTextEditor::Attribute::Ptr m_defaultAttribute;
+    QHash<int, KTextEditor::Attribute::Ptr> m_attributes;
+    QString m_highlightingName;
+};
+}
+
 QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
 uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
@@ -121,8 +152,101 @@ CppHighlighting::~CppHighlighting( )
 {
 }
 
+class CppHighlightingColors : public KDevelop::ConfigurableHighlightingColors {
+  public:
+  CppHighlightingColors() : KDevelop::ConfigurableHighlightingColors("C++ Semantic Highlighting") {
+
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x005912)); //Dark green
+      addAttribute(CppHighlighting::ClassType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x00981e)); //Lighter greyish green
+      addAttribute(CppHighlighting::TypeAliasType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x6c101e)); //Dark red
+      addAttribute(CppHighlighting::EnumType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x862a38)); //Greyish red
+      addAttribute(CppHighlighting::EnumeratorType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x21005A)); // Navy blue
+      addAttribute(CppHighlighting::FunctionType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x443069));// Dark Burple (blue / purple)
+      addAttribute(CppHighlighting::MemberVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0xae7d00)); //Light orange
+      addAttribute(CppHighlighting::LocalClassMemberType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x705000)); //Dark orange
+      addAttribute(CppHighlighting::InheritedClassMemberType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x0C4D3C));
+      addAttribute(CppHighlighting::LocalVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x300085)); // Less dark navy blue
+      addAttribute(CppHighlighting::FunctionVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x9F3C5F)); // Rose
+      addAttribute(CppHighlighting::NamespaceVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x12762B)); // Grass green
+      addAttribute(CppHighlighting::GlobalVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x6B2840)); // Dark rose
+      addAttribute(CppHighlighting::NamespaceType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute(*defaultAttribute()));
+//       a->setForeground(QColor(0x8b0019)); // Pure red
+      a->setUnderlineColor(QColor(0x8b0019)); // Pure red
+      a->setUnderlineStyle(QTextCharFormat::WaveUnderline);
+      addAttribute(CppHighlighting::ErrorVariableType, a);
+    }
+    {
+      KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
+      a->setForeground(QColor(0x5C5C5C)); // Gray
+      addAttribute(CppHighlighting::ForwardDeclarationType, a);
+    }
+/*      case ScopeType:
+      case TemplateType:
+      case TemplateParameterType:
+      case CodeType:
+      case FileType:*/
+    
+  }
+};
+
+static CppHighlightingColors configurableColors;
+
 KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Contexts context, uint color ) const
 {
+  ///@todo Clear cache when the highlighting has changed
   KTextEditor::Attribute::Ptr a;
   switch (context) {
     case DefinitionContext:
@@ -139,136 +263,31 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
   }
 
   if (!a || color ) {
-    a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute());
-    a->setBackgroundFillWhitespace(true);
-    switch (context) {
-      case DefinitionContext:
-        if( !color )
-          m_definitionAttributes.insert(type, a);
-        break;
-
-      case DeclarationContext:
-        if( !color )
-          m_declarationAttributes.insert(type, a);
-        break;
-
-      case ReferenceContext:
-        if( !color )
-          m_referenceAttributes.insert(type, a);
-        break;
-    }
-
-    switch (type) {
-//       case UnknownType:
-//         // Chocolate orange
-//         a->setForeground(QColor(0xA0320A));
-//         break;
-
-/*      case ArgumentType:
-        // Steel
-        a->setBackground(QColor(0x435361));
-        break;*/
-      case ClassType: {
-        a->setForeground(QColor(0x005912)); //Dark green
-
-        KTextEditor::Attribute::Ptr e(new KTextEditor::Attribute());
-        e->setForeground(QColor(0x005500));
-        a->setDynamicAttribute(Attribute::ActivateCaretIn, e);
-        //a->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
-        break;
-      }
-      case TypeAliasType:
-        a->setForeground(QColor(0x00981e)); //Lighter greyish green
-        break;
-
-      case EnumType:
-        a->setForeground(QColor(0x6c101e)); //Dark red
-        break;
-
-      case EnumeratorType:
-        a->setForeground(QColor(0x862a38)); //Greyish red
-        break;
-
-      case FunctionType:
-        // Navy blue
-        a->setForeground(QColor(0x21005A));
-        break;
-
-      case MemberVariableType:
-        // Dark Burple (blue / purple)
-        a->setForeground(QColor(0x443069));
-        break;
-
-      case LocalClassMemberType:
-        a->setForeground(QColor(0xae7d00)); //Light orange
-        break;
-
-      case InheritedClassMemberType:
-        a->setForeground(QColor(0x705000)); //Dark orange
-        break;
-
-      case LocalVariableType:
-        // Dark aquamarine
-        a->setForeground(QColor(0x0C4D3C));
-        break;
-
-      case FunctionVariableType:
-        // Less dark navy blue
-        a->setForeground(QColor(0x300085));
-        break;
-
-      case NamespaceVariableType:
-        // Rose
-        a->setForeground(QColor(0x9F3C5F));
-        break;
-
-      case GlobalVariableType:
-        // Grass green
-        a->setForeground(QColor(0x12762B));
-        break;
-
-//       case NamespaceType:
-//         // Dark rose
-//         a->setForeground(QColor(0x6B2840));
-//         break;
-
-      case ErrorVariableType:
-        // Pure red
-        a->setForeground(QColor(0x8b0019));
-        break;
-
-      case ForwardDeclarationType:
-        // Gray
-        a->setForeground(QColor(0x5C5C5C));
-        break;
-
-      case ScopeType:
-      case TemplateType:
-      case TemplateParameterType:
-      case CodeType:
-      case FileType:
-        break;
-    }
+    
+    a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*configurableColors.getAttribute(type)));
 
     switch (context) {
       case DefinitionContext:
-        a->setFontBold();
-        break;
-
       case DeclarationContext:
         a->setFontBold();
-        //a->setFontUnderline(true);
-        break;
-
-      case ReferenceContext:
-        KTextEditor::Attribute::Ptr d(new KTextEditor::Attribute());
-        d->setBackground(QColor(Qt::blue).light(190));
-        d->setEffects(Attribute::EffectFadeIn | Attribute::EffectFadeOut);
-        a->setDynamicAttribute(Attribute::ActivateMouseIn, d);
         break;
     }
-    if( color )
+
+    if( color ) {
       a->setForeground(QColor(color));
+    } else {
+      switch (context) {
+        case DefinitionContext:
+          m_definitionAttributes.insert(type, a);
+          break;
+        case DeclarationContext:
+          m_declarationAttributes.insert(type, a);
+          break;
+        case ReferenceContext:
+          m_referenceAttributes.insert(type, a);
+          break;
+      }
+    }
   }
 
   return a;
@@ -497,6 +516,9 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
 //     if(!Cpp::isAccessible(context, classMember))
 //       return ErrorVariableType;
 
+  if(!dec)
+    return ErrorVariableType;
+
   Types type = LocalVariableType;
   if (context) {
     //It is a use.
@@ -560,11 +582,15 @@ void CppHighlighting::highlightUse(DUContext* context, int index, uint color) co
   if (SmartRange* range = context->useSmartRange(index)) {
     Types type = ErrorVariableType;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
-    if (decl)
-      type = typeForDeclaration(decl, context);
-
+    
+    type = typeForDeclaration(decl, context);
+    
     LOCK_SMART(range);
-    range->setAttribute(attributeForType(type, ReferenceContext, color));
+    
+    if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
+      range->setAttribute(attributeForType(type, ReferenceContext, color));
+    else
+      range->setAttribute(KTextEditor::Attribute::Ptr());
   }
 }
 
@@ -578,7 +604,10 @@ void CppHighlighting::highlightUses(DUContext* context) const
         type = typeForDeclaration(decl, context);
 
     LOCK_SMART(range);
-      range->setAttribute(attributeForType(type, ReferenceContext, 0));
+    if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
+        range->setAttribute(attributeForType(type, ReferenceContext, 0));
+    else
+        range->setAttribute(KTextEditor::Attribute::Ptr());
     }
   }
 }
