@@ -136,9 +136,11 @@ QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentI
 {
 
     int startrow = 0;
-    if( isValidIndex(currentIdx) )
+    if( !isValidIndex(currentIdx) )
     {
         startrow = rowCount() - 1;
+    }else{
+        startrow = currentIdx.row();
     }
     int currow = startrow - 1;
     while( currow != startrow )
