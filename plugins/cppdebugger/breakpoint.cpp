@@ -486,10 +486,10 @@ void FilePosBreakpoint::setLocation(const QString& location)
 
         QString t = regExp1.cap(1);
         QString dirPath = QFileInfo(t).path();
-        if ( dirPath == '.' )
+        if ( dirPath == "." )
         {
             QString existingDirPath = QFileInfo(fileName_).path();
-            if (existingDirPath != '.')
+            if (existingDirPath != ".")
                 fileName_ = existingDirPath + '/' + regExp1.cap(1);
             else
                 fileName_ = regExp1.cap(1);
