@@ -29,7 +29,7 @@ and images.
 <b>IMPORTANT:</b> You should replace <code>yourPartClassName</code> with the name of the class that
 implements your part.
 
-On the area marked with <code>...</code> you can add optional informations. Here is an example of that:
+On the area marked with <code>...</code> you can add optional information. Here is an example of that:
 
 \verbinclude plugins/appwizard/README.dox
 

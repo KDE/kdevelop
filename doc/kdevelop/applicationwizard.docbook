@@ -661,7 +661,7 @@ As you might have noticed, the applications manager did readily fill in some inf
 The templates you set up in the <guilabel>Create New Project</guilabel> dialog will later be processed whenever you command &kdevelop; to set up a new source and/or header file. The information you provided here will be included at top as a documentation header, before the code parts begin.
 </para>
 <para>
-You are not restricted to plain text however. &kdevelop; knows of several variables which allow you to include actual information in the file. The &appwizard; did in fact use some such variables to insert the <guilabel>Author</guilabel>, <guilabel>Email</guilabel>, and <guilabel>License</guilabel> informations into the initial template text.
+You are not restricted to plain text however. &kdevelop; knows of several variables which allow you to include actual information in the file. The &appwizard; did in fact use some such variables to insert the <guilabel>Author</guilabel>, <guilabel>Email</guilabel>, and <guilabel>License</guilabel> information into the initial template text.
 </para>
 
 <variablelist>
@@ -760,7 +760,7 @@ In many cases when your new project has been set up this way, &kdevelop; will au
 </para></note>
 
 <para>
-Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading informations according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
+Do not forget to initially check what the &appwizard; has provided. For example you may want to change the initial heading information according to your own templates. Usually you will find these in a <filename class="directory">templates</filename> subdirectory in your project directory. Some simple copy operations will mostly suffice.
 </para>
 <para>
 Then it is advisable that you <emphasis>compile the initial project</emphasis> before you attempt to change any code. In most cases this initial compilation should be possible. Thus you can make up whether the project really was set up according to your needs. If it was not, simply remove the project directory (in your local &CVS; root as well if you use one) and start over again.

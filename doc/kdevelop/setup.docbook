@@ -257,7 +257,7 @@ There is an alternative way to switch the compiler output detail. Just right cli
 View</guilabel> <guilabel>Window font:</guilabel></term>
 <listitem>
 <para>
-The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are informations the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
+The <guilabel>Application Output View</guilabel> window is used to display error and state information from applications which are run from inside &kdevelop;. These are information the applications usually sends to the console when run stand-alone. So you do not need to leave the IDE when testing the application you currently work on.
 </para>
 
 <para>
