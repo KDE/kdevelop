@@ -122,10 +122,6 @@ protected:
   void newUse(SimpleRange newRange, Declaration* declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
-    if(!declaration) {
-      kDebug() << "Tried to create use of zero declaration";
-      return;
-    }
 
     bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);

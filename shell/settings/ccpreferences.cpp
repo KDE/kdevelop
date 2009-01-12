@@ -85,6 +85,7 @@ void CCPreferences::writeToSettings()
     
     settings.m_enableSemanticHighlighting = preferencesDialog->kcfg_enableSemanticHighlighting->isChecked();
     settings.m_localVariableColorizationLevel = preferencesDialog->kcfg_localVariableColorization->value();
+    settings.m_highlightSemanticProblems = preferencesDialog->kcfg_highlightSemanticProblems->isChecked();
     
     emit settings.emitChanged();
 }

@@ -114,6 +114,16 @@
         </item>
        </layout>
       </item>
+      <item row="2" column="0" >
+       <widget class="QCheckBox" name="kcfg_highlightSemanticProblems" >
+        <property name="toolTip" >
+         <string>Highlight semantic problems like not found or not accessible declarations.</string>
+        </property>
+        <property name="text" >
+         <string>Highlight Semantic Problems</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
