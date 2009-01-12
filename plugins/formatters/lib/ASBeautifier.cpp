@@ -874,7 +874,7 @@ string ASBeautifier::beautify(const string &originalLine)
 		spaceTabCount = inStatementIndentStack->back();
 
 
-	for (i = 0; i < (int) headerStackSize; i++)
+	for (i = 0; i < (int) headerStackSize; ++i)
 	{
 		isInClass = false;
 
@@ -941,7 +941,7 @@ string ASBeautifier::beautify(const string &originalLine)
 
 	// parse characters in the current line.
 
-	for (i = 0; i < (int) line.length(); i++)
+	for (i = 0; i < (int) line.length(); ++i)
 	{
 		outBuffer.append(1, line[i]);
 
@@ -1847,7 +1847,7 @@ int ASBeautifier::getNextProgramCharDistance(const string &line, int i)
 	int  charDistance;
 	char ch;
 
-	for (charDistance = 1; charDistance < remainingCharNum; charDistance++)
+	for (charDistance = 1; charDistance < remainingCharNum; ++charDistance)
 	{
 		ch = line[i + charDistance];
 		if (inComment)

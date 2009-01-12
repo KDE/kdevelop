@@ -123,7 +123,7 @@ void SuiteBuilder::constructSuites()
         }
     }
     QMap<QString, Suite*>::Iterator it;
-    for(it = m_suites.begin(); it != m_suites.end(); it++) {
+    for(it = m_suites.begin(); it != m_suites.end(); ++it) {
         m_root->addChild(it.value());
     }
 }

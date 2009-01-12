@@ -58,7 +58,7 @@ namespace
 IDocument* activeDocument()
 {
     ICore* core = ICore::self();
-    IDocumentController* dc = core->documentController(); 
+    IDocumentController* dc = core->documentController();
     IDocument* doc = dc->activeDocument();
     if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
         return 0;
@@ -149,7 +149,7 @@ void updateClassCount(Declaration* clazz, QMap<Declaration*,int>& classes)
     kDebug() << "Incremented member definition count for " << clazz->toString();
 }
 
-/*! Calculates the class with the highest number of member function 
+/*! Calculates the class with the highest number of member function
     implementations in context ctx */
 Declaration* dominantClassInCpp(TopDUContext* ctx)
 {
@@ -177,7 +177,7 @@ void updateClassMemberCountFor(DUContext* ctx, QMap<Declaration*,int>& classes)
     }
 }
 
-/*! recursive functions which traverses ctx for classes and updates the 
+/*! recursive functions which traverses ctx for classes and updates the
     member counts in the classes map */
 void computeClassMemberCount(DUContext* parent, QMap<Declaration*,int>& classes)
 {
@@ -235,7 +235,7 @@ KUrl findTargetLocation(QualifiedIdentifier target)
 /*    if (count > 0) {
         url = KUrl(matches->declaration()->url().str());
     }*/
-    for(int i=0; i<count; i++, matches++) {
+    for(int i=0; i<count; ++i, ++matches) {
         Declaration* matched = matches->declaration();
         if (!matched || matched->url().isEmpty()) continue;
         kDebug() << "matched " << matched->toString() << " " << matched->url().str();
@@ -320,7 +320,7 @@ TopDUContext* TestSwitch::documentContextFor(const KUrl& url)
     }
     return docCtx;
 }
- 
+
 #define STOP_IF(X, MSG) \
   if (X) { kDebug() << MSG; m_buzzySwitching = false; return; }
 
@@ -333,7 +333,7 @@ void TestSwitch::swapTest_UnitUnderTest()
     STOP_IF(!doc, "Can't switch, no active document.")
 
     DUChainReadLocker lock(DUChain::lock());
-    TopDUContext* docCtx = documentContextFor(doc->url());  
+    TopDUContext* docCtx = documentContextFor(doc->url());
     STOP_IF(!docCtx, QString("Failed to get chain for %1").arg(doc->url().path()))
 
     Declaration* clazz = (isHeader(doc->url())) ?
