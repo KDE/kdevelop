@@ -1,18 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=Generic Project Manager
-Name[el]=Κανένα
-Name[es]=Ninguno
-Name[fr]=Aucun
-Name[gl]=Nengún
-Name[nds]=Keen
-Name[pt]=Nenhum
-Name[pt_BR]=Nenhum
-Name[sv]=Ingen
-Name[uk]=Немає
-Name[x-test]=xxNonexx
-Name[zh_CN]=无
-Name[zh_TW]=無
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos
