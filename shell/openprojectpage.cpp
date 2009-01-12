@@ -44,7 +44,7 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
     QStringList filters;
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
-    filters << "*."+ShellExtension::getInstance()->projectFileExtension() +"|"+ShellExtension::getInstance()->projectFileDescription();
+    filters << "*."+ShellExtension::getInstance()->projectFileExtension() +'|'+ShellExtension::getInstance()->projectFileDescription();
     KPluginInfo::List plugins = PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" );
     foreach(const KPluginInfo& info, PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
@@ -55,7 +55,7 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
         {
             m_projectFilters.insert( info.name(), filter.toStringList() );
             allEntry.append( filter.toString() );
-            filters << filter.toStringList().join(" ")+"|"+desc.toString();
+            filters << filter.toStringList().join(" ")+'|'+desc.toString();
         }
     }
 

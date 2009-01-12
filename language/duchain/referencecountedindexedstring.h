@@ -11,8 +11,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef REFERENCEDCOUNTED_INDEXED_STRING_H
-#define REFERENCEDCOUNTED_INDEXED_STRING_H
+#ifndef REFERENCECOUNTEDINDEXEDSTRING_H
+#define REFERENCECOUNTEDINDEXEDSTRING_H
 
 //krazy:excludeall=dpointer,inline
 

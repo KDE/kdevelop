@@ -115,7 +115,7 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
                 }
             }
         }
-        m_url.addPath( m_url.fileName()+"."+ShellExtension::getInstance()->projectFileExtension() );
+        m_url.addPath( m_url.fileName()+'.'+ShellExtension::getInstance()->projectFileExtension() );
     } else
     {
         setAppropriate( projectInfoPage, false );

@@ -24,14 +24,14 @@ Boston, MA 02110-1301, USA.
 #include <QStandardItemModel>
 #include <QPalette>
 
-#include <KSelectAction>
-#include <KActionMenu>
-#include <KActionCollection>
-#include <KMessageBox>
-#include <KLocale>
-#include <KDebug>
-#include <KColorScheme>
-#include <KCompositeJob>
+#include <KDE/KSelectAction>
+#include <KDE/KActionMenu>
+#include <KDE/KActionCollection>
+#include <KDE/KMessageBox>
+#include <KDE/KLocale>
+#include <KDE/KDebug>
+#include <KDE/KColorScheme>
+#include <KDE/KCompositeJob>
 #include <kdialogjobuidelegate.h>
 
 #include <interfaces/iproject.h>
@@ -210,7 +210,7 @@ void RunController::setupActions()
 
 QAction* KDevelop::RunController::addTarget(KDevelop::IProject * project, const QString& targetName)
 {
-    // First check wether we already have the action, if there's a large number
+    // First check weather we already have the action, if there's a large number
     // we might need to use a map/hash for storing the data instead of
     // QAction::data()
     bool found = false;

@@ -19,7 +19,7 @@
 #ifndef SPECIALIZATIONSTORE_H
 #define SPECIALIZATIONSTORE_H
 
-#include <QtCore/qhash.h>
+#include <QtCore/QHash>
 #include "../languageexport.h"
 
 namespace KDevelop {

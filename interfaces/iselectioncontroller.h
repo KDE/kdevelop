@@ -35,7 +35,7 @@ class Context;
  * This controller can be used by selection consumers and selection providers.
  *
  * A selection provider (for example a treeview for the projects) should
- * call updateSelection() with an apropriate context filled with the details
+ * call updateSelection() with an appropriate context filled with the details
  * of the selection
  *
  * A selection consumer who is interested in notifications when the selection has

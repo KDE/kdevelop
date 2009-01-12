@@ -22,7 +22,7 @@
 #include <QtCore/Qt>
 #include <QtCore/QList>
 
-#include <KConfigGroup>
+#include <KDE/KConfigGroup>
 
 #include "sublimeexport.h"
 
