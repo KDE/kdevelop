@@ -61,6 +61,7 @@ Container::Container(QWidget *parent)
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
     setHoverCloseButton(true);
     setCloseButtonEnabled(true);
+    setTabReorderingEnabled(true);
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
