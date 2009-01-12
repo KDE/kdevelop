@@ -19,18 +19,18 @@
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-#include <ktoolbar.h>
-#include <kwindowsystem.h>
+#include <KDE/KDebug>
+#include <KDE/KGlobal>
+#include <KDE/KConfig>
+#include <KDE/KSharedConfig>
+#include <KDE/KConfigGroup>
+#include <KDE/KToolBar>
+#include <KDE/KWindowSystem>
 
-#include <QApplication>
-#include <QDesktopWidget>
-#include <KStatusBar>
-#include <KMenuBar>
+#include <QtGui/QApplication>
+#include <QtGui/QDesktopWidget>
+#include <KDE/KStatusBar>
+#include <KDE/KMenuBar>
 
 #include "area.h"
 #include "view.h"

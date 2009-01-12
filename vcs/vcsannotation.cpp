@@ -22,7 +22,7 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QHash>
-#include <kurl.h>
+#include <KDE/KUrl>
 
 #include "vcsrevision.h"
 

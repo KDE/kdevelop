@@ -22,7 +22,7 @@
 #include <QtCore/QVector>
 #include <QtCore/QPair>
 
-#include <kdebug.h>
+#include <KDE/KDebug>
 
 #include "embeddedfreetree.h"
 #include "kdevvarlengtharray.h"

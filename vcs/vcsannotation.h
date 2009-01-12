@@ -64,9 +64,9 @@ public:
     QDateTime date() const;
     /**
      * set the line number of this annotation line
-     * @param number the line number
+     * @param lineno the line number
      */
-    void setLineNumber( int );
+    void setLineNumber( int lineno );
     /**
      * set the text of this annotation line
      * @param text the text of the line

@@ -22,7 +22,7 @@
 #ifndef VCSJOB_H
 #define VCSJOB_H
 
-#include <kjob.h>
+#include <KDE/KJob>
 
 #include "vcsexport.h"
 

@@ -20,10 +20,10 @@
 #ifndef KDEVSTATUSBAR_H
 #define KDEVSTATUSBAR_H
 
-#include <QTime>
-#include <QMap>
+#include <QtCore/QTime>
+#include <QtCore/QMap>
 
-#include <KStatusBar>
+#include <KDE/KStatusBar>
 
 class QProgressBar;
 class QSignalMapper;

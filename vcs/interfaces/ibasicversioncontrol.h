@@ -20,10 +20,10 @@
  */
 
 #ifndef IBASICVERSIONCONTROL_H
-#define IBASICVERSIONCONTROL_H
+#define IBASICVERSIONCONTROL_H  
 
 #include <interfaces/iextension.h>
-#include <kurl.h>
+#include <KDE/KUrl>
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
 
@@ -102,7 +102,6 @@ public:
 
     /**
      * adds a local unversioned file or directory to the list of versioned files.
-     * @param recursive is only meaningful for directories
      * @param localLocations a list of files or directories that should be put under version control
      * @param recursion whether to add directories and their children or only directories themselves
      * @returns a job that executes the addition
@@ -112,7 +111,7 @@ public:
 
     /**
      * removes a local versioned file or directory from the version control system
-     * @param the list of files/directories to remove from the VCS
+     * @param localLocations the list of files/directories to remove from the VCS
      * @returns a job that executes the removal
      */
     virtual VcsJob* remove( const KUrl::List& localLocations ) = 0;
@@ -146,7 +145,7 @@ public:
      * fetches the latest changes from the repository, if there are
      * conflicts a merge needs to be executed separately
      *
-     * @param localLocation the local files/dirs that should be updated
+     * @param localLocations the local files/dirs that should be updated
      * @param rev Update to this revision. The operation will fail if @p rev is
      * a range.
      * @param recursion defines whether the directories should be updated

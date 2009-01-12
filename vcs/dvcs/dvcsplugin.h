@@ -23,7 +23,7 @@
 
 #include <KDE/KUrl>
 #include <KDE/KJob>
-#include <kcomponentdata.h>
+#include <KDE/KComponentData>
 
 #include <QtCore/QObject>
 

@@ -19,13 +19,13 @@
 
 #include "statusbar.h"
 
-#include <QTimer>
-#include <QProgressBar>
-#include <QLabel>
-#include <QSignalMapper>
+#include <QtCore/QTimer>
+#include <QtGui/QProgressBar>
+#include <QtGui/QLabel>
+#include <QtCore/QSignalMapper>
 
-#include <KColorScheme>
-#include <KDebug>
+#include <KDE/KColorScheme>
+#include <KDE/KDebug>
 
 #include <interfaces/istatus.h>
 #include <interfaces/ilanguagecontroller.h>

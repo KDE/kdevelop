@@ -31,15 +31,15 @@
 #include <QtGui/QMenu>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-#include <QFileInfo>
-#include <QString>
+#include <QtCore/QFileInfo>
+#include <QtCore/QString>
 
-#include <KParts/PartManager>
-#include <KParts/Part>
+#include <KDE/KParts/PartManager>
+#include <KDE/KParts/Part>
 
-#include <KActionCollection>
-#include <KMessageBox>
-#include <KAction>
+#include <KDE/KActionCollection>
+#include <KDE/KMessageBox>
+#include <KDE/KAction>
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
