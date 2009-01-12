@@ -185,10 +185,23 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
       return true;
   }
   
-  if(fromContext->parentContext() && fromContext->parentContext()->type() == DUContext::Class)
-    return isAccessible(fromContext->parentContext(), declaration);
+  DUContext* parent = logicalParentContext(fromContext, fromContext->topContext());
+  
+  if(parent && parent->type() == DUContext::Class)
+    return isAccessible(parent, declaration);
   
   return false;
+}
+
+KDevelop::DUContext* logicalParentContext(KDevelop::DUContext* context, KDevelop::TopDUContext* source)
+{
+  if(!context->parentContext())
+    return 0;
+  
+  if(context->parentContext()->type() == DUContext::Helper && !context->parentContext()->importedParentContexts().isEmpty())
+    return context->parentContext()->importedParentContexts()[0].context(source);
+   
+  return context->parentContext();
 }
 
 /**

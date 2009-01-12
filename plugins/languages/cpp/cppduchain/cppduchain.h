@@ -82,6 +82,12 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop:
 KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::ClassMemberDeclaration* declaration);
 
 /**
+ * Returns the logical parent-context of the given context. This may be a different than the physical parent-context
+ * in case of external class-definitions.
+ */
+KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* logicalParentContext(KDevelop::DUContext* context, KDevelop::TopDUContext* source);
+
+/**
  * Preprocesses the given string, taking the environment from the given environment-file.
  * DUChain does not need to be locked.
  * @param line All macros that are defined before this line are used
