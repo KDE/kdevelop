@@ -275,7 +275,7 @@ template <typename T> T* BuildASTVisitor::stackPop()
 QString BuildASTVisitor::getTokenString(qint64 idx)
 {
     QMake::Parser::Token token = m_parser->tokenStream->token(idx);
-    return m_parser->tokenText(token.begin,token.end).replace("\n","\\n");
+    return m_parser->tokenText(token.begin,token.end).replace('\n',"\\n");
 }
 
 void BuildASTVisitor::setPositionForAst( AstNode* node, AST* ast )
