@@ -225,7 +225,7 @@ void VariableItem::valueDone(const GDBMI::ResultRecord& r)
                     else
                         encoded += "\\" + s;
                 }
-                encoded += "'";
+                encoded += '\'';
                 s = encoded;
             }
         }
@@ -368,7 +368,7 @@ QString VariableItem::displayName() const
 
     if (VariableItem* p = parentItem())
     {
-        return "*" + p->displayName();
+        return '*' + p->displayName();
     }
     else
     {
@@ -405,7 +405,7 @@ QString VariableItem::gdbExpression() const
     if (ok)
     {
         // Array, parent always exists.
-        return parent->gdbExpression() + "[" + expression_ + "]";
+        return parent->gdbExpression() + '[' + expression_ + ']';
     }
     else if (expression_[0] == '*')
     {
@@ -415,7 +415,7 @@ QString VariableItem::gdbExpression() const
             // references 0-th element of some array).
             // So, we really need to get to the parent to computed the right
             // gdb expression.
-            return "*" + parent->gdbExpression();
+            return '*' + parent->gdbExpression();
         }
         else
         {
@@ -431,9 +431,9 @@ QString VariableItem::gdbExpression() const
                the expression should cast parent to the base's
                type. */
             if (baseClassMember_)
-                return "((" + expression_ + ")" + parent->gdbExpression() + ")";
+                return "((" + expression_ + ')' + parent->gdbExpression() + ')';
             else
-                return parent->gdbExpression() + "." + expression_;
+                return parent->gdbExpression() + '.' + expression_;
         else
             return expression_;
     }
@@ -658,7 +658,7 @@ QVariant VariableItem::data(int column, int role) const
                 tip = tip.mid(0, maxTooltipSize - 1 ) + " [...]";
 
             if (!tip.isEmpty())
-                tip += "\n" + originalValueType_;
+                tip += '\n' + originalValueType_;
 
             return tip;
         }

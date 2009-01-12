@@ -608,7 +608,7 @@ bool GDBController::startDebugger()
         delete gdb_;
         gdb_ = 0;
     }
-    
+
     gdb_ = new GDB();
 
     /** FIXME: connect ttyStdout. It takes QByteArray, so
@@ -764,7 +764,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         QProcess *proc = new QProcess;
         QStringList arguments;
         arguments << "-c" << config_runShellScript_.path() +
-            " " + run.executable().path().toLatin1() + options;
+            ' ' + run.executable().path().toLatin1() + options;
 
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
@@ -1243,9 +1243,9 @@ void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSt
             if (delta & i)
             {
                 if (i & newState)
-                    out += "+";
+                    out += '+';
                 else
-                    out += "-";
+                    out += '-';
 
                 bool found = false;
 #define STATE_CHECK(name)\
@@ -1266,7 +1266,7 @@ void GDBController::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSt
 
                 if (!found)
                     out += QString::number(i);
-                out += " ";
+                out += ' ';
 
             }
         }

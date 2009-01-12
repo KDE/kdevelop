@@ -52,7 +52,7 @@ QString get_function_or_address(const GDBMI::Value &frame)
 QString get_source(const GDBMI::Value &frame)
 {
     if (frame.hasField("file"))
-        return frame["file"].literal() + ":" +  frame["line"].literal();
+        return frame["file"].literal() + ':' +  frame["line"].literal();
     else if (frame.hasField("from"))
         return frame["from"].literal();
     else
@@ -68,8 +68,8 @@ Frame::Frame(TreeModel* model, Thread* parent, const GDBMI::Value& frame)
 void Frame::updateSelf(const GDBMI::Value& frame)
 {
     id_ = frame["level"].toInt();
-    setData(QVector<QString>() 
-            << ("#" + frame["level"].literal())
+    setData(QVector<QString>()
+            << ('#' + frame["level"].literal())
             << get_function_or_address(frame)
             << get_source(frame));
 }
@@ -79,7 +79,7 @@ Thread::Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
 : TreeItem(model, parent), controller_(controller)
 {
     id_ = thread["id"].toInt();
-    
+
     updateSelf(thread, true);
     setHasMoreInitial(true);
 }
@@ -93,12 +93,12 @@ void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
             << get_source(frame));
     if (!initial)
         reportChange();
-    
+
     if (isExpanded())
         fetchMoreChildren_1(true);
     else if (!initial) {
         /* We actually don't know if there are children or not.
-           I don't really want to emit -stack-list-frames for each 
+           I don't really want to emit -stack-list-frames for each
            thread, and -thread-info does not say if thread has more
            that one frame.
            So, mark this item as having children.  If there are none,
@@ -106,7 +106,7 @@ void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
            when opening item.  It's better than showing the item as
            having no children, as otherwise user won't be able to
            expand it.  */
-        setHasMore(true);        
+        setHasMore(true);
     }
 }
 
@@ -115,13 +115,13 @@ void Thread::fetchMoreChildren()
     fetchMoreChildren_1(false);
 }
 
-void Thread::fetchMoreChildren_1(bool clear) 
+void Thread::fetchMoreChildren_1(bool clear)
 {
     /* We always ask GDB for:
        - the last frame we already have
        - 'step' more frames
        - one more frame
-       
+
        We ask for the last present frame so that GDB does not give fits
        if the last frame we have is exactly the last frame target has.
        We ask for one more frame so that we know if there are more
@@ -129,13 +129,13 @@ void Thread::fetchMoreChildren_1(bool clear)
     int now;
     if (clear)
         now = 0;
-    else 
+    else
         now = childItems.size();
     int next = now + step + 1;
     if (clear)
         now = 0;
     QString arg = QString("%1 %2").arg(now).arg(next);
-    
+
     GDBCommand *c = new GDBCommand(StackListFrames, arg,
                                    this,
                                    &Thread::handleFrameList);
@@ -151,7 +151,7 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
     {
         /* For smooth update, after stepping we update first
            block of frames without previously clearing the
-           existing ones. 
+           existing ones.
            Also note that we ignore the first stack frame
            here.  */
         int i;
@@ -167,7 +167,7 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
         }
         while (i < childItems.count())
             removeChild(i);
-        
+
         setHasMore(stack.size() > step+1);
     }
     else
@@ -188,7 +188,7 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
 class DebugUniverse : public TreeItem
 {
 public:
-    DebugUniverse(TreeModel* model, GDBController *controller, 
+    DebugUniverse(TreeModel* model, GDBController *controller,
                   StackManager *stackManager)
     : TreeItem(model), controller_(controller), stackManager_(stackManager)
     {}
@@ -198,11 +198,11 @@ public:
         controller_->addCommand(
             new GDBCommand(ThreadInfo, "",
                            this,
-                           &DebugUniverse::handleThreadInfo));        
+                           &DebugUniverse::handleThreadInfo));
     }
 
     void fetchMoreChildren() {}
-    
+
     using TreeItem::clear;
 
 private:
@@ -247,12 +247,12 @@ private:
                     t->updateSelf(threads[gidx]);
                     updated = true;
                     ++kidx;
-                }                
+                }
             }
             if (!updated)
                 break;
         }
-         
+
         for (; gidx >= 0; --gidx)
             appendChild(new Thread(model(), this,
                                    controller_, threads[gidx]));
@@ -269,7 +269,7 @@ private:
 
     }
 
-    GDBController* controller_;    
+    GDBController* controller_;
     StackManager* stackManager_;
 };
 }
@@ -287,7 +287,7 @@ StackManager::StackManager(GDBController* controller)
     model_->setRootItem(universe_);
 
     // new ModelTest(model_, this);
-    
+
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(controller, SIGNAL(event(event_t)),
@@ -316,7 +316,7 @@ void StackManager::setAutoUpdate(bool b)
 }
 
 void StackManager::updateThreads()
-{   
+{
     if (autoUpdate_)
         universe_->update();
 }
@@ -326,17 +326,17 @@ void StackManager::slotEvent(event_t e)
     switch(e)
     {
         case program_state_changed:
-            
+
             if (autoUpdate_)
                 updateThreads();
-            
+
             break;
 
          case thread_or_frame_changed:
             break;
 
         case program_exited:
-        case debugger_exited: 
+        case debugger_exited:
             universe_->clear();
             break;
 

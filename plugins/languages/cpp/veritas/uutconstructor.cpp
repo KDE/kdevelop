@@ -51,7 +51,7 @@ void printTypeInfoFor(Declaration* decl)
 {
     AbstractType::Ptr atype = decl->type<AbstractType>();
     if (atype) {
-        kDebug() << "Not an Unresolved type [" << atype->toString() 
+        kDebug() << "Not an Unresolved type [" << atype->toString()
                  << " " << decl->toString() << "]";
     } else {
         kDebug() << "Failed to fetch type for " << decl->toString();
@@ -63,7 +63,7 @@ QString cleanTypeNameFor(DelayedType::Ptr type)
 {
     QString strType = type->toString();
     if (strType.startsWith("<unresolved> ")) {
-        strType = strType.split(" ").last();
+        strType = strType.split(' ').last();
     }
     return strType;
 }

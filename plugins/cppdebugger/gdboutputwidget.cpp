@@ -154,10 +154,10 @@ namespace {
         // Make sure the newline is at the end of the newly-added
         // string. This is so that we can always correctly remove
         // newline inside 'flushPending'.
-        if (!text.endsWith("\n"))
+        if (!text.endsWith('\n'))
           text.append('\n');
 
-        if (text.endsWith("\n"))
+        if (text.endsWith('\n'))
         {
             text.remove(text.length()-1, 1);
         }
@@ -176,7 +176,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
         s = colorify(s, "blue");
     }
     else
-        s.replace("\n", "<br>");
+        s.replace('\n', "<br>");
 
     allCommands_.append(s);
     allCommandsRaw_.append(line);
@@ -278,9 +278,9 @@ void GDBOutputWidget::flushPending()
 
     // QTextEdit adds newline after paragraph automatically.
     // So, remove trailing newline to avoid double newlines.
-    if (pendingOutput_.endsWith("\n"))
+    if (pendingOutput_.endsWith('\n'))
         pendingOutput_.remove(pendingOutput_.length()-1, 1);
-    Q_ASSERT(!pendingOutput_.endsWith("\n"));
+    Q_ASSERT(!pendingOutput_.endsWith('\n'));
 
     m_gdbView->insertHtml(pendingOutput_);
     pendingOutput_ = "";
@@ -328,8 +328,8 @@ void GDBOutputWidget::focusInEvent(QFocusEvent */*e*/)
 QString GDBOutputWidget::html_escape(const QString& s)
 {
     QString r(s);
-    r.replace("<", "&lt;");
-    r.replace(">", "&gt;");
+    r.replace('<', "&lt;");
+    r.replace('>', "&gt;");
     return r;
 }
 

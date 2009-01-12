@@ -96,7 +96,7 @@ void Breakpoint::sendToGdb()
     setPending(false);
 
     bool restart = false;
-    // FIXME: this will only catch command for which gdb 
+    // FIXME: this will only catch command for which gdb
     // produces the "^running" marker.
     // FIXME: this probably won't work if there are other
     // run commands in the thread already.
@@ -107,7 +107,7 @@ void Breakpoint::sendToGdb()
         controller()->slotPauseApp();
         restart = true;
     }
-    
+
     if (isActionAdd())
     {
         // This prevents us from sending breakpoint command to
@@ -151,10 +151,10 @@ void Breakpoint::clearBreakpoint()
         new GDBCommand(BreakDelete,
                        dbgRemoveCommand(),
                        this,
-                       &Breakpoint::handleDeleted)); 
+                       &Breakpoint::handleDeleted));
 }
 
-void Breakpoint::applicationExited() 
+void Breakpoint::applicationExited()
 {
 }
 
@@ -166,7 +166,7 @@ void Breakpoint::setBreakpoint()
     // Don't use handler mechanism yet, because the reply
     // should contain internal id of breakpoint (not gdb id), so that we
     // can match gdb id with the breakpoint instance we've set.
-            
+
     // Note that at startup we issue several breakpoint commands, so can't
     // just store last breakpoint. Need to stack of last breakpoint commands,
     // but that for later.
@@ -301,30 +301,30 @@ QString Breakpoint::traceRealFormatString() const
     else
     {
         result = "Tracepoint";
-        if (const FilePosBreakpoint* fb 
+        if (const FilePosBreakpoint* fb
             = dynamic_cast<const FilePosBreakpoint*>(this))
         {
             result += " at " + fb->location() + ": ";
         }
         else
         {
-            result += " " + QString::number(key()) + ": ";
+            result += ' ' + QString::number(key()) + ": ";
         }
         for(QStringList::const_iterator i = tracedExpressions_.begin(),
                 e = tracedExpressions_.end(); i != e; ++i)
         {
-            result += " " + *i + " = %d";
+            result += ' ' + *i + " = %d";
         }
     }
 
     // Quote the thing
-    result = "\"" + result + "\\n\"";
-    
+    result = '"' + result + "\\n\"";
+
     for(QStringList::const_iterator i = tracedExpressions_.begin(),
             e = tracedExpressions_.end(); i != e; ++i)
     {
         result += ", " + *i;
-    }    
+    }
 
     return result;
 }
@@ -335,7 +335,7 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
     // because field names differ depending on breakpoint type.
 
     int id = -1;
-    
+
     if (r.hasField("bkpt"))
         id = r["bkpt"]["number"].literal().toInt();
     else if (r.hasField("wpt"))
@@ -346,7 +346,7 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
     // for future.
     else if (r.hasField("hw-awpt"))
         id = r["hw-awpt"]["number"].literal().toInt();
-    
+
     if (id == -1)
     {
         // If can't set because file not found yet,
@@ -357,7 +357,7 @@ void Breakpoint::handleSet(const GDBMI::ResultRecord& r)
     {
         setActive(0 /* unused m_activeFlag */, id);
     }
-    
+
     // Need to do this so that if breakpoint is not set
     // (because the file is not found)
     // we unset isDbgProcessing flag, so that breakpoint can
@@ -439,7 +439,7 @@ bool FilePosBreakpoint::match_data(const Breakpoint *xb) const
 
 QString FilePosBreakpoint::displayType() const
 {
-    return i18nc("Code breakpoint", "Code"); 
+    return i18nc("Code breakpoint", "Code");
 }
 
 bool FilePosBreakpoint::isValid() const
@@ -466,7 +466,7 @@ QString FilePosBreakpoint::location(bool compact) const
 {
     if (subtype_ == filepos && hasFileAndLine() && compact)
     {
-        return QFileInfo(fileName_).fileName()+":"+QString::number(line_);
+        return QFileInfo(fileName_).fileName() + ':' + QString::number(line_);
     }
     else
     {
@@ -477,7 +477,7 @@ QString FilePosBreakpoint::location(bool compact) const
 void FilePosBreakpoint::setLocation(const QString& location)
 {
     location_ = location;
-   
+
     QRegExp regExp1("(.*):(\\d+)$");
     regExp1.setMinimal(true);
     if ( regExp1.indexIn(location, 0) >= 0 )
@@ -486,11 +486,11 @@ void FilePosBreakpoint::setLocation(const QString& location)
 
         QString t = regExp1.cap(1);
         QString dirPath = QFileInfo(t).path();
-        if ( dirPath == "." )
+        if ( dirPath == '.' )
         {
             QString existingDirPath = QFileInfo(fileName_).path();
-            if (existingDirPath != ".")
-                fileName_ = existingDirPath+"/"+regExp1.cap(1);
+            if (existingDirPath != '.')
+                fileName_ = existingDirPath + '/' + regExp1.cap(1);
             else
                 fileName_ = regExp1.cap(1);
         }
@@ -513,7 +513,7 @@ void FilePosBreakpoint::handleSet(const GDBMI::ResultRecord& r)
 {
     // Below logic gets filename and line from gdb response, and
     // allows us to show breakpoint marker even for function
-    // breakpoints. Unfortunately, 'fullname' field is available only in 
+    // breakpoints. Unfortunately, 'fullname' field is available only in
     // post-6.4 versions of gdb and if we try to use 'file', then
     // KDevelop won't be able to find that file to show the marker.
     if (r.hasField("bkpt"))
@@ -535,8 +535,8 @@ void FilePosBreakpoint::handleSet(const GDBMI::ResultRecord& r)
 
 Watchpoint::Watchpoint(BreakpointController* controller, const QString& varName, bool temporary, bool enabled)
     : Breakpoint(controller, temporary, enabled),
-      varName_(varName)    
-{    
+      varName_(varName)
+{
 }
 
 /***************************************************************************/
@@ -546,7 +546,7 @@ Watchpoint::~Watchpoint()
 }
 
 void Watchpoint::setBreakpoint()
-{    
+{
     if (isEnabled())
     {
         setDbgProcessing(true);

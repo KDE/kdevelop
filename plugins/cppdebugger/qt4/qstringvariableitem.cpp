@@ -103,7 +103,7 @@ void QStringVariableItem::handleResult(const GDBMI::ResultRecord& r)
     // one QChar from two characters from gdb. But to do that, we *should*
     // now if the data if generic gdb value, and result of request for string
     // data. Fixing is is for later.
-    s.replace( QRegExp("\\\\000|\\\\0"), "" );
+    s.remove( QRegExp("\\\\000|\\\\0"), "" );
 
     // FIXME: for now, assume that all special representations are
     // just strings.

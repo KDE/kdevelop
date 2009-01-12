@@ -470,7 +470,7 @@ namespace GDBDebugger
         QWidget* ncs = const_cast<QWidget*>(s);
         QString cap = caption;
         // Prevent intepreting '&' as accelerator specifier.
-        cap.replace("&", "&&");
+        cap.replace('&', "&&");
         toolBox_->setItemText(toolBox_->indexOf(ncs), cap);
     }
 

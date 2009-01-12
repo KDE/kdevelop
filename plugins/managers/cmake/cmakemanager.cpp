@@ -242,7 +242,7 @@ KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) 
         kDebug(9032) << "No builddir specified for" << item->project()->name();
         return KUrl();
     }
-        
+
     KUrl path = group.readEntry("CurrentBuildDir");
     KUrl projectPath = m_realRoot[item->project()];
 
@@ -308,7 +308,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     KUrl folderUrl=project->folder();
     kDebug(9042) << "found module path is" << m_modulePathDef;
     kDebug(9042) << "file is" << cmakeInfoFile.path();
-    
+
     if ( !cmakeInfoFile.isLocalFile() )
     {
 //         KMessageBox::error( ICore::self()->uiControllerInternal()->defaultMainWindow(),
@@ -320,7 +320,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
         m_subprojectRoot[project] = folderUrl;
-        
+
         if(group.hasKey("ProjectRootRelative"))
         {
             QString relative=group.readEntry("ProjectRootRelative");
@@ -355,13 +355,13 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
                 group.writeEntry("ProjectRootRelative", "./");
             }
         }
-        
+
         m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_modulePathPerProject[project]=m_modulePathDef;
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
-        
+
         KUrl cachefile=buildDirectory(m_rootItem);
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
@@ -451,13 +451,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             if(binDir.startsWith("./"))
                 binDir=binDir.remove(0, 2);
             QString currentBinDir=vm->value("CMAKE_BINARY_DIR")[0]+binDir;
-            
+
             vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(currentBinDir));
             vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
             vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
 
             kDebug(9042) << "currentBinDir" << KUrl(vm->value("CMAKE_BINARY_DIR")[0]) << vm->value("CMAKE_CURRENT_BINARY_DIR");
-            
+
         #ifdef CMAKEDEBUGVISITOR
             CMakeAstDebugVisitor dv;
             dv.walk(cmakeListsPath.toLocalFile(), f, 0);
@@ -481,7 +481,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             vm->remove("CMAKE_CURRENT_LIST_FILE");
             vm->remove("CMAKE_CURRENT_SOURCE_DIR");
             vm->remove("CMAKE_CURRENT_BINARY_DIR");
-            
+
             EditorIntegrator editor;
             editor.setCurrentUrl(IndexedString(v.context()->url().toUrl()));
             LockedSmartInterface smart(editor.smart());
@@ -506,7 +506,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             }
 
             KUrl subroot=m_subprojectRoot[item->project()];
-            
+
             foreach (const QString& subf, v.subdirectories())
             {
                 if(subf.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
@@ -514,7 +514,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 KUrl path(folder->url());
                 path.addPath(subf);
                 path.adjustPath(KUrl::AddTrailingSlash);
-                
+
                 kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
                 if(subroot.isParentOf(path) || path.isParentOf(subroot))
                 {
@@ -522,21 +522,21 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     {
                         entries.removeAll(subf);
                     }
-                    
+
                     CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, folder );
                     kDebug() << "folder: " << a << a->index();
                     a->setUrl(path);
                     a->setDefinitions(v.definitions());
                     folderList.append( a );
-                    
+
                     DescriptorAttatched* datt=static_cast<DescriptorAttatched*>(a);
                     datt->setDescriptor(v.folderDeclarationDescriptor(subf));
                 }
             }
-            
+
     //         if(folderList.isEmpty() && path.isParentOf(item->url()))
     //             kDebug() << "poor guess";
-            
+
             QStringList directories;
             directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
             directories += currentBinDir;
@@ -550,11 +550,11 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     path.addPath(s);
                     dir=path.toLocalFile();
                 }
-                
+
                 KUrl simp(dir); //We use this to simplify dir
                 simp.cleanPath();
                 dir=simp.toLocalFile();
-                
+
                 if(!directories.contains(dir))
                     directories.append(dir);
             }
@@ -566,12 +566,12 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                 QStringList dependencies=v.targetDependencies(t);
                 if(!dependencies.isEmpty()) //Just to remove verbosity
                 {
-                    
+
                     QString outputName=t;
                     if(v.targetHasProperty(t, "OUTPUT_NAME"))
                         outputName=v.targetProperty(t, "OUTPUT_NAME");
-                
-                    KDevelop::ProjectTargetItem* targetItem;   
+
+                    KDevelop::ProjectTargetItem* targetItem;
                     switch(v.targetType(t))
                     {
                         case CMakeProjectVisitor::Library:
@@ -799,15 +799,15 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     KUrl dirtyFile(dirty);
     KUrl dir(dirtyFile.upUrl());
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
-    
+
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
         kDebug(9042) << dir << " is dirty" << files;
-        
+
         Q_ASSERT(!files.isEmpty());
         CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
-        
+
         KDevelop::IProject* proj=it->project();
         KUrl projectBaseUrl=m_realRoot[proj];
         projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
@@ -891,7 +891,7 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
         connect( action, SIGNAL( triggered() ), this, SLOT( jumpToDeclaration() ) );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
     }
-    
+
     return menuExt;
 }
 
@@ -910,7 +910,7 @@ void CMakeProjectManager::jumpToDeclaration()
             c = decl->range().start.textCursor();
             url = decl->url().toUrl();
         }
-        
+
         ICore::self()->documentController()->openDocument(url, c);
     }
 }
@@ -948,21 +948,21 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder,
     KUrl lists=parent->url();
     lists.addPath("CMakeLists.txt");
     QString relative=KUrl::relativeUrl(parent->url(), folder);
-    
+
     kDebug() << "Adding folder " << parent->url() << " to " << folder << " as " << relative;
-    
+
     Q_ASSERT(!relative.contains("/"));
 //     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-    
+
     ApplyChangesWidget e(i18n("Create a folder called '%1'.", relative), lists);
-    
+
     e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
-    
+
     if(e.exec())
     {
         KUrl newCMakeLists(folder);
         newCMakeLists.addPath("CMakeLists.txt");
-        
+
         QFile f(newCMakeLists.toLocalFile());
         if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
         {
@@ -972,7 +972,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder,
         }
         QTextStream out(&f);
         out << "\n";
-        
+
         bool saved=e.document()->documentSave();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
@@ -990,13 +990,13 @@ bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
         it->parent()->removeRow(it->row());
         return true;
     }
-    
+
     ApplyChangesWidget e(i18n("Remove a folder called '%1'.", it->text()), lists);
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
     KTextEditor::Range r=cmit->descriptor().range().textRange();
     kDebug(9042) << "For " << lists << " remove " << r;
     e.document()->removeText(r);
-    
+
     if(e.exec())
     {
         bool saved=e.document()->documentSave();
@@ -1013,7 +1013,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
     QString txt=doc->text(r.textRange());
     if(!add && txt.contains(name))
     {
-        txt.replace(name, QString());
+        txt.remove(name);
         doc->replaceText(r.textRange(), txt);
         ret=true;
     }
@@ -1025,16 +1025,16 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
         for(int i=0; i<topctx->usesCount(); i++)
         {
             Use u = topctx->uses()[i];
-            
+
             if(!r.contains(u.m_range))
                 continue; //We just want the uses in the range, not the whole file
-            
+
             Declaration* d=u.usedDeclaration(topctx);
-            
+
             if(d->context()->topContext()->url().toUrl()==lists)
                 decls += d;
         }
-        
+
         if(add && decls.isEmpty())
         {
             doc->insertText(r.textRange().start(), name);
@@ -1043,7 +1043,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
         else foreach(Declaration* d, decls)
         {
             r.start=d->range().end;
-            
+
             for(int l=r.start.line; ;l++)
             {
                 QString line=doc->line(l);
@@ -1056,7 +1056,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
                     break;
                 }
             }
-            
+
             if(!r.isEmpty())
             {
                 ret = ret && followUses(doc, r, name, lists, add);
@@ -1085,18 +1085,18 @@ bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, K
 {
     if(it->parent()!=target)
         return false; //It is not a cmake-managed file
-    
+
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
-    
+
     DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
     SimpleRange r=desc->descriptor().range();
     r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
-    
+
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
-    
+
     ApplyChangesWidget e(i18n("Remove a file called '%1'.", it->text()), lists);
-    
+
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false);
     if(ret)
     {
@@ -1128,20 +1128,20 @@ bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevel
 {
     if(it->parent()==target)
         return true; //It already is in the target
-    
+
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
-    
+
     DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
     SimpleRange r=desc->descriptor().range();
     r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
-    
+
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
-    
+
     ApplyChangesWidget e(i18n("Add a file called '%1' to target '%2'.", it->text(), target->text()), lists);
-    
+
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, true);
-    
+
     if(e.exec())
     {
         bool saved=e.document()->documentSave();

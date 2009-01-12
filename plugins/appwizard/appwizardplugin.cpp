@@ -337,7 +337,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
         if (dir->entry(entry)->isDirectory())
         {
             const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            QString newdest = dest+"/"+file->name();
+            QString newdest = dest + '/' + file->name();
             if( !QFileInfo( newdest ).exists() )
             {
                 QDir::root().mkdir( newdest  );
@@ -364,7 +364,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString 
 bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QString &dest)
 {
     kDebug() << "copy:" << source << "to" << dest;
-    if( KMimeType::isBinaryData(source) ) 
+    if( KMimeType::isBinaryData(source) )
     {
         KIO::CopyJob* job = KIO::copy( KUrl(source), KUrl(dest), KIO::HideProgressInfo );
         if( !job->exec() )
@@ -372,12 +372,12 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
             return false;
         }
         return true;
-    } else 
+    } else
     {
         QFile inputFile(source);
         QFile outputFile(dest);
-    
-    
+
+
         if (inputFile.open(QFile::ReadOnly) && outputFile.open(QFile::WriteOnly))
         {
             QTextStream input(&inputFile);

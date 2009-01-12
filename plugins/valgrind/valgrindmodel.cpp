@@ -293,7 +293,7 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
                     if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
                         if (!f->file.isEmpty())
                             if (f->line >= 0)
-                                return f->file + ":" + f->line;
+                                return f->file + ':' + f->line;
                             else
                                 return f->file;
                     break;
@@ -324,7 +324,7 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
                 case Source:
                     if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
                         if (f->line >= 0)
-                            return f->url().path() + ":" + f->line;
+                            return f->url().path() + ':' + f->line;
                         else
                             return f->url().path();
                     break;

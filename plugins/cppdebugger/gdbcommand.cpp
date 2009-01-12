@@ -23,25 +23,25 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_this(0), 
+: type_(type), command_(command), handler_this(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_this(0), 
+: type_(type), command_(QString::number(index)), handler_this(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 QString GDBCommand::cmdToSend()
 {
-    return initialString() + "\n";
+    return initialString() + '\n';
 }
 
 QString GDBCommand::initialString() const
 {
-    return (type() == NonMI ? QString() : gdbCommand() + " ") + command_;
+    return (type() == NonMI ? QString() : gdbCommand() + ' ') + command_;
 }
 
 bool GDBCommand::isUserCommand() const
@@ -114,7 +114,7 @@ ModifyBreakpointCommand::cmdToSend()
     if (bp_->dbgId() > 0)
     {
         QString s(initialString());
-        s = s.arg(bp_->dbgId()) + "\n";
+        s = s.arg(bp_->dbgId()) + '\n';
         return s.toLatin1();
     }
     else
@@ -146,7 +146,7 @@ bool CliCommand::invokeHandler(const GDBMI::ResultRecord& r)
 QString GDBCommand::gdbCommand() const
 {
     QString command;
-  
+
     switch (type()) {
         case NonMI:
             command = "";
@@ -559,7 +559,7 @@ QString GDBCommand::gdbCommand() const
             break;
     }
 
-    return "-" + command;
+    return '-' + command;
 }
 
 GDBMI::CommandType GDBCommand::type() const

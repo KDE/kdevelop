@@ -59,7 +59,7 @@ void GrepJob::start()
 
     // waba: code below breaks on filenames containing a ',' !!!
 //     QStringList filelist = QString::split(",", filesString);
-    QStringList filelist = filesString.split(",");
+    QStringList filelist = filesString.split(',');
     KTemporaryFile* tempFile = 0;
     if (useProjectFilesFlag)
     {
@@ -161,7 +161,7 @@ void GrepJob::start()
 
     QStringList grepCmd;
     QString excludestring = excludeString;
-    QStringList excludelist = excludestring.split(",", QString::SkipEmptyParts);
+    QStringList excludelist = excludestring.split(',', QString::SkipEmptyParts);
     if (!excludelist.isEmpty())
     {
         QStringList::Iterator it(excludelist.begin());

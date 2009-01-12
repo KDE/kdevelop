@@ -35,7 +35,7 @@ CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, 
 
     QString cmakeBin=executeProcess("which", QStringList("cmake"));
     setCMakeBinary(KUrl(cmakeBin));
-    
+
     connect(m_creatorUi->run, SIGNAL(clicked()), this, SLOT(runBegin()));
     connect(m_creatorUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_creatorUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
@@ -143,7 +143,7 @@ QString CMakeBuildDirCreator::buildDirProject(const KUrl& buildDir)
     while (!correct && !file.atEnd())
     {
         QString line = file.readLine().trimmed();
-        if(line.startsWith("#") || line.isEmpty())
+        if(line.startsWith('#') || line.isEmpty())
             continue;
 
         if(line.startsWith(pLine))
@@ -239,7 +239,7 @@ void CMakeBuildDirCreator::updated()
                 m_creatorUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
         }
-        
+
         m_creatorUi->installPrefix->setEnabled(correct);
         m_creatorUi->buildType->setEnabled(correct);
 //         m_creatorUi->generator->setEnabled(correct);

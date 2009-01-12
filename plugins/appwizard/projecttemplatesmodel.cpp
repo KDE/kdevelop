@@ -57,7 +57,7 @@ void ProjectTemplatesModel::refresh()
 
 ProjectTemplateItem *ProjectTemplatesModel::createItem(const QString &name, const QString &category)
 {
-    QStringList path = category.split("/");
+    QStringList path = category.split('/');
 
     QStandardItem *parent = invisibleRootItem();
     QStringList currentPath;

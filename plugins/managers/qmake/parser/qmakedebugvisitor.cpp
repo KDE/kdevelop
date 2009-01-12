@@ -42,7 +42,7 @@ QString DebugVisitor::getTokenInfo(qint64 idx)
     return QString("%1,%2,%3")
             .arg(line)
             .arg(col)
-            .arg(m_parser->tokenText(token.begin,token.end).replace("\n","\\n"));
+            .arg(m_parser->tokenText(token.begin,token.end).replace('\n',"\\n"));
 }
 
 QString DebugVisitor::getIndent()

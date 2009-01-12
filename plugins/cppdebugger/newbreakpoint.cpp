@@ -36,14 +36,14 @@ using namespace GDBMI;
 namespace GDBDebugger
 {
 
-NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
+NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller, kind_t kind)
 : KDevelop::INewBreakpoint(model, parent, kind), controller_(controller)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
 
-NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent, 
+NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller,
                              const KConfigGroup& config)
 : KDevelop::INewBreakpoint(model, parent, config), controller_(controller)
@@ -53,13 +53,13 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller)
 : KDevelop::INewBreakpoint(model, parent), controller_(controller)
-{   
+{
 }
 
 void NewBreakpoint::update(const GDBMI::Value &b)
 {
     id_ = b["number"].toInt();
-    
+
     QString type = b["type"].literal();
     const char *code_breakpoints[] = {
         "breakpoint", "hw breakpoint", "until", "finish"};
@@ -74,7 +74,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
                TODO: this also means that if used added a watchpoint in gdb
                like "watch foo", then we'll show it in the breakpoint table
                just fine, but after KDevelop restart, we'll try to add the
-               breakpoint using basically "watch *&(foo)".  I'm not sure if 
+               breakpoint using basically "watch *&(foo)".  I'm not sure if
                that's a problem or not.  */
             itemData[location_column] = b["original-location"].literal();
         }
@@ -83,7 +83,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
     {
         itemData[location_column] = "Your GDB is too old";
     }
-    
+
 
     if (!dirty_.contains(condition_column)
         && !errors_.contains(condition_column))
@@ -94,13 +94,13 @@ void NewBreakpoint::update(const GDBMI::Value &b)
 
     if (b.hasField("addr") && b["addr"].literal() == "<PENDING>")
         pending_ = true;
-    else 
+    else
         pending_ = false;
-   
+
     hitCount_ = b["times"].toInt();
     reportChange();
 
-#if 0        
+#if 0
     {bp_watchpoint, "watchpoint"},
     {bp_hardware_watchpoint, "hw watchpoint"},
     {bp_read_watchpoint, "read watchpoint"},
@@ -118,7 +118,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
             bp->setConditional(b["cond"].literal());
         else
             bp->setConditional(QString::null);
-        
+
         // TODO: make the above functions do this instead
         bp->notifyModified();
     }
@@ -145,7 +145,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
         }
 
     }
-#endif        
+#endif
 }
 
 void NewBreakpoint::sendMaybe()
@@ -172,7 +172,7 @@ void NewBreakpoint::sendMaybe()
 
     /** See what is dirty, and send the changes.  For simplicity, send
         changes one-by-one and call sendToGDB again in the completion
-        handler.  
+        handler.
         FIXME: should handle and annotate the errors?
     */
     if (deleted_)
@@ -182,7 +182,7 @@ void NewBreakpoint::sendMaybe()
         else
             controller_->addCommand(
                 new GDBCommand(BreakDelete, QString::number(id_),
-                               this, &NewBreakpoint::handleDeleted));        
+                               this, &NewBreakpoint::handleDeleted));
     }
     else if (dirty_.contains(location_column))
     {
@@ -192,13 +192,13 @@ void NewBreakpoint::sendMaybe()
                this one.  */
             controller_->addCommand(
                 new GDBCommand(BreakDelete, QString::number(id_),
-                               this, &NewBreakpoint::handleDeleted));           
+                               this, &NewBreakpoint::handleDeleted));
         }
         else
         {
             if (kind_ == code_breakpoint)
                 controller_->addCommand(
-                    new GDBCommand(BreakInsert, 
+                    new GDBCommand(BreakInsert,
                                    itemData[location_column].toString(),
                                    this, &NewBreakpoint::handleInserted, true));
             else
@@ -214,16 +214,16 @@ void NewBreakpoint::sendMaybe()
     else if (dirty_.contains(enable_column))
     {
         controller_->addCommand(
-            new GDBCommand(enabled_ ? BreakEnable : BreakDisable,  
+            new GDBCommand(enabled_ ? BreakEnable : BreakDisable,
                            QString::number(id_),
-                           this, &NewBreakpoint::handleEnabledOrDisabled, 
+                           this, &NewBreakpoint::handleEnabledOrDisabled,
                            true));
     }
     else if (dirty_.contains(condition_column))
     {
         controller_->addCommand(
-            new GDBCommand(BreakCondition, 
-                           QString::number(id_) + " " + 
+            new GDBCommand(BreakCondition,
+                           QString::number(id_) + ' ' +
                            itemData[condition_column].toString(),
                            this, &NewBreakpoint::handleConditionChanged, true));
     }
@@ -250,7 +250,7 @@ void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
     {
         errors_.insert(location_column);
         dirty_.remove(location_column);
-        reportChange();        
+        reportChange();
         static_cast<Breakpoints*>(parentItem)
             ->errorEmit(this, r["msg"].literal(), location_column);
     }

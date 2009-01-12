@@ -40,7 +40,7 @@
 
 using namespace GDBDebugger;
 
-GDB::GDB() 
+GDB::GDB()
 : sawPrompt_(false), currentCmd_(0)
 {
     KConfigGroup config(KGlobal::config(), "GDB Debugger");
@@ -54,12 +54,12 @@ GDB::GDB()
     }
 
     process_ = new KProcess(this);
-    process_->setOutputChannelMode( KProcess::SeparateChannels ); 
-    connect(process_, SIGNAL(readyReadStandardOutput()), 
+    process_->setOutputChannelMode( KProcess::SeparateChannels );
+    connect(process_, SIGNAL(readyReadStandardOutput()),
             SLOT(readyReadStandardOutput()));
-    connect(process_, SIGNAL(readyReadStandardError()), 
+    connect(process_, SIGNAL(readyReadStandardError()),
             SLOT(readyReadStandardError()));
-    connect(process_, 
+    connect(process_,
             SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(processFinished(int, QProcess::ExitStatus)));
     connect(process_, SIGNAL(error(QProcess::ProcessError)),
@@ -104,7 +104,7 @@ GDB::GDB()
     process_->start();
 
     kDebug(9012) << "STARTING GDB\n";
-    emit userCommandOutput(shell + " " + gdbBinary_
+    emit userCommandOutput(shell + ' ' + gdbBinary_
                            + " --interpreter=mi2 -quiet\n" );
 }
 
@@ -115,12 +115,12 @@ void GDB::execute(GDBCommand* command)
     QString commandText = currentCmd_->cmdToSend();
 
     kDebug(9012) << "SEND:" << commandText;
-    
+
     process_->write(commandText.toLatin1(),
                     commandText.length());
-    
+
     QString prettyCmd = currentCmd_->cmdToSend();
-    prettyCmd.replace( QRegExp("set prompt \032.\n"), "" );
+    prettyCmd.remove( QRegExp("set prompt \032.\n") );
     prettyCmd = "(gdb) " + prettyCmd;
 
     if (currentCmd_->isUserCommand())
@@ -166,7 +166,7 @@ void GDB::readyReadStandardOutput()
             break;
         QByteArray reply(buffer_.left(i));
         buffer_ = buffer_.mid(i+1);
-        
+
         processLine(reply);
     }
 }
@@ -216,7 +216,7 @@ void GDB::processLine(const QByteArray& line)
        else if (r->kind == GDBMI::Record::Prompt)
        {
            sawPrompt_ = true;
-       }       
+       }
    }
    else
    {
@@ -227,13 +227,13 @@ void GDB::processLine(const QByteArray& line)
            switch(r->kind)
            {
            case GDBMI::Record::Result: {
-               
+
                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
-               
+
                if (currentCmd_->isUserCommand())
                    emit userCommandOutput(QString::fromLocal8Bit(line));
                else
-                   emit internalCommandOutput(QString::fromLocal8Bit(line) + "\n");
+                   emit internalCommandOutput(QString::fromLocal8Bit(line) + '\n');
 
                if (result.reason == "stopped")
                {
@@ -275,7 +275,7 @@ void GDB::processLine(const QByteArray& line)
 
                break;
            }
-               
+
            case GDBMI::Record::Stream: {
 
                GDBMI::StreamRecord& s = dynamic_cast<GDBMI::StreamRecord&>(*r);
@@ -291,7 +291,7 @@ void GDB::processLine(const QByteArray& line)
                currentCmd_->newOutput(s.message);
 
                emit streamRecord(s);
-                
+
                break;
            }
            case GDBMI::Record::Prompt:
@@ -306,7 +306,7 @@ void GDB::processLine(const QByteArray& line)
                      "<p>The debugger component encountered internal error while "
                      "processing reply from gdb. Please submit a bug report."),
                i18n("The exception is: %1\n"
-                    "The MI response is: %2", e.what(), 
+                    "The MI response is: %2", e.what(),
                     QString::fromLatin1(line)),
                i18n("Internal debugger error"));
 
@@ -329,7 +329,7 @@ void GDB::processLine(const QByteArray& line)
 void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     kDebug(9012) << "GDB FINISHED\n";
-/* FIXME: revive. Need to arrange for controller to delete us. 
+/* FIXME: revive. Need to arrange for controller to delete us.
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
     deleteLater();
     delete tty_;
@@ -362,7 +362,7 @@ void GDB::processErrored(QProcess::ProcessError error)
             i18n("Could not start debugger"));
 
         /* FIXME: make sure the controller gets rids of GDB instance
-        emit debuggerAbnormalExit(); 
+        emit debuggerAbnormalExit();
 
         raiseEvent(debugger_exited); */
 
