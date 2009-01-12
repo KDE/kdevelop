@@ -10,8 +10,8 @@ set(KDEVPLATFORM_VERSION_MAJOR 0)
 set(KDEVPLATFORM_VERSION_MINOR 9)
 set(KDEVPLATFORM_VERSION_PATCH 85)
 
-set(KDE_MIN_VERSION "4.1.96")
-find_package(KDE4 4.1.96 REQUIRED)
+set(KDE_MIN_VERSION "4.1.84")
+find_package(KDE4 4.1.84 REQUIRED)
 find_package(ZLIB REQUIRED)
 
 include (KDE4Defaults)
@@ -47,14 +47,19 @@ macro_write_basic_cmake_version_file( KDevPlatformConfigVersion.cmake ${KDEVPLAT
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )
 configure_file( "${KDevPlatform_SOURCE_DIR}/kdevplatformversion.h.cmake" "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h" @ONLY )
 
-install( FILES
-        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
-        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
-        DESTINATION "${LIB_INSTALL_DIR}/kdevplatform" )
+if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/cmake/kdevplatform")
+else(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+    set(_kdevplatform_CONFIG_DEST "${LIB_INSTALL_DIR}/kdevplatform")
+endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
+
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatformversion.h"
         DESTINATION "${INCLUDE_INSTALL_DIR}/kdevplatform" )
-
+install( FILES
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake"
+        "${KDevPlatform_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
+        DESTINATION "${_kdevplatform_CONFIG_DEST}" )
 install( EXPORT KDevPlatformTargets
-         DESTINATION ${LIB_INSTALL_DIR}/kdevplatform
+         DESTINATION "${_kdevplatform_CONFIG_DEST}"
          FILE KDevPlatformTargets.cmake )
