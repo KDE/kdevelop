@@ -1,7 +1,7 @@
 /* This file is part of the KDevelop project
 Copyright 2003 Falk Brettschneider <falkbr@kdevelop.org>
 Copyright 2003 John Firebaugh <jfirebaugh@kde.org>
-Copyright 2003 Amilcar do Carmo Lucas <amilcar@ida.ing.tu-bs.de>
+Copyright 2003 Amilcar do Carmo Lucas <amilcar@kdevelop.org>
 Copyright 2004, 2007 Alexander Dymo <adymo@kdevelop.org>
 Copyright 2006 Adam Treat <treat@kde.org>
 
@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEV_MAINWINDOW_H
 #define KDEV_MAINWINDOW_H
 
-#include <kxmlguiwindow.h>
+#include <KDE/KXmlGuiWindow>
 
 #include "core.h"
 #include <sublime/mainwindow.h>
