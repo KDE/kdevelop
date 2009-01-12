@@ -14,6 +14,7 @@
 #include <klineedit.h>
 #include <kcomponentdata.h>
 #include <kstandarddirs.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <interfaces/icore.h>
@@ -24,7 +25,7 @@
 #include "appwizardplugin.h"
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
-    :QWidget(parent), m_templatesModel(templatesModel), m_urlEditedByUser( false )
+    : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
 {
     ui = new Ui::ProjectSelectionPage();
     ui->setupUi(this);
@@ -32,6 +33,9 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
+
+    ui->locationValidLabel->setText(QString());
+    
     connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(const QString&)),
              this, SLOT(urlEdited() ));
     connect( ui->locationUrl, SIGNAL(urlSelected(const KUrl&)),
@@ -83,24 +87,16 @@ QString ProjectSelectionPage::appName()
 
 void ProjectSelectionPage::urlEdited()
 {
-    m_urlEditedByUser = true;
     validateData();
     emit locationChanged( ui->locationUrl->url() );
 }
 
 void ProjectSelectionPage::validateData()
 {
-    KUrl url;
-    if( m_urlEditedByUser )
+    KUrl url = ui->locationUrl->url();
+    if( !url.isLocalFile() || url.isEmpty() )
     {
-        url = ui->locationUrl->url();
-    } else
-    {
-        url = KUrl( QDir::homePath() );
-    }
-    if( !url.isLocalFile() || url.isEmpty())
-    {
-        ui->locationValidLabel->setText( i18n("Invalid Location") );
+        ui->locationValidLabel->setText( i18n("Invalid location") );
         emit invalid();
         return;
     }
@@ -135,39 +131,28 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    if( !m_urlEditedByUser )
+    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
+    if( item && !item->hasChildren() )
     {
-        url.addPath( encodedAppName() );
+        ui->locationValidLabel->setText( QString() );
+        emit valid();
+    } else
+    {
+        ui->locationValidLabel->setText( i18n("Invalid project template") );
+        emit invalid();
+        return;
     }
+
+    // Check for non-empty target directory. Not an error, but need to display a warning.
+    url.addPath( encodedAppName() );
     QFileInfo fi( url.toLocalFile( KUrl::RemoveTrailingSlash ) );
     if( fi.exists() && fi.isDir() )
     {
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
         {
-            ui->locationValidLabel->setText( i18n("Directory already exists and is not empty!") );
-            emit invalid();
-            return;
+            ui->locationValidLabel->setText( i18n("Path already exists and contains files") );
         }
     }
-
-    QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
-    if( item && !item->hasChildren() )
-    {
-        ui->locationValidLabel->setText( url.path( KUrl::RemoveTrailingSlash ) );
-        if( !m_urlEditedByUser )
-        {
-            ui->locationUrl->setPath( url.path( KUrl::RemoveTrailingSlash ) );
-        }
-        emit valid();
-        return;
-    } else
-    {
-        ui->locationValidLabel->setText( i18n("Invalid Project Template") );
-        emit invalid();
-        return;
-    }
-    ui->locationValidLabel->setText( i18n("Invalid Location") );
-    emit invalid();
 }
 
 QByteArray ProjectSelectionPage::encodedAppName()
@@ -193,6 +178,21 @@ QString ProjectSelectionPage::pathUp(const QString& aPath)
     int tIndex = tPath.lastIndexOf( QDir::separator() );
     tPath = tPath.remove(tIndex, tPath.length() - tIndex);
     return tPath;
+}
+
+bool ProjectSelectionPage::shouldContinue()
+{
+    QFileInfo fi(location().toLocalFile(KUrl::RemoveTrailingSlash));
+    if (fi.exists() && fi.isDir())
+    {
+        if (!QDir(fi.absoluteFilePath()).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty())
+        {
+            int res = KMessageBox::questionYesNo(this, i18n("The specified path already exists and contains files. "
+                                                            "Are you sure you want to proceed?"));
+            return res == KMessageBox::Yes;
+        }
+    }
+    return true;
 }
 
 #include "projectselectionpage.moc"

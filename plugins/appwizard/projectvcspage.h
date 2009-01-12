@@ -21,7 +21,7 @@
 #ifndef PROJECTVCSPAGE_H
 #define PROJECTVCSPAGE_H
 
-#include <QWidget>
+#include "appwizardpagewidget.h"
 #include <QMap>
 
 namespace Ui
@@ -38,7 +38,7 @@ class VcsImportMetadataWidget;
 
 class KUrl;
 
-class ProjectVcsPage : public QWidget
+class ProjectVcsPage : public AppWizardPageWidget
 {
     Q_OBJECT
 public:

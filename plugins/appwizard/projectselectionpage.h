@@ -10,7 +10,7 @@
 #ifndef _PROJECTSELECTIONPAGE_H_
 #define _PROJECTSELECTIONPAGE_H_
 
-#include <QWidget>
+#include "appwizardpagewidget.h"
 
 namespace Ui {
 class ProjectSelectionPage;
@@ -20,11 +20,13 @@ class ProjectTemplatesModel;
 class QModelIndex;
 class KUrl;
 
-class ProjectSelectionPage: public QWidget {
+class ProjectSelectionPage : public AppWizardPageWidget {
 Q_OBJECT
 public:
     explicit ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent = 0);
     ~ProjectSelectionPage();
+
+    bool shouldContinue();
 
     QString selectedTemplate();
     QString appName();
@@ -43,7 +45,6 @@ private:
 
     Ui::ProjectSelectionPage *ui;
     ProjectTemplatesModel *m_templatesModel;
-    bool m_urlEditedByUser;
 };
 
 #endif

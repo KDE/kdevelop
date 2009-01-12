@@ -6,6 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9010 )
 set(kdevappwizard_PART_SRCS
     appwizardplugin.cpp
     appwizarddialog.cpp
+    appwizardpagewidget.cpp
     projectselectionpage.cpp
     projecttemplatesmodel.cpp
     projecttemplateitem.cpp

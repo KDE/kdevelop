@@ -34,7 +34,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
 ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget * parent )
-    : QWidget( parent ), m_ui( new Ui::ProjectVcsPage )
+    : AppWizardPageWidget( parent ), m_ui( new Ui::ProjectVcsPage )
 {
     m_ui->setupUi( this );
     QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension (
