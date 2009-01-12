@@ -147,7 +147,7 @@ class EnvironmentInformationRequest {
   uint m_index;
 };
 
-///A list of environment-informations/top-contexts mapped to a file-name
+///A list of environment-information/top-contexts mapped to a file-name
 class EnvironmentInformationListItem {
   public:
   EnvironmentInformationListItem() {
@@ -407,7 +407,7 @@ public:
       FOREACH_FUNCTION(uint topContextIndex, item->items)
         ret << ParsingEnvironmentFilePointer(loadInformation(url, topContextIndex));
     }
-    //Add those informations that have not been added to the stored lists yet
+    //Add those information that have not been added to the stored lists yet
     ret += m_fileEnvironmentInformations.values(url);
 
     return ret;
@@ -803,7 +803,7 @@ private:
   }
 
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
-  ///Maps filenames to a list of top-contexts/environment-informations. Protected by m_chainsMutex
+  ///Maps filenames to a list of top-contexts/environment-information. Protected by m_chainsMutex
   ItemRepository<EnvironmentInformationListItem, EnvironmentInformationListRequest, NoDynamicData> m_environmentListInfo;
   ///Maps top-context-indices to environment-information item. Protected by m_chainsMutex
   ItemRepository<EnvironmentInformationItem, EnvironmentInformationRequest, NoDynamicData> m_environmentInfo;
