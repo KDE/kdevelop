@@ -59,6 +59,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       return m_document->replaceText(range, newText);
   }
   
+  virtual QString rangeText(KTextEditor::Range range) const {
+      return m_document->text(range);
+  }
+  
   private:
     KTextEditor::Document* m_document;
 };

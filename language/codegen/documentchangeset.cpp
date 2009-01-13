@@ -33,7 +33,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     return ChangeResult(true);
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPolicy policy) {
     QMap<IndexedString, CodeRepresentation*> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
@@ -94,8 +94,17 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             {
                 textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
             }else{
-                qDeleteAll(codeRepresentations);
-                return DocumentChangeSet::ChangeResult(QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered %7) -> %8").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText), sortedChangesList[pos]);
+                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
+                
+                if(policy == IgnoreFailedChange) {
+                    //Just don't do the replacement
+                }else if(policy == WarnOnFailedChange) {
+                    kWarning() << warningString;
+                }else{
+                    qDeleteAll(codeRepresentations);
+                    
+                    return DocumentChangeSet::ChangeResult(warningString, sortedChangesList[pos]);
+                }
             }
         }
         
@@ -118,8 +127,18 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
                 DocumentChange& change(*sortedChangesList[pos]);
                 if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText)) {
-                    dynamic->endEdit();
-                    return DocumentChangeSet::ChangeResult(QString("Inconsistent change at line %1").arg(change.m_range.start.line));
+                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
+                    
+                    
+                    if(policy == IgnoreFailedChange) {
+                        //Just don't do the replacement
+                    }else if(policy == WarnOnFailedChange) {
+                        kWarning() << warningString;
+                    }else{
+                        dynamic->endEdit();
+                        qDeleteAll(codeRepresentations);
+                        return DocumentChangeSet::ChangeResult(warningString);
+                    }
                 }
             }
             
@@ -137,7 +156,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             return DocumentChangeSet::ChangeResult(QString("Failed to set text on %1").arg(file.str()));
         }
     }
-    
     
     qDeleteAll(codeRepresentations);
     ModificationRevisionSet::clearCache();

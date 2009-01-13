@@ -58,7 +58,15 @@ namespace KDevelop {
         ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
         ChangeResult addChange(const DocumentChangePointer& change);
         
-        ChangeResult applyAllChanges();
+        enum ReplacementPolicy {
+            IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
+            WarnOnFailedChange,///If this is given to applyAllChanges, a warning is given when a change could not be applied,
+                               ///but following changes are applied, and success is returned.
+            StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems
+        };
+        
+        ///@param policy What should be done when a change could not be applied?
+        ChangeResult applyAllChanges(ReplacementPolicy policy = StopOnFailedChange);
         
         private:
             QMap< IndexedString, QList<DocumentChangePointer> > m_changes;

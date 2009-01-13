@@ -48,6 +48,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
       ///Used to group edit-history together. Call this before a bunch of replace(), and endEdit in the end.
       virtual void startEdit() = 0;
       virtual bool replace(const KTextEditor::Range& range, QString oldText, QString newText) = 0;
+      virtual QString rangeText(KTextEditor::Range range) const = 0;
       ///Must be called exactly once per startEdit()
       virtual void endEdit() = 0;
 };
