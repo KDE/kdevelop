@@ -212,6 +212,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
   SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(decl);
+  collector->setCollectConstructors(true);
 
   QDialog dialog;
 
