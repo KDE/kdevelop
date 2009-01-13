@@ -68,7 +68,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		*/
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
-		/** A ist of all languages (corresponding to a
+		/** A list of all languages (corresponding to a
 		* \ref KDevelop::ILanguageSupport) supported by loaded plugins.
 		*/
 		QStringList languages();
