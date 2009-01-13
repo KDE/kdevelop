@@ -290,7 +290,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   foreach(const KDevelop::IndexedTopDUContext &collected, collector->m_allUsingContexts) {
     QSet<int> hadIndices;
     foreach(const IndexedDeclaration &decl, collector->declarations()) {
-      uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(collector->declaration().data(), false);
+      uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
       if(hadIndices.contains(usedDeclarationIndex))
         continue;
       hadIndices.insert(usedDeclarationIndex);
@@ -308,7 +308,8 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
     return;
   }
 
-  result = changes.applyAllChanges();
+  ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
+  result = changes.applyAllChanges(DocumentChangeSet::IgnoreFailedChange);
   if(!result) {
       KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));
       return;
