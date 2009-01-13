@@ -1,6 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=Generic Project Manager
+Name[es]=Gestor de proyectos genérico
+Name[nds]=Allmeen Projektpleger
+Name[pt]=Gestor de Projectos Genérico
+Name[pt_BR]=Gestor de Projectos Genérico
+Name[sv]=Generell projekthantering
+Name[uk]=Звичайний засіб керування проектом
 Comment=Allow KDevelop to manage generic projects
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos
