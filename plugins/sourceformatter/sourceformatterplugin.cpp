@@ -292,7 +292,7 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 				output = formatter->formatSource(is.readAll(), mime);
 				file.close();
 			} else
-				KMessageBox::error(0, i18n("Unable to read %1").arg(list[fileCount].prettyUrl()));
+				KMessageBox::error(0, i18n("Unable to read %1", list[fileCount].prettyUrl()));
 
 			//write new content
 			if (file.open(QFile::WriteOnly | QIODevice::Truncate)) {
@@ -300,7 +300,7 @@ void SourceFormatterPlugin::formatFiles(KUrl::List &list)
 				os << manager->addModelineForCurrentLang(output, mime);
 				file.close();
 			} else
-				KMessageBox::error(0, i18n("Unable to write to %1").arg(list[fileCount].prettyUrl()));
+				KMessageBox::error(0, i18n("Unable to write to %1", list[fileCount].prettyUrl()));
 
 			if (!KIO::NetAccess::upload(tmpFile, list[fileCount], 0))
 				KMessageBox::error(0, KIO::NetAccess::lastErrorString());

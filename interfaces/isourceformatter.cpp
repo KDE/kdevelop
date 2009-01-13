@@ -18,7 +18,7 @@
 */
 #include "isourceformatter.h"
 
-#include <KLocale>
+#include <KDE/KLocale>
 
 namespace KDevelop
 {
@@ -40,7 +40,7 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 {
 	QString options;
 	QMap<QString, QVariant>::const_iterator it = map.constBegin();
-	for (; it != map.constEnd(); it++) {
+	for (; it != map.constEnd(); ++it) {
 		options += it.key();
 		options += '=';
 		options += it.value().toString();
@@ -65,7 +65,7 @@ QString ISourceFormatter::missingExecutableMessage(const QString &name)
 {
 	return i18n("The executable %1 cannot be found. Please make sure"
 	" it is installed and can be executed. <br />"
-	"The plugin will not work until you fix this problem.").arg("<b>" + name + "</b>");
+	"The plugin will not work until you fix this problem.", "<b>" + name + "</b>");
 }
 
 }

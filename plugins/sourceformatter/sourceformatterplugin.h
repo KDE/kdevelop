@@ -20,10 +20,10 @@ Boston, MA 02110-1301, USA.
 #ifndef SOURCEFORMATTERPLUGIN_H
 #define SOURCEFORMATTERPLUGIN_H
 
-#include <QHash>
-#include <QList>
-#include <KMimeType>
-#include <KUrl>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <KDE/KMimeType>
+#include <KDE/KUrl>
 
 class KAction;
 namespace KParts

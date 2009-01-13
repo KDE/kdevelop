@@ -122,7 +122,7 @@ void ProgressDialog::done(int r)
 
 void ProgressDialog::setFilesScanned(int n)
 {
-    filesLabel->setText(i18n("Files processed: %1").arg(n));
+    filesLabel->setText(i18n("Files processed: %1", n));
 }
 
 void ProgressDialog::setFilesToDig(int n)

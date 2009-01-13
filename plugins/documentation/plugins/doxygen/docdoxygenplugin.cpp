@@ -450,7 +450,7 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
             QString filename = childEl.namedItem("filename").firstChild().toText().data();
 
             IndexItemProto *indexItem = new IndexItemProto(this, item, index, classname, 
-            i18n("%1 Class Reference").arg(classname));
+            i18n("%1 Class Reference", classname));
             indexItem->addURL(KURL(prefix + filename));
             
             createIndexFromTag(dom, index, item, childEl, prefix + filename);
@@ -467,7 +467,7 @@ void DocDoxygenPlugin::createIndexFromTag(QDomDocument &dom, IndexBox *index,
             
             if (classname != membername)
             {
-                IndexItemProto *indexItem = new IndexItemProto(this, item, index, membername,i18n("%1::%2%3 Member Reference").arg(classname).arg(membername).arg(arglist));
+                IndexItemProto *indexItem = new IndexItemProto(this, item, index, membername,i18n("%1::%2%3 Member Reference", classname, membername, arglist));
                 indexItem->addURL(KURL(prefix + "#" + anchor));
             }
         }

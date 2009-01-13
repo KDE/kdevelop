@@ -109,7 +109,7 @@ namespace KDevelop {
             QSet<IndexedString> m_waitForUpdate;
             QSet<IndexedString> m_updateReady;
             
-            //All files that already have been feeded to processUses
+            //All files that already have been feed to processUses
             QSet<IndexedString> m_processed;
             
             //To prevent endless recursion in updateReady()

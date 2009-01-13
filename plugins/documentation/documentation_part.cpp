@@ -465,7 +465,7 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
             QString squeezed = KStringHandler::csqueeze(m_contextStr, 30);
             int id = -1;
             if (hasContextFeature(Finder)) {
-                id = popup->insertItem(i18n("Find Documentation: %1").arg(squeezed),
+                id = popup->insertItem(i18n("Find Documentation: %1", squeezed),
                                     this, SLOT(contextFindDocumentation()));
                 popup->setWhatsThis(id, i18n("<b>Find documentation</b><p>"
                                     "Opens the documentation finder tab and searches "
@@ -474,7 +474,7 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
                                     "Google, etc."));
             }
             if (hasContextFeature(IndexLookup)) {
-                id = popup->insertItem(i18n("Look in Documentation Index: %1").arg(squeezed),
+                id = popup->insertItem(i18n("Look in Documentation Index: %1", squeezed),
                                 this, SLOT(contextLookInDocumentationIndex()));
                 popup->setWhatsThis(id, i18n("<b>Look in documentation index</b><p>"
                                 "Opens the documentation index tab. It allows "
@@ -482,7 +482,7 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
                                 "the documentation index."));
             }
             if (hasContextFeature(FullTextSearch)) {
-                id = popup->insertItem(i18n("Search in Documentation: %1").arg(squeezed),
+                id = popup->insertItem(i18n("Search in Documentation: %1", squeezed),
                                 this, SLOT(contextSearchInDocumentation()));
                 popup->setWhatsThis(id, i18n("<b>Search in documentation</b><p>Searches "
                                 "for a term under the cursor in "
@@ -491,12 +491,12 @@ void DocumentationPart::contextMenu(QPopupMenu *popup, const Context *context)
                                 "configuration dialog of the documentation plugin."));
             }
             if (hasContextFeature(GotoMan)) {
-                id = popup->insertItem(i18n("Goto Manpage: %1").arg(squeezed),
+                id = popup->insertItem(i18n("Goto Manpage: %1", squeezed),
                                 this, SLOT(contextManPage()));
                 popup->setWhatsThis(id, i18n("<b>Goto manpage</b><p>Tries to open a man page for the term under the cursor."));
             }
             if (hasContextFeature(GotoInfo)) {
-                id = popup->insertItem( i18n("Goto Infopage: %1").arg(squeezed),
+                id = popup->insertItem( i18n("Goto Infopage: %1", squeezed),
                                 this, SLOT(contextInfoPage()) );
                 popup->setWhatsThis(id, i18n("<b>Goto infopage</b><p>Tries to open an info page for the term under the cursor."));
             }

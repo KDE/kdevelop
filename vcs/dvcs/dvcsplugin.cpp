@@ -31,7 +31,6 @@
 #include <QtGui/QMenu>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-#include <QtCore/QFileInfo>
 #include <QtCore/QString>
 
 #include <KDE/KParts/PartManager>

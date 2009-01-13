@@ -18,8 +18,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef BRANCH_DIALOG_H
-#define BRANCH_DIALOG_H
+#ifndef BRANCH_MANAGER_H
+#define BRANCH_MANAGER_H
 
 #include <QtGui/QStringListModel>
 #include <KDE/KDialog>

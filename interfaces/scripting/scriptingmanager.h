@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SCRIPTINGMANANGER_H
-#define SCRIPTINGMANANGER_H
+#ifndef SCRIPTINGMANAGER_H
+#define SCRIPTINGMANAGER_H
 
 #include "../interfacesexport.h"
 

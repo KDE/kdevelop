@@ -9,7 +9,7 @@
  ***************************************************************************/
 
 #include "svnssldialog.h"
-#include <QTreeWidgetItem>
+#include <QtGui/QTreeWidgetItem>
 #include <klocale.h>
 
 #include "ui_ssltrustdialog.h"
@@ -59,7 +59,7 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
     d->ui.validUntil->setText( validuntil );
     d->ui.validFrom->setText( validfrom );
     d->ui.issuer->setText( issuerName );
-    setCaption( i18n( "Ssl Server Certificate: %1" ).arg( realm ) );
+    setCaption( i18n( "Ssl Server Certificate: %1", realm ) );
 
 }
 
