@@ -118,6 +118,7 @@ private slots:
   void testIndexedStrings();
   void testEnum();
   void testCaseUse();
+  void testConstructorOperatorUses();
   void testSizeofUse();
   void testDefinitionUse();
   void testImportStructure();

@@ -1648,10 +1648,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
     }
 
+    static IndexedString functionCallOperatorIdentifier("operator()");
+    
+    bool createUseOnParen = (bool)chosenFunction && (constructedType || chosenFunction->identifier().identifier() == functionCallOperatorIdentifier);
+
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
     lock.unlock();
-    if(oldCurrentUse.isValid)
+    
+    if(createUseOnParen) {
+      if(oldCurrentUse.isValid)
+        newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, oldCurrentUse.declaration );
+      
+      newUse( node , node->start_token, node->start_token+1, chosenFunction );
+    }else if(oldCurrentUse.isValid) {
       newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, chosenFunction );
+    }
 
     m_parameterNodes = oldParameterNodes;
     m_parameters = oldParams;
