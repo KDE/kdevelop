@@ -61,8 +61,14 @@ QSize AbstractNavigationWidget::sizeHint() const
   if(m_browser) {
     updateIdealSize();
     QSize ret = QSize(qMin(m_idealTextSize.width(), maxNavigationWidgetWidth), qMin(m_idealTextSize.height(), 300));
-    if(m_currentWidget)
+    if(m_currentWidget) {
       ret.setHeight( ret.height() + m_currentWidget->sizeHint().height() );
+      if(m_currentWidget->sizeHint().width() > ret.width())
+        ret.setWidth(m_currentWidget->sizeHint().width());
+      if(ret.width() < 500) //When we embed a widget, give it some space, even if it doesn't have a large size-hint
+        ret.setWidth(500);
+      
+    }
     return ret;
   } else
     return QWidget::sizeHint();
