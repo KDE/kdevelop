@@ -1916,7 +1916,7 @@ void TestDUChain::testFunctionDefinition5() {
 
 void TestDUChain::testFunctionDefinition6() {
   QByteArray text("class Class {Class(); void test();}; void Class::test(Class c) {int i;}");
-  ReferencedTopDUContext top = parse(text, DUmpNone);
+  ReferencedTopDUContext top = parse(text, DumpNone);
   
   //Here we do an update, since there was a bug where updating caused problems here
   parse(text, DumpNone, top.data());
