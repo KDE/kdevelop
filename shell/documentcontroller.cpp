@@ -433,7 +433,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     d->closeAll->setEnabled(true);
     d->closeAllOthers->setEnabled(true);
 
-    if(doc != previousActiveDocument) {
+    if(doc) {
         KTextEditor::Cursor activePosition;
         if(doc->textDocument() && doc->textDocument()->activeView())
             activePosition = doc->textDocument()->activeView()->cursorPosition();
