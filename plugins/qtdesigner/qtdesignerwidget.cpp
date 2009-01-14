@@ -28,6 +28,7 @@
 #include <QtGui/QMdiSubWindow>
 
 #include <kdebug.h>
+#include <klocale.h>
 #include <kaction.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
@@ -89,7 +90,7 @@ void QtDesignerWidget::setupActions()
     KAction* action = ac->addAction( "widgeteditor" );
     action->setCheckable( true );
     action->setChecked( true );
-    action->setText( "Edit Widgets" );
+    action->setText( i18n("Edit Widgets") );
     connect( action, SIGNAL(triggered()), SLOT(editWidgets()));
     foreach (QObject *plugin, QPluginLoader::staticInstances())
     {
