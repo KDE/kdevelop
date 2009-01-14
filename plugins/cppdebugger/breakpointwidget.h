@@ -58,7 +58,7 @@ namespace GDBDebugger
             layout->setContentsMargins(11, 0, 0, 11);
 
             status_ = new QLabel(this);
-            status_->setText("Breakpoint is active");
+            status_->setText(i18n("Breakpoint is active"));
             status_->hide();
             layout->addWidget(status_);
 
@@ -102,9 +102,9 @@ namespace GDBDebugger
             ignore_->setEnabled(true);
 
             if (b->pending())
-                status_->setText("Breakpoint is <a href=pending>pending</a>");
+                status_->setText(i18n("Breakpoint is %1",QString("<a href=pending>pending</a>")));
             else if (b->dirty())
-                status_->setText("Breakpoint is <a href=dirty>dirty</a>");
+                status_->setText(i18n("Breakpoint is %1",QString("<a href=dirty>dirty</a>")));
             else
                 status_->setText("Breakpoint is active");
 
@@ -124,22 +124,22 @@ namespace GDBDebugger
             if (link == "pending")
             {
                 QWhatsThis::showText(pos,
-                                     "<b>Breakpoint is pending</b>"
+                                     i18n("<b>Breakpoint is pending</b>"
                                      "<p>Pending breakpoints are those that are "
                                      "communucated to GDB, but which are not yet "
                                      "installed in the target, because GDB cannot "
                                      "find the function or the file the breakpoint "
                                      "refers too. Most common case is a breakpoint "
                                      "in a shared library.  GDB will insert this "
-                                     "breakpoint only when the library is loaded.",
+                                     "breakpoint only when the library is loaded."),
                                      status_);
             }
             else if (link == "dirty")
             {
                 QWhatsThis::showText(pos,
-                                     "<b>Breakpoint is dirty</b>"
+                                     i18n("<b>Breakpoint is dirty</b>"
                                      "<p>The breakpoint is not yet communicated "
-                                     "to GDB.",
+                                     "to GDB."),
                                      status_);
             }
         }
