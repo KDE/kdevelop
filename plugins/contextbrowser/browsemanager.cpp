@@ -41,6 +41,7 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <qtimer.h>
+#include <qapplication.h>
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -142,6 +143,17 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             }else{
                 m_delayedBrowsingTimer->start(300);
                 m_browingStartedInView = view;
+            }
+            
+            if(magicModifier == Qt::Key_Alt) {
+                //ugly hack:
+                //If the magic modifier is ALT, we have to prevent it from being taken by the menu-bar to switch focus to it.
+                //This behavior depends on the style, but if the menu-bar receives any key-press in between, it doesn't do it.
+                //So we send a meaningless key-press here: The shift-key.
+                QEvent* pressEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Shift, Qt::AltModifier);
+                QEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Shift, Qt::AltModifier);
+                QApplication::postEvent(masterWidget(widget), pressEvent);
+                QApplication::postEvent(masterWidget(widget), releaseEvent);
             }
         }
         
