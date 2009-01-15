@@ -45,6 +45,7 @@
 #include <interfaces/irun.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/iselectioncontroller.h>
 
 #include "projectmanagerview.h"
 #include "projectbuildsetmodel.h"
@@ -111,25 +112,56 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_build = new KAction( i18n("Build"), this );
     d->m_build->setShortcut( Qt::Key_F8 );
     d->m_build->setIcon(KIcon("run-build"));
+    d->m_build->setEnabled( false );
     connect( d->m_build, SIGNAL(triggered()), this, SLOT(buildProjectItems()) );
     actionCollection()->addAction( "project_build", d->m_build );
     d->m_install = new KAction( i18n("Install"), this );
+    d->m_install->setEnabled( false );
     connect( d->m_install, SIGNAL(triggered()), this, SLOT(installProjectItems()) );
     actionCollection()->addAction( "project_install", d->m_install );
     d->m_clean = new KAction( i18n("Clean"), this );
+    d->m_clean->setEnabled( false );
     connect( d->m_clean, SIGNAL(triggered()), this, SLOT(cleanProjectItems()) );
     actionCollection()->addAction( "project_clean", d->m_clean );
     d->m_configure = new KAction( i18n("Configure"), this );
     d->m_configure->setIcon(KIcon("configure"));
+    d->m_configure->setEnabled( false );
     connect( d->m_configure, SIGNAL(triggered()), this, SLOT(configureProjectItems()) );
     actionCollection()->addAction( "project_configure", d->m_configure );
     d->m_prune = new KAction( i18n("Prune"), this );
+    d->m_prune->setEnabled( false );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
     actionCollection()->addAction( "project_prune", d->m_prune );
     setXMLFile( "kdevprojectmanagerview.rc" );
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( i18n("Projects"), d->factory );
+    connect( core()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
+             SLOT(updateActionState(KDevelop::Context*)));
+    connect( d->buildSet, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+             SLOT(updateFromBuildSetChange()));
+    connect( d->buildSet, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+             SLOT(updateFromBuildSetChange()));
+    connect( d->buildSet, SIGNAL(modelReset()),
+             SLOT(updateFromBuildSetChange()));
+}
 
+void ProjectManagerViewPlugin::updateFromBuildSetChange()
+{
+    updateActionState( core()->selectionController()->currentSelection() );
+}
+
+void ProjectManagerViewPlugin::updateActionState( KDevelop::Context* ctx )
+{
+    bool isEmpty = d->buildSet->items().isEmpty();
+    if( isEmpty ) 
+    {
+        isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || dynamic_cast<ProjectItemContext*>( ctx )->items().isEmpty();
+    }
+    d->m_build->setEnabled( !isEmpty );
+    d->m_install->setEnabled( !isEmpty );
+    d->m_clean->setEnabled( !isEmpty );
+    d->m_configure->setEnabled( !isEmpty );
+    d->m_prune->setEnabled( !isEmpty );
 }
 
 ProjectManagerViewPlugin::~ProjectManagerViewPlugin()
@@ -299,29 +331,42 @@ void ProjectManagerViewPlugin::buildAllProjects()
     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Build, items ) );
 }
 
+void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType t )
+{
+    QList<ProjectBaseItem*> items;
+    if( !d->buildSet->items().isEmpty() )
+    {
+        ICore::self()->runController()->registerJob( new BuilderJob( t, d->buildSet->items() ) );
+    } else
+    {
+        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+        ICore::self()->runController()->registerJob( new BuilderJob( t, ctx->items() ) );
+    }
+}
+
 void ProjectManagerViewPlugin::installProjectItems()
 {
-     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Install, d->buildSet->items() ) );
+    runBuilderJob( BuilderJob::Install );
 }
 
 void ProjectManagerViewPlugin::pruneProjectItems()
 {
-    ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Prune, d->buildSet->items() ) );
+    runBuilderJob( BuilderJob::Prune );
 }
 
 void ProjectManagerViewPlugin::configureProjectItems()
 {
-    ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Configure, d->buildSet->items() ) );
+    runBuilderJob( BuilderJob::Configure );
 }
 
 void ProjectManagerViewPlugin::cleanProjectItems()
 {
-     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Clean, d->buildSet->items() ) );
+    runBuilderJob( BuilderJob::Clean );
 }
 
 void ProjectManagerViewPlugin::buildProjectItems()
 {
-     ICore::self()->runController()->registerJob( new BuilderJob( BuilderJob::Build, d->buildSet->items() ) );
+    runBuilderJob( BuilderJob::Build );
 }
 
 ProjectBuildSetModel* ProjectManagerViewPlugin::buildSet()

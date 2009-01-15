@@ -23,6 +23,7 @@
 #include <QtCore/QPointer>
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
+#include "builderjob.h"
 
 class KUrl;
 class ProjectBuildSetModel;
@@ -37,6 +38,7 @@ class ProjectTargetItem;
 class IProjectBuilder;
 class IProject;
 class ContextMenuExtension;
+class Context;
 }
 
 class ProjectManagerView;
@@ -78,10 +80,12 @@ protected Q_SLOTS:
     void createFileInTargetFromContextMenu();
     void removeFolderFromContextMenu();
     void removeFileFromContextMenu();
-
+    void updateActionState( KDevelop::Context* ctx );
+    void updateFromBuildSetChange();
 private:
     static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
+    void runBuilderJob( BuilderJob::BuildType );
     class ProjectManagerViewPluginPrivate* const d;
 
 };
