@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Plugins
+Name[cs]=Moduly
 Name[de]=Module
 Name[el]=Πρόσθετα
 Name[es]=Complementos
