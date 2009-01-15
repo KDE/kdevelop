@@ -21,13 +21,7 @@
 
 #include <limits>
 
-#if defined(Q_OS_WIN)
-#include <hash_map>
-#else
-#include <ext/hash_map>
-#endif
-
-#include <QThread>
+#include <QtCore/QThread>
 
 #include "../editor/hashedstring.h"
 #include "../interfaces/iproblem.h"
@@ -132,8 +126,6 @@ class TopDUContext::CacheData {
   public:
     CacheData(TopDUContextPointer _context) : context(_context) {
     }
-    typedef std::hash_map<uint, KDevVarLengthArray<IndexedDeclaration> > HashType;
-    HashType visibleDeclarations; //Contains cached visible declarations. Visible means that they are imported, and does not respect include-positions or similar
     TopDUContextPointer context;
 };
 
