@@ -41,6 +41,8 @@
 #include <kcombobox.h>
 #include <kjob.h>
 
+#include <interfaces/iselectioncontroller.h>
+#include <interfaces/context.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -131,6 +133,12 @@ void ProjectManagerView::selectionChanged()
 {
     m_ui->buildSetView->selectionChanged();
     m_buildAction->setEnabled( !m_ui->projectTreeView->selectionModel()->selectedIndexes().isEmpty() );
+    QList<ProjectBaseItem*> selected;
+    foreach( const QModelIndex& idx, m_ui->projectTreeView->selectionModel()->selectedRows() )
+    {
+        selected << m_modelFilter->itemFromProxyIndex( idx );
+    }
+    KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectItemContext( selected ) );
 }
 
 void ProjectManagerView::buildSelectedItems()
