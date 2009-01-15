@@ -74,7 +74,7 @@ Q_SIGNALS:
      * is set) of the receivers of this signal, so make sure to copy all the
      * needed information.
      */
-    void selectionChanged( Context* );
+    void selectionChanged( KDevelop::Context* );
 
 };
 
