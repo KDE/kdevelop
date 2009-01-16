@@ -13,6 +13,7 @@ Comment[sv]=Insticksprogrammet ger KDevelop en filhanterare.
 Comment[tr]=Bu eklenti KDevelop için bir dosya yönetici sağlar.
 Comment[uk]=За допомогою цього додатка можна отримати доступ до менеджера файлів у KDevelop.
 Comment[x-test]=xxThis plugin brings a filemanager to KDevelop.xx
+Comment[zh_CN]=此插件对 KDevelop 整合一个文件管理器。
 Comment[zh_TW]=此外掛程式讓 KDevelop 可使用檔案管理員。
 Name=KDevFileManager
 Name[nds]=KDevDateipleger
