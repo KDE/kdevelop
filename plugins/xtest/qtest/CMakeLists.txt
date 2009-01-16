@@ -8,7 +8,7 @@ set(kdevqtest_SRCS
     qtestmodelitems.cpp
     xmlregister.cpp
     qtestoutputmorpher.cpp
-    kdevregister.cpp
+    modelbuilder.cpp
     suitebuilder.cpp
     executable.cpp
     casebuilder.cpp

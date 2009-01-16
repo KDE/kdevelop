@@ -18,7 +18,7 @@
 * 02110-1301, USA.
 */
 
-#include "kdevregister.h"
+#include "modelbuilder.h"
 #include "suitebuilder.h"
 #include <veritas/test.h>
 #include "qtestsettings.h"
@@ -322,4 +322,4 @@ Test* ModelBuilder::root() const
     return m_root;
 }
 
-#include "kdevregister.moc"
+#include "modelbuilder.moc"

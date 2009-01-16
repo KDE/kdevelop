@@ -55,7 +55,7 @@
 
 #include "qtestoutputdelegate.h"
 #include "qtestconfig.h"
-#include "kdevregister.h"
+#include "modelbuilder.h"
 
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
