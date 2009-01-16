@@ -9,8 +9,10 @@ include_directories(
 
 set(cmakebuilder_LIB_SRCS
     cmakebuilder.cpp
+    ../../managers/cmake/settings/cmakebuilddircreator.cpp
     cmakejob.cpp
 )
+kde4_add_ui_files( cmakebuilder_LIB_SRCS ../../managers/cmake/settings/cmakebuilddircreator.ui )
 
 
 kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})

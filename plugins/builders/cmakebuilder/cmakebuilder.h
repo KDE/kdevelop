@@ -56,6 +56,7 @@ public:
     virtual KJob* install(KDevelop::ProjectBaseItem *dom);
     virtual KJob* clean(KDevelop::ProjectBaseItem *dom);
     virtual KJob* configure(KDevelop::IProject*);
+    virtual KJob* prune(KDevelop::IProject*);
 
 //     bool updateConfig( KDevelop::IProject* project );
 private Q_SLOTS:
@@ -66,6 +67,7 @@ Q_SIGNALS:
     void failed(KDevelop::ProjectBaseItem*);
     void installed(KDevelop::ProjectBaseItem*);
     void cleaned(KDevelop::ProjectBaseItem*);
+    void pruned(KDevelop::IProject*);
 
 private:
     bool m_dirty;

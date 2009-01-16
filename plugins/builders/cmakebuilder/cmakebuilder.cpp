@@ -26,12 +26,13 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QFile>
-
+#include <QtCore/QDir>
 
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <outputview/ioutputview.h>
@@ -41,19 +42,23 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kparts/mainwindow.h>
+#include <kio/deletejob.h>
 #include <kaboutdata.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kmessagebox.h>
 #include <kdialog.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KProcess>
 #include <kjob.h>
+#include <kurl.h>
+#include <kconfig.h>
 
 #include "cmakejob.h"
-
-#define CMAKE_COMMAND "cmake"
+#include "../../managers/cmake/settings/cmakebuilddircreator.h"
 
 K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
 K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"), "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
@@ -93,8 +98,26 @@ void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
     }
 }
 
+bool buildDirConfigured( KDevelop::ProjectBaseItem* item )
+{
+    KConfigGroup cmakeGrp = item->project()->projectConfiguration()->group("CMake");
+    KUrl builddir = cmakeGrp.readEntry( "currentBuildDir", KUrl() );
+    
+    if( !builddir.isValid() || builddir.isEmpty() ) 
+    {
+        CMakeBuildDirCreator bd( item->project()->projectItem()->url(), KDevelop::ICore::self()->uiController()->activeMainWindow() );
+        if( !bd.exec() )
+        {
+            return false;
+        }
+        cmakeGrp.writeEntry( "currentBuildDir", bd.buildFolder() );
+    }  
+    return true;
+}
+
 KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
+    KDevelop::ProjectBaseItem* builditem = dom;
     if( m_builder )
     {
         if(dom->file())
@@ -107,47 +130,90 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(dom->project(), target);
             fldr->add(it);
              
-            dom=it;
+            builditem=it;
             m_deleteWhenDone << fldr << it;
         }
         
+        if( !buildDirConfigured(builditem) )
+        {
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
+            return 0;
+        }
+        
         kDebug(9032) << "Building with make";
-        return m_builder->build(dom);
+        return m_builder->build(builditem);
     }
     return false;
 }
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
 {
+    KDevelop::ProjectBaseItem* item = dom;
     if( m_builder )
     {
         if(dom->file()) //It doesn't work to compile a file
-            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+            item=(KDevelop::ProjectBaseItem*) dom->parent();
         
         kDebug(9032) << "Cleaning with make";
-        return m_builder->clean(dom);
+        if( !buildDirConfigured(item) )
+        {
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
+            return 0;
+        }
+        return m_builder->clean(item);
     }
-    return false;
+    return 0;
 }
 
 KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 {
+    KDevelop::ProjectBaseItem* item = dom;
     if( m_builder )
     {
         if(dom->file())
-            dom=(KDevelop::ProjectBaseItem*) dom->parent();
+            item=(KDevelop::ProjectBaseItem*) dom->parent();
         
         kDebug(9032) << "Installing with make";
+        if( !buildDirConfigured(item) )
+        {
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
+            return 0;
+        }
         return m_builder->install(dom);
     }
-    return false;
+    return 0;
 }
 
 KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
+    if( !buildDirConfigured( project->projectItem() ) )
+    {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
+        return 0;
+    }
     CMakeJob* job = new CMakeJob(this);
     job->setProject(project);
     return job;
+}
+
+KJob* CMakeBuilder::prune( KDevelop::IProject* project )
+{
+    if( !buildDirConfigured( project->projectItem() ) )
+    {
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clear builddir"), i18n("Aborting builddir clearing") );
+        return 0;
+    }
+    KConfigGroup grp = project->projectConfiguration()->group("CMake");
+    KUrl builddir = grp.readEntry( "currentBuildDir", KUrl() );
+    QDir d( builddir.toLocalFile() );
+    KUrl::List urls;
+    foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot ) )
+    {
+        KUrl tmp = builddir;
+        tmp.addPath( entry );
+        urls << tmp;
+    }
+    return KIO::del( urls );
 }
 
 #include "cmakebuilder.moc"
