@@ -66,7 +66,7 @@ Q_SIGNALS:
 // IStatus
 
 private slots:
-    void fetchTestCommands(KJob*);
+    void fetchTestCommands();
     void suiteBuilderFinished();
     void slotShowProgress(int minimum, int maximum, int value);
     void doReload(KDevelop::ProjectBaseItem*);

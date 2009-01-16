@@ -102,6 +102,34 @@ void ModelBuilder::doReload(KDevelop::ProjectBaseItem* item)
     }
 }
 
+/*! Read test executables from project configuration. Returns the empty list if not succesful */
+QList<Veritas::TestExecutableInfo> fetchTestExesFromConfig(const KConfigGroup& veriConf, QString& failureMsg)
+{
+    QList<Veritas::TestExecutableInfo> testExes;
+    if (!veriConf.exists()) {
+        failureMsg = i18n("Failed to load test suite. No test executables configured.");
+        return testExes;
+    }
+    if (veriConf.readEntry( "framework" ) != "QTest") {
+        failureMsg = i18n("Failed to load test suite. Wrong framework.");
+        return testExes;            
+    }
+    QStringList exes = veriConf.readEntry<QStringList>( "executables", QStringList() );
+    foreach(const QString& exe, exes) {
+            TestExecutableInfo te;
+            KUrl testUrl(exe);
+            if (!testUrl.isValid()) continue;
+            te.setCommand(exe);
+            te.setName(testUrl.fileName());
+            te.setWorkingDirectory(testUrl.upUrl());
+            testExes << te;
+    }
+    if (testExes.isEmpty()) {
+        failureMsg = i18n("Failed to load test suite. No test executables configured.");
+    }
+    return testExes;
+}
+
 void ModelBuilder::reload(KDevelop::IProject* project_)
 {
     if (!project_) return;
@@ -128,36 +156,23 @@ void ModelBuilder::reload(KDevelop::IProject* project_)
         veriConf.writeEntry( "executables", exes);
         delete fsm;
     } else {
-        KConfigGroup veriConf = project()->projectConfiguration()->group( "Veritas" );
-        if (!veriConf.exists()) {
+        QString failureMsg;
+        KConfigGroup testConfig = project()->projectConfiguration()->group( "Veritas" );
+        QList<Veritas::TestExecutableInfo> testExes;
+        
+        testExes = fetchTestExesFromConfig(testConfig, failureMsg);
+        if (testExes.isEmpty()) {
+            m_reloading = false;
             emit reloadFailed();
-            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
+            emit showErrorMessage(failureMsg, 5);
             return;
         }
-        if (veriConf.readEntry( "framework" ) != "QTest") {
-            emit reloadFailed();
-            emit showErrorMessage(i18n("Failed to load test suite. Wrong framework."), 5);
-            return;            
-        }
-        QStringList exes = veriConf.readEntry<QStringList>( "executables", QStringList() );
-        m_testExes.clear();
-        foreach(const QString& exe, exes) {
-            TestExecutableInfo te;
-            KUrl testUrl(exe);
-            if (!testUrl.isValid()) continue;
-            te.setCommand(exe);
-            te.setName(testUrl.fileName());
-            te.setWorkingDirectory(testUrl.upUrl());
-            m_testExes << te;
-        }
-        if (m_testExes.isEmpty()) {
-            emit reloadFailed();
-            emit showErrorMessage(i18n("Failed to load test suite. No test executables configured."), 5);
-            return;            
-        }
+        m_testExes = testExes;
     }
 
-    fetchTestCommands(0);
+    if (m_reloading) { 
+        fetchTestCommands();
+    }
 }
 
 ModelBuilder::ModelBuilder()
@@ -234,7 +249,7 @@ KUrl ModelBuilder::buildRoot()
     return buildRoot;
 }
 
-void ModelBuilder::fetchTestCommands(KJob*)
+void ModelBuilder::fetchTestCommands()
 {
     Q_ASSERT(project());
     Q_ASSERT(m_reloading);
