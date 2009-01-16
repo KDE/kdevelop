@@ -38,7 +38,7 @@ class ProjectFolderItem;
 class IProject;
 }
 
-namespace Veritas { class Test; }
+namespace Veritas { class Test; class TestToolViewFactory; }
 namespace QTest { class KDevRegister; }
 
 /*! Makes the QTestRunner toolview available */
@@ -56,7 +56,8 @@ public:
 
     virtual QWidget* createConfigWidget();
     virtual KDevelop::ProjectConfigSkeleton* configSkeleton(const QVariantList& args);
-
+    virtual void unload();
+    
 private slots:
     void newQTest();
 
@@ -64,6 +65,7 @@ private:
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
     KDevelop::IProject* m_proj; // scratch variable
+    Veritas::TestToolViewFactory* m_toolFactory;
 };
 
 #endif // QTEST_QTESTPLUGIN_H

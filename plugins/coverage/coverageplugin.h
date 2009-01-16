@@ -41,7 +41,8 @@ Q_OBJECT
 public:
     explicit CoveragePlugin(QObject* parent, const QVariantList& = QVariantList());
     virtual ~CoveragePlugin();
-
+    virtual void unload();
+    
 private:
     QFileInfoList findGcdaFilesIn(QDir& dir);
 

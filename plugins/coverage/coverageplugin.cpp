@@ -58,6 +58,11 @@ CoveragePlugin::~CoveragePlugin()
 {
 }
 
+void CoveragePlugin::unload()
+{
+     core()->uiController()->removeToolView( m_factory );
+}
+
 QFileInfoList CoveragePlugin::findGcdaFilesIn(QDir& dir)
 {
     QFileInfoList gcdaFiles;
