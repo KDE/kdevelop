@@ -21,6 +21,7 @@
 #define KROSSWRAPPER_H
 
 #include "duchainreader.h"
+#include <QSet>
 
 class KrossWrapper : public DUChainReader
 {
@@ -94,9 +95,12 @@ class KrossWrapper : public DUChainReader
         }
         
         void writeEndClass()
-        { output += "\tprivate:\n"
-                    "\t\t"+definedClasses.last()+"* wrapped;\n"
-                    "};\n\n"; }
+        {
+            output += "\tprivate:\n"
+                      "\t\t"+definedClasses.last()+"* wrapped;\n"
+                      "};\n\n";
+            typedefedTypes.clear();
+        }
                     
         void writeVariable(const QString& name, const QString& _type, bool isConst)
         {
