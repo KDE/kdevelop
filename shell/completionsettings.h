@@ -21,18 +21,39 @@
 #define COMPLETIONSETTINGS_H
 
 #include <interfaces/icompletionsettings.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>  
+#include <kglobal.h>
 
 class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
-    CompletionSettings() : m_level(AlwaysFull), m_automatic(true), m_enableSemanticHighlighting(true), m_localVariableColorizationLevel(120), m_highlightSemanticProblems(true) {
+    CompletionSettings() : m_level(AlwaysFull), m_automatic(true), m_enableSemanticHighlighting(true), m_highlightSemanticProblems(true), m_localVariableColorizationLevel(120) {
+    }
+
+    bool readBoolConfig(QString name, bool _default = false) const {
+        KConfigGroup group(KGlobal::config(), "Language Support");
+        return group.readEntry( name, _default );
+    }
+
+    int readIntConfig(QString name, int _default = 0) const {
+        KConfigGroup group(KGlobal::config(), "Language Support");
+        return group.readEntry( name, _default );
     }
     
     virtual CompletionLevel completionLevel() const {
-        return m_level;
+        CompletionLevel level(m_level);
+        if(readBoolConfig("alwaysFullCompletion"))
+            level = AlwaysFull;
+        if(readBoolConfig("minimalAutomaticCompletion"))
+            level = MinimalWhenAutomatic;
+        if(readBoolConfig("alwaysMinimalCompletion"))
+            level = Minimal;
+        
+        return level;
     }
         
     virtual bool automaticCompletionEnabled() const {
-        return m_automatic;
+        return readBoolConfig("Automatic Invocation", m_automatic);
     }
     
     void emitChanged() {
@@ -40,15 +61,15 @@ public:
     }
     
     virtual int localVariableColorizationLevel() const {
-        return m_localVariableColorizationLevel;
+        return readIntConfig("localVariableColorization", m_localVariableColorizationLevel);
     }
     
     virtual bool semanticHighlightingEnabled() const {
-        return m_enableSemanticHighlighting;
+        return readBoolConfig("enableSemanticHighlighting", m_enableSemanticHighlighting);
     }
     
     virtual bool highlightSemanticProblems() const {
-        return m_highlightSemanticProblems;
+        return readBoolConfig("highlightSemanticProblems", m_highlightSemanticProblems);
     }
     
     static CompletionSettings& self();

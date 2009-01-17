@@ -255,7 +255,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
-        KConfigGroup group(KGlobal::config(), "Code Completion");
+        KConfigGroup group(KGlobal::config(), "Language Support");
         bool automaticInvocation = group.readEntry( "Automatic Invocation", false );
 
         cc->setAutomaticInvocationEnabled(automaticInvocation);
