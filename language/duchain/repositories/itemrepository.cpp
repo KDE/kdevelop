@@ -62,27 +62,21 @@ bool processExists(int pid) {
   return f.exists();
 }
 
-///The global item-repository registry that is used by default
-ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
-  
+QPair<QString, KLockFile::Ptr> allocateRepository() {
   KLockFile::Ptr lock;
   QString repoPath;
+  
    KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
-//   if(ICore::self()) {
-///@todo Use the kde directory again, once we know how to get it in this early stage
-//     QString baseDir = KStandardDirs::locateLocal("data", "kdevduchain");
     QString baseDir = QDir::homePath() + "/.kdevduchain";
     KStandardDirs::makeDir(baseDir);
     //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
     for(int a = 0; a < 100; ++a) {
       QString specificDir = baseDir + QString("/%1").arg(a);
       KStandardDirs::makeDir(specificDir);
-      kDebug() << "testing" << specificDir;
+
        lock = new KLockFile(specificDir + "/lock", component);
        KLockFile::LockResult result = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag);
-
        bool useDir = false;
-       
        if(result != KLockFile::LockOK) {
          int pid;
          QString hostname, appname;
@@ -97,7 +91,7 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
              }
            }
          }
-       }else{
+       }else {
          useDir = true;
        }
        if(useDir) {
@@ -109,13 +103,19 @@ ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
     }
     
     if(repoPath.isEmpty()) {
-      kWarning() << "could not create a directory for the duchain data";
+      kError() << "could not create a directory for the duchain data";
     }else{
       kDebug() << "picked duchain directory" << repoPath;
     }
-//   }
-  
-  static ItemRepositoryRegistry global(repoPath, lock);
+    
+    return qMakePair(repoPath, lock);
+}
+
+///The global item-repository registry that is used by default
+ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
+  QPair<QString, KLockFile::Ptr> repo = allocateRepository();
+    
+  static ItemRepositoryRegistry global(repo.first, repo.second);
   return global;
 }
 
@@ -195,12 +195,19 @@ bool removeDirectory(const QDir &aDir)
   return !has_err;
 }
 
+//After calling this, the data-directory may be a new one
 void ItemRepositoryRegistry::deleteDataDirectory() {
   QMutexLocker lock(&m_mutex);
   QFileInfo pathInfo(m_path);
   QDir d(m_path);
-  Q_ASSERT(removeDirectory(d));
-  KStandardDirs::makeDir(m_path);
+  bool result = removeDirectory(d);
+  Q_ASSERT(result);
+  Q_ASSERT(m_lock);
+  m_lock->unlock(); //Have to release the lock here, else it will delete the new lock
+  //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
+  QPair<QString, KLockFile::Ptr> repo = allocateRepository();
+  m_path = repo.first;
+  m_lock = repo.second;
 }
 
 bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Ptr lock) {
@@ -208,23 +215,36 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
   if(m_path == path && !clear)
     return true;
   
-  QFileInfo wasWriting(path + "/is_writing");
-  if(wasWriting.exists()) {
-    clear = true;
-  }
-  
-  QString wantFile = path + QString("/version_%1").arg(staticItemRepositoryVersion());
-  QFileInfo rightVersion(wantFile);
-  if(!rightVersion.exists()) {
-    kWarning() << wantFile << "not found, seems to be an old version";
-    clear = true;
-  }
-  
+  m_lock = lock;
   m_path = path;
-  if(clear) {
-      kWarning() << QString("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository").arg(m_path);
-//     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
-      deleteDataDirectory();
+
+  bool needRepoCheck = true;
+  
+  while(needRepoCheck) {
+
+    if(QFile::exists(m_path + "/is_writing")) {
+      kWarning() << "repository" << m_path << "was write-locked, it probably is inconsistent";
+      clear = true;
+    }
+  
+    QDir pathDir(m_path);
+    pathDir.setFilter(QDir::Files);
+    
+    //When there is only one file in the repository, it's the lock-file, and the repository has just been cleared
+    if(pathDir.count() != 1 && !QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) )) {
+      kWarning() << "version-hint not found, seems to be an old version";
+      clear = true;
+    }
+    
+    if(clear) {
+        kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
+  //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+        deleteDataDirectory();
+        clear = false;
+        //We need to re-check, because a new data-directory may have been picked
+    }else{
+        needRepoCheck = false;
+    }
   }
   
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
@@ -254,7 +274,6 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
 //     kDebug() << "Could not open counter file";
   }
   
-  m_lock = lock;
   return true;
 }
 
