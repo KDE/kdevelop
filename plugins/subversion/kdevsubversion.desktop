@@ -17,6 +17,7 @@ Comment[x-test]=xxThis plugin integrates subversion to KDevelop.xx
 Comment[zh_CN]=此插件对 KDevelop 整合 subversion。
 Comment[zh_TW]=此外掛程式將 subversion 整合進 KDevelop。
 Name=Subversion Support
+Name[el]=Υποστήριξη Subversion
 Name[es]=Implementación de Subversion
 Name[gl]=Soporte de Subversion
 Name[nds]=Subversion-Ünnerstütten

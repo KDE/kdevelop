@@ -14,6 +14,7 @@ Comment[uk]=За допомогою цього додатка можна зап�
 Comment[x-test]=xxThis plugin allows running of programs with no instrumentor, ie. natively by the current host.xx
 Comment[zh_TW]=此外掛程式允許在目前主機上執行程式。
 Name=Run Program
+Name[el]=Εκτέλεση προγράμματος
 Name[es]=Ejecutar programa
 Name[gl]=Executar un programa
 Name[nds]=Programm utföhren

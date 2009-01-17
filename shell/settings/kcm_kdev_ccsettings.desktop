@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Language Support
+Name[el]=Υποστήριξη γλώσσας
 Name[es]=Implementación de lenguaje
 Name[gl]=Soporte de linguaxe
 Name[nds]=Spraak-Ünnerstütten
@@ -22,6 +23,7 @@ Name[uk]=Підтримка мов
 Name[zh_CN]=语言支持
 Name[zh_TW]=語言支援
 Comment=Configure code-completion and semantic highlighting
+Comment[el]=Ρυθμίσεις συμπλήρωσης κώδικα και σημειολογικού τονισμού
 Comment[es]=Configurar terminación de código y resalte semántico
 Comment[gl]=Configura o completado de código e o realce semántico
 Comment[nds]=Kode-Kompletteren un inholtbaseert Rutheven instellen

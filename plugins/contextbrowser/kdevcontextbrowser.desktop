@@ -14,6 +14,7 @@ Comment[uk]=За допомогою цього додатка можна пер�
 Comment[x-test]=xxThis plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.xx
 Comment[zh_TW]=此外掛程式顯示關於目前語言的資訊，並將相關的宣告與使用突顯出來。
 Name=Code Browser
+Name[el]=Περιηγητής κώδικα
 Name[es]=Navegador de código
 Name[gl]=Navegador do código
 Name[nds]=Kodekieker
