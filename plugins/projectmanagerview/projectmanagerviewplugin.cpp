@@ -197,12 +197,15 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( !buildItemsAdded && ( item->target() || item->type() == ProjectBaseItem::BuildFolder ) )
         {
             KAction* action = new KAction( i18n( "Build" ), this );
+            action->setIcon(KIcon("run-build"));
             connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             action = new KAction( i18n( "Install" ), this );
+            action->setIcon(KIcon("run-install"));
             connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             action = new KAction( i18n( "Clean" ), this );
+            action->setIcon(KIcon("run-clean"));
             connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             action = new KAction( i18n( "Add to Buildset" ), this );
@@ -215,6 +218,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
             KAction* close = new KAction( i18n( "Close Project(s)" ), this );
+            close->setIcon(KIcon("dialog-close"));
             connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
             closeProjectsAdded = true;
@@ -223,14 +227,17 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( item->folder() )
         {
             KAction* action = new KAction( i18n( "Create File" ), this );
+            action->setIcon(KIcon("document-new"));
             connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
 
             action = new KAction( i18n( "Create Folder" ), this );
+            action->setIcon(KIcon("folder-new"));
             connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
 
             action = new KAction( i18n( "Reload" ), this );
+            action->setIcon(KIcon("view-refresh"));
             connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
@@ -238,6 +245,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( item->folder() && item->parent() )
         {
             KAction* action = new KAction( i18n( "Remove Folder" ), this );
+            action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFolderFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
@@ -245,18 +253,22 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( item->file() )
         {
             KAction* action = new KAction( i18n( "Remove File" ), this );
+            action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         else if ( item->target() )
         {
             KAction* action = new KAction( i18n( "Create File" ), this );
+            action->setIcon(KIcon("document-new"));
             connect( action, SIGNAL(triggered()), this, SLOT(createFileInTargetFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        else if(!hasTargets && item->executable())
+        
+        if(!hasTargets && item->executable())
         {
             KAction* action = new KAction( i18n("Run"), this );
+            action->setIcon(KIcon("system-run"));
             connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
         }
