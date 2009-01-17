@@ -169,7 +169,6 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedDUContext indexedContext() const { return wrapped->indexedContext(); }
 		Q_SCRIPTABLE bool isBackwardMapped() const { return wrapped->isBackwardMapped(); }
-		typedef KDevelop::SimpleCursor KDevelopSimpleCursor;
 		Q_PROPERTY(KDevelopSimpleCursor  position READ getposition WRITE setposition SCRIPTABLE true)
 		Q_SCRIPTABLE void setposition(const KDevelopSimpleCursor  val) { wrapped->position=val; }
 		Q_SCRIPTABLE KDevelopSimpleCursor  getposition() const { return wrapped->position; }
