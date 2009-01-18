@@ -1,3 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <kpartgui name="KDevQTest" version="1">
+<MenuBar>
+  <Menu name="code">
+    <Text context="@title:menu">Code</Text>
+    <Action name="create_qtest" />
+  </Menu>
+</MenuBar>
 </kpartgui>

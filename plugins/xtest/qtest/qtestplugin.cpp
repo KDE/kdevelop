@@ -1,6 +1,6 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ * Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,10 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QApplication>
 
 #include <KAction>
+#include <KActionCollection>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KLocale>
@@ -56,7 +58,7 @@
 #include "qtestoutputdelegate.h"
 #include "qtestconfig.h"
 #include "modelbuilder.h"
-
+#include "createqtestwizard.h"
 
 K_PLUGIN_FACTORY(QTestPluginFactory, registerPlugin<QTestPlugin>();)
 K_EXPORT_PLUGIN(QTestPluginFactory(KAboutData("kdevqtest","kdevxtest", ki18n("QTest test"), "0.1", ki18n("Support for running QTest unit tests"), KAboutData::License_GPL)))
@@ -67,6 +69,7 @@ using namespace Veritas;
 
 QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
         : IPlugin(QTestPluginFactory::componentData(), parent),
+        m_dir(0),
         m_delegate(new QTestOutputDelegate(this)),
         m_proj(0)
 {
@@ -75,6 +78,9 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
     m_toolFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(name(), m_toolFactory);
     setXMLFile("kdevqtest.rc");
+    m_newQTestAction = actionCollection()->addAction("create_qtest");
+    m_newQTestAction->setText(i18n("Create &QTest"));
+    connect(m_newQTestAction, SIGNAL(triggered()), this, SLOT(showNewTestWizard()));
 }
 
 void QTestPlugin::unload()
@@ -130,38 +136,51 @@ QTestPlugin::~QTestPlugin()
 //    OutputParser::fto_resetResultMemoryLeakStats();
 }
 
+void QTestPlugin::showNewTestWizard()
+{
+    NewTestWizard* wz = new NewTestWizard(qApp->activeWindow());
+    QStringList projectNames;
+    foreach(IProject* proj, core()->projectController()->projects()) {
+        projectNames << proj->name();
+    }
+    wz->setProjects(projectNames);
+    if (m_proj) {
+        wz->setSelectedProject(m_proj->name());
+    }
+    if (m_dir) {
+        wz->setBaseDirectory(m_dir->url());
+    }
+
+    m_proj = 0;
+    m_dir = 0;
+    
+    connect(wz, SIGNAL(accepted()), this, SLOT(newQTest()));
+    connect(wz, SIGNAL(rejected()), wz, SLOT(deleteLater()));
+    wz->exec();
+}
+
 void QTestPlugin::newQTest()
 {
-    bool kk;
-    QString clz;
-    clz = QInputDialog::getText(
-              0, i18n("New QTest"),
-              i18n("Class name:"), QLineEdit::Normal,
-              QString("MyTest"), &kk);
-    if (!kk || clz.isEmpty()) return;
-
+    NewTestWizard* wizard = qobject_cast<NewTestWizard*>(sender());
+    Q_ASSERT(wizard);
+    QString testIdentifier = wizard->testClassIdentifier();
+    
     IDocumentController* dc;
     dc = ICore::self()->documentController();
-    IProjectFileManager* pfm = 0;
-    if (m_proj) {
-        pfm = m_proj->projectFileManager();
-    } else {
-        kError() << "Can't create QTest skeleton, project not set.";
+
+    KUrl hdrUrl = wizard->targetHeaderFile();
+    QFile hdr(hdrUrl.pathOrUrl());
+    if (!hdr.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        wizard->deleteLater();
         return;
     }
-    Q_ASSERT(pfm);
-
-    KUrl hdrUrl = m_dir->url();
-    hdrUrl.addPath(clz.toLower() + ".h");
-    QFile hdr(hdrUrl.pathOrUrl());
-    if (!hdr.open(QIODevice::WriteOnly | QIODevice::Text)) return;
     QStringList lns;
-    lns << QString() + "#ifndef QTEST_" + clz.toUpper() + "_H_INCLUDED"
-    << QString() + "#define QTEST_" + clz.toUpper() + "_H_INCLUDED"
+    lns << QString() + "#ifndef QTEST_" + testIdentifier.toUpper() + "_H_INCLUDED"
+    << QString() + "#define QTEST_" + testIdentifier.toUpper() + "_H_INCLUDED"
     << ""
     << "#include <QtCore/QObject>"
     << ""
-    << QString() + "class " + clz + " : public QObject"
+    << QString() + "class " + testIdentifier + " : public QObject"
     << "{"
     << "Q_OBJECT"
     << "private slots:"
@@ -171,42 +190,62 @@ void QTestPlugin::newQTest()
     << "    void someCmd();"
     << "};"
     << ""
-    << QString() + "#endif // QTEST_" + clz.toUpper() + "_H_INCLUDED"
+    << QString() + "#endif // QTEST_" + testIdentifier.toUpper() + "_H_INCLUDED"
     << "";
     QTextStream out(&hdr);
     out << lns.join("\n");
     hdr.close();
     dc->openDocument(hdrUrl);
-    if (m_proj) pfm->addFile(hdrUrl, m_dir);
 
-    KUrl srcUrl = m_dir->url();
-    srcUrl.addPath(clz.toLower() + ".cpp");
+    KUrl srcUrl = wizard->targetSourceFile();
     QFile src(srcUrl.pathOrUrl());
-    if (!src.open(QIODevice::WriteOnly | QIODevice::Text)) return;
+    if (!src.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        wizard->deleteLater();
+        return;
+    }
     lns.clear();
-    lns << QString() + "#include \"" + clz.toLower() + ".h\""
+    lns << QString() + "#include \"" + testIdentifier.toLower() + ".h\""
     << "#include <QtTest/QTest>"
     << ""
-    << "void " + clz + "::init()"
+    << "void " + testIdentifier + "::init()"
     << "{"
     << "}"
     << ""
-    << "void " + clz + "::cleanup()"
+    << "void " + testIdentifier + "::cleanup()"
     << "{"
     << "}"
     << ""
-    << "void " + clz + "::someCmd()"
+    << "void " + testIdentifier + "::someCmd()"
     << "{"
     << "}"
     << ""
-    << QString() + "QTEST_MAIN( " + clz + " )"
-    << QString() + "#include \"" + clz.toLower() + ".moc\""
+    << QString() + "QTEST_MAIN( " + testIdentifier + " )"
+    << QString() + "#include \"" + testIdentifier.toLower() + ".moc\""
     << "";
     QTextStream out2(&src);
     out2 << lns.join("\n");
     src.close();
     dc->openDocument(srcUrl);
-    if (m_proj) pfm->addFile(srcUrl, m_dir);
+    
+    IProject* selectedProject = 0;
+    foreach(IProject*proj, core()->projectController()->projects()) {
+        if (proj->name() == wizard->selectedProject()) {
+            selectedProject = proj;
+        }
+    }
+    if (selectedProject) {
+        IProjectFileManager* pfm = selectedProject->projectFileManager();
+        QList<KDevelop::ProjectFolderItem*> fldrs = selectedProject->foldersForUrl(srcUrl.upUrl());
+        if (!fldrs.isEmpty()) {
+            pfm->addFile(srcUrl, fldrs[0]);
+        }
+        fldrs = selectedProject->foldersForUrl(hdrUrl.upUrl());
+        if (!fldrs.isEmpty()) {
+            pfm->addFile(hdrUrl, fldrs[0]);
+        }
+    }
+    
+    wizard->deleteLater();
 }
 
 ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
@@ -232,9 +271,8 @@ ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
 
     m_proj = bl[0]->project();
     m_dir = bl[0]->folder();
-    KAction *action = new KAction(i18n("New QTest"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(newQTest()));
-    cm.addAction(ContextMenuExtension::ExtensionGroup, action);
+
+    cm.addAction(ContextMenuExtension::FileGroup, m_newQTestAction);
     return cm;
 }
 

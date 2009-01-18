@@ -1,6 +1,6 @@
 /* KDevelop xUnit plugin
  *
- * Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ * Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ class IProject;
 
 namespace Veritas { class Test; class TestToolViewFactory; }
 namespace QTest { class KDevRegister; }
+class KAction;
 
 /*! Makes the QTestRunner toolview available */
 class QTestPlugin : public KDevelop::IPlugin, public Veritas::ITestFramework
@@ -60,12 +61,14 @@ public:
     
 private slots:
     void newQTest();
+    void showNewTestWizard();
 
 private:
     KDevelop::ProjectFolderItem* m_dir;
     QTestOutputDelegate* m_delegate;
     KDevelop::IProject* m_proj; // scratch variable
     Veritas::TestToolViewFactory* m_toolFactory;
+    KAction* m_newQTestAction;
 };
 
 #endif // QTEST_QTESTPLUGIN_H

@@ -15,7 +15,11 @@ set(kdevqtest_SRCS
     qtestsettings.cpp
     qtestoutputmodel.cpp
     qtestoutputdelegate.cpp
-    qtestoutputjob.cpp)
+    qtestoutputjob.cpp
+    createqtestwizard.cpp)
+
+kde4_add_ui_files(kdevqtest_SRCS
+    classdetailspage.ui)
 
 qt4_automoc(${kdevqtest_SRCS})
 kde4_add_library(kdevqtest SHARED ${kdevqtest_SRCS})

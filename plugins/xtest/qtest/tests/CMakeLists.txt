@@ -26,6 +26,7 @@ kdev_add_test(unit-qtestoutputmorpher "qtestoutputmorphertest.cpp")
 kdev_add_test(sys-qtestrunnertest qtestrunnertest.cpp)
 kdev_add_test(unit-suitebuilder suitebuildertest.cpp)
 kdev_add_test(unit-casebuilder casebuildertest.cpp)
+kdev_add_test(unit-newtestwizardtest newtestwizardtest.cpp)
 
 add_subdirectory(suite1)
 

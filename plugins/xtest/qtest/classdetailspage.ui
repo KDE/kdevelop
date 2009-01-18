@@ -1,0 +1,111 @@
+<ui version="4.0" >
+ <class>ClassDetailsPage</class>
+ <widget class="QWidget" name="ClassDetailsPage" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>660</width>
+    <height>459</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" >
+     <item>
+      <layout class="QGridLayout" name="gridLayout" >
+       <item row="0" column="1" >
+        <widget class="KComboBox" name="projectSelection" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="headerLabel" >
+         <property name="text" >
+          <string>Header File</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" >
+        <widget class="KUrlRequester" name="headerInput" />
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLabel" name="sourceLabel" >
+         <property name="text" >
+          <string>Source File</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="KUrlRequester" name="sourceInput" />
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="projectLabel" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Project</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="identifierLabel" >
+         <property name="text" >
+          <string>Class Name</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="KLineEdit" name="identifierInput" />
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
