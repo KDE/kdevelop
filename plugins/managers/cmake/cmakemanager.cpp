@@ -367,7 +367,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_projectCache[project]=readCache(cachefile);
         initializeProject(project, folderUrl);
 
-        m_watchers[project]->disconnect( SIGNAL(dirty() ), this, SLOT(dirtyFile(QString)));
+        m_watchers[project]->disconnect( SIGNAL(dirty(QString) ), this, SLOT(dirtyFile(QString)));
         connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
         Q_ASSERT(m_rootItem->rowCount()==0);
     }
