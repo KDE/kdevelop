@@ -49,7 +49,7 @@ using namespace KTextEditor;
 const uint maxApplyAliasesRecursion = 100;
 
 namespace std {
-#if defined(Q_OS_WIN)
+#if defined(Q_CC_MSVC)
   using namespace stdext;
 #else
   using namespace __gnu_cxx;

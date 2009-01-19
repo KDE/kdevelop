@@ -13,10 +13,16 @@
  *      #defines in your own programs!
  */
 #define GOOGLE_NAMESPACE  ::google
+#if defined(Q_CC_MSVC)
 #define HASH_NAMESPACE  stdext
 /* the location of <hash_fun.h>/<stl_hash_fun.h> */
 #define HASH_FUN_H <hash_map>
 #define SPARSEHASH_HASH  HASH_NAMESPACE::hash_compare
+#else
+#define HASH_NAMESPACE __gnu_cxx
+#define HASH_FUN_H <ext/hash_map>
+#define SPARSEHASH_HASH  HASH_NAMESPACE::hash
+#endif
 #undef HAVE_UINT16_T
 #undef HAVE_U_INT16_T
 #define HAVE___UINT16  1

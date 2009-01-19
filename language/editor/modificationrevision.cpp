@@ -24,14 +24,14 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#if defined(Q_OS_WIN)
+#if defined(Q_CC_MSVC)
 #include <hash_map>
 #else
 #include <ext/hash_map>
 #endif
 
 namespace std {
-#if defined(Q_OS_WIN)
+#if defined(Q_CC_MSVC)
   using namespace stdext;
 #else
   using namespace __gnu_cxx;
