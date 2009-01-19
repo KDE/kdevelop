@@ -101,7 +101,8 @@ void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
 bool buildDirConfigured( KDevelop::ProjectBaseItem* item )
 {
     KConfigGroup cmakeGrp = item->project()->projectConfiguration()->group("CMake");
-    KUrl builddir = cmakeGrp.readEntry( "currentBuildDir", KUrl() );
+    KUrl builddir = cmakeGrp.readEntry( "CurrentBuildDir", KUrl() );
+    QStringList builddirs = cmakeGrp.readEntry( "BuildDirs", QStringList() );
     
     if( !builddir.isValid() || builddir.isEmpty() ) 
     {
@@ -110,8 +111,13 @@ bool buildDirConfigured( KDevelop::ProjectBaseItem* item )
         {
             return false;
         }
-        cmakeGrp.writeEntry( "currentBuildDir", bd.buildFolder() );
-    }  
+        cmakeGrp.writeEntry( "CurrentBuildDir", bd.buildFolder() );
+        
+        if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
+            builddirs.append(bd.buildFolder().toLocalFile());
+            cmakeGrp.writeEntry( "BuildDirs", builddirs);
+        }
+    }
     return true;
 }
 
