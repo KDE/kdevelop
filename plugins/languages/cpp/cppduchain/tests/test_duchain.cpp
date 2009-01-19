@@ -329,6 +329,42 @@ void TestDUChain::testContextSearch() {
   QCOMPARE(top->findContexts(DUContext::Namespace, QualifiedIdentifier("Stru") ).count(), 0);
 }
 
+void TestDUChain::testSeparateVariableDefinition() {
+  {
+    QByteArray method("struct S {static int testValue; }; const int a = 5; int S::testValue(a);");
+    
+    /**
+    * A prefix-context is created that surrounds S::testValue to represent the "S" part of the scope.
+    */
+    
+    TopDUContext* top = parse(method, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->localDeclarations()[0]->qualifiedIdentifier(), QualifiedIdentifier("S"));
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    ClassMemberDeclaration* staticDeclaration = dynamic_cast<ClassMemberDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
+    QVERIFY(staticDeclaration);
+    QCOMPARE(staticDeclaration->qualifiedIdentifier(), QualifiedIdentifier("S::testValue"));
+    QVERIFY(staticDeclaration->isStatic());
+    
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+    Declaration* actualDeclaration = top->childContexts()[1]->localDeclarations()[0];
+    QCOMPARE(actualDeclaration->qualifiedIdentifier(), QualifiedIdentifier("S::testValue"));
+    ///@todo declaration/definition relationship
+  }
+  
+  {
+    //Declaration + definition
+    QByteArray method("extern int x; int x;");
+    
+    TopDUContext* top = parse(method, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    ///@todo declaration/definition relationship
+  }
+}
+
 void TestDUChain::testIntegralTypes()
 {
   TEST_FILE_PARSE_ONLY
@@ -1318,7 +1354,7 @@ void TestDUChain::testDeclareFriend()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray method("class A { friend class F; }; ");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1723,7 +1759,7 @@ void TestDUChain::testSignalSlotUse() {
 void TestDUChain::testFunctionDefinition() {
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() : i(3) {}; A::~A() {}; ");
 
-  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
+  TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
 
   DUChainWriteLocker lock(DUChain::lock());
 

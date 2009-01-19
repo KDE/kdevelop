@@ -201,8 +201,20 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
 void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
+  QualifiedIdentifier id;
   PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
+  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names) {
+    //Build a prefix-context for external variable-definitions
+    //This is slightly redundant and expensive, but then again, it should only be run for external variable definitions
+    if(!node->declarator->parameter_declaration_clause || !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause)) {
+      SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      identifierForNode(node->declarator->id, id);
+      openPrefixContext(node, id, pos);
+    }
+  }
   DeclarationBuilderBase::visitInitDeclarator(node);
+  
+  closePrefixContext(id);
 }
 
 void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)

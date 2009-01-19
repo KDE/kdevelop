@@ -133,6 +133,8 @@ private slots:
 
   void testSymbolTableValid();
   
+  void testSeparateVariableDefinition();
+  
   void testBaseUses();
 
   void testCStruct();

@@ -173,7 +173,7 @@ protected:
   ///The prefix-context will also import the context of the specific class-declaration, so the visibility matches.
   ///@param id should be the whole identifier. A prefix-context will only be created if it
   ///has more than 1 element.
-  void openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos);
+  void openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos);
   void closePrefixContext(const QualifiedIdentifier& id);
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.

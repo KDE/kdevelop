@@ -186,7 +186,7 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
-void ContextBuilder::openPrefixContext(ClassSpecifierAST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
+void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
   if(id.count() < 2)
     return;
   QualifiedIdentifier prefixId(id);
