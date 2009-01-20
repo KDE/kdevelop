@@ -57,9 +57,6 @@ private slots:
     void executableContents();
     void buttonsDisabledInReadOnlyMode();
 
-    void initializeFileDialogWithProjectFolder();
-    void keepExistingFileDialogContent();
-
 private:
     void assertDetailsCollapsed();
     void assertDetailsExpanded();
@@ -67,11 +64,6 @@ private:
     void assertChildWidgetsDisabled();
     void assertChildWidgetsEnabled();
     KUrlRequester* fetchFirstTestExeRequester();
-
-public slots:
-    /*! Verify that the file dialog (associated with m_testExeInputField) has 
-     *  a default folder that equals m_expectedFolder. */
-    void assertFileDialogFolderEquals();
 
 private:
     ConfigWidget* m_config;
