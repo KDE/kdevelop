@@ -204,7 +204,10 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
 
-  if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
+  if(currentContext()->type() == DUContext::Other) {
+    //Cannot declare a a function within a code-context
+    node->declarator->parameter_is_initializer = true;
+  }else if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
