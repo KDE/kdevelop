@@ -100,6 +100,7 @@ void printAllDeclarations(DUContext* ctx)
 void UUTConstructor::printUseInfo(int useId, const Use* use, DUContext* ctx)
 {
     Declaration* decl = declarationForUse(use,ctx);
+    if (!decl) return;
     kDebug() << "decl    " << decl->toString();
     KUrl url(decl->url().str());
     kDebug() << "useTxt  " << m_docAccess->text(url, use->m_range);
@@ -121,13 +122,13 @@ ClassSkeleton UUTConstructor::morph(Declaration* variable)
     return cs;
 }
 
-void UUTConstructor::constructMethodsFor(DUContext* ctx, Declaration* variable, ClassSkeleton& cs)
+void UUTConstructor::constructMethodsFor(DUContext* ctx, Declaration* classToMorph, ClassSkeleton& cs)
 {
     const Use* uses = ctx->uses();
     for(int i=0; i<ctx->usesCount(); i++, uses++) {
         Declaration* decl = declarationForUse(uses, ctx);
         printUseInfo(i, uses, ctx);
-        if (decl == variable) {
+        if (decl == classToMorph) {
             MethodSkeleton ms = createMethod(decl, uses, ctx);
             if (!ms.isEmpty()) {
               cs.addMethod(ms);
@@ -135,7 +136,7 @@ void UUTConstructor::constructMethodsFor(DUContext* ctx, Declaration* variable, 
         }
     }
     foreach(DUContext* child, ctx->childContexts()) {
-        constructMethodsFor(child, variable, cs);
+        constructMethodsFor(child, classToMorph, cs);
     }
 }
 
