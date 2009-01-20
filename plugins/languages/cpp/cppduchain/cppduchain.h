@@ -74,6 +74,15 @@ KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloaded
    */
 KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context);
 
+  /**
+   * Returns the logical namespace the given context belongs to, visibility-wise.
+   * @param identifier An ending part of identifier of the given context(May be the full identifier)
+   * @param context A context
+   * @param source The context from where to start searching
+   * @return The part of "identifier" that represents a namespace
+   */
+KDEVCPPDUCHAIN_EXPORT KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(KDevelop::QualifiedIdentifier identifier, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source);
+
 /**
  * Returns whether the given declaration can be accessed from the given context. Checks for private/protected and such stuff.
  * @param fromContext The scope-context from where to check. May be zero.

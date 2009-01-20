@@ -485,35 +485,7 @@ class CppDUContext : public BaseContext {
       {
         QualifiedIdentifier prefix = BaseContext::localScopeIdentifier();
         if(prefix.count() > 1) {
-          
-          DUContext* classContext = 0;
-          
-          if(type == DUContext::Helper) {
-            //This is a prefix-context for an external class-definition like "class A::B {..};"
-            if(BaseContext::importedParentContexts().size())
-              classContext = BaseContext::importedParentContexts()[0].context(source);
-          } else {
-            //This must be a function-definition, like void A::B::test() {}
-            Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<BaseContext*>((const BaseContext*)this));
-            if(classDeclaration)
-              classContext = classDeclaration->logicalInternalContext(source);
-            prefix.pop();
-          }
-          
-          if(classContext) {
-            while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
-              prefix.pop();
-              
-              //This way we can correctly resolve the namespace-component for multiple externally defined classes,
-              //see testDeclareStructInNamespace() in test_duchain.cpp
-              if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper) {
-                classContext = BaseContext::importedParentContexts()[0].context(source);
-                continue;
-              }
-              
-              break;
-            }
-          }
+          prefix = Cpp::namespaceScopeComponentFromContext(prefix, this, source);
           
           if(!prefix.isEmpty()) {
             prefix.setExplicitlyGlobal(true);

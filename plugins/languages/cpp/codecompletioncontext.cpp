@@ -1172,13 +1172,20 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
         kDebug() << "Import is not based on NamespaceAliasDeclaration";
       }
     }
+    
+    QualifiedIdentifier ownNamespaceScope = Cpp::namespaceScopeComponentFromContext(m_duContext->scopeIdentifier(true), m_duContext.data(), m_duContext->topContext());
+    if(!ownNamespaceScope.isEmpty())
+      ids += ownNamespaceScope;
 
     foreach(const QualifiedIdentifier &id, ids) {
       QList<DUContext*> importedContexts = m_duContext->findContexts( DUContext::Namespace, id );
-      foreach(DUContext* context, importedContexts)
+      foreach(DUContext* context, importedContexts) {
+        if(context->range().contains(m_duContext->range()))
+          continue; //If the context surrounds the current one, the declarations are visible through allDeclarations(..).
         foreach(Declaration* decl, context->localDeclarations())
           if(filterDeclaration(decl))
             decls << qMakePair(decl, 1200);
+      }
     }
   }
 

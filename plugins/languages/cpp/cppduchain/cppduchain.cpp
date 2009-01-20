@@ -115,6 +115,42 @@ QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* con
   }
 }
 
+KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdentifier prefix, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source)
+{
+  const DUContext* classContext = 0;
+  
+  if(context->type() == DUContext::Helper) {
+    //This is a prefix-context for an external class-definition like "class A::B {..};"
+    if(context->importedParentContexts().size())
+      classContext = context->importedParentContexts()[0].context(source);
+  } else if(context->type() == DUContext::Class) {
+    classContext = context;
+  }else{
+    //This must be a function-definition, like void A::B::test() {}
+    Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<DUContext*>(context));
+    if(classDeclaration)
+      classContext = classDeclaration->logicalInternalContext(source);
+    prefix.pop();
+  }
+  
+  if(classContext) {
+    while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
+      prefix.pop();
+      
+      //This way we can correctly resolve the namespace-component for multiple externally defined classes,
+      //see testDeclareStructInNamespace() in test_duchain.cpp
+      if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper) {
+        classContext = context->importedParentContexts()[0].context(source);
+        continue;
+      }
+      
+      break;
+    }
+  }
+  
+  return prefix;
+}
+
 Declaration* localClassFromCodeContext(DUContext* context)
 {
   if(!context)
