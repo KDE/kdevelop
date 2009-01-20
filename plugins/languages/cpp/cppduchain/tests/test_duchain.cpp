@@ -331,7 +331,7 @@ void TestDUChain::testContextSearch() {
 
 void TestDUChain::testSeparateVariableDefinition() {
   {
-    QByteArray method("struct S {static int testValue; }; const int a = 5; int S::testValue(a);");
+    QByteArray method("struct S {static int testValue; enum { A = 5 }; class C {}; int test(C); }; int S::testValue(A); int S::test(C) {}; ");
     
     /**
     * A prefix-context is created that surrounds S::testValue to represent the "S" part of the scope.
@@ -341,8 +341,10 @@ void TestDUChain::testSeparateVariableDefinition() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->localDeclarations()[0]->qualifiedIdentifier(), QualifiedIdentifier("S"));
-    QCOMPARE(top->childContexts().count(), 2);
-    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 4);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 1);
     ClassMemberDeclaration* staticDeclaration = dynamic_cast<ClassMemberDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
     QVERIFY(staticDeclaration);
     QCOMPARE(staticDeclaration->qualifiedIdentifier(), QualifiedIdentifier("S::testValue"));
@@ -350,8 +352,16 @@ void TestDUChain::testSeparateVariableDefinition() {
     
     QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
     Declaration* actualDeclaration = top->childContexts()[1]->localDeclarations()[0];
+    QVERIFY(!dynamic_cast<AbstractFunctionDeclaration*>(actualDeclaration));
     QCOMPARE(actualDeclaration->qualifiedIdentifier(), QualifiedIdentifier("S::testValue"));
+
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+    
     ///@todo declaration/definition relationship
+
+    
+    QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(top->localDeclarations()[1]));
+
   }
   
   {
@@ -1154,7 +1164,8 @@ void TestDUChain::testDeclareStructInNamespace()
     
     QCOMPARE(top->childContexts()[2]->childContexts().count(), 1);
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations().count(), 3);
-    
+    kDebug() << top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->abstractType()->toString();
+    kDebug() << top->localDeclarations()[0]->abstractType()->toString();
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[0]->indexedType());
     QCOMPARE(top->childContexts()[2]->childContexts()[0]->localDeclarations()[1]->indexedType(), top->childContexts()[1]->localDeclarations()[0]->indexedType());
     kDebug() << top->childContexts()[3]->localDeclarations()[0]->abstractType()->toString();
@@ -1276,7 +1287,7 @@ void TestDUChain::testVariableDeclaration()
   DUChainWriteLocker lock(DUChain::lock());
 
   QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 3); // "A instance(c)" evaluates to a function declaration, so we have one function context.
+  QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 5);
   QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
   QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2);

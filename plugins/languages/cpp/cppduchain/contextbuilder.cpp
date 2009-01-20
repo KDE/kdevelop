@@ -186,15 +186,15 @@ ContextBuilder::~ContextBuilder ()
   delete m_nameCompiler;
 }
 
-void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
+QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const QualifiedIdentifier& id, KDevelop::SimpleCursor pos) {
   if(id.count() < 2)
-    return;
+    return qMakePair((DUContext*)0, QualifiedIdentifier());
+  
   QualifiedIdentifier prefixId(id);
   prefixId.pop();
+
   DUContext* import = 0;
 
-  //When creating a prefix-context that is there to embed a class within another class, import the enclosing class into that context.
-  //That way items from the base class can be found.
   {
     DUChainReadLocker lock(DUChain::lock());
 
@@ -220,16 +220,26 @@ void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, 
       }
     }
   }
+  
+  return qMakePair(import, prefixId);
+}
 
-  openContext(ast, DUContext::Helper, prefixId);
+void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
+  if(id.count() < 2)
+    return;
 
+  //When creating a prefix-context that is there to embed a class within another class, import the enclosing class into that context.
+  //That way items from the base class can be found.
+
+  QPair<DUContext*, QualifiedIdentifier> prefix = findPrefixContext(id, pos);
+
+  openContext(ast, DUContext::Helper, prefix.second);
+
+  DUContext* import = prefix.first;
+  
   if(import) {
     DUChainWriteLocker lock(DUChain::lock());
-    if(import->imports(currentContext())) {
-      kDebug() << "prevented endless recursive import";
-    }else{
-      addImportedParentContextSafely(currentContext(), import);
-    }
+    addImportedParentContextSafely(currentContext(), import);
   }
 }
 
@@ -564,6 +574,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
   QualifiedIdentifier functionName;
   if (compilingContexts() && node->init_declarator && node->init_declarator->declarator && node->init_declarator->declarator->id) {
     identifierForNode(node->init_declarator->declarator->id, functionName);
+
     if (functionName.count() >= 2) {
       
       // This is a class function definition
@@ -574,7 +585,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       className.setExplicitlyGlobal(true);
       
       QList<Declaration*> classDeclarations = currentContext()->findDeclarations(className);
-      
+
       if (classDeclarations.count() != 0 && classDeclarations.first()->internalContext()) {
         m_importedParentContexts.append(classDeclarations.first()->internalContext());
         
@@ -866,12 +877,24 @@ void ContextBuilder::closeTypeForDeclarator(DeclaratorAST */*node*/) {
 
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
+  QualifiedIdentifier id;
+  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
+    //Build a prefix-context for external variable-definitions
+    DUChainWriteLocker lock(DUChain::lock());
+    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    identifierForNode(node->declarator->id, id);
+    
+    openPrefixContext(node, id, pos);
+  }
+
   m_currentInitializer = node->initializer;
   if(node->declarator)
     visitDeclarator(node->declarator);
   if(node->initializer)
     visitInitializer(node->initializer);
   m_currentInitializer = 0;
+  
+  closePrefixContext(id);
 }
 
 void ContextBuilder::visitDeclarator(DeclaratorAST *node) {

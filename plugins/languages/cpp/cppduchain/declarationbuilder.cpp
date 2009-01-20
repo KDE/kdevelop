@@ -58,6 +58,7 @@
 
 #include "cppdebughelper.h"
 #include "name_visitor.h"
+#include "usebuilder.h"
 
 const Identifier& castIdentifier() {
   static Identifier id("operator{...cast...}");
@@ -201,20 +202,35 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
 void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
-  QualifiedIdentifier id;
   PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
-  if(node->declarator && node->declarator->id && node->declarator->id->qualified_names) {
-    //Build a prefix-context for external variable-definitions
-    //This is slightly redundant and expensive, but then again, it should only be run for external variable definitions
-    if(!node->declarator->parameter_declaration_clause || !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause)) {
-      SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
-      identifierForNode(node->declarator->id, id);
-      openPrefixContext(node, id, pos);
+
+  if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
+    //Decide whether the parameter-declaration clause is valid
+    DUChainWriteLocker lock(DUChain::lock());
+    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    
+    QualifiedIdentifier id;
+    identifierForNode(node->declarator->id, id);    
+    DUContext* previous = currentContext();
+
+    DUContext* previousLast = lastContext();
+    QList<KDevelop::DUContext*> importedParentContexts = m_importedParentContexts;
+    
+    openPrefixContext(node, id, pos); //We create a temporary prefix-context to search from within the right scope
+    
+    DUContext* tempContext = currentContext();
+    node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
+    closePrefixContext(id);
+    
+    if(tempContext != previous) {
+      delete tempContext;
+      setLastContext(previousLast);
+      m_importedParentContexts = importedParentContexts;
     }
+    Q_ASSERT(currentContext() == previous);
   }
-  DeclarationBuilderBase::visitInitDeclarator(node);
   
-  closePrefixContext(id);
+  DeclarationBuilderBase::visitInitDeclarator(node);
 }
 
 void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
@@ -244,23 +260,22 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
   m_collectQtFunctionSignature = !m_accessPolicyStack.isEmpty() && ((m_accessPolicyStack.top() & FunctionIsSlot) || (m_accessPolicyStack.top() & FunctionIsSignal));
   m_qtFunctionSignature = QByteArray();
   
-  ///@todo this should be solved more elegantly within parser and AST
-  if (node->parameter_declaration_clause) {
-    //Check if all parameter declarations are valid. If not, this is a misunderstood variable declaration.
-    if(!checkParameterDeclarationClause(node->parameter_declaration_clause))
-      node->parameter_declaration_clause = 0;
-  }
-  if (node->parameter_declaration_clause) {
+  if (node->parameter_declaration_clause && !node->parameter_is_initializer) {
+
+    if(m_collectQtFunctionSignature) //We need to do this just to collect the signature
+      checkParameterDeclarationClause(node->parameter_declaration_clause);
+    
     Declaration* decl = openFunctionDeclaration(node->id, node);
 
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
         decl->setDeclarationIsDefinition( (bool)m_functionDefinedStack.top() );
     }
-
+    
     applyFunctionSpecifiers();
   } else {
     openDefinition(node->id, node, node->id == 0);
+    node->parameter_declaration_clause = 0;
   }
 
   m_collectQtFunctionSignature = false;
@@ -1452,6 +1467,9 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
           if( lastTypeWasInstance() ) {
             ret = false;
             break;
+          }else if(lastType().cast<DelayedType>() && lastType().cast<DelayedType>()->kind() == DelayedType::Unresolved) {
+            //When the searched item was not found, expect it to be a non-type
+            ret = false;
           }else{
             ret = true;
             break;

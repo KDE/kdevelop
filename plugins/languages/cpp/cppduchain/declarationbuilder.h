@@ -152,10 +152,10 @@ private:
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
   QStack<std::size_t> m_functionDefinedStack;
 
+  bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
+
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;
-  
-  bool m_inTypedef, m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
 };
 
 KDEVCPPDUCHAIN_EXPORT const Identifier& castIdentifier();

@@ -175,6 +175,10 @@ protected:
   ///has more than 1 element.
   void openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos);
   void closePrefixContext(const QualifiedIdentifier& id);
+  
+  //The returned context may be zero, while the identifier valid
+  QPair<DUContext*, QualifiedIdentifier> findPrefixContext(const QualifiedIdentifier& id, KDevelop::SimpleCursor pos);
+  
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
   virtual void visitFunctionDeclaration (FunctionDefinitionAST *);
