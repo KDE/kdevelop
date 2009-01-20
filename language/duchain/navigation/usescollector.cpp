@@ -43,6 +43,8 @@ static Identifier destructorForName(Identifier name) {
   return Identifier('~'+str);
 }
 
+///@todo Only collect uses within currently loaded projects
+
 template<class ImportanceChecker>
 void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* current, QSet<ParsingEnvironmentFile*>& visited, QSet<ParsingEnvironmentFile*>& collected) {
 
