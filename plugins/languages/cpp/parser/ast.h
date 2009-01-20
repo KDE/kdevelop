@@ -364,6 +364,8 @@ struct DeclaratorAST: public AST
   NameAST *id;
   ExpressionAST *bit_expression;
   const ListNode<ExpressionAST*> *array_dimensions;
+  
+  bool parameter_is_initializer; //Used by the declaration-builder to mark a parameter-declaration clause as a mis-parsed initializer
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<std::size_t> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
