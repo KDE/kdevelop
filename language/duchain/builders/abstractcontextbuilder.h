@@ -300,7 +300,9 @@ protected:
   inline DUContext* lastContext() const { return m_lastContext; }
   /// Clears the last closed context.
   inline void clearLastContext() { m_lastContext = 0; }
-
+  
+  inline void setLastContext(DUContext* context) { m_lastContext = context; }
+  
   /**
    * Determine if we are recompiling an existing definition-use chain, or if
    * a new chain is being created from scratch.
