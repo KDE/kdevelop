@@ -6,6 +6,7 @@ Comment[x-test]=xxKDevelopxx
 
 [Event/ProcessSuccess]
 Name=Process successful
+Name[cs]=Proces úspěšný
 Name[da]=Processen lykkedes
 Name[de]=Prozess erfolgreich
 Name[el]=Επιτυχής διεργασία
@@ -39,6 +40,7 @@ Name[x-test]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Name[zh_TW]=行程成功
 Comment=Process finished successfully
+Comment[cs]=Proces úspěšně dokončen
 Comment[da]=Processen afsluttede med succes
 Comment[de]=Prozess erfolgreich beendet
 Comment[el]=Η διεργασία τερμάτισε με επιτυχία
@@ -75,6 +77,7 @@ Action=None
 
 [Event/ProcessError]
 Name=Process error
+Name[cs]=Chyba procesu
 Name[da]=Procesfejl
 Name[de]=Prozess-Fehler
 Name[el]=Σφάλμα διεργασίας
@@ -109,6 +112,7 @@ Name[x-test]=xxProcess errorxx
 Name[zh_CN]=处理出错
 Name[zh_TW]=行程錯誤
 Comment=Process finished with errors
+Comment[cs]=Proces dokončen s chybami
 Comment[da]=Processen afsluttede med fejl
 Comment[de]=Prozes mit Fehlern beendet
 Comment[el]=Η διεργασία τερμάτισε με σφάλματα

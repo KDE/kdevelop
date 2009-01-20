@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Test
+Name[cs]=Otestovat
 Name[el]=Δοκιμή
 Name[es]=Prueba
 Name[gl]=Proba
