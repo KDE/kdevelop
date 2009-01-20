@@ -204,8 +204,8 @@ void RunController::setupActions()
             this, SLOT(slotProjectOpened(KDevelop::IProject*)));
     connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
             this, SLOT(slotProjectClosing(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged( KDevelop::IProject* ) ),
-            SLOT(slotProjectOpened(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
+             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 }
 
 QAction* KDevelop::RunController::addTarget(KDevelop::IProject * project, const QString& targetName)
@@ -256,6 +256,12 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                     d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
+}
+
+void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
+{
+    slotProjectClosing(project);
+    slotProjectOpened(project);
 }
 
 void RunController::slotExecute()
