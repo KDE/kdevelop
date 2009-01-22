@@ -1,0 +1,9 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevAppWizard" version="3">
+<MenuBar>
+  <Menu name="project" >
+    <text context="@title:menu">Project</text>
+    <Action name="project_new" group="project_new"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
