@@ -39,7 +39,6 @@ void MakeOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     if( status.isValid() )
     {
         MakeOutputModel::OutputItemType type = status.value<MakeOutputModel::OutputItemType>();
-        kDebug() << "item for" << index << "has type:" << type;
         if( type == MakeOutputModel::ErrorItem )
         {
             opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
