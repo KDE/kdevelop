@@ -23,15 +23,20 @@ set( cmakecommon_SRCS
   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
+  cmakebuilddirchooser.cpp
  )
+
+set( cmakecommon_UI
+  cmakebuilddirchooser.ui
+)
 
 set( cmakemanager_SRCS
   cmakemodelitems.cpp
-  settings/cmakebuilddircreator.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
   applychangeswidget.cpp
+  settings/cmakebuilddircreator.cpp
 )
 
 set( cmakemanager_UI
@@ -56,7 +61,8 @@ remove_definitions( -DQT_NO_STL )
 # Note: This library doesn't follow API/ABI/BC rules and shouldn't have a SOVERSION
 #       Its only purpose is to support the plugin without needing to add all source files
 #       to the plugin target
-kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
+
+kde4_add_ui_files( cmakecommon_SRCS ${cmakecommon_UI} )
 kde4_add_library( kdev4cmakecommon SHARED ${cmakecommon_SRCS} )
 target_link_libraries( kdev4cmakecommon ${KDE4_KDEUI_LIBS}
                         ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY}
@@ -70,7 +76,7 @@ target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
                         ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
                         ${KDE4_KTEXTEDITOR_LIBS})
 
-
+kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
 kde4_add_plugin( kcm_kdevcmake_settings ${cmakesettings_SRCS} )
 target_link_libraries( kcm_kdevcmake_settings ${KDE4_KIO_LIBS}

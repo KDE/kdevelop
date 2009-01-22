@@ -18,25 +18,36 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKEBUILDDIRCREATOR_H
-#define CMAKEBUILDDIRCREATOR_H
+#ifndef CMAKEBUILDDIRCHOOSER_H
+#define CMAKEBUILDDIRCHOOSER_H
 
-#include <QDialog>
-#include <KUrl>
-#include <KProcess>
+#include <QWidget>
+#include <QFlags>
+#include <kurl.h>
 
-#include "../cmakebuilddirchooser.h"
+#include "cmakeexport.h"
 
 namespace Ui {
-    class CMakeBuildDirCreator;
+    class CMakeBuildDirChooser;
 }
 
-class CMakeBuildDirCreator : public QDialog
+class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
 {
     Q_OBJECT
     public:
-        explicit CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent = 0, Qt::WindowFlags f=0);
-        ~CMakeBuildDirCreator() {}
+        enum StatusType 
+        { 
+            BuildDirCreated = 0, 
+            BuildDirChosen = 1,
+            CorrectProject = 2, 
+            BuildFolderEmpty = 4, 
+            HaveCMake = 8,
+            CorrectBuildDir = 16
+        };
+        Q_DECLARE_FLAGS( StatusTypes, StatusType )
+
+        explicit CMakeBuildDirChooser(QWidget* parent = 0);
+        ~CMakeBuildDirChooser() {}
 
         KUrl cmakeBinary() const;
         KUrl installPrefix() const;
@@ -47,23 +58,21 @@ class CMakeBuildDirCreator : public QDialog
         void setInstallPrefix(const KUrl&);
         void setBuildFolder(const KUrl&);
         void setBuildType(const QString&);
-        void setAlreadyUsed(const QStringList&);
+        void setSourceFolder( const KUrl& srcFolder );
+    signals:
+        void status(const QString&);
+        void updated( StatusTypes, const QString& srcDirFromCache );
 
     private slots:
-        void runBegin();
-        void runEnd();
-
-        void addOutput();
-
-        void cmakeCommandDone(int exitCode, QProcess::ExitStatus exitStatus);
-        void chooserStatus(const QString&);
-        void chooserUpdated( CMakeBuildDirChooser::StatusTypes, const QString& );
+        void updated();
     private:
-        QStringList m_alreadyUsed;
-        Ui::CMakeBuildDirCreator* m_creatorUi;
-        KProcess m_proc;
+        static QString buildDirProject(const KUrl& buildDir);
+
+        static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
+        Ui::CMakeBuildDirChooser* m_chooserUi;
         KUrl m_srcFolder;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS( CMakeBuildDirChooser::StatusTypes )
 
 
 #endif
