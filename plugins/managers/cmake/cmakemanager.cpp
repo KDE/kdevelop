@@ -812,16 +812,17 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
-        kDebug(9042) << dir << " is dirty" << files;
+        kDebug(9032) << dirtyFile << "is dirty" << files;
 
-        Q_ASSERT(!files.isEmpty());
+        Q_ASSERT(p->fileCount()>0);
+        Q_ASSERT(files.count()==1);
         CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
 
         KDevelop::IProject* proj=it->project();
         KUrl projectBaseUrl=m_realRoot[proj];
-        projectBaseUrl.adjustPath(KUrl::RemoveTrailingSlash);
+        projectBaseUrl.adjustPath(KUrl::AddTrailingSlash);
 
-        kDebug(9042) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
+        kDebug(9032) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
         if(dir!=projectBaseUrl)
         {
 #if 0
@@ -1081,6 +1082,7 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
     if(!static_cast<ProjectBaseItem*>(it->parent())->target())
     {
         it->parent()->removeRow(it->row());
+        it->project()->removeFromFileSet(KDevelop::IndexedString( it->url()));
     }
     else
     {
@@ -1115,6 +1117,8 @@ bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, K
             if(!saved)
                 KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                     i18n("Cannot save the change."));
+            else
+                it->project()->removeFromFileSet(IndexedString(it->url()));
         }
     }
     else

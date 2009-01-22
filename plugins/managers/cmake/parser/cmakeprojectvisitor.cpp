@@ -1945,8 +1945,9 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         if(!arg.isCorrect() || !arg.value.contains('$'))
             continue;
 
-        QList< IntPair > var = parseArgument(arg.value);
-        for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
+        QList<IntPair> var = parseArgument(arg.value);
+        QList<IntPair>::const_iterator it, itEnd=var.constEnd();
+        for(it=var.constBegin(); it!=itEnd; ++it)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
