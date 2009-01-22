@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <ktempdir.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kmacroexpander.h>
@@ -101,7 +103,9 @@ void AppWizardPlugin::slotNewProject()
     {
         QString project = createProject( dlg.appInfo() );
         if (!project.isEmpty())
+        {
             core()->projectController()->openProject(KUrl::fromPath(project));
+        }
     }
 }
 
@@ -309,9 +313,33 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         kDebug() << "failed to open template archive";
         return QString();
     }
+    
+    QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4" );
 
-    kDebug() << "Returning" << QDir::cleanPath(dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4");
-    return QDir::cleanPath(dest.toLocalFile() + '/' + dest.fileName() + ".kdev4");
+    kDebug() << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
+    
+    if( ! QFileInfo( projectFileName ).exists() )
+    {
+        kDebug() << "creating .kdev4 file";
+        KSharedConfig::Ptr cfg = KSharedConfig::openConfig( projectFileName, KConfig::SimpleConfig );
+        KConfigGroup project = cfg->group( "Project" );
+        project.writeEntry( "Name", info.name );
+        QString manager = "KDevGenericManager";
+        if( QFileInfo( QFileInfo( projectFileName ).absolutePath() + "/CMakeLists.txt" ).exists() )
+        {
+            manager = "KDevCMakeManager";
+        } else if( QFileInfo( QFileInfo( projectFileName ).absolutePath() + "/CMakeLists.txt" ).exists() )
+        {
+            manager = "KDevCustomMakeManager";
+        }
+        project.writeEntry( "Manager", manager );
+        project.sync();
+        cfg->sync();
+        KConfigGroup project2 = cfg->group( "Project" );
+        kDebug() << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
+    }
+    
+    return projectFileName;
 }
 
 bool AppWizardPlugin::unpackArchive(const KArchiveDirectory *dir, const QString &dest)
