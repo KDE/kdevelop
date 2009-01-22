@@ -34,7 +34,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     QString cmakeBin=executeProcess("which", QStringList("cmake"));
     setCMakeBinary(KUrl(cmakeBin));
-
+    
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_chooserUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
@@ -44,6 +44,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
 {
     m_srcFolder = srcFolder;
+    m_chooserUi->buildFolder->setUrl(KUrl( srcFolder.toLocalFile() + "/build" ) );
     update();
 }
 
