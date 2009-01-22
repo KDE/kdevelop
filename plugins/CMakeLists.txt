@@ -1,4 +1,3 @@
-macro_optional_add_subdirectory(duchainviewer)
 macro_optional_add_subdirectory(konsole)
 add_subdirectory(filemanager)
 add_subdirectory(vcscommon)
@@ -9,7 +8,6 @@ add_subdirectory(quickopen)
 add_subdirectory(contextbrowser)
 macro_optional_add_subdirectory(snippet)
 macro_optional_add_subdirectory(cvs)
-#add_subdirectory(classbrowser)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(sourceformatter)
@@ -30,8 +28,6 @@ if(SUBVERSION_FOUND)
 endif(SUBVERSION_FOUND)
 
 macro_optional_add_subdirectory(git)
-macro_optional_add_subdirectory(mercurial)
-macro_optional_add_subdirectory(bazaar)
 
 macro_display_feature_log()
 
