@@ -55,6 +55,9 @@
 #include "parserdependencypolicy.h"
 #include <editor/modificationrevisionset.h>
 
+//@todo Enable this again once languageForUrl is thread-safe
+const bool separateThreadForHighPriority = false;
+
 namespace KDevelop
 {
 
@@ -140,7 +143,7 @@ public:
             
             for(QSet<KUrl>::Iterator it = it1.value().begin(); it != it1.value().end();) {
                 //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
-                if(m_parseJobs.count() >= m_threads+1)
+                if(m_parseJobs.count() >= m_threads+1 || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority) )
                     break;
                 
                 if(m_parseJobs.count() >= m_threads && it1.key() > BackgroundParser::NormalPriority && !specialParseJob)
@@ -223,7 +226,7 @@ public:
         m_delay = config.readEntry("Delay", 500);
         m_timer.setInterval(m_delay);
         m_threads = 0;
-        m_parser->setThreadCount(config.readEntry("Number of Threads", 1));
+        m_parser->setThreadCount(config.readEntry("Number of Threads Internal", 1)); ///@todo Change back to "Numer of Threads" once languageForUrl is thread-safe
 
         if (config.readEntry("Enabled", true)) {
             resume();
