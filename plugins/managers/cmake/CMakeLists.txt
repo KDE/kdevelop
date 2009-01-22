@@ -27,6 +27,7 @@ set( cmakecommon_SRCS
 
 set( cmakemanager_SRCS
   cmakemodelitems.cpp
+  settings/cmakebuilddircreator.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
@@ -35,6 +36,7 @@ set( cmakemanager_SRCS
 
 set( cmakemanager_UI
   cmakepossibleroots.ui
+  settings/cmakebuilddircreator.ui
 )
 
 set( cmakesettings_SRCS

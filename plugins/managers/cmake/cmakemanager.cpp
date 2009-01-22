@@ -31,6 +31,7 @@
 #include <kpluginloader.h>
 #include <KAboutData>
 #include <KDialog>
+#include <kparts/mainwindow.h>
 #include <KUrl>
 #include <KProcess>
 #include <KAction>
@@ -42,6 +43,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
@@ -67,6 +69,7 @@
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
+#include "settings/cmakebuilddircreator.h"
 #include "cmakecodecompletionmodel.h"
 #include "icmakebuilder.h"
 
@@ -239,7 +242,6 @@ KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) 
     KConfigGroup group(cfg.data(), "CMake");
     if(!group.hasKey("CurrentBuildDir"))
     {
-        kDebug(9032) << "No builddir specified for" << item->project()->name();
         return KUrl();
     }
 
@@ -363,6 +365,13 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
         m_rootItem->setProjectRoot(true);
 
         KUrl cachefile=buildDirectory(m_rootItem);
+        if( cachefile.isEmpty() ) {
+            CMakeBuildDirCreator creator( folderUrl, KDevelop::ICore::self()->uiController()->activeMainWindow() );
+            if( creator.exec() ) {
+                group.writeEntry( "CurrentBuildDir", creator.buildFolder() );
+                group.writeEntry( "BuildDirs", QStringList() << creator.buildFolder().toLocalFile() );
+            }
+        }
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
         initializeProject(project, folderUrl);
