@@ -70,10 +70,19 @@ QStringList IPluginController::argumentsFromService( const KService::Ptr &servic
     return args;
 }
 
-void KDevelop::IPluginController::pluginUnloading(IPlugin * plugin)
+void IPluginController::pluginUnloading(IPlugin * plugin)
 {
     emit pluginUnloaded(plugin);
 }
+
+KPluginInfo::List IPluginController::queryExtensionPlugins(const QString &extension, const QStringList &constraints)
+{
+    QStringList c = constraints;
+    c << QString("'%1' in [X-KDevelop-Interfaces]").arg( extension );
+    return queryPlugins( c.join(" and ") );
+}
+
+
 
 }
 

@@ -502,13 +502,6 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     return plugins;
 }
 
-KPluginInfo::List PluginController::queryExtensionPlugins(const QString &extension, const QStringList &constraints)
-{
-    QStringList c = constraints;
-    c << QString("'%1' in [X-KDevelop-Interfaces]").arg( extension );
-    return queryPlugins( c.join(" and ") );
-}
-
 QExtensionManager* PluginController::extensionManager()
 {
     return d->m_manager;

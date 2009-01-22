@@ -157,6 +157,8 @@ public:
 
     static QStringList argumentsFromService( const KService::Ptr &service );
 
+    static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints = QStringList());
+
     virtual QExtensionManager* extensionManager() = 0;
 
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
