@@ -23,6 +23,7 @@
 #include <QtCore/QFileInfo>
 
 #include <kconfig.h>
+#include <klocale.h>
 #include <kconfiggroup.h>
 #include <kurl.h>
 #include <kparts/mainwindow.h>
@@ -47,6 +48,9 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     if( !builddir.isValid() || builddir.isEmpty() )
     {
         KDialog choosedlg(KDevelop::ICore::self()->uiController()->activeMainWindow());
+        choosedlg.setButtons( KDialog::Ok | KDialog::Cancel );
+        choosedlg.setWindowTitle( i18n( "Choose CMake Build Directory" ) );
+        choosedlg.resize( 600, 250 );
         CMakeBuildDirChooser bd( &choosedlg );
         bd.setSourceFolder( item->project()->folder() );
         choosedlg.setButtons( KDialog::Ok | KDialog::Cancel );
