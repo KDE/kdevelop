@@ -45,7 +45,6 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
     filters << "*."+ShellExtension::getInstance()->projectFileExtension() +'|'+ShellExtension::getInstance()->projectFileDescription();
-    KPluginInfo::List plugins = PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" );
     foreach(const KPluginInfo& info, PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
