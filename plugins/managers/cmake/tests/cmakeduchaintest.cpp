@@ -152,10 +152,10 @@ void CMakeDUChainTest::testUses_data()
             "include(included)\n"
             "set(usinginc aa${avalue})\n" <<
             
-            "macro(bla kk)\n"
-                "message(STATUS ${kk})\n"
-            "endmacro(bla)\n"
-            "bla(kk)\n" <<
+//             "macro(bla kk)\n"
+//                 "message(STATUS ${kk})\n"
+//             "endmacro(bla)\n"
+//             "bla(kk)\n" <<
             
             "set(var 1)\n"
             "if(var)\n"
@@ -163,16 +163,16 @@ void CMakeDUChainTest::testUses_data()
             "endif(var)\n"
             "message(STATUS \"------- done\")\n";
             
-    QTest::newRow("empty") << QString("message(STATUS ueee)\n") << QStringList() << QList<SimpleRange>();
+    QTest::newRow("empty") << "message(STATUS ueee)\n" << QStringList() << QList<SimpleRange>();
     QTest::newRow("defanduse") << input[0] << (QStringList() << "var" << "var2") << (QList<SimpleRange>() << SimpleRange(2,11, 2,11+3) );
-//     QTest::newRow("include") << input[1] << (QStringList() << "CMAKE_MODULE_PATH" << "usinginc")
-//         << (QList<SimpleRange>() << SimpleRange(2,17, 2,17+6));
-//     
+    QTest::newRow("include") << input[1] << (QStringList() << "CMAKE_MODULE_PATH" << "usinginc")
+        << (QList<SimpleRange>() << SimpleRange(2,17, 2,17+6));
+    
 //     QTest::newRow("macro") << input[2] << (QStringList() << "bla")
 //         << (QList<SimpleRange>() << SimpleRange(2,9, 2,9+3) << SimpleRange(3,0,  3,3)/* << SimpleRange(10,3, 10,3+3)*/);
-//         
-//     QTest::newRow("conditional") << input[3] << QStringList("var")
-//         << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
+        
+    QTest::newRow("conditional") << input[3] << QStringList("var")
+        << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
 }
 
 void CMakeDUChainTest::testUses()
@@ -181,19 +181,27 @@ void CMakeDUChainTest::testUses()
     QFETCH(QStringList, decls);
     QFETCH(QList<SimpleRange>, uses);
 
-    KDevelop::ReferencedTopDUContext m_fakeContext;
-    {
-        DUChainWriteLocker lock(DUChain::lock());
-        m_fakeContext = new TopDUContext(IndexedString("test"+input.mid(0,3)), SimpleRange(0,0,0,0));
-    }
-
-    QFile file("cmake_duchain_test");
+    QTemporaryFile filetemp("cmake_duchain_test");
+    filetemp.open();
+    
+    QFile file(filetemp.fileName());
+    
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     QTextStream out(&file);
     out << input;
     file.close();
     CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
-    file.remove();
+    int endl=1, endc=1;
+    
+    for(int i=0; i<input.count(); i++, endc++)
+    {
+        if(input[i]=='\n')
+        {
+            endl++;
+            endc=0;
+        }
+    }
+    ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), SimpleRange(0,0, endl, endc));
     
     QString inputIncluded="set(avalue 33)";
     
@@ -208,11 +216,6 @@ void CMakeDUChainTest::testUses()
     MacroMap mm;
     VariableMap vm;
     CacheValues cv;
-    
-    m_fakeContext->deleteLocalDeclarations();
-    m_fakeContext->deleteChildContextsRecursively();
-    m_fakeContext->deleteUses();
-    m_fakeContext->setRange(SimpleRange(0,0, 2,31));
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
@@ -229,12 +232,14 @@ void CMakeDUChainTest::testUses()
     QVector<Declaration*> declarations=ctx->localDeclarations();
     QCOMPARE(ctx->range().start.line, 0);
    
-    if(decls.count() != declarations.count())
-    {
-        for(int i=0; i<decls.count(); i++) {
-            qDebug() << "decl" << declarations[i]->toString();
-        }
-    }
+    qDebug() << "nyeeee" << declarations;
+    
+//     if(decls.count() != declarations.count())
+//     {
+//         for(int i=0; i<decls.count(); i++) {
+//             qDebug() << "decl" << declarations[i]->toString();
+//         }
+//     }
     
     QCOMPARE(decls.count(), declarations.count());
     for(int i=0; i<decls.count(); i++) {
@@ -258,6 +263,7 @@ void CMakeDUChainTest::testUses()
     }
 
     includedFile.remove();
+    file.remove();
     DUChain::self()->removeDocumentChain(m_fakeContext);
 }
 
