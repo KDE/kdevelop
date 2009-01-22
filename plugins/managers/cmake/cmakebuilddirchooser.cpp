@@ -139,7 +139,7 @@ void CMakeBuildDirChooser::updated()
         if(correct)
         {
             st |= CorrectBuildDir;
-            emit status(i18n(""));
+            emit status(QString());
         }
         else
         {
