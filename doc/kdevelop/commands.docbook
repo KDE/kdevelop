@@ -45,7 +45,7 @@ functionality which is only available when the plugin is enabled.</para>
 <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>N</accel>ew</guimenuitem>
+<guimenuitem>New</guimenuitem>
 </menuchoice></term>
 <listitem><para>Creates a new file. 
 The user is prompted to select the directory (default: the current project's
@@ -61,7 +61,7 @@ Then the Automake Manager asks which target to add the new file to.
 <keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>O</accel>pen</guimenuitem>
+<guimenuitem>Open</guimenuitem>
 </menuchoice></term>
 <listitem><para>Opens an existing file in a simple dialog
 box.</para></listitem>
@@ -70,7 +70,7 @@ box.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Open <accel>R</accel>ecent</guimenuitem>
+<guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
 <listitem><para>For opening the most recently edited files. Once you have clicked on this option, a list of recently edited files will appear. Select the file you want and KWord will open the file.
 </para></listitem>
@@ -82,7 +82,7 @@ box.</para></listitem>
 <keycombo action="simul">&Alt;&Ctrl;<keycap>O</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Quick Open <accel>F</accel>ile</guimenuitem>
+<guimenuitem>Quick Open File</guimenuitem>
 </menuchoice></term>
 <listitem><para>Presents a list of files in the current project's
 source directory. The user can select from this list
@@ -97,7 +97,7 @@ or type a filename. That file is then opened.
 <keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>S</accel>ave</guimenuitem>
+<guimenuitem>Save</guimenuitem>
 </menuchoice></term>
 <listitem><para>Saves the current file.</para></listitem>
 </varlistentry>
@@ -106,7 +106,7 @@ or type a filename. That file is then opened.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Save <accel>A</accel>s...</guimenuitem>
+<guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
 <listitem><para>Uses the
 <guilabel>Save As...</guilabel> dialog box to let you save a copy
@@ -116,7 +116,7 @@ under a new name.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Save Al<accel>l</accel></guimenuitem>
+<guimenuitem>Save All</guimenuitem>
 </menuchoice></term>
 <listitem><para>Saves all open files.</para></listitem>
 </varlistentry>
@@ -125,7 +125,7 @@ under a new name.</para></listitem>
 <term><menuchoice>
 <shortcut><keycap>F5</keycap></shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Reloa<accel>d</accel></guimenuitem>
+<guimenuitem>Reload</guimenuitem>
 </menuchoice></term>
 <listitem><para>Reloads current file to show changes 
 made by different programs.
@@ -137,7 +137,7 @@ and the user is prompted whether the file is to be reloaded.)
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Rever<accel>t</accel> all</guimenuitem>
+<guimenuitem>Revert all</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Reverts all changes in opened files.
@@ -154,7 +154,7 @@ modified file.
 <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>P</accel>rint...</guimenuitem>
+<guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
 <listitem><para>Prints the current file.</para></listitem>
 </varlistentry>
@@ -162,7 +162,7 @@ modified file.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>E<accel>x</accel>port</guimenuitem>
+<guimenuitem>Export</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Exports the current file. Currently the following 
@@ -182,7 +182,7 @@ Other formats may follow in future KDevelop versions.
 <keycombo action="simul">&Ctrl;<keycap>F4</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>C</accel>lose</guimenuitem>
+<guimenuitem>Close</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Closes current file.
@@ -193,7 +193,7 @@ Closes current file.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Clos<accel>e</accel> All</guimenuitem>
+<guimenuitem>Close All</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Closes all open files.
@@ -204,7 +204,7 @@ Closes all open files.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Close All Ot<accel>h</accel>ers</guimenuitem>
+<guimenuitem>Close All Others</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Closes all files except the current one.
@@ -224,7 +224,7 @@ and re-open the current one.
 <keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem><accel>Q</accel>uit</guimenuitem>
+<guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
 <listitem><para>Quits KDevelop.</para></listitem>
 </varlistentry>
@@ -255,7 +255,7 @@ also simply called "document".
 <keycombo action="simul">&Ctrl;<keycap>Z</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>U</accel>ndo</guimenuitem>
+<guimenuitem>Undo</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Reverses the last action you performed.
@@ -269,7 +269,7 @@ Reverses the last action you performed.
 <keycombo action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Re<accel>d</accel>o</guimenuitem>
+<guimenuitem>Redo</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Reverses the last Undo performed.
@@ -283,7 +283,7 @@ Reverses the last Undo performed.
 <keycombo action="simul">&Ctrl;<keycap>X</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Cu<accel>t</accel></guimenuitem>
+<guimenuitem>Cut</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Deletes the selected (highlighted) text from the document, and places a copy in the clipboard.
@@ -297,7 +297,7 @@ Deletes the selected (highlighted) text from the document, and places a copy in 
 <keycombo action="simul">&Ctrl;<keycap>C</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>C</accel>opy</guimenuitem>
+<guimenuitem>Copy</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Places a copy of the selected text in the clipboard.
@@ -311,7 +311,7 @@ Places a copy of the selected text in the clipboard.
 <keycombo action="simul">&Ctrl;<keycap>V</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>P</accel>aste</guimenuitem>
+<guimenuitem>Paste</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Inserts a copy of the clipboard into the current cursor position. 
@@ -327,7 +327,7 @@ the contents of the clipboard. The clipboard is not altered.
 <keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Select <accel>A</accel>ll</guimenuitem>
+<guimenuitem>Select All</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Immediately selects all text of the current file.
@@ -341,7 +341,7 @@ Immediately selects all text of the current file.
 <keycombo action="simul">&Ctrl;&Shift;<keycap>A</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Dese<accel>l</accel>ect</guimenuitem>
+<guimenuitem>Deselect</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Every simple cursor movement (e.g. left, right etc. without Shift pressed)
@@ -358,7 +358,7 @@ This command does an explicit Deselect without cursor action.
 <keycombo action="simul">&Ctrl;&Shift;<keycap>B</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Bl<accel>o</accel>ck Selection Mode</guimenuitem>
+<guimenuitem>Block Selection Mode</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 KDevelop's editor can operate linewise or block-oriented.
@@ -397,7 +397,7 @@ TODO:
 <keycombo action="simul"><keycap>Insert</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Overwr<accel>i</accel>te Mode</guimenuitem>
+<guimenuitem>Overwrite Mode</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Toggles Insert/Overwrite Mode.
@@ -411,7 +411,7 @@ Toggles Insert/Overwrite Mode.
 <keycombo action="simul">&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>F</accel>ind</guimenuitem>
+<guimenuitem>Find</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Calls the Find dialog box. You can search simple text or 
@@ -426,7 +426,7 @@ a regular expression.
 <keycombo action="simul"><keycap>F3</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Find <accel>N</accel>ext</guimenuitem>
+<guimenuitem>Find Next</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 After first using Find (see above), finds the same text
@@ -441,7 +441,7 @@ or regular expression again.
 <keycombo action="simul">&Shift;<keycap>F3</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Find Pre<accel>v</accel>ious</guimenuitem>
+<guimenuitem>Find Previous</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 After first using Find (see above), finds the same text
@@ -456,7 +456,7 @@ or regular expression again, searching upwards.
 <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>R</accel>eplace</guimenuitem>
+<guimenuitem>Replace</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens the Find/Replace dialog box. You can search simple text or 
@@ -473,7 +473,7 @@ placeholders of the regular expression.
 <keycombo action="simul">&Ctrl;<keycap>G</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>G</accel>o to Line</guimenuitem>
+<guimenuitem>Go to Line</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Prompts for a line number and jumps to that line.
@@ -488,7 +488,7 @@ You can show/hide line numbers with View - Show/Hide Line Numbers (F11).
 <keycombo action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Find in Fi<accel>l</accel>es</guimenuitem>
+<guimenuitem>Find in Files</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Finds text in several Files, like the grep Unix command. 
@@ -504,7 +504,7 @@ TODO!!!
 <keycombo action="simul">&Ctrl;&Shift;<keycap>R</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Find-<accel>S</accel>elect-Replace</guimenuitem>
+<guimenuitem>Find-Select-Replace</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens the project wide string replacement dialog. There you
@@ -521,7 +521,7 @@ exclude them from replace operation or cancel the whole replace.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>R</accel>eformat Source</guimenuitem>
+<guimenuitem>Reformat Source</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Reformats Source code using the astyle library.
@@ -537,7 +537,7 @@ Otherwise the entire file will be formatted.
 <keycombo action="simul">&Ctrl;<keycap>J</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>E</accel>xpand Text</guimenuitem>
+<guimenuitem>Expand Text</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 A list of reasonable completions of the current word is presented,
@@ -557,7 +557,7 @@ TODO: BUG: Ctrl-J doesn't work
 <keycombo action="simul">&Ctrl;<keycap>L</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>E<accel>x</accel>pand Abbreviation</guimenuitem>
+<guimenuitem>Expand Abbreviation</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Expands abbreviation. Abbreviations can be defined in 
@@ -588,7 +588,7 @@ external libraries. TODO
 <keycombo action="simul"><keycap>F2</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem><accel>M</accel>ake Member</guimenuitem>
+<guimenuitem>Make Member</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Creates a class member function in implementation file
@@ -886,7 +886,7 @@ the marks are not shown.
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem><accel>C</accel>ode Folding</guimenuitem>
+<guimenuitem>Code Folding</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Code folding is used to easily gain an overview of the code
@@ -899,7 +899,7 @@ The commands in this submenu collapse or expand the  local or top level.
 	    <shortcut>
             <keycombo action="simul">&Ctrl;&Shift;<keycap>-</keycap></keycombo>
 	    </shortcut>
-	    <guimenuitem><accel>C</accel>ollapse Toplevel</guimenuitem>
+	    <guimenuitem>Collapse Toplevel</guimenuitem>
 	 </menuchoice>
       </term>
       <listitem><para>Collapses toplevel. </para></listitem>
@@ -910,7 +910,7 @@ The commands in this submenu collapse or expand the  local or top level.
 	    <shortcut>
             <keycombo action="simul">&Ctrl;&Shift;<keycap>+</keycap></keycombo>
 	    </shortcut>
-	    <guimenuitem><accel>E</accel>xpand Toplevel</guimenuitem>
+	    <guimenuitem>Expand Toplevel</guimenuitem>
 	 </menuchoice>
       </term>
       <listitem><para>Expands toplevel. </para></listitem>
@@ -921,7 +921,7 @@ The commands in this submenu collapse or expand the  local or top level.
 	    <shortcut>
             <keycombo action="simul">&Ctrl;<keycap>-</keycap></keycombo>
 	    </shortcut>
-	    <guimenuitem>Collapse One <accel>L</accel>ocal Level</guimenuitem>
+	    <guimenuitem>Collapse One Local Level</guimenuitem>
 	 </menuchoice>
       </term>
       <listitem><para>Collapses innermost local level. </para></listitem>
@@ -932,7 +932,7 @@ The commands in this submenu collapse or expand the  local or top level.
 	    <shortcut>
             <keycombo action="simul">&Ctrl;<keycap>+</keycap></keycombo>
 	    </shortcut>
-	    <guimenuitem>Expand <accel>O</accel>ne Local Level</guimenuitem>
+	    <guimenuitem>Expand One Local Level</guimenuitem>
 	 </menuchoice>
       </term>
       <listitem><para>Expands innermost local level.</para></listitem>
@@ -967,14 +967,14 @@ now in the Tools menu used to be here.
 
 
 <sect2 id="menu-project">
-<title>The <guimenu><accel>P</accel>roject</guimenu> Menu</title>
+<title>The <guimenu>Project</guimenu> Menu</title>
 
 <variablelist>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>N</accel>ew Project...</guimenuitem>
+<guimenuitem>New Project...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 This starts KDevelop's application wizard. 
@@ -987,7 +987,7 @@ application from a set of templates.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>O</accel>pen Project...</guimenuitem>
+<guimenuitem>Open Project...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens a Kdevelop2 or KDevelop3 project.
@@ -998,7 +998,7 @@ Opens a Kdevelop2 or KDevelop3 project.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem>Open <accel>R</accel>ecent Project</guimenuitem>
+<guimenuitem>Open Recent Project</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens recently edited project. 
@@ -1010,7 +1010,7 @@ A submenu of recently edited projectj is displayed to choose from.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>I</accel>mport existing Project...</guimenuitem>
+<guimenuitem>Import existing Project...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Creates a KDevelop project file for a given directory,
@@ -1034,7 +1034,7 @@ where already existing code files of a non-KDevelop project are stored.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem>N<accel>e</accel>w Class...</guimenuitem>
+<guimenuitem>New Class...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Calls the New Class wizard.
@@ -1045,7 +1045,7 @@ Calls the New Class wizard.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>C</accel>lass Inheritance Diagram</guimenuitem>
+<guimenuitem>Class Inheritance Diagram</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Displays inheritance relationship between classes in the project.
@@ -1057,7 +1057,7 @@ Displays inheritance relationship between classes in the project.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>A</accel>dd Translation...</guimenuitem>
+<guimenuitem>Add Translation...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Prompts the user for a language and 
@@ -1069,7 +1069,7 @@ creates .po file for the selected language.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>B</accel>uild Configuration</guimenuitem>
+<guimenuitem>Build Configuration</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 ???TODO
@@ -1080,7 +1080,7 @@ creates .po file for the selected language.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>D</accel>istribution &amp; Publishing</guimenuitem>
+<guimenuitem>Distribution &amp; Publishing</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens the Project Distribution &amp; Publishing dialog which
@@ -1092,7 +1092,7 @@ helps users package and publish their software. TODO:link
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem><accel>P</accel>roject Options...</guimenuitem>
+<guimenuitem>Project Options...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Opens dialog to set project options.
@@ -1103,7 +1103,7 @@ Opens dialog to set project options.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Project</guimenu>
-<guimenuitem>C<accel>l</accel>ose Project</guimenuitem>
+<guimenuitem>Close Project</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Closes current project.
@@ -1122,7 +1122,7 @@ Closes current project.
 
 
 <sect2 id="menu-build">
-<title>The <guimenu>Bu<accel>i</accel>ld</guimenu> Menu</title>
+<title>The <guimenu>Build</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1132,7 +1132,7 @@ Closes current project.
 <keycombo action="simul"><keycap>F8</keycap></keycombo>
 </shortcut>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>B</accel>uild Project</guimenuitem>
+<guimenuitem>Build Project</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs make from the project directory.
@@ -1146,7 +1146,7 @@ Runs make from the project directory.
 <keycombo action="simul"><keycap>F7</keycap></keycombo>
 </shortcut>
 <guimenu>Build</guimenu>
-<guimenuitem>Build <accel>A</accel>ctive Target</guimenuitem>
+<guimenuitem>Build Active Target</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Constructs a series of make commands to build an active target.
@@ -1159,7 +1159,7 @@ Also builds dependent targets.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem>Compile <accel>F</accel>ile</guimenuitem>
+<guimenuitem>Compile File</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs make filename.o from the directory
@@ -1183,7 +1183,7 @@ Run Configure
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem>Ru<accel>n</accel> automake &amp; friends</guimenuitem>
+<guimenuitem>Run automake &amp; friends</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Executes
@@ -1203,7 +1203,7 @@ commands from the project directory.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>I</accel>nstall</guimenuitem>
+<guimenuitem>Install</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs <command>make install</command> command from the project directory.
@@ -1214,7 +1214,7 @@ Runs <command>make install</command> command from the project directory.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem>Install (as root <accel>u</accel>ser)</guimenuitem>
+<guimenuitem>Install (as root user)</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Asks the user for the root password using 
@@ -1227,7 +1227,7 @@ runs <command>make install</command> as root user.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>C</accel>lean project</guimenuitem>
+<guimenuitem>Clean project</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs <command>make clean</command> command from the project directory.
@@ -1238,7 +1238,7 @@ Runs <command>make clean</command> command from the project directory.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>D</accel>istclean</guimenuitem>
+<guimenuitem>Distclean</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs <command>make distclean</command> command from the project directory.
@@ -1263,7 +1263,7 @@ Runs <command>make packages-messages</command> command from the project director
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>E</accel>xecute Program</guimenuitem>
+<guimenuitem>Execute Program</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Executes program specified in project settings, Run Options tab.
@@ -1276,7 +1276,7 @@ to determine the application to run.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem>Build A<accel>P</accel>I Documentation</guimenuitem>
+<guimenuitem>Build API Documentation</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Runs <application>doxygen</application> on a project Doxyfile
@@ -1290,7 +1290,7 @@ this also runs <application>doxytag</application> to create it.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Build</guimenu>
-<guimenuitem>C<accel>l</accel>ean API Documentation</guimenuitem>
+<guimenuitem>Clean API Documentation</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Removes all files generated by doxygen.
@@ -1304,7 +1304,7 @@ Removes all files generated by doxygen.
 <keycombo action="simul"><keycap>Escape</keycap></keycombo>
 </shortcut>
 <guimenu>Build</guimenu>
-<guimenuitem><accel>S</accel>top</guimenuitem>
+<guimenuitem>Stop</guimenuitem>
 </menuchoice></term>
 <listitem><para>
 Stop application started with the Execute menuitem above,
@@ -1330,7 +1330,7 @@ to choose a process to stop.
 
 
 <sect2 id="menu-debug">
-<title>The <guimenu><accel>D</accel>ebug</guimenu> Menu</title>
+<title>The <guimenu>Debug</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1514,7 +1514,7 @@ Profile with KCachegrind
 
 
 <sect2 id="menu-bookmarks">
-<title>The <guimenu><accel>B</accel>ookmarks</guimenu> Menu</title>
+<title>The <guimenu>Bookmarks</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1549,7 +1549,7 @@ bookmarks.</para></listitem>
 
 
 <sect2 id="menu-window">
-<title>The <guimenu><accel>W</accel>indow</guimenu> Menu</title>
+<title>The <guimenu>Window</guimenu> Menu</title>
 
 <variablelist>
 
@@ -1603,7 +1603,7 @@ bookmarks.</para></listitem>
 
 
 <sect2 id="menu-tools">
-<title>The <guimenu><accel>T</accel>ools</guimenu> Menu</title>
+<title>The <guimenu>Tools</guimenu> Menu</title>
 
 <variablelist>
 <varlistentry>
@@ -1943,7 +1943,7 @@ Document Current Function
 
 
 <sect2 id="menu-settings">
-<title>The <guimenu><accel>S</accel>ettings</guimenu> Menu</title>
+<title>The <guimenu>Settings</guimenu> Menu</title>
 
 
 <variablelist>
@@ -2041,7 +2041,7 @@ Configure KDevelop...
 
 
 <sect2 id="menu-help">
-<title>The <guimenu><accel>H</accel>elp</guimenu> Menu</title>
+<title>The <guimenu>Help</guimenu> Menu</title>
 
 <variablelist>
 
