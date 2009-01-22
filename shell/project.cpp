@@ -403,6 +403,7 @@ void Project::reloadModel()
         return;
     }
     d->reloading = true;
+    d->fileSet.clear();
 
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
