@@ -325,12 +325,19 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         KConfigGroup project = cfg->group( "Project" );
         project.writeEntry( "Name", info.name );
         QString manager = "KDevGenericManager";
-        if( QFileInfo( QFileInfo( projectFileName ).absolutePath() + "/CMakeLists.txt" ).exists() )
+        
+        QDir d( dest.toLocalFile() ); 
+        foreach(const KPluginInfo& info, KDevelop::IPluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
         {
-            manager = "KDevCMakeManager";
-        } else if( QFileInfo( QFileInfo( projectFileName ).absolutePath() + "/CMakeLists.txt" ).exists() )
-        {
-            manager = "KDevCustomMakeManager";
+            QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
+            if( filter.isValid() )
+            {
+                if( !d.entryList( filter.toStringList() ).isEmpty() )
+                {
+                    manager = info.pluginName();
+                    break;
+                }
+            }
         }
         project.writeEntry( "Manager", manager );
         project.sync();
