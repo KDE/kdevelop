@@ -9,7 +9,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
-add_subdirectory(app_templates)
 add_subdirectory(veritas)
 add_subdirectory(tests)
 ########### next target ###############

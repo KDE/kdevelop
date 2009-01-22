@@ -32,6 +32,7 @@ add_subdirectory(cmake)
 add_subdirectory(pics)
 add_subdirectory(src)
 add_subdirectory(plugins)
+add_subdirectory(app_templates)
 macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()
