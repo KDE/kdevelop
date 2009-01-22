@@ -297,7 +297,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
       hadIndices.insert(usedDeclarationIndex);
       DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
       if(!result) {
-        KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));
+        KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
         return;
       }
     }
@@ -305,14 +305,14 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
   if(!result) {
-    KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));
+    KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
     return;
   }
 
   ///We have to ignore failed changes for now, since uses of a constructor or of operator() may be created on "(" parens
   result = changes.applyAllChanges(DocumentChangeSet::IgnoreFailedChange);
   if(!result) {
-      KMessageBox::error(0, i18n("Applying changes failed: %1").arg(result.m_failureReason));
+      KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
       return;
   }
 }

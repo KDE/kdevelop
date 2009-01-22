@@ -388,8 +388,8 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
 
     if (reason == "exited-signalled")
     {
-        programNoApp(i18n("Exited on signal %1")
-                     .arg(r["signal-name"].literal()), false);
+        programNoApp(i18n("Exited on signal %1",
+                     r["signal-name"].literal()), false);
         // FIXME: figure out why this variable is needed.
         programHasExited_ = true;
         state_reload_needed = false;

@@ -122,7 +122,7 @@ void ValgrindControl::newValgrindConnection()
 
 void ValgrindControl::socketError(QAbstractSocket::SocketError)
 {
-    KMessageBox::error(qApp->activeWindow(), i18n("Socket error while communicating with valgrind: \"%1\"").arg(m_connection->errorString()), i18n("Valgrind communication error"));
+    KMessageBox::error(qApp->activeWindow(), i18n("Socket error while communicating with valgrind: \"%1\"", m_connection->errorString()), i18n("Valgrind communication error"));
 }
 
 ValgrindPlugin * ValgrindControl::plugin() const
