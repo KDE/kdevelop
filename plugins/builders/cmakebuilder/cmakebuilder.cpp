@@ -189,7 +189,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         }
         
         kDebug(9032) << "Installing with make";
-        KJob* install = m_builder->clean(item);
+        KJob* install = m_builder->install(item);
         if( configure ) {
             install = new ConfigureAndBuildJob( configure, install );
         }
