@@ -53,6 +53,8 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
+#include <interfaces/context.h>
+#include <interfaces/iselectioncontroller.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -93,14 +95,16 @@ public:
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
-    QPointer<QAction> m_closeAllProjects;
+    QPointer<KAction> m_closeAllProjects;
+    QPointer<KAction> m_closeProject;
+    QPointer<KAction> m_openConfig;
     IProjectDialogProvider* dialog;
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
     IProject* m_configuringProject;
     ProjectController* q;
 
     ProjectControllerPrivate( ProjectController* p )
-        : q(p), m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0)
+        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p)
     {
     }
 
@@ -146,12 +150,10 @@ public:
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QStringList pluginnames;
-        kDebug() << "managerplugin:" << project->managerPlugin();
         for( QList<IPlugin*>::iterator it = plugins.begin(); it != plugins.end(); ++it )
         {
             IPlugin* plugin = *it;
             IProjectFileManager* iface = plugin->extension<KDevelop::IProjectFileManager>();
-            kDebug() << "Checking plugin:" << plugin << "with iface" << iface;
             if( !iface || plugin == project->managerPlugin() )
                 pluginnames << m_core->pluginController()->pluginInfo( plugin ).pluginName();
         }
@@ -166,6 +168,41 @@ public:
             emit q->projectConfigurationChanged( m_configuringProject );
         }
     }
+
+    void updateActionStates( Context* ctx )
+    {
+        ProjectItemContext* itemctx = dynamic_cast<ProjectItemContext*>(ctx);
+        m_openConfig->setEnabled( itemctx && itemctx->items().count() == 1 );
+        m_closeProject->setEnabled( itemctx && itemctx->items().count() > 0 );
+    }
+    
+    void openProjectConfig()
+    {
+        ProjectItemContext* ctx = dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
+        if( ctx && ctx->items().count() == 1 )
+        {
+            q->configureProject( ctx->items().at(0)->project() );
+        }
+    }
+    
+    void closeSelectedProjects()
+    {
+        ProjectItemContext* ctx =  dynamic_cast<ProjectItemContext*>( Core::self()->selectionController()->currentSelection() );
+        if( ctx && ctx->items().count() > 0 )
+        {
+            QSet<IProject*> projects;
+            foreach( ProjectBaseItem* item, ctx->items() )
+            {
+                projects.insert( item->project() );
+            }
+            foreach( IProject* project, projects )
+            {
+                q->closeProject( project );
+            }
+        }
+    
+    }
+
 
 };
 
@@ -267,7 +304,7 @@ void ProjectController::setupActions()
     KActionCollection * ac =
         d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    QAction *action;
+    KAction *action;
 
     action = ac->addAction( "project_open" );
     action->setText(i18n( "&Open Project..." ) );
@@ -290,6 +327,17 @@ void ProjectController::setupActions()
     action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects." ) );
     action->setEnabled( false );
     action->setIcon(KIcon("window-close"));
+
+    d->m_closeProject = action = ac->addAction( "project_close" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeSelectedProjects() ) );
+    action->setText( i18n( "Close Project(s)" ) );
+    action->setToolTip( i18n( "Closes all currently selected projects" ) );
+    action->setEnabled( false );
+
+    d->m_openConfig = action = ac->addAction( "project_open_config" );
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProjectConfig() ) );
+    action->setText( i18n( "Open Configuration..." ) );
+    action->setEnabled( false );
 
     KSharedConfig * config = KGlobal::config().data();
 //     KConfigGroup group = config->group( "General Options" );
@@ -337,6 +385,9 @@ void ProjectController::initialize()
         foreach (const KUrl& url, openProjects)
             openProject(url);
     }
+
+    connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
+             SLOT(updateActionStates(KDevelop::Context*)) );
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
@@ -505,16 +556,6 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 }
 
 // helper method for closeProject()
-void ProjectController::disableProjectCloseAction()
-{
-    MainWindow *mw = d->m_core->uiControllerInternal()->defaultMainWindow();
-    if (!mw) return;
-    KActionCollection * ac = mw->actionCollection();
-    QAction *action = ac->action("project_close");
-    if (action) action->setEnabled(false);
-}
-
-// helper method for closeProject()
 void ProjectController::closeAllOpenedFiles(IProject* proj)
 {
     Q_FOREACH( ProjectFileItem *fileItem, proj->files() )
@@ -546,7 +587,6 @@ bool ProjectController::closeProject(IProject* proj)
     //Core::self()->saveSettings();     // The project file is being closed.
                                         // Now we can save settings for all of the Core
                                         // objects including this one!!
-    //disableProjectCloseAction();
     unloadUnusedProjectPlugins(proj);
     closeAllOpenedFiles(proj);
     proj->close();
@@ -592,6 +632,7 @@ IProject* ProjectController::findProjectByName( const QString& name )
     }
     return 0;
 }
+
 
 bool ProjectController::configureProject( IProject* project )
 {

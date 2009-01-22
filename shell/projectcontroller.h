@@ -104,6 +104,9 @@ private:
     Q_PRIVATE_SLOT(d, void projectConfig( QObject* ) )
     Q_PRIVATE_SLOT(d, void unloadAllProjectPlugins() )
     Q_PRIVATE_SLOT(d, void notifyProjectConfigurationChanged() )
+    Q_PRIVATE_SLOT(d, void updateActionStates( KDevelop::Context* ) )
+    Q_PRIVATE_SLOT(d, void closeSelectedProjects() )
+    Q_PRIVATE_SLOT(d, void openProjectConfig() )
     class ProjectControllerPrivate* const d;
     friend class ProjectControllerPrivate;
 };
