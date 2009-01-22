@@ -24,6 +24,7 @@ set( cmakecommon_SRCS
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
   cmakebuilddirchooser.cpp
+  cmakeutils.cpp
  )
 
 set( cmakecommon_UI

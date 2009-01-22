@@ -9,15 +9,14 @@ include_directories(
 
 set(cmakebuilder_LIB_SRCS
     cmakebuilder.cpp
-    ../../managers/cmake/settings/cmakebuilddircreator.cpp
     cmakejob.cpp
+    configureandbuildjob.cpp
 )
-kde4_add_ui_files( cmakebuilder_LIB_SRCS ../../managers/cmake/settings/cmakebuilddircreator.ui )
-
 
 kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder
+    kdev4cmakecommon
         ${KDE4_KDEUI_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
         ${KDEVPLATFORM_INTERFACES_LIBRARY}

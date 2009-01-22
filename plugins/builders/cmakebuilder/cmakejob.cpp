@@ -29,7 +29,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QFile>
-
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 
 #include <project/projectmodel.h>
 
@@ -88,15 +89,24 @@ void CMakeJob::start()
             model(), SLOT(appendLines(const QStringList&) ) );
     connect(m_executor, SIGNAL(receivedStandardOutput(const QStringList&)),
             model(), SLOT(appendLines(const QStringList&) ) );
-    m_executor->setWorkingDirectory( buildDir( m_project ).toLocalFile() );
+    KUrl buildDirUrl = KUrl(QFileInfo(buildDir( m_project ).toLocalFile()).absoluteFilePath());
+    if( !QFileInfo(buildDirUrl.toLocalFile()).exists() )
+    {
+        kDebug() << "creating" << buildDirUrl.fileName() << "in" << buildDirUrl.directory();
+        QDir d(buildDirUrl.directory());
+        d.mkdir( buildDirUrl.fileName() );
+    }
+    m_executor->setWorkingDirectory( buildDirUrl.toLocalFile() );
     m_executor->setArguments( cmakeArguments( m_project ) );
     connect( m_executor, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
     connect( m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
+    kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
     m_executor->start();
 }
 
 void CMakeJob::slotFailed()
 {
+    kDebug() << "job failed!";
     if (!m_killed) {
         setError(FailedError);
         // FIXME need more detail
@@ -107,6 +117,7 @@ void CMakeJob::slotFailed()
 
 void CMakeJob::slotCompleted()
 {
+    kDebug() << "job completed";
     emitResult();
 }
 

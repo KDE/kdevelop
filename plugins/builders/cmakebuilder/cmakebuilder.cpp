@@ -57,8 +57,9 @@
 #include <kurl.h>
 #include <kconfig.h>
 
+#include "configureandbuildjob.h"
 #include "cmakejob.h"
-#include "../../managers/cmake/settings/cmakebuilddircreator.h"
+#include "../../managers/cmake/cmakeutils.h"
 
 K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
 K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"), "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
@@ -98,29 +99,6 @@ void CMakeBuilder::buildFinished(KDevelop::ProjectBaseItem* it)
     }
 }
 
-bool buildDirConfigured( KDevelop::ProjectBaseItem* item )
-{
-    KConfigGroup cmakeGrp = item->project()->projectConfiguration()->group("CMake");
-    KUrl builddir = cmakeGrp.readEntry( "CurrentBuildDir", KUrl() );
-    QStringList builddirs = cmakeGrp.readEntry( "BuildDirs", QStringList() );
-    
-    if( !builddir.isValid() || builddir.isEmpty() ) 
-    {
-        CMakeBuildDirCreator bd( item->project()->projectItem()->url(), KDevelop::ICore::self()->uiController()->activeMainWindow() );
-        if( !bd.exec() )
-        {
-            return false;
-        }
-        cmakeGrp.writeEntry( "CurrentBuildDir", bd.buildFolder() );
-        
-        if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
-            builddirs.append(bd.buildFolder().toLocalFile());
-            cmakeGrp.writeEntry( "BuildDirs", builddirs);
-        }
-    }
-    return true;
-}
-
 KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
 {
     KDevelop::ProjectBaseItem* builditem = dom;
@@ -139,15 +117,26 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             builditem=it;
             m_deleteWhenDone << fldr << it;
         }
-        
-        if( !buildDirConfigured(builditem) )
+        KJob* configure = 0;
+        if( CMake::checkForNeedingConfigure(builditem) )
+        {
+            kDebug() << "Needing configure, adding item and setting job";
+            configure = this->configure(builditem->project());
+        } else if( CMake::buildDirForProject( builditem->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
             return 0;
         }
         
         kDebug(9032) << "Building with make";
-        return m_builder->build(builditem);
+        KJob* build = m_builder->build(builditem);
+        kDebug() << configure << build;
+        if( configure ) 
+        {
+            kDebug() << "creating composite job";
+            build = new ConfigureAndBuildJob( configure, build );
+        }
+        return build;
     }
     return false;
 }
@@ -160,13 +149,22 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
-        kDebug(9032) << "Cleaning with make";
-        if( !buildDirConfigured(item) )
+        KJob* configure = 0;
+        if( CMake::checkForNeedingConfigure(item) )
+        {
+            configure = this->configure(item->project());
+        } else if( CMake::buildDirForProject( item->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
             return 0;
         }
-        return m_builder->clean(item);
+        
+        kDebug(9032) << "Cleaning with make";
+        KJob* clean = m_builder->clean(item);
+        if( configure ) {
+            clean = new ConfigureAndBuildJob( configure, clean );
+        }
+        return clean;
     }
     return 0;
 }
@@ -179,20 +177,31 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
         
-        kDebug(9032) << "Installing with make";
-        if( !buildDirConfigured(item) )
+
+        KJob* configure = 0;
+        if( CMake::checkForNeedingConfigure(item) )
+        {
+            configure = this->configure(item->project());
+        } else if( CMake::buildDirForProject( item->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
             return 0;
         }
-        return m_builder->install(dom);
+        
+        kDebug(9032) << "Installing with make";
+        KJob* install = m_builder->clean(item);
+        if( configure ) {
+            install = new ConfigureAndBuildJob( configure, install );
+        }
+        return install;
+
     }
     return 0;
 }
 
 KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
-    if( !buildDirConfigured( project->projectItem() ) )
+    if( CMake::buildDirForProject( project ).isEmpty() )
     {
         KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
         return 0;
@@ -204,13 +213,12 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 
 KJob* CMakeBuilder::prune( KDevelop::IProject* project )
 {
-    if( !buildDirConfigured( project->projectItem() ) )
+    KUrl builddir = CMake::buildDirForProject( project );
+    if( builddir.isEmpty() )
     {
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clear builddir"), i18n("Aborting builddir clearing") );
+        KMessageBox::information(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clear builddir"), i18n("No clearing of builddir possible") );
         return 0;
     }
-    KConfigGroup grp = project->projectConfiguration()->group("CMake");
-    KUrl builddir = grp.readEntry( "currentBuildDir", KUrl() );
     QDir d( builddir.toLocalFile() );
     KUrl::List urls;
     foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot ) )

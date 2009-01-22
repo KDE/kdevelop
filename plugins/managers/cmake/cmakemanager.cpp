@@ -69,9 +69,9 @@
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
-#include "settings/cmakebuilddircreator.h"
 #include "cmakecodecompletionmodel.h"
 #include "icmakebuilder.h"
+#include "cmakeutils.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -366,11 +366,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
-            CMakeBuildDirCreator creator( folderUrl, KDevelop::ICore::self()->uiController()->activeMainWindow() );
-            if( creator.exec() ) {
-                group.writeEntry( "CurrentBuildDir", creator.buildFolder() );
-                group.writeEntry( "BuildDirs", QStringList() << creator.buildFolder().toLocalFile() );
-            }
+            CMake::checkForNeedingConfigure(m_rootItem);
         }
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
