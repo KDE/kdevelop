@@ -1077,8 +1077,8 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
     bool ret=true;
     if(!static_cast<ProjectBaseItem*>(it->parent())->target())
     {
-        it->parent()->removeRow(it->row());
         it->project()->removeFromFileSet(KDevelop::IndexedString( it->url()));
+        it->parent()->removeRow(it->row());
     }
     else
     {
