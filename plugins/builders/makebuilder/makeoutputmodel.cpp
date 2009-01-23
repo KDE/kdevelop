@@ -186,18 +186,13 @@ void MakeOutputModel::addLines( const QStringList& lines )
         foreach( const ErrorFormat& errFormat, ErrorFormat::errorFormats )
         {
             QRegExp regEx = errFormat.expression;
-            
-            ///@todo What about other languages?
-            QRegExp warningRegExp("(warnung\\:)|(warning)");
-            warningRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-            
             if( regEx.indexIn( line ) != -1 && !( line.contains( "Each undeclared identifier is reported only once" ) || line.contains( "for each function it appears in." ) ) )
             {
-//                 kDebug() << "found an error:" << line;
+                kDebug() << "found an error:" << line;
                 item.url = urlForFile( regEx.cap( errFormat.fileGroup ) );
                 item.lineNo = regEx.cap( errFormat.lineGroup ).toInt() - 1;
                 //item.shortenedText = regEx.cap( errFormat.textGroup );
-                item.type = QVariant::fromValue( ( regEx.cap(3).contains(warningRegExp) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
+                item.type = QVariant::fromValue( ( regEx.cap(3).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
                 item.isActivatable = true;
                 matched = true;
                 break;
