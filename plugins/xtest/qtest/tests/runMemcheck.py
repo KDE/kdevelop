@@ -1,5 +1,4 @@
 #!/usr/bin/python
-#!/usr/bin/python
 # run valgrind's memory error checker on all tests.
 # filter uninteresting errors and known false positives
 # eg staticly initialized memory from libraries like libfontconfig
@@ -89,6 +88,8 @@ class BackTrace:
                     return False # something Qt-Font related, not interested in this
                 if frame.func.find('__nss_database_lookup') != -1:
                     return False # more crap
+		if frame.func.find('KCatalogPrivate::setupGettextEnv()') and frame.sfile=="kcatalog.cpp":
+		    return False
             if frame.sfile:
                 if frame.sfile.find("xtest") != -1 or frame.sfile.find("veritas") != -1:
                     is_interesting = True

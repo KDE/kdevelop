@@ -55,6 +55,7 @@ Q_DECLARE_METATYPE(QList<QStringList>)
 
 void QTestRunnerTest::init()
 {
+    m_settings = new FakeSettings;
     OutputParser::fto_resetResultMemoryLeakStats();
     m_runner = new RunnerTestHelper;
     m_runner->initializeGUI();
@@ -64,6 +65,7 @@ void QTestRunnerTest::cleanup()
 {
     m_runner->cleanupGUI();
     delete m_runner;
+    delete m_settings;
 
     int nrofLeaks = 0;
     bool foundLeaks = OutputParser::fto_hasResultMemoryLeaks(nrofLeaks);
@@ -415,7 +417,7 @@ Veritas::Test* QTestRunnerTest::fetchRoot(QByteArray& testRegistrationXml)
     QBuffer buff(&testRegistrationXml);
     XmlRegister reg;
     reg.setSource(&buff);
-    reg.setSettings(new FakeSettings());
+    reg.setSettings(m_settings);
     reg.reload(0);
     return reg.root();
 }

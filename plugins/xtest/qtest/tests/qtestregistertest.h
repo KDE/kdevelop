@@ -29,6 +29,8 @@ namespace QTest {
 class XmlRegister;
 class Suite;
 class Case;
+class ISettings;
+
 namespace Test {
 
 class QTestRegisterTest : public QObject
@@ -47,6 +49,7 @@ private slots:
 
 private: // state
     QTest::XmlRegister* reg;
+    QTest::ISettings* m_settings;
 
 private: // helpers
     void compareSuites(QTest::Suite* exp,

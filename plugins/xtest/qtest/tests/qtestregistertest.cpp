@@ -23,8 +23,7 @@
 #include "../xmlregister.h"
 #include "../qtestsettings.h"
 #include "../qtestmodelitems.h"
-#include "../qtestmodelitems.h"
-#include "../qtestmodelitems.h"
+#include "../qtestconfig.h"
 
 #include <kasserts.h>
 
@@ -89,13 +88,15 @@ class FakeSettings : public ISettings
 void QTestRegisterTest::init()
 {
     reg = new XmlRegister();
-    reg->setSettings( new FakeSettings() );
+    m_settings = new FakeSettings();
+    reg->setSettings( m_settings );
 }
 
 void QTestRegisterTest::cleanup()
 {
     if (reg->root()) delete reg->root();
     delete reg;
+    delete m_settings;
 }
 
 void QTestRegisterTest::compareSuites(Suite* exp, Suite* actual)

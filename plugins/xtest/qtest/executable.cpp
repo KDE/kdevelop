@@ -78,7 +78,13 @@ Executable::Executable()
 }
 
 Executable::~Executable()
-{}
+{
+    if (m_output) {
+        m_output->close();
+        delete m_output;
+    }
+    removeTempFiles();
+}
 
 void Executable::setLocation(const KUrl& url)
 {
@@ -264,7 +270,10 @@ void Executable::initTempOutputFile()
     m_stdOutFilePath = pathPrefix + "-out.tmp";
     m_stdErrFilePath = pathPrefix + "-err.tmp";
     m_textOutFilePath = pathPrefix + "-txt.tmp";
-    if (m_output) delete m_output;
+    if (m_output) {
+        m_output->close();
+        delete m_output;
+    }
     m_output = new QFile(m_outputPath);
 
     QFile err(m_stdErrFilePath);

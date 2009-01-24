@@ -127,6 +127,7 @@ void Case::setSource(const KUrl& source)
 
 Case::~Case()
 {
+    if (m_executable) delete m_executable;
 }
 
 bool Case::shouldRun() const

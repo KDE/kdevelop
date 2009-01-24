@@ -27,6 +27,7 @@ namespace Veritas { class Test; class RunnerTestHelper; }
 
 namespace QTest
 {
+class ISettings;
 
 class QTestRunnerTest : public QObject
 {
@@ -53,6 +54,7 @@ private:
 
 private:
     Veritas::RunnerTestHelper* m_runner;
+    ISettings* m_settings;
 };
 
 }
