@@ -429,6 +429,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( !url.isValid() )
     {
+        KPassivePopup::message( i18n( "Invalid Location: %1", url.prettyUrl() ), Core::self()->uiControllerInternal()->activeMainWindow() );
         return false;
     }
     if ( d->m_currentlyOpening.contains(url))
@@ -465,6 +466,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
     Project* project = new Project();
     if ( !project->open( url ) )
     {
+        KPassivePopup::message( i18n( "Project could not be opened: %1", url.prettyUrl() ), Core::self()->uiControllerInternal()->activeMainWindow() );
         delete project;
         return false;
     }
