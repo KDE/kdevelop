@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-plugins="appwizard coverage cppdebugger documentview formatters grepview qtdesigner valgrind xtest"
+plugins="coverage cppdebugger documentview formatters grepview qtdesigner valgrind xtest"
 for plugin in $plugins ; do
     rcfiles="`find $plugin -name \*.rc`"
     uifiles="`find $plugin -name \*.ui`"
