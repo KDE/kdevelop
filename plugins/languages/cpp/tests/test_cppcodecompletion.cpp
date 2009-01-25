@@ -63,6 +63,13 @@ QString testFile3 = "struct A {}; struct B : public A {};";
 
 QString testFile4 = "void test1() {}; class TestClass() { TestClass() {} };";
 
+QStandardItemModel& fakeModel() {
+  static QStandardItemModel model;
+  model.setColumnCount(10);
+  model.setRowCount(10);
+  return model;
+}
+
 namespace QTest {
   template<>
   char* toString(const Cursor& cursor)
@@ -118,6 +125,36 @@ namespace QTest {
     return qstrdup(s.toLatin1().constData());
   }
 }
+
+//Helper-class for testing completion-items
+//Just initialize it with the context and the text, and then use the members, for simple cases only "names"
+struct CompletionItemTester {
+  CompletionItemTester(DUContext* context, QString text = "; ") {
+    completionContext = new  Cpp::CodeCompletionContext(DUContextPointer(context), text, QString());
+    bool abort = false;
+    items = completionContext->completionItems(context->range().end, abort);
+    foreach(Item i, items)
+      names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+  }
+  
+  QStringList names; //Names of all completion-items, not sorted
+  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
+  QList <Item > items; //All items retrieved, sorted by name
+  
+  Cpp::CodeCompletionContext::Ptr completionContext;
+  
+  //Convenience-function to retrieve data from completion-items by name
+  QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
+    return itemData(names.indexOf(itemName), column, role);
+  }
+  
+  QVariant itemData(int itemNumber, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
+    if(itemNumber < 0 || itemNumber >= items.size())
+      return QVariant();
+    
+    return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
+  }
+};
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestCppCodeCompletion::TestCppCodeCompletion()
@@ -177,15 +214,12 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
   
   QList <Item > items = cptr->completionItems(context->range().end, abort);
-  QStandardItemModel fakeModel;
-  fakeModel.setColumnCount(10);
-  fakeModel.setRowCount(10);
   
   bool hadThis = false;
   
   foreach(Item i, items) {
     NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
-    kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+    kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     if(decItem) {
       kDebug() << typeid(*i.data()).name();
       QVERIFY(decItem);
@@ -193,7 +227,7 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
     }else{
       TypeConversionCompletionItem* conversion = dynamic_cast<TypeConversionCompletionItem*>(i.data());
       QVERIFY(conversion);
-      QCOMPARE(conversion->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString(), QString("this"));
+      QCOMPARE(conversion->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString(), QString("this"));
       hadThis = true;
     }
   }
@@ -202,6 +236,19 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
 
   lock.lock();
   release(context);
+}
+
+void TestCppCodeCompletion::testFriendVisibility() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("class A { class PrivateClass {}; friend class B; }; class B{};");
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 2);
+
+  //No type within A, so there should be no items
+  QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "PrivateClass");
 }
 
 void TestCppCodeCompletion::testSameNamespace() {
@@ -226,12 +273,11 @@ void TestCppCodeCompletion::testSameNamespace() {
     typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
     
     QList <Item > items = cptr->completionItems(top->range().end, abort);
-    QStandardItemModel fakeModel;
     foreach(Item i, items) {
       NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
     
     //Have been filtered out, because only types are shown from the global scope
@@ -264,12 +310,11 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
     
     QList <Item > items = cptr->completionItems(top->range().end, abort);
-    QStandardItemModel fakeModel;
     foreach(Item i, items) {
       NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
     
     //Have been filtered out, because only types are shown from the global scope
@@ -281,12 +326,11 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
     
     QList <Item > items = cptr->completionItems(top->range().end, abort);
-    QStandardItemModel fakeModel;
     foreach(Item i, items) {
       NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel.index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
     
     QCOMPARE(items.count(), 3); //b, a, and test

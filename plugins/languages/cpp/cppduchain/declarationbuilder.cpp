@@ -1151,10 +1151,8 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
     DeclarationBuilderBase::visitElaboratedTypeSpecifier(node);
     return;
   }
-
-  //For now completely ignore friend-class specifiers, because those currently are wrongly parsed as forward-declarations.
-  if( !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier) )
-    return;
+  
+  bool isFriendDeclaration = !m_storageSpecifiers.isEmpty() && (m_storageSpecifiers.top() & ClassMemberDeclaration::FriendSpecifier);
 
   bool openedDeclaration = false;
 
@@ -1164,7 +1162,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
     bool forwardDeclarationGlobal = false;
 
-    if(m_declarationHasInitDeclarators) {
+    if(m_declarationHasInitDeclarators || isFriendDeclaration) {
       /**This is an elaborated type-specifier
        *
        * See iso c++ draft 3.3.4 for details.
@@ -1193,6 +1191,11 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
             //This belongs into the type-builder, but it's much easier to do here, since we already have all the information
             ///@todo See above, only search for fitting declarations(of structure/enum/class/union type)
             injectType(declarations.first()->abstractType());
+            
+            if( isFriendDeclaration ) {
+              lock.unlock();
+              createFriendDeclaration(node);
+            }
             return;
           }else{
             kDebug(9007) << "Error: Bad declaration";
@@ -1210,7 +1213,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
         if(forwardDeclarationGlobal) {
           //Open the global context, so it is currentContext() and we can insert the forward-declaration there
-
           DUContext* globalCtx;
           {
             DUChainReadLocker lock(DUChain::lock());
@@ -1248,8 +1250,16 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
       static_cast<ForwardDeclaration*>(currentDeclaration())->setResolved(idType->declaration());*/
     closeDeclaration();
   }
+  
+  if( isFriendDeclaration )
+    createFriendDeclaration(node);
 }
 
+void DeclarationBuilder::createFriendDeclaration(AST* range) {
+  static IndexedIdentifier friendIdentifier(Identifier("friend"));
+  openDeclaration<Declaration>(0, range, friendIdentifier.identifier(), true);
+  closeDeclaration();
+}
 
 void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
 {

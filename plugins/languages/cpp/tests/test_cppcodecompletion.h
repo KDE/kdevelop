@@ -84,6 +84,7 @@ private slots:
   void testMacroExpansionRanges();
   void testPreprocessor();
   void testNaiveMatching();
+  void testFriendVisibility();
 
 public:
   enum DumpArea {

@@ -1377,7 +1377,7 @@ void TestDUChain::testDeclareFriend()
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 1);
+  QCOMPARE(top->localDeclarations().count(), 2); //1 Forward-declaration of F
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
   Declaration* defClassA = top->localDeclarations().first();
@@ -1385,8 +1385,15 @@ void TestDUChain::testDeclareFriend()
   QCOMPARE(defClassA->uses().count(), 0);
   QVERIFY(defClassA->type<CppClassType>());
   QVERIFY(defClassA->internalContext());
-  QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 0);
+  QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 1);
 
+  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("F"));
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1); //friend-declaration
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->identifier(), Identifier("friend"));
+  
+  QVERIFY(Cpp::isFriend(top->localDeclarations()[0], top->localDeclarations()[1]));
+  
   release(top);
 }
 

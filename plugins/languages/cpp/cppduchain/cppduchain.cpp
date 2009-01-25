@@ -221,6 +221,9 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
       return true;
   }
   
+  if(isFriend(declaration->context()->owner(), fromContext->owner()))
+    return true;
+  
   DUContext* parent = logicalParentContext(fromContext, fromContext->topContext());
   
   if(parent && parent->type() == DUContext::Class)
@@ -391,6 +394,27 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
   }
   
   return identifier.toString();
+}
+
+bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend) {
+  if(!_class || !_friend)
+    return false;
+  
+  DUContext* classInternal = _class->internalContext();
+  
+  if(!classInternal)
+    return false;
+  
+  static IndexedIdentifier friendIdentifier(Identifier("friend"));
+  
+  ///@todo Make this more efficient
+  QList<Declaration*> decls = classInternal->findLocalDeclarations(friendIdentifier.identifier());
+  
+  foreach(Declaration* decl, decls)
+    if(decl->indexedType() == _friend->indexedType())
+      return true;
+  
+  return false;
 }
 
 }

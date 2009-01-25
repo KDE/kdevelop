@@ -847,6 +847,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
                   if(classMember && !filterDeclaration(classMember))
                     continue;
+                  else if(!filterDeclaration(decl.first))
+                    continue;
                     
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
                     if(decl.first->kind() != Declaration::Instance)
@@ -1252,6 +1254,11 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) {
   if(!decl)
     return true;
+  
+  static IndexedIdentifier friendIdentifier(Identifier("friend"));
+  
+  if(decl->indexedIdentifier() == friendIdentifier)
+    return false;
   
   if(m_onlyShowTypes && decl->kind() != Declaration::Type)
     return false;
