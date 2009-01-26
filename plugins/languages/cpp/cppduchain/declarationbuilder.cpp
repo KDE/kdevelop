@@ -606,6 +606,12 @@ Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AS
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();
+  
+  if(m_accessPolicyStack.isEmpty())
+    ret->setAccessPolicy(KDevelop::Declaration::Public);
+  else
+    ret->setAccessPolicy(currentAccessPolicy());
+  
   ret->setClassType(classType);
   return ret;
 }

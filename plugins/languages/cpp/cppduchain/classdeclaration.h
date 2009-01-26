@@ -23,6 +23,8 @@
 #include <language/duchain/declarationdata.h>
 #include "cppduchainexport.h"
 #include "cpptypes.h"
+#include <language/duchain/classmemberdeclarationdata.h>
+#include <language/duchain/classmemberdeclaration.h>
 
 namespace KDevelop {
   class QualifiedIdentifier;
@@ -43,7 +45,7 @@ struct BaseClassInstance
 
 DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
 
-class ClassDeclarationData : public KDevelop::DeclarationData
+class ClassDeclarationData : public KDevelop::ClassMemberDeclarationData
 {
 public:
   enum ClassType {
@@ -61,7 +63,7 @@ public:
     freeAppendedLists();
   }
 
-  ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::DeclarationData(rhs) {
+  ClassDeclarationData(const ClassDeclarationData& rhs) : KDevelop::ClassMemberDeclarationData(rhs) {
     initializeAppendedLists();
     copyListsFrom(rhs);
     m_classType = rhs.m_classType;
@@ -70,7 +72,7 @@ public:
   /// Type of the class (struct, class, etc.)
   ClassType m_classType;
 
-  START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::DeclarationData);
+  START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::ClassMemberDeclarationData);
   APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
   END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
 };
@@ -78,7 +80,7 @@ public:
 /**
  * Represents a single template-parameter definition
  */
-class KDEVCPPDUCHAIN_EXPORT ClassDeclaration : public KDevelop::Declaration
+class KDEVCPPDUCHAIN_EXPORT ClassDeclaration : public KDevelop::ClassMemberDeclaration
 {
 public:
   

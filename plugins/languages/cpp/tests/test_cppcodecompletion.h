@@ -85,6 +85,7 @@ private slots:
   void testPreprocessor();
   void testNaiveMatching();
   void testFriendVisibility();
+  void testInheritanceVisibility();
 
 public:
   enum DumpArea {

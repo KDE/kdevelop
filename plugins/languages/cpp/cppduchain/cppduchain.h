@@ -87,8 +87,10 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::QualifiedIdentifier namespaceScopeComponentFromC
  * Returns whether the given declaration can be accessed from the given context. Checks for private/protected and such stuff.
  * @param fromContext The scope-context from where to check. May be zero.
  * @param declaration The declaration to check access to. Must not be zero.
+ * @param source Top-context fromw here to start the computations
+ * @param declarationContext The context within which the declaration is visible. This can be a different context than declaration->context() in case of inheritance
  * */
-KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::ClassMemberDeclaration* declaration);
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(KDevelop::DUContext* fromContext, KDevelop::ClassMemberDeclaration* declaration, KDevelop::TopDUContext* source, KDevelop::DUContext* declarationContext);
 
 /**
  * Returns the logical parent-context of the given context. This may be a different than the physical parent-context

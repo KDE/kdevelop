@@ -560,6 +560,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
 }
 
 bool TypeConversion::isAccessible(const ClassMemberDeclaration* decl) {
+  ///@todo Use Cpp::isAccessible here
   if(!decl)
     return false;
   return decl->accessPolicy() == Declaration::Public;

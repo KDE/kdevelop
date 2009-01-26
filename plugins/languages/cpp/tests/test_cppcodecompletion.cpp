@@ -238,6 +238,29 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   release(context);
 }
 
+void TestCppCodeCompletion::testInheritanceVisibility() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("class A { public: class AMyClass {}; }; class B : protected A { public: class BMyClass {}; }; class C : private B{ public: class CMyClass {}; }; class D : public C { class DMyClass{}; }; ");
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 4);
+
+  QCOMPARE(top->childContexts()[1]->type(), DUContext::Class);
+  QVERIFY(top->childContexts()[1]->owner());
+  QVERIFY(Cpp::localClassFromCodeContext(top->childContexts()[1]));
+  //From within B, MyClass is visible, because of the protected inheritance
+  QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "AMyClass");
+  QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "BMyClass" << "AMyClass" << "A" << "B" );
+  QCOMPARE(CompletionItemTester(top, "A::").names, QStringList() << "AMyClass");
+  QCOMPARE(CompletionItemTester(top, "B::").names, QStringList() << "BMyClass");
+  QCOMPARE(CompletionItemTester(top->childContexts()[2]).names.toSet(), QSet<QString>() << "CMyClass" << "BMyClass" << "AMyClass" << "C" << "B" << "A");
+  QCOMPARE(CompletionItemTester(top, "C::").names.toSet(), QSet<QString>() << "CMyClass");
+  QCOMPARE(CompletionItemTester(top->childContexts()[3]).names.toSet(), QSet<QString>() << "DMyClass" << "CMyClass" << "D" << "C" << "B" << "A");
+  QCOMPARE(CompletionItemTester(top, "D::").names.toSet(), QSet<QString>() << "CMyClass" ); //DMyClass is private
+}
+
 void TestCppCodeCompletion::testFriendVisibility() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("class A { class PrivateClass {}; friend class B; }; class B{};");

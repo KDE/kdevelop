@@ -37,6 +37,7 @@
 #include "cppducontext.h"
 #include <language/duchain/use.h>
 #include "templateparameterdeclaration.h"
+#include "classdeclaration.h"
 
 
 using namespace Cpp;
@@ -161,6 +162,9 @@ Declaration* localClassFromCodeContext(DUContext* context)
     context = context->parentContext();
   }
   
+  if(context->type() == DUContext::Class)
+    return context->owner();
+  
   //For function declarations, this is the solution.
   if(context->parentContext() && context->parentContext()->type() == DUContext::Class)
     return context->parentContext()->owner();
@@ -192,9 +196,47 @@ Declaration* localClassFromCodeContext(DUContext* context)
   return 0;
 }
 
-KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDeclaration* declaration)
+ClassMemberDeclaration::AccessPolicy mostRestrictiveInheritanceAccessPolicy(DUContext* startContext, DUContext* targetContext, TopDUContext* top, bool ignoreFirst = false)
 {
-  if(declaration->accessPolicy() == ClassMemberDeclaration::Public)
+  ClassMemberDeclaration::AccessPolicy ret = ClassMemberDeclaration::Public;
+  if(startContext != targetContext) {
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(startContext->owner());
+    if(classDecl) {
+      FOREACH_FUNCTION(const BaseClassInstance& import, classDecl->baseClasses) {
+        AbstractType::Ptr type = import.baseClass.type();
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        if(identified) {
+          Declaration* decl = identified->declaration(top);
+          ///@todo This is not very efficient
+          if(decl && decl->internalContext() && decl->internalContext()->imports(targetContext)) {
+            ret = mostRestrictiveInheritanceAccessPolicy(decl->internalContext(), targetContext, top);
+            if(import.access > ret && !ignoreFirst)
+              ret = import.access;
+            break;
+          }
+        }
+      }
+    }
+  }
+  return ret;
+}
+
+KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDeclaration* declaration, TopDUContext* source, DUContext* declarationContext)
+{
+  if(declarationContext) {
+    ClassMemberDeclaration::AccessPolicy restriction = mostRestrictiveInheritanceAccessPolicy(declarationContext, declaration->context(), source);
+    if(restriction != ClassMemberDeclaration::Public)
+      return false;
+  }else if(!declarationContext && fromContext->type() == DUContext::Class && fromContext->imports(declaration->context())) {
+    declarationContext = fromContext;
+    ClassMemberDeclaration::AccessPolicy restriction = mostRestrictiveInheritanceAccessPolicy(declarationContext, declaration->context(), source, true);
+    if(restriction == ClassMemberDeclaration::Private)
+      return false;
+  }
+
+  ClassMemberDeclaration::AccessPolicy effectiveAccessPolicy = declaration->accessPolicy();
+  
+  if(effectiveAccessPolicy == ClassMemberDeclaration::Public)
     return true;
   
   if(!fromContext)
@@ -206,17 +248,17 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
       return false;
     }
     
-    return isAccessible(classDecl->internalContext(), declaration);
+    return isAccessible(classDecl->internalContext(), declaration, source, declarationContext);
   }
   
   if(fromContext->type() != DUContext::Class)
     return false;
   
-  if(declaration->accessPolicy() == ClassMemberDeclaration::Protected) {
+  if(effectiveAccessPolicy == ClassMemberDeclaration::Protected) {
     if(fromContext->imports( declaration->context() )) {
       return true;
     }
-  }else if(declaration->accessPolicy() == ClassMemberDeclaration::Private) {
+  }else if(effectiveAccessPolicy == ClassMemberDeclaration::Private) {
     if(fromContext == declaration->context())
       return true;
   }
@@ -227,7 +269,7 @@ KDEVCPPDUCHAIN_EXPORT bool isAccessible(DUContext* fromContext, ClassMemberDecla
   DUContext* parent = logicalParentContext(fromContext, fromContext->topContext());
   
   if(parent && parent->type() == DUContext::Class)
-    return isAccessible(parent, declaration);
+    return isAccessible(parent, declaration, source, declarationContext);
   
   return false;
 }

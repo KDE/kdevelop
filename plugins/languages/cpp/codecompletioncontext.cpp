@@ -845,9 +845,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   
                   ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
 
-                  if(classMember && !filterDeclaration(classMember))
+                  if(classMember && !filterDeclaration(classMember, ctx))
                     continue;
-                  else if(!filterDeclaration(decl.first))
+                  else if(!filterDeclaration(decl.first, ctx))
                     continue;
                     
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
@@ -1251,7 +1251,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   }
 }
 
-bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) {
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
   if(!decl)
     return true;
   
@@ -1272,19 +1272,18 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, bool dynamic) 
   if(dynamic && decl->context()->type() == DUContext::Class) {
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
-      return filterDeclaration(classMember);
+      return filterDeclaration(classMember, declarationContext);
   }
   
   return true;
 }
 
-bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl) {
-    
+bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) {
   if(doAccessFiltering && decl) {
-    if(!Cpp::isAccessible(m_localClass.data(), decl))
+    if(!Cpp::isAccessible(m_localClass.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
   }
-  return filterDeclaration((Declaration*)decl, false);
+  return filterDeclaration((Declaration*)decl, declarationContext, false);
 }
 
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)

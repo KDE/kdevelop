@@ -170,8 +170,8 @@ namespace Cpp {
     private:
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
-      bool  filterDeclaration(Declaration* decl, bool dynamic = true);
-      bool  filterDeclaration(ClassMemberDeclaration* decl);
+      bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true);
+      bool  filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext = 0);
       ///Replaces the member-access type at the current cursor position from "from" to "new", for example from "->" to "."
       void replaceCurrentAccess(QString old, QString _new);
 
