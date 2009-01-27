@@ -501,7 +501,14 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
       identifier.push(QualifiedIdentifier(editor()->tokenToString(node->namespace_name)));
   }
 
+  size_t realStart = node->start_token;
+  
+  if(node->namespace_name) //Move the start behind the name, the simple + hacky way
+    node->start_token = node->namespace_name+1;
+  
   openContext(node, DUContext::Namespace, identifier);
+  
+  node->start_token = realStart;
 
   DefaultVisitor::visitNamespace (node);
 

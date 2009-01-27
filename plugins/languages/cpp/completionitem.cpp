@@ -341,6 +341,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           if(indentByDepth)
             indentation = QString(depth, ' ');
 
+          if(m_declaration->kind() == Declaration::Namespace)
+            return indentation + "namespace";
+          
           if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(dec) ) {
             if( alias->identifier().isEmpty() ) {
               return indentation + "using namespace";/* " + alias->importIdentifier().toString();*/

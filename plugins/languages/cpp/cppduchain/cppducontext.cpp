@@ -123,10 +123,17 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
 
   if( !s.result.isEmpty() && lookup.count() == 1 ) { //When we are searching within a scope-context, no namespaces are involved any more, so we look up exactly one item at a time.
 
+    bool searchInNamespace = false;
+    
     //Eventually extract a scope context
     foreach( const DeclarationPointer &decl, s.result ) {
       if( !decl )
         continue;
+      
+      if(!scopeContext && decl->kind() == Declaration::Namespace) {
+        searchInNamespace = true;
+        break;
+      }
       
       scopeContext = decl->logicalInternalContext(topContext());
       
@@ -151,15 +158,18 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
         break;
     }
     
-    if( scopeContext && scopeContext->owner() && scopeContext->owner()->isForwardDeclaration() ) {
-      kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->identifier().toString();
-      m_lastScopeContext = DUContextPointer(scopeContext);
-      scopeContext = 0;
-    }
-    
-    if( !scopeContext ) {
-      s.result.clear();
-      return false;
+    if(!searchInNamespace) {
+      if( scopeContext && scopeContext->owner() && scopeContext->owner()->isForwardDeclaration() ) {
+        kDebug(9007) << "Tried to search in forward-declaration of " << scopeContext->owner()->identifier().toString();
+        m_lastScopeContext = DUContextPointer(scopeContext);
+        scopeContext = 0;
+      }
+      
+      if( !scopeContext ) {
+        s.result.clear();
+        m_lastDeclarations.clear();
+        return false;
+      }
     }
   }
 
@@ -172,7 +182,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   DUContext::DeclarationList tempDecls;
   if( !scopeContext ) {
     m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup );
-    if( tempDecls.isEmpty() && m_source != m_context ) {
+    if( tempDecls.isEmpty() && m_source != m_context && !s.identifier.explicitlyGlobal() ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
       
@@ -190,75 +200,56 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
       if( !decls.isEmpty() )
         tempDecls = decls;
-//       ImportTrace trace;
-//       m_source->importTrace(m_context->topContext(), trace);
-//       for( int a = trace.count()-1; a >= 0; --a ) {
-//         const ImportTraceItem& traceItem(trace[a]);
-//         DUContext::DeclarationList decls;
-//         ///@todo Give a correctly modified trace(without the used items)
-//         traceItem.ctx->findDeclarationsInternal( allIdentifiers, traceItem.position.isValid() ? traceItem.position : traceItem.ctx->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
-//         if( !decls.isEmpty() ) {
-//           tempDecls = decls;
-//           break;
-//         }
-//       }
     }
   } else { //Create a new trace, so template-parameters can be resolved globally
     scopeContext->findDeclarationsInternal( allIdentifiers, scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext(), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
   }
-
-  if( !tempDecls.isEmpty() ) {
-    s.result.clear();
-    //instantiate template declarations
-    FOREACH_ARRAY(Declaration* decl, tempDecls) {
-      if(decl->isForwardDeclaration() && scopeContext && scopeContext->type() == DUContext::Class) {
-        //We found a forward-declaration within a class. Resolve it with its real declaration.
-        Declaration* resolution = dynamic_cast<ForwardDeclaration*>(decl)->resolve(m_source);
-        if(resolution)
-          decl = resolution;
-      }
-      if( !s.templateParameters.isValid() ) {
-        s.result << DeclarationPointer(decl);
-      }else{
-        Declaration* dec = instantiateDeclaration(decl, s.templateParameters);
-        if( dec )
-          s.result << DeclarationPointer(dec);
-      }
+  
+  s.result.clear();
+  
+  //instantiate template declarations
+  FOREACH_ARRAY(Declaration* decl, tempDecls) {
+    
+    if(decl->isForwardDeclaration() && scopeContext && scopeContext->type() == DUContext::Class) {
+      //We found a forward-declaration within a class. Resolve it with its real declaration.
+      Declaration* resolution = dynamic_cast<ForwardDeclaration*>(decl)->resolve(m_source);
+      if(resolution)
+        decl = resolution;
     }
-
-    s.templateParameters = InstantiationInformation();
-
-    ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply remove them
-    bool hadNamespaceAlias = false;
-    bool hadScopeDeclaration = false;
-    for(QList<DeclarationPointer>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
-      Declaration* decl = it->data();
-      if(decl) {
-        if( dynamic_cast<NamespaceAliasDeclaration*>(decl) )
-          hadNamespaceAlias = true;
-        if(decl->internalContext() || decl->kind() == Declaration::Type)
-          hadScopeDeclaration = true;
-      }
+    
+    if( !s.templateParameters.isValid() ) {
+      s.result << DeclarationPointer(decl);
+    }else{
+      Declaration* dec = instantiateDeclaration(decl, s.templateParameters);
+      if( dec )
+        s.result << DeclarationPointer(dec);
     }
+  }
+  
+  s.templateParameters = InstantiationInformation();
 
-    ///We filter out declarations without contexts, because in some places in C++ those should not be considered as scope-parts
-    if(!hadNamespaceAlias) {
-      if(!isFinalIdentifier && !hadScopeDeclaration) {
-        s.result.clear();
-        return true;
-      }else{
-        s.identifier.clear();
-      }
+  ///Namespace-aliases are treated elsewhere, and should not screw our search, so simply ignore them
+  bool hadNamespace = false;
+  bool hadScopeDeclaration = false;
+  for(QList<DeclarationPointer>::iterator it = s.result.begin(); it != s.result.end(); ++it) {
+    Declaration* decl = it->data();
+    if(decl) {
+      if(decl->kind() == Declaration::Namespace)
+        hadNamespace = true;
+      else if( dynamic_cast<NamespaceAliasDeclaration*>(decl) )
+        hadNamespace = true;
+      if(decl->internalContext() || decl->kind() == Declaration::Type)
+        hadScopeDeclaration = true;
     }
-  } else {
-    s.result.clear();
-    s.templateParameters = InstantiationInformation();
-    //Nothing was found 
-      //This is ok in the case that currentLookup stands for a namespace, because namespaces do not have a declaration.
-      if( s.templateParameters.isValid() ) {
-        kDebug(9007) << "CppDUContext::findDeclarationsInternal: Template in scope could not be located: " << lookup.toString();
-        return false; //If one of the parts has a template-identifier, it cannot be a namespace
-      }
+  }
+
+  ///We filter out declarations without contexts, because in some places in C++ those should not be considered as scope-parts
+  if(!hadNamespace) {
+    if(!isFinalIdentifier && !hadScopeDeclaration) {
+      s.result.clear();
+    }else {
+      s.identifier.clear();
+    }
   }
 
   m_lastDeclarations = s.result;

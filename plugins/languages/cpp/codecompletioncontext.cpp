@@ -828,6 +828,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         case MemberChoose:
           if( memberAccessContainer().isValid() ||memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
           {
+            QSet<QualifiedIdentifier> hadNamespaceDeclarations; //Used to show only one namespace-declaration per namespace
             QList<DUContext*> containers = memberAccessContainers();
             ifDebug( kDebug() << "got" << containers.size() << "member-access containers"; )
             if( !containers.isEmpty() ) {
@@ -842,13 +843,20 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
                 foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
                   //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
-                  
                   ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
 
                   if(classMember && !filterDeclaration(classMember, ctx))
                     continue;
                   else if(!filterDeclaration(decl.first, ctx))
                     continue;
+                  
+                  if(decl.first->kind() == Declaration::Namespace) {
+                    QualifiedIdentifier id = decl.first->qualifiedIdentifier();
+                    if(hadNamespaceDeclarations.contains(id))
+                      continue;
+                    
+                    hadNamespaceDeclarations.insert(id);
+                  }
                     
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
                     if(decl.first->kind() != Declaration::Instance)
@@ -1154,6 +1162,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::speci
 void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items) {
   //Normal case: Show all visible declarations
   typedef QPair<Declaration*, int> DeclarationDepthPair;
+  QSet<QualifiedIdentifier> hadNamespaceDeclarations;
 
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
 
@@ -1196,10 +1205,20 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 
   //Remove pure function-definitions before doing overload-resolution, so they don't hide their own declarations.
   foreach( const DeclarationDepthPair& decl, oldDecls )
-    if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration())
-      if(filterDeclaration(decl.first))
+    if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration()) {
+      if(decl.first->kind() == Declaration::Namespace) {
+        QualifiedIdentifier id = decl.first->qualifiedIdentifier();
+        if(hadNamespaceDeclarations.contains(id))
+          continue;
+        
+        hadNamespaceDeclarations.insert(id);
+      }
+      
+      if(filterDeclaration(decl.first)) {
         decls << decl;
-
+      }
+    }
+    
   decls = Cpp::hideOverloadedDeclarations(decls);
 
   foreach( const DeclarationDepthPair& decl, decls )
@@ -1260,7 +1279,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(decl->indexedIdentifier() == friendIdentifier)
     return false;
   
-  if(m_onlyShowTypes && decl->kind() != Declaration::Type)
+  if(m_onlyShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
     return false;
     
   if(m_onlyShowSignals || m_onlyShowSlots) {

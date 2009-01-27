@@ -342,8 +342,9 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
                 continue; //Do not steal declarations
             }
 
-            if(FunctionDefinition* funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration()))
+            if(FunctionDefinition* funDef = dynamic_cast<FunctionDefinition*>(currentDeclaration())) {
               funDef->setDeclaration(dec);
+            }
 
             found = true;
             break;
@@ -406,7 +407,7 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd)
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const SimpleRange* customRange)
 {
   SimpleRange newRange;
   if(name) {
@@ -418,8 +419,10 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       start = name->unqualified_name->tilde+1;
 
     newRange = editor()->findRange(start, end);
-  }else{
+  }else if(rangeNode) {
     newRange = editor()->findRange(rangeNode);
+  }else if(customRange) {
+    newRange = *customRange;
   }
 
   if(collapseRangeAtStart)
@@ -887,6 +890,26 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* 
   //We need to set this early, so we can do correct search while building
   DUChainWriteLocker lock(DUChain::lock());
   currentDeclaration()->setInternalContext(context);
+}
+
+void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
+
+  if (ast->namespace_name) {
+    DUChainWriteLocker lock(DUChain::lock());
+    SimpleRange range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
+    openDeclarationReal<Declaration>(0, 0, Identifier(editor()->tokenToString(ast->namespace_name)), false, false, &range);
+  }
+  
+  DeclarationBuilderBase::visitNamespace(ast);
+  
+  if (ast->namespace_name) {
+    DUChainWriteLocker lock(DUChain::lock());
+    Declaration* decl = currentDeclaration();
+    closeDeclaration();
+    decl->setKind(KDevelop::Declaration::Namespace);
+    decl->setInternalContext(lastContext());
+    decl->setAbstractType(AbstractType::Ptr());
+  }
 }
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)

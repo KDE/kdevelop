@@ -46,6 +46,7 @@
 #include "cpppreprocessenvironment.h"
 #include "cppduchain/classdeclaration.h"
 #include <qstandarditemmodel.h>
+#include <language/duchain/functiondefinition.h>
 
 using namespace KTextEditor;
 
@@ -274,8 +275,32 @@ void TestCppCodeCompletion::testFriendVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "PrivateClass");
 }
 
+void TestCppCodeCompletion::testNamespaceCompletion() {
+  
+  QByteArray method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Namespace);
+  QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::Namespace);
+  QVERIFY(!top->localDeclarations()[0]->abstractType());
+  QVERIFY(!top->localDeclarations()[1]->abstractType());
+  QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
+  QCOMPARE(top->localDeclarations()[1]->internalContext(), top->childContexts()[1]);
+  
+  QCOMPARE(CompletionItemTester(top).names, QStringList() << "A");
+
+  QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names.toSet(), QSet<QString>() << "m" << "n" << "Q");
+  QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
+  release(top);
+}
+
 void TestCppCodeCompletion::testSameNamespace() {
-  TEST_FILE_PARSE_ONLY
 
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
@@ -288,23 +313,14 @@ void TestCppCodeCompletion::testSameNamespace() {
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  FunctionDefinition* funDef = dynamic_cast<KDevelop::FunctionDefinition*>(top->childContexts()[1]->localDeclarations()[0]);
+  QVERIFY(!funDef->hasDeclaration());
 
 //   lock.unlock();
   {
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[1]->childContexts()[1]), "; ", QString()) );
-    bool abort = false;
-    typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
-    
-    QList <Item > items = cptr->completionItems(top->range().end, abort);
-    foreach(Item i, items) {
-      NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
-      QVERIFY(decItem);
-      kDebug() << decItem->declaration()->toString();
-      kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
-    }
-    
-    //Have been filtered out, because only types are shown from the global scope
-    QCOMPARE(items.count(), 3); //C, test2, test
+    kDebug() << CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names;
+    QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "test2" << "test" << "A");
   }
   
   release(top);
@@ -981,11 +997,9 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   QString test("#define TEST namespace NS{int a;int b;int c;int d;int q;} class A{}; \nTEST; int a; int b; int c; int d;int e;int f;int g;int h;\n");
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
-  QCOMPARE(ctx->localDeclarations().count(), 9);
-  kDebug() << ctx->localDeclarations()[0]->range().textRange();
-  kDebug() << ctx->localDeclarations()[1]->range().textRange();
-  QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
-  QCOMPARE(ctx->localDeclarations()[1]->range().textRange(), KTextEditor::Range(1, 10, 1, 11));
+  QCOMPARE(ctx->localDeclarations().count(), 10);
+  QCOMPARE(ctx->localDeclarations()[1]->range().textRange(), KTextEditor::Range(1, 4, 1, 4)); //Because the macro TEST was expanded out of its physical range, the Declaration is collapsed.
+  QCOMPARE(ctx->localDeclarations()[2]->range().textRange(), KTextEditor::Range(1, 10, 1, 11));
 }
 {
   //The range of the merged declaration name should be trimmed to the end of the macro invocation

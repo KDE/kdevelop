@@ -79,6 +79,7 @@ public:
 
   protected:
   virtual void visitDeclarator (DeclaratorAST*);
+  virtual void visitNamespace(NamespaceAST* );
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST *node);
   virtual void visitAccessSpecifier(AccessSpecifierAST*);
@@ -117,7 +118,7 @@ private:
   template<class T>
   T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier(), bool collapseRange = false, bool collapseRangeAtEnd = false);
   template<class T>
-  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd);
+  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const SimpleRange* customRange = 0);
   /// Same as the above, but sets it as the definition too @param forceInstance when this is true, the declaration is forced to be an instance, not a type declaration,
   /// and its assigned identified type will not get the declaration assigned.
   virtual void closeDeclaration(bool forceInstance = false);

@@ -520,6 +520,9 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
     return ErrorVariableType;
 
   Types type = LocalVariableType;
+  if(dec->kind() == Declaration::Namespace)
+    return NamespaceType;
+  
   if (context) {
     //It is a use.
     //Determine the class we're in
