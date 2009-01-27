@@ -1268,6 +1268,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
     kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
   }
+  
+  items += keywordCompletionItems();
 }
 
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
@@ -1325,6 +1327,110 @@ void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
 
 int CodeCompletionContext::matchPosition() const {
   return m_knownArgumentExpressions.count();
+}
+
+QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywordCompletionItems() {
+  QList<CompletionTreeItemPointer> ret;
+  #define ADD_TYPED_TOKEN(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(#X, type, 0, KSharedPtr<Cpp::CodeCompletionContext>(this)) )
+  
+  #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
+  if(m_duContext->type() == DUContext::Class) {
+    ADD_TOKEN(Q_OBJECT);
+    ADD_TOKEN(private);
+    ADD_TOKEN(protected);
+    ADD_TOKEN(public);
+    ADD_TOKEN(signals);
+    ADD_TOKEN(slots);
+    ADD_TOKEN(virtual);
+    ADD_TOKEN(friend);
+    ADD_TOKEN(explicit);
+  }
+  
+  if(m_duContext->type() == DUContext::Other) {
+    ADD_TOKEN(break);
+    ADD_TOKEN(case);
+    ADD_TOKEN(and);
+    ADD_TOKEN(and_eq);
+    ADD_TOKEN(asm);
+    ADD_TOKEN(bitand);
+    ADD_TOKEN(bitor);
+    ADD_TOKEN(catch);
+    ADD_TOKEN(const_cast);
+    ADD_TOKEN(default);
+    ADD_TOKEN(delete);
+    ADD_TOKEN(do);
+    ADD_TOKEN(dynamic_cast);
+    ADD_TOKEN(else);
+    ADD_TOKEN(emit);
+    ADD_TOKEN(for);
+    ADD_TOKEN(goto);
+    ADD_TOKEN(if);
+    ADD_TOKEN(incr);
+    ADD_TOKEN(new);
+    ADD_TOKEN(not);
+    ADD_TOKEN(not_eq);
+    ADD_TOKEN(or);
+    ADD_TOKEN(or_eq);
+    ADD_TOKEN(reinterpret_cast);
+    ADD_TOKEN(return);
+    ADD_TOKEN(static_cast);
+    ADD_TOKEN(switch);
+    ADD_TOKEN(try);
+    ADD_TOKEN(typeid);
+    ADD_TOKEN(while);
+    ADD_TOKEN(xor);
+    ADD_TOKEN(xor_eq);
+    ADD_TOKEN(continue);
+  }else{
+    ADD_TOKEN(inline);
+  }
+  
+  if(m_duContext->type() == DUContext::Global) {
+    ADD_TOKEN(export);
+    ADD_TOKEN(extern);
+    ADD_TOKEN(namespace);
+  }
+  
+  ADD_TOKEN(auto);
+  ADD_TOKEN(bool);
+  ADD_TOKEN(char);
+  ADD_TOKEN(class);
+  ADD_TOKEN(const);
+  ADD_TOKEN(double);
+  ADD_TOKEN(enum);
+  ADD_TOKEN(float);
+  ADD_TOKEN(int);
+  ADD_TOKEN(long);
+  ADD_TOKEN(mutable);
+  ADD_TOKEN(operator);
+  ADD_TOKEN(register);
+  ADD_TOKEN(short);
+  ADD_TOKEN(signed);
+  ADD_TOKEN(sizeof);
+  ADD_TOKEN(static);
+  ADD_TOKEN(struct);
+  ADD_TOKEN(template);
+  ADD_TOKEN(throw);
+  ADD_TOKEN(typedef);
+  ADD_TOKEN(typename);
+  ADD_TOKEN(union);
+  ADD_TOKEN(unsigned);
+  ADD_TOKEN(using);
+  ADD_TOKEN(void);
+  ADD_TOKEN(volatile);
+  ADD_TOKEN(wchar_t);
+
+  ConstantIntegralType::Ptr trueType(new ConstantIntegralType(IntegralType::TypeBoolean));
+  trueType->setValue<bool>(true);
+  
+  ADD_TYPED_TOKEN(true, trueType->indexed());
+
+  ConstantIntegralType::Ptr falseType(new ConstantIntegralType(IntegralType::TypeBoolean));
+  falseType->setValue<bool>(false);
+
+  ADD_TYPED_TOKEN(false, falseType->indexed());
+  
+  return ret;
 }
 
 

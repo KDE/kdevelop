@@ -1580,6 +1580,7 @@ void TestDUChain::testDeclareUsingNamespace2()
 {
   TEST_FILE_PARSE_ONLY
 
+///@todo Correclty build namespace-uses for namespace-aliases and and "using namespace"
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
   QByteArray method("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } }; namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }");

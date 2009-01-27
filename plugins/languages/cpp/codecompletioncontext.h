@@ -168,6 +168,7 @@ namespace Cpp {
       KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type) const;
       
     private:
+      QList<CompletionTreeItemPointer> keywordCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
       bool  filterDeclaration(Declaration* decl, DUContext* declarationContext = 0, bool dynamic = true);
