@@ -130,7 +130,16 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   KUrl currentPath(context->topContext()->url().str());
   currentPath.setFileName(QString());
   
-  KUrl::List includePaths = CppLanguageSupport::self()->findIncludePaths(currentUrl, 0);
+  Cpp::EnvironmentFilePointer env(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
+  if(!env)
+    return ret;
+  
+  
+  KUrl::List includePaths;
+  
+  foreach(IndexedString path, env->includePaths())
+    includePaths << path.toUrl();
+  
   includePaths.prepend(currentPath);
   
   ///Search the persistent symbol table
