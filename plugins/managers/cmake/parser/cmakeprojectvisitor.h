@@ -160,7 +160,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         void macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
-        QStringList value(const QString& exp, const QList<IntPair>& poss, int desired) const;
+        QStringList value(const QString& exp, const QList<IntPair>& poss, int& desired) const;
         QStringList theValue(const QString& exp, const IntPair& p) const;
 
         typedef QMap<QString, QString> TargetProperties;

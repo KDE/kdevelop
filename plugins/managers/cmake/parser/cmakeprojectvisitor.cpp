@@ -144,16 +144,19 @@ QString replaceOne(const QString& var, const QString& id, const QString& value, 
     return var.mid(0, dollar)+value+var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
 }
 
-QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>& poss, int desired) const
+QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>& poss, int& desired) const
 {
     QString var=exp;
     QList<IntPair> invars;
     invars += poss[desired];
+    qDebug() << ">>>>>" << exp << desired << poss.count();
     for(; desired+1<poss.size() && poss[desired].level>1; desired++)
     {
         invars+=poss[desired+1];
+        qDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
     }
 
+    qDebug() << ";;;;;" << invars.count();
     if(invars.count()>1)
     {
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
@@ -187,7 +190,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
     int i=0;
     IntPair last(-1,-1, 0);
 
-    for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it)
+    for(QList<IntPair>::const_iterator it=var.constBegin(); it!=var.constEnd(); ++it, ++i)
     {
         while(it!=var.constEnd() && it->level>1)
             ++it;
@@ -198,7 +201,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
         QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
 
         QStringList vars = value(exp.value, var, i);
-//         qDebug() << "aaaaaaaaaA" << vars;
+//         qDebug() << "aaaaaaaaaA" << pre << vars;
 
         if(!vars.isEmpty())
         {
@@ -207,7 +210,9 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
         ret.last()+=pre;
         ret += vars;
         last=p;
-        i++;
+        
+//         qDebug() << "yaaaaaaa" << ret;
+//         i++;
     }
     ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
 
@@ -844,6 +849,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     SimpleRange sr=def.arguments.first().range();
     SimpleRange endsr=end.arguments.first().range();
     int idx;
+    
     if(!decls.isEmpty())
     {
         idx=m_topctx->indexForUsedDeclaration(decls.first());
@@ -863,6 +869,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         }
         d->setAbstractType( AbstractType::Ptr(func) );
         idx=m_topctx->indexForUsedDeclaration(d);
+        qDebug() << "creating macro decl: " << m_topctx << m_topctx->localDeclarations();
     }
     m_topctx->createUse(idx, endsr, 0);
 }
@@ -1874,10 +1881,10 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
             element = new MacroCallAst;
 
         createUses(*it);
-        kDebug(9042) << "resolving:" << it->writeBack();
+//         kDebug(9042) << "resolving:" << it->writeBack();
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
-        kDebug(9042) << "resolved:" << func.writeBack() << correct;
+//         kDebug(9042) << "resolved:" << func.writeBack() << correct;
         if(!correct)
         {
             kDebug(9042) << "error! found an error while processing" << func.writeBack() << "was" << it->writeBack() << endl

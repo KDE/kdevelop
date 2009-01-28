@@ -305,6 +305,8 @@ void CMakeProjectVisitorTest::testRun_data()
                             "set(aaa ca)\n"
                             "set(aab co)\n"
                             "set(b a)\n"
+//                             "message(STATUS \"${aaa}${aab} should be caco\")\n"
+//                             "message(STATUS \"${a${b}a}${a${b}b} should be caco\")\n"
                             "if(\"${a${b}a}${a${b}b}\" STREQUAL caco )\n"
                             "  set(GOOD TRUE)\n"
                             "endif()\n"
