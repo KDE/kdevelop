@@ -104,6 +104,7 @@
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
     <DefineGroup append="show_merge" name="show_merge" />
     <Action name="configure_sessions" append="configure_merge" />
+    <Action name="settings_notifications" append="configure_merge" />
     <Action name="options_configure_editors" append="configure_merge" />
     <DefineGroup append="configure_merge" name="configure_merge" />
   </Menu>

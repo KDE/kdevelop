@@ -147,3 +147,13 @@ Comment[x-test]=xxProcess finished with errorsxx
 Comment[zh_CN]=处理完成，但有错误
 Comment[zh_TW]=行程發生錯誤
 Action=None
+
+[Event/LoadingProject]
+Name=Loading Project
+Comment=A project loading process has just started
+Action=Popup
+
+[Event/ProjectLoadedSuccessfully]
+Name=Project Loaded Successfully
+Comment=A project has been loaded successfully
+Action=Popup
