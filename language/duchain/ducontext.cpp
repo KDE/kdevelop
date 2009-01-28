@@ -43,7 +43,6 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "arrayhelpers.h"
-#include "codemodel.h"
 
 ///It is fine to use one global static mutex here
 
@@ -562,10 +561,6 @@ DUContext::~DUContext( )
     QualifiedIdentifier id(scopeIdentifier(true));
     if(d->m_inSymbolTable && parentContext()) {
       PersistentSymbolTable::self().removeContext(id, this);
-
-      //We put namespaces into the code-model
-      if(d->m_contextType == DUContext::Namespace)
-        CodeModel::self().removeItem(url(), id);
     }
     
     if(d->m_owner.declaration())
@@ -1186,23 +1181,7 @@ void DUContext::setType(ContextType type)
 {
   ENSURE_CAN_WRITE
 
-  bool wasNamespaceInCodeModel = d_func()->m_inSymbolTable && d_func()->m_contextType == DUContext::Namespace && d_func()->m_scopeIdentifier.isValid();
-
   d_func_dynamic()->m_contextType = type;
-
-  bool shouldBeNamespaceInCodeModel = d_func()->m_inSymbolTable && d_func()->m_contextType == DUContext::Namespace && d_func()->m_scopeIdentifier.isValid();
-  
-  if(wasNamespaceInCodeModel && shouldBeNamespaceInCodeModel) {
-    //We're fine
-  }else if(!wasNamespaceInCodeModel && shouldBeNamespaceInCodeModel) {
-    //Add
-    QualifiedIdentifier id(scopeIdentifier(true));
-    CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
-  }else if(wasNamespaceInCodeModel && !shouldBeNamespaceInCodeModel) {
-    //Remove
-    QualifiedIdentifier id(scopeIdentifier(true));
-    CodeModel::self().removeItem(url(), id);
-  }
 
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
@@ -1623,14 +1602,9 @@ void DUContext::setInSymbolTable(bool inSymbolTable)
         QualifiedIdentifier id(scopeIdentifier(true));
         PersistentSymbolTable::self().addContext(id, this);
 
-        if(d_func()->m_contextType == DUContext::Namespace)
-          CodeModel::self().addItem(url(), id, CodeModelItem::Namespace);
       }else if(d_func()->m_inSymbolTable && !inSymbolTable) {
         QualifiedIdentifier id(scopeIdentifier(true));
         PersistentSymbolTable::self().removeContext(id, this);
-        
-        if(d_func()->m_contextType == DUContext::Namespace)
-          CodeModel::self().removeItem(url(), id);
       }
     }
 
