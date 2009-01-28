@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="64" name="kdevelop" >
+<kpartgui version="65" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">File</text>
@@ -57,11 +57,11 @@
 
     <Merge />
     <Separator />
-    <Action name="project_open_config" /> 
+    <Action name="project_open_config" />
 
     <Separator/>
     <Action name="project_close"/>
-    <Action name="project_close_all"/>   
+    <Action name="project_close_all"/>
   </Menu>
 
   <Menu name="run">
@@ -104,7 +104,6 @@
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
     <DefineGroup append="show_merge" name="show_merge" />
     <Action name="configure_sessions" append="configure_merge" />
-    <Action name="settings_notifications" append="configure_merge" />
     <Action name="options_configure_editors" append="configure_merge" />
     <DefineGroup append="configure_merge" name="configure_merge" />
   </Menu>
