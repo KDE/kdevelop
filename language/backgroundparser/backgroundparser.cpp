@@ -56,7 +56,7 @@
 #include <editor/modificationrevisionset.h>
 
 //@todo Enable this again once languageForUrl is thread-safe
-const bool separateThreadForHighPriority = false;
+const bool separateThreadForHighPriority = true;
 
 namespace KDevelop
 {
@@ -226,7 +226,7 @@ public:
         m_delay = config.readEntry("Delay", 500);
         m_timer.setInterval(m_delay);
         m_threads = 0;
-        m_parser->setThreadCount(config.readEntry("Number of Threads Internal", 1)); ///@todo Change back to "Numer of Threads" once languageForUrl is thread-safe
+        m_parser->setThreadCount(config.readEntry("Number of Threads", 1));
 
         if (config.readEntry("Enabled", true)) {
             resume();
