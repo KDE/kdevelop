@@ -189,7 +189,14 @@ protected:
       if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
         Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
 
-      if(LanguageSpecificDeclarationBuilderBase::lastContext() && (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Class || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Other || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Function || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Template || LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Enum) )
+      if(LanguageSpecificDeclarationBuilderBase::lastContext() && 
+        (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Class || 
+         LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Other || 
+         LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Function || 
+         LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Template || 
+         LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Enum ||
+         (LanguageSpecificDeclarationBuilderBase::lastContext()->type() == DUContext::Namespace && currentDeclaration()->kind() == Declaration::Namespace)
+         ) )
       {
         if( !LanguageSpecificDeclarationBuilderBase::lastContext()->owner() || !LanguageSpecificDeclarationBuilderBase::wasEncountered(LanguageSpecificDeclarationBuilderBase::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
           currentDeclaration()->setInternalContext(LanguageSpecificDeclarationBuilderBase::lastContext());
