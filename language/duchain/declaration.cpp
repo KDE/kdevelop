@@ -84,6 +84,7 @@ Declaration::Kind Declaration::kind() const {
 void Declaration::setKind(Kind kind) {
   DUCHAIN_D_DYNAMIC(Declaration);
   d->m_kind = kind;
+  updateCodeModel();
 }
 
 bool Declaration::inDUChain() const {
@@ -585,6 +586,9 @@ bool Declaration::inSymbolTable() const
 
 CodeModelItem::Kind kindForDeclaration(Declaration* decl) {
   CodeModelItem::Kind kind = CodeModelItem::Unknown;
+  
+  if(decl->kind() == Declaration::Namespace)
+    return CodeModelItem::Namespace;
   
   if(decl->isFunctionDeclaration()) {
     kind = CodeModelItem::Function;
