@@ -95,7 +95,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "not+or+not" ) << QString("NOT;TRUE;OR;NOT;TRUE").split(";") << false;
     QTest::newRow( "empty" ) << QString("EMPTY").split(";") << false;
     QTest::newRow( "not+empty" ) << QString("NOT;EMPTY").split(";") << true;
-    QTest::newRow( "empty+strequal" ) << QString("NOT;;STREQUAL;").split(";") << true;
+    QTest::newRow( "empty+strequal" ) << QString("NOT;;STREQUAL;").split(";") << false;
     QTest::newRow( "weirdmatch" ) << QString("EXP MATCHES expression").split(" ") << true;
     
     //parentheses: 2.6.3
