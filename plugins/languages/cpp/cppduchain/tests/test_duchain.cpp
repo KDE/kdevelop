@@ -1416,11 +1416,13 @@ void TestDUChain::testDeclareNamespace()
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), top->localDeclarations()[0]);
   QCOMPARE(top->childContexts()[0]->range(), SimpleRange(0, 14, 0, 26));
+  QVERIFY(top->localDeclarations()[0]->inSymbolTable());
 
   QVERIFY(top->localDeclarations()[0]->inSymbolTable());
   QVERIFY(top->localDeclarations()[0]->uses().size());
   
   DUContext* fooCtx = top->childContexts().first();
+  QVERIFY(fooCtx->inSymbolTable());
   QCOMPARE(fooCtx->childContexts().count(), 0);
   QCOMPARE(fooCtx->localDeclarations().count(), 1);
   QCOMPARE(fooCtx->localScopeIdentifier(), QualifiedIdentifier("foo"));
@@ -1451,6 +1453,17 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar")), bar);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::foo::bar")), bar);
 
+  IndexedQualifiedIdentifier fooId(QualifiedIdentifier("foo"));
+
+  uint itemCount;
+  const KDevelop::CodeModelItem* items;
+  CodeModel::self().items(top->url(), itemCount, items);
+  for(uint a = 0; a < itemCount; ++a) {
+    if(items[a].id == fooId) {
+      QCOMPARE(items[a].referenceCount, 1u); //Once by the namespace, once by the declaration
+    }
+  }
+  
   release(top);
 }
 
