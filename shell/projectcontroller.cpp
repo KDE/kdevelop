@@ -46,7 +46,7 @@ Boston, MA 02110-1301, USA.
 #include <ksettings/dialog.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
-#include <kpassivepopup.h>
+#include <knotification.h>
 
 #include <ksettings/dispatcher.h>
 
@@ -429,7 +429,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
 
     if ( !url.isValid() )
     {
-        KPassivePopup::message( i18n( "Invalid Location: %1", url.prettyUrl() ), Core::self()->uiControllerInternal()->activeMainWindow() );
+        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
+                           i18n("Invalid Location: %1", url.prettyUrl()));
         return false;
     }
     if ( d->m_currentlyOpening.contains(url))
@@ -451,7 +452,10 @@ bool ProjectController::openProject( const KUrl &projectFile )
         }
     }
 
-    KPassivePopup::message( i18n( "Loading Project: %1", url.prettyUrl() ), Core::self()->uiControllerInternal()->activeMainWindow() );
+    KNotification* ev=new KNotification("LoadingProject", Core::self()->uiControllerInternal()->activeMainWindow());
+    ev->setText(i18n( "Loading Project: %1", url.prettyUrl() ));
+    ev->setComponentData(KGlobal::mainComponent());
+    ev->sendEvent();
 
     //FIXME Create the hidden directory if it doesn't exist
     if ( loadProjectPart() )
@@ -466,7 +470,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
     Project* project = new Project();
     if ( !project->open( url ) )
     {
-        KPassivePopup::message( i18n( "Project could not be opened: %1", url.prettyUrl() ), Core::self()->uiControllerInternal()->activeMainWindow() );
+        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
+                           i18n( "Project could not be opened: %1", url.prettyUrl() ));
         delete project;
         return false;
     }
@@ -524,8 +529,10 @@ bool ProjectController::projectImportingFinished( IProject* project )
         }
         Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::AllDeclarationsContextsAndUses, 10 );
     }
-    KPassivePopup::message( i18n( "Project loaded: %1", project->name() ), Core::self()->uiControllerInternal()->activeMainWindow() );
-
+    KNotification* ev=new KNotification("ProjectLoadedSuccessfully", Core::self()->uiControllerInternal()->activeMainWindow());
+    ev->setText(i18n( "Project loaded: %1", project->name() ));
+    ev->setComponentData(KGlobal::mainComponent());
+    ev->sendEvent();
     return true;
 }
 

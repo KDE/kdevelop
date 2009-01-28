@@ -41,6 +41,7 @@ Boston, MA 02110-1301, USA.
 #include <ktogglefullscreenaction.h>
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
+#include <knotifyconfigwidget.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -179,6 +180,12 @@ void MainWindowPrivate::setupActions()
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
     action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session" ) );
+
+    
+    action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
+    action->setText( i18n("Configure Notifications...") );
+    action->setToolTip( i18n("Configure Notifications") );
+    action->setWhatsThis( i18n( "<b>Configure Notification</b><p>Shows a dialog that lets you configure notifications" ) );
 
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),

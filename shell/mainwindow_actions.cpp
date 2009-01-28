@@ -195,5 +195,12 @@ void MainWindowPrivate::configureSessions()
     SessionDialog dlg(m_mainWindow);
     dlg.exec();
 }
+
+void MainWindowPrivate::configureNotifications()
+{
+    KNotifyConfigWidget::configure(m_mainWindow);
+}
+
+
 }
 
