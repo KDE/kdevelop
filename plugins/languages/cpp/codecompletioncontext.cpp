@@ -811,7 +811,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     LOCKDUCHAIN;
     QList<CompletionTreeItemPointer> items;
 
-    if(!m_duContext)
+    if(!m_duContext || !m_valid)
       return items;
 
     typedef QPair<Declaration*, int> DeclarationDepthPair;
@@ -1331,6 +1331,9 @@ int CodeCompletionContext::matchPosition() const {
 
 QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywordCompletionItems() {
   QList<CompletionTreeItemPointer> ret;
+  #ifdef TEST_COMPLETION
+  return ret;
+  #endif
   #define ADD_TYPED_TOKEN(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(#X, type, 0, KSharedPtr<Cpp::CodeCompletionContext>(this)) )
   
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
