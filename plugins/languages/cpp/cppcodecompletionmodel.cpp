@@ -72,7 +72,10 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 
 bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
-  if(inserted.trimmed().endsWith( '(' ) || inserted.trimmed().endsWith(',') || inserted.trimmed().endsWith('<') || inserted.trimmed().endsWith(":") )
+  QString insertedTrimmed = inserted.trimmed();
+  if(insertedTrimmed.endsWith('\"'))
+    return false; //Never start completion behind a string literal
+  if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
     return true;
   
   return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, userInsertion, position);
