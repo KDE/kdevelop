@@ -892,23 +892,22 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* 
   currentDeclaration()->setInternalContext(context);
 }
 
-void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
+  void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
   if (ast->namespace_name) {
     DUChainWriteLocker lock(DUChain::lock());
     SimpleRange range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
-    openDeclarationReal<Declaration>(0, 0, Identifier(editor()->tokenToString(ast->namespace_name)), false, false, &range);
+    Identifier id(editor()->tokenToString(ast->namespace_name));
+    openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
   }
   
   DeclarationBuilderBase::visitNamespace(ast);
   
   if (ast->namespace_name) {
     DUChainWriteLocker lock(DUChain::lock());
-    Declaration* decl = currentDeclaration();
+    currentDeclaration()->setKind(KDevelop::Declaration::Namespace);
+    clearLastType();
     closeDeclaration();
-    decl->setKind(KDevelop::Declaration::Namespace);
-    decl->setInternalContext(lastContext());
-    decl->setAbstractType(AbstractType::Ptr());
   }
 }
 
