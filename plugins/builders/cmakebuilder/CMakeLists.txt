@@ -17,6 +17,7 @@ kde4_add_plugin(kdevcmakebuilder ${cmakebuilder_LIB_SRCS})
 target_link_libraries(
     kdevcmakebuilder
     kdev4cmakecommon
+        ${KDE4_KIO_LIBS}
         ${KDE4_KDEUI_LIBS}
         ${QT_QTDESIGNER_LIBRARY}
         ${KDEVPLATFORM_INTERFACES_LIBRARY}
