@@ -1075,7 +1075,7 @@ int CMakeProjectVisitor::visit(const IfAst *ifast)  //Highly crappy code
 
         if(inside==1)
         {
-            bool result;
+            bool result = false;
 
             if(funcName=="if" || funcName=="elseif")
             {
