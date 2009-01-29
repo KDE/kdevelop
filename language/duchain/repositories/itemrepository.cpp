@@ -200,8 +200,14 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   QMutexLocker lock(&m_mutex);
   QFileInfo pathInfo(m_path);
   QDir d(m_path);
+
+  //lockForWriting creates a file, that prevents any other KDevelop instance from using the directory as it is.
+  //Instead, the other instance will try to delete the directory as well.
+  lockForWriting();
+  
   // Have to release the lock here, else it will delete the new lock and windows needs all file-handles
   // to be released before deleting a directory that contains these files
+  
   m_lock->unlock();
   bool result = removeDirectory(d);
   Q_ASSERT(result);
