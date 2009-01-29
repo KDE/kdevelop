@@ -18,7 +18,7 @@
 
 namespace KDevelop {
 //Using a function makes sure that initialization order cannot break anything
-RepositoryManager< Repositories::StringRepository > globalStringRepository() {
+RepositoryManager< Repositories::StringRepository >& globalStringRepository() {
 	static RepositoryManager< Repositories::StringRepository > manager("String Index");
 	return manager;
 }
