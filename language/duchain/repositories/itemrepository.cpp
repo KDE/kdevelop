@@ -200,10 +200,12 @@ void ItemRepositoryRegistry::deleteDataDirectory() {
   QMutexLocker lock(&m_mutex);
   QFileInfo pathInfo(m_path);
   QDir d(m_path);
+  // Have to release the lock here, else it will delete the new lock and windows needs all file-handles
+  // to be released before deleting a directory that contains these files
+  m_lock->unlock();
   bool result = removeDirectory(d);
   Q_ASSERT(result);
   Q_ASSERT(m_lock);
-  m_lock->unlock(); //Have to release the lock here, else it will delete the new lock
   //Just remove the old directory, and allocate a new one. Probably it'll be the same one.
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();
   m_path = repo.first;
@@ -239,8 +241,6 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
     if(clear) {
         kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
   //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
-		// Unlock the filelock as not all operating systems allow to remove files which are still opened by a process
-		m_lock->unlock();
         deleteDataDirectory();
         clear = false;
         //We need to re-check, because a new data-directory may have been picked
