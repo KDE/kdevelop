@@ -140,7 +140,7 @@ KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdenti
       
       //This way we can correctly resolve the namespace-component for multiple externally defined classes,
       //see testDeclareStructInNamespace() in test_duchain.cpp
-      if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper) {
+      if(classContext->parentContext() && classContext->parentContext()->type() == DUContext::Helper && !context->importedParentContexts().isEmpty()) {
         classContext = context->importedParentContexts()[0].context(source);
         continue;
       }
