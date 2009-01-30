@@ -23,6 +23,7 @@
 #include <KDebug>
 #include <KProcess>
 #include <KMessageBox>
+#include <KStandardDirs>
 #include "ui_cmakebuilddirchooser.h"
 
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
@@ -32,7 +33,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->setupUi( this );
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
 
-    QString cmakeBin=executeProcess("which", QStringList("cmake"));
+    QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
     
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
@@ -189,28 +190,6 @@ KUrl CMakeBuildDirChooser::installPrefix() const { return m_chooserUi->installPr
 KUrl CMakeBuildDirChooser::buildFolder() const { return m_chooserUi->buildFolder->url(); }
 
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
-
-QString CMakeBuildDirChooser::executeProcess(const QString& execName, const QStringList& args)
-{
-    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-
-    KProcess p;
-    p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram(execName, args);
-    p.start();
-
-    if(!p.waitForFinished())
-    {
-        kDebug(9042) << "failed to execute:" << execName;
-    }
-
-    QByteArray b = p.readAllStandardOutput();
-    QString t;
-    t.prepend(b.trimmed());
-    kDebug(9042) << "executed" << execName << "<" << t;
-
-    return t;
-}
 
 #include "cmakebuilddirchooser.moc"
 

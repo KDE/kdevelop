@@ -68,7 +68,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
     private:
         static QString buildDirProject(const KUrl& buildDir);
 
-        static QString executeProcess(const QString& execName, const QStringList& args=QStringList());
         Ui::CMakeBuildDirChooser* m_chooserUi;
         KUrl m_srcFolder;
 };
