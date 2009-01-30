@@ -1018,5 +1018,29 @@ TemplateDeclaration::InstantiationsHash TemplateDeclaration::instantiations() co
     return m_instantiations;
 }
 
+template<>
+Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const {
+  if( instantiatedFrom() ) {
+    SpecialTemplateDeclaration<ForwardDeclaration>* instantiatedFrom = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>*>(this->instantiatedFrom());
+    if( instantiatedFrom ) {
+      Declaration* baseResolved = instantiatedFrom->resolve(topContext);
+      TemplateDeclaration* baseTemplate = dynamic_cast<TemplateDeclaration*>(baseResolved);
+      if( baseResolved && baseTemplate ) {
+        Declaration* ret = baseTemplate->instantiate(instantiatedWith().information(), topContext ? topContext : this->topContext());
+        return ret;
+      }else{
+          //Forward-declaration was not resolved
+          return 0;
+      }
+    }else{
+      //TODO: report this in the problem reporter?
+      kWarning(9007) << "Problem in template forward-declaration";
+      return 0;
+    }
+  }else{
+    return ForwardDeclaration::resolve(topContext);
+  }
+}
+
 }
 

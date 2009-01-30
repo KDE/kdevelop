@@ -22,7 +22,6 @@
 #include <QList>
 #include <QMutex>
 
-#include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationid.h>
 #include <language/duchain/duchainpointer.h>
@@ -350,30 +349,6 @@ namespace Cpp {
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
   AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
-
-  template<>
-Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const {
-  if( instantiatedFrom() ) {
-    SpecialTemplateDeclaration<ForwardDeclaration>* instantiatedFrom = dynamic_cast<SpecialTemplateDeclaration<ForwardDeclaration>*>(this->instantiatedFrom());
-    if( instantiatedFrom ) {
-      Declaration* baseResolved = instantiatedFrom->resolve(topContext);
-      TemplateDeclaration* baseTemplate = dynamic_cast<TemplateDeclaration*>(baseResolved);
-      if( baseResolved && baseTemplate ) {
-        Declaration* ret = baseTemplate->instantiate(instantiatedWith().information(), topContext ? topContext : this->topContext());
-        return ret;
-      }else{
-          //Forward-declaration was not resolved
-          return 0;
-      }
-    }else{
-      //TODO: report this in the problem reporter?
-      kWarning(9007) << "Problem in template forward-declaration";
-      return 0;
-    }
-  }else{
-    return ForwardDeclaration::resolve(topContext);
-  }
-}
 
 }
 
