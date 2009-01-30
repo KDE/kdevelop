@@ -1771,7 +1771,7 @@ void TestDUChain::testSignalSlotUse() {
     release(top);
   }
   {
-    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class AA : public QObject { signals: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : public AA { public slots: void slot1(); void slot2(); signals: void signal1();public: void test() {T t;connect(t, __qt_sig_slot__(signal2()), this, __qt_sig_slot__(slot2()));connect(this, __qt_sig_slot__(signal1(int)), __qt_sig_slot__(slot1())); } }; ");
+    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; struct AA : QObject { signals: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : AA { public slots: void slot1(); void slot2(); signals: void signal1();public: void test() {T t;connect(t, __qt_sig_slot__(signal2()), this, __qt_sig_slot__(slot2()));connect(this, __qt_sig_slot__(signal1(int)), __qt_sig_slot__(slot1())); } }; ");
 
     TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpNone));
 
@@ -1784,6 +1784,14 @@ void TestDUChain::testSignalSlotUse() {
     QVERIFY(!top->childContexts()[3]->localDeclarations()[2]->uses().count()); //signal1() is not used
 
     QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
+    ClassDeclaration* classAA = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[1]);
+    QVERIFY(classAA);
+    QCOMPARE(classAA->baseClassesSize(), 1u);
+    QCOMPARE(classAA->baseClasses()[0].access, Declaration::Public);
+    ClassDeclaration* classA = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[3]);
+    QVERIFY(classA);
+    QCOMPARE(classA->baseClassesSize(), 1u);
+    QCOMPARE(classA->baseClasses()[0].access, Declaration::Private);
 
     QVERIFY(top->childContexts()[1]->localDeclarations()[0]->uses().count());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());

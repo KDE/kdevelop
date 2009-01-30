@@ -1038,29 +1038,32 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
   BaseClassInstance instance;
   {
     DUChainWriteLocker lock(DUChain::lock());
-
-    instance.virtualInheritance = (bool)node->virt;
-    instance.baseClass = lastType()->indexed();
-
-    int tk = 0;
-    if( node->access_specifier )
-      tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
-
-    switch( tk ) {
-      default:
-      case Token_private:
-        instance.access = KDevelop::Declaration::Private;
-        break;
-      case Token_public:
-        instance.access = KDevelop::Declaration::Public;
-        break;
-      case Token_protected:
-        instance.access = KDevelop::Declaration::Protected;
-        break;
-    }
-
     ClassDeclaration* currentClass = dynamic_cast<ClassDeclaration*>(currentDeclaration());
     if(currentClass) {
+
+      instance.virtualInheritance = (bool)node->virt;
+      instance.baseClass = lastType()->indexed();
+      if(currentClass->classType() == ClassDeclarationData::Struct)
+        instance.access = KDevelop::Declaration::Public;
+      else
+        instance.access = KDevelop::Declaration::Private;
+
+      if( node->access_specifier ) {
+        int tk = editor()->parseSession()->token_stream->token(node->access_specifier).kind;
+
+        switch( tk ) {
+          case Token_private:
+            instance.access = KDevelop::Declaration::Private;
+            break;
+          case Token_public:
+            instance.access = KDevelop::Declaration::Public;
+            break;
+          case Token_protected:
+            instance.access = KDevelop::Declaration::Protected;
+            break;
+        }
+      }
+
       currentClass->addBaseClass(instance);
     }else{
       kWarning() << "base-specifier without class declaration";
