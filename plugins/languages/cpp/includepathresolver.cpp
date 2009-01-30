@@ -286,7 +286,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   //Make the working-directory absolute
   QString workingDirectory = _workingDirectory;
   
-  if( KUrl(workingDirectory).isRelative() ) {
+  if( KUrl::isRelativeUrl(workingDirectory) ) {
     KUrl u( QDir::currentPath() );
     u.addPath( workingDirectory );
     workingDirectory = u.path();
@@ -337,7 +337,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   QFileInfo fi( file );
 
   QString absoluteFile = file;
-  if( !file.startsWith('/') )
+  if( KUrl::isRelativeUrl( file ) )
     absoluteFile = workingDirectory + '/' + file;
   KUrl u( absoluteFile );
   u.cleanPath();
@@ -350,7 +350,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   targetName = file.left( dot );
 
   QString wd = dir.path();
-  if( !wd.startsWith('/') ) {
+  if( KUrl::isRelativeUrl( wd ) ) {
     wd = QDir::currentPath() + '/' + wd;
     KUrl u( wd );
     u.cleanPath();
@@ -491,7 +491,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
           int cdIndex = prefix.lastIndexOf( "cd ");
           if( cdIndex != -1 ) {
             newWorkingDirectory = prefix.right( prefix.length() - 3 - cdIndex ).trimmed();
-            if( !newWorkingDirectory.startsWith('/') )
+            if( KUrl::isRelativeUrl( newWorkingDirectory ) )
               newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
             KUrl u( newWorkingDirectory );
             u.cleanPath();
@@ -506,7 +506,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             ///Looks like valid parameters
             ///Make the file-name absolute, so it can be referenced from any directory
             QString absoluteFile = file;
-            if( !absoluteFile.startsWith('/') )
+            if( KUrl::isRelativeUrl( absoluteFile ) )
               absoluteFile = workingDirectory +  '/' + file;
             KUrl u( absoluteFile );
             u.cleanPath();
@@ -564,7 +564,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
         path = path.mid( 1, path.length() - 2 );
       }
     }
-    if( !path.startsWith('/') )
+    if( KUrl::isRelativeUrl( path ) )
       path = workingDirectory + '/' + path;
 
     KUrl u( path );

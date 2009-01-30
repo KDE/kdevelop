@@ -549,7 +549,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             foreach(const QString& s, v.includeDirectories())
             {
                 QString dir(s);
-                if(!s.startsWith('/') && !s.startsWith("#["))
+                if(KUrl::isRelativeUrl( s ) && !s.startsWith("#["))
                 {
                     KUrl path=folder->url();
                     path.addPath(s);
