@@ -224,6 +224,11 @@ void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
   }
 }
 
+void ContextBrowserPlugin::hideTooTip() {
+  delete m_currentToolTip;
+}
+
+
 void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cursor position) {
   KUrl viewUrl(view->document()->url());
   QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
@@ -268,9 +273,17 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     kDebug() << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
+    
+    //First disconnect to prevent multiple connections
+    disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
+    disconnect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
+    connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
+    connect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
+    
   }else{
     kDebug() << "not showing tooltip, no navigation-widget";
   }
+  
 }
 
 

@@ -90,6 +90,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
 
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
+    void hideTooTip();
+    
   private:
     void switchUse(bool forward);
     void clearMouseHover();
