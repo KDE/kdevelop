@@ -114,12 +114,13 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
     target += m_context->d_func()->m_scopeIdentifier;
 }
 
-bool DUContextDynamicData::isThisImportedBy(const DUContext* context) const {
+bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source) const {
   if( this == context->m_dynamicData )
     return true;
 
-  FOREACH_FUNCTION( IndexedDUContext ctx, m_context->d_func()->m_importers ) {
-    if( IndexedTopDUContext(ctx.topContextIndex()).isLoaded() && ctx.context() && ctx.context()->m_dynamicData->isThisImportedBy(context) )
+  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
+    DUContext* import = ctx.context(source);
+    if(import == context || import->m_dynamicData->imports(context, source))
       return true;
   }
 
@@ -859,7 +860,7 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
 {
   ENSURE_CAN_READ
 
-  return origin->m_dynamicData->isThisImportedBy(this);
+  return m_dynamicData->imports(origin, topContext());
 }
 
 

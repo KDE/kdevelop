@@ -265,7 +265,7 @@ public:
   /**
    * Returns true if this context is imported by the given one, on any level.
    * */
-  bool isThisImportedBy(const DUContext* context) const;
+  bool imports(const DUContext* context, const TopDUContext* source) const;
 
 };
 
