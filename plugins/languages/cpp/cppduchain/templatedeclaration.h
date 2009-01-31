@@ -24,6 +24,7 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/declarationid.h>
+#include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/topducontext.h>
@@ -349,6 +350,9 @@ namespace Cpp {
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
   AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
+
+template<>
+Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const;
 
 }
 
