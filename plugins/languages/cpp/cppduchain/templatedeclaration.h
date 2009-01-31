@@ -193,7 +193,7 @@ namespace Cpp {
    * be a TemplateDeclaration.
    * */
   template<class BaseDeclaration>
-  class KDEVCPPDUCHAIN_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
+  class SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
     public:
     template<class Data>
     SpecialTemplateDeclaration(Data& data) : BaseDeclaration(data) {
