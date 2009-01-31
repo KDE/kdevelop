@@ -150,10 +150,14 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
+Name[uk]=Завантаження проекту      
 Comment=A project loading process has just started
+Comment[uk]=Процес завантаження проекту було запущено
 Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
+Name[uk]=Проект успішно завантажено
 Comment=A project has been loaded successfully
+Comment[uk]=Проект було успішно завантажено
 Action=Popup
