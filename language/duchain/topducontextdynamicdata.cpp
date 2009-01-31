@@ -199,6 +199,12 @@ IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 }
 
 void TopDUContextDynamicData::loadData() const {
+  //This function has to be protected by an additional mutex, since it can be triggered from multiple threads at the same time
+  static QMutex mutex;
+  QMutexLocker lock(&mutex);
+  if(m_dataLoaded)
+    return;
+  
   Q_ASSERT(!m_dataLoaded);
   Q_ASSERT(m_data.isEmpty());
   Q_ASSERT(m_contextDataOffsets.isEmpty());
