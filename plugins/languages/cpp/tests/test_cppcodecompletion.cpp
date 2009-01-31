@@ -252,9 +252,12 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
   QVERIFY(top->childContexts()[1]->owner());
   QVERIFY(Cpp::localClassFromCodeContext(top->childContexts()[1]));
   //From within B, MyClass is visible, because of the protected inheritance
+  QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 1);
+  QVERIFY(!Cpp::isAccessible(top, dynamic_cast<ClassMemberDeclaration*>(top->childContexts()[0]->localDeclarations()[0]), top, top->childContexts()[1]));
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "AMyClass");
   QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "BMyClass" << "AMyClass" << "A" << "B" );
   QCOMPARE(CompletionItemTester(top, "A::").names, QStringList() << "AMyClass");
+  kDebug() << "list:" << CompletionItemTester(top, "B::").names << CompletionItemTester(top, "A::").names.size();
   QCOMPARE(CompletionItemTester(top, "B::").names, QStringList() << "BMyClass");
   QCOMPARE(CompletionItemTester(top->childContexts()[2]).names.toSet(), QSet<QString>() << "CMyClass" << "BMyClass" << "AMyClass" << "C" << "B" << "A");
   QCOMPARE(CompletionItemTester(top, "C::").names.toSet(), QSet<QString>() << "CMyClass");

@@ -1300,8 +1300,8 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
 }
 
 bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) {
-  if(doAccessFiltering && decl && m_localClass) {
-    if(!Cpp::isAccessible(m_localClass.data(), decl, m_duContext->topContext(), declarationContext))
+  if(doAccessFiltering && decl) {
+    if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
   }
   return filterDeclaration((Declaration*)decl, declarationContext, false);
