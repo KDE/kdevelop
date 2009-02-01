@@ -2,6 +2,7 @@
 * This file is part of KDevelop
 *
 * Copyright 2006 Adam Treat <treat@kde.org>
+* Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
