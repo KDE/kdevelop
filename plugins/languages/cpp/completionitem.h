@@ -72,7 +72,7 @@ public:
   //If this is not -1, it can be a fixed match-quality from 0 to 10, that will be used non-dynamically.
   int m_fixedMatchQuality;
   
-  KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
+  virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
   
   virtual KDevelop::DeclarationPointer declaration() const {
     return m_declaration;

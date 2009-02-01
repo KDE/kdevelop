@@ -46,8 +46,12 @@ using namespace KDevelop;
 using namespace TypeUtils;
 
 CppCodeCompletionWorker::CppCodeCompletionWorker(CppCodeCompletionModel* parent)
-  : CodeCompletionWorker(parent)
+  : KDevelop::CodeCompletionWorker(parent)
 {
+}
+KDevelop::CodeCompletionContext* CppCodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const
+{
+  return new Cpp::CodeCompletionContext( context, contextText, followingText );
 }
 
 void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
@@ -62,133 +66,8 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
   //We will have some caching in TopDUContext until this objects lifetime is over
   TopDUContext::Cache cache(topContext);
   Cpp::TypeConversionCacheEnabler enableConversionCache;
-  
-  KTextEditor::Cursor cursorPosition = view->cursorPosition();
-  QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
-  if(position < cursorPosition)
-    followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
-  
-  kDebug() << "added text:" << followingText;
-  
-  Cpp::CodeCompletionContext::Ptr completionContext( new Cpp::CodeCompletionContext( context, contextText, followingText ) );
-  if (CppCodeCompletionModel* m = model())
-    m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 
-  if( completionContext->isValid() ) {
-    DUChainReadLocker lock(DUChain::lock());
-
-    if (!context) {
-      kDebug(9007) << "Completion context disappeared before completions could be calculated";
-      return;
-    }
-
-    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting(), fullCompletion());
-
-    if (aborting())
-      return;
-    
-    computeGroups( items, completionContext );
-
-  } else {
-    kDebug(9007) << "setContext: Invalid code-completion context";
-  }
-}
-
-///Always the last item of a grouping chain: Only inserts the items
-struct LastGrouper {
-  LastGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
-  {
-    foreach( CompletionTreeItemPointer item, items ) {
-      item->setParent(parent);
-      tree << KSharedPtr<CompletionTreeElement>( item.data() );
-    }
-  }
-};
-
-///Helper class that helps us grouping the completion-list. A chain of groupers can be built, by using NextGrouper.
-template<class KeyExtractor, class NextGrouper = LastGrouper>
-struct ItemGrouper {
-  typedef typename KeyExtractor::KeyType KeyType;
-  
-  ItemGrouper(QList<KSharedPtr<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
-  {
-    typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
-    GroupMap groups;
-    
-    foreach(const CompletionTreeItemPointer& item, items) {
-      KeyType key = KeyExtractor::extract(item);
-      typename GroupMap::iterator it = groups.find(key);
-      if(it == groups.end())
-        it = groups.insert(key, QList<CompletionTreeItemPointer>());
-
-      (*it).append(item);
-    }
-
-    for( typename GroupMap::const_iterator it = groups.begin(); it != groups.end(); ++it ) {
-      KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode());
-      node->setParent(parent);
-      node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;
-      node->roleValue = QVariant(it.key());
-
-      tree << KSharedPtr<CompletionTreeElement>( node.data() );
-      
-      NextGrouper nextGrouper(node->children, node.data(), *it);
-    }
-  }
-};
-
-///Extracts the argument-hint depth from completion-items, to be used in ItemGrouper for grouping by argument-hint depth.
-struct ArgumentHintDepthExtractor {
-  typedef int KeyType;
-  enum { Role = KTextEditor::CodeCompletionModel::ArgumentHintDepth };
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-    return item->argumentHintDepth();
-  }
-};
-
-struct InheritanceDepthExtractor {
-  typedef int KeyType;
-  
-  enum { Role = KTextEditor::CodeCompletionModel::InheritanceDepth };
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-    return item->inheritanceDepth();
-  }
-};
-
-struct SimplifiedAttributesExtractor {
-  typedef int KeyType;
-  
-  enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
-
-  static int groupingProperties;
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-    const NormalDeclarationCompletionItem* decItem = item->asItem<NormalDeclarationCompletionItem>();
-    if( decItem )
-      return decItem->completionProperties() & groupingProperties;
-    else
-      return 0;
-  }
-};
-
-///@todo make configurable. These are the attributes that can be respected for grouping.
-int SimplifiedAttributesExtractor::groupingProperties = CodeCompletionModel::Public | CodeCompletionModel::Protected | CodeCompletionModel::Private | CodeCompletionModel::Static | CodeCompletionModel::TypeAlias | CodeCompletionModel::Variable | CodeCompletionModel::Class | CodeCompletionModel::GlobalScope | CodeCompletionModel::LocalScope | CodeCompletionModel::GlobalScope | CodeCompletionModel::NamespaceScope;
-
-void CppCodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext)
-{
-  kDebug(9007) << "grouping" << items.count() << "completion-items";
-  QList<KSharedPtr<CompletionTreeElement> > tree;
-  /**
-   * 1. Group by argument-hint depth
-   * 2. Group by inheritance depth
-   * 3. Group by simplified attributes
-   * */
-  ItemGrouper<ArgumentHintDepthExtractor, ItemGrouper<InheritanceDepthExtractor, ItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, 0, items);
-  if(aborting())
-    return;
-  emit foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
+  CodeCompletionWorker::computeCompletions(context, position, view, contextRange, contextText);
 }
 
 CppCodeCompletionModel* CppCodeCompletionWorker::model() const
