@@ -215,7 +215,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     inline bool isDummy() const {
       //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
       //integers
-      return (bool)(m_topContext & (1 << 31));
+      return (m_topContext == (unsigned int)1 << 31 );
     }
 
     inline QPair<uint, uint> dummyData() const {
