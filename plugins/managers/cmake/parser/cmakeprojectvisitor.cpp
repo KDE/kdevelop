@@ -869,7 +869,6 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         }
         d->setAbstractType( AbstractType::Ptr(func) );
         idx=m_topctx->indexForUsedDeclaration(d);
-        qDebug() << "creating macro decl: " << m_topctx << m_topctx->localDeclarations();
     }
     m_topctx->createUse(idx, endsr, 0);
 }
