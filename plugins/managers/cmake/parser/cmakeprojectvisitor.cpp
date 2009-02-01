@@ -149,14 +149,14 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     QString var=exp;
     QList<IntPair> invars;
     invars += poss[desired];
-    qDebug() << ">>>>>" << exp << desired << poss.count();
+    //qDebug() << ">>>>>" << exp << desired << poss.count();
     for(; desired+1<poss.size() && poss[desired].level>1; desired++)
     {
         invars+=poss[desired+1];
-        qDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
+        //qDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
     }
 
-    qDebug() << ";;;;;" << invars.count();
+    //qDebug() << ";;;;;" << invars.count();
     if(invars.count()>1)
     {
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
