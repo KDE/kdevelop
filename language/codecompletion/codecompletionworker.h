@@ -45,8 +45,8 @@ namespace KDevelop
 {
 
 class CodeCompletion;
-
 class CompletionTreeElement;
+class CodeCompletionModel;
 
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
@@ -62,12 +62,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     void setFullCompletion(bool);
     bool fullCompletion() const;
 
+    KDevelop::CodeCompletionModel* model() const;
+
   Q_SIGNALS:
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
 
   protected:
     
-    virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText) = 0;
+    virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
+    virtual QList<KSharedPtr<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext);
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const = 0;
 
     bool& aborting();
     

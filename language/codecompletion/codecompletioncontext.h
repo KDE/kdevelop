@@ -33,6 +33,7 @@ namespace KTextEditor {
 namespace KDevelop {
   class DUContext;
   class AbstractType;
+  class SimpleCursor;
 
 
   class CompletionTreeItem;
@@ -60,7 +61,12 @@ namespace KDevelop {
 
       ///@return depth of the context. The basic completion-context has depth 0, its parent 1, and so on..
       int depth() const;
-      
+
+      ///Computes the full set of completion items, using the information retrieved earlier.
+      ///Should only be called on the first context, parent contexts are included in the computations.
+      ///@param Abort is checked regularly, and if it is false, the computation is aborted.
+      virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort, bool fullCompletion = true) = 0;
+
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()

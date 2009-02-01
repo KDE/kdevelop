@@ -29,14 +29,19 @@
 #include <klocale.h>
 
 #include "../duchain/ducontext.h"
+#include "../duchain/duchainlock.h"
+#include "../duchain/duchain.h"
 #include "codecompletion.h"
 #include "codecompletionitem.h"
+#include "codecompletionmodel.h"
+#include "codecompletionitemgrouper.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
 
 CodeCompletionWorker::CodeCompletionWorker(QObject* parent) :
-  m_mutex(new QMutex())
+    QObject(parent)
+  , m_mutex(new QMutex())
   , m_abort(false)
   , m_fullCompletion(true)
 {
@@ -90,6 +95,55 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   computeCompletions(context, position, view, range, text);
 }
 
+void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
+{
+  KTextEditor::Cursor cursorPosition = view->cursorPosition();
+  QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
+  if(position < cursorPosition)
+    followingText = view->document()->text( KTextEditor::Range( position, cursorPosition ) );
+  
+  kDebug() << "added text:" << followingText;
+  
+  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText ) );
+  if (KDevelop::CodeCompletionModel* m = model())
+    m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
+
+  if( completionContext->isValid() ) {
+    DUChainReadLocker lock(DUChain::lock());
+
+    if (!context) {
+      kDebug() << "Completion context disappeared before completions could be calculated";
+      return;
+    }
+    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting(), fullCompletion());
+
+    if (aborting())
+      return;
+    
+    QList<KSharedPtr<CompletionTreeElement> > tree = computeGroups( items, completionContext );
+
+    if(aborting())
+      return;
+
+    emit foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
+
+  } else {
+    kDebug() << "setContext: Invalid code-completion context";
+  }
+}
+
+QList<KSharedPtr<CompletionTreeElement> > CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext)
+{
+  QList<KSharedPtr<CompletionTreeElement> > tree;
+  /**
+   * 1. Group by argument-hint depth
+   * 2. Group by inheritance depth
+   * 3. Group by simplified attributes
+   * */
+  CodeCompletionItemGrouper<ArgumentHintDepthExtractor, CodeCompletionItemGrouper<InheritanceDepthExtractor, CodeCompletionItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, 0, items);
+  return tree;
+}
+
 void CodeCompletionWorker::abortCurrentCompletion()
 {
   QMutexLocker lock(m_mutex);
@@ -99,6 +153,11 @@ void CodeCompletionWorker::abortCurrentCompletion()
 bool& CodeCompletionWorker::aborting()
 {
   return m_abort;
+}
+
+KDevelop::CodeCompletionModel* CodeCompletionWorker::model() const
+{
+  return const_cast<KDevelop::CodeCompletionModel*>(static_cast<const KDevelop::CodeCompletionModel*>(parent()));
 }
 
 #include "codecompletionworker.moc"

@@ -123,6 +123,14 @@ int CompletionTreeItem::argumentHintDepth() const
   return 0;
 }
 
+KTextEditor::CodeCompletionModel::CompletionProperties CompletionTreeItem::completionProperties() const {
+  Declaration* dec = declaration().data();
+  if(!dec)
+    return (KTextEditor::CodeCompletionModel::CompletionProperties)0;
+
+  return DUChainUtils::completionProperties(dec);
+}
+
 DeclarationPointer CompletionTreeItem::declaration() const {
   return DeclarationPointer();
 }
