@@ -22,6 +22,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     contextmenuextension.cpp
     icompletionsettings.cpp
     iselectioncontroller.cpp
+    idocumentationprovider.cpp
+    idocumentation.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
     #scripting/scriptingmanager.cpp
@@ -47,6 +49,7 @@ install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARG
 
 install(FILES
     context.h
+    contextmenuextension.h
     iplugin.h
     icore.h
     iuicontroller.h
@@ -68,7 +71,8 @@ install(FILES
     irunprovider.h
     icompletionsettings.h
     iselectioncontroller.h
-    contextmenuextension.h
+    idocumentation.h
+    idocumentationprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
