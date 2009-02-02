@@ -6,7 +6,7 @@ set(kdevelop_SRCS
     splashscreen.cpp
 )
 
-
+kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
 kde4_add_executable(kdevelop ${kdevelop_SRCS})
 
