@@ -33,7 +33,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext {
     IndexedTopDUContext(TopDUContext* context = 0);
     
     enum {
-      DummyMask = 1<<31
+      DummyMask = 1u<<31u
     };
     
     ///Returns the top-context represented by this indexed top-context. If it wasn't loaded yet, it is loaded.
@@ -206,7 +206,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
       if(isDummy() == dummy)
         return;
       if(dummy)
-        m_topContext = 1 << 31;
+        m_topContext = 1u << 31u;
       else
         m_topContext = 0;
       m_declarationIndex = 0;
@@ -215,12 +215,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     inline bool isDummy() const {
       //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
       //integers
-      return (bool)(m_topContext & static_cast<uint>(1 << 31));
+      return (bool)(m_topContext & static_cast<uint>(1u << 31u));
     }
 
     inline QPair<uint, uint> dummyData() const {
       Q_ASSERT(isDummy());
-      return qMakePair(m_topContext & (~(1<<31)), m_declarationIndex);
+      return qMakePair(m_topContext & (~(1u<<31u)), m_declarationIndex);
     }
 
     ///Do not call this when this object is valid. The first integer loses one bit of precision.
@@ -230,7 +230,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
       m_topContext = data.first;
       m_declarationIndex = data.second;
       Q_ASSERT(!isDummy());
-      m_topContext |= (1 << 31); //Mark as dummy
+      m_topContext |= (1u << 31u); //Mark as dummy
       Q_ASSERT(isDummy());
       Q_ASSERT(dummyData() == data);
     }

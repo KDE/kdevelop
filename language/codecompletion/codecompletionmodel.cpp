@@ -211,6 +211,8 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   if( !element )
     return QVariant();
 
+  kDebug() << "element" << element;
+
   CompletionTreeElement& treeElement(*element);
 
   if( role == CodeCompletionModel::GroupRole ) {
@@ -225,7 +227,6 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
       if( role == treeElement.asNode()->role ) {
         return treeElement.asNode()->roleValue;
       } else {
-        kDebug(9007) << "Requested wrong role from non-leaf tree element";
         return QVariant();
       }
     }

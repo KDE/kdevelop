@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual ~CodeCompletionModel();
     
     ///This MUST be called after the creation of this completion-model.
-    ///If use use the KDevelop::CodeCompletion helper-class, that one cares about it.
+    ///If you use use the KDevelop::CodeCompletion helper-class, that one cares about it.
     virtual void initialize();
     
     virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
