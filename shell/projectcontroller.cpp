@@ -425,6 +425,8 @@ bool ProjectController::openProject( const KUrl &projectFile )
     if ( url.isEmpty() )
     {
         url = d->dialog->askProjectConfigLocation();
+        if ( url.isEmpty() )
+            return false;
     }
 
     if ( !url.isValid() )
