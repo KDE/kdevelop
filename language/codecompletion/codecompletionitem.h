@@ -91,6 +91,13 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   
   KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
   QVariant roleValue;
+  
+  ///Will append the child, and initialize it correctly to create a working tree-stucture
+  void appendChild(KSharedPtr<CompletionTreeElement>);
+  void appendChildren(QList<KSharedPtr<CompletionTreeElement> >);
+  void appendChildren(QList<KSharedPtr<CompletionTreeItem> >);
+  
+  ///@warning Do not manipulate this directly, that's bad for consistency. Use appendChild instead.
   QList<KSharedPtr<CompletionTreeElement> > children;
 };
 
@@ -121,7 +128,17 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   virtual IndexedType typeForArgumentMatching() const;
 };
 
+///A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
+///The items in the group will be shown in the completion-list with a group-header that contains the given name
+struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode : public CompletionTreeNode {
+  ///@param inheritanceDepth @see KTextEditor::CodeCompletionModel::GroupRole
+  CompletionCustomGroupNode(QString groupName, int inheritanceDepth = 700);
+  
+  int inheritanceDepth;
+};
+
 typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+typedef KSharedPtr<CompletionTreeElement> CompletionTreeElementPointer;
 
 }
 

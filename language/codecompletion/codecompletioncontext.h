@@ -37,7 +37,9 @@ namespace KDevelop {
 
 
   class CompletionTreeItem;
+  class CompletionTreeElement;
   typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
+  typedef KSharedPtr<CompletionTreeElement> CompletionTreeElementPointer;
 
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
@@ -67,6 +69,9 @@ namespace KDevelop {
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
       virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort, bool fullCompletion = true) = 0;
 
+      ///After completionItems(..) has been called, this may return completion-elements that are already grouped, for example using custom grouping(@see CompletionCustomGroupNode
+      virtual QList<KDevelop::CompletionTreeElementPointer> ungroupedElements();
+      
       /**In the case of recursive argument-hints, there may be a chain of parent-contexts, each for the higher argument-matching
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()

@@ -19,6 +19,7 @@
 #include "codecompletioncontext.h"
 
 #include <util/pushvalue.h>
+#include "codecompletionitem.h"
 
 using namespace KDevelop;
 
@@ -81,3 +82,8 @@ CodeCompletionContext* CodeCompletionContext::parentContext()
 {
   return m_parentContext.data();
 }
+
+QList< KSharedPtr< KDevelop::CompletionTreeElement > > KDevelop::CodeCompletionContext::ungroupedElements() {
+  return QList< KSharedPtr< KDevelop::CompletionTreeElement > >();
+}
+

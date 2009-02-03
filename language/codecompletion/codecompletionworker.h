@@ -57,7 +57,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     CodeCompletionWorker(QObject* parent);
     virtual ~CodeCompletionWorker();
 
-    void abortCurrentCompletion();
+    virtual void abortCurrentCompletion();
 
     void setFullCompletion(bool);
     bool fullCompletion() const;
@@ -65,18 +65,26 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     KDevelop::CodeCompletionModel* model() const;
 
   Q_SIGNALS:
+    ///Connection into the foreground thread. When this is emitted, the result is shown in the completion-list.
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
 
   protected:
     
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
     virtual QList<KSharedPtr<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext);
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const = 0;
+    ///If you don't need to reimplement computeCompletions, you can implement only this.
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const;
 
+    ///Can be used to retrieve and set the aborting flag(Enabling it is equivalent to caling abortCompletion())
+    ///Is always reset from within computeCompletions
     bool& aborting();
     
-  protected Q_SLOTS:
+  public Q_SLOTS:
+    ///Connection from the foreground thread within CodeCompletionModel
     void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    ///This can be used to do special processing within the background, completely bypassing the normal computeCompletions(..) etc. system.
+    ///It will be executed within the background when the model emits doSpecialProcessingInBackground
+    virtual void doSpecialProcessing(uint data);
 
   private:
     QMutex* m_mutex;

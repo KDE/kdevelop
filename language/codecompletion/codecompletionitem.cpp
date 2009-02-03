@@ -65,6 +65,21 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
     }
 }
 
+void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeElement > > children) {
+  for(QList< KSharedPtr< KDevelop::CompletionTreeElement > >::const_iterator it = children.begin(); it != children.end(); ++it)
+    appendChild(*it);
+}
+
+void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeItem > > children) {
+  for(QList< KSharedPtr< KDevelop::CompletionTreeItem > >::iterator it = children.begin(); it != children.end(); ++it)
+    appendChild(KSharedPtr< KDevelop::CompletionTreeElement >((*it).data()));
+}
+
+void CompletionTreeNode::appendChild(KSharedPtr< KDevelop::CompletionTreeElement > child) {
+  child->setParent(this);
+  children << child;
+}
+
 int CompletionTreeElement::columnInParent() const {
   return 0;
 }
@@ -137,6 +152,12 @@ DeclarationPointer CompletionTreeItem::declaration() const {
 
 IndexedType CompletionTreeItem::typeForArgumentMatching() const {
   return IndexedType();
+}
+
+CompletionCustomGroupNode::CompletionCustomGroupNode(QString groupName, int _inheritanceDepth) {
+  role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)Qt::DisplayRole;
+  roleValue = groupName;
+  inheritanceDepth = _inheritanceDepth;
 }
 
 }

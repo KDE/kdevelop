@@ -51,6 +51,7 @@
 
 #include "codecompletionworker.h"
 #include "codecompletioncontext.h"
+#include <duchain/specializationstore.h>
 
 using namespace KTextEditor;
 
@@ -74,7 +75,7 @@ struct CompletionWorkerThread : public QThread {
      connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
 
      connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
-     
+     connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
      exec();
    }
    
@@ -105,6 +106,8 @@ void CodeCompletionModel::initialize() {
 
 CodeCompletionModel::~CodeCompletionModel()
 {
+  if(m_thread->m_worker)
+    m_thread->m_worker->abortCurrentCompletion();
   m_thread->quit();
   m_thread->wait();
   
@@ -124,10 +127,65 @@ bool CodeCompletionModel::fullCompletion() const
   return m_fullCompletion;
 }
 
-KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() {
+KDevelop::CodeCompletionWorker* CodeCompletionModel::worker() const {
   return m_thread->m_worker;
 }
 
+void CodeCompletionModel::clear() {
+  m_completionItems.clear();
+  m_navigationWidgets.clear();
+  m_completionContext.clear();
+  reset();
+}
+
+void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
+{
+  Q_UNUSED(invocationType)
+
+  DUChainReadLocker lock(DUChain::lock(), 400);
+  if( !lock.locked() ) {
+    kDebug(9007) << "could not lock du-chain in time";
+    return;
+  }
+
+  TopDUContext* top = DUChainUtils::standardContextForUrl( url );
+  if(!top) {
+    return;
+  }
+  setCurrentTopContext(TopDUContextPointer(top));
+
+  if (top) {
+    kDebug(9007) << "completion invoked for context" << (DUContext*)top;
+
+    if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
+      kDebug(9007) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
+    }
+
+    DUContextPointer thisContext;
+    {
+      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
+
+       kDebug(9007) << "context is set to" << thisContext.data();
+        if( thisContext ) {
+/*          kDebug( 9007 ) << "================== duchain for the context =======================";
+          DumpChain dump;
+          dump.dump(thisContext.data());*/
+        } else {
+          kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================";
+          m_completionItems.clear();
+          m_navigationWidgets.clear();
+          reset();
+          return;
+        }
+    }
+
+    lock.unlock();
+
+    emit completionsNeeded(thisContext, range.start(), view);
+  } else {
+    kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+  }
+}
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
   //If this triggers, initialize() has not been called after creation.
@@ -205,13 +263,16 @@ void CodeCompletionModel::executeCompletionItem2(Document* document, const Range
   element->asItem()->execute(document, word);
 }
 
+KSharedPtr< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
+  CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
+  return KSharedPtr< KDevelop::CompletionTreeElement >(element);
+}
+
 QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
 {
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element )
     return QVariant();
-
-  kDebug() << "element" << element;
 
   CompletionTreeElement& treeElement(*element);
 
@@ -224,6 +285,11 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
     }
   }else{
     if( treeElement.asNode() ) {
+      if( role == CodeCompletionModel::InheritanceDepth ) {
+        CompletionCustomGroupNode* customGroupNode = dynamic_cast<CompletionCustomGroupNode*>(element);
+        if(customGroupNode)
+          return QVariant(customGroupNode->inheritanceDepth);
+      }
       if( role == treeElement.asNode()->role ) {
         return treeElement.asNode()->roleValue;
       } else {

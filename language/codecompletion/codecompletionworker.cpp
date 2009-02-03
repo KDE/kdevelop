@@ -96,6 +96,14 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   computeCompletions(context, position, view, range, text);
 }
 
+void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
+
+}
+
+KDevelop::CodeCompletionContext* KDevelop::CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText) const {
+  return 0;
+}
+
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
 {
   KTextEditor::Cursor cursorPosition = view->cursorPosition();
@@ -109,7 +117,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   if (KDevelop::CodeCompletionModel* m = model())
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 
-  if( completionContext->isValid() ) {
+  if( completionContext && completionContext->isValid() ) {
     DUChainReadLocker lock(DUChain::lock());
 
     if (!context) {
@@ -125,6 +133,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
     if(aborting())
       return;
+    
+    tree += completionContext->ungroupedElements();
 
     emit foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
 
