@@ -40,7 +40,7 @@ const int maxDefaultParameterLength = 30;
 using namespace KDevelop;
 using namespace Cpp;
 
-void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams )
+void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams, bool noShortening )
 {
   Declaration* dec(item.m_declaration.data());
 
@@ -133,9 +133,13 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         }
       }
 
-      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ )
-        ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength) + " " + (*paramNameIt)->identifier().toString();
-      else if (argument)
+      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ ) {
+        if(noShortening)
+          ret += argument->toString();
+        else
+          ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength);
+        ret += " " + (*paramNameIt)->identifier().toString();
+      } else if (argument)
         ret += argument->toString();
       else
         ret += "<incomplete type>";

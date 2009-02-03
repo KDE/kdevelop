@@ -2723,6 +2723,22 @@ void TestDUChain::testTemplateInternalSearch() {
   release(top);
 }
 
+void TestDUChain::testTemplateReference() {
+  QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item);");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QVERIFY(top->localDeclarations()[2]->abstractType());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  AbstractType::Ptr argType = top->childContexts()[1]->localDeclarations()[0]->abstractType();
+  QVERIFY(argType.cast<ReferenceType>());
+  QCOMPARE(argType->toString().remove(' '), QString("CC<constA*>&"));
+  QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], 10000).remove(' '), QString("CC<constA*>&"));
+}
+
 void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 

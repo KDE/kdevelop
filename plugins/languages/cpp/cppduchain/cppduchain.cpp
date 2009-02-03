@@ -420,6 +420,9 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
     return QString();
 
   TypeIdentifier identifier = TypeIdentifier(type->toString());
+  if(type.cast<ReferenceType>())
+    identifier.setIsReference(true);
+  
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
   

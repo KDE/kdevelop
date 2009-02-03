@@ -64,7 +64,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
 QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   QString ret;
-  createArgumentList(*this, ret, 0, false);
+  createArgumentList(*this, ret, 0, false, true);
   if(m_declaration->abstractType() && m_declaration->abstractType()->modifiers() & AbstractType::ConstModifier)
     ret += " const";
   return ret;
