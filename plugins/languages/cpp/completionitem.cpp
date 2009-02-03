@@ -128,6 +128,13 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       lock.lock();
     }
   }
+  
+  if(m_declaration.data()->kind() == Declaration::Namespace) {
+    lock.unlock();
+    document->insertText(word.end(), "::");
+    lock.lock();
+  }
+    
 
   if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
     bool haveArguments = false;
