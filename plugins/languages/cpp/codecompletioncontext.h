@@ -57,6 +57,8 @@ namespace Cpp {
       ///Should only be called on the first context, parent contexts are included in the computations.
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
       virtual QList<CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort, bool fullCompletion = true);
+      
+      virtual QList< KSharedPtr< KDevelop::CompletionTreeElement > > ungroupedElements();
 
       typedef KSharedPtr<CodeCompletionContext> Ptr;
 
@@ -181,6 +183,9 @@ namespace Cpp {
 
       void processFunctionCallAccess();
 
+      //Creates the group and adds it to m_storedUngroupedItems if items is not empty
+      void eventuallyAddGroup(QString name, int priority, QList< KSharedPtr< KDevelop::CompletionTreeItem > > items);
+      
       //Returns the required prefix that is needed in order to find the givne declaration from the current context.
       //In worst case, it is the scope prefix of the declaration.
       QualifiedIdentifier requiredPrefix(Declaration* decl) const;
@@ -232,6 +237,8 @@ namespace Cpp {
       DUContextPointer m_localClass;
       
       int m_pointerConversionsBeforeMatching; //0 = No conversion, +1, +2, .. = increase pointer level = &, -1, -2, .. = decrease pointer level = *
+      
+      QList<KDevelop::CompletionTreeElementPointer> m_storedUngroupedItems;
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;

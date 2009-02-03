@@ -41,8 +41,15 @@ public:
   KDevelop::IndexedDeclaration m_decl;
 };
 
+class ForwardDeclarationItem : public NormalDeclarationCompletionItem {
+  public:
+  ForwardDeclarationItem(KDevelop::DeclarationPointer decl);
+  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
+};
+
 ///DUChain must be locked
 ///@param displayTextPrefix may be needed so the created items pass a specific filtering in the completion-list
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0, bool namespaceAllowed = false);
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0, bool needInstance = false);
 
 #endif

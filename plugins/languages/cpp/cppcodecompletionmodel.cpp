@@ -60,6 +60,7 @@
 #include "cpplanguagesupport.h"
 #include <language/editor/modificationrevision.h>
 #include <language/duchain/specializationstore.h>
+#include "implementationhelperitem.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -69,6 +70,17 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
 }
+
+#if KDE_IS_VERSION(4,2,61)
+KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CppCodeCompletionModel::matchingItem(const QModelIndex& matched) {
+  KSharedPtr<CompletionTreeElement> element = itemForIndex(matched);
+  //Do not hide the completion-list if the matched item is an implementation-helper
+  if(dynamic_cast<ImplementationHelperItem*>(element.data()))
+    return KTextEditor::CodeCompletionModelControllerInterface2::None;
+  else
+    return CodeCompletionModelControllerInterface2::matchingItem(matched);
+}
+#endif
 
 bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
@@ -100,56 +112,6 @@ KDevelop::CodeCompletionWorker* CppCodeCompletionModel::createCompletionWorker()
 
 CppCodeCompletionModel::~CppCodeCompletionModel()
 {
-}
-
-void CppCodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url)
-{
-  Q_UNUSED(invocationType)
-
-  DUChainReadLocker lock(DUChain::lock(), 400);
-  if( !lock.locked() ) {
-    kDebug(9007) << "could not lock du-chain in time";
-    return;
-  }
-
-  TopDUContext* top = CppLanguageSupport::self()->standardContext( url );
-  if(!top || !top->parsingEnvironmentFile() || top->parsingEnvironmentFile()->type() != CppParsingEnvironment ) {
-    kDebug(9007) << "no context or no parsingEnvironmentFile available, or the context is not a C++ context";
-    return;
-  }
-  setCurrentTopContext(TopDUContextPointer(top));
-
-  if (top) {
-    kDebug(9007) << "completion invoked for context" << (DUContext*)top;
-
-    if( top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
-      kDebug(9007) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
-    }
-
-    DUContextPointer thisContext;
-    {
-      thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
-
-       kDebug(9007) << "context is set to" << thisContext.data();
-        if( thisContext ) {
-/*          kDebug( 9007 ) << "================== duchain for the context =======================";
-          DumpChain dump;
-          dump.dump(thisContext.data());*/
-        } else {
-          kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================";
-          m_completionItems.clear();
-          m_navigationWidgets.clear();
-          reset();
-          return;
-        }
-    }
-
-    lock.unlock();
-
-    emit completionsNeeded(thisContext, range.start(), view);
-  } else {
-    kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
-  }
 }
 
 #include "cppcodecompletionmodel.moc"

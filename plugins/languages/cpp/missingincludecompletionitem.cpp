@@ -24,16 +24,59 @@
 #include <language/duchain/types/identifiedtype.h>
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/typeutils.h"
+#include "cppduchain/templateparameterdeclaration.h"
 #include "cpplanguagesupport.h"
 #include "cppcodecompletionmodel.h"
 #include <klocale.h>
 #include <ktexteditor/document.h>
+#include <classdeclaration.h>
+#include <language/duchain/duchainutils.h>
+#include <declarationbuilder.h>
+#include <language/duchain/stringhelpers.h>
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
-bool allowDotDot = false;
+bool allowDotDot = true;
 
 using namespace KTextEditor;
 using namespace KDevelop;
+
+///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
+int moveBehindComment(KTextEditor::Document* document, int line) {
+  
+  if(line < 100) {
+    int checkLines = document->lines() < 100 ? document->lines() : 100;
+    
+    QStringList text = document->textLines(KTextEditor::Range(0, 0, checkLines, 0));
+    bool inComment = false; //This is a bit stupid
+    for(int a = 0; a < checkLines; ++a) {
+      if(!inComment && !text[a].trimmed().startsWith("//") && a >= line)
+        return a;
+      
+      if(text[a].indexOf("/*") != -1)
+        inComment = true;
+
+      if(text[a].indexOf("*/") != -1)
+        inComment = false;
+    }
+  }
+  return line;
+}
+
+///Decide whether the file is allowed to be included directly. If yes, this should return false.
+bool isBlacklistedInclude(KUrl url) {
+  QString fileName = url.fileName();
+  foreach(QString extension, sourceExtensions) {
+    if(fileName.endsWith(extension))
+      return true; //Do not respect declartions from source-files
+  }
+  url = url.upUrl();
+  //Do not allow including directly from the bits directory. Instead use one of the forwarding headers in other directories, when possible.
+  if(url.fileName() == "bits" && url.path().contains("/include/c++/")) {
+    return true;
+  }
+  
+  return false;
+}
 
 QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier) {
   QualifiedIdentifier  identifier;
@@ -45,18 +88,18 @@ QualifiedIdentifier removeTemplateParameters(QualifiedIdentifier baseIdentifier)
   return identifier;
 }
 
-QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefix, QString file, KUrl::List includePaths, KUrl currentPath, IndexedDeclaration decl, uint argumentHintDepth) {
+QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefix, QString file, KUrl::List includePaths, KUrl currentPath, IndexedDeclaration decl, uint argumentHintDepth, QSet<QString>& directives) {
   QList<KDevelop::CompletionTreeItemPointer> ret;
   //We have found a potential declaration. Now find the shortest include path.
   QString shortestDirective;
   bool isRelativeToCurrentDir = false;
   foreach(const KUrl& includePath, includePaths) {
     QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
+    if(relative.startsWith("./"))
+      relative = relative.mid(2);
     
-    if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith("..")))) {
+    if(shortestDirective.isEmpty() || (relative.length() < shortestDirective.length() && (allowDotDot || !relative.startsWith(".."))) || (shortestDirective.startsWith("..") && !relative.startsWith(".."))) {
       shortestDirective = relative;
-      if(shortestDirective.startsWith("./"))
-        shortestDirective = shortestDirective.mid(2);
       
       isRelativeToCurrentDir = includePath.equals( currentPath );
     }
@@ -67,12 +110,25 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefi
     else
       shortestDirective = "<" + shortestDirective + ">";
     
-    ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, (int)argumentHintDepth));
+    if(!directives.contains(shortestDirective))
+      ret << KDevelop::CompletionTreeItemPointer(new MissingIncludeCompletionItem(shortestDirective, displayTextPrefix, decl, (int)argumentHintDepth));
+    
+    directives.insert(shortestDirective);
   }
   return ret;
 }
 
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool namespaceAllowed) {
+struct DirectiveShorterThan {
+  bool operator()(const KDevelop::CompletionTreeItemPointer& lhs, const KDevelop::CompletionTreeItemPointer& rhs) {
+    const MissingIncludeCompletionItem* l = dynamic_cast<const MissingIncludeCompletionItem*>(lhs.data());
+    const MissingIncludeCompletionItem* r = dynamic_cast<const MissingIncludeCompletionItem*>(rhs.data());
+    if(l && r)
+      return l->m_addedInclude.length() < r->m_addedInclude.length();
+    return false;
+  }
+};
+
+QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool needInstance) {
   
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type(), context->topContext());
   
@@ -94,6 +150,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     prefixes << namespaceScope.left(a); //Also search within enclosing namespaces
   
   QList<KDevelop::CompletionTreeItemPointer> ret;
+  QList<KDevelop::CompletionTreeItemPointer> blacklistRet;
 
   QualifiedIdentifier identifier;
   if(type) {
@@ -142,6 +199,10 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   
   includePaths.prepend(currentPath);
   
+  QSet<QString> directives;
+  
+  QSet<DeclarationId> haveForwardDeclarationItems;
+  
   ///Search the persistent symbol table
   foreach(QualifiedIdentifier prefix, prefixes) {
     prefix.setExplicitlyGlobal(false);
@@ -150,32 +211,76 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
     QualifiedIdentifier id = prefix + identifier;
 
     PersistentSymbolTable::self().declarations( id, declarationCount, declarations );
+
     for(uint a = 0; a < declarationCount; ++a) {
       Declaration* decl = declarations[a].declaration();
+      
+      if(!decl || decl->topContext()->language() != IndexedString("C++") || !decl->topContext()->parsingEnvironmentFile())
+        continue;
+      
+      if(decl && (decl->context()->type() == DUContext::Namespace || decl->context()->type() == DUContext::Global) && !needInstance && (decl->type<CppClassType>() || decl->type<KDevelop::EnumerationType>()) ) {
+        if(!haveForwardDeclarationItems.contains(decl->id()))
+          ret += KDevelop::CompletionTreeItemPointer( new ForwardDeclarationItem(DeclarationPointer(decl)) );
+        haveForwardDeclarationItems.insert(decl->id());
+      }
+      
       if(decl && !decl->isForwardDeclaration()) {
         if(context->topContext()->imports(decl->topContext(), SimpleCursor::invalid()))
           continue;
-        QString file(decl->topContext()->url().toUrl().path());
-        ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth);
-      }
-    }
-  }
-  if(ret.isEmpty() && namespaceAllowed) {
-    foreach(QualifiedIdentifier prefix, prefixes) {
-      prefix.setExplicitlyGlobal(false);
-      const IndexedDUContext* contexts;
-      uint contextCount;
-      QualifiedIdentifier id = prefix + identifier;
+        
+        QString file(decl->url().toUrl().path());
+        
+        bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
+        
+        foreach(KDevelop::ParsingEnvironmentFilePointer ptr, decl->topContext()->parsingEnvironmentFile()->importers()) {
+          if(ptr->imports().count() == 1 || inBlacklistDir) {
+            if(isBlacklistedInclude(ptr->url().toUrl()))
+              continue;
+            //This file is a forwader, add it to the list
 
-      PersistentSymbolTable::self().contexts( id, contextCount, contexts );
-      for(uint a = 0; a < contextCount; ++a) {
-        if(contexts[a].indexedTopContext().isLoaded() && context->topContext()->imports(contexts[a].indexedTopContext().data(), SimpleCursor::invalid()))
-          continue;
-        QString file = contexts[a].indexedTopContext().url().str();
-        ret += itemsForFile(identifier.toString() + " " + displayTextPrefix, file, includePaths, currentPath, IndexedDeclaration(), argumentHintDepth);
+            //Forwarders must be completely empty
+            if(ptr->topContext()->localDeclarations().count())
+              continue;
+            
+            QString file(ptr->url().toUrl().path());
+            ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
+          }
+        }
+        
+        if(inBlacklistDir)
+          blacklistRet += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
+        else
+          ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
       }
     }
   }
+
+  if(ret.isEmpty())
+    ret += blacklistRet;
+  
+  {
+    //If there is non-relative include directives, remove the relative ones
+    QList<KDevelop::CompletionTreeItemPointer> relativeIncludes;
+    QList<KDevelop::CompletionTreeItemPointer> nonRelativeIncludes;
+    
+    for(QList<KDevelop::CompletionTreeItemPointer>::iterator it = ret.begin(); it != ret.end(); ) {
+      MissingIncludeCompletionItem* currentItem = dynamic_cast<MissingIncludeCompletionItem*>(it->data());
+      if(currentItem) {
+        if(currentItem->m_addedInclude.contains("\"../") || currentItem->m_addedInclude.contains("<../"))
+          relativeIncludes << *it;
+        else
+          nonRelativeIncludes << *it;
+      }
+      ++it;
+    }
+    
+    if(!nonRelativeIncludes.isEmpty()) {
+      foreach(KDevelop::CompletionTreeItemPointer relative, relativeIncludes)
+        ret.removeAll(relative);
+    }
+  }
+
+  qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(ret.begin(), ret.end(), DirectiveShorterThan());
   
   return ret;
 }
@@ -207,6 +312,8 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
         case KTextEditor::CodeCompletionModel::Name: {
           if(!m_decl.data())
             return m_displayTextPrefix;
+          else if(m_decl.data()->kind() == Declaration::Namespace)
+            return m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString();
           else
             return m_displayTextPrefix + m_decl.data()->toString();
         }
@@ -239,9 +346,109 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
         lastLineWithInclude = a;
     }
   }
-  document->insertLine(lastLineWithInclude+1, insertLine);
+
+  document->insertLine(moveBehindComment(document, lastLineWithInclude+1), insertLine);
 }
 
 int MissingIncludeCompletionItem::inheritanceDepth() const {
   return 0;
+}
+
+ForwardDeclarationItem::ForwardDeclarationItem(KDevelop::DeclarationPointer decl) : NormalDeclarationCompletionItem(decl) {
+}
+
+QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
+  if(role == Qt::DisplayRole && index.column() == KTextEditor::CodeCompletionModel::Prefix)
+    return i18n("Add Forward-Declaration");
+  return NormalDeclarationCompletionItem::data(index, role, model);
+}
+
+void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+  DUChainReadLocker lock(DUChain::lock());
+  if(m_declaration) {
+    QStringList needNamespace = m_declaration->context()->scopeIdentifier().toStringList();
+    
+    DUContext* context = DUChainUtils::standardContextForUrl(document->url());
+    if(!context)
+      return;
+    bool foundChild = true;
+    while(!needNamespace.isEmpty() && foundChild) {
+      foundChild = false;
+      
+      foreach(DUContext* child, context->childContexts()) {
+        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && child->range().start.textCursor() < word.start()) {
+          context = child;
+          foundChild = true;
+          needNamespace.pop_front();
+          break;
+        }
+      }
+    }
+    
+    QString forwardDeclaration;
+    if(m_declaration->type<KDevelop::EnumerationType>()) {
+      forwardDeclaration = "enum " + m_declaration->identifier().toString() + ";\n";
+    }else if(m_declaration->isTypeAlias()) {
+      if(!m_declaration->abstractType())
+        return;
+      
+      forwardDeclaration = "typedef " + m_declaration->abstractType()->toString() + " " + m_declaration->identifier().toString() + ";\n";
+    }else{
+      DUContext* templateContext = getTemplateContext(m_declaration.data());
+      if(templateContext) {
+        forwardDeclaration += "template<";
+        bool first = true;
+        foreach(Declaration* _paramDecl, templateContext->localDeclarations()) {
+          TemplateParameterDeclaration* paramDecl = dynamic_cast<TemplateParameterDeclaration*>(_paramDecl);
+          if(!paramDecl)
+            continue;
+          if(!first) {
+            forwardDeclaration += ", ";
+          }else{
+            first = false;
+          }
+          
+          CppTemplateParameterType::Ptr templParamType = paramDecl->type<CppTemplateParameterType>();
+          if(templParamType) {
+            forwardDeclaration += "class ";
+          }else if(paramDecl->abstractType()) {
+            forwardDeclaration += paramDecl->abstractType()->toString() + " ";
+          }
+          
+          forwardDeclaration += paramDecl->identifier().toString();
+          
+          if(!paramDecl->defaultParameter().isEmpty()) {
+            forwardDeclaration += " = " + paramDecl->defaultParameter().toString();
+          }
+        }
+        
+        forwardDeclaration += " >\n";
+      }
+      forwardDeclaration += "class " + m_declaration->identifier().toString() + ";\n";
+    }
+    
+    bool neededNamespace = !needNamespace.isEmpty();
+    
+    while(!needNamespace.isEmpty()) {
+      forwardDeclaration = "namespace " + needNamespace.back() + " {\n" + forwardDeclaration + "}\n";
+      needNamespace.pop_back();
+    }
+    
+    //Put declarations to the end, and namespaces to the begin
+    KTextEditor::Cursor position;
+    
+    if(neededNamespace || context->range().end.textCursor() > word.start()) {
+      //To the begin
+      position = context->range().start.textCursor();
+    } else{
+      //To the end
+      position = context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
+    }
+    Cpp::EnvironmentFilePointer envFile = Cpp::EnvironmentFilePointer(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
+    if(envFile && position.line() < envFile->contentStartLine())
+      position.setLine( moveBehindComment(document, envFile->contentStartLine()) );
+    
+    lock.unlock();
+    document->insertText(position, forwardDeclaration);
+  }
 }

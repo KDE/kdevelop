@@ -33,6 +33,7 @@
 #include "includeitem.h"
 #include "completionitem.h"
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
+#include <kdeversion.h>
 
 class QIcon;
 class QString;
@@ -55,7 +56,12 @@ namespace KDevelop {
   class CompletionTreeElement;
 }
 
-class CppCodeCompletionModel : public KDevelop::CodeCompletionModel, public KTextEditor::CodeCompletionModelControllerInterface
+class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
+#if KDE_IS_VERSION(4,2,61)
+, KTextEditor::CodeCompletionModelControllerInterface2
+#else
+, KTextEditor::CodeCompletionModelControllerInterface
+#endif
 {
   Q_OBJECT
 
@@ -65,11 +71,13 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel, public KTex
     virtual ~CppCodeCompletionModel();
 
   protected:
+#if KDE_IS_VERSION(4,2,61)
+    virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
+#endif
     virtual void aborted(KTextEditor::View* view);
     virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
-    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType, const KUrl& url);
 
   private:
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
@@ -78,4 +86,3 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel, public KTex
 
 
 #endif
-

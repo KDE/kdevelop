@@ -173,7 +173,7 @@ private:
     static CppLanguageSupport* m_self;
 
     CppHighlighting *m_highlights;
-    KDevelop::CodeCompletion *m_cc;
+    KDevelop::CodeCompletion *m_cc, *m_missingIncludeCompletion;
     Cpp::ReferenceCountedMacroSet *m_standardMacros;
     const KDevelop::ParsingEnvironment *m_standardEnvironment;
     

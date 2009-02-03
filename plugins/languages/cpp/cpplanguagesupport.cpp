@@ -93,6 +93,7 @@
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
 #include "includepathcomputer.h"
+#include "missingincludecompletionmodel.h"
 
 
 #define DEBUG_UI_LOCKUP
@@ -158,6 +159,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 
     m_highlights = new CppHighlighting( this );
     m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
+    m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new MissingIncludeCompletionModel(0), name() );
     m_standardMacros = new Cpp::ReferenceCountedMacroSet;
     m_standardIncludePaths = new QStringList;
     

@@ -30,6 +30,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     completionhelpers.cpp
     missingincludecompletionitem.cpp
     implementationhelperitem.cpp
+    missingincludecompletionmodel.cpp
 
     codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
