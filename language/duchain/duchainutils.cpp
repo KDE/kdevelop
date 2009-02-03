@@ -48,31 +48,33 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
 {
   CodeCompletionModel::CompletionProperties p;
 
-  if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
-    switch (member->accessPolicy()) {
-      case Declaration::Public:
-        p |= CodeCompletionModel::Public;
-        break;
-      case Declaration::Protected:
-        p |= CodeCompletionModel::Protected;
-        break;
-      case Declaration::Private:
-        p |= CodeCompletionModel::Private;
-        break;
-    }
+  if(dec->context()->type() == DUContext::Class) {
+    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
+      switch (member->accessPolicy()) {
+        case Declaration::Public:
+          p |= CodeCompletionModel::Public;
+          break;
+        case Declaration::Protected:
+          p |= CodeCompletionModel::Protected;
+          break;
+        case Declaration::Private:
+          p |= CodeCompletionModel::Private;
+          break;
+      }
 
-    if (member->isStatic())
-      p |= CodeCompletionModel::Static;
-    if (member->isAuto())
-      {}//TODO
-    if (member->isFriend())
-      p |= CodeCompletionModel::Friend;
-    if (member->isRegister())
-      {}//TODO
-    if (member->isExtern())
-      {}//TODO
-    if (member->isMutable())
-      {}//TODO
+      if (member->isStatic())
+        p |= CodeCompletionModel::Static;
+      if (member->isAuto())
+        {}//TODO
+      if (member->isFriend())
+        p |= CodeCompletionModel::Friend;
+      if (member->isRegister())
+        {}//TODO
+      if (member->isExtern())
+        {}//TODO
+      if (member->isMutable())
+        {}//TODO
+    }
   }
 
   if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
