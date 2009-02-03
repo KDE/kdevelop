@@ -27,15 +27,35 @@ ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::De
 
 QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   QVariant ret = NormalDeclarationCompletionItem::data(index, role, model);
-  if(index.column() == KTextEditor::CodeCompletionModel::Prefix && role == Qt::DisplayRole) {
-    QString prefix;
-    if(m_type == Override)
-      prefix = i18n("Override");
-    if(m_type == CreateDefinition)
-      prefix = i18n("Implement");
-    
-    ret = prefix + " " + ret.toString();
+  if(role == Qt::DisplayRole) {
+    if(index.column() == KTextEditor::CodeCompletionModel::Prefix) {
+      QString prefix;
+      if(m_type == Override)
+        prefix = i18n("Override");
+      if(m_type == CreateDefinition)
+        prefix = i18n("Implement");
+      
+      ret = prefix + " " + ret.toString();
+    }
+
+    if(index.column() == KTextEditor::CodeCompletionModel::Name) {
+      KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+      if(declaration().data() && m_type != Override) {
+        QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
+        if(!parentScope.isEmpty())
+          ret = parentScope.toString() + "::" + ret.toString();
+      }
+    }
   }
+  
+  if(role == KTextEditor::CodeCompletionModel::ItemSelected) {
+    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+    if(declaration().data() && m_type == Override) {
+      QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
+      return i18n("From %1", parentScope.toString());
+    }
+  }
+  
   if(role == KTextEditor::CodeCompletionModel::InheritanceDepth)
     return QVariant(0);
   return ret;
