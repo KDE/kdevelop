@@ -43,7 +43,7 @@ ProblemHighlighter::~ProblemHighlighter()
         return;
 
     KDevelop::EditorIntegrator editor;
-    editor.setCurrentUrl(IndexedString(m_document->url().pathOrUrl()), true);
+    editor.setCurrentUrl(IndexedString(m_document->url()), true);
 
     LockedSmartInterface iface = editor.smart();
     if (iface)
@@ -53,7 +53,7 @@ ProblemHighlighter::~ProblemHighlighter()
 void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& problems)
 {
     KDevelop::EditorIntegrator editor;
-    IndexedString url(m_document->url().pathOrUrl());
+    IndexedString url(m_document->url());
     editor.setCurrentUrl(url, true);
 
     LockedSmartInterface iface = editor.smart();
