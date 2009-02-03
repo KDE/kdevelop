@@ -150,11 +150,15 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
+Name[et]=Projekti laadimine
+Name[fr]=Chargement du projet
 Name[pt]=A Carregar o Projecto
 Name[pt_BR]=A Carregar o Projecto
 Name[sv]=Laddar projekt
 Name[uk]=Завантаження проекту      
 Comment=A project loading process has just started
+Comment[et]=Projekti laadimine just käivitati
+Comment[fr]=Un processus de chargement de projet vient de démarrer
 Comment[pt]=Acabou de ser iniciado um processo de carregamento do projecto
 Comment[pt_BR]=Acabou de ser iniciado um processo de carregamento do projecto
 Comment[sv]=En laddningsprocess för projektet har just startats
@@ -163,11 +167,15 @@ Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
+Name[et]=Projekt on edukalt laaditud
+Name[fr]=Le projet a été chargé avec succès
 Name[pt]=O Projecto foi Carregado com Sucesso
 Name[pt_BR]=O Projecto foi Carregado com Sucesso
 Name[sv]=Projekt laddat med lyckat resultat
 Name[uk]=Проект успішно завантажено
 Comment=A project has been loaded successfully
+Comment[et]=Projekt on edukalt laaditud
+Comment[fr]=Un projet a été chargé avec succès
 Comment[pt]=Foi carregado um projecto com sucesso
 Comment[pt_BR]=Foi carregado um projecto com sucesso
 Comment[sv]=Ett projekt har laddats med lyckat resultat
