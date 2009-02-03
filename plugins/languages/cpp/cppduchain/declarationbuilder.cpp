@@ -87,6 +87,8 @@ DUContext* getTemplateContext(Declaration* decl) {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
+  if(internal->type() == DUContext::Template)
+    return internal;
   foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     if( ctx.context(decl->topContext()) )
       if( ctx.context(decl->topContext())->type() == DUContext::Template )
