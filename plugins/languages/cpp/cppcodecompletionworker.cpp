@@ -41,6 +41,7 @@
 #include <language/duchain/dumpchain.h>
 #include <language/codecompletion/codecompletioncontext.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/parsingenvironment.h>
 
 using namespace KDevelop;
 using namespace TypeUtils;
@@ -61,6 +62,12 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
     DUChainReadLocker lock(DUChain::lock());
     if(context)
       topContext = TopDUContextPointer(context->topContext());
+    if(!topContext)
+      return;
+    if(!topContext->parsingEnvironmentFile() || topContext->language() != IndexedString("C++")) {
+      kDebug() << "top-context has wrong language:" << topContext->language().str();
+      return;
+    }
   }
   
   //We will have some caching in TopDUContext until this objects lifetime is over
