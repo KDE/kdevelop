@@ -37,7 +37,9 @@ class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
   Q_OBJECT
 public:
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
+#if KDE_IS_VERSION(4,2,61)
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
+#endif
   
   void stop();
   
