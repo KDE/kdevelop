@@ -115,19 +115,4 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     KSharedPtr<Cpp::CodeCompletionContext> completionContext;
 };
 
-//A completion item used for completing include-files
-/*class ArgumentListCompletionItem : public KDevelop::CompletionTreeItem {
-public:
-  IncludeFileCompletionItem(const Cpp::IncludeItem& include) : includeItem(include) {
-  }
-
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
-
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
-
-  Cpp::IncludeItem includeItem;
-};*/
 #endif
