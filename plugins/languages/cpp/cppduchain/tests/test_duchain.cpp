@@ -2724,12 +2724,12 @@ void TestDUChain::testTemplateInternalSearch() {
 }
 
 void TestDUChain::testTemplateReference() {
-  QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item);");
+  QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item); const A& a;");
 
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 4);
   QVERIFY(top->localDeclarations()[2]->abstractType());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
@@ -2737,6 +2737,8 @@ void TestDUChain::testTemplateReference() {
   QVERIFY(argType.cast<ReferenceType>());
   QCOMPARE(argType->toString().remove(' '), QString("CC<constA*>&"));
   QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], 10000).remove(' '), QString("CC<constA*>&"));
+  QVERIFY(top->localDeclarations()[3]->abstractType());
+  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], 10000).remove(' '), QString("constA&"));
 }
 
 void TestDUChain::testTemplates() {

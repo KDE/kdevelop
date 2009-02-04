@@ -416,11 +416,17 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
     type = funType->returnType();
   }
   
+  bool isReference = false;
+  if(type.cast<ReferenceType>()) {
+    isReference = true;
+    type = type.cast<ReferenceType>()->baseType();
+  }
+  
   if(!type)
     return QString();
 
   TypeIdentifier identifier = TypeIdentifier(type->toString());
-  if(type.cast<ReferenceType>())
+  if(isReference)
     identifier.setIsReference(true);
   
   if(type.cast<DelayedType>())
