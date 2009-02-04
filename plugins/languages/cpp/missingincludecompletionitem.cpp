@@ -36,6 +36,7 @@
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
+const int maxDeclarationCount = 30;
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -212,6 +213,9 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
 
     PersistentSymbolTable::self().declarations( id, declarationCount, declarations );
 
+    if(declarationCount >  maxDeclarationCount)
+      declarationCount = maxDeclarationCount;
+    
     for(uint a = 0; a < declarationCount; ++a) {
       Declaration* decl = declarations[a].declaration();
       
