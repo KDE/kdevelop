@@ -71,7 +71,7 @@ CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
 {
 }
 
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
 KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CppCodeCompletionModel::matchingItem(const QModelIndex& matched) {
   KSharedPtr<CompletionTreeElement> element = itemForIndex(matched);
   //Do not hide the completion-list if the matched item is an implementation-helper

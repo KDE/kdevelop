@@ -78,7 +78,7 @@ void MissingIncludeCompletionModel::completionInvokedInternal(KTextEditor::View*
   clear();
 }
 
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
 KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
   //When something in this model matches, don't hide the completion-list
   kDebug() << "checking reaction";

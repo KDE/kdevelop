@@ -57,7 +57,7 @@ namespace KDevelop {
 }
 
 class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
 , KTextEditor::CodeCompletionModelControllerInterface2
 #else
 , KTextEditor::CodeCompletionModelControllerInterface
@@ -71,7 +71,7 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual ~CppCodeCompletionModel();
 
   protected:
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
     virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
 #endif
     virtual void aborted(KTextEditor::View* view);

@@ -28,7 +28,7 @@
 class MissingIncludeCompletionWorker;
 
 class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
 , KTextEditor::CodeCompletionModelControllerInterface2
 #else
 , KTextEditor::CodeCompletionModelControllerInterface
@@ -37,7 +37,7 @@ class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
   Q_OBJECT
 public:
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
 #endif
   
@@ -58,7 +58,7 @@ protected:
   MissingIncludeCompletionWorker* worker() const;
   virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
   virtual KDevelop::CodeCompletionWorker* createCompletionWorker ();
-#if KDE_IS_VERSION(4,2,61)
+#if KDE_IS_VERSION(4,2,62)
   virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
 #endif
 };
