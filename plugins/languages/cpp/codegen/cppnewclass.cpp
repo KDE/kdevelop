@@ -274,10 +274,14 @@ void CppNewClass::generateImplementation()
   output << "/*\n" << field("license").toString() << "*/\n\n";
 
   // #include our header
-  output << "#include \"" << KUrl::relativePath(url.directory(), headerUrl.path()) << "\"\n\n";
+  QString path = KUrl::relativePath(url.directory(), headerUrl.path());
+  if(path.startsWith("./"))
+    path = path.mid(2);
+  output << "#include \"" << path << "\"\n\n";
 
   // Namespace
   QualifiedIdentifier id(field("classIdentifier").toString());
+  
   Identifier classId = id.last();
 
   bool ns = false;
@@ -290,7 +294,7 @@ void CppNewClass::generateImplementation()
   if (ns)
     // Add using statement
     // TODO make configurable
-    output << "using namespace " << id.toString() << "\n\n";
+    output << "using namespace " << id.toString() << ";\n\n";
 
   // Overrides
   {
@@ -301,7 +305,7 @@ void CppNewClass::generateImplementation()
     if (Declaration* d = indexedDecl.declaration()) {
       ImplementationHelperItem item(ImplementationHelperItem::CreateDefinition, DeclarationPointer(d));
 
-      output << item.insertionText() << "\n";
+      output << item.insertionText(KUrl(), KDevelop::SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
     }
   }
   }

@@ -70,7 +70,7 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   return ret;
 }
 
-QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position) {
+QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor position, QualifiedIdentifier forceParentScope) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   
   QString newText;
@@ -97,7 +97,7 @@ QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position)
     }
   }else if(m_type == CreateDefinition) {
       QualifiedIdentifier localScope;
-      TopDUContext* topContext = DUChainUtils::standardContextForUrl(m_declaration->url().toUrl());
+      TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
       if(topContext) {
         DUContext* context = topContext->findContextAt(position);
         if(context)
@@ -105,6 +105,11 @@ QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position)
       }
       
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();
+      
+      if(!forceParentScope.isEmpty() && !scope.isEmpty()) {
+        scope = forceParentScope;
+        scope.push(m_declaration->identifier());
+      }
       
       if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
         return QString();
@@ -122,6 +127,10 @@ QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position)
       if(asFunction) {
       
         ClassFunctionDeclaration* overridden = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::getOverridden(m_declaration.data()));
+        
+        if(!forceParentScope.isEmpty())
+          overridden = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+        
         if(overridden && !overridden->isAbstract()) {
           if(asFunction->returnType() && asFunction->returnType()->toString() != "void") {
             newText += "return ";
@@ -167,6 +176,6 @@ QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position)
 void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
 
   
-  document->replaceText(word, insertionText(SimpleCursor(word.end())));
+  document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
 }
 

@@ -37,7 +37,7 @@ public:
   HelperType m_type;
   
   ///Returns the text that this item would yield if it was executed
-  QString insertionText(KDevelop::SimpleCursor position = KDevelop::SimpleCursor());
+  QString insertionText(KUrl currentDocumentUrl = KUrl(), KDevelop::SimpleCursor currentDocumentCursor = KDevelop::SimpleCursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
 };
 
 #endif // IMPLEMENTATIONHELPERITEM_H
