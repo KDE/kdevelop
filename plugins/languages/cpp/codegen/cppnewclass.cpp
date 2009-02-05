@@ -301,8 +301,8 @@ void CppNewClass::generateImplementation()
       output << type->returnType()->toString() << " " << classId.toString() << "::" << d->identifier().toString() << "(";
       bool first = true;
       foreach (const AbstractType::Ptr& arg, type->arguments()) {
-        output << arg->toString();
         if (first) first = false; else output << ", ";
+        output << arg->toString();
       }
       output << ")\n{\n  ";
 
