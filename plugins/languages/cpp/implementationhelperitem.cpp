@@ -70,12 +70,12 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
   return ret;
 }
 
-void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+QString ImplementationHelperItem::insertionText(KDevelop::SimpleCursor position) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   
   QString newText;
   if(!m_declaration)
-    return;
+    return QString();
 
   if(m_type == Override) {
     if(!useAlternativeText) {
@@ -90,16 +90,16 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
         newText += ";";
       } else {
         kDebug() << "Declaration disappeared";
-        return;
+        return QString();
       }
     }else{
       newText = alternativeText;
     }
   }else if(m_type == CreateDefinition) {
       QualifiedIdentifier localScope;
-      TopDUContext* topContext = DUChainUtils::standardContextForUrl(document->url());
+      TopDUContext* topContext = DUChainUtils::standardContextForUrl(m_declaration->url().toUrl());
       if(topContext) {
-        DUContext* context = topContext->findContextAt(SimpleCursor(word.end()));
+        DUContext* context = topContext->findContextAt(position);
         if(context)
           localScope = context->scopeIdentifier(true);
       }
@@ -107,7 +107,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();
       
       if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
-        return;
+        return QString();
       
       scope = scope.mid( localScope.count() );
       
@@ -161,8 +161,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       newText += "\n}\n";
   }
 
-  lock.unlock();
+  return newText;
+}
+
+void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+
   
-  document->replaceText(word, newText);
+  document->replaceText(word, insertionText(SimpleCursor(word.end())));
 }
 

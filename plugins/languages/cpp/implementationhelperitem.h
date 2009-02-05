@@ -35,6 +35,9 @@ public:
   //Arguments + "const"
   QString signaturePart(bool includeDefaultParams);
   HelperType m_type;
+  
+  ///Returns the text that this item would yield if it was executed
+  QString insertionText(KDevelop::SimpleCursor position = KDevelop::SimpleCursor());
 };
 
 #endif // IMPLEMENTATIONHELPERITEM_H

@@ -39,6 +39,7 @@
 #include <language/duchain/persistentsymboltable.h>
 
 #include "../cppduchain/classdeclaration.h"
+#include <implementationhelperitem.h>
 
 using namespace KDevelop;
 
@@ -184,8 +185,9 @@ void CppNewClass::generateHeader()
           ap = member->accessPolicy();
         }
       }
-
-      output << "  virtual " << d->toString() << ";\n";
+      
+      ImplementationHelperItem item(ImplementationHelperItem::Override, DeclarationPointer(d));
+      output << item.insertionText() << "\n";
     }
   }
   }
@@ -297,32 +299,9 @@ void CppNewClass::generateImplementation()
   foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
     IndexedDeclaration indexedDecl = qvariant_cast<IndexedDeclaration>(override);
     if (Declaration* d = indexedDecl.declaration()) {
-      FunctionType::Ptr type = d->type<FunctionType>();
-      output << type->returnType()->toString() << " " << classId.toString() << "::" << d->identifier().toString() << "(";
-      bool first = true;
-      foreach (const AbstractType::Ptr& arg, type->arguments()) {
-        if (first) first = false; else output << ", ";
-        output << arg->toString();
-      }
-      output << ")\n{\n  ";
+      ImplementationHelperItem item(ImplementationHelperItem::CreateDefinition, DeclarationPointer(d));
 
-      // Generate default implementation
-      // TODO check for pure virtual first
-      IntegralType::Ptr returnType = IntegralType::Ptr::dynamicCast( type->returnType() );
-      if (!returnType || returnType->dataType() != IntegralType::TypeVoid) {
-        output << "return ";
-      }
-      // Find class
-      if (d->context()) {
-        Declaration* parentClass = d->context()->owner();
-        QualifiedIdentifier parentId = parentClass->qualifiedIdentifier();
-        if (parentId.beginsWith( id )) {
-            parentId = parentId.mid( id.count() );
-        }
-        output << parentId.toString() << "::" << d->identifier().toString() << "();\n";
-      }
-
-      output << "}\n\n";
+      output << item.insertionText() << "\n";
     }
   }
   }
