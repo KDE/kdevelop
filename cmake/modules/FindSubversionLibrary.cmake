@@ -123,7 +123,7 @@ IF (NOT WIN32)
                STRING(REGEX REPLACE "^-l" "" _ARG ${_ARG})
                FIND_LIBRARY(_APU_LIB_FROM_ARG NAMES aprutil-1
                     PATHS
-                    ${_APU_LIB_PATHS}
+                    ${_c_LIB_PATHS}
                )
                IF(_APU_LIB_FROM_ARG)
                   SET(APU_LIBRARY ${APU_LIBRARY} ${_APU_LIB_FROM_ARG})
@@ -437,11 +437,11 @@ ELSE (NOT APR_LIBRARY)
 ENDIF(NOT APR_LIBRARY)
 
 IF (NOT APU_LIBRARY)
-  MESSAGE(STATUS "No apr lib found, subversion support will be disabled")
+  MESSAGE(STATUS "No apu lib found, subversion support will be disabled")
   SET(SUBVERSION_FOUND false)
 ELSE (NOT APU_LIBRARY)
   IF(NOT Subversion_FIND_QUIETLY)
-    MESSAGE(STATUS "Found apr lib: ${APU_LIBRARY}")
+    MESSAGE(STATUS "Found apu lib: ${APU_LIBRARY}")
   ENDIF(NOT Subversion_FIND_QUIETLY)
   SET(SUBVERSION_LIBRARIES ${SUBVERSION_LIBRARIES} ${APU_LIBRARY})
 ENDIF(NOT APU_LIBRARY)
