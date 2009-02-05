@@ -121,7 +121,7 @@ IF (NOT WIN32)
             ENDIF(${_ARG} MATCHES "^-L")
             IF(${_ARG} MATCHES "^-l")
                STRING(REGEX REPLACE "^-l" "" _ARG ${_ARG})
-               FIND_LIBRARY(_APU_LIB_FROM_ARG NAMES aprutil-1
+               FIND_LIBRARY(_APU_LIB_FROM_ARG NAMES ${_ARG}
                     PATHS
                     ${_c_LIB_PATHS}
                )
