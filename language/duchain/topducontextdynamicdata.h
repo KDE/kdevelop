@@ -39,6 +39,8 @@ class TopDUContextDynamicData {
   public:
   TopDUContextDynamicData(TopDUContext* topContext);
   ~TopDUContextDynamicData();
+
+  void clearContextsAndDeclartions();
   
   /**
    * Allocates an index for the given declaration in this top-context.

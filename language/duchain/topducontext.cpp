@@ -881,6 +881,9 @@ TopDUContext::~TopDUContext( )
     if(!isOnDisk())
       clearUsedDeclarationIndices();
   }
+  deleteChildContextsRecursively();
+  deleteLocalDeclarations();
+  m_dynamicData->clearContextsAndDeclartions();
 }
 
 void TopDUContext::deleteSelf() {
@@ -890,7 +893,7 @@ void TopDUContext::deleteSelf() {
   
   if(!m_local->m_sharedDataOwner)
     m_dynamicData->m_deleting = true;
-
+  
   delete this;
   
   delete local;
