@@ -34,6 +34,7 @@ Name[pt_BR]=Formatador de código fonte
 Name[sv]=Källkodsformatering
 Name[tr]=Kaynak Kod Biçimlendirici
 Name[uk]=Інструмент форматування коду
+Name[x-test]=xxSource Code Formatterxx
 Name[zh_CN]=源代码格式化器
 Name[zh_TW]=源碼格式器
 GenericName=AStyle Plugin
