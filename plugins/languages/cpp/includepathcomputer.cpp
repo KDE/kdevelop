@@ -24,6 +24,8 @@
 #include <klocalizedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <QDirIterator>
+#include <language/duchain/duchainutils.h>
 
 using namespace KDevelop;
 
@@ -61,6 +63,7 @@ void IncludePathComputer::computeForeground() {
   }
 
     
+    
 
     foreach (KDevelop::IProject *project, KDevelop::ICore::self()->projectController()->projects()) {
         QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(m_source);
@@ -68,7 +71,6 @@ void IncludePathComputer::computeForeground() {
         if( !files.isEmpty() )
             file = files.first();
         if (!file) {
-//                 kDebug() << "Didn't find file for url:" << m_source << "in project" << project->name();
             continue;
         }
 
@@ -104,6 +106,36 @@ void IncludePathComputer::computeForeground() {
 
     if(!m_gotPathsFromManager)
       kDebug(9007) << "Did not find a build-manager for" << m_source;
+    
+    if(m_ret.isEmpty()) {
+      //Got no useful include-paths. It's possible that the source-file is not part of the project yet,
+      //so pick another source-file from the same directory
+      kDebug(9007) << "Did not get any include-paths for" << m_source;
+      QFileInfo fileInfo(m_source.path());
+      QDirIterator it(fileInfo.dir().path());
+      while(it.hasNext()) {
+        QString file = it.next();
+        foreach(QString ext, sourceExtensions) {
+          if(file != fileInfo.fileName() && file.endsWith(ext)) {
+            DUChainReadLocker lock(DUChain::lock(), 300);
+            if(lock.locked()) {
+              TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)));
+              if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile()) {
+                Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
+                Q_ASSERT(envFile);
+                foreach(KDevelop::IndexedString str, envFile->includePaths()) {
+                  m_ret << str.toUrl();
+                }
+                m_ready = true;
+                return;
+              }
+            }else{
+              return;
+            }
+          }
+        }
+      }
+    }
 }
 
 
