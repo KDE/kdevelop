@@ -27,6 +27,7 @@ GenericName[pt]=Compilação Única
 GenericName[sv]=Kompilera en
 GenericName[tr]=Bir Dosya Derle
 GenericName[x-test]=xxCompileOnexx
+GenericName[zh_CN]=编译一个
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcompileone
 X-KDE-PluginInfo-Name=CompileOne
