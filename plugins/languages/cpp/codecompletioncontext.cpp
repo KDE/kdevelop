@@ -1381,16 +1381,18 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   #ifdef TEST_COMPLETION
   return ret;
   #endif
-  #define ADD_TYPED_TOKEN(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(#X, type, 0, KSharedPtr<Cpp::CodeCompletionContext>(this)) )
+  #define ADD_TYPED_TOKEN_S(X, type) ret << CompletionTreeItemPointer( new TypeConversionCompletionItem(X, type, 0, KSharedPtr<Cpp::CodeCompletionContext>(this)) )
+  #define ADD_TYPED_TOKEN(X, type) ADD_TYPED_TOKEN_S(#X, type)
   
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
+  #define ADD_TOKEN_S(X) ADD_TYPED_TOKEN_S(X, KDevelop::IndexedType())
   if(m_duContext->type() == DUContext::Class) {
-    ADD_TOKEN(Q_OBJECT);
+    ADD_TOKEN_S("Q_OBJECT");
     ADD_TOKEN(private);
     ADD_TOKEN(protected);
     ADD_TOKEN(public);
-    ADD_TOKEN(signals);
-    ADD_TOKEN(slots);
+    ADD_TOKEN_S("signals");
+    ADD_TOKEN_S("slots");
     ADD_TOKEN(virtual);
     ADD_TOKEN(friend);
     ADD_TOKEN(explicit);
@@ -1411,7 +1413,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
     ADD_TOKEN(do);
     ADD_TOKEN(dynamic_cast);
     ADD_TOKEN(else);
-    ADD_TOKEN(emit);
+    ADD_TOKEN_S("emit");
     ADD_TOKEN(for);
     ADD_TOKEN(goto);
     ADD_TOKEN(if);
