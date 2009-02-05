@@ -164,6 +164,8 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
     DUContextPointer thisContext;
     {
       thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
+      if(!thisContext)
+        thisContext = top;
 
        kDebug() << "context is set to" << thisContext.data();
         if( thisContext ) {
