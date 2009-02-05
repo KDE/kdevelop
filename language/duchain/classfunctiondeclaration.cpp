@@ -132,6 +132,16 @@ void ClassFunctionDeclaration::setIsAbstract(bool abstract)
   d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(abstract, AbstractFunctionFlag, d_func()->m_functionFlags);
 }
 
+bool ClassFunctionDeclaration::isFinal() const
+{
+  return d_func()->m_functionFlags & FinalFunctionFlag;
+}
+
+void ClassFunctionDeclaration::setIsFinal(bool final)
+{
+  d_func_dynamic()->m_functionFlags = (ClassFunctionFlags)setFlag(final, FinalFunctionFlag, d_func()->m_functionFlags);
+}
+
 bool ClassFunctionDeclaration::isSignal() const
 {
   return d_func()->m_functionFlags & FunctionSignalFlag;

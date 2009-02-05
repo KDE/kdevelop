@@ -34,7 +34,8 @@ enum ClassFunctionFlags
   FunctionFlagNormal = 0,
   FunctionSignalFlag = 1 <<  1,
   FunctionSlotFlag = 1 << 2,
-  AbstractFunctionFlag = 1 << 3
+  AbstractFunctionFlag = 1 << 3,
+  FinalFunctionFlag = 1 << 4
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString)
@@ -84,6 +85,10 @@ public:
   ///Whether this function is abstract
   bool isAbstract() const;
   void setIsAbstract(bool);
+  
+  ///Whether this function is final
+  bool isFinal() const;
+  void setIsFinal(bool);
   
   bool isConstructor() const;
   bool isDestructor() const;
