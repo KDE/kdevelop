@@ -25,6 +25,9 @@
 #include <qmutex.h>
 #include <language/duchain/ducontext.h>
 
+namespace KDevelop {
+class ParseJob;
+}
 class MissingIncludeCompletionWorker;
 
 class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
@@ -50,6 +53,11 @@ public:
   void startWithExpression(KDevelop::DUContextPointer context, QString prefixExpression, QString localExpression);
   
   static MissingIncludeCompletionModel& self();
+  
+  static void startCompletionAfterParsing(KDevelop::IndexedString url);
+  
+  private slots:
+  void parseJobFinished(KDevelop::ParseJob* job);
   
 protected:
   

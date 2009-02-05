@@ -21,16 +21,47 @@
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/parsejob.h>
+#include <interfaces/idocumentcontroller.h>
+#include <ktexteditor/codecompletioninterface.h>
 
 KDevelop::CodeCompletionWorker* MissingIncludeCompletionModel::createCompletionWorker()
 {
   return new MissingIncludeCompletionWorker(this);
 }
 
+namespace {
+  KDevelop::IndexedString startCompletionAfterParsingUrl;
+}
+
+void MissingIncludeCompletionModel::startCompletionAfterParsing(KDevelop::IndexedString url) {
+  startCompletionAfterParsingUrl = url;
+}
+
+void MissingIncludeCompletionModel::parseJobFinished(KDevelop::ParseJob* job) {
+  if(job->document() == startCompletionAfterParsingUrl && !KDevelop::ICore::self()->languageController()->backgroundParser()->isQueued(job->document().toUrl())) {
+    startCompletionAfterParsingUrl = KDevelop::IndexedString();
+    KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->documentForUrl(job->document().toUrl());
+    if(doc && doc->textDocument() && doc->textDocument()->activeView() && doc->textDocument()->activeView()->hasFocus()) {
+      KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(doc->textDocument()->activeView());
+      if(iface) {
+        ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
+        QMetaObject::invokeMethod(doc->textDocument()->activeView(), "userInvokedCompletion");
+      }
+      job->document().toUrl();
+    }
+  }
+}
+
+
 MissingIncludeCompletionModel* missingIncludeCompletionModelInstance = 0;
 
 MissingIncludeCompletionModel::MissingIncludeCompletionModel(QObject* parent) : CodeCompletionModel(parent) {
   missingIncludeCompletionModelInstance = this;
+  connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
 MissingIncludeCompletionModel::~MissingIncludeCompletionModel() {

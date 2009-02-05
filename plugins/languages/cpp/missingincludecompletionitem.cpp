@@ -34,10 +34,11 @@
 #include <declarationbuilder.h>
 #include <language/duchain/stringhelpers.h>
 #include "completionhelpers.h"
+#include "missingincludecompletionmodel.h"
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
-const int maxDeclarationCount = 30;
+const int maxDeclarationCount = 10;
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -354,6 +355,7 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
   }
 
   document->insertLine(moveBehindComment(document, lastLineWithInclude+1), insertLine);
+  MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
 }
 
 int MissingIncludeCompletionItem::inheritanceDepth() const {
