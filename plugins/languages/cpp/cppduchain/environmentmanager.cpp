@@ -236,7 +236,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
 
   ///@todo find out why this assertion sometimes triggers, maybe different macros with the same name were used?
   //ifDebug( Q_ASSERT(m_usedMacros.set().count() == m_usedMacroNames.set().count()) );
-  ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << m_usedMacros.set().count() );
+  ifDebug( kDebug(9007) << "Count of used macros that need to be verified:" << d_func()->m_usedMacros.set().count() );
 
   for ( ReferenceCountedMacroSet::Iterator it( d_func()->m_usedMacros.iterator() ); it; ++it ) {
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( it.ref().name );
