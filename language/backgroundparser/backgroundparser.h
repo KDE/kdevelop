@@ -187,6 +187,9 @@ public Q_SLOTS:
     ///Enables all processing of new jobs, equivalent to setNeededPriority(WorstPriority)
     void enableProcessing();
     
+    ///Returns true if the given url is queued for parsing
+    bool isQueued(KUrl url) const;
+    
 protected:
     void loadSettings(bool projectIsLoaded);
     void saveSettings(bool projectIsLoaded);
