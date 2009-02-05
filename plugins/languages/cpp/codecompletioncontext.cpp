@@ -141,7 +141,9 @@ int completionRecursionDepth = 0;
 
 CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_pointerConversionsBeforeMatching(0)
 {
+#ifndef TEST_COMPLETION  
   MissingIncludeCompletionModel::self().stop();
+#endif
   
   if(m_duContext) {
     LOCKDUCHAIN;
@@ -1095,7 +1097,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
     if(depth() == 0) {
       //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
       if(memberAccessOperation() == StaticMemberChoose) {
+#ifndef TEST_COMPLETION  
         MissingIncludeCompletionModel::self().startWithExpression(m_duContext, m_expression + "::", m_followingText.trimmed());
+#endif
       }
 
       if(m_duContext->type() == DUContext::Class) {
@@ -1304,7 +1308,9 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 //   if(!m_followingText.trimmed().isEmpty()) {
 //     uint oldItemCount = items.count();
 //     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
+#ifndef TEST_COMPLETION  
     MissingIncludeCompletionModel::self().startWithExpression(m_duContext, QString(), m_followingText.trimmed());
+#endif
 //     kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
 //   }
   

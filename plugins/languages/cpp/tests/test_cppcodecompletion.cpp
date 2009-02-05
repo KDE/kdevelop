@@ -232,8 +232,9 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
       hadThis = true;
     }
   }
-  QVERIFY(hadThis);
-  QCOMPARE(items.count(), 4); //C, test, i, and "this"
+  //"this" is not found, because it's part of the keyword-completion now
+//   QVERIFY(hadThis);
+  QCOMPARE(items.count(), 3); //C, test, i, and "this"
 
   lock.lock();
   release(context);
