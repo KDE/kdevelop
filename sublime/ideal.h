@@ -22,7 +22,11 @@
 #ifndef SUBLIME_IDEAL_H
 #define SUBLIME_IDEAL_H
 
-#include <QtGui>
+#include <QtGui/QAction>
+#include <QtGui/QActionEvent>
+#include <QtGui/QToolButton>
+#include <QtGui/QDockWidget>
+#include <QtGui/QStyleOption>
 
 #include "ideallayout.h"
 #include "sublimedefs.h"
