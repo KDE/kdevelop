@@ -219,6 +219,14 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
         overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
         overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
     }
+    
+    ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+    if(classFunction && classFunction->isAbstract()) {
+        overrideItem->setIcon(0, KIcon("flag-red"));
+        overrideItem->setText(0, overrideItem->text(0) + " = 0");///@todo this is C++ specific
+        classItem->removeChild(overrideItem);
+        classItem->insertChild(0, overrideItem);
+    }
 }
 
 QTreeWidget* OverridesPage::overrideTree() const
