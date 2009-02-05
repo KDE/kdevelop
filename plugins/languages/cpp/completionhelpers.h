@@ -42,5 +42,8 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
 ///Returns the type as which a declaration in the completion-list should be interpreted, which especially means that it returns the return-type of a function.
 KDevelop::AbstractType::Ptr effectiveType( KDevelop::Declaration* decl );
 
+///Returns true if the given file has the extension of a C++ source file, not of a header.
+bool isSource(QString fileName);
+
 #endif
 

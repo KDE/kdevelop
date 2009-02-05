@@ -33,6 +33,7 @@
 #include "cppduchain.h"
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
+#include "cpplanguagesupport.h"
 
 const int desiredArgumentTypeLength = 20;
 const int maxDefaultParameterLength = 30;
@@ -303,5 +304,12 @@ AbstractType::Ptr effectiveType( Declaration* decl )
     return decl->type<FunctionType>()->returnType();
 
   return decl->abstractType();
+}
+
+bool isSource(QString file) {
+  foreach(QString ext, sourceExtensions)
+    if(file.endsWith(ext))
+      return true;
+  return false;
 }
 

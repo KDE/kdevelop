@@ -33,6 +33,7 @@
 #include <language/duchain/duchainutils.h>
 #include <declarationbuilder.h>
 #include <language/duchain/stringhelpers.h>
+#include "completionhelpers.h"
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
@@ -66,10 +67,9 @@ int moveBehindComment(KTextEditor::Document* document, int line) {
 ///Decide whether the file is allowed to be included directly. If yes, this should return false.
 bool isBlacklistedInclude(KUrl url) {
   QString fileName = url.fileName();
-  foreach(QString extension, sourceExtensions) {
-    if(fileName.endsWith(extension))
-      return true; //Do not respect declartions from source-files
-  }
+  if(isSource(fileName))
+    return true;
+
   url = url.upUrl();
   //Do not allow including directly from the bits directory. Instead use one of the forwarding headers in other directories, when possible.
   if(url.fileName() == "bits" && url.path().contains("/include/c++/")) {
@@ -222,10 +222,12 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
       if(!decl || decl->topContext()->language() != IndexedString("C++") || !decl->topContext()->parsingEnvironmentFile())
         continue;
       
-      if(decl && (decl->context()->type() == DUContext::Namespace || decl->context()->type() == DUContext::Global) && !needInstance && (decl->type<CppClassType>() || decl->type<KDevelop::EnumerationType>()) ) {
-        if(!haveForwardDeclarationItems.contains(decl->id()))
-          ret += KDevelop::CompletionTreeItemPointer( new ForwardDeclarationItem(DeclarationPointer(decl)) );
-        haveForwardDeclarationItems.insert(decl->id());
+      if(!isSource(context->url().str())) {
+        if(decl && (decl->context()->type() == DUContext::Namespace || decl->context()->type() == DUContext::Global) && !needInstance && (decl->type<CppClassType>() || decl->type<KDevelop::EnumerationType>()) ) {
+          if(!haveForwardDeclarationItems.contains(decl->id()))
+            ret += KDevelop::CompletionTreeItemPointer( new ForwardDeclarationItem(DeclarationPointer(decl)) );
+          haveForwardDeclarationItems.insert(decl->id());
+        }
       }
       
       if(decl && !decl->isForwardDeclaration()) {
