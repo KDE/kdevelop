@@ -238,13 +238,13 @@ void ParsingEnvironmentFile::setModificationRevision( const KDevelop::Modificati
   
   #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << "setting modification-revision" << rev.toString();
+  kDebug() <<  id(this) << "setting modification-revision" << rev.toString();
   }
 #endif
   d_func_dynamic()->m_modificationTime = rev;
 #ifdef LEXERCACHE_DEBUG
   if(debugging()) {
-  kDebug( 9007 ) <<  id(this) << "new modification-revision" << m_modificationTime;
+  kDebug() <<  id(this) << "new modification-revision" << m_modificationTime;
   }
 #endif
   d_func_dynamic()->m_allModificationRevisions.addModificationRevision(d_func()->m_url, d_func()->m_modificationTime);

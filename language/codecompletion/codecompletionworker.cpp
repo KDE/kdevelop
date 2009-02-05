@@ -70,7 +70,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
   if( !doc ) {
-    kDebug(9007) << "No document for completion";
+    kDebug() << "No document for completion";
     return;
   }
 

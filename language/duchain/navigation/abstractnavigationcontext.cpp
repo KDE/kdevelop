@@ -125,7 +125,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
 
 
   if( !action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty()) ) {
-      kDebug(9007) << "Navigation-action has invalid declaration" << endl;
+      kDebug() << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
   qRegisterMetaType<KUrl>("KUrl");
@@ -133,7 +133,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
 
   switch( action.type ) {
     case NavigationAction::None:
-      kDebug(9007) << "Tried to execute an invalid action in navigation-widget" << endl;
+      kDebug() << "Tried to execute an invalid action in navigation-widget" << endl;
       break;
     case NavigationAction::NavigateDeclaration:
     {
@@ -311,7 +311,7 @@ NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration de
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link) {
   if( !m_links.contains(link) ) {
-    kDebug(9007) << "Executed unregistered link " << link << endl;
+    kDebug() << "Executed unregistered link " << link << endl;
     return NavigationContextPointer(this);
   }
 

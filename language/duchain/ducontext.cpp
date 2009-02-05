@@ -870,7 +870,7 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
   DUCHAIN_D_DYNAMIC(DUContext);
 
   if(context == this) {
-    kDebug(9007) << "Tried to import self";
+    kDebug() << "Tried to import self";
     return;
   }
   

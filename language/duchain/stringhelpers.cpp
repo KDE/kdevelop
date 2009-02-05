@@ -223,7 +223,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   }
 
   if( !s ) {
-    kDebug(9007) << "skipFunctionArguments: Safety-counter triggered";
+    kDebug() << "skipFunctionArguments: Safety-counter triggered";
   }
 
   argumentsStart -= pos;

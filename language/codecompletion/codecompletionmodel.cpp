@@ -144,7 +144,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
   DUChainReadLocker lock(DUChain::lock(), 400);
   if( !lock.locked() ) {
-    kDebug(9007) << "could not lock du-chain in time";
+    kDebug() << "could not lock du-chain in time";
     return;
   }
 
@@ -155,23 +155,23 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
   setCurrentTopContext(TopDUContextPointer(top));
 
   if (top) {
-    kDebug(9007) << "completion invoked for context" << (DUContext*)top;
+    kDebug() << "completion invoked for context" << (DUContext*)top;
 
     if( top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->modificationRevision() != ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl())) ) {
-      kDebug(9007) << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
+      kDebug() << "Found context is not current. Its revision is " /*<< top->parsingEnvironmentFile()->modificationRevision() << " while the document-revision is " << ModificationRevision::revisionForFile(IndexedString(url.pathOrUrl()))*/;
     }
 
     DUContextPointer thisContext;
     {
       thisContext = SpecializationStore::self().applySpecialization(top->findContextAt(SimpleCursor(range.start())), top);
 
-       kDebug(9007) << "context is set to" << thisContext.data();
+       kDebug() << "context is set to" << thisContext.data();
         if( thisContext ) {
-/*          kDebug( 9007 ) << "================== duchain for the context =======================";
+/*          kDebug() << "================== duchain for the context =======================";
           DumpChain dump;
           dump.dump(thisContext.data());*/
         } else {
-          kDebug( 9007 ) << "================== NO CONTEXT FOUND =======================";
+          kDebug() << "================== NO CONTEXT FOUND =======================";
           m_completionItems.clear();
           m_navigationWidgets.clear();
           reset();
@@ -183,7 +183,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
     emit completionsNeeded(thisContext, range.start(), view);
   } else {
-    kDebug(9007) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
+    kDebug() << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
   }
 }
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
@@ -252,7 +252,7 @@ void CodeCompletionModel::executeCompletionItem2(Document* document, const Range
 {
   DUChainReadLocker lock(DUChain::lock(), 3000);
   if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
+    kDebug() << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
     return;
   }
 
@@ -280,7 +280,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
     if( treeElement.asNode() ) {
       return QVariant(treeElement.asNode()->role);
     }else {
-      kDebug(9007) << "Requested group-role from leaf tree element";
+      kDebug() << "Requested group-role from leaf tree element";
       return QVariant();
     }
   }else{
@@ -299,7 +299,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
 
   if(!treeElement.asItem()) {
-    kWarning(9007) << "Error in completion model";
+    kWarning() << "Error in completion model";
     return QVariant();
   }
 
@@ -350,7 +350,7 @@ QModelIndex CodeCompletionModel::index(int row, int column, const QModelIndex& p
     CompletionTreeNode* node = element->asNode();
 
     if( !node ) {
-      kDebug(9007) << "Requested sub-index of leaf node";
+      kDebug() << "Requested sub-index of leaf node";
       return QModelIndex();
     }
 

@@ -230,7 +230,7 @@ bool ModificationRevisionSet::needsUpdate() const {
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
     ModificationRevision revision = KDevelop::ModificationRevision::revisionForFile( data->file );
     if( revision != data->revision ) {
-       kDebug( 9007 ) << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
+       kDebug() << "dependency" << data->file.str() << "has changed, stored stamp:" << data->revision << "new time:" << revision ;
        return true;
     }
     ++it;

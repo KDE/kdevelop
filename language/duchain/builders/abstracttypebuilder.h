@@ -228,8 +228,8 @@ protected:
 
           if (decl->abstractType() ) {
             ///@todo only functions may have multiple declarations here
-            //ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times" )
-            //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
+            //ifDebug( if( dec.count() > 1 ) kDebug() << id.toString() << "was found" << dec.count() << "times" )
+            //kDebug() << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
             openedType = true;
             openType(decl->abstractType());
             break;
@@ -247,7 +247,7 @@ protected:
     openedType = true;
     openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
-    ifDebug( if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+    ifDebug( if(templateDeclarationDepth() == 0) kDebug() << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
     }*/
     return openedType;
   }
