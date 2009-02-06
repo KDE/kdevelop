@@ -440,7 +440,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
 
     QString possib=inc->includeFile();
     QString path;
-    if(possib[0]=='/' && QFile::exists(possib))
+    if(!KUrl(possib).isRelative() && QFile::exists(possib))
         path=possib;
     else
     {
@@ -507,12 +507,12 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         else if(m_cache->contains(var))
             instPath = m_cache->value(var);
 
-//         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var) << instPath;
+         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var) << instPath;
 
 #if defined(Q_OS_WIN)
         modulePath.prepend(instPath);
         modulePath.prepend(instPath+"/cmake");
-#else
+#endif
         QString name=pack->name();
         QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
         foreach(const QString& post, postfix)
@@ -520,7 +520,6 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             modulePath.prepend(instPath+"/share/"+name.toLower()+post);
             modulePath.prepend(instPath+"/lib/"+name.toLower()+post);
         }
-#endif
 
         possibs+=QString("%1Config.cmake").arg(pack->name());
         possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
@@ -1225,7 +1224,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
         QByteArray b = procs.last()->readAllStandardOutput();
         QString t;
         t.prepend(b.trimmed());
-        m_vars->insert(exec->outputVariable(), QStringList(t.trimmed()));
+        m_vars->insert(exec->outputVariable(), QStringList(t.trimmed().replace("\\", "\\\\")));
         kDebug(9042) << "executed " << exec->outputVariable() << "=" << t;
     }
     qDeleteAll(procs);
@@ -1312,7 +1311,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::TO_CMAKE_PATH:
 #ifdef Q_OS_WIN
-            m_vars->insert(file->variable(), file->path().split(';'));
+            m_vars->insert(file->variable(), file->path().replace("\\", "/").split(';'));
 #else
             m_vars->insert(file->variable(), file->path().split(':'));
 #endif
@@ -1320,9 +1319,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
         case FileAst::TO_NATIVE_PATH:
-            if(QDir::separator()!='/')
-                m_vars->insert(file->variable(), QStringList(file->path().replace('/', QDir::separator())));
-
+            m_vars->insert(file->variable(), QStringList(file->path().replace('/', QDir::separator())));
             kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
@@ -1356,29 +1353,25 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
-    QString val, path=filecomp->fileName();
+    QString val;
+    QFileInfo fi(filecomp->fileName());
 
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::PATH:
-            val=path.mid(0, path.lastIndexOf('/'));
+            val=fi.absolutePath();
             break;
         case GetFilenameComponentAst::ABSOLUTE:
-            val=m_root+'/'+path;//FIXME: Should solve it.
+            val=fi.canonicalFilePath();
             break;
         case GetFilenameComponentAst::NAME: {
-            int p=path.lastIndexOf('/')+1;
-            val=path.mid(p, path.count()-p);
+            val=fi.fileName();
         } break;
         case GetFilenameComponentAst::EXT: {
-            int p=path.lastIndexOf('.')+1;
-            if(p>=0)
-                val=path.mid(p, path.count()-p);
+            val=fi.suffix();
         } break;
         case GetFilenameComponentAst::NAME_WE: {
-            int p=path.lastIndexOf('/')+1;
-            int p2 = path.lastIndexOf('.');
-            val=path.mid(p, p2-p);
+            val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
         } break;
         case GetFilenameComponentAst::PROGRAM:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
