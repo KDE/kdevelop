@@ -1372,7 +1372,8 @@ bool TopDUContext::importsPrivate(const DUContext * origin, const SimpleCursor& 
       Q_ASSERT(ret);
     return ret;
   } else {
-    return DUContext::imports(origin, position);
+    //Cannot import a non top-context
+    return false;
   }
  }
 
@@ -1397,6 +1398,13 @@ void TopDUContext::clearImportedParentContexts() {
 void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous, bool temporary) {
   if(context == this)
     return;
+  
+  if(!dynamic_cast<TopDUContext*>(context)) {
+    //We cannot do this, because of the extended way we treat top-context imports.
+    kDebug() << "tried to import a non top-context into a top-context. This is not possible.";
+    return;
+  }
+  
   if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
     DUContext::addImportedParentContext(context, position, anonymous, temporary); 
   
