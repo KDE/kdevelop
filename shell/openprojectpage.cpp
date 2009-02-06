@@ -44,21 +44,21 @@ OpenProjectPage::OpenProjectPage( QWidget* parent )
     QStringList filters;
     QStringList allEntry;
     allEntry << "*."+ShellExtension::getInstance()->projectFileExtension();
-    filters << "*."+ShellExtension::getInstance()->projectFileExtension() +'|'+ShellExtension::getInstance()->projectFileDescription();
+    filters << QString( "%1|%2 (%1)").arg("*."+ShellExtension::getInstance()->projectFileExtension()).arg(ShellExtension::getInstance()->projectFileDescription());
     foreach(const KPluginInfo& info, PluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
     {
         QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
-        QVariant desc = info.property("X-KDevelop-ProjectFilesFilterDescription");
+	    QVariant desc = info.property("X-KDevelop-ProjectFilesFilterDescription");
         QString filterline;
         if( filter.isValid() && desc.isValid() )
         {
             m_projectFilters.insert( info.name(), filter.toStringList() );
-            allEntry.append( filter.toString() );
-            filters << filter.toStringList().join(" ")+'|'+desc.toString();
+            allEntry += filter.toStringList();
+            filters << QString("%1|%2 (%1)").arg(filter.toStringList().join(" ")).arg(desc.toString());
         }
     }
-
-    filters.prepend( allEntry.join(" ")+"|All Project Files" );
+	
+    filters.prepend( QString( "%1|All Project Files (%1)").arg(allEntry.join(" ") ) );
 
     fileWidget->setFilter( filters.join("\n") );
 
