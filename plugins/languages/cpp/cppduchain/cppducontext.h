@@ -434,11 +434,10 @@ class CppDUContext : public BaseContext {
     void setInstantiatedFrom( CppDUContext<BaseContext>* context, const InstantiationInformation& templateArguments )
     {
       Q_ASSERT(!dynamic_cast<TopDUContext*>(this));
-      if(context && context->m_instantiatedFrom) {
+      if(context->m_instantiatedFrom) {
         setInstantiatedFrom(context->m_instantiatedFrom, templateArguments);
         return;
       }
-      QMutexLocker l(&cppDuContextInstantiationsMutex);
       
       if( m_instantiatedFrom ) {
         Q_ASSERT(m_instantiatedFrom->m_instatiations[m_instantiatedWith] == this);
@@ -446,42 +445,33 @@ class CppDUContext : public BaseContext {
       }
       
       m_instantiatedWith = templateArguments.indexed();
-      if(context) {
-        //Change the identifier so it contains the template-parameters
-        QualifiedIdentifier totalId = this->localScopeIdentifier();
-        KDevelop::Identifier id;
-        if( !totalId.isEmpty() ) {
-          id = totalId.last();
-          totalId.pop();
-        }
-        
-        id.clearTemplateIdentifiers();
-        FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
-          AbstractType::Ptr type(arg.type());
-          IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
-          if(identified)
-            id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
-          else if(type)
-            id.appendTemplateIdentifier( type->toString() );
-          else
-            id.appendTemplateIdentifier(QualifiedIdentifier("no type"));
-        }
-
-        totalId.push(id);
-        
-        this->setLocalScopeIdentifier(totalId);
+      //Change the identifier so it contains the template-parameters
+      QualifiedIdentifier totalId = this->localScopeIdentifier();
+      KDevelop::Identifier id;
+      if( !totalId.isEmpty() ) {
+        id = totalId.last();
+        totalId.pop();
       }
+      
+      id.clearTemplateIdentifiers();
+      FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
+        AbstractType::Ptr type(arg.type());
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        if(identified)
+          id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
+        else if(type)
+          id.appendTemplateIdentifier( type->toString() );
+        else
+          id.appendTemplateIdentifier(QualifiedIdentifier("no type"));
+      }
+
+      totalId.push(id);
+      
+      this->setLocalScopeIdentifier(totalId);
       
       m_instantiatedFrom = context;
       Q_ASSERT(m_instantiatedFrom != this);
-      if(m_instantiatedFrom) {
-        if(!m_instantiatedFrom->m_instatiations.contains(m_instantiatedWith)) {
-          m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
-        }else{
-          kDebug(9007) << "created orphaned instantiation for" << context->m_instatiations[m_instantiatedWith]->scopeIdentifier(true).toString();
-          m_instantiatedFrom = 0;
-        }
-      }
+      m_instantiatedFrom->m_instatiations.insert( m_instantiatedWith, this );
     }
     
     virtual void applyUpwardsAliases(DUContext::SearchItem::PtrList& identifiers, const TopDUContext* source) const
@@ -593,33 +583,20 @@ class CppDUContext : public BaseContext {
     
   private:
     ~CppDUContext() {
-
-      if(m_instantiatedFrom)
-        setInstantiatedFrom(0, InstantiationInformation());
-      
+      //Delete all the local declarations first, so they also delete their instantiations
+//       BaseContext::deleteLocalDeclarations();
       //Specializations will be destroyed the same time this is destroyed
-      CppDUContext<BaseContext>* oldFirst = 0;
-      QMutexLocker l(&cppDuContextInstantiationsMutex);
-      while(!m_instatiations.isEmpty()) {
-        CppDUContext<BaseContext>* first = 0;
-        first = *m_instatiations.begin();
-        
-        Q_ASSERT(first != oldFirst);
-        
-        l.unlock();
-        
-        if(first->isAnonymous()) {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          delete first;
-        } else {
-          Q_ASSERT(first->m_instantiatedFrom == this);
-          first->setInstantiatedFrom(0, InstantiationInformation());
-          Q_ASSERT(first->m_instantiatedFrom == 0);
-        }
-        
-        oldFirst = first;
-        
-        l.relock();
+      QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* > instatiations;
+      {
+        QMutexLocker l(&cppDuContextInstantiationsMutex);
+        instatiations = m_instatiations;
+      }
+      foreach( CppDUContext<BaseContext>* instatiation, instatiations ) {
+        Q_ASSERT(instatiation != this);
+        if(instatiation->isAnonymous())
+          delete instatiation;
+        else
+          instatiation->setInstantiatedFrom(0, InstantiationInformation());
       }
     }
 

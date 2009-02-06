@@ -2745,6 +2745,8 @@ void TestDUChain::testTemplates() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A {T2 a; typedef T Template1; }; class B{int b;}; class C{int c;}; template<class T>class A<B,T>{};  typedef A<B,C> D;");
 
   TopDUContext* top = parse(method, DumpNone);
+  parse(method, DumpNone, top);
+  
 
   DUChainWriteLocker lock(DUChain::lock());
 
