@@ -68,12 +68,12 @@ const bool assistAccessType = true;
 const bool noMultipleBinaryOperators = true;
 ///Whether only items that are allowed to be accessed should be shown
 const bool doAccessFiltering = true;
-#ifdef TEST_COMPLETION
-//Stub implementation that does nothing
-QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString /*expression*/, QString /*displayTextPrefix*/, Cpp::ExpressionEvaluationResult /*expressionResult*/, KDevelop::DUContext* /*context*/, int /*argumentHintDepth*/, bool /*needInstance*/) {
-  return QList<KDevelop::CompletionTreeItemPointer>();
-}
-#endif
+// #ifdef TEST_COMPLETION
+// //Stub implementation that does nothing
+// QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString /*expression*/, QString /*displayTextPrefix*/, Cpp::ExpressionEvaluationResult /*expressionResult*/, KDevelop::DUContext* /*context*/, int /*argumentHintDepth*/, bool /*needInstance*/) {
+//   return QList<KDevelop::CompletionTreeItemPointer>();
+// }
+// #endif
 
 QStringList binaryArithmeticOperators = QString("+ - * / % ^ & | < >" ).split( ' ', QString::SkipEmptyParts );
 

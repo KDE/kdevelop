@@ -35,6 +35,8 @@ public:
   virtual int argumentHintDepth() const {
     return m_argumentHintDepth;
   }
+  
+  QString lineToInsert() const;
 
   int m_argumentHintDepth;
   QString m_addedInclude, m_displayTextPrefix;
@@ -51,5 +53,8 @@ class ForwardDeclarationItem : public NormalDeclarationCompletionItem {
 ///DUChain must be locked
 ///@param displayTextPrefix may be needed so the created items pass a specific filtering in the completion-list
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth = 0, bool needInstance = false);
+
+///DUChain must be locked
+KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, KDevelop::IndexedDeclaration decl);
 
 #endif

@@ -40,6 +40,7 @@
 
 #include "../cppduchain/classdeclaration.h"
 #include <implementationhelperitem.h>
+#include <missingincludecompletionitem.h>
 
 using namespace KDevelop;
 
@@ -112,6 +113,16 @@ void CppNewClass::generateHeader()
 
   QTextStream output(&file);
 
+  QList<IndexedDeclaration> baseClasses;
+  
+  for(int a = 0; a < currentId(); ++a) {
+    OverridesPage* overridesPage = dynamic_cast<OverridesPage*>(page(a));
+    if(overridesPage)
+      baseClasses = overridesPage->baseClasses();
+  }
+  
+  kDebug() << "base-classes:" << baseClasses.size();
+  
   output << "/*\n" << field("license").toString() << "*/\n\n";
 
   // Namespace
@@ -133,6 +144,23 @@ void CppNewClass::generateHeader()
   output << "#ifndef " << headerGuard << '\n';
   output << "#define " << headerGuard << "\n\n";
 
+  //Add #includes
+  
+  bool addedIncludes = false;
+  
+  foreach(IndexedDeclaration base, baseClasses) {
+    DUChainReadLocker lock(DUChain::lock());
+    KSharedPtr<MissingIncludeCompletionItem> item = includeDirectiveFromUrl(url, base);
+    if(item) {
+      output << item->lineToInsert() << "\n";
+      addedIncludes = true;
+    }
+  }
+  
+  if(addedIncludes)
+    output << "\n\n";
+  
+  
   if (ns)
     output << "namespace " << id.toString() << " {\n\n";
 

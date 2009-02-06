@@ -35,6 +35,7 @@
 #include <language/duchain/stringhelpers.h>
 #include "completionhelpers.h"
 #include "missingincludecompletionmodel.h"
+#include <language/duchain/aliasdeclaration.h>
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
@@ -130,6 +131,50 @@ struct DirectiveShorterThan {
   }
 };
 
+QStringList candidateIncludeFiles(Declaration* decl) {
+  QStringList ret;
+
+  bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
+  
+  foreach(KDevelop::ParsingEnvironmentFilePointer ptr, decl->topContext()->parsingEnvironmentFile()->importers()) {
+    if(ptr->imports().count() == 1 || inBlacklistDir) {
+      if(isBlacklistedInclude(ptr->url().toUrl()))
+        continue;
+      //This file is a forwader, add it to the list
+
+      //Forwarders must be completely empty
+      if(ptr->topContext()->localDeclarations().count())
+        continue;
+      
+      QString file(ptr->url().toUrl().path());
+      ret << file;
+    }
+  }
+  
+  if(!inBlacklistDir)
+    ret << decl->url().toUrl().path();
+  
+  return ret;
+}
+
+KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, KDevelop::IndexedDeclaration decl) {
+  KSharedPtr<MissingIncludeCompletionItem> item;
+  if(decl.data()) {
+    QSet<QString> temp;
+    QStringList candidateFiles = candidateIncludeFiles(decl.data());
+
+    QList<KDevelop::CompletionTreeItemPointer> items;
+    foreach(QString file, candidateFiles)
+      items += itemsForFile(QString(), file, CppLanguageSupport::self()->findIncludePaths(fromUrl, 0), fromUrl, decl, 0, temp);
+
+    qSort<QList<KDevelop::CompletionTreeItemPointer>::iterator, DirectiveShorterThan>(items.begin(), items.end(), DirectiveShorterThan());
+    if(!items.isEmpty()) {
+      item = KSharedPtr<MissingIncludeCompletionItem>(dynamic_cast<MissingIncludeCompletionItem*>(items.begin()->data()));
+    }
+  }
+  return item;
+}
+
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool needInstance) {
   
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type(), context->topContext());
@@ -221,6 +266,8 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
       Declaration* decl = declarations[a].declaration();
       
       if(!decl || decl->topContext()->language() != IndexedString("C++") || !decl->topContext()->parsingEnvironmentFile())
+        continue;
+      if(dynamic_cast<KDevelop::AliasDeclaration*>(decl))
         continue;
       
       if(!isSource(context->url().str())) {
@@ -337,9 +384,13 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
   return QVariant();
 }
 
+QString MissingIncludeCompletionItem::lineToInsert() const {
+  return "#include " + m_addedInclude;
+}
+
 void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
 
-  QString insertLine = "#include " + m_addedInclude;
+  QString insertLine = lineToInsert();
   int lastLineWithInclude = 0;
   int checkLines = word.start().line() -1;
   for(int a = 0; a < checkLines; ++a) {
