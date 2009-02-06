@@ -663,6 +663,11 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
 {
   DUContext* ret = ContextBuilderBase::openContextInternal(range, type, identifier);
 
+  {
+    DUChainWriteLocker lock(DUChain::lock());
+    static_cast<CppDUContext<DUContext>*>(ret)->deleteAllInstantiations();
+  }
+  
   /**
    * @todo either remove this here and add it to the correct other places, or remove it in the over places.
    * The problem: For template-parameter contexts this needs to be imported into function-parameter contexts

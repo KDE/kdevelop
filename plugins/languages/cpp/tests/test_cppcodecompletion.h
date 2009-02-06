@@ -87,6 +87,7 @@ private slots:
   void testFriendVisibility();
   void testInheritanceVisibility();
   void testNamespaceCompletion();
+  void testTemplateMemberAccess();
 
 public:
   enum DumpArea {
@@ -104,7 +105,7 @@ private:
   //Preprocesses the text, and parses all included strings within the correct context. Only strings that were added using addInclude(..) can be parsed. The url is only neede for the EnvironmentFile.
   QString preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent = 0, bool stopAfterHeaders = false, KSharedPtr<Cpp::EnvironmentFile>* = 0, rpp::LocationTable** returnLocationTable = 0L, PreprocessedContents* contents = 0L );
 
-  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl());
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), rpp::pp* parent = 0, KUrl identity = KUrl(), TopDUContext* update = 0);
 
   void release(KDevelop::DUContext* top);
 

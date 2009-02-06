@@ -193,6 +193,9 @@ namespace Cpp {
       ///@param type The type of the argument the items are matched to.
       QList<CompletionTreeItemPointer> specialItemsForArgumentType(AbstractType::Ptr type);
       
+      ///Returns whether the declaration is directly visible from within the current context
+      bool visibleFromWithin(Declaration* decl, DUContext* currentContext);
+      
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
       ///Should preprocess the given text(replace macros with their body etc.)

@@ -48,6 +48,7 @@
 #include <qtfunctiondeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include "missingincludecompletionmodel.h"
+#include <templateparameterdeclaration.h>
 
 // #define ifDebug(x) x
 
@@ -252,7 +253,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     }
   }
 
-  if( endsWithOperator( m_text ) ) {
+  if( endsWithOperator( m_text ) && (m_memberAccessOperation != StaticMemberChoose || !m_text.trimmed().endsWith(">"))) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
       m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
@@ -1308,7 +1309,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 //   if(!m_followingText.trimmed().isEmpty()) {
 //     uint oldItemCount = items.count();
 //     items += missingIncludeCompletionItems(totalExpression, m_followingText.trimmed() + ": ", ExpressionEvaluationResult(), m_duContext.data(), 0);
-#ifndef TEST_COMPLETION  
+#ifndef TEST_COMPLETION
     MissingIncludeCompletionModel::self().startWithExpression(m_duContext, QString(), m_followingText.trimmed());
 #endif
 //     kDebug() << QString("added %1 missing-includes for %2").arg(items.count()-oldItemCount).arg(totalExpression);
@@ -1317,9 +1318,21 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   eventuallyAddGroup(i18n("C++ Builtin"), 800, keywordCompletionItems());
 }
 
+bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUContext* currentContext) {
+  if(!decl || !currentContext)
+    return false;
+  if(currentContext->imports(decl->context()))
+    return true;
+  
+  return visibleFromWithin(decl, currentContext->parentContext());
+}
+
 bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
   if(!decl)
     return true;
+  
+  if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
+    return false;
   
   static IndexedIdentifier friendIdentifier(Identifier("friend"));
   

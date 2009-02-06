@@ -279,6 +279,24 @@ void TestCppCodeCompletion::testFriendVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "PrivateClass");
 }
 
+void TestCppCodeCompletion::testTemplateMemberAccess() {
+  QByteArray method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+
+  lock.unlock();
+  parse(method, DumpAll, 0, KUrl(), top);
+  lock.lock();
+
+  QCOMPARE(top->childContexts().count(), 4);
+  QCOMPARE(top->childContexts()[3]->type(), DUContext::Other);
+  QCOMPARE(CompletionItemTester(top->childContexts()[3], "IntTest::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+  QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+  QCOMPARE(CompletionItemTester(top->childContexts()[3], "tv.").names.toSet(), QSet<QString>() << "member");
+}
+
 void TestCppCodeCompletion::testNamespaceCompletion() {
   
   QByteArray method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
@@ -1374,7 +1392,7 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
     return result;
 }
 
-TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity)
+TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dump, rpp::pp* parent, KUrl _identity, TopDUContext* update)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
@@ -1426,7 +1444,7 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   DeclarationBuilder definitionBuilder(session);
 
-  TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, &included);
+  TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, &included, ReferencedTopDUContext(update));
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);

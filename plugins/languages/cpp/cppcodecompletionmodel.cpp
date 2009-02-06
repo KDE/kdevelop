@@ -114,4 +114,9 @@ CppCodeCompletionModel::~CppCodeCompletionModel()
 {
 }
 
+void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
+  KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
+}
+
+
 #include "cppcodecompletionmodel.moc"

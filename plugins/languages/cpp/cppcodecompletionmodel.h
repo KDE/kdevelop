@@ -74,6 +74,7 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
 #if KDE_IS_VERSION(4,2,62)
     virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
 #endif
+    virtual void updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range);
     virtual void aborted(KTextEditor::View* view);
     virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
