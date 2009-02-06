@@ -94,6 +94,8 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* top)
   DUContext* internal = decl->internalContext();
   if( !internal )
     return 0;
+  if(internal->type() == DUContext::Template)
+    return internal;
   foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
     if( ctx.context(top) )
       if( ctx.context(top)->type() == DUContext::Template )
@@ -609,6 +611,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
   if( contextCopy && !doNotRegister )
     contextCopy->setInstantiatedFrom(dynamic_cast<CppDUContext<DUContext>*>(context), templateArguments);
+
   ///Since now the context is accessible through the du-chain, so it must not be changed any more.
 
   if( instantiatedDeclaration && instantiatedDeclaration->abstractType() ) {
@@ -629,7 +632,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           }
         }else{
           TemplateDeclaration* instantiatedTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
-          
           InstantiationInformation globalTemplateArguments = templateArguments;
           
           if(instantiatedTemplate) {
@@ -653,7 +655,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           ///Use the internal context if it exists, so undefined template-arguments can be found and the DelayedType can be further delayed then.
           AbstractType::Ptr changedType = resolveDelayedTypes( instantiatedDeclaration->abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source );
 
-          if( idType && idType->declaration(source) == instantiatedFrom ) {
+          if( idType && idType->declarationId() == instantiatedFrom->id() ) {
             if( changedType == instantiatedDeclaration->abstractType() )
                 changedType = instantiatedDeclaration->abstractType()->clone();
 
@@ -668,7 +670,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               changedIdType->setDeclarationId(base);
             }
           }
-          
           instantiatedDeclaration->setAbstractType( changedType );
         }
 
@@ -753,7 +754,6 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   QMap<IndexedString, AbstractType::Ptr> instantiatedParameters;
   DUContext* templateContext = getTemplateContext(thisDecl, source);
   if(!templateContext) {
-     kDebug() << "no template context";
     return qMakePair(0u, (TemplateDeclaration*)0);
   }
   
@@ -866,6 +866,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   }  
   
   Declaration* decl = dynamic_cast<Declaration*>(this);
+  
   Q_ASSERT(decl);
   Q_ASSERT(decl->topContext());
   

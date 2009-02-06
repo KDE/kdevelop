@@ -280,21 +280,51 @@ void TestCppCodeCompletion::testFriendVisibility() {
 }
 
 void TestCppCodeCompletion::testTemplateMemberAccess() {
-  QByteArray method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
-  TopDUContext* top = parse(method, DumpAll);
+  {
+    QByteArray method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");
+    TopDUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+    DUChainWriteLocker lock(DUChain::lock());
 
-  lock.unlock();
-  parse(method, DumpAll, 0, KUrl(), top);
-  lock.lock();
+    QCOMPARE(top->localDeclarations().count(), 4);
+    AbstractType::Ptr type = top->localDeclarations()[3]->abstractType();
+    QVERIFY(type);
+    IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    QVERIFY(identified);
+    QVERIFY(!identified->declarationId().isDirect());
+    QString specializationString = IndexedInstantiationInformation(identified->declarationId().specialization()).information().toString();
+    kDebug() << "specialization:" << identified->declarationId().specialization() << specializationString;
+    QCOMPARE(specializationString, QString("<int>"));
+    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("I<int>"));
+    
+    lock.unlock();
+    parse(method, DumpAll, 0, KUrl(), top);
+    lock.lock();
 
-  QCOMPARE(top->childContexts().count(), 4);
-  QCOMPARE(top->childContexts()[3]->type(), DUContext::Other);
-  QCOMPARE(CompletionItemTester(top->childContexts()[3], "IntTest::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
-  QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
-  QCOMPARE(CompletionItemTester(top->childContexts()[3], "tv.").names.toSet(), QSet<QString>() << "member");
+    QCOMPARE(top->localDeclarations().count(), 4);
+    QVERIFY(top->localDeclarations()[3]->abstractType());
+    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("I<int>"));
+    
+    release(top);
+  }
+  {
+    QByteArray method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+
+    lock.unlock();
+    parse(method, DumpAll, 0, KUrl(), top);
+    lock.lock();
+
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[3]->type(), DUContext::Other);
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "IntTest::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "tv.").names.toSet(), QSet<QString>() << "member");
+    release(top);
+  }
 }
 
 void TestCppCodeCompletion::testNamespaceCompletion() {
