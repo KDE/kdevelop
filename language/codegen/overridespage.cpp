@@ -47,8 +47,13 @@ public:
     QList<KDevelop::Declaration*> overrideSuperclasses;
     QMultiHash<Identifier, KDevelop::Declaration*> overriddenFunctions;
     QList<KDevelop::Declaration*> chosenOverrides;
+    QList<KDevelop::IndexedDeclaration> baseClasses;
     QVariantList selectedOverrides;
 };
+
+QList< KDevelop::IndexedDeclaration > KDevelop::OverridesPage::baseClasses() const {
+    return d->baseClasses;
+}
 
 OverridesPage::OverridesPage(QWizard* parent)
     : QWizardPage(parent)
@@ -145,6 +150,8 @@ void OverridesPage::fetchInheritance(const QString& inheritedObject)
         // Check if it's a class/struct/etc
         if (decl->type<StructureType>()) {
             fetchInheritanceFromClass(decl);
+            d->baseClasses << IndexedDeclaration(decl);
+            break;
         }
     }
 }
@@ -223,6 +230,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
     ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
     if(classFunction && classFunction->isAbstract()) {
         overrideItem->setIcon(0, KIcon("flag-red"));
+        overrideItem->setCheckState(0, Qt::Checked);
         overrideItem->setText(0, overrideItem->text(0) + " = 0");///@todo this is C++ specific
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);

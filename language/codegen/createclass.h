@@ -30,6 +30,7 @@ class KUrl;
 namespace KDevelop {
 
 class OverridesPage;
+class IndexedDeclaration;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWizardPage
 {

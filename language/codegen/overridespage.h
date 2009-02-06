@@ -50,6 +50,9 @@ public:
     virtual void fetchInheritanceFromClass(KDevelop::Declaration* decl);
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
 
+    /// Returns a list of all base-classes that were picked by the user
+    QList<IndexedDeclaration> baseClasses() const;
+    
 public Q_SLOTS:
     virtual void selectAll();
     virtual void deselectAll();
