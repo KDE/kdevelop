@@ -1518,7 +1518,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     /**
-     * If a class-name was found, get its constructors.
+     * If a class name was found, get its constructors.
      *
      * @todo Think uses should be built for typedef class constructors.
      *       Normally, it should be a use of the typedef class, so refactoring can work
