@@ -50,7 +50,7 @@
 using namespace KDevelop;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_defaultPaths(QStringList("/usr/lib/") << "/usr/include"), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
+    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
 {
 }
 
@@ -368,6 +368,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).split(';');
     else
         values = set->values();
+    kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
@@ -631,6 +632,7 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
 #ifdef Q_OS_WIN
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("Path");
+    kDebug() << "added Path env for program finding" << envVarDirectories("Path");
 #else
     if(!fprog->noSystemEnvironmentPath() && !fprog->noDefaultPath())
         modulePath += envVarDirectories("PATH");
@@ -659,6 +661,7 @@ QString CMakeProjectVisitor::findExecutable(const QString& file,
     QString path;
     QStringList suffixes=m_vars->value("CMAKE_EXECUTABLE_SUFFIX");
     suffixes.prepend(QString());
+    kDebug() << "finding executable, using suffixes" << suffixes;
 
     foreach(const QString& suffix, suffixes)
     {
