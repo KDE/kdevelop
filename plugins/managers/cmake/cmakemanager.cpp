@@ -216,20 +216,18 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
 
-#if defined(Q_WS_X11) || defined(Q_WS_MAC)
-    m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("TRUE"));
-    m_varsDef.insert("UNIX", QStringList("TRUE"));
-    #ifdef Q_WS_X11
-        m_varsDef.insert("LINUX", QStringList("TRUE"));
-    #endif
-    #ifdef Q_WS_MAC //NOTE: maybe should use __APPLE__
-        m_varsDef.insert("APPLE", QStringList("TRUE"));
-    #endif
+#ifdef Q_OS_WIN32
+    m_varsDef.insert("WIN32", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_WIN32", QStringList("1"));
+#else
+    m_varsDef.insert("UNIX", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("1"));
+#endif
+#ifdef Q_OS_MAC
+    m_varsDef.insert("APPLE", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
 #endif
 
-#ifdef Q_OS_WIN
-    m_varsDef.insert("WIN32", QStringList("TRUE"));
-#endif
     kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;
 }
 
@@ -254,8 +252,9 @@ KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) 
         item=dynamic_cast<const ProjectBaseItem*>(item->parent());
         fi=dynamic_cast<const ProjectFolderItem*>(item);
     }
-    if(!fi)
+    if(!fi) {
         return path;
+    }
 
     QString relative=KUrl::relativeUrl( projectPath, fi->url() );
     path.addPath(relative);
