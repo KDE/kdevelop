@@ -531,7 +531,7 @@ namespace svn
      * message using ContextListener::contextGetLogMessage. 
      * This return values is given back, then.
      *
-     * if the @a listener is not set the its checked whether
+     * if the @a listener is not set it is checked whether
      * the log message has been set using @a setLogMessage
      * yet. If not, return false otherwise true
      *

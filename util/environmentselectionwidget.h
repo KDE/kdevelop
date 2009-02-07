@@ -45,7 +45,7 @@ namespace KDevelop
  * </entry>
  * \endcode
  *
- * Its important to list "default" as the default value, because thats currently
+ * It is important to list "default" as the default value, because that is currently
  * the only way to avoid an empty entry in the combo box.
  *
  */

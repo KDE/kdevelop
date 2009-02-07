@@ -52,7 +52,7 @@ class UiController;
  * delete core;
  * \endcode
  *
- * @note Its important to call initialize and cleanup, else the controller's
+ * @note It is important to call initialize and cleanup, else the controllers
  * won't work properly.
  */
 class KDEVPLATFORMTESTSHELL_EXPORT TestCore : public Core

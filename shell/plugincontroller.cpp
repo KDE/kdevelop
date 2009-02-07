@@ -310,7 +310,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0L;
     }
 
-    // Do not load KDevKrossManager directly, its indirectly loaded when loading
+    // Do not load KDevKrossManager directly, it is indirectly loaded when loading
     // any plugins written in a supported scripting language
     // The kross-manager plugin needs the name+interfaces of the script-plugin
     // as argument
@@ -379,7 +379,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         if( str_error.isEmpty() && !missingInterfaces.isEmpty() )
         {
             kWarning() << "Can't load plugin '" << pluginId
-                    << "' some of its required dependecies could not be fulfilled:" << endl
+                    << "' some of its required dependencies could not be fulfilled:" << endl
                     << missingInterfaces.join(",") << endl;
         }
         else

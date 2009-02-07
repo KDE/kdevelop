@@ -57,7 +57,7 @@ public:
 
     /**
      * Provides access to the selection model of the project view.
-     * This way its possible to fetch the list of selected items in
+     * This way it is possible to fetch the list of selected items in
      * the project view and use that to prefill some thing.
      * @returns the selection model
      */
@@ -98,7 +98,7 @@ public Q_SLOTS:
     /**
      * close the given project. Closing the project is done in steps and
      * the @ref projectClosing and @ref projectClosed signals are emitted. Only when
-     * the latter signal is emitted its guaranteed that the project has been closed.
+     * the latter signal is emitted it is guaranteed that the project has been closed.
      * The @ref IProject object will be deleted after the closing has finished.
      * @returns true if the project could be closed, false otherwise
      */

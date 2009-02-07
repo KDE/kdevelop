@@ -97,7 +97,7 @@ struct SetNodeDataRequest {
   };
   
   //This constructor creates a request that finds or creates a node that equals the given node
-  //The m_hash must be up to dat, and the node must be split correctly around its splitPosition
+  //The m_hash must be up to date, and the node must be split correctly around its splitPosition
   inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository);
   
   SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository);

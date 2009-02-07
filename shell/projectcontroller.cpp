@@ -127,8 +127,8 @@ public:
             //plugins implementing IProjectManager, removing from that the
             //plugin that manages this project. Set this as blacklist on the
             //dialog
-            //@FIXME: Currently its important to set a parentApp on the kcm's
-            //thats different from the component name of the application, else
+            //@FIXME: Currently it is important to set a parentApp on the kcms
+            //that's different from the component name of the application, else
             //the plugin will show up on all projects settings dialogs.
 
             QStringList pluginsForPrj = findPluginsForProject( proj );
