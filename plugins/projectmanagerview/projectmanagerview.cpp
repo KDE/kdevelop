@@ -78,15 +78,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(m_syncAction);
     updateSyncAction();
 
-    m_buildAction = new KAction(this);
-    m_buildAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    m_buildAction->setText(i18n("Build Selected Items"));
-    m_buildAction->setToolTip(i18n("Builds the selected items in the tree."));
-    m_buildAction->setIcon(KIcon("run-build"));
-    connect(m_buildAction, SIGNAL(triggered(bool)), this, SLOT( buildSelectedItems() ));
-    addAction(m_buildAction);
-
-
+    addAction(plugin->actionCollection()->action("project_build"));
+    addAction(plugin->actionCollection()->action("project_install"));
+    addAction(plugin->actionCollection()->action("project_clean"));
+    
     m_ui->projectTreeView->setWhatsThis( i18n( "Project Overview" ) );
     QSizePolicy pol( QSizePolicy::Expanding, QSizePolicy::Expanding );
     pol.setVerticalStretch( 6 );
@@ -97,10 +92,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 //     m_filters->setClearButtonShown(true);
 //     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
 //     vbox->addWidget( m_filters );
-
-    m_ui->hideDetailsButton->setIcon( KIcon( "arrow-down-double.png" ) );
-    connect( m_ui->hideDetailsButton, SIGNAL( clicked() ),
-             this, SLOT( switchDetailView() ) );
 
     pol = QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
     pol.setVerticalStretch( 2 );
@@ -132,18 +123,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 void ProjectManagerView::selectionChanged()
 {
     m_ui->buildSetView->selectionChanged();
-    m_buildAction->setEnabled( !m_ui->projectTreeView->selectionModel()->selectedIndexes().isEmpty() );
     QList<ProjectBaseItem*> selected;
     foreach( const QModelIndex& idx, m_ui->projectTreeView->selectionModel()->selectedRows() )
     {
         selected << m_modelFilter->itemFromProxyIndex( idx );
     }
     KDevelop::ICore::self()->selectionController()->updateSelection( new ProjectItemContext( selected ) );
-}
-
-void ProjectManagerView::buildSelectedItems()
-{
-    ICore::self()->runController()->registerJob( new BuilderJob(BuilderJob::Build, selectedItems() ) );
 }
 
 void ProjectManagerView::updateSyncAction()
@@ -168,22 +153,6 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
             kDebug(9511) << "adding an unknown item";
     }
     return items;
-}
-
-void ProjectManagerView::switchDetailView()
-{
-    KFadeWidgetEffect* animation = new KFadeWidgetEffect( this );
-    if( m_ui->buildSetView->isHidden() )
-    {
-        m_ui->hideDetailsButton->setIcon( KIcon( "arrow-down-double" ) );
-        m_ui->buildSetView->show();
-    }
-    else
-    {
-        m_ui->hideDetailsButton->setIcon( KIcon( "arrow-up-double" ) );
-        m_ui->buildSetView->hide();
-    }
-    animation->start();
 }
 
 void ProjectManagerView::locateCurrentDocument()

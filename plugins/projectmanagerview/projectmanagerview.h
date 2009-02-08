@@ -51,10 +51,8 @@ public:
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
 private slots:
     void selectionChanged();
-    void switchDetailView();
     void locateCurrentDocument();
     void updateSyncAction();
-    void buildSelectedItems();
     void openUrl( const KUrl& );
     void fileCreated( const QString & );
     void fileDirty( const QString & );
@@ -62,7 +60,6 @@ private slots:
 
 private:
     KAction* m_syncAction;
-    KAction* m_buildAction;
     Ui::ProjectManagerView* m_ui;
     QStringList m_cachedFileList;
     ProjectProxyModel* m_modelFilter;

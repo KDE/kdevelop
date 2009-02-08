@@ -13,41 +13,9 @@
    <item>
     <layout class="QHBoxLayout" >
      <item>
-      <widget class="QToolButton" name="buildButton" >
-       <property name="toolTip" >
-        <string>Build</string>
-       </property>
-       <property name="whatsThis" >
-        <string>Build all items from the buildset</string>
-       </property>
+      <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="installButton" >
-       <property name="toolTip" >
-        <string>Install</string>
-       </property>
-       <property name="whatsThis" >
-        <string>Install all items from the buildset</string>
-       </property>
-       <property name="text" >
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="cleanButton" >
-       <property name="toolTip" >
-        <string>Clean</string>
-       </property>
-       <property name="whatsThis" >
-        <string>Clean all items from the buildset</string>
-       </property>
-       <property name="text" >
-        <string>...</string>
+        <string>Buildset</string>
        </property>
       </widget>
      </item>
