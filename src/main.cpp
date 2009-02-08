@@ -127,7 +127,7 @@ int main( int argc, char *argv[] )
     }
 
     Core::initialize();
-    KGlobal::locale()->insertCatalog( "kdevplatform" );
+    KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
 
     if ( splash )
