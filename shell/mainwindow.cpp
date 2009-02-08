@@ -76,9 +76,6 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
     {
         setXMLFile( ShellExtension::getInstance() ->xmlFile() );
     }
-
-    connect(this->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
-            d, SLOT(fixToolbar()));
 }
 
 MainWindow::~ MainWindow()
