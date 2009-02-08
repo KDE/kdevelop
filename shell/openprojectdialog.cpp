@@ -88,29 +88,24 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
             OpenProjectPage* page2 = qobject_cast<OpenProjectPage*>( openPage->widget() );
             if( page2 )
             {
-                if( !isDir )
+                bool managerFound = false;
+                foreach( const QString& manager, page2->projectFilters().keys() )
                 {
-                    bool managerFound = false;
-                    foreach( const QString& manager, page2->projectFilters().keys() )
+                    QDir dir;
+                    if( !isDir ) 
                     {
-                        foreach( const QString& filter, page2->projectFilters()[manager] )
-                        {
-                            QRegExp r( filter );
-                            r.setPatternSyntax( QRegExp::Wildcard );
-                            if( r.exactMatch( url.fileName() ) )
-                            {
-                                page->setProjectManager( manager );
-                                managerFound = true;
-                                break;
-                            }
-                        }
-                        if( managerFound ) 
-                        {
-                            break;
-                        }
+                        dir = QDir( url.directory() );
+                    } else {
+                        dir = QDir( url.toLocalFile() ); 
                     }
-                } else
-                {
+                    QStringList l = dir.entryList( page2->projectFilters()[manager] );
+                    if( !l.isEmpty() && ( isDir || l.contains( url.toLocalFile() ) ) ) {
+                        page->setProjectManager( manager );
+                        managerFound = true;
+                        break;
+                    }
+                }
+                if( !managerFound ) {
                     page->setProjectManager( "Generic Project Manager" );
                 }
             }
