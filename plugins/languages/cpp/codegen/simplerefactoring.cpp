@@ -44,8 +44,13 @@
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <project/projectmodel.h>
-#include "cppnewclass.h"
 #include <language/duchain/functiondefinition.h>
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include "cppnewclass.h"
+
+Q_DECLARE_METATYPE(ProjectBaseItem*);
 
 using namespace KDevelop;
 
@@ -93,10 +98,10 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
   if(ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context)) {
     //Actions on project-items
     foreach(KDevelop::ProjectBaseItem* item, projectContext->items()) {
-      if(item->folder()) {
+      if(item->folder() || item->target()) {
         //Allow creating a class in the folder
         QAction* action = new QAction(i18n("Create Class"), this);
-        action->setData(QVariant::fromValue(item->folder()->url()));
+        action->setData(QVariant::fromValue<ProjectBaseItem*>(item));
 //         action->setIcon(KIcon("edit-rename"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(executeNewClassAction()));
 
@@ -109,10 +114,25 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
 void SimpleRefactoring::executeNewClassAction() {
   QAction* action = qobject_cast<QAction*>(sender());
   if(action) {
-    KUrl url = action->data().value<KUrl>();
-    if(url.isValid()) {
-      CppNewClass newClassWizard(qApp->activeWindow(), url);
-      newClassWizard.exec();
+    ProjectBaseItem* item = action->data().value<ProjectBaseItem*>();
+    KUrl url;
+    ProjectFolderItem* folder;
+    if(item->folder()) {
+      folder=item->folder();
+    } else if(item->target()) {
+      folder=static_cast<ProjectBaseItem*>(item->parent())->folder();
+    }
+    CppNewClass newClassWizard(qApp->activeWindow(), folder->url());
+    int result=newClassWizard.exec();
+    if(result==QDialog::Accepted) {
+      IProject* p=item->project();
+      ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.field("implementationUrl").value<KUrl>(), folder);
+      ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.field("headerUrl").value<KUrl>(), folder);
+      
+      if(item->target()) {
+        p->buildSystemManager()->addFileToTarget(file, item->target());
+        p->buildSystemManager()->addFileToTarget(header, item->target());
+      }
     }
   }else{
     kWarning() << "strange problem";
