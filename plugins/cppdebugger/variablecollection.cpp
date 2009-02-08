@@ -495,10 +495,17 @@ void VariableCollection::update()
 void VariableCollection::handleListLocalVars(const GDBMI::ResultRecord& r)
 {
     const GDBMI::Value& locals = r["locals"];
+    QSet<QString> existingVariables;
+    for (int j = 0; j < rowCount(); j++)
+    {
+        existingVariables << data( index( j, 0 ), Qt::DisplayRole ).toString();
+    }
+
     for (int i = 0; i < locals.size(); i++)
     {
         const GDBMI::Value& var = locals[i];
-        if( !Variable::findByName(var["name"].literal() ) )
+        // Only add the variable if we don't have them in the list yet.
+        if( !existingVariables.contains( var["name"].literal() ) )
         {
             universe_->addVariable( var );
         }
