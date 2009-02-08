@@ -87,52 +87,52 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     return false;
 }
 
-KUrl currentBuildDirForProject( KDevelop::IProject* project )
+KUrl currentBuildDir( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     return cmakeGrp.readEntry( currentBuildDirKey, KUrl() );
 }
 
-QString currentBuildTypeForProject( KDevelop::IProject* project )
+QString currentBuildType( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     return cmakeGrp.readEntry( currentBuildTypeKey, "Release" );
 }
 
-KUrl currentCMakeBinaryForProject( KDevelop::IProject* project )
+KUrl currentCMakeBinary( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     return cmakeGrp.readEntry( currentCMakeBinaryKey, KStandardDirs::findExe( "cmake" ) );
 }
 
-KUrl currentInstallDirForProject( KDevelop::IProject* project )
+KUrl currentInstallDir( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     return cmakeGrp.readEntry( currentInstallDirKey, KUrl("/usr/local") );
 }
 
-void setCurrentInstallDirForProject( KDevelop::IProject* project, const KUrl& url )
+void setCurrentInstallDir( KDevelop::IProject* project, const KUrl& url )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentInstallDirKey, url );
     cmakeGrp.sync();
 }
 
-void setCurrentBuildTypeForProject( KDevelop::IProject* project, const QString& type )
+void setCurrentBuildType( KDevelop::IProject* project, const QString& type )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentBuildTypeKey, type );
     cmakeGrp.sync();
 }
 
-void setCurrentCMakeBinaryForProject( KDevelop::IProject* project, const KUrl& url )
+void setCurrentCMakeBinary( KDevelop::IProject* project, const KUrl& url )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentCMakeBinaryKey, url );
     cmakeGrp.sync();
 }
 
-void setCurrentBuildDirForProject( KDevelop::IProject* project, const KUrl& url )
+void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentBuildDirKey, url );
