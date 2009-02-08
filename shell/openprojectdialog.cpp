@@ -88,25 +88,38 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
             OpenProjectPage* page2 = qobject_cast<OpenProjectPage*>( openPage->widget() );
             if( page2 )
             {
+                // Default manager
+                page->setProjectManager( "Generic Project Manager" );
+                // clear the filelist
+                m_fileList.clear();
+
+                if( isDir ) {
+                    // If a dir was selected fetch all files in it
+                    KIO::ListJob* job = KIO::listDir( m_url );
+                    connect( job, SIGNAL(entries(KIO::Job*, const KIO::UDSEntryList&)), 
+                                  SLOT(storeFileList(KIO::Job*, const KIO::UDSEntryList&)));
+                    KIO::NetAccess::synchronousRun( job, Core::self()->uiController()->activeMainWindow() );
+                } else {
+                    // Else we'lll just take the given file
+                    m_fileList << url.fileName();
+                }
+                // Now find a manager for the file(s) in our filelist.
                 bool managerFound = false;
                 foreach( const QString& manager, page2->projectFilters().keys() )
                 {
-                    QDir dir;
-                    if( !isDir ) 
+                    foreach( const QString& filterexp, page2->projectFilters()[manager] )
                     {
-                        dir = QDir( url.directory() );
-                    } else {
-                        dir = QDir( url.toLocalFile() ); 
+                        if( !m_fileList.filter( QRegExp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard ) ).isEmpty() ) 
+                        {
+                            managerFound = true;
+                            break;
+                        }
                     }
-                    QStringList l = dir.entryList( page2->projectFilters()[manager] );
-                    if( !l.isEmpty() && ( isDir || l.contains( url.toLocalFile() ) ) ) {
+                    if( managerFound )
+                    {
                         page->setProjectManager( manager );
-                        managerFound = true;
                         break;
                     }
-                }
-                if( !managerFound ) {
-                    page->setProjectManager( "Generic Project Manager" );
                 }
             }
         }
@@ -150,6 +163,18 @@ QString OpenProjectDialog::projectName()
 QString OpenProjectDialog::projectManager()
 {
     return m_projectManager;
+}
+
+void OpenProjectDialog::storeFileList(KIO::Job*, const KIO::UDSEntryList& list)
+{
+    foreach( const KIO::UDSEntry& entry, list )
+    {
+        QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
+        if( name != "." && name != ".." && !entry.isDir() )
+        {
+            m_fileList << name;
+        }
+    }
 }
 
 }

@@ -35,6 +35,7 @@ private slots:
     void validateOpenUrl( const KUrl& );
     void validateProjectName( const QString& );
     void validateProjectManager( const QString& );
+    void storeFileList(KIO::Job*, const KIO::UDSEntryList&);
 private:
     void validateProjectInfo();
     KUrl m_url;
@@ -42,6 +43,7 @@ private:
     QString m_projectManager;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
+    QStringList m_fileList;
 };
 
 }
