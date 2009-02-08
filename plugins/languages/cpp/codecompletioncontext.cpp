@@ -135,7 +135,7 @@ QString extractLastLine(const QString& str) {
 
 bool isKeyword(QString str) {
   ///@todo Complete this list
-  return str == "new" || str == "return" || str == "else" || str == "throw";
+  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete";
 }
 
 int completionRecursionDepth = 0;
@@ -291,6 +291,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
    * emit exp;
    * throw exp;
    * new Class;
+   * delete exp;
    * a=function(exp
    * a = exp(
    * ClassType instance(
@@ -856,6 +857,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         case MemberChoose:
           if( memberAccessContainer().isValid() ||memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
           {
+            bool typeIsConst = false;
+            AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext());
+            if (expressionTarget && (expressionTarget->modifiers() & AbstractType::ConstModifier))
+              typeIsConst = true;
+            
             QSet<QualifiedIdentifier> hadNamespaceDeclarations; //Used to show only one namespace-declaration per namespace
             QList<DUContext*> containers = memberAccessContainers();
             ifDebug( kDebug() << "got" << containers.size() << "member-access containers"; )
@@ -873,7 +879,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
                   ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl.first);
 
-                  if(classMember && !filterDeclaration(classMember, ctx))
+                  if(classMember && !filterDeclaration(classMember, ctx, typeIsConst))
                     continue;
                   else if(!filterDeclaration(decl.first, ctx))
                     continue;
@@ -1206,6 +1212,15 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   typedef QPair<Declaration*, int> DeclarationDepthPair;
   QSet<QualifiedIdentifier> hadNamespaceDeclarations;
 
+  bool typeIsConst = false;
+  /*Declaration* func = Cpp::localFunctionFromCodeContext(m_duContext.data());
+  kDebug() << m_duContext->type() << func;
+  if (func) {
+    kDebug() << func->abstractType()->toString();
+    if (func->abstractType() && (func->abstractType()->modifiers() & AbstractType::ConstModifier))
+      typeIsConst = true;
+  }*/
+
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
@@ -1244,7 +1259,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 
   QList<DeclarationDepthPair> oldDecls = decls;
   decls.clear();
-
+  
   //Remove pure function-definitions before doing overload-resolution, so they don't hide their own declarations.
   foreach( const DeclarationDepthPair& decl, oldDecls )
     if(!dynamic_cast<FunctionDefinition*>(decl.first) || !static_cast<FunctionDefinition*>(decl.first)->hasDeclaration()) {
@@ -1256,7 +1271,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
         hadNamespaceDeclarations.insert(id);
       }
       
-      if(filterDeclaration(decl.first)) {
+      if(filterDeclaration(decl.first, 0, true, typeIsConst)) {
         decls << decl;
       }
     }
@@ -1327,10 +1342,10 @@ bool CodeCompletionContext::visibleFromWithin(KDevelop::Declaration* decl, DUCon
   return visibleFromWithin(decl, currentContext->parentContext());
 }
 
-bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic) {
+bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* declarationContext, bool dynamic, bool typeIsConst) {
   if(!decl)
     return true;
-  
+
   if(dynamic_cast<TemplateParameterDeclaration*>(decl) && !visibleFromWithin(decl, m_duContext.data()))
     return false;
   
@@ -1351,14 +1366,16 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(dynamic && decl->context()->type() == DUContext::Class) {
     ClassMemberDeclaration* classMember = dynamic_cast<ClassMemberDeclaration*>(decl);
     if(classMember)
-      return filterDeclaration(classMember, declarationContext);
+      return filterDeclaration(classMember, declarationContext, typeIsConst);
   }
   
   return true;
 }
 
-bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext) {
+bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext, bool typeIsConst) {
   if(doAccessFiltering && decl) {
+    if (typeIsConst && decl->abstractType() && !(decl->abstractType()->modifiers() & AbstractType::ConstModifier))
+      return false;
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
   }

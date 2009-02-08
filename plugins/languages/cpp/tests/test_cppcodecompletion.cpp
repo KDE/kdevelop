@@ -266,6 +266,19 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
   QCOMPARE(CompletionItemTester(top, "D::").names.toSet(), QSet<QString>() << "CMyClass" ); //DMyClass is private
 }
 
+void TestCppCodeCompletion::testConstVisibility() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("struct test { void f(); void e() const; }; int main() { const test a; }");
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->childContexts().count(), 3);
+
+  kDebug() << "list:" << CompletionItemTester(top->childContexts()[2], "a.").names << CompletionItemTester(top->childContexts()[2], "a.").names.size();
+  QCOMPARE(CompletionItemTester(top->childContexts()[2], "a.").names.toSet(), QSet<QString>() << "e");
+}
+
 void TestCppCodeCompletion::testFriendVisibility() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("class A { class PrivateClass {}; friend class B; }; class B{};");
@@ -282,7 +295,7 @@ void TestCppCodeCompletion::testFriendVisibility() {
 void TestCppCodeCompletion::testTemplateMemberAccess() {
   {
     QByteArray method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -298,7 +311,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("I<int>"));
     
     lock.unlock();
-    parse(method, DumpAll, 0, KUrl(), top);
+    parse(method, DumpNone, 0, KUrl(), top);
     lock.lock();
 
     QCOMPARE(top->localDeclarations().count(), 4);
@@ -309,13 +322,13 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
   }
   {
     QByteArray method("template<class T> class Test { public: T member; typedef T Data; enum { Value = 3 }; }; typedef Test<int> IntTest; void test() { IntTest tv; int i = Test<int>::Value; }");
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "Test<int>::").names.toSet(), QSet<QString>() << "Data" << "Value" << "member");
 
     lock.unlock();
-    parse(method, DumpAll, 0, KUrl(), top);
+    parse(method, DumpNone, 0, KUrl(), top);
     lock.lock();
 
     QCOMPARE(top->childContexts().count(), 4);
@@ -330,7 +343,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
 void TestCppCodeCompletion::testNamespaceCompletion() {
   
   QByteArray method("namespace A { class m; namespace Q {}; }; namespace A { class n; int q; }");
-  TopDUContext* top = parse(method, DumpAll);
+  TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
