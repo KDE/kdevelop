@@ -145,6 +145,8 @@ public:
 
     Watches *watches() const { return watches_; }
 
+    void addVariable( const GDBMI::Value& );
+
     void fetchMoreChildren() {}
 
 private:
@@ -261,6 +263,7 @@ private slots:
 
 private:
     void handleVarUpdate(const GDBMI::ResultRecord& r);
+    void handleListLocalVars(const GDBMI::ResultRecord& r);
 
 private:
 

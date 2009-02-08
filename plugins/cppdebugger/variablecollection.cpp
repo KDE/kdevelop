@@ -316,6 +316,13 @@ VariablesRoot::VariablesRoot(TreeModel* model)
     appendChild(watches_, true);
 }
 
+void VariablesRoot::addVariable( const GDBMI::Value& var )
+{
+    Variable* v = new Variable( static_cast<VariableCollection*>(model()), this, controller(), var["name"].literal() );
+    appendChild( v, false );
+    v->createVarobjMaybe();
+}
+
 GDBController* VariablesRoot::controller()
 {
     return static_cast<VariableCollection*>(model())->controller();
@@ -478,8 +485,24 @@ void VariableCollection::slotEvent(event_t event)
 void VariableCollection::update()
 {
     controller()->addCommand(
+        new GDBCommand(GDBMI::StackListLocals, "1", this,
+                       &VariableCollection::handleListLocalVars));
+    controller()->addCommand(
         new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableCollection::handleVarUpdate));
+}
+
+void VariableCollection::handleListLocalVars(const GDBMI::ResultRecord& r)
+{
+    const GDBMI::Value& locals = r["locals"];
+    for (int i = 0; i < locals.size(); i++)
+    {
+        const GDBMI::Value& var = locals[i];
+        if( !Variable::findByName(var["name"].literal() ) )
+        {
+            universe_->addVariable( var );
+        }
+    }
 }
 
 void VariableCollection::handleVarUpdate(const GDBMI::ResultRecord& r)
