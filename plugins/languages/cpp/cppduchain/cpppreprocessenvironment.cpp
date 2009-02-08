@@ -63,7 +63,7 @@ rpp::pp_macro* CppPreprocessEnvironment::retrieveMacro(const KDevelop::IndexedSt
 
     if( !ret || (!m_environmentFile->definedMacroNames().contains(name) && !m_environmentFile->unDefinedMacroNames().contains(name)) )
         m_strings.insert(name.index());
-    
+
     if( ret )
         m_environmentFile->usingMacro(*ret);
 
@@ -107,26 +107,26 @@ void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macro
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
     for( Cpp::ReferenceCountedMacroSet::Iterator it(file->definedMacros().iterator()); it; ++it )
         rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
-    
+
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
         rpp::pp_dynamic_macro m(*it);
         m.defined = false;
         rpp::Environment::setMacro(makeConstant(&m)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
     }
-    
+
     m_macroNameSet += file->definedMacroNames();
     m_macroNameSet -= file->unDefinedMacroNames();
 }
 
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
     rpp::pp_macro* hadMacro = retrieveStoredMacro(macro->name);
-    
+
     //If a macro of the same name has been fixed, the new macro has no effect
     if(hadMacro && hadMacro->fixed) {
-      delete macro;
+      delete[] macro;
       return;
     }
-    
+
   //kDebug() << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
     //Note defined macros
     if( m_environmentFile )
@@ -136,7 +136,7 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
       m_macroNameSet.insert(macro->name);
     else
       m_macroNameSet.remove(macro->name);
-    
+
     rpp::Environment::setMacro(macro);
 }
 
