@@ -22,6 +22,8 @@
 
 #include <QtCore/QStringList>
 
+#include <kglobalsettings.h>
+
 namespace KDevelop
 {
 
@@ -33,7 +35,9 @@ OutputModel::OutputModel( QObject* parent )
 
 void OutputModel::appendLine( const QString& line )
 {
-    appendRow( new QStandardItem( line ) );
+    QStandardItem* item = new QStandardItem( line );
+    item->setFont( KGlobalSettings::fixedFont() );
+    appendRow( item );
 }
 
 void OutputModel::appendLines( const QStringList& lines)
