@@ -231,7 +231,7 @@ CMakeProjectManager::~CMakeProjectManager()
 KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) const
 {
     KUrl path = CMake::currentBuildDir(item->project());
-    if(!path.isEmpty())
+    if(path.isEmpty())
     {
         return KUrl();
     }
