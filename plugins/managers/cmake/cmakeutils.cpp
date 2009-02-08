@@ -28,6 +28,7 @@
 #include <kurl.h>
 #include <kparts/mainwindow.h>
 #include <kdialog.h>
+#include <kdebug.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -61,13 +62,16 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
         }
 
         cmakeGrp.writeEntry( "CurrentBuildDir", bd.buildFolder() );
-        cmakeGrp.writeEntry( "Current CMake binary", bd.cmakeBinary() );
+        cmakeGrp.writeEntry( "Current CMake Binary", bd.cmakeBinary() );
         cmakeGrp.writeEntry( "CurrentInstallDir", bd.installPrefix() );
+        cmakeGrp.writeEntry( "CurrentBuildType", bd.buildType() );
 
         if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
             builddirs.append(bd.buildFolder().toLocalFile());
             cmakeGrp.writeEntry( "BuildDirs", builddirs);
         }
+        cmakeGrp.sync();
+
         return true;
     } else if( !QFileInfo( builddir.toLocalFile() + "/CMakeCache.txt" ).exists() )
     {
