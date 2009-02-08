@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-Copyright 2008 Anreas Pakulat <apaku@gmx.de>
+Copyright 2008 Andreas Pakulat <apaku@gmx.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
