@@ -49,20 +49,18 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT KUrl currentBuildDirForProject( KDevelop::IProject* project );
 
     /**
-     * @returns the current build type for the given project or an empty string if none
-     * has been set by the user.
+     * @returns the current build type for the given project or "Release" as default value.
      */
     KDEVCMAKECOMMON_EXPORT QString currentBuildTypeForProject( KDevelop::IProject* project );
 
     /**
-     * @returns the current cmake binary for the given project or an empty url if none
-     * has been set by the user.
+     * @returns the current cmake binary for the given project or
+     * KStandardDirs::findExe("cmake") as default value. 
      */
     KDEVCMAKECOMMON_EXPORT KUrl currentCMakeBinaryForProject( KDevelop::IProject* project );
 
     /**
-     * @returns the current install dir for the given project or an empty url if none
-     * has been set by the user.
+     * @returns the current install dir for the given project or "/usr/local" as default value.
      */
     KDEVCMAKECOMMON_EXPORT KUrl currentInstallDirForProject( KDevelop::IProject* project );
 

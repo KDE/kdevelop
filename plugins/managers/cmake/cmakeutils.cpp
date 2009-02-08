@@ -29,6 +29,7 @@
 #include <kparts/mainwindow.h>
 #include <kdialog.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -86,7 +87,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     return false;
 }
 
-KUrl buildDirForProject( KDevelop::IProject* project )
+KUrl currentBuildDirForProject( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     return cmakeGrp.readEntry( currentBuildDirKey, KUrl() );
@@ -95,19 +96,19 @@ KUrl buildDirForProject( KDevelop::IProject* project )
 QString currentBuildTypeForProject( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
-    return cmakeGrp.readEntry( currentBuildTypeKey, QString() );
+    return cmakeGrp.readEntry( currentBuildTypeKey, "Release" );
 }
 
 KUrl currentCMakeBinaryForProject( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
-    return cmakeGrp.readEntry( currentCMakeBinaryKey, KUrl() );
+    return cmakeGrp.readEntry( currentCMakeBinaryKey, KStandardDirs::findExe( "cmake" ) );
 }
 
 KUrl currentInstallDirForProject( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
-    return cmakeGrp.readEntry( currentInstallDirKey, KUrl() );
+    return cmakeGrp.readEntry( currentInstallDirKey, KUrl("/usr/local") );
 }
 
 void setCurrentInstallDirForProject( KDevelop::IProject* project, const KUrl& url )
