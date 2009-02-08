@@ -74,6 +74,12 @@ KDEVCPPDUCHAIN_EXPORT QList< QPair<KDevelop::Declaration*, int> > hideOverloaded
    */
 KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context);
 
+  /**Tries determining the local function that the given code-context belongs to.
+   *
+   * This works within contexts of type DUContext::Other, as well as in argument contexts of type DUContext::Function(also within function definitions).
+   */
+KDEVCPPDUCHAIN_EXPORT KDevelop::Declaration* localFunctionFromCodeContext(KDevelop::DUContext* context);
+
   /**
    * Returns the logical namespace the given context belongs to, visibility-wise.
    * @param identifier An ending part of identifier of the given context(May be the full identifier)

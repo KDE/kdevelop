@@ -196,6 +196,37 @@ Declaration* localClassFromCodeContext(DUContext* context)
   return 0;
 }
 
+Declaration* localFunctionFromCodeContext(DUContext* context)
+{
+  kDebug() << context << context->type();
+
+  while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
+  { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
+    context = context->parentContext();
+    kDebug() << context << context->type();
+  }
+
+  if(context->type() == DUContext::Function) {
+    kDebug() << "found function context";
+    return context->owner();
+  }
+
+  if(context->type() == DUContext::Other) {
+    //Jump from code-context to function-context
+    foreach(DUContext::Import import, context->importedParentContexts()) {
+      if(DUContext* i = import.context(context->topContext())) {
+        if(i->type() == DUContext::Function) {
+          kDebug() << "found function context via imports";
+          return i->owner();
+        }
+      }
+    }
+  }
+
+  kDebug() << "no good";
+  return 0;
+}
+
 ClassMemberDeclaration::AccessPolicy mostRestrictiveInheritanceAccessPolicy(DUContext* startContext, DUContext* targetContext, TopDUContext* top, bool ignoreFirst = false)
 {
   ClassMemberDeclaration::AccessPolicy ret = ClassMemberDeclaration::Public;
