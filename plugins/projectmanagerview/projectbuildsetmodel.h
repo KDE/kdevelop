@@ -71,6 +71,7 @@ public:
 public slots:
     void saveToProject( KDevelop::IProject* ) const;
     void loadFromProject( KDevelop::IProject* );
+    void projectClosed( KDevelop::IProject* );
 private:
     QList<BuildItem> m_items;
 };

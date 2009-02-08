@@ -246,6 +246,19 @@ QList<BuildItem> ProjectBuildSetModel::items()
     return m_items ;
 }
 
+void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
+{
+    emit layoutAboutToBeChanged();
+    for( int i = 0; i < m_items.count(); i++ )
+    {
+        if( m_items.at(i).projectName() == project->name() )
+        {
+            m_items.removeAt(i);
+        }
+    }    
+    emit layoutChanged();
+}
+
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");

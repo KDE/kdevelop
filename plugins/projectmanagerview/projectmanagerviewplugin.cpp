@@ -104,6 +104,8 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
 
     connect( core()->projectController(), SIGNAL( projectClosing( KDevelop::IProject* ) ),
              d->buildSet, SLOT( saveToProject( KDevelop::IProject* ) ) );
+    connect( core()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ),
+             d->buildSet, SLOT( projectClosed( KDevelop::IProject* ) ) );
 
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     d->m_buildAll->setIcon(KIcon("run-build"));
