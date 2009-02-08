@@ -41,6 +41,8 @@ class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
     enum Setup { Default=0, NoUi=1 };
 
+    static QString version();
+
     /** Initialize the core of the kdevplatform application */
     static void initialize(Setup mode=Default);
 

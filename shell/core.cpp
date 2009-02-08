@@ -46,13 +46,14 @@
 #include "sourceformattercontroller.h"
 #include "selectioncontroller.h"
 #include "core_p.h"
+#include "kdevplatformversion.h"
 
 namespace KDevelop {
 
 Core *Core::m_self = 0;
 
 CorePrivate::CorePrivate(Core *core):
-    m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), "1.0", ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) ), m_core(core), m_cleanedUp(false)
+    m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR, ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) ), m_core(core), m_cleanedUp(false)
 {
 }
 
@@ -305,6 +306,11 @@ ISourceFormatterController* Core::sourceFormatterController()
 ISelectionController* Core::selectionController()
 {
     return d->selectionController;
+}
+
+QString Core::version()
+{
+    return KDEVPLATFORM_VERSION_STR;
 }
 
 }
