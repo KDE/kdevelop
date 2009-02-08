@@ -1374,7 +1374,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
 
 bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext, bool typeIsConst) {
   if(doAccessFiltering && decl) {
-    if (typeIsConst && decl->abstractType() && !(decl->abstractType()->modifiers() & AbstractType::ConstModifier))
+    if (typeIsConst && decl->type<FunctionType>() && !(decl->abstractType()->modifiers() & AbstractType::ConstModifier))
       return false;
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
