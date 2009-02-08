@@ -21,9 +21,11 @@
 #include "makeoutputmodel.h"
 
 #include <QFileInfo>
+#include <QFont>
 
 #include <ktexteditor/cursor.h>
 #include <kurl.h>
+#include <kglobalsettings.h>
 #include <kdebug.h>
 
 #include <interfaces/icore.h>
@@ -64,6 +66,9 @@ QVariant MakeOutputModel::data( const QModelIndex& idx, int role ) const
                 break;
             case MakeOutputModel::MakeItemTypeRole:
                 return items.at( idx.row() ).type;
+                break;
+            case Qt::FontRole:
+                return KGlobalSettings::fixedFont();
                 break;
             default:
                 break;
