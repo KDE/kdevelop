@@ -54,7 +54,7 @@
 #include <KProcess>
 #include <kjob.h>
 
-#define CMAKE_COMMAND "cmake"
+#include "../../managers/cmake/cmakeutils.h"
 
 using namespace KDevelop;
 
@@ -130,7 +130,7 @@ bool CMakeJob::doKill()
 
 QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
 {
-    return CMake::currentCMakeBinary( project );
+    return CMake::currentCMakeBinary( project ).toLocalFile();
 }
 
 KUrl CMakeJob::buildDir( KDevelop::IProject* project )
@@ -147,7 +147,7 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
     QStringList args;
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
-    args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project));
+    args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
     args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
     args << project->folder().toLocalFile();
     return args;
