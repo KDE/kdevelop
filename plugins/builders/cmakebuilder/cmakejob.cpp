@@ -138,12 +138,11 @@ QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
 
 KUrl CMakeJob::buildDir( KDevelop::IProject* project )
 {
-    KDevelop::IBuildSystemManager* manager = project->buildSystemManager();
-    if( manager )
-    {
-        return manager->buildDirectory( project->projectItem() );
+    KUrl url = CMake::buildDirForProject( project );
+    if( url.isEmpty() ) {
+        url = project->folder();
     }
-    return project->folder();
+    return url;
 }
 
 QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
