@@ -114,19 +114,13 @@ QString executeProcess(const QString& execName, const QStringList& args=QStringL
 QString fetchBuildDir(KDevelop::IProject* project)
 {
     Q_ASSERT(project);
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    KUrl binurl=group.readEntry("CurrentBuildDir");
-    return binurl.toLocalFile(KUrl::AddTrailingSlash);
+    return CMake::currentBuildDir(project).toLocalFile(KUrl::AddTrailingSlash);
 }
 
 QString fetchInstallDir(KDevelop::IProject* project)
 {
     Q_ASSERT(project);
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    KUrl insturl=group.readEntry("CurrentInstallDir");
-    return insturl.toLocalFile(KUrl::AddTrailingSlash);
+    return CMake::currentInstallDir(project).toLocalFile(KUrl::AddTrailingSlash);
 }
 
 inline QString replaceBuildDir(QString in, QString buildDir)
@@ -236,14 +230,12 @@ CMakeProjectManager::~CMakeProjectManager()
 
 KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) const
 {
-    KSharedConfig::Ptr cfg = item->project()->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    if(!group.hasKey("CurrentBuildDir"))
+    KUrl path = CMake::currentBuildDir(item->project());
+    if(!path.isEmpty())
     {
         return KUrl();
     }
 
-    KUrl path = group.readEntry("CurrentBuildDir");
     KUrl projectPath = m_realRoot[item->project()];
 
     const ProjectFolderItem *fi=dynamic_cast<const ProjectFolderItem*>(item);

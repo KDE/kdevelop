@@ -122,7 +122,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         {
             kDebug() << "Needing configure, adding item and setting job";
             configure = this->configure(builditem->project());
-        } else if( CMake::buildDirForProject( builditem->project() ).isEmpty() ) 
+        } else if( CMake::currentBuildDir( builditem->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
             return 0;
@@ -153,7 +153,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         if( CMake::checkForNeedingConfigure(item) )
         {
             configure = this->configure(item->project());
-        } else if( CMake::buildDirForProject( item->project() ).isEmpty() ) 
+        } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
             return 0;
@@ -182,7 +182,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
         if( CMake::checkForNeedingConfigure(item) )
         {
             configure = this->configure(item->project());
-        } else if( CMake::buildDirForProject( item->project() ).isEmpty() ) 
+        } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
         {
             KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
             return 0;
@@ -201,7 +201,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
 
 KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
-    if( CMake::buildDirForProject( project ).isEmpty() )
+    if( CMake::currentBuildDir( project ).isEmpty() )
     {
         KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
         return 0;
@@ -213,7 +213,7 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 
 KJob* CMakeBuilder::prune( KDevelop::IProject* project )
 {
-    KUrl builddir = CMake::buildDirForProject( project );
+    KUrl builddir = CMake::currentBuildDir( project );
     if( builddir.isEmpty() )
     {
         KMessageBox::information(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clear builddir"), i18n("No clearing of builddir possible") );
