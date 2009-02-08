@@ -43,10 +43,48 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item );
 
     /**
-     * @returns the builddir for the given project or an empty url if none
+     * @returns the current builddir for the given project or an empty url if none
      * has been set by the user.
      */
-    KDEVCMAKECOMMON_EXPORT KUrl buildDirForProject( KDevelop::IProject* project );
+    KDEVCMAKECOMMON_EXPORT KUrl currentBuildDirForProject( KDevelop::IProject* project );
+
+    /**
+     * @returns the current build type for the given project or an empty string if none
+     * has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT QString currentBuildTypeForProject( KDevelop::IProject* project );
+
+    /**
+     * @returns the current cmake binary for the given project or an empty url if none
+     * has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT KUrl currentCMakeBinaryForProject( KDevelop::IProject* project );
+
+    /**
+     * @returns the current install dir for the given project or an empty url if none
+     * has been set by the user.
+     */
+    KDEVCMAKECOMMON_EXPORT KUrl currentInstallDirForProject( KDevelop::IProject* project );
+
+    /**
+     * Sets the current install dir for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentInstallDirForProject( KDevelop::IProject* project, const KUrl& url );
+
+    /**
+     * Sets the current build type for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentBuildTypeForProject( KDevelop::IProject* project, const QString& type );
+
+    /**
+     * Sets the current cmake binary for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentCMakeBinaryForProject( KDevelop::IProject* project, const KUrl& url );
+
+    /**
+     * Sets the current build dir for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentBuildDirForProject( KDevelop::IProject* project, const KUrl& url );
 }
 
 #endif

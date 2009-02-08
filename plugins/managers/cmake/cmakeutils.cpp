@@ -37,13 +37,18 @@
 
 #include "cmakebuilddirchooser.h"
 
+static QString currentBuildDirKey = "CurrentBuildDir";
+static QString currentCMakeBinaryKey = "Current CMake Binary";
+static QString currentBuildTypeKey = "CurrentBuildType";
+static QString currentInstallDirKey = "CurrentInstallDir";
+
 namespace CMake
 {
 
 bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
 {
     KConfigGroup cmakeGrp = item->project()->projectConfiguration()->group("CMake");
-    KUrl builddir = cmakeGrp.readEntry( "CurrentBuildDir", KUrl() );
+    KUrl builddir = cmakeGrp.readEntry( currentBuildDirKey, KUrl() );
     QStringList builddirs = cmakeGrp.readEntry( "BuildDirs", QStringList() );
 
     if( !builddir.isValid() || builddir.isEmpty() )
@@ -61,10 +66,10 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
             return false;
         }
 
-        cmakeGrp.writeEntry( "CurrentBuildDir", bd.buildFolder() );
-        cmakeGrp.writeEntry( "Current CMake Binary", bd.cmakeBinary() );
-        cmakeGrp.writeEntry( "CurrentInstallDir", bd.installPrefix() );
-        cmakeGrp.writeEntry( "CurrentBuildType", bd.buildType() );
+        cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
+        cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
+        cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
+        cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
 
         if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
             builddirs.append(bd.buildFolder().toLocalFile());
@@ -84,7 +89,53 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
 KUrl buildDirForProject( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
-    return cmakeGrp.readEntry( "CurrentBuildDir", KUrl() );
+    return cmakeGrp.readEntry( currentBuildDirKey, KUrl() );
+}
+
+QString currentBuildTypeForProject( KDevelop::IProject* project )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( currentBuildTypeKey, QString() );
+}
+
+KUrl currentCMakeBinaryForProject( KDevelop::IProject* project )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( currentCMakeBinaryKey, KUrl() );
+}
+
+KUrl currentInstallDirForProject( KDevelop::IProject* project )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( currentInstallDirKey, KUrl() );
+}
+
+void setCurrentInstallDirForProject( KDevelop::IProject* project, const KUrl& url )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( currentInstallDirKey, url );
+    cmakeGrp.sync();
+}
+
+void setCurrentBuildTypeForProject( KDevelop::IProject* project, const QString& type )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( currentBuildTypeKey, type );
+    cmakeGrp.sync();
+}
+
+void setCurrentCMakeBinaryForProject( KDevelop::IProject* project, const KUrl& url )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( currentCMakeBinaryKey, url );
+    cmakeGrp.sync();
+}
+
+void setCurrentBuildDirForProject( KDevelop::IProject* project, const KUrl& url )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( currentBuildDirKey, url );
+    cmakeGrp.sync();
 }
 
 }
