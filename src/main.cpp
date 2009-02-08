@@ -66,7 +66,6 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     aboutData.addCredit( ki18n("Amilcar do Carmo Lucas"), ki18n( "Website admin, API documentation, Doxygen and autoproject patches" ), "amilcar@kdevelop.org" );
 
-    about
     aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
     aboutData.addCredit( ki18n("Cédric Pasteur"), KLocalizedString("astyle and ident support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
