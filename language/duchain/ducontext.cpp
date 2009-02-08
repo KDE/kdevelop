@@ -114,13 +114,36 @@ void DUContextDynamicData::scopeIdentifier(bool includeClasses, QualifiedIdentif
     target += m_context->d_func()->m_scopeIdentifier;
 }
 
-bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source) const {
+bool DUContextDynamicData::importsSafeButSlow(const DUContext* context, const TopDUContext* source, ImportsHash& checked) const {
   if( this == context->m_dynamicData )
     return true;
+  
+  if(checked.find(this) != checked.end())
+    return false;
+  checked.insert(std::make_pair(this, true));
+  
+  FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
+    DUContext* import = ctx.context(source);
+    if(import == context || import->m_dynamicData->importsSafeButSlow(context, source, checked))
+      return true;
+  }
+
+  return false;
+}
+
+bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext* source, int maxDepth) const {
+  if( this == context->m_dynamicData )
+    return true;
+  
+  if(maxDepth == 0) {
+    ImportsHash checked(500);
+    checked.set_empty_key(0);
+    return importsSafeButSlow(context, source, checked);
+  }
 
   FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
-    if(import == context || import->m_dynamicData->imports(context, source))
+    if(import == context || import->m_dynamicData->imports(context, source, maxDepth-1))
       return true;
   }
 
@@ -860,7 +883,7 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
 {
   ENSURE_CAN_READ
 
-  return m_dynamicData->imports(origin, topContext());
+  return m_dynamicData->imports(origin, topContext(), 4);
 }
 
 
@@ -1248,7 +1271,7 @@ void DUContext::deleteUses()
 }
 
 bool DUContext::inDUChain() const {
-  if( d_func()->m_anonymousInParent )
+  if( d_func()->m_anonymousInParent || !m_dynamicData->m_parentContext)
     return false;
 
   TopDUContext* top = topContext();

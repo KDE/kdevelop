@@ -33,6 +33,7 @@
 #include "declaration.h"
 #include "use.h"
 #include "../languageexport.h"
+#include <util/google/dense_hash_map>
 
 namespace KTextEditor {
   class SmartRange;
@@ -265,8 +266,21 @@ public:
   /**
    * Returns true if this context is imported by the given one, on any level.
    * */
-  bool imports(const DUContext* context, const TopDUContext* source) const;
+  bool imports(const DUContext* context, const TopDUContext* source, int maxDepth) const;
 
+  /**
+   * This can deal with endless recursion
+   */
+  
+  struct ImportsHash {
+    size_t operator() (const DUContextDynamicData* data) const {
+      return (size_t)data;
+    }
+  };
+  
+  typedef google::dense_hash_map<const DUContextDynamicData*, bool, ImportsHash> ImportsHash;
+  
+  bool importsSafeButSlow(const DUContext* context, const TopDUContext* source, ImportsHash& checked) const;
 };
 
 }

@@ -38,7 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
     }
     virtual QString line(int line) const = 0;
     virtual QString text() const = 0;
-    //Overwrites the text in the file with the new given one
+    ///Overwrites the text in the file with the new given one
     ///@return true on success
     virtual bool setText(QString) = 0;
 };
