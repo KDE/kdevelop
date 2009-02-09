@@ -50,7 +50,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
 
-Q_DECLARE_METATYPE(ProjectBaseItem*);
+Q_DECLARE_METATYPE(ProjectBaseItem*)
 
 using namespace KDevelop;
 
