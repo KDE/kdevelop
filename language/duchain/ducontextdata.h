@@ -272,13 +272,13 @@ public:
    * This can deal with endless recursion
    */
   
-  struct ImportsHash {
+  struct ImportsHash_Op {
     size_t operator() (const DUContextDynamicData* data) const {
       return (size_t)data;
     }
   };
   
-  typedef google::dense_hash_map<const DUContextDynamicData*, bool, ImportsHash> ImportsHash;
+  typedef google::dense_hash_map<const DUContextDynamicData*, bool, ImportsHash_Op> ImportsHash;
   
   bool importsSafeButSlow(const DUContext* context, const TopDUContext* source, ImportsHash& checked) const;
 };
