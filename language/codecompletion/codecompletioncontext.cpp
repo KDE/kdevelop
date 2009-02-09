@@ -20,6 +20,7 @@
 
 #include <util/pushvalue.h>
 #include "codecompletionitem.h"
+#include <language/duchain/ducontext.h>
 
 using namespace KDevelop;
 
@@ -87,3 +88,6 @@ QList< KSharedPtr< KDevelop::CompletionTreeElement > > KDevelop::CodeCompletionC
   return QList< KSharedPtr< KDevelop::CompletionTreeElement > >();
 }
 
+KDevelop::DUContext* KDevelop::CodeCompletionContext::duContext() const {
+  return m_duContext.data();
+}
