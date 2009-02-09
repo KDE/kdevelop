@@ -249,7 +249,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
         if(m_currentToolTipDeclaration == IndexedDeclaration(decl) && m_currentToolTip)
           return;
         m_currentToolTipDeclaration = IndexedDeclaration(decl);
-        navigationWidget = decl->context()->createNavigationWidget(decl);
+        navigationWidget = decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
       }
     }
   }
