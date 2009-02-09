@@ -1407,11 +1407,18 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
 
   if( function ) {
+    
     if( node->expression ) {
+      DUChainWriteLocker lock(DUChain::lock());
       //Fill default-parameters
       QString defaultParam = stringFromSessionTokens( editor()->parseSession(), node->expression->start_token, node->expression->end_token ).trimmed();
 
       function->addDefaultParameter(IndexedString(defaultParam));
+    }
+    if( !node->declarator ) {
+      //If there is no declarator, still create a declaration
+      openDefinition(0, node, true);
+      closeDeclaration();
     }
   }
 }
