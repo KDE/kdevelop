@@ -412,9 +412,12 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     KDevelop::IDocument* document = core()->documentController()->documentForUrl(url);
     
     if(!document || 
-        (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
+        (document && document->textDocument() && (!document->textDocument()->activeView() || !targetRange.contains(document->textDocument()->activeView()->cursorPosition())))) {
       KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
       core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
+    }else if(document) {
+      //The cursor is already in the target range, only open the document
+      core()->documentController()->openDocument(url);
     }
     return;
   }else{
