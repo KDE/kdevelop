@@ -278,10 +278,10 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     KDevelop::DUContext* argumentContext = DUChainUtils::getArgumentContext(m_declaration.data());
 
     if(argumentContext) {
-      int firstDefaultParam = argumentContext->localDeclarations().count() - function->defaultParametersSize();
+      int firstDefaultParam = argumentContext->localDeclarations(m_topContext.data()).count() - function->defaultParametersSize();
       int currentArgNum = 0;
 
-      foreach(Declaration* argument, argumentContext->localDeclarations()) {
+      foreach(Declaration* argument, argumentContext->localDeclarations(m_topContext.data())) {
         if( !first )
           modifyHtml() += ", ";
         first = false;

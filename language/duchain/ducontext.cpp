@@ -1034,7 +1034,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor&
   return ret;
 }
 
-QVector<Declaration*> DUContext::localDeclarations() const
+QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) const
 {
   ENSURE_CAN_READ
 

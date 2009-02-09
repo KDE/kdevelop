@@ -515,8 +515,10 @@ public:
 
   /**
    * Returns all local declarations
+   * @param source A source-context that is needed to instantiate template-declarations in some cases.
+   *               If it is zero, that signalizes that missing members should not be instantiated.
    */
-  QVector<Declaration*> localDeclarations() const;
+  virtual QVector<Declaration*> localDeclarations(const TopDUContext* source = 0) const;
 
   /**
    * Searches for the most specific context for the given cursor \a position in the given \a url.
