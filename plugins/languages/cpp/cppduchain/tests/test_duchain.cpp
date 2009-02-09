@@ -58,6 +58,8 @@
 #include "tokens.h"
 #include "parsesession.h"
 
+//Extremely slow
+// #define TEST_NORMAL_IMPORTS
 
 #include <typeinfo>
 #include <language/duchain/duchainutils.h>
@@ -1924,6 +1926,20 @@ void TestDUChain::testFunctionDefinition2() {
     release(top);
   }
 
+  {
+    QByteArray text("void test(int, int&);");
+
+    TopDUContext* top = parse(text, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->childContexts().count(), 1);
+
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+
+    release(top);
+  }
+
 }
 
 void TestDUChain::testFunctionDefinition4() {
@@ -2524,12 +2540,13 @@ void TestDUChain::testFunctionTemplates() {
 }
 
 void TestDUChain::testTemplateFunctions() {
-  QByteArray method("class A {}; template<class T> T a(T& q) {};");
+  QByteArray method("class A {}; template<class T> T a(T& q) {};template<class T> struct TC { void test(const T&); };");
 
   TopDUContext* top = parse(method, DumpNone);
+  parse(method, DumpNone, top);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 3);
   Declaration* d = findDeclaration(top, QualifiedIdentifier("a<A>"));
   QVERIFY(d);
   FunctionType::Ptr cppFunction = d->type<FunctionType>();
@@ -2546,6 +2563,9 @@ void TestDUChain::testTemplateFunctions() {
   QCOMPARE(d->internalContext()->importedParentContexts()[0].context(0)->importedParentContexts()[0].context(0)->type(), DUContext::Template);
 
   QList<QPair<Declaration*, int> > visibleDecls = d->internalContext()->allDeclarations(d->internalContext()->range().end, top, false);
+  for(int a = 0; a < visibleDecls.size(); ++a) {
+    kDebug() << "decl:" << visibleDecls[a].first->toString();
+  }
   QCOMPARE(visibleDecls.size(), 2); //Must be q and T
   QCOMPARE(visibleDecls[0].first->identifier().toString(), QString("q"));
   QVERIFY(visibleDecls[0].first->abstractType());
@@ -2558,6 +2578,26 @@ void TestDUChain::testTemplateFunctions() {
   QVERIFY(found->abstractType());
   QCOMPARE(found->abstractType()->toString(), QString("A&"));
 
+  Declaration* instTC = findDeclaration(top, QualifiedIdentifier("TC<int>"));
+  QVERIFY(instTC);
+  QVERIFY(instTC->internalContext());
+  QList<Declaration*> decls = instTC->internalContext()->findLocalDeclarations(Identifier("test"));
+  QCOMPARE(decls.count(), 1);
+  Declaration* testDecl = decls.first();
+  QVERIFY(testDecl);
+  QVERIFY(testDecl->abstractType());
+  QVERIFY(testDecl->internalContext());
+  QVERIFY(testDecl->type<KDevelop::FunctionType>());
+  QCOMPARE(testDecl->internalContext()->localDeclarations(top).count(), 1);
+  kDebug() << testDecl->abstractType()->toString();
+  QCOMPARE(testDecl->type<KDevelop::FunctionType>()->arguments().count(), 1);
+  
+  DUContext* argContext = KDevelop::DUChainUtils::getArgumentContext(testDecl);
+  QVERIFY(argContext);
+  QCOMPARE(argContext->type(), DUContext::Function);
+  QCOMPARE(argContext->localDeclarations(top).count(), 1);
+  
+  
   release(top);
 }
 
@@ -2724,12 +2764,12 @@ void TestDUChain::testTemplateInternalSearch() {
 }
 
 void TestDUChain::testTemplateReference() {
-  QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item); const A& a;");
+  QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item); const A& a;const A*** b;");
 
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->localDeclarations().count(), 5);
   QVERIFY(top->localDeclarations()[2]->abstractType());
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
@@ -2739,6 +2779,7 @@ void TestDUChain::testTemplateReference() {
   QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], 10000).remove(' '), QString("CC<constA*>&"));
   QVERIFY(top->localDeclarations()[3]->abstractType());
   QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], 10000).remove(' '), QString("constA&"));
+  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[4], 10000).remove(' '), QString("constA***"));
 }
 
 void TestDUChain::testTemplates() {
@@ -3113,6 +3154,7 @@ struct TestContext {
     ++number;
     DUChainWriteLocker lock(DUChain::lock());
     m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), SimpleRange());
+    m_normalContext = new DUContext(SimpleRange(), m_context);
     DUChain::self()->addDocumentChain(m_context);
     Q_ASSERT(IndexedDUContext(m_context).context() == m_context);
   }
@@ -3121,6 +3163,7 @@ struct TestContext {
     unImport(imports);
     DUChainWriteLocker lock(DUChain::lock());
     release(m_context);//->deleteSelf();
+    delete m_normalContext;
   }
 
   void verify(QList<TestContext*> allContexts) {
@@ -3135,13 +3178,21 @@ struct TestContext {
     collected.remove(this);
 
     DUChainReadLocker lock(DUChain::lock());
-    foreach(TestContext* context, collected)
+    foreach(TestContext* context, collected) {
       QVERIFY(m_context->imports(context->m_context, SimpleCursor::invalid()));
+#ifdef TEST_NORMAL_IMPORTS
+      QVERIFY(m_normalContext->imports(context->m_normalContext));
+#endif
+    }
     //Verify that no other contexts are imported
 
     foreach(TestContext* context, allContexts)
-      if(context != this)
+      if(context != this) {
         QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
+#ifdef TEST_NORMAL_IMPORTS
+        QVERIFY(collected.contains(context) || !m_normalContext->imports(context->m_normalContext, SimpleCursor::invalid()));
+#endif
+      }
   }
 
   void collectImports(QSet<TestContext*>& collected) {
@@ -3158,21 +3209,31 @@ struct TestContext {
     ctx->importers << this;
     DUChainWriteLocker lock(DUChain::lock());
     m_context->addImportedParentContext(ctx->m_context);
+#ifdef TEST_NORMAL_IMPORTS
+    m_normalContext->addImportedParentContext(ctx->m_normalContext);
+#endif
   }
 
   void unImport(QList<TestContext*> ctxList) {
     QList<TopDUContext*> list;
+    QList<DUContext*> normalList;
 
     foreach(TestContext* ctx, ctxList) {
       if(!imports.contains(ctx))
         continue;
       list << ctx->m_context;
+      normalList << ctx->m_normalContext;
 
       imports.removeAll(ctx);
       ctx->importers.removeAll(this);
     }
     DUChainWriteLocker lock(DUChain::lock());
     m_context->removeImportedParentContexts(list);
+    
+#ifdef TEST_NORMAL_IMPORTS
+    foreach(DUContext* ctx, normalList)
+      m_normalContext->removeImportedParentContext(ctx);
+#endif
   }
 
   QList<TestContext*> imports;
@@ -3180,6 +3241,7 @@ struct TestContext {
   private:
 
   TopDUContext* m_context;
+  DUContext* m_normalContext;
   QList<TestContext*> importers;
 };
 
