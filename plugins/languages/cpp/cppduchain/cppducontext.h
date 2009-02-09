@@ -619,6 +619,31 @@ class CppDUContext : public BaseContext {
       }      
     }
     
+    //Overridden to instantiate all not yet instantiated local declarations
+    virtual QVector<Declaration*> localDeclarations(const TopDUContext* source) const {
+      
+      if(m_instantiatedFrom && source && BaseContext::type() != DUContext::Template) {
+        QVector<Declaration*> decls = m_instantiatedFrom->localDeclarations(source);
+//         DUContext::DeclarationList temp;
+
+        InstantiationInformation inf;
+        inf.previousInstantiationInformation = m_instantiatedWith.index();
+
+        foreach( Declaration* baseDecl, decls ) {
+          TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(baseDecl);
+          if(tempDecl) {
+            tempDecl->instantiate(inf, source);
+          }else{
+            kDebug() << "Strange: non-template within template context";
+            KDevVarLengthArray<Declaration*, 40> temp;
+            this->findLocalDeclarationsInternal( baseDecl->identifier(), SimpleCursor::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
+          }
+        }
+      }
+        
+        return BaseContext::localDeclarations(source);
+    }
+    
   private:
     ~CppDUContext() {
 
@@ -638,14 +663,8 @@ class CppDUContext : public BaseContext {
         //This requests all declarations, so they all will be instantiated and instances of them added into this context.
         //DUContext::mergeDeclarationsInternal will then get them.
         
-        DUContext::DeclarationList temp;
-        QVector<Declaration*> decls = m_instantiatedFrom->localDeclarations();
-//         kDebug() << "instantiated from" << m_instantiatedFrom->scopeIdentifier(true).toString() <<  "declarations" << decls.size();
-
-        foreach( Declaration* baseDecls, decls ) {
-//           kDebug() << "searching local" << baseDecls->toString();
-          this->findLocalDeclarationsInternal( baseDecls->identifier(), SimpleCursor::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
-        }
+        //Calling localDeclarations() instantiates all not yet instantiated member declarations
+        localDeclarations(source);
         
 //         kDebug() << "final count of local declarations:" << this->localDeclarations().count();
         

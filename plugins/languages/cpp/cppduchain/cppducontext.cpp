@@ -45,9 +45,9 @@ QWidget* CppDUContext<TopDUContext>::createNavigationWidget( Declaration* decl, 
     i.isDirectory = false;
     i.basePath = u.upUrl();
     
-    return new NavigationWidget( i, TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
+    return new NavigationWidget( i, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
   } else {
-    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
+    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
   }
 }
 
@@ -55,11 +55,11 @@ template<>
 QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix, const QString& htmlSuffix) const {
   if( decl == 0 ) {
     if( owner() )
-      return new NavigationWidget( DeclarationPointer(owner()), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
+      return new NavigationWidget( DeclarationPointer(owner()), TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
     else
       return 0;
   } else {
-    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext), htmlPrefix, htmlSuffix );
+    return new NavigationWidget( DeclarationPointer(decl), TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix );
   }
 }
 
