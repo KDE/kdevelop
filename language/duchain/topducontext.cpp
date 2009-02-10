@@ -301,6 +301,8 @@ public:
   void clearImportedContextsRecursively() {
     QMutexLocker lock(&importStructureMutex);
   
+//     Q_ASSERT(m_recursiveImports.size() == m_indexedRecursiveImports.count()-1);
+    
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
 
     foreach(const DUContext::Import &import, m_importedContexts) {
@@ -312,7 +314,7 @@ public:
           user->m_local->removeImportedContextRecursively(top, false);
         
         removeImportedContextRecursion(top, top, 1, rebuild);
-        
+
         QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
         for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
           if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == top)
@@ -324,6 +326,9 @@ public:
     m_importedContexts.clear();
 
     rebuildImportStructureRecursion(rebuild);
+
+    Q_ASSERT(m_recursiveImports.isEmpty());
+//     Q_ASSERT(m_recursiveImports.size() == m_indexedRecursiveImports.count()-1);
   }
   
   //Adds the context to this and all contexts that import this, and manages m_recursiveImports
@@ -1382,7 +1387,6 @@ void TopDUContext::clearImportedParentContexts() {
     d_func_dynamic()->m_importsCache = IndexedRecursiveImports();
     d_func_dynamic()->m_importsCache.insert(IndexedTopDUContext(this));
   }
-  m_local->clearImportedContextsRecursively();
   
   if(!m_local->m_sharedDataOwner)
     DUContext::clearImportedParentContexts();
@@ -1392,6 +1396,13 @@ void TopDUContext::clearImportedParentContexts() {
         removeImportedParentContext(parent.context(0));
     Q_ASSERT(m_local->m_importedContexts.isEmpty());
   }
+  
+  m_local->clearImportedContextsRecursively();
+  
+  Q_ASSERT(m_local->m_recursiveImports.count() == 0);
+  
+  Q_ASSERT(m_local->m_indexedRecursiveImports.count() == 1);
+  
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
 }
 
