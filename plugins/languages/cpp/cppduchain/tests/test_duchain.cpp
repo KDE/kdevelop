@@ -3235,6 +3235,20 @@ struct TestContext {
       m_normalContext->removeImportedParentContext(ctx);
 #endif
   }
+  
+  void clearImports() {
+    
+    {
+      DUChainWriteLocker lock(DUChain::lock());
+    
+      m_context->clearImportedParentContexts();
+      m_normalContext->clearImportedParentContexts();
+    }
+    foreach(TestContext* ctx, imports) {
+      imports.removeAll(ctx);
+      ctx->importers.removeAll(this);
+    }
+  }
 
   QList<TestContext*> imports;
 
@@ -3313,6 +3327,7 @@ void TestDUChain::testImportStructure()
     //Create a random structure
     int contextCount = 120;
     int verifyOnceIn = contextCount/*((contextCount*contextCount)/20)+1*/; //Verify once in every chances(not in all cases, becase else the import-structure isn't built on-demand!)
+    int clearOnceIn = contextCount;
     for(int a = 0; a < contextCount; a++)
       allContexts << new TestContext();
     for(int c = 0; c < cycles; ++c) {
@@ -3347,6 +3362,13 @@ void TestDUChain::testImportStructure()
         for(int b = 0; b < contextCount; b++)
           if(rand() % verifyOnceIn == 0)
             allContexts[b]->verify(allContexts);
+      }
+      
+      for(int a = 0; a < contextCount; a++) {
+        if(rand() % clearOnceIn == 0) {
+          allContexts[a]->clearImports();
+          allContexts[a]->verify(allContexts);
+        }
       }
     }
 
