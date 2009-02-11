@@ -145,16 +145,22 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
     ///iso c++ draft 13.3.3.1.4 reference-binding, modeled roughly
     ReferenceType::Ptr toReference = to.cast<ReferenceType>();
     if( toReference ) {
-      if( (toReference->modifiers() & AbstractType::ConstModifier) || (toReference->modifiers() & AbstractType::ConstModifier) == isConstant(from) && fromLValue ) {
+      AbstractType::Ptr realFrom = realType(from, m_topContext);
+      AbstractType::Ptr realTo = realType(to, m_topContext);
+      if(!realFrom || !realTo) {
+        problem( from, to, "one type is invalid" );
+        goto ready;
+      }
+      if( fromLValue && ((realTo->modifiers() & AbstractType::ConstModifier) || (realTo->modifiers() & AbstractType::ConstModifier) == isConstant(from)) ) {
         ///Since from is an lvalue, and the constant-specification matches, we can maybe directly create a reference
         //Either identity-conversion:
-        if( identityConversion( realType(from, m_topContext), realType(toReference.cast<AbstractType>(), m_topContext) ) ) {
+        if( identityConversion( realFrom, realTo ) ) {
           conv = ExactMatch + 2*ConversionRankOffset;
           goto ready;
         }
         //Or realType(toReference) is a public base-class of realType(fromReference)
-        CppClassType::Ptr fromClass = realType(from, m_topContext).cast<CppClassType>();
-        CppClassType::Ptr toClass = realType(to, m_topContext).cast<CppClassType>();
+        CppClassType::Ptr fromClass = realFrom.cast<CppClassType>();
+        CppClassType::Ptr toClass = realTo.cast<CppClassType>();
 
         if( fromClass && toClass && isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) ) {
           conv = ExactMatch + 2*ConversionRankOffset;
@@ -170,9 +176,9 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
         }
       }
 
-      if( toReference->modifiers() & AbstractType::ConstModifier ) {
+      if( realTo->modifiers() & AbstractType::ConstModifier ) {
         //For constant references, the compiler can create a temporary object holding the converted value. So just forget whether the types are references.
-        conv = implicitConversion( realType(from, m_topContext)->indexed(), realType(to, m_topContext)->indexed(), fromLValue );
+        conv = implicitConversion( realType(from, m_topContext)->indexed(), realType(to, m_topContext)->indexed(), fromLValue, noUserDefinedConversion );
         goto ready;
       }
     }
@@ -235,13 +241,16 @@ int TypeConversion::baseConversionLevels() const {
 ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, PointerType::Ptr to ) {
   
   //We can convert non-const -> const, but not const -> non-const
-  if(to->modifiers() & AbstractType::ConstModifier || !(from->modifiers()& AbstractType::ConstModifier)) {
+//   if(to->modifiers() & AbstractType::ConstModifier || !(from->modifiers()& AbstractType::ConstModifier)) {
   
     AbstractType::Ptr nextFrom = from->baseType();
     AbstractType::Ptr nextTo = to->baseType();
 
     if(!nextTo || !nextFrom)
       return NoMatch;
+
+    if((nextFrom->modifiers() & AbstractType::ConstModifier) && !(nextTo->modifiers() & AbstractType::ConstModifier))
+      return NoMatch; //Cannot convert const -> non-const
     
     PointerType::Ptr pointerFrom = nextFrom.cast<PointerType>();
     PointerType::Ptr pointerTo = nextTo.cast<PointerType>();
@@ -255,22 +264,17 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
         if( isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) )
           return ((toClass->modifiers() & AbstractType::ConstModifier) != (fromClass->modifiers() & AbstractType::ConstModifier)) ? Conversion : ExactMatch;
     
-    if((nextFrom->modifiers() & AbstractType::ConstModifier) && !(nextTo->modifiers() & AbstractType::ConstModifier)) {
-      return NoMatch; //Cannot convert const -> non-const
-    }else{
-      
-      bool changed = false;
-      //Change the constness matches, so they are equal if compatible
-      if(nextTo->modifiers() & AbstractType::ConstModifier) {
-        nextFrom->setModifiers(nextFrom->modifiers() | AbstractType::ConstModifier);
-        changed = true;
-      }
-      
-      if(nextFrom->equals(nextTo.constData()))
-        return changed ? Conversion : ExactMatch;
+    bool changed = false;
+    //Change the constness matches, so they are equal if compatible
+    if(nextTo->modifiers() & AbstractType::ConstModifier) {
+      nextFrom->setModifiers(nextFrom->modifiers() | AbstractType::ConstModifier);
+      changed = true;
     }
     
-  }
+    if(nextFrom->equals(nextTo.constData()))
+      return changed ? Conversion : ExactMatch;
+    
+//   }
   
   return NoMatch;
 }
@@ -528,9 +532,11 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
     }
   }
 
+  AbstractType::Ptr realTo( realType(to, m_topContext) );
+
   {
     ///Try conversion using constructor
-    CppClassType::Ptr toClass = realType(to, m_topContext).cast<CppClassType>(); //@todo think whether the realType(..) is ok
+    CppClassType::Ptr toClass = realTo.cast<CppClassType>(); //@todo think whether the realType(..) is ok
     if( toClass && toClass->declaration(m_topContext) )
     {
       if( fromClass ) {

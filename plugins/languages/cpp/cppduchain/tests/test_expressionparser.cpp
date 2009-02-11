@@ -643,6 +643,29 @@ void TestExpressionParser::testBaseClasses() {
   TEST_FILE_PARSE_ONLY
 }
 
+void TestExpressionParser::testTypeConversion2() {
+  TEST_FILE_PARSE_ONLY
+
+  QByteArray test = "const int& i; int q; unsigned int qq; int* ii; int* const iii;";
+  DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(c->localDeclarations().count(), 5);
+  
+  TypeConversion tc(c->topContext());
+  QVERIFY(tc.implicitConversion(c->localDeclarations()[1]->indexedType(), c->localDeclarations()[0]->indexedType()));
+  QVERIFY(tc.implicitConversion(c->localDeclarations()[2]->indexedType(), c->localDeclarations()[0]->indexedType()));
+  QVERIFY(tc.implicitConversion(c->localDeclarations()[1]->indexedType(), c->localDeclarations()[0]->indexedType(), false));
+  QVERIFY(tc.implicitConversion(c->localDeclarations()[2]->indexedType(), c->localDeclarations()[0]->indexedType(), false));
+
+  //Only the pointed-to part must be const-compatible
+  QVERIFY(tc.implicitConversion(c->localDeclarations()[4]->indexedType(), c->localDeclarations()[3]->indexedType()));
+  
+  //QVERIFY(0);
+  //lock.lock();
+  release(c);
+}
+
 void TestExpressionParser::testTypeConversion() {
   TEST_FILE_PARSE_ONLY
 
