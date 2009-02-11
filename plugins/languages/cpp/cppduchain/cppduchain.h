@@ -48,7 +48,7 @@ namespace KDevelop {
 namespace Cpp {
   class EnvironmentFile;
 /**
- * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++.
+ * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++(Only if it's a class context).
  * @param topContext should be the top-context from where the search starts. This is needed to resolve template-parameters.
  * Du-chain must be locked before.
  * */
