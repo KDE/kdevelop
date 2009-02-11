@@ -310,8 +310,12 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
  
+        AbstractType::Ptr type = effectiveType(dec);
+        
+        bool fromLValue = (bool)type.cast<ReferenceType>() || (!dynamic_cast<AbstractFunctionDeclaration*>(dec) && dec->kind() == Declaration::Instance);
+        
         ///@todo fill the lvalue-ness correctly
-        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(effectiveType(dec)->indexed()), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(type->indexed()), currentMatchContext->typeForArgumentMatching(), fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
         return QVariant(quality);
       }
     }
@@ -652,8 +656,9 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
 
-        ///@todo fill the lvalue-ness correctly
-        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(typeForArgumentMatching()), currentMatchContext->typeForArgumentMatching(), true )  * 10 ) / Cpp::MaximumConversionResult;
+        ///@todo Think about lvalue-ness
+        
+        int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(typeForArgumentMatching()), currentMatchContext->typeForArgumentMatching(), false )  * 10 ) / Cpp::MaximumConversionResult;
         return QVariant(quality);
       }
     }
