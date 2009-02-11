@@ -526,8 +526,12 @@ void KDevelop::TextView::setInitialRange(KTextEditor::Range range) {
 void KDevelop::TextView::setState(const QString & state)
 {
     static QRegExp re("Cursor=([\\d]+),([\\d]+)");
-    if (d->editor && d->editor->editorView() && re.exactMatch(state))
-        d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+    if (re.exactMatch(state)) {
+        if (d->editor && d->editor->editorView() && re.exactMatch(state))
+            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+        else
+            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()), 0));
+    }
 }
 
 QString KDevelop::TextDocument::documentType() const
