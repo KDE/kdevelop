@@ -434,8 +434,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
   if( expr.startsWith("delete") )  {
     expr = expr.right( expr.length() - 6 );
+    QRegExp bracketRE("^\\s*\\[\\s*\\]");
+    if (expr.contains(bracketRE))
+      expr = expr.remove(bracketRE);
+    
     if(!expr.isEmpty() || depth == 0) {
       //Create a new context for the "delete"
+      // TODO add brackets if necessary?
       m_parentContext = new CodeCompletionContext( m_duContext, "delete", QString(), depth+1 );
     }else{
       //m_memberAccessOperation = DeleteAccess;
