@@ -268,15 +268,17 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
 
 void TestCppCodeCompletion::testConstVisibility() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("struct test { void f(); void e() const; }; int main() { const test a; }");
+  QByteArray method("struct test { void f(); void e() const; }; int main() { const test a; } void test::e() const { }");
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts().count(), 5);
 
   kDebug() << "list:" << CompletionItemTester(top->childContexts()[2], "a.").names << CompletionItemTester(top->childContexts()[2], "a.").names.size();
   QCOMPARE(CompletionItemTester(top->childContexts()[2], "a.").names.toSet(), QSet<QString>() << "e");
+  kDebug() << "list:" << CompletionItemTester(top->childContexts()[4], "").names << CompletionItemTester(top->childContexts()[4], "").names.size();
+  QCOMPARE(CompletionItemTester(top->childContexts()[4], "").names.toSet(), QSet<QString>() << "e" << "test" << "main");
 }
 
 void TestCppCodeCompletion::testFriendVisibility() {

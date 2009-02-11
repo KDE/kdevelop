@@ -1213,13 +1213,10 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   QSet<QualifiedIdentifier> hadNamespaceDeclarations;
 
   bool typeIsConst = false;
-  /*Declaration* func = Cpp::localFunctionFromCodeContext(m_duContext.data());
-  kDebug() << m_duContext->type() << func;
-  if (func) {
-    kDebug() << func->abstractType()->toString();
+  if (Declaration* func = Cpp::localFunctionFromCodeContext(m_duContext.data())) {
     if (func->abstractType() && (func->abstractType()->modifiers() & AbstractType::ConstModifier))
       typeIsConst = true;
-  }*/
+  }
 
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
 

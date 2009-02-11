@@ -198,16 +198,12 @@ Declaration* localClassFromCodeContext(DUContext* context)
 
 Declaration* localFunctionFromCodeContext(DUContext* context)
 {
-  kDebug() << context << context->type();
-
   while( context->parentContext() && context->type() == DUContext::Other && context->parentContext()->type() == DUContext::Other )
   { //Move context to the top context of type "Other". This is needed because every compound-statement creates a new sub-context.
     context = context->parentContext();
-    kDebug() << context << context->type();
   }
 
-  if(context->type() == DUContext::Function) {
-    kDebug() << "found function context";
+  if(context->type() == DUContext::Function || context->owner()) {
     return context->owner();
   }
 
@@ -216,14 +212,12 @@ Declaration* localFunctionFromCodeContext(DUContext* context)
     foreach(DUContext::Import import, context->importedParentContexts()) {
       if(DUContext* i = import.context(context->topContext())) {
         if(i->type() == DUContext::Function) {
-          kDebug() << "found function context via imports";
           return i->owner();
         }
       }
     }
   }
 
-  kDebug() << "no good";
   return 0;
 }
 
