@@ -28,7 +28,7 @@ void CMakeAstTest::testAddExecutableGoodParse_data()
     func2.addArguments( argList2 );
 
     CMakeFunctionDesc func3;
-    func3.name = "add_executable";
+    func3.name = "ADD_EXECUTABLE";
     QStringList argList3;
     argList3 << "foo" << "MACOSX_BUNDLE" << "${mysrcs_SRCS}";
     func3.addArguments( argList3 );
@@ -45,6 +45,11 @@ void CMakeAstTest::testAddExecutableGoodParse_data()
     argList5 << "foo" << "WIN32" << "MACOSX_BUNDLE" << "EXCLUDE_FROM_ALL"
              << "${mysrcs_SRCS}";
     func5.addArguments( argList5 );
+    
+    CMakeFunctionDesc func6;
+    func5.name = "add_executable";
+    QStringList argList6=QString("KDE4__kconfig_compiler IMPORTED").split(' ');
+    func5.addArguments( argList6 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "only sources" ) << func;

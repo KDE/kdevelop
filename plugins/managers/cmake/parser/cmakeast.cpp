@@ -460,7 +460,7 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     if ( func.arguments.size() < 2 )
         return false;
-
+    
     QList<CMakeFunctionArgument> args = func.arguments;
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
     it = args.begin();
@@ -480,7 +480,7 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             m_sourceLists.append( it->value );
     }
 
-    if ( m_sourceLists.isEmpty() )
+    if(!m_isImported && m_sourceLists.isEmpty())
         return false;
 
     return true;

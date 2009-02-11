@@ -687,9 +687,8 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     QStringList locationOptions = fpath->path()+fpath->hints();
     QStringList path, files=fpath->filenames();
 
-    if(!fpath->noDefaultPath()) {
-        locationOptions += m_defaultPaths;
-    }
+    if(!fpath->noDefaultPath())
+        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
@@ -737,8 +736,8 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
     if(!flib->noDefaultPath())
     {
-        locationOptions += m_defaultPaths;
-        locationOptions += m_vars->value("CMAKE_INSTALL_PREFIX").join(QString())+"/lib";
+        foreach(const QString& s, m_vars->value("CMAKE_SYSTEM_PREFIX_PATH"))
+            locationOptions.append(s+"/lib");
     }
 
     foreach(const QString& p, files)
@@ -1356,16 +1355,19 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
-    QString val;
-    QFileInfo fi(filecomp->fileName());
+    QString dir;
+    if(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
+        dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    QFileInfo fi(dir, filecomp->fileName());
 
+    QString val;
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::PATH:
             val=fi.absolutePath();
             break;
         case GetFilenameComponentAst::ABSOLUTE:
-            val=fi.canonicalFilePath();
+            val=fi.absoluteFilePath();
             break;
         case GetFilenameComponentAst::NAME: {
             val=fi.fileName();
@@ -1714,7 +1716,6 @@ int CMakeProjectVisitor::visit(const CustomCommandAst *ccast)
     }
     return 1;
 }
-
 
 int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
 {

@@ -151,7 +151,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 QString v=*(it2+1);
 //                 kDebug(9042) << "EXISTS" << v << *it2;
                 if(v.isEmpty())
-                    kDebug(9042) << "error: no";
+                    kDebug(9042) << "error: no parameter to exist";
                 else
                 {
                     last=false;

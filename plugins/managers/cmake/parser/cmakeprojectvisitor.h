@@ -188,7 +188,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
         QStack< VisitorState > m_backtrace;
         QString m_root;
-        QStringList m_defaultPaths;
         VariableMap *m_vars;
         MacroMap *m_macros;
         const CacheValues* m_cache;

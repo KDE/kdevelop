@@ -81,6 +81,7 @@
 #include <language/editor/editorintegrator.h>
 #include <language/duchain/smartconverter.h>
 #include <language/duchain/use.h>
+#include <ktexteditor/smartinterface.h>
 
 using namespace KDevelop;
 
@@ -481,12 +482,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             EditorIntegrator editor;
             editor.setCurrentUrl(IndexedString(v.context()->url().toUrl()));
             LockedSmartInterface smart(editor.smart());
-            if(smart) {
+            if(smart)
+            {
+                smart->clearRevision();
+                
                 DUChainWriteLocker lock(DUChain::lock());
                 SmartConverter converter(&editor);
                 converter.convertDUChain(v.context());
                 CMakeHighlighting highlight;
                 highlight.highlightDUChain(v.context());
+                smart->useRevision(smart->currentRevision());
             }
 
             /*{
