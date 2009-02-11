@@ -34,6 +34,7 @@
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
 #include "cpplanguagesupport.h"
+#include "codecompletioncontext.h"
 
 const int desiredArgumentTypeLength = 20;
 const int maxDefaultParameterLength = 30;
@@ -46,6 +47,9 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   Declaration* dec(item.m_declaration.data());
 
   Cpp::CodeCompletionContext::Function f;
+  TopDUContext* top = 0;
+  if(item.completionContext && item.completionContext->duContext())
+    top = item.completionContext->duContext()->topContext();
 
   if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
     f = item.completionContext->functions()[item.listOffset];
@@ -61,7 +65,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
     QVector<Declaration*> parameters;
     if( DUChainUtils::getArgumentContext(dec) )
-      parameters = DUChainUtils::getArgumentContext(dec)->localDeclarations();
+      parameters = DUChainUtils::getArgumentContext(dec)->localDeclarations(top);
 
 //     QStringList defaultParams = decl->defaultParameters();
 
@@ -212,7 +216,6 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
   
   if(!templateContext)
     return;
-  
   
   QVector<Declaration*> parameters = templateContext->localDeclarations();
 
