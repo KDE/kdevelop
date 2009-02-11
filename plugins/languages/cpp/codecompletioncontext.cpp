@@ -504,11 +504,26 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
           if( idDecl && idDecl->internalContext() ) {
             QList<Declaration*> operatorDeclarations = idDecl->internalContext()->findLocalDeclarations(Identifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
-              ///@todo care about const
               foreach(Declaration* decl, operatorDeclarations)
                 m_expressionResult.allDeclarationsList().append(decl->id());
 
-              FunctionType::Ptr function = operatorDeclarations.front()->abstractType().cast<FunctionType>();
+              bool declarationIsConst = false;
+              if (idDecl->abstractType()->modifiers() & AbstractType::ConstModifier)
+                declarationIsConst = true;
+              
+              FunctionType::Ptr function;
+              foreach (Declaration* decl, operatorDeclarations) {
+                FunctionType::Ptr f2 = decl->abstractType().cast<FunctionType>();
+                const bool operatorIsConst = f2->modifiers() & AbstractType::ConstModifier;
+                if (operatorIsConst == declarationIsConst) {
+                  // Best match
+                  function = f2;
+                  break;
+                } else if (operatorIsConst && !function) {
+                  // Const result where non-const is ok, accept and keep looking
+                  function = f2;
+                }
+              }
 
               if( function ) {
                 m_expressionResult.type = function->returnType()->indexed();
