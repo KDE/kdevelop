@@ -163,7 +163,7 @@ using namespace KDevelop;
     Declaration* klassDecl = klass->declaration(topContext);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
     if( !context || !context->owner() || !context->owner() ) {
-      kDebug(9007) << "Tried to get constructors of a class without context";
+//       kDebug(9007) << "Tried to get constructors of a class without context";
       return;
     }
     
