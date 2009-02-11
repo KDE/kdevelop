@@ -169,7 +169,7 @@ void TargetProperties::addCompileTarget(const QString& name)
 
 void TargetProperties::removeCompileTarget()
 {
-    kDebug() << "removiiiiiiiing" << preferencesDialog->compileItems->currentRow();
+    kDebug() << "removing" << preferencesDialog->compileItems->currentRow();
     int curr=preferencesDialog->compileItems->currentRow();
     if(curr>=0)
     {

@@ -306,28 +306,6 @@ QStringList splitArguments(const QString& args)
     return ret;
 }
 
-//Copied from projectitemlineedit.cpp
-QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofetch)
-{
-    if(tofetch.isEmpty())
-        return QModelIndex();
-
-    QModelIndex current=model->index(0,0, QModelIndex());
-
-    QModelIndex ret;
-    foreach(const QString& currentName, tofetch)
-    {
-        QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
-        if(l.count()>0) {
-            ret=l.first();
-            current = model->index(0,0, ret);
-        } else
-            current = QModelIndex();
-    }
-    Q_ASSERT(model->data(ret).toString()==tofetch.last());
-    return ret;
-}
-
 IRun KDevelop::RunController::defaultRun() const
 {
     IProject* project = 0;
@@ -353,7 +331,7 @@ IRun KDevelop::RunController::defaultRun() const
     if(exec.isEmpty())
     {
         QString target=group.readEntry("Run Item", QString());
-        QModelIndex idx=pathToIndex(model, target.split('/'));
+        QModelIndex idx=ProjectModel::pathToIndex(model, target.split('/'));
         if( idx.isValid() )
         {
             ProjectBaseItem *it=model->item(idx);
@@ -391,7 +369,7 @@ IRun KDevelop::RunController::defaultRun() const
     {
         foreach(const QString& it, compileItems)
         {
-            QModelIndex idx=pathToIndex(model, it.split('/'));
+            QModelIndex idx=ProjectModel::pathToIndex(model, it.split('/'));
             ProjectBaseItem *pit=model->item(idx);
 
             if(!pit)

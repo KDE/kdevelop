@@ -23,6 +23,7 @@
 #include <KDebug>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <project/projectmodel.h>
 
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : KLineEdit(parent)
@@ -31,35 +32,11 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     connect(this, SIGNAL(correctnessChanged(bool)), this, SLOT(correctnessChange(bool)));
 }
 
-QModelIndex pathToIndex(const QAbstractItemModel* model, const QStringList& tofetch)
-{
-    if(tofetch.isEmpty())
-        return QModelIndex();
-    
-    QModelIndex current=model->index(0,0, QModelIndex());
-    
-    QModelIndex ret;
-    foreach(const QString& currentName, tofetch)
-    {
-        QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
-        if(l.count()>0) {
-            ret=l.first();
-            current = model->index(0,0, ret);
-        } else {
-            ret = QModelIndex();
-            break;
-        }
-    }
-//     Q_ASSERT(model->data(ret).toString()==tofetch.last());
-    return ret;
-}
-
-
 void ProjectItemLineEdit::updated(const QString& newText)
 {
     QStringList tofetch=completer()->splitPath(newText);
     const QAbstractItemModel* model=completer()->model();
-    QModelIndex idx=pathToIndex(model, tofetch);
+    QModelIndex idx=KDevelop::ProjectModel::pathToIndex(model, tofetch);
     emit correctnessChanged(idx.isValid());
 }
 

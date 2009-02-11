@@ -447,6 +447,30 @@ int ProjectLibraryTargetItem::type() const
     return ProjectBaseItem::LibraryTarget;
 }
 
+QModelIndex ProjectModel::pathToIndex(const QAbstractItemModel* model, const QStringList& tofetch)
+{
+    if(tofetch.isEmpty())
+        return QModelIndex();
+
+    QModelIndex current=model->index(0,0, QModelIndex());
+
+    QModelIndex ret;
+    foreach(const QString& currentName, tofetch)
+    {
+        QModelIndexList l = model->match(current, Qt::EditRole, currentName, 1, Qt::MatchExactly);
+        if(l.count()>0) {
+            ret=l.first();
+            current = model->index(0,0, ret);
+        } else
+            current = QModelIndex();
+    }
+    
+    qDebug() << "ooooooooo" << model->data(ret) << tofetch << ret.isValid();
+    
+    Q_ASSERT(model->data(ret).toString()==tofetch.last() || !ret.isValid());
+    return ret;
+}
+
 
 }
 #include "projectmodel.moc"
