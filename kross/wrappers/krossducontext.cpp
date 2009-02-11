@@ -130,7 +130,7 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QList< KDevelop::Declaration* > findLocalDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, const TypePtr< KDevelop::AbstractType >& x3=KDevelop::AbstractType::Ptr(), QFlags< KDevelop::DUContext::SearchFlag > x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findLocalDeclarations(x0, x1, x2, x3, x4); }
 		Q_SCRIPTABLE QVector< KDevelop::Declaration* > clearLocalDeclarations() { return wrapped->clearLocalDeclarations(); }
 		Q_SCRIPTABLE void deleteLocalDeclarations() { wrapped->deleteLocalDeclarations(); }
-		Q_SCRIPTABLE QVector< KDevelop::Declaration* > localDeclarations() const { return wrapped->localDeclarations(); }
+		Q_SCRIPTABLE QVector< KDevelop::Declaration* > localDeclarations(const KDevelop::TopDUContext* x0=0) const { return wrapped->localDeclarations(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* findContext(const KDevelop::SimpleCursor& x0, KDevelop::DUContext* x1=0) const { return wrapped->findContext(x0, x1); }
 		Q_SCRIPTABLE QList< KDevelop::DUContext* > findContexts(KDevelop::DUContext::ContextType x0, const KDevelop::QualifiedIdentifier& x1, const KDevelop::SimpleCursor& x2=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x3=0, QFlags< KDevelop::DUContext::SearchFlag > x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findContexts(x0, x1, x2, x3, x4); }
 		Q_SCRIPTABLE bool parentContextOf(KDevelop::DUContext* x0) const { return wrapped->parentContextOf(x0); }
