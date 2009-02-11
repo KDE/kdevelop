@@ -465,8 +465,6 @@ QModelIndex ProjectModel::pathToIndex(const QAbstractItemModel* model, const QSt
             current = QModelIndex();
     }
     
-    qDebug() << "ooooooooo" << model->data(ret) << tofetch << ret.isValid();
-    
     Q_ASSERT(model->data(ret).toString()==tofetch.last() || !ret.isValid());
     return ret;
 }
