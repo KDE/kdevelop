@@ -266,7 +266,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        else if ( targetAdded && item->target() )
+        else if ( !targetAdded && item->target() )
         {
             targetAdded = true;
             KAction* action = new KAction( i18n( "Create File" ), this );
