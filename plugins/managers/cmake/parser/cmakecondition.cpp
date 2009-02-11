@@ -162,7 +162,7 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                     {
                         last=true;
                     }
-                    kDebug(9042) << "EXISTS" << v << dir << last;
+//                     kDebug(9042) << "EXISTS" << f.filePath() << dir << last;
                 }
                 itEnd=it2;
             }   break;

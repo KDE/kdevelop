@@ -311,12 +311,38 @@ void CMakeProjectVisitorTest::testRun_data()
                             "  set(GOOD TRUE)\n"
                             "endif()\n"
                             << cacheValues << results;
-                            results.clear();
-                            
+                           
+    results.clear();                        
     results << StringPair("str", "babababababa");
     QTest::newRow("replace") <<
                             "set(str tatatttatatttata)\n"
                             "string(REGEX REPLACE \"t+\" \"b\" str ${str})\n"
+                            << cacheValues << results;
+    results.clear();
+    results << StringPair("good", "TRUE");
+    QTest::newRow("ifexists") <<
+                            "set(good FALSE)\n"
+                            "if(EXISTS Makefile)\n" //Relative
+                            "   set(good TRUE)\n"
+                            "endif()\n"
+                            
+                            "if(EXISTS /proc)\n"    //Absolute
+                            "   set(good TRUE)\n"
+                            "else()\n"
+                            "   set(good FALSE)\n"
+                            "endif()\n"
+                            
+                            "if(EXISTS /pppppppp)\n" //Doesn't exist absolute
+                            "   set(good FALSE)\n"
+                            "else()\n"
+                            "   set(good TRUE)\n"
+                            "endif()\n"
+                            
+                            "if(EXISTS MAAAAA)\n" //Doesn't exist relative
+                            "   set(good FALSE)\n"
+                            "else()\n"
+                            "   set(good TRUE)\n"
+                            "endif()\n"
                             << cacheValues << results;
 }
 
@@ -341,6 +367,8 @@ void CMakeProjectVisitorTest::testRun()
     CacheValues val;
     foreach(const StringPair& v, cache)
         val[v.first]=v.second;
+    
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
     
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
