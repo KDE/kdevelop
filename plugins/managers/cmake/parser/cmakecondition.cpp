@@ -149,17 +149,20 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case EXISTS:
             {
                 QString v=*(it2+1);
-//                 kDebug(9042) << "EXISTS" << v << *it2;
                 if(v.isEmpty())
                     kDebug(9042) << "error: no parameter to exist";
                 else
                 {
                     last=false;
-                    QFileInfo f(v);
+                    QString dir;
+                    if(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
+                        dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+                    QFileInfo f(dir, v);
                     if(f.exists())
                     {
                         last=true;
                     }
+                    kDebug(9042) << "EXISTS" << v << dir << last;
                 }
                 itEnd=it2;
             }   break;

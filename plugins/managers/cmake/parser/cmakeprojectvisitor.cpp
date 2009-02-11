@@ -736,7 +736,13 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
     if(!flib->noDefaultPath())
     {
-        foreach(const QString& s, m_vars->value("CMAKE_SYSTEM_PREFIX_PATH"))
+        locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
+        locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
+        
+        locationOptions += m_vars->value("CMAKE_SYSTEM_LIBRARY_PATH");
+        
+        QStringList opt=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
     }
 
@@ -1364,7 +1370,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::PATH:
-            val=fi.absolutePath();
+            val=fi.canonicalFilePath();
             break;
         case GetFilenameComponentAst::ABSOLUTE:
             val=fi.absoluteFilePath();
