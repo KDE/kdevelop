@@ -502,14 +502,15 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         if( idType ) {
           Declaration* idDecl = idType->declaration(m_duContext->topContext());
           if( idDecl && idDecl->internalContext() ) {
+            bool declarationIsConst = false;
+            if (containerType->modifiers() & AbstractType::ConstModifier || idDecl->abstractType()->modifiers() & AbstractType::ConstModifier)
+              declarationIsConst = true;
+
             QList<Declaration*> operatorDeclarations = idDecl->internalContext()->findLocalDeclarations(Identifier("operator->"));
             if( !operatorDeclarations.isEmpty() ) {
+              // TODO use Cpp::isAccessible on operator functions for more correctness?
               foreach(Declaration* decl, operatorDeclarations)
                 m_expressionResult.allDeclarationsList().append(decl->id());
-
-              bool declarationIsConst = false;
-              if (idDecl->abstractType()->modifiers() & AbstractType::ConstModifier)
-                declarationIsConst = true;
               
               FunctionType::Ptr function;
               foreach (Declaration* decl, operatorDeclarations) {
@@ -529,7 +530,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                 m_expressionResult.type = function->returnType()->indexed();
                 m_expressionResult.isInstance = true;
               } else {
-                  log( QString("arrow-operator of class is not a function: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+                  log( QString("arrow-operator of class is not a function, or is non-const where the object being accessed is const: %1").arg(containerType ? containerType->toString() : QString("null") ) );
               }
             } else {
               log( QString("arrow-operator on type without operator-> member: %1").arg(containerType ? containerType->toString() : QString("null") ) );
