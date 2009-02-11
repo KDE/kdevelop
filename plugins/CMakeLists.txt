@@ -10,5 +10,5 @@ add_subdirectory(formatters)
 add_subdirectory(coverage)
 
 if(NOT WIN32)
-    add_subdirectory(cppdebugger)
+    macro_optional_add_subdirectory(cppdebugger)
 endif(NOT WIN32)
