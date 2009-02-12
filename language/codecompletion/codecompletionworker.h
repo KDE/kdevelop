@@ -79,6 +79,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     ///Is always reset from within computeCompletions
     bool& aborting();
     
+    void failed();
+    
   public Q_SLOTS:
     ///Connection from the foreground thread within CodeCompletionModel
     void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);

@@ -60,6 +60,10 @@ bool CodeCompletionWorker::fullCompletion() const {
   return m_fullCompletion;
 }
 
+void CodeCompletionWorker::failed() {
+    emit foundDeclarations( QList<KSharedPtr<CompletionTreeElement> >(), KSharedPtr<KDevelop::CodeCompletionContext>() );
+}
+
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
 {
   {
@@ -71,6 +75,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   KTextEditor::Document* doc = view->document();
   if( !doc ) {
     kDebug() << "No document for completion";
+    failed();
     return;
   }
 
@@ -90,8 +95,11 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
     text += '\n';
 
-  if (aborting())
+  if (aborting()) {
+    failed();
+
     return;
+  }
 
   computeCompletions(context, position, view, range, text);
 }
@@ -121,18 +129,23 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     DUChainReadLocker lock(DUChain::lock());
 
     if (!context) {
+      failed();
       kDebug() << "Completion context disappeared before completions could be calculated";
       return;
     }
     QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting(), fullCompletion());
 
-    if (aborting())
+    if (aborting()) {
+      failed();
       return;
+    }
     
     QList<KSharedPtr<CompletionTreeElement> > tree = computeGroups( items, completionContext );
 
-    if(aborting())
+    if(aborting()) {
+      failed();
       return;
+    }
     
     tree += completionContext->ungroupedElements();
 

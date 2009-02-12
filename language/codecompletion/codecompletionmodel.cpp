@@ -224,6 +224,9 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
 {
   m_completionItems = items;
   m_completionContext = completionContext;
+  
+  if(m_completionContext)
+    kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
 
   reset();
 
@@ -241,6 +244,9 @@ void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext>
 {
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
+
+  if(m_completionContext)
+    kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
 }
 
 KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const

@@ -358,6 +358,7 @@ void BackgroundParser::clear(QObject* parent)
 void BackgroundParser::loadSettings(bool projectIsLoaded)
 {
     Q_UNUSED(projectIsLoaded)
+        
 
     d->loadSettings();
 }
