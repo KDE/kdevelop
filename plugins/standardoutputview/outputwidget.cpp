@@ -310,6 +310,7 @@ QListView* OutputWidget::createListView(int id)
             listview->setViewMode( QListView::ListMode );
             listview->setMovement( QListView::Static );
             listview->setResizeMode( QListView::Fixed );
+            listview->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
             views[id] = listview;
             connect( listview, SIGNAL(activated(const QModelIndex&)),
                      this, SLOT(activate(const QModelIndex&)));
@@ -408,7 +409,7 @@ void OutputWidget::enableActions()
 
 void OutputWidget::scrollToBottom( int id )
 {
-    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
+/*    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
     {
         kDebug() << "starting auto-scroll timer";
         if (!scrollTimers.contains(id)) {
@@ -422,7 +423,12 @@ void OutputWidget::scrollToBottom( int id )
         if (!scrollTimers[id]->isActive())
             // 100ms delay in scrolling, for performance reasons
             scrollTimers[id]->start(100);
-    }
+    }*/
+    QWidget* w = currentWidget();
+    if( !w )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
+    view->scrollToBottom();
 }
 
 void OutputWidget::doScrollToBottom( int id )
