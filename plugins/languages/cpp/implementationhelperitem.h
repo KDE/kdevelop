@@ -26,7 +26,8 @@ class ImplementationHelperItem : public NormalDeclarationCompletionItem
 public:
   enum HelperType {
     Override,
-    CreateDefinition
+    CreateDefinition,
+    CreateSignalSlot
   };
   ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0);
   

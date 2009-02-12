@@ -115,6 +115,11 @@ CppCodeCompletionModel::~CppCodeCompletionModel()
 }
 
 void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
+  if(completionContext()) {
+    Cpp::CodeCompletionContext* cppContext = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext().data());
+    Q_ASSERT(cppContext);
+    cppContext->setFollowingText(range.text().join("\n"));
+  }
   KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
 }
 

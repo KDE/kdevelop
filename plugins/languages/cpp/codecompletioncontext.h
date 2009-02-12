@@ -44,6 +44,8 @@ namespace KDevelop {
   typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
 }
 
+class ImplementationHelperItem;
+
 namespace Cpp {
   class OverloadResolutionFunction;
 
@@ -169,6 +171,10 @@ namespace Cpp {
 
       KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type) const;
       
+      QString followingText() const;
+      
+      void setFollowingText(QString str);
+      
     private:
       QList<CompletionTreeItemPointer> keywordCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
@@ -233,6 +239,7 @@ namespace Cpp {
 
       QList<Function> m_functions;
 
+      IndexedDeclaration m_connectedSignal;
       //If a signal/slot access is performed, and a slot is being connected to a signal, this contains the identifier and the signature
       Identifier m_connectedSignalIdentifier;
       QByteArray m_connectedSignalNormalizedSignature;
@@ -245,6 +252,8 @@ namespace Cpp {
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;
+
+      friend class ::ImplementationHelperItem;
   };
 }
 

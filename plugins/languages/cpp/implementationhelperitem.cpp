@@ -21,6 +21,11 @@
 #include "completionhelpers.h"
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <qtfunctiondeclaration.h>
+#include <language/codegen/coderepresentation.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
 
 ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
 }
@@ -34,12 +39,23 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
         prefix = i18n("Override");
       if(m_type == CreateDefinition)
         prefix = i18n("Implement");
+      if(m_type == CreateSignalSlot)
+        return i18n("Create Slot");
       
       ret = prefix + " " + ret.toString();
     }
 
     if(index.column() == KTextEditor::CodeCompletionModel::Name) {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+      if(m_type == CreateSignalSlot) {
+        ret = completionContext->followingText();
+        Cpp::QtFunctionDeclaration* cDecl = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
+
+        if(cDecl && ret.toString().isEmpty())
+          ret = cDecl->identifier().toString();
+        
+        return ret;
+      }
       if(declaration().data() && m_type != Override) {
         QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
         if(!parentScope.isEmpty())
@@ -175,7 +191,72 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
 
 void ImplementationHelperItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
 
-  
-  document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
+  if(m_type == CreateSignalSlot) {
+    //Step 1: Decide where to put the declaration
+    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+    
+    QList<DUContext*> containers = completionContext->memberAccessContainers();
+    
+    if(containers.isEmpty())
+      return;
+    
+    DUContext* classContext = containers.first();
+    
+    KUrl doc = classContext->url().toUrl();
+    
+    ///@todo Make sure the file is up-to-date
+    KDevelop::CodeRepresentation* rep = KDevelop::createCodeRepresentation(classContext->url());
+    if(rep) {
+      QString indent = "  ";
+      
+      QStringList text = rep->text().split('\n');
+      int targetLine = classContext->range().end.line;
+      bool behindExistingSlot = false;
+      foreach(Declaration* decl, classContext->localDeclarations()) {
+        if(Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl)) {
+          if(qtFunction->isSlot()) {
+            //Prefer putting the declaration behind existing slots
+            behindExistingSlot = true;
+            targetLine = qtFunction->range().end.line+1;
+            if(text.size() > targetLine-1) {
+              indent = QString();
+              for(int a = 0; a < text[targetLine-1].length(); ++a) {
+                if(text[targetLine-1][a].isSpace())
+                  indent += text[targetLine-1][a];
+                else
+                  break;
+              }
+            }
+          }
+        }
+      }
+      
+      QString add;
+      if(!behindExistingSlot)
+        add = indent + "private slots:\n";
+      
+      QString sig;
+      m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
+      createArgumentList(*this, sig, 0, false, true);      
+      
+      add = indent + "void " + completionContext->followingText() + sig + ";";
+      
+      if(targetLine > text.size())
+        return;
+      
+      text.insert(targetLine, add);
+      
+      lock.unlock();
+      
+      rep->setText(text.join("\n"));
+      delete rep;
+      ICore::self()->languageController()->backgroundParser()->addDocument(doc);
+      
+      QString localText = "SLOT(" + completionContext->followingText() + "(" + QString::fromUtf8(completionContext->m_connectedSignalNormalizedSignature) + ")));";
+      document->replaceText(word, localText);
+    }
+  }else{
+    document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
+  }
 }
 

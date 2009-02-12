@@ -309,6 +309,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   if(m_expression == "else")
     m_expression = QString();
+  
+  if(m_expression == "const") {
+    //The cursor is behind a "const .."
+    m_onlyShowTypes = true;
+    m_expression = QString();
+  }
 
   QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
@@ -404,8 +410,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     }
   }
   
-  if(depth == 0 && parentContext() && parentContext()->memberAccessOperation() == TemplateAccess)
-    m_onlyShowTypes = true; ///@todo Check the current item whether it's int or bool, and then also allow constants/enumerators
+  if(depth == 0 && parentContext() && parentContext()->memberAccessOperation() == TemplateAccess) {
+    LOCKDUCHAIN;
+    //This also happens in cases like "for(int a = 0; a < |", so test whether the previous expression is an instance.
+    if(parentContext()->m_expressionResult.isValid() && !parentContext()->m_expressionResult.isInstance)
+      m_onlyShowTypes = true;
+  }
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) || expressionPrefix.endsWith("return") ) {
@@ -511,7 +521,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
             if (containerType->modifiers() & AbstractType::ConstModifier || idDecl->abstractType()->modifiers() & AbstractType::ConstModifier)
               declarationIsConst = true;
 
-            QList<Declaration*> operatorDeclarations = idDecl->internalContext()->findLocalDeclarations(Identifier("operator->"));
+            QList<Declaration*> operatorDeclarations = Cpp::findLocalDeclarations(idDecl->internalContext(), Identifier("operator->"), m_duContext->topContext());
             if( !operatorDeclarations.isEmpty() ) {
               // TODO use Cpp::isAccessible on operator functions for more correctness?
               foreach(Declaration* decl, operatorDeclarations)
@@ -1042,6 +1052,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           break;
         case SignalAccess:
         case SlotAccess:
+        {
+        KDevelop::IndexedDeclaration connectedSignal;
         if(!m_connectedSignalIdentifier.isEmpty()) {
           ///Create an additional argument-hint context that shows information about the signal we connect to
           if(parentContext() && parentContext()->m_knownArgumentTypes.count() > 1 && parentContext()->m_knownArgumentTypes[0].type.isValid()) {
@@ -1058,9 +1070,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                         //Match
                         NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
                         item->useAlternativeText = true;
+                        m_connectedSignal = IndexedDeclaration(decl.first);
                         item->alternativeText = i18n("Connect to") + " " + decl.first->qualifiedIdentifier().toString() + "(" + QString::fromUtf8(m_connectedSignalNormalizedSignature) + ")";
                         item->m_isQtSignalSlotCompletion = true;
                         items << CompletionTreeItemPointer(item);
+                        connectedSignal = IndexedDeclaration(decl.first);
                       }
                     }
                   }
@@ -1077,6 +1091,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           if(identified) {
             Declaration* decl = identified->declaration(m_duContext->topContext());
             if(decl && decl->internalContext()) {
+              
+              if(connectedSignal.isValid() && m_localClass.data() == decl->internalContext()) { ///Create implementation-helper to add a slot
+                signalSlots << CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateSignalSlot, DeclarationPointer(connectedSignal.data()), CodeCompletionContext::Ptr(this)));
+              }
+              
               foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
                   if((classFun->isSignal() && !m_onlyShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
@@ -1107,6 +1126,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               eventuallyAddGroup(i18n("Signals/Slots"), 10, signalSlots);
             }
           }
+        }
         }
         //Since there is 2 connect() functions, the third argument may be a slot as well as a QObject*, so also
         //give normal completion items
@@ -1177,10 +1197,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
 
   foreach(Declaration* decl, context->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
-    if(classFun) {
-      if(!classFun->isAbstract() && !classFun->isDefinition() && !FunctionDefinition::definition(classFun) && classFun->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
-        ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(classFun), KSharedPtr<CodeCompletionContext>(this)));
-      }
+    if((!classFun || !classFun->isAbstract()) && !decl->isDefinition() && !FunctionDefinition::definition(decl) && decl->qualifiedIdentifier().toString().startsWith(minimumScope.toString()))
+      ret << KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateDefinition, DeclarationPointer(decl), KSharedPtr<CodeCompletionContext>(this)));
   }
 
   foreach(DUContext* child, context->childContexts())
@@ -1440,6 +1458,35 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
   #define ADD_TOKEN_S(X) ADD_TYPED_TOKEN_S(X, KDevelop::IndexedType())
+
+  bool restrictedItems = m_onlyShowSignals || m_onlyShowSlots || m_onlyShowTypes;
+  
+  if(!restrictedItems || m_onlyShowTypes) {
+    ADD_TOKEN(bool);
+    ADD_TOKEN(char);
+    ADD_TOKEN(const);
+    ADD_TOKEN(double);
+    ADD_TOKEN(enum);
+    ADD_TOKEN(float);
+    ADD_TOKEN(int);
+    ADD_TOKEN(long);
+    ADD_TOKEN(mutable);
+    ADD_TOKEN(register);
+    ADD_TOKEN(short);
+    ADD_TOKEN(signed);
+    ADD_TOKEN(struct);
+    ADD_TOKEN(template);
+    ADD_TOKEN(typename);
+    ADD_TOKEN(union);
+    ADD_TOKEN(unsigned);
+    ADD_TOKEN(void);
+    ADD_TOKEN(volatile);
+    ADD_TOKEN(wchar_t);
+  }
+  
+  if(restrictedItems && (m_duContext->type() == DUContext::Other || m_duContext->type() == DUContext::Function))
+    return ret;
+  
   if(m_duContext->type() == DUContext::Class) {
     ADD_TOKEN_S("Q_OBJECT");
     ADD_TOKEN(private);
@@ -1498,33 +1545,13 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   }
   
   ADD_TOKEN(auto);
-  ADD_TOKEN(bool);
-  ADD_TOKEN(char);
   ADD_TOKEN(class);
-  ADD_TOKEN(const);
-  ADD_TOKEN(double);
-  ADD_TOKEN(enum);
-  ADD_TOKEN(float);
-  ADD_TOKEN(int);
-  ADD_TOKEN(long);
-  ADD_TOKEN(mutable);
   ADD_TOKEN(operator);
-  ADD_TOKEN(register);
-  ADD_TOKEN(short);
-  ADD_TOKEN(signed);
   ADD_TOKEN(sizeof);
   ADD_TOKEN(static);
-  ADD_TOKEN(struct);
-  ADD_TOKEN(template);
   ADD_TOKEN(throw);
   ADD_TOKEN(typedef);
-  ADD_TOKEN(typename);
-  ADD_TOKEN(union);
-  ADD_TOKEN(unsigned);
   ADD_TOKEN(using);
-  ADD_TOKEN(void);
-  ADD_TOKEN(volatile);
-  ADD_TOKEN(wchar_t);
 
   ConstantIntegralType::Ptr trueType(new ConstantIntegralType(IntegralType::TypeBoolean));
   trueType->setValue<bool>(true);
@@ -1537,6 +1564,14 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   ADD_TYPED_TOKEN(false, falseType->indexed());
   
   return ret;
+}
+
+QString CodeCompletionContext::followingText() const {
+  return m_followingText;
+}
+
+void CodeCompletionContext::setFollowingText(QString str) {
+  m_followingText = str;
 }
 
 
