@@ -318,6 +318,8 @@ void CMakeProjectVisitorTest::testRun_data()
                             "set(str tatatttatatttata)\n"
                             "string(REGEX REPLACE \"t+\" \"b\" str ${str})\n"
                             << cacheValues << results;
+                            
+    //This test should probably be linux-only
     results.clear();
     results << StringPair("good", "TRUE");
     QTest::newRow("ifexists") <<
@@ -343,6 +345,13 @@ void CMakeProjectVisitorTest::testRun_data()
                             "else()\n"
                             "   set(good TRUE)\n"
                             "endif()\n"
+                            << cacheValues << results;
+    
+    //This test should probably be linux-only
+    results.clear();
+    results << StringPair("output", "/lib");
+    QTest::newRow("get_filename_component") <<
+                            "get_filename_component(output /usr/lib/libdl.so PATH)\n"
                             << cacheValues << results;
 }
 
