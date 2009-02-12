@@ -133,12 +133,23 @@ QString extractLastLine(const QString& str) {
     return str;
 }
 
-bool isKeyword(QString str) {
-  ///@todo Complete this list
-  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete";
+bool isPrefixKeyword(QString str) {
+  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete" || str == "emit";
 }
 
 int completionRecursionDepth = 0;
+
+///Removes the given word from before the expression if it is there. Returns whether it was found + removed.
+bool removePrefixWord(QString& expression, QString word) {
+  if(expression.left(word.size()+1).trimmed() == word) {
+    if(expression.size() >= word.size()+1)
+      expression = expression.mid(word.size()+1);
+    else
+      expression.clear();
+    return true;
+  }
+  return false;
+}
 
 CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_pointerConversionsBeforeMatching(0)
 {
@@ -315,6 +326,11 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_onlyShowTypes = true;
     m_expression = QString();
   }
+  
+  if(m_expression == "emit")  {
+    m_onlyShowSignals = true;
+    m_expression = QString();
+  }
 
   QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
@@ -326,7 +342,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if(newExpressionStart > 0) {
       QString newExpression = expressionPrefix.mid(newExpressionStart).trimmed();
       QString newExpressionPrefix = stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
-      if(!isKeyword(newExpression)) {
+      if(!isPrefixKeyword(newExpression)) {
         if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
           kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
           m_expression = newExpression;
@@ -429,12 +445,9 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   QString expr = m_expression.trimmed();
 
-  if( expr.startsWith("emit") )  {
-    expr = expr.right( expr.length() - 4 );
-    m_onlyShowSignals = true;
-  }
-  if( expr.startsWith("return") )  {
-    expr = expr.right( expr.length() - 6 );
+  removePrefixWord(expr, "emit");
+  
+  if( removePrefixWord(expr, "return") )  {
     if(!expr.isEmpty() || depth == 0) {
       //Create a new context for the "return"
       m_parentContext = new CodeCompletionContext( m_duContext, "return", QString(), depth+1 );
@@ -442,8 +455,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       m_memberAccessOperation = ReturnAccess;
     }
   }
-  if( expr.startsWith("delete") )  {
-    expr = expr.right( expr.length() - 6 );
+  if( removePrefixWord(expr, "delete") )  {
     QRegExp bracketRE("^\\s*\\[\\s*\\]");
     if (expr.contains(bracketRE))
       expr = expr.remove(bracketRE);
@@ -456,14 +468,12 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       //m_memberAccessOperation = DeleteAccess;
     }
   }
-  if( expr.startsWith("throw") )  {
+  if( removePrefixWord(expr, "throw") )  {
     isThrow = true;
-    expr = expr.right( expr.length() - 5 );
   }
-  if( expr.startsWith("new") ) {
+  if( removePrefixWord(expr, "new") ) {
     m_onlyShowTypes = true;
     m_pointerConversionsBeforeMatching = 1;
-    expr = expr.right( expr.length() - 3 );
   }
   ExpressionParser expressionParser/*(false, true)*/;
 
@@ -1342,7 +1352,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 
   ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(functionContext->owner(), m_duContext->topContext()));
   
-  if(classFun && !classFun->isStatic() && classFun->context()->owner()) {
+  if(classFun && !classFun->isStatic() && classFun->context()->owner() && !m_onlyShowSignals && !m_onlyShowSlots && !m_onlyShowTypes) {
     AbstractType::Ptr classType = classFun->context()->owner()->abstractType();
     if(classFun->abstractType()->modifiers() & AbstractType::ConstModifier)
       classType->setModifiers((AbstractType::CommonModifiers)(classType->modifiers() | AbstractType::ConstModifier));
