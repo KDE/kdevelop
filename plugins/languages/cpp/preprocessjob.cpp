@@ -635,9 +635,10 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             slaveJob->parseForeground();
 
             // Add the included file.
-            ///@todo Gracefully handle if no duchain is returned, while aborting
-            Q_ASSERT(slaveJob->duChain());
-            parentJob()->addIncludedFile(slaveJob->duChain(), sourceLine);
+            if(slaveJob->duChain())
+              parentJob()->addIncludedFile(slaveJob->duChain(), sourceLine);
+            else
+              kDebug(9007) << "parse-job for" << includedFile << "did not return a top-context";
             delete slaveJob;
         }
         ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << "(" << m_currentEnvironment->environment().size() << "macros)" << ": file included"; )
