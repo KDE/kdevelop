@@ -236,8 +236,9 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
         add = indent + "private slots:\n";
       
       QString sig;
-      m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
-      createArgumentList(*this, sig, 0, false, true);      
+      sig = "(" + QString::fromUtf8(completionContext->m_connectedSignalNormalizedSignature) + ")";
+//       m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
+//       createArgumentList(*this, sig, 0, false, true);      
       
       add = indent + "void " + completionContext->followingText() + sig + ";";
       
