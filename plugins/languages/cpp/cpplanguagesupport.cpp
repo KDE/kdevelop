@@ -594,7 +594,7 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
       QString check = localPath.path(KUrl::AddTrailingSlash) + includeName;
         QFileInfo info(check);
-        if (info.exists() && info.isReadable()) {
+        if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
             ret.first.cleanPath();
@@ -618,7 +618,7 @@ restart:
         QString check = path.path(KUrl::AddTrailingSlash) + includeName;
         QFileInfo info(check);
 
-        if (info.exists() && info.isReadable()) {
+        if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
             ret.first.cleanPath();
