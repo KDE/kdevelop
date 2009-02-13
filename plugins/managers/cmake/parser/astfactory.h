@@ -35,6 +35,7 @@ public:
 
     ///Alias for the AST creation callback
     typedef CMakeAst* ( *CreateAstCallback )();
+    ~AstFactory();
 public:
     ///Returns true if registration was successful
     bool registerAst( const QString& astId,

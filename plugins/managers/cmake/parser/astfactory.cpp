@@ -42,6 +42,12 @@ AstFactory::AstFactory()
     d = new Private;
 }
 
+AstFactory::~AstFactory()
+{
+    delete d;
+}
+
+
 bool AstFactory::registerAst( const QString& astId,
                               CreateAstCallback createFn )
 {
