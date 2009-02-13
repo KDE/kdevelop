@@ -261,3 +261,6 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
   }
 }
 
+bool ImplementationHelperItem::dataChangedWithInput() const {
+  return m_type == CreateSignalSlot;
+}

@@ -119,6 +119,42 @@ void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTex
     Cpp::CodeCompletionContext* cppContext = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext().data());
     Q_ASSERT(cppContext);
     cppContext->setFollowingText(range.text().join("\n"));
+    bool didReset = false;
+    if(completionContext()->ungroupedElements().size()) {
+      //Update the ungrouped elements, since they may have changed their text
+      int row = rowCount() - completionContext()->ungroupedElements().size();
+      
+      foreach(KDevelop::CompletionTreeElementPointer item, completionContext()->ungroupedElements()) {
+        
+        QModelIndex parent = index(row, 0);
+        
+        KDevelop::CompletionCustomGroupNode* group = dynamic_cast<KDevelop::CompletionCustomGroupNode*>(item.data());
+        if(group) {
+          int subRow = 0;
+          foreach(KDevelop::CompletionTreeElementPointer item, group->children) {
+            if(item->asItem() && item->asItem()->dataChangedWithInput()) {
+//               dataChanged(index(subRow, Name, parent), index(subRow, Name, parent));
+              kDebug() << "doing dataChanged";
+              reset(); ///@todo This is very expensive, but kate doesn't listen for dataChanged(..). Find a cheaper way to achieve this.
+              didReset = true;
+              break;
+            }
+            ++subRow;
+          }
+        }
+        
+        if(didReset)
+          break;
+        
+        if(item->asItem() && item->asItem()->dataChangedWithInput()) {
+          reset();
+          didReset = true;
+          break;
+        }
+        ++row;
+      }
+//       dataChanged(index(rowCount() - completionContext()->ungroupedElements().size(), 0), index(rowCount()-1, columnCount()-1 ));
+    }
   }
   KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
 }

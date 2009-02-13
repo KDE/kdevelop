@@ -39,6 +39,8 @@ public:
   
   ///Returns the text that this item would yield if it was executed
   QString insertionText(KUrl currentDocumentUrl = KUrl(), KDevelop::SimpleCursor currentDocumentCursor = KDevelop::SimpleCursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
+  
+  virtual bool dataChangedWithInput() const;
 };
 
 #endif // IMPLEMENTATIONHELPERITEM_H

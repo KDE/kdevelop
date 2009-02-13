@@ -1100,8 +1100,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified) {
             Declaration* decl = identified->declaration(m_duContext->topContext());
-            if(decl && decl->internalContext()) {
-              
+            if(decl && decl->internalContext() /*&& Cpp::findLocalDeclarations(decl->internalContext(), Identifier("QObject"), m_duContext->topContext()).count()*/) { //hacky test whether it's a QObject
+              ///@todo Always allow this when the class is within one of the open projects. Problem: The project lookup is not threadsafe
               if(connectedSignal.isValid() && m_localClass.data() == decl->internalContext()) { ///Create implementation-helper to add a slot
                 signalSlots << CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateSignalSlot, DeclarationPointer(connectedSignal.data()), CodeCompletionContext::Ptr(this)));
               }
