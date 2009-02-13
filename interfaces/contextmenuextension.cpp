@@ -54,6 +54,7 @@ ContextMenuExtension::ContextMenuExtension()
 
 ContextMenuExtension::~ContextMenuExtension()
 {
+    delete d;
 }
 
 
