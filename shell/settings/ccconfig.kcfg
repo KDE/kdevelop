@@ -21,6 +21,9 @@
     <entry name="highlightSemanticProblems" key="highlightSemanticProblems" type="Bool">
     <default>true</default>
     </entry>
+    <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
+    <default>true</default>
+    </entry>
     <entry name="localVariableColorization" key="localVariableColorization" type="Int">
     <default>120</default>
     </entry>

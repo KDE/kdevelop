@@ -44,6 +44,8 @@ namespace KDevelop {
             
             Q_SCRIPTABLE virtual bool highlightSemanticProblems() const = 0;
             
+            Q_SCRIPTABLE virtual bool showMultiLineSelectionInformation() const = 0;
+            
         Q_SIGNALS:
             void settingsChanged(ICompletionSettings*);
     };

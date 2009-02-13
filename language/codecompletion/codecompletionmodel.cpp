@@ -334,7 +334,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   QVariant ret = treeElement.asItem()->data(index, role, this);
 
   //In reduced completion mode, don't show information text with the selected items
-  if(!m_fullCompletion && role == ItemSelected)
+  if(role == ItemSelected && (!m_fullCompletion || !ICore::self()->languageController()->completionSettings()->showMultiLineSelectionInformation()))
     return QVariant();
   
   return ret;
