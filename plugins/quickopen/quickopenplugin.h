@@ -121,6 +121,8 @@ class QuickOpenWidgetHandler : public QObject {
 
   private slots:
   void currentChanged( const QModelIndex& current, const QModelIndex& previous );
+  void currentChanged( const QItemSelection& current, const QItemSelection& previous );
+
   void accept();
   void textChanged( const QString& str );
   void updateProviders();

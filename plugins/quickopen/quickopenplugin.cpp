@@ -262,7 +262,7 @@ void QuickOpenWidgetHandler::run() {
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
-  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
+  connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QItemSelection&, const QItemSelection& )) );
 }
 
 QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
@@ -332,6 +332,10 @@ void QuickOpenWidgetHandler::callRowSelected() {
 }
 
 void QuickOpenWidgetHandler::currentChanged( const QModelIndex& /*current*/, const QModelIndex& /*previous */) {
+  callRowSelected();
+}
+
+void QuickOpenWidgetHandler::currentChanged( const QItemSelection& /*current*/, const QItemSelection& /*previous */) {
   callRowSelected();
 }
 
