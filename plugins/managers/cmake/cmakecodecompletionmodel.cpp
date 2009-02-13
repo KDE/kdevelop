@@ -89,9 +89,11 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             int pos=index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
-            FunctionType::Ptr func = m_declarations[pos].data()->abstractType().cast<FunctionType>();
-            if(func)
-                return "Macro";
+            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
+                if (FunctionType::Ptr func = type.cast<FunctionType>())
+                    return "Macro";
+                else
+                    return "Variable";
             else
                 return "Variable";
         }
@@ -104,16 +106,18 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             DUChainReadLocker lock(DUChain::lock());
             int pos=index.row()-m_commands.count();
-            FunctionType::Ptr func=m_declarations[pos].data()->abstractType().cast<FunctionType>();
-            if(func)
+            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
             {
-                QStringList args;
-                foreach(const AbstractType::Ptr& t, func->arguments())
+                if (FunctionType::Ptr func = type.cast<FunctionType>())
                 {
-                    DelayedType::Ptr delay = t.cast<DelayedType>();
-                    args.append(delay->identifier().toString());
+                    QStringList args;
+                    foreach(const AbstractType::Ptr& t, func->arguments())
+                    {
+                        DelayedType::Ptr delay = t.cast<DelayedType>();
+                        args.append(delay->identifier().toString());
+                    }
+                    return '('+args.join(", ")+')';
                 }
-                return '('+args.join(", ")+')';
             }
         }
     }
@@ -133,19 +137,20 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
             Declaration* decl = m_declarations[pos].data();
             if(!decl)
                 return;
-            FunctionType::Ptr func=decl->abstractType().cast<FunctionType>();
-            if(func)
+            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
             {
-                document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+                if (FunctionType::Ptr func = type.cast<FunctionType>())
+                {
+                    document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+                    break;
+                }
             }
-            else
-            {
-                Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
-                QString bef=document->text(prefix);
-                if(r.start().column()>=2 && bef=="${")
-                    r.start().setColumn( r.start().column()-2 );
-                document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
-            }
+
+            Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
+            QString bef=document->text(prefix);
+            if(r.start().column()>=2 && bef=="${")
+                r.start().setColumn( r.start().column()-2 );
+            document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
         }   break;
     }
 }
