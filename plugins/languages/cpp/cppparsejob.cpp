@@ -294,7 +294,8 @@ CppLanguageSupport * CPPParseJob::cpp() const
 }
 
 void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine) {
-    m_includedFiles.push_back(LineContextPair(duChain, sourceLine));
+    if(duChain.data())
+      m_includedFiles.push_back(LineContextPair(duChain, sourceLine));
 }
 
 void CPPParseJob::setProxyEnvironmentFile( Cpp::EnvironmentFile* file ) {
