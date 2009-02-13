@@ -56,6 +56,12 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
 
     qApp->installEventFilter(this);
 }
+
+ActiveToolTip::~ActiveToolTip()
+{
+    delete d;
+}
+
 bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
 {
     switch (e->type()) {

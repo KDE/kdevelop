@@ -43,6 +43,8 @@ Q_OBJECT
 public:
     /* position must be in global coordinates.  */
     ActiveToolTip(QWidget *parent, const QPoint& position);
+    ~ActiveToolTip();
+
 
     bool eventFilter(QObject *object, QEvent *e);
     
