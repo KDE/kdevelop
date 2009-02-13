@@ -160,4 +160,8 @@ CompletionCustomGroupNode::CompletionCustomGroupNode(QString groupName, int _inh
   inheritanceDepth = _inheritanceDepth;
 }
 
+bool CompletionTreeItem::dataChangedWithInput() const {
+  return false;
+}
+
 }

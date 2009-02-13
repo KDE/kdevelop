@@ -126,6 +126,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   ///Should return the type should be used for matching items against this one when it's an argument hint.
   ///May return IndexedType() when this item should not be matched.
   virtual IndexedType typeForArgumentMatching() const;
+  
+  ///Should return whether this completion-items data changes with input done by the user during code-completion.
+  ///Returning true is very expensive.
+  virtual bool dataChangedWithInput() const;
 };
 
 ///A custom-group node, that can be used as-is. Just create it, and call appendChild to add group items.
