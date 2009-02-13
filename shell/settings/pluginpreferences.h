@@ -38,8 +38,9 @@ public:
     PluginPreferences( QWidget *, const QVariantList & );
     void load();
     void save();
-    void reparseConfig( const QByteArray& );
     void defaults();
+public slots:
+    void reparseConfig( const QByteArray& );
 private:
     KPluginSelector* selector;
 };
