@@ -92,8 +92,9 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
   
   for (uint index = 0; index < formalsSize; ++index) {
     if (name.index() == formals[index]) {
-      if (index < (uint)m_frame->actuals.size())
+      if (index < (uint)m_frame->actuals.size()) {
         return m_frame->actuals[index];
+      }
       else {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
@@ -189,33 +190,27 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           if(formal[a] == indexFromCharacter('\"'))
             formal.insert(a, indexFromCharacter('\\'));
 
-        if (!formal.isEmpty()) {
-          Stream is(&formal, inputPosition);
-          is.setOriginalInputPosition(originalInputPosition);
-          skip_whitespaces(is, devnull());
+        Stream is(&formal, inputPosition);
+        is.setOriginalInputPosition(originalInputPosition);
+        skip_whitespaces(is, devnull());
 
-          output << '\"';
+        output << '\"';
 
-          while (!is.atEnd()) {
-            if (input == '"') {
-              output << '\\' << is;
+        while (!is.atEnd()) {
+          if (input == '"') {
+            output << '\\' << is;
 
-            } else if (input == '\n') {
-              output << '"' << is << '"';
+          } else if (input == '\n') {
+            output << '"' << is << '"';
 
-            } else {
-              output << is;
-            }
-
-            skip_whitespaces(++is, output);
+          } else {
+            output << is;
           }
 
-          output << '\"';
-
-        } else {
-          output << '#'; // TODO ### warning message?
+          skip_whitespaces(++is, output);
         }
 
+        output << '\"';
       }
       else if (input == '\"')
       {
@@ -363,7 +358,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         pp_macro_expander expand_actual(m_engine, m_frame);
 
-        int before = input.offset();
         {
           actual.clear();
 
@@ -376,23 +370,22 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           }
           trim(actualText);
 
-          if (input.offset() != before)
+          pp_actual newActual;
           {
-            pp_actual newActual;
-            {
-              PreprocessedContents newActualText;
-              Stream as(&actualText, actualStart);
-              as.setOriginalInputPosition(input.originalInputPosition());
+            PreprocessedContents newActualText;
+            Stream as(&actualText, actualStart);
+            as.setOriginalInputPosition(input.originalInputPosition());
 
-              rpp::LocationTable table;
-              table.anchor(0, actualStart, 0);
-              Stream nas(&newActualText, actualStart, &table);
-              expand_actual(as, nas);
-              
-              table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
-            }
-            actuals.append(newActual);
+            rpp::LocationTable table;
+            table.anchor(0, actualStart, 0);
+            Stream nas(&newActualText, actualStart, &table);
+            expand_actual(as, nas);
+            
+            table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
           }
+          newActual.forceValid = true;
+          
+          actuals.append(newActual);
         }
 
         // TODO: why separate from the above?
@@ -425,6 +418,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               
               table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
             }
+            newActual.forceValid = true;
             actuals.append(newActual);
           }
         }

@@ -82,6 +82,7 @@ private slots:
   void testEnvironmentMatching();
   void testUsesThroughMacros();
   void testMacroExpansionRanges();
+  void testEmptyMacroArguments();
   void testPreprocessor();
   void testNaiveMatching();
   void testFriendVisibility();

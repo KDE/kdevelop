@@ -1040,6 +1040,15 @@ QStringList splitSorted(const QString& str) {
   return ret;
 }
 
+void TestCppCodeCompletion::testEmptyMacroArguments() {
+  QString test("#define merge(prefix, suffix) prefix ## suffix\n void merge(test1, ) () { } void merge(, test2) () { }");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 2);
+  QCOMPARE(ctx->localDeclarations()[0]->identifier().toString(), QString("test1"));
+  QCOMPARE(ctx->localDeclarations()[1]->identifier().toString(), QString("test2"));
+}
+
 void TestCppCodeCompletion::testMacroExpansionRanges() {
 {
   QString test("#define TEST(X) int allabamma; \nTEST(C)\n");

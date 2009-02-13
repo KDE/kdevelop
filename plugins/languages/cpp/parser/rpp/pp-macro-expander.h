@@ -43,13 +43,17 @@ class pp;
 //The value of a preprocessor function-like macro parameter
 class pp_actual {
 public:
+  pp_actual() : forceValid(false) {
+  }
   QList<PreprocessedContents> text;
   QList<Anchor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
+  bool forceValid;
 
   bool isValid() const {
-    return !text.isEmpty();
+    return !text.isEmpty() || forceValid;
   }
   void clear() {
+    forceValid = false;
     text.clear();
     inputPosition.clear();
   }
