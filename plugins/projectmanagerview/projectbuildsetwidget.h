@@ -52,6 +52,10 @@ public slots:
 private slots:
     void addItems();
     void removeItems();
+    void moveUp();
+    void moveDown();
+    void moveToBottom();
+    void moveToTop();
     void showContextMenu( const QPoint& p );
 private:
     ProjectManagerView* m_view;

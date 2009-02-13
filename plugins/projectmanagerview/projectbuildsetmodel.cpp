@@ -293,3 +293,49 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
         endInsertRows();
     }
 }
+
+void ProjectBuildSetModel::moveRowsDown(int row, int count)
+{
+    QList<BuildItem> items = m_items.mid( row, count );
+    removeRows( row, count );
+    beginInsertRows( QModelIndex(), row+1, row+count );
+    for( int i = 0; i < count; i++ )
+    {
+        m_items.insert( row+1+i, items.at( i ) ); 
+    }
+    endInsertRows();
+}
+
+void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
+{
+    QList<BuildItem> items = m_items.mid( row, count );
+    removeRows( row, count );
+    beginInsertRows( QModelIndex(), rowCount(), rowCount()+count );
+    m_items.append( items );
+    endInsertRows();
+}
+
+void ProjectBuildSetModel::moveRowsUp(int row, int count)
+{
+    QList<BuildItem> items = m_items.mid( row, count );
+    removeRows( row, count );
+    beginInsertRows( QModelIndex(), row-1, row-2+count );
+    for( int i = 0; i < count; i++ )
+    {
+        m_items.insert( row-1+i, items.at( i ) ); 
+    }
+    endInsertRows();
+}
+
+void ProjectBuildSetModel::moveRowsToTop(int row, int count)
+{
+    QList<BuildItem> items = m_items.mid( row, count );
+    removeRows( row, count );
+    beginInsertRows( QModelIndex(), 0, count );
+    for( int i = 0; i < count; i++ )
+    {
+        m_items.insert( 0+i, items.at( i ) ); 
+    }
+    endInsertRows();
+}
+
