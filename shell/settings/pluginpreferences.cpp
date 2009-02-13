@@ -56,7 +56,7 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
     }
     selector->addPlugins( plugins, KPluginSelector::ReadConfigFile, QString(), QString(), Core::self()->activeSession()->config() );
     connect( selector, SIGNAL( changed(bool) ), this, SLOT( changed() ) );
-    connect( selector, SIGNAL( configComitted(const QByteArray&) ), this, SLOT( reparseConfig(const QByteArray&) ) );
+    connect( selector, SIGNAL( configCommitted(const QByteArray&) ), this, SLOT( reparseConfig(const QByteArray&) ) );
     selector->load();
 }
 
