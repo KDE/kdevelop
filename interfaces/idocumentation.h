@@ -20,8 +20,8 @@
 #ifndef IDOCUMENTATION_H
 #define IDOCUMENTATION_H
 
-#include <QString>
-#include <KSharedPtr>
+#include <QtCore/QString>
+#include <KDE/KSharedPtr>
 #include "interfacesexport.h"
 
 class QWidget;
