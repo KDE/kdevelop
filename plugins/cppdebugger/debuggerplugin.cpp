@@ -714,7 +714,6 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
                 "been activated or the interrupt was pressed).") );
             m_startDebugger->disconnect(this);
             connect(m_startDebugger, SIGNAL(triggered(bool)), controller, SLOT(slotRun()));
-            m_startDebugger->setEnabled(true);
 
             if ( config().readEntry("Raise GDB On Start", false ) )
             {
@@ -730,6 +729,20 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
             stateChanged("active");
             justRestarted_ = true;
         }
+    }
+
+    /* The 'start' command should be enabled either when:
+       - Debugger is not running
+       - Debugger is running and application is also running,
+       in which case 'start' continues execution.  */
+    if ((newState & s_dbgNotStarted)
+        || (!(newState & s_dbgNotStarted) && !(newState & s_appNotStarted)))
+    {
+        m_startDebugger->setEnabled(true);
+    }
+    else
+    {
+        m_startDebugger->setEnabled(false);
     }
 
     if (changedState & s_explicitBreakInto)
