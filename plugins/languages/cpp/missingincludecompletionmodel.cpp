@@ -154,7 +154,9 @@ QString MissingIncludeCompletionModel::filterString(KTextEditor::View* view, con
 }
 
 void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
-  QMutexLocker mutexLock(&mutex);
+  
+  QMutexLocker localLock(&mutex);
+  
   kDebug() << context.data() << aborting() << localExpression << prefixExpression;
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 500);
@@ -162,16 +164,22 @@ void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
     return;
   
   QString expression = prefixExpression + localExpression;
+  bool needInstance = localExpression.isEmpty();
+  KDevelop::DUContext* ctx = context.data();
+  QString localExpressionCopy = localExpression;
   
+  localLock.unlock(); //We unlock the local lock, because else the UI will block until the function has completed.
+  //This means that from now on, we must not use any local functions.
   
   QList<KSharedPtr<KDevelop::CompletionTreeElement> > items;
   KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(i18n("Not Included"), 1000);
 
-  if(!localExpression.isEmpty())
+  if(!localExpressionCopy.isEmpty())
   {
     typedef KSharedPtr<KDevelop::CompletionTreeItem> Item;
   
-    foreach(Item item, missingIncludeCompletionItems(expression, expression + ": ", Cpp::ExpressionEvaluationResult(), context.data(), 0, localExpression.isEmpty()))
+    QList<KDevelop::CompletionTreeItemPointer> items = missingIncludeCompletionItems(expression, expression + ": ", Cpp::ExpressionEvaluationResult(), ctx, 0, needInstance);
+    foreach(Item item, items)
       node->appendChild(KSharedPtr<KDevelop::CompletionTreeElement>(item.data()));
   }
   
