@@ -100,6 +100,7 @@ public Q_SLOTS:
 
     void configureSessions();
     void configureNotifications();
+    void showAboutPlatform();
 
 private:
     KActionCollection *actionCollection();

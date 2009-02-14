@@ -187,6 +187,12 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n("Configure Notifications") );
     action->setWhatsThis( i18n( "<b>Configure Notification</b><p>Shows a dialog that lets you configure notifications" ) );
 
+    action = actionCollection()->addAction( "about_platform", this, SLOT( showAboutPlatform() ) );
+    action->setText( i18n("About KDevelop Platform") );
+    action->setStatusTip( i18n("Show Information about KDevelop Platform") );
+    action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform" ) );
+
+
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
 //                                            i18n( "&Stop" ),

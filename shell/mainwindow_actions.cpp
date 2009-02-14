@@ -21,12 +21,14 @@ Boston, MA 02110-1301, USA.
 */
 
 #include <kconfiggroup.h>
-#include <KApplication>
+#include <kapplication.h>
+#include <kaboutapplicationdialog.h>
 
 #include <ktexteditor/editor.h>
 
 #include "core.h"
 #include "documentcontroller.h"
+#include "mainwindow_p.h"
 #include "sessiondialog.h"
 
 namespace KDevelop {
@@ -201,6 +203,11 @@ void MainWindowPrivate::configureNotifications()
     KNotifyConfigWidget::configure(m_mainWindow);
 }
 
+void MainWindowPrivate::showAboutPlatform()
+{
+    KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
+    dlg.exec();
+}
 
 }
 
