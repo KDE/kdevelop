@@ -311,9 +311,7 @@ void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
     beginInsertRows( QModelIndex(), rowCount(), rowCount()+count );
-    foreach( BuildItem& item, items ) {
-        m_items.append( item );
-    }
+    m_items += items;
     endInsertRows();
 }
 
