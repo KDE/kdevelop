@@ -76,7 +76,7 @@ public:
 public Q_SLOTS:
     virtual void openProject( const KUrl &KDev4ProjectFile = KUrl() );
     virtual bool projectImportingFinished( IProject* );
-    virtual bool closeProject( IProject* );
+    virtual void closeProject( IProject* );
     virtual void closeAllProjects();
     virtual bool configureProject( IProject* );
 //     void changeCurrentProject( ProjectBaseItem* );

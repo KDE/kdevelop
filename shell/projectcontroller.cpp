@@ -596,11 +596,11 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     }
 }
 
-bool ProjectController::closeProject(IProject* proj)
+void ProjectController::closeProject(IProject* proj)
 {
     if(!proj || d->m_projects.indexOf(proj) == -1)
     {
-        return false;
+        return;
     }
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
@@ -616,7 +616,7 @@ bool ProjectController::closeProject(IProject* proj)
         initializePluginCleanup(proj);
     }
     emit projectClosed(proj);
-    return true;
+    return;
 }
 
 bool ProjectController::loadProjectPart()

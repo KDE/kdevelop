@@ -102,7 +102,7 @@ public Q_SLOTS:
      * The @ref IProject object will be deleted after the closing has finished.
      * @returns true if the project could be closed, false otherwise
      */
-    virtual bool closeProject( IProject* ) = 0;
+    virtual void closeProject( IProject* ) = 0;
     virtual bool configureProject( IProject* ) = 0;
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
