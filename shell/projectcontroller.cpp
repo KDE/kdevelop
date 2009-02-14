@@ -491,7 +491,7 @@ void ProjectController::openProject( const KUrl &projectFile )
     return;
 }
 
-bool ProjectController::projectImportingFinished( IProject* project )
+void ProjectController::projectImportingFinished( IProject* project )
 {
     IPlugin *managerPlugin = project->managerPlugin();
     QList<IPlugin*> pluglist;
@@ -543,7 +543,6 @@ bool ProjectController::projectImportingFinished( IProject* project )
     ev->setText(i18n( "Project loaded: %1", project->name() ));
     ev->setComponentData(KGlobal::mainComponent());
     ev->sendEvent();
-    return true;
 }
 
 // helper method for closeProject()
@@ -653,10 +652,9 @@ IProject* ProjectController::findProjectByName( const QString& name )
 }
 
 
-bool ProjectController::configureProject( IProject* project )
+void ProjectController::configureProject( IProject* project )
 {
     d->projectConfig( project );
-    return true;
 }
 
 void ProjectController::addProject(IProject* project)

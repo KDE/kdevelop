@@ -103,7 +103,7 @@ public Q_SLOTS:
      * @returns true if the project could be closed, false otherwise
      */
     virtual void closeProject( IProject* ) = 0;
-    virtual bool configureProject( IProject* ) = 0;
+    virtual void configureProject( IProject* ) = 0;
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
     virtual KUrl projectsBaseDirectory() const = 0;
