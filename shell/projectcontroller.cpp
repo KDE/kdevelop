@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <kaction.h>
 #include <kconfig.h>
 #include <klocale.h>
+#include <kpassivepopup.h>
 #include <kservice.h>
 #include <kstandardaction.h>
 #include <kmessagebox.h>
@@ -418,7 +419,7 @@ QList<IProject*> ProjectController::projects() const
     return d->m_projects;
 }
 
-bool ProjectController::openProject( const KUrl &projectFile )
+void ProjectController::openProject( const KUrl &projectFile )
 {
     KUrl url = projectFile;
 
@@ -426,19 +427,23 @@ bool ProjectController::openProject( const KUrl &projectFile )
     {
         url = d->dialog->askProjectConfigLocation();
         if ( url.isEmpty() )
-            return false;
+            return;
     }
 
     if ( !url.isValid() )
     {
         KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
                            i18n("Invalid Location: %1", url.prettyUrl()));
-        return false;
+        return;
     }
     if ( d->m_currentlyOpening.contains(url))
     {
         kDebug() << "Already opening " << url << ". Aborting.";
-        return false;
+        KPassivePopup::message( i18n( "Project already being opened"), 
+                                i18n( "Already opening %1, not opening again", 
+                                      url.prettyUrl() ), 
+                                Core::self()->uiController()->activeMainWindow() );
+        return;
     }
 
     foreach( IProject* project, d->m_projects )
@@ -449,7 +454,7 @@ bool ProjectController::openProject( const KUrl &projectFile )
             { // close first, then open again by falling through
                 closeProject(project);
             } else { // abort
-                return false;
+                return;
             }
         }
     }
@@ -466,8 +471,11 @@ bool ProjectController::openProject( const KUrl &projectFile )
         //Now we can load settings for all of the Core objects including this one!!
 //         Core::loadSettings();
         d->m_core->pluginControllerInternal()->loadProjectPlugins();
-    } else
-        return false;
+    } else {
+        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
+                           i18n("Cannot Load Projects View plugin, aborting."));
+        return;
+    }
 
     Project* project = new Project();
     if ( !project->open( url ) )
@@ -475,12 +483,12 @@ bool ProjectController::openProject( const KUrl &projectFile )
         KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
                            i18n( "Project could not be opened: %1", url.prettyUrl() ));
         delete project;
-        return false;
+        return;
     }
 
     d->m_currentlyOpening << url;
     d->m_closeAllProjects->setEnabled(true);
-    return true;
+    return;
 }
 
 bool ProjectController::projectImportingFinished( IProject* project )

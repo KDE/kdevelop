@@ -527,12 +527,7 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 
     kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
     kDebug() << "Project was closed, now it will be opened";
-    if(!core()->projectController()->openProject(projectFile))
-    {
-        KMessageBox::sorry( 0,
-                            i18n( "Could not open project %1.",
-                                  projectFile.path() ) );
-    }
+    core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
 //     emit jobFinished(_checkoutJob); //couses crash!
 }
