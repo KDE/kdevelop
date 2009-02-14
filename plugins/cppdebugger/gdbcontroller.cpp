@@ -611,6 +611,11 @@ bool GDBController::startDebugger()
 
     gdb_ = new GDB();
 
+    // FIXME: here, we should wait until GDB is up and waiting for input.
+    // Then, clear s_dbgNotStarted
+    // It's better to do this right away so that the state bit is always
+    // correct.
+
     /** FIXME: connect ttyStdout. It takes QByteArray, so
         I'm not sure what to do.  */
 #if 0
@@ -671,16 +676,6 @@ bool GDBController::startDebugger()
 
 bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
 {
-    if (stateIsOn(s_dbgNotStarted))
-    {
-        // User has already run the debugger, but it's not running.
-        // Most likely, the debugger has crashed, and the debuggerpart
-        // was left in 'running' state so that the user can examine
-        // gdb output or something. But now, need to fully shut down
-        // previous debug session.
-        stopDebugger();
-    }
-
     if (stateIsOn( s_appNotStarted ) )
     {
         emit showMessage(i18n("Running program"), 1000);
