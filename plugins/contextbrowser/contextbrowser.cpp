@@ -531,7 +531,6 @@ void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
           addedWidget = foundSpecialObject ?
             showSpecialObjectView(view, position, pickedLanguage, ctx) :
             showDeclarationView(view, position, foundDeclaration, ctx);
-          ///@todo show tooltip
       }
     }
 
