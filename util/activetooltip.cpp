@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <limits>
 #include <kdebug.h>
+#include <QPointer>
 
 namespace KDevelop
 {
@@ -133,6 +134,7 @@ void ActiveToolTip::showEvent(QShowEvent*)
 void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
+    emit resized();
 }
 
 void ActiveToolTip::adjustRect()
@@ -143,6 +145,66 @@ void ActiveToolTip::adjustRect()
     d->rect_ = r;
 }
 
+void ActiveToolTip::setBoundingGeometry(QRect r) {
+    r.adjust(-10, -10, 10, 10);
+    d->rect_ = r;
 }
+
+namespace {
+    typedef QMultiMap<float, QPointer<ActiveToolTip> > ToolTipPriorityMap;
+    static ToolTipPriorityMap registeredToolTips;
+    ActiveToolTipManager manager;
+}
+
+void ActiveToolTipManager::doVisibility() {
+    bool hideAll = false;
+    int lastBottomPosition = -1;
+    QRect fullGeometry; //Geometry of all visible tooltips together
+    
+    for(ToolTipPriorityMap::const_iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ++it) {
+        if(*it) {
+            if(hideAll) {
+                (*it)->hide();
+            }else{
+                if((*it)->geometry().top() < lastBottomPosition) {
+                    QRect geom = (*it)->geometry();
+                    geom.moveTop(lastBottomPosition);
+                    (*it)->setGeometry(geom);
+                }
+                (*it)->show();
+                lastBottomPosition = (*it)->geometry().bottom();
+                
+                if(it == registeredToolTips.begin())
+                    fullGeometry = (*it)->geometry();
+                else
+                    fullGeometry = fullGeometry.united((*it)->geometry());
+            }
+            if(it.key() == 0) {
+                hideAll = true;
+            }
+        }
+    }
+
+    //Set bounding geometry, and remove old tooltips
+    for(ToolTipPriorityMap::iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ) {
+        if(!(*it)) {
+            it = registeredToolTips.erase(it);
+        }else{
+            (*it)->setBoundingGeometry(fullGeometry);
+            ++it;
+        }
+    }
+}
+
+void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority) {
+    registeredToolTips.insert(priority, tooltip);
+    
+    connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
+    QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);
+}
+
+}
+
+
 
 #include "activetooltip.moc"

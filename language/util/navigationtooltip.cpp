@@ -46,7 +46,6 @@ void NavigationToolTip::setNavigationWidget(QWidget* widget) {
     layout->addWidget(widget);
     layout->setMargin(0);
     m_navigationWidget = widget;
-    show();
 }
 
 }

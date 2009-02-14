@@ -24,6 +24,14 @@
 
 namespace KDevelop {
 
+///Internal
+class KDEVPLATFORMUTIL_EXPORT ActiveToolTipManager : public QObject {
+    Q_OBJECT
+    friend class ActiveToolTip;
+    private slots:
+        void doVisibility();
+};
+
 /** This class implements a tooltip that can contain arbitrary
     widgets that the user can interact with.
 
@@ -45,7 +53,15 @@ public:
     ActiveToolTip(QWidget *parent, const QPoint& position);
     ~ActiveToolTip();
 
-
+    ///Shows and registers the given tool-tip.
+    ///This should be used instead of just calling show() to make multiple different
+    ///tooltips work together.
+    ///@param tooltip  The tooltip to show. It should not be visible yet, show() will eventually be called from here, with some delay.
+    ///                The ownership stays with the caller.
+    ///@param priority The priority of this tooltip. Lower is better. Multiple tooltips will be stacked down in the given order.
+    ///                If it is zero, the given tooltip will be shown exclusively.
+    static void showToolTip(ActiveToolTip* tooltip, float priority = 100);
+    
     bool eventFilter(QObject *object, QEvent *e);
     
     bool insideThis(QObject* object);
@@ -55,7 +71,11 @@ public:
     void resizeEvent(QResizeEvent*);
 
     void adjustRect();
-
+    
+    ///Set the area within which the mouse can be moved freely without hiding the tooltip
+    void setBoundingGeometry(QRect geometry);
+Q_SIGNALS:
+    void resized();    
 private:
     class ActiveToolTipPrivate* const d;
 };

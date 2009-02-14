@@ -273,7 +273,8 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     kDebug() << "tooltip size" << tooltip->size();
     m_currentToolTip = tooltip;
-    
+    ActiveToolTip::showToolTip(tooltip);
+
     //First disconnect to prevent multiple connections
     disconnect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), this, SLOT(hideTooTip()));
     disconnect(view, SIGNAL(focusOut(KTextEditor::View*)), this, SLOT(hideTooTip()));
