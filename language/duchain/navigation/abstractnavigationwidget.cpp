@@ -61,6 +61,7 @@ QSize AbstractNavigationWidget::sizeHint() const
   if(m_browser) {
     updateIdealSize();
     QSize ret = QSize(qMin(m_idealTextSize.width(), maxNavigationWidgetWidth), qMin(m_idealTextSize.height(), 300));
+    
     if(m_currentWidget) {
       ret.setHeight( ret.height() + m_currentWidget->sizeHint().height() );
       if(m_currentWidget->sizeHint().width() > ret.width())
@@ -135,6 +136,13 @@ void AbstractNavigationWidget::update() {
     m_currentText = html;
     m_idealTextSize = QSize();
 
+    QSize hint = sizeHint();
+    if(hint.height() >= m_idealTextSize.height()) {
+      m_browser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }else{
+      m_browser->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    }
+    
     m_browser->verticalScrollBar()->setValue(scrollPos);
     m_browser->scrollToAnchor("currentPosition");
     m_browser->show();
