@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="66" name="kdevelop" >
+<kpartgui version="68" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">File</text>
@@ -135,6 +135,10 @@
     <Action name="docks_submenu"/>
     <Separator/>
     <Merge/>
+  </Menu>
+  
+  <Menu name="help">
+    <Action name="about_platform" append="about_merge" />
   </Menu>
 
 </MenuBar>
