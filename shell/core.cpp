@@ -24,6 +24,7 @@
 
 #include <kdebug.h>
 #include <kglobal.h>
+#include <klocale.h>
 
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
@@ -51,9 +52,31 @@
 namespace KDevelop {
 
 Core *Core::m_self = 0;
+KAboutData aboutData()
+{
+    KAboutData aboutData( "kdevplatform", "kdevplatform", 
+                          ki18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR, 
+                          ki18n("Development Platform for IDE-like Applications"), 
+                          KAboutData::License_LGPL_V2, ki18n( "Copyright 2004-2009, The KDevelop developers" ), 
+                          KLocalizedString(), "http://www.kdevelop.org" );
+    aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Maintainer, Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
+    aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
+    aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support" ), "david.nolden.kdevelop@art-master.de" );
+    aboutData.addAuthor( ki18n("Aleix Pol Gonzales"), ki18n( "CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
+    aboutData.addAuthor( ki18n("Vladimir Prus"), ki18n( "GDB integration" ), "ghost@cs.msu.su" );
+    aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
+    
+    aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
+    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and ident support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
+    aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
+    aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
+    aboutData.addCredit( ki18n("Dukju Ahn"), ki18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
+    return aboutData;
+}
 
 CorePrivate::CorePrivate(Core *core):
-    m_componentData( KAboutData( "kdevplatform", "kdevplatform", ki18n("KDevelop Platform"), KDEVPLATFORM_VERSION_STR, ki18n("Development Platform for IDE-like Applications"), KAboutData::License_LGPL_V2 ) ), m_core(core), m_cleanedUp(false)
+    m_componentData( aboutData() ), m_core(core), m_cleanedUp(false)
 {
 }
 
