@@ -30,8 +30,22 @@
 ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
 }
 
+#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+
 QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   QVariant ret = NormalDeclarationCompletionItem::data(index, role, model);
+  if(role == Qt::DecorationRole) {
+    if(index.column() == KTextEditor::CodeCompletionModel::Icon) {
+      switch(m_type) {
+        case Override:
+          RETURN_CACHED_ICON("CTparents");
+        case CreateDefinition:
+          RETURN_CACHED_ICON("CTsuppliers"); ///@todo Better icon?
+        case CreateSignalSlot:
+          RETURN_CACHED_ICON("dialog-ok-apply"); ///@todo Better icon?
+      }
+    }
+  }
   if(role == Qt::DisplayRole) {
     if(index.column() == KTextEditor::CodeCompletionModel::Prefix) {
       QString prefix;

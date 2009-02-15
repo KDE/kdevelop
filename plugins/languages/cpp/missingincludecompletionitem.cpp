@@ -36,6 +36,7 @@
 #include "completionhelpers.h"
 #include "missingincludecompletionmodel.h"
 #include <language/duchain/aliasdeclaration.h>
+#include <../../../digikam/imageplugins/coreplugin/sharpnesseditor/clapack/f2c.h>
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
@@ -346,6 +347,11 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
     return QVariant();
   }
   switch (role) {
+    case Qt::DecorationRole:
+    {
+      static KIcon icon("CTparents");
+      return QVariant(icon);
+    }
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return QVariant(true);
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {

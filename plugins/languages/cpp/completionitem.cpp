@@ -506,6 +506,14 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
      {
       CodeCompletionModel::CompletionProperties p = completionProperties();
 
+      //If it's a signal, remove t he protected flag when computing the decoration. Signals are always protected, and this will give a nicer icon.
+      if(p & CodeCompletionModel::Signal)
+        p = CodeCompletionModel::Signal;
+      //If it's a slot, remove all flags except the slot flag, because that will give a nicer icon. Access-rights are checked anyway.
+      if(p & CodeCompletionModel::Slot)
+        p = CodeCompletionModel::Slot;
+      
+      
       if( index.column() == CodeCompletionModel::Icon ) {
         lock.unlock();
         return DUChainUtils::iconForProperties(p);
