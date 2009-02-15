@@ -123,9 +123,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeEle
   ///The default-implementation returns zero.
   virtual DeclarationPointer declaration() const;
   
-  ///Should return the type should be used for matching items against this one when it's an argument hint.
-  ///May return IndexedType() when this item should not be matched.
-  virtual IndexedType typeForArgumentMatching() const;
+  ///Should return the types should be used for matching items against this one when it's an argument hint.
+  ///The matching against all types should be done, and the best one will be used as final match result.
+  virtual QList<IndexedType> typeForArgumentMatching() const;
   
   ///Should return whether this completion-items data changes with input done by the user during code-completion.
   ///Returning true is very expensive.

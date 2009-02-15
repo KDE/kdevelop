@@ -150,8 +150,8 @@ DeclarationPointer CompletionTreeItem::declaration() const {
   return DeclarationPointer();
 }
 
-IndexedType CompletionTreeItem::typeForArgumentMatching() const {
-  return IndexedType();
+QList<IndexedType> CompletionTreeItem::typeForArgumentMatching() const {
+  return QList<IndexedType>();
 }
 
 CompletionCustomGroupNode::CompletionCustomGroupNode(QString groupName, int _inheritanceDepth) {
