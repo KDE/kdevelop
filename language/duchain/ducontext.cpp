@@ -590,8 +590,14 @@ DUContext::~DUContext( )
     if(d->m_owner.declaration())
       d->m_owner.declaration()->setInternalContext(0);
 
-    while( d->m_importersSize() != 0 )
-      d->m_importers()[0].data()->removeImportedParentContext(this);
+    while( d->m_importersSize() != 0 ) {
+      if(d->m_importers()[0].data())
+        d->m_importers()[0].data()->removeImportedParentContext(this);
+      else {
+        kDebug() << "importer disappeared";
+        d->m_importersList().removeOne(d->m_importers()[0]);
+      }
+    }
 
     clearImportedParentContexts();
   }
