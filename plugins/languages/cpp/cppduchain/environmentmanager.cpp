@@ -458,7 +458,7 @@ void EnvironmentFile::addIncludeFile( const IndexedString& file, const Modificat
 
 void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Index>& strings ) {
   ENSURE_WRITE_LOCKED
-  d_func_dynamic()->m_strings += ReferenceCountedStringSet( EnvironmentManager::stringSetRepository.createSet(strings) );
+  d_func_dynamic()->m_strings += ReferenceCountedStringSet( strings );
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
@@ -500,7 +500,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Q_ASSERT(backup.set().setIndex() == file.d_func()->m_usedMacros.set().setIndex());
     
     if(!addUsedMacros.empty())
-      d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(addUsedMacros) );
+      d_func_dynamic()->m_usedMacros += ReferenceCountedMacroSet( addUsedMacros );
   }
   
   ifDebug( Q_ASSERT(d_func()->m_usedMacroNames.set().count() == d_func()->m_usedMacros.set().count()) );
@@ -529,7 +529,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
     Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
     
     if(!removeDefinedMacros.empty())
-      d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( Cpp::EnvironmentManager::macroSetRepository.createSet(removeDefinedMacros) );
+      d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( removeDefinedMacros );
   }
 
   //Now merge in the new defined macros

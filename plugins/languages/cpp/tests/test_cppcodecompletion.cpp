@@ -1211,7 +1211,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(envFile);
         //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
         QCOMPARE(toStringList(envFile->strings()), splitSorted("s1\ns2"));
-        QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
+        QCOMPARE(toStringList(envFile->usedMacroNames()), QStringList()); //No macros from outside were used
 
         QCOMPARE(envFile->definedMacros().set().count(), 1u);
         QCOMPARE(envFile->usedMacros().set().count(), 0u);
@@ -1224,7 +1224,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
         QCOMPARE(envFile2->definedMacros().set().count(), 0u);
 
-        QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList("String1")); //stringset_test1.h used the Macro String1 from outside
+        QCOMPARE(toStringList(envFile2->usedMacroNames()), QStringList("String1")); //stringset_test1.h used the Macro String1 from outside
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
       {
@@ -1238,7 +1238,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         //String1 is shadowed by the macro-definition, so it is not a string that can be affected from outside.
         kDebug() << toStringList(envFile->strings()) << splitSorted("s1\ns2");
         QCOMPARE(toStringList(envFile->strings()), splitSorted("s1\ns2"));
-        QCOMPARE(toStringList(envFile->usedMacroNames().set()), QStringList()); //No macros from outside were used
+        QCOMPARE(toStringList(envFile->usedMacroNames()), QStringList()); //No macros from outside were used
 
         QCOMPARE(top->importedParentContexts().count(), 1);
         TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(0));
@@ -1247,7 +1247,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
         QVERIFY(envFile2);
         QCOMPARE(envFile2->definedMacros().set().count(), 0u);
 
-        QCOMPARE(toStringList(envFile2->usedMacroNames().set()), QStringList()); //stringset_test1.h used the Macro String1 from outside. However it is an undef-macro, so it does not appear in usedMacroNames() and usedMacros()
+        QCOMPARE(toStringList(envFile2->usedMacroNames()), QStringList()); //stringset_test1.h used the Macro String1 from outside. However it is an undef-macro, so it does not appear in usedMacroNames() and usedMacros()
         QCOMPARE(envFile2->usedMacros().set().count(), (unsigned int)0);
         QCOMPARE(toStringList(envFile2->strings()), splitSorted("String1\ns1\ns2"));
       }
