@@ -479,7 +479,8 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   d_func_dynamic()->m_usedMacroNames += (file.d_func()->m_usedMacroNames - d_func()->m_definedMacroNames) - d_func()->m_unDefinedMacroNames;
 
   ///Merge those used macros that were not defined within this environment
-  //This is slightly inefficient, would be nicer to have a fast mechanism for this
+  //This is slightly inefficient, would be nicer to have a fast mechanism for this.
+  //This is not tragic since usually only few macros are used, and thus few need to be iterated.
   
   {
     Utils::Set definedMacroNamesSet = d_func()->m_definedMacroNames.set();
@@ -508,25 +509,21 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ///Add defined macros from the merged file.
 
   {
+    ReferenceCountedMacroSet potentiallyRemoveMacros = d_func()->m_definedMacros - file.d_func()->m_definedMacros;
+    
     Utils::Set otherDefinedMacroNamesSet = file.d_func()->m_definedMacroNames.set();
     Utils::Set otherUnDefinedMacroNamesSet = file.d_func()->m_unDefinedMacroNames.set();
     //Since merged macros overrule already stored ones, first remove the ones of the same name.
     
     std::set<uint> removeDefinedMacros;
     ReferenceCountedMacroSet backup = d_func()->m_definedMacros;
-    Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
     
     
-    for( ReferenceCountedMacroSet::Iterator it( d_func()->m_definedMacros.iterator() ); it; ++it ) {
-      Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
+    for( ReferenceCountedMacroSet::Iterator it( potentiallyRemoveMacros.iterator() ); it; ++it ) {
       const rpp::pp_macro& macro(it.ref());
       if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
         removeDefinedMacros.insert(it.index());
-      Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
     }
-    
-    //Must not happen, since we hold the locks
-    Q_ASSERT(backup.set().setIndex() == d_func()->m_definedMacros.set().setIndex());
     
     if(!removeDefinedMacros.empty())
       d_func_dynamic()->m_definedMacros -= ReferenceCountedMacroSet( removeDefinedMacros );
