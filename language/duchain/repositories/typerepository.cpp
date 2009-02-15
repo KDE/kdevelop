@@ -77,24 +77,13 @@ class AbstractTypeDataRequest {
   const AbstractType& m_item;
 };
 
-
-struct TypeRepositoryData {
-  TypeRepositoryData() : repository("Type Repository") {
-    repository.setUnloadingEnabled(false);
-  }
-  ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData> repository;
-};
-
-TypeRepositoryData& data() {
-  static TypeRepositoryData d;
-  return d;
-}
+RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData>, false> typeRepository("Type Repository");
 
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
     return 0;
 
-  uint i = data().repository.index(AbstractTypeDataRequest(*input));
+  uint i = typeRepository->index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
   AbstractType::Ptr t = typeForIndex(i);
   if(!t->equals(input.unsafeData())) {
@@ -113,7 +102,7 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
   if(index == 0)
     return AbstractType::Ptr();
 
-  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(data().repository.itemFromIndex(index))) );
+  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(typeRepository->itemFromIndex(index))) );
 }
 
 }
