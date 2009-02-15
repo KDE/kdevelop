@@ -71,6 +71,8 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual ~CppCodeCompletionModel();
 
   protected:
+    virtual void foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext);
+    
 #if KDE_IS_VERSION(4,2,62)
     virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
 #endif

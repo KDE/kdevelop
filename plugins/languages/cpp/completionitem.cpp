@@ -266,7 +266,11 @@ QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMat
   return ret;
 }
 
-CompletionTreeItemPointer currentMatchContext;
+QList<IndexedType> currentMatchContext;
+
+void setStaticMatchContext(QList< KDevelop::IndexedType > types) {
+  currentMatchContext = types;
+}
 
 QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {
 
@@ -279,7 +283,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
   //Stuff that does not require a declaration:
   switch (role) {
     case CodeCompletionModel::SetMatchContext:
-      currentMatchContext = CompletionTreeItemPointer(const_cast<NormalDeclarationCompletionItem*>(this));
+      currentMatchContext = typeForArgumentMatching();
       return QVariant(1);
   };
 
@@ -307,10 +311,10 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       if(m_fixedMatchQuality != -1)
         return QVariant(m_fixedMatchQuality);
       
-      if( currentMatchContext && currentMatchContext->typeForArgumentMatching().size()) {
+      if( currentMatchContext.size()) {
         
         int bestQuality = 0;
-        foreach(IndexedType type, currentMatchContext->typeForArgumentMatching()) {
+        foreach(IndexedType type, currentMatchContext) {
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
  
@@ -645,7 +649,7 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
 
   switch (role) {
     case CodeCompletionModel::SetMatchContext:
-      currentMatchContext = CompletionTreeItemPointer(const_cast<TypeConversionCompletionItem*>(this));
+      currentMatchContext = typeForArgumentMatching();
       return QVariant(1);
     case CodeCompletionModel::BestMatchesCount:
       return QVariant(normalBestMatchesCount);
@@ -668,11 +672,11 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
         return QVariant();
       }
       
-      if( currentMatchContext && currentMatchContext->typeForArgumentMatching().size() ) {
+      if( currentMatchContext.size() ) {
         
           int bestQuality = 0;
           
-          foreach(IndexedType type, currentMatchContext->typeForArgumentMatching()) {
+          foreach(IndexedType type, currentMatchContext) {
           Cpp::TypeConversion conv(model->currentTopContext().data());
 
           ///@todo Think about lvalue-ness

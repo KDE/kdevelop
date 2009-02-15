@@ -44,6 +44,9 @@ namespace KTextEditor {
 class QModelIndex;
 class CppCodeCompletionModel;
 
+
+void setStaticMatchContext(QList<KDevelop::IndexedType> types);
+
 //A completion item used for completion of normal declarations while normal code-completion
 class NormalDeclarationCompletionItem : public KDevelop::CompletionTreeItem {
 public:

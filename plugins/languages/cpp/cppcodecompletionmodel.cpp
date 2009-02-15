@@ -158,5 +158,22 @@ void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTex
   KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
 }
 
+void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
+  //Set the static match-context, in case the argument-hints are not shown
+  if(completionContext) {
+    Cpp::CodeCompletionContext* argumentFunctions = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext->parentContext());
+    if(argumentFunctions) {
+      QList<IndexedType> types;
+      bool abort = false;
+      foreach(CompletionTreeItemPointer item, argumentFunctions->completionItems(SimpleCursor::invalid(), abort, false))
+        types += item->typeForArgumentMatching();
+      
+      setStaticMatchContext(types);
+    }
+  }
+  CodeCompletionModel::foundDeclarations(item, completionContext);
+}
+
+
 
 #include "cppcodecompletionmodel.moc"
