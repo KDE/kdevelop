@@ -1420,7 +1420,11 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
     preprocessor.setEnvironment( currentEnvironment );
     currentEnvironment->setEnvironmentFile( environmentFile );
 
-    rpp::MacroBlock* macros = new rpp::MacroBlock(0);
+    rpp::MacroBlock* macros = 0;
+    if(parent)
+      macros = parent->environment()->firstBlock();
+    else
+      macros = new rpp::MacroBlock(0);
 
     preprocessor.environment()->enterBlock(macros);
 

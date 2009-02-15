@@ -41,6 +41,11 @@ Environment::Environment(pp* preprocessor)
 Environment::~Environment()
 {
   delete m_locationTable;
+  if(!currentBlock()) {
+    //Delete all macros that are still here, because they are not part of a block
+    foreach(pp_macro* macro, m_environment)
+      delete macro;
+  }
 }
 
 LocationTable* Environment::locationTable() const
@@ -158,6 +163,17 @@ void Environment::swapMacros( Environment* parentEnvironment ) {
   EnvironmentMap oldEnvironment = m_environment;
   m_environment = parentEnvironment->m_environment;
   parentEnvironment->m_environment = oldEnvironment;
+  
+  if(!parentEnvironment->currentBlock()) {
+    
+    if(currentBlock()) {
+      foreach(pp_macro* macro, m_environment)
+        currentBlock()->macros.append(macro);
+    }
+  }else{
+    //If both sides have a macro-block, it should be the same one, else the macros can not be safely swapped
+    Q_ASSERT(parentEnvironment->firstBlock() == firstBlock());
+  }
 }
 
 void Environment::leaveBlock()

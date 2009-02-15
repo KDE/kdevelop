@@ -136,9 +136,9 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
     
 
-  if( !useAlternativeText && m_declaration && dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) ) { //Do some intelligent stuff for functions with the parens:
+  if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) /*|| m_declaration->kind() == Declaration::Type*/) ) { //Do some intelligent stuff for functions with the parens:
     bool haveArguments = false;
-    if( m_declaration && m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->indexedArgumentsSize() )
+    if( m_declaration->kind() == Declaration::Type || (m_declaration->type<FunctionType>() && m_declaration->type<FunctionType>()->indexedArgumentsSize()) )
       haveArguments = true;
     //Need to have a paren behind
     QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
