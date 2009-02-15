@@ -325,7 +325,7 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
   if(it != d->m_importsCache.end()) {
     cachedImports = *it;
   }else{
-    cachedImports = CachedIndexedRecursiveImports(recursiveImportCacheRepository.createSet(visibility.set().stdSet()));
+    cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
     d->m_importsCache.insert(visibility, cachedImports);
   }
   
@@ -361,7 +361,7 @@ PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilte
   if(it != d->m_importsCache.end()) {
     cachedImports = *it;
   }else{
-    cachedImports = CachedIndexedRecursiveImports(recursiveImportCacheRepository.createSet(visibility.set().stdSet()));
+    cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
     d->m_importsCache.insert(visibility, cachedImports);
   }
   

@@ -148,9 +148,10 @@ class StorableSet : public Conversion {
             set().staticRef();
     }
 
-    StorableSet(const Set& base) : m_setIndex(base.setIndex()) {
+    StorableSet(const std::set<uint>& indices) {
         StaticAccessLocker lock;
         Q_UNUSED(lock);
+        m_setIndex = StaticRepository::repository()->createSet(indices).setIndex();
         if(doReferenceCounting)
             set().staticRef();
     }

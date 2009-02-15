@@ -769,7 +769,7 @@ void TopDUContext::updateImportsCache() {
     std::set<uint> visited;
     TopDUContextData::updateImportCacheRecursion(this, visited);
     Q_ASSERT(visited.find(ownIndex()) != visited.end());
-    d_func_dynamic()->m_importsCache = IndexedRecursiveImports(recursiveImportRepository.createSet(visited));
+    d_func_dynamic()->m_importsCache = IndexedRecursiveImports(visited);
   }else{
     d_func_dynamic()->m_importsCache = IndexedRecursiveImports();
     TopDUContextData::updateImportCacheRecursion(ownIndex(), this, d_func_dynamic()->m_importsCache);
