@@ -166,9 +166,9 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
       RETURN_CACHED_ICON("CVprotected_slot")
     else if( p & CodeCompletionModel::Private )
       RETURN_CACHED_ICON("CVprivate_slot")
-    else
+    else if(p & CodeCompletionModel::Public )
       RETURN_CACHED_ICON("CVpublic_slot")
-
+    else RETURN_CACHED_ICON("slot")
   else if( p & CodeCompletionModel::Signal )
     if( p & CodeCompletionModel::Protected )
       RETURN_CACHED_ICON("CVprotected_signal")
