@@ -302,6 +302,7 @@ public:
     Q_ASSERT(m_chainsByIndex.empty());
   }
   
+  ///DUChain must be write-locked
   void removeDocumentChainFromMemory(TopDUContext* context) {
     QMutexLocker l(&m_chainsMutex);
 
@@ -331,10 +332,12 @@ public:
       if(!context->isOnDisk())
         instance->removeFromEnvironmentManager(context);
 
-      m_chainsByIndex.erase(it);
-
       l.unlock();
+      //DUChain is write-locked, so we can do whatever we want on the top-context, including deleting it
       context->deleteSelf();
+      l.relock();
+      
+      m_chainsByIndex.erase(it);
     }
   }
 
