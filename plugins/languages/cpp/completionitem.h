@@ -54,7 +54,7 @@ public:
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
 
-  virtual KDevelop::IndexedType typeForArgumentMatching() const;
+  virtual QList<KDevelop::IndexedType> typeForArgumentMatching() const;
   
   KDevelop::DeclarationPointer m_declaration;
   KSharedPtr<Cpp::CodeCompletionContext> completionContext;
@@ -103,8 +103,8 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
     virtual int argumentHintDepth() const;
     virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-    KDevelop::IndexedType type() const;
-    virtual KDevelop::IndexedType typeForArgumentMatching() const;
+    QList<KDevelop::IndexedType> type() const;
+    virtual QList<KDevelop::IndexedType> typeForArgumentMatching() const;
     void setPrefix(QString s);
     virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
   private:
