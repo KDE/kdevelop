@@ -241,7 +241,7 @@ void Lexer::nextToken( Token& tk, bool stopOnNewline )
         m_startLine = false;
         int ppe = preprocessorEnabled();
 	setPreprocessorEnabled( false );
-	while( currentChar() && currentChar() != '\n' ){
+	while( !currentChar().isNull() && currentChar() != '\n' ){
             Token tok(m_source);
             nextToken( tok, true );
         }
