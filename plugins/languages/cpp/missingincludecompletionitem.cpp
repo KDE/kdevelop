@@ -339,18 +339,19 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   return ret;
 }
 
+#define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
+
 QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
     kDebug(9007) << "Failed to lock the du-chain in time";
     return QVariant();
   }
+  if(role == Qt::DecorationRole)
+    if(index.column() == KTextEditor::CodeCompletionModel::Icon)
+      RETURN_CACHED_ICON("CTparents")
+  
   switch (role) {
-    case Qt::DecorationRole:
-    {
-      static KIcon icon("CTparents");
-      return QVariant(icon);
-    }
     case KTextEditor::CodeCompletionModel::IsExpandable:
       return QVariant(true);
     case KTextEditor::CodeCompletionModel::ExpandingWidget: {
