@@ -552,10 +552,15 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
 
     int kind = editor()->parseSession()->token_stream->kind(node->class_key);
 
-    if ((kind == Token_union || id.isEmpty()) && currentContext()->parentContext() && currentContext()->parentContext()->type() == DUContext::Class) {
+    if ((kind == Token_union || id.isEmpty())) {
       //It's an unnamed union context, or an unnamed struct, propagate the declarations to the parent
       DUChainWriteLocker lock(DUChain::lock());
-      currentContext()->setPropagateDeclarations(true);
+      if(currentContext()->parentContext()->type() == DUContext::Class) 
+        currentContext()->setPropagateDeclarations(true);
+      
+        ///@todo Mark unions in the duchain in some way, instead of just representing them as a class
+      if(kind == Token_union)
+        currentContext()->setInSymbolTable(currentContext()->parentContext()->inSymbolTable());
     }
   }
   
@@ -962,6 +967,18 @@ void ContextBuilder::addImportedContexts()
     m_importedParentContexts.clear();
   }
   clearLastContext();
+}
+
+void ContextBuilder::setInSymbolTable(KDevelop::DUContext* context) {
+  if(context->type() == DUContext::Class) {
+    //Do not put unnamed/unique structs and all their members into the symbol-table
+    QualifiedIdentifier scopeId = context->localScopeIdentifier();
+    if(scopeId.isEmpty() || (scopeId.count() == 1 && scopeId.first().isUnique())) {
+      context->setInSymbolTable(false);
+      return;
+    }
+  }
+  ContextBuilderBase::setInSymbolTable(context);
 }
 
 void ContextBuilder::visitIfStatement(IfStatementAST* node)

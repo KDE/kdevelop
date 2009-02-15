@@ -167,7 +167,7 @@ protected:
 	    kDebug(9007) << "ContextBuilder::addBaseType: Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
 	  }
   }
-
+  
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.
   ///The prefix-context will also import the context of the specific class-declaration, so the visibility matches.
@@ -209,6 +209,8 @@ protected:
   virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
+  virtual void setInSymbolTable(DUContext* context);
+  
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
   
   TopDUContext* topContext() {
