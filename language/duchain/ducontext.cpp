@@ -124,7 +124,7 @@ bool DUContextDynamicData::importsSafeButSlow(const DUContext* context, const To
   
   FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
-    if(import == context || import->m_dynamicData->importsSafeButSlow(context, source, checked))
+    if(import == context || (import && import->m_dynamicData->importsSafeButSlow(context, source, checked)))
       return true;
   }
 
@@ -143,7 +143,7 @@ bool DUContextDynamicData::imports(const DUContext* context, const TopDUContext*
 
   FOREACH_FUNCTION( const DUContext::Import& ctx, m_context->d_func()->m_importedContexts ) {
     DUContext* import = ctx.context(source);
-    if(import == context || import->m_dynamicData->imports(context, source, maxDepth-1))
+    if(import == context || (import && import->m_dynamicData->imports(context, source, maxDepth-1)))
       return true;
   }
 
