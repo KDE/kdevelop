@@ -436,6 +436,7 @@ void CPPInternalParseJob::run()
           foreach(const DUContext::Import& ctx, contentContext->importedParentContexts())
             contentContext->removeImportedParentContext(ctx.context(0));
           }
+          ///@todo Make this possible without a permanent write-lock
           contentContext->updateImportsCache();
     }
 
