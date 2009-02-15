@@ -786,7 +786,7 @@ protected:
         if (!identifier.isEmpty())
           ret->setLocalScopeIdentifier(identifier);
 
-        ret->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
+        setInSymbolTable(ret);
 
 //         if( recompiling() )
 //           kDebug() << "created new context while recompiling for " << identifier.toString() << "(" << ret->range().textRange() << ")";
@@ -796,6 +796,16 @@ protected:
     m_encountered.insert( ret );
     openContext( ret );
     return ret;
+  }
+
+  ///This function should call context->setInSymbolTable(..) with an appropriate decision. The duchain is write-locked when this is called.
+  virtual void setInSymbolTable(DUContext* context) {
+    if(!context->parentContext()->inSymbolTable()) {
+      context->setInSymbolTable(false);
+      return;
+    }
+    DUContext::ContextType type = context->type();
+    context->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);    
   }
 
 private:
