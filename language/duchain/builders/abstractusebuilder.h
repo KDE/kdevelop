@@ -88,7 +88,7 @@ protected:
 
     SimpleRange newRange = editorFindRange(name, name);
 
-    DUChainWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock()); ///@todo Don't call findDeclarations during write-lock, it can lead to UI lockups
     QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
     foreach (Declaration* declaration, declarations)
       if (!declaration->isForwardDeclaration()) {
@@ -123,7 +123,7 @@ protected:
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    bool encountered = false;
+    bool encountered = false; ///@todo This can cause I/O, so it would be better if it was possible with only a read-lock
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
 
