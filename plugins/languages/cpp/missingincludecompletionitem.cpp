@@ -36,7 +36,6 @@
 #include "completionhelpers.h"
 #include "missingincludecompletionmodel.h"
 #include <language/duchain/aliasdeclaration.h>
-#include <../../../digikam/imageplugins/coreplugin/sharpnesseditor/clapack/f2c.h>
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
