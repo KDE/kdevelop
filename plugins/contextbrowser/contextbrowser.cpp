@@ -152,6 +152,10 @@ ContextBrowserPlugin::~ContextBrowserPlugin()
 
 void ContextBrowserPlugin::watchRange(KTextEditor::SmartRange* range)
 {
+  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(range->document());
+  Q_ASSERT(smart);
+  QMutexLocker lock(smart->smartMutex());
+
   if (range->watchers().contains( this ))
     return;
 
@@ -561,20 +565,34 @@ void ContextBrowserPlugin::declarationSelectedInUI(DeclarationPointer decl)
 
 void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
 {
-  KDevelop::DUChainWriteLocker lock( DUChain::lock() );
-  registerAsRangeWatcher(job->duChain());
+  if(job->duChain() && job->duChain()->smartRange()) {
+    KDevelop::DUChainReadLocker lock( DUChain::lock() );
+    registerAsRangeWatcher(job->duChain());
+  }
 }
 
 void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUChainBase* base)
 {
-  if(base->smartRange())
+  if(base->smartRange()) {
     watchRange(base->smartRange());
+}
 }
 
 void ContextBrowserPlugin::registerAsRangeWatcher(KDevelop::DUContext* ctx)
 {
-  if(!ctx)
+  if(!ctx || !ctx->smartRange())
     return;
+
+  QMutex* lockSmartMutex = 0;
+
+  if(!ctx->parentContext()) {
+    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(ctx->smartRange()->document());
+    Q_ASSERT(smart);
+    lockSmartMutex = smart->smartMutex();
+  }
+  
+  QMutexLocker lock(lockSmartMutex);
+  
   if(dynamic_cast<TopDUContext*>(ctx) && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile() && static_cast<TopDUContext*>(ctx)->parsingEnvironmentFile()->isProxyContext() && !ctx->importedParentContexts().isEmpty())
     return registerAsRangeWatcher(ctx->importedParentContexts()[0].context(0));
 
@@ -601,7 +619,7 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
   foreach( View* view, document->textDocument()->views() )
     viewCreated( document->textDocument(), view );
 
-  KDevelop::DUChainWriteLocker lock( DUChain::lock() );
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
   QList<TopDUContext*> chains = DUChain::self()->chainsForDocument( document->url() );
 
   foreach( TopDUContext* chain, chains )
