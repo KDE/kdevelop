@@ -94,9 +94,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///doSpecialProcessing(data) will be executed in the background thread.
     void doSpecialProcessingInBackground(uint data);
 
-  private Q_SLOTS:
+  protected Q_SLOTS:
     ///Connection from the background-thread into the model: This is called when the background-thread is ready
-    void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, KSharedPtr<CodeCompletionContext> completionContext);
+    virtual void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > item, KSharedPtr<CodeCompletionContext> completionContext);
     
   protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.
