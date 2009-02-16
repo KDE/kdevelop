@@ -68,7 +68,7 @@ set(kdevcppdebugger_PART_SRCS
     breakpointwidget.cpp
 #    modeltest.cpp
     tooltipwidget.cpp
-    ../languages/cpp/stringhelpers.cpp
+    ../../languages/cpp/stringhelpers.cpp
 )
 
 set(kdevcppdebugger_PART_UI
