@@ -130,7 +130,6 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         
         kDebug(9032) << "Building with make";
         KJob* build = m_builder->build(builditem);
-        kDebug() << configure << build;
         if( configure ) 
         {
             kDebug() << "creating composite job";
