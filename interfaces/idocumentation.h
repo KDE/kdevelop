@@ -34,8 +34,11 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
     public:
         virtual ~IDocumentation();
         
+        /** @returns the name of the documented information*/
+        virtual QString name() const = 0;
+        
         /** @returns a HTML-formatted short description. */
-        virtual QString description() = 0;
+        virtual QString description() const = 0;
         
         /** @returns a widget with all the needed documentation information.
             \param parent defines the widget's parent
