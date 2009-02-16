@@ -565,7 +565,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             foreach ( const QString& t, v.targets())
             {
                 QStringList dependencies=v.targetDependencies(t);
-                if(!dependencies.isEmpty()) //Just to remove verbosity
+                if(true || !dependencies.isEmpty()) //Just to remove verbosity
                 {
 
                     QString outputName=t;
@@ -580,6 +580,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                             break;
                         case CMakeProjectVisitor::Executable:
                             targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
+                            break;
+                        case CMakeProjectVisitor::Custom:
+                            targetItem = new CMakeCustomTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
                             break;
                     }
                     DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);

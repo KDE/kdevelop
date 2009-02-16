@@ -42,7 +42,7 @@ namespace KDevelop
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
-        enum TargetType { Library, Executable };
+        enum TargetType { Library, Executable, Custom };
         explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
         virtual ~CMakeProjectVisitor() {}
         

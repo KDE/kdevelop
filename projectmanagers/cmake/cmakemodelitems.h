@@ -110,6 +110,18 @@ class CMakeLibraryTargetItem
         QString outputName;
 };
 
+class CMakeCustomTargetItem
+    : public KDevelop::ProjectTargetItem, public DUChainAttatched, public DescriptorAttatched
+{
+    public:
+        CMakeCustomTargetItem(KDevelop::IProject* project, const QString &name,
+                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
+            : KDevelop::ProjectTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+            
+    private:
+        QString outputName;
+};
+
 /*
 class CMakeFileItem : public KDevelop::ProjectFileItem, public DUChainAttatched
 {

@@ -347,8 +347,10 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
     if(!exec->isImported())
         defineTarget(exec->executable(), exec->sourceLists(), Executable);
-    kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget[exec->executable()]
-        << "was" << exec->content()[exec->line()].writeBack();
+    else
+        kDebug(9042) << "imported executable" << exec->executable();
+    kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget.contains(exec->executable())
+        << "imported" << exec->isImported();
     return 1;
 }
 
@@ -1729,7 +1731,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     kDebug(9042) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
     kDebug(9042) << ctar->content()[ctar->line()].writeBack();
 
-    m_filesPerTarget.insert(ctar->target(), ctar->dependencies());
+    defineTarget(ctar->target(), ctar->dependencies(), Custom);
     return 1;
 }
 
