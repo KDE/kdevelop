@@ -160,9 +160,9 @@ public:
     }
     QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const
     {
-//        if( !url.isValid() ) {
-//            return QList<ProjectBaseItem*>();
-//        }
+        if( !url.isValid() ) {
+            return QList<ProjectBaseItem*>();
+        }
         // TODO: This is moderately efficient, but could be much faster with a
         // QHash<QString, ProjectFolderItem> member. Would it be worth it?
         KUrl u = topItem->url();
