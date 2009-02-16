@@ -90,8 +90,8 @@ public:
   bool isFinal() const;
   void setIsFinal(bool);
   
-  bool isConstructor() const;
-  bool isDestructor() const;
+  virtual bool isConstructor() const;
+  virtual bool isDestructor() const;
   
   bool isConversionFunction() const;
 
