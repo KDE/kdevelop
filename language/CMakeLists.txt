@@ -249,6 +249,7 @@ install(FILES
     duchain/builders/abstractdeclarationbuilder.h
     duchain/builders/abstracttypebuilder.h
     duchain/builders/abstractusebuilder.h
+    duchain/builders/abstractexpressionvisitor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/builders COMPONENT Devel
 )
 
