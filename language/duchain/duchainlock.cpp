@@ -61,6 +61,16 @@ namespace std {
 #endif
 }
 
+#ifndef Q_CC_MSVC
+namespace __gnu_cxx {
+    template<>
+    struct hash<void *>
+    {
+        inline size_t operator() (const void *ptr) const { return reinterpret_cast<size_t>(ptr); }
+    };
+}
+#endif
+
 namespace KDevelop
 {
 class DUChainLockPrivate
