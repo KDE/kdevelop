@@ -37,6 +37,7 @@ class UiController;
 class SessionController;
 class SourceFormatterController;
 class SelectionController;
+class DocumentationController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
@@ -53,6 +54,7 @@ public:
     QPointer<SessionController> sessionController;
     QPointer<SourceFormatterController> sourceFormatterController;
     QPointer<SelectionController> selectionController;
+    QPointer<DocumentationController> documentationController;
 
     KComponentData m_componentData;
     Core *m_core;

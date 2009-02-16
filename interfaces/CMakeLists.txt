@@ -24,6 +24,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     iselectioncontroller.cpp
     idocumentationprovider.cpp
     idocumentation.cpp
+    idocumentationcontroller.cpp
     #scripting/scriptdocument.cpp
     #scripting/scripttools.cpp
     #scripting/scriptingmanager.cpp
@@ -73,6 +74,7 @@ install(FILES
     iselectioncontroller.h
     idocumentation.h
     idocumentationprovider.h
+    idocumentationcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

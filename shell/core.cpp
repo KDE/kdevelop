@@ -44,6 +44,7 @@
 #include "languagecontroller.h"
 #include "documentcontroller.h"
 #include "runcontroller.h"
+#include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "selectioncontroller.h"
 #include "core_p.h"
@@ -132,6 +133,11 @@ void CorePrivate::initialize(Core::Setup mode)
     {
         selectionController = new SelectionController(m_core);
     }
+    
+    if( !documentationController )
+    {
+        documentationController = new DocumentationController(m_core);
+    }
 
     kDebug() << "initializing ui controller";
     sessionController->initialize();
@@ -163,6 +169,7 @@ void CorePrivate::initialize(Core::Setup mode)
     runController->initialize();
     sourceFormatterController->initialize();
     selectionController->initialize();
+    documentationController->initialize();
 }
 CorePrivate::~CorePrivate()
 {
@@ -176,6 +183,7 @@ CorePrivate::~CorePrivate()
     delete runController;
     delete sessionController;
     delete sourceFormatterController;
+    delete documentationController;
 }
 
 
@@ -329,6 +337,11 @@ ISourceFormatterController* Core::sourceFormatterController()
 ISelectionController* Core::selectionController()
 {
     return d->selectionController;
+}
+
+IDocumentationController* Core::documentationController()
+{
+    return d->documentationController;
 }
 
 QString Core::version()
