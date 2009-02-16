@@ -160,6 +160,9 @@ void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTex
 
 void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
   //Set the static match-context, in case the argument-hints are not shown
+  
+  setStaticMatchContext(QList<IndexedType>());
+  
   if(completionContext) {
     Cpp::CodeCompletionContext* argumentFunctions = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext->parentContext());
     if(argumentFunctions) {
