@@ -368,14 +368,15 @@ QVariant MissingIncludeCompletionItem::data(const QModelIndex& index, int role, 
     case Qt::DisplayRole:
       switch (index.column()) {
         case KTextEditor::CodeCompletionModel::Prefix:
-            return i18n("Add") +  " #include " + m_addedInclude + " " + i18n("for");
+            return i18n("Add include directive");
         case KTextEditor::CodeCompletionModel::Name: {
+          QString suffix = ", #include " + m_addedInclude;
           if(!m_decl.data())
-            return m_displayTextPrefix;
+            return m_displayTextPrefix + suffix;
           else if(m_decl.data()->kind() == Declaration::Namespace)
-            return m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString();
+            return m_displayTextPrefix + " namespace " + m_decl.data()->identifier().toString()  + suffix;
           else
-            return m_displayTextPrefix + m_decl.data()->toString();
+            return m_displayTextPrefix + m_decl.data()->toString() + suffix;
         }
       }
       break;
