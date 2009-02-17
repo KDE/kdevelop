@@ -18,6 +18,7 @@
 */
 
 #include "documentrangeobject.h"
+#include "documentrangeobject_p.h"
 
 #include <QtCore/QMutexLocker>
 
@@ -30,7 +31,6 @@
 #include "hashedstring.h"
 
 #include "editorintegrator.h"
-#include "documentrangeobject_p.h"
 #include "../duchain/duchainregister.h"
 #include "../duchain/duchainbase.h"
 
