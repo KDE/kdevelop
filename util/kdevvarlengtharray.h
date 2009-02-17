@@ -45,7 +45,7 @@
 #define KDEVVARLENGTHARRAY_H
 
 #include <QtCore/qcontainerfwd.h>
-#include <QtCore/qglobal.h>
+#include <QtCore/QtGlobal>
 #include <new>
 
 ///Foreach macro that also works with QVarLengthArray or KDevVarLengthArray
