@@ -63,7 +63,7 @@ KAboutData aboutData()
     aboutData.addAuthor( ki18n("Andreas Pakulat"), ki18n( "Maintainer, Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), "apaku@gmx.de" );
     aboutData.addAuthor( ki18n("Alexander Dymo"), ki18n( "Architecture, Sublime UI, Ruby support" ), "adymo@kdevelop.org" );
     aboutData.addAuthor( ki18n("David Nolden"), ki18n( "Definition-Use Chain, C++ Support" ), "david.nolden.kdevelop@art-master.de" );
-    aboutData.addAuthor( ki18n("Aleix Pol Gonzales"), ki18n( "CMake Support, Run Support, Kross Support" ), "aleixpol@gmail.com" );
+    aboutData.addAuthor( ki18n("Aleix Pol Gonzalez"), ki18n( "CMake Support, Run Support, Kross Support" ), "aleixpol@kde.org" );
     aboutData.addAuthor( ki18n("Vladimir Prus"), ki18n( "GDB integration" ), "ghost@cs.msu.su" );
     aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     
