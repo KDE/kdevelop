@@ -44,7 +44,7 @@
 #ifndef KDEVVARLENGTHARRAY_H
 #define KDEVVARLENGTHARRAY_H
 
-#include <QtCore/qcontainerfwd.h>
+//#include <QtCore/qcontainerfwd.h>
 #include <QtCore/QtGlobal>
 #include <new>
 

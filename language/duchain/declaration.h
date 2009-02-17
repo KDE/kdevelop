@@ -22,7 +22,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QtCore/qcontainerfwd.h>
+//#include <QtCore/qcontainerfwd.h>
 
 #include "../editor/documentrangeobject.h"
 #include "identifier.h"
