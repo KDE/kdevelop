@@ -185,7 +185,15 @@ void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
   
   items << KSharedPtr<KDevelop::CompletionTreeElement>(node);
   
-  if(node->children.count())
+  localLock.relock();
+  
+  if(localExpressionCopy != localExpression) {
+    //If a new expression has been set meanwhile, re-start the processing and don't show old results
+    localLock.unlock();
+    lock.unlock();
+    doSpecialProcessing(0);
+    return;
+  }else if(node->children.count() && context.isValid()) //Only emit if the local context has not been invalidated meanwhile during abort()
     emit foundDeclarations(items, KDevelop::CodeCompletionContext::Ptr());  
   else
     emit foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> >(), KDevelop::CodeCompletionContext::Ptr());  
