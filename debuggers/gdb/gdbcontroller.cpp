@@ -40,6 +40,7 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kjob.h>
 #include <kmessagebox.h>
 #include <kshell.h>
 #include <KConfigGroup>
@@ -1128,6 +1129,16 @@ void GDBController::gdbReady()
         setStateOff(s_dbgBusy);
         raiseEvent(debugger_ready);
     }
+}
+
+void GDBController::gdbExited()
+{
+    setStateOn(s_dbgNotStarted);
+    setStateOff(s_shuttingDown);
+
+    // FIXME: should mark KJob as stopped here, except that emitResult
+    // method is protected.
+    //gdbExecuteJob_->emitResult();
 }
 
 void GDBController::raiseEvent(event_t e)

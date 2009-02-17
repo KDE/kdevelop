@@ -68,6 +68,11 @@ Q_SIGNALS:
         isReady call will return true.  */
     void ready();
 
+    /** Emitted when GDB itself exits.  This could happen because
+        it just crashed due to internal bug, or we killed it
+        explicitly.  */
+    void gdbExited();
+
     /** Emitted when GDB reports stop, with 'r' being the
         data provided by GDB. */
     void programStopped(const GDBMI::ResultRecord& r);

@@ -329,6 +329,10 @@ void GDB::processLine(const QByteArray& line)
 void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     kDebug(9012) << "GDB FINISHED\n";
+    /* FIXME: return the status? */
+    emit gdbExited();
+
+
 /* FIXME: revive. Need to arrange for controller to delete us.
     bool abnormal = exitCode != 0 || exitStatus != QProcess::NormalExit;
     deleteLater();

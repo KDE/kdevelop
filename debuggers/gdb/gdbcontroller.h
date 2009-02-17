@@ -233,6 +233,8 @@ private Q_SLOTS:
 
     void gdbReady();
 
+    void gdbExited();
+
     void programStopped(const GDBMI::ResultRecord& mi_record);
 
     /** Parses the CLI output line, and catches interesting messages
