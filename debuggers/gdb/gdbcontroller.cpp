@@ -629,6 +629,7 @@ bool GDBController::startDebugger()
             SIGNAL(gdbInternalCommandStdout(const QString&)));
 
     connect(gdb_, SIGNAL(ready()), this, SLOT(gdbReady()));
+    connect(gdb_, SIGNAL(gdbExited()), this, SLOT(gdbExited()));
     connect(gdb_, SIGNAL(programStopped(const GDBMI::ResultRecord&)),
             this, SLOT(programStopped(const GDBMI::ResultRecord&)));
     connect(gdb_, SIGNAL(programRunning()),
@@ -1135,10 +1136,6 @@ void GDBController::gdbExited()
 {
     setStateOn(s_dbgNotStarted);
     setStateOff(s_shuttingDown);
-
-    // FIXME: should mark KJob as stopped here, except that emitResult
-    // method is protected.
-    //gdbExecuteJob_->emitResult();
 }
 
 void GDBController::raiseEvent(event_t e)

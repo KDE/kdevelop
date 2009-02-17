@@ -521,6 +521,8 @@ bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)
 {
     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
 
+    currentJob_ = job;
+
     return controller->startProgram(run, job);
 }
 
@@ -789,6 +791,12 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
 
     // If program is started, enable the 'restart' comand.
     m_restartDebugger->setEnabled(program_running && !attached_or_core);
+
+    if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
+      {
+	emit finished(currentJob_);
+	currentJob_ = 0;
+      }
 
     // And now? :-)
     kDebug(9012) << "Debugger state: " << newState << ": ";

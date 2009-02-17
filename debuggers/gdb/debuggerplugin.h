@@ -192,6 +192,8 @@ private:
 
     KConfigGroup m_config;
 
+    KJob* currentJob_;
+
     KAction* m_startDebugger;
     KAction* m_restartDebugger;
     KAction* m_stopDebugger;
