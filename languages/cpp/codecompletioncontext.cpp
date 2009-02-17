@@ -1022,6 +1022,13 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   if(!conv.implicitConversion(m_expressionResult.type, integral->indexed()))
                     integral = IntegralType::Ptr(); //No conversion possible
                 }
+                
+                if( m_operator == "[]" && (type.cast<KDevelop::ArrayType>() || type.cast<KDevelop::PointerType>())) {
+                  IntegralType::Ptr t(new IntegralType(IntegralType::TypeInt));
+                  t->setModifiers(IntegralType::UnsignedModifier);
+                  QString showName = "operator []";
+                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, t->indexed(), depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+                }
 
                 if( m_operator == "=" || integral ) {
                   ///Conversion to the left operand-type, builtin operators on integral types
