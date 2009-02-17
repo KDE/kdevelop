@@ -20,7 +20,7 @@
 #ifndef IDOCUMENTATIONPROVIDER_H
 #define IDOCUMENTATIONPROVIDER_H
 
-#include <KSharedPtr>
+#include <KDE/KSharedPtr>
 
 #include "iextension.h"
 #include "interfacesexport.h"
