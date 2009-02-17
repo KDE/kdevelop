@@ -18,6 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 #include "core.h"
+#include "core_p.h"
 
 #include <QtGui/QApplication>
 #include <QtCore/QPointer>
@@ -47,7 +48,6 @@
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "selectioncontroller.h"
-#include "core_p.h"
 #include "kdevplatformversion.h"
 
 namespace KDevelop {
