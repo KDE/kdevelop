@@ -6,29 +6,29 @@ include_directories(${CMAKE_SOURCE_DIR}/languages/cpp)
 
 ########### next target ###############
 
-set(kcm_kdev_cppdebugger_PART_SRCS
+set(kcm_kdev_gdb_PART_SRCS
     debuggerconfigwidget.cpp
 )
 
-set(kcm_kdev_cppdebugger_PART_UI
+set(kcm_kdev_gdb_PART_UI
     debuggerconfigwidget.ui
 )
 
-kde4_add_ui_files(kcm_kdev_cppdebugger_PART_SRCS ${kcm_kdev_cppdebugger_PART_UI})
-kde4_add_kcfg_files( kcm_kdev_cppdebugger_PART_SRCS debuggerconfig.kcfgc )
-kde4_add_plugin(kcm_kdev_cppdebugger ${kcm_kdev_cppdebugger_PART_SRCS})
-target_link_libraries(kcm_kdev_cppdebugger
+kde4_add_ui_files(kcm_kdev_gdb_PART_SRCS ${kcm_kdev_gdb_PART_UI})
+kde4_add_kcfg_files( kcm_kdev_gdb_PART_SRCS debuggerconfig.kcfgc )
+kde4_add_plugin(kcm_kdev_gdb ${kcm_kdev_gdb_PART_SRCS})
+target_link_libraries(kcm_kdev_gdb
     ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS}
 )
 
-install(TARGETS kcm_kdev_cppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kcm_kdev_cppdebugger.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kcm_kdev_gdb DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kcm_kdev_gdb.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 ########### next target ###############
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
-set(kdevcppdebugger_PART_SRCS
+set(kdevgdb_PART_SRCS
     gdb.cpp    
     debuggerplugin.cpp
     gdbcontroller.cpp
@@ -71,14 +71,14 @@ set(kdevcppdebugger_PART_SRCS
     ../../languages/cpp/stringhelpers.cpp
 )
 
-set(kdevcppdebugger_PART_UI
+set(kdevgdb_PART_UI
     debuggertracingdialog.ui
     processselection.ui
 )
 
-kde4_add_ui_files(kdevcppdebugger_PART_SRCS ${kdevcppdebugger_PART_UI})
-kde4_add_plugin(kdevcppdebugger ${kdevcppdebugger_PART_SRCS})
-target_link_libraries(kdevcppdebugger sublime
+kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
+kde4_add_plugin(kdevgdb ${kdevgdb_PART_SRCS})
+target_link_libraries(kdevgdb sublime
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
@@ -89,10 +89,10 @@ target_link_libraries(kdevcppdebugger sublime
     ${KDE4_KPARTS_LIBRARY}
 )
 
-install(TARGETS kdevcppdebugger DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install(FILES kdevcppdebugger.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kdevcppdebuggerui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcppdebugger )
+install(FILES kdevgdb.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kdevgdbui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgdb )

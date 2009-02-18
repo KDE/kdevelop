@@ -29,7 +29,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(DebuggerConfigFactory, registerPlugin<DebuggerConfigWidget>();)
-K_EXPORT_PLUGIN(DebuggerConfigFactory("kcm_kdev_cppdebugger"))
+K_EXPORT_PLUGIN(DebuggerConfigFactory("kcm_kdev_gdb"))
 
 DebuggerConfigWidget::DebuggerConfigWidget(QWidget *parent, const QVariantList &args)
     : KCModule( DebuggerConfigFactory::componentData(), parent, args )

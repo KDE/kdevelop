@@ -4,8 +4,8 @@ Type=Service
 ServiceTypes=KCModule
 
 X-KDE-ModuleType=Library
-X-KDE-Library=kcm_kdev_cppdebugger
-X-KDE-FactoryName=kcm_kdev_cppdebugger
+X-KDE-Library=kcm_kdev_gdb
+X-KDE-FactoryName=kcm_kdev_gdb
 X-KDE-ParentApp=kdevplatformproject
 X-KDE-ParentComponents=kdevplatformproject
 X-KDE-CfgDlgHierarchy=GENERAL

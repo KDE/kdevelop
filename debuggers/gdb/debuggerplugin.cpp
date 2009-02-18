@@ -88,7 +88,7 @@ namespace GDBDebugger
 {
 
 K_PLUGIN_FACTORY(CppDebuggerFactory, registerPlugin<CppDebuggerPlugin>(); )
-K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevcppdebugger","kdevcppdebugger", ki18n("C++ Debugger"), "0.1", ki18n("Support for running C++ apps in GDB"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CppDebuggerFactory(KAboutData("kdevgdb","kdevgdb", ki18n("GDB Support"), "0.1", ki18n("Support for running apps in GDB"), KAboutData::License_GPL)))
 
 template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
@@ -144,7 +144,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
 
-    setXMLFile("kdevcppdebuggerui.rc");
+    setXMLFile("kdevgdbui.rc");
 
     // Setup widgets and dbgcontroller
 
