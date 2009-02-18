@@ -134,7 +134,7 @@ void CorePrivate::initialize(Core::Setup mode)
         selectionController = new SelectionController(m_core);
     }
     
-    if( !documentationController )
+    if( !documentationController && !(mode & Core::NoUi) )
     {
         documentationController = new DocumentationController(m_core);
     }

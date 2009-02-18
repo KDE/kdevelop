@@ -38,6 +38,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController
         
         /** Return the corresponding documentation instance for a determinate declaration. */
         virtual KSharedPtr<IDocumentation> documentationForDeclaration(Declaration* declaration)=0;
+        
+        /** Show the documentation specified by @p doc. */
+        virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)=0;
 };
 
 }

@@ -32,6 +32,7 @@ set(kdevplatformshell_LIB_SRCS
     projectinfopage.cpp
     selectioncontroller.cpp
     documentationcontroller.cpp
+    documentationview.cpp
 )
 
 set(kdevplatformshell_UI

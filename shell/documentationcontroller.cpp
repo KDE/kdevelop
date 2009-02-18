@@ -21,19 +21,46 @@
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <shell/core.h>
 
 #include <KDebug>
 
+#include "documentationview.h"
+
 using namespace KDevelop;
 
-DocumentationController::DocumentationController(Core* core)
+class DocumentationViewFactory: public KDevelop::IToolViewFactory
 {
-}
+    public:
+        DocumentationViewFactory()
+        {}
+        
+        virtual QWidget* create( QWidget *parent = 0 )
+        {
+            DocumentationView* v= new DocumentationView( parent );
+            
+            mViews.append(v);
+            return v;
+        }
+        
+        virtual Qt::DockWidgetArea defaultPosition() { return Qt::RightDockWidgetArea; }
+        virtual QString id() const { return "org.kdevelop.DocumentationView"; }
+        
+        QList<DocumentationView*> views() const { return mViews; }
+//      QList<Sublime::View*> tabs() const { return mTabs; }
+//      virtual void viewCreated(Sublime::View* view) { mTabs.append(view); }
+    private:
+        QList<DocumentationView*> mViews;
+//      QList<Sublime::View*> mTabs;
+};
+
+DocumentationController::DocumentationController(Core* core)
+    : m_factory(0)
+{}
 
 void DocumentationController::initialize()
-{
-}
+{}
 
 KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
 {
@@ -54,4 +81,15 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
         }
     }
     return ret;
+}
+
+void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
+{
+    if(!m_factory)
+    {
+        m_factory = new DocumentationViewFactory;
+        ICore::self()->uiController()->addToolView(i18n("Documentation"), m_factory);
+    }
+    
+    m_factory->views().last()->showWidget(doc->documentationWidget());
 }

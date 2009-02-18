@@ -16,33 +16,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCUMENTATIONCONTROLLER_H
-#define DOCUMENTATIONCONTROLLER_H
+#ifndef DOCUMENTATIONVIEW_H
+#define DOCUMENTATIONVIEW_H
 
-#include <interfaces/idocumentationcontroller.h>
-#include <QObject>
+#include <QWidget>
 
-class DocumentationViewFactory;
-
-namespace KDevelop
+class DocumentationView : public QWidget
 {
-class Core;
-
-class DocumentationController : public QObject, public KDevelop::IDocumentationController
-{
-    Q_OBJECT
-    public:
-        DocumentationController(Core* core);
-        
-        void initialize();
-        
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
-        virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
-        
-    private:
-        DocumentationViewFactory* m_factory;
+	Q_OBJECT
+	public:
+		DocumentationView(QWidget* parent);
+		
+	public slots:
+		void showWidget(QWidget*) const;
 };
 
-}
-
-#endif // DOCUMENTATIONCONTROLLER_H
+#endif // DOCUMENTATIONVIEW_H
