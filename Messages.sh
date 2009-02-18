@@ -28,15 +28,15 @@ done
 
 debuggers="cppdebugger valgrind"
 for plugin in $debuggers ; do
-    rcfiles="`find debugger/$plugin -name \*.rc`"
-    uifiles="`find debugger/$plugin -name \*.ui`"
+    rcfiles="`find debuggers/$plugin -name \*.rc`"
+    uifiles="`find debuggers/$plugin -name \*.ui`"
     if [[ "$rcfiles" != "" ]] ; then
         $EXTRACTRC $rcfiles >> rc.cpp || exit 11
     fi
     if [[ "$uifiles" != "" ]] ; then
         $EXTRACTRC $uifiles >> rc.cpp || exit 12
     fi
-    $XGETTEXT -kaliasLocal `find debugger/$plugin -name \*.cc -o -name \*.cpp -o -name \*.h` rc.cpp -o $podir/kdev${plugin}.pot
+    $XGETTEXT -kaliasLocal `find debuggers/$plugin -name \*.cc -o -name \*.cpp -o -name \*.h` rc.cpp -o $podir/kdev${plugin}.pot
     rm -f rc.cpp
 done
 
