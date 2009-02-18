@@ -26,6 +26,7 @@
 namespace KDevelop
 {
 class IDocumentController;
+class IDocumentationController;
 class ILanguageController;
 class IPluginController;
 class IProjectController;
