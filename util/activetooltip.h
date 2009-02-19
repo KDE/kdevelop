@@ -28,7 +28,7 @@ namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTipManager : public QObject {
     Q_OBJECT
     friend class ActiveToolTip;
-    private slots:
+    private Q_SLOTS:
         void doVisibility();
 };
 
