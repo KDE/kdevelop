@@ -1988,6 +1988,21 @@ bool isGenerated(const QString& name)
     return name.indexOf("#[")>=0;
 }
 
+QStringList CMakeProjectVisitor::dependees(const QString& s) const
+{
+    QStringList ret;
+    if(isGenerated(s))
+    {
+        foreach(const QString& f, m_generatedFiles[s])
+            ret += dependees(f);
+    }
+    else
+    {
+        ret += s;
+    }
+    return ret;
+}
+
 QStringList CMakeProjectVisitor::targetDependencies(const QString & target) const
 {
     QStringList ret;
@@ -1996,7 +2011,13 @@ QStringList CMakeProjectVisitor::targetDependencies(const QString & target) cons
         if(isGenerated(s))
         {
             kDebug(9042) << "Generated:" << s;
-            ret += m_generatedFiles[s];
+            QStringList gen = dependees(s);
+            
+            foreach(const QString& file, gen)
+            {
+                if(!ret.contains(file))
+                    ret.append(file);
+            }
         }
         else
         {

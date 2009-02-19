@@ -565,52 +565,48 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             foreach ( const QString& t, v.targets())
             {
                 QStringList dependencies=v.targetDependencies(t);
-                if(true || !dependencies.isEmpty()) //Just to remove verbosity
+                QString outputName=t;
+                if(v.targetHasProperty(outputName, "OUTPUT_NAME"))
+                    outputName=v.targetProperty(outputName, "OUTPUT_NAME");
+
+                KDevelop::ProjectTargetItem* targetItem;
+                switch(v.targetType(outputName))
                 {
-
-                    QString outputName=t;
-                    if(v.targetHasProperty(t, "OUTPUT_NAME"))
-                        outputName=v.targetProperty(t, "OUTPUT_NAME");
-
-                    KDevelop::ProjectTargetItem* targetItem;
-                    switch(v.targetType(t))
-                    {
-                        case CMakeProjectVisitor::Library:
-                            targetItem = new CMakeLibraryTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
-                            break;
-                        case CMakeProjectVisitor::Executable:
-                            targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
-                            break;
-                        case CMakeProjectVisitor::Custom:
-                            targetItem = new CMakeCustomTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
-                            break;
-                    }
-                    DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
-                    datt->setDescriptor(v.targetDeclarationDescriptor(outputName));
-
-                    foreach( const QString & sFile, dependencies )
-                    {
-                        if(sFile.isEmpty())
-                            continue;
-
-                        KUrl sourceFile(sFile);
-                        if(sourceFile.isRelative()) {
-                            sourceFile = folder->url();
-                            sourceFile.adjustPath( KUrl::RemoveTrailingSlash );
-                            sourceFile.addPath( sFile );
-                        }
-
-                        if( entries.contains( sourceFile.fileName() ) )
-                        {
-                            entries.removeAll( sourceFile.fileName() );
-                        }
-
-                        new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                        item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
-                        kDebug(9042) << "..........Adding:" << sourceFile;
-                    }
-                    m_targets.append(targetItem);
+                    case CMakeProjectVisitor::Library:
+                        targetItem = new CMakeLibraryTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
+                        break;
+                    case CMakeProjectVisitor::Executable:
+                        targetItem = new CMakeExecutableTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
+                        break;
+                    case CMakeProjectVisitor::Custom:
+                        targetItem = new CMakeCustomTargetItem( item->project(), t, folder, v.declarationsPerTarget()[t], outputName );
+                        break;
                 }
+                DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
+                datt->setDescriptor(v.targetDeclarationDescriptor(outputName));
+
+                foreach( const QString & sFile, dependencies )
+                {
+                    if(sFile.isEmpty())
+                        continue;
+
+                    KUrl sourceFile(sFile);
+                    if(sourceFile.isRelative()) {
+                        sourceFile = folder->url();
+                        sourceFile.adjustPath( KUrl::RemoveTrailingSlash );
+                        sourceFile.addPath( sFile );
+                    }
+
+                    if( entries.contains( sourceFile.fileName() ) )
+                    {
+                        entries.removeAll( sourceFile.fileName() );
+                    }
+
+                    new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+                    item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
+                    kDebug(9042) << "..........Adding:" << sourceFile;
+                }
+                m_targets.append(targetItem);
             }
 
         }
