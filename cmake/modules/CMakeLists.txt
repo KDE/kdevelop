@@ -1,5 +1,5 @@
 # install the cmake files
 
-set(cmakeFiles KDevelopMacros.cmake FindKDevelop.cmake)
+set(cmakeFiles FindKDevelop.cmake)
 install( FILES ${cmakeFiles} DESTINATION ${DATA_INSTALL_DIR}/cmake/modules )
 
