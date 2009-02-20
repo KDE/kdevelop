@@ -150,6 +150,7 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
+Name[es]=Cargando proyecto
 Name[et]=Projekti laadimine
 Name[fr]=Chargement du projet
 Name[ga]=Tionscadal á Luchtú
@@ -163,6 +164,7 @@ Name[x-test]=xxLoading Projectxx
 Name[zh_CN]=正在装入工程
 Name[zh_TW]=載入專案中
 Comment=A project loading process has just started
+Comment[es]=Acaba de comenzar un proceso de carga de proyecto
 Comment[et]=Projekti laadimine just käivitati
 Comment[fr]=Un processus de chargement de projet vient de démarrer
 Comment[ja]=プロジェクトの読み込みを開始しました
@@ -178,6 +180,7 @@ Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
+Name[es]=Proyecto cargado con éxito
 Name[et]=Projekt on edukalt laaditud
 Name[fr]=Le projet a été chargé avec succès
 Name[ga]=D'éirigh le luchtú an tionscadail
@@ -191,6 +194,7 @@ Name[x-test]=xxProject Loaded Successfullyxx
 Name[zh_CN]=工程成功装入
 Name[zh_TW]=專案已成功載入
 Comment=A project has been loaded successfully
+Comment[es]=Un proyecto ha sido cargado con éxito
 Comment[et]=Projekt on edukalt laaditud
 Comment[fr]=Un projet a été chargé avec succès
 Comment[ga]=D'éirigh le luchtú an tionscadail
