@@ -1,5 +1,5 @@
 
-macro(kdevelop_add_app_templates _templateNames)
+macro(kdevplatform_add_app_templates _templateNames)
     foreach(_templateName ${ARGV})
 
         get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
@@ -55,5 +55,5 @@ macro(kdevelop_add_app_templates _templateNames)
         macro_additional_clean_files(${_template})
 
     endforeach(_templateName)
-endmacro(kdevelop_add_app_templates)
+endmacro(kdevplatform_add_app_templates)
 
