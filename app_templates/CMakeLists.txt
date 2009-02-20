@@ -4,4 +4,4 @@ set(apptemplate_DIRS
     cpp/QMake/qmake_qt4guiapp
 )
 
-kdevelop_add_app_templates(${apptemplate_DIRS})
+kdevplatform_add_app_templates(${apptemplate_DIRS})
