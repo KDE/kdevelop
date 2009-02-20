@@ -37,6 +37,7 @@
 #include "../types/enumerationtype.h"
 #include "../types/referencetype.h"
 #include "../types/pointertype.h"
+#include <interfaces/idocumentationcontroller.h>
 
 
 namespace KDevelop {
@@ -75,7 +76,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
 void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
 {
   NavigationAction action( declaration, actionType );
-  QString targetId = QString("%1").arg((quint64)declaration.data());
+  QString targetId = QString::number((quint64)declaration.data() * actionType);
   makeLink(name, targetId, action);
 }
 
@@ -88,7 +89,7 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
     m_currentPositionLine = -1;
     m_selectedLink = m_linkCount;
   }
-
+  
   QString str = Qt::escape(name);
   if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
     str = "<font color=\"#880088\">" + str + "</font>";
@@ -144,7 +145,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
     } break;
     case NavigationAction::NavigateUses:
       return registerChild(new UsesNavigationContext(action.decl.data(), this));
-  case NavigationAction::JumpToSource:
+    case NavigationAction::JumpToSource:
       {
         KUrl doc = action.document;
         KTextEditor::Cursor cursor = action.cursor;
@@ -167,6 +168,11 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
         QMetaObject::invokeMethod( ICore::self()->documentController(), "openDocument", Qt::QueuedConnection, Q_ARG(KUrl, doc), Q_ARG(KTextEditor::Cursor, cursor) );
         break;
       }
+    case NavigationAction::ShowDocumentation: {
+        KSharedPtr<IDocumentation> doc=ICore::self()->documentationController()->documentationForDeclaration(action.decl.data());
+        ICore::self()->documentationController()->showDocumentation(doc);
+      }
+      break;
   }
 
   return NavigationContextPointer( this );
@@ -314,7 +320,7 @@ NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& li
     kDebug() << "Executed unregistered link " << link << endl;
     return NavigationContextPointer(this);
   }
-
+  
   return execute(m_links[link]);
 }
 

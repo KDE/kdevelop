@@ -34,7 +34,8 @@ struct NavigationAction {
     NavigateDeclaration,
     NavigateUses,
     JumpToSource, //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
-    ExecuteKey
+    ExecuteKey,
+    ShowDocumentation
   };
 
   ///When executed, this navigation-action calls the "executeKeyAction(QString) function in its navigation-context

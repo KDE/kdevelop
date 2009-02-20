@@ -35,6 +35,8 @@
 #include "../types/referencetype.h"
 #include "../types/typeutils.h"
 #include "../persistentsymboltable.h"
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
@@ -71,8 +73,15 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
     modifyHtml() += "<br>";
   }
+  
+  KSharedPtr<IDocumentation> doc=ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());
+  if(doc) {
+    modifyHtml() += i18n("Show documentation ");
+    makeLink( m_declaration->toString(), m_declaration, NavigationAction::ShowDocumentation);
+    modifyHtml() += "<br />";
+  }
 
-  if( !shorten ) {
+  if( !shorten ) { 
     const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
     if( function ) {
       htmlFunction();
@@ -216,7 +225,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     modifyHtml() += commentHighlight(comment);
     modifyHtml() += "<br />";
   }
-
+  
   if( !shorten ) {
     if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
       modifyHtml() += labelHighlight(i18n( "Def.: " ));
