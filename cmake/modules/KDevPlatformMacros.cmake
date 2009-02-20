@@ -1,4 +1,16 @@
+#
+# KDevelop Platform Macros
+#
+# The following macros are defined here:
+#
+#  KDEVPLATFORM_ADD_APP_TEMPLATES( template1 ... templateN )
+#    Use this to get packaged template archives for the given templates.
+#    Parameters should be the directories containing the templates.
+#
+# Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+# Redistribution and use is allowed according to the terms of the BSD license.
 
+# package and install the given directories as application templates
 macro(kdevplatform_add_app_templates _templateNames)
     foreach(_templateName ${ARGV})
 
