@@ -26,6 +26,9 @@
 # KDEVPLATFORM_VERITAS_LIBRARY         - test module library
 # KDEVPLATFORM_SOURCEFORMATTER_LIBRARY - source formatter library
 #
+# The following macros are added (from KDevPlatformMacros.cmake):
+#
+#
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
@@ -41,6 +44,12 @@ if( KDEVPLATFORM_FIND_VERSION_MAJOR )
 endif( KDEVPLATFORM_FIND_VERSION_MAJOR )
 
 find_package( KDevPlatform ${_args} NO_MODULE )
+
+if( KDEVPLATFORM_FOUND )
+   get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
+   include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
+endif( KDEVPLATFORM_FOUND )
+
 
 if( NOT KDEVPLATFORM_FOUND AND KDEVPLATFORM_FIND_REQUIRED )
     message( FATAL_ERROR "Could not find KDevPlatform libraries, searched in '${CMAKE_PREFIX_PATH}' and '$ENV{CMAKE_PREFIX_PATH}'. You can set CMAKE_PREFIX_PATH to search in other directories." )
