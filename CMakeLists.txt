@@ -22,8 +22,6 @@ add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 
-include(KDevelopMacros)
-
 # create config.h
 include (ConfigureChecks.cmake)
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
