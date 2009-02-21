@@ -343,6 +343,7 @@ public:
 
   /// Represents an imported parent context.
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
+    ///DUChain must be read-locked when this is called
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
