@@ -264,7 +264,8 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
   visitNodes(this,ast->template_parameters);
   closeContext();
-  m_importedParentContexts << DUContext::Import(ctx); //Import the context into the following function-argument context(so the template-parameters can be found from there)
+  
+  queueImportedContext(ctx); //Import the context into the following function-argument context(so the template-parameters can be found from there)
 
   DefaultVisitor::visit(ast->declaration);
 
@@ -599,7 +600,7 @@ void ContextBuilder::visitFunctionDefinition (FunctionDefinitionAST *node)
       QList<Declaration*> classDeclarations = currentContext()->findDeclarations(className);
 
       if (classDeclarations.count() != 0 && classDeclarations.first()->internalContext()) {
-        m_importedParentContexts.append(DUContext::Import(classDeclarations.first()->internalContext()));
+        queueImportedContext(classDeclarations.first()->internalContext());
         
         QualifiedIdentifier newFunctionName(className);
         newFunctionName.push(functionName.last());
@@ -931,7 +932,7 @@ void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
     DUContext* ctx = openContext(node->parameter_declaration_clause, DUContext::Function, node->id);
     addImportedContexts();
     if(compilingContexts())
-      m_importedParentContexts.append(DUContext::Import(ctx));
+      queueImportedContext(ctx);
   }
 
   //BEGIN Copied from default visitor
@@ -1069,7 +1070,11 @@ void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
 
   if (node->condition) {
     DUContext* secondParentContext = openContext(node->condition, DUContext::Other);
-    contextsToImport.append(DUContext::Import(secondParentContext));
+    
+    {
+      DUChainReadLocker lock(DUChain::lock());
+      contextsToImport.append(DUContext::Import(secondParentContext));
+    }
 
     visit(node->condition);
 
@@ -1090,7 +1095,13 @@ void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
 
 bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentContext)
 {
-  return createContextIfNeeded(node, QVector<DUContext::Import>() << DUContext::Import(importedParentContext));
+  QVector<DUContext::Import> imports;
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    imports << DUContext::Import(importedParentContext);
+  }
+  
+  return createContextIfNeeded(node, imports);
 }
 
 bool ContextBuilder::createContextIfNeeded(AST* node, const QVector<DUContext::Import>& importedParentContexts)

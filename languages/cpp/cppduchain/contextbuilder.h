@@ -209,6 +209,11 @@ protected:
   virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
 
+  void queueImportedContext(DUContext* context) {
+    DUChainReadLocker lock(DUChain::lock());
+    m_importedParentContexts << DUContext::Import(context);
+  }
+  
   virtual void setInSymbolTable(DUContext* context);
   
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
