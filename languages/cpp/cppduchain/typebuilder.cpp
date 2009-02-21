@@ -453,10 +453,13 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
 
 DUContext* TypeBuilder::searchContext() const {
   DUChainReadLocker lock(DUChain::lock());
-  if( !m_importedParentContexts.isEmpty() && m_importedParentContexts.last()->type() == DUContext::Template ) {
-    return m_importedParentContexts.last();
-  } else
-    return currentContext();
+  if( !m_importedParentContexts.isEmpty() ) {
+    if( DUContext* ctx = m_importedParentContexts.last().context(topContext()) )
+      if(ctx->type() == DUContext::Template)
+        return m_importedParentContexts.last().context(topContext());
+  } 
+    
+  return currentContext();
 }
 
 ///@todo check whether this conflicts with the isTypeAlias(..) stuff in declaration, and whether it is used at all

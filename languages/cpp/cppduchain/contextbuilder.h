@@ -213,7 +213,7 @@ protected:
   
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
   
-  TopDUContext* topContext() {
+  TopDUContext* topContext() const {
     return currentContext()->topContext();
   }
 
@@ -222,7 +222,7 @@ protected:
 
   KDevelop::DUContext* openContextInternal(const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
-  bool createContextIfNeeded(AST* node, const QList<KDevelop::DUContext*>& importedParentContexts);
+  bool createContextIfNeeded(AST* node, const QVector<KDevelop::DUContext::Import>& importedParentContexts);
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
   void addImportedContexts();
 
@@ -247,8 +247,8 @@ protected:
   QHash<KDevelop::DUContext*, KDevelop::SimpleRange> m_contextRanges;
 #endif
 
-  QList<KDevelop::DUContext*> m_importedParentContexts;
-  QStack< QList<DUContext*> > m_tryParentContexts;
+  QVector<KDevelop::DUContext::Import> m_importedParentContexts;
+  QStack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
   InitializerAST* m_currentInitializer;
 };
 

@@ -219,7 +219,7 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     DUContext* previous = currentContext();
 
     DUContext* previousLast = lastContext();
-    QList<KDevelop::DUContext*> importedParentContexts = m_importedParentContexts;
+    QVector<KDevelop::DUContext::Import> importedParentContexts = m_importedParentContexts;
     
     openPrefixContext(node, id, pos); //We create a temporary prefix-context to search from within the right scope
     
@@ -371,7 +371,7 @@ ForwardDeclaration * DeclarationBuilder::openForwardDeclaration(NameAST * name, 
 template<class Type>
 Type hasTemplateContext( const QList<Type>& contexts ) {
   foreach( const Type& context, contexts )
-    if( context&& context->type() == KDevelop::DUContext::Template )
+    if( context && context->type() == KDevelop::DUContext::Template )
       return context;
   return Type(0);
 }
@@ -395,7 +395,7 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 {
   DUChainWriteLocker lock(DUChain::lock());
 
-  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts);
+  KDevelop::DUContext* templateCtx = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext());
 
   ///We always need to create a template declaration when we're within a template, so the declaration can be accessed
   ///by specialize(..) and its indirect DeclarationId
@@ -931,7 +931,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     identifierForNode(node->name, id);
     openPrefixContext(node, id, pos);
     DUChainReadLocker lock(DUChain::lock());
-    if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts)) {
+    if(DUContext* templateContext = hasTemplateContext(m_importedParentContexts, topContext()).context(topContext())) {
       specializedWith = createSpecializationInformation(node->name, templateContext);
     }
   }
