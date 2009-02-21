@@ -35,29 +35,15 @@
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
-set( _args )
-if( KDEVPLATFORM_FIND_VERSION_MAJOR )
-    set( _args ${KDEVPLATFORM_FIND_VERSION_MAJOR} )
-    if( KDEVPLATFORM_FIND_VERSION_MINOR )
-        set( _args ${_args}.${KDEVPLATFORM_FIND_VERSION_MINOR} )
-        if( KDEVPLATFORM_FIND_VERSION_PATCH )
-            set( _args ${_args}.${KDEVPLATFORM_FIND_VERSION_PATCH} )
-        endif( KDEVPLATFORM_FIND_VERSION_PATCH )
-    endif( KDEVPLATFORM_FIND_VERSION_MINOR )
-endif( KDEVPLATFORM_FIND_VERSION_MAJOR )
+set(_KDevPlatform_FIND_QUIETLY ${KDevPlatform_FIND_QUIETLY})
+find_package( KDevPlatform ${KDevPlatform_FIND_VERSION} NO_MODULE )
+set(KDevPlatform_FIND_QUIETLY ${_KDevPlatform_FIND_QUIETLY})
 
-find_package( KDevPlatform ${_args} NO_MODULE )
-
-if( KDEVPLATFORM_FOUND )
+if( KDevPlatform_FOUND )
    get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
    include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
-endif( KDEVPLATFORM_FOUND )
+endif( KDevPlatform_FOUND )
 
-
-if( NOT KDEVPLATFORM_FOUND AND KDEVPLATFORM_FIND_REQUIRED )
-    message( FATAL_ERROR "Could not find KDevPlatform libraries, searched in '${CMAKE_PREFIX_PATH}' and '$ENV{CMAKE_PREFIX_PATH}'. You can set CMAKE_PREFIX_PATH to search in other directories." )
-elseif( KDEVPLATFORM_FOUND AND NOT KDEVPLATFORM_FIND_QUIETLY )
-    message( STATUS "Found KDevPlatform ${KDEVPLATFORM_VERSION}, using include dir ${KDEVPLATFORM_INCLUDE_DIR}." )
-endif( NOT KDEVPLATFORM_FOUND AND KDEVPLATFORM_FIND_REQUIRED )
-
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(KDevPlatform DEFAULT_MSG KDevPlatform_CONFIG )
 
