@@ -54,17 +54,17 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     addMainWindow( dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     
     KAction* action = actionCollection()->addAction ( "last_used_views_forward" );
-    action->setText( "Next View" );
+    action->setText( i18n( "Next View" ) );
     action->setShortcut( Qt::CTRL | Qt::Key_Tab );
-    action->setWhatsThis( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." );
-    action->setStatusTip( "Walk through the list of last used views" );
+    action->setWhatsThis( i18n( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." ) );
+    action->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( action, SIGNAL(triggered()), SLOT(walkForward()) );
     
     action = actionCollection()->addAction ( "last_used_views_backward" );
-    action->setText( "Previous View" );
+    action->setText( i18n( "Previous View" ) );
     action->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
-    action->setWhatsThis( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." );
-    action->setStatusTip( "Walk through the list of last used views" );
+    action->setWhatsThis( i18n( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." ) );
+    action->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( action, SIGNAL(triggered()), SLOT(walkBackward()) );
     
     view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
