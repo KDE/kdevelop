@@ -2,7 +2,7 @@
 <kpartgui name="KDevQuickopen" version="4">
 <MenuBar>
   <Menu name="navigation" group="search_menu_merge">
-    <text context="@title:menu">Navigation</text>
+    <text context="@title:menu">&amp;Navigation</text>
 
     <Action name="quick_open"
 	    group="file_operations"/>
