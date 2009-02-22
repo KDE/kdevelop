@@ -59,9 +59,8 @@ Container::Container(QWidget *parent)
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
-    setHoverCloseButton(true);
-    setCloseButtonEnabled(true);
-    setTabReorderingEnabled(true);
+    setMovable(true);
+    setTabsClosable(true);
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
