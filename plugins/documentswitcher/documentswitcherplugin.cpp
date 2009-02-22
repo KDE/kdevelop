@@ -125,7 +125,6 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
-    kDebug() << "switching to idx";
     int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
     
@@ -136,13 +135,7 @@ void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
         if( row >= 0 && row < l.size() )
         {
             window->activateView( l.at( row ) );
-        } else 
-        {
-            kWarning() << "Ooops, got invalid row from selecting a view";
         }
-    } else 
-    {
-        kWarning() << "Ooops, got no mainwindow";
     }
 }
 
@@ -170,7 +163,6 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
 {
     if( !mainwindow ) 
         return;
-    kDebug() << "got new mainwindow";
     storeAreaViewList( mainwindow, mainwindow->area() );
     connect( mainwindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(changeArea(Sublime::Area*)) );
     connect( mainwindow, SIGNAL(activeViewChanged(Sublime::View*)), SLOT(changeView(Sublime::View*)) );
@@ -183,7 +175,6 @@ void DocumentSwitcherPlugin::removeMainWindow( QObject* obj )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( obj );
     if( !mainwindow )
         return;
-    kDebug() << "removing mainwindow" << mainwindow;
     disconnect( mainwindow, 0, this, 0 );
     documentLists.remove( mainwindow );
 }
@@ -193,10 +184,8 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
 {
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
-    kDebug() << "changing area" << area;
     if( !documentLists[mainwindow].contains( area ) )
     {
-        kDebug() << "storing view list";
         storeAreaViewList( mainwindow, area );
     }
 }
@@ -207,8 +196,6 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
         
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
-    
-    kDebug() << "changing view:" << view << view->document() << view->document()->title();
     
     Sublime::Area* area = mainwindow->area();
     
@@ -227,7 +214,6 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
         
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
-    kDebug() << "removing view:" << view << view->document() << view->document()->title();
     
     Sublime::Area* area = mainwindow->area();
     
