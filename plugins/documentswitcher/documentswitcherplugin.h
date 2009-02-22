@@ -46,6 +46,8 @@ private slots:
     void changeArea( Sublime::Area* );
     void removeView( Sublime::View* );
     void removeMainWindow(QObject*);
+    void walkForward();
+    void walkBackward();
 private:
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
     QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;

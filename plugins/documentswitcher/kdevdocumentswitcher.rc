@@ -1,3 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevDocumentSwitcher" version="1">
+<kpartgui name="KDevDocumentSwitcher" version="4">
+<MenuBar>
+  <Menu name="navigation">
+    <Action name="last_used_documents_forward" group="navigation_file"/>
+    <Action name="last_used_documents_backward" group="navigation_file"/>
+  </Menu>
+</MenuBar>
+
 </kpartgui>
