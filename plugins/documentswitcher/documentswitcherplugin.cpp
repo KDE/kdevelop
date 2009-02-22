@@ -105,9 +105,26 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
     kDebug() << "switching to idx";
+    int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
     view->deleteLater();
     view = 0;
+    
+    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
+    {
+        const QList<Sublime::View*> l = documentLists[window][window->area()];
+        if( row >= 0 && row < l.size() )
+        {
+            window->activateView( l.at( row ) );
+        } else 
+        {
+            kWarning() << "Ooops, got invalid row from selecting a view";
+        }
+    } else 
+    {
+        kWarning() << "Ooops, got no mainwindow";
+    }
 }
 
 void DocumentSwitcherPlugin::unload()
