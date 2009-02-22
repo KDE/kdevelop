@@ -12,6 +12,7 @@ macro_optional_add_subdirectory(cvs)
 add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(sourceformatter)
+add_subdirectory(documentswitcher)
 
 macro_optional_find_package(SubversionLibrary)
 macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )

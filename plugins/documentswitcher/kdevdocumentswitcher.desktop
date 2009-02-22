@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=A most-recently-used document switcher for KDevPlatform.
+Comment[x-test]=xxA most-recently-used document switcher for KDevPlatform.xx
+Name=KDevDocumentSwitcher
+Name[x-test]=xxKDevDocumentSwitcherxx
+GenericName=Most-Recently-Used Document Switcher
+GenericName[x-test]=xxMost-Recently-Used Document Switcherxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevdocumentswitcher
+X-KDE-PluginInfo-Name=kdevdocumentswitcher
+X-KDE-PluginInfo-Author=Andreas Pakulat
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDevelop-Mode=GUI
