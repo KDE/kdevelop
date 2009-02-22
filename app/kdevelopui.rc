@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="68" name="kdevelop" >
+<kpartgui version="69" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -23,12 +23,6 @@
     <Merge/>
   </Menu>
 
-  <DefineGroup name="search_menu_merge" />
-
-<!--
-  <Action name="bookmarks" group="search_menu_merge" />
--->
-
   <Menu name="view">
     <text context="@title:menu">&amp;View</text>
     <Action name="add_toolview"/>
@@ -47,6 +41,19 @@
     <Separator/>
     <DefineGroup name="view_operations"/>
   </Menu>
+
+  <Menu name="navigation">
+    <text context="@title:menu">&amp;Navigation</text>
+    <DefineGroup name="navigation_file"/>
+    <Separator />
+    <DefineGroup name="navigation_code"/>
+    <Separator />
+    <Merge />
+  </Menu>
+
+<!--
+  <Action name="bookmarks" group="search_menu_merge" />
+-->
 
   <Menu name="project">
     <text context="@title:menu">&amp;Project</text>
