@@ -53,18 +53,18 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
     addMainWindow( dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     
-    KAction* action = actionCollection()->addAction ( "last_used_documents_forward" );
-    action->setText( "Last View" );
+    KAction* action = actionCollection()->addAction ( "last_used_views_forward" );
+    action->setText( "Next View" );
     action->setShortcut( Qt::CTRL | Qt::Key_Tab );
-    action->setWhatsThis( "<b>Walk through last used Documents</b><br/>Opens a list to walk through the list of last used documents." );
-    action->setStatusTip( "Walk through the list of last used documents" );
+    action->setWhatsThis( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." );
+    action->setStatusTip( "Walk through the list of last used views" );
     connect( action, SIGNAL(triggered()), SLOT(walkForward()) );
     
-    action = actionCollection()->addAction ( "last_used_documents_backward" );
+    action = actionCollection()->addAction ( "last_used_views_backward" );
     action->setText( "Previous View" );
     action->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
-    action->setWhatsThis( "<b>Walk through last used Documents (Backward)</b><br/>Opens a list to walk through the list of last used documents." );
-    action->setStatusTip( "Walk through the list of last used documents" );
+    action->setWhatsThis( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." );
+    action->setStatusTip( "Walk through the list of last used views" );
     connect( action, SIGNAL(triggered()), SLOT(walkBackward()) );
     
     view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
