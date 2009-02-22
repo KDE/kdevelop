@@ -37,6 +37,7 @@
 #include <kmimetype.h>
 #include <kio/copyjob.h>
 #include <kio/netaccess.h>
+#include <kde_file.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -425,8 +426,8 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
                 output << KMacroExpander::expandMacros(line, m_variables) << "\n";
             }
             // Preserve file mode...
-            struct stat fmode;
-            ::fstat(inputFile.handle(), &fmode);
+            KDE_struct_stat fmode;
+            KDE_fstat(inputFile.handle(), &fmode);
             ::fchmod(outputFile.handle(), fmode.st_mode);
             return true;
         }
