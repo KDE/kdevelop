@@ -22,12 +22,33 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
+namespace Sublime 
+{
+    class View;
+    class MainWindow;
+    class AreaIndex;
+    class Area;
+}
+
+class QSignalMapper;
+
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
-    DocumentSwitcherPlugin(QObject *parent, const QVariantList &args = QVariantList() );
+    DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
     ~DocumentSwitcherPlugin();
-
+    
+    virtual void unload();
+    
+private slots:
+    void changeView( Sublime::View* );
+    void addMainWindow( Sublime::MainWindow* );
+    void changeArea( Sublime::Area* );
+    void removeView( Sublime::View* );
+    void removeMainWindow(QObject*);
+private:
+    void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
+    QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
 };
 
 #endif
