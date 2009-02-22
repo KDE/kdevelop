@@ -46,14 +46,14 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     addMainWindow( dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     
     KAction* action = actionCollection()->addAction ( "last_used_documents_forward" );
-    action->setText( "Walk through last used Documents" );
+    action->setText( "Last View" );
     action->setShortcut( Qt::CTRL | Qt::Key_Tab );
     action->setWhatsThis( "<b>Walk through last used Documents</b><br/>Opens a list to walk through the list of last used documents." );
     action->setStatusTip( "Walk through the list of last used documents" );
     connect( action, SIGNAL(triggered()), SLOT(walkForward()) );
     
     action = actionCollection()->addAction ( "last_used_documents_backward" );
-    action->setText( "Walk through last used Documents" );
+    action->setText( "Previous View" );
     action->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
     action->setWhatsThis( "<b>Walk through last used Documents (Backward)</b><br/>Opens a list to walk through the list of last used documents." );
     action->setStatusTip( "Walk through the list of last used documents" );
