@@ -36,10 +36,11 @@
 #include <sublime/mainwindow.h>
 #include <sublime/document.h>
 
+#include "documentswitchertreeview.h"
+
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
 K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
 
-//TODO: Support ESC for hiding popup
 //TODO: Implement walking through list via Ctrl+Tab/Shift-Tab
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
@@ -66,16 +67,17 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     action->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( action, SIGNAL(triggered()), SLOT(walkBackward()) );
     
-    view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    view = new DocumentSwitcherTreeView( this, KDevelop::ICore::self()->uiController()->activeMainWindow() );
     view->setSelectionBehavior( QAbstractItemView::SelectRows );
     view->setSelectionMode( QAbstractItemView::SingleSelection );
     view->setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+    view->addAction( actionCollection()->action( "last_used_views_forward" ) );
+    view->addAction( actionCollection()->action( "last_used_views_backward" ) );
     connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
     connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
     
     model = new QStringListModel( view );
-    view->setModel( model );
-        
+    view->setModel( model );    
 }
 
 void DocumentSwitcherPlugin::walkForward()

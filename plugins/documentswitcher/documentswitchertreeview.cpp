@@ -16,47 +16,34 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef DOCUMENTSWITCHERPLUGIN_H
-#define DOCUMENTSWITCHERPLUGIN_H
+#include "documentswitchertreeview.h"
 
-#include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QKeyEvent>
 
-namespace Sublime 
+#include <kdebug.h>
+
+#include "documentswitcherplugin.h"
+
+DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin_, QWidget* parent ) 
+    : QListView( parent ), plugin( plugin_ )
 {
-    class View;
-    class MainWindow;
-    class AreaIndex;
-    class Area;
 }
 
-class QListView;
-class QModelIndex;
-class QStringListModel;
+void DocumentSwitcherTreeView::keyPressEvent( QKeyEvent* event )
+{
+    QListView::keyPressEvent(event);
+}
 
-class DocumentSwitcherPlugin: public KDevelop::IPlugin {
-    Q_OBJECT
-public:
-    DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
-    ~DocumentSwitcherPlugin();
-    
-    virtual void unload();
-public slots:
-    void switchToView( const QModelIndex& );
-private slots:
-    void changeView( Sublime::View* );
-    void addMainWindow( Sublime::MainWindow* );
-    void changeArea( Sublime::Area* );
-    void removeView( Sublime::View* );
-    void removeMainWindow(QObject*);
-    void walkForward();
-    void walkBackward();
-private:
-    void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
-    QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
-    QListView* view;
-    QStringListModel* model;
-};
-
-#endif
+void DocumentSwitcherTreeView::keyReleaseEvent( QKeyEvent* event ) 
+{
+    if( event->key() == Qt::Key_Control ) 
+    {
+        plugin->switchToView( selectionModel()->currentIndex() );
+        event->accept();
+        hide();
+    } else 
+    {
+        QListView::keyReleaseEvent(event);
+    }
+}
 

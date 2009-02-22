@@ -16,47 +16,23 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef DOCUMENTSWITCHERPLUGIN_H
-#define DOCUMENTSWITCHERPLUGIN_H
+#ifndef DOCUMENTSWITCHERTREEVIEW_H
+#define DOCUMENTSWITCHERTREEVIEW_H
 
-#include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <QListView>
 
-namespace Sublime 
+class DocumentSwitcherPlugin;
+
+class DocumentSwitcherTreeView : public QListView
 {
-    class View;
-    class MainWindow;
-    class AreaIndex;
-    class Area;
-}
-
-class QListView;
-class QModelIndex;
-class QStringListModel;
-
-class DocumentSwitcherPlugin: public KDevelop::IPlugin {
-    Q_OBJECT
 public:
-    DocumentSwitcherPlugin( QObject *parent, const QVariantList &args = QVariantList() );
-    ~DocumentSwitcherPlugin();
-    
-    virtual void unload();
-public slots:
-    void switchToView( const QModelIndex& );
-private slots:
-    void changeView( Sublime::View* );
-    void addMainWindow( Sublime::MainWindow* );
-    void changeArea( Sublime::Area* );
-    void removeView( Sublime::View* );
-    void removeMainWindow(QObject*);
-    void walkForward();
-    void walkBackward();
+    DocumentSwitcherTreeView( DocumentSwitcherPlugin*, QWidget* parent = 0 );
+
+protected:
+virtual void keyPressEvent(QKeyEvent* event);
+virtual void keyReleaseEvent(QKeyEvent* );
 private:
-    void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
-    QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
-    QListView* view;
-    QStringListModel* model;
+    DocumentSwitcherPlugin* plugin;
 };
 
-#endif
-
+#endif // DOCUMENTSWITCHERTREEVIEW_H

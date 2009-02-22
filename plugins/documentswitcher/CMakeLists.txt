@@ -5,6 +5,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9530 )
 
 set(kdevdocumentswitcher_PART_SRCS
     documentswitcherplugin.cpp
+    documentswitchertreeview.cpp
 )
 
 kde4_add_plugin(kdevdocumentswitcher ${kdevdocumentswitcher_PART_SRCS})
