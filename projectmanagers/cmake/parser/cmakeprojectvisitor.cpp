@@ -118,7 +118,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     QString type=exp.mid(dollar+1, thecase.first-dollar-1);
     QString var=exp.mid(thecase.first+1, thecase.second-thecase.first-1);
     QStringList vars;
-//     qDebug() << "lalalallalala" << exp << thecase.print();
+//     kDebug() << "lalalallalala" << exp << thecase.print();
     if(type.isEmpty())
     {
         if(m_vars->contains(var))
@@ -133,14 +133,14 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
     else
         kDebug() << "error: I do not understand the key: " << type;
 
-//     qDebug() << "solving: " << var << vars << exp;
+//     kDebug() << "solving: " << var << vars << exp;
     return vars;
 }
 
 QString replaceOne(const QString& var, const QString& id, const QString& value, int dollar)
 {
-//     qDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
-//     qDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
+//     kDebug() << "ooo" << var << value << id << var[dollar+id.size()-1] << (dollar+id.size());
+//     kDebug() << "kkkk" << var.mid(0, dollar) << value << var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
     return var.mid(0, dollar)+value+var.mid(dollar+id.size(), var.size()-(dollar+id.size()));
 }
 
@@ -149,14 +149,14 @@ QStringList CMakeProjectVisitor::value(const QString& exp, const QList<IntPair>&
     QString var=exp;
     QList<IntPair> invars;
     invars += poss[desired];
-    //qDebug() << ">>>>>" << exp << desired << poss.count();
+    //kDebug() << ">>>>>" << exp << desired << poss.count();
     for(; desired+1<poss.size() && poss[desired].level>1; desired++)
     {
         invars+=poss[desired+1];
-        //qDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
+        //kDebug() << "poss@"<< desired+1 << "="<< poss[desired+1].print();
     }
 
-    //qDebug() << ";;;;;" << invars.count();
+    //kDebug() << ";;;;;" << invars.count();
     if(invars.count()>1)
     {
         QList<IntPair>::const_iterator itConstEnd=invars.constEnd();
@@ -196,12 +196,12 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
             ++it;
 
         const IntPair& p=*it;
-//         qDebug () << "reeeeeet" << ret << exp.value << p.print();
+//         kDebug () << "reeeeeet" << ret << exp.value << p.print();
         int dollar=exp.value.lastIndexOf('$', p.first);
         QString pre=exp.value.mid(last.second+1, dollar-last.second-1);
 
         QStringList vars = value(exp.value, var, i);
-//         qDebug() << "aaaaaaaaaA" << pre << vars;
+//         kDebug() << "aaaaaaaaaA" << pre << vars;
 
         if(!vars.isEmpty())
         {
@@ -211,7 +211,7 @@ QStringList CMakeProjectVisitor::resolveVariable(const CMakeFunctionArgument &ex
         ret += vars;
         last=p;
         
-//         qDebug() << "yaaaaaaa" << ret;
+//         kDebug() << "yaaaaaaa" << ret;
 //         i++;
     }
     ret.last().append(exp.value.mid(last.second+1, exp.value.count()-last.second));
@@ -1372,7 +1372,7 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::PATH:
-            qDebug() << "aaaaa" << fi.path() << fi.canonicalFilePath() << fi.canonicalPath();
+            kDebug() << "aaaaa" << fi.path() << fi.canonicalFilePath() << fi.canonicalPath();
             val=fi.canonicalPath();
             break;
         case GetFilenameComponentAst::ABSOLUTE:
