@@ -1,20 +1,20 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevContextBrowser" version="2">
+<kpartgui name="KDevContextBrowser" version="3">
 <MenuBar>
-  <Menu name="navigation" group="search_menu_merge">
+  <Menu name="navigation">
     <text context="@title:menu">Navigation</text>
 
     <Action name="previous_context"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="next_context"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="previous_use"
-            group="file_operations"/>
+            group="navigation_code"/>
 
     <Action name="next_use"
-            group="file_operations"/>
+            group="navigation_code"/>
   </Menu>
 </MenuBar>
 

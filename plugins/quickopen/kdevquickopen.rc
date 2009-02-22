@@ -1,35 +1,33 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="4">
+<kpartgui name="KDevQuickopen" version="5">
 <MenuBar>
-  <Menu name="navigation" group="search_menu_merge">
-    <text context="@title:menu">&amp;Navigation</text>
-
+  <Menu name="navigation">
     <Action name="quick_open"
-	    group="file_operations"/>
+	    group="navigation_file"/>
 
     <Action name="quick_open_file"
-	    group="file_operations"/>
+	    group="navigation_file"/>
 
     <Action name="quick_open_class"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_open_files"
-            group="file_operations"/>
+            group="navigation_file"/>
 
     <Action name="quick_open_function"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_navigate"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_outline"
-            group="file_operations"/>
+            group="navigation_code"/>
 
     <Action name="quick_open_jump_declaration"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
     <Action name="quick_open_jump_definition"
-	    group="file_operations"/>
+	    group="navigation_code"/>
 
   </Menu>
 </MenuBar>
