@@ -67,6 +67,16 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     action->setStatusTip( "Walk through the list of last used documents" );
     connect( action, SIGNAL(triggered()), SLOT(walkBackward()) );
     
+    view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    view->setSelectionBehavior( QAbstractItemView::SelectRows );
+    view->setSelectionMode( QAbstractItemView::SingleSelection );
+    view->setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+    connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
+    connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
+    
+    model = new QStringListModel( view );
+    view->setModel( model );
+        
 }
 
 void DocumentSwitcherPlugin::walkForward()
@@ -77,26 +87,30 @@ void DocumentSwitcherPlugin::walkForward()
         kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
         return;
     }
-    if( !view )
+    QModelIndex idx;
+    if( !view->isVisible() )
     {
-        view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
-        view->setSelectionBehavior( QAbstractItemView::SelectRows );
-        view->setSelectionMode( QAbstractItemView::SingleSelection );
-        view->setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
-        connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
-        connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
-        
         QStringList views;
         foreach( Sublime::View* v, documentLists[window][window->area()] )
         {
             views << v->document()->title();
         }
-        view->setModel( new QStringListModel( views, view ) );
-        view->selectionModel()->select( view->model()->index( 0, 0 ), QItemSelectionModel::Select );
-        view->selectionModel()->setCurrentIndex( view->model()->index( 0, 0 ), QItemSelectionModel::SelectCurrent );
+    
+        model->setStringList( views );
         view->move( QCursor::pos() );
+        idx = model->index( 1, 0 );
         view->show();
+    } else 
+    {
+        int newrow = view->selectionModel()->currentIndex().row() + 1;
+        if( newrow == model->rowCount() ) 
+        {
+            newrow = 0;
+        }
+        idx = model->index( newrow, 0 );
     }
+    view->selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect );
+    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent );
 }
 
 void DocumentSwitcherPlugin::walkBackward()
@@ -109,13 +123,9 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
-    if( !view )
-        return;
     kDebug() << "switching to idx";
     int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
-    view->deleteLater();
-    view = 0;
     
     Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )

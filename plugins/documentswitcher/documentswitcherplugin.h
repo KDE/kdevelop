@@ -32,6 +32,7 @@ namespace Sublime
 
 class QListView;
 class QModelIndex;
+class QStringListModel;
 
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
@@ -54,6 +55,7 @@ private:
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
     QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
     QListView* view;
+    QStringListModel* model;
 };
 
 #endif
