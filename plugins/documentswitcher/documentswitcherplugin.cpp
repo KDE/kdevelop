@@ -87,6 +87,8 @@ void DocumentSwitcherPlugin::walkForward()
             views << v->document()->title();
         }
         view->setModel( new QStringListModel( views, view ) );
+        view->selectionModel()->select( view->model()->index( 0, 0 ), QItemSelectionModel::Select );
+        view->selectionModel()->setCurrentIndex( view->model()->index( 0, 0 ), QItemSelectionModel::SelectCurrent );
         view->move( QCursor::pos() );
         view->show();
     }
@@ -103,14 +105,6 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
     kDebug() << "switching to idx";
-    view->hide();
-    view->deleteLater();
-    view = 0;
-}
-
-void DocumentSwitcherPlugin::switchToView()
-{
-    kDebug() << "Switching to view";
     view->hide();
     view->deleteLater();
     view = 0;

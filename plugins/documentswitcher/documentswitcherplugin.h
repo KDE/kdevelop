@@ -49,7 +49,6 @@ private slots:
     void removeMainWindow(QObject*);
     void walkForward();
     void walkBackward();
-    void switchToView();
     void switchToView( const QModelIndex& );
 private:
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
