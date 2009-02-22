@@ -275,7 +275,7 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
     area->setShownToolView(pos, id);
 }
 
-void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*view*/)
+void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
     ViewCreator viewCreator(this);
     QSplitter *splitter = m_indexSplitters[index];
@@ -293,6 +293,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View */*vi
         delete container;
     }
     area->walkViews(viewCreator, index);
+    emit m_mainWindow->viewAdded( view );
 }
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
@@ -314,6 +315,8 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         kWarning() << "Splitter does not have a left widget!";
         return;
     }
+    
+    emit m_mainWindow->aboutToRemoveView( view );
 
     if (view->widget())
         widgetToView.remove(view->widget());

@@ -84,6 +84,12 @@ Q_SIGNALS:
     void activeToolViewChanged(Sublime::View*);
     /**Emitted when the user interface settings have changed.*/
     void settingsLoaded();
+    
+    /**Emitted when a new view is added to the mainwindow.*/
+    void viewAdded(Sublime::View*);
+    /**Emitted when a view is going to be removed from the mainwindow.*/
+    void aboutToRemoveView(Sublime::View*);
+
 
 protected:
 public: // FIXME?

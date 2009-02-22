@@ -243,6 +243,7 @@ void Controller::addMainWindow(MainWindow* mainWindow)
         d->mainWindowAreas[index].push_back(na);
     }
     showAreaInternal(d->mainWindowAreas[index][0], mainWindow);
+    emit mainWindowAdded( mainWindow );
 }
 
 void Controller::addDocument(Document *document)
