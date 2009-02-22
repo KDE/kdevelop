@@ -117,6 +117,36 @@ void DocumentSwitcherPlugin::walkForward()
 
 void DocumentSwitcherPlugin::walkBackward()
 {
+    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
+    {
+        kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
+        return;
+    }
+    QModelIndex idx;
+    if( !view->isVisible() )
+    {
+        QStringList views;
+        foreach( Sublime::View* v, documentLists[window][window->area()] )
+        {
+            views << v->document()->title();
+        }
+    
+        model->setStringList( views );
+        view->move( QCursor::pos() );
+        idx = model->index( model->rowCount()-1, 0 );
+        view->show();
+    } else 
+    {
+        int newrow = view->selectionModel()->currentIndex().row() - 1;
+        if( newrow == -1 ) 
+        {
+            newrow = model->rowCount()-1;
+        }
+        idx = model->index( newrow, 0 );
+    }
+    view->selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect );
+    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent );
 }
 
 DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
