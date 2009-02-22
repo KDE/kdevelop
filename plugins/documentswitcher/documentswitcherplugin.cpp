@@ -104,6 +104,8 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
+    if( !view )
+        return;
     kDebug() << "switching to idx";
     int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
