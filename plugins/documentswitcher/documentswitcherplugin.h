@@ -33,6 +33,9 @@ namespace Sublime
 class QListView;
 class QModelIndex;
 class QStringListModel;
+class QEvent;
+
+class KAction;
 
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
@@ -51,11 +54,16 @@ private slots:
     void removeMainWindow(QObject*);
     void walkForward();
     void walkBackward();
+protected:
+    bool eventFilter( QObject*, QEvent* );
 private:
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
+    void enableActions( Sublime::MainWindow* mw );
     QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
     QListView* view;
     QStringListModel* model;
+    KAction* forwardAction;
+    KAction* backwardAction;
 };
 
 #endif
