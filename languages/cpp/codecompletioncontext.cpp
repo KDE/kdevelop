@@ -321,7 +321,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if(m_expression == "else")
     m_expression = QString();
   
-  if(m_expression == "const") {
+  if(m_expression == "const" || m_expression == "typedef") {
     //The cursor is behind a "const .."
     m_onlyShowTypes = true;
     m_expression = QString();
@@ -760,15 +760,20 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   return ret;
 }
 
-KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type) const {
+KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const {
   if(m_pointerConversionsBeforeMatching == 0)
     return type;
   AbstractType::Ptr t = type.type();
   if(!t)
     return KDevelop::IndexedType();
+
+  //Can only take addresses of lvalues
+  if(m_pointerConversionsBeforeMatching > 1 || (m_pointerConversionsBeforeMatching && !fromLValue))
+    return IndexedType();
   
   if(m_pointerConversionsBeforeMatching > 0) {
     for(int a = 0; a < m_pointerConversionsBeforeMatching; ++a) {
+      
       t = TypeUtils::increasePointerDepth(t);
       if(!t)
         return IndexedType();
@@ -1167,7 +1172,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 #endif
       }
 
-      if(m_duContext->type() == DUContext::Class) {
+      if(m_duContext->type() == DUContext::Class && !parentContext()) {
         //Show override helper items
         QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
         foreach(const DUContext::Import &import, m_duContext->importedParentContexts())
@@ -1178,7 +1183,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         }
       }
 
-      if(m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global) {
+      if(!parentContext() && (m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
         QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
         if(!helpers.isEmpty()) {
           eventuallyAddGroup(i18n("Implement Function"), 0, helpers);

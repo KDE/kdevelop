@@ -169,7 +169,7 @@ namespace Cpp {
 
       int matchPosition() const;
 
-      KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type) const;
+      KDevelop::IndexedType applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const;
       
       QString followingText() const;
       

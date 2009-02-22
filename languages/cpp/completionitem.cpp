@@ -323,7 +323,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         bool fromLValue = (bool)ownType.cast<ReferenceType>() || (!dynamic_cast<AbstractFunctionDeclaration*>(dec) && dec->kind() == Declaration::Instance);
         
         ///@todo fill the lvalue-ness correctly
-        int q = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType->indexed()), type, fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
+        int q = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType->indexed(), fromLValue), type, fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
         if(q > bestQuality)
           bestQuality = q;
         }
@@ -681,7 +681,7 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
 
           ///@todo Think about lvalue-ness
           foreach(IndexedType ownType, typeForArgumentMatching()) {
-            int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType), type, false )  * 10 ) / Cpp::MaximumConversionResult;
+            int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType, false), type, false )  * 10 ) / Cpp::MaximumConversionResult;
             if(quality > bestQuality)
               bestQuality = quality;
           }
