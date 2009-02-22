@@ -19,6 +19,9 @@
  ***************************************************************************/
 #include "documentswitcherplugin.h"
 
+#include <QListView>
+#include <QStringListModel>
+
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -39,7 +42,7 @@ K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevd
 
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
-    :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent)
+    :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
 {
     setXMLFile("kdevdocumentswitcher.rc");
     connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
@@ -63,6 +66,30 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
 
 void DocumentSwitcherPlugin::walkForward()
 {
+    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
+    {
+        kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
+        return;
+    }
+    if( !view )
+    {
+        view = new QListView( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+        view->setSelectionBehavior( QAbstractItemView::SelectRows );
+        view->setSelectionMode( QAbstractItemView::SingleSelection );
+        view->setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
+        connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
+        connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
+        
+        QStringList views;
+        foreach( Sublime::View* v, documentLists[window][window->area()] )
+        {
+            views << v->document()->title();
+        }
+        view->setModel( new QStringListModel( views, view ) );
+        view->move( QCursor::pos() );
+        view->show();
+    }
 }
 
 void DocumentSwitcherPlugin::walkBackward()
@@ -71,6 +98,22 @@ void DocumentSwitcherPlugin::walkBackward()
 
 DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 {
+}
+
+void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
+{
+    kDebug() << "switching to idx";
+    view->hide();
+    view->deleteLater();
+    view = 0;
+}
+
+void DocumentSwitcherPlugin::switchToView()
+{
+    kDebug() << "Switching to view";
+    view->hide();
+    view->deleteLater();
+    view = 0;
 }
 
 void DocumentSwitcherPlugin::unload()

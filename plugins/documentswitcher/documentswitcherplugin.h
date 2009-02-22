@@ -30,7 +30,8 @@ namespace Sublime
     class Area;
 }
 
-class QSignalMapper;
+class QListView;
+class QModelIndex;
 
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
@@ -48,9 +49,12 @@ private slots:
     void removeMainWindow(QObject*);
     void walkForward();
     void walkBackward();
+    void switchToView();
+    void switchToView( const QModelIndex& );
 private:
     void storeAreaViewList( Sublime::MainWindow* mainwindow, Sublime::Area* area );
     QMap<Sublime::MainWindow*, QMap<Sublime::Area*, QList<Sublime::View*> > > documentLists;
+    QListView* view;
 };
 
 #endif
