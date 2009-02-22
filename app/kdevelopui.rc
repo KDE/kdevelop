@@ -2,7 +2,7 @@
 <kpartgui version="68" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
-    <text context="@title:menu">File</text>
+    <text context="@title:menu">&amp;File</text>
     <DefineGroup append="new_merge" name="new_merge"/>
     <DefineGroup append="open_merge" name="open_merge"/>
     <DefineGroup append="save_merge" name="save_merge"/>
@@ -13,7 +13,7 @@
   </Menu>
 
   <Menu name="edit">
-    <text context="@title:menu">Edit</text>
+    <text context="@title:menu">&amp;Edit</text>
     <DefineGroup append="edit_undo_merge" name="edit_undo_merge"/>
     <DefineGroup append="edit_paste_merge" name="edit_paste_merge"/>
     <DefineGroup append="edit_select_merge" name="edit_select_merge"/>
@@ -30,7 +30,7 @@
 -->
 
   <Menu name="view">
-    <text context="@title:menu">View</text>
+    <text context="@title:menu">&amp;View</text>
     <Action name="add_toolview"/>
     <Action name="remove_view"/>
     <Action name="user_interface"/>
@@ -49,7 +49,7 @@
   </Menu>
 
   <Menu name="project">
-    <text context="@title:menu">Project</text>
+    <text context="@title:menu">&amp;Project</text>
     <DefineGroup name="project_new"/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
@@ -65,7 +65,7 @@
   </Menu>
 
   <Menu name="run">
-    <text name="@title:menu">Run</text>
+    <text name="@title:menu">&amp;Run</text>
 
     <Action name="run_default_target" />
     <Action name="run_execute" /> <!-- ### remove me -->
@@ -109,7 +109,7 @@
   </Menu>
 
   <Menu name="window">
-    <text context="@title:menu">Window</text>
+    <text context="@title:menu">&amp;Window</text>
     <Action name="new_window"/>
     <Separator/>
     <Action name="view_next_window"/>
