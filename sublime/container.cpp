@@ -59,15 +59,9 @@ Container::Container(QWidget *parent)
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
-//TODO: Remove when KDevPlatform depends on KDE 4.3 or later
-#if QT_VERSION < 0x040500
     setHoverCloseButton(true);
     setCloseButtonEnabled(true);
     setTabReorderingEnabled(true);
-#else
-    setMovable(true);
-    setTabsClosable(true);
-#endif
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
