@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef __SNIPPETPART_H__
-#define __SNIPPETPART_H__
+#ifndef __SNIPPETPLUGIN_H__
+#define __SNIPPETPLUGIN_H__
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>

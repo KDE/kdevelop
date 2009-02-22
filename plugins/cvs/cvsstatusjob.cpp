@@ -82,7 +82,7 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
 
     QString currentDir;
 
-    QStringList lines = jobOutput.split("\n");
+    QStringList lines = jobOutput.split('\n');
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
 

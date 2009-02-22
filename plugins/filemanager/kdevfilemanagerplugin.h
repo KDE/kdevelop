@@ -16,8 +16,8 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
-#ifndef KDEVFILEMANAGERPART_H
-#define KDEVFILEMANAGERPART_H
+#ifndef KDEVFILEMANAGERPLUGIN_H
+#define KDEVFILEMANAGERPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>

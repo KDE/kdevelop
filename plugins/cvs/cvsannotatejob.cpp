@@ -52,7 +52,7 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
     // Annotations for main.cpp
     static QRegExp reFile("Annotations for\\s(.*)");
 
-    QStringList lines = jobOutput.split("\n");
+    QStringList lines = jobOutput.split('\n');
 
     QString filename;
     for (int i=0, linenumber=0; i<lines.count(); ++i) {

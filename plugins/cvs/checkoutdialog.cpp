@@ -59,7 +59,7 @@ void CheckoutDialog::jobFinished(KJob * job)
 
     static QRegExp re_file("^.\\s(.*)");
     bool error = false;
-    QStringList lines = cvsjob->output().split("\n");
+    QStringList lines = cvsjob->output().split('\n');
     foreach(const QString &line, lines) {
         if (line.isEmpty()) {
             // ignore empty lines

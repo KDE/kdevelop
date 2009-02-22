@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSBROWSERPART_H
-#define CLASSBROWSERPART_H
+#ifndef PROBLEMREPORTERPLUGIN_H
+#define PROBLEMREPORTERPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -57,6 +57,6 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
 };
 
-#endif // CLASSBROWSERPART_H
+#endif // PROBLEMREPORTERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

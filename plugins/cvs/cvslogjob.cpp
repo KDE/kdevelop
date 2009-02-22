@@ -43,7 +43,7 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
 
 
-    QStringList lines = jobOutput.split("\n");
+    QStringList lines = jobOutput.split('\n');
 
     KDevelop::VcsEvent item;
     bool firstSeperatorReached = false;

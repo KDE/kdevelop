@@ -9,8 +9,8 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-#ifndef _APPWIZARDPART_H_
-#define _APPWIZARDPART_H_
+#ifndef _APPWIZARDPLUGIN_H_
+#define _APPWIZARDPLUGIN_H_
 
 #include <interfaces/iplugin.h>
 

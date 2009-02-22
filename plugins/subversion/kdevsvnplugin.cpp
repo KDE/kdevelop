@@ -44,7 +44,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
-#include <vcs/vcsrevision.h>
 #include <vcs/vcsmapping.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsannotation.h>

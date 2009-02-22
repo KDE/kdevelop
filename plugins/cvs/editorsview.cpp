@@ -88,7 +88,7 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
 
     QString lastfilename;
 
-    QStringList lines = jobOutput.split("\n");
+    QStringList lines = jobOutput.split('\n');
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];

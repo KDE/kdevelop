@@ -134,7 +134,7 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
                 if (number > 1) // of course this is only possible if our revision is not the first on the branch
                     number--;
 
-                str = QString("-r") + base + "." + QString::number(number);
+                str = QString("-r") + base + '.' + QString::number(number);
                 kDebug(9500) << "Converted revision "<<orig<<" to previous revision "<<str;
             }
             break;
@@ -303,6 +303,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
 CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
                       bool recursiv, bool binary)
 {
+    // FIXME recursiv is not implemented yet
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";

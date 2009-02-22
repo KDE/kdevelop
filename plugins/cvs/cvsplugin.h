@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef CVS_PART_H
-#define CVS_PART_H
+#ifndef CVSPLUGIN_H
+#define CVSPLUGIN_H
 
 #include <KUrl>
 #include <KJob>

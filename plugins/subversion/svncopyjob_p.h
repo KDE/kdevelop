@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SVNCOPYJOP_P_H
-#define SVNCOPYJOP_P_H
+#ifndef SVNCOPYJOB_P_H
+#define SVNCOPYJOB_P_H
 
 #include "svninternaljobbase.h"
 
