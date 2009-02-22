@@ -1,3 +1,4 @@
+project(cpp)
 include(CppBuildConfig.cmake)
 
 include_directories(

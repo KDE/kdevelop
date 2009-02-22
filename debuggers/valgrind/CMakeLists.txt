@@ -1,4 +1,4 @@
-
+project(valgrind)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9002 )
 
 ########### next target ###############

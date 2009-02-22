@@ -2,8 +2,8 @@ remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/languages/cpp
-    ${CMAKE_BINARY_DIR}/languages/cpp)
+    ${cpp_SOURCE_DIR}
+    ${cpp_BINARY_DIR})
 
 add_subdirectory(tests)
 

@@ -1,8 +1,8 @@
-
+project(cmakebuilder)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
 include_directories(
-    ${CMAKE_SOURCE_DIR}/projectbuilders/makebuilder
-    ${CMAKE_SOURCE_DIR}/projectmanagers/cmake
+    ${makebuilder_SOURCE_DIR}
+    ${kdevelop_SOURCE_DIR}/projectmanagers/cmake
     )
 
 

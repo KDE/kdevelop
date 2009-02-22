@@ -1,4 +1,4 @@
-
+project(documentview)
 #add_subdirectory(settings)
 
 ########### next target ###############

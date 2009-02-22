@@ -1,8 +1,8 @@
-
+project(cmakemanager)
 include_directories(
     
     ${CMAKE_CURRENT_SOURCE_DIR}/parser
-    ${CMAKE_SOURCE_DIR}/projectbuilders/cmakebuilder/
+    ${cmakebuilder_SOURCE_DIR}
 )
 add_subdirectory(tests)
 

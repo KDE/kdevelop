@@ -4,7 +4,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 find_package(KDevelop-PG-Qt QUIET)
 include_directories(
-    ${CMAKE_SOURCE_DIR}/projectbuilders/qmakebuilder
+    ${qmakebuilder_SOURCE_DIR}
     ${QMakeManager_SOURCE_DIR}
     ${QMakeManager_BINARY_DIR}
 )

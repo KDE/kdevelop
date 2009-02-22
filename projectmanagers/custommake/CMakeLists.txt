@@ -1,9 +1,9 @@
-
+project(custommakemanager)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9025 )
 # add_subdirectory(tests)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/projectbuilders/makebuilder
+    ${makebuilder_SOURCE_DIR}
     )
 
 

@@ -1,7 +1,8 @@
+project(gdb)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
-include_directories(${CMAKE_SOURCE_DIR}/languages/cpp)
+include_directories(${cpp_SOURCE_DIR})
 #add_subdirectory(tests)
 
 ########### next target ###############
@@ -68,7 +69,7 @@ set(kdevgdb_PART_SRCS
     breakpointwidget.cpp
 #    modeltest.cpp
     tooltipwidget.cpp
-    ../../languages/cpp/stringhelpers.cpp
+    ${cpp_SOURCE_DIR}/stringhelpers.cpp
 )
 
 set(kdevgdb_PART_UI

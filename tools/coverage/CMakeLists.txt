@@ -1,3 +1,4 @@
+project(coverage)
 add_subdirectory(tests)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )

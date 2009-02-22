@@ -1,4 +1,4 @@
-
+project(qtdesigner)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9038 )
 
 ########### next target ###############
