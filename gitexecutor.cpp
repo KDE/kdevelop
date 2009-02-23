@@ -346,7 +346,7 @@ QList<QVariant> GitExecutor::getOtherFiles(const QString &directory)
     foreach(const QString &file, otherFiles)
     {
         VcsStatusInfo status;
-        status.setUrl(directory + file);
+        status.setUrl(stripPathToDir(directory) + '/' + file);
         status.setState(VcsStatusInfo::ItemUnknown);
         others.append(qVariantFromValue<VcsStatusInfo>(status));
     }
@@ -372,7 +372,7 @@ QList<QVariant> GitExecutor::getModifiedFiles(const QString &directory)
     {
         QChar stCh = line[97];
 
-        KUrl file(directory + line.section('\t', 1).trimmed());
+        KUrl file(stripPathToDir(directory) + '/' + line.section('\t', 1).section('/', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
@@ -426,7 +426,7 @@ QList<QVariant> GitExecutor::getCachedFiles(const QString &directory)
     {
         QChar stCh = line[97];
 
-        KUrl file(directory + line.section('\t', 1).trimmed());
+        KUrl file(stripPathToDir(directory) + '/' + line.section('\t', 1).section('/', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
