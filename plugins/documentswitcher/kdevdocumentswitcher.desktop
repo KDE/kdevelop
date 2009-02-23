@@ -2,11 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=A most-recently-used document switcher for KDevPlatform.
-Comment[x-test]=xxA most-recently-used document switcher for KDevPlatform.xx
 Name=KDevDocumentSwitcher
-Name[x-test]=xxKDevDocumentSwitcherxx
 GenericName=Most-Recently-Used Document Switcher
-GenericName[x-test]=xxMost-Recently-Used Document Switcherxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevdocumentswitcher
 X-KDE-PluginInfo-Name=kdevdocumentswitcher
