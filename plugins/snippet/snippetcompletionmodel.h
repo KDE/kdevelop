@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef SNIPPETCODECOMPLETIONMODEL_H
-#define SNIPPETCODECOMPLETIONMODEL_H
+#ifndef SNIPPETCOMPLETIONMODEL_H
+#define SNIPPETCOMPLETIONMODEL_H
 
 #include <ktexteditor/codecompletionmodel.h>
 
