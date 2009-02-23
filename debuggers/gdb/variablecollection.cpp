@@ -38,6 +38,7 @@
 #include "stringhelpers.h"
 
 #include <interfaces/icore.h>
+#include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include "sublime/controller.h"
@@ -55,6 +56,7 @@
 
 //#include "modeltest.h"
 
+using namespace KDevelop;
 using namespace GDBDebugger;
 
 Variable::Variable(TreeModel* model, TreeItem* parent, 
@@ -337,12 +339,10 @@ VariableCollection::VariableCollection(GDBController* parent)
 
     //new ModelTest(this);
 
-    foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
-        slotPartAdded(p);
-    connect(KDevelop::ICore::self()->partController(),
-            SIGNAL(partAdded(KParts::Part*)),
-            this,
-            SLOT(slotPartAdded(KParts::Part*)));
+    connect (ICore::self()->documentController(), 
+	     SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), 
+	     this, 
+	     SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
 }
 
 
@@ -357,15 +357,18 @@ VariableCollection::~ VariableCollection()
 {
 }
 
-void VariableCollection::slotPartAdded(KParts::Part* part)
+void VariableCollection::textDocumentCreated(KDevelop::IDocument* doc)
 {
-    if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part))
-        foreach (KTextEditor::View* v, doc->views())
-            slotViewAdded(v);
-    // FIXME: connect to new view signal
+  connect( doc->textDocument(), 
+	   SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), 
+	   this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
+
+  foreach( KTextEditor::View* view, doc->textDocument()->views() )
+    viewCreated( doc->textDocument(), view );
 }
 
-void VariableCollection::slotViewAdded(KTextEditor::View* view)
+void VariableCollection::viewCreated(KTextEditor::Document* doc, 
+                                     KTextEditor::View* view)
 {
     using namespace KTextEditor;
     TextHintInterface *iface = dynamic_cast<TextHintInterface*>(view);

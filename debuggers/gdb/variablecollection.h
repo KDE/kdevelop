@@ -257,8 +257,9 @@ private:
 
 private slots:
     void slotEvent(event_t event);
-    void slotPartAdded(KParts::Part*);
-    void slotViewAdded(KTextEditor::View*);
+
+    void textDocumentCreated( KDevelop::IDocument*);
+    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
 private:
