@@ -47,6 +47,7 @@ public:
 public slots:
     void switchToView( const QModelIndex& );
 private slots:
+    void addView( Sublime::View* );
     void changeView( Sublime::View* );
     void addMainWindow( Sublime::MainWindow* );
     void changeArea( Sublime::Area* );

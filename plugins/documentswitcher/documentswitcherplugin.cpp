@@ -44,14 +44,13 @@ K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevd
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
 //TODO: Better placement, at cursor position might not be ideal, maybe on the right side of the central widget
-//BUG: First document after start is not in list, seems to be caused by setting the stringlist
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
     :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
 {
     setXMLFile("kdevdocumentswitcher.rc");
     connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
-    addMainWindow( dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
+    addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
     forwardAction->setText( i18n( "Next View" ) );
@@ -82,7 +81,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
 
 void DocumentSwitcherPlugin::walkForward()
 {
-    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
     {
         kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
@@ -116,7 +115,7 @@ void DocumentSwitcherPlugin::walkForward()
 
 void DocumentSwitcherPlugin::walkBackward()
 {
-    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
     {
         kWarning() << "This should not happen, tried to walk through document list of an unknown mainwindow!";
@@ -157,7 +156,7 @@ void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
     int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
     
-    Sublime::MainWindow* window = dynamic_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
     {
         const QList<Sublime::View*> l = documentLists[window][window->area()];
@@ -190,11 +189,13 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
 
 void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow ) 
 {
-    if( !mainwindow ) 
+    if( !mainwindow )  {
         return;
+    }
     storeAreaViewList( mainwindow, mainwindow->area() );
     connect( mainwindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(changeArea(Sublime::Area*)) );
     connect( mainwindow, SIGNAL(activeViewChanged(Sublime::View*)), SLOT(changeView(Sublime::View*)) );
+    connect( mainwindow, SIGNAL(viewAdded(Sublime::View*)), SLOT(addView(Sublime::View*)) );
     connect( mainwindow, SIGNAL(aboutToRemoveView(Sublime::View*)), SLOT(removeView(Sublime::View*)) );
     connect( mainwindow, SIGNAL(destroyed(QObject*)), SLOT(removeMainWindow(QObject*)));
     kDebug() << "installing event filer on object:";
@@ -209,6 +210,14 @@ bool DocumentSwitcherPlugin::eventFilter( QObject* watched, QEvent* ev )
         enableActions(mw);
     }
     return QObject::eventFilter( watched, ev );
+}
+
+void DocumentSwitcherPlugin::addView( Sublime::View* view ) 
+{
+    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
+    if( !mainwindow )
+        return;
+    documentLists[mainwindow][mainwindow->area()].append( view );
 }
 
 void DocumentSwitcherPlugin::removeMainWindow( QObject* obj ) 
