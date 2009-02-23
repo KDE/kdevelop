@@ -94,6 +94,14 @@ bool IDVCSexecutor::addFileList(DVCSjob* job, const KUrl::List& urls)
     return true;
 }
 
+QString IDVCSexecutor::stripPathToDir(const QString &path)
+{
+    QFileInfo repoInfo = QFileInfo(path);
+    if (repoInfo.isFile())
+        return repoInfo.path();
+    else
+        return path;
+}
 
 ///TODO: imlement in HG and Bazaar!
 
