@@ -167,7 +167,7 @@ void MainWindowPrivate::setupActions()
     action = KStandardAction::preferences( this, SLOT( settingsDialog() ),
                                       actionCollection());
     action->setToolTip( text );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( text ).arg(
+    action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
@@ -179,18 +179,18 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
-    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session" ) );
+    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session</p>" ) );
 
     
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
     action->setToolTip( i18n("Configure Notifications") );
-    action->setWhatsThis( i18n( "<b>Configure Notification</b><p>Shows a dialog that lets you configure notifications" ) );
+    action->setWhatsThis( i18n( "<b>Configure Notification</b><p>Shows a dialog that lets you configure notifications</p>" ) );
 
     action = actionCollection()->addAction( "about_platform", this, SLOT( showAboutPlatform() ) );
     action->setText( i18n("About KDevelop Platform") );
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
-    action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform" ) );
+    action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform</p>" ) );
 
 
 //     KToolBarPopupAction *popupAction;
@@ -202,7 +202,7 @@ void MainWindowPrivate::setupActions()
 
 //     popupAction->setShortcut( Qt::Key_Escape );
 //     popupAction->setToolTip( i18n( "Stop" ) );
-//     popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes." ) );
+//     popupAction->setWhatsThis( i18n( "<b>Stop</b><p>Stops all running processes.</p>" ) );
 //     popupAction->setEnabled( false );
 //     connect( popupAction, SIGNAL( triggered() ),
 //              this, SLOT( stopButtonPressed() ) );
@@ -215,7 +215,7 @@ void MainWindowPrivate::setupActions()
                  this, SLOT( showMenuBar() ),
                  actionCollection());
     action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2<p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
+    action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
 
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );

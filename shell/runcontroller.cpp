@@ -177,21 +177,21 @@ void RunController::setupActions()
     action = new KAction( KIcon("system-run"), i18n("Execute Program"), this);
     action->setShortcut(Qt::SHIFT + Qt::Key_F9);
     action->setToolTip(i18n("Execute program"));
-    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab."));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab.</p>"));
     ac->addAction("run_execute", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
     action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
     action->setShortcut(Qt::Key_Escape);
     action->setToolTip(i18n("Stop all currently running jobs"));
-    action->setWhatsThis(i18n("<b>Stop Jobs</b><p>Requests that all running jobs are stopped."));
+    action->setWhatsThis(i18n("<b>Stop Jobs</b><p>Requests that all running jobs are stopped.</p>"));
     action->setEnabled(false);
     ac->addAction("run_stop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
 
     d->currentTargetAction = new KSelectAction( i18n("Current Run Target"), this);
     d->currentTargetAction->setToolTip(i18n("Current Run Target"));
-    d->currentTargetAction->setWhatsThis(i18n("<b>Run Target</b><p>Select which target to run when run is invoked."));
+    d->currentTargetAction->setWhatsThis(i18n("<b>Run Target</b><p>Select which target to run when run is invoked.</p>"));
     ac->addAction("run_default_target", d->currentTargetAction);
 
     foreach (IProject* project, Core::self()->projectController()->projects()) {

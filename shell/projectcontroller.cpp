@@ -325,7 +325,7 @@ void ProjectController::setupActions()
     action->setText( i18n( "Close All Projects" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllProjects() ) );
     action->setToolTip( i18n( "Close all currently open projects" ) );
-    action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects." ) );
+    action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects.</p>" ) );
     action->setEnabled( false );
     action->setIcon(KIcon("window-close"));
 

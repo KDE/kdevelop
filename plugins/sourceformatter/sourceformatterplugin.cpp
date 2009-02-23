@@ -72,13 +72,13 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
 	m_formatTextAction->setWhatsThis(i18n("<b>Reformat source</b><p>Source reformatting "
-	        "functionality using <b>astyle</b> library. "));
+	        "functionality using <b>astyle</b> library.</p>"));
 	connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
 
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
 	m_formatFilesAction->setText(i18n("Format files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-	m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library. "));
+	m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
 	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatItem()));
 
 	m_formatTextAction->setEnabled(false);

@@ -276,14 +276,14 @@ IdealDockWidget::IdealDockWidget(QWidget *parent)
 	m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
 				    "will be automatically hidden when you click outside it. "
 				    "A locked tool will remain visible until you explicitly "
-				    "hide it, or switch to a different tool."));
+				    "hide it, or switch to a different tool.</p>"));
 	connect(m_anchor, SIGNAL(toggled(bool)), SIGNAL(anchor(bool)));
 
 	m_close = closeButton;
 	m_close->setToolTip(i18n("Remove the tool"));
 	m_close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
 				   "You can add the tool again by using the "
-				   "<tt>View->Add Tool View</tt> command."));
+				   "<tt>View->Add Tool View</tt> command.</p>"));
 	connect(m_close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     }
 }
