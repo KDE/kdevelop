@@ -27,6 +27,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
+#include <kdeversion.h>
 #include <kacceleratormanager.h>
 
 #include "view.h"
@@ -59,9 +60,14 @@ Container::Container(QWidget *parent)
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
+#if KDE_VERSION < KDE_MAKE_VERSION(4,2,60)
     setHoverCloseButton(true);
     setCloseButtonEnabled(true);
     setTabReorderingEnabled(true);
+#else
+    setTabsClosable(true);
+    setMovable(true);
+#endif
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
