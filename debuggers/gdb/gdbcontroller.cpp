@@ -1134,6 +1134,11 @@ void GDBController::gdbReady()
 
 void GDBController::gdbExited()
 {
+    /* Technically speaking, GDB is likely not to kill the application, and
+       we should have some backup mechanism to make sure the application is
+       killed by KDevelop.  But even if application stays around, we no longer
+       can control it in any way, so mark it as exited.  */
+    setStateOn(s_appNotStarted);
     setStateOn(s_dbgNotStarted);
     setStateOff(s_shuttingDown);
 }
