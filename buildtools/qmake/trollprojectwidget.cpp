@@ -930,8 +930,8 @@ void TrollProjectWidget::addSubprojectToItem( QMakeScopeItem* spitem, const QStr
 //             newitem->moveItem( lastitem );
     }else
     {
-        KMessageBox::error(this, i18n("Couldn't create subproject. This means that either the project you wanted"
-                                      " to add a subproject isn't parsed correctly or it's not a"
+        KMessageBox::error(this, i18n("Could not create subproject. This means that either the project you wanted"
+                                      " to add a subproject to is not parsed correctly, or it is not a"
                                       " subdirs-project."), i18n("Subproject creation failed") );
     }
     spitem->scope->saveToFile();
@@ -953,8 +953,8 @@ void TrollProjectWidget::slotRemoveSubproject( QMakeScopeItem *spitem )
             delsubdir = true;
         if( !spitem->scope->deleteSubProject( m_shownSubproject->scope->getNum(), delsubdir ) )
         {
-            KMessageBox::error(this, i18n("Couldn't delete subproject.\nThis is an internal error, please write a"
-                                          " bugreport to bugs.kde.org and include the output of kdevelop when run"
+            KMessageBox::error(this, i18n("Could not delete subproject.\nThis is an internal error, please write a"
+                                          " bug report to bugs.kde.org and include the output of kdevelop when run"
                                           "from a shell."),i18n("Subproject Deletion failed"));
             return;
         }
@@ -1017,7 +1017,7 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
         idQmake = popup.insertItem( SmallIcon( "qmakerun" ), i18n( "Run qmake" ) );
         popup.setWhatsThis( idQmake, i18n( "<b>Run qmake</b><p>Runs <b>qmake</b> from the selected subproject directory. This creates or regenerates Makefile." ) );
         idQmakeRecursive = popup.insertItem( SmallIcon( "qmakerun" ), i18n( "Run qmake recursively" ) );
-        popup.setWhatsThis( idQmakeRecursive, i18n( "<b>Run qmake recursively</b><p>Runs <b>qmake</b> from the selected"
+        popup.setWhatsThis( idQmakeRecursive, i18n( "<b>Run qmake recursively</b><p>Runs <b>qmake</b> from the selected "
                             "subproject directory and recurses into all subproject directories. "
                             "This creates or regenerates Makefile." ) );
 
@@ -1049,12 +1049,12 @@ void TrollProjectWidget::slotOverviewContextMenu( KListView *, QListViewItem *it
         popup.insertSeparator();
         idAddSubproject = popup.insertItem( SmallIcon( "folder_new" ), i18n( "Add Subproject..." ) );
         popup.setWhatsThis( idAddSubproject, i18n( "<b>Add subproject</b><p>Creates a <i>new</i> or adds an <i>existing</i> subproject to the currently selected scope. "
-                            "This action is allowed only if a type of the subproject is 'subdirectories'. The type of the subproject can be "
-                            "defined in <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
+                            "This action is allowed only if the type of the subproject is 'subdirectories'. The type of the subproject can be "
+                            "defined in the <b>Subproject Settings</b> dialog (open it from the subproject context menu)." ) );
         if ( spitem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 )
             popup.setItemEnabled( idAddSubproject, false );
         idDisableSubproject = popup.insertItem( SmallIcon( "remove_subdir" ), i18n( "Disable Subproject..." ) );
-        popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Disable subproject</b><p>Disables the currently selected subproject when this scope is active. Does not delete the directory from disk. Deleted subproject can be later added by calling 'Add Subproject' action." ) );
+        popup.setWhatsThis( idRemoveSubproject, i18n( "<b>Disable subproject</b><p>Disables the currently selected subproject when this scope is active. Does not delete the directory from disk. The deleted subproject can be later added by using the 'Add Subproject' action." ) );
         if( spitem->scope->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 && spitem->scope->parent()->variableValues( "TEMPLATE" ).findIndex( "subdirs" ) == -1 )
             popup.setItemEnabled( idDisableSubproject, false );
         popup.insertSeparator();
@@ -1188,7 +1188,7 @@ void TrollProjectWidget::addFiles( QStringList &files, bool relativeToProjectRoo
             }
             else
             {
-                KMessageBox::error( this, i18n("You didn't select a subproject to add the file to or selected a subproject that has subdirs."), i18n( "File adding aborted" ) );
+                KMessageBox::error( this, i18n("You did not select a subproject to add the file to, or select a subproject that has subdirs."), i18n( "File adding aborted" ) );
             }
         }
 
@@ -1794,7 +1794,7 @@ void TrollProjectWidget::slotDetailsContextMenu( KListView *, QListViewItem *ite
         if ( !( gitem->groupType == GroupItem::InstallObject ) )
         {
             idRemoveFile = popup.insertItem( SmallIconSet( "editdelete" ), i18n( "Remove File" ) );
-            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. For sources also removes the subclassing information." ) );
+            popup.setWhatsThis( idRemoveFile, i18n( "<b>Remove file</b><p>Removes file from a current group. For sources, this also removes the subclassing information." ) );
             idFileProperties = popup.insertItem( SmallIconSet( "configure_file" ), i18n( "Exclude File" ) );
             popup.setWhatsThis( idFileProperties, i18n( "<b>Exclude File</b><p>Excludes the file from this Scope. Does not touch subclassing information" ) );
         }
@@ -2273,7 +2273,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                 case Scope::FunctionScope:
                     if( !pitem->scope->deleteFunctionScope( spitem->scope->getNum() ) )
                     {
-                        KMessageBox::error(this, i18n("Couldn't delete Function Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Function Scope Deletion failed"));
+                        KMessageBox::error(this, i18n("Could not delete Function Scope.\nThis is an internal error, please write a bug report to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Function Scope Deletion failed"));
                         return;
                     }
                     //                     pitem->scopes.remove( spitem );
@@ -2281,7 +2281,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                 case Scope::IncludeScope:
                     if( !pitem->scope->deleteIncludeScope( spitem->scope->getNum() ) )
                     {
-                        KMessageBox::error(this, i18n("Couldn't delete Include Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Include Scope Deletion failed"));
+                        KMessageBox::error(this, i18n("Could not delete Include Scope.\nThis is an internal error, please write a bug report to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Include Scope Deletion failed"));
                         return;
                     }
                     //                     pitem->scopes.remove( spitem );
@@ -2293,7 +2293,7 @@ void TrollProjectWidget::slotRemoveScope( QMakeScopeItem * spitem )
                 case Scope::SimpleScope:
                     if( !pitem->scope->deleteSimpleScope( spitem->scope->getNum() ) )
                     {
-                        KMessageBox::error(this, i18n("Couldn't delete Scope.\nThis is an internal error, please write a bugreport to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Scope Deletion failed"));
+                        KMessageBox::error(this, i18n("Could not delete Scope.\nThis is an internal error, please write a bug report to bugs.kde.org and include the output of kdevelop when run from a shell."),i18n("Scope Deletion failed"));
                         return;
                     }
                     //                     pitem->scopes.remove( spitem );
@@ -2459,7 +2459,7 @@ void TrollProjectWidget::slotDisableSubproject( QMakeScopeItem* spitem )
 void TrollProjectWidget::slotProjectDirty(const QString& path)
 {
     kdDebug(9024) << "File is dirty:" << path << " using method " << endl;
-    if( KMessageBox::warningYesNo(this, i18n("The project file \"%1\" has changed on disk\n(Or you have \"%2\" opened in the editor, which also triggers a reload when you change something in the QMake Manager).\n\nDo you want to reload the it?").arg(path).arg(path), i18n("Project File Changed"), i18n("Reload"), i18n("Do Not Reload"), "trollproject_reload_project_file" ) != KMessageBox::No )
+    if( KMessageBox::warningYesNo(this, i18n("The project file \"%1\" has changed on disk\n(Or you have \"%2\" opened in the editor, which also triggers a reload when you change something in the QMake Manager).\n\nDo you want to reload it?").arg(path).arg(path), i18n("Project File Changed"), i18n("Reload"), i18n("Do Not Reload"), "trollproject_reload_project_file" ) != KMessageBox::No )
     {
         m_part->dirWatch()->stopScan();
         QListViewItemIterator it(m_rootSubproject);

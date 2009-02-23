@@ -478,7 +478,7 @@ Warnings2Tab::Warnings2Tab( GccOptionsPlugin::Type type, QWidget *parent, const 
 	new FlagListItem( wrestBox,
 	                  "-Wdisabled-optimization", i18n( "<qt>Warn if a requested optimization pass is disabled</qt>" ) );
 	new FlagListItem( wrestBox,
-	                  "-Wno-div-by-zero", i18n( "<qt>Don't warn if there is a division by zero</qt>" ) );
+	                  "-Wno-div-by-zero", i18n( "<qt>Do not warn if there is a division by zero</qt>" ) );
 
 	if ( type == GccOptionsPlugin::GCC )
 	{

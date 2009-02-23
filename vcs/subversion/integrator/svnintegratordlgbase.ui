@@ -84,14 +84,14 @@ to perform any subversion operations.</string>
 repository and checks it out as a working copy.
 
 NOTE: The repository has to exist.
-eg. been created with 'svnadmin'</string>
+e.g. has been created with 'svnadmin'</string>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Creates project, imports it into the subversion
 repository and checks it out as a working copy.
 
 NOTE: The repository has to exist.
-eg. been created with 'svnadmin'</string>
+e.g. has been created with 'svnadmin'</string>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -132,7 +132,7 @@ file:///home/user/subversion/mynewproject</string>
                             <property name="toolTip" stdset="0">
                                 <string>Subversion repository location.
 The repository has to exist -
-eg. been created with 'svnadmin'</string>
+e.g. has been created with 'svnadmin'</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>Subversion repository location. This should include the subdirectory for the project in the repository. The project subdirectory and further subdirectories will be created. 

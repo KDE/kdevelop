@@ -149,10 +149,10 @@
                             <cstring>configargs_edit</cstring>
                         </property>
                         <property name="toolTip" stdset="0">
-                            <string>Options to pass to configure. eg. --prefix=&lt;install dir&gt;</string>
+                            <string>Options to pass to configure, e.g. --prefix=&lt;install dir&gt;</string>
                         </property>
                         <property name="whatsThis" stdset="0">
-                            <string>Options to pass to configure. eg. --prefix=&lt;install dir&gt;</string>
+                            <string>Options to pass to configure, e.g. --prefix=&lt;install dir&gt;</string>
                         </property>
                     </widget>
                     <widget class="QLabel" row="3" column="0" rowspan="1" colspan="5">

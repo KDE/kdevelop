@@ -144,7 +144,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           this, SLOT(slotBuildAndExecuteProject()),
                           actionCollection(), "build_execute_project" );
     action->setToolTip(i18n("Execute main program"));
-    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently selected subproject if its an application or the program specified in project settings, <b>Run Options</b> tab."));
+    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently selected subproject if it is an application or the program specified in project settings, <b>Run Options</b> tab."));
 
     action = new KAction( i18n("&Build Subproject"), "make_kdevelop", Key_F7,
                           m_widget, SLOT(slotBuildTarget()),
@@ -169,7 +169,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           actionCollection(),"build_install_target"  );
     action->setToolTip(i18n("Install subproject"));
     action->setWhatsThis(i18n("<b>Install subproject</b><p>Runs <b>make install</b> from the current subproject directory. "
-                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "The current subproject is the subproject selected in the <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
@@ -178,7 +178,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           actionCollection(), "build_clean_target" );
     action->setToolTip(i18n("Clean subproject"));
     action->setWhatsThis(i18n("<b>Clean subproject</b><p>Runs <b>make clean</b> from the current subproject directory. "
-                              "Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              "The current subproject is the subproject selected in the <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
@@ -187,7 +187,7 @@ TrollProjectPart::TrollProjectPart(QObject *parent, const char *name, const QStr
                           actionCollection(), "build_distclean_target" );
     action->setToolTip(i18n("Dist-Clean subproject"));
     action->setWhatsThis(i18n("<b>Dist-Clean subproject</b><p>Runs <b>make distclean</b> from the current"
-                              " subproject directory. Current subproject is a subproject selected in <b>QMake manager</b> 'overview' window.<br>"
+                              " subproject directory. The current subproject is the subproject selected in the <b>QMake manager</b> 'overview' window.<br>"
                               "Environment variables and make arguments can be specified "
                               "in the project settings dialog, <b>Make Options</b> tab."));
 
@@ -330,7 +330,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             }else
             {
                 if( KMessageBox::warningYesNo( m_widget,
-                                               i18n("You didn't specify a Qt directory, the project might not "
+                                               i18n("You did not specify a Qt directory, and the project might not "
                                                    "work properly without one.\nDo you want to try setting a Qt"
                                                    " directory again?"),
                                                i18n("No Qt directory given"))
@@ -379,7 +379,7 @@ void TrollProjectPart::openProject(const QString &dirName, const QString &projec
             }else
             {
                 if( KMessageBox::warningYesNo( m_widget,
-                                               i18n("You didn't specify a QMake binary, the project might not "
+                                               i18n("You did not specify a QMake binary, and the project might not "
                                                    "work properly without one.\nDo you want to try setting a QMake"
                                                    " binary again?"),
                                                i18n("No QMake binary given"))

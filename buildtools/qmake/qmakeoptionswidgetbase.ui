@@ -103,7 +103,7 @@ Leave this empty to automatically search for a .pro file in the project director
                         <cstring>radioNeverSave</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Never Save (!Warning: This can lead to loss of setting changes)</string>
+                        <string>&amp;Never Save (Warning: This can lead to loss of setting changes)</string>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Never save the configuration when changing the project.</string>
@@ -123,10 +123,10 @@ Leave this empty to automatically search for a .pro file in the project director
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Ask wether the configuration should be saved when switching the project.</string>
+                        <string>Ask whether the configuration should be saved when switching the project.</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Always ask wether the configuration should be saved when selecting another subproject..</string>
+                        <string>Always ask whether the configuration should be saved when selecting another subproject.</string>
                     </property>
                 </widget>
             </vbox>

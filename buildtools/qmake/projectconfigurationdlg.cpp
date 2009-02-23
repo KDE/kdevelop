@@ -137,7 +137,7 @@ void ProjectConfigurationDlg::updateSubproject( QMakeScopeItem* _item )
             case TrollProjectWidget::Ask:
                 if ( !buttonApply->isEnabled() )
                     break;
-                if ( KMessageBox::questionYesNo( 0, i18n( "Save the current subprojects configuration?" ),
+                if ( KMessageBox::questionYesNo( 0, i18n( "Save the current subproject's configuration?" ),
                                                  i18n( "Save Configuration?" ) ) == KMessageBox::Yes )
                     apply();
                 break;

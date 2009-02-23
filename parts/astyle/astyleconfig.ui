@@ -262,15 +262,15 @@ Settings/Configure Kdevelop/Formatting.</string>
                                     <enum>WidgetWidth</enum>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Set the file extensions for what the
+                                    <string>Set the extensions of files that the
 formatter will try to reformat. Use a
-space seperated list. eg. *.cpp *.hpp
+space separated list, e.g. *.cpp *.hpp.
 Can use * on its own for any file.</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
-                                    <string>Set the file extensions for what the
+                                    <string>Set the extensions of files that the
 formatter will try to reformat. Use a
-space seperated list. eg. *.cpp *.hpp
+space separated list, e.g. *.cpp *.hpp.
 Can use * on its own for any file.</string>
                                 </property>
                             </widget>
@@ -930,7 +930,7 @@ There is no unpad operator option.</string>
                                     <string>&amp;Keep one-line statements</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Don't break lines containing multiple statements into
+                                    <string>Do not break lines containing multiple statements into
 multiple single-statement lines.</string>
                                 </property>
                             </widget>
@@ -942,7 +942,7 @@ multiple single-statement lines.</string>
                                     <string>Keep o&amp;ne-line blocks</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Don't break blocks residing completely on one line.</string>
+                                    <string>Do not break blocks residing completely on one line.</string>
                                 </property>
                             </widget>
                         </vbox>

@@ -70,7 +70,7 @@ void SvnIntegratorDlg::accept()
         s << cmd << list;
         KIO::SimpleJob* job = KIO::special( protocolUrl, parms, true );
         if( !NetAccess::synchronousRun( job, 0 ) ){
-            KMessageBox::error( this, i18n("Fail to create project directories on repository") );
+            KMessageBox::error( this, i18n("Unable to create project directories on repository") );
             return;
         }
 
@@ -81,7 +81,7 @@ void SvnIntegratorDlg::accept()
         s2 << cmd << servURL << KURL::fromPathOrURL( m_projectLocation );
         KIO::SimpleJob* importJob = KIO::special( protocolUrl, parms2, true );
         if( !NetAccess::synchronousRun( importJob, 0 ) ){
-            KMessageBox::error( this, i18n("Fail to import into repository.") );
+            KMessageBox::error( this, i18n("Unable to import into repository.") );
             return;
         }
     }
@@ -103,7 +103,7 @@ void SvnIntegratorDlg::accept()
     SimpleJob *job2 = KIO::special( protocolUrl, parms3, true );
     if( ! NetAccess::synchronousRun( job2, 0 ) ){
         // Checkout failed
-        KMessageBox::error(this, i18n("Fail to checkout from repository.") );
+        KMessageBox::error(this, i18n("Unable to checkout from repository.") );
         return;
     }
 }

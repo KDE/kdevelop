@@ -133,7 +133,7 @@ If disabled, the parser will typically only run when the file is saved.</string>
                 <string>Special &amp;Headers</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Often a macro that the C++ parser must understand in order to correctly parse a piece of code is defined somewhere in some far off header file that the parser doesn't look at. This textbox can be used to define those macros locally so that the C++ parser to understand them.</string>
+                <string>Often a macro that the C++ parser must understand in order to correctly parse a piece of code is defined somewhere in a non-standard header file that the parser does not look at. This textbox can be used to define those macros locally so that the C++ parser can understand them.</string>
             </property>
             <vbox>
                 <property name="name">

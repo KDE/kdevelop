@@ -1695,7 +1695,7 @@ svn_error_t *kio_svnProtocol::trustSSLPrompt(svn_auth_cred_ssl_server_trust_t **
 	QCString replyType;
 	QDataStream arg(params, IO_WriteOnly);
 
-	arg << i18n( "This certificate from server could not be trusted automatically. Will you trust this certificate? " );
+	arg << i18n( "The certificate from the server could not be trusted automatically.  Do you want to trust this certificate? " );
 	arg << QString::fromLocal8Bit(ci->hostname);
 	arg << QString::fromLocal8Bit(ci->fingerprint);
 	arg << QString::fromLocal8Bit(ci->valid_from) << QString::fromLocal8Bit(ci->valid_until);

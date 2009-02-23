@@ -333,7 +333,7 @@ QPopupMenu* OutputText::createPopupMenu(const QPoint&)
         i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
-            "This option will affect only future commands, it won't "
+            "This option will affect only future commands, it will not "
             "add or remove already issued commands from the view."));
 
     popup->insertItem(i18n("Copy All"),

@@ -78,7 +78,7 @@ CustomProjectPart::CustomProjectPart( QObject *parent, const char *name, const Q
 
     action = new KAction( i18n( "Re-Populate Project" ), 0, this, SLOT( populateProject() ), actionCollection(), "repopulate_project" );
     action->setToolTip( i18n( "Re-Populate Project" ) );
-    action->setWhatsThis( i18n( "<b>Re-Populate Project</b><p>Re-Populate's the project, searches through the project directory and adds all files that match one of the wildcards set in the custom manager options to the project filelist." ) );
+    action->setWhatsThis( i18n( "<b>Re-Populate Project</b><p>Re-Populates the project, searching through the project directory and adding all files that match one of the wildcards set in the custom manager options of the project filelist." ) );
 
     action = new KAction( i18n( "&Build Project" ), "make_kdevelop", Key_F8,
                           this, SLOT( slotBuild() ),
@@ -260,7 +260,7 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
                                     this, SLOT( slotChangeBlacklist() ) );
             popup->setWhatsThis( id, i18n( "<b>Remove from blacklist</b><p>"
                                            "Removes the given file or directory from the "
-                                           "blacklist if its already in it.<br>The blacklist contains files and"
+                                           "blacklist if it is already in it.<br>The blacklist contains files and"
                                            " directories that should be ignored even if they match a project filetype "
                                            "pattern" ) );
         }
@@ -318,14 +318,14 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
     {
         int id = popup->insertItem( i18n( "Add Selected File/Dir(s) to Project" ),
                                     this, SLOT( slotAddToProject() ) );
-        popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Adds selected file/dir(s) to the list of files in project. "
-                                       "Note that the files should be manually added to corresponding makefile or build.xml." ) );
+        popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Adds selected file/dir(s) to the list of files in the project. "
+                                       "Note that the files should be manually added to the corresponding makefile or build.xml." ) );
         if ( dirAddRecursive )
         {
             int id = popup->insertItem( i18n( "Add Selected Dir(s) to Project (recursive)" ),
                                         this, SLOT( slotAddToProjectRecursive() ) );
-            popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Recursively adds selected dir(s) to the list of files in project. "
-                                           "Note that the files should be manually added to corresponding makefile or build.xml." ) );
+            popup->setWhatsThis( id, i18n( "<b>Add to project</b><p>Recursively adds selected dir(s) to the list of files in the project. "
+                                           "Note that the files should be manually added to the corresponding makefile or build.xml." ) );
         }
     }
 
@@ -333,15 +333,15 @@ void CustomProjectPart::contextMenu( QPopupMenu *popup, const Context *context )
     {
         int id = popup->insertItem( i18n( "Remove Selected File/Dir(s) From Project" ),
                                     this, SLOT( slotRemoveFromProject() ) );
-        popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Removes selected file/dir(s) from the list of files in project. "
-                                       "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
+        popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Removes selected file/dir(s) from the list of files in the project. "
+                                       "Note that the files should be manually excluded from the corresponding makefile or build.xml." ) );
 
         if ( dirDelRecursive )
         {
             int id = popup->insertItem( i18n( "Remove Selected Dir(s) From Project (recursive)" ),
                                         this, SLOT( slotRemoveFromProjectRecursive() ) );
-            popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Recursively removes selected dir(s) from the list of files in project. "
-                                           "Note that the files should be manually excluded from corresponding makefile or build.xml." ) );
+            popup->setWhatsThis( id, i18n( "<b>Remove from project</b><p>Recursively removes selected dir(s) from the list of files in the project. "
+                                           "Note that the files should be manually excluded from the corresponding makefile or build.xml." ) );
         }
     }
 }

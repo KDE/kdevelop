@@ -494,7 +494,7 @@
                         <cstring>forceCLocaleRadio</cstring>
                     </property>
                     <property name="text">
-                        <string>Force english compiler output</string>
+                        <string>Force English compiler output</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton">

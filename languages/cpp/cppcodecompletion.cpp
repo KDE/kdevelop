@@ -1723,7 +1723,7 @@ void CppCodeCompletion::slotTextHint( int line, int column, QString &text ) {
 
 
     } else {
-      addStatusText( i18n( "Type of \"%1\" could not be evaluated! Tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2 * timeout );
+      addStatusText( i18n( "Type of \"%1\" could not be evaluated: tried to evaluate expression as \"%2\"" ).arg( type.expr.expr() ).arg( type.expr.typeAsString() ), 2 * timeout );
     }
   }
 

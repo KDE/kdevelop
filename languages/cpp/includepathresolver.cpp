@@ -382,7 +382,7 @@ PathResolutionResult IncludePathResolver::getFullOutput( const QString& command,
     proc.setUseShell( true );
     proc << command;
     if ( !proc.start(KProcess::NotifyOnExit, KProcess::Stdout) ) {
-      return PathResolutionResult( false, i18n("Couldn't start the make-process") );
+      return PathResolutionResult( false, i18n("Could not start the make-process") );
     }
 
     output = proc.stdOut();

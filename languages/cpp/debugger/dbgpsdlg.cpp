@@ -170,7 +170,7 @@ void Dbg_PS_Dialog::slotProcessExited()
                     this, 
                     // FIXME: probably should XML-escape 'item' before passing it
                     // to 'arg'.
-                    i18n("<b>Could not parse output from the <tt>ps</tt> command!</b>"
+                    i18n("<b>Could not parse output from the <tt>ps</tt> command.</b>"
                          "<p>The following line could not be parsed:"
                          "<b><tt>%1</tt>").arg(item),
                     i18n("Internal error"), "gdb_error" );

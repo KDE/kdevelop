@@ -512,7 +512,7 @@ The project needs to be compiled or at least configured before this system may w
                                     <string>src;</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>A semicolon-seperated list of include-paths to be used while searching for headers. 
+                                    <string>A semicolon-separated list of include-paths to be used while searching for headers. 
 Paths not starting with '/' will be interpreted as relative to the project-folder.</string>
                                 </property>
                             </widget>
@@ -524,7 +524,7 @@ Paths not starting with '/' will be interpreted as relative to the project-folde
                                     <string>std=_GLIBCXX_STD</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>This line may contain a semicolon-seperated list of namespace-aliases and namespace-imports. 
+                                    <string>This line may contain a semicolon-separated list of namespace-aliases and namespace-imports. 
 example: "std&lt;&lt;_GLIBCXX_STD;NewNamespaceName=OldNamespaceName; &lt;&lt; SomeGloballyImportedNamespace" (without paratheses). 
 "&lt;&lt;" means that the right namespace is imported into the left, while "=" means that both namespaces are treated as
 if they were one("a=b" is equivalent to "a&lt;&lt;b;b&lt;&lt;a")</string>
@@ -1113,7 +1113,7 @@ This option only applies to QMake projects.</string>
                                     <string>&amp;Use KDevelop's embedded designer</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Start KDevelop own designer embedded within KDevelop</string>
+                                    <string>Start KDevelop's own designer embedded within KDevelop</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to integrate the UI designer into KDevelop.</string>
@@ -1127,7 +1127,7 @@ This option only applies to QMake projects.</string>
                                     <string>Run &amp;KDevelop's designer as a separate application</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Start KDevelop own designer externally</string>
+                                    <string>Start KDevelop's own designer externally</string>
                                 </property>
                                 <property name="whatsThis" stdset="0">
                                     <string>KDevelop comes with its own UI designer that can either be embedded or be run as a separate program. Check this button if you wish to run KDevelop's UI designer as a separate program.</string>

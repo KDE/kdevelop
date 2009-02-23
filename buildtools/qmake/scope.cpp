@@ -158,8 +158,8 @@ bool Scope::loadFromFile( const QString& filename )
         if( DomUtil::readBoolEntry( *m_part->projectDom(),
             "/kdevtrollproject/qmake/showParseErrors", true ) )
         {
-            KMessageBox::error( 0, i18n( "Couldn't parse project file: %1" ).arg( filename ),
-                    i18n( "Couldn't parse project file" ) );
+            KMessageBox::error( 0, i18n( "Could not parse project file: %1" ).arg( filename ),
+                    i18n( "Could not parse project file" ) );
         }
         m_root = 0;
         return false;
@@ -198,8 +198,8 @@ void Scope::saveToFile() const
         file.close();
     }else
     {
-        KMessageBox::error( 0, i18n( "Couldn't write project file: %1" ).arg( filename ),
-                i18n( "Couldn't write project file" ) );
+        KMessageBox::error( 0, i18n( "Could not write project file: %1" ).arg( filename ),
+                i18n( "Could not write project file" ) );
     }
 #ifdef DEBUG
     Scope::PrintAST pa;

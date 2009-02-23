@@ -404,15 +404,15 @@ QString AutoProjectPart::mainProgram() const
         TargetItem* titem = m_widget->activeTarget();
 
         if ( !titem ) {
-            KMessageBox::error( m_widget, i18n("There's no active target!\n"
-                                "Unable to determine the main program"), i18n("No active target found") );
+            KMessageBox::error( m_widget, i18n("There is no active target.\n"
+                                "Unable to determine the main program."), i18n("No active target found") );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : There's no active target! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
             return QString::null;
         }
 
         if ( titem->primary != "PROGRAMS" ) {
-            KMessageBox::error( m_widget, i18n("Active target \"%1\" isn't binary ( %2 ) !\n"
-                                "Unable to determine the main program. If you want this\n"
+            KMessageBox::error( m_widget, i18n("Active target \"%1\" is not binary ( %2 ).\n"
+                                "Unable to determine the main program.  If you want this\n"
                                 "to be the active target, set a main program under\n"
                                 "Project -> Project Options -> Run Options").arg(titem->name).arg(titem->primary), i18n("Active target is not a library") );
             kdDebug ( 9020 ) << k_funcinfo << "Error! : Active target isn't binary (" << titem->primary << ") ! -> Unable to determine the main program in AutoProjectPart::mainProgram()" << endl;
@@ -792,7 +792,7 @@ bool AutoProjectPart::queueInternalLibDependenciesBuild(TargetItem* titem, QStri
                     tdir += dependency.left(pos+1);
                     tname = dependency.mid(pos+1);
                 }
-                KMessageBox::error( 0, i18n("Found a circular dependecy in the project, between this target and %1.\nCan't build this project until this is resolved").arg(tname), i18n("Circular Dependecy found") );
+                KMessageBox::error( 0, i18n("Found a circular dependency in the project, between this target and %1.\nCannot build this project until this is resolved.").arg(tname), i18n("Circular Dependency found") );
                 return false;
             }
         }

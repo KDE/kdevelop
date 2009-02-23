@@ -1155,9 +1155,9 @@ void GDBController::slotRun()
                 KMessageBox::error(
                     0,
                     i18n("<b>Application does not exist</b>"
-                         "<p>The application you're trying to debug,<br>"
+                         "<p>The application you are trying to debug,<br>"
                          "    %1\n"
-                         "<br>does not exist. Check that you've specified "
+                         "<br>does not exist. Check that you have specified "
                          "the right application in the debugger configuration."
                         ).arg(app.fileName()),
                     i18n("Application does not exist"));
@@ -1587,8 +1587,8 @@ void GDBController::slotDbgStdout(KProcess *, char *buf, int buflen)
             KMessageBox::detailedSorry(
                 0,
                 i18n("<b>Internal debugger error</b>",
-                     "<p>The debugger component encountered internal error while "
-                     "processing reply from gdb. Please submit a bug report."),
+                     "<p>The debugger component encountered an internal error while "
+                     "processing a reply from gdb. Please submit a bug report."),
                 i18n("The exception is: %1\n"
                      "The MI response is: %2").arg(e.what()).arg(reply),
                 i18n("Internal debugger error"));

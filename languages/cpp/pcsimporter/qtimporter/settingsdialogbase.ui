@@ -70,7 +70,7 @@
                         </sizepolicy>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Select the Qt configuration to create a Code Completion database for. If you don't know what this option does, just go with the default.</string>
+                        <string>Select the Qt configuration for which to create a Code Completion database. If you do not know what this option does, accept the default.</string>
                     </property>
                 </widget>
             </hbox>

@@ -89,7 +89,7 @@ void SettingsDialog::addUrlButton_clicked()
 	}
 	else
 	{
-		KMessageBox::error( this, i18n("This doesn't appear to be a valid KDE include directory.\nPlease select a different directory."), i18n("Invalid Directory") );
+		KMessageBox::error( this, i18n("This does not appear to be a valid KDE include directory.\nPlease select a different directory."), i18n("Invalid Directory") );
 	}
 }
 
