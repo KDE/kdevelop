@@ -53,14 +53,14 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
-    forwardAction->setText( i18n( "Next View" ) );
+    forwardAction->setText( i18n( "Last Used Views" ) );
     forwardAction->setShortcut( Qt::CTRL | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "<b>Walk through last used Views</b><br/>Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, SIGNAL(triggered()), SLOT(walkForward()) );
     
     backwardAction = actionCollection()->addAction ( "last_used_views_backward" );
-    backwardAction->setText( i18n( "Previous View" ) );
+    backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
     backwardAction->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "<b>Walk through last used Views (Reverse)</b><br/>Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
@@ -198,7 +198,6 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
     connect( mainwindow, SIGNAL(viewAdded(Sublime::View*)), SLOT(addView(Sublime::View*)) );
     connect( mainwindow, SIGNAL(aboutToRemoveView(Sublime::View*)), SLOT(removeView(Sublime::View*)) );
     connect( mainwindow, SIGNAL(destroyed(QObject*)), SLOT(removeMainWindow(QObject*)));
-    kDebug() << "installing event filer on object:";
     mainwindow->installEventFilter( this );
 }
 
@@ -217,8 +216,17 @@ void DocumentSwitcherPlugin::addView( Sublime::View* view )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     if( !mainwindow )
         return;
+    enableActions();
     documentLists[mainwindow][mainwindow->area()].append( view );
 }
+
+void DocumentSwitcherPlugin::enableActions() 
+{
+    Sublime::MainWindow* mw = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    forwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
+    backwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
+}
+
 
 void DocumentSwitcherPlugin::removeMainWindow( QObject* obj ) 
 {
@@ -239,6 +247,7 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
     {
         storeAreaViewList( mainwindow, area );
     }
+    enableActions();
 }
 void DocumentSwitcherPlugin::changeView( Sublime::View* view )
 {

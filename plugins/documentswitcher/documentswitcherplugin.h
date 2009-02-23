@@ -37,6 +37,8 @@ class QEvent;
 
 class KAction;
 
+class KAction;
+
 class DocumentSwitcherPlugin: public KDevelop::IPlugin {
     Q_OBJECT
 public:
