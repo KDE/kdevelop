@@ -44,6 +44,7 @@ public:
     virtual void update() =0;
 
     virtual INewBreakpoint* addCodeBreakpoint()=0;
+    virtual INewBreakpoint* addCodeBreakpoint(const QString& location)=0;
     virtual INewBreakpoint* addWatchpoint()=0;
     virtual INewBreakpoint* addWatchpoint(const QString& expression)=0;
     virtual INewBreakpoint* addReadWatchpoint()=0;

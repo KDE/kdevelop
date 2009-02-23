@@ -47,6 +47,7 @@ public:
     virtual void createHelperBreakpoint();
     
     KDevelop::INewBreakpoint* addCodeBreakpoint();
+    KDevelop::INewBreakpoint* addCodeBreakpoint(const QString& location);
     KDevelop::INewBreakpoint* addWatchpoint();
     KDevelop::INewBreakpoint* addWatchpoint(const QString& expression);
     KDevelop::INewBreakpoint* addReadWatchpoint();

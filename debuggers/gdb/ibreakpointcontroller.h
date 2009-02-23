@@ -114,7 +114,7 @@ private slots:
     */
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
 
-private:
+protected:
     IBreakpoints* universe_;
 
     static const QPixmap* inactiveBreakpointPixmap();

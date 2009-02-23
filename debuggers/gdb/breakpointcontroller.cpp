@@ -55,6 +55,13 @@ BreakpointController::BreakpointController(GDBController* parent)
             this,
             SLOT(slotUpdateBreakpointMarks(KParts::Part*)));
 
+    // FIXME: this, presumably, should be in generic breakpoint controller.
+    connect (KDevelop::ICore::self()->documentController(), 
+	     SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), 
+	     this, 
+	     SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
+
+
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(parent,     SIGNAL(event(event_t)),
@@ -487,5 +494,40 @@ void BreakpointController::slotBreakpointEnabledChanged(Breakpoint * b)
 {
     adjustMark(b, true);
 }
+
+void BreakpointController::textDocumentCreated(KDevelop::IDocument* doc)
+{
+    KTextEditor::MarkInterface *iface =
+        qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+
+    if( iface ) {
+        connect (doc->textDocument(), SIGNAL(
+                     markChanged(KTextEditor::Document*, 
+                                 KTextEditor::Mark, 
+                                 KTextEditor::MarkInterface::MarkChangeAction)),
+                 this,
+                 SLOT(markChanged(KTextEditor::Document*, 
+                                 KTextEditor::Mark, 
+                                  KTextEditor::MarkInterface::MarkChangeAction)));
+    }
+}
+
+void BreakpointController::markChanged(
+    KTextEditor::Document* doc, 
+    KTextEditor::Mark mark, 
+    KTextEditor::MarkInterface::MarkChangeAction action)
+{
+    if (action == KTextEditor::MarkInterface::MarkAdded)
+    {
+        // FIXME: check that there's no breakpoint at this line already?
+        universe_->addCodeBreakpoint(doc->url().path(KUrl::RemoveTrailingSlash) 
+                                     + ":" + QString::number(mark.line));
+    }
+    else
+    {
+        kDebug() << "It'd remove a breakpoint, but it's not implemented yet\n";
+    }
+}
+
 
 #include "breakpointcontroller.moc"

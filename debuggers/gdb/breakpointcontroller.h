@@ -72,7 +72,7 @@ public:
 
     void removeAllBreakpoints();
 
-public slots:
+private slots:
     void slotEvent(event_t);
     void slotBreakpointModified(Breakpoint* b);
     void slotBreakpointEnabledChanged(Breakpoint* b);
@@ -80,6 +80,10 @@ public slots:
 
     void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
     void slotToggleBreakpoint(const QString &filename, int lineNum);
+    void textDocumentCreated(KDevelop::IDocument*);
+    void markChanged(KTextEditor::Document*, 
+                     KTextEditor::Mark mark, 
+                     KTextEditor::MarkInterface::MarkChangeAction);
 
 private:
     void adjustMark(Breakpoint* bp, bool add);

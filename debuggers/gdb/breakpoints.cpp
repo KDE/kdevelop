@@ -62,6 +62,16 @@ KDevelop::INewBreakpoint* Breakpoints::addCodeBreakpoint()
     return n;
 }
 
+KDevelop::INewBreakpoint* 
+Breakpoints::addCodeBreakpoint(const QString& location)
+{
+    NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
+                                         NewBreakpoint::code_breakpoint);
+    insertChild(childItems.size()-1, n);
+    n->setColumn(KDevelop::INewBreakpoint::location_column, location);
+    return n;
+}
+
 KDevelop::INewBreakpoint* Breakpoints::addWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
