@@ -1275,7 +1275,7 @@ Definitions* DUChain::definitions()
 
 void DUChain::aboutToQuit()
 {
-  sdDUChainPrivate->doMoreCleanup();;
+  sdDUChainPrivate->doMoreCleanup();
   sdDUChainPrivate->m_openDocumentContexts.clear();
   sdDUChainPrivate->m_destroyed = true;
   sdDUChainPrivate->clear();

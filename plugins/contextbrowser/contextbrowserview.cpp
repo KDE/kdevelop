@@ -372,7 +372,7 @@ ContextController::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KDevel
         //Use a position relative to the context
         setCursorPosition(cursorPosition);
         if(ctx.data())
-            alternativeString = ctx.data()->scopeIdentifier(true).toString();;
+            alternativeString = ctx.data()->scopeIdentifier(true).toString();
         if(!alternativeString.isEmpty())
             alternativeString += i18n("(changed)"); //This is used when the context was deleted in between
 }

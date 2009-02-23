@@ -141,7 +141,7 @@ Test* OverlayManager::index2Test(const QModelIndex& index) const
     Q_ASSERT(m_view); Q_ASSERT(m_view->model());
     QAbstractProxyModel* proxyModel = static_cast<QAbstractProxyModel*>(m_view->model());
     const QModelIndex runnerIndex = proxyModel->mapToSource(index);
-    return static_cast<Test*>(runnerIndex.internalPointer());;
+    return static_cast<Test*>(runnerIndex.internalPointer());
 }
 
 QAbstractItemView* OverlayManager::view() const
