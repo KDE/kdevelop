@@ -216,13 +216,12 @@ void DocumentSwitcherPlugin::addView( Sublime::View* view )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     if( !mainwindow )
         return;
-    enableActions();
+    enableActions( mainwindow );
     documentLists[mainwindow][mainwindow->area()].append( view );
 }
 
-void DocumentSwitcherPlugin::enableActions() 
+void DocumentSwitcherPlugin::enableActions( Sublime::MainWindow* mw ) 
 {
-    Sublime::MainWindow* mw = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     forwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
     backwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
 }
@@ -247,7 +246,7 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
     {
         storeAreaViewList( mainwindow, area );
     }
-    enableActions();
+    enableActions( mainwindow );
 }
 void DocumentSwitcherPlugin::changeView( Sublime::View* view )
 {
@@ -285,13 +284,6 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     }
     enableActions(mainwindow);
 }
-
-void DocumentSwitcherPlugin::enableActions( Sublime::MainWindow* mw )
-{
-    forwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
-    backwardAction->setEnabled( documentLists[mw][mw->area()].size() > 1 );
-}
-
 
 #include "documentswitcherplugin.moc"
 
