@@ -203,7 +203,7 @@ void CMakePreferences::showInternal(int state)
     if(!m_currentModel)
         return;
 
-    bool showAdv=(state==Qt::Unchecked);
+    bool showAdv=(state == Qt::Checked);
     for(int i=0; i<m_currentModel->rowCount(); i++)
     {
         bool hidden=m_currentModel->isInternal(i) || (!showAdv && m_currentModel->isAdvanced(i));
