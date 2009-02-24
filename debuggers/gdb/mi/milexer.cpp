@@ -117,7 +117,7 @@ TokenStream *MILexer::tokenize(const FileSymbol *fileSymbol)
     tokenStream->m_tokensCount = m_tokensCount;
 
     tokenStream->m_firstToken = tokenStream->m_tokens.data();
-    tokenStream->m_currentToken = tokenStream->m_firstToken;;
+    tokenStream->m_currentToken = tokenStream->m_firstToken;
 
     tokenStream->m_cursor = m_cursor;
 

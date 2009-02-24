@@ -126,7 +126,7 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
         QList<Declaration*> functions;
         TypeUtils::getConstructors( klass, m_topContext.data(), functions );
         foreach(Declaration* f, functions)
-          newDeclarations.insert(f, decl.first);;
+          newDeclarations.insert(f, decl.first);
       }
     }else{
       newDeclarations.insert(it->second, it->first);
