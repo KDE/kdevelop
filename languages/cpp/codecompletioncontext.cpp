@@ -1289,7 +1289,8 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
 
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts
-    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, position );
+    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, position, 0, DUContext::NoFiltering );
+    
     QSet<QualifiedIdentifier> ids;
     foreach(Declaration* importDecl, imports) {
       NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(importDecl);

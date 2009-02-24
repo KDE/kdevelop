@@ -294,6 +294,23 @@ void TestCppCodeCompletion::testFriendVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[1], "A::").names, QStringList() << "PrivateClass");
 }
 
+void TestCppCodeCompletion::testLocalUsingNamespace() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("namespace Foo { int test() {} } void Bar() { using namespace Foo; int b = test(); }");
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
+  QVERIFY(top->childContexts()[0]->localDeclarations()[0]->uses().size());
+  QVERIFY(top->childContexts()[2]->findLocalDeclarations(KDevelop::globalImportIdentifier, KDevelop::SimpleCursor::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
+//   QVERIFY(top->childContexts()[2]->findDeclarations(KDevelop::globalImportIdentifier).size());
+  
+  QVERIFY(CompletionItemTester(top->childContexts()[2]).names.contains("test"));
+  release(top);
+}
+
 void TestCppCodeCompletion::testTemplateMemberAccess() {
   {
     QByteArray method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");

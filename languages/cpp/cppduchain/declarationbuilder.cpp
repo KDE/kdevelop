@@ -1122,15 +1122,6 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
 {
   DeclarationBuilderBase::visitUsingDirective(node);
 
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    if( currentContext()->type() != DUContext::Namespace && currentContext()->type() != DUContext::Global ) {
-      ///@todo report problem
-      kDebug(9007) << "Namespace-import used in non-global scope";
-      return;
-    }
-  }
-
   if( compilingContexts() ) {
     NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, globalImportIdentifier);
     {

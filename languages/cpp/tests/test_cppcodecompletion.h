@@ -86,6 +86,7 @@ private slots:
   void testPreprocessor();
   void testNaiveMatching();
   void testFriendVisibility();
+  void testLocalUsingNamespace();
   void testInheritanceVisibility();
   void testConstVisibility();
   void testNamespaceCompletion();
