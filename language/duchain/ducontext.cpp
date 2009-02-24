@@ -727,7 +727,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
             }
           }
 
-          if( declaration->kind() == Declaration::NamespaceAlias )
+          if( declaration->kind() == Declaration::NamespaceAlias && !(m_flags & NoFiltering) )
             return 0;
 
           if((m_flags & OnlyFunctions) && !declaration->isFunctionDeclaration())
@@ -823,10 +823,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   ///Step 1: Apply namespace-aliases and -imports
   SearchItem::PtrList aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched under multiple names
-  if( d_func()->m_contextType == Namespace )
-    applyAliases(baseIdentifiers, aliasedIdentifiers, position, false);
-  else
-    aliasedIdentifiers = baseIdentifiers;
+  applyAliases(baseIdentifiers, aliasedIdentifiers, position, false,  type() != DUContext::Namespace && type() != DUContext::Global);
 
 
   if( d->m_importedContextsSize() != 0 ) {
@@ -1320,9 +1317,13 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
   return ret;
 }
 
-void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace) const {
+void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
 
   QList<Declaration*> imports = allLocalDeclarations(globalImportIdentifier);
+  if(imports.isEmpty() && onlyImports) {
+    identifiers = baseIdentifiers;
+    return;
+  }
 
   FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers ) {
     bool addUnmodified = true;
@@ -1410,7 +1411,7 @@ void DUContext::findContextsInternal(ContextType contextType, const SearchItem::
   ///Step 1: Apply namespace-aliases and -imports
   SearchItem::PtrList aliasedIdentifiers;
   //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
-  applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace);
+  applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace, contextType != Namespace);
 
   if( d->m_importedContextsSize() != 0 ) {
     ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)

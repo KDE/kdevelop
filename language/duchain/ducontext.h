@@ -781,8 +781,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
+   * @param onlyImports if this is true, namespace-aliases will not be respected, but only imports. This is faster.
    * */
-  void applyAliases(const SearchItem::PtrList& identifiers, SearchItem::PtrList& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace) const;
+  void applyAliases(const SearchItem::PtrList& identifiers, SearchItem::PtrList& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports = false) const;
   /**
    * Applies the aliases that need to be applied when moving the search from this context up to the parent-context.
    * The default-implementation adds a set of identifiers with the own local identifier prefixed, if this is a namespace.
