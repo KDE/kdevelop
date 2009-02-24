@@ -37,8 +37,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
     public:
         enum StatusType 
         { 
-            BuildDirCreated = 0, 
-            BuildDirChosen = 1,
+            BuildDirCreated = 1, 
             CorrectProject = 2, 
             BuildFolderEmpty = 4, 
             HaveCMake = 8,
