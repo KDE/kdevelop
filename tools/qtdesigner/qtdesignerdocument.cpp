@@ -213,6 +213,7 @@ Sublime::View *QtDesignerDocument::newView(Sublime::Document* doc)
 {
     if( qobject_cast<QtDesignerDocument*>( doc ) ) {
         QFile uiFile(url().toLocalFile());
+        uiFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
         m_form = designerPlugin()->designer()->formWindowManager()->createFormWindow();
         kDebug(9038) << "now we have" << m_form->core()->formWindowManager()->formWindowCount() << "formwindows";
