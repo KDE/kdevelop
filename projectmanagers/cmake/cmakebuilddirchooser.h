@@ -61,7 +61,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
         void setSourceFolder( const KUrl& srcFolder );
     signals:
         void status(const QString&);
-        void updated( StatusTypes, const QString& srcDirFromCache );
+        void updated( CMakeBuildDirChooser::StatusTypes, const QString& srcDirFromCache );
 
     private slots:
         void updated();
