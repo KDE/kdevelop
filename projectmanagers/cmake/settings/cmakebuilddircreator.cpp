@@ -37,6 +37,7 @@ CMakeBuildDirCreator::CMakeBuildDirCreator(const KUrl& srcDir, QWidget* parent, 
     connect(m_creatorUi->run, SIGNAL(clicked()), this, SLOT(runBegin()));
     connect(m_creatorUi->builddirChooser, SIGNAL(updated(CMakeBuildDirChooser::StatusTypes, const QString&)), 
             SLOT(chooserUpdated(CMakeBuildDirChooser::StatusTypes,const QString&)));
+    connect(m_creatorUi->builddirChooser, SIGNAL(status(QString)), SLOT(chooserStatus(QString)));
     connect(&m_proc, SIGNAL(readyReadStandardError()), this, SLOT(addOutput()));
     connect(&m_proc, SIGNAL(readyReadStandardOutput()), this, SLOT(addOutput()));
     connect(&m_proc, SIGNAL(finished ( int , QProcess::ExitStatus )), this, SLOT(cmakeCommandDone ( int , QProcess::ExitStatus )));
