@@ -640,6 +640,10 @@ bool GDBController::startDebugger()
     connect(gdb_, SIGNAL(resultRecord(const GDBMI::ResultRecord&)),
             this, SLOT(resultRecord(const GDBMI::ResultRecord&)));
 
+    // Start gdb. Do this after connecting all signals so that initial
+    // GDB output, and important events like "GDB died" are reported.
+    gdb_->start();
+
     setStateOff(s_dbgNotStarted);
 
     // Initialise gdb. At this stage gdb is sitting wondering what to do,

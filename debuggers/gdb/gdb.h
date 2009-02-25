@@ -40,6 +40,10 @@ class GDB : public QObject
 public:
     GDB();
 
+    /** Starts GDB.  This should be done after connecting to all
+        signals the client is interested in.  */
+    void start();
+
     /** Executes a command.  This method may be called at
         most once each time 'ready' is emitted.  When the
         GDB instance is just constructed, one should wait

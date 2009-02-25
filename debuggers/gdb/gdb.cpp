@@ -41,9 +41,13 @@
 using namespace GDBDebugger;
 
 GDB::GDB()
-: sawPrompt_(false), currentCmd_(0)
+: process_(0), sawPrompt_(false), currentCmd_(0)
 {
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");
+}
+
+void GDB::start()
+{
+   KConfigGroup config(KGlobal::config(), "GDB Debugger");
     // FIXME: verify that default value leads to something sensible
     KUrl gdbUrl = config.readEntry("GDB Path", "");
     if (gdbUrl.isEmpty()) {
@@ -52,7 +56,6 @@ GDB::GDB()
         // FIXME: verify its' a local path.
         gdbBinary_ = gdbUrl.toLocalFile(KUrl::RemoveTrailingSlash);
     }
-
     process_ = new KProcess(this);
     process_->setOutputChannelMode( KProcess::SeparateChannels );
     connect(process_, SIGNAL(readyReadStandardOutput()),
