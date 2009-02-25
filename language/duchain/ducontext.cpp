@@ -889,11 +889,26 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
   return m_dynamicData->imports(origin, topContext(), 4);
 }
 
+void DUContext::addIndirectImport(const DUContext::Import& import) {
+  ENSURE_CAN_WRITE
+  DUCHAIN_D_DYNAMIC(DUContext);
+
+  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
+    if(d->m_importedContexts()[a] == import) {
+      d->m_importedContextsList()[a].position = import.position;
+      return;
+    }
+  }
+
+  ///Do not sort the imported contexts by their own line-number, it makes no sense.
+  ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
+
+  d->m_importedContextsList().append(import);
+}
 
 void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool /*temporary*/ )
 {
   ENSURE_CAN_WRITE
-  DUCHAIN_D_DYNAMIC(DUContext);
 
   if(context == this) {
     kDebug() << "Tried to import self";
@@ -901,24 +916,12 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
   }
   
   Import import(context, position);
-
-  for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
-    if(d->m_importedContexts()[a] == import) {
-      d->m_importedContextsList()[a].position = position;
-      return;
-    }
-  }
+  addIndirectImport(import);
 
   if( !anonymous && import.isBackwardMapped() ) {
     ENSURE_CAN_WRITE_(context)
     context->m_dynamicData->addImportedChildContext(this);
   }
-
-  ///Do not sort the imported contexts by their own line-number, it makes no sense.
-  ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
-
-  d->m_importedContextsList().append(import);
-
   //DUChain::contextChanged(this, DUChainObserver::Addition, DUChainObserver::ImportedParentContexts, context);
 }
 
@@ -1845,9 +1848,12 @@ DUContext::Import::Import(DUContext* _context, const SimpleCursor& _position) : 
   }
 }
 
+DUContext::Import::Import(const DeclarationId& id, const SimpleCursor& _position) : position(_position) {
+  m_declaration = id;
+}
+
 DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
   if(m_declaration.isValid()) {
-    Q_ASSERT(m_declaration.isDirect());
     Declaration* decl = m_declaration.getDeclaration(topContext);
     if(decl)
       return decl->internalContext();

@@ -345,6 +345,7 @@ public:
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     ///DUChain must be read-locked when this is called
     Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
+    Import(const DeclarationId& id, const SimpleCursor& position = SimpleCursor::invalid());
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
     }
@@ -405,6 +406,13 @@ public:
    * the chain is sorted correctly.
    */
   virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor::invalid(), bool anonymous = false, bool temporary = false);
+
+  /**
+   * Adds an imported context, which may be indirect.
+   * @warning This is only allowed if this context is _NOT_ a top-context
+   * @warning When using this mechanism, this context will not be registered as importer to the other one.
+   */
+  void addIndirectImport(const DUContext::Import& import);
 
   /**
    * Removes a child context.
