@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=KDevCMakeBuilder
+Name=CMake Project Builder
 Name[hi]=केडेवसीमेकबिल्डर
 Name[sv]=KDevelop CMake-byggverktyg
 Name[x-test]=xxKDevCMakeBuilderxx

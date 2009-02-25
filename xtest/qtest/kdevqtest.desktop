@@ -22,7 +22,7 @@ Comment[x-test]=xxQTestLib test runnerxx
 Comment[zh_CN]=QTestLib 测试运行器
 Comment[zh_TW]=QTestLib 測試執行者
 
-Name=QTest runner
+Name=QTest Runner
 Name[de]=QTest ausführen
 Name[el]=Εκτελεστής QTest
 Name[es]=Ejecución de QTest

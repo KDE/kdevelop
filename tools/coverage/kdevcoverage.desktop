@@ -20,7 +20,7 @@ Comment[x-test]=xxGcov C(++) coveragexx
 Comment[zh_CN]=Gcov C(++) 覆盖率
 Comment[zh_TW]=Gcov C/C++ 範圍
 
-Name=Code coverage report
+Name=Code Coverage Report
 Name[el]=Αναφορά κάλυψης κώδικα
 Name[es]=Informe de cobertura del código
 Name[et]=Koodi katvuse aruanne
