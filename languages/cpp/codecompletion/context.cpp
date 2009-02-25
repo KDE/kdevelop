@@ -113,7 +113,7 @@ QList<Declaration*> convert( const QList<DeclarationPointer>& list ) {
 QList<Declaration*> convert( const QList<DeclarationId>& decls, uint count, TopDUContext* top ) {
 
   QList<Declaration*> ret;
-  for(int a = 0; a < count; ++a) {
+  for(uint a = 0; a < count; ++a) {
     Declaration* d = decls[a].getDeclaration(top);
     if(d)
       ret << d;
@@ -151,7 +151,7 @@ bool removePrefixWord(QString& expression, QString word) {
   return false;
 }
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_pointerConversionsBeforeMatching(0)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false)
 {
 #ifndef TEST_COMPLETION  
   MissingIncludeCompletionModel::self().stop();
@@ -613,7 +613,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     case FunctionCallAccess:
       processFunctionCallAccess();
     break;
-    case TemplateAccess:
+    default:
       //Nothing to do for now
     break;
   }

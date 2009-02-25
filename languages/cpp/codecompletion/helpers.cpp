@@ -91,7 +91,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
     int num = 0;
 
     const KDevVarLengthArray<Cpp::ViableFunction::ParameterConversion>& conversions = f.function.parameterConversions();
-    uint parameterConversion = 0;
+    int parameterConversion = 0;
 
     foreach (const AbstractType::Ptr& argument, functionType->arguments()) {
       if (first)
@@ -202,6 +202,8 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
 void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams )
 {
+  Q_UNUSED(includeDefaultParams);
+
   Declaration* dec(item.m_declaration.data());
 
   QTextFormat normalFormat(QTextFormat::CharFormat);

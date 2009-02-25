@@ -228,6 +228,8 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
         if (CppClassType::Ptr classType =  dec->type<CppClassType>())
           p |= CodeCompletionModel::Class;
         break;
+      default:
+        break;
     }
   }
 

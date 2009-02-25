@@ -113,6 +113,7 @@ void MissingIncludeCompletionModel::completionInvokedInternal(KTextEditor::View*
 
 #if KDE_IS_VERSION(4,2,62)
 KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
+  Q_UNUSED(matched);
   //When something in this model matches, don't hide the completion-list
   kDebug() << "checking reaction";
   return None;
@@ -151,6 +152,9 @@ void MissingIncludeCompletionModel::updateCompletionRange(KTextEditor::View* vie
 }
 
 QString MissingIncludeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position) {
+  Q_UNUSED(view);
+  Q_UNUSED(range);
+  Q_UNUSED(position);
   //No filtering at all
   return QString();
 }
@@ -202,6 +206,10 @@ void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
 }
 
 void MissingIncludeCompletionWorker::computeCompletions(KDevelop::DUContextPointer _context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText) {
+  Q_UNUSED(position);
+  Q_UNUSED(view);
+  Q_UNUSED(contextRange);
+  Q_UNUSED(contextText);
   QMutexLocker mLock(&mutex);
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 500);
   if(lock.locked()) {

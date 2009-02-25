@@ -39,7 +39,7 @@
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
-const int maxDeclarationCount = 30;
+const uint maxDeclarationCount = 30;
 
 using namespace KTextEditor;
 using namespace KDevelop;

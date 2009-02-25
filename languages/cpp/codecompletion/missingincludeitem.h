@@ -26,7 +26,7 @@ namespace Cpp {
 
 class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem {
 public:
-  MissingIncludeCompletionItem(QString addedInclude, QString displayTextPrefix, KDevelop::IndexedDeclaration decl, int argumentHintDepth) : m_addedInclude(addedInclude), m_displayTextPrefix(displayTextPrefix), m_decl(decl), m_argumentHintDepth(argumentHintDepth) {
+  MissingIncludeCompletionItem(QString addedInclude, QString displayTextPrefix, KDevelop::IndexedDeclaration decl, int argumentHintDepth) : m_argumentHintDepth(argumentHintDepth), m_addedInclude(addedInclude), m_displayTextPrefix(displayTextPrefix), m_decl(decl) {
   }
 
   virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
