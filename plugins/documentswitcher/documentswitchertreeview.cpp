@@ -24,9 +24,10 @@
 
 #include "documentswitcherplugin.h"
 
-DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin_, QWidget* parent ) 
-    : QListView( parent ), plugin( plugin_ )
+DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugin_ ) 
+    : QListView( 0 ), plugin( plugin_ )
 {
+    setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
 }
 
 void DocumentSwitcherTreeView::keyPressEvent( QKeyEvent* event )

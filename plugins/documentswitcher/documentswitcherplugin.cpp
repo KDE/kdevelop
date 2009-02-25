@@ -66,10 +66,9 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( backwardAction, SIGNAL(triggered()), SLOT(walkBackward()) );
     
-    view = new DocumentSwitcherTreeView( this, KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    view = new DocumentSwitcherTreeView( this );
     view->setSelectionBehavior( QAbstractItemView::SelectRows );
     view->setSelectionMode( QAbstractItemView::SingleSelection );
-    view->setWindowFlags( Qt::Popup | Qt::FramelessWindowHint );
     view->addAction( forwardAction );
     view->addAction( backwardAction );
     connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
@@ -173,6 +172,9 @@ void DocumentSwitcherPlugin::unload()
     {
         removeMainWindow( mw );
     }
+    delete forwardAction;
+    delete backwardAction;
+    view->deleteLater();
 }
 
 

@@ -26,7 +26,7 @@ class DocumentSwitcherPlugin;
 class DocumentSwitcherTreeView : public QListView
 {
 public:
-    DocumentSwitcherTreeView( DocumentSwitcherPlugin*, QWidget* parent = 0 );
+    DocumentSwitcherTreeView( DocumentSwitcherPlugin* );
 
 protected:
 virtual void keyPressEvent(QKeyEvent* event);
