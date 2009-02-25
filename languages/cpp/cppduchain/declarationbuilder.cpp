@@ -1449,9 +1449,13 @@ void DeclarationBuilder::applyFunctionSpecifiers()
   ClassFunctionDeclaration* classFunDecl = dynamic_cast<ClassFunctionDeclaration*>(function);
   if(classFunDecl && !classFunDecl->isVirtual()) {
     QList<Declaration*> overridden;
-    foreach(const DUContext::Import &import, currentContext()->importedParentContexts())
-      overridden += import.context(topContext())->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
+    foreach(const DUContext::Import &import, currentContext()->importedParentContexts()) {
+      DUContext* iContext = import.context(topContext());
+      if(iContext) {
+        overridden += iContext->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
                                             SimpleCursor::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
+      }
+    }
     if(!overridden.isEmpty()) {
       foreach(Declaration* decl, overridden) {
         if(AbstractFunctionDeclaration* fun = dynamic_cast<AbstractFunctionDeclaration*>(decl))
