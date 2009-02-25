@@ -521,7 +521,7 @@ void BreakpointController::markChanged(
     {
         // FIXME: check that there's no breakpoint at this line already?
         universe_->addCodeBreakpoint(doc->url().path(KUrl::RemoveTrailingSlash) 
-                                     + ":" + QString::number(mark.line));
+                                     + ":" + QString::number(mark.line+1));
     }
     else
     {
