@@ -37,6 +37,7 @@ add_subdirectory(debuggers)
 add_subdirectory(tools)
 add_subdirectory(xtest)
 add_subdirectory(app_templates)
+add_subdirectory(documentation)
 macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()

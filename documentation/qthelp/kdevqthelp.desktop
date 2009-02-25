@@ -1,0 +1,35 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=This plugin provides QtHelp integration
+Comment[et]=See plugin pakub QtHelpo lõimimist
+Comment[fr]=Ce module fournit l'intégration de QtHelp
+Comment[pt]=Este 'plugin' oferece uma integração com o QtHelp
+Comment[pt_BR]=Este 'plugin' oferece uma integração com o QtHelp
+Comment[sv]=Insticksprogrammet tillhandahåller integrering av Qt-hjälp
+Comment[tr]=Bu eklenti QtHelp bütünleşmesi sağlar
+Comment[uk]=За допомогою цього додатка здійснюється інтеграція з QtHelp
+Comment[x-test]=xxThis plugin provides QtHelp integrationxx
+Name=KDevQtHelp
+Name[sv]=KDevelop Qt-hjälp
+Name[x-test]=xxKDevQtHelpxx
+GenericName=Qt Help
+GenericName[et]=Qt Abi
+GenericName[fr]=Aide pour Qt
+GenericName[ga]=Cabhair Qt
+GenericName[pt]=Ajuda do Qt
+GenericName[pt_BR]=Ajuda do Qt
+GenericName[sv]=Qt-hjälp
+GenericName[tr]=Qt Yardım
+GenericName[uk]=Довідка Qt
+GenericName[x-test]=xxQt Helpxx
+ServiceTypes=KDevelop/Plugin
+
+X-KDE-Library=kdevqthelp
+X-KDevelop-Version=6
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=KDevQtHelp
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Mode=GUI
+X-KDevelop-Interfaces=org.kdevelop.IDocumentationProvider
