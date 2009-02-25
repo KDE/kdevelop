@@ -73,9 +73,8 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 		QString m_name;
 };
 
-QString qtDocsLocation()
+QString qtDocsLocation(const QString& qmake)
 {
-	QString qmake=KStandardDirs::findExe("qmake");
 	QString ret;
 	
 	KProcess p;
@@ -99,9 +98,19 @@ QString qtDocsLocation()
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
 	, m_engine(KStandardDirs::locateLocal("data", "qthelpcollection", QtHelpFactory::componentData()))
+    , m_rx("<[a-zA-Z, ]*>")
 {
-	
-	QString fileName=qtDocsLocation()+"/qch/qt.qch";
+	QStringList qmakes;
+    KStandardDirs::findAllExe(qmakes, "qmake");
+	QString fileName;
+    foreach(const QString& qmake, qmakes) {
+        fileName=qtDocsLocation(qmake)+"/qch/qt.qch";
+        if(QFile::exists(fileName)) {
+            kDebug() << "checking doc: " << fileName;
+            break;
+        }
+    }
+    
 	bool b=m_engine.setupData();
 	kDebug() << "setup" << b << m_engine.error();
 	
@@ -119,6 +128,17 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	kDebug() << "registered" << b << m_engine.error() << m_engine.registeredDocumentations();
 }
 
+QString QtHelpPlugin::removeTemplateInstantiation(const QString& id) const
+{
+    m_rx.indexIn(id);
+    QString ret(id);
+    foreach(const QString& match, m_rx.capturedTexts())
+    {
+        ret.replace(match, QString());
+    }
+    kDebug() << "result:" << ret << "from:" << id;
+    return ret;
+}
 
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec)
 {
@@ -127,7 +147,10 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
 	if(dec && dec->internalContext()) {
 		QString id = dec->internalContext()->scopeIdentifier(true).toString();
 		if(!id.isEmpty()) {
+            id=removeTemplateInstantiation(id);
 			QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
+            
+            kDebug() << "doc_found" << id << links;
 			if(!links.isEmpty())
 				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, links, &m_engine));
 		}

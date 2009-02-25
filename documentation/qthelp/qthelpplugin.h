@@ -31,9 +31,10 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
 	public:
 		QtHelpPlugin(QObject *parent, const QVariantList & args= QVariantList());
 		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*);
-		
+		QString removeTemplateInstantiation(const QString& id) const;
 	private:
 		QHelpEngine m_engine;
+        QRegExp m_rx;
 };
 
 #endif // QTHELPPLUGIN_H

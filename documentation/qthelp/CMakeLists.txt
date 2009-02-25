@@ -1,3 +1,4 @@
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9045 )
 
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
