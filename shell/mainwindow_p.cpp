@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 
 #include <QApplication>
-#include <QStackedWidget>
 
 #include <kmenu.h>
 #include <kdebug.h>

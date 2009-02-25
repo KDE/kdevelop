@@ -24,7 +24,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
-#include <QtGui/QStackedWidget>
 
 #include <KDE/KApplication>
 #include <KDE/KActionCollection>

@@ -26,7 +26,6 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QStandardItem>
-#include <QtGui/QStackedWidget>
 #include <QtGui/QToolButton>
 
 #include <kxmlguiwindow.h>

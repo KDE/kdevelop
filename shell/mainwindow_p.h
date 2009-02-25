@@ -25,7 +25,6 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QPointer>
 
-class QStackedWidget;
 class KActionCollection;
 
 namespace Sublime {
