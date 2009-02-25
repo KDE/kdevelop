@@ -186,9 +186,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         PreprocessedContents formal = resolve_formal(identifier, input).mergeText();
         
         //Escape so we don't break on '"'
-        for(int a = formal.count()-1; a >= 0; --a)
-          if(formal[a] == indexFromCharacter('\"'))
+        for(int a = formal.count()-1; a >= 0; --a) {
+          if(formal[a] == indexFromCharacter('\"') || formal[a] == indexFromCharacter('\\'))
             formal.insert(a, indexFromCharacter('\\'));
+        }
 
         Stream is(&formal, inputPosition);
         is.setOriginalInputPosition(originalInputPosition);

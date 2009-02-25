@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
     Copyright 2006 Hamish Rodda<rodda@kde.org>
+    Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -240,6 +241,24 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   release(context);
 }
 
+void TestCppCodeCompletion::testCompletionPrefix() {
+  TEST_FILE_PARSE_ONLY
+  {
+    QByteArray method("struct Test {int m;}; Test t;Test* t2;void test() {}");
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().size(), 3);
+    QCOMPARE(CompletionItemTester(top->childContexts()[2], "if((t).").names, QStringList() << "m");
+    QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test t(&t2->").names, QStringList() << "m");
+
+    QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test(\"(\").").names, QStringList() << "m");
+    
+    QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test(\" \\\" quotedText( \\\" \").").names, QStringList() << "m");
+    release(top);
+  }
+}
+
 void TestCppCodeCompletion::testInheritanceVisibility() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("class A { public: class AMyClass {}; }; class B : protected A { public: class BMyClass {}; }; class C : private B{ public: class CMyClass {}; }; class D : public C { class DMyClass{}; }; ");
@@ -265,6 +284,8 @@ void TestCppCodeCompletion::testInheritanceVisibility() {
   QCOMPARE(CompletionItemTester(top->childContexts()[3]).names.toSet(), QSet<QString>() << "DMyClass" << "CMyClass" << "D" << "C" << "B" << "A");
   QCOMPARE(CompletionItemTester(top, "D::").names.toSet(), QSet<QString>() << "CMyClass" ); //DMyClass is private
 }
+
+
 
 void TestCppCodeCompletion::testConstVisibility() {
   TEST_FILE_PARSE_ONLY

@@ -162,8 +162,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if(!m_duContext)
       return;
     
-    if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global))
+    if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
       m_onlyShowTypes = true;
+      ifDebug( kDebug() << "Only showing types"; )
+    }
 
     Declaration* classDecl = Cpp::localClassFromCodeContext(m_duContext.data());
     if(classDecl) {
@@ -248,7 +250,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         //which is handled below
         int start_expr = Utils::expressionAt( m_text, m_text.length()-1 );
 
-        QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();        
+        QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();  
         
         Cpp::ExpressionEvaluationResult result = expressionParser.evaluateExpression(expr.toUtf8(), m_duContext);
         if(!result.isValid() || (!result.isInstance || result.type.type().cast<FunctionType>())) {

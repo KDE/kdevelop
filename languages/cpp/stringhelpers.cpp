@@ -73,10 +73,6 @@ enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
 int expressionAt( const QString& text, int index ) {
 
-  /* C++ style comments present issues with finding the expr so I'm
-  	matching for them and replacing them with empty C style comments
-  	of the same length for purposes of finding the expr. */
-
   if( index == 0 )
     return 0;
 
@@ -104,12 +100,13 @@ int expressionAt( const QString& text, int index ) {
           ++count;
         } else if ( ch == ')' ) {
           --count;
-        } else if ( count == 0 ) {
+        }
+        --index;
+        if ( count == 0 ) {
           //index;
           last = T_PAREN;
           break;
         }
-        --index;
       }
     } else if ( last != T_IDE && ch == '>' && ch2 != "->" ) {
       int count = 0;
