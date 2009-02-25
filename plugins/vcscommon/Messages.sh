@@ -1,4 +1,7 @@
 #!/bin/sh
-$EXTRACTRC `find . -name \*.rc` `find . -name \*.ui` >> rc.cpp
+files=`find . -name \*.rc -o -name \*.ui`
+if [ "x$files" != "x" ]; then
+	$EXTRACTRC $files >> rc.cpp
+fi
 $XGETTEXT `find . -name \*.cc -o -name \*.cpp -o -name \*.h` -o $podir/kdevvcscommon.pot
 rm -f rc.cpp
