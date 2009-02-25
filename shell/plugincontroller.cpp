@@ -199,10 +199,19 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
 void PluginController::initialize()
 {
     QMap<QString, bool> pluginMap;
-    // Get the default from the ShellExtension
-    foreach( const QString& s, ShellExtension::getInstance()->defaultPlugins() )
+    if( ShellExtension::getInstance()->defaultPlugins().isEmpty() ) 
     {
-        pluginMap.insert( s, true );
+        foreach( const KPluginInfo& pi, d->plugins )
+        {
+            pluginMap.insert( pi.pluginName(), true );
+        }
+    } else
+    {
+        // Get the default from the ShellExtension
+        foreach( const QString& s, ShellExtension::getInstance()->defaultPlugins() )
+        {
+            pluginMap.insert( s, true );
+        }
     }
 
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
