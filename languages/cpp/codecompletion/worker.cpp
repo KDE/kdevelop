@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "cppcodecompletionworker.h"
+#include "worker.h"
 
 #include <kdebug.h>
 
@@ -28,14 +28,14 @@
 #include <ktexteditor/document.h>
 #include <klocale.h>
 
-#include "cppduchain/cppduchain.h"
-#include "cppduchain/typeutils.h"
+#include "../cppduchain/cppduchain.h"
+#include "../cppduchain/typeutils.h"
 
-#include "cppduchain/overloadresolutionhelper.h"
+#include "../cppduchain/overloadresolutionhelper.h"
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/ducontext.h>
-#include "cpptypes.h"
+#include "../cppduchain/cpptypes.h"
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainbase.h>
 #include <language/duchain/dumpchain.h>
@@ -46,16 +46,18 @@
 using namespace KDevelop;
 using namespace TypeUtils;
 
-CppCodeCompletionWorker::CppCodeCompletionWorker(CppCodeCompletionModel* parent)
+namespace Cpp {
+
+CodeCompletionWorker::CodeCompletionWorker(CodeCompletionModel* parent)
   : KDevelop::CodeCompletionWorker(parent)
 {
 }
-KDevelop::CodeCompletionContext* CppCodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const
+KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const
 {
   return new Cpp::CodeCompletionContext( context, contextText, followingText );
 }
 
-void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
+void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
 {
   TopDUContextPointer topContext;
   {
@@ -74,12 +76,14 @@ void CppCodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer cont
   TopDUContext::Cache cache(topContext);
   Cpp::TypeConversionCacheEnabler enableConversionCache;
 
-  CodeCompletionWorker::computeCompletions(context, position, view, contextRange, contextText);
+  KDevelop::CodeCompletionWorker::computeCompletions(context, position, view, contextRange, contextText);
 }
 
-CppCodeCompletionModel* CppCodeCompletionWorker::model() const
+CodeCompletionModel* CodeCompletionWorker::model() const
 {
-  return const_cast<CppCodeCompletionModel*>(static_cast<const CppCodeCompletionModel*>(parent()));
+  return const_cast<CodeCompletionModel*>(static_cast<const CodeCompletionModel*>(parent()));
 }
 
-#include "cppcodecompletionworker.moc"
+}
+
+#include "worker.moc"

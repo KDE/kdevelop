@@ -14,11 +14,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "./implementationhelperitem.h"
+#include "implementationhelperitem.h"
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
 #include <language/duchain/duchainutils.h>
-#include "completionhelpers.h"
+#include "helpers.h"
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <qtfunctiondeclaration.h>
@@ -26,6 +26,8 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+
+namespace Cpp {
 
 ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
 }
@@ -277,4 +279,6 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
 bool ImplementationHelperItem::dataChangedWithInput() const {
   return m_type == CreateSignalSlot;
+}
+
 }

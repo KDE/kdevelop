@@ -17,9 +17,11 @@
 #ifndef IMPLEMENTATIONHELPERITEM_H
 #define IMPLEMENTATIONHELPERITEM_H
 
-#include "completionitem.h"
+#include "item.h"
 
 using namespace KDevelop;
+
+namespace Cpp {
 
 class ImplementationHelperItem : public NormalDeclarationCompletionItem
 {
@@ -42,5 +44,7 @@ public:
   
   virtual bool dataChangedWithInput() const;
 };
+
+}
 
 #endif // IMPLEMENTATIONHELPERITEM_H

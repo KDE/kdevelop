@@ -43,7 +43,7 @@
 #include "rpp/pp-environment.h"
 #include "expressionvisitor.h"
 #include "expressionparser.h"
-#include "codecompletioncontext.h"
+#include "codecompletion/context.h"
 #include "cpppreprocessenvironment.h"
 #include "cppduchain/classdeclaration.h"
 #include <qstandarditemmodel.h>
@@ -220,14 +220,14 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   bool hadThis = false;
   
   foreach(Item i, items) {
-    NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
+    Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
     kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     if(decItem) {
       kDebug() << typeid(*i.data()).name();
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
     }else{
-      TypeConversionCompletionItem* conversion = dynamic_cast<TypeConversionCompletionItem*>(i.data());
+      Cpp::TypeConversionCompletionItem* conversion = dynamic_cast<Cpp::TypeConversionCompletionItem*>(i.data());
       QVERIFY(conversion);
       QCOMPARE(conversion->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString(), QString("this"));
       hadThis = true;
@@ -455,7 +455,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     
     QList <Item > items = cptr->completionItems(top->range().end, abort);
     foreach(Item i, items) {
-      NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
+      Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
       kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
@@ -471,7 +471,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     
     QList <Item > items = cptr->completionItems(top->range().end, abort);
     foreach(Item i, items) {
-      NormalDeclarationCompletionItem* decItem  = dynamic_cast<NormalDeclarationCompletionItem*>(i.data());
+      Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
       kDebug() << decItem->declaration()->toString();
       kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();

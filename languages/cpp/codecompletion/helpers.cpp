@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "completionhelpers.h"
-#include "completionitem.h"
+#include "helpers.h"
+#include "item.h"
 #include <QList>
 #include <QVariant>
 #include <language/duchain/declaration.h>
@@ -28,19 +28,20 @@
 #include <language/duchain/duchainutils.h>
 #include <QTextFormat>
 #include <QStringList>
-#include "overloadresolution.h"
-#include "cpptypes.h"
-#include "cppduchain.h"
+#include "../cppduchain/overloadresolution.h"
+#include "../cppduchain/cpptypes.h"
+#include "../cppduchain/cppduchain.h"
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
-#include "cpplanguagesupport.h"
-#include "codecompletioncontext.h"
+#include "../cpplanguagesupport.h"
+#include "context.h"
 
 const int desiredArgumentTypeLength = 20;
 const int maxDefaultParameterLength = 30;
 
 using namespace KDevelop;
-using namespace Cpp;
+
+namespace Cpp {
 
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams, bool noShortening )
 {
@@ -316,3 +317,4 @@ bool isSource(QString file) {
   return false;
 }
 
+}

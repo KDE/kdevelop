@@ -25,23 +25,24 @@
 
 #include <language/codecompletion/codecompletionworker.h>
 
-#include "cppcodecompletionmodel.h"
+#include "model.h"
 
-class CppCodeCompletionWorker : public KDevelop::CodeCompletionWorker
+namespace Cpp {
+
+class CodeCompletionWorker : public KDevelop::CodeCompletionWorker
 {
   Q_OBJECT
 
   public:
-    CppCodeCompletionWorker(CppCodeCompletionModel* parent);
+    CodeCompletionWorker(CodeCompletionModel* parent);
     
-    CppCodeCompletionModel* model() const;
+    CodeCompletionModel* model() const;
 
   protected:
     virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
     virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText) const;
-
-  private:
-    void computeGroups(QList<KDevelop::CompletionTreeItemPointer> items, KSharedPtr<Cpp::CodeCompletionContext> completionContext);
 };
+
+}
 
 #endif // KDEVCPPCODECOMPLETIONWORKER_H

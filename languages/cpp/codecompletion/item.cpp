@@ -19,7 +19,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "completionitem.h"
+#include "item.h"
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <ktexteditor/range.h>
@@ -27,21 +27,23 @@
 #include <ktexteditor/document.h>
 #include <cpptypes.h>
 #include <QModelIndex>
-#include "completionhelpers.h"
-#include "cppcodecompletionmodel.h"
+#include "helpers.h"
+#include "model.h"
 #include <language/duchain/declaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
-#include "cppduchain/navigation/navigationwidget.h"
+#include "../cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
 #include <classdeclaration.h>
-#include "cppduchain/qtfunctiondeclaration.h"
+#include "../cppduchain/qtfunctiondeclaration.h"
 #include <language/duchain/use.h>
 #include <typeutils.h>
 #include <cppduchain.h>
 #include <templatedeclaration.h>
 
 using namespace KDevelop;
+
+namespace Cpp {
 
 ///@todo Implement a proper duchain based shortening-scheme, and use it throughout the completion
 //If this is true, the return-values of argument-hints will be just written as "..." if they are too long
@@ -272,7 +274,7 @@ void setStaticMatchContext(QList< KDevelop::IndexedType > types) {
   currentMatchContext = types;
 }
 
-QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const {
+QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
 
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
@@ -563,7 +565,7 @@ int IncludeFileCompletionItem::argumentHintDepth() const
   return 0;
 }
 
-QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const CodeCompletionModel* model) const
+QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const
 {
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
@@ -701,4 +703,6 @@ int TypeConversionCompletionItem::argumentHintDepth() const {
 }
 
 TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
+}
+
 }

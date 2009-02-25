@@ -22,13 +22,13 @@
 #include <ktexteditor/cursor.h>
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
-#include "cppduchain/typeconversion.h"
-#include "cppduchain/expressionparser.h"
-#include "cppduchain/viablefunctions.h"
-#include "cppduchain/overloadresolutionhelper.h"
-#include "cppduchain/expressionevaluationresult.h"
-#include "includeitem.h"
-#include "completionitem.h"
+#include "../cppduchain/typeconversion.h"
+#include "../cppduchain/expressionparser.h"
+#include "../cppduchain/viablefunctions.h"
+#include "../cppduchain/overloadresolutionhelper.h"
+#include "../cppduchain/expressionevaluationresult.h"
+#include "../includeitem.h"
+#include "item.h"
 #include <language/codecompletion/codecompletioncontext.h>
 
 namespace KTextEditor {
@@ -253,7 +253,7 @@ namespace Cpp {
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;
 
-      friend class ::ImplementationHelperItem;
+      friend class ImplementationHelperItem;
   };
 }
 

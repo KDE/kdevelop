@@ -39,8 +39,8 @@
 #include <language/duchain/persistentsymboltable.h>
 
 #include "../cppduchain/classdeclaration.h"
-#include <implementationhelperitem.h>
-#include <missingincludecompletionitem.h>
+#include "../codecompletion/implementationhelperitem.h"
+#include "../codecompletion/missingincludeitem.h"
 
 using namespace KDevelop;
 
@@ -150,7 +150,7 @@ void CppNewClass::generateHeader()
   
   foreach(IndexedDeclaration base, baseClasses) {
     DUChainReadLocker lock(DUChain::lock());
-    KSharedPtr<MissingIncludeCompletionItem> item = includeDirectiveFromUrl(url, base);
+    KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(url, base);
     if(item) {
       output << item->lineToInsert() << "\n";
       addedIncludes = true;
@@ -214,7 +214,7 @@ void CppNewClass::generateHeader()
         }
       }
       
-      ImplementationHelperItem item(ImplementationHelperItem::Override, DeclarationPointer(d));
+      Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, DeclarationPointer(d));
       output << item.insertionText() << "\n";
     }
   }
@@ -331,7 +331,7 @@ void CppNewClass::generateImplementation()
   foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
     IndexedDeclaration indexedDecl = qvariant_cast<IndexedDeclaration>(override);
     if (Declaration* d = indexedDecl.declaration()) {
-      ImplementationHelperItem item(ImplementationHelperItem::CreateDefinition, DeclarationPointer(d));
+      Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::CreateDefinition, DeclarationPointer(d));
 
       output << item.insertionText(KUrl(), KDevelop::SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
     }

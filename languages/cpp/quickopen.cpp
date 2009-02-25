@@ -35,7 +35,7 @@
 #include <language/duchain/duchainlock.h>
 
 #include "cppduchain/navigation/navigationwidget.h"
-#include "cppcodecompletionmodel.h"
+#include "codecompletion/model.h"
 #include "cpplanguagesupport.h"
 #include <language/duchain/arrayhelpers.h>
 

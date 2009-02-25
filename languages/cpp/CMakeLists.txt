@@ -20,18 +20,18 @@ set(kdevcpplanguagesupport_PART_SRCS
     cppparsejob.cpp
     preprocessjob.cpp
     cpphighlighting.cpp
-    cppcodecompletionmodel.cpp
-    cppcodecompletionworker.cpp
-    codecompletioncontext.cpp
+    codecompletion/model.cpp
+    codecompletion/worker.cpp
+    codecompletion/context.cpp
     stringhelpers.cpp
     includepathresolver.cpp
     setuphelpers.cpp
     quickopen.cpp
-    completionitem.cpp
-    completionhelpers.cpp
-    missingincludecompletionitem.cpp
-    implementationhelperitem.cpp
-    missingincludecompletionmodel.cpp
+    codecompletion/item.cpp
+    codecompletion/helpers.cpp
+    codecompletion/missingincludeitem.cpp
+    codecompletion/implementationhelperitem.cpp
+    codecompletion/missingincludemodel.cpp
 
     codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp

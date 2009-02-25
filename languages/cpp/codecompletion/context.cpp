@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "codecompletioncontext.h"
+#include "context.h"
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
@@ -30,24 +30,24 @@
 #include <language/duchain/safetycounter.h>
 #include <language/interfaces/iproblem.h>
 #include <util/pushvalue.h>
-#include "cppduchain/cppduchain.h"
-#include "cppduchain/typeutils.h"
-#include "cppduchain/overloadresolution.h"
-#include "cppduchain/viablefunctions.h"
-#include "cppduchain/environmentmanager.h"
-#include "cpptypes.h"
-#include "stringhelpers.h"
-#include "templatedeclaration.h"
-#include "cpplanguagesupport.h"
-#include "environmentmanager.h"
-#include "cppduchain/cppduchain.h"
+#include "../cppduchain/cppduchain.h"
+#include "../cppduchain/typeutils.h"
+#include "../cppduchain/overloadresolution.h"
+#include "../cppduchain/viablefunctions.h"
+#include "../cppduchain/environmentmanager.h"
+#include "../cppduchain/cpptypes.h"
+#include "../stringhelpers.h"
+#include "../cppduchain/templatedeclaration.h"
+#include "../cpplanguagesupport.h"
+#include "../cppduchain/environmentmanager.h"
+#include "../cppduchain/cppduchain.h"
 #include "cppdebughelper.h"
-#include "missingincludecompletionitem.h"
+#include "missingincludeitem.h"
 #include <interfaces/idocumentcontroller.h>
 #include "implementationhelperitem.h"
 #include <qtfunctiondeclaration.h>
 #include <language/duchain/duchainutils.h>
-#include "missingincludecompletionmodel.h"
+#include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 
 // #define ifDebug(x) x
@@ -161,7 +161,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     LOCKDUCHAIN;
     if(!m_duContext)
       return;
-    
+
     if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
       m_onlyShowTypes = true;
       ifDebug( kDebug() << "Only showing types"; )
@@ -250,7 +250,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         //which is handled below
         int start_expr = Utils::expressionAt( m_text, m_text.length()-1 );
 
-        QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();  
+        QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();
         
         Cpp::ExpressionEvaluationResult result = expressionParser.evaluateExpression(expr.toUtf8(), m_duContext);
         if(!result.isValid() || (!result.isInstance || result.type.type().cast<FunctionType>())) {
@@ -1292,7 +1292,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts
     QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, position, 0, DUContext::NoFiltering );
-    
+
     QSet<QualifiedIdentifier> ids;
     foreach(Declaration* importDecl, imports) {
       NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(importDecl);

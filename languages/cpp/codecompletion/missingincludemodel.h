@@ -28,6 +28,8 @@
 namespace KDevelop {
 class ParseJob;
 }
+
+namespace Cpp {
 class MissingIncludeCompletionWorker;
 
 class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
@@ -94,5 +96,7 @@ class MissingIncludeCompletionWorker : public KDevelop::CodeCompletionWorker {
   protected:
   virtual void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
 };
+
+}
 
 #endif // MISSINGINCLUDECOMPLETIONMODEL_H

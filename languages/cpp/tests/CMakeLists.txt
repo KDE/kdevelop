@@ -10,7 +10,29 @@ include_directories(
 
 add_definitions(-DTEST_COMPLETION)
 
-set(cppcodecompletiontest_SRCS test_cppcodecompletion.cpp ../codecompletioncontext.cpp ../stringhelpers.cpp ../completionitem.cpp ../completionhelpers.cpp ../implementationhelperitem.cpp ../cpplanguagesupport.cpp ../cpphighlighting.cpp ../cppcodecompletionmodel.cpp ../preprocessjob.cpp ../quickopen.cpp ../codegen/simplerefactoring.cpp ../cppparsejob.cpp ../includepathresolver.cpp ../setuphelpers.cpp ../codegen/cppnewclass.cpp ../codegen/progressdialogs.cpp ../cppcodecompletionworker.cpp ../includepathcomputer.cpp ../missingincludecompletionmodel.cpp ../missingincludecompletionitem.cpp )
+set(cppcodecompletiontest_SRCS
+  test_cppcodecompletion.cpp
+  ../codecompletion/context.cpp
+  ../stringhelpers.cpp
+  ../codecompletion/item.cpp
+  ../codecompletion/helpers.cpp
+  ../codecompletion/implementationhelperitem.cpp
+  ../cpplanguagesupport.cpp
+  ../cpphighlighting.cpp
+  ../codecompletion/model.cpp
+  ../preprocessjob.cpp
+  ../quickopen.cpp
+  ../codegen/simplerefactoring.cpp
+  ../cppparsejob.cpp
+  ../includepathresolver.cpp
+  ../setuphelpers.cpp
+  ../codegen/cppnewclass.cpp
+  ../codegen/progressdialogs.cpp
+  ../codecompletion/worker.cpp
+  ../includepathcomputer.cpp
+  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/missingincludeitem.cpp
+)
 
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})

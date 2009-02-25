@@ -30,8 +30,8 @@
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "includeitem.h"
-#include "completionitem.h"
+#include "../includeitem.h"
+#include "item.h"
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include <kdeversion.h>
 
@@ -39,24 +39,18 @@ class QIcon;
 class QString;
 class QMutex;
 
-namespace KDevelop
-{
-class DUContext;
-class Declaration;
+namespace KDevelop {
+  class DUContext;
+  class Declaration;
+  class CompletionTreeElement;
 }
 
 namespace Cpp {
   class CodeCompletionContext;
   class NavigationWidget;
-}
+  class CodeCompletionWorker;
 
-class CppCodeCompletionWorker;
-
-namespace KDevelop {
-  class CompletionTreeElement;
-}
-
-class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
+class CodeCompletionModel : public KDevelop::CodeCompletionModel
 #if KDE_IS_VERSION(4,2,62)
 , KTextEditor::CodeCompletionModelControllerInterface2
 #else
@@ -67,8 +61,8 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
 
   public:
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-    CppCodeCompletionModel(QObject* parent);
-    virtual ~CppCodeCompletionModel();
+    CodeCompletionModel(QObject* parent);
+    virtual ~CodeCompletionModel();
 
   protected:
     virtual void foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext);
@@ -86,6 +80,6 @@ class CppCodeCompletionModel : public KDevelop::CodeCompletionModel
     KSharedPtr<Cpp::CodeCompletionContext> m_completionContext;
 };
 
-
+}
 
 #endif

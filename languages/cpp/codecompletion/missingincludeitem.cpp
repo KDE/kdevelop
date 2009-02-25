@@ -16,25 +16,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "missingincludecompletionitem.h"
+#include "missingincludeitem.h"
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/types/identifiedtype.h>
-#include "cppduchain/navigation/navigationwidget.h"
-#include "cppduchain/typeutils.h"
-#include "cppduchain/templateparameterdeclaration.h"
-#include "cpplanguagesupport.h"
-#include "cppcodecompletionmodel.h"
+#include "../cppduchain/navigation/navigationwidget.h"
+#include "../cppduchain/typeutils.h"
+#include "../cppduchain/templateparameterdeclaration.h"
+#include "../cpplanguagesupport.h"
+#include "model.h"
 #include <klocale.h>
 #include <ktexteditor/document.h>
 #include <classdeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include <declarationbuilder.h>
 #include <language/duchain/stringhelpers.h>
-#include "completionhelpers.h"
-#include "missingincludecompletionmodel.h"
+#include "helpers.h"
+#include "missingincludemodel.h"
 #include <language/duchain/aliasdeclaration.h>
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
@@ -43,6 +43,8 @@ const int maxDeclarationCount = 30;
 
 using namespace KTextEditor;
 using namespace KDevelop;
+
+namespace Cpp {
 
 ///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
 int moveBehindComment(KTextEditor::Document* document, int line) {
@@ -521,4 +523,6 @@ void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTex
     lock.unlock();
     document->insertText(position, forwardDeclaration);
   }
+}
+
 }

@@ -14,10 +14,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "./missingincludecompletionmodel.h"
-#include "completionitem.h"
+#include "missingincludemodel.h"
+#include "item.h"
 #include <klocalizedstring.h>
-#include "missingincludecompletionitem.h"
+#include "missingincludeitem.h"
 #include <language/duchain/duchainutils.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
@@ -27,6 +27,8 @@
 #include <language/backgroundparser/parsejob.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/codecompletioninterface.h>
+
+namespace Cpp {
 
 KDevelop::CodeCompletionWorker* MissingIncludeCompletionModel::createCompletionWorker()
 {
@@ -208,4 +210,6 @@ void MissingIncludeCompletionWorker::computeCompletions(KDevelop::DUContextPoint
   }
 }
 
-#include "missingincludecompletionmodel.moc"
+}
+
+#include "missingincludemodel.moc"

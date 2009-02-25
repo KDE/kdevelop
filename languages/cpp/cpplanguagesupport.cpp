@@ -76,7 +76,7 @@
 #include "parsesession.h"
 #include "cpphighlighting.h"
 #include "cppparsejob.h"
-#include "cppcodecompletionmodel.h"
+#include "codecompletion/model.h"
 #include "cppeditorintegrator.h"
 #include "usebuilder.h"
 #include "environmentmanager.h"
@@ -93,7 +93,7 @@
 #include "cppdebughelper.h"
 #include "codegen/simplerefactoring.h"
 #include "includepathcomputer.h"
-#include "missingincludecompletionmodel.h"
+#include "codecompletion/missingincludemodel.h"
 
 
 #define DEBUG_UI_LOCKUP
@@ -158,8 +158,8 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     setXMLFile( "kdevcppsupport.rc" );
 
     m_highlights = new CppHighlighting( this );
-    m_cc = new KDevelop::CodeCompletion( this, new CppCodeCompletionModel(0), name() );
-    m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new MissingIncludeCompletionModel(0), name() );
+    m_cc = new KDevelop::CodeCompletion( this, new Cpp::CodeCompletionModel(0), name() );
+    m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new Cpp::MissingIncludeCompletionModel(0), name() );
     m_standardMacros = new Cpp::ReferenceCountedMacroSet;
     m_standardIncludePaths = new QStringList;
     

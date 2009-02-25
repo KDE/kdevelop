@@ -35,6 +35,8 @@ namespace KDevelop {
   class DUContext;
 }
 
+namespace Cpp {
+
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true, bool noShortening = false );
 
 void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true );
@@ -44,6 +46,8 @@ KDevelop::AbstractType::Ptr effectiveType( KDevelop::Declaration* decl );
 
 ///Returns true if the given file has the extension of a C++ source file, not of a header.
 bool isSource(QString fileName);
+
+}
 
 #endif
 

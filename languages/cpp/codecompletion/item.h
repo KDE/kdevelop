@@ -27,12 +27,8 @@
 
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletionitem.h>
-#include <codecompletioncontext.h>
-#include "includeitem.h"
-
-namespace Cpp {
-  class CodeCompletionContext;
-}
+#include "context.h"
+#include "../includeitem.h"
 
 namespace KTextEditor {
   class CodeCompletionModel;
@@ -42,8 +38,11 @@ namespace KTextEditor {
 }
 
 class QModelIndex;
-class CppCodeCompletionModel;
 
+
+namespace Cpp {
+  class CodeCompletionContext;
+  class CodeCompletionModel;
 
 void setStaticMatchContext(QList<KDevelop::IndexedType> types);
 
@@ -117,5 +116,7 @@ class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {
     int m_argumentHintDepth;
     KSharedPtr<Cpp::CodeCompletionContext> completionContext;
 };
+
+}
 
 #endif

@@ -20,7 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "cppcodecompletionmodel.h"
+#include "model.h"
 
 #include <QIcon>
 #include <QMetaType>
@@ -33,14 +33,14 @@
 #include <kiconloader.h>
 
 
-#include "cppduchain/cppduchain.h"
-#include "cppduchain/typeutils.h"
+#include "../cppduchain/cppduchain.h"
+#include "../cppduchain/typeutils.h"
 
-#include "cppduchain/overloadresolutionhelper.h"
+#include "../cppduchain/overloadresolutionhelper.h"
 
 #include <language/duchain/declaration.h>
-#include "cpptypes.h"
-#include "typeutils.h"
+#include "../cppduchain/cpptypes.h"
+#include "../cppduchain/typeutils.h"
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchain.h>
@@ -52,11 +52,11 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/dumpchain.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "cppduchain/navigation/navigationwidget.h"
-#include "preprocessjob.h"
+#include "../cppduchain/navigation/navigationwidget.h"
+#include "../preprocessjob.h"
 #include <language/duchain/duchainutils.h>
-#include "cppcodecompletionworker.h"
-#include "cpplanguagesupport.h"
+#include "worker.h"
+#include "../cpplanguagesupport.h"
 #include <language/editor/modificationrevision.h>
 #include <language/duchain/specializationstore.h>
 #include "implementationhelperitem.h"
@@ -65,13 +65,15 @@ using namespace KTextEditor;
 using namespace KDevelop;
 using namespace TypeUtils;
 
-CppCodeCompletionModel::CppCodeCompletionModel( QObject * parent )
+namespace Cpp {
+
+CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
 }
 
 #if KDE_IS_VERSION(4,2,62)
-KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CppCodeCompletionModel::matchingItem(const QModelIndex& matched) {
+KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched) {
   KSharedPtr<CompletionTreeElement> element = itemForIndex(matched);
   //Do not hide the completion-list if the matched item is an implementation-helper
   if(dynamic_cast<ImplementationHelperItem*>(element.data()))
@@ -81,7 +83,7 @@ KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CppCodeCompl
 }
 #endif
 
-bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
+bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
   QString insertedTrimmed = inserted.trimmed();
   if(insertedTrimmed.endsWith('\"'))
@@ -92,28 +94,28 @@ bool CppCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, cons
   return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
-void CppCodeCompletionModel::aborted(KTextEditor::View* view) {
+void CodeCompletionModel::aborted(KTextEditor::View* view) {
     kDebug() << "aborting";
     worker()->abortCurrentCompletion();
     
     KTextEditor::CodeCompletionModelControllerInterface::aborted(view);
 }
 
-bool CppCodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
+bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
   bool ret = CodeCompletionModelControllerInterface::shouldAbortCompletion(view, range, currentCompletion);
   
   return ret;
 }
 
-KDevelop::CodeCompletionWorker* CppCodeCompletionModel::createCompletionWorker() {
-  return new CppCodeCompletionWorker(this);
+KDevelop::CodeCompletionWorker* CodeCompletionModel::createCompletionWorker() {
+  return new CodeCompletionWorker(this);
 }
 
-CppCodeCompletionModel::~CppCodeCompletionModel()
+CodeCompletionModel::~CodeCompletionModel()
 {
 }
 
-void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
+void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
   if(completionContext()) {
     Cpp::CodeCompletionContext* cppContext = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext().data());
     Q_ASSERT(cppContext);
@@ -158,7 +160,7 @@ void CppCodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTex
   KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
 }
 
-void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
+void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
   //Set the static match-context, in case the argument-hints are not shown
   
   setStaticMatchContext(QList<IndexedType>());
@@ -174,9 +176,9 @@ void CppCodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::Comple
       setStaticMatchContext(types);
     }
   }
-  CodeCompletionModel::foundDeclarations(item, completionContext);
+  KDevelop::CodeCompletionModel::foundDeclarations(item, completionContext);
 }
 
+}
 
-
-#include "cppcodecompletionmodel.moc"
+#include "model.moc"

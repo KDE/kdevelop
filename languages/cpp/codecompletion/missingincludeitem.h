@@ -19,8 +19,10 @@
 #ifndef MISSINGINCLUDECOMPLETIONITEM_H
 #define MISSINGINCLUDECOMPLETIONITEM_H
 
-#include "completionitem.h"
-#include "cppduchain/expressionevaluationresult.h"
+#include "item.h"
+#include "../cppduchain/expressionevaluationresult.h"
+
+namespace Cpp {
 
 class MissingIncludeCompletionItem : public KDevelop::CompletionTreeItem {
 public:
@@ -56,5 +58,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
 
 ///DUChain must be locked
 KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, KDevelop::IndexedDeclaration decl);
+
+}
 
 #endif
