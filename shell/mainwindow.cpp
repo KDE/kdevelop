@@ -133,10 +133,6 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentStateChanged(KDevelop::IDocument*)), SLOT(documentStateChanged(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
-    /*connect( Core::projectController(), SIGNAL( projectOpened() ),
-             d, SLOT( projectOpened() ) );
-    connect( Core::projectController(), SIGNAL( projectClosed() ),
-             d, SLOT( projectClosed() ) );*/
     d->setupGui();
 }
 

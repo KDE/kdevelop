@@ -80,8 +80,6 @@ public Q_SLOTS:
     void split(Qt::Orientation orientation);
     void toggleFullScreen(bool fullScreen);
 
-    void projectOpened();
-    void projectClosed();
     void configureToolbars();
     void newToolbarConfig();
 
