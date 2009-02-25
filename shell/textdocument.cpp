@@ -455,6 +455,7 @@ bool TextDocument::close(DocumentSaveMode mode)
     if (!PartDocument::close(mode))
         return false;
 
+    KDevelop::EditorIntegrator::removeDocument(d->document);
     d->document->deleteLater();
 
     return true;

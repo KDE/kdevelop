@@ -103,6 +103,15 @@ void EditorIntegrator::addDocument( KTextEditor::Document * document )
   data()->insertLoadedDocument(document);
 }
 
+void EditorIntegrator::removeDocument( KTextEditor::Document * document )
+{
+  QObject::disconnect(document, SIGNAL(aboutToClose(KTextEditor::Document*)), data(), SLOT(removeDocument(KTextEditor::Document*)));
+  QObject::disconnect(document, SIGNAL(aboutToReload(KTextEditor::Document*)), data(), SLOT(reloadDocument(KTextEditor::Document*)));
+  QObject::disconnect(document, SIGNAL(documentUrlChanged(KTextEditor::Document*)), data(), SLOT(documentUrlChanged(KTextEditor::Document*)));
+
+  data()->removeDocument(document);
+}
+
 Document * EditorIntegrator::documentForUrl(const HashedString& url)
 {
   return documentForUrl(IndexedString(url.str()));
