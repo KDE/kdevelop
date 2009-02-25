@@ -131,11 +131,34 @@ void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
   m_onlyComputeVisible = onlyVisible;
 }
 
+void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
+  DUChainWriteLocker lock(DUChain::lock());
+
+  addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
+
+  Q_ASSERT(currentContext()->type() == DUContext::Class);
+  AbstractType::Ptr baseClass = base.baseClass.type();
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
+  Declaration* idDecl = 0;
+  if( idType && (idDecl = idType->declaration(currentContext()->topContext())) ) {
+    DUContext* ctx = idDecl->logicalInternalContext(currentContext()->topContext());
+    if(ctx) {
+      currentContext()->addImportedParentContext( ctx );
+    }else{
+      currentContext()->addIndirectImport( DUContext::Import(idType->declarationId()) );
+      kDebug(9007) << "Could not resolve base-class, adding it indirectly: " << (base.baseClass ? base.baseClass.type()->toString() : QString());
+    }
+  } else if( !baseClass.cast<DelayedType>() ) {
+    kDebug(9007) << "Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
+  }
+}
+
 void ContextBuilder::setEditor(CppEditorIntegrator* editor, bool ownsEditorIntegrator)
 {
   ContextBuilderBase::setEditor(editor, ownsEditorIntegrator);
   m_nameCompiler = new NameCompiler(editor->parseSession());
 }
+
 
 void addImportedParentContextSafely(DUContext* context, DUContext* import) {
   if(import->imports(context)) {
