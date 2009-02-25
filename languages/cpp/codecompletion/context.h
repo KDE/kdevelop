@@ -1,5 +1,5 @@
 /*
-   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -252,6 +252,7 @@ namespace Cpp {
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;
+      bool m_isDeclarationTypePrefix;//True if the expression is set to the type-part of a declaration like "int i"
 
       friend class ImplementationHelperItem;
   };

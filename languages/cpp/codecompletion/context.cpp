@@ -1,5 +1,5 @@
 /*
-   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -308,6 +308,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
    * a=function(exp
    * a = exp(
    * ClassType instance(
+   * Type instance =
    *
    * What else?
    *
@@ -333,6 +334,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_onlyShowSignals = true;
     m_expression = QString();
   }
+  
+  m_isDeclarationTypePrefix = false;
 
   QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
@@ -349,6 +352,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
           kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
           m_expression = newExpression;
           expressionPrefix = newExpressionPrefix;
+          m_isDeclarationTypePrefix = true;
         }
       }
     }
@@ -482,7 +486,14 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ifDebug( kDebug(9007) << "expression: " << expr; )
 
   if( !expr.trimmed().isEmpty() && !m_expressionResult.isValid() ) {
-    m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
+    if(!m_isDeclarationTypePrefix) {
+      m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
+    }else{
+      m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
+      m_expressionResult.isInstance = true;
+      kDebug() << "is expression type prefix";
+    }
+    
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
       if( m_memberAccessOperation != StaticMemberChoose ) {
@@ -997,6 +1008,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         case FunctionCallAccess:
           {
             kDebug() << "functionCallAccess" << functions().count() << m_expression;
+            
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
               break;*/
@@ -1014,7 +1026,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                 ++num;
               }
             }
-
+            
             if(additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
               //Argument-hints for builtin operators
               AbstractType::Ptr type = m_expressionResult.type.type();
@@ -1055,6 +1067,39 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               }
 
 //                 items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = functionName();
+            }else if(m_expressionResult.isValid() && m_expressionResult.type.type() && (!m_expressionResult.isInstance || m_isDeclarationTypePrefix) && !m_expressionResult.type.type().cast<FunctionType>()) {
+              //Eventually add a builtin copy-constructor if a type is being constructed
+              bool hasCopyConstructor = false;
+              
+              //Search for a copy-constructor within the class
+              CppClassType::Ptr classType = m_expressionResult.type.type().cast<CppClassType>();
+              if(classType) {
+                Declaration* decl = classType->declaration(m_duContext->topContext());
+                if(decl) {
+                  AbstractType::Ptr constClassType = classType->indexed().type();
+                  constClassType->setModifiers(AbstractType::ConstModifier);
+                  
+                  ReferenceType::Ptr argumentType(new ReferenceType);
+                  argumentType->setBaseType(constClassType);
+                  
+                  DUContext* ctx = decl->internalContext();
+                  if(ctx) {
+                    QList<Declaration*> constructors = ctx->findLocalDeclarations(decl->identifier());
+                    foreach(Declaration* constructor, constructors) {
+                      FunctionType::Ptr funType = constructor->type<FunctionType>();
+                      if(funType && !funType->returnType() && funType->arguments().size() == 1) {
+                        if(funType->arguments()[0]->equals(argumentType.constData()))
+                          hasCopyConstructor = true;
+                      }
+                    }
+                  }
+                }
+              }
+              
+              if(!hasCopyConstructor) {
+                  QString showName = m_expressionResult.type.type()->toString() + "(";
+                  items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, m_expressionResult.type, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
+              }
             }
           }
           break;
