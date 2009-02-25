@@ -300,8 +300,33 @@ QString clearComments( QString str, QChar replacement ) {
   return str;
 }
 
-QString clearStrings( QString str, QChar /*replacement*/ ) {
-  ///@todo implement: Replace all strings with the given replacement-character
+QString clearStrings( QString str, QChar replacement ) {
+  bool inString = false;
+  for(int pos = 0; pos < str.length(); ++pos) {
+    bool intoString = false;
+    if(str[pos] == '"' && !inString)
+      intoString = true;
+    
+    if(inString || intoString) {
+      if(inString) {
+        if(str[pos] == '"')
+          inString = false;
+      }else{
+        inString = true;
+      }
+      
+      bool skip = false;
+      if(str[pos] == '\\')
+        skip = true;
+        
+      str[pos] = replacement;
+      if(skip) {
+        ++pos;
+        if(pos < str.length())
+          str[pos] = replacement;
+      }
+    }
+  }
   return str;
 }
 
