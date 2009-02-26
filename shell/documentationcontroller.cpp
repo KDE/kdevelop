@@ -23,6 +23,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <shell/core.h>
+#include <sublime/view.h>
 
 #include <KDebug>
 
@@ -48,11 +49,12 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
         virtual QString id() const { return "org.kdevelop.DocumentationView"; }
         
         QList<DocumentationView*> views() const { return mViews; }
-//      QList<Sublime::View*> tabs() const { return mTabs; }
-//      virtual void viewCreated(Sublime::View* view) { mTabs.append(view); }
+        QList<Sublime::View*> tabs() const { return mTabs; }
+        virtual void viewCreated(Sublime::View* view) { mTabs.append(view); }
+        
     private:
         QList<DocumentationView*> mViews;
-//      QList<Sublime::View*> mTabs;
+        QList<Sublime::View*> mTabs;
 };
 
 DocumentationController::DocumentationController(Core* core)
@@ -80,6 +82,7 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
                 break;
         }
     }
+    
     return ret;
 }
 
@@ -92,4 +95,8 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
     }
     
     m_factory->views().last()->showWidget(doc->documentationWidget());
+    
+    foreach( Sublime::View* v, m_factory->tabs()) {
+        v->requestRaise();
+    }
 }
