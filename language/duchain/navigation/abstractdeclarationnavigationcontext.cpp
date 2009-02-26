@@ -74,14 +74,11 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     modifyHtml() += "<br>";
   }
   
-  KSharedPtr<IDocumentation> doc=ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());
-  if(doc) {
-    modifyHtml() += i18n("Show documentation ");
-    makeLink( m_declaration->toString(), m_declaration, NavigationAction::ShowDocumentation);
-    modifyHtml() += "<br />";
-  }
-
-  if( !shorten ) { 
+  KSharedPtr<IDocumentation> doc;
+  
+  if( !shorten ) {
+    doc = ICore::self()->documentationController()->documentationForDeclaration(m_declaration.data());
+    
     const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
     if( function ) {
       htmlFunction();
@@ -216,16 +213,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   if(!shorten)
     htmlAdditionalNavigation();
   
-  if( !shorten && !m_declaration->comment().isEmpty() ) {
-    QString comment = m_declaration->comment();
-    comment.replace("<br />", "\n"); //do not escape html newlines within the comment
-    comment.replace("<br/>", "\n");
-    comment = Qt::escape(comment);
-    comment.replace('\n', "<br />"); //Replicate newlines in html
-    modifyHtml() += commentHighlight(comment);
-    modifyHtml() += "<br />";
-  }
-  
   if( !shorten ) {
     if(dynamic_cast<FunctionDefinition*>(m_declaration.data()))
       modifyHtml() += labelHighlight(i18n( "Def.: " ));
@@ -252,6 +239,31 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     modifyHtml() += " ";
     makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
+  
+  if( !shorten && (!m_declaration->comment().isEmpty() || doc) ) {
+    modifyHtml() += "<br />";
+    QString comment = m_declaration->comment();
+    if(comment.isEmpty() && doc) {
+      comment = doc->description();
+      if(!comment.isEmpty()) {
+        modifyHtml() += commentHighlight(comment) /*+ "<br />"*/;
+      }
+    } else if(!comment.isEmpty()) {
+      comment.replace("<br />", "\n"); //do not escape html newlines within the comment
+      comment.replace("<br/>", "\n");
+      comment = Qt::escape(comment);
+      comment.replace('\n', "<br />"); //Replicate newlines in html
+      modifyHtml() += commentHighlight(comment);
+      modifyHtml() += "<br />";
+    }
+  }
+  
+    if(!shorten && doc) {
+      modifyHtml() += "<br />" + i18n("Show documentation for ");
+      makeLink( m_declaration->qualifiedIdentifier().toString(), m_declaration, NavigationAction::ShowDocumentation );
+    }
+  
+  
     //modifyHtml() += "<br />";
 
   addExternalHtml(m_suffix);
