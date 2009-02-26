@@ -155,6 +155,7 @@ public slots:
 private:
   QListViewItem* findItemWhichBeginsWith(const QString& text) const;
 #endif
+  virtual void showEvent(QShowEvent*);
 
 private:
 
@@ -170,6 +171,8 @@ private:
     int minFrame_;
     int maxFrame_;
     bool has_more_frames;
+
+    bool mayUpdate_;
 
     friend class FrameStackItem;
 

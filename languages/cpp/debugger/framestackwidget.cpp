@@ -43,7 +43,8 @@ FramestackWidget::FramestackWidget(GDBController* controller,
                                    const char *name, WFlags f)
         : QListView(parent, name, f),
           viewedThread_(0),
-          controller_(controller)
+          controller_(controller),
+          mayUpdate_( false )
 {
     setRootIsDecorated(true);
     setSorting(-1);
@@ -135,9 +136,14 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
             kdDebug(9012) << "Clearning framestack\n";
             clear();
 
-            controller_->addCommand(
-                new GDBCommand("-thread-list-ids",
-                               this, &FramestackWidget::handleThreadList));
+            if ( isVisible() )
+            {
+               controller_->addCommand(
+                   new GDBCommand("-thread-list-ids",
+                                  this, &FramestackWidget::handleThreadList));
+               mayUpdate_ = false;
+            }
+            else mayUpdate_ = true;
 
             break;
             
@@ -178,6 +184,22 @@ void FramestackWidget::slotEvent(GDBController::event_t e)
         case GDBController::connected_to_program:
             break;
     }
+}
+
+void FramestackWidget::showEvent(QShowEvent*)
+{
+   if (controller_->stateIsOn(s_appRunning|s_dbgBusy|s_dbgNotStarted|s_shuttingDown))
+      return;
+
+   if ( mayUpdate_ )
+   {
+      clear();
+
+      controller_->addCommand(
+          new GDBCommand( "-thread-list-ids", this, &FramestackWidget::handleThreadList ) );
+
+      mayUpdate_ = false;
+   }
 }
 
 void FramestackWidget::getBacktrace(int min_frame, int max_frame)
