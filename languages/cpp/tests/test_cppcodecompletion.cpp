@@ -1348,9 +1348,14 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
+    IncludeFileList includes;
+  {//Test macro redirection
+    QString test = preprocess(HashedString(), "#define M1(X) X ## _m1 \n#define M2(X) M ## X\n#define M3 M2\n#define M4 M3 \nM4(1)(hallo)", includes);
+    kDebug() << test;
+    QCOMPARE(test.trimmed(), QString("hallo_m1"));
+  }
   {//Test replacement of merged preprocessor function calls
     TopDUContext* top = parse(QByteArray("#define MACRO_1(X) X ## _fromMacro1 \n#define A(pred, n) MACRO_ ## n(pred) \n#define D(X,Y) A(X ## Y, 1) \nint D(a,ba);"), DumpNone);
-    IncludeFileList includes;
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba_fromMacro1"));
