@@ -48,12 +48,26 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
         virtual Qt::DockWidgetArea defaultPosition() { return Qt::RightDockWidgetArea; }
         virtual QString id() const { return "org.kdevelop.DocumentationView"; }
         
-        QList<DocumentationView*> views() const { return mViews; }
+        QPointer<DocumentationView> lastView()
+        {
+            while(!mViews.isEmpty() && !mViews.last())
+            {
+                if(!mViews.last()) {
+                    mViews.takeLast();
+                    mTabs.takeLast();
+                }
+            }
+            
+            qDebug() << "aaaaaaa" << mViews;
+            ICore::self()->uiController()->addToolView(i18n("Documentation"), this);
+            Q_ASSERT(!mViews.isEmpty());
+            return mViews.last();
+        }
         QList<Sublime::View*> tabs() const { return mTabs; }
         virtual void viewCreated(Sublime::View* view) { mTabs.append(view); }
         
     private:
-        QList<DocumentationView*> mViews;
+        QList<QPointer<DocumentationView> > mViews;
         QList<Sublime::View*> mTabs;
 };
 
@@ -91,10 +105,10 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
     if(!m_factory)
     {
         m_factory = new DocumentationViewFactory;
-        ICore::self()->uiController()->addToolView(i18n("Documentation"), m_factory);
     }
     
-    m_factory->views().last()->showWidget(doc->documentationWidget());
+    QPointer<DocumentationView> p=m_factory->lastView();
+    p->showWidget(doc->documentationWidget());
     
     foreach( Sublime::View* v, m_factory->tabs()) {
         v->requestRaise();
