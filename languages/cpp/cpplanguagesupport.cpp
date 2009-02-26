@@ -708,10 +708,10 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
   int start = position.column;
   int end = position.column;
 
-  while(start > 0 && (line[start].isLetter() || line[start] == '_') && (line[start-1].isLetter() || line[start-1] == '_'))
+  while(start > 0 && (line[start].isLetterOrNumber() || line[start] == '_') && (line[start-1].isLetterOrNumber() || line[start-1] == '_'))
     --start;
 
-  while(end <  lineLength && (line[end].isLetter() || line[end] == '_'))
+  while(end <  lineLength && (line[end].isLetterOrNumber() || line[end] == '_'))
     ++end;
 
   SimpleRange wordRange = SimpleRange(SimpleCursor(lineNumber, start), SimpleCursor(lineNumber, end));
