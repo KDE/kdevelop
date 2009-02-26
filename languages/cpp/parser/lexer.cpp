@@ -269,7 +269,7 @@ void Lexer::tokenize(ParseSession* _session)
       current_token->size = cursor.offsetIn( session->contents() ) - current_token->position;
     
     Q_ASSERT(m_leaveSize || (cursor.current == session->contents() + current_token->position + current_token->size));
-    Q_ASSERT(current_token->position + current_token->size <= session->contentsVector().size());
+    Q_ASSERT(current_token->position + current_token->size <= (uint)session->contentsVector().size());
     Q_ASSERT(previousIndex == index-1 || previousIndex == index); //Never parse more than 1 token, because that won't be initialized correctly
 
     m_leaveSize = false;
