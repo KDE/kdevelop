@@ -1,9 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Manager
-Name[hi]=सी-मेक
-Name[ne]=सीमेक
-Name[x-test]=xxCMakexx
 Comment=Allows KDevelop to manager CMake based projects
 Comment[de]=Erlaubt das Erstellen CMake-basierter Projekte mit KDevelop
 Comment[el]=Επιτρέπει στο KDevelop το χειρισμό έργων με βάση το CMake

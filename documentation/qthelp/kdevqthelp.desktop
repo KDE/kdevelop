@@ -2,8 +2,12 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides QtHelp integration
+Comment[nds]=Dit Moduul stellt de Inbetten vun de Qt-Hülp praat
+Comment[uk]=За допомогою цього додатка здійснюється інтеграція з QtHelp
 Name=KDevQtHelp
 GenericName=Qt Help
+GenericName[nds]=Qt-Hülp
+GenericName[uk]=Довідка Qt
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevqthelp

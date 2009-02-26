@@ -1,9 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Manager
-Name[hi]=क्यू-मेक
-Name[ne]=क्यूमेक
-Name[x-test]=xxQMakexx
 Comment=Imports and edits qmake projects
 Comment[be]=Імпарт і рэдагаванне праектаў Qmake
 Comment[ca]=Importa i edita els projectes de qmake

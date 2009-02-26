@@ -21,8 +21,6 @@ Comment[x-test]=xxA plugin for formatting C files using GNU indentxx
 Comment[zh_CN]=使用 GNU 缩进格式化 C 文件的插件
 Comment[zh_TW]=使用 GNU 規則排列 C 語言程式碼的外掛程式
 Name=Indent Formatter Backend
-Name[sv]=KDevelop indent
-Name[x-test]=xxKDevIndentxx
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevindent

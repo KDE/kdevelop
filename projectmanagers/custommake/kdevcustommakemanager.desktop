@@ -1,22 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=Custom Makefile Project Manager
-Name[el]=Προσαρμοσμένο Makefile
-Name[es]=Makefile personalizado
-Name[et]=Kohandatud Makefile
-Name[fr]=Personnaliser un Makefile
-Name[gl]=Makefile personalizado
-Name[ja]=カスタム Makefile
-Name[lv]=Pielāgots Make fails
-Name[nds]=Topasst Makefile
-Name[pt]=Makefile Personalizada
-Name[pt_BR]=Makefile personalizado
-Name[sv]=Egen byggfil
-Name[tr]=Özel Makefile Dosyası
-Name[uk]=Власний Makefile
-Name[x-test]=xxCustom Makefilexx
-Name[zh_CN]=自定义 Makefile
-Name[zh_TW]=自訂 Makefile
 Comment=Imports and edits custom make projects
 Comment[de]=Importiert und bearbeitet benutzerdefinierte Make-Projekte
 Comment[el]=Εισαγωγή και επεξεργασία έργων προσαρμοσμένου make

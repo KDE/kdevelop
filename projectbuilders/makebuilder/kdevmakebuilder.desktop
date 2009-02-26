@@ -1,11 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=Make Project Builder
-Name[da]=KDevelop MakeBuilder
-Name[hi]=के-डेव-मेक-बिल्डर
-Name[ne]=केडीई विकास निर्माण विकासकर्ता
-Name[sv]=KDevelop Make-byggverktyg
-Name[x-test]=xxKDevMakeBuilderxx
 Comment=KDevelop Make Builder
 Comment[de]=Make-Builder von KDevelop
 Comment[el]=Κατασκευαστής Make του KDevelop

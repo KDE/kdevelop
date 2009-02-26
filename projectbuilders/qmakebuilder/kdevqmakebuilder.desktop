@@ -1,10 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Builder
-Name[hi]=केडेवक्यूमेकबिल्डर
-Name[ne]=केडीई विकास क्यूमेक विकासकर्ता
-Name[sv]=KDevelop QMake-byggverktyg
-Name[x-test]=xxKDevQMakeBuilderxx
 Comment=Builds QMake Projects
 Comment[de]=Erstellt QMake-Projekte
 Comment[el]=Κατασκευή έργων QMake
