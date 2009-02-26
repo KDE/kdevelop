@@ -1,6 +1,7 @@
 /*
   Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that

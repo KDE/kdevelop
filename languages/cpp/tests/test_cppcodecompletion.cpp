@@ -1128,6 +1128,7 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
+  kDebug() << ctx->localDeclarations()[0]->range().textRange();
   QCOMPARE(ctx->localDeclarations()[0]->range().textRange(), KTextEditor::Range(1, 5, 1, 11));
 }
 }
@@ -1347,6 +1348,20 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
+  {//Test merging
+    TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
+    IncludeFileList includes;
+    kDebug() << preprocess(HashedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
+  }
+  {
+    TopDUContext* top = parse(QByteArray("#define MERGE(a, b) a ## b \n#define MERGE_WITH_PARENS(par) MERGE ## par \nint MERGE_WITH_PARENS((int, B));"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("intB"));
+  }
   {//Test simple #if
     TopDUContext* top = parse(QByteArray("#define X\n#if defined(X)\nint xDefined;\n#endif\n#if !defined(X)\nint xNotDefined;\n#endif\n#if (!defined(X))\nint xNotDefined2;\n#endif"), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1377,14 +1392,6 @@ void TestCppCodeCompletion::testPreprocessor() {
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).start.column, 19);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).end.column, 37);
-  }
-  {//Test merging
-    TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
-    IncludeFileList includes;
-    kDebug() << preprocess(HashedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
-    DUChainWriteLocker lock(DUChain::lock());
-    QCOMPARE(top->localDeclarations().count(), 1);
-    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
   }
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);

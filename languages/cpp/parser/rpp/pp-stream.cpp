@@ -1,5 +1,6 @@
 /*
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2008-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -217,6 +218,13 @@ Stream & Stream::operator<< ( const unsigned int& c )
   return *this;
 }
 
+unsigned int rpp::Stream::popLastOutput() {
+  unsigned int ret = m_string->last();
+  m_string->pop_back();
+  --m_pos;
+  return ret;
+}
+
 Stream& Stream::operator<< ( const Stream& input )
 {
   const uint c = input;
@@ -361,6 +369,12 @@ void Stream::setMacroExpansion(const KDevelop::SimpleCursor& expansion)
 KDevelop::SimpleCursor Stream::macroExpansion() const
 {
   return m_macroExpansion;
+}
+
+rpp::Anchor rpp::Stream::currentOutputAnchor() const {
+  if(m_locationTable)
+    return m_locationTable->positionAt(m_pos, *m_string).first;
+  return rpp::Anchor();
 }
 
 void Stream::mark(const Anchor& position)

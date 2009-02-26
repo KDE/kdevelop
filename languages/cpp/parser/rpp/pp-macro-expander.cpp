@@ -1,6 +1,7 @@
 /*
   Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -177,7 +178,54 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       {
         Q_ASSERT(isCharacter(input.current()));
         Q_ASSERT(IndexedString(input.current()).str() == "#");
-        skip_blanks(++input, output);
+        
+        ++input;
+        
+        // search for the paste token
+        if(input == '#') {
+          ++input;
+          skip_blanks (input, devnull());
+          IndexedString previous(output.popLastOutput()); //Previous already has been expanded
+          while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
+            previous = IndexedString(output.popLastOutput());
+          IndexedString add(skip_identifier (input));
+          
+          PreprocessedContents newExpanded;
+          
+          {
+            //Expand "add", so it is eventually replaced by an actual
+            PreprocessedContents actualText;
+            actualText.append(add.index());
+
+            {
+              Stream as(&actualText);
+              pp_macro_expander expand_actual(m_engine, m_frame);
+              Stream nas(&newExpanded);
+              expand_actual(as, nas);
+            }
+          }
+          
+          if(!newExpanded.isEmpty()) {
+            IndexedString first(newExpanded.first());
+            if(!isCharacter(first.index()) || QChar(characterFromIndex(first.index())).isLetterOrNumber() || characterFromIndex(first.index()) == '_') {
+              //Merge the tokens
+              newExpanded.first() = IndexedString(previous.byteArray() + first.byteArray()).index();
+            }else{
+              //Cannot merge, prepend the previous text
+              newExpanded.prepend(previous.index());
+            }
+          }else{
+            newExpanded.append(previous.index());
+          }
+          
+          //Now expand the merged text completely into the output.
+          pp_macro_expander final_expansion(m_engine, m_frame);
+          Stream nas(&newExpanded, output.currentOutputAnchor());
+          final_expansion(nas, output);
+          continue;
+        }
+        
+        skip_blanks(input, output);
 
         IndexedString identifier( skip_identifier(input) );
 
@@ -248,21 +296,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         Anchor inputPosition = input.inputPosition();
         IndexedString name(skip_identifier (input));
         
-        // search for the paste token
-        int blankStart = input.offset();
-        skip_blanks (input, devnull());
-        if (!input.atEnd() && input == '#') {
-          ++input;
-
-          if (!input.atEnd() && input == '#')
-            skip_blanks(++input, devnull());
-          else
-            input.seek(blankStart);
-
-        } else {
-          input.seek(blankStart);
-        }
-
         Anchor inputPosition2 = input.inputPosition();
         pp_actual actual = resolve_formal(name, input);
         if (actual.isValid()) {
@@ -276,6 +309,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             output.appendString(*cursorIt, *textIt);
           }
           output.mark(input.inputPosition());
+          
+          if(actual.text.isEmpty()) {
+            int start = input.offset();
+            
+            skip_blanks(input, devnull());
+            //Omit paste tokens behind empty used actuals, else we will merge with the previous text
+            if(input == '#' && (++input) == '#') {
+              ++input;
+              //We have skipped a paste token
+            }else{
+              input.seek(start);
+            }
+          }
+          
           continue;
         }
 

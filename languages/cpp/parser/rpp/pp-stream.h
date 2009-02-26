@@ -1,5 +1,6 @@
 /*
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2008-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -133,6 +134,9 @@ class KDEVCPPRPP_EXPORT Stream
     ///@warning Doesn't handle newlines correctly!
     Stream& operator--();
 
+    ///Removes the last added item from the output, and returns it
+    uint popLastOutput();
+
     ///Returns the cursor that points to the current input position.
     Anchor inputPosition() const;
     ///If the input position is collapsed, the input position will be locked from now on. It will stay the same until a new one is set.
@@ -146,6 +150,9 @@ class KDEVCPPRPP_EXPORT Stream
     ///The macroExpansion member may have no effect if macroExpansion is set for this stream.
     void mark(const Anchor& position);
 
+    ///Returns the anchor for the current output position.
+    Anchor currentOutputAnchor() const;
+    
     Stream & operator<< ( const char& c ) {
       return operator<<(indexFromCharacter(c));
     }

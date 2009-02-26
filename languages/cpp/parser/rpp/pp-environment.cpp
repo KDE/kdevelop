@@ -1,5 +1,6 @@
 /*
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2008-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -233,7 +234,7 @@ pp_macro* Environment::retrieveStoredMacro(const KDevelop::IndexedString& name) 
   return 0;
 }
 
-pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const
+pp_macro* Environment::retrieveMacro(const KDevelop::IndexedString& name, bool /*isImportant*/) const
 {
   return retrieveStoredMacro(name);
 }
