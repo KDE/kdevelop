@@ -225,6 +225,12 @@ unsigned int rpp::Stream::popLastOutput() {
   return ret;
 }
 
+unsigned int rpp::Stream::peekLastOutput(uint backOffset) const {
+  if(m_pos - backOffset > 0)
+    return m_string->at(m_pos - backOffset - 1);
+  return 0;
+}
+
 Stream& Stream::operator<< ( const Stream& input )
 {
   const uint c = input;

@@ -185,9 +185,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         if(input == '#') {
           ++input;
           skip_blanks (input, devnull());
+          
           IndexedString previous(output.popLastOutput()); //Previous already has been expanded
           while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
-            previous = IndexedString(output.popLastOutput());
+            previous = IndexedString(output.popLastOutput());   
+          
           IndexedString add(skip_identifier (input));
           
           PreprocessedContents newExpanded;
@@ -330,7 +332,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         pp_macro* macro = m_engine->environment()->retrieveMacro(name, false);
         
-        if (!macro || !macro->defined || macro->hidden || m_engine->hideNextMacro())
+        if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
         {
           m_engine->setHideNextMacro(name == definedIndex);
 
@@ -347,10 +349,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           continue;
         }
         
-        if (!macro->function_like)
-        {
-          EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
-          pp_macro* m = 0;
+        EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
           if (macro->definitionSize()) {
             macro->hidden = true;
@@ -371,44 +370,40 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               skip_whitespaces(es, devnull());
               IndexedString identifier( skip_identifier(es) );
 
-              pp_macro* m2 = 0;
-              if (es.atEnd() && (m2 = m_engine->environment()->retrieveMacro(identifier, false)) && m2->defined) {
-                m = m2;
-              } else {
-                output.appendString(Anchor(input.inputPosition(), true), expanded);
-              }
+              output.appendString(Anchor(input.inputPosition(), true), expanded);
             }
 
             macro->hidden = false;
           }
+        }else if(input == '(') {
 
-          if (!m)
-            continue;
-
-          macro = m;
+        //Eventually execute a function-macro
+          
+        IndexedString previous(indexFromCharacter(' ')); //Previous already has been expanded
+        uint stepsBack = 0;
+        while(isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ' && output.peekLastOutput(stepsBack)) {
+          previous = IndexedString(output.peekLastOutput(stepsBack));
+          ++stepsBack;
         }
-
-        skip_whitespaces(input, devnull());
-
+        
+        pp_macro* macro = m_engine->environment()->retrieveMacro(previous, false);
+        
+        if(!macro || !macro->function_like) {
+          output << input;
+          ++input;
+          continue;
+        }
+        
         //In case expansion fails, we can skip back to this position
         int openingPosition = input.offset();
         Anchor openingPositionCursor = input.inputPosition();
         
-        // function like macro
-        if (input.atEnd() || input != '(')
-        {
-          output.appendString(inputPosition, name);
-          continue;
-        }
-
         QList<pp_actual> actuals;
         ++input; // skip '('
 
         pp_macro_expander expand_actual(m_engine, m_frame);
 
         {
-          actual.clear();
-
           PreprocessedContents actualText;
           skip_whitespaces(input, devnull());
           Anchor actualStart = input.inputPosition();
@@ -439,7 +434,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         // TODO: why separate from the above?
         while (!input.atEnd() && input == ',')
         {
-          actual.clear();
           ++input; // skip ','
 
           {
@@ -475,11 +469,20 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           //Failed to expand the macro. Output the macro name and continue normal
           //processing behind it.(Code completion depends on this behavior when expanding
           //incomplete input-lines)
-          output.appendString(inputPosition, name);
           input.seek(openingPosition);
           input.setInputPosition(openingPositionCursor);
+          //Move one character into the output, so we don't get an endless loop
+          output << input;
+          ++input;
           continue;
         }
+        
+        //Remove the name of the called macro
+        while(stepsBack) {
+          --stepsBack;
+          output.popLastOutput();
+        }
+        
         //Q_ASSERT(!input.atEnd() && input == ')');
 
         ++input; // skip ')'

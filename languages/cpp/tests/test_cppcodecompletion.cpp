@@ -1348,6 +1348,13 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
+  {//Test replacement of merged preprocessor function calls
+    TopDUContext* top = parse(QByteArray("#define MACRO_1(X) X ## _fromMacro1 \n#define A(pred, n) MACRO_ ## n(pred) \n#define D(X,Y) A(X ## Y, 1) \nint D(a,ba);"), DumpNone);
+    IncludeFileList includes;
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba_fromMacro1"));
+  }
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
