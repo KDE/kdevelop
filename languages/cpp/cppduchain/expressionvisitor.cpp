@@ -495,7 +495,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
       m_lastDeclarations = nameV.declarations();
 
-      if( m_lastDeclarations.isEmpty() ) {
+      if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
         m_lastType = m_lastDeclarations.first()->abstractType();
@@ -1528,7 +1528,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     {
       LOCKDUCHAIN;
-      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
+      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
 
         if( constructedType && constructedType->declaration(topContext()) && constructedType->declaration(topContext())->internalContext() )
         {
@@ -1611,7 +1611,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       QString candidates;
       foreach(const DeclarationPointer &decl, declarations) {
-        if( !decl )
+        if( !decl.data() )
           continue;
         int defaultParamCount = 0;
         if( AbstractFunctionDeclaration* aDec = dynamic_cast<AbstractFunctionDeclaration*>(decl.data()) )
