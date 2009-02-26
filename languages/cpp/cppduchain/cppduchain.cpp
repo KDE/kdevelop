@@ -368,7 +368,7 @@ QPair<KDevelop::Identifier, QByteArray> qtFunctionSignature(QByteArray fullFunct
 KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
   KDevelop::Identifier ret(id);
   ret.clearTemplateIdentifiers();
-  for(int a = 0; a < id.templateIdentifiersCount(); ++a)
+  for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a)
     ret.appendTemplateIdentifier(exchangeQualifiedIdentifier(id.templateIdentifier(a), replace, replaceWith));
 
   return ret;
@@ -409,7 +409,7 @@ TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPos
 Identifier removeTemplateParameters(Identifier id, int behindPosition) {
   Identifier ret(id);
   ret.clearTemplateIdentifiers();
-  for(int a = 0; a < id.templateIdentifiersCount(); ++a) {
+  for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a) {
     TypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
     if(a < behindPosition)
       ret.appendTemplateIdentifier(replacement);
