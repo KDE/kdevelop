@@ -34,7 +34,7 @@ namespace KDevelop
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
   public:
     /// Constructor.
-    IndexedType(uint index = 0) : m_index(index) {
+    explicit IndexedType(uint index = 0) : m_index(index) {
     }
 
     /**
