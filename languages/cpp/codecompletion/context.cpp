@@ -1016,7 +1016,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             if (functions().count() > maxOverloadedOperatorArgumentHints) {
               items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <Cpp::CodeCompletionContext >(this), 0, 0 ) );
               if(functions().count())
-                items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18n("%1 overloads of", functions().count()) + " " + functionName();
+                items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.  The numeric argument is always greater than one, so translation of the singular case is only necessary in languages where the singular form is used for 21, 31 etc.", "1 overload of %2", "%1 overloads of %2", functions().count(), functionName());
             }else if(functions().count() == 0 && additionalContextType() != Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
               items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
             }else if(!functions().isEmpty()) {
