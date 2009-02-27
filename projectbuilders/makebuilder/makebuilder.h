@@ -90,7 +90,6 @@ private Q_SLOTS:
     void jobFinished(KJob* job);
 
 private:
-    QHash< KDevelop::ProjectBaseItem*, KJob* > m_jobs;
     MakeOutputDelegate* m_delegate;
 };
 

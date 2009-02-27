@@ -89,7 +89,7 @@ void MakeBuilder::jobFinished(KJob* job)
 
     if( !mj )
         return;
-
+    
     if (mj->error()) 
     {
         emit failed( mj->item() );
@@ -112,8 +112,6 @@ void MakeBuilder::jobFinished(KJob* job)
                 break;
         }
     }
-    
-    m_jobs.remove(mj->item());
 }
 
 KJob* MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
@@ -124,12 +122,7 @@ KJob* MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
 
 KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandType c,  const QString& overrideTarget )
 {
-    if (m_jobs.contains(item))
-        return m_jobs[item];
-
-    kDebug() << "running new makejob";
     MakeJob* job = new MakeJob(this, item, c, overrideTarget);
-    m_jobs[item] = job;
     job->setItem(item);
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
