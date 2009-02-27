@@ -1087,6 +1087,7 @@ bool Parser::parseOperator(OperatorAST *&node)
     case Token_assign:
     case Token_shift:
     case Token_eq:
+    case Token_not:
     case Token_not_eq:
     case Token_leq:
     case Token_geq:
@@ -3933,6 +3934,7 @@ bool Parser::parseUnaryExpression(ExpressionAST *&node)
     case '+':
     case '-':
     case '!':
+    case Token_not:
     case '~':
       {
         std::size_t op = session->token_stream->cursor();
