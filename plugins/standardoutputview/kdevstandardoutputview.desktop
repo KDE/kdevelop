@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=Output View
+Name[ga]=Amharc Aschurtha
+Name[uk]=Перегляд виводу
+Name[zh_TW]=輸出檢視
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview
