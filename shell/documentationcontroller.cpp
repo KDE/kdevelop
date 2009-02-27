@@ -58,7 +58,8 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
                 }
             }
             
-            ICore::self()->uiController()->addToolView(i18n("Documentation"), this);
+            if(mViews.isEmpty())
+                ICore::self()->uiController()->addToolView(i18n("Documentation"), this);
             Q_ASSERT(!mViews.isEmpty());
             return mViews.last();
         }
