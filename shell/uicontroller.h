@@ -25,6 +25,7 @@
 #include <sublime/controller.h>
 
 #include <ksharedconfig.h>
+#include <interfaces/iassistant.h>
 
 namespace Sublime {
     class AreaIndex;
@@ -80,6 +81,8 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     virtual void registerStatus(QObject* status);
 
+    virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant);
+    
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
@@ -93,6 +96,12 @@ private:
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
+private Q_SLOTS:
+    void assistantAction1();
+    void assistantAction2(bool);
+    void assistantAction3(bool);
+    void assistantAction4(bool);
+    void assistantHide(bool);
 
 private:
     class UiControllerPrivate* const d;

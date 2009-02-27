@@ -27,6 +27,9 @@
 
 class QAction;
 
+template<class T>
+class KSharedPtr;
+
 namespace KParts {
     class MainWindow;
 }
@@ -38,6 +41,7 @@ namespace Sublime{
 namespace KDevelop {
 
 class IDocument;
+class IAssistant;
 
 class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
@@ -82,6 +86,10 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     virtual void registerStatus(QObject* status) = 0;
 
+    /**
+     * Shows an assistant popup at bottom within the current central widget
+     * @p assistant the assistant that will be shown in a popup */
+    virtual void popUpAssistant(const KSharedPtr<IAssistant>& assistant) = 0;
 
     /**
      * This is meant to be used by IDocument subclasses to initialize the
