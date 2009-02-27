@@ -406,6 +406,7 @@ void TemplateDeclaration::setInstantiatedFrom(TemplateDeclaration* from, const I
   m_instantiatedWith = instantiatedWith.indexed();
   //Only one instantiation is allowed
   if(from) {
+    //Either it must be reserved, or not exist yet
     Q_ASSERT(from->m_instantiations.find(instantiatedWith.indexed()) == from->m_instantiations.end() || (*from->m_instantiations.find(instantiatedWith.indexed())) == 0);
     from->m_instantiations.insert(m_instantiatedWith, this);
     Q_ASSERT(from->m_instantiations.contains(m_instantiatedWith));
@@ -473,13 +474,12 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   Q_ASSERT(parentContext);
   TemplateDeclaration* instantiatedFromTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
 
-  if(instantiatedFromTemplate) { //This makes sure that we don't try to do the same instantiation in the meantime
-
-    //May happen when instantiating specializations
-    //     Q_ASSERT(!instantiatedFromTemplate->instantiatedFrom());
-    Q_ASSERT(instantiatedDeclaration);
-    instantiatedFromTemplate->reserveInstantiation(templateArguments.indexed());
-  }
+//   if(instantiatedFromTemplate) { //This makes sure that we don't try to do the same instantiation in the meantime
+// 
+//     //May happen when instantiating specializations
+//     //     Q_ASSERT(!instantiatedFromTemplate->instantiatedFrom());
+//     Q_ASSERT(instantiatedDeclaration);
+//   }
 
   StandardCppDUContext* contextCopy = 0;
 
@@ -844,13 +844,14 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       if(it != m_defaultParameterInstantiations.end())
         templateArguments = (*it).information();
     }
-    
-   InstantiationsHash::const_iterator it;
+  
+    InstantiationsHash::const_iterator it;
     it = m_instantiations.find( templateArguments.indexed() );
     if( it != m_instantiations.end() ) {
       if(*it) {
         return dynamic_cast<Declaration*>(*it);
       }else{
+        ///@todo What the same thing is instantiated twice in parralel? Then this may trigger as well, altough one side should wait
         ///We are currently instantiating this declaration with the same template arguments. This would lead to an assertion.
         kDebug() << "tried to recursively instantiate" << dynamic_cast<Declaration*>(this)->toString() << "with" << templateArguments.toString();
         ///Maybe problematic, because the returned declaration is not in the correct context etc.
@@ -896,22 +897,29 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       if(!(templateArguments == _templateArguments)) {
         QMutexLocker l(&instantiationsMutex);
         m_defaultParameterInstantiations[_templateArguments.indexed()] = templateArguments.indexed();
-    
-        InstantiationsHash::const_iterator it;
-          it = m_instantiations.find( templateArguments.indexed() );
-          if( it != m_instantiations.end() ) {
-            if(*it) {
-              return dynamic_cast<Declaration*>(*it);
-            }else{
-              //Problem
-              return dynamic_cast<Declaration*>(this);
-            }
-          }
-        
       }
     }
   }
-  
+
+  {
+    //Now we have the final template-parameters. Once again check whether we have already instantiated this,
+    //and if not, reserve the instantiation so we cannot crash later on
+    ///@todo When the same declaration is instantuated multiple times, this sucks because one is returned invalid
+    QMutexLocker l(&instantiationsMutex);
+    InstantiationsHash::const_iterator it;
+    it = m_instantiations.find( templateArguments.indexed() );
+    if( it != m_instantiations.end() ) {
+      if(*it) {
+        return dynamic_cast<Declaration*>(*it);
+      }else{
+        //Problem
+        return dynamic_cast<Declaration*>(this);
+      }
+    }
+    ///@warning Once we've called reserveInstantiation, we have to be 100% sure that we actually create the instantiation
+    reserveInstantiation(templateArguments.indexed());
+  }
+
   TemplateDeclaration* instantiatedSpecialization =  0;
   uint specializationMatchQuality = 0;
   //Check whether there is a specialization that matches the template parameters
@@ -929,21 +937,14 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       }
     }
   }
+  
+  //We have reserved the instantiation, so it must have stayed untouched
+  Q_ASSERT(m_instantiations[templateArguments.indexed()] == 0);
+  
   if(instantiatedSpecialization) {
     //A specialization has been chosen and instantiated. Just register it here, and return it.
     instantiatedSpecialization->setInstantiatedFrom(this, templateArguments);
     return dynamic_cast<Declaration*>(instantiatedSpecialization);
-  }else{
-    //For security, since we have done quite some calls to outside, check whether we have an instantiation cached now
-    QMutexLocker l(&instantiationsMutex);
-   InstantiationsHash::const_iterator it;
-    it = m_instantiations.find( templateArguments.indexed() );
-    if( it != m_instantiations.end() ) {
-      if(*it) {
-        kDebug() << dynamic_cast<Declaration*>(this)->toString() << "instantiation appeared during matching";
-        return dynamic_cast<Declaration*>(*it);
-      }
-    }
   }
 
   {
