@@ -926,20 +926,19 @@ void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memb
     Q_ASSERT(t);
     bool isConstant = t->modifiers() & AbstractType::ConstModifier;
     bool isVolatile = t->modifiers() & AbstractType::VolatileModifier;
-    //bool isStatic = t->modifiers() & AbstractType::StaticModifier;
 
     kDebug() << memberFun->toString() << "virtual?"  << memberFun->isVirtual()
                                       << "explicit?" << memberFun->isExplicit()
                                       << "inline?"   << memberFun->isInline()
                                       << "constant?" << isConstant
-                                      << "volatile?" << isVolatile;
-                                      //<< "static?"   << isStatic;
+                                      << "volatile?" << isVolatile
+                                      << "static?"   << memberFun->isStatic();
     QVERIFY(!memberFun->isVirtual());
     QVERIFY(!memberFun->isExplicit());
     QVERIFY(!memberFun->isInline());
     QVERIFY(!isConstant);
     QVERIFY(!isVolatile);
-    //QVERIFY(!isStatic);
+    QVERIFY(!memberFun->isStatic());
 }
 
 void TestDUChain::testTryCatch() {
