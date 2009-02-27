@@ -133,6 +133,7 @@ public:
     virtual KParts::MainWindow *activeMainWindow() { return m_activeMainWindow; }
     virtual Sublime::Controller* controller() { return m_controller; }
     virtual void registerStatus(QObject*) {}
+    virtual void popupAssistant(const KSharedPtr<IAssistant>& ) {}
 
     KParts::MainWindow* m_activeMainWindow;
     Sublime::Controller* m_controller;
