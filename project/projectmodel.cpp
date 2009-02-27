@@ -195,6 +195,28 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     return lst;
 }
 
+QList< KDevelop::ProjectFileItem* > ProjectBaseItem::allFiles() const
+{
+    QList<ProjectFileItem*> lst;
+    for ( int i = 0; i < rowCount(); ++i )
+    {
+        QStandardItem* item = child( i );
+        if ( item->type() == File )
+        {
+            ProjectFileItem *kdevitem = dynamic_cast<ProjectFileItem*>( item );
+            if ( kdevitem )
+                lst.append( kdevitem );
+        }
+        else if ( item->type() == Folder )
+        {
+            ProjectBaseItem *kdevitem = dynamic_cast<ProjectBaseItem*>( item );
+            if ( kdevitem )
+                lst += kdevitem->allFiles();
+        }
+    }
+    return lst;
+}
+
 ProjectModel::ProjectModel( QObject *parent )
         : QStandardItemModel( parent ), d(0)
 {
