@@ -196,8 +196,8 @@ void IncludePathComputer::computeBackground() {
                         if( m_problems ) {
                           KDevelop::ProblemPointer p(new KDevelop::Problem);
                           p->setSource(KDevelop::ProblemData::Preprocessor);
-                          p->setDescription(i18n("Build-manager did not return an include-path" ));
-                          p->setExplanation(i18n("The build-manager did not return the include-path %1, which could be resolved by the include-path resolver", r.pathOrUrl()));
+                          p->setDescription(i18n("Build manager did not return an include path" ));
+                          p->setExplanation(i18n("The build manager did not return the include path %1, which could be resolved by the include path resolver", r.pathOrUrl()));
                           p->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
                           *m_problems << p;
                         }
@@ -215,8 +215,8 @@ void IncludePathComputer::computeBackground() {
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem->setSource(KDevelop::ProblemData::Preprocessor);
-            problem->setDescription(i18n("Include-path resolver:") + " " + result.errorMessage);
-            problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude-path resolver: %2", m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
+            problem->setDescription(i18n("Include path resolver:") + " " + result.errorMessage);
+            problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2", m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
             problem->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
         }
     }

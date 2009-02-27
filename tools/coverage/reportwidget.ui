@@ -159,7 +159,7 @@ Covered lines are those that were executed at least once.</string>
               <property name="whatsThis" >
                <string>Total number of lines of code in the selected directories.
 
-Note that it only includes executable lines. That is, things like comments, macros, forward declarations... aren't taken into account.</string>
+Note that it only includes executable lines. That is, things like comments, macros, forward declarations, etc. are not taken into account.</string>
               </property>
               <property name="text" >
                <string>Total SLOC:</string>
@@ -171,7 +171,7 @@ Note that it only includes executable lines. That is, things like comments, macr
               <property name="whatsThis" >
                <string>Total number of lines of code in the selected directories.
 
-Note that it only includes executable lines. That is, things like comments, macros, forward declarations... aren't taken into account.</string>
+Note that it only includes executable lines. That is, things like comments, macros, forward declarations, etc. are not taken into account.</string>
               </property>
               <property name="text" >
                <string>-</string>

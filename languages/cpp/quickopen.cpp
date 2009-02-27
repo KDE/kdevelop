@@ -188,7 +188,7 @@ QWidget* IncludeFileData::expandingWidget() const {
     if( !inclusionPath.isEmpty() )
       inclusionPath.pop_back(); //Remove the file itself from the list
     
-    htmlSuffix = "<br/>" + i18n( "In %1th include-path", m_item.pathNumber );
+    htmlSuffix = "<br/>" + i18n( "In include path %1", m_item.pathNumber );
   }
   
   foreach( const KUrl& u, inclusionPath )
