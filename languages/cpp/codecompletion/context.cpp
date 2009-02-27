@@ -330,6 +330,11 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     m_expression = QString();
   }
   
+  if(m_expression == ":" || m_expression == "public" || m_expression == "protected" || m_expression == "private" || m_expression == "virtual") {
+    m_onlyShowTypes = true;
+    m_expression = QString();
+  }
+  
   if(m_expression == "emit")  {
     m_onlyShowSignals = true;
     m_expression = QString();
