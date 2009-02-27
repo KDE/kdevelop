@@ -48,8 +48,8 @@ FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* con
 {
     setToolTip(i18n("<b>Frame stack</b><p>"
                     "Often referred to as the \"call stack\", "
-                    "this is a list showing what function is "
-                    "currently active and who called each "
+                    "this is a list showing which function is "
+                    "currently active, and what called each "
                     "function to get to this point in your "
                     "program. By clicking on an item you "
                     "can see the values in any of the "

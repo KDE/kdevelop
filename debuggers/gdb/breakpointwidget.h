@@ -129,8 +129,8 @@ namespace GDBDebugger
                                      "communucated to GDB, but which are not yet "
                                      "installed in the target, because GDB cannot "
                                      "find the function or the file the breakpoint "
-                                     "refers too. Most common case is a breakpoint "
-                                     "in a shared library.  GDB will insert this "
+                                     "refers to. The most common case is a breakpoint "
+                                     "in a shared library: GDB will insert this "
                                      "breakpoint only when the library is loaded."),
                                      status_);
             }

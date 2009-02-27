@@ -134,7 +134,7 @@ However, non-mangled names are easier to read.</string>
           <property name="whatsThis" >
            <string>If GDB has not seen a library that will be loaded via
 "dlopen" then it will refuse to set a breakpoint in that code.
-We can get GDB to stop on a library load and hence
+With this option, GDB will stop on a library load and hence
 try to set the pending breakpoints. See the documentation
 for more details relating to this behavior.
 

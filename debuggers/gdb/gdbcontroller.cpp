@@ -793,9 +793,9 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
             KMessageBox::error(
                 qApp->activeWindow(),
                 i18n("<b>Application does not exist</b>"
-                      "<p>The application you're trying to debug,<br>"
+                      "<p>The application you are trying to debug,<br>"
                       "    %1\n"
-                      "<br>does not exist. Check that you've specified "
+                      "<br>does not exist. Check that you have specified "
                       "the right application in the debugger configuration.",
                       app.fileName()),
                 i18n("Application does not exist"));
@@ -1187,11 +1187,10 @@ void GDBController::slotUserGDBCmd(const QString& cmd)
 void GDBController::explainDebuggerStatus()
 {
     GDBCommand* currentCmd_ = gdb_->currentCommand();
-    QString information = i18n(
-        "%1 commands in queue\n"
-        "%2 commands being processed by gdb\n"
-        "Debugger state: %3\n",
-        commandQueue_->count(), (currentCmd_ ? 1 : 0), state_);
+    QString information = 
+        i18np("1 command in queue\n", "%1 commands in queue\n", commandQueue_->count()) +
+        i18ncp("Only the 0 and 1 cases need to be translated", "1 command being processed by gdb\n", "%1 commands being processed by gdb\n", (currentCmd_ ? 1 : 0)) +
+        i18n("Debugger state: %1\n", state_);
 
     if (currentCmd_)
     {
