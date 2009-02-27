@@ -279,7 +279,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   };
 
   if( m_isResolving )
-    return PathResolutionResult(false, i18n("tried include-path-resolution while another resolution-process was still running") );
+    return PathResolutionResult(false, i18n("Tried include path resolution while another resolution process was still running") );
 
   Enabler e( m_isResolving );
 
@@ -300,7 +300,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   dir = QDir( mapToBuild(dir.absolutePath()).toLocalFile() );
   QFileInfo makeFile( dir, "Makefile" );
   if( !makeFile.exists() )
-    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("problem while trying to resolve include-paths for %1", file ) );
+    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   QDateTime makeFileModification = makeFile.lastModified();
@@ -424,7 +424,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
 PathResolutionResult IncludePathResolver::getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const {
   if( !executeCommand(command, workingDirectory, output) )
-    return PathResolutionResult( false, i18n("make-process failed"), i18n("output: %1", output ) );
+    return PathResolutionResult( false, i18n("Make process failed"), i18n("Output: %1", output ) );
   return PathResolutionResult(true);
 }
 
@@ -517,14 +517,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
               return res;
             return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams , newSource );
           }else{
-            return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The parameter-string \"%1\" does not seem to be valid. Output was: %2", makeParams, fullOutput) );
+            return PathResolutionResult( false, i18n("Recursive make call failed"), i18n("The parameter string \"%1\" does not seem to be valid. Output was: %2.", makeParams, fullOutput) );
           }
         } else {
-          return PathResolutionResult( false, i18n("Recursive make-call failed"), i18n("The directory \"%1\" does not exist. Output was: %2", newWorkingDirectory, fullOutput) );
+          return PathResolutionResult( false, i18n("Recursive make call failed"), i18n("The directory \"%1\" does not exist. Output was: %2.", newWorkingDirectory, fullOutput) );
         }
 
       } else {
-        return PathResolutionResult( false, i18n("Recursive make-call malformed"), i18n("Output was: %1", fullOutput) );
+        return PathResolutionResult( false, i18n("Malformed recursive make call"), i18n("Output was: %1", fullOutput) );
       }
 
       ++offset;
@@ -576,7 +576,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   }
 
   if(ret.paths.isEmpty())
-    return PathResolutionResult( false, i18n("Could not extract include-paths from make-output"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+    return PathResolutionResult( false, i18n("Could not extract include paths from make output"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
   
   return ret;
 }
