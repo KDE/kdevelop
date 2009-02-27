@@ -98,7 +98,7 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     actionCollection()->addAction("tools_valgrind", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_V);
     action->setToolTip(i18n("Valgrind memory leak check and other tools"));
-    action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind - a tool to help you find memory-management problems in your programs, and other valgrind tools.</p>"));
+    action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind &mdash; a tool to help you find memory-management problems in your programs, and which provides other tools.</p>"));
     action->setIcon(KIcon("fork"));
     connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
 }

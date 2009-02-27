@@ -34,14 +34,14 @@ ValgrindWidget::ValgrindWidget(ValgrindPlugin* plugin, QWidget * parent)
     setWindowIcon(KIcon("fork"));
     setWindowTitle(i18n("Valgrind Output"));
 
-    setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of the valgrind. Valgrind detects<br/>"
-        "use of uninitialized memory<br/>"
-        "reading/writing memory after it has been free'd<br/>"
-        "reading/writing off the end of malloc'd blocks<br/>"
-        "reading/writing inappropriate areas on the stack<br/>"
-        "memory leaks -- where pointers to malloc'd blocks are lost forever<br/>"
-        "passing of uninitialised and/or unaddressable memory to system calls<br/>"
-        "mismatched use of malloc/new/new [] vs free/delete/delete []<br/>"
+    setWhatsThis( i18n( "<b>Valgrind</b><p>Shows the output of valgrind. Valgrind detects:<br/>"
+        "use of uninitialized memory;<br/>"
+        "reading/writing memory after it has been free'd;<br/>"
+        "reading/writing off the end of malloc'd blocks;<br/>"
+        "reading/writing inappropriate areas on the stack;<br/>"
+        "memory leaks &mdash; where pointers to malloc'd blocks are lost forever;<br/>"
+        "passing of uninitialised and/or unaddressable memory to system calls;<br/>"
+        "mismatched use of malloc/new/new [] vs free/delete/delete [];<br/>"
         "some abuses of the POSIX pthread API.</p>" ) );
 
     connect(plugin, SIGNAL(newModel(ValgrindModel*)), this, SLOT(newModel(ValgrindModel*)));
