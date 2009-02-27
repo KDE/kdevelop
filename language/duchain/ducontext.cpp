@@ -837,9 +837,9 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
       for(int import = d->m_importedContextsSize()-1; import >= 0; --import ) {
         DUContext* context = d->m_importedContexts()[import].context(source);
 
-        /// \todo This statement is really weird! Ask david...
         while( !context && import > 0 ) {
           --import;
+          context = d->m_importedContexts()[import].context(source);
         }
 
         if(context == this) {
