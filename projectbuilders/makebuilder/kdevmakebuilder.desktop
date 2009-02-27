@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=Make Project Builder
+Name[ga]=Tógálaí Tionscadal Make
+Name[uk]=Інструмент збирання проектів Make
+Name[zh_TW]=Make 專案建立器
 Comment=KDevelop Make Builder
 Comment[de]=Make-Builder von KDevelop
 Comment[el]=Κατασκευαστής Make του KDevelop

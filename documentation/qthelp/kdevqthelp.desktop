@@ -4,10 +4,13 @@ Exec=blubb
 Comment=This plugin provides QtHelp integration
 Comment[nds]=Dit Moduul stellt de Inbetten vun de Qt-Hülp praat
 Comment[uk]=За допомогою цього додатка здійснюється інтеграція з QtHelp
+Comment[zh_TW]=此外掛程式提供 QtHelp 整合
 Name=KDevQtHelp
 GenericName=Qt Help
+GenericName[ga]=Cabhair Qt
 GenericName[nds]=Qt-Hülp
 GenericName[uk]=Довідка Qt
+GenericName[zh_TW]=Qt 說明
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevqthelp

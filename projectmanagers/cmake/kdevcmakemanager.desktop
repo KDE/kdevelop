@@ -1,6 +1,8 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Manager
+Name[uk]=Керування проектами CMake
+Name[zh_TW]=CMake 專案管理員
 Comment=Allows KDevelop to manager CMake based projects
 Comment[de]=Erlaubt das Erstellen CMake-basierter Projekte mit KDevelop
 Comment[el]=Επιτρέπει στο KDevelop το χειρισμό έργων με βάση το CMake

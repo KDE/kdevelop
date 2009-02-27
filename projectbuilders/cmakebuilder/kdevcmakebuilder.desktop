@@ -1,6 +1,9 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Builder
+Name[ga]=Tógálaí Tionscadal CMake
+Name[uk]=Інструмент збирання проектів CMake
+Name[zh_TW]=CMake 專案建立器
 Comment=Builds CMake Projects
 Comment[de]=Erstellt CMake-Projekte
 Comment[el]=Κατασκευή έργων CMake

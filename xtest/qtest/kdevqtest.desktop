@@ -23,6 +23,9 @@ Comment[zh_CN]=QTestLib 测试运行器
 Comment[zh_TW]=QTestLib 測試執行者
 
 Name=QTest Runner
+Name[ga]=Feidhmitheoir QTest
+Name[uk]=Засіб запуску QTest
+Name[zh_TW]=Qtest 執行者
 GenericName=Unit test runner
 GenericName[de]=Unittest ausführen
 GenericName[el]=Εκτέλεση ελέγχου Unit

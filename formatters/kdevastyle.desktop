@@ -23,7 +23,11 @@ Comment[x-test]=xxA plugin for formatting of sourcecode according to a specified
 Comment[zh_CN]=一个根据指定规则设定格式化源代码的插件
 Comment[zh_TW]=根據指定的規則排列程式源碼的外掛程式
 Name=AStyle Formatter Backend
+Name[uk]=Сервер форматування AStyle
+Name[zh_TW]=AStyle 格式器後端介面
 GenericName=Formatter Backend
+GenericName[uk]=Сервер форматування
+GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevastyle

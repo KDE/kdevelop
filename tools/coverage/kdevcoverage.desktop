@@ -21,6 +21,8 @@ Comment[zh_CN]=Gcov C(++) 覆盖率
 Comment[zh_TW]=Gcov C/C++ 範圍
 
 Name=Code Coverage Report
+Name[uk]=Звіт щодо покриття коду
+Name[zh_TW]=源碼範圍報告
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcoverage
 X-KDE-PluginInfo-Name=coverageplugin
