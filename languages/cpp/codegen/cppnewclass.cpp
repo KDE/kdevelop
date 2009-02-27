@@ -90,12 +90,14 @@ void CppNewClass::generate()
 
 KUrl CppNewClass::headerUrlFromBase(QString className, KUrl baseUrl) {
   KUrl url(baseUrl); ///@todo Add some settings somewhere to set up how this is computed
+  className = className.split("::").last(); //Use last element of the scope, so namespaces are not part of the filename
   url.addPath(className.toLower() + ".h");
   return url;
 }
 
 KUrl CppNewClass::implementationUrlFromBase(QString className, KUrl baseUrl) {
   KUrl url(baseUrl);
+  className = className.split("::").last(); //Use last element of the scope, so namespaces are not part of the filename
   url.addPath(className.toLower() + ".cpp");
   return url;
 }
