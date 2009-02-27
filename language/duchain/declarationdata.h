@@ -47,7 +47,7 @@ public:
   ///@todo Eventually move this and all the definition/declaration coupling functionality somewhere else
   //Holds the declaration id for this definition, if this is a definition with separate declaration
   DeclarationId m_declaration;
-  
+
   //Index in the comment repository
   uint m_comment;
 
@@ -57,6 +57,7 @@ public:
   bool m_inSymbolTable : 1;
   bool m_isTypeAlias   : 1;
   bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
+  bool m_isFinal       : 1;
 };
 
 }

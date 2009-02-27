@@ -163,14 +163,14 @@ public:
       }
     }
     {
-      DUChainReadLocker lock( DUChain::lock() );
+      /*DUChainReadLocker lock( DUChain::lock() );
       //foreach(DUContext* context, topLevelContext->childContexts());
       kDebug() << "built top-level context with" << top->localDeclarations().count() << "declarations," << top->localDeclarations().count() << " Definitions and" << top->childContexts().size() << "Child-Contexts";
 
       foreach( DUContext* contexts, top->childContexts() )
       {
         kDebug() << "CHILD:" << contexts->scopeIdentifier( true ) << "Parent:" << ( dynamic_cast<TopDUContext*>( contexts->parentContext() ) ? "top-context" : "" );
-      }
+      }*/
     }
     m_compilingContexts = false;
     return top;
@@ -300,9 +300,9 @@ protected:
   inline DUContext* lastContext() const { return m_lastContext; }
   /// Clears the last closed context.
   inline void clearLastContext() { m_lastContext = 0; }
-  
+
   inline void setLastContext(DUContext* context) { m_lastContext = context; }
-  
+
   /**
    * Determine if we are recompiling an existing definition-use chain, or if
    * a new chain is being created from scratch.
@@ -712,10 +712,10 @@ protected:
 
 //         if(iface)
 //           kDebug() << "translated by" << (translated.start.textCursor() - range.start.textCursor()) << (translated.end.textCursor() - range.end.textCursor()) << "to revision" << iface->currentRevision();
-        
+
         int currentIndex = nextContextIndex();
         int lookingAhead = 0;
-        
+
         for ( ; currentIndex < childContexts.count(); ++currentIndex )
         {
           DUContext* child = childContexts.at( currentIndex );
@@ -805,7 +805,7 @@ protected:
       return;
     }
     DUContext::ContextType type = context->type();
-    context->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);    
+    context->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
   }
 
 private:

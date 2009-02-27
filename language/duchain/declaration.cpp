@@ -55,13 +55,13 @@ Repositories::StringRepository commentRepository("Comment Repository");
 
 REGISTER_DUCHAIN_ITEM(Declaration);
 
-DeclarationData::DeclarationData() 
-  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false),  
-    m_isTypeAlias(false), m_anonymousInContext(false)
+DeclarationData::DeclarationData()
+  : m_comment(0), m_isDefinition(false), m_inSymbolTable(false),
+    m_isTypeAlias(false), m_anonymousInContext(false), m_isFinal(false)
 {
   m_kind = Declaration::Instance;
 }
-  
+
 DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs)
 {
   m_identifier = rhs.m_identifier;
@@ -74,6 +74,7 @@ DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData
   m_comment = rhs.m_comment;
   m_anonymousInContext = rhs.m_anonymousInContext;
   m_internalContext = rhs.m_internalContext;
+  m_isFinal = rhs.m_isFinal;
 }
 
 Declaration::Kind Declaration::kind() const {
@@ -141,22 +142,22 @@ Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
 Declaration::~Declaration()
 {
   uint oldOwnIndex = m_indexInTopContext;
-  
+
   TopDUContext* topContext = this->topContext();
-  
+
   //Only perform the actions when the top-context isn't being deleted, or when it hasn't been stored to disk
   if(!topContext->deleting() || !topContext->isOnDisk()) {
     DUCHAIN_D_DYNAMIC(Declaration);
     // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )
       d->m_internalContext.context()->setOwner(0);
-    
+
     if (d->m_inSymbolTable && !d->m_identifier.isEmpty()) {
       QualifiedIdentifier id = qualifiedIdentifier();
       PersistentSymbolTable::self().removeDeclaration(id, this);
       CodeModel::self().removeItem(url(), id);
     }
-    
+
     d->m_inSymbolTable = false;
   }
 
@@ -166,9 +167,9 @@ Declaration::~Declaration()
     if(!topContext->deleting() || !topContext->isOnDisk() || context()->d_func()->isDynamic())
       context()->m_dynamicData->removeDeclaration(this);
   }
-    
+
   clearOwnIndex();
-  
+
   if(!topContext->deleting() || !topContext->isOnDisk()) {
     setContext(0);
 
@@ -263,11 +264,11 @@ Declaration* IndexedDeclaration::declaration() const {
 void Declaration::rebuildDynamicData(DUContext* parent, uint ownIndex)
 {
   DUChainBase::rebuildDynamicData(parent, ownIndex);
-  
+
   m_context = parent;
   m_topContext = parent->topContext();
   m_indexInTopContext = ownIndex;
-  
+
   parent->m_dynamicData->addDeclarationToHash(d_func()->m_identifier.identifier(), this);
 }
 
@@ -276,14 +277,14 @@ void Declaration::setIdentifier(const Identifier& identifier)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(Declaration);
   bool wasInSymbolTable = d->m_inSymbolTable;
-  
+
   setInSymbolTable(false);
-    
+
   if( m_context && !d->m_anonymousInContext )
     m_context->changingIdentifier( this, d->m_identifier, identifier );
 
   d->m_identifier = identifier;
-  
+
   setInSymbolTable(wasInSymbolTable);
   //DUChain::declarationChanged(this, DUChainObserver::Change, DUChainObserver::Identifier);
 }
@@ -366,8 +367,8 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 
   //We don't need to clear, because it's not allowed to move from one top-context into another
 //   clearOwnIndex();
-  
-  
+
+
   DUCHAIN_D_DYNAMIC(Declaration);
   if (m_context && context) {
     Q_ASSERT(m_context->topContext() == context->topContext());
@@ -384,14 +385,14 @@ void Declaration::setContext(DUContext* context, bool anonymous)
     m_topContext = context->topContext();
   else
     m_topContext = 0;
-  
+
   d->m_anonymousInContext = anonymous;
   m_context = context;
 
   if (context) {
     if(!m_indexInTopContext)
       allocateOwnIndex();
-    
+
     if(!d->m_anonymousInContext) {
       context->m_dynamicData->addDeclaration(this);
       //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::Context, m_context);
@@ -403,14 +404,14 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 }
 
 void Declaration::clearOwnIndex() {
-  
+
   if(!m_indexInTopContext)
     return;
-  
+
   if(!context() || (!d_func()->m_anonymousInContext && !context()->isAnonymous())) {
     ENSURE_CAN_WRITE
   }
-  
+
   if(m_indexInTopContext) {
     Q_ASSERT(m_topContext);
     m_topContext->m_dynamicData->clearDeclarationIndex(this);
@@ -419,7 +420,7 @@ void Declaration::clearOwnIndex() {
 }
 
 void Declaration::allocateOwnIndex() {
-  
+
   ///@todo Fix multithreading stuff with template instantiation, preferably using some internal mutexes
 //   if(context() && (!context()->isAnonymous() && !d_func()->m_anonymousInContext)) {
 //     ENSURE_CAN_WRITE
@@ -429,10 +430,10 @@ void Declaration::allocateOwnIndex() {
 
   m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || !context() || context()->isAnonymous());
   Q_ASSERT(m_indexInTopContext);
-  
+
   if(!m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
     kFatal() << "Could not re-retrieve declaration" << "index:" << m_indexInTopContext;
-  
+
 }
 
 const Declaration* Declaration::logicalDeclaration(const TopDUContext* topContext) const {
@@ -498,15 +499,15 @@ void Declaration::setInternalContext(DUContext* context)
     m_topContext = context->topContext();
     allocateOwnIndex();
   }
-  
+
   DUContext* oldInternalContext = d->m_internalContext.context();
-  
+
   d->m_internalContext = context;
 
   //Q_ASSERT( !oldInternalContext || oldInternalContext->owner() == this );
   if( oldInternalContext && oldInternalContext->owner() == this )
     oldInternalContext->setOwner(0);
-  
+
 
   if( context )
     context->setOwner(this);
@@ -543,6 +544,16 @@ void Declaration::setDeclarationIsDefinition(bool dd)
 //   if (d->m_isDefinition && definition()) {
 //     setDefinition(0);
 //   }
+}
+
+bool Declaration::isFinal() const
+{
+  return d_func()->m_isFinal;
+}
+
+void Declaration::setFinal(bool final)
+{
+  d_func_dynamic()->m_isFinal = final;
 }
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this
@@ -586,23 +597,23 @@ bool Declaration::inSymbolTable() const
 
 CodeModelItem::Kind kindForDeclaration(Declaration* decl) {
   CodeModelItem::Kind kind = CodeModelItem::Unknown;
-  
+
   if(decl->kind() == Declaration::Namespace)
     return CodeModelItem::Namespace;
-  
+
   if(decl->isFunctionDeclaration()) {
     kind = CodeModelItem::Function;
   }
-  
+
   if(decl->kind() == Declaration::Type && decl->type<StructureType>())
     kind = CodeModelItem::Class;
-  
+
   if(kind == CodeModelItem::Unknown && decl->kind() == Declaration::Instance)
     kind = CodeModelItem::Variable;
-  
+
   if(decl->isForwardDeclaration())
     kind = (CodeModelItem::Kind)(kind | CodeModelItem::ForwardDeclaration);
-  
+
   return kind;
 }
 
@@ -622,14 +633,14 @@ void Declaration::setInSymbolTable(bool inSymbolTable)
     if(!d->m_inSymbolTable && inSymbolTable) {
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().addDeclaration(id, this);
-      
+
       CodeModel::self().addItem(url(), id, kindForDeclaration(this));
     }
-  
+
     else if(d->m_inSymbolTable && !inSymbolTable) {
       QualifiedIdentifier id(qualifiedIdentifier());
       PersistentSymbolTable::self().removeDeclaration(id, this);
-      
+
       CodeModel::self().removeItem(url(), id);
     }
   }
@@ -681,7 +692,7 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   DUCHAIN_D(Declaration);
   if(d->m_identifier != rhs->d_func()->m_identifier)
     return false;
-  
+
   return m_context->equalScopeIdentifier(m_context);
 }
 

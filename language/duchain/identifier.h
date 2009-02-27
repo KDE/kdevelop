@@ -76,7 +76,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   bool operator<(const IndexedQualifiedIdentifier& rhs) const {
     return index < rhs.index;
   }
-  
+
   bool isValid() const;
 
   QualifiedIdentifier identifier() const;
@@ -218,9 +218,9 @@ public:
   /**
    * Copy the leftmost \a len number of identifiers.
    *
-   * @param len The number of identifiers to copy.
+   * @param len The number of identifiers to copy, or if negative, the number of identifiers to omit from the right
    * */
-  inline QualifiedIdentifier left(int len) const { return mid(0, len); }
+  inline QualifiedIdentifier left(int len) const { return mid(0, len > 0 ? len : count() + len); }
 
   bool explicitlyGlobal() const;
   void setExplicitlyGlobal(bool eg);

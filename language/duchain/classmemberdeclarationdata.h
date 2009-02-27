@@ -32,7 +32,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationData : public Declaratio
 public:
   ClassMemberDeclarationData();
   ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs );
-  
+
   Declaration::AccessPolicy m_accessPolicy;
   bool m_isStatic: 1;
   bool m_isAuto: 1;
@@ -40,6 +40,11 @@ public:
   bool m_isRegister: 1;
   bool m_isExtern: 1;
   bool m_isMutable: 1;
+  bool m_isFinal: 1;
+  bool m_isNative: 1;
+  bool m_isSynchronized: 1;
+  bool m_isStrictFP: 1;
+  bool m_isAbstract: 1;
 };
 
 }

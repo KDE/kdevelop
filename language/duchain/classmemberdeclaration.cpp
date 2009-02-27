@@ -34,9 +34,12 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
   m_isRegister = false;
   m_isExtern = false;
   m_isMutable = false;
-  
+  m_isNative = false;
+  m_isSynchronized = false;
+  m_isStrictFP = false;
+  m_isAbstract = false;
 }
-ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs ) 
+ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs )
     : DeclarationData( rhs )
 {
   m_accessPolicy = rhs.m_accessPolicy;
@@ -46,6 +49,10 @@ ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclara
   m_isRegister = rhs.m_isRegister;
   m_isExtern = rhs.m_isExtern;
   m_isMutable = rhs.m_isMutable;
+  m_isNative = rhs.m_isNative;
+  m_isSynchronized = rhs.m_isSynchronized;
+  m_isStrictFP = rhs.m_isStrictFP;
+  m_isAbstract = rhs.m_isAbstract;
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
@@ -150,6 +157,47 @@ void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPol
   d_func_dynamic()->m_accessPolicy = accessPolicy;
 }
 
+bool ClassMemberDeclaration::isNative() const
+{
+  return d_func()->m_isNative;
+}
+
+void ClassMemberDeclaration::setNative(bool native)
+{
+  d_func_dynamic()->m_isNative = native;
+}
+
+bool ClassMemberDeclaration::isStrictFP() const
+{
+  return d_func()->m_isStrictFP;
+}
+
+void ClassMemberDeclaration::setStrictFP(bool strictFP)
+{
+  d_func_dynamic()->m_isStrictFP = strictFP;
+}
+
+bool ClassMemberDeclaration::isSynchronized() const
+{
+  return d_func()->m_isSynchronized;
+}
+
+void ClassMemberDeclaration::setSynchronized(bool synchronized)
+{
+  d_func_dynamic()->m_isSynchronized = synchronized;
+}
+
+bool ClassMemberDeclaration::isAbstract() const
+{
+  return d_func()->m_isAbstract;
+}
+
+void ClassMemberDeclaration::setAbstract(bool abstract)
+{
+  d_func_dynamic()->m_isAbstract = abstract;
+}
+
+
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
   DUCHAIN_D_DYNAMIC(ClassMemberDeclaration);
@@ -159,6 +207,11 @@ void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
   d->m_isRegister = specifiers & RegisterSpecifier;
   d->m_isExtern = specifiers & ExternSpecifier;
   d->m_isMutable = specifiers & MutableSpecifier;
+  d->m_isFinal = specifiers & FinalSpecifier;
+  d->m_isSynchronized = specifiers & SynchronizedSpecifier;
+  d->m_isNative = specifiers & NativeSpecifier;
+  d->m_isStrictFP = specifiers & StrictFPSpecifier;
+  d->m_isAbstract = specifiers & AbstractSpecifier;
 }
 }
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

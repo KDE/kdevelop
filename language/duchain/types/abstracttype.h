@@ -91,24 +91,16 @@ public:
     ConstModifier               = 1 << 0,
     VolatileModifier            = 1 << 1,
     TransientModifier           = 1 << 2,
-    FinalModifier               = 1 << 3,///@todo  remove, is a property of a declaration, not of its type
-    AbstractModifier            = 1 << 4,///@todo  remove, is a property of a declaration, not of its type
-    NativeModifier              = 1 << 5,///@todo  remove, is a property of a declaration, not of its type
-    SynchronizedModifier        = 1 << 6,///@todo  remove, is a property of a declaration, not of its type
-    StrictFPModifier            = 1 << 7,
-    NewModifier                 = 1 << 8,
-    SealedModifier              = 1 << 9,
-    StaticModifier              = 1 << 10,///@todo  remove, is a property of a declaration, not of its type
-    ReadonlyModifier            = 1 << 11,///@todo  remove, is a property of a declaration, not of its type
-    OverrideModifier            = 1 << 12,///@todo  remove, is a property of a declaration, not of its type
-    UnsafeModifier              = 1 << 13,
-    FixedModifier               = 1 << 14,
-    ShortModifier               = 1 << 15,
-    LongModifier                = 1 << 16,
-    LongLongModifier            = 1 << 17,
-    SignedModifier              = 1 << 18,
-    UnsignedModifier            = 1 << 19,
-    LanguageSpecificModifier    = 1 << 20 //TODO make this support 64 bit values
+    NewModifier                 = 1 << 3,
+    SealedModifier              = 1 << 4,
+    UnsafeModifier              = 1 << 5,
+    FixedModifier               = 1 << 6,
+    ShortModifier               = 1 << 7,
+    LongModifier                = 1 << 8,
+    LongLongModifier            = 1 << 9,
+    SignedModifier              = 1 << 10,
+    UnsignedModifier            = 1 << 11,
+    LanguageSpecificModifier    = 1 << 12 //TODO make this support 64 bit values
   };
 
   /// Constructor.

@@ -65,7 +65,8 @@ public:
   enum AccessPolicy {
     Public    /**< a public declaration */,
     Protected /**< a protected declaration */,
-    Private   /**< a private declaration */
+    Private   /**< a private declaration */,
+    DefaultAccess /**<a declaration with default access; in java, only package-level access. */
   };
   /// Enumeration of the types of declarations
   enum Kind {
@@ -125,6 +126,11 @@ public:
   bool isTypeAlias() const;
   /// Set whether this declaration is a type alias. \param typeAlias true if the declaration is a type alias, otherwise false.
   void setIsTypeAlias(bool typeAlias);
+
+  /// Access whether the declaration is final, ie, it can only be written to once [Java]
+  bool isFinal() const;
+  /// Set whether the declaration is final. \param final true if the declaration is final, otherwise false.
+  void setFinal(bool final);
 
   /**
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
@@ -377,7 +383,7 @@ public:
 
   ///Whether this declaration has been inserted anonymously into its parent-context
   bool isAnonymous() const;
-  
+
   /**
    * Clear the index for this declaration in the top context that was allocated with allocateOwnIndex().
    */

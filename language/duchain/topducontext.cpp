@@ -18,6 +18,7 @@
 */
 
 #include "topducontext.h"
+#include "topducontextutils.h"
 
 #include <limits>
 
@@ -79,12 +80,12 @@ ReferencedTopDUContext::~ReferencedTopDUContext() {
 ReferencedTopDUContext& ReferencedTopDUContext::operator=(const ReferencedTopDUContext& rhs) {
   if(m_topContext == rhs.m_topContext)
     return *this;
-  
+
   if(m_topContext)
     DUChain::self()->refCountDown(m_topContext);
-  
+
   m_topContext = rhs.m_topContext;
-  
+
   if(m_topContext)
     DUChain::self()->refCountUp(m_topContext);
   return *this;
@@ -168,7 +169,7 @@ struct TopDUContext::AliasChainElement {
       if(!mismatch)
         return current;
     }
-    
+
     //We do this so we don't create crap items in the qualified-identifier repository while searching.
     //When the qualified identifier doesn't exist, we don't need to search it.
     return QualifiedIdentifier();
@@ -216,15 +217,15 @@ public:
       Q_ASSERT(0); //Not supported and to be removed
       Q_ASSERT(!sharedDataOwner->m_local->m_sharedDataOwner);
       sharedDataOwner->m_local->m_dataUsers.insert(m_ctxt);
-      
+
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
         if(dynamic_cast<TopDUContext*>(import.context(0)))
           dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.insert(m_ctxt);
     }
   }
-  
+
   mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
-  
+
   TopDUContext::CacheData* currentCache() const {
     QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
     if(it != m_threadCaches.end())
@@ -232,22 +233,22 @@ public:
     else
       return 0;
   }
-  
+
   ~TopDUContextLocalPrivate() {
     //Either we use some other contexts data and have no users, or we own the data and have users that share it.
     QMutexLocker lock(&importStructureMutex);
-    
+
     Q_ASSERT(!m_sharedDataOwner || m_dataUsers.isEmpty());
-    
+
     if(m_sharedDataOwner) {
       Q_ASSERT(m_sharedDataOwner->m_local->m_dataUsers.contains(m_ctxt));
       m_sharedDataOwner->m_local->m_dataUsers.remove(m_ctxt);
-      
+
       if(!m_sharedDataOwner->m_local->m_dataUsers.isEmpty()) {
         //this should not happen, because the users should always be deleted before the owner itself is deleted.
         Q_ASSERT(0);
       }
-      
+
       foreach(const DUContext::Import& import, m_sharedDataOwner->m_local->m_importedContexts)
         if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
           dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
@@ -256,14 +257,14 @@ public:
       if(DUChain::self()->isInMemory(import.topContextIndex()) && dynamic_cast<TopDUContext*>(import.context(0)))
         dynamic_cast<TopDUContext*>(import.context(0))->m_local->m_directImporters.remove(m_ctxt);
   }
-  
+
   ///@todo Make all this work consistently together with import-caching
-  
+
   //After loading, should rebuild the links
   void rebuildDynamicImportStructure() {
     //Currently we do not store the whole data in TopDUContextLocalPrivate, so we reconstruct it from what was stored by DUContext.
     Q_ASSERT(m_importedContexts.isEmpty());
-    
+
     FOREACH_FUNCTION(const DUContext::Import& import, m_ctxt->d_func()->m_importedContexts) {
       if(DUChain::self()->isInMemory(import.topContextIndex())) {
         TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
@@ -279,7 +280,7 @@ public:
       }
     }
   }
-  
+
   //Index of this top-context within the duchain
   //Since the data of top-contexts can be shared among multiple, this can be used to add imports that are local to this top-context.
   QVector<DUContext::Import> m_importedContexts;
@@ -287,32 +288,32 @@ public:
   TopDUContext* m_ctxt;
   TopDUContext* m_sharedDataOwner; //Either the owner of the shared data, or zero if this context owns the data
   QSet<TopDUContext*> m_dataUsers; //Set of all context that use the data of this context.
-  
+
   QSet<DUContext*> m_directImporters;
-  
+
   ParsingEnvironmentFilePointer m_file;
   QList<ProblemPointer> m_problems;
 
   uint m_ownIndex;
-  
+
   bool m_inDuChain;
-  
-  
+
+
   void clearImportedContextsRecursively() {
     QMutexLocker lock(&importStructureMutex);
-  
+
 //     Q_ASSERT(m_recursiveImports.size() == m_indexedRecursiveImports.count()-1);
-    
+
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
 
     foreach(const DUContext::Import &import, m_importedContexts) {
       TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
       if(top) {
         top->m_local->m_directImporters.remove(m_ctxt);
-        
+
         foreach(TopDUContext* user, m_dataUsers)
           user->m_local->removeImportedContextRecursively(top, false);
-        
+
         removeImportedContextRecursion(top, top, 1, rebuild);
 
         QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
@@ -322,7 +323,7 @@ public:
         }
       }
     }
-    
+
     m_importedContexts.clear();
 
     rebuildImportStructureRecursion(rebuild);
@@ -330,23 +331,23 @@ public:
     Q_ASSERT(m_recursiveImports.isEmpty());
 //     Q_ASSERT(m_recursiveImports.size() == m_indexedRecursiveImports.count()-1);
   }
-  
+
   //Adds the context to this and all contexts that import this, and manages m_recursiveImports
   void addImportedContextRecursively(TopDUContext* context, bool temporary, bool local) {
     QMutexLocker lock(&importStructureMutex);
 
     context->m_local->m_directImporters.insert(m_ctxt);
-    
+
     if(local)
       m_importedContexts << DUContext::Import(context);
-    
+
     foreach(TopDUContext* user, m_dataUsers)
       user->m_local->addImportedContextRecursively(context, temporary, false);
 
 //     context->m_local->needImportStructure();
 
     addImportedContextRecursion(context, context, 1, temporary);
-    
+
     if(!m_ctxt->usingImportsCache()) {
       QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
       for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it)
@@ -359,13 +360,13 @@ public:
     QMutexLocker lock(&importStructureMutex);
 
     context->m_local->m_directImporters.remove(m_ctxt);
-    
+
     if(local)
       removeFromVector(m_importedContexts, DUContext::Import(context));
-    
+
     foreach(TopDUContext* user, m_dataUsers)
       user->m_local->removeImportedContextRecursively(context, false);
-    
+
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     removeImportedContextRecursion(context, context, 1, rebuild);
 
@@ -383,20 +384,20 @@ public:
   void removeImportedContextsRecursively(const QList<TopDUContext*>& contexts, bool local) {
     QMutexLocker lock(&importStructureMutex);
 
-    
+
     foreach(TopDUContext* user, m_dataUsers)
       user->m_local->removeImportedContextsRecursively(contexts, false);
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     foreach(TopDUContext* context, contexts) {
-      
+
       context->m_local->m_directImporters.remove(m_ctxt);
-      
+
       if(local)
         removeFromVector(m_importedContexts, DUContext::Import(context));
-      
+
       removeImportedContextRecursion(context, context, 1, rebuild);
-      
+
       if(!m_ctxt->usingImportsCache()) {
         QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
         for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
@@ -463,7 +464,7 @@ public:
 
     if(m_ctxt->usingImportsCache())
       return;
-    
+
 //     if(!m_haveImportStructure)
 //       return;
 
@@ -482,7 +483,7 @@ public:
 
       m_indexedRecursiveImports.insert(imported->indexed());
 //       Q_ASSERT(m_indexedRecursiveImports.size() == m_recursiveImports.size()+1);
-      
+
       Q_ASSERT(traceNext != m_ctxt);
     }else{
       if(!computeShortestPaths)
@@ -519,7 +520,7 @@ public:
 
     if(m_ctxt->usingImportsCache())
        return;
-    
+
     if(imported == m_ctxt)
       return;
 
@@ -571,7 +572,7 @@ struct TopDUContext::ContextChecker {
   }
 
   bool operator()(IndexedDUContext context) const {
-    
+
 //     const TopDUContext* otherTop = context->topContext();
 
     if (top->m_local->m_ownIndex != context.topContextIndex()) {
@@ -581,14 +582,14 @@ struct TopDUContext::ContextChecker {
       DUContext* ctx = context.data();
       if(!ctx)
         return false;
-      
+
       if (ctx->type() != contextType)
         return false;
     } else {
       DUContext* ctx = context.data();
       if(!ctx)
         return false;
-      
+
       if (ctx->type() != contextType)
         return false;
 
@@ -607,13 +608,19 @@ struct TopDUContext::ContextChecker {
 };
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
 ///The import-structure needs to be constructed and locked when this is used
-struct TopDUContext::DeclarationChecker {
-  DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = 0) : createVisibleCache(_createVisibleCache), top(_top), topDFunc(_top->d_func()), position(_position), dataType(_dataType), flags(_flags) {
-  }
+TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
+  : createVisibleCache(_createVisibleCache)
+  , top(_top)
+  , topDFunc(_top->d_func())
+  , position(_position)
+  , dataType(_dataType)
+  , flags(_flags)
+{
+}
 
-  bool operator()(IndexedDeclaration dec) const {
-
-    if (top->m_local->m_ownIndex != dec.topContextIndex()) {
+bool TopDUContext::DeclarationChecker::operator()(IndexedDeclaration dec) const
+{
+  if (top->m_local->m_ownIndex != dec.topContextIndex()) {
 //       bool visible;
 //       {
 //         QMutexLocker lock(&importStructureMutex);
@@ -622,51 +629,43 @@ struct TopDUContext::DeclarationChecker {
 //       if(createVisibleCache && visible)
 //         createVisibleCache->append(dec);
 
-      // Make sure that this declaration is accessible
+    // Make sure that this declaration is accessible
 /*      if (!(flags & DUContext::NoImportsCheck) && !visible)
-        return false;*/
-      
-      Declaration* decl = dec.data();
-      if(!decl)
-        return false;
-      
-      if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
-        return false;
+      return false;*/
 
-      if (dataType && decl->abstractType()->indexed() != dataType->indexed())
-        // The declaration doesn't match the type filter we are applying
-        return false;
+    Declaration* decl = dec.data();
+    if(!decl)
+      return false;
 
-    } else {
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
+      return false;
+
+    if (dataType && decl->abstractType()->indexed() != dataType->indexed())
+      // The declaration doesn't match the type filter we are applying
+      return false;
+
+  } else {
 //       if(createVisibleCache)
 //         createVisibleCache->append(dec);
 
-      Declaration* decl = dec.data();
-      if(!decl)
-        return false;
-      
-      if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
-        return false;
-      
-      if (dataType && decl->abstractType() != dataType)
-        // The declaration doesn't match the type filter we are applying
-        return false;
+    Declaration* decl = dec.data();
+    if(!decl)
+      return false;
 
-      if (decl->range().start >= position)
-        if(!decl->context() || decl->context()->type() != DUContext::Class)
-            return false; // The declaration is behind the position we're searching from, therefore not accessible
-    }
-    // Success, this declaration is accessible
-    return true;
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
+      return false;
+
+    if (dataType && decl->abstractType() != dataType)
+      // The declaration doesn't match the type filter we are applying
+      return false;
+
+    if (decl->range().start >= position)
+      if(!decl->context() || decl->context()->type() != DUContext::Class)
+          return false; // The declaration is behind the position we're searching from, therefore not accessible
   }
-
-  mutable KDevVarLengthArray<IndexedDeclaration>* createVisibleCache;
-  const TopDUContext* top;
-  const TopDUContextData* topDFunc;
-  const SimpleCursor& position;
-  const AbstractType::Ptr& dataType;
-  DUContext::SearchFlags flags;
-};
+  // Success, this declaration is accessible
+  return true;
+}
 
 // ImportTrace TopDUContext::importTrace(const TopDUContext* target) const
 // {
@@ -674,25 +673,25 @@ struct TopDUContext::DeclarationChecker {
 //   importTrace(target, ret);
 //   return ret;
 // }
-// 
+//
 // void TopDUContext::importTrace(const TopDUContext* target, ImportTrace& store) const
 // {
 //     QMutexLocker lock(&importStructureMutex);
-// 
+//
 //     const TopDUContext* current = this;
 //     while(current != target) {
 // //       current->d_func()->needImportStructure();
-// 
+//
 //       TopDUContextLocalPrivate::RecursiveImports::const_iterator it = current->m_local->m_recursiveImports.constFind(target);
-// 
+//
 //       if(it == current->m_local->m_recursiveImports.constEnd())
 //         return;
-// 
+//
 //       const TopDUContext* nextContext = (*it).second;
-// 
+//
 //       if(nextContext) {
 //         store.append(ImportTraceItem(current, current->importPosition(nextContext)));
-// 
+//
 //         current = nextContext;
 //       }else{
 //         kWarning() << "inconsistent import-structure";
@@ -707,7 +706,7 @@ const TopDUContext::IndexedRecursiveImports& TopDUContext::recursiveImportIndice
   QMutexLocker lock(&importStructureMutex);
   if(!d_func()->m_importsCache.isEmpty())
     return d_func()->m_importsCache;
-  
+
   return m_local->m_indexedRecursiveImports;
 }
 
@@ -720,7 +719,7 @@ void TopDUContextData::updateImportCacheRecursion(uint baseIndex, IndexedTopDUCo
     return;
   }
   visited.insert(currentContext.index());
-  
+
   const TopDUContextData* currentData = currentContext.data()->topContext()->d_func();
   if(currentData->m_importsCache.contains(baseIndex) || currentData->m_importsCache.isEmpty())
   {
@@ -761,10 +760,10 @@ void TopDUContextData::updateImportCacheRecursion(IndexedTopDUContext currentCon
 
 void TopDUContext::updateImportsCache() {
   QMutexLocker lock(&importStructureMutex);
-  
-  
+
+
   const bool use_fully_recursive_import_cache_computation = false;
-  
+
   if(use_fully_recursive_import_cache_computation) {
     std::set<uint> visited;
     TopDUContextData::updateImportCacheRecursion(this, visited);
@@ -791,7 +790,7 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
-  
+
   return DUContext::importPosition(target);
 }
 
@@ -815,7 +814,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
       }
     }
   }
-  
+
   for(unsigned int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
   TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context(0))); //To avoid detaching, use const iterator
     if(top) {
@@ -859,7 +858,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   : DUContext(*new TopDUContextData(url), range), m_local(new TopDUContextLocalPrivate(this, 0, DUChain::newTopContextIndex())), m_dynamicData(new TopDUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
-  
+
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d->m_features = VisibleDeclarationsAndContexts;
   d->m_ownIndex = m_local->m_ownIndex;
@@ -895,12 +894,12 @@ void TopDUContext::deleteSelf() {
   //We've got to make sure that m_dynamicData and m_local are still valid while all the sub-contexts are destroyed
   TopDUContextLocalPrivate* local = m_local;
   TopDUContextDynamicData* dynamicData = m_dynamicData;
-  
+
   if(!m_local->m_sharedDataOwner)
     m_dynamicData->m_deleting = true;
-  
+
   delete this;
-  
+
   delete local;
   delete dynamicData;
 }
@@ -915,7 +914,7 @@ void TopDUContext::setFeatures(Features features)
   features = (TopDUContext::Features)(features & (~((uint)8))); //Remove the "Recursive" flag since that's only for searching
   features = (TopDUContext::Features)(features & (~ForceUpdateRecursive)); //Remove the update flags
   d_func_dynamic()->m_features = features;
-  
+
   //Replicate features to ParsingEnvironmentFile
   if(parsingEnvironmentFile())
     parsingEnvironmentFile()->setFeatures(features);
@@ -923,7 +922,7 @@ void TopDUContext::setFeatures(Features features)
 
 void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
-  
+
   //Replicate features to ParsingEnvironmentFile
   if(file)
     file->setFeatures(d_func()->m_features);
@@ -951,16 +950,16 @@ struct TopDUContext::FindDeclarationsAcceptor {
 #endif
 
     PersistentSymbolTable::Declarations allDecls;
-    
+
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    
+
     //If the identifier wasn't found in the identifier repository, the item cannot exist.
     if(id.isEmpty() && !element.identifier.isEmpty())
       return;
-    
+
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDeclarationIterator filter;
-    
+
     //This is used if filterung is disabled
     PersistentSymbolTable::Declarations::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck) {
@@ -968,9 +967,9 @@ struct TopDUContext::FindDeclarationsAcceptor {
       unchecked = allDecls.iterator();
     } else
       filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
-                                 
+
     while(filter || unchecked) {
-      
+
       IndexedDeclaration iDecl;
       if(filter) {
         iDecl = *filter;
@@ -979,7 +978,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
         iDecl = *unchecked;
         ++unchecked;
       }
-      
+
       if(!check(iDecl))
         continue;
       Declaration* decl = iDecl.data();
@@ -1047,7 +1046,7 @@ struct TopDUContext::ApplyAliasesBuddyInfo {
     }
     return false;
   }
-  
+
   uint m_importChainType;
   ApplyAliasesBuddyInfo* m_predecessor;
   IndexedQualifiedIdentifier m_importId;
@@ -1062,7 +1061,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
     QualifiedIdentifier id;
     if(!searches.isEmpty())
       id = searches.first();
-    
+
     kDebug() << "maximum apply-aliases recursion reached while searching" << id;
   }
   ///@todo explicitlyGlobal if the first identifier los global
@@ -1090,7 +1089,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         for(; filter; ++filter)
         {
           IndexedDeclaration iDecl(*filter);
-          
+
           if(!check(iDecl))
             continue;
 
@@ -1119,7 +1118,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
             kDebug() << "found empty import";
             continue;
           }
-          
+
           if(buddy->alreadyImporting( importIdentifier ))
             continue; //This import has already been applied to this search
 
@@ -1134,7 +1133,7 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
 
           ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
-          
+
           if(identifier->next.isEmpty()) {
             //Just insert the aliased namespace identifier
             accept(*newAliasedElement);
@@ -1172,12 +1171,12 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
     AliasChainElement importChainItem(backPointer, globalImportIdentifier);
 
     QualifiedIdentifier id = importChainItem.qualifiedIdentifier();
-    
+
     if(!id.isEmpty()) {
       //This iterator efficiently filters the visible declarations out of all declarations
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
-      
-        
+
+
       if(filter) {
         DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
 
@@ -1249,16 +1248,16 @@ struct TopDUContext::FindContextsAcceptor {
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
     PersistentSymbolTable::Contexts allDecls;
-    
+
     QualifiedIdentifier id = element.qualifiedIdentifier();
-    
+
     //If the identifier wasn't found in the identifier repository, the item cannot exist.
     if(id.isEmpty() && !element.identifier.isEmpty())
       return;
-    
+
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDUContextIterator filter;
-    
+
     //This is used if filterung is disabled
     PersistentSymbolTable::Contexts::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck) {
@@ -1268,7 +1267,7 @@ struct TopDUContext::FindContextsAcceptor {
       filter = PersistentSymbolTable::self().getFilteredContexts(id, top->recursiveImportIndices());
 
     while(filter || unchecked) {
-      
+
       IndexedDUContext iDecl;
       if(filter) {
         iDecl = *filter;
@@ -1387,7 +1386,7 @@ void TopDUContext::clearImportedParentContexts() {
     d_func_dynamic()->m_importsCache = IndexedRecursiveImports();
     d_func_dynamic()->m_importsCache.insert(IndexedTopDUContext(this));
   }
-  
+
   if(!m_local->m_sharedDataOwner)
     DUContext::clearImportedParentContexts();
   else {
@@ -1396,36 +1395,36 @@ void TopDUContext::clearImportedParentContexts() {
         removeImportedParentContext(parent.context(0));
     Q_ASSERT(m_local->m_importedContexts.isEmpty());
   }
-  
+
   m_local->clearImportedContextsRecursively();
-  
+
   Q_ASSERT(m_local->m_recursiveImports.count() == 0);
-  
+
   Q_ASSERT(m_local->m_indexedRecursiveImports.count() == 1);
-  
+
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
 }
 
 void TopDUContext::addImportedParentContext(DUContext* context, const SimpleCursor& position, bool anonymous, bool temporary) {
   if(context == this)
     return;
-  
+
   if(!dynamic_cast<TopDUContext*>(context)) {
     //We cannot do this, because of the extended way we treat top-context imports.
     kDebug() << "tried to import a non top-context into a top-context. This is not possible.";
     return;
   }
-  
+
   if(!m_local->m_sharedDataOwner) //Always make the contexts anonymous, because we care about importers in TopDUContextLocalPrivate
-    DUContext::addImportedParentContext(context, position, anonymous, temporary); 
-  
+    DUContext::addImportedParentContext(context, position, anonymous, temporary);
+
   m_local->addImportedContextRecursively(static_cast<TopDUContext*>(context), temporary, true);
 }
 
 void TopDUContext::removeImportedParentContext(DUContext* context) {
   if(!m_local->m_sharedDataOwner)
     DUContext::removeImportedParentContext(context);
-  
+
   m_local->removeImportedContextRecursively(static_cast<TopDUContext*>(context), true);
 }
 
@@ -1501,23 +1500,23 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   }else{
     ENSURE_CAN_READ
   }
-  
+
 if(!declaration)
   return std::numeric_limits<int>::max();
-  
+
   if(declaration->topContext() == this && !declaration->inSymbolTable()) {
     uint index = declaration->ownIndex();
     Q_ASSERT(!(index & (1<<31)));
     return (int)(index | (1<<31)); //We don't put context-local declarations into the list, that's a waste. We just use the mark them with the highest bit.
   }
-  
+
   DeclarationId id(declaration->id());
 
   int index = -1;
-  
+
   uint size = d_func()->m_usedDeclarationIdsSize();
   const DeclarationId* ids = d_func()->m_usedDeclarationIds();
-  
+
   for(unsigned int a = 0; a < size; ++a)
     if(ids[a] == id) {
       index = a;
