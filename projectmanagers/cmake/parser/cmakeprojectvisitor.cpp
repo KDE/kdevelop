@@ -560,7 +560,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 
         if(pack->noModule())
         {
-            m_vars->insert(QString("%1_CONFIG"), QStringList(path));
+            m_vars->insert(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
         m_vars->take("CMAKE_CURRENT_LIST_FILE");
     }
@@ -578,6 +578,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
 {
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
+    
     if(topctx)
     {
         topctx->deleteLocalDeclarations();
@@ -592,11 +593,11 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     }
     else
     {
-        topctx=new TopDUContext(IndexedString(path),
-                SimpleRange(0,0, endl, endc));
+        topctx=new TopDUContext(IndexedString(path), SimpleRange(0,0, endl, endc));
         DUChain::self()->addDocumentChain(topctx);
 
         Q_ASSERT(DUChain::self()->chainForDocument(path));
+        topctx->addImportedParentContext(aux);
         aux->addImportedParentContext(topctx);
     }
     
@@ -987,15 +988,11 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
 
-            kDebug() << "pppppppppp" << m_topctx << m_topctx->findDeclarations(Identifier(call->name())).count()
-                     << m_topctx->localDeclarations().size();
             //Executing
             int len = walk(code.code, 1);
             kDebug(9042) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
 
-            kDebug() << "oooooooooo" << m_topctx << m_topctx->findDeclarations(Identifier(call->name())).count()
-                     << m_topctx->localDeclarations().size();
             //Restoring
             i=1;
             foreach(const QString& name, code.knownArgs)
@@ -1861,7 +1858,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
     if(!m_topctx || m_topctx->url().toUrl()!=url)
     {
         kDebug(9042) << "Creating a context for" << url;
-        m_topctx=createContext(url, m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1);
+        m_topctx=createContext(url, aux ? aux : m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1);
         if(!aux)
             aux=m_topctx;
     }
@@ -1888,6 +1885,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 
         createUses(*it);
 //         kDebug(9042) << "resolving:" << it->writeBack();
+            
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
 //         kDebug(9042) << "resolved:" << func.writeBack() << correct;
@@ -1971,7 +1969,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
         {
             QString var=arg.value.mid(it->first+1, it->second-it->first-1);
             QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(var));
-
+            
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());

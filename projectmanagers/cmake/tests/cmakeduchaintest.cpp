@@ -203,7 +203,7 @@ void CMakeDUChainTest::testUses()
     }
     ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), SimpleRange(0,0, endl, endc));
     
-    QString inputIncluded="set(avalue 33)";
+    QString inputIncluded="set(avalue 33)\n";
     
     QFile includedFile("included.cmake");
     QVERIFY(includedFile.open(QIODevice::WriteOnly | QIODevice::Text));
