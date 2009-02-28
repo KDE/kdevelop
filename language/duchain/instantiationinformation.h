@@ -56,6 +56,9 @@ namespace KDevelop {
     ///@param local If this is true, only the template-parameters of this scope are printed, but not the parent ones
     QString toString(bool local = false) const;
     
+    ///This must always be used to add new parameters. Never use templateParametersList() directly.
+    void addTemplateParameter(AbstractType::Ptr type);
+    
     ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
     uint previousInstantiationInformation;
     

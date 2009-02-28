@@ -19,6 +19,8 @@
 #include "./instantiationinformation.h"
 #include "identifier.h"
 #include "repositories/itemrepository.h"
+#include "types/typeutils.h"
+#include <typeinfo>
 
 
 namespace KDevelop {
@@ -56,6 +58,11 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
 
   ret.push(lastId);
   return ret;
+}
+
+void InstantiationInformation::addTemplateParameter(TypePtr< KDevelop::AbstractType > type) {
+  ///@todo This is C++ specific: Only the un-aliased types play a role for template-parameters
+  templateParametersList().append(TypeUtils::unAliasedType(type)->indexed());
 }
 
 QString InstantiationInformation::toString(bool local) const {
