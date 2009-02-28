@@ -60,9 +60,11 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
   return ret;
 }
 
-void InstantiationInformation::addTemplateParameter(TypePtr< KDevelop::AbstractType > type) {
+void InstantiationInformation::addTemplateParameter(KDevelop::AbstractType::Ptr type) {
   ///@todo This is C++ specific: Only the un-aliased types play a role for template-parameters
-  templateParametersList().append(TypeUtils::unAliasedType(type)->indexed());
+  ///@todo Do deep un-aliasing. Example: A pointer to an aliased type
+//   templateParametersList().append(TypeUtils::unAliasedType(type)->indexed());
+  templateParametersList().append(type->indexed());
 }
 
 QString InstantiationInformation::toString(bool local) const {
