@@ -94,6 +94,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/codecompletionitem.cpp
     codecompletion/codecompletioncontext.cpp
     codecompletion/codecompletionitemgrouper.cpp
+    codecompletion/codecompletionhelper.cpp
 
     codegen/createclass.cpp
     codegen/codegenerator.cpp
@@ -269,6 +270,7 @@ install(FILES
     codecompletion/codecompletionitem.h
     codecompletion/codecompletioncontext.h
     codecompletion/codecompletionitemgrouper.h
+    codecompletion/codecompletionhelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion COMPONENT Devel
 )
 

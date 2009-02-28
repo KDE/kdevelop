@@ -1,0 +1,81 @@
+/*
+   Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+#include "codecompletionhelper.h"
+
+#include "../duchain/duchain.h"
+#include "../duchain/declaration.h"
+#include "../duchain/duchainlock.h"
+#include "../duchain/types/functiontype.h"
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
+namespace KDevelop {
+
+void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor::Range& word, DeclarationPointer declaration, bool jumpForbidden)
+{
+  bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
+  bool spaceBetweenParens = false;
+  bool spaceBetweenEmptyParens = false;
+
+  KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+
+  bool haveArguments = false;
+
+  if( declaration->kind() == Declaration::Type || (declaration->type<FunctionType>() && declaration->type<FunctionType>()->indexedArgumentsSize()) )
+    haveArguments = true;
+  //Need to have a paren behind
+  QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
+  if( suffix.trimmed().startsWith('(') ) {
+    //Move the cursor behind the opening paren
+    if( document->activeView() )
+      document->activeView()->setCursorPosition( word.end() + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
+  }else{
+    //We need to insert an opening paren
+    QString openingParen;
+    if( spaceBeforeParen )
+      openingParen = " (";
+    else
+      openingParen = '(';
+
+    if( spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens) )
+      openingParen += ' ';
+
+    QString closingParen;
+    if( spaceBetweenParens && (haveArguments) ) {
+      closingParen = " )";
+    } else
+      closingParen = ')';
+
+    KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
+
+    //If no arguments, move the cursor behind the closing paren
+    if( !haveArguments )
+      jumpPos += KTextEditor::Cursor( 0, closingParen.length() );
+
+    lock.unlock();
+    document->insertText( word.end(), openingParen + closingParen );
+    if(!jumpForbidden) {
+      if( document->activeView() )
+        document->activeView()->setCursorPosition( jumpPos );
+    }
+  }
+
+}
+
+}
