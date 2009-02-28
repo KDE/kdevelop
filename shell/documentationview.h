@@ -20,6 +20,8 @@
 #define DOCUMENTATIONVIEW_H
 
 #include <QWidget>
+#include <KToolBar>
+#include <interfaces/idocumentation.h>
 
 class DocumentationView : public QWidget
 {
@@ -27,8 +29,18 @@ class DocumentationView : public QWidget
 	public:
 		DocumentationView(QWidget* parent);
 		
-	public slots:
-		void showWidget(QWidget*) const;
+		void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+    public slots:
+        void browseForward();
+        void browseBack();
+    private:
+        void replaceView(QWidget*);
+        
+        KToolBar* mActions;
+        QAction* mForward;
+        QAction* mBack;
+        QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
+        QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
 };
 
 #endif // DOCUMENTATIONVIEW_H

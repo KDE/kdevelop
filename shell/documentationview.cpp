@@ -17,19 +17,60 @@
 */
 
 #include "documentationview.h"
+#include <QAction>
 #include <QVBoxLayout>
 #include <KDebug>
+#include <KIcon>
+#include <KLocale>
 
 DocumentationView::DocumentationView(QWidget* parent)
  : QWidget(parent)
 {
-	setLayout(new QVBoxLayout(this));
+    setLayout(new QVBoxLayout(this));
+    mActions=new KToolBar(this);
+    layout()->addWidget(mActions);
+    mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
+    mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
+    
+    mBack->setEnabled(false);
+    mForward->setEnabled(false);
+    connect(mBack, SIGNAL(triggered()), this, SLOT(browseBack()));
+    connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
+    mCurrent=mHistory.begin();
 }
 
-void DocumentationView::showWidget(QWidget* toAdd) const
+void DocumentationView::browseBack()
 {
-	kDebug(9529) << "showing" << toAdd;
-	if(layout()->count()!=0)
-		layout()->takeAt(0);
-	layout()->addWidget(toAdd);
+    mCurrent--;
+    mBack->setEnabled(mCurrent!=mHistory.begin());
+    mForward->setEnabled(true);
+    
+    replaceView((*mCurrent)->documentationWidget());
+}
+
+void DocumentationView::browseForward()
+{
+    mCurrent++;
+    mForward->setEnabled(mCurrent+1!=mHistory.end());
+    mBack->setEnabled(true);
+    
+    replaceView((*mCurrent)->documentationWidget());
+}
+
+void DocumentationView::replaceView(QWidget* newView)
+{
+    if(layout()->count()!=1)
+        layout()->takeAt(1);
+    layout()->addWidget(newView);
+}
+
+void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
+{
+	kDebug(9529) << "showing" << doc;
+	replaceView(doc->documentationWidget(this));
+    
+    mBack->setEnabled( !mHistory.isEmpty() );
+    mForward->setEnabled(false);
+    mHistory.append(doc);
+    mCurrent=mHistory.end()-1;
 }

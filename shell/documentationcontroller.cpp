@@ -108,7 +108,7 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
     }
     
     QPointer<DocumentationView> p=m_factory->lastView();
-    p->showWidget(doc->documentationWidget());
+    p->showDocumentation(doc);
     
     foreach( Sublime::View* v, m_factory->tabs()) {
         v->requestRaise();
