@@ -49,8 +49,9 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
   Cpp::CodeCompletionContext::Function f;
   TopDUContext* top = 0;
-  if(item.completionContext && item.completionContext->duContext())
+  if(item.completionContext && item.completionContext->duContext()) {
     top = item.completionContext->duContext()->topContext();
+  }
 
   if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
     f = item.completionContext->functions()[item.listOffset];
@@ -143,7 +144,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         if(noShortening)
           ret += argument->toString();
         else
-          ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength);
+          ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength, item.stripPrefix());
         ret += " " + (*paramNameIt)->identifier().toString();
       } else if (argument)
         ret += argument->toString();

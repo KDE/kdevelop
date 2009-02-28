@@ -218,6 +218,25 @@ bool declarationNeedsTemplateParameters(Declaration* decl) {
   return false;
 }
 
+KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() const {
+  if(completionContext && completionContext->duContext()) {
+    const TopDUContext* top = completionContext->duContext()->topContext();
+    
+    Declaration* decl = 0;
+    if(completionContext->memberAccessContainer().allDeclarations.size())
+      if( decl = completionContext->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
+        AbstractType::Ptr t = decl->abstractType();
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+        if(idType)
+          return idType->qualifiedIdentifier();
+      }
+    
+    return completionContext->duContext()->scopeIdentifier(true);
+  }
+  
+  return QualifiedIdentifier();
+}
+
 QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMatching() const {
   QList<KDevelop::IndexedType> ret;
   if( m_declaration && completionContext && completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && listOffset < completionContext->functions().count() )
@@ -242,6 +261,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
   DUChainReadLocker lock(DUChain::lock(), 500);
   if(!lock.locked()) {
     kDebug(9007) << "Failed to lock the du-chain in time";
+    return QVariant();
+  }
+  
+  if(!completionContext) {
+    kDebug(9007) << "Missing completion-context";
     return QVariant();
   }
 
@@ -380,7 +404,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
               ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(dec);
 
               if (functionType->returnType()) {
-                QString ret = indentation + Cpp::shortenedTypeString(dec, desiredTypeLength);
+                QString ret = indentation + Cpp::shortenedTypeString(dec, desiredTypeLength, stripPrefix());
                 if(shortenArgumentHintReturnValues && argumentHintDepth() && ret.length() > maximumArgumentHintReturnValueLength)
                   return QString("...");
                 else

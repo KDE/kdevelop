@@ -58,6 +58,9 @@ public:
 
   virtual QList<KDevelop::IndexedType> typeForArgumentMatching() const;
   
+  //Prefix that will be stripped from all identifiers(For example the namespace)
+  QualifiedIdentifier stripPrefix() const;
+  
   KDevelop::DeclarationPointer m_declaration;
   KSharedPtr<Cpp::CodeCompletionContext> completionContext;
   int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
