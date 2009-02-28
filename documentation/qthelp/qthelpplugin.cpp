@@ -45,7 +45,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 {
 	public:
 		QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, QHelpEngineCore* e)
-			: m_info(info), m_engine(e), m_name(name) { Q_ASSERT(!m_info.isEmpty()); }
+			: m_info(info), m_engine(e), m_name(name), m_view(0) { Q_ASSERT(!m_info.isEmpty()); }
 		
 		virtual QString name() const { return m_name; }
 		virtual QString description() const {
@@ -170,30 +170,25 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
             
             return QStringList(m_info.keys()).join(", ");
         }
-		virtual QWidget* documentationWidget(QWidget* parent)
-		{
-// 			QTemporaryFile file;
-// 			if(!file.open())
-// 				kDebug() << "error";
-// 			else
-			{
-				QWebView* b=new QWebView(parent);
-				b->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_engine, 0));
-				QUrl url=m_info[m_info.keys().first()];
-// 				QByteArray data = m_engine.fileData(url);
-// 				b->setContent(data, QString(), url);
-// 				b->loadResource(QTextDocument::HtmlResource, data);
-				b->load(url);
-				
-				return b;
-			}
-			return 0;
-		}
-		
+        
+        virtual QWidget* documentationWidget(QWidget* parent)
+        {
+            if(!m_view) {
+                m_view=new QWebView(parent);
+                m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_engine, 0));
+            }
+            
+            QUrl url=m_info[m_info.keys().first()];
+            m_view->load(url);
+            
+            return m_view;
+        }
+
 	private:
 		QMap<QString, QUrl> m_info;
 		QHelpEngineCore* m_engine;
 		QString m_name;
+        QPointer<QWebView> m_view;
 };
 
 QString qtDocsLocation(const QString& qmake)
