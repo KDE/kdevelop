@@ -92,6 +92,11 @@ public:
     virtual void popUpAssistant(const KSharedPtr<IAssistant>& assistant) = 0;
 
     /**
+     * Hides the assistant if it is currently being shown
+     */
+    virtual void hideAssistant(const KSharedPtr<IAssistant>& assistant) = 0;
+    
+    /**
      * This is meant to be used by IDocument subclasses to initialize the
      * Sublime::Document.
      *
