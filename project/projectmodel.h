@@ -103,9 +103,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
 
-        /** @returns Returns a list of all files that have this object as a parent, whether directly or indirectly. */
-        QList<ProjectFileItem*> allFiles() const;
-
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
