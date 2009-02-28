@@ -30,6 +30,7 @@
 #include <kglobal.h>
 
 #include <KDE/KTextEditor/Document>
+#include <KDE/KTextEditor/SmartInterface>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -849,6 +850,7 @@ DUChain::DUChain()
   connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
   connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
+  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeletedFinal(KTextEditor::Document*)), SLOT(documentAboutToBeDeletedFinal(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
@@ -1193,19 +1195,43 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
-void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
+static void deconvertDUChainInternal(DUContext* context)
+{
+  foreach (Declaration* dec, context->localDeclarations())
+    dec->clearSmartRange();
+
+  context->clearUseSmartRanges();
+
+  foreach (DUContext* child, context->childContexts())
+    deconvertDUChainInternal(child);
+
+  context->clearSmartRange();
+}
+
+void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
-  EditorIntegrator editor;
-  SmartConverter sc(&editor);
-
+  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
+  if(!smart)
+    return;
+  
+  QMutexLocker lock(smart->smartMutex());
+  
   foreach (TopDUContext* top, chains) {
+    
     DUChainWriteLocker lock( DUChain::lock() );
-    sc.deconvertDUChain( top );
+    
+    deconvertDUChainInternal(top);
   }
+}
+
+void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
+{
+  if(sdDUChainPrivate->m_destroyed)
+    return;
 
   foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts) {
     if(top->url().str() == doc->url().pathOrUrl())

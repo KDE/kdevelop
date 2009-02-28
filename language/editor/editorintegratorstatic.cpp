@@ -27,6 +27,10 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/smartconverter.h>
+
 #include "editorintegrator.h"
 
 using namespace KTextEditor;
@@ -102,9 +106,8 @@ void EditorIntegratorStatic::documentUrlChanged(KTextEditor::Document* document)
 
 void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
-  // Tell KDevelop to extract itself from the document before it goes away
   emit documentAboutToBeDeleted(document);
-
+  
   int rev = -1;
   {
     QMutexLocker lock(mutex2);
@@ -133,6 +136,10 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 
     documents.remove(url);
   }
+  
+  lock.unlock();
+
+  emit documentAboutToBeDeletedFinal(document);
 }
 
 void EditorIntegratorStatic::reloadDocument(KTextEditor::Document* document)

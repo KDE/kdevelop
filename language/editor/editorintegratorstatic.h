@@ -53,6 +53,10 @@ public:
 Q_SIGNALS:
   void documentLoaded(KTextEditor::Document* document);
   void documentAboutToBeDeleted(KTextEditor::Document* document);
+  ///Emitted after all editor-integrators have been cleared. At that point,
+  ///smart-ranges can be deleted without the chance of crashing an editor-integrator.
+  ///In this stage, editor-integrators don't work any more.
+  void documentAboutToBeDeletedFinal(KTextEditor::Document* document);
   void documentAboutToBeReloaded(KTextEditor::Document* document);
 
 public Q_SLOTS:
