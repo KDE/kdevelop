@@ -252,15 +252,15 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     instantiateWith.templateParametersList().clear();
 
     foreach( Declaration* decl, templateContext->localDeclarations() ) {
-      IndexedType type;
+      AbstractType::Ptr type;
 
       CppTemplateParameterType::Ptr paramType = decl->abstractType().cast<CppTemplateParameterType>();
       if( paramType ) //Take the type we have assigned.
-        type = instantiatedParameters[decl->identifier().identifier()]->indexed();
+        type = instantiatedParameters[decl->identifier().identifier()];
       else
-        type = decl->abstractType()->indexed(); //Take the type that was available already earlier
+        type = decl->abstractType(); //Take the type that was available already earlier
 
-      instantiateWith.templateParametersList().append(type);
+      instantiateWith.addTemplateParameter(type);
     }
     Declaration* ret = tempDecl->instantiate( instantiateWith, m_topContext.data() );
     ///@todo find out when can fail

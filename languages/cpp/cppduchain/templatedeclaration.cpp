@@ -44,6 +44,7 @@
 #include <rpp/pp-location.h>
 #include <control.h>
 #include <parser.h>
+#include <typeinfo>
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -155,20 +156,22 @@ struct DelayedTypeSearcher : public KDevelop::SimpleTypeVisitor {
   }
 };
 
-/**
- * Returns whether any count of reference/pointer-types are followed by a delayed type
- * */
-DelayedType::Ptr containsDelayedType(AbstractType::Ptr type)
+namespace Cpp {
+TypePtr<DelayedType> containsDelayedType(AbstractType::Ptr type)
 {
   PointerType::Ptr pType = type.cast<PointerType>();
   ReferenceType::Ptr rType = type.cast<ReferenceType>();
   DelayedType::Ptr delayedType = type.cast<DelayedType>();
+  TypeAliasType::Ptr aType = type.cast<TypeAliasType>();
   if( pType )
     return containsDelayedType(pType->baseType());
   if( rType )
     return containsDelayedType(rType->baseType());
+  if( aType )
+    return containsDelayedType(aType->type());
 
   return delayedType;
+}
 }
 
 ///Replaces any DelayedType's in interesting positions with their resolved versions, if they can be resolved.
@@ -198,6 +201,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         DUContext::DeclarationList decls;
         if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags ) )
           return type;
+        
 
         if( !decls.isEmpty() ) {
           return applyPointerReference(decls[0]->abstractType(), delayedType->identifier());
@@ -220,11 +224,15 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         AbstractType::Ptr typeCopy( type->clone() );
         PointerType::Ptr pType = typeCopy.cast<PointerType>();
         ReferenceType::Ptr rType = typeCopy.cast<ReferenceType>();
+        TypeAliasType::Ptr aType = typeCopy.cast<TypeAliasType>();
         if( pType ) //Replace the base
           pType->exchangeTypes(this);
         if( rType ) //Replace the base
           rType->exchangeTypes(this);
+        if( aType )
+          aType->exchangeTypes(this);
 
+        
         return typeCopy;
       }
     }
@@ -474,13 +482,6 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
   Q_ASSERT(parentContext);
   TemplateDeclaration* instantiatedFromTemplate = dynamic_cast<TemplateDeclaration*>(instantiatedFrom);
 
-//   if(instantiatedFromTemplate) { //This makes sure that we don't try to do the same instantiation in the meantime
-// 
-//     //May happen when instantiating specializations
-//     //     Q_ASSERT(!instantiatedFromTemplate->instantiatedFrom());
-//     Q_ASSERT(instantiatedDeclaration);
-//   }
-
   StandardCppDUContext* contextCopy = 0;
 
   if( context ) {
@@ -642,7 +643,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               InstantiationInformation newSpecializedWith(oldSpecializedWith);
               newSpecializedWith.templateParametersList().clear();
               FOREACH_FUNCTION(IndexedType type, oldSpecializedWith.templateParameters)
-                newSpecializedWith.templateParametersList().append(resolveDelayedTypes(type.type(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source )->indexed());
+                newSpecializedWith.addTemplateParameter(resolveDelayedTypes(type.type(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source ));
               instantiatedTemplate->setSpecializedWith(newSpecializedWith.indexed());
               globalTemplateArguments = newSpecializedWith;
             }
@@ -661,6 +662,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
             IdentifiedType* changedIdType = dynamic_cast<IdentifiedType*>(changedType.unsafeData());
             if( changedIdType ) {
+              
               DeclarationId base = instantiatedFrom->id();
               
               if(instantiatedFromTemplate && instantiatedFromTemplate->specializedFrom().data())
@@ -788,15 +790,15 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   instantiateWith.templateParametersList().clear();
 
   foreach( Declaration* decl, templateContext->localDeclarations() ) {
-    IndexedType type;
+    AbstractType::Ptr type;
 
     CppTemplateParameterType::Ptr paramType = decl->abstractType().cast<CppTemplateParameterType>();
     if( paramType ) //Take the type we have assigned.
-      type = instantiatedParameters[decl->identifier().identifier()]->indexed();
+      type = instantiatedParameters[decl->identifier().identifier()];
     else
-      type = decl->abstractType()->indexed(); //Take the type that was available already earlier
+      type = decl->abstractType(); //Take the type that was available already earlier
 
-    instantiateWith.templateParametersList().append(type);
+    instantiateWith.addTemplateParameter(type);
   }
   
   ifDebugMatching( kDebug() << "instantiating locally with" << instantiateWith.toString(); )
@@ -887,7 +889,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       foreach(Declaration* decl, newTemplateContext->localDeclarations())
         if(!decl->type<CppTemplateParameterType>()) {
   //         kDebug() << "inserting" << decl->abstractType()->toString();
-          templateArguments.templateParametersList().append(decl->indexedType());
+          templateArguments.addTemplateParameter(decl->abstractType());
         }else{
   //         kDebug() << "not inserting";
         }

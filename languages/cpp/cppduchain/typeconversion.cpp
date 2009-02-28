@@ -27,6 +27,7 @@
 #include <language/duchain/duchain.h>
 #include <qthread.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/types/typeutils.h>
 
 
 using namespace Cpp;
@@ -271,7 +272,7 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
       changed = true;
     }
     
-    if(nextFrom->equals(nextTo.constData()))
+    if(identityConversion(nextFrom, nextTo))
       return changed ? Conversion : ExactMatch;
     
 //   }
@@ -475,6 +476,10 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
 }
 
 bool TypeConversion::identityConversion( AbstractType::Ptr from, AbstractType::Ptr to ) {
+  
+  from = TypeUtils::unAliasedType(from);
+  to = TypeUtils::unAliasedType(to);
+  
   if( !from && !to )
     return true;
   else if( !from || !to )
@@ -522,7 +527,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
           if( rank != NoMatch && (!secondConversionIsIdentity || rank == ExactMatch) )
           {
             //We have found a matching conversion-function
-            if( realType(convertedType, m_topContext)->equals(to.unsafeData()) )
+            if( identityConversion(realType(convertedType, m_topContext), to) )
               maximizeRank( bestRank, ExactMatch );
             else
               maximizeRank( bestRank, Conversion );

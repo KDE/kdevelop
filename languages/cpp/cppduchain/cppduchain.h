@@ -28,6 +28,7 @@
 #include "cppduchainexport.h"
 #include <language/duchain/indexedstring.h>
 #include <QSet>
+#include <language/duchain/identifier.h>
 
 namespace KTextEditor {
   class Cursor;
@@ -125,7 +126,7 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier unTypedefType(KDevelop::Declarati
 
 ///Returns a shortened string version of the type attached to the given declaration, using the uses to resolve typedefs and such.
 ///@param desiredLength the desired length. No guarantee that the resulting string will be this short.
-KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, int desiredLength);
+KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
 
 KDEVCPPDUCHAIN_EXPORT bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend);
 }

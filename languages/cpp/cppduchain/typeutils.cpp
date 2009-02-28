@@ -34,12 +34,19 @@ using namespace KDevelop;
       *constant = false;
     AbstractType::Ptr base = _base;
     ReferenceType::Ptr ref = base.cast<ReferenceType>();
+    TypeAliasType::Ptr alias = base.cast<TypeAliasType>();
 
-    while( ref ) {
-      if( constant )
-        (*constant) |= (ref->modifiers() & AbstractType::ConstModifier);
-      base = ref->baseType();
+    while( ref || alias ) {
+      if(ref) {
+        if( constant )
+          (*constant) |= (ref->modifiers() & AbstractType::ConstModifier);
+        base = ref->baseType();
+      }else{
+        base = alias->type();
+      }
+      
       ref = base.cast<ReferenceType>();
+      alias = base.cast<TypeAliasType>();
     }
 
     return base;

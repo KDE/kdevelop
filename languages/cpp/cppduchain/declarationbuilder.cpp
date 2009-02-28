@@ -104,13 +104,13 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_inTypedef(false), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(editor, false);
 }
@@ -761,8 +761,6 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 {
   parseComments(def->comments);
 
-  PushValue<bool> setInTypedef(m_inTypedef, true);
-
   DeclarationBuilderBase::visitTypedef(def);
 }
 
@@ -828,7 +826,7 @@ Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformatio
           type->exchangeTypes(&exchanger);
         }
         
-        newCurrent.templateParametersList().append(type->indexed());
+        newCurrent.addTemplateParameter(type);
 
         current = current->next;
       }while(current != start);
@@ -915,8 +913,6 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* 
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
-  PushValue<bool> setNotInTypedef(m_inTypedef, false);
-
   /**Open helper contexts around the class, so the qualified identifier matches.
    * Example: "class MyClass::RealClass{}"
    * Will create one helper-context named "MyClass" around RealClass

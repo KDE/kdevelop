@@ -2222,14 +2222,16 @@ void TestDUChain::testTypedefUnsignedInt() {
   QCOMPARE(top->localDeclarations().count(), 2);
   QVERIFY(top->localDeclarations()[0]->abstractType());
   QVERIFY(top->localDeclarations()[1]->abstractType());
-  QCOMPARE(top->localDeclarations()[0]->abstractType()->toString(), QString("long unsigned int"));
-  QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("long unsigned int"));
+  QCOMPARE(top->localDeclarations()[0]->abstractType()->toString(), QString("MyInt"));
+  QCOMPARE(top->localDeclarations()[1]->abstractType()->toString(), QString("MyInt"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[0]->abstractType())->toString(), QString("long unsigned int"));
+  QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("long unsigned int"));
 }
 
 void TestDUChain::testTypedef() {
   QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { }");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->localDeclarations().count(), 3);
@@ -2245,13 +2247,18 @@ void TestDUChain::testTypedef() {
   QCOMPARE(classA->localScopeIdentifier(), QualifiedIdentifier("A"));
 
   Declaration* defB = findDeclaration(top,  Identifier("B"));
-  QCOMPARE(defB->indexedType(), defClassA->indexedType());
+  QVERIFY(defB->indexedType() != defClassA->indexedType());
   QVERIFY(defB->isTypeAlias());
+  TypeAliasType::Ptr aliasType = defB->type<TypeAliasType>();
+  QVERIFY(aliasType);
+  QVERIFY(aliasType->type());
+  QCOMPARE(aliasType->type()->indexed(),  defClassA->indexedType());
+  QCOMPARE(aliasType->declaration(top), defB);
   QCOMPARE(defB->kind(), Declaration::Type);
   QCOMPARE(QString::fromUtf8(defB->comment()), QString("This is a typedef"));
 
-  QVERIFY( !defB->type<CppTypeAliasType>().unsafeData() ); //Just verify that CppTypeAliasType is not used, because it isn't(maybe remove that class?)
-
+  QCOMPARE(defB->logicalInternalContext(top), defClassA->logicalInternalContext(top));
+  
   release(top);
 }
 
@@ -2370,13 +2377,13 @@ void TestDUChain::testSpecializedTemplates() {
     QVERIFY(foundE1Specialization);
     Declaration* foundE1Specialization2 = findDeclaration(top, QualifiedIdentifier("E<A,C>::NotA"));
     QVERIFY(foundE1Specialization2);
-    QCOMPARE(foundE1Specialization2->indexedType(), top->localDeclarations()[2]->indexedType());
+    QCOMPARE(unAliasedType(foundE1Specialization2->abstractType())->indexed(), top->localDeclarations()[2]->indexedType());
   
     Declaration* foundE2Specialization = findDeclaration(top, QualifiedIdentifier("E<C,A>::Type3"));
     QVERIFY(foundE2Specialization);
     Declaration* foundE2Specialization2 = findDeclaration(top, QualifiedIdentifier("E<C,A>::NotA"));
     QVERIFY(foundE2Specialization2);
-    QCOMPARE(foundE2Specialization2->indexedType(), top->localDeclarations()[2]->indexedType());
+    QCOMPARE(unAliasedType(foundE2Specialization2->abstractType())->indexed(), top->localDeclarations()[2]->indexedType());
   
     QVERIFY(findDeclaration(top, QualifiedIdentifier("E<C,A>")));
     QCOMPARE(findDeclaration(top, QualifiedIdentifier("E<C,A>"))->identifier(), Identifier("E<C,A>"));
@@ -2615,7 +2622,7 @@ void TestDUChain::testTemplateDependentClass() {
   Declaration* d = findDeclaration(top, QualifiedIdentifier("t"));
   QVERIFY(d);
   kDebug() << d->toString();
-  QCOMPARE(d->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+  QCOMPARE(unAliasedType(d->abstractType())->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
   release(top);
 }
@@ -2838,7 +2845,8 @@ void TestDUChain::testTemplates() {
     QVERIFY(typedefDecl);
     QVERIFY(typedefDecl->isTypeAlias());
     QVERIFY(typedefDecl->abstractType());
-    DelayedType::Ptr delayed = typedefDecl->type<DelayedType>();
+    QVERIFY(unAliasedType(typedefDecl->abstractType()));
+    DelayedType::Ptr delayed = unAliasedType(typedefDecl->abstractType()).cast<DelayedType>();
     QVERIFY(delayed);
     QCOMPARE(delayed->identifier(), TypeIdentifier("T"));
   }
@@ -2852,7 +2860,8 @@ void TestDUChain::testTemplates() {
     Declaration* instanceTypedefD = findDeclaration(top, Identifier("D"));
     QVERIFY(instanceTypedefD);
     QVERIFY(instanceDefClassA);
-    QCOMPARE(instanceTypedefD->abstractType()->toString(), instanceDefClassA->abstractType()->toString() );
+    QVERIFY(unAliasedType(instanceTypedefD->abstractType()));
+    QCOMPARE(unAliasedType(instanceTypedefD->abstractType())->toString(), instanceDefClassA->abstractType()->toString() );
     //QCOMPARE(instanceTypedefD->abstractType().data(), instanceDefClassA->abstractType().data() ); Re-enable once specializations are re-used
     Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(instanceDefClassA);
     QVERIFY(templateDecl);
@@ -2942,11 +2951,32 @@ void TestDUChain::testTemplateDefaultParameters() {
 void TestDUChain::testTemplates2() {
   QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*&> instance;");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
-  Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
+  QVERIFY(top->childContexts().count() > 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  QVERIFY(!top->childContexts()[1]->localDeclarations()[0]->type<TypeAliasType>());
+  QVERIFY(top->childContexts().count() == 5);
+  QVERIFY(top->childContexts()[4]->localDeclarations().count() > 1);
+  
+  QVERIFY(top->childContexts()[4]->localDeclarations()[0]->type<TypeAliasType>());
+  QVERIFY(top->childContexts()[4]->localDeclarations()[1]->type<TypeAliasType>());
+  QVERIFY(top->childContexts()[4]->localDeclarations()[0]->type<TypeAliasType>()->type().cast<DelayedType>());
+  QVERIFY(top->childContexts()[4]->localDeclarations()[1]->type<TypeAliasType>()->type().cast<DelayedType>());
+  QVERIFY(top->childContexts()[4]->localDeclarations()[2]->type<DelayedType>());
+  
+  Declaration* memberDecl;
+
+  kDebug() << "checking member";
+  
+  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
+  QVERIFY(memberDecl);
+  QVERIFY(unAliasedType(memberDecl->abstractType()));
+  QCOMPARE(unAliasedType(memberDecl->abstractType())->toString(), QString("S&"));
+  
+  memberDecl = findDeclaration(top, QualifiedIdentifier("instance"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S*& >"));
@@ -2956,16 +2986,10 @@ void TestDUChain::testTemplates2() {
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));*/
 
-  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
-  QVERIFY(memberDecl);
-  QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));
-
-
   memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S*>::member"));
   QVERIFY(memberDecl);
-  QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("S*&"));
+  QVERIFY(unAliasedType(memberDecl->abstractType()));
+  QCOMPARE(unAliasedType(memberDecl->abstractType())->toString(), QString("S*&"));
 
   release(top);
 }
@@ -2991,23 +3015,27 @@ void TestDUChain::testTemplatesRebind() {
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Base<S>::rebind<A>::other::Type"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("A"));
+  QVERIFY(memberDecl->abstractType());
+  QVERIFY(unAliasedType(memberDecl->abstractType()));
+  QCOMPARE(unAliasedType(memberDecl->abstractType())->toString(), QString("A"));
   }
 
   Declaration* memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::member"));
   QVERIFY(memberDecl);
   QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("S"));
+  QVERIFY(unAliasedType(memberDecl->abstractType()));
+  QCOMPARE(unAliasedType(memberDecl->abstractType())->toString(), QString("S"));
 
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
   QVERIFY(member3Decl->abstractType());
-  QCOMPARE(member3Decl->abstractType()->toString(), QString("A"));
+  QVERIFY(unAliasedType(member3Decl->abstractType()));
+  QCOMPARE(unAliasedType(member3Decl->abstractType())->toString(), QString("A"));
 
   Declaration* member2Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::member2"));
   QVERIFY(member2Decl);
-  QVERIFY(member2Decl->abstractType());
-  QCOMPARE(member2Decl->abstractType()->toString(), QString("S"));
+  QVERIFY(unAliasedType(member2Decl->abstractType()));
+  QCOMPARE(unAliasedType(member2Decl->abstractType())->toString(), QString("S"));
 
   release(top);
 }
@@ -3024,20 +3052,40 @@ void TestDUChain::testTemplatesRebind2() {
   OverloadResolver resolution( DUContextPointer(top->localDeclarations()[2]->internalContext()), TopDUContextPointer(top) );
   QVERIFY(resolution.resolveConstructor( OverloadResolver::ParameterList() ));
 
+  QVERIFY(top->childContexts().count() >= 6);
+  QCOMPARE(top->childContexts()[5]->localDeclarations().count(), 4);
+  AbstractType::Ptr valueType = top->childContexts()[5]->localDeclarations()[0]->abstractType();
+  QVERIFY(containsDelayedType(valueType));
+  QVERIFY(containsDelayedType(top->childContexts()[5]->localDeclarations()[1]->abstractType()));
+  QVERIFY(containsDelayedType(top->childContexts()[5]->localDeclarations()[2]->abstractType()));
+  QVERIFY(containsDelayedType(top->childContexts()[5]->localDeclarations()[3]->abstractType()));
+  
+  Declaration* valueAliasDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::Value"));
+  QVERIFY(valueAliasDecl);
+  TypeAliasType::Ptr alias = valueAliasDecl->type<TypeAliasType>();
+  QVERIFY(alias);
+  QVERIFY(alias->type());
+  QVERIFY(!alias->type().cast<DelayedType>());
+  QCOMPARE(unAliasedType(alias.cast<AbstractType>())->toString(), QString("A"));
+  kDebug() << "aliased type:" << alias->type()->toString();
+  kDebug() << "typedef type:" << alias->toString();
+  kDebug() << "un-aliased type:" << unAliasedType(alias.cast<AbstractType>())->toString();
+  
   Declaration* member5Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass2"));
   QVERIFY(member5Decl);
-  QVERIFY(member5Decl->abstractType());
-  QCOMPARE(member5Decl->abstractType()->toString(), QString("Test< A >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
+  QVERIFY(unAliasedType(member5Decl->abstractType()));
+  AbstractType::Ptr type = unAliasedType(member5Decl->abstractType());
+  QCOMPARE(unAliasedType(member5Decl->abstractType())->toString(), QString("Test< A >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
 
   Declaration* member4Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass"));
   QVERIFY(member4Decl);
-  QVERIFY(member4Decl->abstractType());
-  QCOMPARE(member4Decl->abstractType()->toString(), QString("Test< A >"));
+  QVERIFY(unAliasedType(member4Decl->abstractType()));
+  QCOMPARE(unAliasedType(member4Decl->abstractType())->toString(), QString("Test< A >"));
 
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
-  QVERIFY(member3Decl->abstractType());
-  QCOMPARE(member3Decl->abstractType()->toString(), QString("A"));
+  QVERIFY(unAliasedType(member3Decl->abstractType()));
+  QCOMPARE(unAliasedType(member3Decl->abstractType())->toString(), QString("A"));
 
   release(top);
 }

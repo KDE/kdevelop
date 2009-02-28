@@ -136,8 +136,6 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
     /**Identity-conversion:
      * This represents an identity-conversion in the context of copying. That means that top-level cv-qualifiers are ignored.
      *
-     * It currently achieves this by just comparing the mangled identifiers.
-     *
      * @return Whether the types are same except for cv-qualification */
 
     bool identityConversion( AbstractType::Ptr from, AbstractType::Ptr to );

@@ -347,7 +347,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     DUChainWriteLocker lock(DUChain::lock());
 
     QCOMPARE(top->localDeclarations().count(), 4);
-    AbstractType::Ptr type = top->localDeclarations()[3]->abstractType();
+    AbstractType::Ptr type = TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType());
     QVERIFY(type);
     IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
     QVERIFY(identified);
@@ -355,7 +355,8 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QString specializationString = IndexedInstantiationInformation(identified->declarationId().specialization()).information().toString();
     kDebug() << "specialization:" << identified->declarationId().specialization() << specializationString;
     QCOMPARE(specializationString, QString("<int>"));
-    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("I<int>"));
+    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("Test<int>::It"));
+    QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
     
     lock.unlock();
     parse(method, DumpNone, 0, KUrl(), top);
@@ -363,7 +364,7 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
 
     QCOMPARE(top->localDeclarations().count(), 4);
     QVERIFY(top->localDeclarations()[3]->abstractType());
-    QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("I<int>"));
+    QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
     
     release(top);
   }
@@ -978,7 +979,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateResolution() {
   
   Declaration* decl = findDeclaration(top, QualifiedIdentifier("t"), top->range().end);
   QVERIFY(decl);
-  QCOMPARE(QualifiedIdentifier(decl->abstractType()->toString()), QualifiedIdentifier("std::A<C>"));
+  QCOMPARE(QualifiedIdentifier(TypeUtils::unAliasedType(decl->abstractType())->toString()), QualifiedIdentifier("std::A<C>"));
   
   release(top);
 }

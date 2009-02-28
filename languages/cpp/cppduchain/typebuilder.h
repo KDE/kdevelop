@@ -77,7 +77,10 @@ protected:
 
   bool lastTypeWasInstance() const;
 
+  bool m_inTypedef;
+  
   private:
+  void eventuallyCreateAliasType();
   void openDelayedType(const KDevelop::TypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 

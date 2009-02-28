@@ -39,6 +39,8 @@
 #include "parser/rpp/chartools.h"
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
+#include <language/duchain/types/typealiastype.h>
+#include <util/pushvalue.h>
 
 using namespace KDevelop;
 
@@ -49,7 +51,7 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
 }
 
 TypeBuilder::TypeBuilder()
-  : TypeBuilderBase(), m_declarationHasInitDeclarators(false), m_lastTypeWasInstance(false)
+  : TypeBuilderBase(), m_declarationHasInitDeclarators(false), m_inTypedef(false), m_lastTypeWasInstance(false)
 {
 }
 
@@ -83,6 +85,8 @@ bool isTemplateDependent(Declaration* decl) {
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+//   PushValue<bool> setNotInTypedef(m_inTypedef, false);
+  
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   CppClassType::Ptr classType = CppClassType::Ptr(new CppClassType());
 
@@ -203,6 +207,17 @@ bool TypeBuilder::lastTypeWasInstance() const
   return m_lastTypeWasInstance;
 }
 
+void TypeBuilder::eventuallyCreateAliasType() {
+  if(m_inTypedef) {
+    KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
+    openType(alias);
+    
+    alias->setType(lastType());
+      
+    closeType();
+  }
+}
+
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
   m_lastTypeWasInstance = false;
@@ -218,6 +233,9 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
     if(openedType)
       closeType();
+    
+    eventuallyCreateAliasType();
+    
     return;
   }
 
@@ -336,6 +354,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
   if (openedType)
     closeType();
+
+  eventuallyCreateAliasType();
 }
 
 void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
@@ -407,6 +427,9 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
       delay = true;
 
     if(!delay) {
+      
+      ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
+      
       foreach( Declaration* decl, dec ) {
         if( needClass && !decl->abstractType().cast<CppClassType>() )
           continue;
@@ -415,11 +438,16 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
           if(decl->kind() == KDevelop::Declaration::Instance)
             m_lastTypeWasInstance = true;
 
-          ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
           //kDebug(9007) << "found for" << id.toString() << ":" << decl->toString() << "type:" << decl->abstractType()->toString() << "context:" << decl->context();
-          openedType = true;
 
           AbstractType::Ptr type = decl->abstractType();
+          
+          if(TypeUtils::unAliasedType(type).cast<DelayedType>()) {
+            continue;
+          }
+
+          openedType = true;
+
           if(type && modifiers && type->modifiers() != modifiers)
             type->setModifiers(modifiers); //The type-system automatically copies the type while changing, so we don't create any problems here.
 
@@ -462,14 +490,14 @@ DUContext* TypeBuilder::searchContext() const {
   return currentContext();
 }
 
-///@todo check whether this conflicts with the isTypeAlias(..) stuff in declaration, and whether it is used at all
 void TypeBuilder::visitTypedef(TypedefAST* node)
 {
-  openType(CppTypeAliasType::Ptr(new CppTypeAliasType()));
+  PushValue<bool> setInTypedef(m_inTypedef, true);
+//   openType(KDevelop::TypeAliasType::Ptr(new KDevelop::TypeAliasType()));
 
   TypeBuilderBase::visitTypedef(node);
 
-  closeType();
+//   closeType();
 }
 
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)

@@ -34,7 +34,7 @@ namespace KDevelop {
 namespace TypeUtils {
   using namespace KDevelop;
   /**
-   * Returns the dereferenced type(example: ReferenceType(PointerType(int)) -> PointerType(int))
+   * Returns the dereferenced and un-aliased type(example: ReferenceType(Typedef(PointerType(int))) -> PointerType(int))
    *
    *  !!DU-Chain must be locked!
    * @param constant will be set to true when one of the references made the result constant

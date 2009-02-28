@@ -33,7 +33,6 @@ using namespace KDevelop;
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
 
 REGISTER_TYPE(CppClassType);
-REGISTER_TYPE(CppTypeAliasType);
 REGISTER_TYPE(CppTemplateParameterType);
 
 AbstractType* CppClassType::clone() const {
@@ -66,10 +65,6 @@ QString CppClassType::toString() const
 }
 
 
-AbstractType* CppTypeAliasType::clone() const {
-  return new CppTypeAliasType(*this);
-}
-
 bool moreExpressiveThan(IntegralType* lhs, IntegralType* rhs) {
   bool ret = lhs->dataType() > rhs->dataType() && !((rhs->modifiers() & AbstractType::SignedModifier) && !(lhs->modifiers() & AbstractType::SignedModifier));
   if((rhs->modifiers() & AbstractType::LongLongModifier) && !(lhs->modifiers() & AbstractType::LongLongModifier))
@@ -83,30 +78,6 @@ AbstractType* CppTemplateParameterType::clone() const {
   return new CppTemplateParameterType(*this);
 }
 
-bool CppTypeAliasType::equals(const AbstractType* _rhs) const
-{
-  if( !fastCast<const CppTypeAliasType*>(_rhs))
-    return false;
-  const CppTypeAliasType* rhs = static_cast<const CppTypeAliasType*>(_rhs);
-
-  if( this == rhs )
-    return true;
-
-  if( AbstractType::equals(rhs) && IdentifiedType::equals(rhs) )
-  {
-    if( (bool)d_func()->m_type != (bool)rhs->d_func()->m_type )
-      return false;
-
-    if( !d_func()->m_type )
-      return true;
-
-    return d_func()->m_type == rhs->d_func()->m_type;
-
-  } else {
-    return false;
-  }
-}
-
 bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
 {
   if( !fastCast<const CppTemplateParameterType*>(_rhs))
@@ -117,33 +88,6 @@ bool CppTemplateParameterType::equals(const AbstractType* _rhs) const
     return true;
 
   return IdentifiedType::equals(rhs) && AbstractType::equals(rhs);
-}
-
-AbstractType::Ptr CppTypeAliasType::type() const
-{
-  return d_func()->m_type.type();
-}
-
-void CppTypeAliasType::setType(AbstractType::Ptr type)
-{
-  d_func_dynamic()->m_type = type->indexed();
-}
-
-uint CppTypeAliasType::hash() const
-{
-  return 31 * IdentifiedType::hash() + (type() ? type()->hash() + 83 : 0);
-}
-
-QString CppTypeAliasType::toString() const
-{
-  QualifiedIdentifier id = qualifiedIdentifier();
-  if (!id.isEmpty())
-    return id.toString();
-
-  if (type())
-    return type()->toString();
-
-  return "typedef <notype>";
 }
 
 TemplateParameterDeclaration* CppTemplateParameterType::declaration(const TopDUContext* top) const {

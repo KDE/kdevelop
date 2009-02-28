@@ -43,6 +43,7 @@ namespace KTextEditor {
 namespace  KDevelop {
   class DUContext;
   class Declaration;
+  class DelayedType;
 }
 
 namespace Cpp {
@@ -290,6 +291,7 @@ namespace Cpp {
     virtual void removeSpecializationInternal(IndexedDeclaration decl) {
       bool result = static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializationsList().removeOne(decl);
       Q_ASSERT(result);
+      Q_UNUSED(result);
     }
     virtual void setSpecializedWith(IndexedInstantiationInformation info) {
       static_cast<Data*>(this->DUChainBase::d_func_dynamic())->m_specializedWith = info;
@@ -344,12 +346,17 @@ namespace Cpp {
    *
    * The DU-Context must be read-locked but not write-locked when this is called.
    * */
-  CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom, bool doNotRegister = false );
+  KDEVCPPDUCHAIN_EXPORT CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::DUContext* parentContext, const KDevelop::TopDUContext* source, KDevelop::DUContext* context, const InstantiationInformation& templateArguments, KDevelop::Declaration* instantiatedDeclaration, KDevelop::Declaration* instantiatedFrom, bool doNotRegister = false );
 
+  /**
+  * Returns whether any count of reference/pointer-types are followed by a delayed type
+  * */
+  KDEVCPPDUCHAIN_EXPORT TypePtr<DelayedType> containsDelayedType(AbstractType::Ptr type);
+  
   /**
    * Eventually creates a copy of the given type, where all DelayedTypes that can be resolved in the given context are resolved.
    * */
-  AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr resolveDelayedTypes( AbstractType::Ptr type, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, KDevelop::DUContext::SearchFlags searchFlags = KDevelop::DUContext::NoUndefinedTemplateParams );
 
 template<>
 Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDUContext* topContext) const;

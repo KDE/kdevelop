@@ -432,8 +432,41 @@ TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPos
   return ret;
 }
 
-QString shortenedTypeString(Declaration* decl, int desiredLength) {
+KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier strip);
+
+KDevelop::Identifier stripPrefixIdentifiers(KDevelop::Identifier id, KDevelop::QualifiedIdentifier strip) {
+  KDevelop::Identifier ret(id);
+  ret.clearTemplateIdentifiers();
+  for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a)
+    ret.appendTemplateIdentifier(stripPrefixIdentifiers(id.templateIdentifier(a), strip));
+
+  return ret;
+}
+
+KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier strip) {
+  
+  KDevelop::TypeIdentifier ret(id);
+  while(ret.count())
+    ret.pop();
+  
+  int commonPrefix = 0;
+  for(;commonPrefix < id.count()-1 && commonPrefix < strip.count(); ++commonPrefix)
+    if(strip.at(commonPrefix).toString() != id.at(commonPrefix).toString())
+      break;
+  
+  for(int a = commonPrefix; a < id.count(); ++a)
+    ret.push( stripPrefixIdentifiers(id.at(a), strip) );
+
+  return ret;
+}
+
+QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdentifier stripPrefix) {
   AbstractType::Ptr type = decl->abstractType();
+  if(decl->isTypeAlias()) {
+      if(type.cast<TypeAliasType>())
+        type = type.cast<TypeAliasType>()->type();
+  }
+  
   if(decl->isFunctionDeclaration()) {
     FunctionType::Ptr funType = decl->type<FunctionType>();
     if(!funType)
@@ -447,6 +480,26 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
     type = type.cast<ReferenceType>()->baseType();
   }
   
+  struct ShortenAliasExchanger : public KDevelop::TypeExchanger {
+    virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+      KDevelop::AbstractType::Ptr newType( type->clone() );
+      
+      KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
+      if(alias) {
+        //If the aliased type has less involved template arguments, prefer it
+        if(alias->type() && alias->type()->toString().count('<') < alias->toString().count('<'))
+          newType = alias->type();
+      }
+      
+      newType->exchangeTypes(this);
+      
+      return newType;
+    }
+  };
+  
+  ShortenAliasExchanger exchanger;
+  type = exchanger.exchange(type);
+  
   if(!type)
     return QString();
 
@@ -457,8 +510,10 @@ QString shortenedTypeString(Declaration* decl, int desiredLength) {
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
   
-  if(identifier.toString().length() > desiredLength)
-    identifier = Cpp::unTypedefType(decl, identifier);
+  identifier = stripPrefixIdentifiers(identifier, stripPrefix);
+  
+//   if(identifier.toString().length() > desiredLength)
+//     identifier = Cpp::unTypedefType(decl, identifier);
   
   int removeTemplateParametersFrom = 10;
   

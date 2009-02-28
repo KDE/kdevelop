@@ -84,8 +84,10 @@ class ConfigurableHighlightingColors {
 QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
 uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
-uchar foregroundRatio = 140; ///@todo this needs a knob in the configuration: How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+uchar foregroundRatio = 140; ///How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
 uchar backgroundRatio = 0; ///Mixing in background color makes the colors less annoying
+
+uint backgroundTinting = 0;
 
 ///@param ratio ratio between 0 and 0xff
 uint mix(uint color1, uint color2, uchar ratio) {
@@ -119,17 +121,21 @@ uint interpolate(uint step) {
   return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], (step * 0xff) / interpolationLengths[waypoint]);
 }
 
+uint backgroundColor() {
+  ///@todo Find the correct text background color from kate
+  return 0xffffff;
+}
+
 void generateColors(int count) {
   colors.clear();
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   uint standardColor(0u); //QApplication::palette().foreground().color().rgb());
-  uint backgroundColor(0xffffff);
   uint step = totalColorInterpolationSteps() / count;
   uint currentPos = colorOffset;
   kDebug() << "text color:" << (void*)QApplication::palette().text().color().rgb();
   for(int a = 0; a < count; ++a) {
     kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*)interpolate( currentPos );
-    colors.append( mix(mix(interpolate( currentPos ), backgroundColor, backgroundRatio), standardColor, foregroundRatio) );
+    colors.append( mix(mix(interpolate( currentPos ), backgroundColor(), backgroundRatio), standardColor, foregroundRatio) );
     //colors.append( interpolate(currentPos).rgb() );
     currentPos += step;
   }
@@ -163,7 +169,7 @@ class CppHighlightingColors : public KDevelop::ConfigurableHighlightingColors {
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x00981e)); //Lighter greyish green
+      a->setForeground(QColor(0x35938d));
       addAttribute(CppHighlighting::TypeAliasType, a);
     }
     {
@@ -275,6 +281,7 @@ KTextEditor::Attribute::Ptr CppHighlighting::attributeForType( Types type, Conte
 
     if( color ) {
       a->setForeground(QColor(color));
+//       a->setBackground(QColor(mix(0xffffff-color, backgroundColor(), 255-backgroundTinting)));
     } else {
       switch (context) {
         case DefinitionContext:
@@ -543,7 +550,7 @@ CppHighlighting::Types CppHighlighting::typeForDeclaration(Declaration * dec, DU
           type = FunctionType;
       else if(dec->type<CppClassType>())
           type = ClassType;
-      else if(dec->type<CppTypeAliasType>())
+      else if(dec->type<KDevelop::TypeAliasType>())
           type = TypeAliasType;
       else if(dec->type<EnumerationType>())
         type = EnumType;

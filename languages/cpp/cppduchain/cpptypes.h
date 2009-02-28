@@ -108,59 +108,6 @@ protected:
   TYPE_DECLARE_DATA(CppClassType);
 };
 
-typedef KDevelop::MergeIdentifiedType<KDevelop::AbstractType> CppTypeAliasTypeBase;
-
-struct CppTypeAliasTypeData : public CppTypeAliasTypeBase::Data {
-  KDevelop::IndexedType m_type;
-};
-
-///@todo remove
-class KDEVCPPDUCHAIN_EXPORT CppTypeAliasType : public CppTypeAliasTypeBase
-{
-public:
-  typedef TypePtr<CppTypeAliasType> Ptr;
-
-  CppTypeAliasType(const CppTypeAliasType& rhs) : CppTypeAliasTypeBase(copyData<CppTypeAliasTypeData>(*rhs.d_func())) {
-  }
-
-  CppTypeAliasType(CppTypeAliasTypeData& data) : CppTypeAliasTypeBase(data) {
-  }
-
-  CppTypeAliasType() : CppTypeAliasTypeBase(createData<CppTypeAliasTypeData>()) {
-    d_func_dynamic()->setTypeClassId<CppTypeAliasType>();
-  }
-
-  KDevelop::AbstractType::Ptr type() const;
-  void setType(KDevelop::AbstractType::Ptr type);
-
-  virtual uint hash() const;
-
-  virtual QString toString() const;
-
-//   virtual QString mangled() const;
-
-  virtual KDevelop::AbstractType* clone() const;
-
-  virtual bool equals(const KDevelop::AbstractType* rhs) const;
-
-  enum {
-    Identity = 19
-  };
-
-  typedef CppTypeAliasTypeData Data;
-
-protected:
-  TYPE_DECLARE_DATA(CppTypeAliasType);
-
-  virtual void accept0 (KDevelop::TypeVisitor *v) const
-  {
-    if (v->visit (this))
-      acceptType (d_func()->m_type.type(), v);
-
-    //v->endVisit (this);
-  }
-};
-
 /**
  * This class represents a template-parameter on the type-level(it is strictly attached to a template-declaration)
  * This is only attached to unset template-parameters. Once the template-parameters are set, the TemplateDeclarations
