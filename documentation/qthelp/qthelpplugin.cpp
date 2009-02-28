@@ -188,7 +188,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 		QMap<QString, QUrl> m_info;
 		QHelpEngineCore* m_engine;
 		QString m_name;
-        QPointer<QWebView> m_view;
+        static QPointer<QWebView> m_view;
 };
 
 QString qtDocsLocation(const QString& qmake)
