@@ -152,10 +152,10 @@ void CMakeDUChainTest::testUses_data()
             "include(included)\n"
             "set(usinginc aa${avalue})\n" <<
             
-//             "macro(bla kk)\n"
-//                 "message(STATUS ${kk})\n"
-//             "endmacro(bla)\n"
-//             "bla(kk)\n" <<
+            "macro(bla kk)\n"
+                "message(STATUS ${kk})\n"
+            "endmacro(bla)\n"
+            "bla(hola)\n" <<
             
             "set(var 1)\n"
             "if(var)\n"
@@ -168,8 +168,8 @@ void CMakeDUChainTest::testUses_data()
     QTest::newRow("include") << input[1] << (QStringList() << "CMAKE_MODULE_PATH" << "usinginc")
         << (QList<SimpleRange>() << SimpleRange(2,17, 2,17+6));
     
-//     QTest::newRow("macro") << input[2] << (QStringList() << "bla")
-//         << (QList<SimpleRange>() << SimpleRange(2,9, 2,9+3) << SimpleRange(3,0,  3,3)/* << SimpleRange(10,3, 10,3+3)*/);
+    QTest::newRow("macro") << input[2] << (QStringList() << "bla")
+        << (QList<SimpleRange>() << SimpleRange(2,9, 2,9+3) << SimpleRange(3,0,  3,3)/* << SimpleRange(10,3, 10,3+3)*/);
         
     QTest::newRow("conditional") << input[3] << QStringList("var")
         << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
@@ -227,12 +227,12 @@ void CMakeDUChainTest::testUses()
     TopDUContext* ctx=v.context();
     QVERIFY(ctx);
     QVERIFY(ctx->indexed().data());
-    KDevelop::DumpChain dump;
-    dump.dump(ctx);
-    QVector<Declaration*> declarations=ctx->localDeclarations();
+//     KDevelop::DumpChain dump;
+//     dump.dump(ctx);
     QCOMPARE(ctx->range().start.line, 0);
+    QVector<Declaration*> declarations=ctx->localDeclarations();
    
-    qDebug() << "nyeeee" << declarations;
+    qDebug() << "nyeeee" << ctx << declarations;
     
 //     if(decls.count() != declarations.count())
 //     {

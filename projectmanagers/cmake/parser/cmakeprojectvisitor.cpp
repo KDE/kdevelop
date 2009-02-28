@@ -33,6 +33,7 @@
 #include <language/duchain/types/delayedtype.h>
 
 #include <KProcess>
+#include <KLocale>
 #include <KDebug>
 #include <QHash>
 #include <QQueue>
@@ -458,14 +459,8 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
-            ReferencedTopDUContext aux=m_topctx;
-            if(m_topctx)
-            {
-                m_topctx=createContext(KUrl(include.first().filePath), aux, include.last().endLine-1, include.last().endColumn-1);
-            }
             kDebug(9042) << "including:" << path;
             walk(include, 0);
-            m_topctx=aux;
         }
         else
         {
@@ -556,10 +551,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
-            ReferencedTopDUContext aux=m_topctx;
-            m_topctx=createContext(KUrl(path), aux, package.last().endColumn, package.last().endLine);
             walk(package, 0);
-            m_topctx=aux;
         }
         else
         {
@@ -586,7 +578,19 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
 {
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
-    if(!topctx)
+    if(topctx)
+    {
+        topctx->deleteLocalDeclarations();
+        topctx->deleteChildContextsRecursively();
+        topctx->deleteUses();
+        
+        EditorIntegrator editor;
+        editor.setCurrentUrl(topctx->url());
+        
+        SmartConverter converter(&editor);
+        converter.deconvertDUChain(topctx);
+    }
+    else
     {
         topctx=new TopDUContext(IndexedString(path),
                 SimpleRange(0,0, endl, endc));
@@ -595,18 +599,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
         Q_ASSERT(DUChain::self()->chainForDocument(path));
         aux->addImportedParentContext(topctx);
     }
-    else
-    {
-        topctx->deleteLocalDeclarations();
-        topctx->deleteChildContextsRecursively();
-        topctx->deleteUses();
-        
-        EditorIntegrator editor;
-        editor.setCurrentUrl(IndexedString(topctx->url().toUrl()));
-        
-        SmartConverter converter(&editor);
-        converter.deconvertDUChain(topctx);
-    }
+    
     return topctx;
 }
 
@@ -853,6 +846,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     if(def.arguments.isEmpty() || end.arguments.isEmpty())
         return;
     QString id=def.arguments.first().value;
+    
     DUChainWriteLocker lock(DUChain::lock());
     QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
     SimpleRange sr=def.arguments.first().range();
@@ -947,7 +941,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     {
         const Macro code=m_macros->value(call->name());
         kDebug(9042) << "Running macro:" << call->name() << "params:" << call->arguments() << "=" << code.knownArgs << "for" << code.code.count() << "lines";
-
+        
         if(code.knownArgs.count() > call->arguments().count())
         {
             kDebug(9032) << "error: more parameters needed when calling" << call->name();
@@ -993,14 +987,15 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             m_vars->insertMulti("ARGC", QStringList(QString::number(call->arguments().count())));
             kDebug(9042) << "argn=" << m_vars->value("ARGN");
 
+            kDebug() << "pppppppppp" << m_topctx << m_topctx->findDeclarations(Identifier(call->name())).count()
+                     << m_topctx->localDeclarations().size();
             //Executing
-            ReferencedTopDUContext auxctx=m_topctx;
-            m_topctx=0;
             int len = walk(code.code, 1);
             kDebug(9042) << "visited!" << call->name()  <<
                 m_vars->value("ARGV") << "_" << m_vars->value("ARGN") << "..." << len;
-            m_topctx=auxctx;
 
+            kDebug() << "oooooooooo" << m_topctx << m_topctx->findDeclarations(Identifier(call->name())).count()
+                     << m_topctx->localDeclarations().size();
             //Restoring
             i=1;
             foreach(const QString& name, code.knownArgs)
@@ -1020,6 +1015,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
     {
         kDebug(9032) << "error: Did not find the macro:" << call->name() << call->content()[call->line()].writeBack();
     }
+    
     return 1;
 }
 
@@ -1859,10 +1855,15 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 {
-    if(!m_topctx)
+    ReferencedTopDUContext aux=m_topctx;
+    KUrl url(fc[0].filePath);
+    
+    if(!m_topctx || m_topctx->url().toUrl()!=url)
     {
-        KUrl url(fc[0].filePath);
+        kDebug(9042) << "Creating a context for" << url;
         m_topctx=createContext(url, m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1);
+        if(!aux)
+            aux=m_topctx;
     }
     VisitorState p;
     p.code = &fc;
@@ -1903,10 +1904,16 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
 //             kDebug(9042) << "Found an end." << func.writeBack();
             delete element;
             m_backtrace.pop();
+            m_topctx=aux;
             return line;
         }
-        if(element->isDeprecated())
-            kDebug(9042) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
+        if(element->isDeprecated()) {
+            kDebug(9032) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
+            KSharedPtr<Problem> p(new Problem);
+            p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
+            p->setRange(it->nameRange());
+            m_topctx->addProblem(p);
+        }
         element->setContent(fc, line);
 
         createDefinitions(element);
@@ -1920,6 +1927,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
         delete element;
     }
     m_backtrace.pop();
+    m_topctx=aux;
     kDebug(9042) << "Walk stopped @" << line;
     return line;
 }
