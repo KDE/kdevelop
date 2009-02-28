@@ -93,6 +93,7 @@ private slots:
   void testConstVisibility();
   void testNamespaceCompletion();
   void testTemplateMemberAccess();
+  void testTemplateArguments();
 
 public:
   enum DumpArea {

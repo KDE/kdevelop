@@ -339,6 +339,27 @@ void TestCppCodeCompletion::testLocalUsingNamespace() {
   release(top);
 }
 
+void TestCppCodeCompletion::testTemplateArguments() {
+    QByteArray method("template<class T> struct I; typedef I<int> II; template<class T> struct Test { T t; }; ");
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    QVERIFY(findDeclaration(top, QualifiedIdentifier("II")));
+    
+    Declaration* decl = findDeclaration(top, QualifiedIdentifier("Test<II>::t"));
+    QVERIFY(decl);
+    QVERIFY(decl->abstractType());
+    QVERIFY(decl->type<TypeAliasType>());
+    
+    //Since II is not template-dependent, the type should have stayed a TypeAliasType
+    QCOMPARE(Identifier(decl->abstractType()->toString()), Identifier("II"));
+    
+    release(top);
+}
+
 void TestCppCodeCompletion::testTemplateMemberAccess() {
   {
     QByteArray method("template<class T> struct I; template<class T> class Test { public: typedef I<T> It; }; template<class T> struct I { }; Test<int>::It test;");

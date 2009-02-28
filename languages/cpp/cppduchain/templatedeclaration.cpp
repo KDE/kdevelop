@@ -834,8 +834,6 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 /*  if(dynamic_cast<TopDUContext*>(dynamic_cast<const Declaration*>(this)->context())) {
     Q_ASSERT(templateArguments.previousInstantiationInformation == 0);
   }*/
-///@todo Make default-parameters be respected for the specialization picking code. Problem: They may be
-///locally dependent on each other, and thus need the partially instantiated local context.
   if( m_instantiatedFrom && !forceLocal)
     return m_instantiatedFrom->instantiate( templateArguments, source );
 
@@ -879,6 +877,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 //   kDebug() << decl->qualifiedIdentifier().toString() << "got template-context" << templateContext << templateArguments.toString();
 
   if(!forceLocal) {
+    ///Apply default-parameters
     if(templateContext && (templateContext->localDeclarations().count() > templateArguments.templateParametersSize() || templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1)) {
       //Do a little fake instantiation so all the default-parameters are correctly applied right here. Then, they can be used
       //during specialization-matching.
@@ -895,11 +894,55 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
         }
       
       delete newTemplateContext;
+    }
+
+    ///Check whether there is type-aliases in the parameters that need to be resolved
+    ///Generally, resolve all type-aliases that are part of a template-class, and keep the others
+    {
+      InstantiationInformation newTemplateArguments = templateArguments;
       
-      if(!(templateArguments == _templateArguments)) {
-        QMutexLocker l(&instantiationsMutex);
-        m_defaultParameterInstantiations[_templateArguments.indexed()] = templateArguments.indexed();
-      }
+      newTemplateArguments.templateParametersList().clear();
+
+      struct UnAliasExchanger : public KDevelop::TypeExchanger {
+        UnAliasExchanger(const TopDUContext* _source) : source(_source) {
+        }
+        
+        const TopDUContext* source;
+        
+        virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+
+          KDevelop::AbstractType::Ptr check = type;
+          
+          KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
+          if(alias) {
+            //We exchange type-aliases with their real types only of the type-alias is in a template
+            //class. In that case, we cannot be sure that it's not used for meta-programming.
+            //All other aliases can be kept, for user-friendliness, even if it's not 100% C++ correct
+            Declaration* decl = alias->declaration(source);
+            
+            if(!decl || dynamic_cast<TemplateDeclaration*>(decl)) {
+              return exchange(alias->type());
+            }
+          }
+          
+          if(check)
+            check->exchangeTypes(this);
+          
+          return check;
+        }
+      };
+    
+      UnAliasExchanger exchanger(source);
+      
+      for(int a = 0; a < templateArguments.templateParametersSize(); ++a)
+        newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].type())->indexed());
+      
+      templateArguments = newTemplateArguments;
+    }
+    
+    if(!(templateArguments == _templateArguments)) {
+      QMutexLocker l(&instantiationsMutex);
+      m_defaultParameterInstantiations[_templateArguments.indexed()] = templateArguments.indexed();
     }
   }
 

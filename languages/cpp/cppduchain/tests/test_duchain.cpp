@@ -3075,12 +3075,12 @@ void TestDUChain::testTemplatesRebind2() {
   QVERIFY(member5Decl);
   QVERIFY(unAliasedType(member5Decl->abstractType()));
   AbstractType::Ptr type = unAliasedType(member5Decl->abstractType());
-  QCOMPARE(unAliasedType(member5Decl->abstractType())->toString(), QString("Test< A >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
+  QCOMPARE(unAliasedType(member5Decl->abstractType())->toString(), QString("Test< S::Value >")); ///@todo This will fail once we parse "const" correctly, change it to "Test< const A >" then
 
   Declaration* member4Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::ValueClass"));
   QVERIFY(member4Decl);
   QVERIFY(unAliasedType(member4Decl->abstractType()));
-  QCOMPARE(unAliasedType(member4Decl->abstractType())->toString(), QString("Test< A >"));
+  QCOMPARE(unAliasedType(member4Decl->abstractType())->toString(), QString("Test< S::Value >"));
 
   Declaration* member3Decl = findDeclaration(top, QualifiedIdentifier("Class<S>::value"));
   QVERIFY(member3Decl);
