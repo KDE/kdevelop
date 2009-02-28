@@ -779,6 +779,9 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 }
 
 KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const {
+  if(!m_duContext)
+    return KDevelop::IndexedType();
+  
   if(m_pointerConversionsBeforeMatching == 0)
     return type;
   AbstractType::Ptr t = type.type();
