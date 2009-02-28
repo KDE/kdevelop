@@ -21,6 +21,7 @@
 #include "repositories/itemrepository.h"
 #include "types/typeutils.h"
 #include <typeinfo>
+#include "types/typealiastype.h"
 
 
 namespace KDevelop {
@@ -61,10 +62,32 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
 }
 
 void InstantiationInformation::addTemplateParameter(KDevelop::AbstractType::Ptr type) {
-  ///@todo This is C++ specific: Only the un-aliased types play a role for template-parameters
-  ///@todo Do deep un-aliasing. Example: A pointer to an aliased type
-//   templateParametersList().append(TypeUtils::unAliasedType(type)->indexed());
-  templateParametersList().append(type->indexed());
+  ///@todo This is C++ specific: Only the un-aliased types play a role for template-parameters, and it's even required to correctly do specialization-matching and such
+  
+  struct UnAliasExchanger : public KDevelop::TypeExchanger {
+    virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+
+      KDevelop::AbstractType::Ptr check = type;
+      
+      KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
+      if(alias)
+        return exchange(alias->type());
+      
+      check->exchangeTypes(this);
+      
+      return check;
+    }
+  };
+  
+  UnAliasExchanger exchanger;
+  
+/*  templateParametersList().append(TypeUtils::unAliasedType(type)->indexed());
+  return;*/
+  
+  if(type)
+    templateParametersList().append(exchanger.exchange(AbstractType::Ptr(type->clone()))->indexed());
+  else
+    templateParametersList().append(IndexedType());
 }
 
 QString InstantiationInformation::toString(bool local) const {
