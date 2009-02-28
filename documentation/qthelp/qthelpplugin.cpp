@@ -45,7 +45,7 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 {
 	public:
 		QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, QHelpEngineCore* e)
-			: m_info(info), m_engine(e), m_name(name), m_view(0) { Q_ASSERT(!m_info.isEmpty()); }
+			: m_info(info), m_engine(e), m_name(name) { Q_ASSERT(!m_info.isEmpty()); }
 		
 		virtual QString name() const { return m_name; }
 		virtual QString description() const {
@@ -190,6 +190,8 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 		QString m_name;
         static QPointer<QWebView> m_view;
 };
+
+QPointer<QWebView> QtHelpDocumentation::m_view = 0;
 
 QString qtDocsLocation(const QString& qmake)
 {
