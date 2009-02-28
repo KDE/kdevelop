@@ -198,7 +198,8 @@ public:
   /**
    * Should, like accept0, be implemented by all types that hold references to other types.
    *
-   * \todo document function
+   * If this is called on one type, that type should call exchangeTypes(..) with all its referenced sub-types.
+   * The type itself does not recurse into the sub-types, that can be done by the exchanger itself if desired.
    * */
   virtual void exchangeTypes( TypeExchanger* exchanger );
 
