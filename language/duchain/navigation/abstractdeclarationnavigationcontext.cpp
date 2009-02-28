@@ -37,6 +37,7 @@
 #include "../persistentsymboltable.h"
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <duchain/types/typealiastype.h>
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
@@ -89,7 +90,13 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if(m_declaration->type<EnumeratorType>())
         modifyHtml() += i18n("enumerator") + ' ';
 
-      eventuallyMakeTypeLinks( m_declaration->abstractType() );
+      AbstractType::Ptr useType = m_declaration->abstractType();
+      if(m_declaration->isTypeAlias()) {
+        if(useType.cast<TypeAliasType>())
+          useType = useType.cast<TypeAliasType>()->type();
+      }
+      
+      eventuallyMakeTypeLinks( useType );
 
       modifyHtml() += ' ' + nameHighlight(Qt::escape(declarationName(m_declaration))) + "<br>";
     }else{
