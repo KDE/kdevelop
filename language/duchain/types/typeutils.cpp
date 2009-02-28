@@ -45,19 +45,23 @@ namespace TypeUtils {
 
     ReferenceType::Ptr ref = base.cast<ReferenceType>();
     PointerType::Ptr pnt = base.cast<PointerType>();
+    TypeAliasType::Ptr alias = base.cast<TypeAliasType>();
 
-    while( ref || pnt ) {
+    while( ref || pnt || alias ) {
       if( ref ) {
         if( constant )
           (*constant) |= static_cast<bool>(ref->modifiers() & AbstractType::ConstModifier);
         base = ref->baseType();
-      } else {
+      } else if(pnt) {
         if( constant )
           (*constant) |= static_cast<bool>(pnt->modifiers() & AbstractType::ConstModifier);
         base = pnt->baseType();
+      }else{
+        base = alias->type();
       }
       ref = base.cast<ReferenceType>();
       pnt = base.cast<PointerType>();
+      alias = base.cast<TypeAliasType>();
     }
 
     return base;

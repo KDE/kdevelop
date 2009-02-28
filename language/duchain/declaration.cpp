@@ -46,6 +46,7 @@
 #include "codemodel.h"
 #include "specializationstore.h"
 #include "types/typeutils.h"
+#include "types/typealiastype.h"
 
 using namespace KTextEditor;
 
@@ -470,11 +471,18 @@ DUContext * Declaration::logicalInternalContext(const TopDUContext* topContext) 
 
   if( d_func()->m_isTypeAlias ) {
     ///If this is a type-alias, return the internal context of the actual type.
-    AbstractType::Ptr t = TypeUtils::unAliasedType(abstractType());
-    
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
-    if( idType && idType->declaration(topContext) && idType->declaration(topContext) != this )
-      return idType->declaration(topContext)->logicalInternalContext( topContext );
+    TypeAliasType::Ptr t = type<TypeAliasType>();
+    if(t) {
+      AbstractType::Ptr target = t->type();
+      
+      IdentifiedType* idType = dynamic_cast<IdentifiedType*>(target.unsafeData());
+      if( idType ) {
+        Declaration* decl = idType->declaration(topContext);
+        if(decl && decl != this) {
+          return decl->logicalInternalContext( topContext );
+        }
+      }
+    }
   }
 
   return internalContext();

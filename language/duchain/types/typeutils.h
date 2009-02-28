@@ -26,7 +26,7 @@ namespace KDevelop {
 }
 namespace TypeUtils {
   /**
-   * Returns the completely dereferenced type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
+   * Returns the completely dereferenced and un-aliased type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
    *
    *  !!DU-Chain must be locked!
   * @param constant will be set to true when one of the references made the result constant
