@@ -31,6 +31,7 @@ public:
         void executeAction2();
         void executeAction3();
         void executeAction4();
+        KDevelop::IAssistant::Ptr assistant() const;
     private:
         QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
         KDevelop::IAssistant::Ptr m_assistant;

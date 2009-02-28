@@ -76,3 +76,7 @@ void AssistantPopup::executeAction4() {
     if(actions.size() > 3)
         actions[3]->execute();
 }
+
+KSharedPtr< KDevelop::IAssistant > AssistantPopup::assistant() const {
+    return m_assistant;
+}

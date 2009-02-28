@@ -82,6 +82,8 @@ public:
     virtual void registerStatus(QObject* status);
 
     virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant);
+
+    virtual void hideAssistant(const KDevelop::IAssistant::Ptr& assistant);
     
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,

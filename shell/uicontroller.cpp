@@ -618,6 +618,12 @@ void UiController::registerStatus(QObject* status)
     mw->registerStatus(status);
 }
 
+void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
+{
+    if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant)
+        delete d->currentShownAssistant;
+}
+
 void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     delete d->currentShownAssistant;
