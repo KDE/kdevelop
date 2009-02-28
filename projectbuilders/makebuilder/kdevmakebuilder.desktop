@@ -2,6 +2,10 @@
 Type=Service
 Name=Make Project Builder
 Name[ga]=Tógálaí Tionscadal Make
+Name[ja]=Make プロジェクトビルダー
+Name[pt]=Construtor de Projectos do Make
+Name[pt_BR]=Construtor de Projectos do Make
+Name[sv]=Make-projektbyggverktyg
 Name[uk]=Інструмент збирання проектів Make
 Name[zh_TW]=Make 專案建立器
 Comment=KDevelop Make Builder

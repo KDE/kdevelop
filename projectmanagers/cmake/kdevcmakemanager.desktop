@@ -1,6 +1,10 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Manager
+Name[ja]=CMake プロジェクトマネージャ
+Name[pt]=Gestor de Projectos do CMake
+Name[pt_BR]=Gestor de Projectos do CMake
+Name[sv]=CMake-projekthantering
 Name[uk]=Керування проектами CMake
 Name[zh_TW]=CMake 專案管理員
 Comment=Allows KDevelop to manager CMake based projects
