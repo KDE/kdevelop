@@ -33,6 +33,10 @@ namespace TypeUtils {
    * @return return-value will only be zero if type is zero
    */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetType(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
+  /**
+   * Resolves all type-aliases, returning the effective aliased type
+   */
+  KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr unAliasedType(const KDevelop::AbstractType::Ptr& type);
 }
 
 #endif

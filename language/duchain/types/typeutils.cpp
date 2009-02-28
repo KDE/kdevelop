@@ -19,10 +19,26 @@
 #include "typeutils.h"
 #include "referencetype.h"
 #include "pointertype.h"
+#include "typealiastype.h"
 
 namespace TypeUtils {
   using namespace KDevelop;
 
+  TypePtr< KDevelop::AbstractType > unAliasedType(const TypePtr< KDevelop::AbstractType >& _type) {
+    TypePtr< KDevelop::AbstractType > type = _type;
+    
+    TypePtr< KDevelop::TypeAliasType > alias = type.cast<KDevelop::TypeAliasType>();
+    
+    int depth = 0; //Prevent endless recursion
+    while(alias && depth < 20) {
+      type = alias->type();
+      alias = type.cast<KDevelop::TypeAliasType>();
+      ++depth;
+    }
+    
+    return type;
+  }
+  
   AbstractType::Ptr targetType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
 
     AbstractType::Ptr base(_base);

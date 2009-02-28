@@ -28,6 +28,7 @@
 #include "arraytype.h"
 #include "enumerationtype.h"
 #include "enumeratortype.h"
+#include "typealiastype.h"
 
 #endif
 

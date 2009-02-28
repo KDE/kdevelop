@@ -153,6 +153,14 @@ public:
     void operator=(const FunctionTypeData& rhs);
 };
 
+/// Private data structure for ReferenceType
+class KDEVPLATFORMLANGUAGE_EXPORT TypeAliasTypeData :  public MergeIdentifiedType<AbstractType>::Data
+{
+public:
+  /// Type of data which is typedeffed
+  IndexedType m_type;
+};
+
 /// Private data structure for StructureType
 class KDEVPLATFORMLANGUAGE_EXPORT StructureTypeData : public MergeIdentifiedType<AbstractType>::Data
 {

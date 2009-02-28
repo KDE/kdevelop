@@ -180,7 +180,8 @@ public:
     TypeArray     /**< an array */,
     TypeDelayed   /**< a delayed type */,
     TypeEnumeration /**< an enumeration type */,
-    TypeEnumerator /**< an enumerator type */
+    TypeEnumerator /**< an enumerator type */,
+    TypeAlias      /**< a type-alias type */
   };
 
   /**
