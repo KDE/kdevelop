@@ -464,7 +464,8 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     modifyHtml() += Qt::escape("<no type>");
     return;
   }
-  AbstractType::Ptr target = TypeUtils::targetType( type, m_topContext.data() );
+  
+  AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
   if( idType ) {
