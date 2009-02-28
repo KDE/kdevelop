@@ -1130,6 +1130,15 @@ KDevelop::ProjectFileItem* CMakeProjectManager::addFile( const KUrl& url, KDevel
 
 bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
 {
+    QSet<QString> headerExt=QSet<QString>() << ".h" << ".hpp" << ".hxx";
+    foreach(const QString& ext, headerExt)
+    {
+        if(it->url().fileName().endsWith(ext))
+            return false;
+        else if(it->url().fileName().endsWith(ext.toUpper()))
+            return false;
+    }
+    
     if(it->parent()==target)
         return true; //It already is in the target
 
