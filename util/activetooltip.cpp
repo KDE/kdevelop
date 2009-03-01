@@ -161,7 +161,7 @@ void ActiveToolTipManager::doVisibility() {
     int lastBottomPosition = -1;
     QRect fullGeometry; //Geometry of all visible tooltips together
     
-    for(ToolTipPriorityMap::const_iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ++it) {
+    for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
         if(*it) {
             if(hideAll) {
                 (*it)->hide();
@@ -174,7 +174,7 @@ void ActiveToolTipManager::doVisibility() {
                 (*it)->show();
                 lastBottomPosition = (*it)->geometry().bottom();
                 
-                if(it == registeredToolTips.begin())
+                if(it == registeredToolTips.constBegin())
                     fullGeometry = (*it)->geometry();
                 else
                     fullGeometry = fullGeometry.united((*it)->geometry());

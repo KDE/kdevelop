@@ -1081,7 +1081,7 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
   // Match all parsed versions of this document
-  for (QMultiMap<IndexedString, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chainsByUrl.lowerBound(document); it != sdDUChainPrivate->m_chainsByUrl.constEnd(); ++it) {
+  for (QMultiMap<IndexedString, TopDUContext*>::Iterator it = sdDUChainPrivate->m_chainsByUrl.lowerBound(document); it != sdDUChainPrivate->m_chainsByUrl.end(); ++it) {
     if (it.key() == document)
       chains << it.value();
     else
