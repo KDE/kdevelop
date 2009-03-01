@@ -253,7 +253,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();
         
         Cpp::ExpressionEvaluationResult result = expressionParser.evaluateExpression(expr.toUtf8(), m_duContext);
-        if(!result.isValid() || (!result.isInstance || result.type.type().cast<FunctionType>())) {
+        if(!result.isValid() || (!result.isInstance || result.type.type<FunctionType>())) {
           m_memberAccessOperation = TemplateAccess;
           m_text = m_text.left( m_text.length()-1 );
         }
@@ -427,7 +427,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                   m_expressionResult.type = klass->indexedType();
               }else if(parentContext()->m_knownArgumentTypes.size() >= function.matchedArguments) {
                 m_expressionResult = parentContext()->m_knownArgumentTypes[function.matchedArguments-1];
-                m_expressionResult.type = TypeUtils::targetType(TypeUtils::matchingClassPointer(funType->arguments()[function.matchedArguments-1], m_expressionResult.type.type(), m_duContext->topContext()), m_duContext->topContext())->indexed();
+                m_expressionResult.type = TypeUtils::targetType(TypeUtils::matchingClassPointer(funType->arguments()[function.matchedArguments-1], m_expressionResult.type.abstractType(), m_duContext->topContext()), m_duContext->topContext())->indexed();
               }
               break;
             }
@@ -537,7 +537,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
         return;
       
       //Dereference a pointer
-      AbstractType::Ptr containerType = m_expressionResult.type.type();
+      AbstractType::Ptr containerType = m_expressionResult.type.abstractType();
       PointerType::Ptr pnt = TypeUtils::realType(containerType, m_duContext->topContext()).cast<PointerType>();
       if( !pnt ) {
         AbstractType::Ptr realContainer = TypeUtils::realType(containerType, m_duContext->topContext());
@@ -611,7 +611,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       if(!m_duContext)
         return;
       
-      AbstractType::Ptr type = m_expressionResult.type.type();
+      AbstractType::Ptr type = m_expressionResult.type.abstractType();
       if(type && m_duContext) {
         DelayedType::Ptr delayed = type.cast<DelayedType>();
 #ifndef TEST_COMPLETION // hmzzz ?? :)
@@ -658,7 +658,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
       return;
     }
 
-    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.type(), m_expressionResult.isLValue()), m_operator);
+    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.abstractType(), m_expressionResult.isLValue()), m_operator);
 
     m_functionName = "operator"+m_operator;
   } else {
@@ -675,7 +675,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   OverloadResolver::ParameterList knownParameters;
   foreach( const ExpressionEvaluationResult &result, m_knownArgumentTypes )
-    knownParameters.parameters << OverloadResolver::Parameter( result.type.type(), result.isLValue() );
+    knownParameters.parameters << OverloadResolver::Parameter( result.type.abstractType(), result.isLValue() );
 
   helper.setKnownParameters(knownParameters);
 
@@ -748,7 +748,7 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   }
 
   if(m_expressionResult.isValid() ) {
-    AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext());
+    AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.abstractType(), m_duContext->topContext());
     const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( expressionTarget.unsafeData() );
       Declaration* idDecl = 0;
     if( idType && (idDecl = idType->declaration(m_duContext->topContext())) ) {
@@ -758,7 +758,7 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
           ret << ctx;
       }else {
         //Print some debug-output
-        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type.type()->toString();
+        kDebug(9007) << "Could not get internal context from" << m_expressionResult.type.abstractType()->toString();
         kDebug(9007) << "Declaration" << idDecl->toString() << idDecl->isForwardDeclaration();
         if( Cpp::TemplateDeclaration* tempDeclaration = dynamic_cast<Cpp::TemplateDeclaration*>(idDecl) ) {
           if( tempDeclaration->instantiatedFrom() ) {
@@ -784,7 +784,7 @@ KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(K
   
   if(m_pointerConversionsBeforeMatching == 0)
     return type;
-  AbstractType::Ptr t = type.type();
+  AbstractType::Ptr t = type.abstractType();
   if(!t)
     return KDevelop::IndexedType();
 
@@ -888,7 +888,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     if(classFun && classFun->isVirtual() && !classFun->isConstructor() && !classFun->isDestructor()) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
-      if(!overridable.contains(key) && base->findLocalDeclarations(classFun->identifier(), SimpleCursor::invalid(), 0, key.first.type()).isEmpty())
+      if(!overridable.contains(key) && base->findLocalDeclarations(classFun->identifier(), SimpleCursor::invalid(), 0, key.first.abstractType()).isEmpty())
         overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext)));
     }
   }
@@ -925,7 +925,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           if( memberAccessContainer().isValid() ||memberAccessOperation() == Cpp::CodeCompletionContext::StaticMemberChoose )
           {
             bool typeIsConst = false;
-            AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.type(), m_duContext->topContext());
+            AbstractType::Ptr expressionTarget = TypeUtils::targetType(m_expressionResult.type.abstractType(), m_duContext->topContext());
             if (expressionTarget && (expressionTarget->modifiers() & AbstractType::ConstModifier))
               typeIsConst = true;
             
@@ -997,7 +997,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         break;
         case TemplateAccess:
           {
-            AbstractType::Ptr type = m_expressionResult.type.type();
+            AbstractType::Ptr type = m_expressionResult.type.abstractType();
             IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
             Declaration* decl = 0;
             if(identified)
@@ -1037,7 +1037,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             
             if(additionalContextType() == Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
               //Argument-hints for builtin operators
-              AbstractType::Ptr type = m_expressionResult.type.type();
+              AbstractType::Ptr type = m_expressionResult.type.abstractType();
               if(m_expressionResult.isValid() && m_expressionResult.isInstance && type) {
                 IntegralType::Ptr integral = type.cast<IntegralType>();
 
@@ -1061,8 +1061,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   ///Conversion to the left operand-type, builtin operators on integral types
                   IndexedType useType = integral ? integral->indexed() : m_expressionResult.type;
                   QString showName = functionName();
-                  if(useType.type())
-                    showName = useType.type()->toString() + " " + m_operator;
+                  if(useType.abstractType())
+                    showName = useType.abstractType()->toString() + " " + m_operator;
 
                   if(useType == m_expressionResult.type && m_expressionResult.allDeclarations.size() == 1) {
                     Declaration* decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());
@@ -1075,16 +1075,16 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               }
 
 //                 items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = functionName();
-            }else if(m_expressionResult.isValid() && m_expressionResult.type.type() && (!m_expressionResult.isInstance || m_isDeclarationTypePrefix) && !m_expressionResult.type.type().cast<FunctionType>()) {
+            }else if(m_expressionResult.isValid() && m_expressionResult.type.abstractType() && (!m_expressionResult.isInstance || m_isDeclarationTypePrefix) && !m_expressionResult.type.type<FunctionType>()) {
               //Eventually add a builtin copy-constructor if a type is being constructed
               bool hasCopyConstructor = false;
               
               //Search for a copy-constructor within the class
-              CppClassType::Ptr classType = m_expressionResult.type.type().cast<CppClassType>();
+              CppClassType::Ptr classType = m_expressionResult.type.type<CppClassType>();
               if(classType) {
                 Declaration* decl = classType->declaration(m_duContext->topContext());
                 if(decl) {
-                  AbstractType::Ptr constClassType = classType->indexed().type();
+                  AbstractType::Ptr constClassType = classType->indexed().abstractType();
                   constClassType->setModifiers(AbstractType::ConstModifier);
                   
                   ReferenceType::Ptr argumentType(new ReferenceType);
@@ -1105,7 +1105,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               }
               
               if(!hasCopyConstructor) {
-                  QString showName = m_expressionResult.type.type()->toString() + "(";
+                  QString showName = m_expressionResult.type.abstractType()->toString() + "(";
                   items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, m_expressionResult.type, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
               }
             }
@@ -1134,7 +1134,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         if(!m_connectedSignalIdentifier.isEmpty()) {
           ///Create an additional argument-hint context that shows information about the signal we connect to
           if(parentContext() && parentContext()->m_knownArgumentTypes.count() > 1 && parentContext()->m_knownArgumentTypes[0].type.isValid()) {
-            StructureType::Ptr signalContainerType = TypeUtils::targetType(parentContext()->m_knownArgumentTypes[0].type.type(), m_duContext->topContext()).cast<StructureType>();
+            StructureType::Ptr signalContainerType = TypeUtils::targetType(parentContext()->m_knownArgumentTypes[0].type.abstractType(), m_duContext->topContext()).cast<StructureType>();
            if(signalContainerType) {
 //             kDebug() << "searching signal in container" << signalContainerType->toString() << m_connectedSignalIdentifier.toString();
                Declaration* signalContainer = signalContainerType->declaration(m_duContext->topContext());
@@ -1163,7 +1163,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         if( memberAccessContainer().isValid() ) {
           QList<CompletionTreeItemPointer> signalSlots;
           ///Collect all slots/signals to show
-          AbstractType::Ptr type = memberAccessContainer().type.type();
+          AbstractType::Ptr type = memberAccessContainer().type.abstractType();
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified) {
             Declaration* decl = identified->declaration(m_duContext->topContext());

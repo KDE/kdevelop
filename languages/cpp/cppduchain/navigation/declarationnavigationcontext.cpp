@@ -50,7 +50,7 @@ void DeclarationNavigationContext::htmlClass()
   if(classDecl) {
     FOREACH_FUNCTION( const Cpp::BaseClassInstance& base, classDecl->baseClasses ) {
       modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
-      eventuallyMakeTypeLinks(base.baseClass.type());
+      eventuallyMakeTypeLinks(base.baseClass.abstractType());
     }
     modifyHtml() += " ";
   }
@@ -73,7 +73,7 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
           modifyHtml() += ", ";
 
         if( type ) {
-          AbstractType::Ptr t = type.type();
+          AbstractType::Ptr t = type.abstractType();
           eventuallyMakeTypeLinks(t);
         }else{
             modifyHtml() += "missing type";

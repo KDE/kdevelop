@@ -654,14 +654,14 @@ void TestCppCodeCompletion::testTypeConversion() {
 KDevelop::IndexedType toReference(IndexedType t) {
   
   ReferenceType::Ptr refType( new ReferenceType);
-  refType->setBaseType(t.type());
+  refType->setBaseType(t.abstractType());
   return refType->indexed();
 }
 
 KDevelop::IndexedType toPointer(IndexedType t) {
   
   PointerType::Ptr refType( new PointerType);
-  refType->setBaseType(t.type());
+  refType->setBaseType(t.abstractType());
   return refType->indexed();
 }
 
@@ -699,7 +699,7 @@ void TestCppCodeCompletion::testTypeConversion2() {
     QCOMPARE(context->localDeclarations().size(), 6);
     Cpp::TypeConversion conv(context);
     QVERIFY( !conv.implicitConversion(context->localDeclarations()[0]->indexedType(), context->localDeclarations()[1]->indexedType()) );
-    PointerType::Ptr fromPointer = context->localDeclarations()[1]->indexedType().type().cast< PointerType>();
+    PointerType::Ptr fromPointer = context->localDeclarations()[1]->indexedType().type< PointerType>();
     QVERIFY(fromPointer);
     QVERIFY( !(fromPointer->modifiers() & AbstractType::ConstModifier));
     QVERIFY( conv.implicitConversion(context->localDeclarations()[1]->indexedType(), context->localDeclarations()[0]->indexedType()) );
@@ -804,7 +804,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type.type()->toString(), QString("Erna&"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("Erna&"));
 
 
   ///Test overload-resolution
@@ -815,7 +815,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type.type()->toString(), QString("Heinz"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("Heinz"));
 
   lock.unlock();
   result = parser.evaluateExpression( "globalClass.function(globalHonk.erna)", DUContextPointer(c));
@@ -824,7 +824,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type.type()->toString(), QString("Erna"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("Erna"));
 
   //No matching function for type Honk. Since the expression-parser is not set to "strict", it returns any found function with the right name.
   lock.unlock();
@@ -834,7 +834,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  //QCOMPARE(result.type.type()->toString(), QString("Heinz"));
+  //QCOMPARE(result.type.abstractType()->toString(), QString("Heinz"));
 
 
   lock.unlock();
@@ -844,7 +844,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type.type()->toString(), QString("Heinz"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("Heinz"));
   lock.unlock();
 
   result = parser.evaluateExpression( "globalFunction(globalHonk.erna)", DUContextPointer(c));
@@ -853,7 +853,7 @@ void TestCppCodeCompletion::testInclude() {
   QVERIFY(result.isValid());
   QVERIFY(result.isInstance);
   QVERIFY(result.type);
-  QCOMPARE(result.type.type()->toString(), QString("Erna"));
+  QCOMPARE(result.type.abstractType()->toString(), QString("Erna"));
 
   release(c);
 }
@@ -1049,7 +1049,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QVERIFY(classType);
     QCOMPARE(decl->baseClassesSize(), 1u);
     QVERIFY(decl->baseClasses()[0].baseClass);
-    CppClassType::Ptr parentClassType = decl->baseClasses()[0].baseClass.type().cast<CppClassType>();
+    CppClassType::Ptr parentClassType = decl->baseClasses()[0].baseClass.type<CppClassType>();
     QVERIFY(parentClassType);
     QCOMPARE(parentClassType->toString(), QString("Test< Dummy >"));
   }

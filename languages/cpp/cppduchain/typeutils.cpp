@@ -151,7 +151,7 @@ using namespace KDevelop;
       //equivalent to using the imported parent-contexts
       FOREACH_FUNCTION(const Cpp::BaseClassInstance& base, cppClassDecl->baseClasses) {
         if( base.access != KDevelop::Declaration::Private ) { //we need const-cast here because the constant list makes also the pointers constant, which is not intended
-          CppClassType::Ptr baseClass = base.baseClass.type().cast<CppClassType>();
+          CppClassType::Ptr baseClass = base.baseClass.type<CppClassType>();
           if( baseClass )
             getMemberFunctions( baseClass, topContext, functions, functionName,   mustBeConstant);
         }

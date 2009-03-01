@@ -30,7 +30,7 @@ namespace Cpp {
 TypeIdentifier ExpressionEvaluationResult::identifier() const {
   static TypeIdentifier noIdentifier("(no type)");
 
-  AbstractType::Ptr t(type.type());
+  AbstractType::Ptr t(type.abstractType());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
   if( idType )
     return idType->qualifiedIdentifier();
@@ -47,10 +47,10 @@ TypeIdentifier ExpressionEvaluationResult::identifier() const {
 
 QString ExpressionEvaluationResult::toString() const {
   if( DUChain::lock()->currentThreadHasReadLock() )
-    return QString(isLValue() ? "lvalue " : "") + QString(isInstance ? "instance " : "") + (type.type() ? type.type()->toString() : QString("(no type)"));
+    return QString(isLValue() ? "lvalue " : "") + QString(isInstance ? "instance " : "") + (type.abstractType() ? type.abstractType()->toString() : QString("(no type)"));
 
   DUChainReadLocker lock(DUChain::lock());
-  return QString(isLValue() ? "lvalue " : "") + QString(isInstance ? "instance " : "") + (type ? type.type()->toString() : QString("(no type)"));
+  return QString(isLValue() ? "lvalue " : "") + QString(isInstance ? "instance " : "") + (type ? type.abstractType()->toString() : QString("(no type)"));
 }
 
 unsigned int ExpressionEvaluationResult::hash() const {
@@ -65,10 +65,10 @@ QString ExpressionEvaluationResult::toShortString() const
 {
   //Inline for now, so it can be used from the duchainbuilder module
   if( DUChain::lock()->currentThreadHasReadLock() )
-    return type ? type.type()->toString() : QString("(no type)");
+    return type ? type.abstractType()->toString() : QString("(no type)");
 
   DUChainReadLocker lock(DUChain::lock());
-  return type ? type.type()->toString() : QString("(no type)");
+  return type ? type.abstractType()->toString() : QString("(no type)");
 }
 
 ExpressionEvaluationResult::~ExpressionEvaluationResult() {

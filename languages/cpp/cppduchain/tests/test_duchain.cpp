@@ -1246,7 +1246,7 @@ void TestDUChain::testCStruct2()
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->indexedType().type()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->indexedType().type()).name();
+  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->abstractType()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->abstractType()).name();
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
 
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
@@ -1267,8 +1267,8 @@ void TestDUChain::testCStruct2()
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 3); //3 declarations because the elaborated type-specifier "struct C" creates a forward-declaration on the global scope
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->indexedType().type()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->indexedType().type()).name();
-  FunctionType::Ptr function(top->childContexts()[0]->localDeclarations()[0]->indexedType().type().cast<FunctionType>());
+  kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->abstractType()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->abstractType()).name();
+  FunctionType::Ptr function(top->childContexts()[0]->localDeclarations()[0]->type<FunctionType>());
   QVERIFY(function);
   kDebug() << "RETURN:" << function->returnType()->toString() << typeid(*function->returnType()).name();
   QCOMPARE(function->returnType()->indexed(), top->localDeclarations()[1]->indexedType());
@@ -2198,7 +2198,7 @@ void TestDUChain::testBaseClasses() {
   QCOMPARE(defClassF->identifier(), Identifier("F"));
   QVERIFY(defClassF->type<CppClassType>());
   QCOMPARE( defClassF->baseClassesSize(), 1u );
-  QVERIFY( defClassF->baseClasses()[0].baseClass.type().cast<DelayedType>().unsafeData() );
+  QVERIFY( defClassF->baseClasses()[0].baseClass.type<DelayedType>().unsafeData() );
 
   Declaration* FDDecl = findDeclaration(top, QualifiedIdentifier("F<D>") );
   QVERIFY(FDDecl);
@@ -2297,13 +2297,13 @@ void TestDUChain::testSpecializedTemplates() {
     //Must be const T*
     QVERIFY(sp3AsTemplate);
     QCOMPARE(sp3AsTemplate->specializedWith().information().templateParametersSize(), 1u);
-    kDebug() << "specialized with" << sp3AsTemplate->specializedWith().information().templateParameters()[0].type()->toString();
-    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type());
-    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>());
-    QVERIFY(! (sp3AsTemplate->specializedWith().information().templateParameters()[0].type()->modifiers() & AbstractType::ConstModifier) );
-    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType());
-    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType().cast<DelayedType>());
-    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type().cast<PointerType>()->baseType().cast<DelayedType>()->identifier().isConstant());
+    kDebug() << "specialized with" << sp3AsTemplate->specializedWith().information().templateParameters()[0].abstractType()->toString();
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].abstractType());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type<PointerType>());
+    QVERIFY(! (sp3AsTemplate->specializedWith().information().templateParameters()[0].abstractType()->modifiers() & AbstractType::ConstModifier) );
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type<PointerType>()->baseType());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type<PointerType>()->baseType().cast<DelayedType>());
+    QVERIFY(sp3AsTemplate->specializedWith().information().templateParameters()[0].type<PointerType>()->baseType().cast<DelayedType>()->identifier().isConstant());
     
     
     
@@ -2364,11 +2364,11 @@ void TestDUChain::testSpecializedTemplates() {
     QVERIFY(templateE2Decl);
     QCOMPARE(templateE1Decl->specializedWith().information().templateParametersSize(), 2u);
     QCOMPARE(templateE2Decl->specializedWith().information().templateParametersSize(), 2u);
-    QVERIFY(!templateE1Decl->specializedWith().information().templateParameters()[0].type().cast<DelayedType>());
-    kDebug() << typeid(*templateE1Decl->specializedWith().information().templateParameters()[1].type()).name();
-    QVERIFY(templateE1Decl->specializedWith().information().templateParameters()[1].type().cast<DelayedType>());
-    QVERIFY(templateE2Decl->specializedWith().information().templateParameters()[0].type().cast<DelayedType>());
-    QVERIFY(!templateE2Decl->specializedWith().information().templateParameters()[1].type().cast<DelayedType>());
+    QVERIFY(!templateE1Decl->specializedWith().information().templateParameters()[0].type<DelayedType>());
+    kDebug() << typeid(*templateE1Decl->specializedWith().information().templateParameters()[1].abstractType()).name();
+    QVERIFY(templateE1Decl->specializedWith().information().templateParameters()[1].type<DelayedType>());
+    QVERIFY(templateE2Decl->specializedWith().information().templateParameters()[0].type<DelayedType>());
+    QVERIFY(!templateE2Decl->specializedWith().information().templateParameters()[1].type<DelayedType>());
   
     QCOMPARE(dynamic_cast<TemplateDeclaration*>(templateE1Decl->specializedFrom().data()), templateEDecl);
     QCOMPARE(dynamic_cast<TemplateDeclaration*>(templateE2Decl->specializedFrom().data()), templateEDecl);
@@ -2642,9 +2642,9 @@ void TestDUChain::testMetaProgramming() {
   QVERIFY(templateBase->specializationsSize() == 1);
   QCOMPARE(templateSpecialization->specializedFrom().data(), top->localDeclarations()[0]);
   QCOMPARE(templateSpecialization->specializedWith().information().templateParametersSize(), 1u);
-  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].type());
-  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].type().cast<ConstantIntegralType>());
-  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[0].type().cast<ConstantIntegralType>()->value<int>(), 0);
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].abstractType());
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[0].type<ConstantIntegralType>());
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[0].type<ConstantIntegralType>()->value<int>(), 0);
   kDebug() << "searching";
   Declaration* factorial0Container = findDeclaration(top, QualifiedIdentifier("Factorial<0>"));
   QCOMPARE(factorial0Container, top->localDeclarations()[1]);
@@ -2720,9 +2720,9 @@ void TestDUChain::testMetaProgramming2() {
   QVERIFY(templateBase->specializationsSize() == 1);
   QCOMPARE(templateSpecialization->specializedFrom().data(), top->localDeclarations()[0]);
   QCOMPARE(templateSpecialization->specializedWith().information().templateParametersSize(), 2u);
-  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].type());
-  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].type().cast<ConstantIntegralType>());
-  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[1].type().cast<ConstantIntegralType>()->value<int>(), 0);
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].abstractType());
+  QVERIFY(templateSpecialization->specializedWith().information().templateParameters()[1].type<ConstantIntegralType>());
+  QCOMPARE(templateSpecialization->specializedWith().information().templateParameters()[1].type<ConstantIntegralType>()->value<int>(), 0);
 
   Declaration* permutations0 = findDeclaration(top, QualifiedIdentifier("Permutations<5, 0>::value"));
   QVERIFY(permutations0);

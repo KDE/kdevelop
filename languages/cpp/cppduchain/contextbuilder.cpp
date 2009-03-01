@@ -137,7 +137,7 @@ void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
   addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
 
   Q_ASSERT(currentContext()->type() == DUContext::Class);
-  AbstractType::Ptr baseClass = base.baseClass.type();
+  AbstractType::Ptr baseClass = base.baseClass.abstractType();
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(baseClass.unsafeData());
   Declaration* idDecl = 0;
   if( idType && (idDecl = idType->declaration(currentContext()->topContext())) ) {
@@ -146,10 +146,10 @@ void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
       currentContext()->addImportedParentContext( ctx );
     }else{
       currentContext()->addIndirectImport( DUContext::Import(idType->declarationId()) );
-      kDebug(9007) << "Could not resolve base-class, adding it indirectly: " << (base.baseClass ? base.baseClass.type()->toString() : QString());
+      kDebug(9007) << "Could not resolve base-class, adding it indirectly: " << (base.baseClass ? base.baseClass.abstractType()->toString() : QString());
     }
   } else if( !baseClass.cast<DelayedType>() ) {
-    kDebug(9007) << "Got invalid base-class" << (base.baseClass ? base.baseClass.type()->toString() : QString());
+    kDebug(9007) << "Got invalid base-class" << (base.baseClass ? base.baseClass.abstractType()->toString() : QString());
   }
 }
 

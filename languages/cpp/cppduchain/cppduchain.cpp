@@ -228,7 +228,7 @@ ClassMemberDeclaration::AccessPolicy mostRestrictiveInheritanceAccessPolicy(DUCo
     ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(startContext->owner());
     if(classDecl) {
       FOREACH_FUNCTION(const BaseClassInstance& import, classDecl->baseClasses) {
-        AbstractType::Ptr type = import.baseClass.type();
+        AbstractType::Ptr type = import.baseClass.abstractType();
         IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
         if(identified) {
           Declaration* decl = identified->declaration(top);

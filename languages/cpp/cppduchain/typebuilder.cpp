@@ -156,7 +156,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       }
 
       if ( !delay && res.isValid() && res.isInstance ) {
-        AbstractType::Ptr resType = res.type.type();
+        AbstractType::Ptr resType = res.type.abstractType();
         if( ConstantIntegralType::Ptr iType = resType.cast<ConstantIntegralType>() ) {
           m_currentEnumeratorValue = (int)iType->value<qint64>();
           EnumeratorType::Ptr enumerator(new EnumeratorType());
@@ -382,7 +382,7 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
       }
 
       if ( !delay && res.isValid() && res.isInstance ) {
-        openType( res.type.type() );
+        openType( res.type.abstractType() );
         openedType = true;
       }
     }
@@ -544,7 +544,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
   bool typeOpened = false;
   if (node->op) {
     QString op = editor()->tokenToString(node->op);
-    if (!op.isEmpty())
+    if (!op.isEmpty()) {
       if (op[0] == '&') {
         ReferenceType::Ptr pointer(new ReferenceType());
         pointer->setModifiers(parseConstVolatile(editor()->parseSession(), node->cv));
@@ -559,6 +559,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
         openType(pointer);
         typeOpened = true;
       }
+    }
   }
 
   TypeBuilderBase::visitPtrOperator(node);
@@ -620,7 +621,7 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     ArrayType::Ptr array(new ArrayType());
     array->setElementType(lastType());
 
-    ConstantIntegralType::Ptr integral = res.type.type().cast<ConstantIntegralType>();
+    ConstantIntegralType::Ptr integral = res.type.type<ConstantIntegralType>();
     if( res.isValid() && integral ) {
       array->setDimension(integral->value<qint64>());
     } else {

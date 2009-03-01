@@ -238,7 +238,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     return declaration; //All parameters already have a type assigned
 
   for( int a = 0; a < params.parameters.count(); a++ )
-    matchParameterTypes(params.parameters[a].type, arguments[a].type(), instantiatedParameters);
+    matchParameterTypes(params.parameters[a].type, arguments[a].abstractType(), instantiatedParameters);
 
   bool allInstantiated = true;
   for( QMap<IndexedString, AbstractType::Ptr>::const_iterator it = instantiatedParameters.begin(); it != instantiatedParameters.end(); ++it )
@@ -356,7 +356,7 @@ uint OverloadResolver::matchParameterTypes(const AbstractType::Ptr& argumentType
       uint matchDepth = 1;
       
       for(uint a = 0; a < argumentInstantiatedWith.templateParametersSize(); ++a) {
-        uint localMatchDepth = matchParameterTypes(argumentInstantiatedWith.templateParameters()[a].type(), parameterInstantiatedWith.templateParameters()[a].type(), instantiatedTypes, keepValue);
+        uint localMatchDepth = matchParameterTypes(argumentInstantiatedWith.templateParameters()[a].abstractType(), parameterInstantiatedWith.templateParameters()[a].abstractType(), instantiatedTypes, keepValue);
         if(!localMatchDepth)
           return 0;
         matchDepth += localMatchDepth;

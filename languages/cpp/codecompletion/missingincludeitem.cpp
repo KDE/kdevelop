@@ -183,7 +183,7 @@ KSharedPtr<MissingIncludeCompletionItem> includeDirectiveFromUrl(KUrl fromUrl, K
 
 QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString expression, QString displayTextPrefix, Cpp::ExpressionEvaluationResult expressionResult, KDevelop::DUContext* context, int argumentHintDepth, bool needInstance) {
   
-  AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.type(), context->topContext());
+  AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.abstractType(), context->topContext());
   
   //Collect all visible "using namespace" imports
   QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier );

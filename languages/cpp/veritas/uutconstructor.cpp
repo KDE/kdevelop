@@ -230,12 +230,12 @@ QString serializeTypeFromExpression(const QString& expr, DUContext* ctx)
     kDebug() << "failed to grab arguments";
     return QString();
   }
-  if (er.type.type()->whichType() == AbstractType::TypeFunction) {
-    TypePtr<FunctionType> f = er.type.type().cast<FunctionType>();
+  if (er.type.abstractType()->whichType() == AbstractType::TypeFunction) {
+    TypePtr<FunctionType> f = er.type.type<FunctionType>();
     Q_ASSERT(f); Q_ASSERT(f->returnType());
     return f->returnType()->toString();
   } else {
-    return er.type.type()->toString();
+    return er.type.abstractType()->toString();
   }
 }
 

@@ -44,6 +44,7 @@ private slots:
   {
   }
 
+#if 0
   void testSymbolTable()
   {
     NameTable table;
@@ -323,6 +324,23 @@ private slots:
     TranslationUnitAST* ast = parse(method, &mem_pool);
     dumper.dump(ast, lastSession->token_stream);
     ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
+  }
+#endif
+
+  void testNonTemplateDeclaration()
+  {
+    /*{
+      QByteArray templateMethod("template <int> class a {}; int main() { const int b = 1; const int c = 2; a<b|c> d; }");
+      pool mem_pool;
+      TranslationUnitAST* ast = parse(templateMethod, &mem_pool);
+      dumper.dump(ast, lastSession->token_stream);
+    }*/
+
+    //int a, b, c, d; bool e;
+    QByteArray declaration("void expression() { if (a < b || c > d) {} }");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(declaration, &mem_pool);
+    dumper.dump(ast, lastSession->token_stream);
   }
 
   /*void testParseFile()

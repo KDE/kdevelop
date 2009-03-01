@@ -63,7 +63,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     
     ///@return whether the result is an lvalue
     bool isLValue() const {
-      return isInstance && (instanceDeclaration.isValid() || type.type().cast<ReferenceType>());
+      return isInstance && (instanceDeclaration.isValid() || type.type<ReferenceType>());
     }
 
     ///@return whether this result is valid(has a type)

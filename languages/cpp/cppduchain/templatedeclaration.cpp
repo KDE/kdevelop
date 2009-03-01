@@ -216,7 +216,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
       else
         res = p.evaluateType( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), source );
 
-      return res.type.type();
+      return res.type.abstractType();
     }else{
       if( containsDelayedType(type) )
       {
@@ -374,7 +374,7 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
     if(specializedWith.templateParametersSize()) {
       //Use the information from the specialization-information to build the template-identifiers
       FOREACH_FUNCTION(IndexedType indexedType, specializedWith.templateParameters) {
-        AbstractType::Ptr type = indexedType.type();
+        AbstractType::Ptr type = indexedType.abstractType();
         if(type)
           identifier.appendTemplateIdentifier( type->toString() );
         else
@@ -518,9 +518,9 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         TemplateDeclaration* tempCopyDecl = dynamic_cast<TemplateDeclaration*>(declCopy);
         Q_ASSERT(tempCopyDecl);
 
-        if( currentArgument < templateArguments.templateParametersSize() && templateArguments.templateParameters()[currentArgument].type() )
+        if( currentArgument < templateArguments.templateParametersSize() && templateArguments.templateParameters()[currentArgument].abstractType() )
         {
-          declCopy->setAbstractType( templateArguments.templateParameters()[currentArgument].type() );
+          declCopy->setAbstractType( templateArguments.templateParameters()[currentArgument].abstractType() );
         } else {
           //Apply default-parameters, although these should have been applied before
           //Use the already available delayed-type resolution to resolve the value/type
@@ -574,7 +574,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
         ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
         uint num = 0;
         FOREACH_FUNCTION( const BaseClassInstance& base, klass->baseClasses ) {
-          DelayedType::Ptr delayed = base.baseClass.type().cast<DelayedType>();
+          DelayedType::Ptr delayed = base.baseClass.type<DelayedType>();
           if( delayed ) {
             ///Resolve the delayed type, and import the context
             DelayedTypeResolver res(contextCopy, source);
@@ -643,7 +643,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               InstantiationInformation newSpecializedWith(oldSpecializedWith);
               newSpecializedWith.templateParametersList().clear();
               FOREACH_FUNCTION(IndexedType type, oldSpecializedWith.templateParameters)
-                newSpecializedWith.addTemplateParameter(resolveDelayedTypes(type.type(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source ));
+                newSpecializedWith.addTemplateParameter(resolveDelayedTypes(type.abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source ));
               instantiatedTemplate->setSpecializedWith(newSpecializedWith.indexed());
               globalTemplateArguments = newSpecializedWith;
             }
@@ -770,7 +770,7 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   uint matchDepth = 1;
   
   for(uint a = 0; a < info.templateParametersSize(); ++a) {
-    uint localMatchDepth = resolver.matchParameterTypes(info.templateParameters()[a].type(), specializedWith.templateParameters()[a].type(), instantiatedParameters, true);
+    uint localMatchDepth = resolver.matchParameterTypes(info.templateParameters()[a].abstractType(), specializedWith.templateParameters()[a].abstractType(), instantiatedParameters, true);
     if(!localMatchDepth) {
       ifDebugMatching( kDebug() << "mismatch in parameter" << a; )
       return qMakePair(0u, (TemplateDeclaration*)0);
@@ -935,7 +935,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       UnAliasExchanger exchanger(source);
       
       for(int a = 0; a < templateArguments.templateParametersSize(); ++a)
-        newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].type())->indexed());
+        newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].abstractType())->indexed());
       
       templateArguments = newTemplateArguments;
     }

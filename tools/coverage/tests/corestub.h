@@ -54,9 +54,9 @@ public:
         m_projectController(0),
         m_uiController(0),
         m_runController(0),
+        m_selectionController(0),
         m_session(0),
         m_partController(0),
-        m_selectionController(0),
         m_documentationController(0) {}
 
     virtual ~Core() {}

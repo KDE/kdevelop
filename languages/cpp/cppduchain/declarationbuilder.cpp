@@ -817,7 +817,7 @@ Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformatio
       do {
         NameASTVisitor visitor(editor()->parseSession(), 0, templateContext, currentContext()->topContext(), templateContext->range().end/*, DUContext::NoUndefinedTemplateParams*/);
         ExpressionEvaluationResult res = visitor.processTemplateArgument(current->element);
-        AbstractType::Ptr type = res.type.type();
+        AbstractType::Ptr type = res.type.abstractType();
         
         TemplateTypeExchanger exchanger(currentContext()->topContext());
         

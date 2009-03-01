@@ -301,7 +301,7 @@ class CppDUContext : public BaseContext {
               res.type = Cpp::resolveDelayedTypes( delayed.cast<AbstractType>(), this, source, basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams ? DUContext::NoUndefinedTemplateParams : DUContext::NoSearchFlags )->indexed();
               
               if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
-                AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.type(), 0));
+                AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.abstractType(), 0));
                 if (targetTypePtr.cast<CppTemplateParameterType>() || targetTypePtr.cast<DelayedType>()) {
                   return false;
                 }
@@ -457,7 +457,7 @@ class CppDUContext : public BaseContext {
         
         id.clearTemplateIdentifiers();
         FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
-          AbstractType::Ptr type(arg.type());
+          AbstractType::Ptr type(arg.abstractType());
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified)
             id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
