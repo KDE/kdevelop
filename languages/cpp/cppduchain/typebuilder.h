@@ -77,6 +77,9 @@ protected:
 
   bool lastTypeWasInstance() const;
 
+  //Correctly applies the current modifiers to the given type
+  void applyModifiers(AbstractType::Ptr type, uint modifiers);
+  
   bool m_inTypedef;
   
   private:

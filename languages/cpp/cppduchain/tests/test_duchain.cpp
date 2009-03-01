@@ -2229,12 +2229,12 @@ void TestDUChain::testTypedefUnsignedInt() {
 }
 
 void TestDUChain::testTypedef() {
-  QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { }");
+  QByteArray method("/*This is A translation-unit*/ \n/*This is class A*/class A { }; \ntypedef A B;//This is a typedef\nvoid test() { };\nconst B c;");
 
   TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 4);
 
   Declaration* defClassA = top->localDeclarations().first();
   QCOMPARE(defClassA->identifier(), Identifier("A"));
@@ -2258,6 +2258,13 @@ void TestDUChain::testTypedef() {
   QCOMPARE(QString::fromUtf8(defB->comment()), QString("This is a typedef"));
 
   QCOMPARE(defB->logicalInternalContext(top), defClassA->logicalInternalContext(top));
+  
+  Declaration* defC = findDeclaration(top, QualifiedIdentifier("c"));
+  QVERIFY(defC);
+  //The "const" has to be moved into the pointed-to type so it is correctly respected during type-conversions and such
+  QVERIFY(TypeUtils::unAliasedType(defC->abstractType()));
+  QVERIFY(TypeUtils::unAliasedType(defC->abstractType())->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(defC->abstractType()->modifiers() & AbstractType::ConstModifier);
   
   release(top);
 }

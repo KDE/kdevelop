@@ -218,6 +218,22 @@ void TestCppCodeCompletion::testImportTypedef() {
     QCOMPARE(imports[1].context(context)->type(), DUContext::Class);
     QCOMPARE(imports[1].context(context)->scopeIdentifier(true), QualifiedIdentifier("A"));
   }
+  {
+    QByteArray test = "class A { public: int m; }; template<class Base> class C : public Base { }; typedef C<A> TheBase; class B : public TheBase { }; class E : public B{ };";
+
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    Declaration* typeDef = findDeclaration(context, QualifiedIdentifier("TheBase"));
+    QVERIFY(typeDef);
+    QVERIFY(typeDef->isTypeAlias());
+    QVERIFY(typeDef->type<KDevelop::TypeAliasType>());
+    
+    Declaration* BDecl = findDeclaration(context, QualifiedIdentifier("B"));
+    QVERIFY(BDecl);
+    QCOMPARE(BDecl->internalContext()->importedParentContexts().size(), 1);
+    QVERIFY(BDecl->internalContext()->importedParentContexts()[0].context(context));
+  }
+  
 }
 
 void TestCppCodeCompletion::testPrivateVariableCompletion() {

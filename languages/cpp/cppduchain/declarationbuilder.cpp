@@ -1040,7 +1040,9 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
     if(currentClass) {
 
       instance.virtualInheritance = (bool)node->virt;
-      instance.baseClass = lastType()->indexed();
+
+      //TypeUtils::unAliasedType(
+      instance.baseClass = TypeUtils::unAliasedType(lastType())->indexed();
       if(currentClass->classType() == ClassDeclarationData::Struct)
         instance.access = KDevelop::Declaration::Public;
       else

@@ -423,15 +423,18 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
     ifDebug( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
     ifDebugCurrentFile( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
-    if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) )
+    if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) ) {
+      ifDebug( kDebug(9007) << "opening delayed because of template-dependence"; )
       delay = true;
+    }
 
     if(!delay) {
       
       ifDebug( if( dec.count() > 1 ) kDebug(9007) << id.toString() << "was found" << dec.count() << "times"; )
       
       foreach( Declaration* decl, dec ) {
-        if( needClass && !decl->abstractType().cast<CppClassType>() )
+        AbstractType::Ptr unAliased = TypeUtils::unAliasedType(decl->abstractType());
+        if( needClass && !unAliased.cast<CppClassType>() )
           continue;
 
         if (decl->abstractType() ) {
@@ -442,14 +445,14 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
 
           AbstractType::Ptr type = decl->abstractType();
           
-          if(TypeUtils::unAliasedType(type).cast<DelayedType>()) {
+          if(unAliased.cast<DelayedType>()) {
             continue;
           }
 
           openedType = true;
 
-          if(type && modifiers && type->modifiers() != modifiers)
-            type->setModifiers(modifiers); //The type-system automatically copies the type while changing, so we don't create any problems here.
+          if(type)
+            applyModifiers(type, modifiers);
 
           openType(type);
           break;
@@ -467,6 +470,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
    openedType = true;
    TypeIdentifier typeId(id);
    typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
+   
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
 
    ifDebug( DUChainReadLocker lock(DUChain::lock()); if(templateDeclarationDepth() == 0) kDebug(9007) << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext(); )
@@ -476,6 +480,10 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "opened type" << (currentAbstractType() ? currentAbstractType()->toString() : QString("(no type)")); )
 
   return openedType;
+}
+
+void TypeBuilder::applyModifiers(KDevelop::AbstractType::Ptr type, uint modifiers) {
+  type->setModifiers(modifiers | type->modifiers());
 }
 
 
