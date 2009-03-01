@@ -1859,7 +1859,7 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
   if(m_declaration.isValid()) {
     Declaration* decl = m_declaration.getDeclaration(topContext);
     if(decl)
-      return decl->internalContext();
+      return decl->logicalInternalContext(topContext);
     else
       return 0;
   }else{
