@@ -115,30 +115,30 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
       rev = revisions[document];
   }
 
-  QMutexLocker lock(mutex);
-
-  IndexedString url(document->url().pathOrUrl());
-  if (documents.contains(url)) {
-    KTextEditor::Document* d = documents[url];
-
-    // Grab the smart mutex to make sure kdevelop is finished with this document.
-    SmartInterface* smart = dynamic_cast<SmartInterface*>(d);
-    QMutexLocker smartLock(smart ? smart->smartMutex() : 0);
-    if (smart)
-      if (rev != -1)
-        smart->releaseRevision(rev);
-
-    if (editorIntegrators.contains(document)) {
-      foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {
-        editor->clearCurrentDocument();
+  {
+    QMutexLocker lock(mutex);
+  
+    IndexedString url(document->url().pathOrUrl());
+    if (documents.contains(url)) {
+      KTextEditor::Document* d = documents[url];
+  
+      // Grab the smart mutex to make sure kdevelop is finished with this document.
+      SmartInterface* smart = dynamic_cast<SmartInterface*>(d);
+      QMutexLocker smartLock(smart ? smart->smartMutex() : 0);
+      if (smart)
+        if (rev != -1)
+          smart->releaseRevision(rev);
+  
+      if (editorIntegrators.contains(document)) {
+        foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {
+          editor->clearCurrentDocument();
+        }
       }
+  
+      documents.remove(url);
     }
-
-    documents.remove(url);
   }
   
-  lock.unlock();
-
   emit documentAboutToBeDeletedFinal(document);
 }
 

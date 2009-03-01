@@ -1221,7 +1221,7 @@ void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
   foreach (TopDUContext* top, chains) {
     
     DUChainWriteLocker lock( DUChain::lock() );
-    QMutexLocker lock(smart->smartMutex());
+    QMutexLocker lockSmart(smart->smartMutex());
     
     deconvertDUChainInternal(top);
   }
