@@ -104,6 +104,8 @@ set(kdevplatformlanguage_LIB_SRCS
 
     util/setrepository.cpp
     util/navigationtooltip.cpp
+
+    highlighting/codehighlighting.cpp
 )
 
 set( kdevplatformlanguage_LIB_UI
@@ -294,5 +296,10 @@ install(FILES
     duchain/navigation/useswidget.h
     duchain/navigation/usescollector.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/duchain/navigation COMPONENT Devel
+)
+
+install(FILES
+    highlighting/codehighlighting.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
 )
 
