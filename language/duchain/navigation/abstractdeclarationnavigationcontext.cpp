@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <duchain/types/typealiastype.h>
+#include <typeinfo>
 
 namespace KDevelop {
 AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
@@ -454,7 +455,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     //We leave out the * and & reference and pointer signs, those are added to the end
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
-    modifyHtml() += Qt::escape(type->toString());
+    modifyHtml() += i18n("not found") + " " + Qt::escape(type->toString());
   }
 }
 
@@ -468,6 +469,8 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
+  kDebug() << "making type-links for" << type->toString() << typeid(*type).name();
+  
   if( idType ) {
     ///@todo This is C++ specific, move into subclass
     

@@ -39,11 +39,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
   protected:
     DeclarationPointer m_declaration;
 
+    
     static QString stringFromAccess(Declaration::AccessPolicy access);
     static QString stringFromAccess(DeclarationPointer decl);
     static QString declarationName( DeclarationPointer decl );
     static QStringList declarationDetails(DeclarationPointer decl);
 
+    
     ///Print the function-signature in a way that return-type and argument can be jumped to
     virtual void htmlFunction();
     ///Navigation for additional less important links, like what function was overloaded etc.

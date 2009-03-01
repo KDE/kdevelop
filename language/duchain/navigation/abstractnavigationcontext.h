@@ -90,7 +90,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     ///After clear() was called, this returns false again.
     bool alreadyComputed() const;
     
+    void setTopContext(TopDUContextPointer context);
+
+    TopDUContextPointer topContext() const;
+    
   protected:
+    
+    virtual void setPreviousContext(AbstractNavigationContext* previous);
     
     struct TextHandler {
       TextHandler(AbstractNavigationContext* c) : context(c) {

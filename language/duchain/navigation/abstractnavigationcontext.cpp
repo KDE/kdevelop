@@ -41,6 +41,15 @@
 
 
 namespace KDevelop {
+  
+void AbstractNavigationContext::setTopContext(KDevelop::TopDUContextPointer context) {
+  m_topContext = context;
+}
+
+KDevelop::TopDUContextPointer AbstractNavigationContext::topContext() const {
+  return m_topContext;
+}
+
 
 AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
   : m_selectedLink(0), m_linkCount(-1), m_currentPositionLine(0),
@@ -178,6 +187,10 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
   return NavigationContextPointer( this );
 }
 
+void AbstractNavigationContext::setPreviousContext(KDevelop::AbstractNavigationContext* previous) {
+  m_previousContext = previous;
+}
+
 NavigationContextPointer AbstractNavigationContext::registerChild( AbstractNavigationContext* context ) {
   m_children << NavigationContextPointer(context);
   return m_children.last();
@@ -191,7 +204,7 @@ NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPoi
   if(abstractNavigationWidget)
     ret = abstractNavigationWidget->context();
   delete navigationWidget;
-  ret->m_previousContext = this;
+  ret->setPreviousContext(this);
   m_children << ret;
   return ret;
 }

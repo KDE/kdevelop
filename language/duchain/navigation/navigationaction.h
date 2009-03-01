@@ -34,7 +34,8 @@ struct NavigationAction {
     NavigateDeclaration,
     NavigateUses,
     JumpToSource, //If this is set, the action jumps to document and cursor if they are valid, else to the declaration-position of decl
-    ExecuteKey,
+    ExecuteKey, //This is used to do changes within one single navigation-context. executeKey(key) will be called in the current context,
+                //and the context has the chance to react in an arbitrary way.
     ShowDocumentation
   };
 
