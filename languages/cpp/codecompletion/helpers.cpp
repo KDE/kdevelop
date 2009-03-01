@@ -45,16 +45,16 @@ namespace Cpp {
 
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams, bool noShortening )
 {
-  Declaration* dec(item.m_declaration.data());
+  Declaration* dec(item.declaration().data());
 
   Cpp::CodeCompletionContext::Function f;
   TopDUContext* top = 0;
-  if(item.completionContext && item.completionContext->duContext()) {
-    top = item.completionContext->duContext()->topContext();
+  if(item.completionContext() && item.completionContext()->duContext()) {
+    top = item.completionContext()->duContext()->topContext();
   }
 
-  if( item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext->functions().count() > item.listOffset )
-    f = item.completionContext->functions()[item.listOffset];
+  if( item.completionContext() && item.completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext()->functions().count() > item.listOffset )
+    f = item.completionContext()->functions()[item.listOffset];
 
   QTextFormat normalFormat(QTextFormat::CharFormat);
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
@@ -205,7 +205,7 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
 {
   Q_UNUSED(includeDefaultParams);
 
-  Declaration* dec(item.m_declaration.data());
+  Declaration* dec(item.declaration().data());
 
   QTextFormat normalFormat(QTextFormat::CharFormat);
   QTextFormat highlightFormat; //highlightFormat is invalid, so kate uses the match-quality dependent color.
@@ -266,7 +266,7 @@ void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QSt
     {
       *highlighting <<  QVariant(textFormatStart);
       *highlighting << QVariant(ret.length() - textFormatStart);
-      if(item.completionContext && item.completionContext->memberAccessOperation() == Cpp::CodeCompletionContext::TemplateAccess && num == item.completionContext->matchPosition())
+      if(item.completionContext() && item.completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::TemplateAccess && num == item.completionContext()->matchPosition())
         *highlighting << highlightFormat;
       else
         *highlighting << normalFormat;

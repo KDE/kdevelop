@@ -29,7 +29,7 @@
 
 namespace Cpp {
 
-ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, context, _inheritanceDepth, _listOffset), m_type(type) {
+ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::DeclarationPointer decl, KSharedPtr<Cpp::CodeCompletionContext> context, int _inheritanceDepth, int _listOffset) : NormalDeclarationCompletionItem(decl, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(context), _inheritanceDepth, _listOffset), m_type(type) {
 }
 
 #define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
@@ -64,7 +64,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
     if(index.column() == KTextEditor::CodeCompletionModel::Name) {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
       if(m_type == CreateSignalSlot) {
-        ret = completionContext->followingText();
+        ret = completionContext()->followingText();
         Cpp::QtFunctionDeclaration* cDecl = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
 
         if(cDecl && ret.toString().isEmpty())
@@ -211,7 +211,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     //Step 1: Decide where to put the declaration
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     
-    QList<DUContext*> containers = completionContext->memberAccessContainers();
+    QList<DUContext*> containers = completionContext()->memberAccessContainers();
     
     if(containers.isEmpty())
       return;
@@ -252,11 +252,11 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
         add = indent + "private slots:\n";
       
       QString sig;
-      sig = "(" + QString::fromUtf8(completionContext->m_connectedSignalNormalizedSignature) + ")";
+      sig = "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")";
 //       m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
 //       createArgumentList(*this, sig, 0, false, true);      
       
-      add = indent + "void " + completionContext->followingText() + sig + ";";
+      add = indent + "void " + completionContext()->followingText() + sig + ";";
       
       if(targetLine > text.size())
         return;
@@ -269,7 +269,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       delete rep;
       ICore::self()->languageController()->backgroundParser()->addDocument(doc);
       
-      QString localText = "SLOT(" + completionContext->followingText() + "(" + QString::fromUtf8(completionContext->m_connectedSignalNormalizedSignature) + ")));";
+      QString localText = "SLOT(" + completionContext()->followingText() + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
       document->replaceText(word, localText);
     }
   }else{

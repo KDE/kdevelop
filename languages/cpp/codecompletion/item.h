@@ -27,6 +27,7 @@
 
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletionitem.h>
+#include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include "context.h"
 #include "../includeitem.h"
 
@@ -47,9 +48,10 @@ namespace Cpp {
 void setStaticMatchContext(QList<KDevelop::IndexedType> types);
 
 //A completion item used for completion of normal declarations while normal code-completion
-class NormalDeclarationCompletionItem : public KDevelop::CompletionTreeItem {
+class NormalDeclarationCompletionItem : public KDevelop::NormalDeclarationCompletionItem {
 public:
-  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<Cpp::CodeCompletionContext> context=KSharedPtr<Cpp::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0) : m_declaration(decl), completionContext(context), m_inheritanceDepth(_inheritanceDepth), listOffset(_listOffset), useAlternativeText(false), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
+  NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<KDevelop::CodeCompletionContext> context=KSharedPtr<KDevelop::CodeCompletionContext>(), int _inheritanceDepth = 0, int _listOffset=0)
+    : KDevelop::NormalDeclarationCompletionItem(decl, context, _inheritanceDepth), useAlternativeText(false), listOffset(_listOffset), m_isQtSignalSlotCompletion(false), m_isTemplateCompletion(false), m_fixedMatchQuality(-1) {
   }
   
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
@@ -61,15 +63,13 @@ public:
   //Prefix that will be stripped from all identifiers(For example the namespace)
   QualifiedIdentifier stripPrefix() const;
   
-  KDevelop::DeclarationPointer m_declaration;
-  KSharedPtr<Cpp::CodeCompletionContext> completionContext;
-  int m_inheritanceDepth; //Inheritance-depth: 0 for local functions(within no class), 1 for within local class, 1000+ for global items.
-  int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
   QString alternativeText; //Text shown when declaration is zero
   
   //If this is true, alternativeText will be shown in the list, and will be inserted on execution.
   //Also the scope will be set to LocalScope when this attribute is true.
   bool useAlternativeText;
+
+  int listOffset; //If it is an argument-hint, this contains the offset within the completion-context's function-list
 
   //If this is true, the execution of the item should trigger the insertion of a complete SIGNAL/SLOT use
   bool m_isQtSignalSlotCompletion, m_isTemplateCompletion;
@@ -78,13 +78,13 @@ public:
   int m_fixedMatchQuality;
   
   virtual KTextEditor::CodeCompletionModel::CompletionProperties completionProperties() const;
-  
-  virtual KDevelop::DeclarationPointer declaration() const {
-    return m_declaration;
-  }
-  
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
+
+  KSharedPtr<CodeCompletionContext> completionContext() const;
+
+protected:
+  virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const;
+  virtual bool createsExpandingWidget() const;
+  virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const;
 };
 
 //A completion item used for completing include-files

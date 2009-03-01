@@ -971,7 +971,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                   }
 
                   if(!decl.first->identifier().isEmpty())
-                    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(this), decl.second ) );
+                    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second ) );
                 }
               }
             } else {
@@ -1005,7 +1005,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             if(!decl && !m_expressionResult.allDeclarations.isEmpty())
               decl = m_expressionResult.allDeclarations[0].getDeclaration(m_duContext->topContext());
             if(decl) {
-              NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(decl),  KSharedPtr <Cpp::CodeCompletionContext >(this), 0, 0 );
+              NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(decl),  KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, 0 );
               item->m_isTemplateCompletion = true;
               items << CompletionTreeItemPointer( item );
             }else{
@@ -1022,7 +1022,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               break;*/
             //When there is too many overloaded functions, do not show them. They can just be too many.
             if (functions().count() > maxOverloadedOperatorArgumentHints) {
-              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <Cpp::CodeCompletionContext >(this), 0, 0 ) );
+              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, 0 ) );
               if(functions().count())
                 items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.  The numeric argument is always greater than one, so translation of the singular case is only necessary in languages where the singular form is used for 21, 31 etc.", "1 overload of %2", "%1 overloads of %2", functions().count(), functionName());
             }else if(functions().count() == 0 && additionalContextType() != Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
@@ -1030,7 +1030,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
             }else if(!functions().isEmpty()) {
               int num = 0;
               foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
-                items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), KSharedPtr <Cpp::CodeCompletionContext >(this), 0, num ) );
+                items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, num ) );
                 ++num;
               }
             }
@@ -1145,7 +1145,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                     if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(decl.first)) {
                       if(classFun->isSignal() && classFun->normalizedSignature() == signature) {
                         //Match
-                        NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
+                        NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
                         item->useAlternativeText = true;
                         m_connectedSignal = IndexedDeclaration(decl.first);
                         item->alternativeText = i18n("Connect to") + " " + decl.first->qualifiedIdentifier().toString() + "(" + QString::fromUtf8(m_connectedSignalNormalizedSignature) + ")";
@@ -1176,7 +1176,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
               foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
                   if((classFun->isSignal() && !m_onlyShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
-                    NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), CodeCompletionContext::Ptr(this), candidate.second );
+                    NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), KDevelop::CodeCompletionContext::Ptr(this), candidate.second );
                     item->m_isQtSignalSlotCompletion = true;
                     if(!m_connectedSignalIdentifier.isEmpty()) {
                       item->m_fixedMatchQuality = 0;
@@ -1315,7 +1315,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::speci
       DUContext* enumInternal = enumDecl->internalContext();
       foreach(Declaration* enumerator, enumInternal->localDeclarations()) {
         QualifiedIdentifier id = prefix + enumerator->identifier();
-        items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), Ptr(this), 0 ));
+        items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(enumerator), KDevelop::CodeCompletionContext::Ptr(this), 0 ));
         static_cast<NormalDeclarationCompletionItem*>(items.back().data())->alternativeText = id.toString();
         static_cast<NormalDeclarationCompletionItem*>(items.back().data())->useAlternativeText = true;
       }
@@ -1394,7 +1394,7 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
   decls = Cpp::hideOverloadedDeclarations(decls);
 
   foreach( const DeclarationDepthPair& decl, decls )
-    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), Ptr(this), decl.second ) );
+    items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem(DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(this), decl.second ) );
 
   ///Eventually show additional specificly known items for the matched argument-type, like for example enumerators for enum types
   CodeCompletionContext* parent = parentContext();
