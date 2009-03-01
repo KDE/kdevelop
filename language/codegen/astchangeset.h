@@ -156,6 +156,8 @@ protected:
     {
     }
 
+    AstNode* m_nodeChanges;
+
 private:
     AstChangeSet<AstNode>* m_changeSet;
     AstNode* m_node;

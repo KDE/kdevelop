@@ -21,7 +21,7 @@
 
 #include <QtGui/QWizardPage>
 
-#include "../duchain/declaration.h"
+#include "language/duchain/declaration.h"
 
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -47,6 +47,7 @@ public:
     virtual void cleanupPage();
     virtual bool validatePage();
     virtual void fetchInheritance(const QString& inheritedObject);
+    virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
     virtual void fetchInheritanceFromClass(KDevelop::Declaration* decl);
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
 

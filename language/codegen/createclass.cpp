@@ -67,6 +67,7 @@ void CreateClass::setup()
 
 KUrl CreateClass::headerUrlFromBase(QString className, KUrl baseUrl)
 {
+    Q_UNUSED(baseUrl);
     KUrl url;
     url.addPath(className);
     return url;
@@ -74,6 +75,8 @@ KUrl CreateClass::headerUrlFromBase(QString className, KUrl baseUrl)
 
 KUrl CreateClass::implementationUrlFromBase(QString className, KUrl baseUrl)
 {
+    Q_UNUSED(baseUrl);
+    Q_UNUSED(className);
     return KUrl();
 }
 
@@ -264,6 +267,7 @@ LicensePage::~LicensePage()
 void LicensePage::licenseComboChanged(int license)
 {
     //TODO
+    Q_UNUSED(license);
 }
 
 class KDevelop::OutputPagePrivate

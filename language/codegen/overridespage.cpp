@@ -130,17 +130,13 @@ void OverridesPage::cleanupPage()
 
 void OverridesPage::fetchInheritance(const QString& inheritedObject)
 {
-    // TODO: properly strip qualifiers
-    QString identifier = inheritedObject;
-    identifier = identifier.remove("public ", Qt::CaseInsensitive).remove("protected ", Qt::CaseInsensitive).remove("private ", Qt::CaseInsensitive).simplified();
-
     KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
     if(!lock.locked()) {
       kDebug() << "Failed to lock du-chain in time";
       return;
     }
 
-    PersistentSymbolTable::Declarations declarations = PersistentSymbolTable::self().getDeclarations( IndexedQualifiedIdentifier( QualifiedIdentifier(identifier)) );
+    PersistentSymbolTable::Declarations declarations = PersistentSymbolTable::self().getDeclarations( IndexedQualifiedIdentifier(parseParentClassId(inheritedObject)) );
 
     for (PersistentSymbolTable::Declarations::Iterator it = declarations.iterator(); it; ++it) {
         Declaration* decl = it->declaration();
@@ -155,6 +151,16 @@ void OverridesPage::fetchInheritance(const QString& inheritedObject)
         }
     }
 }
+
+KDevelop::QualifiedIdentifier KDevelop::OverridesPage::parseParentClassId(const QString& inheritedObject)
+{
+    // TODO: properly strip qualifiers
+    QString identifier = inheritedObject;
+    identifier = identifier.remove("public ", Qt::CaseInsensitive).remove("protected ", Qt::CaseInsensitive).remove("private ", Qt::CaseInsensitive).simplified();
+
+    return QualifiedIdentifier(identifier);
+}
+
 
 void OverridesPage::fetchInheritanceFromClass(KDevelop::Declaration* decl)
 {
