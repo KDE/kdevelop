@@ -890,14 +890,14 @@ bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*
   return m_dynamicData->imports(origin, topContext(), 4);
 }
 
-void DUContext::addIndirectImport(const DUContext::Import& import) {
+bool DUContext::addIndirectImport(const DUContext::Import& import) {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a] == import) {
       d->m_importedContextsList()[a].position = import.position;
-      return;
+      return true;
     }
   }
 
@@ -905,6 +905,7 @@ void DUContext::addIndirectImport(const DUContext::Import& import) {
   ///Contexts added first, aka template-contexts, should stay in first place, so they are searched first.
 
   d->m_importedContextsList().append(import);
+  return false;
 }
 
 void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool /*temporary*/ )
@@ -917,7 +918,8 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
   }
 
   Import import(context, position);
-  addIndirectImport(import);
+  if(addIndirectImport(import))
+    return;
 
   if( !anonymous && import.isBackwardMapped() ) {
     ENSURE_CAN_WRITE_(context)

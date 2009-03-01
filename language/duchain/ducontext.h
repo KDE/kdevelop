@@ -411,8 +411,9 @@ public:
    * Adds an imported context, which may be indirect.
    * @warning This is only allowed if this context is _NOT_ a top-context
    * @warning When using this mechanism, this context will not be registered as importer to the other one.
+   * @return true if the import was already imported before, else false.
    */
-  void addIndirectImport(const DUContext::Import& import);
+  bool addIndirectImport(const DUContext::Import& import);
 
   /**
    * Removes a child context.
