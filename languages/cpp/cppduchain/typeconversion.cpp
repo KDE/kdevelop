@@ -130,8 +130,8 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
       return *it;
   }
   
-  AbstractType::Ptr to = _to.abstractType();
-  AbstractType::Ptr from = _from.abstractType();
+  AbstractType::Ptr to = unAliasedType(_to.abstractType());
+  AbstractType::Ptr from = unAliasedType(_from.abstractType());
   
   if( !from || !to ) {
     problem( from, to, "one type is invalid" );
@@ -244,8 +244,8 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
   //We can convert non-const -> const, but not const -> non-const
 //   if(to->modifiers() & AbstractType::ConstModifier || !(from->modifiers()& AbstractType::ConstModifier)) {
   
-    AbstractType::Ptr nextFrom = from->baseType();
-    AbstractType::Ptr nextTo = to->baseType();
+    AbstractType::Ptr nextFrom = unAliasedType(from->baseType());
+    AbstractType::Ptr nextTo = unAliasedType(to->baseType());
 
     if(!nextTo || !nextFrom)
       return NoMatch;
@@ -258,8 +258,8 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
     if(pointerFrom && pointerTo)
       return pointerConversion(pointerFrom, pointerTo);
     
-    CppClassType::Ptr fromClass = from->baseType().cast<CppClassType>();
-    CppClassType::Ptr toClass = to->baseType().cast<CppClassType>();
+    CppClassType::Ptr fromClass = nextFrom.cast<CppClassType>();
+    CppClassType::Ptr toClass = nextTo.cast<CppClassType>();
     if( toClass && fromClass )
       if(toClass->modifiers() & AbstractType::ConstModifier || !(fromClass->modifiers()& AbstractType::ConstModifier))
         if( isPublicBaseClass( fromClass, toClass, m_topContext, &m_baseConversionLevels ) )
@@ -314,6 +314,8 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
    *
    * This function achieves the rules recursively. Performance-wise that may not be perfect, because sometimes many different paths can are followed.
    **/
+  from = unAliasedType(from);
+  to = unAliasedType(to);
 
   if( (categories & IdentityCategory) && identityConversion( from, to ) )
     return ExactMatch;

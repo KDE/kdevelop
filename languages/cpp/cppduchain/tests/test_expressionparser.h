@@ -56,6 +56,7 @@ private slots:
   void testSimpleExpression();
   void testTypeConversion();
   void testTypeConversion2();
+  void testTypeConversionWithTypedefs();
   void testSmartPointer();
   void testCasts();
   void testBaseClasses();
