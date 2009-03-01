@@ -563,7 +563,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( importedContext.context(source), SimpleCursor::invalid(), true );
+        contextCopy->addImportedParentContext( import, SimpleCursor::invalid(), true );
       }
     }
 
