@@ -193,13 +193,31 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 }
 
 void TestCppCodeCompletion::testImportTypedef() {
-  QByteArray test = "class Class { }; typedef Class Klass; class C : public Class { };";
+  {
+    QByteArray test = "class Class { }; typedef Class Klass; class C : public Class { };";
 
-  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(context->childContexts().count(), 2);
-  QCOMPARE(context->childContexts()[1]->importedParentContexts().count(), 1);
-  QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 2);
+    QCOMPARE(context->childContexts()[1]->importedParentContexts().count(), 1);
+    QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
+  }
+  {
+    QByteArray test = "class A { public: int m; }; template<class Base> class C : public Base { };";
+
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    Declaration* CDecl = findDeclaration(context, QualifiedIdentifier("C<A>"));
+    QVERIFY(CDecl);
+    QVERIFY(CDecl->internalContext());
+    QVector<DUContext::Import> imports = CDecl->internalContext()->importedParentContexts();
+    QCOMPARE(imports.size(), 2);
+    QVERIFY(imports[0].context(context));
+    QVERIFY(imports[1].context(context));
+    QCOMPARE(imports[0].context(context)->type(), DUContext::Template);
+    QCOMPARE(imports[1].context(context)->type(), DUContext::Class);
+    QCOMPARE(imports[1].context(context)->scopeIdentifier(true), QualifiedIdentifier("A"));
+  }
 }
 
 void TestCppCodeCompletion::testPrivateVariableCompletion() {
