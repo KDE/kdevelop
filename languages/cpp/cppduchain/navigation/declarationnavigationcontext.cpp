@@ -32,12 +32,17 @@
 #include "../typeutils.h"
 #include "../templatedeclaration.h"
 #include "../classdeclaration.h"
+#include "../cppduchain.h"
 
 namespace Cpp {
 
 DeclarationNavigationContext::DeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
   : AbstractDeclarationNavigationContext( decl, topContext, previousContext )
 {
+}
+
+KDevelop::AbstractType::Ptr DeclarationNavigationContext::typeToShow(KDevelop::AbstractType::Ptr type) {
+  return shortenTypeForViewing(type);
 }
 
 void DeclarationNavigationContext::setPreviousContext(KDevelop::AbstractNavigationContext* previous) {

@@ -460,6 +460,32 @@ KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDe
   return ret;
 }
 
+AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
+  struct ShortenAliasExchanger : public KDevelop::TypeExchanger {
+    virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+      if(!type)
+        return type;
+      
+      KDevelop::AbstractType::Ptr newType( type->clone() );
+      
+      KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
+      if(alias) {
+        //If the aliased type has less involved template arguments, prefer it
+        if(alias->type() && alias->type()->toString().count('<') < alias->toString().count('<'))
+          newType = alias->type();
+      }
+      
+      newType->exchangeTypes(this);
+      
+      return newType;
+    }
+  };
+  
+  ShortenAliasExchanger exchanger;
+  type = exchanger.exchange(type);
+  return type;
+}
+
 QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdentifier stripPrefix) {
   AbstractType::Ptr type = decl->abstractType();
   if(decl->isTypeAlias()) {
@@ -479,28 +505,8 @@ QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdent
     isReference = true;
     type = type.cast<ReferenceType>()->baseType();
   }
-  
-  struct ShortenAliasExchanger : public KDevelop::TypeExchanger {
-    virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
-      if(!type)
-        return type;
-      KDevelop::AbstractType::Ptr newType( type->clone() );
-      
-      KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
-      if(alias) {
-        //If the aliased type has less involved template arguments, prefer it
-        if(alias->type() && alias->type()->toString().count('<') < alias->toString().count('<'))
-          newType = alias->type();
-      }
-      
-      newType->exchangeTypes(this);
-      
-      return newType;
-    }
-  };
-  
-  ShortenAliasExchanger exchanger;
-  type = exchanger.exchange(type);
+
+  type = shortenTypeForViewing(type);
   
   if(!type)
     return QString();

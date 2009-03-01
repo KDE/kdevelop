@@ -29,6 +29,7 @@
 #include <language/duchain/indexedstring.h>
 #include <QSet>
 #include <language/duchain/identifier.h>
+#include <language/duchain/types/abstracttype.h>
 
 namespace KTextEditor {
   class Cursor;
@@ -129,6 +130,9 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier unTypedefType(KDevelop::Declarati
 KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
 
 KDEVCPPDUCHAIN_EXPORT bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend);
+
+///Shortens the type by resolving typedefs that are not useful
+KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr shortenTypeForViewing(KDevelop::AbstractType::Ptr type);
 }
 
 #endif
