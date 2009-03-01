@@ -24,7 +24,7 @@
 
 namespace KDevelop
 {
-
+/// \todo move data to private d pointer classes
 struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
 {
   DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = 0);
@@ -35,6 +35,18 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
   const TopDUContextData* topDFunc;
   const SimpleCursor& position;
   const AbstractType::Ptr& dataType;
+  DUContext::SearchFlags flags;
+};
+
+struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::ContextChecker
+{
+  ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags);
+
+  bool operator()(IndexedDUContext context) const;
+
+  const TopDUContext* top;
+  const SimpleCursor& position;
+  ContextType contextType;
   DUContext::SearchFlags flags;
 };
 

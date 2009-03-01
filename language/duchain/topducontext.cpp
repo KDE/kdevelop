@@ -566,46 +566,40 @@ public:
   }
 };
 
-struct TopDUContext::ContextChecker {
+TopDUContext::ContextChecker::ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags) : top(_top), position(_position), contextType(_contextType), flags(_flags)
+{
+}
 
-  ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags) : top(_top), position(_position), contextType(_contextType), flags(_flags) {
-  }
-
-  bool operator()(IndexedDUContext context) const {
+bool TopDUContext::ContextChecker::operator()(IndexedDUContext context) const {
 
 //     const TopDUContext* otherTop = context->topContext();
 
-    if (top->m_local->m_ownIndex != context.topContextIndex()) {
+  if (top->m_local->m_ownIndex != context.topContextIndex()) {
 
-      // Make sure that this declaration is accessible
+    // Make sure that this declaration is accessible
 
-      DUContext* ctx = context.data();
-      if(!ctx)
-        return false;
+    DUContext* ctx = context.data();
+    if(!ctx)
+      return false;
 
-      if (ctx->type() != contextType)
-        return false;
-    } else {
-      DUContext* ctx = context.data();
-      if(!ctx)
-        return false;
+    if (ctx->type() != contextType)
+      return false;
+  } else {
+    DUContext* ctx = context.data();
+    if(!ctx)
+      return false;
 
-      if (ctx->type() != contextType)
-        return false;
+    if (ctx->type() != contextType)
+      return false;
 
-      if (ctx->range().start > position)
-        if(!ctx->parentContext() || ctx->parentContext()->type() != Class)
-            return false;
-    }
-    //Success
-    return true;
+    if (ctx->range().start > position)
+      if(!ctx->parentContext() || ctx->parentContext()->type() != Class)
+          return false;
   }
+  //Success
+  return true;
+}
 
-  const TopDUContext* top;
-  const SimpleCursor& position;
-  ContextType contextType;
-  DUContext::SearchFlags flags;
-};
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
 ///The import-structure needs to be constructed and locked when this is used
 TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
