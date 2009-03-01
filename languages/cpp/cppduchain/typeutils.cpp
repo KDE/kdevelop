@@ -66,7 +66,7 @@ using namespace KDevelop;
   }
 
   bool isConstant( const AbstractType::Ptr& t ) {
-    return t->modifiers() & AbstractType::ConstModifier;
+    return t && t->modifiers() & AbstractType::ConstModifier;
   }
 
   bool isNullType( const AbstractType::Ptr& t ) {
