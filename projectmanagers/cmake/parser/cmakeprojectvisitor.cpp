@@ -460,7 +460,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
         if ( !include.isEmpty() )
         {
             kDebug(9042) << "including:" << path;
-            walk(include, 0);
+            walk(include, 0, true);
         }
         else
         {
@@ -551,7 +551,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             path=KUrl(path).pathOrUrl();
             kDebug(9042) << "================== Found" << path << "===============";
-            walk(package, 0);
+            walk(package, 0, true);
         }
         else
         {
@@ -574,10 +574,15 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     return 1;
 }
 
-KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux, int endl ,int endc)
+KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& path, ReferencedTopDUContext aux,
+                                                                    int endl ,int endc, bool isClean)
 {
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
+    
+    if(!isClean && topctx) {
+        return topctx;
+    }
     
     if(topctx)
     {
@@ -846,7 +851,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
 {
     if(def.arguments.isEmpty() || end.arguments.isEmpty())
         return;
-    QString id=def.arguments.first().value;
+    QString id=def.arguments.first().value.toLower();
     
     DUChainWriteLocker lock(DUChain::lock());
     QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
@@ -951,7 +956,7 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
         {
             {
                 DUChainWriteLocker lock(DUChain::lock());
-                QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name()));
+                QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(call->name().toLower()));
 
                 if(!decls.isEmpty())
                 {
@@ -1575,7 +1580,6 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     {
                         rx.indexIn(in);
                         QStringList info = rx.capturedTexts();
-                        int idx=0, count=0, last=0;
                         
                         QString tmp = sast->replace();
                         for(int i = 1; i < info.count(); i++)
@@ -1850,7 +1854,7 @@ RecursivityType recursivity(const QString& functionName)
     return No;
 }
 
-int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
+int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClean)
 {
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
@@ -1858,7 +1862,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line)
     if(!m_topctx || m_topctx->url().toUrl()!=url)
     {
         kDebug(9042) << "Creating a context for" << url;
-        m_topctx=createContext(url, aux ? aux : m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1);
+        m_topctx=createContext(url, aux ? aux : m_parentCtx, fc.last().endLine-1, fc.last().endColumn-1, isClean);
         if(!aux)
             aux=m_topctx;
     }

@@ -111,7 +111,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeFunctionDesc folderDeclarationDescriptor(const QString& name) const { return m_folderDesc[name]; }
         CMakeFunctionDesc targetDeclarationDescriptor(const QString& name) const { return m_targetDesc[name]; }
             
-        int walk(const CMakeFileContent& fc, int line);
+        int walk(const CMakeFileContent& fc, int line, bool isClean=false);
         
 //         static VariableType hasVariable(const QString &name);
         static QStringList envVarDirectories(const QString &varName);
@@ -156,7 +156,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         
     private:
         static KDevelop::ReferencedTopDUContext
-            createContext(const KUrl& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc);
+            createContext(const KUrl& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc, bool isClean);
         
         void macroDeclaration(const CMakeFunctionDesc& def, const CMakeFunctionDesc& end, const QStringList& args);
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
