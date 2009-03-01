@@ -25,7 +25,7 @@
 namespace KDevelop
 {
 
-AbstractType::Ptr IndexedType::type() const {
+AbstractType::Ptr IndexedType::abstractType() const {
   if(!m_index)
     return AbstractType::Ptr();
   return TypeRepository::typeForIndex(m_index);

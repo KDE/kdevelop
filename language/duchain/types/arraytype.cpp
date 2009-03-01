@@ -79,7 +79,7 @@ void ArrayType::setDimension(int dimension)
 
 AbstractType::Ptr ArrayType::elementType () const
 {
-  return d_func()->m_elementType.type();
+  return d_func()->m_elementType.abstractType();
 }
 
 void ArrayType::setElementType(AbstractType::Ptr type)
@@ -96,7 +96,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
     {
-      acceptType (d_func()->m_elementType.type(), v);
+      acceptType (d_func()->m_elementType.abstractType(), v);
     }
 
   v->endVisit (this);
@@ -105,7 +105,7 @@ void ArrayType::accept0 (TypeVisitor *v) const
 void ArrayType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(ArrayType);
-  d->m_elementType = exchanger->exchange( d->m_elementType.type() )->indexed();
+  d->m_elementType = exchanger->exchange( d->m_elementType.abstractType() )->indexed();
 }
 
 AbstractType::WhichType ArrayType::whichType() const

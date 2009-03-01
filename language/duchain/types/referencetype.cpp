@@ -67,7 +67,7 @@ ReferenceType::~ReferenceType()
 
 AbstractType::Ptr ReferenceType::baseType () const
 {
-  return d_func()->m_baseType.type();
+  return d_func()->m_baseType.abstractType();
 }
 
 void ReferenceType::setBaseType(AbstractType::Ptr type)
@@ -78,14 +78,14 @@ void ReferenceType::setBaseType(AbstractType::Ptr type)
 void ReferenceType::accept0 (TypeVisitor *v) const
 {
   if (v->visit (this))
-    acceptType (d_func()->m_baseType.type(), v);
+    acceptType (d_func()->m_baseType.abstractType(), v);
 
   v->endVisit (this);
 }
 
 void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 {
-  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.type() )->indexed();
+  d_func_dynamic()->m_baseType = exchanger->exchange( d_func()->m_baseType.abstractType() )->indexed();
 }
 
 QString ReferenceType::toString() const

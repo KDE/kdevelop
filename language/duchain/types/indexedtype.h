@@ -42,7 +42,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
      *
      * \returns the type pointer, or null if this index is invalid.
      */
-    AbstractType::Ptr type() const;
+    AbstractType::Ptr abstractType() const;
+
+    /**
+     * Access the type, dynamically casted to the type you provide.
+     *
+     * \returns the type pointer, or null if this index is invalid.
+     */
+    template<class T>
+    TypePtr<T> type() const { return TypePtr<T>::dynamicCast(abstractType()); }
 
     /// Determine if the type is valid. \returns true if valid, otherwise false.
     bool isValid() const {

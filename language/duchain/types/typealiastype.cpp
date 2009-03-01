@@ -53,7 +53,7 @@ bool TypeAliasType::equals(const AbstractType* _rhs) const
 }
 AbstractType::Ptr TypeAliasType::type() const
 {
-  return d_func()->m_type.type();
+  return d_func()->m_type.abstractType();
 }
 
 void TypeAliasType::setType(AbstractType::Ptr type)
@@ -81,7 +81,7 @@ QString TypeAliasType::toString() const
 void TypeAliasType::accept0 (KDevelop::TypeVisitor *v) const
 {
   if (v->visit (this))
-    acceptType (d_func()->m_type.type(), v);
+    acceptType (d_func()->m_type.abstractType(), v);
 
 //     v->endVisit (this);
 }
@@ -91,7 +91,7 @@ KDevelop::AbstractType::WhichType TypeAliasType::whichType() const {
 }
 
 void TypeAliasType::exchangeTypes(KDevelop::TypeExchanger* exchanger) {
-  d_func_dynamic()->m_type = exchanger->exchange( d_func()->m_type.type() )->indexed();
+  d_func_dynamic()->m_type = exchanger->exchange( d_func()->m_type.abstractType() )->indexed();
 }
 
 

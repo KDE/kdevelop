@@ -299,7 +299,7 @@ IndexedType Declaration::indexedType() const
 AbstractType::Ptr Declaration::abstractType( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
-  return d_func()->m_type.type();
+  return d_func()->m_type.abstractType();
 }
 
 void Declaration::setAbstractType(AbstractType::Ptr type)

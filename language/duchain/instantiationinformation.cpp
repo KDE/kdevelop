@@ -45,8 +45,8 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
   lastId.clearTemplateIdentifiers();
 
   for(uint a = 0; a < templateParametersSize(); ++a) {
-    if(templateParameters()[a].type()) {
-      TypeIdentifier id(templateParameters()[a].type()->toString());
+    if(templateParameters()[a].abstractType()) {
+      TypeIdentifier id(templateParameters()[a].abstractType()->toString());
       id.setIsExpression(true);
       lastId.appendTemplateIdentifier(id);
     }else{
@@ -73,8 +73,8 @@ QString InstantiationInformation::toString(bool local) const {
     for(int a = 0; a < templateParametersSize(); ++a) {
         if(a)
             ret += ", ";
-        if(templateParameters()[a].type())
-          ret += templateParameters()[a].type()->toString();
+        if(templateParameters()[a].abstractType())
+          ret += templateParameters()[a].abstractType()->toString();
     }
     ret += '>';
     return ret;

@@ -111,7 +111,7 @@ void FunctionType::setReturnType(AbstractType::Ptr returnType)
 
 AbstractType::Ptr FunctionType::returnType () const
 {
-  return d_func()->m_returnType.type();
+  return d_func()->m_returnType.abstractType();
 }
 
 QList<AbstractType::Ptr> FunctionType::arguments () const
@@ -119,7 +119,7 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
   ///@todo Don't do the conversion
   QList<AbstractType::Ptr> ret;
   FOREACH_FUNCTION(IndexedType arg, d_func()->m_arguments)
-    ret << arg.type();
+    ret << arg.abstractType();
   return ret;
 }
 
@@ -138,10 +138,10 @@ void FunctionType::accept0 (TypeVisitor *v) const
   TYPE_D(FunctionType);
   if (v->visit (this))
   {
-    acceptType (d->m_returnType.type(), v);
+    acceptType (d->m_returnType.abstractType(), v);
 
     for (unsigned int i = 0; i < d->m_argumentsSize (); ++i)
-      acceptType (d->m_arguments()[i].type(), v);
+      acceptType (d->m_arguments()[i].abstractType(), v);
   }
 
   v->endVisit (this);
@@ -151,8 +151,8 @@ void FunctionType::exchangeTypes( TypeExchanger* exchanger )
 {
   TYPE_D_DYNAMIC(FunctionType);
   for (uint i = 0; i < d->m_argumentsSize (); ++i)
-    d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].type() )->indexed();
-  d->m_returnType = exchanger->exchange(d->m_returnType.type())->indexed();
+    d->m_argumentsList()[i] = exchanger->exchange( d->m_arguments()[i].abstractType() )->indexed();
+  d->m_returnType = exchanger->exchange(d->m_returnType.abstractType())->indexed();
 }
 
 QString FunctionType::partToString( SignaturePart sigPart ) const {
@@ -167,7 +167,7 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
         first = false;
       else
         args.append(", ");
-      args.append(type ? type.type()->toString() : QString("<notype>"));
+      args.append(type ? type.abstractType()->toString() : QString("<notype>"));
     }
     args += ')';
   }
