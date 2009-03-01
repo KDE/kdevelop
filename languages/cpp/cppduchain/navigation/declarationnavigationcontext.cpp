@@ -27,6 +27,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/duchainutils.h>
+#include <language/duchain/duchainlock.h>
 
 #include "../typeutils.h"
 #include "../templatedeclaration.h"
@@ -37,6 +38,16 @@ namespace Cpp {
 DeclarationNavigationContext::DeclarationNavigationContext( DeclarationPointer decl, KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
   : AbstractDeclarationNavigationContext( decl, topContext, previousContext )
 {
+}
+
+void DeclarationNavigationContext::setPreviousContext(KDevelop::AbstractNavigationContext* previous) {
+  AbstractDeclarationNavigationContext::setPreviousContext(previous);
+  DUChainReadLocker lock(KDevelop::DUChain::lock());
+  if(previous->topContext()) {
+    if(m_declaration.data() && dynamic_cast<TemplateDeclaration*>(m_declaration.data()))
+      //If this is a template, take the top-context from the previous context, because we cannot have correct visibility from here
+      setTopContext(previous->topContext());
+  }
 }
 
 void DeclarationNavigationContext::htmlClass()
