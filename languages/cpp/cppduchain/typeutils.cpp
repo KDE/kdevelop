@@ -42,7 +42,12 @@ using namespace KDevelop;
           (*constant) |= (ref->modifiers() & AbstractType::ConstModifier);
         base = ref->baseType();
       }else{
+        uint hadModifiers = alias->modifiers();
+        
         base = alias->type();
+
+        if(hadModifiers)
+          base->setModifiers(base->modifiers() | hadModifiers);
       }
       
       ref = base.cast<ReferenceType>();
