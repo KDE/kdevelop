@@ -44,6 +44,13 @@ AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assist
     else
         layout->addLayout(hLayout);
     
+    QPalette p;
+    p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
+    p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
+    setPalette(p);
+    
+    setAutoFillBackground(true);
+    
     move(pos().x(), parent->height() - height());
 }
 
