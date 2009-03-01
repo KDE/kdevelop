@@ -482,6 +482,8 @@ QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdent
   
   struct ShortenAliasExchanger : public KDevelop::TypeExchanger {
     virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+      if(!type)
+        return type;
       KDevelop::AbstractType::Ptr newType( type->clone() );
       
       KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
