@@ -45,6 +45,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     static QString declarationName( DeclarationPointer decl );
     static QStringList declarationDetails(DeclarationPointer decl);
 
+    ///This can be used for example to resolve typedefs within the type.
+    ///All types that are visualized in the navigation-context are/should be mangled through this.
+    ///The default-implementation returns the original type.
+    virtual AbstractType::Ptr typeToShow(AbstractType::Ptr type);
     
     ///Print the function-signature in a way that return-type and argument can be jumped to
     virtual void htmlFunction();

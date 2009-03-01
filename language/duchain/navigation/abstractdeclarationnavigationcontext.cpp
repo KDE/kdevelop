@@ -281,6 +281,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   return currentHtml();
 }
 
+KDevelop::AbstractType::Ptr AbstractDeclarationNavigationContext::typeToShow(KDevelop::AbstractType::Ptr type) {
+  return type;
+}
+
 void AbstractDeclarationNavigationContext::htmlFunction()
 {
   const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(m_declaration.data());
@@ -455,12 +459,14 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     //We leave out the * and & reference and pointer signs, those are added to the end
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
-    modifyHtml() += i18n("not found") + " " + Qt::escape(type->toString());
+    modifyHtml() += Qt::escape(type->toString());
   }
 }
 
 void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType::Ptr type )
 {
+  type = typeToShow(type);
+  
   if( !type ) {
     modifyHtml() += Qt::escape("<no type>");
     return;
