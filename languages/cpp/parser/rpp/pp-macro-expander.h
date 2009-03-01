@@ -76,6 +76,7 @@ class pp_frame
 public:
   pp_frame (pp_macro* __expandingMacro, const QList<pp_actual>& __actuals);
 
+  int depth;
   pp_macro* expandingMacro;
   QList<pp_actual> actuals;
 };

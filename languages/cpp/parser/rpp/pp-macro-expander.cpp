@@ -38,6 +38,8 @@
 #include "preprocessor.h"
 #include "chartools.h"
 
+const int maxMacroExpansionDepth = 50;
+
 using namespace KDevelop;
 
 QString joinIndexVector(const uint* arrays, uint size, QString between) {
@@ -70,6 +72,7 @@ using namespace rpp;
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
   : expandingMacro(__expandingMacro)
   , actuals(__actuals)
+  , depth(0)
 {
 }
 
@@ -388,7 +391,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         pp_macro* macro = m_engine->environment()->retrieveMacro(previous, false);
         
-        if(!macro || !macro->function_like) {
+        if(!macro || !macro->function_like || !macro->defined || macro->hidden) {
           output << input;
           ++input;
           continue;
@@ -494,12 +497,22 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
         pp_frame frame(macro, actuals);
-        pp_macro_expander expand_macro(m_engine, &frame);
-        macro->hidden = true;
-        Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
-        ms.setOriginalInputPosition(input.originalInputPosition());
-        expand_macro(ms, output);
-        macro->hidden = false;
+        if(m_frame)
+          frame.depth = m_frame->depth + 1;
+        
+        if(frame.depth >= maxMacroExpansionDepth) 
+        {
+          kDebug() << "reached maximum macro-expansion depth while expanding" << macro->name.str();
+          output << input;
+          ++input;
+        }else{
+          pp_macro_expander expand_macro(m_engine, &frame);
+          macro->hidden = true;
+          Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
+          ms.setOriginalInputPosition(input.originalInputPosition());
+          expand_macro(ms, output);
+          macro->hidden = false;
+        }
       } else {
         output << input;
         ++input;
