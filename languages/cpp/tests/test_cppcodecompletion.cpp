@@ -192,6 +192,16 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testImportTypedef() {
+  QByteArray test = "class Class { }; typedef Class Klass; class C : public Class { };";
+
+  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->childContexts().count(), 2);
+  QCOMPARE(context->childContexts()[1]->importedParentContexts().count(), 1);
+  QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
+}
+
 void TestCppCodeCompletion::testPrivateVariableCompletion() {
   TEST_FILE_PARSE_ONLY
   QByteArray test = "class C {void test() {}; int i; };";
@@ -1370,7 +1380,23 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
+  
     IncludeFileList includes;
+    #ifdef TEST_MACRO_EXPANSION_ORDER
+    //Not working yet
+  {//No macro-expansion should happen on the first layer of a macro-call
+  QString preprocessed = preprocess(HashedString(), "#define VAL_KIND A \n#define DO_CAT_I(a, b) a ## b \n#define DO_CAT(a, b) DO_CAT_I(a, b) \nint DO_CAT(Value_, VAL_KIND); \nint DO_CAT_I(Value_, VAL_KIND);\n int VAL_KIND;\nint DO_CAT(VAL_KIND, _Value);\nint DO_CAT(VAL_KIND, _Value);\n", includes);
+  kDebug() << preprocessed;
+    TopDUContext* top = parse(preprocessed.toUtf8(), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 5);
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("Value_A"));
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("Value_VAL_KIND"));
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("A"));
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A_Value"));
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("VAL_KIND_Value"));
+  }
+  #endif
   {//Test macro redirection
     QString test = preprocess(HashedString(), "#define M1(X) X ## _m1 \n#define M2(X) M ## X\n#define M3 M2\n#define M4 M3 \nM4(1)(hallo)", includes);
     kDebug() << test;
