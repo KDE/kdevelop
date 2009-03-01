@@ -31,7 +31,14 @@ namespace TypeUtils {
     
     int depth = 0; //Prevent endless recursion
     while(alias && depth < 20) {
+      
+      uint hadModifiers = alias->modifiers();
+      
       type = alias->type();
+      
+      if(hadModifiers)
+        type->setModifiers(type->modifiers() | hadModifiers);
+      
       alias = type.cast<KDevelop::TypeAliasType>();
       ++depth;
     }
@@ -57,7 +64,12 @@ namespace TypeUtils {
           (*constant) |= static_cast<bool>(pnt->modifiers() & AbstractType::ConstModifier);
         base = pnt->baseType();
       }else{
+        uint hadModifiers = alias->modifiers();
+        
         base = alias->type();
+
+        if(hadModifiers)
+          base->setModifiers(base->modifiers() | hadModifiers);
       }
       ref = base.cast<ReferenceType>();
       pnt = base.cast<PointerType>();

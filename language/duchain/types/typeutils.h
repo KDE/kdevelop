@@ -27,6 +27,7 @@ namespace KDevelop {
 namespace TypeUtils {
   /**
    * Returns the completely dereferenced and un-aliased type, pointers are also dereferenced(example: ReferenceType(PointerType(int)) -> int)
+   * All modifiers are pushed from the aliases into the targets.
    *
    *  !!DU-Chain must be locked!
   * @param constant will be set to true when one of the references made the result constant
@@ -39,6 +40,7 @@ namespace TypeUtils {
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetTypeKeepAliases(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
   /**
    * Resolves all type-aliases, returning the effective aliased type
+   * All modifiers are pushed from the aliases into the targets.
    */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr unAliasedType(const KDevelop::AbstractType::Ptr& type);
 }
