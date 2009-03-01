@@ -71,7 +71,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
 //     QStringList defaultParams = decl->defaultParameters();
 
-    QVector<Declaration*>::const_iterator paramNameIt = parameters.begin();
+    QVector<Declaration*>::const_iterator paramNameIt = parameters.constBegin();
     uint defaultParamNum = 0;
 
     int firstDefaultParam = functionType->arguments().count() - decl->defaultParametersSize();
@@ -140,7 +140,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         }
       }
 
-      if( paramNameIt != parameters.end() /*&& !(*paramNameIt)->identifier().isEmpty()*/ ) {
+      if( paramNameIt != parameters.constEnd() /*&& !(*paramNameIt)->identifier().isEmpty()*/ ) {
         if(noShortening)
           ret += argument->toString();
         else
@@ -175,7 +175,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       }
 
       ++num;
-      if( paramNameIt != parameters.end() )
+      if( paramNameIt != parameters.constEnd() )
         ++paramNameIt;
     }
 

@@ -137,8 +137,8 @@ QHash<int, QString> operatorNames = initOperatorNames();
 
 QString operatorNameFromTokenKind( int tokenKind )
 {
-  QHash<int, QString>::const_iterator it = operatorNames.find(tokenKind);
-  if( it == operatorNames.end() )
+  QHash<int, QString>::const_iterator it = operatorNames.constFind(tokenKind);
+  if( it == operatorNames.constEnd() )
     return QString();
   else
     return *it;
@@ -300,7 +300,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     m_lastInstance = Instance( m_lastDeclarations.front() );
 
     //If it is a function, match the const qualifier
-    for( QList<DeclarationPointer>::const_iterator it = m_lastDeclarations.begin(); it != m_lastDeclarations.end(); ++it ) {
+    for( QList<DeclarationPointer>::const_iterator it = m_lastDeclarations.constBegin(); it != m_lastDeclarations.constEnd(); ++it ) {
       AbstractType::Ptr t = (*it)->abstractType();
       if( t ) {
         if( (t->modifiers() & AbstractType::ConstModifier) == isConst ) {
@@ -1573,7 +1573,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     //Check if all parameters could be evaluated
     int paramNum = 1;
     bool fail = false;
-    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.begin(); it != m_parameters.end(); ++it ) {
+    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
       if( !(*it).type ) {
         problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
         fail = true;

@@ -55,7 +55,7 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
     return ret;
   
   QVector<DUContext::Import> bases = context->importedParentContexts();
-  for( QVector<DUContext::Import>::const_iterator it = bases.begin(); it != bases.end(); ++it ) {
+  for( QVector<DUContext::Import>::const_iterator it = bases.constBegin(); it != bases.constEnd(); ++it ) {
     if( it->context(topContext) )
       ret += findLocalDeclarations( (*it).context(topContext), identifier, topContext );
   }

@@ -427,8 +427,8 @@ bool AddDependenciesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QList<CMakeFunctionArgument> args = func.arguments;
     m_target = args.front().value;
 
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
-    it = args.begin() + 1; //skip the first argument since it's the target
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.constEnd();
+    it = args.constBegin() + 1; //skip the first argument since it's the target
     for ( ; it != itEnd; ++it )
     {
         m_dependencies << it->value;
@@ -462,8 +462,8 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     QList<CMakeFunctionArgument> args = func.arguments;
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
-    it = args.begin();
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.constEnd();
+    it = args.constBegin();
     m_executable = it->value;
     ++it;
     for ( ; it != itEnd; ++it )
@@ -511,8 +511,8 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     bool libTypeSet = false;
     QList<CMakeFunctionArgument> args = func.arguments;
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.end();
-    it = args.begin();
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = args.constEnd();
+    it = args.constBegin();
     m_libraryName = it->value;
     ++it;
     for(; it != itEnd;)
@@ -583,8 +583,8 @@ bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
 
     m_sourceDir = func.arguments[0].value;
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
-    it = ++func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+    it = ++func.arguments.constBegin();
     for ( ; it != itEnd; ++it )
     {
         if ( it->value == "EXCLUDE_FROM_ALL" )
@@ -619,8 +619,8 @@ bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     m_testName = func.arguments[0].value;
     m_exeName = func.arguments[1].value;
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
-    it = func.arguments.begin() + 2;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+    it = func.arguments.constBegin() + 2;
     for ( ; it != itEnd; ++it )
         m_testArgs << it->value;
 
@@ -761,8 +761,8 @@ bool ConfigureFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_inputFile = func.arguments[0].value;
     m_outputFile = func.arguments[1].value;
 
-    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.end();
-    it = func.arguments.begin() + 2;
+    QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
+    it = func.arguments.constBegin() + 2;
     for ( ; it != itEnd; ++it )
     {
         CMakeFunctionArgument arg = ( *it );
@@ -805,7 +805,7 @@ bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_driverName=func.arguments[1].value;
     
     QList<CMakeFunctionArgument>::const_iterator it, itEnd = func.arguments.constEnd();
-    it = func.arguments.begin() + 2;
+    it = func.arguments.constBegin() + 2;
     enum State { Tests, ExtraInclude, Function};
     State s=Tests;
 
@@ -894,7 +894,7 @@ bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_executableName = func.arguments[0].value;
     bool args=false;
 
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin(), itEnd=func.arguments.end();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
     // don't re-read the first element
     it++;
     for(; it!=itEnd; ++it) {
@@ -1299,7 +1299,7 @@ bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     addOutputArgument(func.arguments.first());
     m_variableName = func.arguments.first().value;
     Stage s;
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
     if(it->value=="NAMES") {
         definedNames = true;
         s=NAMES;
@@ -1517,7 +1517,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
     if(it->value=="NAMES") {
         ++it;
         definedNames = true;
@@ -1588,7 +1588,7 @@ bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     addOutputArgument(func.arguments[0]);
     m_variableName = func.arguments[0].value;
     Stage s = NAMES;
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1, itEnd=func.arguments.end();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
     if(it->value=="NAMES")
         ++it;
     else {
@@ -1909,8 +1909,8 @@ bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_includeFile = func.arguments[0].value;
     
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
-    it=func.arguments.begin() + 1;
-    itEnd = func.arguments.end();
+    it=func.arguments.constBegin() + 1;
+    itEnd = func.arguments.constEnd();
 
     bool nextIsResult=false;
     for ( ; it != itEnd; ++it ) {
@@ -1973,8 +1973,8 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
-    it=func.arguments.begin() + i;
-    itEnd = func.arguments.end();
+    it=func.arguments.constBegin() + i;
+    itEnd = func.arguments.constEnd();
 
     for ( ; it != itEnd; ++it )
         m_includedDirectories.append(it->value);
@@ -2817,8 +2817,8 @@ bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         QList<CMakeFunctionArgument> args = func.arguments;
         QList<CMakeFunctionArgument>::const_iterator it, itEnd;
-        it = args.begin() + 1;
-        itEnd = args.end() - numCacheArgs - numForceArgs - numParentScope;
+        it = args.constBegin() + 1;
+        itEnd = args.constEnd() - numCacheArgs - numForceArgs - numParentScope;
         for ( ; it != itEnd; ++it )
             m_values.append( it->value );
     }

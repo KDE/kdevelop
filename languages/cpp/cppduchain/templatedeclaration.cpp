@@ -840,14 +840,14 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   {
     QMutexLocker l(&instantiationsMutex);
     {
-      DefaultParameterInstantiationHash::const_iterator it = m_defaultParameterInstantiations.find(templateArguments.indexed());
-      if(it != m_defaultParameterInstantiations.end())
+      DefaultParameterInstantiationHash::const_iterator it = m_defaultParameterInstantiations.constFind(templateArguments.indexed());
+      if(it != m_defaultParameterInstantiations.constEnd())
         templateArguments = (*it).information();
     }
   
     InstantiationsHash::const_iterator it;
-    it = m_instantiations.find( templateArguments.indexed() );
-    if( it != m_instantiations.end() ) {
+    it = m_instantiations.constFind( templateArguments.indexed() );
+    if( it != m_instantiations.constEnd() ) {
       if(*it) {
         return dynamic_cast<Declaration*>(*it);
       }else{
@@ -952,8 +952,8 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
     ///@todo When the same declaration is instantuated multiple times, this sucks because one is returned invalid
     QMutexLocker l(&instantiationsMutex);
     InstantiationsHash::const_iterator it;
-    it = m_instantiations.find( templateArguments.indexed() );
-    if( it != m_instantiations.end() ) {
+    it = m_instantiations.constFind( templateArguments.indexed() );
+    if( it != m_instantiations.constEnd() ) {
       if(*it) {
         return dynamic_cast<Declaration*>(*it);
       }else{

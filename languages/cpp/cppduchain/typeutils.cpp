@@ -162,7 +162,7 @@ using namespace KDevelop;
   void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QList<Declaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*> tempFunctions;
     getMemberFunctions( klass, topContext, tempFunctions, functionName, mustBeConstant );
-    for( QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.begin(); it != tempFunctions.end(); ++it )
+    for( QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = tempFunctions.constBegin(); it != tempFunctions.constEnd(); ++it )
       functions << (*it);
   }
 

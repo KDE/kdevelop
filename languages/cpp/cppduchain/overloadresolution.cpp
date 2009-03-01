@@ -81,7 +81,7 @@ uint OverloadResolver::worstConversionRank() {
 }
 
 void OverloadResolver::expandDeclarations( const QList<Declaration*>& declarations, QSet<Declaration*>& newDeclarations ) {
-  for( QList<Declaration*>::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+  for( QList<Declaration*>::const_iterator it = declarations.constBegin(); it != declarations.constEnd(); ++it ) {
     Declaration* decl = *it;
     bool isConstant = false;
 
@@ -109,7 +109,7 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
 }
 
 void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, QHash<Declaration*, OverloadResolver::ParameterList>& newDeclarations ) {
-  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.begin(); it != declarations.end(); ++it ) {
+  for( QList<QPair<OverloadResolver::ParameterList, Declaration*> >::const_iterator it = declarations.constBegin(); it != declarations.constEnd(); ++it ) {
     QPair<OverloadResolver::ParameterList, Declaration*> decl = *it;
     bool isConstant = false;
 
@@ -150,7 +150,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
   ///Second step: Find best viable function
   ViableFunction bestViableFunction( m_topContext.data() );
 
-  for( QSet<Declaration*>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
+  for( QSet<Declaration*>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
   {
     Declaration* decl = applyImplicitTemplateParameters( params, *it );
     if( !decl )
@@ -186,7 +186,7 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
   ///Second step: Find best viable function
   QList<ViableFunction> viableFunctions;
 
-  for( QHash<Declaration*, OverloadResolver::ParameterList>::const_iterator it = newDeclarations.begin(); it != newDeclarations.end(); ++it )
+  for( QHash<Declaration*, OverloadResolver::ParameterList>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
   {
     ViableFunction viable( m_topContext.data(), it.key() );
     ParameterList mergedParams = it.value();
@@ -241,7 +241,7 @@ Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterL
     matchParameterTypes(params.parameters[a].type, arguments[a].abstractType(), instantiatedParameters);
 
   bool allInstantiated = true;
-  for( QMap<IndexedString, AbstractType::Ptr>::const_iterator it = instantiatedParameters.begin(); it != instantiatedParameters.end(); ++it )
+  for( QMap<IndexedString, AbstractType::Ptr>::const_iterator it = instantiatedParameters.constBegin(); it != instantiatedParameters.constEnd(); ++it )
     if( !(*it) ) {
       allInstantiated = false;
     }

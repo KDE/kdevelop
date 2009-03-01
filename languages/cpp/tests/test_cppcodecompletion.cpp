@@ -1484,8 +1484,8 @@ struct TestPreprocessor : public rpp::Preprocessor {
 
   rpp::Stream* sourceNeeded(QString& fileName, rpp::Preprocessor::IncludeType type, int sourceLine, bool skipCurrentPath)
   {
-    QMap<QString,QString>::const_iterator it = cc->fakeIncludes.find(fileName);
-    if( it != cc->fakeIncludes.end() || !pp ) {
+    QMap<QString,QString>::const_iterator it = cc->fakeIncludes.constFind(fileName);
+    if( it != cc->fakeIncludes.constEnd() || !pp ) {
       kDebug(9007) << "parsing included file \"" << fileName << "\"";
       included << LineContextPair( dynamic_cast<TopDUContext*>(cc->parse( (*it).toUtf8(), TestCppCodeCompletion::DumpNone, pp, KUrl(it.key()))), sourceLine );
     } else {

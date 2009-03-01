@@ -261,7 +261,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
       ///Compute the types of the argument-expressions
 
-      for( QStringList::const_iterator it = m_knownArgumentExpressions.begin(); it != m_knownArgumentExpressions.end(); ++it )
+      for( QStringList::const_iterator it = m_knownArgumentExpressions.constBegin(); it != m_knownArgumentExpressions.constEnd(); ++it )
         m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
     }
   }
@@ -836,7 +836,7 @@ QString originalOperator( const QString& str ) {
 
 QString CodeCompletionContext::getEndOperator( const QString& str ) const {
 
-  for( QStringList::const_iterator it = allOperators.begin(); it != allOperators.end(); ++it )
+  for( QStringList::const_iterator it = allOperators.constBegin(); it != allOperators.constEnd(); ++it )
     if( str.endsWith(*it) )
       return *it;
   return QString();

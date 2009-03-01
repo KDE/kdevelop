@@ -121,21 +121,21 @@ void IncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* c
   QVector<DUContext*> children = ctx->childContexts();
   QVector<Declaration*> declarations = ctx->localDeclarations();
 
-  QVector<DUContext*>::const_iterator childIterator = children.begin();
-  QVector<Declaration*>::const_iterator declarationIterator = declarations.begin();
+  QVector<DUContext*>::const_iterator childIterator = children.constBegin();
+  QVector<Declaration*>::const_iterator declarationIterator = declarations.constBegin();
 
-  while(childIterator != children.end() || declarationIterator != declarations.end()) {
+  while(childIterator != children.constEnd() || declarationIterator != declarations.constEnd()) {
 
     //Show declarations/contexts in the order they appear in the file
     int currentDeclarationLine = -1;
     int currentContextLine = -1;
-    if(declarationIterator != declarations.end())
+    if(declarationIterator != declarations.constEnd())
       currentDeclarationLine = (*declarationIterator)->range().textRange().start().line();
 
-    if(childIterator != children.end())
+    if(childIterator != children.constEnd())
       currentDeclarationLine = (*childIterator)->range().textRange().start().line();
 
-    if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.end()) && declarationIterator != declarations.end() )
+    if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.constEnd()) && declarationIterator != declarations.constEnd() )
     {
       if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty() && !(*declarationIterator)->range().isEmpty() && !(*declarationIterator)->isForwardDeclaration()) {
         //Show the declaration

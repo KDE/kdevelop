@@ -306,10 +306,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
           
-          QList<PreprocessedContents>::const_iterator textIt = actual.text.begin();
-          QList<Anchor>::const_iterator cursorIt = actual.inputPosition.begin();
+          QList<PreprocessedContents>::const_iterator textIt = actual.text.constBegin();
+          QList<Anchor>::const_iterator cursorIt = actual.inputPosition.constBegin();
 
-          for( ; textIt != actual.text.end(); ++textIt, ++cursorIt )
+          for( ; textIt != actual.text.constEnd(); ++textIt, ++cursorIt )
           {
             output.appendString(*cursorIt, *textIt);
           }

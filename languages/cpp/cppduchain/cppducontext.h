@@ -556,8 +556,8 @@ class CppDUContext : public BaseContext {
         return m_instantiatedFrom->instantiate(info, source);
       
       {
-        typename QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* >::const_iterator it = m_instatiations.find(info.indexed());
-        if(it != m_instatiations.end())
+        typename QHash<IndexedInstantiationInformation, CppDUContext<BaseContext>* >::const_iterator it = m_instatiations.constFind(info.indexed());
+        if(it != m_instatiations.constEnd())
           return *it;
       }
       

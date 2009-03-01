@@ -279,7 +279,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   // search for files from the assembled candidate lists, return the first
   // candidate file that actually exists or QString::null if nothing is found.
   QStringList::ConstIterator it;
-  for ( it = candidates.begin(); it != candidates.end(); ++it )
+  for ( it = candidates.constBegin(); it != candidates.constEnd(); ++it )
   {
 //     kDebug( 9007 ) << "Trying " << ( *it ) << endl;
     if ( QFileInfo( *it ).exists() )

@@ -83,7 +83,7 @@ namespace CppTools {
         if( !workingDirectory.isEmpty() )
           QDir::setCurrent( workingDirectory );
         
-        for( QStringList::const_iterator it = files.begin(); it != files.end(); ++it ) {
+        for( QStringList::const_iterator it = files.constBegin(); it != files.constEnd(); ++it ) {
           ifTest( cout << "touching " << (*it).toUtf8().constData() << endl );
           struct stat s;
           if( stat( (*it).toLocal8Bit().constData(), &s ) == 0 ) {
@@ -114,7 +114,7 @@ namespace CppTools {
 
       ///Undo changed modification-times
       void unModify() {
-        for( StatMap::const_iterator it = m_stat.begin(); it != m_stat.end(); ++it ) {
+        for( StatMap::const_iterator it = m_stat.constBegin(); it != m_stat.constEnd(); ++it ) {
 
           ifTest( cout << "untouching" << it.key().toUtf8().constData() << endl );
 
@@ -369,7 +369,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   ///STEP 3.1: Try resolution using the absolute path
   PathResolutionResult res;
   //Try for each possible target
-  for( QStringList::const_iterator it = possibleTargets.begin(); it != possibleTargets.end(); ++it ) {
+  for( QStringList::const_iterator it = possibleTargets.constBegin(); it != possibleTargets.constEnd(); ++it ) {
     res = resolveIncludePathInternal( absoluteFile, wd, *it, source );
     if( res ) {
       break;
@@ -390,7 +390,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ///STEP 3.2: Try resolution using the relative path
   QString relativeFile = KUrl::relativePath(wd, absoluteFile);
-  for( QStringList::const_iterator it = possibleTargets.begin(); it != possibleTargets.end(); ++it ) {
+  for( QStringList::const_iterator it = possibleTargets.constBegin(); it != possibleTargets.constEnd(); ++it ) {
     res = resolveIncludePathInternal( relativeFile, wd, *it, source );
     if( res ) break;
   }

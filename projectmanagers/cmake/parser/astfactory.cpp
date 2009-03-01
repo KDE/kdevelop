@@ -67,8 +67,8 @@ bool AstFactory::unregisterAst( const QString& astId )
 
 CMakeAst* AstFactory::createAst( const QString& astId )
 {
-    CallbackMap::const_iterator it = d->callbacks.find( astId.toLower() );
-    if ( it == d->callbacks.end() )
+    CallbackMap::const_iterator it = d->callbacks.constFind( astId.toLower() );
+    if ( it == d->callbacks.constEnd() )
         return 0;
 
     return ( it.value() )();

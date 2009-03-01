@@ -125,8 +125,8 @@ uint TypeConversion::implicitConversion( IndexedType _from, IndexedType _to, boo
   params.noUserDefinedConversion = noUserDefinedConversion;
   
   if(m_cache) {
-    QHash<ImplicitConversionParams, int>::const_iterator it = m_cache->m_implicitConversionResults.find(params);
-    if(it != m_cache->m_implicitConversionResults.end())
+    QHash<ImplicitConversionParams, int>::const_iterator it = m_cache->m_implicitConversionResults.constFind(params);
+    if(it != m_cache->m_implicitConversionResults.constEnd())
       return *it;
   }
   
@@ -518,7 +518,7 @@ ConversionRank TypeConversion::userDefinedConversion( AbstractType::Ptr from, Ab
       QHash<FunctionType::Ptr, ClassFunctionDeclaration*> conversionFunctions;
       getMemberFunctions(fromClass, m_topContext, conversionFunctions, "operator{...cast...}", fromConst);
 
-      for( QHash<FunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.begin(); it != conversionFunctions.end(); ++it )
+      for( QHash<FunctionType::Ptr, ClassFunctionDeclaration*>::const_iterator it = conversionFunctions.constBegin(); it != conversionFunctions.constEnd(); ++it )
       {
         if(isAccessible(it.value())) {
           AbstractType::Ptr convertedType( it.key()->returnType() );
