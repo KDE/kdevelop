@@ -49,6 +49,8 @@
 #include <qstandarditemmodel.h>
 #include <language/duchain/functiondefinition.h>
 
+#include <language/codecompletion/codecompletiontesthelper.h>
+
 using namespace KTextEditor;
 
 using namespace KDevelop;
@@ -63,98 +65,8 @@ QString testFile3 = "struct A {}; struct B : public A {};";
 
 QString testFile4 = "void test1() {}; class TestClass() { TestClass() {} };";
 
-QStandardItemModel& fakeModel() {
-  static QStandardItemModel model;
-  model.setColumnCount(10);
-  model.setRowCount(10);
-  return model;
-}
+typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTester;
 
-namespace QTest {
-  template<>
-  char* toString(const Cursor& cursor)
-  {
-    QByteArray ba = "Cursor(";
-    ba += QByteArray::number(cursor.line()) + ", " + QByteArray::number(cursor.column());
-    ba += ')';
-    return qstrdup(ba.data());
-  }
-  template<>
-  char* toString(const QualifiedIdentifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  template<>
-  char* toString(const Identifier& id)
-  {
-    QByteArray arr = id.toString().toLatin1();
-    return qstrdup(arr.data());
-  }
-  /*template<>
-  char* toString(QualifiedIdentifier::MatchTypes t)
-  {
-    QString ret;
-    switch (t) {
-      case QualifiedIdentifier::NoMatch:
-        ret = "No Match";
-        break;
-      case QualifiedIdentifier::Contains:
-        ret = "Contains";
-        break;
-      case QualifiedIdentifier::ContainedBy:
-        ret = "Contained By";
-        break;
-      case QualifiedIdentifier::ExactMatch:
-        ret = "Exact Match";
-        break;
-    }
-    QByteArray arr = ret.toString().toLatin1();
-    return qstrdup(arr.data());
-  }*/
-  template<>
-  char* toString(const Declaration& def)
-  {
-    QString s = QString("Declaration %1 (%2): %3").arg(def.identifier().toString()).arg(def.qualifiedIdentifier().toString()).arg(reinterpret_cast<long>(&def));
-    return qstrdup(s.toLatin1().constData());
-  }
-  template<>
-  char* toString(const TypePtr<AbstractType>& type)
-  {
-    QString s = QString("Type: %1").arg(type ? type->toString() : QString("<null>"));
-    return qstrdup(s.toLatin1().constData());
-  }
-}
-
-//Helper-class for testing completion-items
-//Just initialize it with the context and the text, and then use the members, for simple cases only "names"
-struct CompletionItemTester {
-  CompletionItemTester(DUContext* context, QString text = "; ") {
-    completionContext = new  Cpp::CodeCompletionContext(DUContextPointer(context), text, QString());
-    bool abort = false;
-    items = completionContext->completionItems(context->range().end, abort);
-    foreach(Item i, items)
-      names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
-  }
-  
-  QStringList names; //Names of all completion-items, not sorted
-  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
-  QList <Item > items; //All items retrieved, sorted by name
-  
-  Cpp::CodeCompletionContext::Ptr completionContext;
-  
-  //Convenience-function to retrieve data from completion-items by name
-  QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
-    return itemData(names.indexOf(itemName), column, role);
-  }
-  
-  QVariant itemData(int itemNumber, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) {
-    if(itemNumber < 0 || itemNumber >= items.size())
-      return QVariant();
-    
-    return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
-  }
-};
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestCppCodeCompletion::TestCppCodeCompletion()
