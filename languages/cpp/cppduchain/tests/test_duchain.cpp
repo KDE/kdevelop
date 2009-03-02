@@ -2976,18 +2976,33 @@ void TestDUChain::testTemplates3() {
   QCOMPARE(unAliasedType(cv2Decl->abstractType())->toString(), QString("const int"));
   QVERIFY(TypeUtils::unAliasedType(cv2Decl->abstractType())->modifiers() & AbstractType::ConstModifier);
 
-  Declaration* cvrDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::ConstValueRef"));
-  QVERIFY(cvrDecl);
-  QVERIFY(cvrDecl->abstractType());
-  QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
-  QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
-  QCOMPARE(targetType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
-  TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
-  QVERIFY(alias);
-  QVERIFY(alias->type());
-  QCOMPARE(targetTypeKeepAliases(Cpp::shortenTypeForViewing(cvrDecl->abstractType()), 0, 0)->toString(), QString("const quakka"));
-  QCOMPARE(Cpp::shortenTypeForViewing(cvrDecl->abstractType())->toString(), QString("const quakka&"));
-  QVERIFY(TypeUtils::unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  {
+    Declaration* cvrDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::ConstValueRef"));
+    QVERIFY(cvrDecl);
+    QVERIFY(cvrDecl->abstractType());
+    QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+    QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
+    QCOMPARE(targetType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
+    TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
+    QVERIFY(alias);
+    QVERIFY(alias->type());
+    QCOMPARE(targetTypeKeepAliases(Cpp::shortenTypeForViewing(cvrDecl->abstractType()), 0, 0)->toString(), QString("const quakka"));
+    //When the target is a typedef type, the duchain does not know whether it should write "const" before or behind, so it puts it behind "quakka"
+    QCOMPARE(Cpp::shortenTypeForViewing(cvrDecl->abstractType())->toString(), QString("quakka const&"));
+    QVERIFY(TypeUtils::unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  }
+  {
+    Declaration* cvrDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka*>::ConstValueRef"));
+    QVERIFY(cvrDecl);
+    QVERIFY(cvrDecl->abstractType());
+    QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+    QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("quakka* const"));
+    TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
+    QVERIFY(alias);
+    QVERIFY(alias->type());
+    QCOMPARE(Cpp::shortenTypeForViewing(cvrDecl->abstractType())->toString(), QString("quakka* const&"));
+    QVERIFY(TypeUtils::unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  }
   release(top);
 }
 
