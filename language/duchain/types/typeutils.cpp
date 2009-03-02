@@ -46,7 +46,8 @@ namespace TypeUtils {
     return type;
   }
   
-  AbstractType::Ptr targetType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
+  ///@todo remove constant and topContext
+  AbstractType::Ptr targetType(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* /*constant*/) {
 
     AbstractType::Ptr base(_base);
 
@@ -55,22 +56,19 @@ namespace TypeUtils {
     TypeAliasType::Ptr alias = base.cast<TypeAliasType>();
 
     while( ref || pnt || alias ) {
+      
+      uint hadModifiers = base->modifiers();
+      
       if( ref ) {
-        if( constant )
-          (*constant) |= static_cast<bool>(ref->modifiers() & AbstractType::ConstModifier);
         base = ref->baseType();
       } else if(pnt) {
-        if( constant )
-          (*constant) |= static_cast<bool>(pnt->modifiers() & AbstractType::ConstModifier);
         base = pnt->baseType();
       }else{
-        uint hadModifiers = alias->modifiers();
-        
         base = alias->type();
-
-        if(hadModifiers)
-          base->setModifiers(base->modifiers() | hadModifiers);
       }
+      if((alias || ref) && hadModifiers)
+        base->setModifiers(base->modifiers() | hadModifiers);
+      
       ref = base.cast<ReferenceType>();
       pnt = base.cast<PointerType>();
       alias = base.cast<TypeAliasType>();
@@ -79,7 +77,7 @@ namespace TypeUtils {
     return base;
   }
 
-  AbstractType::Ptr targetTypeKeepAliases(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* constant) {
+  AbstractType::Ptr targetTypeKeepAliases(const AbstractType::Ptr& _base, const TopDUContext* /*topContext*/, bool* /*constant*/) {
 
     AbstractType::Ptr base(_base);
 
@@ -87,13 +85,13 @@ namespace TypeUtils {
     PointerType::Ptr pnt = base.cast<PointerType>();
 
     while( ref || pnt ) {
+      
       if( ref ) {
-        if( constant )
-          (*constant) |= static_cast<bool>(ref->modifiers() & AbstractType::ConstModifier);
+        uint hadModifiers = ref->modifiers();
         base = ref->baseType();
+        if(hadModifiers)
+          base->setModifiers(base->modifiers() | hadModifiers);
       } else if(pnt) {
-        if( constant )
-          (*constant) |= static_cast<bool>(pnt->modifiers() & AbstractType::ConstModifier);
         base = pnt->baseType();
       }
       ref = base.cast<ReferenceType>();
@@ -103,3 +101,7 @@ namespace TypeUtils {
     return base;
   }
 }
+
+
+
+

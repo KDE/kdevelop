@@ -30,12 +30,13 @@ namespace TypeUtils {
    * All modifiers are pushed from the aliases into the targets.
    *
    *  !!DU-Chain must be locked!
-  * @param constant will be set to true when one of the references made the result constant
+   * Modifiers of aliases ore references are pushed into the targets.
    * @return return-value will only be zero if type is zero
    */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetType(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
   /**
    * Same as targetType(..), ecept that it does not un-aliases TypeAliasTypes
+   * Modifiers of aliases ore references are pushed into the targets.
    */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::AbstractType::Ptr targetTypeKeepAliases(const KDevelop::AbstractType::Ptr& type, const KDevelop::TopDUContext* topContext, bool* constant = 0);
   /**
