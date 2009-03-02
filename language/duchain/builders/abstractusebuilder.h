@@ -226,7 +226,7 @@ protected:
 
       LockedSmartInterface iface = LanguageSpecificUseBuilderBase::editor()->smart();
       //Delete all ranges that were not re-used
-      if(this->currentContext()->smartRange()) {
+      if(this->currentContext()->smartRange() && iface) {
         this->currentContext()->takeUseRanges();
         foreach(KTextEditor::SmartRange* range, currentUseTracker().reuseRanges) {
 #ifdef DEBUG_UPDATE_MATCHING
@@ -245,7 +245,7 @@ protected:
       for(int a = 0; a < tracker.createUses.size(); ++a) {
         KTextEditor::SmartRange* range = 0;
         
-        if(this->currentContext()->smartRange()) {
+        if(this->currentContext()->smartRange() && iface) {
           range = tracker.createUses[a].second;
           Q_ASSERT(range);
         }

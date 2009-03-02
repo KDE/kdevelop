@@ -1212,6 +1212,7 @@ void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
+  
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
   KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
@@ -1220,7 +1221,6 @@ void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
   
   foreach (TopDUContext* top, chains) {
     
-    DUChainWriteLocker lock( DUChain::lock() );
     QMutexLocker lockSmart(smart->smartMutex());
     
     deconvertDUChainInternal(top);

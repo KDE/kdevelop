@@ -108,6 +108,10 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
 {
   emit documentAboutToBeDeleted(document);
   
+  //We lock the duchain for write because only that way we can
+  //disable all editor-integrators and deconvert the contexts within one cycle
+  DUChainWriteLocker lock( DUChain::lock() );
+  
   int rev = -1;
   {
     QMutexLocker lock(mutex2);
