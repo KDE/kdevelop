@@ -43,7 +43,8 @@ using namespace KDevelop;
       }else{
         base = alias->type();
       }
-      base->setModifiers(base->modifiers() | hadModifiers);
+      if(base)
+        base->setModifiers(base->modifiers() | hadModifiers);
       
       ref = base.cast<ReferenceType>();
       alias = base.cast<TypeAliasType>();
