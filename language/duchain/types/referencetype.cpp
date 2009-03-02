@@ -90,7 +90,7 @@ void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 
 QString ReferenceType::toString() const
 {
-  return (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>&")) + AbstractType::toString(true);
+  return AbstractType::toString(false) + (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>"));
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
