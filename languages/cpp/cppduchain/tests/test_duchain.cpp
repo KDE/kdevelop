@@ -2955,6 +2955,28 @@ void TestDUChain::testTemplateDefaultParameters() {
   release(top);
 }
 
+void TestDUChain::testTemplates3() {
+  QByteArray method("typedef int quakka; template<class T> struct Test { typedef T Value; const Value cv; const T cv2; };");
+
+  TopDUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  Declaration* cvDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::cv"));
+  QVERIFY(cvDecl);
+  QVERIFY(cvDecl->abstractType());
+  QVERIFY(cvDecl->abstractType()->modifiers() & AbstractType::ConstModifier);
+  QVERIFY(TypeUtils::unAliasedType(cvDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  QCOMPARE(unAliasedType(cvDecl->abstractType())->toString(), QString("const int"));
+  kDebug() << "cv type: " << cvDecl->abstractType()->toString();
+  Declaration* cv2Decl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::cv2"));
+  QVERIFY(cv2Decl);
+  QVERIFY(cv2Decl->abstractType());
+  QVERIFY(cv2Decl->abstractType()->modifiers() & AbstractType::ConstModifier);
+  QCOMPARE(cv2Decl->abstractType()->toString(), QString("const quakka"));
+  QCOMPARE(unAliasedType(cv2Decl->abstractType())->toString(), QString("const int"));
+  QVERIFY(TypeUtils::unAliasedType(cv2Decl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  release(top);
+}
 void TestDUChain::testTemplates2() {
   QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*&> instance;");
 
