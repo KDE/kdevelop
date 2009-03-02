@@ -243,7 +243,10 @@ class CodeHighlightingColors : public KDevelop::ConfigurableHighlightingColors {
   }
 };
 
-static CodeHighlightingColors configurableColors;
+static CodeHighlightingColors& configurableColors() {
+    static CodeHighlightingColors colors;
+    return colors;
+}
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Contexts context, uint color ) const
 {
@@ -265,7 +268,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
 
   if (!a || color ) {
     
-    a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*configurableColors.getAttribute(type)));
+    a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*configurableColors().getAttribute(type)));
 
     switch (context) {
       case DefinitionContext:
