@@ -2961,12 +2961,22 @@ void TestDUChain::testTemplates3() {
   TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
+  Declaration* qDecl = findDeclaration(top, QualifiedIdentifier("quakka"));
+  QVERIFY(qDecl);
+  QCOMPARE(qDecl->abstractType()->toString(), QString("quakka"));
+  
   Declaration* cvDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::cv"));
   QVERIFY(cvDecl);
   QVERIFY(cvDecl->abstractType());
+  
+  AbstractType::Ptr type = cvDecl->abstractType();
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+  QVERIFY(idType);
+  QVERIFY(idType->declaration(top));
+  
   QVERIFY(cvDecl->abstractType()->modifiers() & AbstractType::ConstModifier);
   QVERIFY(TypeUtils::unAliasedType(cvDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
-  kDebug() << "cv type: " << cvDecl->abstractType()->toString();
+
   QCOMPARE(unAliasedType(cvDecl->abstractType())->toString(), QString("const int"));
   Declaration* cv2Decl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::cv2"));
   QVERIFY(cv2Decl);
@@ -2979,6 +2989,12 @@ void TestDUChain::testTemplates3() {
   {
     Declaration* cvrDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::ConstValueRef"));
     QVERIFY(cvrDecl);
+    
+    AbstractType::Ptr type = cvrDecl->abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+    QVERIFY(idType);
+    QVERIFY(idType->declaration(top));
+    
     QVERIFY(cvrDecl->abstractType());
     QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
     QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
