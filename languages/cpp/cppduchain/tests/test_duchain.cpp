@@ -2956,7 +2956,7 @@ void TestDUChain::testTemplateDefaultParameters() {
 }
 
 void TestDUChain::testTemplates3() {
-  QByteArray method("typedef int quakka; template<class T> struct Test { typedef T Value; const Value cv; const T cv2; };");
+  QByteArray method("typedef int quakka; template<class T> struct Test { typedef T Value; const Value cv; const T cv2; ; typedef Value& ValueRef; typedef const ValueRef ConstValueRef; };");
 
   TopDUContext* top = parse(method, DumpAll);
 
@@ -2966,8 +2966,8 @@ void TestDUChain::testTemplates3() {
   QVERIFY(cvDecl->abstractType());
   QVERIFY(cvDecl->abstractType()->modifiers() & AbstractType::ConstModifier);
   QVERIFY(TypeUtils::unAliasedType(cvDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
-  QCOMPARE(unAliasedType(cvDecl->abstractType())->toString(), QString("const int"));
   kDebug() << "cv type: " << cvDecl->abstractType()->toString();
+  QCOMPARE(unAliasedType(cvDecl->abstractType())->toString(), QString("const int"));
   Declaration* cv2Decl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::cv2"));
   QVERIFY(cv2Decl);
   QVERIFY(cv2Decl->abstractType());
@@ -2975,8 +2975,22 @@ void TestDUChain::testTemplates3() {
   QCOMPARE(cv2Decl->abstractType()->toString(), QString("const quakka"));
   QCOMPARE(unAliasedType(cv2Decl->abstractType())->toString(), QString("const int"));
   QVERIFY(TypeUtils::unAliasedType(cv2Decl->abstractType())->modifiers() & AbstractType::ConstModifier);
+
+  Declaration* cvrDecl = findDeclaration(top, QualifiedIdentifier("Test<quakka>::ConstValueRef"));
+  QVERIFY(cvrDecl);
+  QVERIFY(cvrDecl->abstractType());
+  QVERIFY(unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  QCOMPARE(realType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
+  QCOMPARE(targetType(cvrDecl->abstractType(), 0, 0)->toString(), QString("const int"));
+  TypeAliasType::Ptr alias = cvrDecl->abstractType().cast<TypeAliasType>();
+  QVERIFY(alias);
+  QVERIFY(alias->type());
+  QCOMPARE(targetTypeKeepAliases(Cpp::shortenTypeForViewing(cvrDecl->abstractType()), 0, 0)->toString(), QString("const quakka"));
+  QCOMPARE(Cpp::shortenTypeForViewing(cvrDecl->abstractType())->toString(), QString("const quakka&"));
+  QVERIFY(TypeUtils::unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
   release(top);
 }
+
 void TestDUChain::testTemplates2() {
   QByteArray method("struct S {} ; template<class TT> class Base { struct Alloc { typedef TT& referenceType; }; }; template<class T> struct Class : public Base<T> { typedef typename Base<T>::Alloc Alloc; typedef typename Alloc::referenceType reference; reference member; }; Class<S*&> instance;");
 

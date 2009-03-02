@@ -36,11 +36,14 @@ namespace TypeUtils {
   /**
    * Returns the dereferenced and un-aliased type(example: ReferenceType(Typedef(PointerType(int))) -> PointerType(int))
    *
+   * Modifiers in reference- or alias-types are propagated into their target types.
+   *
    *  !!DU-Chain must be locked!
    * @param constant will be set to true when one of the references made the result constant
    * @return return-value will only be zero if type is zero
    */
-  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext, bool* constant = 0);
+  ///@todo remove all parameters except type
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext = 0, bool* constant = 0);
 
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr pointsToType(const AbstractType::Ptr& type, const AbstractType::Ptr& pointsTo);
 
