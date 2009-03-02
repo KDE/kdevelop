@@ -31,6 +31,18 @@ ProjectTemplatesModel::ProjectTemplatesModel(AppWizardPlugin *parent)
 {
 }
 
+bool ProjectTemplatesModel::templateExists( const QString& descname )
+{
+    QFileInfo fi(descname);
+    foreach( const QString& templatename, m_plugin->componentData().dirs()->findAllResources("apptemplates") )
+    {
+        if( QFileInfo(templatename).baseName() == fi.baseName() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ProjectTemplatesModel::refresh()
 {
     clear();
@@ -42,15 +54,22 @@ void ProjectTemplatesModel::refresh()
     const QStringList templateDescriptions = dirs->findAllResources("apptemplate_descriptions");
     foreach (const QString &templateDescription, templateDescriptions)
     {
-        KConfig templateConfig(templateDescription);
-        KConfigGroup general(&templateConfig, "General");
-        QString name = general.readEntry("Name");
-        QString category = general.readEntry("Category");
-        QString icon = general.readEntry("Icon");
+        if( templateExists( templateDescription ) ) {
 
-        ProjectTemplateItem *templateItem = createItem(name, category);
-        templateItem->setData(templateDescription);
-        templateItem->setData(icon, Qt::UserRole+2);
+            KConfig templateConfig(templateDescription);
+            KConfigGroup general(&templateConfig, "General");
+            QString name = general.readEntry("Name");
+            QString category = general.readEntry("Category");
+            QString icon = general.readEntry("Icon");
+    
+            ProjectTemplateItem *templateItem = createItem(name, category);
+            templateItem->setData(templateDescription);
+            templateItem->setData(icon, Qt::UserRole+2);
+        } else {
+            // Template file doesn't exist anymore, so remove the description
+            // saves us the extra lookups for templateExists on the next run
+            QFile(templateDescription).remove();
+        }
     }
     setHorizontalHeaderLabels(QStringList() << i18n("Project Templates"));
 }

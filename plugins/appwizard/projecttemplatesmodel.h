@@ -26,6 +26,7 @@ public:
 
 private:
     void extractTemplateDescriptions();
+    bool templateExists(const QString&);
     ProjectTemplateItem *createItem(const QString &name, const QString &category);
 
     AppWizardPlugin *m_plugin;
