@@ -35,6 +35,7 @@ Name[x-test]=xxSubversion Supportxx
 Name[zh_CN]=Subversion 支持
 Name[zh_TW]=Subversion 支援
 GenericName=Version Control Support
+GenericName[es]=Implementación de Control de Versiones
 GenericName[ja]=バージョン管理のサポート
 GenericName[pt]=Suporte ao Controlo de Versões
 GenericName[pt_BR]=Suporte ao Controlo de Versões
