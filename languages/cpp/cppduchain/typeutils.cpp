@@ -37,18 +37,13 @@ using namespace KDevelop;
     TypeAliasType::Ptr alias = base.cast<TypeAliasType>();
 
     while( ref || alias ) {
+      uint hadModifiers = base->modifiers();
       if(ref) {
-        if( constant )
-          (*constant) |= (ref->modifiers() & AbstractType::ConstModifier);
         base = ref->baseType();
       }else{
-        uint hadModifiers = alias->modifiers();
-        
         base = alias->type();
-
-        if(hadModifiers)
-          base->setModifiers(base->modifiers() | hadModifiers);
       }
+      base->setModifiers(base->modifiers() | hadModifiers);
       
       ref = base.cast<ReferenceType>();
       alias = base.cast<TypeAliasType>();
