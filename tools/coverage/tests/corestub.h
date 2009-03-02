@@ -134,6 +134,7 @@ public:
     virtual Sublime::Controller* controller() { return m_controller; }
     virtual void registerStatus(QObject*) {}
     virtual void popUpAssistant(const KSharedPtr<KDevelop::IAssistant>& ) {}
+    virtual void hideAssistant(const KSharedPtr<KDevelop::IAssistant>& ) {}
 
     KParts::MainWindow* m_activeMainWindow;
     Sublime::Controller* m_controller;
