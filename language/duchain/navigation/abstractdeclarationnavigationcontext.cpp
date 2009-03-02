@@ -502,7 +502,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
 
   } else {
     if(idType) {
-      kdebug() << "identified type could not be resolved:" << idType->qualifiedIdentifier() << idType->declarationId().isValid() << idType->declarationId().isDirect();
+      kDebug() << "identified type could not be resolved:" << idType->qualifiedIdentifier() << idType->declarationId().isValid() << idType->declarationId().isDirect();
     }
     modifyHtml() += Qt::escape(type->toString());
   }
