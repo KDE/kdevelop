@@ -36,7 +36,7 @@ namespace TypeUtils {
       
       type = alias->type();
       
-      if(hadModifiers)
+      if(hadModifiers && type)
         type->setModifiers(type->modifiers() | hadModifiers);
       
       alias = type.cast<KDevelop::TypeAliasType>();
@@ -66,7 +66,7 @@ namespace TypeUtils {
       }else{
         base = alias->type();
       }
-      if((alias || ref) && hadModifiers)
+      if((alias || ref) && hadModifiers && base)
         base->setModifiers(base->modifiers() | hadModifiers);
       
       ref = base.cast<ReferenceType>();
@@ -89,7 +89,7 @@ namespace TypeUtils {
       if( ref ) {
         uint hadModifiers = ref->modifiers();
         base = ref->baseType();
-        if(hadModifiers)
+        if(hadModifiers && base)
           base->setModifiers(base->modifiers() | hadModifiers);
       } else if(pnt) {
         base = pnt->baseType();
