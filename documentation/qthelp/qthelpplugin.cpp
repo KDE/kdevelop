@@ -173,10 +173,8 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         
         virtual QWidget* documentationWidget(QWidget* parent)
         {
-            if(!m_view) {
-                m_view=new QWebView(parent);
-                m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_engine, 0));
-            }
+            m_view=new QWebView(parent);
+            m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_engine, 0));
             
             QUrl url=m_info[m_info.keys().first()];
             m_view->load(url);
@@ -188,10 +186,8 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 		QMap<QString, QUrl> m_info;
 		QHelpEngineCore* m_engine;
 		QString m_name;
-        static QPointer<QWebView> m_view;
+        QPointer<QWebView> m_view;
 };
-
-QPointer<QWebView> QtHelpDocumentation::m_view = 0;
 
 QString qtDocsLocation(const QString& qmake)
 {
