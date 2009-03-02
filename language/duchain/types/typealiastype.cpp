@@ -70,10 +70,10 @@ QString TypeAliasType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty())
-    return id.toString();
+    return  AbstractType::toString(false) + id.toString();
 
   if (type())
-    return type()->toString();
+    return AbstractType::toString(false) + type()->toString();
 
   return "typedef <notype>";
 }
