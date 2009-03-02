@@ -275,6 +275,7 @@ install(FILES
     codecompletion/codecompletionitemgrouper.h
     codecompletion/codecompletionhelper.h
     codecompletion/normaldeclarationcompletionitem.h
+    codecompletion/codecompletiontesthelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion COMPONENT Devel
 )
 
