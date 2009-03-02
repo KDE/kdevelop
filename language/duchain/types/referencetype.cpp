@@ -25,6 +25,8 @@
 #include "typesystemdata.h"
 #include "typeregister.h"
 #include "typesystem.h"
+#include "integraltype.h"
+#include "structuretype.h"
 
 namespace KDevelop
 {
@@ -90,7 +92,11 @@ void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 
 QString ReferenceType::toString() const
 {
-  return AbstractType::toString(false) + (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>"));
+  AbstractType::Ptr base = baseType();
+  if(base.cast<IntegralType>() || base.cast<StructureType>())
+    return AbstractType::toString(false) + (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>"));
+  else
+    return (baseType() ? QString("%1&").arg(baseType()->toString() + AbstractType::toString(true)) : QString("<notype>"));
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
