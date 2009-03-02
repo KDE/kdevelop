@@ -471,8 +471,11 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
       KDevelop::TypeAliasType::Ptr alias = type.cast<KDevelop::TypeAliasType>();
       if(alias) {
         //If the aliased type has less involved template arguments, prefer it
-        if(alias->type() && alias->type()->toString().count('<') < alias->toString().count('<'))
-          newType = alias->type();
+        AbstractType::Ptr shortenedTarget = exchange(alias->type());
+        if(shortenedTarget && shortenedTarget->toString().count('<') < alias->toString().count('<')) {
+          shortenedTarget->setModifiers(shortenedTarget->modifiers() | alias->modifiers());
+          return shortenedTarget;
+        }
       }
       
       newType->exchangeTypes(this);
