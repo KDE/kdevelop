@@ -1,5 +1,5 @@
 project(coverage)
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9003 )
