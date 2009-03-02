@@ -93,6 +93,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       AbstractType::Ptr useType = m_declaration->abstractType();
       if(m_declaration->isTypeAlias()) {
+        //Do not show the own name as type of typedefs
         if(useType.cast<TypeAliasType>())
           useType = useType.cast<TypeAliasType>()->type();
       }
@@ -459,6 +460,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     //We leave out the * and & reference and pointer signs, those are added to the end
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
+    kDebug() << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << m_topContext->url().str();
     modifyHtml() += Qt::escape(type->toString());
   }
 }
@@ -471,42 +473,37 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     modifyHtml() += Qt::escape("<no type>");
     return;
   }
-  
+
   AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases( type, m_topContext.data() );
   const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>( target.unsafeData() );
 
   kDebug() << "making type-links for" << type->toString() << typeid(*type).name();
   
-  if( idType ) {
+  if( idType && idType->declaration(m_topContext.data()) ) {
     ///@todo This is C++ specific, move into subclass
     
     if(target->modifiers() & AbstractType::ConstModifier)
       modifyHtml() += "const ";
     
-    htmlIdentifiedType(type, idType);
+    htmlIdentifiedType(target, idType);
 
-    PointerType::Ptr pointer = type.cast<PointerType>();
-    ReferenceType::Ptr ref = type.cast<ReferenceType>();
+    //We need to exchange the target type, else template-parameters may confuse this
+    SimpleTypeExchanger exchangeTarget(target, AbstractType::Ptr());
     
-    //Add reference and pointer
-    while(pointer || ref) {
-      if(pointer) {
-        modifyHtml() += Qt::escape("*");
-        if(pointer->modifiers() & AbstractType::ConstModifier)
-          modifyHtml() += " const";
-        ref = pointer->baseType().cast<ReferenceType>();
-        pointer = pointer->baseType().cast<PointerType>();
-      }
-      if(ref) {
-        modifyHtml() += Qt::escape("&");
-        if(ref->modifiers() & AbstractType::ConstModifier)
-          modifyHtml() += " const";
-        pointer = ref->baseType().cast<PointerType>();
-        ref = ref->baseType().cast<ReferenceType>();
-      }
+    AbstractType::Ptr exchanged = exchangeTarget.exchange(type);
+    
+    if(exchanged) {
+      QString typeSuffixString = exchanged->toString();
+      QRegExp suffixExp("\\&|\\*");
+      int suffixPos = typeSuffixString.indexOf(suffixExp);
+      if(suffixPos != -1)
+        modifyHtml() += typeSuffixString.mid(suffixPos);
     }
 
   } else {
+    if(idType) {
+      kdebug() << "identified type could not be resolved:" << idType->qualifiedIdentifier() << idType->declarationId().isValid() << idType->declarationId().isDirect();
+    }
     modifyHtml() += Qt::escape(type->toString());
   }
 }
