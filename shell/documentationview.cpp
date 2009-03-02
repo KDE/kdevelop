@@ -60,7 +60,7 @@ void DocumentationView::browseForward()
 void DocumentationView::replaceView(QWidget* newView)
 {
     if(layout()->count()!=1)
-        layout()->takeAt(1);
+        delete layout()->takeAt(1);
     layout()->addWidget(newView);
 }
 
