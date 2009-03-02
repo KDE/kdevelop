@@ -29,6 +29,7 @@
 #include <kparts/mainwindow.h>
 #include <kdialog.h>
 #include <kdebug.h>
+#include <kprocess.h>
 #include <kstandarddirs.h>
 
 #include <project/projectmodel.h>
@@ -137,6 +138,28 @@ void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url )
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( currentBuildDirKey, url );
     cmakeGrp.sync();
+}
+
+QString executeProcess(const QString& execName, const QStringList& args)
+{
+    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+
+    KProcess p;
+    p.setOutputChannelMode(KProcess::MergedChannels);
+    p.setProgram(execName, args);
+    p.start();
+
+    if(!p.waitForFinished())
+    {
+        kDebug() << "failed to execute:" << execName;
+    }
+
+    QByteArray b = p.readAllStandardOutput();
+    QString t;
+    t.prepend(b.trimmed());
+    kDebug(9042) << "executed" << execName << "<" << t;
+
+    return t;
 }
 
 }

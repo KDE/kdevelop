@@ -106,10 +106,10 @@ void CMakeDUChainTest::testDUChainWalk()
 //     v.setModulePath();
     v.walk(code, 0);
 
-    DUChainWriteLocker lock(DUChain::lock());
-    TopDUContext* ctx=v.context();
+    ReferencedTopDUContext ctx=v.context();
     QVERIFY(ctx);
 
+    DUChainWriteLocker lock(DUChain::lock());
     QVector<Declaration*> declarations=ctx->localDeclarations();
     /*for(int i=0; i<declarations.count(); i++)
     {
@@ -127,9 +127,9 @@ void CMakeDUChainTest::testDUChainWalk()
         {
             if(declarations[i]->range()==sr)
                 found=true;
-            else
-                qDebug() << "diff " << declarations[i]->range().start.column << declarations[i]->range().end.column
-                    << declarations[i]->range().end.line;
+//             else
+//                 qDebug() << "diff " << declarations[i]->range().start.column << declarations[i]->range().end.column
+//                     << declarations[i]->range().end.line;
         }
         if(!found)
             qDebug() << "doesn't exist " << sr.start.column << sr.end.column;
@@ -173,6 +173,13 @@ void CMakeDUChainTest::testUses_data()
         
     QTest::newRow("conditional") << input[3] << QStringList("var")
         << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
+        
+    QTest::newRow("included_macro") <<
+        "set(CMAKE_MODULE_PATH .)\n"
+        "include(included)\n"
+        "mymacro(33)\nmessage(STATUS 33)\n"
+        << QStringList("CMAKE_MODULE_PATH")
+        << (QList<SimpleRange>() << SimpleRange(2,0, 2,0+7));
 }
 
 void CMakeDUChainTest::testUses()
@@ -203,7 +210,11 @@ void CMakeDUChainTest::testUses()
     }
     ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), SimpleRange(0,0, endl, endc));
     
-    QString inputIncluded="set(avalue 33)\n";
+    QString inputIncluded=
+        "set(avalue 33)\n"
+        "macro(mymacro kk)\n"
+            "message(STATUS hello ${kk})\n"
+        "endmacro(mymacro)\n";
     
     QFile includedFile("included.cmake");
     QVERIFY(includedFile.open(QIODevice::WriteOnly | QIODevice::Text));
@@ -236,7 +247,7 @@ void CMakeDUChainTest::testUses()
     
 //     if(decls.count() != declarations.count())
 //     {
-//         for(int i=0; i<decls.count(); i++) {
+//         for(int i=0; i<declarations.count(); i++) {
 //             qDebug() << "decl" << declarations[i]->toString();
 //         }
 //     }
@@ -257,14 +268,16 @@ void CMakeDUChainTest::testUses()
     QCOMPARE(ctx->usesCount(), uses.count());
     for(int i=0; i<ctx->usesCount(); i++)
     {
-        qDebug() << "use" << i << ctx->uses()[i].m_range.textRange() << uses[i].textRange()
-                 << ctx->usedDeclarationForIndex(ctx->uses()[i].m_declarationIndex)->identifier().toString();
-        QCOMPARE(uses[i], ctx->uses()[i].m_range);
+        Use u=ctx->uses()[i];
+        qDebug() << "use" << i << u.m_range.textRange() << uses[i].textRange()
+                 << u.usedDeclaration(ctx)->toString();
+        QCOMPARE(uses[i], u.m_range);
     }
+    
+    DUChain::self()->removeDocumentChain(m_fakeContext);
 
     includedFile.remove();
     file.remove();
-    DUChain::self()->removeDocumentChain(m_fakeContext);
 }
 
 #include "cmakeduchaintest.moc"

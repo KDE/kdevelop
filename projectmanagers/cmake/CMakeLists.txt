@@ -10,7 +10,7 @@ add_subdirectory(tests)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
-add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9032 )
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9042 )
 
 set( cmakecommon_SRCS
   parser/cmListFileLexer.c
@@ -31,7 +31,9 @@ set( cmakecommon_UI
   cmakebuilddirchooser.ui
 )
 
-set( cmakemanager_SRCS
+set( cmakemanager_SRCS 
+  cmakenavigationwidget.cpp
+  cmakedocumentation.cpp
   cmakemodelitems.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp

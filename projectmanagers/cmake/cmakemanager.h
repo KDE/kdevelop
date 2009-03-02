@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2009 Aleix Pol <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 class QDir;
 class QObject;
 class CMakeHighlighting;
+class CMakeDocumentation;
 
 namespace KDevelop
 {
@@ -103,12 +104,10 @@ public:
 
     //LanguageSupport
     virtual QString name() const;
-    
     virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
-    
     virtual KDevelop::ILanguage *language();
-
     virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
 public slots:
     void dirtyFile(const QString& file);
@@ -127,7 +126,8 @@ private:
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
                                                     KDevelop::ReferencedTopDUContext parent);
-    
+
+    CMakeDocumentation* m_doc;
     VariableMap m_varsDef;
     QStringList m_modulePathDef;
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;

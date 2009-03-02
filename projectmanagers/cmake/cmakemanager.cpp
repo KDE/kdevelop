@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2009 Aleix Pol <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,9 @@
 
 #include "applychangeswidget.h"
 #include "cmakeconfig.h"
+#include "cmakedocumentation.h"
 #include "cmakemodelitems.h"
+#include "cmakenavigationwidget.h"
 #include "cmakehighlighting.h"
 #include "cmakecachereader.h"
 #include "cmakeastvisitor.h"
@@ -89,28 +91,6 @@ K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
 namespace {
-
-QString executeProcess(const QString& execName, const QStringList& args=QStringList())
-{
-    kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-
-    KProcess p;
-    p.setOutputChannelMode(KProcess::MergedChannels);
-    p.setProgram(execName, args);
-    p.start();
-
-    if(!p.waitForFinished())
-    {
-        kDebug() << "failed to execute:" << execName;
-    }
-
-    QByteArray b = p.readAllStandardOutput();
-    QString t;
-    t.prepend(b.trimmed());
-    kDebug(9042) << "executed" << execName << "<" << t;
-
-    return t;
-}
 
 QString fetchBuildDir(KDevelop::IProject* project)
 {
@@ -203,9 +183,9 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     cmakeInitScripts << "CMakeUnixFindMake.cmake";
 #endif
     cmakeInitScripts << "CMakeDetermineSystem.cmake";
+    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
     cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
-    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
 
 
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
@@ -223,11 +203,14 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
 #endif
 
+    m_doc=new CMakeDocumentation(cmakeCmd);
     kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;
 }
 
 CMakeProjectManager::~CMakeProjectManager()
-{}
+{
+    delete m_doc;
+}
 
 KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) const
 {
@@ -715,7 +698,7 @@ QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
     QString ret;
     KUrl bin(guessCMakeShare(cmakeBin));
 
-    QString version=executeProcess(cmakeBin, QStringList("--version"));
+    QString version=CMake::executeProcess(cmakeBin, QStringList("--version"));
     QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");
     rx.indexIn(version);
     QString versionNumber = rx.capturedTexts()[1];
@@ -1163,6 +1146,56 @@ bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevel
                                   i18n("Cannot save the change."));
     }
     return ret;
+}
+
+QWidget* CMakeProjectManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
+{
+    KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
+    Declaration *decl=0;
+    QString htmlDoc;
+    if(top)
+    {
+        int useAt=top->findUseAt(position);
+        if(useAt>=0)
+        {
+            Use u=top->uses()[useAt];
+            decl=u.usedDeclaration(top->topContext());
+        }
+    }
+
+    if(decl)
+    {
+        QString id=decl->identifier().toString();
+        QString desc=m_doc->description(decl);
+        if(desc.isEmpty()) {
+            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, decl);
+            return doc;
+        } else {
+            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, id, desc);
+            return doc;
+        }
+    }
+    else
+    {
+        const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
+        const KTextEditor::Document* e=d->textDocument();
+        KTextEditor::Cursor start=position.textCursor(), end=position.textCursor(), step(0,1);
+        for(QChar i=e->character(start); i.isLetter() || i=='_'; i=e->character(start-=step))
+        {}
+        start+=step;
+        
+        for(QChar i=e->character(end); i.isLetter() || i=='_'; i=e->character(end+=step))
+        {}
+        
+        QString id=e->text(KTextEditor::Range(start, end));
+        QString desc=m_doc->description(id);
+        if(!desc.isEmpty())
+        {
+            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, id, desc);
+            return doc;
+        }
+    }
+    return 0;
 }
 
 #include "cmakemanager.moc"

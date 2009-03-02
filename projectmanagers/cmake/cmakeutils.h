@@ -22,6 +22,7 @@
 #define CMAKEUTILS_H
 
 #include "cmakeexport.h"
+#include <QStringList>
 
 namespace KDevelop
 {
@@ -83,6 +84,9 @@ namespace CMake
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url );
+    
+    /** Runs the process specified by @p execName with @p args */
+    KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
 }
 
 #endif
