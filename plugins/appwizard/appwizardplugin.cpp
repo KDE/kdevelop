@@ -35,6 +35,7 @@
 #include <kpluginloader.h>
 #include <kactioncollection.h>
 #include <kmimetype.h>
+#include <kparts/mainwindow.h>
 #include <kio/copyjob.h>
 #include <kio/netaccess.h>
 #include <kde_file.h>
@@ -42,6 +43,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>
@@ -106,6 +108,8 @@ void AppWizardPlugin::slotNewProject()
         if (!project.isEmpty())
         {
             core()->projectController()->openProject(KUrl::fromPath(project));
+        } else {
+            KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
         }
     }
 }
