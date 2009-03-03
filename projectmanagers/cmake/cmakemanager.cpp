@@ -170,10 +170,19 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     executable="cmake";
 #endif
     QString cmakeCmd = CMakeProjectVisitor::findFile(executable, envVars);
-    m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd);
+    QString versionOutput=CMake::executeProcess(cmakeCmd, QStringList("--version"));
+    QRegExp rx("([0-9]+).([0-9]+)-patch ([0-9]+)");
+    rx.indexIn(versionOutput);
+    QStringList version=rx.capturedTexts();
+    version.takeFirst();
+    
+    m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd, version);
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
+    m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(version[0]));
+    m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(version[1]));
+    m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(version[2]));
 #ifdef Q_OS_WIN
     cmakeInitScripts << "CMakeMinGWFindMake.cmake";
     cmakeInitScripts << "CMakeMSYSFindMake.cmake";
@@ -187,9 +196,8 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
 
-
     m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
-    m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd)));
+    m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd, version)));
 
 #ifdef Q_OS_WIN32
     m_varsDef.insert("WIN32", QStringList("1"));
@@ -693,15 +701,12 @@ QString CMakeProjectManager::guessCMakeShare(const QString& cmakeBin)
     return bin.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
-QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
+QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
 {
     QString ret;
     KUrl bin(guessCMakeShare(cmakeBin));
 
-    QString version=CMake::executeProcess(cmakeBin, QStringList("--version"));
-    QRegExp rx("[a-z* ]*([0-9.]*)-[0-9]*");
-    rx.indexIn(version);
-    QString versionNumber = rx.capturedTexts()[1];
+    QString versionNumber = version[0]+'.'+version[1];
 
     bin.cd(QString("share/cmake-%1").arg(versionNumber));
 
@@ -720,9 +725,9 @@ QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin)
     return ret;
 }
 
-QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin)
+QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
 {
-    return QStringList(guessCMakeRoot(cmakeBin)+"/Modules");
+    return QStringList(guessCMakeRoot(cmakeBin, version)+"/Modules");
 }
 
 /*void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
