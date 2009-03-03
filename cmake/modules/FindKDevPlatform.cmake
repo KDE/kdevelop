@@ -39,11 +39,6 @@ set(_KDevPlatform_FIND_QUIETLY ${KDevPlatform_FIND_QUIETLY})
 find_package( KDevPlatform ${KDevPlatform_FIND_VERSION} NO_MODULE )
 set(KDevPlatform_FIND_QUIETLY ${_KDevPlatform_FIND_QUIETLY})
 
-if( KDevPlatform_FOUND )
-   get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
-   include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
-endif( KDevPlatform_FOUND )
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(KDevPlatform DEFAULT_MSG KDevPlatform_CONFIG )
 

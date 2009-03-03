@@ -25,7 +25,6 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} )
 set(KDEVPLATFORM_LIB_VERSION 1.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 1)
 
-add_subdirectory(cmake)
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
 add_subdirectory(project)
@@ -62,3 +61,6 @@ install( FILES
 install( EXPORT KDevPlatformTargets
          DESTINATION "${_kdevplatform_CONFIG_DEST}"
          FILE KDevPlatformTargets.cmake )
+
+# Put this last, so it can use _kdevplatform_CONFIG_DEST
+add_subdirectory(cmake)
