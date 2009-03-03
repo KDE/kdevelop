@@ -110,7 +110,6 @@ ParseJob::~ParseJob()
     
     if(KDevelop::LockedSmartInterface smart = editor.smart())
         smart->clearRevision();
-    
     {
         //Only for testing
         DUChainReadLocker lock(DUChain::lock());

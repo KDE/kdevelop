@@ -274,6 +274,9 @@ public:
         QPointer<QObject> notifyWhenReady;
         int priority;
         TopDUContext::Features features;
+        bool operator==(const DocumentParseTarget& rhs) const {
+            return notifyWhenReady == rhs.notifyWhenReady && priority == rhs.priority && features == rhs.features;
+        }
     };
 
     struct DocumentParsePlan {
@@ -452,16 +455,27 @@ void BackgroundParser::addDocumentList(const KUrl::List &urls, TopDUContext::Fea
         addDocument(url, features, priority);
 }
 
-void BackgroundParser::removeDocument(const KUrl &url)
+void BackgroundParser::removeDocument(const KUrl &url, QObject* notifyWhenReady)
 {
     QMutexLocker lock(&d->m_mutex);
 
     Q_ASSERT(url.isValid());
 
     if(d->m_documents.contains(url)) {
+        
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
-        d->m_documents.remove(url);
-        --d->m_maxParseJobs;
+        
+        foreach(BackgroundParserPrivate::DocumentParseTarget target, d->m_documents[url].targets)
+            if(target.notifyWhenReady == notifyWhenReady)
+                d->m_documents[url].targets.removeAll(target);
+
+        if(d->m_documents[url].targets.isEmpty()) {
+            d->m_documents.remove(url);
+            --d->m_maxParseJobs;
+        }else{
+            //Insert with an eventually different priority
+            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
+        }
     }
 }
 

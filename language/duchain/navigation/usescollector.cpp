@@ -296,25 +296,24 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
 
   if(!topContext) {
     kDebug() << "failed updating" << url.str();
-    return;
-  }
-
-  if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
-    ///Use the attached content-context instead
-    foreach(const DUContext::Import &import, topContext->importedParentContexts()) {
-      if(import.context(0) && import.context(0)->topContext()->parsingEnvironmentFile() && !import.context(0)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
-        if((import.context(0)->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
-          ReferencedTopDUContext newTop(import.context(0)->topContext());
-          topContext = newTop;
-          break;
+  }else{
+    if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
+      ///Use the attached content-context instead
+      foreach(const DUContext::Import &import, topContext->importedParentContexts()) {
+        if(import.context(0) && import.context(0)->topContext()->parsingEnvironmentFile() && !import.context(0)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
+          if((import.context(0)->topContext()->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
+            ReferencedTopDUContext newTop(import.context(0)->topContext());
+            topContext = newTop;
+            break;
+          }
         }
       }
-    }
-    if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
-      kDebug() << "got bad proxy-context for" << url.str();
-      return;
-    }
+      if(topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
+        kDebug() << "got bad proxy-context for" << url.str();
+        topContext = 0;
+      }
 
+    }
   }
 
   if(m_waitForUpdate.contains(url) && !m_updateReady.contains(url)) {
@@ -326,8 +325,8 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
     progress(m_updateReady.size(), m_waitForUpdate.size());
   }
 
-  if(!topContext->parsingEnvironmentFile()) {
-    kDebug() << "missing parsingEnvironmentFile";
+  if(!topContext || !topContext->parsingEnvironmentFile()) {
+    kDebug() << "bad top-context";
     return;
   }
 

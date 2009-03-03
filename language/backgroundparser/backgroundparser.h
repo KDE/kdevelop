@@ -152,7 +152,7 @@ public Q_SLOTS:
      * @p priority A value that manages the order of parsing. Documents with lowest priority are parsed first.
      * @param notifyReady An optional pointer to a QObject that should contain a slot
      *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
-     *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
+     *                    The notification is guaranteed to be called once for each call to addDocument. The given top-context
      *                    may be invalid if the update failed.
      */
     void addDocument(const KUrl& url, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0, QObject* notifyWhenReady = 0);
@@ -165,9 +165,10 @@ public Q_SLOTS:
     void addDocumentList(const KUrl::List& urls, TopDUContext::Features features = TopDUContext::VisibleDeclarationsAndContexts, int priority = 0);
 
     /**
-     * Removes the @p url from the queue.
+     * Removes the @p url that is registered for the given notification from the url.
+     * @param notifyWhenReady Notifier the document was added with
      */
-    void removeDocument(const KUrl& url);
+    void removeDocument(const KUrl& url, QObject* notifyWhenReady = 0);
 
     /**
      * Forces the current queue to be parsed.
