@@ -40,16 +40,39 @@ CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject *parent)
 {
 }
 
+bool isFunction(const Declaration* decl)
+{
+    return decl->abstractType().cast<FunctionType>();
+}
+
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
-    int numRows = m_commands.count();
     m_declarations.clear();
     DUChainReadLocker lock(DUChain::lock());
-    TopDUContext* ctx = DUChain::self()->chainForDocument( view->document()->url() );
-    if(ctx ) {
+    KTextEditor::Document* d=view->document();
+    TopDUContext* ctx = DUChain::self()->chainForDocument( d->url() );
+    
+    KTextEditor::Cursor pos=range.end(), step(0,1);
+    m_inside=false;
+    for(QChar i=d->character(pos); pos.column()>0 && !m_inside; i=d->character(pos-=step))
+    { m_inside = (i=='('); }
+    
+    int numRows = m_inside? 0 : m_commands.count();
+    m_varCount=0;
+    if(ctx)
+    {
         typedef QPair<Declaration*, int> DeclPair;
-        foreach(const DeclPair& pair, ctx->allDeclarations( SimpleCursor(range.start()), ctx ))
-            m_declarations.append(pair.first);
+        QList<DeclPair> list=ctx->allDeclarations( SimpleCursor(range.start()), ctx );
+        
+        m_varCount=0;
+        foreach(const DeclPair& pair, list)
+        {
+            Declaration *d=pair.first;
+            bool func=isFunction(d);
+            if((func && !m_inside) || (!func && m_inside))
+                m_declarations.append(d);
+        }
+        
         numRows+=m_declarations.count();
     }
     setRowCount(numRows);
@@ -58,10 +81,15 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
 
 CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) const
 {
-    if(row<m_commands.count())
-        return Command;
+    if(m_inside)
+        return Variable;
     else
-        return VariableMacro;
+    {
+        if(row<m_commands.count())
+            return Command;
+        else
+            return Macro;
+    }
 }
 
 QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) const
@@ -74,52 +102,45 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         if(type==Command)
             return m_commands[index.row()];
-        else if(type==VariableMacro)
+        else if(type==Variable || type==Macro)
         {
-            int pos=index.row()-m_commands.count();
+            int pos = (type==Variable) ? index.row() : index.row()-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
             return m_declarations[pos].data()->identifier().toString();
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Prefix)
     {
-        if(type==Command)
-            return "Command";
-        else if(type==VariableMacro)
+        switch(type)
         {
-            int pos=index.row()-m_commands.count();
-            DUChainReadLocker lock(DUChain::lock());
-            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
-                if (FunctionType::Ptr func = type.cast<FunctionType>())
-                    return "Macro";
-                else
-                    return "Variable";
-            else
-                return "Variable";
+            case Command:   return "Command";
+            case Variable:  return "Variable";
+            case Macro:     return "Macro";
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Arguments)
     {
-        if(type==Command)
-            return QString(); //TODO
-        else if(type==VariableMacro)
-        {
-            DUChainReadLocker lock(DUChain::lock());
-            int pos=index.row()-m_commands.count();
-            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
+        switch(type) {
+            case Variable:
+            case Command:
+                break;
+            case Macro:
             {
-                if (FunctionType::Ptr func = type.cast<FunctionType>())
+                DUChainReadLocker lock(DUChain::lock());
+                int pos=index.row()-m_commands.count();
+                AbstractType::Ptr type; Q_ASSERT(type = m_declarations[pos].data()->abstractType());
+                FunctionType::Ptr func; Q_ASSERT(func = type.cast<FunctionType>());
+                
+                QStringList args;
+                foreach(const AbstractType::Ptr& t, func->arguments())
                 {
-                    QStringList args;
-                    foreach(const AbstractType::Ptr& t, func->arguments())
-                    {
-                        DelayedType::Ptr delay = t.cast<DelayedType>();
-                        args.append(delay->identifier().toString());
-                    }
-                    return '('+args.join(", ")+')';
+                    DelayedType::Ptr delay = t.cast<DelayedType>();
+                    args.append(delay->identifier().toString());
                 }
+                return '('+args.join(", ")+')';
             }
         }
+        
     }
     return QVariant();
 }
@@ -131,21 +152,18 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
         case Command:
             document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
             break;
-        case VariableMacro: {
+        case Macro: {
             int pos=row-m_commands.count();
             DUChainReadLocker lock(DUChain::lock());
             Declaration* decl = m_declarations[pos].data();
             if(!decl)
                 return;
-            if (AbstractType::Ptr type = m_declarations[pos].data()->abstractType())
-            {
-                if (FunctionType::Ptr func = type.cast<FunctionType>())
-                {
-                    document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
-                    break;
-                }
-            }
-
+            AbstractType::Ptr type; Q_ASSERT(type = m_declarations[pos].data()->abstractType());
+            FunctionType::Ptr func; Q_ASSERT(func = type.cast<FunctionType>());
+            document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+        }   break;
+        case Variable: {
+            DUChainReadLocker lock(DUChain::lock());
             Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
             QString bef=document->text(prefix);
             if(r.start().column()>=2 && bef=="${")
