@@ -425,7 +425,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
                 //The function that does not take the target-argument is being used
                 if(Declaration* klass = Cpp::localClassFromCodeContext(m_duContext.data()))
                   m_expressionResult.type = klass->indexedType();
-              }else if(parentContext()->m_knownArgumentTypes.size() >= function.matchedArguments) {
+              }else if(parentContext()->m_knownArgumentTypes.size() >= function.matchedArguments && function.matchedArguments != 0) {
                 m_expressionResult = parentContext()->m_knownArgumentTypes[function.matchedArguments-1];
                 m_expressionResult.type = TypeUtils::targetType(TypeUtils::matchingClassPointer(funType->arguments()[function.matchedArguments-1], m_expressionResult.type.abstractType(), m_duContext->topContext()), m_duContext->topContext())->indexed();
               }
