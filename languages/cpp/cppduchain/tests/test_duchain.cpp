@@ -1808,6 +1808,8 @@ void TestDUChain::testSignalSlotUse() {
 }
 
 void TestDUChain::testFunctionDefinition() {
+  //               0         1         2         3         4         5         6         7
+  //               01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() : i(3) {}; A::~A() {}; ");
 
   TopDUContext* top = dynamic_cast<TopDUContext*>(parse(text, DumpAll));
@@ -1824,6 +1826,9 @@ void TestDUChain::testFunctionDefinition() {
 
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
 
+  QVERIFY(atInA->internalContext());
+  QCOMPARE(atInA->internalContext()->range(), SimpleRange(0, 29, 0, 33));
+  
   QCOMPARE(top->localDeclarations().count(), 5);
 
   QVERIFY(top->localDeclarations()[1]->logicalInternalContext(top));
