@@ -1576,7 +1576,7 @@ DUContext * DUContext::findContextAt(const SimpleCursor & position, bool include
   if (!range().contains(position) && (!includeRightBorder || !range().isEmpty() || range().start != position))
     return 0;
 
-  for(uint a = d_func()->m_childContextsSize()-1; a >= 0; --a)
+  for(int a = int(d_func()->m_childContextsSize())-1; a >= 0; --a)
     if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position))
       return specific;
 
