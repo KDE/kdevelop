@@ -82,6 +82,8 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
   m_document = KDevelop::IndexedString(view->document()->url());
   
+  m_invocationRange = SimpleRange(inserted);
+  
   kDebug() << "checking";
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
@@ -90,7 +92,7 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
     return;
   }
   
-  DUContext* context = findFunctionContext(m_document.toUrl(), SimpleCursor(inserted.start()));
+  DUContext* context = findFunctionContext(m_document.toUrl(), m_invocationRange);
   
   if(!context) {
     kDebug() << "not found function-context";
@@ -126,13 +128,18 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   }
 }
 
-DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDevelop::SimpleCursor position) const {
+DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDevelop::SimpleRange range) const {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   TopDUContext* top = DUChainUtils::standardContextForUrl(url);
+
   if(top) {
-    DUContext* context = top->findContextAt(position, true);
-    if(context && context->type() == DUContext::Function && context->owner())
+    DUContext* context = top->findContextAt(range.start, true);
+    if(context == top)
+      context = top->findContextAt(range.end, true);
+    
+    if(context && context->type() == DUContext::Function && context->owner()) {
       return context;
+    }
   }
   return 0;
 }
@@ -161,7 +168,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     
     virtual QString description() const {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-      return i18n("Adapt definition signature of %1(%2) to to (%3)", m_definitionId.qualifiedIdentifier().toString(), makeSignatureString(m_oldSignature), makeSignatureString(m_newSignature));
+      return i18n("Adapt definition signature of %1(%2) to (%3)", m_definitionId.qualifiedIdentifier().toString(), makeSignatureString(m_oldSignature), makeSignatureString(m_newSignature));
     }
     
     virtual void execute() {
@@ -216,8 +223,12 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
   if(job->document() == m_document) {
     kDebug() << "parse job finshed for current document";
     clearActions();
+    KTextEditor::View* v = view();
+    if(!v)
+      return;
+    SimpleCursor currentPos(v->cursorPosition());
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    if(DUContext* context = findFunctionContext(m_document.toUrl(), SimpleCursor(invocationCursor()))) {
+    if(DUContext* context = findFunctionContext(m_document.toUrl(), SimpleRange(currentPos, currentPos))) {
       if(context->owner() && context->owner()->identifier() == m_declarationName) {
         QList<SignatureItem> newSignature;
         foreach(Declaration* parameter, context->localDeclarations()) {
@@ -239,7 +250,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
 }
 
 void StaticCodeAssistant::assistantHide() {
-  m_activeAssistant.clear();
+  m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
 }
 
 void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {

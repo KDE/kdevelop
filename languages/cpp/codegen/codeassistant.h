@@ -58,8 +58,9 @@ class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
     KDevelop::ReferencedTopDUContext m_definitionContext;
     QList<SignatureItem> m_oldSignature;
     KDevelop::IndexedString m_document;
+    KDevelop::SimpleRange m_invocationRange;
     
-    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleCursor position) const;
+    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleRange position) const;
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
 };
