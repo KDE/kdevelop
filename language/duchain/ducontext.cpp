@@ -439,12 +439,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   int childCount = m_context->d_func()->m_childContextsSize();
 
-  //Optimization: In most cases while parsing, the new child-context will be added to the end, so check if it is the case.
-  if(m_context->d_func()->m_childContextsSize() != 0) {
-    if(m_context->d_func()->m_childContexts()[childCount-1].data(m_topContext)->range().start <= context->range().start)
-      goto insertAtEnd;
-  }
-
   for (int i = 0; i < childCount; ++i) {///@todo Do binary search to find the position
     DUContext* child = m_context->d_func()->m_childContexts()[i].data(m_topContext);
     if (context == child)
@@ -457,7 +451,6 @@ void DUContextDynamicData::addChildContext( DUContext * context )
     }
   }
 
-  insertAtEnd:
   if( !inserted ) {
     m_context->d_func_dynamic()->m_childContextsList().insert(indexed, 0);
     context->m_dynamicData->m_parentContext = m_context;
