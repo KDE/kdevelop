@@ -26,6 +26,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <language/duchain/parsingenvironment.h>
 
 namespace Cpp {
 
@@ -211,6 +212,26 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     //Step 1: Decide where to put the declaration
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     
+    IndexedString doc;
+    {
+      QList<DUContext*> containers = completionContext()->memberAccessContainers();
+      
+      if(containers.isEmpty())
+        return;
+      else
+        doc = containers[0]->url();
+    }
+
+    lock.unlock();
+    //Make sure the top-context is up-to-date, waiting for an update if required
+    KDevelop::ReferencedTopDUContext updated( DUChain::self()->waitForUpdate(doc, TopDUContext::AllDeclarationsAndContexts) );
+    
+    if(!updated) {
+      kDebug() << "not creating slot because failed to update" << doc.str();
+      return;
+    }
+    lock.lock();
+    
     QList<DUContext*> containers = completionContext()->memberAccessContainers();
     
     if(containers.isEmpty())
@@ -218,9 +239,6 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     
     DUContext* classContext = containers.first();
     
-    KUrl doc = classContext->url().toUrl();
-    
-    ///@todo Make sure the file is up-to-date
     KDevelop::CodeRepresentation* rep = KDevelop::createCodeRepresentation(classContext->url());
     if(rep) {
       QString indent = "  ";
@@ -267,10 +285,11 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
       
       rep->setText(text.join("\n"));
       delete rep;
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc);
       
       QString localText = "SLOT(" + completionContext()->followingText() + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
       document->replaceText(word, localText);
+
+      ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
     }
   }else{
     document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));

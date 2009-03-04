@@ -20,6 +20,10 @@
 #include <interfaces/iassistant.h>
 #include <QObject>
 #include <ktexteditor/cursor.h>
+#include <language/duchain/declarationid.h>
+#include <language/duchain/topducontext.h>
+#include <language/duchain/indexedstring.h>
+#include <language/duchain/types/indexedtype.h>
 
 namespace KTextEditor {
 class Document;
@@ -28,8 +32,12 @@ class View;
 }
 namespace KDevelop {
 class IDocument;
+class ParseJob;
+class DUContext;
 }
 namespace Cpp {
+
+typedef QPair<KDevelop::IndexedType, KDevelop::IndexedString> SignatureItem;
 
 class CreateDeclarationAction : public KDevelop::IAssistantAction {
   public:
@@ -37,10 +45,23 @@ class CreateDeclarationAction : public KDevelop::IAssistantAction {
     virtual void execute();
 };
 
-class CodeAssistant : public KDevelop::ITextAssistant {
+
+class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
+  Q_OBJECT
   public:
-    CodeAssistant(KTextEditor::View* view);
-    QList< KDevelop::IAssistantAction::Ptr > actions();
+    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted);
+    bool isUseful();
+    
+  private:
+    KDevelop::Identifier m_declarationName;
+    KDevelop::DeclarationId m_definitionId;
+    KDevelop::ReferencedTopDUContext m_definitionContext;
+    QList<SignatureItem> m_oldSignature;
+    KDevelop::IndexedString m_document;
+    
+    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleCursor position) const;
+  private slots:
+    void parseJobFinished(KDevelop::ParseJob*);
 };
 
 class StaticCodeAssistant : public QObject {
@@ -48,12 +69,11 @@ class StaticCodeAssistant : public QObject {
   public:
     StaticCodeAssistant();
   private slots:
+    void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
-    void viewCursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
   private:
-    
-    KSharedPtr<CodeAssistant> m_activeAssistant;
+    KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
 };
 
 }
