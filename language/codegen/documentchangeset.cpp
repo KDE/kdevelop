@@ -37,7 +37,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
     QMap<IndexedString, CodeRepresentation*> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
-    
+
     foreach(const IndexedString &file, m_changes.keys())
     {
         CodeRepresentation* repr = createCodeRepresentation(file);
@@ -61,7 +61,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
             if(previous){
                 if(previous->m_range.end > (*it)->m_range.start) {
                     //intersection
-                    if(previous->m_range == (*it)->m_range && previous->m_oldText == (*it)->m_oldText && previous->m_newText == (*it)->m_newText) {
+                    if(previous->m_range == (*it)->m_range && previous->m_oldText == (*it)->m_oldText && previous->m_newText == (*it)->m_newText &&
+                       !previous->m_ignoreOldText && !(*it)->m_ignoreOldText) {
                         //duplicate, remove one
                         it = sortedChanges.erase(it);
                         continue;
@@ -74,15 +75,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
             previous = *it;
             ++it;
         }
-        
-        
+
         QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
         sortedChangesList = sortedChanges.values();
-        
+
         for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
             DocumentChange& change(*sortedChangesList[pos]);
             QString encountered;
-            if(change.m_range.start < change.m_range.end &&
+            if(change.m_range.start <= change.m_range.end &&
                 change.m_range.end.line < textLines.size() &&
                 change.m_range.start.line >= 0 &&
                 change.m_range.start.column >= 0 &&
@@ -90,7 +90,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
                 change.m_range.end.column >= 0 && 
                 change.m_range.end.column < textLines[change.m_range.end.line].length() && 
                 change.m_range.start.line == change.m_range.end.line  && //We demand this, although it shoult be fixed
-                (encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText)
+                ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
             {
                 textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
             }else{
@@ -126,7 +126,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
             
             for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
                 DocumentChange& change(*sortedChangesList[pos]);
-                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText)) {
+                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
                     QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
                     
                     

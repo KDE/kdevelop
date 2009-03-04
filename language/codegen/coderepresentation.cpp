@@ -51,10 +51,11 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_document->endEditing();
   }
   
-  bool replace(const KTextEditor::Range& range, QString oldText, QString newText) {
+  bool replace(const KTextEditor::Range& range, QString oldText, QString newText, bool ignoreOldText) {
       QString old = m_document->text(range);
-      if(oldText != old)
+      if(oldText != old && !ignoreOldText) {
           return false;
+      }
       
       return m_document->replaceText(range, newText);
   }

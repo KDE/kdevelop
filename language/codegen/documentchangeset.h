@@ -25,13 +25,14 @@
 
 namespace KDevelop {
     struct KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public KShared {
-        DocumentChange(const IndexedString& document, const SimpleRange& range, const QString& oldText, const QString& newText) : m_document(document), m_range(range), m_oldText(oldText), m_newText(newText) {
+        DocumentChange(const IndexedString& document, const SimpleRange& range, const QString& oldText, const QString& newText) : m_document(document), m_range(range), m_oldText(oldText), m_newText(newText), m_ignoreOldText(false) {
         }
         
         IndexedString m_document;
         SimpleRange m_range;
         QString m_oldText;
         QString m_newText;
+        bool m_ignoreOldText; //Set this to disable the verification of m_oldText
     };
     
     typedef KSharedPtr<DocumentChange> DocumentChangePointer;
