@@ -19,6 +19,7 @@ Comment[zh_TW]=此外掛程式依不同檔案型態提供不同的後端介面�
 Name=Source Formatter
 Name[es]=Formateador de código
 Name[ja]=ソースフォーマッタ
+Name[nds]=Bornformateren
 Name[pt]=Formatador de Código
 Name[pt_BR]=Formatador de Código
 Name[sv]=Källkodsformatering
