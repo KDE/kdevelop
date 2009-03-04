@@ -104,6 +104,7 @@ private Q_SLOTS:
     void assistantAction3(bool);
     void assistantAction4(bool);
     void assistantHide();
+    void assistantActionsChanged();
     
 
 private:

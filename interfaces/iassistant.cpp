@@ -18,6 +18,7 @@
 
 #include "iassistant.h"
 #include <ktexteditor/view.h>
+#include <ktexteditor/document.h>
 
 using namespace KDevelop;
 
@@ -41,33 +42,52 @@ unsigned int KDevelop::IAssistantAction::flags() const {
     return NoFlag;
 }
 
-QIcon KDevelop::IAssistant::icon() {
+QIcon KDevelop::IAssistant::icon() const {
     return QIcon();
 }
 
-QString KDevelop::IAssistant::title() {
+QString KDevelop::IAssistant::title() const {
     return QString();
 }
 
-// QList< KSharedPtr< KDevelop::IAssistantAction > > KDevelop::StandardAssistant::actions() {
-//     return m_actions;
-// }
-// 
-// KDevelop::StandardAssistant::StandardAssistant(const QList< KSharedPtr< KDevelop::IAssistantAction > >& actions) : m_actions(actions) {
-// }
+void KDevelop::IAssistant::doHide() {
+    emit hide();
+}
 
-KTextEditor::View* KDevelop::ITextAssistant::view() {
+QList< KDevelop::IAssistantAction::Ptr > KDevelop::IAssistant::actions() const {
+    return m_actions;
+}
+
+void KDevelop::IAssistant::addAction(KDevelop::IAssistantAction::Ptr action) {
+    m_actions << action;
+}
+
+void KDevelop::IAssistant::clearActions() {
+    m_actions.clear();
+}
+
+KTextEditor::View* KDevelop::ITextAssistant::view() const {
   return m_view;
+}
+
+KTextEditor::Cursor KDevelop::ITextAssistant::invocationCursor() const {
+  return m_invocationCursor;
 }
 
 KDevelop::ITextAssistant::ITextAssistant(KTextEditor::View* view) {
   m_view = view;
   connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
-  invocationCursor = view->cursorPosition();
+  connect(view->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+  m_invocationCursor = view->cursorPosition();
 }
 
-void KDevelop::ITextAssistant::cursorPositionChanged(KTextEditor::View* view, KTextEditor::Cursor cursor) {
-  if(abs((invocationCursor - cursor).line()) > 2)
+void KDevelop::ITextAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
+    if(document->text(range).contains("\n"))
+        emit hide();
+}
+
+void KDevelop::ITextAssistant::cursorPositionChanged(KTextEditor::View* /*view*/, KTextEditor::Cursor cursor) {
+  if(abs((m_invocationCursor - cursor).line()) > 2)
     emit hide();
 }
 

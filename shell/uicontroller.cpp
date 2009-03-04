@@ -633,8 +633,11 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
     if(textWidget && textWidget->editorView()) {
         connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()));
+        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()));
+
         d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
-        d->currentShownAssistant->show();
+        if(assistant->actions().count())
+            d->currentShownAssistant->show();
     }
 }
 
@@ -660,6 +663,12 @@ void UiController::assistantAction4(bool) {
 void UiController::assistantHide() {
     delete d->currentShownAssistant;
 }
+
+void UiController::assistantActionsChanged() {
+    if(d->currentShownAssistant)
+        popUpAssistant(d->currentShownAssistant->assistant());
+}
+
 
 }
 

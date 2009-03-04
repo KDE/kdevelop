@@ -79,8 +79,6 @@ AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assist
     setAutoFillBackground(true);
 
     updateActions();
-    
-    connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()));
 }
 
 void AssistantPopup::assistantActionsChanged() {
@@ -107,7 +105,7 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
     button->setText(QString("%1").arg(index+1));
 
     if(index == -1)
-        connect(button, SIGNAL(clicked(bool)), SLOT(hide()));
+        connect(button, SIGNAL(clicked(bool)), m_assistant.data(), SLOT(doHide()));
     if(index == 0)
         connect(button, SIGNAL(clicked(bool)), SLOT(executeAction1()));
     if(index == 1)
@@ -128,7 +126,7 @@ void AssistantPopup::executeAction1() {
     if(actions.size() > 0)
         actions[0]->execute();
     
-    hide();
+    m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction2() {
@@ -136,7 +134,7 @@ void AssistantPopup::executeAction2() {
     if(actions.size() > 1)
         actions[1]->execute();
 
-    hide();
+    m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction3() {
@@ -144,7 +142,7 @@ void AssistantPopup::executeAction3() {
     if(actions.size() > 2)
         actions[2]->execute();
 
-    hide();
+    m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction4() {
@@ -152,7 +150,7 @@ void AssistantPopup::executeAction4() {
     if(actions.size() > 3)
         actions[3]->execute();
 
-    hide();
+    m_assistant->doHide();
 }
 
 KSharedPtr< KDevelop::IAssistant > AssistantPopup::assistant() const {

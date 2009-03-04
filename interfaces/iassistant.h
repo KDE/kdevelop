@@ -73,23 +73,36 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
         
         typedef KSharedPtr<IAssistant> Ptr;
     
-        ///Should return the actions for this assistant
-        virtual QList<IAssistantAction::Ptr> actions() = 0;
+        ///Returns the stored list of actions, or can be overridden to return an own set
+        virtual QList<IAssistantAction::Ptr> actions() const;
+        
+        ///Adds the given action to the list of actions
+        ///Does not emit actionsChanged(), you have to do that when you're ready
+        virtual void addAction(IAssistantAction::Ptr action);
+        
+        ///Clears the stored list of actions
+        ///Does not emit actionsChanged(), you have to do that when you're ready
+        virtual void clearActions();
         
         ///May return an icon for this assistant
-        virtual QIcon icon();
+        virtual QIcon icon() const;
         
         ///May return the title of this assistant
-        virtual QString title();
+        virtual QString title() const;
+    public slots:
+        ///Emits hide(), which causes this assistant to be hidden
+        virtual void doHide();
     signals:
         ///Can be emitted by the assistant when it should be hidden
         void hide();
         ///Can be emitted by the assistant when it's actions have changed and should be re-read
         void actionsChanged();
+    private:
+        QList<IAssistantAction::Ptr> m_actions;
 };
 
 ///A helper assistant base class that binds itself to a view, and hides itself as soon as
-///the cursor was moved too far away from the invocation position
+///the cursor was moved too far away from the invocation position, or a newline was inserted.
 class KDEVPLATFORMINTERFACES_EXPORT ITextAssistant : public IAssistant
 {
   Q_OBJECT
@@ -97,23 +110,21 @@ public:
   ITextAssistant(KTextEditor::View* view);
   
   ///@return The view this text-assistant was created with. May be zero if it was deleted already.
-  KTextEditor::View* view();
+  KTextEditor::View* view() const;
+  ///Position where the cursor was when this assistant was created
+  KTextEditor::Cursor invocationCursor() const;
 private slots:
-  void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
-    
+  //This function checks whether the cursor was moved away by more than 2 lines from the initial position, and hides the assistant if so.
+  //Override it to change this behavior.
+  virtual void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
+  //This function checks whether a newline was inserted, and hides the assistant if so.
+  //Override it to change this behavior.
+  virtual void textInserted(KTextEditor::Document*,KTextEditor::Range);
+  
 private:
   QPointer<KTextEditor::View> m_view;
-  KTextEditor::Cursor invocationCursor;
+  KTextEditor::Cursor m_invocationCursor;
 };
-
-///Convenience-class that allows creating a simple assistant from just a list of actions
-// class KDEVPLATFORMINTERFACES_EXPORT StandardTextAssistant : public ITextAssistant {
-//     public:
-//         StandardTextAssistant(const QList<IAssistantAction::Ptr>& actions);
-//         virtual QList<IAssistantAction::Ptr> actions();
-//     private:
-//         QList<IAssistantAction::Ptr> m_actions;
-// };
 
 }
 
