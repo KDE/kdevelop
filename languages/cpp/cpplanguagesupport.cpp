@@ -94,10 +94,19 @@
 #include "codegen/simplerefactoring.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
+#include <valgrind/callgrind.h>
 
+
+// #define CALLGRIND_TRACE_UI_LOCKUP
 
 #define DEBUG_UI_LOCKUP
-#define LOCKUP_INTERVAL 300
+#define LOCKUP_INTERVAL 140
+
+#ifdef CALLGRIND_TRACE_UI_LOCKUP
+#define DEBUG_UI_LOCKUP
+#define LOCKUP_INTERVAL 5
+#endif
+
 //List of possible headers used for definition/declaration fallback switching
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
@@ -962,11 +971,18 @@ UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent )
          m_timeMutex.lock();
          m_lastTime = QDateTime::currentDateTime();
          m_timeMutex.unlock();
+#ifdef CALLGRIND_TRACE_UI_LOCKUP
+         CALLGRIND_STOP_INSTRUMENTATION
+#endif
  }
 
 void UIBlockTester::lockup() {
-    kDebug() << "ui is blocking";
         //std::cout << "UIBlockTester: lockup of the UI for " << m_msecs << endl; ///kdDebug(..) is not thread-safe..
+#ifdef CALLGRIND_TRACE_UI_LOCKUP
+    CALLGRIND_START_INSTRUMENTATION
+#else
+    kDebug() << "ui is blocking";
+#endif
  }
 
 #include "cpplanguagesupport.moc"

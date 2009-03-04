@@ -36,6 +36,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/cppnewclass.cpp
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
+    codegen/codeassistant.cpp
 )
 
 
