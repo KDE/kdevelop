@@ -39,16 +39,16 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/codeassistant.cpp
 )
 
+option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
+if(BUILD_kdev_includepathresolver)
+  ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
+  SET_TARGET_PROPERTIES( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
+  TARGET_LINK_LIBRARIES( kdev_includepathresolver
+  ${KDEVPLATFORM_INTERFACES_LIBRARY}  ${KDEVPLATFORM_PROJECT_LIBRARY}
+  ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} )
+  install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
+endif(BUILD_kdev_includepathresolver)
 
-ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
-
-SET_TARGET_PROPERTIES( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
-
-TARGET_LINK_LIBRARIES( kdev_includepathresolver
-${KDEVPLATFORM_INTERFACES_LIBRARY}  ${KDEVPLATFORM_PROJECT_LIBRARY}
-${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} )
-
-install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
