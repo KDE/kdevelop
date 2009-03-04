@@ -2,6 +2,7 @@
 Type=Service
 Name=QMake Project Builder
 Name[ja]=QMake プロジェクトビルダー
+Name[nds]=QMake-Projektbuumoduul
 Name[pt]=Construtor de Projectos do QMake
 Name[pt_BR]=Construtor de Projectos do QMake
 Name[sv]=QMake-projektbyggverktyg
