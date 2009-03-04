@@ -94,7 +94,7 @@
 #include "codegen/simplerefactoring.h"
 #include "includepathcomputer.h"
 #include "codecompletion/missingincludemodel.h"
-#include <valgrind/callgrind.h>
+//#include <valgrind/callgrind.h>
 
 
 // #define CALLGRIND_TRACE_UI_LOCKUP
