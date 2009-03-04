@@ -25,16 +25,22 @@
 
 class AssistantPopup : public QFrame
 {
+    Q_OBJECT
 public:
         AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant);
-        void executeAction1();
-        void executeAction2();
-        void executeAction3();
-        void executeAction4();
         KDevelop::IAssistant::Ptr assistant() const;
+    public slots:
+    void executeAction1();
+    void executeAction2();
+    void executeAction3();
+    void executeAction4();
+    void assistantActionsChanged();
     private:
+        void updateActions();
         QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
         KDevelop::IAssistant::Ptr m_assistant;
+        QList<KDevelop::IAssistantAction::Ptr> m_actions;
+        QPalette m_normalPalette;
 };
 
 #endif // ASSISTANTPOPUP_H

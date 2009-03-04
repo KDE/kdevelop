@@ -48,6 +48,7 @@
 #include "documentcontroller.h"
 #include "assistantpopup.h"
 #include <kactioncollection.h>
+#include <ktexteditor/view.h>
 
 namespace KDevelop {
 
@@ -193,7 +194,7 @@ UiController::UiController(Core *core)
     KAction* assistantactionhide = actions->addAction("assistant_action_hide");
     assistantactionhide->setText( i18n("&Hide Assistant") );
     assistantactionhide->setShortcut( Qt::ALT | Qt::Key_0 );
-    connect(assistantactionhide, SIGNAL(triggered(bool)), this, SLOT(assistantHide(bool)));
+    connect(assistantactionhide, SIGNAL(triggered(bool)), this, SLOT(assistantHide()));
 }
 
 UiController::~UiController()
@@ -629,8 +630,10 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     delete d->currentShownAssistant;
     
     Sublime::View* view = d->activeSublimeWindow->activeView();
-    if(view->hasWidget() && view->widget()) {
-        d->currentShownAssistant = new AssistantPopup(view->widget(), assistant);
+    TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
+    if(textWidget && textWidget->editorView()) {
+        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()));
+        d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
         d->currentShownAssistant->show();
     }
 }
@@ -654,7 +657,7 @@ void UiController::assistantAction4(bool) {
         d->currentShownAssistant->executeAction4();
 }
 
-void UiController::assistantHide(bool) {
+void UiController::assistantHide() {
     delete d->currentShownAssistant;
 }
 

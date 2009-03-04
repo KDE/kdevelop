@@ -54,3 +54,5 @@ QList< KSharedPtr< KDevelop::IAssistantAction > > KDevelop::StandardAssistant::a
 
 KDevelop::StandardAssistant::StandardAssistant(const QList< KSharedPtr< KDevelop::IAssistantAction > >& actions) : m_actions(actions) {
 }
+
+#include "iassistant.moc"

@@ -103,7 +103,8 @@ private Q_SLOTS:
     void assistantAction2(bool);
     void assistantAction3(bool);
     void assistantAction4(bool);
-    void assistantHide(bool);
+    void assistantHide();
+    
 
 private:
     class UiControllerPrivate* const d;

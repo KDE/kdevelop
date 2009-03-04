@@ -59,8 +59,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public KShared {
 
 ///Represents a single assistant popup
 ///Subclass it to create own assistants
-class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public KShared
+class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
 {
+    Q_OBJECT
     public:
         virtual ~IAssistant();
         
@@ -74,6 +75,11 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public KShared
         
         ///May return the title of this assistant
         virtual QString title();
+    signals:
+        ///Can be emitted by the assistant when it should be hidden
+        void hide();
+        ///Can be emitted by the assistant when it's actions have changed and should be re-read
+        void actionsChanged();
 };
 
 ///Convenience-class that allows creating a simple assistant from just a list of actions

@@ -424,7 +424,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         emit documentOpened( d->documents[url] );
     }
 
-    if (!activationParams.testFlag(IDocumentController::DoNotActivate))
+    if (!activationParams.testFlag(IDocumentController::DoNotActivate) && doc != activeDocument())
         emit documentActivated( doc );
 
     d->saveAll->setEnabled(true);
