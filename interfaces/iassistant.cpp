@@ -17,6 +17,7 @@
 */
 
 #include "iassistant.h"
+#include <ktexteditor/view.h>
 
 using namespace KDevelop;
 
@@ -48,11 +49,26 @@ QString KDevelop::IAssistant::title() {
     return QString();
 }
 
-QList< KSharedPtr< KDevelop::IAssistantAction > > KDevelop::StandardAssistant::actions() {
-    return m_actions;
+// QList< KSharedPtr< KDevelop::IAssistantAction > > KDevelop::StandardAssistant::actions() {
+//     return m_actions;
+// }
+// 
+// KDevelop::StandardAssistant::StandardAssistant(const QList< KSharedPtr< KDevelop::IAssistantAction > >& actions) : m_actions(actions) {
+// }
+
+KTextEditor::View* KDevelop::ITextAssistant::view() {
+  return m_view;
 }
 
-KDevelop::StandardAssistant::StandardAssistant(const QList< KSharedPtr< KDevelop::IAssistantAction > >& actions) : m_actions(actions) {
+KDevelop::ITextAssistant::ITextAssistant(KTextEditor::View* view) {
+  m_view = view;
+  connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
+  invocationCursor = view->cursorPosition();
+}
+
+void KDevelop::ITextAssistant::cursorPositionChanged(KTextEditor::View* view, KTextEditor::Cursor cursor) {
+  if(abs((invocationCursor - cursor).line()) > 2)
+    emit hide();
 }
 
 #include "iassistant.moc"

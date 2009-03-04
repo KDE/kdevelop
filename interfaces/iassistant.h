@@ -22,7 +22,13 @@
 #include <KSharedPtr>
 #include <QIcon>
 #include "interfacesexport.h"
+#include <QPointer>
+#include <ktexteditor/cursor.h>
 
+namespace KTextEditor {
+class View;
+class Cursor;
+}
 namespace KDevelop {
 
 ///Represents a single assistant action.
@@ -82,14 +88,32 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
         void actionsChanged();
 };
 
-///Convenience-class that allows creating a simple assistant from just a list of actions
-class KDEVPLATFORMINTERFACES_EXPORT StandardAssistant : public IAssistant {
-    public:
-        StandardAssistant(const QList<IAssistantAction::Ptr>& actions);
-        virtual QList<IAssistantAction::Ptr> actions();
-    private:
-        QList<IAssistantAction::Ptr> m_actions;
+///A helper assistant base class that binds itself to a view, and hides itself as soon as
+///the cursor was moved too far away from the invocation position
+class KDEVPLATFORMINTERFACES_EXPORT ITextAssistant : public IAssistant
+{
+  Q_OBJECT
+public:
+  ITextAssistant(KTextEditor::View* view);
+  
+  ///@return The view this text-assistant was created with. May be zero if it was deleted already.
+  KTextEditor::View* view();
+private slots:
+  void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
+    
+private:
+  QPointer<KTextEditor::View> m_view;
+  KTextEditor::Cursor invocationCursor;
 };
+
+///Convenience-class that allows creating a simple assistant from just a list of actions
+// class KDEVPLATFORMINTERFACES_EXPORT StandardTextAssistant : public ITextAssistant {
+//     public:
+//         StandardTextAssistant(const QList<IAssistantAction::Ptr>& actions);
+//         virtual QList<IAssistantAction::Ptr> actions();
+//     private:
+//         QList<IAssistantAction::Ptr> m_actions;
+// };
 
 }
 
