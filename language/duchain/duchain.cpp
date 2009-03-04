@@ -61,6 +61,7 @@
 #include <QtCore/qwaitcondition.h>
 #include <QtCore/qmutex.h>
 #include <unistd.h>
+#include "waitforupdate.h"
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
@@ -1332,6 +1333,27 @@ void DUChain::refCountDown(TopDUContext* top) {
 
 void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
   emit declarationSelected(decl);
+}
+
+KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures) {
+  Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
+
+  WaitForUpdate waiter;
+  
+  waiter.m_dataMutex.lock();
+  
+  {
+    DUChainReadLocker readLock(DUChain::lock());
+  
+    updateContextForUrl(document, minFeatures, &waiter);
+  }
+  
+  waiter.m_waitMutex.lock();
+  waiter.m_dataMutex.unlock();
+  if(!waiter.m_ready)
+    waiter.m_wait.wait(&waiter.m_waitMutex);
+  
+  return waiter.m_topContext;
 }
 
 void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady) const {

@@ -79,6 +79,18 @@ public:
    */
    Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0) const;
   
+   /**
+    * Convenience-function similar to updateContextForUrl that blocks this thread until the update of the given document is ready,
+    * and returns the top-context.
+    * @param document The document to update
+    * @param features The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
+    *                 If you want to force an update including all imports, use TopDUContext::ForceUpdateRecursive.
+    * @return The up-to-date top-context, or zero if the update failed
+    * @warning The duchain must _not_ be locked when this is called!
+    *
+    */
+   KDevelop::ReferencedTopDUContext waitForUpdate(const IndexedString& document, TopDUContext::Features minFeatures);
+   
   /**
    * Return any chain for the given document
    * If available, the version accepting IndexedString should be used instead of this, for performance reasons.

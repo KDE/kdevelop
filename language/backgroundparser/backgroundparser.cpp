@@ -213,6 +213,14 @@ public:
 
         if(languages.isEmpty())
             kWarning(9504) << "found no languages for url" << url;
+        else
+            kWarning(9504) << "could not create parse-job for url" << url;
+
+        //Notify that we failed
+        typedef QPointer<QObject> Notify;
+        foreach(Notify n, notifyWhenReady)
+            if(n)
+                QMetaObject::invokeMethod(n, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
         return 0;
     }
@@ -434,15 +442,11 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
             d->m_documentsForPriority[it.value().priority()].remove(url);
             it.value().targets << target;
             d->m_documentsForPriority[it.value().priority()].insert(url);
-        }
-
-        if (it == d->m_documents.end()) {
+        }else{
 //             kDebug(9505) << "BackgroundParser::addDocument: queuing" << url;
             d->m_documents[url].targets << target;
             d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
-        } else {
-//             kDebug(9505) << "BackgroundParser::addDocument: is already queued:" << url;
         }
 
         d->startTimerThreadSafe();
