@@ -27,8 +27,8 @@ void AssistantPopup::updateActions() {
     
     setFrameStyle(QFrame::Panel);
     
-    foreach(QObject* child, children())
-        delete child;
+//     foreach(QObject* child, children())
+//         delete child;
 
     QWidget* parent = qobject_cast<QWidget*>(this->parent());
 
@@ -122,34 +122,46 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
 }
 
 void AssistantPopup::executeAction1() {
+    Ptr stayAlive(this); //Make sure this popup stays alive while executing an action
+
     QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
     if(actions.size() > 0)
         actions[0]->execute();
     
+    Q_ASSERT(m_assistant);
     m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction2() {
+    Ptr stayAlive(this); //Make sure this popup stays alive while executing an action
+
     QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
     if(actions.size() > 1)
         actions[1]->execute();
 
+    Q_ASSERT(m_assistant);
     m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction3() {
+    Ptr stayAlive(this); //Make sure this popup stays alive while executing an action
+
     QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
     if(actions.size() > 2)
         actions[2]->execute();
 
+    Q_ASSERT(m_assistant);
     m_assistant->doHide();
 }
 
 void AssistantPopup::executeAction4() {
+    Ptr stayAlive(this); //Make sure this popup stays alive while executing an action
+
     QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
     if(actions.size() > 3)
         actions[3]->execute();
 
+    Q_ASSERT(m_assistant);
     m_assistant->doHide();
 }
 

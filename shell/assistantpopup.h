@@ -21,14 +21,16 @@
 
 #include <QFrame>
 #include <interfaces/iassistant.h>
+#include <ksharedptr.h>
 
 
-class AssistantPopup : public QFrame
+class AssistantPopup : public QFrame, public KShared
 {
     Q_OBJECT
 public:
-        AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant);
-        KDevelop::IAssistant::Ptr assistant() const;
+    typedef KSharedPtr<AssistantPopup> Ptr;
+    AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant);
+    KDevelop::IAssistant::Ptr assistant() const;
     public slots:
     void executeAction1();
     void executeAction2();
