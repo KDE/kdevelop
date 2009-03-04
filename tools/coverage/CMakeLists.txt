@@ -56,4 +56,3 @@ install(TARGETS kdevcoverage DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES kdevcoverage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevcoverage.rc DESTINATION ${DATA_INSTALL_DIR}/kdevcoverage )
-install( PROGRAMS lcov_geninfo DESTINATION ${BIN_INSTALL_DIR} )
