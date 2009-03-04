@@ -370,7 +370,7 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
   }
 
   SimpleCursor start = newDeclaration->range().start;
-
+///@todo Do binary search to find the position
   bool inserted = false;
   for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
     Declaration* child = m_context->d_func_dynamic()->m_localDeclarations()[i].data(m_topContext);
@@ -389,8 +389,8 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
       break;
     }
   }
-  if( !inserted )
-    m_context->d_func_dynamic()->m_localDeclarationsList().append(newDeclaration);
+  if( !inserted ) //We haven't found any child that is before this one, so prepend it
+    insertToArray(m_context->d_func_dynamic()->m_localDeclarationsList(), newDeclaration, 0);
 
     addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
   }
@@ -445,12 +445,12 @@ void DUContextDynamicData::addChildContext( DUContext * context )
       goto insertAtEnd;
   }
 
-  for (int i = 0; i < childCount; ++i) {
+  for (int i = 0; i < childCount; ++i) {///@todo Do binary search to find the position
     DUContext* child = m_context->d_func()->m_childContexts()[i].data(m_topContext);
     if (context == child)
       return;
-    if (context->range().start < child->range().start) {
-      insertToArray(m_context->d_func_dynamic()->m_childContextsList(), indexed, i);
+    if (context->range().start > child->range().start) {
+      insertToArray(m_context->d_func_dynamic()->m_childContextsList(), indexed, i+1);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
       break;
@@ -459,7 +459,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   insertAtEnd:
   if( !inserted ) {
-    m_context->d_func_dynamic()->m_childContextsList().append(indexed);
+    m_context->d_func_dynamic()->m_childContextsList().insert(indexed, 0);
     context->m_dynamicData->m_parentContext = m_context;
   }
 
