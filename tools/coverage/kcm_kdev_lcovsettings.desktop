@@ -1,0 +1,14 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_lcovsettings
+X-KDE-FactoryName=kcm_kdev_lcovsettings
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevelop
+
+Name=lcov settings
+Comment=Configure lcov settings
+

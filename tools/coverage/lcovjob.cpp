@@ -103,8 +103,8 @@ void LcovJob::initProcess()
          << m_root.pathOrUrl()
          << m_root.pathOrUrl();
     KConfigGroup grp = KGlobal::config()->group("Code Coverage");
-    QString geninfo = grp.readEntry("geninfoPath","/usr/bin/geninfo" );
-    m_lcov->setProgram( geninfo, args);
+    KUrl geninfo = grp.readEntry("geninfoPath", KUrl("/usr/bin/geninfo") );
+    m_lcov->setProgram( geninfo.toLocalFile(), args);
     m_lcov->setOutputChannelMode(KProcess::SeparateChannels);
     m_lineMaker = new ProcessLineMaker(m_lcov);
 
