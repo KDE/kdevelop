@@ -52,10 +52,19 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     KTextEditor::Document* d=view->document();
     TopDUContext* ctx = DUChain::self()->chainForDocument( d->url() );
     
-    KTextEditor::Cursor pos=range.end(), step(0,1);
-    m_inside=false;
-    for(QChar i=d->character(pos); pos.column()>0 && !m_inside; i=d->character(pos-=step))
-    { m_inside = (i=='('); }
+    QString line=d->line(range.end().line());
+//     m_inside=line.lastIndexOf('(', range.end().column())>=0;
+    m_inside=line.lastIndexOf('(', range.end().column()-line.size()-1)>=0;
+    qDebug() << "ooooooooo"  << line << range << m_inside << range.end().column() << range.end().column()-line.size();
+    
+    for(int l=range.end().line(); l>=0 && !m_inside; --l)
+    {
+        QString cline=d->line(l);
+        QString line=cline.mid(0, cline.indexOf('#'));
+        
+        bool out=line.lastIndexOf(')')>=0;
+        m_inside= !out && line.indexOf('(')>=0;
+    }
     
     int numRows = m_inside? 0 : m_commands.count();
     m_varCount=0;
