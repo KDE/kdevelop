@@ -21,6 +21,7 @@
 #include "duchainlock.h"
 
 #include <QtCore/QCoreApplication>
+#include <QApplication>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
 #include <QtCore/QTimer>
@@ -1350,8 +1351,12 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   
   waiter.m_waitMutex.lock();
   waiter.m_dataMutex.unlock();
-  if(!waiter.m_ready)
-    waiter.m_wait.wait(&waiter.m_waitMutex);
+  while(!waiter.m_ready) {
+    ///@todo When we don't do this, the backgroundparser doesn't process anything.
+    ///      The background-parser should be moved into an own thread, so we wouldn't need to do this.
+    QApplication::processEvents();
+    waiter.m_wait.wait(&waiter.m_waitMutex, 10);
+  }
   
   return waiter.m_topContext;
 }
