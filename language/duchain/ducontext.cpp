@@ -439,7 +439,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 
   int childCount = m_context->d_func()->m_childContextsSize();
 
-  for (int i = 0; i < childCount; ++i) {///@todo Do binary search to find the position
+  for (int i = childCount-1; i >= 0; --i) {///@todo Do binary search to find the position
     DUContext* child = m_context->d_func()->m_childContexts()[i].data(m_topContext);
     if (context == child)
       return;
