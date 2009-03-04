@@ -3,6 +3,7 @@ Type=Service
 Name=CMake Project Builder
 Name[ga]=Tógálaí Tionscadal CMake
 Name[ja]=CMake プロジェクトビルダー
+Name[nds]=CMake-Projektbuumoduul
 Name[pt]=Construtor de Projectos do CMake
 Name[pt_BR]=Construtor de Projectos do CMake
 Name[sv]=CMake-projektbyggverktyg

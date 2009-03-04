@@ -2,6 +2,7 @@
 Type=Service
 Name=QMake Project Manager
 Name[ja]=QMake プロジェクトマネージャ
+Name[nds]=QMake-Projektpleger
 Name[pt]=Gestor de Projectos do QMake
 Name[pt_BR]=Gestor de Projectos do QMake
 Name[sv]=QMake-projekthantering

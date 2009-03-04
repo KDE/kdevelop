@@ -21,6 +21,7 @@ Comment[zh_CN]=Gcov C(++) 覆盖率
 Comment[zh_TW]=Gcov C/C++ 範圍
 
 Name=Code Coverage Report
+Name[nds]=Kodeafdeck-Bericht
 Name[pt]=Relatório de Cobertura do Código
 Name[pt_BR]=Relatório de Cobertura do Código
 Name[sv]=Kodtäckningsrapport

@@ -2,6 +2,7 @@
 Type=Service
 Name=CMake Project Manager
 Name[ja]=CMake プロジェクトマネージャ
+Name[nds]=CMake-Projektpleger
 Name[pt]=Gestor de Projectos do CMake
 Name[pt_BR]=Gestor de Projectos do CMake
 Name[sv]=CMake-projekthantering
