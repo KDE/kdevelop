@@ -37,7 +37,7 @@ class DUContext;
 }
 namespace Cpp {
 
-typedef QPair<KDevelop::IndexedType, KDevelop::IndexedString> SignatureItem;
+typedef QPair<KDevelop::IndexedType, QString> SignatureItem;
 
 class CreateDeclarationAction : public KDevelop::IAssistantAction {
   public:
@@ -54,9 +54,13 @@ class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
     
   private:
     KDevelop::Identifier m_declarationName;
+    
+    bool m_editingDefinition; //If this is true, the user is editing on the definition side, and the declaration should be updated
+    
     KDevelop::DeclarationId m_definitionId;
     KDevelop::ReferencedTopDUContext m_definitionContext;
     QList<SignatureItem> m_oldSignature;
+    KDevelop::IndexedType m_oldReturnType;
     KDevelop::IndexedString m_document;
     KDevelop::SimpleRange m_invocationRange;
     
@@ -73,7 +77,9 @@ class StaticCodeAssistant : public QObject {
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
+    void textRemoved(KTextEditor::Document*,KTextEditor::Range);
   private:
+    void eventuallyStartAssistant(KTextEditor::Document*, KTextEditor::Range range);
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
 };
 
