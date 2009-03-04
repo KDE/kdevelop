@@ -1565,12 +1565,16 @@ void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 DUContext * DUContext::findContextAt(const SimpleCursor & position, bool includeRightBorder) const
 {
   ENSURE_CAN_READ
+  
+//   kDebug() << "searchign" << position.textCursor() << "in:" << scopeIdentifier(true).toString() << range().textRange() << includeRightBorder;
 
-  if (!range().contains(position) && (!includeRightBorder || !range().isEmpty() || range().start != position))
+  if (!range().contains(position) && (!includeRightBorder || range().end != position)) {
+//     kDebug() << "mismatch";
     return 0;
+  }
 
   for(int a = int(d_func()->m_childContextsSize())-1; a >= 0; --a)
-    if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position))
+    if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position, includeRightBorder))
       return specific;
 
   return const_cast<DUContext*>(this);
