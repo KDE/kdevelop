@@ -18,6 +18,8 @@
 
 #include "abstractfunctiondeclaration.h"
 #include <QStringList>
+#include "types/functiontype.h"
+#include "declaration.h"
 
 namespace KDevelop {
 
@@ -59,6 +61,17 @@ void AbstractFunctionDeclaration::setFunctionSpecifiers(FunctionSpecifiers speci
   dynamicData()->m_isInline = specifiers & InlineSpecifier;
   dynamicData()->m_isExplicit = specifiers & ExplicitSpecifier;
   dynamicData()->m_isVirtual = specifiers & VirtualSpecifier;
+}
+
+IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index) const {
+  FunctionType::Ptr fType = dynamic_cast<const Declaration*>(this)->type<FunctionType>();
+  if(index >= 0 && index < fType->arguments().size()) {
+    index -= (fType->arguments().size() - defaultParametersSize());
+    if(index >= 0 && index < defaultParametersSize())
+      return defaultParameters()[index];
+  }
+  
+  return IndexedString();
 }
 
 }
