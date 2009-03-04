@@ -32,6 +32,7 @@
 
 #include <KProcess>
 #include <KLocale>
+#include <KConfigGroup>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>

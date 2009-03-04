@@ -52,6 +52,14 @@ target_link_libraries(kdevcoverage
     ${KDE4_KDEUI_LIBS})
 install(TARGETS kdevcoverage DESTINATION ${PLUGIN_INSTALL_DIR})
 
+set(lcovsettings_cfg_SRCS lcovprefs.cpp)
+
+kde4_add_ui_files( lcovsettings_cfg_SRCS lcovprefs.ui )
+kde4_add_kcfg_files( lcovsettings_cfg_SRCS lcovconfig.kcfgc )
+kde4_add_plugin( kcm_kdev_lcovsettings ${lcovsettings_cfg_SRCS} )
+target_link_libraries( kcm_kdev_lcovsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
+
+
 ########### install files ###############
 
 install( FILES kdevcoverage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

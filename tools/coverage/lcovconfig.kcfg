@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Code Coverage">
+    <entry name="geninfoPath" key="geninfoPath" type="Path">
+        <default>/usr/bin/geninfo</default>
+        <label>Specifies which geninfo executable to use to generate coverage information</label>
+        <whatsthis>The geninfo executable from the lcov toolset is needed to create a visualizable format from gcov code coverage data.
+        </whatsthis>
+    </entry>
+  </group>
+</kcfg>
