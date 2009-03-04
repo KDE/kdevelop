@@ -1569,15 +1569,15 @@ void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 }
 
 
-DUContext * DUContext::findContextAt(const SimpleCursor & position) const
+DUContext * DUContext::findContextAt(const SimpleCursor & position, bool includeRightBorder) const
 {
   ENSURE_CAN_READ
 
-  if (!range().contains(position))
+  if (!range().contains(position) && (!includeRightBorder || !range().isEmpty() || range().start != position))
     return 0;
 
-  FOREACH_FUNCTION(LocalIndexedDUContext child, d_func()->m_childContexts)
-    if (DUContext* specific = child.data(topContext())->findContextAt(position))
+  for(uint a = d_func()->m_childContextsSize()-1; a >= 0; --a)
+    if (DUContext* specific = d_func()->m_childContexts()[a].data(topContext())->findContextAt(position))
       return specific;
 
   return const_cast<DUContext*>(this);

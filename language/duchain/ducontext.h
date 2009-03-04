@@ -284,9 +284,10 @@ public:
 
   /**
    * Find the context which most specifically covers \a position.
+   * @param includeRightBorder When this is true, contexts will also be found that have the position on their right border.
    * The search is recursive, so the most specific context is found.
    */
-  DUContext* findContextAt(const SimpleCursor& position) const;
+  DUContext* findContextAt(const SimpleCursor& position, bool includeBorders = false) const;
 
   /**
    * Find a child declaration that has a rang that covers the given position
