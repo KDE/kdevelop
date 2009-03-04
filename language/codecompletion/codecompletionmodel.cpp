@@ -255,15 +255,9 @@ KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const
   return m_completionContext;
 }
 
-///@todo move into subclass
 void CodeCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
 {
-  DUChainReadLocker lock(DUChain::lock(), 3000);
-  if(!lock.locked()) {
-    kDebug() << "Failed to lock the du-chain for completion-item execution"; //Probably we prevented a deadlock
-    return;
-  }
-
+  //We must not lock the duchain at this place, because the items might rely on that
   CompletionTreeElement* element = (CompletionTreeElement*)index.internalPointer();
   if( !element || !element->asItem() )
     return;
