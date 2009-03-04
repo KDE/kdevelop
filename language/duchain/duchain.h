@@ -74,7 +74,7 @@ public:
    * @param notifyReady An optional pointer to a QObject that should contain a slot
    *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
    *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
-   *                    may be invalid if the update failed.
+   *                    may be invalid if the update failed. A queued connection is used if a re-parse has to be done.
    * @return Whether an update was scheduled. If false is returned, the top-context is already up-to-date, and has the needed features.
    */
    Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0) const;
