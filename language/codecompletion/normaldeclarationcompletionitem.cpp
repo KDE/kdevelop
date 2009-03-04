@@ -134,7 +134,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             return functionType->AbstractType::toString();
           }
       } else if(index.column() == CodeCompletionModel::Prefix) {
-          kDebug() << m_declaration->abstractType();
           if (m_declaration->abstractType()) {
             if(EnumeratorType::Ptr enumerator = m_declaration->type<EnumeratorType>()) {
               if(m_declaration->context()->owner() && m_declaration->context()->owner()->abstractType()) {
