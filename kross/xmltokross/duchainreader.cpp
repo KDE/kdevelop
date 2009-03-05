@@ -76,8 +76,8 @@ void DUChainReader::foundClass(const Declaration* decl)
 //              << definedClasses;
     if(cdecl->baseClassesSize()>=1 &&
        cdecl->baseClasses()[0].access==KDevelop::Declaration::Public &&
-       definedClasses.contains(cdecl->baseClasses()[0].baseClass.type()->toString()))
-        baseClass=cdecl->baseClasses()[0].baseClass.type()->toString();
+       definedClasses.contains(cdecl->baseClasses()[0].baseClass.abstractType()->toString()))
+        baseClass=cdecl->baseClasses()[0].baseClass.abstractType()->toString();
     
     QString inClass;
     bool isInClass=decl->context()->type() == DUContext::Class;
