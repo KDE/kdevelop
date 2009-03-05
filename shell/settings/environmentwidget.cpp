@@ -167,6 +167,7 @@ void EnvironmentWidget::addGroupClicked()
         return; // same group name cannot be added twice.
     }
     ui.activeCombo->addItem( curText );
+    ui.activeCombo->setCurrentItem( curText );
 }
 
 void EnvironmentWidget::removeGroupClicked()
@@ -191,8 +192,8 @@ void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
 void EnvironmentWidget::enableButtons( const QString& txt ) 
 {
     ui.addgrpBtn->setEnabled( !groupModel->groups().contains( txt  ) );
-    ui.removegrpBtn->setEnabled( groupModel->groups().contains( txt  ) );
-    ui.setAsDefaultBtn->setEnabled( groupModel->groups().contains( txt  ) );
+    ui.removegrpBtn->setEnabled( ( groupModel->groups().contains( txt  ) && groupModel->defaultGroup() != txt ) );
+    ui.setAsDefaultBtn->setEnabled( ( groupModel->groups().contains( txt  ) && groupModel->defaultGroup() != txt ) );
 }
 
 
