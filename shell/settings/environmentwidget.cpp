@@ -95,10 +95,6 @@ void EnvironmentWidget::loadSettings( KConfig* config )
     QStringList groupList = groupModel->groups();
     kDebug() << "Grouplist:" << groupList << "default group:" << groupModel->defaultGroup();
     ui.activeCombo->addItems( groupList );
-    if( !groupList.contains( groupModel->defaultGroup() ) )
-    {
-        ui.activeCombo->addItem( groupModel->defaultGroup() );
-    }
     int idx = ui.activeCombo->findText( groupModel->defaultGroup() );
     ui.activeCombo->setCurrentIndex( idx );
 }
