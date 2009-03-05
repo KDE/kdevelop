@@ -49,8 +49,8 @@ StaticCodeAssistant::StaticCodeAssistant() {
 void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
   ///@todo Also wait for "textRemoved" signal
   if(document->textDocument()) {
-    connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
+    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
   }
 }
 
