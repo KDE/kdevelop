@@ -56,7 +56,7 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
              this, SLOT( settingsChanged() ) );
 
 
-    d->skel = new KConfigSkeleton("kdeveloprc");
+    d->skel = new KConfigSkeleton(KGlobal::config());
     addConfig( d->skel, d->preferencesDialog );
 
 
