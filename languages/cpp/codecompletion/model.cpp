@@ -86,6 +86,9 @@ KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CodeCompleti
 bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
   QString insertedTrimmed = inserted.trimmed();
+  
+  TypeConversion::startCache();
+  
   if(insertedTrimmed.endsWith('\"'))
     return false; //Never start completion behind a string literal
   if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
@@ -97,6 +100,7 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
 void CodeCompletionModel::aborted(KTextEditor::View* view) {
     kDebug() << "aborting";
     worker()->abortCurrentCompletion();
+    TypeConversion::stopCache();
     
     KTextEditor::CodeCompletionModelControllerInterface::aborted(view);
 }

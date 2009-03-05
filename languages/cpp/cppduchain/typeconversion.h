@@ -100,6 +100,13 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
      * Since a conversion to a base-class is still considered an exact match, this can be used to more precisely compare results.
      * */
     int baseConversionLevels() const;
+
+    /**
+     * Start/Stop type-conversion caching for the current thread. Prefer TypeConversionEnabler over calling these directly.
+     */
+    static void startCache();
+    static void stopCache();
+    
   protected:
     /**
      * iso c++ draf 13.3.3.1.1
@@ -114,9 +121,6 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
     ///Returns whether the given declaration is accessible from here
     ///@todo Does not respect the local context yet
     bool isAccessible(const ClassMemberDeclaration* decl);
-    
-    static void startCache();
-    static void stopCache();
     
     /**iso c++ draft 13.3.3.1.2
      *

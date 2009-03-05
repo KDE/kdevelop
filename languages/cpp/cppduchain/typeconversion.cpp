@@ -57,21 +57,25 @@ struct TypeConversionCache {
 }
 
 QHash<Qt::HANDLE, TypeConversionCache*> typeConversionCaches;
+QMutex typeConversionCacheMutex;
 
 void TypeConversion::startCache() {
-  DUChainWriteLocker lock(DUChain::lock());
-  typeConversionCaches[QThread::currentThreadId()] = new TypeConversionCache;
+  QMutexLocker lock(&typeConversionCacheMutex);
+  if(!typeConversionCaches.contains(QThread::currentThreadId()))
+    typeConversionCaches[QThread::currentThreadId()] = new TypeConversionCache;
 }
 
 void TypeConversion::stopCache() {
-  DUChainWriteLocker lock(DUChain::lock());
-  Q_ASSERT(typeConversionCaches.contains(QThread::currentThreadId()));
-  delete typeConversionCaches[QThread::currentThreadId()];
-  typeConversionCaches.remove(QThread::currentThreadId());
+  QMutexLocker lock(&typeConversionCacheMutex);
+  if(typeConversionCaches.contains(QThread::currentThreadId())) {
+    delete typeConversionCaches[QThread::currentThreadId()];
+    typeConversionCaches.remove(QThread::currentThreadId());
+  }
 }
 
 TypeConversion::TypeConversion(const TopDUContext* topContext) : m_topContext(topContext) {
 
+  QMutexLocker lock(&typeConversionCacheMutex);
   QHash<Qt::HANDLE, TypeConversionCache*>::iterator it = typeConversionCaches.find(QThread::currentThreadId());
   if(it != typeConversionCaches.end())
     m_cache = *it;
