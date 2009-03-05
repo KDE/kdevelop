@@ -298,15 +298,27 @@ void ContextBrowserPlugin::clearMouseHover() {
 }
 
 
-Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/) {
-  static Attribute::Ptr standardAttribute = Attribute::Ptr();
-  if( !standardAttribute ) {
-    standardAttribute = Attribute::Ptr( new Attribute() );
-    standardAttribute->setBackgroundFillWhitespace(true);
-    standardAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
-    standardAttribute->setForeground(Qt::black); 
-}
-  return standardAttribute;
+Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
+  if(bold) {
+    static Attribute::Ptr standardBoldAttribute = Attribute::Ptr();
+    if( !standardBoldAttribute ) {
+      standardBoldAttribute= Attribute::Ptr( new Attribute() );
+      standardBoldAttribute->setBackgroundFillWhitespace(true);
+      standardBoldAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
+      standardBoldAttribute->setForeground(Qt::black); 
+      standardBoldAttribute->setFontBold(true);
+    }
+    return standardBoldAttribute;
+  }else{
+    static Attribute::Ptr standardAttribute = Attribute::Ptr();
+    if( !standardAttribute ) {
+      standardAttribute = Attribute::Ptr( new Attribute() );
+      standardAttribute->setBackgroundFillWhitespace(true);
+      standardAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
+      standardAttribute->setForeground(Qt::black); 
+    }
+    return standardAttribute;
+  }
 }
 
 Attribute::Ptr highlightedDeclarationAttribute() {
@@ -340,7 +352,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
       attrib = highlightedDeclarationAttribute();
     else*/
 
-    Attribute::Ptr attrib = highlightedUseAttribute(mouseHighlight);
+    Attribute::Ptr attrib = highlightedUseAttribute(mouseHighlight, range->attribute() ? range->attribute()->fontBold() : false);
     
     if( !m_backups.contains(range) ) {
       m_backups[range] = qMakePair(attrib, range->attribute());
