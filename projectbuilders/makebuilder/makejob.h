@@ -82,7 +82,7 @@ private Q_SLOTS:
 private:
     QStringList computeBuildCommand() const;
     KUrl computeBuildDir(KDevelop::ProjectBaseItem* item) const;
-    QMap<QString, QString> environmentVars() const;
+    QStringList environmentVars() const;
 
     MakeBuilder* m_builder;
     KDevelop::ProjectBaseItem* m_item;

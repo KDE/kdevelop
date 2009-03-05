@@ -115,11 +115,7 @@ void MakeJob::start()
     connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
              this, SLOT( procFinished( int, QProcess::ExitStatus ) ) );
 
-    Q_FOREACH( const QString& s, environmentVars().keys() )
-    {
-        m_process->setEnv( s, environmentVars()[s] );
-    }
-
+    m_process->setEnvironment( environmentVars() );
     m_process->setWorkingDirectory( buildDir.toLocalFile() );
     m_process->setProgram( command, cmd );
     kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
@@ -225,34 +221,15 @@ QStringList MakeJob::computeBuildCommand() const
     return cmdline;
 }
 
-QMap<QString, QString> MakeJob::environmentVars() const
+QStringList MakeJob::environmentVars() const
 {
     KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
     QString defaultProfile = builderGroup.readEntry(
             "Default Make Environment Profile", "default" );
 
-    const QStringList procDefaultList = QProcess::systemEnvironment();
-    QMap<QString, QString> retMap;
-    foreach( const QString &_line, procDefaultList )
-    {
-        QString varName = _line.section( '=', 0, 0 );
-        QString varValue = _line.section( '=', 1 );
-        retMap.insert( varName, varValue );
-    }
-    if( defaultProfile.isEmpty() )
-        return retMap;
-
     const KDevelop::EnvironmentGroupList l(KGlobal::config());
-    const QMap<QString, QString> userMap = l.variables( defaultProfile );
-
-    for( QMap<QString, QString>::const_iterator it = userMap.begin();
-         it != userMap.end(); ++it )
-    {
-        retMap.insert( it.key(), it.value() );
-    }
-
-    return retMap;
+    return l.createEnvironment( defaultProfile, QProcess::systemEnvironment() );
 }
 
 void MakeJob::addStandardOutput( const QStringList& lines )
