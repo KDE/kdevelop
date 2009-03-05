@@ -37,10 +37,12 @@ public:
     QString m_defaultGroup;
 };
 
+static const QString defaultEnvGroupKey = "Default Environment Group";
+static const QString envGroup = "Environment Settings";
 
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
-    d->m_defaultGroup = cfg.readEntry( "Default EnvironmentGroup", QString( "default" ) );
+    d->m_defaultGroup = cfg.readEntry( defaultEnvGroupKey, QString( "default" ) );
     foreach( const QString &envgrpname, cfg.groupList() )
     {
         KConfigGroup envgrp( &cfg, envgrpname );
@@ -61,7 +63,7 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 
 void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
-    cfg.writeEntry( "Default Environment Group", d->m_defaultGroup );
+    cfg.writeEntry( defaultEnvGroupKey, d->m_defaultGroup );
     foreach( const QString &group, d->m_groups.keys() )
     {
         KConfigGroup envgrp( &cfg, group );
@@ -76,14 +78,14 @@ void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 EnvironmentGroupList::EnvironmentGroupList( KSharedConfigPtr config )
     : d(new EnvironmentGroupListPrivate)
 {
-    KConfigGroup cfg( config, "Environment Settings" );
+    KConfigGroup cfg( config, envGroup );
     decode( cfg, d );
 }
 
 EnvironmentGroupList::EnvironmentGroupList( KConfig* config )
     : d(new EnvironmentGroupListPrivate)
 {
-    KConfigGroup cfg( config, "Environment Settings" );
+    KConfigGroup cfg( config, envGroup );
     decode( cfg, d );
 }
 
@@ -119,7 +121,7 @@ void EnvironmentGroupList::setDefaultGroup( const QString& group )
 
 void EnvironmentGroupList::saveSettings( KConfig* config ) const
 {
-    KConfigGroup cfg(config, "Environment Settings" );
+    KConfigGroup cfg(config, envGroup );
     encode( cfg, d );
     config->sync();
 }
@@ -127,7 +129,7 @@ void EnvironmentGroupList::saveSettings( KConfig* config ) const
 void EnvironmentGroupList::loadSettings( KConfig* config )
 {
     d->m_groups.clear();
-    KConfigGroup cfg(config, "Environment Settings" );
+    KConfigGroup cfg(config, envGroup );
     decode( cfg, d );
 }
 
