@@ -243,7 +243,7 @@ QMap<QString, QString> MakeJob::environmentVars() const
     if( defaultProfile.isEmpty() )
         return retMap;
 
-    const KDevelop::EnvironmentGroupList l(configPtr);
+    const KDevelop::EnvironmentGroupList l(KGlobal::config());
     const QMap<QString, QString> userMap = l.variables( defaultProfile );
 
     for( QMap<QString, QString>::const_iterator it = userMap.begin();
