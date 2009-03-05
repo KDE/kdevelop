@@ -121,7 +121,7 @@ void EnvironmentGroupList::saveSettings( KConfig* config ) const
 {
     KConfigGroup cfg(config, "Environment Settings" );
     encode( cfg, d );
-    cfg.sync();
+    config->sync();
 }
 
 void EnvironmentGroupList::loadSettings( KConfig* config )
@@ -146,10 +146,10 @@ EnvironmentGroupList::EnvironmentGroupList()
 {
 }
 
-QStringList EnvironmentGroupList::createEnvironment(const QString & group, const QStringList & defaults) const
+QStringList EnvironmentGroupList::createEnvironment( const QString & group, const QStringList & defaultEnvironment ) const
 {
     QMap<QString, QString> retMap;
-    foreach( const QString &line, defaults )
+    foreach( const QString &line, defaultEnvironment )
     {
         QString varName = line.section( '=', 0, 0 );
         QString varValue = line.section( '=', 1 );

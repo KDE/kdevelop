@@ -81,7 +81,7 @@ public:
      * Creates a merged environment between the defaults specified by
      * \a defaultEnvironment and those saved in \a group
      */
-    QStringList createEnvironment(const QString& group, const QStringList& defaults) const;
+    QStringList createEnvironment(const QString& group, const QStringList& defaultEnvironment ) const;
 
     /**
      * returns the variables that are set for a given group.
