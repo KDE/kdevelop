@@ -384,7 +384,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::includeScript(const QStrin
     v.setVariableMap(vm);
     v.setMacroMap(mm);
     v.setModulePath(m_modulePathPerProject[project]);
-    v.walk(f, 0);
+    v.walk(f, 0, true);
 
     vm->remove("CMAKE_CURRENT_LIST_FILE");
     vm->remove("CMAKE_CURRENT_SOURCE_DIR");
