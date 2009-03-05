@@ -401,10 +401,13 @@ namespace GDBDebugger
         void slotSelectionChanged(const QItemSelection& selected,
                                   const QItemSelection&)
         {
-            details_->setItem(
-                static_cast<NewBreakpoint*>(
-                    controller_->breakpoints()->itemForIndex(
-                        selected.indexes().first())));
+	    if (!selected.empty())
+	    {    
+		details_->setItem(
+                    static_cast<NewBreakpoint*>(
+                        controller_->breakpoints()->itemForIndex(
+                            selected.indexes().first())));
+	    }
         }
 
         void slotBreakpointHit(int id)
