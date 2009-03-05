@@ -81,6 +81,7 @@ void EnvironmentWidget::enableDeleteButton()
 void EnvironmentWidget::setAsDefault()
 {
     groupModel->changeDefaultGroup( ui.activeCombo->currentText() );
+    enableButtons( ui.activeCombo->currentText() );
     emit changed();
 }
 
@@ -181,6 +182,7 @@ void EnvironmentWidget::removeGroupClicked()
     QString curText = ui.activeCombo->currentText();
     groupModel->removeGroup( curText );
     ui.activeCombo->removeItem( idx );
+    ui.activeCombo->setCurrentItem( groupModel->defaultGroup() );
 }
 
 void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
