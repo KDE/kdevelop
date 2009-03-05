@@ -184,7 +184,7 @@ void EnvironmentWidget::removeGroupClicked()
 
 void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
 {
-
+    enableButtons( ui.activeCombo->currentText() );
     groupModel->setCurrentGroup( ui.activeCombo->currentText() );
 }
 
