@@ -39,11 +39,13 @@ public:
 
 static const QString defaultEnvGroupKey = "Default Environment Group";
 static const QString envGroup = "Environment Settings";
+static const QString groupListKey = "Group List";
 
 void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     d->m_defaultGroup = cfg.readEntry( defaultEnvGroupKey, QString( "default" ) );
-    foreach( const QString &envgrpname, cfg.groupList() )
+    QStringList grouplist = cfg.readEntry( groupListKey, QStringList() << "default" );
+    foreach( const QString &envgrpname, grouplist )
     {
         KConfigGroup envgrp( &cfg, envgrpname );
         QMap<QString,QString> variables;
@@ -53,17 +55,19 @@ void decode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
         }
         d->m_groups.insert( envgrpname, variables );
     }
-
-    // If the defaultgroup doesn't exist yet create it
-    if( !d->m_groups.contains( d->m_defaultGroup ) )
-    {
-        d->m_groups.insert( d->m_defaultGroup, QMap<QString,QString>() );
-    }
 }
 
 void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
 {
     cfg.writeEntry( defaultEnvGroupKey, d->m_defaultGroup );
+    cfg.writeEntry( groupListKey, d->m_groups.keys() );
+    foreach( const QString &group, cfg.groupList() ) 
+    {
+        if( !d->m_groups.keys().contains( group ) ) 
+        {
+            cfg.deleteGroup( group );
+        }
+    }
     foreach( const QString &group, d->m_groups.keys() )
     {
         KConfigGroup envgrp( &cfg, group );
