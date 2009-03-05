@@ -65,6 +65,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect( ui.setAsDefaultBtn, SIGNAL( clicked() ), SIGNAL( changed() ) );
     connect( ui.activeCombo, SIGNAL(currentIndexChanged(int)),
              SLOT( activeGroupChanged(int)) );
+    connect( ui.activeCombo, SIGNAL(editTextChanged(QString)), SLOT(enableButtons(QString)));
     connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
     connect( groupModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
     connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
@@ -186,6 +187,14 @@ void EnvironmentWidget::activeGroupChanged( int /*idx*/ )
 
     groupModel->setCurrentGroup( ui.activeCombo->currentText() );
 }
+
+void EnvironmentWidget::enableButtons( const QString& txt ) 
+{
+    ui.addgrpBtn->setEnabled( !groupModel->groups().contains( txt  ) );
+    ui.removegrpBtn->setEnabled( groupModel->groups().contains( txt  ) );
+    ui.setAsDefaultBtn->setEnabled( groupModel->groups().contains( txt  ) );
+}
+
 
 }
 

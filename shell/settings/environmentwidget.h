@@ -59,9 +59,10 @@ private Q_SLOTS:
     void deleteButtonClicked();
     void addGroupClicked();
     void removeGroupClicked();
-    void activeGroupChanged(int);
+    void activeGroupChanged( int );
     void enableDeleteButton();
     void setAsDefault();
+    void enableButtons( const QString& );
 
 private:
 
