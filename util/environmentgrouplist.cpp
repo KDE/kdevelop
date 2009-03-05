@@ -121,6 +121,7 @@ void EnvironmentGroupList::saveSettings( KConfig* config ) const
 {
     KConfigGroup cfg(config, "Environment Settings" );
     encode( cfg, d );
+    cfg.sync();
 }
 
 void EnvironmentGroupList::loadSettings( KConfig* config )
