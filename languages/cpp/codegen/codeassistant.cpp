@@ -36,7 +36,7 @@
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(KTextEditor::Range);
+Q_DECLARE_METATYPE(KTextEditor::Range)
 
 namespace Cpp {
 
