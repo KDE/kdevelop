@@ -51,7 +51,7 @@ SourceFormatterController::~SourceFormatterController()
 
 void SourceFormatterController::loadPlugins()
 {
-	KDevelop::IPluginController *controller = KDevelop::ICore::self()->pluginController();
+ 	KDevelop::IPluginController *controller = KDevelop::ICore::self()->pluginController();
 
 	foreach(KDevelop::IPlugin *p,
 	        controller->allPluginsForExtension("org.kdevelop.ISourceFormatter")) {
@@ -71,18 +71,17 @@ void SourceFormatterController::loadPlugins()
 	}
 }
 
-KDevelop::IPlugin*
+KPluginInfo
 SourceFormatterController::languageSupportForMimeType(const QString &name)
 {
-	KDevelop::IPluginController *controller = KDevelop::ICore::self()->pluginController();
 	QStringList constraints;
 	constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(name);
 
-	QList<KDevelop::IPlugin*> list = controller->allPluginsForExtension("ILanguageSupport", constraints);
-	foreach(KDevelop::IPlugin *p, list)
+	QList<KPluginInfo> list = KDevelop::IPluginController::queryExtensionPlugins("ILanguageSupport", constraints);
+	foreach(KPluginInfo p, list)
 		return p;
 
-	return 0;
+	return KPluginInfo();
 }
 
 QString SourceFormatterController::languageNameFromLanguageSupport(const QString &name)
@@ -90,18 +89,14 @@ QString SourceFormatterController::languageNameFromLanguageSupport(const QString
 	if (m_languages.contains(name))
 		return m_languages[name];
 
+	QString lang = name;
 	// we're loading the plugin, find the name from the language support plugin
-	KDevelop::IPlugin *p = languageSupportForMimeType(name);
-	if (p) {
-		KDevelop::ILanguageSupport *languageSupport = p->extension<KDevelop::ILanguageSupport>();
-		if (languageSupport) {
-			m_languages.insert(name, languageSupport->name());
-			return languageSupport->name();
-		}
-	}
-	// temp to support languages with no language support
-	m_languages.insert(name, name);
-	return name;
+	KPluginInfo p = languageSupportForMimeType(name);
+	if (p.isValid())
+		lang = p.property("X-KDevelop-Language").toString();
+
+	m_languages.insert(name, lang);
+	return lang;
 }
 
 QString SourceFormatterController::languageNameForMimeType(const KMimeType::Ptr &mime)

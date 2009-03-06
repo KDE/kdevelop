@@ -26,12 +26,13 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QList>
 #include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
+#include <KPluginInfo>
 
 #include "shellexport.h"
 
 namespace KDevelop
 {
-        class ISourceFormatter;
+	class ISourceFormatter;
 	class IPlugin;
 
 typedef QHash<QString, QList<KDevelop::IPlugin*> > IPluginHash;
@@ -144,7 +145,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		/** \return the language support plugin corresponding to
 		* a mime type name.
 		*/
-		KDevelop::IPlugin* languageSupportForMimeType(const QString &name);
+		KPluginInfo languageSupportForMimeType(const QString &name);
 		/** \return The name of the language corresponding to this mime type name.
 		*/
 		QString languageNameFromLanguageSupport(const QString &mime);
