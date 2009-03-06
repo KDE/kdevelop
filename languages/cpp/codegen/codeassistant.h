@@ -80,7 +80,7 @@ class StaticCodeAssistant : public QObject {
     void textRemoved(KTextEditor::Document*,KTextEditor::Range);
   private:
     void eventuallyStartAssistant(KTextEditor::Document*, KTextEditor::Range range);
-    KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
+    KSharedPtr<KDevelop::ITextAssistant> m_activeAssistant;
 };
 
 }

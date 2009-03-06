@@ -36,6 +36,8 @@
 
 using namespace KDevelop;
 
+Q_DECLARE_METATYPE(KTextEditor::Range);
+
 namespace Cpp {
 
 StaticCodeAssistant staticCodeAssistant;
@@ -47,7 +49,7 @@ StaticCodeAssistant::StaticCodeAssistant() {
 }
 
 void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
-  ///@todo Also wait for "textRemoved" signal
+  qRegisterMetaType<KTextEditor::Range>("KTextEditor::Range");
   if(document->textDocument()) {
     connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
     connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
@@ -331,7 +333,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
 }
 
 void StaticCodeAssistant::assistantHide() {
-  m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
+  m_activeAssistant = KSharedPtr<KDevelop::ITextAssistant>();
 }
 
 void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range) {
@@ -343,7 +345,11 @@ void StaticCodeAssistant::eventuallyStartAssistant(KTextEditor::Document* docume
 
   if(m_activeAssistant) {
     kDebug() << "there still is an active assistant";
-    return;
+    if(abs(m_activeAssistant->invocationCursor().line() < range.start().line()) >= 1) {
+      kDebug() << "assistant was not deleted in time";
+    }else{
+      return;
+    }
   }
   //Eventually pop up an assistant
   if(!document->activeView())
@@ -352,9 +358,9 @@ void StaticCodeAssistant::eventuallyStartAssistant(KTextEditor::Document* docume
   KSharedPtr<AdaptDefinitionSignatureAssistant> signatureAssistant(new AdaptDefinitionSignatureAssistant(document->activeView(), range));
   
   if(signatureAssistant->isUseful()) {
-    m_activeAssistant = KSharedPtr<IAssistant>(signatureAssistant.data());
+    m_activeAssistant = KSharedPtr<ITextAssistant>(signatureAssistant.data());
     connect(m_activeAssistant.data(), SIGNAL(hide()), SLOT(assistantHide()));
-    ICore::self()->uiController()->popUpAssistant(m_activeAssistant);
+    ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
   }
 }
 
