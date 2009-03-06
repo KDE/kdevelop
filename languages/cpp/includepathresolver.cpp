@@ -266,7 +266,7 @@ KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
   return KUrl(wd);
 }
 
-PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory ) {
+PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory, int maxStepsUp ) {
 
   struct Enabler {
     bool& b;
@@ -277,30 +277,74 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       b = false;
     }
   };
+  std::cout << "check" << std::endl;
 
   if( m_isResolving )
     return PathResolutionResult(false, i18n("Tried include path resolution while another resolution process was still running") );
-
-  Enabler e( m_isResolving );
 
   //Make the working-directory absolute
   QString workingDirectory = _workingDirectory;
   
   if( KUrl(workingDirectory).isRelative() ) {
     KUrl u( QDir::currentPath() );
-    u.addPath( workingDirectory );
+    
+    if(workingDirectory == ".")
+      workingDirectory = QString();
+    else if(workingDirectory.startsWith("./"))
+      workingDirectory = workingDirectory.mid(2);
+    
+    if(!workingDirectory.isEmpty())
+      u.addPath( workingDirectory );
     workingDirectory = u.path();
   } else
     workingDirectory = _workingDirectory;
 
-  ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data(); )
+  ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data() << "  file: " << file.toLocal8Bit().data() << std::endl; )
   
-  ///STEP 1: CACHING
-  QDir dir( workingDirectory );
-  dir = QDir( mapToBuild(dir.absolutePath()).toLocalFile() );
+  QDir sourceDir( workingDirectory );
+
+  ///If there is a .kdev_include_paths file, use it.
+  ///For some reason, the reading does not work.
+// #ifdef READ_CUSTOM_INCLUDE_PATHS
+  QFileInfo customIncludePaths( sourceDir, ".kdev_include_paths" );
+  if(customIncludePaths.exists()) {
+    QFile f(customIncludePaths.filePath());
+    if(f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      PathResolutionResult result(true);
+      QByteArray read = f.readAll();
+      QList<QByteArray> lines = read.split('\n');
+      foreach(QByteArray line, lines)
+        if(!line.isEmpty())
+          result.paths << QString::fromLocal8Bit(line);
+      
+      f.close();
+      return result;
+    }
+  }
+// #endif
+  
+  QDir dir = QDir( mapToBuild(sourceDir.absolutePath()).toLocalFile() );
+  
   QFileInfo makeFile( dir, "Makefile" );
-  if( !makeFile.exists() )
+  if( !makeFile.exists() ) {
+    if(maxStepsUp > 0) {
+//       std::cout << "checking one up" << std::endl;
+      //If there is no makefile in this directory, go one up and re-try from there
+      QFileInfo fileName(file);
+      QString localName = sourceDir.dirName();
+
+      if(sourceDir.cdUp() && !fileName.isAbsolute()) {
+        QString checkFor = localName + "/" + file;
+//         std::cout << "checking in " << sourceDir.path().toUtf8().data() << " for " << checkFor.toUtf8().data() << std::endl;;
+        PathResolutionResult oneUp = resolveIncludePath(checkFor, sourceDir.path(), maxStepsUp-1);
+        if(oneUp.success)
+          return oneUp;
+      }
+    }
     return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
+  }
+
+  Enabler e( m_isResolving );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
   QDateTime makeFileModification = makeFile.lastModified();
