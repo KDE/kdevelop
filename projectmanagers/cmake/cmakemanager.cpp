@@ -220,7 +220,7 @@ CMakeProjectManager::~CMakeProjectManager()
     delete m_doc;
 }
 
-KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) const
+KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     KUrl path = CMake::currentBuildDir(item->project());
     if(path.isEmpty())
@@ -230,11 +230,11 @@ KUrl CMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem *item) 
 
     KUrl projectPath = m_realRoot[item->project()];
 
-    const ProjectFolderItem *fi=dynamic_cast<const ProjectFolderItem*>(item);
+    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
     for(; !fi && item; )
     {
-        item=dynamic_cast<const ProjectBaseItem*>(item->parent());
-        fi=dynamic_cast<const ProjectFolderItem*>(item);
+        item=dynamic_cast<ProjectBaseItem*>(item->parent());
+        fi=dynamic_cast<ProjectFolderItem*>(item);
     }
     if(!fi) {
         return path;

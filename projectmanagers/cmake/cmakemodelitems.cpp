@@ -46,7 +46,7 @@ QStringList CMakeFolderItem::includeDirectories() const
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
-    KUrl ret=project()->buildSystemManager()->buildDirectory(this);
+    KUrl ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
     ret.addPath(outputName);
     return ret;
 }
