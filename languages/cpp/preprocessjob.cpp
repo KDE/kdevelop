@@ -176,7 +176,7 @@ void PreprocessJob::run()
             Q_ASSERT(cppEnv);
             //When possible, we determine whether an update is needed without getting the include-paths, because that's very expensive
             bool needsUpdate = cppEnv->needsUpdate();
-              if(!cppEnv->missingIncludeFiles().isEmpty()) {
+              if(!cppEnv->missingIncludeFiles().isEmpty() && !needsUpdate) {
                 for(Cpp::ReferenceCountedStringSet::Iterator it = cppEnv->missingIncludeFiles().iterator(); it; ++it)
                   kDebug(9007) << updatingEnvironmentFile->url().str() << "has missing include:" << (*it).str();
                 
