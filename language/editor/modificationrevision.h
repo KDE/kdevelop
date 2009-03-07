@@ -46,7 +46,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
   ///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access
   static void clearModificationCache(const IndexedString& fileName);
   
-  ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
+  ///The default-revision is 1, because that is the kate smart-revision for cleanly opened documents
+  ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 1 );
 
   bool operator <( const ModificationRevision& rhs ) const;
 
