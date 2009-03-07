@@ -95,6 +95,8 @@ private slots:
   void testTemplateMemberAccess();
   void testTemplateArguments();
   void testImportTypedef();
+  void testConstructorCompletion();
+  void testAssistant();
 
 public:
   enum DumpArea {

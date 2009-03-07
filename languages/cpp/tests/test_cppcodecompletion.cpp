@@ -104,6 +104,50 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testConstructorCompletion() {
+  return;
+  {
+    QByteArray test = "class Class { Class(); int m_1; float m_2; char m_3; }; ";
+
+    //74
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    
+    {
+      CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : ");
+      
+      //At first, only the members should be shown
+      QCOMPARE(tester.names, QStringList() << "m_1" << "m_2" << "m_3");
+      ///@todo Make sure that the item also inserts parens
+    }
+
+    {
+      CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : m_1(");
+      
+      //At first, only the members should be shown
+      QVERIFY(tester.names.size());
+      QVERIFY(tester.completionContext->parentContext()); //There must be a type-hinting context
+    }
+    
+    
+    QCOMPARE(context->childContexts().count(), 2);
+    QCOMPARE(context->childContexts()[1]->importedParentContexts().count(), 1);
+    QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
+  }
+
+}
+
+void TestCppCodeCompletion::testAssistant() {
+  {
+    QByteArray test = "class C {}; void test() {C c; c.value = 5; }";
+
+    TopDUContext* context = parse( test, DumpDUChain | DumpAST );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 3);
+    
+  }
+}
+
 void TestCppCodeCompletion::testImportTypedef() {
   {
     QByteArray test = "class Class { }; typedef Class Klass; class C : public Class { };";
@@ -623,10 +667,20 @@ KDevelop::IndexedType toPointer(IndexedType t) {
 
 void TestCppCodeCompletion::testTypeConversion2() {
   {
-    QByteArray test = "class A {}; class B {public: explicit B(const A&) {}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
-    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    QByteArray test = "class A {}; class B {public: explicit B(const A&); explicit B(const int&){}; private: operator A() const {}; }; class C : public B{private: C(B) {}; };";
+    TopDUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->localDeclarations().size(), 3);
+    QVERIFY(context->localDeclarations()[0]->internalContext());
+    QCOMPARE(context->localDeclarations()[1]->internalContext()->localDeclarations().count(), 3);
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(context->localDeclarations()[1]->internalContext()->localDeclarations()[0]);
+    QVERIFY(classFun);
+    QVERIFY(classFun->isExplicit());
+    classFun = dynamic_cast<ClassFunctionDeclaration*>(context->localDeclarations()[1]->internalContext()->localDeclarations()[1]);
+    QVERIFY(classFun);
+    QVERIFY(classFun->isExplicit());
+    
+    
     Cpp::TypeConversion conv(context);
     QVERIFY( !conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[0]->indexedType()) );
     QVERIFY( conv.implicitConversion(context->localDeclarations()[2]->indexedType(), context->localDeclarations()[1]->indexedType()) );
