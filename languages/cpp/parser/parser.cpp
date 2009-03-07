@@ -80,7 +80,7 @@ void Parser::moveComments( CommentAST* ast ) {
 }
 
 Parser::Parser(Control *c)
-  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0)
+  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0), _M_hadMismatchingCompoundTokens(false)
 {
   _M_max_problem_count = 5;
   _M_hold_errors = false;
@@ -282,6 +282,9 @@ void Parser::tokenRequiredError(int token)
   err += "\' found \'";
   err += token_name(session->token_stream->lookAhead());
   err += '\'';
+  
+  if(token == '}' || token == '{')
+    _M_hadMismatchingCompoundTokens = true;
 
   reportError(err);
 }
@@ -306,6 +309,9 @@ void Parser::syntaxError()
     err += '\'';
     err += token_name(kind);
     err += '\'';
+    
+    if(kind == '}' || kind == '{')
+      _M_hadMismatchingCompoundTokens = true;
   }
 
   reportError(err);
@@ -409,6 +415,8 @@ bool Parser::skipUntilDeclaration()
         case Token_signals:      // Qt
         case Token_slots:        // Qt
           return true;
+        case '}':
+          return false;
 
         default:
           advance();
@@ -557,6 +565,7 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
 bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 {
   _M_problem_count = 0;
+  _M_hadMismatchingCompoundTokens = false;
 
 /*  kDebug() << "tokens:";
   for(size_t a = 0; a < session->token_stream->size(); ++a)
@@ -593,7 +602,9 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
-
+  
+  ast->hadMissingCompoundTokens = _M_hadMismatchingCompoundTokens;
+  
   return true;
 }
 
@@ -755,9 +766,10 @@ bool Parser::parseLinkageBody(LinkageBodyAST *&node)
 
   clearComment();
 
-  if (session->token_stream->lookAhead() != '}')
+  if (session->token_stream->lookAhead() != '}') {
     reportError(("} expected"));
-  else
+    _M_hadMismatchingCompoundTokens = true;
+  } else
     advance();
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -807,6 +819,7 @@ bool Parser::parseNamespace(DeclarationAST *&node)
   else if (session->token_stream->lookAhead() != '{')
     {
       reportError(("{ expected"));
+      _M_hadMismatchingCompoundTokens = true;
       return false;
     }
 
@@ -3352,7 +3365,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
                   = CreateNode<SimpleDeclarationAST>(session->mempool);
                 ast->init_declarators = snoc(ast->init_declarators,
                                              declarator, session->mempool);
-
+                ast->function_specifiers = funSpec;
                 UPDATE_POS(ast, start, _M_last_valid_token+1);
                 node = ast;
               }

@@ -44,7 +44,6 @@ private slots:
   {
   }
 
-#if 0
   void testSymbolTable()
   {
     NameTable table;
@@ -111,7 +110,7 @@ private slots:
     QVERIFY(ast != 0);
     QVERIFY(ast->declarations != 0);
   }
-
+  
   void testParserFail()
   {
     QByteArray stuff("foo bar !!! nothing that really looks like valid c++ code");
@@ -119,6 +118,39 @@ private slots:
     TranslationUnitAST *ast = parse(stuff, &mem_pool);
     QVERIFY(ast->declarations == 0);
     QVERIFY(control.problems().count() > 3);
+  }
+
+  void testPartialParseFail() {
+    {
+    QByteArray method("struct C { Something invalid is here };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_ClassSpecifier));
+    }
+    {
+    QByteArray method("void test() { Something invalid is here };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
+    }
+    {
+    QByteArray method("void test() { {Something invalid is here };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
+    QVERIFY(ast->hadMissingCompoundTokens);
+    }
+    {
+    QByteArray method("void test() { case:{};");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+    QVERIFY(ast != 0);
+    QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
+    QVERIFY(ast->hadMissingCompoundTokens);
+    }
   }
 
   void testParseMethod()
@@ -325,7 +357,6 @@ private slots:
     dumper.dump(ast, lastSession->token_stream);
     ///@todo make this work, it should yield something like TranslationUnit -> SimpleDeclaration -> InitDeclarator -> BinaryExpression
   }
-#endif
 
   void testNonTemplateDeclaration()
   {

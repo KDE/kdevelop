@@ -801,6 +801,10 @@ struct TranslationUnitAST: public AST, public CommentAST
 
   const ListNode<DeclarationAST*> *declarations;
 
+  ///true if either a '}' was missing at the end, or there was a '}' too much.
+  ///This indicates a temporary state where the user is typing, and the document is completely invalid.
+  bool hadMissingCompoundTokens;
+  
   // Note: non AST related, saves parsing session...
   ParseSession* session;
 };

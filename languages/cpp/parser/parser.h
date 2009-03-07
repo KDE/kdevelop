@@ -238,6 +238,8 @@ private:
   bool _M_hold_errors;
   size_t _M_last_valid_token; //Last encountered token that was not a comment
   size_t _M_last_parsed_comment;
+  
+  bool _M_hadMismatchingCompoundTokens;
 
   // keeps track of tokens where a syntax error has been found
   // so that the same error is not reported twice for a token
