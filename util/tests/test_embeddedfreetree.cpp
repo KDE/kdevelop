@@ -302,6 +302,23 @@ struct StaticRepository {
     }
 };
 
+struct UintSetVisitor {
+    std::set<uint>& s;
+    UintSetVisitor(std::set<uint>& _s) : s(_s) {
+    }
+    
+    bool operator() (const TestItem& item) {
+        s.insert(item.value);
+        return true;
+    }
+};
+
+struct NothingDoVisitor {
+    bool operator() (const TestItem& item) {
+        return true;
+    }
+};
+
 class TestEmbeddedFreeTree : public QObject {
   Q_OBJECT
   private slots:
@@ -397,6 +414,7 @@ class TestEmbeddedFreeTree : public QObject {
         clock_t stdTime = 0;
         clock_t algoTime = 0;
         clock_t treeAlgoTime = 0;
+        clock_t treeAlgoVisitorTime = 0;
         
         clock_t insertionStdTime = 0;
         clock_t insertionAlgoTime = 0;
@@ -404,12 +422,12 @@ class TestEmbeddedFreeTree : public QObject {
         
         typedef Utils::StorableSet<TestItem, TestItemConversion, StaticRepository> RepositorySet;
         
-        uint cycles = 1000;
+        uint cycles = 10000;
         
         uint totalItems = 0, totalFilteredItems = 0;
         
         srand(time(NULL));
-        for(int a = 0; a < cycles; ++a) {
+        for(uint a = 0; a < cycles; ++a) {
             KDevelop::ConvenientFreeListSet<TestItem, TestItemHandler> set1;
             std::set<uint> testSet1;
             
@@ -481,6 +499,7 @@ class TestEmbeddedFreeTree : public QObject {
 
             std::set<uint> algoFiltered;
             std::set<uint> treeAlgoFiltered;
+            std::set<uint> treeAlgoVisitorFiltered;
 
             {
                 //Do the filtering once without actions on the filtered items, just for calculating the time
@@ -503,6 +522,16 @@ class TestEmbeddedFreeTree : public QObject {
                     
                     treeAlgoTime += clock() - start;
                 }
+                
+                {
+                    start = clock();
+                    
+                    NothingDoVisitor v;
+                    KDevelop::ConvenientEmbeddedSetTreeFilterVisitor<TestItem, TestItemHandler, TestItem, RepositorySet, Extractor, NothingDoVisitor> visit(v, set1.iterator(), repSet2);
+                    
+                    treeAlgoVisitorTime += clock() - start;
+                }
+                
                 
                 std::set<uint> stdFiltered;
                 
@@ -530,6 +559,10 @@ class TestEmbeddedFreeTree : public QObject {
                     ++filterIterator;
                 }
             }
+            {
+                UintSetVisitor v(treeAlgoVisitorFiltered);
+                KDevelop::ConvenientEmbeddedSetTreeFilterVisitor<TestItem, TestItemHandler, TestItem, RepositorySet, Extractor, UintSetVisitor> visit(v, set1.iterator(), repSet2);
+            }
             
             
             totalItems += testSet1.size();
@@ -546,9 +579,10 @@ class TestEmbeddedFreeTree : public QObject {
             
             QCOMPARE(algoFiltered, stdFiltered);
             QCOMPARE(treeAlgoFiltered, stdFiltered);
+            QCOMPARE(treeAlgoVisitorFiltered, stdFiltered);
             
         }
-        kDebug() << "Filtering performance: embedded-list filtering:" << toSeconds(algoTime) << "set-repository filtering:" << toSeconds(treeAlgoTime) << "std::set filtering:" << toSeconds(stdTime) << "Normal -> Embedded speedup ratio:" << (toSeconds(stdTime) / toSeconds(algoTime)) << "Normal -> Repository speedup ratio:" << (toSeconds(stdTime) / toSeconds(treeAlgoTime)) << "total processed items:" << totalItems << "total items after filtering:" << totalFilteredItems;
+        kDebug() << "Filtering performance: embedded-list filtering:" << toSeconds(algoTime) << "set-repository filtering:" << toSeconds(treeAlgoTime) << "set-repository visitor filtering:" << toSeconds(treeAlgoVisitorTime) << "std::set filtering:" << toSeconds(stdTime) << "Normal -> Embedded speedup ratio:" << (toSeconds(stdTime) / toSeconds(algoTime)) << "Normal -> Repository speedup ratio:" << (toSeconds(stdTime) / toSeconds(treeAlgoVisitorTime)) << "total processed items:" << totalItems << "total items after filtering:" << totalFilteredItems;
         kDebug() << "Insertion: embedded-list:" << toSeconds(insertionAlgoTime) << "set-repository:" << toSeconds(insertionTreeAlgoTime) << "std::set:" << toSeconds(insertionStdTime);
         
     }

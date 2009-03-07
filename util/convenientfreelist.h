@@ -303,12 +303,14 @@ namespace KDevelop {
         int m_match;
     };
 
+    ///Filters a list-embedded set by a binary tree set as managed by the SetRepository data structures
     template<class Data, class Handler, class Data2, class TreeSet, class KeyExtractor>
     class ConvenientEmbeddedSetTreeFilterIterator : public ConvenientEmbeddedSetIterator<Data, Handler> {
         public:
         ConvenientEmbeddedSetTreeFilterIterator() : m_match(-1) {
         }
-        ConvenientEmbeddedSetTreeFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1) {
+        ///@param noFiltering whether the given input is pre-filtered. If this is true, base will be iterated without skipping any items.
+        ConvenientEmbeddedSetTreeFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs, bool noFiltering = false) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1), m_noFiltering(noFiltering) {
             if(rhs.node().isValid()) {
                 //Correctly initialize the initial bounds
                 int ownStart = lowerBound(rhs.node().firstItem(), 0, this->m_dataSize);
@@ -347,6 +349,13 @@ namespace KDevelop {
 
         private:
         void go() {
+            if(m_noFiltering) {
+                ++m_match;
+                if((uint)m_match >= this->m_dataSize)
+                    m_match = -1;
+                return;
+            }
+
             if(m_match != -1) {
                 //Match multiple items in this list to one in the tree
                 m_match = this->firstValidItem(m_match+1, this->m_dataSize);
@@ -476,8 +485,156 @@ namespace KDevelop {
         TreeSet m_rhs;
         int m_match, m_matchBound;
         Data2 m_matchingTo;
+        bool m_noFiltering;
     };
 
+    ///Same as above, except that it visits all filtered items with a visitor, instead of iterating over them.
+    ///This is more efficient. The visiting is done directly from within the constructor.
+    template<class Data, class Handler, class Data2, class TreeSet, class KeyExtractor, class Visitor>
+    class ConvenientEmbeddedSetTreeFilterVisitor : public ConvenientEmbeddedSetIterator<Data, Handler> {
+        public:
+        ConvenientEmbeddedSetTreeFilterVisitor() {
+        }
+        
+        typedef QPair<QPair<uint, uint>, typename TreeSet::Node > Bounds;
+        
+        ///@param noFiltering whether the given input is pre-filtered. If this is true, base will be iterated without skipping any items.
+        ConvenientEmbeddedSetTreeFilterVisitor(Visitor& visitor, const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs, bool noFiltering = false) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_visitor(visitor), m_rhs(rhs), m_noFiltering(noFiltering) {
+            
+            if(m_noFiltering) {
+                for(uint a = 0; a < this->m_dataSize; ++a)
+                    visitor(this->m_data[a]);
+                return;
+            }
+            
+            if(rhs.node().isValid())  {
+                //Correctly initialize the initial bounds
+                int ownStart = lowerBound(rhs.node().firstItem(), 0, this->m_dataSize);
+                if(ownStart == -1)
+                    return;
+                int ownEnd = lowerBound(rhs.node().lastItem(), ownStart, this->m_dataSize);
+                if(ownEnd == -1)
+                    ownEnd = this->m_dataSize;
+                else
+                    ownEnd += 1;
+                
+                go( (uint)ownStart, (uint)ownEnd, rhs.node() );
+            }
+        }
+        
+        private:
+        void go( uint ownStart, uint ownEnd, typename TreeSet::Node currentNode ) {
+
+            while(true) {
+                if(ownStart >= ownEnd)
+                    return;
+                
+                if(currentNode.isFinalNode()) {
+                    //Check whether the item is contained
+                    int bound = lowerBound(*currentNode, ownStart, ownEnd);
+                    if(bound != -1) {
+                        const Data2& matchTo(*currentNode);
+                    
+                        if(KeyExtractor::extract(this->m_data[bound]) == matchTo) {
+                            while(1) {
+                                m_visitor(this->m_data[bound]);
+                                bound = this->firstValidItem(bound+1, this->m_dataSize);
+                                if(bound < (int)this->m_dataSize && bound != -1 && KeyExtractor::extract(this->m_data[bound]) == matchTo)
+                                    continue;
+                                else
+                                    break;
+                            }
+                        }
+                    }
+                    return;
+                }else{
+                    //This is not a final node, split up the search into the sub-nodes
+                    typename TreeSet::Node leftNode = currentNode.leftChild();
+                    typename TreeSet::Node rightNode = currentNode.rightChild();
+                    Q_ASSERT(leftNode.isValid());
+                    Q_ASSERT(rightNode.isValid());
+                    
+                    
+                    Data2 leftLastItem = leftNode.lastItem();
+                    
+                    int rightSearchStart = lowerBound(rightNode.firstItem(), ownStart, ownEnd);
+                    if(rightSearchStart == -1)
+                        rightSearchStart = ownEnd;
+                    int leftSearchLast = lowerBound(leftLastItem, ownStart, rightSearchStart != -1 ? rightSearchStart : ownEnd);
+                    if(leftSearchLast == -1)
+                        leftSearchLast = rightSearchStart-1;
+                    
+                    bool recurseLeft = false;
+                    if(leftSearchLast > (int)ownStart) {
+                        recurseLeft = true; //There must be something in the range ownStart -> leftSearchLast that matches the range
+                    }else if((int)ownStart == leftSearchLast) {
+                        //Check if the one item item under leftSearchStart is contained in the range
+                        Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[ownStart]);
+                        recurseLeft = leftFoundStartData < leftLastItem || leftFoundStartData == leftLastItem;
+                    }
+                    
+                    bool recurseRight = false;
+                    if(rightSearchStart < (int)ownEnd)
+                        recurseRight = true;
+                    
+                    if(recurseLeft && recurseRight) {
+                        //Execute the left part in a separate function, and then continue on the right
+                        go( ownStart, (leftSearchLast != -1) ? leftSearchLast+1 : ownEnd, leftNode);
+                    }
+                    
+                    if(recurseRight) {
+                        currentNode = rightNode;
+                        ownStart = rightSearchStart;
+                    }else if(recurseLeft) {
+                        currentNode = leftNode;
+                        if(leftSearchLast != -1)
+                            ownEnd = leftSearchLast+1;
+                    }else{
+                        return;
+                    }
+                }
+            }
+        }
+        
+        ///Returns the first valid index that has an extracted data-value larger or equal to @param data.
+        ///Returns -1 if nothing is found.
+        int lowerBound(const Data2& data, int start, int end) {
+            int currentBound = -1;
+            while(1) {
+                if(start >= end)
+                    return currentBound;
+                
+                int center = (start + end)/2;
+                
+                //Skip free items, since they cannot be used for ordering
+                for(; center < end; ) {
+                    if(!Handler::isFree(this->m_data[center]))
+                        break;
+                    ++center;
+                }
+                
+                if(center == end) {
+                    end = (start + end)/2; //No non-free items found in second half, so continue search in the other
+                }else{
+                    Data2 centerData = KeyExtractor::extract(this->m_data[center]);
+                    //Even if the data equals we must continue searching to the left, since there may be multiple matching
+                    if(data == centerData || data < centerData) {
+                        currentBound = center;
+                        end = (start + end)/2;
+                    }else{
+                        //Continue search in second half
+                        start = center+1;
+                    }
+                }
+            }
+        }
+        
+        //Bounds that yet need to be matched. Always a range in the own vector, and a node that all items in the range are contained in
+        Visitor& m_visitor;
+        TreeSet m_rhs;
+        bool m_noFiltering;
+    };
+    
     template<class Data, class Handler>
     ConvenientEmbeddedSetIterator<Data, Handler> ConstantConvenientEmbeddedSet<Data, Handler>::iterator() const {
         return ConvenientEmbeddedSetIterator<Data, Handler>(m_data, m_dataSize, m_centralFreeItem);
