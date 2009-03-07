@@ -483,6 +483,8 @@ void CPPInternalParseJob::run()
 
     ///Now we build/update the content-context
 
+    bool doNotChangeDUChain = false;
+    
     if(!parentJob()->keepDuchain()) {
 
       TranslationUnitAST* ast = 0L;
@@ -493,8 +495,6 @@ void CPPInternalParseJob::run()
       ast = parser.parse( parentJob()->parseSession() );
 
       //This will be set to true if the duchain data should be left untouched
-      bool doNotChangeDUChain = false;
-      
       if(ast->hadMissingCompoundTokens && updatingContentContext) {
         //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
         DUChainWriteLocker l(DUChain::lock());
@@ -627,15 +627,15 @@ void CPPInternalParseJob::run()
         }
       }
 
-      if(contentContext) {
-          DUChainWriteLocker l(DUChain::lock());
-          QList<TopDUContext*> remove;
-          foreach(const ReferencedTopDUContext &ctx, importedTemporaryChains)
-              remove << ctx.data();
-          contentContext->removeImportedParentContexts(remove);
-      }
-
       if(!doNotChangeDUChain) {
+        if(contentContext) {
+            DUChainWriteLocker l(DUChain::lock());
+            QList<TopDUContext*> remove;
+            foreach(const ReferencedTopDUContext &ctx, importedTemporaryChains)
+                remove << ctx.data();
+            contentContext->removeImportedParentContexts(remove);
+        }
+
         ///When simplified environment-matching is enabled, we will accumulate many different
         ///versions of imports into a single top-context. To reduce that a little, we remove all
         ///with urls we didn't encounter.
@@ -688,7 +688,7 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
         return /*parentJob()->abortJob()*/;
 
-    }else{
+    }else if(!doNotChangeDUChain) {
       DUChainWriteLocker l(DUChain::lock());
       ///Add all our imports to the re-used context, just to make sure they are there.
       foreach( const LineContextPair& import, importedContentChains )
@@ -697,7 +697,7 @@ void CPPInternalParseJob::run()
       contentContext->updateImportsCache();
     }
 
-    {
+    if(!doNotChangeDUChain) {
       DUChainReadLocker lock(DUChain::lock());
       foreach(LineContextPair import, parentJob()->includedFiles()) {
         if(import.temporary)
