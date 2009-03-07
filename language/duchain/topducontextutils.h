@@ -28,7 +28,7 @@ namespace KDevelop
 struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
 {
   DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = 0);
-  bool operator()(IndexedDeclaration dec) const;
+  bool operator()(const Declaration* dec) const;
 
   mutable KDevVarLengthArray<IndexedDeclaration>* createVisibleCache;
   const TopDUContext* top;
@@ -42,7 +42,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::ContextChecker
 {
   ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags);
 
-  bool operator()(IndexedDUContext context) const;
+  bool operator()(const DUContext* context) const;
 
   const TopDUContext* top;
   const SimpleCursor& position;

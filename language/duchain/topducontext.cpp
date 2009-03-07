@@ -570,25 +570,18 @@ TopDUContext::ContextChecker::ContextChecker(const TopDUContext* _top, const Sim
 {
 }
 
-bool TopDUContext::ContextChecker::operator()(IndexedDUContext context) const {
+bool TopDUContext::ContextChecker::operator()(const DUContext* ctx) const {
 
-//     const TopDUContext* otherTop = context->topContext();
+  if(!ctx)
+    return false;
 
-  if (top->m_local->m_ownIndex != context.topContextIndex()) {
+  if (top != ctx->topContext()) {
 
     // Make sure that this declaration is accessible
-
-    DUContext* ctx = context.data();
-    if(!ctx)
-      return false;
 
     if (ctx->type() != contextType)
       return false;
   } else {
-    DUContext* ctx = context.data();
-    if(!ctx)
-      return false;
-
     if (ctx->type() != contextType)
       return false;
 
@@ -612,26 +605,14 @@ TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, c
 {
 }
 
-bool TopDUContext::DeclarationChecker::operator()(IndexedDeclaration dec) const
+bool TopDUContext::DeclarationChecker::operator()(const Declaration* decl) const
 {
-  if (top->m_local->m_ownIndex != dec.topContextIndex()) {
-//       bool visible;
-//       {
-//         QMutexLocker lock(&importStructureMutex);
-//         visible = top->m_local->m_indexedRecursiveImports.contains(dec.topContextIndex());
-//       }
-//       if(createVisibleCache && visible)
-//         createVisibleCache->append(dec);
+  if(!decl)
+    return false;
+  
+  if (top != decl->topContext()) {
 
-    // Make sure that this declaration is accessible
-/*      if (!(flags & DUContext::NoImportsCheck) && !visible)
-      return false;*/
-
-    Declaration* decl = dec.data();
-    if(!decl)
-      return false;
-
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
       return false;
 
     if (dataType && decl->abstractType()->indexed() != dataType->indexed())
@@ -639,14 +620,7 @@ bool TopDUContext::DeclarationChecker::operator()(IndexedDeclaration dec) const
       return false;
 
   } else {
-//       if(createVisibleCache)
-//         createVisibleCache->append(dec);
-
-    Declaration* decl = dec.data();
-    if(!decl)
-      return false;
-
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<AbstractFunctionDeclaration*>(decl))
+    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
       return false;
 
     if (dataType && decl->abstractType() != dataType)
@@ -954,7 +928,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDeclarationIterator filter;
 
-    //This is used if filterung is disabled
+    //This is used if filtering is disabled
     PersistentSymbolTable::Declarations::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck) {
       allDecls = PersistentSymbolTable::self().getDeclarations(id);
@@ -972,11 +946,12 @@ struct TopDUContext::FindDeclarationsAcceptor {
         iDecl = *unchecked;
         ++unchecked;
       }
-
-      if(!check(iDecl))
-        continue;
       Declaration* decl = iDecl.data();
+
       if(!decl)
+        continue;
+      
+      if(!check(decl))
         continue;
 
       if( decl->kind() == Declaration::Alias ) {
@@ -1082,13 +1057,11 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
         //In c++, we only need the first alias. However, just to be correct, follow them all for now.
         for(; filter; ++filter)
         {
-          IndexedDeclaration iDecl(*filter);
-
-          if(!check(iDecl))
-            continue;
-
-          Declaration* aliasDecl = iDecl.data();
+          Declaration* aliasDecl = filter->data();
           if(!aliasDecl)
+            continue;
+          
+          if(!check(aliasDecl))
             continue;
 
           if(aliasDecl->kind() != Declaration::NamespaceAlias)
@@ -1176,12 +1149,12 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
         for(; filter; ++filter)
         {
-          //We must never break or return from this loop, because else we might be creating a bad cache
-          if(!check(*filter))
-            continue;
-
           Declaration* importDecl = filter->data();
           if(!importDecl)
+            continue;
+          
+          //We must never break or return from this loop, because else we might be creating a bad cache
+          if(!check(importDecl))
             continue;
 
           //Search for the identifier with the import-identifier prepended
@@ -1271,11 +1244,11 @@ struct TopDUContext::FindContextsAcceptor {
         ++unchecked;
       }
 
-      if(!check(iDecl))
-        continue;
-
       DUContext* ctx = iDecl.data();
       if(!ctx)
+        continue;
+      
+      if(!check(ctx))
         continue;
 
       target << ctx;
