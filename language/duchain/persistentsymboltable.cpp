@@ -31,7 +31,8 @@
 #include "duchainlock.h"
 #include <util/embeddedfreetree.h>
 
-const uint MinimumCountForCache = 20;
+//For now, just _always_ use the cache
+const uint MinimumCountForCache = 1;
 
 namespace KDevelop {
 
@@ -314,6 +315,18 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     d->m_declarations.index(request);
 }
 
+struct DeclarationCacheVisitor {
+  DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache) {
+  }
+  
+  bool operator()(const IndexedDeclaration& decl) const {
+    cache.append(decl);
+    return true;
+  }
+  
+  KDevVarLengthArray<IndexedDeclaration>& cache;
+};
+
 PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
   
   QMutexLocker lock(d->m_declarations.mutex());
@@ -341,14 +354,31 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
     
     KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
     
-    for(FilteredDeclarationIterator it(decls.iterator(), cachedImports); it; ++it)
-      cache.append(*it);
+    {
+      typedef ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor, DeclarationCacheVisitor> FilteredDeclarationCacheVisitor;
     
-    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), cachedImports);
+      //The visitor visits all the declarations from within its constructor
+      DeclarationCacheVisitor v(cache);
+      FilteredDeclarationCacheVisitor visitor(v, decls.iterator(), cachedImports);
+    }
+    
+    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), cachedImports, true);
   }else{
     return FilteredDeclarationIterator(decls.iterator(), cachedImports);
   }
 }
+
+struct DUContextCacheVisitor {
+  DUContextCacheVisitor(KDevVarLengthArray<IndexedDUContext>& _cache) : cache(_cache) {
+  }
+  
+  bool operator()(const IndexedDUContext& decl) const {
+    cache.append(decl);
+    return true;
+  }
+  
+  KDevVarLengthArray<IndexedDUContext>& cache;
+};
 
 PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilteredContexts(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
   QMutexLocker lock(d->m_contexts.mutex());
@@ -377,10 +407,15 @@ PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilte
     
     KDevVarLengthArray<IndexedDUContext>& cache(*insertIt);
     
-    for(FilteredDUContextIterator it(contexts.iterator(), cachedImports); it; ++it)
-      cache.append(*it);
+    {
+      typedef ConvenientEmbeddedSetTreeFilterVisitor<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DUContextTopContextExtractor, DUContextCacheVisitor> FilteredDUContextCacheVisitor;
     
-    return FilteredDUContextIterator(Contexts::Iterator(cache.constData(), cache.size(), -1), cachedImports);
+      //The visitor visits all the declarations from within its constructor
+      DUContextCacheVisitor v(cache);
+      FilteredDUContextCacheVisitor visitor(v, contexts.iterator(), cachedImports);
+    }
+    
+    return FilteredDUContextIterator(Contexts::Iterator(cache.constData(), cache.size(), -1), cachedImports, true);
   }else{
     return FilteredDUContextIterator(contexts.iterator(), cachedImports);
   }
