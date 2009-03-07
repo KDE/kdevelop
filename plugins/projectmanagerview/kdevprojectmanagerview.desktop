@@ -30,6 +30,7 @@ GenericName[pt]=Área do Gestor de Projectos
 GenericName[pt_BR]=Área do Gestor de Projectos
 GenericName[sv]=Projekthanteringsvy
 GenericName[uk]=Перегляд керування проектами
+GenericName[zh_CN]=工程管理器视图
 GenericName[zh_TW]=專案管理員檢視
 Icon=kdevelop
 ServiceTypes=KDevelop/Plugin

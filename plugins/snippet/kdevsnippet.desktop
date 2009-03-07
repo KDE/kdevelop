@@ -36,6 +36,7 @@ GenericName[pt]=Suporte para Excertos de Código
 GenericName[pt_BR]=Suporte para Excertos de Código
 GenericName[sv]=Stöd för kodsnuttar
 GenericName[uk]=Підтримка фрагментів коду
+GenericName[zh_CN]=代码片断支持
 GenericName[zh_TW]=程式碼片段支援
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevsnippet
