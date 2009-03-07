@@ -67,7 +67,7 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
-KUrl QMakeProjectManager::buildDirectory(const KDevelop::ProjectBaseItem* project) const
+KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem* project) const
 {
     if( project->folder() )
         return project->folder()->url();
