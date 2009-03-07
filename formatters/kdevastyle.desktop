@@ -29,6 +29,7 @@ Name[pt]=Infra-Estrutura de Formatação do AStyle
 Name[pt_BR]=Infra-Estrutura de Formatação do AStyle
 Name[sv]=Astyle-formateringsgränssnitt
 Name[uk]=Сервер форматування AStyle
+Name[zh_CN]=AStyle 格式化器后端
 Name[zh_TW]=AStyle 格式器後端介面
 GenericName=Formatter Backend
 GenericName[ja]=フォーマッタのバックエンド
@@ -37,6 +38,7 @@ GenericName[pt]=Infra-Estrutura de Formatação
 GenericName[pt_BR]=Infra-Estrutura de Formatação
 GenericName[sv]=Formateringsgränssnitt
 GenericName[uk]=Сервер форматування
+GenericName[zh_CN]=格式化器后端
 GenericName[zh_TW]=格式器後端介面
 
 ServiceTypes=KDevelop/Plugin

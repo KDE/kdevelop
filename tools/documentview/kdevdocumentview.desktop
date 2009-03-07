@@ -57,6 +57,7 @@ GenericName[pt]=Ferramenta de Documentação
 GenericName[pt_BR]=Ferramenta de Documentação
 GenericName[sv]=Dokumentverktyg
 GenericName[uk]=Інструмент роботи з документами
+GenericName[zh_CN]=文档工具
 GenericName[zh_TW]=文件工具
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevdocumentview

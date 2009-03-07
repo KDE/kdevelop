@@ -7,6 +7,7 @@ Name[pt]=Gestor de Projectos de Makefiles Personalizadas
 Name[pt_BR]=Gestor de Projectos de Makefiles Personalizadas
 Name[sv]=Projekthantering av egna Make-filer
 Name[uk]=Керування проектами з власним Makefile
+Name[zh_CN]=自定义 Makefile 工程管理器
 Name[zh_TW]=自訂 Makefile 專案管理員
 Comment=Imports and edits custom make projects
 Comment[de]=Importiert und bearbeitet benutzerdefinierte Make-Projekte

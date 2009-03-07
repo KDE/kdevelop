@@ -8,6 +8,7 @@ Comment[pt]=Este 'plugin' oferece a integração com o QtHelp
 Comment[pt_BR]=Este 'plugin' oferece a integração com o QtHelp
 Comment[sv]=Insticksprogrammet tillhandahåller integrering av Qt-hjälp
 Comment[uk]=За допомогою цього додатка здійснюється інтеграція з QtHelp
+Comment[zh_CN]=此插件提供了 QtHelp 整合
 Comment[zh_TW]=此外掛程式提供 QtHelp 整合
 Name=KDevQtHelp
 Name[sv]=KDevelop Qt-hjälp
@@ -19,6 +20,7 @@ GenericName[pt]=Ajuda do Qt
 GenericName[pt_BR]=Ajuda do Qt
 GenericName[sv]=Qt-hjälp
 GenericName[uk]=Довідка Qt
+GenericName[zh_CN]=Qt 帮助
 GenericName[zh_TW]=Qt 說明
 ServiceTypes=KDevelop/Plugin
 
