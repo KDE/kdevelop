@@ -222,8 +222,13 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
 
 void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeElement> > items, KSharedPtr<CodeCompletionContext> completionContext)
 {
-  m_completionItems = items;
   m_completionContext = completionContext;
+  
+  if(m_completionItems.isEmpty() && items.isEmpty())
+    return; //We don't need to reset, which is bad for target model
+  
+  m_completionItems = items;
+  
   
   if(m_completionContext)
     kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
