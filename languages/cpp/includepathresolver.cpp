@@ -277,7 +277,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       b = false;
     }
   };
-  std::cout << "check" << std::endl;
 
   if( m_isResolving )
     return PathResolutionResult(false, i18n("Tried include path resolution while another resolution process was still running") );
