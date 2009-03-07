@@ -498,6 +498,16 @@ namespace KDevelop {
         
         typedef QPair<QPair<uint, uint>, typename TreeSet::Node > Bounds;
         
+        struct Bound {
+            inline Bound(uint s, uint e, const typename TreeSet::Node& n) : start(s), end(e), node(n) {
+            }
+            Bound() {
+            }
+            uint start;
+            uint end;
+            typename TreeSet::Node node;
+        };
+        
         ///@param noFiltering whether the given input is pre-filtered. If this is true, base will be iterated without skipping any items.
         ConvenientEmbeddedSetTreeFilterVisitor(Visitor& visitor, const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs, bool noFiltering = false) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_visitor(visitor), m_rhs(rhs), m_noFiltering(noFiltering) {
             
@@ -518,81 +528,89 @@ namespace KDevelop {
                 else
                     ownEnd += 1;
                 
-                go( (uint)ownStart, (uint)ownEnd, rhs.node() );
+                go( Bound((uint)ownStart, (uint)ownEnd, rhs.node()) );
             }
         }
         
         private:
-        void go( uint ownStart, uint ownEnd, typename TreeSet::Node currentNode ) {
+        void go( Bound bound ) {
 
+            KDevVarLengthArray<Bound> bounds;
+            
             while(true) {
-                if(ownStart >= ownEnd)
-                    return;
+                if(bound.start >= bound.end)
+                    goto nextBound;
                 
-                if(currentNode.isFinalNode()) {
+                if(bound.node.isFinalNode()) {
                     //Check whether the item is contained
-                    int bound = lowerBound(*currentNode, ownStart, ownEnd);
-                    if(bound != -1) {
-                        const Data2& matchTo(*currentNode);
+                    int b = lowerBound(*bound.node, bound.start, bound.end);
+                    if(b != -1) {
+                        const Data2& matchTo(*bound.node);
                     
-                        if(KeyExtractor::extract(this->m_data[bound]) == matchTo) {
+                        if(KeyExtractor::extract(this->m_data[b]) == matchTo) {
                             while(1) {
-                                m_visitor(this->m_data[bound]);
-                                bound = this->firstValidItem(bound+1, this->m_dataSize);
-                                if(bound < (int)this->m_dataSize && bound != -1 && KeyExtractor::extract(this->m_data[bound]) == matchTo)
+                                m_visitor(this->m_data[b]);
+                                b = this->firstValidItem(b+1, this->m_dataSize);
+                                if(b < (int)this->m_dataSize && b != -1 && KeyExtractor::extract(this->m_data[b]) == matchTo)
                                     continue;
                                 else
                                     break;
                             }
                         }
                     }
-                    return;
+                    goto nextBound;
                 }else{
                     //This is not a final node, split up the search into the sub-nodes
-                    typename TreeSet::Node leftNode = currentNode.leftChild();
-                    typename TreeSet::Node rightNode = currentNode.rightChild();
+                    typename TreeSet::Node leftNode = bound.node.leftChild();
+                    typename TreeSet::Node rightNode = bound.node.rightChild();
                     Q_ASSERT(leftNode.isValid());
                     Q_ASSERT(rightNode.isValid());
                     
                     
                     Data2 leftLastItem = leftNode.lastItem();
                     
-                    int rightSearchStart = lowerBound(rightNode.firstItem(), ownStart, ownEnd);
+                    int rightSearchStart = lowerBound(rightNode.firstItem(), bound.start, bound.end);
                     if(rightSearchStart == -1)
-                        rightSearchStart = ownEnd;
-                    int leftSearchLast = lowerBound(leftLastItem, ownStart, rightSearchStart != -1 ? rightSearchStart : ownEnd);
+                        rightSearchStart = bound.end;
+                    int leftSearchLast = lowerBound(leftLastItem, bound.start, rightSearchStart != -1 ? rightSearchStart : bound.end);
                     if(leftSearchLast == -1)
                         leftSearchLast = rightSearchStart-1;
                     
                     bool recurseLeft = false;
-                    if(leftSearchLast > (int)ownStart) {
-                        recurseLeft = true; //There must be something in the range ownStart -> leftSearchLast that matches the range
-                    }else if((int)ownStart == leftSearchLast) {
+                    if(leftSearchLast > (int)bound.start) {
+                        recurseLeft = true; //There must be something in the range bound.start -> leftSearchLast that matches the range
+                    }else if((int)bound.start == leftSearchLast) {
                         //Check if the one item item under leftSearchStart is contained in the range
-                        Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[ownStart]);
+                        Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[bound.start]);
                         recurseLeft = leftFoundStartData < leftLastItem || leftFoundStartData == leftLastItem;
                     }
                     
                     bool recurseRight = false;
-                    if(rightSearchStart < (int)ownEnd)
+                    if(rightSearchStart < (int)bound.end)
                         recurseRight = true;
                     
-                    if(recurseLeft && recurseRight) {
-                        //Execute the left part in a separate function, and then continue on the right
-                        go( ownStart, (leftSearchLast != -1) ? leftSearchLast+1 : ownEnd, leftNode);
-                    }
+                    if(recurseLeft && recurseRight)
+                        bounds.append( Bound(rightSearchStart, bound.end, rightNode) );
                     
-                    if(recurseRight) {
-                        currentNode = rightNode;
-                        ownStart = rightSearchStart;
-                    }else if(recurseLeft) {
-                        currentNode = leftNode;
+                    if(recurseLeft) {
+                        bound.node = leftNode;
                         if(leftSearchLast != -1)
-                            ownEnd = leftSearchLast+1;
+                            bound.end = leftSearchLast+1;
+                    }else if(recurseRight) {
+                        bound.node = rightNode;
+                        bound.start = rightSearchStart;
                     }else{
-                        return;
+                        goto nextBound;
                     }
+                    continue;
                 }
+                nextBound:
+                    if(bounds.isEmpty()) {
+                        return;
+                    }else{
+                        bound = bounds.back();
+                        bounds.pop_back();
+                    }
             }
         }
         

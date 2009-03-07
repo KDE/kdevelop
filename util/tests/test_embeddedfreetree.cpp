@@ -307,14 +307,14 @@ struct UintSetVisitor {
     UintSetVisitor(std::set<uint>& _s) : s(_s) {
     }
     
-    bool operator() (const TestItem& item) {
+    inline bool operator() (const TestItem& item) {
         s.insert(item.value);
         return true;
     }
 };
 
 struct NothingDoVisitor {
-    bool operator() (const TestItem& item) {
+    inline bool operator() (const TestItem& item) {
         return true;
     }
 };
