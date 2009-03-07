@@ -116,6 +116,8 @@ void ModificationRevision::clearModificationCache(const IndexedString& fileName)
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url) {
 
   ModificationRevision ret(fileModificationTimeCached(url));
+  ret.revision = 1; //Start with revision 1, because that is the smart-revision for cleanly opened documents
+                    //and we don't need to distinguish between freshly opened and on-disk
 
   KTextEditor::Document* doc = EditorIntegrator::documentForUrl(url);
   if( doc ) {
