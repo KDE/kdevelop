@@ -100,7 +100,7 @@ KDevelop::IProjectBuilder* KrossBuildSystemManager::builder(KDevelop::ProjectFol
     return 0;
 }
 
-KUrl KrossBuildSystemManager::buildDirectory(const KDevelop::ProjectBaseItem* it) const
+KUrl KrossBuildSystemManager::buildDirectory(KDevelop::ProjectBaseItem* it) const
 {
     QVariant result=action->callFunction( "buildDirectory", QVariantList() << Handlers::kDevelopProjectBaseItemHandler(it));
     return result.toUrl();
