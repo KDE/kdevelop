@@ -102,6 +102,8 @@ protected:
     newUse( newRange, !declarations.isEmpty() ? declarations.first() : 0 );
   }
 
+  ///@todo Work this over! We must not pass around "Declaration*" values if the duchain is not locked.
+
   /**
    * Register a new use for a \a declaration with a \a node.
    *
