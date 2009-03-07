@@ -410,7 +410,7 @@ void CPPInternalParseJob::run()
 
 
     if (parentJob()->abortRequested())
-        return parentJob()->abortJob();
+        return /*parentJob()->abortJob()*/;
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
 
@@ -492,8 +492,28 @@ void CPPInternalParseJob::run()
 
       ast = parser.parse( parentJob()->parseSession() );
 
+      //This will be set to true if the duchain data should be left untouched
+      bool doNotChangeDUChain = false;
+      
+      if(ast->hadMissingCompoundTokens && updatingContentContext) {
+        //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
+        DUChainWriteLocker l(DUChain::lock());
+        
+        if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
+            updatingContentContext->smartRange() &&
+          updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
+          kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
+          l.unlock();
+          doNotChangeDUChain = true;
+          ProblemPointer problem(new Problem);
+          problem->setSource(ProblemData::Parser);
+          problem->setDescription("Not updating the DUChain because of serious document inconsistency");
+          control.reportProblem(problem);
+        }
+      }
+      
       if (parentJob()->abortRequested())
-          return parentJob()->abortJob();
+          return /*parentJob()->abortJob()*/;
 
       if ( ast ) {
           ast->session = parentJob()->parseSession();
@@ -563,29 +583,31 @@ void CPPInternalParseJob::run()
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
         
       
-      contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
+      if(!doNotChangeDUChain) {
+        contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
 
-      contentEnvironmentFile->setTopContext(contentContext.data());
+        contentEnvironmentFile->setTopContext(contentContext.data());
       
-      //If publically visible declarations were added/removed, all following parsed files need to be updated
-      if(declarationBuilder.changeWasSignificant()) {
-        ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
-        ///      While searching, always use the perspective of the proxy. Even better: Change the context-system so proxy-contexts become completely valid contexts from the outside perspective,
-        ///      that import all their imports, and that share all their content except the imports/environment-information with all the other proxy contexts for that file, and with one content-context.
-        ///      Main problem: Contained Declarations/DUContexts point at their parent top-context. Which proxy-context should they point at?
-        //kDebug() << "A significant change was recorded, all following contexts will be updated";
-        //parentJob()->masterJob()->setNeedUpdateEverything(true);
-      }
+        //If publically visible declarations were added/removed, all following parsed files need to be updated
+        if(declarationBuilder.changeWasSignificant()) {
+          ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
+          ///      While searching, always use the perspective of the proxy. Even better: Change the context-system so proxy-contexts become completely valid contexts from the outside perspective,
+          ///      that import all their imports, and that share all their content except the imports/environment-information with all the other proxy contexts for that file, and with one content-context.
+          ///      Main problem: Contained Declarations/DUContexts point at their parent top-context. Which proxy-context should they point at?
+          //kDebug() << "A significant change was recorded, all following contexts will be updated";
+          //parentJob()->masterJob()->setNeedUpdateEverything(true);
+        }
 
-      {
-        DUChainReadLocker l(DUChain::lock());
-        Q_ASSERT(!updatingContentContext || updatingContentContext == contentContext);
-        Q_ASSERT(contentContext->parsingEnvironmentFile().data() == contentEnvironmentFile.data());
-        
-        if(contentContext->childContexts().size() + contentContext->localDeclarations().size() == 0) {
-          if(oldItemCount != 0) {
-            //To catch some problems
-            kDebug(9007) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
+        {
+          DUChainReadLocker l(DUChain::lock());
+          Q_ASSERT(!updatingContentContext || updatingContentContext == contentContext);
+          Q_ASSERT(contentContext->parsingEnvironmentFile().data() == contentEnvironmentFile.data());
+          
+          if(contentContext->childContexts().size() + contentContext->localDeclarations().size() == 0) {
+            if(oldItemCount != 0) {
+              //To catch some problems
+              kDebug(9007) << "All items in" << parentJob()->document().str() << "have been extincted, previous count:" << oldItemCount << "current identity offset:" << contentEnvironmentFile->identityOffset();
+            }
           }
         }
       }
@@ -613,41 +635,43 @@ void CPPInternalParseJob::run()
           contentContext->removeImportedParentContexts(remove);
       }
 
-      ///When simplified environment-matching is enabled, we will accumulate many different
-      ///versions of imports into a single top-context. To reduce that a little, we remove all
-      ///with urls we didn't encounter.
-      if(updatingContentContext) {
-          DUChainWriteLocker l(DUChain::lock());
+      if(!doNotChangeDUChain) {
+        ///When simplified environment-matching is enabled, we will accumulate many different
+        ///versions of imports into a single top-context. To reduce that a little, we remove all
+        ///with urls we didn't encounter.
+        if(updatingContentContext) {
+            DUChainWriteLocker l(DUChain::lock());
 
-          //Remove the temporary chains first, so we don't get warnings from them
+            //Remove the temporary chains first, so we don't get warnings from them
 
-          QVector<DUContext::Import> imports = contentContext->importedParentContexts();
-          foreach(const DUContext::Import &ctx, imports) {
-              if(ctx.context(0) && !encounteredIncludeUrls.contains(ctx.context(0)->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
-                  contentContext->removeImportedParentContext(ctx.context(0));
-                  kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url().str();
-              }
-          }
-      }
-      
-      if(contentContext) {
-        DUChainWriteLocker l(DUChain::lock());
-        contentContext->updateImportsCache();
-      }
-      
-      if (!parentJob()->abortRequested()) {
-        if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
-            parentJob()->setLocalProgress(0.5, i18n("Building uses"));
-
-            UseBuilder useBuilder(&editor);
-            useBuilder.buildUses(ast);
+            QVector<DUContext::Import> imports = contentContext->importedParentContexts();
+            foreach(const DUContext::Import &ctx, imports) {
+                if(ctx.context(0) && !encounteredIncludeUrls.contains(ctx.context(0)->url()) && contentEnvironmentFile->missingIncludeFiles().set().count() == 0 && (!proxyEnvironmentFile || proxyEnvironmentFile->missingIncludeFiles().set().count() == 0)) {
+                    contentContext->removeImportedParentContext(ctx.context(0));
+                    kDebug( 9007 ) << "removing not encountered import " << ctx.context(0)->url().str();
+                }
+            }
         }
         
-        if (!parentJob()->abortRequested() && editor.smart()) {
+        if(contentContext) {
+          DUChainWriteLocker l(DUChain::lock());
+          contentContext->updateImportsCache();
+        }
+        
+        if (!parentJob()->abortRequested()) {
+          if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
+              parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
-          if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
-          {
-              parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
+              UseBuilder useBuilder(&editor);
+              useBuilder.buildUses(ast);
+          }
+          
+          if (!parentJob()->abortRequested() && editor.smart()) {
+
+            if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
+            {
+                parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
+            }
           }
         }
       }
@@ -662,7 +686,7 @@ void CPPInternalParseJob::run()
       }
 
       if (parentJob()->abortRequested())
-        return parentJob()->abortJob();
+        return /*parentJob()->abortJob()*/;
 
     }else{
       DUChainWriteLocker l(DUChain::lock());
