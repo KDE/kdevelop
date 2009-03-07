@@ -1281,10 +1281,12 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         foreach( KDevelop::ILanguage* language, languages)
           if(language->languageSupport() && language->languageSupport()->codeHighlighting())
             language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+    }else{
+      kDebug() << "not highlighting the duchain because the documents needs an update";
     }
     
     if(needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses))
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
+      ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }
