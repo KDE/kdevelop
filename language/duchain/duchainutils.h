@@ -95,6 +95,10 @@ namespace DUChainUtils {
 
   ///Returns the declaration that is overridden by the given one, or zero.
   KDEVPLATFORMLANGUAGE_EXPORT Declaration* getOverridden(const Declaration* decl);
+  
+  ///If the given declaration is a function-declaration, this follows the context-structure up to the function-context that contains the arguments,
+  ///and returns it.
+  KDEVPLATFORMLANGUAGE_EXPORT DUContext* getFunctionContext(Declaration* decl);
 }
 }
 
