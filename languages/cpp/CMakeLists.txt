@@ -37,6 +37,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
+    codegen/signatureassistant.cpp
 )
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)

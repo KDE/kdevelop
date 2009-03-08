@@ -664,6 +664,9 @@ void CPPInternalParseJob::run()
 
               UseBuilder useBuilder(&editor);
               useBuilder.buildUses(ast);
+              DUChainWriteLocker l(DUChain::lock());
+              foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
+                contentContext->addProblem(problem);
           }
           
           if (!parentJob()->abortRequested() && editor.smart()) {
@@ -688,7 +691,11 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
         return /*parentJob()->abortJob()*/;
 
-    }else if(!doNotChangeDUChain) {
+    }
+    
+    //Even if doNotChangeDUChain is enabled, add new imported contexts.
+    //This is very useful so new added includes always work.
+    if(parentJob()->keepDuchain() || doNotChangeDUChain) {
       DUChainWriteLocker l(DUChain::lock());
       ///Add all our imports to the re-used context, just to make sure they are there.
       foreach( const LineContextPair& import, importedContentChains )

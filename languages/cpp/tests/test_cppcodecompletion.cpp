@@ -46,6 +46,8 @@
 #include "codecompletion/context.h"
 #include "cpppreprocessenvironment.h"
 #include "cppduchain/classdeclaration.h"
+#include "cppduchain/missingdeclarationproblem.h"
+#include "cppduchain/missingdeclarationassistant.h"
 #include <qstandarditemmodel.h>
 #include <language/duchain/functiondefinition.h>
 
@@ -141,8 +143,14 @@ void TestCppCodeCompletion::testAssistant() {
   {
     QByteArray test = "class C {}; void test() {C c; c.value = 5; }";
 
-    TopDUContext* context = parse( test, DumpDUChain | DumpAST );
+    TopDUContext* context = parse( test, DumpNone );
     DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->problems().count(), 1);
+    KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+    QVERIFY(mdp);
+    kDebug() << "problem:" << mdp->description();
+    QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+    QCOMPARE(mdp->type->identifier().toString(), QString("value"));
     QCOMPARE(context->childContexts().count(), 3);
     
   }
@@ -1618,6 +1626,8 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);
+  foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
+    top->addProblem(problem);
 
   if (dump & DumpDUChain) {
     kDebug(9007) << "===== DUChain:";
