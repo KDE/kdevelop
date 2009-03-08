@@ -124,6 +124,12 @@ void UseBuilder::visitPrimaryExpression (PrimaryExpressionAST* exp)
 class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   public:
   UseExpressionVisitor(ParseSession* session, UseBuilder* useBuilder, bool dumpProblems = false) : Cpp::ExpressionVisitor(session), m_builder(useBuilder), m_lastEndToken(0), m_dumpProblems(dumpProblems) {
+    reportRealProblems(true);
+  }
+  ~UseExpressionVisitor() {
+    typedef KSharedPtr<KDevelop::Problem> P;
+    foreach(P problem, realProblems())
+      m_builder->addProblem(problem);
   }
   private:
 
@@ -239,4 +245,12 @@ void UseBuilder::visitUsing(UsingAST *node)
     visitor.parse( node->name );
   }
   UseBuilderBase::visitUsing(node);
+}
+
+void UseBuilder::addProblem(KSharedPtr< KDevelop::Problem > problem) {
+  m_problems << problem;
+}
+
+QList< KSharedPtr< KDevelop::Problem > > UseBuilder::problems() const {
+  return m_problems;
 }

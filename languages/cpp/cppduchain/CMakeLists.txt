@@ -14,6 +14,9 @@ include_directories(
 ########### next target ###############
 
 set(kdevcppduchain_LIB_SRCS
+    missingdeclarationtype.cpp
+    missingdeclarationproblem.cpp
+    missingdeclarationassistant.cpp
     contextbuilder.cpp
     declarationbuilder.cpp
     typebuilder.cpp

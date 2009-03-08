@@ -87,6 +87,11 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
     ParseSession* session();
 
+    void reportRealProblems(bool);
+    
+    //Returns all posted real problems that appeared during this run. Only if reportRealProblems(true) has been called before.
+    QList<KSharedPtr<KDevelop::Problem> > realProblems() const;
+    
     ///Returns the last queried list of declarations
     QList<DeclarationPointer> lastDeclarations() const;
   protected:
@@ -188,7 +193,10 @@ private:
     ParseSession* m_session;
     KDevelop::DUContext* m_currentContext;
     KDevelop::TopDUContext* m_topContext;
+    bool m_reportRealProblems;
 
+    QList<KSharedPtr<KDevelop::Problem> > m_problems;
+    
   inline void clearLast() {
     m_lastInstance = Instance();
     m_lastType = 0;

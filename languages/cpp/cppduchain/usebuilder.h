@@ -43,6 +43,10 @@ public:
    */
   void buildUses(AST *node);
 
+  QList<KSharedPtr<KDevelop::Problem> > problems() const;
+
+  void addProblem(KSharedPtr<KDevelop::Problem> problem);
+  
   using UseBuilderBase::newUse;
 
 protected:
@@ -86,6 +90,8 @@ private:
   //Whether not encountered uses should be deleted during closeContext()
   bool m_finishContext;
   bool m_localUsesBuilt;
+  
+  QList< KSharedPtr< KDevelop::Problem > > m_problems;
 };
 
 #endif // USEBUILDER_H

@@ -39,6 +39,8 @@
 #include "overloadresolutionhelper.h"
 #include "builtinoperators.h"
 #include "qtfunctiondeclaration.h"
+#include "missingdeclarationtype.h"
+#include "missingdeclarationproblem.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 //#define DEBUG_RESOLUTION_PROBLEMS
@@ -49,6 +51,8 @@
 //If this is enabled, problems will be created when no overloaded function was found for a function-call. This is expensive,
 //because the problem report contains a lot of information, and the problem currently appears very often.
 //#define DEBUG_FUNCTION_CALLS
+
+const uint maxExpressionVisitorProblems = 100;
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -204,7 +208,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0), m_reportRealProblems(false) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -233,6 +237,14 @@ void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {
   m_skipLastNamePart = true;
   parse(ast);
   m_skipLastNamePart = false;
+}
+
+void ExpressionVisitor::reportRealProblems(bool report) {
+  m_reportRealProblems = report;
+}
+
+QList< KSharedPtr< KDevelop::Problem > > ExpressionVisitor::realProblems() const {
+  return m_problems;
 }
 
 void ExpressionVisitor::problem( AST* node, const QString& str ) {
@@ -322,7 +334,6 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
  **/
   void ExpressionVisitor::visitClassMemberAccess(ClassMemberAccessAST* node)
 {
-  ///@todo allow bla->BlaBase::member()
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     if( !m_lastInstance || !m_lastType ) {
@@ -349,7 +360,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           m_lastType = pnt->baseType();
           m_lastInstance = Instance( getDeclaration(m_lastType) );
         } else {
-          findMember( node, m_lastType, Identifier("operator->") ); ///@todo respect const
+          findMember( node, m_lastType, Identifier("operator->") );
           if( !m_lastType ) {
             problem( node, "no overloaded operator-> found" );
             return;
@@ -434,8 +445,10 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
   void ExpressionVisitor::visitName(NameAST* node)
   {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext ? node->ducontext : m_currentContext ); //Definitely push one up here, so we can change the context without side-effects
-
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
+    DUContext* searchInContext = m_currentContext;
+    
     SimpleCursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
@@ -462,14 +475,14 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       MUST_HAVE(declaration);
       MUST_HAVE(declaration->context());
 
-      m_currentContext = declaration->logicalInternalContext(topContext());
+      searchInContext = declaration->logicalInternalContext(topContext());
 
-      MUST_HAVE( m_currentContext );
+      MUST_HAVE( searchInContext );
     }
 
     clearLast();
 
-    NameASTVisitor nameV( m_session, this, m_currentContext, topContext(), position.isValid() ? position : m_currentContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
+    NameASTVisitor nameV( m_session, this, searchInContext, topContext(), position.isValid() ? position : searchInContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
     nameV.run(node, m_skipLastNamePart);
 
     if( nameV.identifier().isEmpty() ) {
@@ -496,6 +509,24 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       m_lastDeclarations = nameV.declarations();
 
       if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
+        MissingDeclarationType::Ptr missing(new MissingDeclarationType);
+        
+        missing->setIdentifier(nameV.identifier());
+        if(m_memberAccess)
+          missing->containerContext = searchInContext;
+        
+        missing->searchStartContext = m_currentContext;
+        
+        if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
+          KSharedPtr<KDevelop::Problem> problem(new Cpp::MissingDeclarationProblem(missing));
+          problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
+          CppEditorIntegrator editor(session());
+          
+          problem->setFinalLocation(DocumentRange(searchInContext->url().str(), editor.findRange(node).textRange()));
+          if(!problem->range().isEmpty() && !session()->positionAndSpaceAt(node->start_token).first.macroExpansion.isValid())
+            m_problems << problem;
+        }
+
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
         m_lastType = m_lastDeclarations.first()->abstractType();
@@ -892,6 +923,28 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
 
+      clearLast();
+      return;
+    }
+    
+    if(MissingDeclarationType::Ptr missing = leftType.cast<Cpp::MissingDeclarationType>()) {
+      if(rightType) {
+        Cpp::ExpressionEvaluationResult res;
+        res.type = KDevelop::IndexedType(rightType);
+        res.isInstance = rightInstance;
+        missing->assigned = res;
+      }
+      clearLast();
+      return;
+    }
+
+    if(MissingDeclarationType::Ptr missing = rightType.cast<Cpp::MissingDeclarationType>()) {
+      if(leftType) {
+        Cpp::ExpressionEvaluationResult res;
+        res.type = KDevelop::IndexedType(leftType);
+        res.isInstance = leftInstance;
+        missing->convertedTo = res;
+      }
       clearLast();
       return;
     }
@@ -1526,6 +1579,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
      * */
     CppClassType::Ptr constructedType;
 
+    AbstractType::Ptr oldLastType = m_lastType;
+    
     {
       LOCKDUCHAIN;
       if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
@@ -1566,6 +1621,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     if( declarations.isEmpty() && !constructedType ) {
+      
+      if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>())
+        missing->arguments = m_parameters;
+      
       problem( node, "function-call: no matching declarations found" );
       return;
     }
