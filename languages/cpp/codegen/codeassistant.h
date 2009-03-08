@@ -1,4 +1,6 @@
 /*
+   Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -24,6 +26,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/types/indexedtype.h>
+#include <QTimer>
 
 namespace KTextEditor {
 class Document;
@@ -37,38 +40,6 @@ class DUContext;
 }
 namespace Cpp {
 
-typedef QPair<KDevelop::IndexedType, QString> SignatureItem;
-
-class CreateDeclarationAction : public KDevelop::IAssistantAction {
-  public:
-    virtual QString description() const;
-    virtual void execute();
-};
-
-
-class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
-  Q_OBJECT
-  public:
-    AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted);
-    bool isUseful();
-    
-  private:
-    KDevelop::Identifier m_declarationName;
-    
-    bool m_editingDefinition; //If this is true, the user is editing on the definition side, and the declaration should be updated
-    
-    KDevelop::DeclarationId m_definitionId;
-    KDevelop::ReferencedTopDUContext m_definitionContext;
-    QList<SignatureItem> m_oldSignature;
-    KDevelop::IndexedType m_oldReturnType;
-    KDevelop::IndexedString m_document;
-    KDevelop::SimpleRange m_invocationRange;
-    
-    KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleRange position) const;
-  private slots:
-    void parseJobFinished(KDevelop::ParseJob*);
-};
-
 class StaticCodeAssistant : public QObject {
   Q_OBJECT
   public:
@@ -78,9 +49,21 @@ class StaticCodeAssistant : public QObject {
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
     void textRemoved(KTextEditor::Document*,KTextEditor::Range);
+    void parseJobFinished(KDevelop::ParseJob*);
+    void documentActivated(KDevelop::IDocument*);
+    void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
+    void timeout();
   private:
+    void checkAssistantForProblems(KDevelop::TopDUContext* top);
+    ///@param manage If this is true, the static code-assistant manages the hiding of the assistant
+    ///                           (It is hidden as soon as the line is left)
+    void startAssistant(KSharedPtr< KDevelop::IAssistant > assistant, bool manage = true);
+    QPointer<KTextEditor::View> m_currentView;
+    KTextEditor::Cursor m_assistantStartedAt;
+    KDevelop::IndexedString m_currentDocument;
     void eventuallyStartAssistant(KTextEditor::Document*, KTextEditor::Range range);
-    KSharedPtr<KDevelop::ITextAssistant> m_activeAssistant;
+    KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
+    QTimer* m_timer;
 };
 
 }
