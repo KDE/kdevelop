@@ -19,6 +19,7 @@ Boston, MA 02110-1301, USA.
 
 #include "iproblem.h"
 #include <duchain/duchainregister.h>
+#include <interfaces/iassistant.h>
 
 namespace KDevelop {
 REGISTER_DUCHAIN_ITEM(Problem);
@@ -100,6 +101,14 @@ ProblemData::Source Problem::source() const
 void Problem::setSource(ProblemData::Source source)
 {
     d_func_dynamic()->source = source;
+}
+
+KSharedPtr< KDevelop::IAssistant > KDevelop::Problem::solutionAssistant() const {
+    return KSharedPtr< KDevelop::IAssistant >();
+}
+
+KDevelop::Problem::Severity KDevelop::Problem::severity() const {
+    return Error;
 }
 
 /*

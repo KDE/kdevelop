@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
+class IAssistant;
 
 class ProblemData : public DUChainBaseData
 {
@@ -44,7 +45,8 @@ public:
         Preprocessor   /**< problem during pre-processing */,
         Lexer          /**< problem while lexing the file */,
         Parser         /**< problem while parsing the file */,
-        DUChainBuilder /**< problem while building the duchain */
+        DUChainBuilder /**< problem while building the duchain */,
+        SemanticAnalysis /**< problem during semantic analysis */
     };
 
     ProblemData()
@@ -104,6 +106,24 @@ public:
      */
     QString explanation() const;
     void setExplanation(const QString& explanation);
+
+    enum Severity {
+        Error,
+        Warning,
+        Hint        //For implementation-helpers and such stuff
+    };
+    
+    /**
+     * Should return the severity of this problem. The default-implementation returns Error.
+     * This is used for example to decide for a highlighting color.
+     */
+    virtual Severity severity() const;
+
+        /**
+     * If this problem can be solved, this may return an assistant for the solution.
+     * The default-implementation returns zero.
+     */
+    virtual KSharedPtr<IAssistant> solutionAssistant() const;
 
     enum {
         Identity = 15
