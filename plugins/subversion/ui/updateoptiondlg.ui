@@ -31,7 +31,7 @@
    <item row="1" column="0" >
     <widget class="QCheckBox" name="nonrecurseChk" >
      <property name="text" >
-      <string>Update immediate childrens only (non-recursive)</string>
+      <string>Update immediate children only (non-recursive)</string>
      </property>
     </widget>
    </item>

@@ -88,7 +88,7 @@ public:
 };
 
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
-K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("Quickly open resources like files, classes, methods"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("Quickly open resources such as files, classes and methods."), KAboutData::License_GPL)))
 
 Declaration* cursorDeclaration() {
   IDocument* doc = ICore::self()->documentController()->activeDocument();

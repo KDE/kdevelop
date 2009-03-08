@@ -275,7 +275,7 @@ void SnippetView::slotCreateSubRepo()
 
     QString subdir = KInputDialog::getText(
                             i18n("Create a new subrepository"),
-                            i18n("Directoryname"), QString(), 0, this);
+                            i18n("Directory name"), QString(), 0, this);
     if (!subdir.isEmpty()) {
         repo->createSubRepo( subdir );
     }

@@ -424,7 +424,7 @@ m_allDeclarations(allDeclarations) {
     if(topContext.isLoaded())
       usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
 
-    label->setText(i18n("<b>Project:</b> %1 &nbsp; <b>File:</b> %2 &nbsp; <i>(%3 uses)</i>", projectName, fileName, usesCount));
+    label->setText(i18np("<b>Project:</b> %2 &nbsp; <b>File:</b> %3 &nbsp; <i>(1 use)</i>", "<b>Project:</b> %2 &nbsp; <b>File:</b> %3 &nbsp; <i>(%1 uses)</i>", usesCount, projectName, fileName));
 
     m_button->setIcon(KIcon("go-next"));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));

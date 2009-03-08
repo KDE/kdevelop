@@ -16,7 +16,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Dockwindow Behaviour</string>
+      <string>Dock Window Behavior</string>
      </property>
      <layout class="QGridLayout" >
       <item row="0" column="0" >
@@ -37,12 +37,12 @@
        <widget class="QComboBox" name="kcfg_TopLeftCornerOwner" >
         <item>
          <property name="text" >
-          <string>LeftDock</string>
+          <string>Left Dock</string>
          </property>
         </item>
         <item>
          <property name="text" >
-          <string>TopDock</string>
+          <string>Top Dock</string>
          </property>
         </item>
        </widget>
@@ -51,12 +51,12 @@
        <widget class="QComboBox" name="kcfg_TopRightCornerOwner" >
         <item>
          <property name="text" >
-          <string>RightDock</string>
+          <string>Right Dock</string>
          </property>
         </item>
         <item>
          <property name="text" >
-          <string>TopDock</string>
+          <string>Top Dock</string>
          </property>
         </item>
        </widget>
@@ -85,12 +85,12 @@
         </property>
         <item>
          <property name="text" >
-          <string>LeftDock</string>
+          <string>Left Dock</string>
          </property>
         </item>
         <item>
          <property name="text" >
-          <string>BottomDock</string>
+          <string>Bottom Dock</string>
          </property>
         </item>
        </widget>
@@ -105,12 +105,12 @@
         </property>
         <item>
          <property name="text" >
-          <string>RightDock</string>
+          <string>Right Dock</string>
          </property>
         </item>
         <item>
          <property name="text" >
-          <string>BottomDock</string>
+          <string>Bottom Dock</string>
          </property>
         </item>
        </widget>

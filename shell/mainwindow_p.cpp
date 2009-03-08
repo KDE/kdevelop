@@ -171,25 +171,25 @@ void MainWindowPrivate::setupActions()
 
     action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
                                         actionCollection());
-    action->setText( i18n( "Show &Statusbar" ) );
-    action->setToolTip( i18n( "Show statusbar" ) );
-    action->setWhatsThis( i18n( "<b>Show statusbar</b><p>Hides or shows the statusbar.</p>" ) );
+    action->setText( i18n( "Show &Status Bar" ) );
+    action->setToolTip( i18n( "Show status bar" ) );
+    action->setWhatsThis( i18n( "<b>Show status bar</b><p>Hides or shows the status bar.</p>" ) );
 
     action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
-    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session</p>" ) );
+    action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );
 
     
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
     action->setToolTip( i18n("Configure Notifications") );
-    action->setWhatsThis( i18n( "<b>Configure Notification</b><p>Shows a dialog that lets you configure notifications</p>" ) );
+    action->setWhatsThis( i18n( "<b>Configure Notifications</b><p>Shows a dialog that lets you configure notifications.</p>" ) );
 
     action = actionCollection()->addAction( "about_platform", this, SLOT( showAboutPlatform() ) );
     action->setText( i18n("About KDevelop Platform") );
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
-    action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform</p>" ) );
+    action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform.</p>" ) );
 
 
 //     KToolBarPopupAction *popupAction;

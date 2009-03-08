@@ -33,7 +33,7 @@
       <string>Repository Location to import into</string>
      </property>
      <property name="whatsThis" >
-      <string>Choose the repository into which the source directory is imported to</string>
+      <string>Choose the repository into which the source directory is imported</string>
      </property>
     </widget>
    </item>

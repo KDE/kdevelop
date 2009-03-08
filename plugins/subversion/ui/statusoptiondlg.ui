@@ -75,7 +75,7 @@
    <item row="6" column="0" >
     <widget class="QCheckBox" name="noignore" >
      <property name="text" >
-      <string>Don't ignore svn:ignore</string>
+      <string>Do not ignore svn:ignore</string>
      </property>
     </widget>
    </item>

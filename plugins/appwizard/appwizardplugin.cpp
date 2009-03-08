@@ -163,7 +163,7 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
                             IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
-        vcsError(i18n("Could not import project into") + dvcs->name(), scratchArea, dest);
+        vcsError(i18n("Could not import project into %1.", dvcs->name()), scratchArea, dest);
         return false;
     }
 

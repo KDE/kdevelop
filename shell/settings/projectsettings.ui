@@ -23,7 +23,7 @@
    <item row="0" column="1" >
     <widget class="KUrlRequester" name="kcfg_projectsBaseDirectory" >
      <property name="toolTip" >
-      <string>Select the base directory where new projects are being created.</string>
+      <string>Select the base directory where new projects are to be created.</string>
      </property>
     </widget>
    </item>

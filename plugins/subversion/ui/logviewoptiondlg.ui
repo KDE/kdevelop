@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>SvnLogViewOptionDlgBase</string>
+   <string>Subversion Log View Options</string>
   </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >

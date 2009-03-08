@@ -285,7 +285,7 @@ void KDevVcsCommonPlugin::diffJobFinished( KJob* job )
             core()->documentController()->openDocumentFromText( diff );
         } else
         {
-            KMessageBox::error( core()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Couldn't get difference") );
+            KMessageBox::error( core()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference.") );
         }
 
         vcsjob->disconnect( this );
@@ -335,13 +335,13 @@ void KDevVcsCommonPlugin::annotation()
             viewiface->setAnnotationBorderVisible( true );
         }else
         {
-            KMessageBox::error( 0, i18n( "Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor" ) );
+            KMessageBox::error( 0, i18n( "Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor." ) );
             delete job;
         }
     }else
     {
         KMessageBox::error( 0, i18n("Cannot execute annotate action because the "
-        "document wasn't found or was not a text document:\n%1", url.pathOrUrl() ) );
+        "document was not found, or was not a text document:\n%1", url.pathOrUrl() ) );
     }
 }
 

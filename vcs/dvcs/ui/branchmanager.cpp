@@ -132,8 +132,8 @@ void BranchManager::renameBranch(QListWidgetItem * item)
     }
 
     int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
-                                      i18n("You're going to rename the branch!\n"
-                                            "%1->%2\nAre you sure?",baseBranch, newBranch));
+                                      i18n("The branch is going to be renamed from\n"
+                                            "%1 to %2.\nAre you sure?",baseBranch, newBranch));
 
     if (ret == QMessageBox::Cancel)
         return;
@@ -153,15 +153,15 @@ void BranchManager::delBranch()
     if (baseBranch == d->curBranch(repo))
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                    i18n("You're on the branch \"%1\"\n"
-                                            "To remove it you have to checkout to another branch!",
+                                    i18n("Currently at the branch \"%1\".\n"
+                                            "To remove it, another branch has to be checked out.",
                                             baseBranch));
         return;
     }
 
     int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
-                                      i18n("You're going to remove branch \"%1\"!\n" 
-                                              "You will not be able to restore it!\nAre you sure?",
+                                      i18n("About to remove the branch \"%1\".\n" 
+                                              "Once removed, it cannot be restored.\nAre you sure?",
                                               baseBranch));
     if (ret == QMessageBox::Cancel)
         return;

@@ -449,7 +449,7 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
                 KUrl url = item->folder()->url();
                 url.addPath( name );
                 if ( !KIO::NetAccess::mkdir( url, window ) ) {
-                    KMessageBox::error( window, i18n( "Can't create folder." ) );
+                    KMessageBox::error( window, i18n( "Cannot create folder." ) );
                     continue;
                 }
                 item->project()->projectFileManager()->addFolder( url, item->folder() );
@@ -516,7 +516,7 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
 
     KSaveFile file(url.path());
     if ( ! file.open() ) {
-        KMessageBox::error( window, i18n( "Can't create file." ) );
+        KMessageBox::error( window, i18n( "Cannot create file." ) );
         return 0;
     }
     file.finalize();
