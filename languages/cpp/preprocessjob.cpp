@@ -485,7 +485,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if((parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) == TopDUContext::AllDeclarationsContextsAndUsesForRecursive)
       slaveMinimumFeatures = parentJob()->minimumFeatures();
     
-    if(parentJob()->minimumFeatures() & TopDUContext::ForceUpdateRecursive)
+    if((parentJob()->minimumFeatures() & TopDUContext::ForceUpdateRecursive) == TopDUContext::ForceUpdateRecursive)
       slaveMinimumFeatures = (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::ForceUpdateRecursive);
     
     QString fileName = fileNameUrl.pathOrUrl();
