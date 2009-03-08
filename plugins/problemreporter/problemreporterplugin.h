@@ -42,6 +42,8 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     ProblemReporterPlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ProblemReporterPlugin();
 
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    
     // KDevelop::Plugin methods
     virtual void unload();
 

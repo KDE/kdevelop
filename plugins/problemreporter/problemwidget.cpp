@@ -54,6 +54,7 @@
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
 #include <kaction.h>
+#include <interfaces/iassistant.h>
 
 //#include "modeltest.h"
 
@@ -70,6 +71,8 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     setWhatsThis( i18n( "Problems" ) );
     setModel(new ProblemModel(m_plugin));
 
+//     setContextMenuPolicy(Qt::CustomContextMenu);
+    
     m_fullUpdateAction = new KAction(this);
     m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_fullUpdateAction->setText(i18n("Force Full Update"));
@@ -193,6 +196,23 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
 ProblemModel * ProblemWidget::model() const
 {
     return static_cast<ProblemModel*>(QTreeView::model());
+}
+
+void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
+    QModelIndex index = indexAt(event->pos());
+    if(index.isValid()) {
+        KDevelop::ProblemPointer problem = model()->problemForIndex(index);
+        if(problem) {
+            KSharedPtr<KDevelop::IAssistant> solution = problem->solutionAssistant();
+            QList<QAction*> actions;
+            if(solution) {
+                foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
+                    actions << action->toKAction();
+            }
+            if(!actions.isEmpty())
+                QMenu::exec(actions, event->globalPos());
+        }
+    }
 }
 
 void ProblemWidget::showEvent(QShowEvent * event)

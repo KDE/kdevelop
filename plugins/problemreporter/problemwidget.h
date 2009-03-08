@@ -49,6 +49,8 @@ public:
 
   static void collectProblems(QList<KDevelop::ProblemPointer>& allProblems, KDevelop::TopDUContext* context, QSet<KDevelop::TopDUContext*>& hadContexts);
 
+  virtual void contextMenuEvent(QContextMenuEvent* );
+  
 protected:
   virtual void showEvent(QShowEvent* event);
 

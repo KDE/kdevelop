@@ -82,6 +82,8 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                                 return i18n("Parser");
                             case ProblemData::DUChainBuilder:
                                 return i18n("Definition-Use Chain");
+                            case ProblemData::SemanticAnalysis:
+                                return i18n("Semantic Analysis");
                         }
                         break;
                     case Error:

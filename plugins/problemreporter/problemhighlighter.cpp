@@ -78,7 +78,13 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             problemRange->smartEnd().advance(1);
 
         KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
-        error->setUnderlineColor(Qt::red);
+        if(problem->severity() == Problem::Error)
+            error->setUnderlineColor(Qt::red);
+        else if(problem->severity() == Problem::Warning)
+            error->setUnderlineColor(Qt::magenta);
+        else
+            error->setUnderlineColor(Qt::yellow);
+            
         error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
         /*KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());

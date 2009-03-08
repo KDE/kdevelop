@@ -44,6 +44,12 @@
 
 #include "problemhighlighter.h"
 #include "problemwidget.h"
+#include <interfaces/context.h>
+#include <language/interfaces/editorcontext.h>
+#include <language/duchain/duchainutils.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/iassistant.h>
+#include <kaction.h>
 
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<ProblemReporterPlugin>(); )
 K_EXPORT_PLUGIN(KDevProblemReporterFactory(KAboutData("kdevproblemreporter","kdevproblemreporter", ki18n("Problem Reporter"), "0.1", ki18n("Shows errors in source code"), KAboutData::License_GPL)))
@@ -137,6 +143,33 @@ void ProblemReporterPlugin::parseJobFinished(KDevelop::ParseJob* parseJob)
 {
   if(parseJob->duChain())
     updateReady(parseJob->document(), parseJob->duChain());
+}
+
+KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context) {
+  KDevelop::ContextMenuExtension extension;
+  
+  KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
+  if(editorContext) {
+      DUChainReadLocker lock(DUChain::lock(), 1000);
+      if(!lock.locked()) {
+        kDebug() << "failed to lock duchain in time";
+        return extension;
+      }
+    
+    TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
+    if(top) {
+      foreach(KDevelop::ProblemPointer problem, top->problems()) {
+        if(problem->range().contains(KDevelop::SimpleCursor(editorContext->position()))) {
+          KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
+          if(solution) {
+            foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
+              extension.addAction(ContextMenuExtension::RefactorGroup, action->toKAction());
+          }
+        }
+      }
+    }
+  }
+  return extension;
 }
 
 #include "problemreporterplugin.moc"
