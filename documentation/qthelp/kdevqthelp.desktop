@@ -2,6 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides QtHelp integration
+Comment[es]=Este complemento proporciona integración de QtHelp
+Comment[fr]=Ce module externe fournit l'intégration de QtHelp
 Comment[ja]=このプラグインは QtHelp を統合します
 Comment[nds]=Dit Moduul stellt de Inbetten vun de Qt-Hülp praat
 Comment[pt]=Este 'plugin' oferece a integração com o QtHelp
@@ -13,6 +15,8 @@ Comment[zh_TW]=此外掛程式提供 QtHelp 整合
 Name=KDevQtHelp
 Name[sv]=KDevelop Qt-hjälp
 GenericName=Qt Help
+GenericName[es]=Ayuda de Qt
+GenericName[fr]=Aide de Qt
 GenericName[ga]=Cabhair Qt
 GenericName[ja]=Qt ヘルプ
 GenericName[nds]=Qt-Hülp

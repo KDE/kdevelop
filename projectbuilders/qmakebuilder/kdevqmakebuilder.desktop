@@ -1,6 +1,8 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Builder
+Name[es]=Constructor de proyecto QMake
+Name[fr]=Constructeur de projet QMake
 Name[ja]=QMake プロジェクトビルダー
 Name[nds]=QMake-Projektbuumoduul
 Name[pt]=Construtor de Projectos do QMake

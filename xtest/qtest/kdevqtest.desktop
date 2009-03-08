@@ -23,6 +23,8 @@ Comment[zh_CN]=QTestLib 测试运行器
 Comment[zh_TW]=QTestLib 測試執行者
 
 Name=QTest Runner
+Name[es]=Ejecución de QTest
+Name[fr]=Exécuteur de QTest
 Name[ga]=Feidhmitheoir QTest
 Name[nds]=QTest-Dreger
 Name[pt]=Execução do QTest
@@ -36,7 +38,7 @@ GenericName[de]=Unittest ausführen
 GenericName[el]=Εκτέλεση ελέγχου Unit
 GenericName[es]=Unidad de ejecución de pruebas
 GenericName[et]=Uniti testkäivitaja
-GenericName[fr]=Exécuteur de test Unit
+GenericName[fr]=Exécuteur de test unitaire
 GenericName[ga]=Feidhmitheoir tástála aonad
 GenericName[gl]=Executor de probas unitarias
 GenericName[it]=Esecuzione di unità di test

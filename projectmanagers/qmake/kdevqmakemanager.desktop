@@ -1,6 +1,8 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Manager
+Name[es]=Gestor de proyecto QMake
+Name[fr]=Gestionnaire de projets CMake
 Name[ja]=QMake プロジェクトマネージャ
 Name[nds]=QMake-Projektpleger
 Name[pt]=Gestor de Projectos do QMake
