@@ -19,8 +19,15 @@
 #include "iassistant.h"
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <kaction.h>
 
 using namespace KDevelop;
+
+KAction* KDevelop::IAssistantAction::toKAction() const {
+    KAction* ret = new KAction(KIcon(icon()), description(), 0);
+    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
+    return ret;
+}
 
 KDevelop::IAssistant::~IAssistant() {
 
@@ -90,5 +97,16 @@ void KDevelop::ITextAssistant::cursorPositionChanged(KTextEditor::View* /*view*/
   if(abs((m_invocationCursor - cursor).line()) > 2)
     emit hide();
 }
+
+QString KDevelop::DummyAssistantAction::description() const {
+    return m_description;
+}
+
+KDevelop::DummyAssistantAction::DummyAssistantAction(QString desc) : m_description(desc) {
+}
+
+void KDevelop::DummyAssistantAction::execute() {
+}
+
 
 #include "iassistant.moc"

@@ -25,6 +25,8 @@
 #include <QPointer>
 #include <ktexteditor/cursor.h>
 
+class KAction;
+
 namespace KTextEditor {
 class View;
 class Cursor;
@@ -33,11 +35,16 @@ namespace KDevelop {
 
 ///Represents a single assistant action.
 ///Subclass it to create own actions
-class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public KShared {
+class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KShared {
+    Q_OBJECT
     public:
         typedef KSharedPtr<IAssistantAction> Ptr;
 
         virtual ~IAssistantAction();
+        
+        ///Creates a KAction that represents this exact assistant action.
+        ///The caller owns the action, and is responsible for deleting it.
+        virtual KAction* toKAction() const;
         
         ///Should return a short description of the action.
         ///It may contain simple HTML formatting.
@@ -50,9 +57,6 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public KShared {
         ///The default implementation returns an invalid icon, which means that no icon is shown
         virtual QIcon icon() const;
         
-        ///Execute this action
-        virtual void execute() = 0;
-        
         enum Flags {
             NoFlag = 0,
             OwnLineFlag //If this flag is given, the action is shown in an own line. This is useful when the description tends to be very long.
@@ -61,8 +65,21 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public KShared {
         ///May return any or'ed combination of Flags
         ///The default-implementation returns NoFlag
         virtual uint flags() const;
+        
+    public slots:
+        ///Execute this action
+        virtual void execute() = 0;
 };
 
+///For testing purposes: This action just shows the given string, and does nothing on execution.
+class KDEVPLATFORMINTERFACES_EXPORT DummyAssistantAction : public IAssistantAction {
+    public:
+        DummyAssistantAction(QString desc);
+        virtual void execute();
+        virtual QString description() const;
+    private:
+        QString m_description;
+};
 ///Represents a single assistant popup
 ///Subclass it to create own assistants
 class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
