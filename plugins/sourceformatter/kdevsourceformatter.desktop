@@ -18,6 +18,7 @@ Comment[zh_CN]=此插件可为每种文件类型使用不同的后端格式化�
 Comment[zh_TW]=此外掛程式依不同檔案型態提供不同的後端介面來做檔案格式化。
 Name=Source Formatter
 Name[es]=Formateador de código
+Name[fr]=Formateur de sources
 Name[ja]=ソースフォーマッタ
 Name[nds]=Bornformateren
 Name[pt]=Formatador de Código
