@@ -33,9 +33,6 @@ class EnvironmentSelectionWidgetPrivate
 EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
     : KComboBox( parent ), d( new EnvironmentSelectionWidgetPrivate )
 {
-    KSettings::Dispatcher::registerComponent( ICore::self()->componentData(), this, "updateEnvGroup" );
-    KSettings::Dispatcher::registerComponent( KGlobal::mainComponent(), this, "updateEnvGroup" );
-
 }
 
 EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
