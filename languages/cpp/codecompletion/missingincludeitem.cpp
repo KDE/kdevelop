@@ -511,12 +511,16 @@ void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTex
     
     if(neededNamespace || context->range().end.textCursor() > word.start()) {
       //To the begin
-      position = context->range().start.textCursor() + KTextEditor::Cursor(0, 1);
+      position = context->range().start.textCursor();
       
-      //Put the newline to the beginning instead of the end
-      forwardDeclaration = "\n" + forwardDeclaration;
-      if(forwardDeclaration.endsWith("\n"))
-        forwardDeclaration = forwardDeclaration.left(forwardDeclaration.length()-1);
+      if(context->type() == DUContext::Namespace) {
+          position += KTextEditor::Cursor(0, 1); //Skip over the opening '{' paren
+        
+        //Put the newline to the beginning instead of the end
+        forwardDeclaration = "\n" + forwardDeclaration;
+        if(forwardDeclaration.endsWith("\n"))
+          forwardDeclaration = forwardDeclaration.left(forwardDeclaration.length()-1);
+      }
     } else{
       //To the end
       position = context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
