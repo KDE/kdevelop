@@ -763,7 +763,10 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   if(word.isEmpty() || !ctx || !ctx->parsingEnvironmentFile())
     return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
 
-  Q_ASSERT(!(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext()));
+  if((ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
+    kDebug() << "Strange: standard-context for" << ctx->url().str() << "is a proxy-context";
+    return qMakePair(TopDUContextPointer(), SimpleRange::invalid());
+  }
 
   Cpp::EnvironmentFilePointer p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
 
