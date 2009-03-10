@@ -69,7 +69,6 @@ struct ParseJobPrivate
         , backgroundParser( 0 )
         , abortMutex(new QMutex)
         , revisionToken(-1)
-        , priority(0)
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
@@ -89,7 +88,6 @@ struct ParseJobPrivate
 
     QMutex* abortMutex;
     int revisionToken;
-    int priority;
 
     volatile bool abortRequested : 1;
     bool aborted : 1;
@@ -212,14 +210,16 @@ QString ParseJob::contentsFromEditor()
 
 int ParseJob::priority() const
 {
-    return d->priority;
+    ///@todo adymo: reenable after documentcontroller is ported
+    return 0;
+/*    if (d->openDocument)
+        if (d->openDocument->isActive())
+            return 2;
+        else
+            return 1;
+    else
+        return 0;*/
 }
-
-void ParseJob::setPriority(int priority) const
-{
-    d->priority = priority;
-}
-
 
 void ParseJob::addJob(Job* job)
 {
@@ -295,11 +295,6 @@ void ParseJob::unsetStaticMinimumFeatures(IndexedString url, TopDUContext::Featu
     ::staticMinimumFeatures[url].removeOne(features);
     if(::staticMinimumFeatures[url].isEmpty())
       ::staticMinimumFeatures.remove(url);
-}
-
-KDevelop::ParseJob* ParseJob::nextJob() const
-{
-    return 0;
 }
 
 }

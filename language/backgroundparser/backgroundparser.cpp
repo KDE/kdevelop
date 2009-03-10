@@ -159,12 +159,11 @@ public:
                 kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 ParseJob* job = createParseJob(*it, m_documents[*it].features(), m_documents[*it].notifyWhenReady());
 
-                if(job) {
+                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
+                    specialParseJob = job; //This parse-job is allocated into the reserved thread
+
+                if(job)
                     jobs.append(job);
-                    job->setPriority(-it1.key());
-                    if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
-                        specialParseJob = job; //This parse-job is allocated into the reserved thread
-                }
 
                 m_documents.remove(*it);
                 it = it1.value().erase(it);
@@ -193,7 +192,18 @@ public:
                 continue; // Language part did not produce a valid ParseJob.
             }
 
-            registerJob(url, job);
+            job->setMinimumFeatures(features);
+            job->setBackgroundParser(m_parser);
+            job->setNotifyWhenReady(notifyWhenReady);
+
+            QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
+                                m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+            QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
+                                m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
+            QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
+                                m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
+
+            m_parseJobs.insert(url, job);
 
             ++m_maxParseJobs;
 
@@ -215,21 +225,6 @@ public:
         return 0;
     }
 
-    void registerJob(const KUrl& url, ParseJob* job)
-    {
-        job->setMinimumFeatures(features);
-        job->setBackgroundParser(m_parser);
-        job->setNotifyWhenReady(notifyWhenReady);
-
-        QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
-                            m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-        QObject::connect(job, SIGNAL(failed(ThreadWeaver::Job*)),
-                            m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
-        QObject::connect(job, SIGNAL(progress(KDevelop::ParseJob*, float, QString)),
-                            m_parser, SLOT(parseProgress(KDevelop::ParseJob*, float, QString)), Qt::QueuedConnection);
-
-        m_parseJobs.insert(url, job);
-    }
 
     void loadSettings()
     {
@@ -510,15 +505,10 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 
             parseJob->setBackgroundParser(0);
 
-            if (ParseJob* next = parseJob->nextJob()) {
-                d->registerJob(next->document().toUrl(), next);
-                d->m_weaver.enqueue(next);
-            } else {
-                ++d->m_doneParseJobs;
-                updateProgressBar();
-            }
-            
             delete parseJob;
+
+            ++d->m_doneParseJobs;
+            updateProgressBar();
         }
 
         //Continue creating more parse-jobs
