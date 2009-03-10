@@ -4,13 +4,13 @@
   <kcfgfile name="kdeveloprc"/>
   <group name="Language Support">
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
-    <default>false</default>
+    <default>true</default>
 </entry>
     <entry name="minimalAutomaticCompletion" key="minimalAutomaticCompletion" type="Bool">
-    <default>false</default>
+    <default>true</default>
 </entry>
     <entry name="alwaysFullCompletion" key="alwaysFullCompletion" type="Bool">
-    <default>true</default>
+    <default>false</default>
 </entry>
     <entry name="alwaysMinimalCompletion" key="alwaysMinimalCompletion" type="Bool">
     <default>false</default>
@@ -19,7 +19,7 @@
     <default>true</default>
     </entry>
     <entry name="highlightSemanticProblems" key="highlightSemanticProblems" type="Bool">
-    <default>true</default>
+    <default>false</default>
     </entry>
     <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
     <default>true</default>

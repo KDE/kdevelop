@@ -27,7 +27,7 @@
 
 class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
-    CompletionSettings() : m_level(AlwaysFull), m_automatic(true), m_enableSemanticHighlighting(true), m_highlightSemanticProblems(true), m_localVariableColorizationLevel(120), m_showMultiLineInformation(true) {
+    CompletionSettings() : m_level(MinimalWhenAutomatic), m_automatic(true), m_enableSemanticHighlighting(true), m_highlightSemanticProblems(true), m_localVariableColorizationLevel(120), m_showMultiLineInformation(true) {
     }
 
     bool readBoolConfig(QString name, bool _default = false) const {
