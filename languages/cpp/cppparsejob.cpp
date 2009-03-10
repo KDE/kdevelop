@@ -591,8 +591,6 @@ void CPPInternalParseJob::run()
             DUChainWriteLocker lock(DUChain::lock());
             if(contentContext)
               contentContext->clearImportedParentContexts();
-            if(updatingProxyContext)
-              updatingProxyContext->clearImportedParentContexts();
         }
         
         contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
@@ -730,6 +728,12 @@ void CPPInternalParseJob::run()
 
     if( proxyEnvironmentFile ) {
         ContextBuilder builder(parentJob()->parseSession());
+        if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
+            DUChainWriteLocker lock(DUChain::lock());
+            if(updatingProxyContext)
+              updatingProxyContext->clearImportedParentContexts();
+        }
+        
         proxyContext = builder.buildProxyContextFromContent(proxyEnvironmentFile, TopDUContextPointer(contentContext), TopDUContextPointer(updatingProxyContext));
 
         DUChainWriteLocker lock(DUChain::lock());
