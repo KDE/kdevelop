@@ -274,7 +274,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 //       m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
 //       createArgumentList(*this, sig, 0, false, true);      
       
-      add = indent + "void " + completionContext()->followingText() + sig + ";";
+      add += indent + "void " + completionContext()->followingText() + sig + ";";
       
       if(targetLine > text.size())
         return;
