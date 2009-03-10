@@ -522,7 +522,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
           CppEditorIntegrator editor(session());
           
-          problem->setFinalLocation(DocumentRange(searchInContext->url().str(), editor.findRange(node).textRange()));
+          problem->setFinalLocation(DocumentRange(m_currentContext->url().str(), editor.findRange(node).textRange()));
           if(!problem->range().isEmpty() && !session()->positionAndSpaceAt(node->start_token).first.macroExpansion.isValid())
             m_problems << problem;
         }
