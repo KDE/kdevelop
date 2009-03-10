@@ -580,21 +580,19 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
     
-    if(!isClean && topctx) {
-        return topctx;
-    }
-    
     if(topctx)
     {
-        topctx->deleteLocalDeclarations();
-        topctx->deleteChildContextsRecursively();
-        topctx->deleteUses();
-        
         EditorIntegrator editor;
         editor.setCurrentUrl(topctx->url());
         
         SmartConverter converter(&editor);
         converter.deconvertDUChain(topctx);
+        
+        if(isClean) {
+            topctx->deleteLocalDeclarations();
+            topctx->deleteChildContextsRecursively();
+            topctx->deleteUses();
+        }
     }
     else
     {
