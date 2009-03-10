@@ -18,6 +18,7 @@ Name[pt_BR]=Configuração do LCov
 Name[sv]=Inställningar av Lcov
 Name[uk]=Параметри lcov
 Name[zh_CN]=lcov 设置
+Name[zh_TW]=Icov 設定
 Comment=Configure lcov settings
 Comment[es]=Configurar las preferencias de lcov
 Comment[ga]=Cumraigh socruithe lcov
@@ -27,4 +28,5 @@ Comment[pt_BR]=Configurar as opções do LCov
 Comment[sv]=Anpassa inställningar av Lcov
 Comment[uk]=Налаштувати параметри lcov
 Comment[zh_CN]=配置 lcov 设置
+Comment[zh_TW]=設定 Icov
 
