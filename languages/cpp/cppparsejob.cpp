@@ -454,17 +454,6 @@ void CPPInternalParseJob::run()
         }
     }
     
-    if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
-        ///@todo Find out why this happens. Probably because of the branching hash.
-        //Actually we shouldn't be creating multiple different versions of contexts, and thus this should not matter.
-        //But somewhere we have the problem that multiple versions are created, so just always clear the imports when updating.
-        DUChainWriteLocker lock(DUChain::lock());
-        if(updatingContentContext)
-          updatingContentContext->clearImportedParentContexts();
-        if(updatingProxyContext)
-          updatingProxyContext->clearImportedParentContexts();
-    }
-
     //Temporarily import contexts imported by parents, because in C++ those are visible from here too
     if( parentJob()->parentPreprocessor() ) {
         DUChainReadLocker lock(DUChain::lock());
@@ -597,6 +586,15 @@ void CPPInternalParseJob::run()
         
       
       if(!doNotChangeDUChain) {
+        
+        if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
+            DUChainWriteLocker lock(DUChain::lock());
+            if(contentContext)
+              contentContext->clearImportedParentContexts();
+            if(updatingProxyContext)
+              updatingProxyContext->clearImportedParentContexts();
+        }
+        
         contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
 
         contentEnvironmentFile->setTopContext(contentContext.data());
