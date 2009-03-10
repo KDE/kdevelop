@@ -52,6 +52,7 @@ public:
     Q_SCRIPTABLE void setBackgroundParser(BackgroundParser* parser);
 
     Q_SCRIPTABLE virtual int priority() const;
+    Q_SCRIPTABLE void setPriority(int priority) const;
 
     /**
      * Determine whether the editor can provide the contents of the document or not.
@@ -129,6 +130,13 @@ public:
      * not be added and the method will return false.
      */
     Q_SCRIPTABLE bool addDependency(ParseJob* dependency, ThreadWeaver::Job* actualDependee = 0);
+
+    /**
+     * Determine if any further jobs are required to complete this parse job.
+     * 
+     * \returns a parse job if further parsing is required, otherwise null.
+     */
+    Q_SCRIPTABLE virtual ParseJob* nextJob() const;
 
 Q_SIGNALS:
     /**Can be used to give progress feedback to the background-parser. @param value should be between 0 and 1, where 0 = 0% and 1 = 100%
