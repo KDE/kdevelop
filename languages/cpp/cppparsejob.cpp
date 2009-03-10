@@ -294,8 +294,10 @@ CppLanguageSupport * CPPParseJob::cpp() const
 }
 
 void CPPParseJob::addIncludedFile(KDevelop::ReferencedTopDUContext duChain, int sourceLine) {
-    if(duChain.data())
+    if(duChain.data()) {
+      DUChainReadLocker lock(DUChain::lock());
       m_includedFiles.push_back(LineContextPair(duChain, sourceLine));
+    }
 }
 
 void CPPParseJob::setProxyEnvironmentFile( Cpp::EnvironmentFile* file ) {
@@ -450,6 +452,17 @@ void CPPInternalParseJob::run()
             importedContentChains << contentFromProxy(context);
             encounteredIncludeUrls << context.context->url();
         }
+    }
+    
+    if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
+        ///@todo Find out why this happens. Probably because of the branching hash.
+        //Actually we shouldn't be creating multiple different versions of contexts, and thus this should not matter.
+        //But somewhere we have the problem that multiple versions are created, so just always clear the imports when updating.
+        DUChainWriteLocker lock(DUChain::lock());
+        if(updatingContentContext)
+          updatingContentContext->clearImportedParentContexts();
+        if(updatingProxyContext)
+          updatingProxyContext->clearImportedParentContexts();
     }
 
     //Temporarily import contexts imported by parents, because in C++ those are visible from here too
