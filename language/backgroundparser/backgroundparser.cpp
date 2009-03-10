@@ -510,16 +510,15 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
 
             parseJob->setBackgroundParser(0);
 
-            delete parseJob;
-
             if (ParseJob* next = parseJob->nextJob()) {
                 d->registerJob(next->document().toUrl(), next);
                 d->m_weaver.enqueue(next);
-
             } else {
                 ++d->m_doneParseJobs;
                 updateProgressBar();
             }
+            
+            delete parseJob;
         }
 
         //Continue creating more parse-jobs
