@@ -217,9 +217,9 @@ public:
 
     void registerJob(const KUrl& url, ParseJob* job)
     {
-        //job->setMinimumFeatures(features);
-        //job->setBackgroundParser(m_parser);
-        //job->setNotifyWhenReady(notifyWhenReady);
+        job->setMinimumFeatures(features);
+        job->setBackgroundParser(m_parser);
+        job->setNotifyWhenReady(notifyWhenReady);
 
         QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
                             m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
