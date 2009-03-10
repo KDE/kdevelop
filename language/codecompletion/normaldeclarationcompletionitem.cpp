@@ -49,6 +49,10 @@ KDevelop::DeclarationPointer NormalDeclarationCompletionItem::declaration() cons
   return m_declaration;
 }
 
+KSharedPtr< KDevelop::CodeCompletionContext > NormalDeclarationCompletionItem::completionContext() const {
+  return m_completionContext;
+}
+
 int NormalDeclarationCompletionItem::inheritanceDepth() const
 {
   return m_inheritanceDepth;

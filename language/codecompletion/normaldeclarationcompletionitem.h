@@ -32,6 +32,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public Compl
 public:
   NormalDeclarationCompletionItem(KDevelop::DeclarationPointer decl = KDevelop::DeclarationPointer(), KSharedPtr<CodeCompletionContext> context=KSharedPtr<CodeCompletionContext>(), int inheritanceDepth = 0);
   virtual KDevelop::DeclarationPointer declaration() const;
+  KSharedPtr<CodeCompletionContext> completionContext() const;
   virtual int inheritanceDepth() const;
   virtual int argumentHintDepth() const;
   QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
