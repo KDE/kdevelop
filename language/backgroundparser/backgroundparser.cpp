@@ -158,13 +158,13 @@ public:
 
                 kDebug(9505) << "creating parse-job" << *it << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
                 ParseJob* job = createParseJob(*it, m_documents[*it].features(), m_documents[*it].notifyWhenReady());
-                job->setPriority(it1.key());
 
-                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
-                    specialParseJob = job; //This parse-job is allocated into the reserved thread
-
-                if(job)
+                if(job) {
                     jobs.append(job);
+                    job->setPriority(-it1.key());
+                    if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
+                        specialParseJob = job; //This parse-job is allocated into the reserved thread
+                }
 
                 m_documents.remove(*it);
                 it = it1.value().erase(it);
