@@ -13,7 +13,8 @@ include_directories(
 
 ########### next target ###############
 
-set(kdevcppduchain_LIB_SRCS
+set(kdevcppduchain_LIB_SRCS 
+    sourcemanipulation.cpp
     missingdeclarationtype.cpp
     missingdeclarationproblem.cpp
     missingdeclarationassistant.cpp
