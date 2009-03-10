@@ -513,11 +513,6 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
-    KAction* quickOpenOpenFile = actions->addAction("quick_open_open_files");
-    quickOpenOpenFile->setText( i18n("Quick Open &Open Files") );
-    quickOpenOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_T );
-    connect(quickOpenOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenOpenFiles()));
-
     KAction* quickOpenFunction = actions->addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
@@ -634,11 +629,6 @@ void QuickOpenPlugin::quickOpenFunction()
 void QuickOpenPlugin::quickOpenClass()
 {
   showQuickOpen( Classes );
-}
-
-void QuickOpenPlugin::quickOpenOpenFiles()
-{
-  showQuickOpen( OpenFiles );
 }
 
 QSet<KDevelop::IndexedString> QuickOpenPlugin::fileSet() const {

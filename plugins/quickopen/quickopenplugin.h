@@ -76,7 +76,6 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
-    void quickOpenOpenFiles();
 
 private slots:
     void storeScopes( const QStringList& );
