@@ -27,13 +27,13 @@
 it has similar functionality, but I failed to make it work correctly.
 */
 
+#include "main.h"
+
 #include <KDE/KApplication>
 #include <KDE/KAboutData>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KMessageBox>
-#include <KDE/KDebug>
 
-#include <QtCore/QDir>
 #include <QtNetwork/QTcpSocket>
 
 #include <cstring>
@@ -50,7 +50,6 @@ it has similar functionality, but I failed to make it work correctly.
 
 #include <libssh2.h>
 
-#include "main.h"
 
 
 void show_error(const QString &error)
@@ -60,7 +59,7 @@ void show_error(const QString &error)
 
 void shutdown_ssh(LIBSSH2_SESSION *session, const QString &error = "")
 {
-    if (error != "")
+    if (!error.isEmpty())
         show_error(error);
 
     libssh2_session_disconnect(session, "See you later, alligator!");
@@ -152,7 +151,7 @@ int main (int argc, char *argv[])
     char* auth_methods = 0;
     if (!(auth_methods = libssh2_userauth_list(session, username.c_str(), username.size()+1)))
     {
-        shutdown_ssh(session, i18n("Server do not support any auth methods for user, operation aborted!"));
+        shutdown_ssh(session, i18n("Server do not support any authentication methods for user, operation aborted!"));
         return 1;
     }
     kDebug() << "Supported auth methods:" << auth_methods;
@@ -191,13 +190,13 @@ int main (int argc, char *argv[])
             break;
         default:
             //shouldn't happen
-            shutdown_ssh(session, i18n("Unsupported auth type, it can be a bug. Operation aborted!"));
+            shutdown_ssh(session, i18n("Unsupported authentication type, it can be a bug. Operation aborted!"));
             return 1;
     }
 
     if (auth)
     {
-        shutdown_ssh(session, i18n("Authentification failed, operation aborted!"));
+        shutdown_ssh(session, i18n("Authentication failed, operation aborted!"));
         return 1; 
     }
     

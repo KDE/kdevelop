@@ -21,7 +21,7 @@
 #define CODECOMPLETIONTESTHELPER_H
 
 #include <QtTest/QtTest>
-#include <QStandardItemModel>
+#include <QtGui/QStandardItemModel>
 
 #include "../duchain/declaration.h"
 #include "../duchain/duchain.h"

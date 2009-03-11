@@ -19,11 +19,11 @@
 #ifndef KDEVELOP_IASSISTANT_H
 #define KDEVELOP_IASSISTANT_H
 
-#include <KSharedPtr>
-#include <QIcon>
-#include "interfacesexport.h"
-#include <QPointer>
+#include <QtCore/QPointer>
+#include <QtGui/QIcon>
+#include <KDE/KSharedPtr>
 #include <ktexteditor/cursor.h>
+#include "interfacesexport.h"
 
 class KAction;
 
@@ -66,7 +66,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KS
         ///The default-implementation returns NoFlag
         virtual uint flags() const;
         
-    public slots:
+    public Q_SLOTS:
         ///Execute this action
         virtual void execute() = 0;
 };
@@ -106,10 +106,10 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
         
         ///May return the title of this assistant
         virtual QString title() const;
-    public slots:
+    public Q_SLOTS:
         ///Emits hide(), which causes this assistant to be hidden
         virtual void doHide();
-    signals:
+    Q_SIGNALS:
         ///Can be emitted by the assistant when it should be hidden
         void hide();
         ///Can be emitted by the assistant when it's actions have changed and should be re-read
@@ -130,7 +130,7 @@ public:
   KTextEditor::View* view() const;
   ///Position where the cursor was when this assistant was created
   KTextEditor::Cursor invocationCursor() const;
-private slots:
+private Q_SLOTS:
   //This function checks whether the cursor was moved away by more than 2 lines from the initial position, and hides the assistant if so.
   //Override it to change this behavior.
   virtual void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);

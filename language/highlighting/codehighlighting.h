@@ -23,9 +23,9 @@
 #ifndef KDEV_CODEHIGHLIGHTING_H
 #define KDEV_CODEHIGHLIGHTING_H
 
-#include <QObject>
-#include <QHash>
-#include <QModelIndex>
+#include <QtCore/QObject>
+#include <QtCore/QHash>
+#include <QtCore/QModelIndex>
 #include <ktexteditor/attribute.h>
 #include "../duchain/ducontext.h"
 #include "../interfaces/icodehighlighting.h"

@@ -76,7 +76,7 @@ public:
   virtual int defaultParametersSize() const = 0;
   virtual void addDefaultParameter(const IndexedString& str) = 0;
   virtual void clearDefaultParameters()  = 0;
-  ///Returns the default paramter assigned to the given argument number.
+  ///Returns the default parameter assigned to the given argument number.
   ///This is a convenience-function.
   IndexedString defaultParameterForArgument(int index) const;
   

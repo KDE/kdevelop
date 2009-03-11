@@ -26,7 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QList>
 #include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
-#include <KPluginInfo>
+#include <KDE/KPluginInfo>
 
 #include "shellexport.h"
 
