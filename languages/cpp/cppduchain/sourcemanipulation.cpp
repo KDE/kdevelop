@@ -121,7 +121,7 @@ bool Cpp::SourceCodeInsertion::insertSlot(QString name, QString normalizedSignat
     if(targetLine > text.size())
       return false;
     
-    return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(targetLine, 0, targetLine, 0), QString(), add));
+    return m_changeSet.addChange(DocumentChangePointer( new DocumentChange(m_context->url(), SimpleRange(targetLine, 0, targetLine, 0), QString(), add) ));
 }
 
 Cpp::SourceCodeInsertion::SourceCodeInsertion(TopDUContext* topContext) : KDevelop::SourceCodeInsertion(topContext){
