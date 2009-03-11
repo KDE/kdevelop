@@ -64,7 +64,7 @@ public:
         if (_auth_type_mask & PASSWORD)
             select_auth_type->addItem(i18n("Password auth"), QVariant(PASSWORD));
         if (_auth_type_mask & PUBKEY)
-            select_auth_type->addItem(i18n("Publick key auth"), QVariant(PUBKEY));
+            select_auth_type->addItem(i18n("Public key auth"), QVariant(PUBKEY));
         if (_auth_type_mask == 0)
             select_auth_type->addItem(i18n("No auth type supported by server"), QVariant(0));
         

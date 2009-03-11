@@ -77,8 +77,8 @@ int main (int argc, char *argv[])
                          ki18n("Displays KPasswordDialog and performs ssh connection using libssh. After connecting it executes 'svnserve -t' and provides tunneling."),
                          KAboutData::License_GPL,
                          ki18n("(c) 2009"),
-                         ki18n("Use this client instead of standart ssh when using subversion to provide KPasswordDialog\
-                                instead of CLI ssh password prompt,"),
+                         ki18n("Use this client instead of standard ssh when using subversion to provide KPasswordDialog"
+                               " instead of CLI ssh password prompt."),
                          "http://kde.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData );
@@ -204,13 +204,13 @@ int main (int argc, char *argv[])
     LIBSSH2_CHANNEL *channel;
     
     if (!(channel = libssh2_channel_open_session(session))) {
-        shutdown_ssh(session, i18n("Can not open ssh chanell, operation aborted!"));
+        shutdown_ssh(session, i18n("Can not open ssh channel, operation aborted!"));
         return 1; 
     }
 
     if(libssh2_channel_exec(channel, "svnserve -t") )
     {
-        shutdown_ssh(session, i18n("Failed to lunch 'svnserver -t', operation aborted!"));
+        shutdown_ssh(session, i18n("Failed to launch 'svnserver -t', operation aborted!"));
         return 1;
     }
     
