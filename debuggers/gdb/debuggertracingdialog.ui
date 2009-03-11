@@ -106,8 +106,7 @@ If custom format string is not enabled, names and values of all expressions will
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>KEditListBox</class>
    <extends>QGroupBox</extends>

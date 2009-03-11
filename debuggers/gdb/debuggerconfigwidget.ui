@@ -344,8 +344,7 @@ This script is intended for the actual commands needed to connect to a remotely 
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
