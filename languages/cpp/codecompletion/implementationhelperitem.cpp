@@ -27,6 +27,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/parsingenvironment.h>
+#include <sourcemanipulation.h>
 
 namespace Cpp {
 
@@ -216,7 +217,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     {
       QList<DUContext*> containers = completionContext()->memberAccessContainers();
       
-      if(containers.isEmpty())
+      if(containers.isEmpty()) 
         return;
       else
         doc = containers[0]->url();
@@ -239,58 +240,22 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     
     DUContext* classContext = containers.first();
     
-    KDevelop::CodeRepresentation* rep = KDevelop::createCodeRepresentation(classContext->url());
-    if(rep) {
-      QString indent = "  ";
-      
-      QStringList text = rep->text().split('\n');
-      int targetLine = classContext->range().end.line;
-      bool behindExistingSlot = false;
-      foreach(Declaration* decl, classContext->localDeclarations()) {
-        if(Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl)) {
-          if(qtFunction->isSlot()) {
-            //Prefer putting the declaration behind existing slots
-            behindExistingSlot = true;
-            targetLine = qtFunction->range().end.line+1;
-            if(text.size() > targetLine-1) {
-              indent = QString();
-              for(int a = 0; a < text[targetLine-1].length(); ++a) {
-                if(text[targetLine-1][a].isSpace())
-                  indent += text[targetLine-1][a];
-                else
-                  break;
-              }
-            }
-          }
-        }
-      }
-      
-      QString add;
-      if(!behindExistingSlot)
-        add = indent + "private slots:\n";
-      
-      QString sig;
-      sig = "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")";
-//       m_declaration = DeclarationPointer(completionContext->m_connectedSignal.data());
-//       createArgumentList(*this, sig, 0, false, true);      
-      
-      add += indent + "void " + completionContext()->followingText() + sig + ";";
-      
-      if(targetLine > text.size())
-        return;
-      
-      text.insert(targetLine, add);
-      
-      lock.unlock();
-      
-      rep->setText(text.join("\n"));
-      delete rep;
-      
-      QString localText = "SLOT(" + completionContext()->followingText() + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
-      document->replaceText(word, localText);
-
-      ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
+    Cpp::SourceCodeInsertion insertion(updated.data());
+    insertion.setContext(classContext);
+    
+    insertion.insertSlot(completionContext()->followingText(), QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
+    
+    lock.unlock();
+    
+    if(!insertion.changes().applyAllChanges()) {
+      kDebug() << "failed";
+      return;
     }
+
+    ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
+
+    QString localText = "SLOT(" + completionContext()->followingText() + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
+    document->replaceText(word, localText);
   }else{
     document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
   }
