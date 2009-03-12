@@ -60,6 +60,7 @@ class PreprocessJob : public ThreadWeaver::Job, public rpp::Preprocessor
     Q_OBJECT
 public:
     PreprocessJob(CPPParseJob* parent);
+    ~PreprocessJob();
 
     CPPParseJob* parentJob() const;
 

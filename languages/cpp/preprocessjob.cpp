@@ -79,6 +79,10 @@ PreprocessJob::PreprocessJob(CPPParseJob * parent)
 {
 }
 
+PreprocessJob::~PreprocessJob() {
+  delete m_currentEnvironment;
+}
+
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
     CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
     ret->merge( CppLanguageSupport::self()->standardMacros() );
@@ -356,8 +360,8 @@ void PreprocessJob::run()
     }
     ifDebug( kDebug(9007) << "PreprocessJob: finished" << parentJob()->document().str(); )
 
-    m_currentEnvironment = 0;
     m_pp = 0;
+    m_currentEnvironment = 0; //Was given to the pp-engine, and will be destroyed by that
 }
 
 void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
