@@ -36,6 +36,7 @@
 #include "helpers.h"
 #include "missingincludemodel.h"
 #include <language/duchain/aliasdeclaration.h>
+#include "sourcemanipulation.h"
 
 //Whether relative urls like "../bla" should be allowed. Even if this is false, they will be preferred over global urls.
 bool allowDotDot = true;
@@ -49,23 +50,13 @@ namespace Cpp {
 ///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
 int moveBehindComment(KTextEditor::Document* document, int line) {
   
-  if(line < 100) {
-    int checkLines = document->lines() < 100 ? document->lines() : 100;
-    
-    QStringList text = document->textLines(KTextEditor::Range(0, 0, checkLines, 0));
-    bool inComment = false; //This is a bit stupid
-    for(int a = 0; a < checkLines; ++a) {
-      if(!inComment && !text[a].trimmed().startsWith("//") && a >= line)
-        return a;
-      
-      if(text[a].indexOf("/*") != -1)
-        inComment = true;
+  DUChainReadLocker lock(DUChain::lock());
+  TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
+  if(!top)
+    return line;
+  Cpp::SourceCodeInsertion insertion(top);
 
-      if(text[a].indexOf("*/") != -1)
-        inComment = false;
-    }
-  }
-  return line;
+  return insertion.firstValidCodeLineBefore(line);
 }
 
 ///Decide whether the file is allowed to be included directly. If yes, this should return false.
@@ -438,99 +429,19 @@ QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const 
 void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
   DUChainReadLocker lock(DUChain::lock());
   if(m_declaration) {
-    QStringList needNamespace = m_declaration->context()->scopeIdentifier().toStringList();
-    
-    DUContext* context = DUChainUtils::standardContextForUrl(document->url());
-    if(!context)
+    TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
+    if(!top)
       return;
-    bool foundChild = true;
-    while(!needNamespace.isEmpty() && foundChild) {
-      foundChild = false;
-      
-      foreach(DUContext* child, context->childContexts()) {
-        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && child->range().start.textCursor() < word.start()) {
-          context = child;
-          foundChild = true;
-          needNamespace.pop_front();
-          break;
-        }
-      }
-    }
+    Cpp::SourceCodeInsertion insertion(top);
     
-    QString forwardDeclaration;
-    if(m_declaration->type<KDevelop::EnumerationType>()) {
-      forwardDeclaration = "enum " + m_declaration->identifier().toString() + ";\n";
-    }else if(m_declaration->isTypeAlias()) {
-      if(!m_declaration->abstractType())
-        return;
-      
-      forwardDeclaration = "typedef " + m_declaration->abstractType()->toString() + " " + m_declaration->identifier().toString() + ";\n";
-    }else{
-      DUContext* templateContext = getTemplateContext(m_declaration.data());
-      if(templateContext) {
-        forwardDeclaration += "template<";
-        bool first = true;
-        foreach(Declaration* _paramDecl, templateContext->localDeclarations()) {
-          TemplateParameterDeclaration* paramDecl = dynamic_cast<TemplateParameterDeclaration*>(_paramDecl);
-          if(!paramDecl)
-            continue;
-          if(!first) {
-            forwardDeclaration += ", ";
-          }else{
-            first = false;
-          }
-          
-          CppTemplateParameterType::Ptr templParamType = paramDecl->type<CppTemplateParameterType>();
-          if(templParamType) {
-            forwardDeclaration += "class ";
-          }else if(paramDecl->abstractType()) {
-            forwardDeclaration += paramDecl->abstractType()->toString() + " ";
-          }
-          
-          forwardDeclaration += paramDecl->identifier().toString();
-          
-          if(!paramDecl->defaultParameter().isEmpty()) {
-            forwardDeclaration += " = " + paramDecl->defaultParameter().toString();
-          }
-        }
-        
-        forwardDeclaration += " >\n";
-      }
-      forwardDeclaration += "class " + m_declaration->identifier().toString() + ";\n";
-    }
+    insertion.setInsertBefore(KDevelop::SimpleCursor(word.start()));
     
-    bool neededNamespace = !needNamespace.isEmpty();
-    
-    while(!needNamespace.isEmpty()) {
-      forwardDeclaration = "namespace " + needNamespace.back() + " {\n" + forwardDeclaration + "}\n";
-      needNamespace.pop_back();
-    }
-    
-    //Put declarations to the end, and namespaces to the begin
-    KTextEditor::Cursor position;
-    
-    if(neededNamespace || context->range().end.textCursor() > word.start()) {
-      //To the begin
-      position = context->range().start.textCursor();
-      
-      if(context->type() == DUContext::Namespace) {
-          position += KTextEditor::Cursor(0, 1); //Skip over the opening '{' paren
-        
-        //Put the newline to the beginning instead of the end
-        forwardDeclaration = "\n" + forwardDeclaration;
-        if(forwardDeclaration.endsWith("\n"))
-          forwardDeclaration = forwardDeclaration.left(forwardDeclaration.length()-1);
-      }
-    } else{
-      //To the end
-      position = context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
-    }
-    Cpp::EnvironmentFilePointer envFile = Cpp::EnvironmentFilePointer(dynamic_cast<Cpp::EnvironmentFile*>(context->topContext()->parsingEnvironmentFile().data()));
-    if(envFile && position.line() < envFile->contentStartLine())
-      position.setLine( moveBehindComment(document, envFile->contentStartLine()) );
+    insertion.insertForwardDeclaration(m_declaration.data());
     
     lock.unlock();
-    document->insertText(position, forwardDeclaration);
+    
+    if(!insertion.changes().applyAllChanges(DocumentChangeSet::WarnOnFailedChange))
+      return;
   }
 }
 

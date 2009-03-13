@@ -25,6 +25,7 @@
 namespace KDevelop {
 
 //Through the whole lifetime of this object, the duchain must be locked
+//Note: _nothing_ will happen until you apply the resulting changes, that can be retrieved through changes()
 class KDEVCPPDUCHAIN_EXPORT SourceCodeInsertion : public KShared
 {
 public:
@@ -35,19 +36,47 @@ public:
   virtual void setInsertBefore(KDevelop::SimpleCursor position);
   ///Set context into which code must be inserted. This must be called before calling modifier functions.
   virtual void setContext(KDevelop::DUContext* context);
-  ///Set optional sub-scope into which the code should be inserted.
+  ///Set optional sub-scope into which the code should be inserted, under 'context'
   virtual void setSubScope(KDevelop::QualifiedIdentifier scope);
   ///Set optional access-policy for the inserted items
   virtual void setAccess(KDevelop::Declaration::AccessPolicy access);
 
   ///Adds a variable declaration using the parameters given before
   virtual bool insertVariableDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr type);
+
+  struct SignatureItem {
+    AbstractType::Ptr type;
+    QString name;
+  };
   
+  virtual bool insertFunctionDeclaration(AbstractType::Ptr returnType, KDevelop::Identifier name, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy = KDevelop::Declaration::Public, bool isConstant = false);
+  
+  ///Use the returned change-set to eventually let the user review the changes, and apply them.
   KDevelop::DocumentChangeSet& changes();
+
+  ///Moves the given line-number to a position that is not part of a comment, is behind the preprocessor/#ifdef code at top of a file,
+  ///and is before or equal @param line
+  virtual int firstValidCodeLineBefore(int line) const;
   
   protected:
+    enum InsertionKind {
+      Variable,
+      Function,
+      Slot
+    };
+    
+    struct InsertionPoint {
+      int line;
+      QString prefix;
+    };
+    
+    ///Returns a pair: (line, prefix) for inserting the given kind of declaration with the given access policy
+    InsertionPoint findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const;
+    //Should apply m_scope to the given declaration string
+    virtual QString applySubScope(QString decl) const;
     virtual QString accessString() const;
     virtual QString indentation() const;
+    virtual QString applyIndentation(QString decl) const;
     
     KDevelop::DocumentChangeSet m_changeSet;
     KDevelop::SimpleCursor m_insertBefore;
@@ -69,6 +98,8 @@ class KDEVCPPDUCHAIN_EXPORT SourceCodeInsertion : public KDevelop::SourceCodeIns
   SourceCodeInsertion(KDevelop::TopDUContext* topContext);
   ///setContext(..) must have been called before with the class-context
   virtual bool insertSlot(QString name, QString normalizedSignature);
+  ///If this is used, only setInsertBefore(..) needs to be called before.
+  virtual bool insertForwardDeclaration(KDevelop::Declaration* decl);
 };
 
 }
