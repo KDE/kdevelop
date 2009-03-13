@@ -35,6 +35,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     return m_document->line(line);
   }
   
+  virtual int lines() const {
+      return m_document->lines();
+  }
+  
   QString text() const {
     return m_document->text();
   }
@@ -76,16 +80,21 @@ class FileCodeRepresentation : public CodeRepresentation {
         QFile file( localFile );
         if ( file.open(QIODevice::ReadOnly) ) {
           data = file.readAll();
-          lines = data.split('\n');
+          lineData = data.split('\n');
         }
     }
     
     QString line(int line) const {
-    if(line < 0 || line >= lines.size())
+    if(line < 0 || line >= lineData.size())
       return QString();
       
-      return QString::fromLocal8Bit(lines[line]);
+      return QString::fromLocal8Bit(lineData[line]);
     }
+    
+    virtual int lines() const {
+        return lineData.count();
+    }
+    
     QString text() const {
       return QString::fromLocal8Bit(data);
     }
@@ -105,7 +114,7 @@ class FileCodeRepresentation : public CodeRepresentation {
   private:
     //We use QByteArray, because the column-numbers are measured in utf-8
     IndexedString m_document;
-    QList<QByteArray> lines;
+    QList<QByteArray> lineData;
     QByteArray data;
 };
 

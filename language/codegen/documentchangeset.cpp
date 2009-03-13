@@ -24,6 +24,9 @@
 namespace KDevelop {
 
 
+KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDevelop::DocumentChange& change) {
+    return addChange(DocumentChangePointer(new DocumentChange(change)));
+}
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChangePointer& change) {
     if(change->m_range.start.line != change->m_range.end.line)
@@ -86,15 +89,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
                 change.m_range.end.line < textLines.size() &&
                 change.m_range.start.line >= 0 &&
                 change.m_range.start.column >= 0 &&
-                change.m_range.start.column < textLines[change.m_range.start.line].length() &&
+                change.m_range.start.column <= textLines[change.m_range.start.line].length() &&
                 change.m_range.end.column >= 0 && 
-                change.m_range.end.column < textLines[change.m_range.end.line].length() && 
+                change.m_range.end.column <= textLines[change.m_range.end.line].length() && 
                 change.m_range.start.line == change.m_range.end.line  && //We demand this, although it shoult be fixed
                 ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
             {
                 textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
             }else{
-                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
+                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = \"%6\"(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
                 
                 if(policy == IgnoreFailedChange) {
                     //Just don't do the replacement

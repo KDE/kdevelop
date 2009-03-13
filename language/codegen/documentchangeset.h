@@ -32,7 +32,7 @@ namespace KDevelop {
         SimpleRange m_range;
         QString m_oldText;
         QString m_newText;
-        bool m_ignoreOldText; //Set this to disable the verification of m_oldText
+        bool m_ignoreOldText; //Set this to disable the verification of m_oldText. This can be used to overwrite arbitrary text, but is dangerous!
     };
     
     typedef KSharedPtr<DocumentChange> DocumentChangePointer;
@@ -56,8 +56,10 @@ namespace KDevelop {
             bool m_success;
         };
         
-        ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
+        ///@deprecated
         ChangeResult addChange(const DocumentChangePointer& change);
+        ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
+        ChangeResult addChange(const DocumentChange& change);
         
         enum ReplacementPolicy {
             IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
