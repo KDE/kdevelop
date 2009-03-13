@@ -141,18 +141,44 @@ void TestCppCodeCompletion::testConstructorCompletion() {
 
 void TestCppCodeCompletion::testAssistant() {
   {
-    QByteArray test = "class C {}; void test() {C c; c.value = 5; }";
+    QByteArray test = "class C {}; void test() {C c; c.value = 5; int i = c.value2; i = c.value3(); }";
 
-    TopDUContext* context = parse( test, DumpNone );
+    TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
-    QCOMPARE(context->problems().count(), 1);
-    KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
-    QVERIFY(mdp);
-    kDebug() << "problem:" << mdp->description();
-    QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
-    QCOMPARE(mdp->type->identifier().toString(), QString("value"));
-    QCOMPARE(context->childContexts().count(), 3);
-    
+    QCOMPARE(context->problems().count(), 3);
+    {
+      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QVERIFY(mdp);
+      kDebug() << "problem:" << mdp->description();
+      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("value"));
+      QVERIFY(mdp->type->assigned.type.isValid());
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(context->childContexts().count(), 3);
+    }
+    {
+      ///@todo Make this work as well
+/*      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[1].data()) );
+      QVERIFY(mdp);
+      kDebug() << "problem:" << mdp->description();
+      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("value2"));
+      QVERIFY(!mdp->type->assigned.type.isValid());
+      QVERIFY(mdp->type->convertedTo.type.isValid());
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->convertedTo.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(context->childContexts().count(), 3);*/
+    }
+    {
+      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[2].data()) );
+      QVERIFY(mdp);
+      kDebug() << "problem:" << mdp->description();
+      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("value3"));
+      QVERIFY(!mdp->type->assigned.type.isValid());
+      QVERIFY(mdp->type->convertedTo.type.isValid());
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->convertedTo.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(context->childContexts().count(), 3);
+    }
   }
 }
 

@@ -40,7 +40,7 @@ namespace Cpp {
 
 StaticCodeAssistant staticCodeAssistant;
 
-StaticCodeAssistant::StaticCodeAssistant() {
+StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),
   m_timer->setInterval(400);
@@ -62,6 +62,7 @@ void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
 
 void StaticCodeAssistant::assistantHide() {
   m_activeAssistant = KSharedPtr<KDevelop::IAssistant>();
+  m_activeProblemAssistant = false;
 }
 
 void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range) {
@@ -107,8 +108,12 @@ void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assi
 }
 
 void StaticCodeAssistant::parseJobFinished(KDevelop::ParseJob* job) {
-  if(m_activeAssistant)
-    return;
+  if(m_activeAssistant) {
+    if(m_activeProblemAssistant)
+      m_activeAssistant->doHide(); //Hide the assistant, as we will create a new one if the problem is still there
+    else
+      return;
+  }
   if(job->document() == m_currentDocument) {
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
     if(!lock.locked())
@@ -152,8 +157,10 @@ void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top)
     foreach(KDevelop::ProblemPointer problem, top->problems()) {
       if(m_currentView && m_currentView->cursorPosition().line() == problem->range().start.line) {
         IAssistant::Ptr solution = problem->solutionAssistant();
-        if(solution)
+        if(solution) {
           startAssistant(solution);
+          m_activeProblemAssistant = true;
+        }
       }
     }
 }

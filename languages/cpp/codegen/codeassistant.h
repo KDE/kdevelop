@@ -63,6 +63,7 @@ class StaticCodeAssistant : public QObject {
     KDevelop::IndexedString m_currentDocument;
     void eventuallyStartAssistant(KTextEditor::Document*, KTextEditor::Range range);
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
+    bool m_activeProblemAssistant;
     QTimer* m_timer;
 };
 

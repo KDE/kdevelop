@@ -261,4 +261,10 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
     return newPointer.cast<AbstractType>();
 }
 
+AbstractType::Ptr removeConstants(AbstractType::Ptr type) {
+      if(ConstantIntegralType::Ptr integral = type.cast<ConstantIntegralType>())
+        return AbstractType::Ptr(new IntegralType(*integral));
+      
+      return type;
+}
 }

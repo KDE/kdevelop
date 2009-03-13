@@ -52,6 +52,7 @@ class KDEVCPPDUCHAIN_EXPORT MissingDeclarationType : public KDevelop::DelayedTyp
     
     //The missing item was called like a function with these arguments
     QList<OverloadResolver::Parameter> arguments;
+    bool isFunction;
     
     //Whether this declaration is supposed to be a type
     bool isType;

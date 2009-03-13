@@ -49,7 +49,7 @@ public:
     QString name;
   };
   
-  virtual bool insertFunctionDeclaration(AbstractType::Ptr returnType, KDevelop::Identifier name, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy = KDevelop::Declaration::Public, bool isConstant = false);
+  virtual bool insertFunctionDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr returnType, QList< KDevelop::SourceCodeInsertion::SignatureItem > signature, KDevelop::Declaration::AccessPolicy policy = KDevelop::Declaration::Public, bool isConstant = false);
   
   ///Use the returned change-set to eventually let the user review the changes, and apply them.
   KDevelop::DocumentChangeSet& changes();

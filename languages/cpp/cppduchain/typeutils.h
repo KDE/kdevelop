@@ -128,6 +128,8 @@ namespace TypeUtils {
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr decreasePointerDepth(KDevelop::AbstractType::Ptr type, KDevelop::TopDUContext* top, bool useOperator = false);
 
   KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr increasePointerDepth(KDevelop::AbstractType::Ptr type);
+  
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr removeConstants(AbstractType::Ptr type);
 }
 
 #endif

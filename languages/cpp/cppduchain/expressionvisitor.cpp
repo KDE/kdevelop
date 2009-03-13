@@ -526,6 +526,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           if(!problem->range().isEmpty() && !session()->positionAndSpaceAt(node->start_token).first.macroExpansion.isValid())
             m_problems << problem;
         }
+        m_lastType = missing.cast<KDevelop::AbstractType>();
 
         problem( node, QString("could not find declaration of %1").arg( nameV.identifier().toString() ) );
       } else {
@@ -830,6 +831,12 @@ template<>
 void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ){
 }
 
+QString toString(AbstractType::Ptr t) {
+  if(!t)
+    return "<no type>";
+  return t->toString();
+}
+
 void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   DelayedType::Ptr type(new DelayedType());
   QString id;
@@ -930,7 +937,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(MissingDeclarationType::Ptr missing = leftType.cast<Cpp::MissingDeclarationType>()) {
       if(rightType) {
         Cpp::ExpressionEvaluationResult res;
-        res.type = KDevelop::IndexedType(rightType);
+        res.type = rightType->indexed();
         res.isInstance = rightInstance;
         missing->assigned = res;
       }
@@ -941,7 +948,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(MissingDeclarationType::Ptr missing = rightType.cast<Cpp::MissingDeclarationType>()) {
       if(leftType) {
         Cpp::ExpressionEvaluationResult res;
-        res.type = KDevelop::IndexedType(leftType);
+        res.type = leftType->indexed();
         res.isInstance = leftInstance;
         missing->convertedTo = res;
       }
@@ -1622,9 +1629,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( declarations.isEmpty() && !constructedType ) {
       
-      if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>())
+      if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
         missing->arguments = m_parameters;
-      
+        missing->isFunction = true;
+      }
+      m_lastType = oldLastType;
       problem( node, "function-call: no matching declarations found" );
       return;
     }

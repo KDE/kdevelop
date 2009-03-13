@@ -24,7 +24,7 @@ QString MissingDeclarationType::toString() const {
   return "missing declaration type " + KDevelop::DelayedType::toString();
 }
 
-Cpp::MissingDeclarationType::MissingDeclarationType() : isType(false) {
+Cpp::MissingDeclarationType::MissingDeclarationType() : isType(false), isFunction(false) {
 
 }
 

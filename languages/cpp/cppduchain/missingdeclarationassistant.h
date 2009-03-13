@@ -23,13 +23,15 @@
 #include <language/duchain/types/abstracttype.h>
 #include "missingdeclarationtype.h"
 #include "cppduchainexport.h"
+#include "missingdeclarationproblem.h"
 
 namespace Cpp {
 
 class KDEVCPPDUCHAIN_EXPORT MissingDeclarationAssistant : public KDevelop::IAssistant
 {
 public:
-  MissingDeclarationAssistant(Cpp::MissingDeclarationType::Ptr t);
+  MissingDeclarationAssistant(KSharedPtr<MissingDeclarationProblem> p);
+  KSharedPtr<MissingDeclarationProblem> problem;
   MissingDeclarationType::Ptr type;
 };
 

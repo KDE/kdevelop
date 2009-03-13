@@ -32,7 +32,7 @@ KDevelop::Problem::Severity Cpp::MissingDeclarationProblem::severity() const {
 }
 
 KSharedPtr< KDevelop::IAssistant > Cpp::MissingDeclarationProblem::solutionAssistant() const {
-  return KSharedPtr< KDevelop::IAssistant >(new MissingDeclarationAssistant(type));
+  return KSharedPtr< KDevelop::IAssistant >(new MissingDeclarationAssistant(KSharedPtr<MissingDeclarationProblem>(const_cast<MissingDeclarationProblem*>(this))));
 }
 
 }

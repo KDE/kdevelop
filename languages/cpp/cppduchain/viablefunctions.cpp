@@ -24,6 +24,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include "cppduchain/cpptypes.h"
 #include "templatedeclaration.h"
+#include "missingdeclarationtype.h"
 
 using namespace Cpp;
 
@@ -73,8 +74,13 @@ void ViableFunction::matchParameters( const OverloadResolver::ParameterList& par
   
   for( QList<OverloadResolver::Parameter>::const_iterator it = params.parameters.begin(); it != params.parameters.end(); ++it )  {
     ParameterConversion c;
-    c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );
-    c.baseConversionLevels = conv.baseConversionLevels();
+/*    MissingDeclarationType::Ptr missing = (*argumentIt).type<MissingDeclarationType>();
+    if(missing) {
+      missing->convertedTo.type = (*it).type->indexed();
+    }else{*/
+      c.rank = conv.implicitConversion( (*it).type->indexed(), *argumentIt, (*it).lValue, m_noUserDefinedConversion );
+      c.baseConversionLevels = conv.baseConversionLevels();
+//     }
     m_parameterConversions << c;
     ++argumentIt;
   }

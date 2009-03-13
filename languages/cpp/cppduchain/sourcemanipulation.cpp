@@ -183,8 +183,12 @@ QString KDevelop::SourceCodeInsertion::applyIndentation(QString decl) const {
   QStringList lines = decl.split('\n');
   QString ind = indentation();
   QStringList ret;
-  foreach(QString line, lines)
-    ret << ind + line;
+  foreach(QString line, lines) {
+    if(!line.isEmpty())
+      ret << ind + line;
+    else
+      ret << line;
+  }
   return ret.join("\n");;
 }
 
@@ -193,7 +197,8 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature)
   foreach(SourceCodeInsertion::SignatureItem item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
-    ret += (item.type ? item.type->toString() : QString("<none>"));
+    AbstractType::Ptr type = TypeUtils::removeConstants(item.type);
+    ret += (type ? type->toString() : QString("<none>"));
     
     if(!item.name.isEmpty())
       ret += " " + item.name;
@@ -201,13 +206,15 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature)
   return ret;
 }
 
-bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(AbstractType::Ptr returnType, KDevelop::Identifier name, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy, bool isConstant) {
+bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy, bool isConstant) {
   QString decl = returnType->toString() + " " + name.toString() + "(" + makeSignatureString(signature) + ")";
+  
+  returnType = TypeUtils::removeConstants(returnType);
   
   if(isConstant)
     decl += " const";
   
-  decl += ";";
+  decl += ";\n";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
@@ -218,7 +225,9 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(AbstractType::Ptr 
 
 bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr type) {
 
-  QString decl = type->toString() + " " + name.toString() + ";";
+  type = TypeUtils::removeConstants(type);
+  
+  QString decl = type->toString() + " " + name.toString() + ";\n";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
@@ -240,19 +249,25 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
         
         if( (kind == Slot && qtFunction && qtFunction->isSlot()) ||
             (kind == Function && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ||
-            (kind == Variable && decl->kind() == Declaration::Instance) ) {
+            (kind == Variable && decl->kind() == Declaration::Instance && !dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
           behindExistingItem = true;
-          ret.line = qtFunction->range().end.line+1;
+          ret.line = decl->range().end.line+1;
         }
       }
     }
     
     if(!behindExistingItem) {
-      ret.prefix = accessString();
-      if(kind == Slot)
-       ret.prefix +=  " slots";
-      ret.prefix += ":\n";
+      Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(m_context->owner());
+      if(kind != Slot && m_access == Declaration::Public && classDecl && classDecl->classType() == Cpp::ClassDeclarationData::Struct) {
+        //Nothing to do, we can just insert into a struct if it should be public
+      }else{
+        ret.prefix = accessString();
+        if(kind == Slot)
+        ret.prefix +=  " slots";
+        ret.prefix += ":\n";
+      }
     }
+    
     
   return ret;
 }
