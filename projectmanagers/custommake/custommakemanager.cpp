@@ -155,7 +155,16 @@ bool CustomMakeManager::removeFileFromTarget(KDevelop::ProjectFileItem *file, KD
 
 KUrl CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
 {
-    return item->project()->folder();
+    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
+    for(; !fi && item; )
+    {
+        item=dynamic_cast<ProjectBaseItem*>(item->parent());
+        fi=dynamic_cast<ProjectFolderItem*>(item);
+    }
+    if(!fi) {
+        return item->project()->folder();
+    }
+    return fi->url();
 }
 
 QList<ProjectTargetItem*> CustomMakeManager::targets(KDevelop::ProjectFolderItem*) const
