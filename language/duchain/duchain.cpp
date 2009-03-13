@@ -718,7 +718,7 @@ public:
         globalItemRepositoryRegistry().unlockForWriting();
 
         int elapsedSeconds = startTime.secsTo(QTime::currentTime());
-        kDebug(9505) << "seconds spent doing cleanup: " << elapsedSeconds;
+        kDebug(9505) << "seconds spent doing cleanup: " << elapsedSeconds << "top-contexts still open:" << m_chainsByIndex.size();;
       }
       if(!retries) {
         int elapesedMilliSeconds = startTime.msecsTo(QTime::currentTime());
