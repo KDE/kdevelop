@@ -206,6 +206,7 @@ void PersistentSymbolTable::clearCache()
   ENSURE_CHAIN_WRITE_LOCKED
   {
     QMutexLocker lock(d->m_declarations.mutex());
+    QMutexLocker lock2(d->m_contexts.mutex());
     d->m_importsCache.clear();
     d->m_contextsCache.clear();
     d->m_declarationsCache.clear();
