@@ -57,9 +57,6 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
                     mTabs.takeLast();
                 }
             }
-            
-            if(mViews.isEmpty())
-                ICore::self()->uiController()->addToolView(i18n("Documentation"), this);
             Q_ASSERT(!mViews.isEmpty());
             return mViews.last();
         }
@@ -72,11 +69,15 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 };
 
 DocumentationController::DocumentationController(Core* core)
-    : m_factory(0)
-{}
+    : m_factory(new DocumentationViewFactory)
+{
+    m_factory = new DocumentationViewFactory;
+}
 
 void DocumentationController::initialize()
-{}
+{
+    Core::self()->uiController()->addToolView( i18n("Documentation"), m_factory );
+}
 
 KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
 {
@@ -102,11 +103,6 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
 
 void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
 {
-    if(!m_factory)
-    {
-        m_factory = new DocumentationViewFactory;
-    }
-    
     QPointer<DocumentationView> p=m_factory->lastView();
     p->showDocumentation(doc);
     
