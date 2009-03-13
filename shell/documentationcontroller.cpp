@@ -71,7 +71,6 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
-    m_factory = new DocumentationViewFactory;
 }
 
 void DocumentationController::initialize()
