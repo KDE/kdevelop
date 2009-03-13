@@ -27,7 +27,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include "sourcemanipulation.h"
 #include <language/duchain/duchainutils.h>
-#include <../../kdevplatform/interfaces/idocumentationcontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include "cppduchain.h"
 
