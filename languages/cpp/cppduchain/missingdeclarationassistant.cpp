@@ -29,6 +29,8 @@
 #include <language/duchain/duchainutils.h>
 #include <interfaces/idocumentcontroller.h>
 #include "cppduchain.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -67,6 +69,8 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           DUContext* container = useContainer();
           
           if(searchFrom && container) {
+            KUrl localUrl = searchFrom->url().toUrl();
+            KUrl changeUrl = container->url().toUrl();
             Cpp::SourceCodeInsertion ins(container->topContext());
             ins.setContext(container);
             ins.setAccess(m_access);
@@ -87,6 +91,11 @@ class CreateMemberDeclarationAction : public IAssistantAction {
             }
             lock.unlock();
             ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+            if(changeUrl != localUrl) {
+              ICore::self()->languageController()->backgroundParser()->addDocument(changeUrl);
+              ICore::self()->languageController()->backgroundParser()->addDocument(localUrl);
+            }
+            
           }
         }
         virtual QString description() const {
