@@ -2,7 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin displays a graphical view of all documents currently loaded and separates them by mimetype.
-Comment[de]=Dieses Modul zeigt eine graphische Darstellung aller gerade geöffneten Dokumente nach Mime-Typen getrennt an.
+Comment[de]=Dieses Modul zeigt eine grafische Darstellung aller gerade geöffneten Dokumente nach Mime-Typen getrennt an.
 Comment[el]=Αυτό το πρόσθετο εμφανίζει μια γραφική προβολή όλων των φορτωμένων εγγράφων και τα διαχωρίζει κατά τον τύπο mime τους.
 Comment[es]=Este complemento muestra una vista gráfica de todos los documentos cargados y los organiza por su tipo MIME.
 Comment[et]=See plugin näitab graafiliselt kõiki laaditud dokumente ja eraldab need MIME tüübi alusel.
