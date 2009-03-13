@@ -131,7 +131,7 @@ class QuickOpenWidgetHandler : public QObject {
   void callRowSelected();
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );
-  QDialog* m_dialog; //Warning: m_dialog is also the parent
+  KDialog* m_dialog; //Warning: m_dialog is also the parent
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;

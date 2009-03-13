@@ -179,15 +179,17 @@ QString cursorItemText() {
 }
 
 QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
-  m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
+  m_dialog = new KDialog( ICore::self()->uiController()->activeMainWindow() );
+  m_dialog->setButtons( KDialog::Ok | KDialog::Cancel );
 
-  o.setupUi( m_dialog );
+  o.setupUi( m_dialog->mainWidget() );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
   connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
 
   m_dialog->setWindowTitle(title);
+  o.searchLine->setFocus();
 
   o.list->setItemDelegate( new QuickOpenDelegate( m_model, o.list ) );
 
@@ -236,7 +238,6 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
   }
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
-  o.buttonBox->installEventFilter( this );
   o.list->setFocusPolicy(Qt::NoFocus);
   o.scopesButton->setFocusPolicy(Qt::NoFocus);
   o.itemsButton->setFocusPolicy(Qt::NoFocus);
