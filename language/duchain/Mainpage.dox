@@ -220,6 +220,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  *    KDevelop::Declaration* decl = it->declaration();
  *    // Use the declaration...
  *  }
+ * \endcode
  *
  * \section accessing Accessing a definition-use chain
  * The first step in using a duchain is to retrieve the chain that you are interested in.
