@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Simple CMake-based C++ application
+Category=C++/No GUI (CMake)
+Icon=default-kdevelop
+ShowFilesAfterGeneration=%{dest}/src/main.cpp
