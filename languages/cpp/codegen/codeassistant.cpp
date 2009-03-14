@@ -160,6 +160,7 @@ void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top)
         if(solution) {
           startAssistant(solution);
           m_activeProblemAssistant = true;
+          break;
         }
       }
     }
