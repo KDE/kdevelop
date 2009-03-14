@@ -1528,6 +1528,23 @@ void TestDUChain::testSearchAcrossNamespace2()
   release(top);
 }
 
+void TestDUChain::testSearchAcrossNamespace3()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("namespace B { class C { }; } namespace A { class C; } using namespace B; namespace A { C c; };");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 3);
+  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
+  QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType()->toString(), QString("A::C"));
+}
+
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 

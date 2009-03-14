@@ -419,9 +419,6 @@ class CppDUContext : public BaseContext {
       if( decls.isEmpty() )
         return false;
 
-      if( decls[0]->isForwardDeclaration() )
-        return false; //All forward-declarations must be collected(for implementation-reasons)
-
       if( dynamic_cast<const KDevelop::AbstractFunctionDeclaration*>(decls[0]) && BaseContext::type() != DUContext::Class ) //In classes, one function hides all overloads
         return false; //Collect overloaded function-declarations
 

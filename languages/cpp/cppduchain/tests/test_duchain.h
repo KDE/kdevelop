@@ -79,6 +79,7 @@ private slots:
   void testDeclareUsingNamespace2();
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();
+  void testSearchAcrossNamespace3();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();
@@ -150,6 +151,7 @@ private slots:
   void testMemberFunctionModifiers();
 
   void testContextSearch();
+  
   
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
