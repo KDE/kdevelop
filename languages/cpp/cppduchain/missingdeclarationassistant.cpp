@@ -102,7 +102,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           DUChainReadLocker lock(DUChain::lock());
           DUContext* container = useContainer();
           if(container)
-            return i18n("Declarate %1 %2 %3",  accessString(), returnString(), container->scopeIdentifier(true).toString() + "::" + problem->type->identifier().toString() + signatureString());
+            return i18n("Declare %1 %2 %3",  accessString(), returnString(), container->scopeIdentifier(true).toString() + "::" + problem->type->identifier().toString() + signatureString());
           else
             return QString();
         }
@@ -183,7 +183,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
         }
         
         AbstractType::Ptr type(AbstractType::Ptr base) const {
-          AbstractType::Ptr ret = TypeUtils::realType(TypeUtils::removeConstants(base))->indexed().abstractType();
+          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(base))->indexed().abstractType();
           if(ret)
             ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier
           return ret;
