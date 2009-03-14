@@ -319,7 +319,9 @@ class Bucket {
     
     void initializeFromMap(char* current) {
       if(!m_data) {
+#ifndef QT_NO_DEBUG
           char* start = current;
+#endif
           readOne(current, m_monsterBucketExtent);
           Q_ASSERT(current - start == 4);
           readOne(current, m_available);
@@ -335,7 +337,9 @@ class Bucket {
 
           m_changed = false;
           m_lastUsed = 0;
+#ifndef QT_NO_DEBUG          
           Q_ASSERT(current - start == (DataSize - ItemRepositoryBucketSize));
+#endif
       }
     }
 
@@ -752,7 +756,14 @@ class Bucket {
       return (Item*)(m_data+index);
     }
 
-    inline const Item* itemFromIndex(unsigned short index, const DynamicData* dynamic) const {
+    inline const Item* itemFromIndex(unsigned short index,                                     
+#ifdef QT_NO_DEBUG
+                                      const DynamicData*
+#else
+                                      const DynamicData* dynamic
+#endif                                      
+
+    ) const {
       m_lastUsed = 0;
       Item* ret((Item*)(m_data+index));
       Q_ASSERT(!dynamic);
@@ -2065,7 +2076,10 @@ class ItemRepository : public AbstractItemRepository {
       m_freeSpaceBuckets.clear();
     }else{
       m_file->close();
-      bool res = m_file->open( QFile::ReadOnly ); //Re-open in read-only mode, so we create a read-only m_fileMap
+#ifndef QT_NO_DEBUG
+      bool res = 
+#endif      
+      m_file->open( QFile::ReadOnly ); //Re-open in read-only mode, so we create a read-only m_fileMap
       Q_ASSERT(res);
       //Check that the version is correct
       uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
@@ -2213,7 +2227,10 @@ class ItemRepository : public AbstractItemRepository {
       } else if(m_file) {
         //Either memory-mapping is disabled, or the item is not in the existing memory-map, 
         //so we have to load it the classical way.
-        bool res = m_file->open( QFile::ReadOnly );
+#ifndef QT_NO_DEBUG        
+        bool res = 
+#endif        
+        m_file->open( QFile::ReadOnly );
         
         if(offset + BucketStartOffset < m_file->size()) {
           Q_ASSERT(res);
