@@ -108,13 +108,13 @@ void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assi
 }
 
 void StaticCodeAssistant::parseJobFinished(KDevelop::ParseJob* job) {
-  if(m_activeAssistant) {
-    if(m_activeProblemAssistant)
-      m_activeAssistant->doHide(); //Hide the assistant, as we will create a new one if the problem is still there
-    else
-      return;
-  }
   if(job->document() == m_currentDocument) {
+    if(m_activeAssistant) {
+      if(m_activeProblemAssistant)
+        m_activeAssistant->doHide(); //Hide the assistant, as we will create a new one if the problem is still there
+      else
+        return;
+    }
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
     if(!lock.locked())
       return;
