@@ -50,7 +50,7 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
       id.setIsExpression(true);
       lastId.appendTemplateIdentifier(id);
     }else{
-      lastId.appendTemplateIdentifier(oldTemplateIdentifiers.size() > a ? oldTemplateIdentifiers[a] : TypeIdentifier());
+      lastId.appendTemplateIdentifier((uint) oldTemplateIdentifiers.size() > a ? oldTemplateIdentifiers[a] : TypeIdentifier());
     }
   }
 
@@ -70,7 +70,7 @@ QString InstantiationInformation::toString(bool local) const {
     if(previousInstantiationInformation && !local)
         ret = IndexedInstantiationInformation(previousInstantiationInformation).information().toString() + "::";
     ret += '<';
-    for(int a = 0; a < templateParametersSize(); ++a) {
+    for(uint a = 0; a < templateParametersSize(); ++a) {
         if(a)
             ret += ", ";
         if(templateParameters()[a].abstractType())
