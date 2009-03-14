@@ -50,6 +50,8 @@
 #define ENSURE_REACHABLE(bucket)
 #endif
 
+#define ITEMREPOSITORY_USE_MMAP_LOADING
+
 ///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
 ///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
 ///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
@@ -276,12 +278,14 @@ class Bucket {
       CheckStart = 0xff00ff1,
       CheckEnd = 0xfafcfb
     };
-    Bucket() : m_monsterBucketExtent(0), m_available(0), m_data(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0) {
+    Bucket() : m_monsterBucketExtent(0), m_available(0), m_data(0), m_mappedData(0), m_objectMap(0), m_objectMapSize(0), m_largestFreeItem(0), m_freeItemCount(0), m_nextBucketHash(0) {
     }
     ~Bucket() {
-      delete[] m_data;
-      delete[] m_nextBucketHash;
-      delete[] m_objectMap;
+      if(m_data != m_mappedData) {
+        delete[] m_data;
+        delete[] m_nextBucketHash;
+        delete[] m_objectMap;
+      }
     }
 
     void initialize(uint monsterBucketExtent) {
@@ -299,28 +303,39 @@ class Bucket {
         m_lastUsed = 0;
       }
     }
-    void initialize(QFile* file, size_t offset) {
+    
+    template<class T>
+    void readIn(char*& from, int count, T* to) {
+      for(int a = 0; a < count; ++a) {
+        *to = *((T*)from);
+        ++to;
+        from += sizeof(T);
+      }
+    }
+    template<class T>
+    void readOne(char*& from, T& to) {
+      readIn(from, 1, &to);
+    }
+    
+    void initializeFromMap(char* current) {
       if(!m_data) {
-        if(static_cast<size_t>(file->size()) > offset) {
+          char* start = current;
+          readOne(current, m_monsterBucketExtent);
+          Q_ASSERT(current - start == 4);
+          readOne(current, m_available);
+          m_objectMapSize = ObjectMapSize;
+          m_objectMap = (short unsigned int*)current;
+          current += sizeof(short unsigned int) * m_objectMapSize;
+          m_nextBucketHash = (short unsigned int*)current;
+          current += sizeof(short unsigned int) * NextBucketHashSize;
+          readOne<short unsigned int>(current, m_largestFreeItem);
+          readOne<unsigned int>(current, m_freeItemCount);
+          m_data = current;
+          m_mappedData = current;
 
-          file->seek(offset);
-          file->read((char*)&m_monsterBucketExtent, sizeof(unsigned int));
-          Q_ASSERT(static_cast<size_t>(file->size()) >= offset + (1+m_monsterBucketExtent)*DataSize);
-
-          initialize(m_monsterBucketExtent);
-
-          file->read((char*)&m_available, sizeof(unsigned int));
-          file->read((char*)m_objectMap, sizeof(short unsigned int) * m_objectMapSize);
-          file->read((char*)m_nextBucketHash, sizeof(short unsigned int) * NextBucketHashSize);
-          file->read((char*)&m_largestFreeItem, sizeof(short unsigned int));
-          file->read((char*)&m_freeItemCount, sizeof(unsigned int));
-          file->read(m_data, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
-          Q_ASSERT(static_cast<size_t>(file->pos()) == offset + (1+m_monsterBucketExtent)*DataSize);
           m_changed = false;
           m_lastUsed = 0;
-        }else{
-          initialize(m_monsterBucketExtent);
-        }
+          Q_ASSERT(current - start == (DataSize - ItemRepositoryBucketSize));
       }
     }
 
@@ -422,7 +437,7 @@ class Bucket {
 
       ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
 
-      m_changed = true;
+      prepareChange();
 
       unsigned int totalSize = itemSize + AdditionalSpacePerItem;
 
@@ -663,7 +678,7 @@ class Bucket {
       ifDebugLostSpace( Q_ASSERT(!lostSpace()); )
 
       m_lastUsed = 0;
-      m_changed = true;
+      prepareChange();
 
       unsigned int size = itemFromIndex(index)->itemSize();
       //Step 1: Remove the item from the data-structures that allow finding it: m_objectMap
@@ -729,17 +744,20 @@ class Bucket {
 #endif
     }
 
+    ///@warning The returned item may be in write-protected memory, so never try doing a const_cast and changing some data
+    ///         If you need to change something, use dynamicItemFromIndex
+    ///@warning When using multi-threading, mutex() must be locked as long as you use the returned data
     inline const Item* itemFromIndex(unsigned short index) const {
       m_lastUsed = 0;
       return (Item*)(m_data+index);
     }
 
-    ///When dynamic is nonzero, and apply(..) returns false, the item is freed, and the returned item is invalid.
     inline const Item* itemFromIndex(unsigned short index, const DynamicData* dynamic) const {
       m_lastUsed = 0;
       Item* ret((Item*)(m_data+index));
-      if(dynamic)
-        dynamic->apply(m_data + index - AdditionalSpacePerItem);
+      Q_ASSERT(!dynamic);
+//       if(dynamic)
+//         dynamic->apply(m_data + index - AdditionalSpacePerItem);
       return ret;
     }
 
@@ -785,7 +803,7 @@ class Bucket {
 
     void setNextBucketForHash(unsigned int hash, unsigned short bucket) {
       m_lastUsed = 0;
-      m_changed = true;
+      prepareChange();
       m_nextBucketHash[hash % NextBucketHashSize] = bucket;
     }
 
@@ -843,8 +861,9 @@ class Bucket {
       return m_changed;
     }
 
-    void setChanged() {
+    void prepareChange() {
       m_changed = true;
+      makeDataPrivate();
     }
 
     ///Returns the count of following buckets that were merged onto this buckets data array
@@ -879,6 +898,21 @@ class Bucket {
 
   private:
 
+    void makeDataPrivate() {
+      if(m_mappedData == m_data) {
+        short unsigned int* oldObjectMap = m_objectMap;
+        short unsigned int* oldNextBucketHash = m_nextBucketHash;
+        
+        m_data = new char[ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize];
+        m_objectMap = new short unsigned int[m_objectMapSize];
+        m_nextBucketHash = new short unsigned int[NextBucketHashSize];
+        
+        memcpy(m_data, m_mappedData, ItemRepositoryBucketSize + m_monsterBucketExtent * DataSize);
+        memcpy(m_objectMap, oldObjectMap, m_objectMapSize * sizeof(short unsigned int));
+        memcpy(m_nextBucketHash, oldNextBucketHash, NextBucketHashSize * sizeof(short unsigned int));
+      }
+    }
+    
     ///Merges the given index item, which must have a freeSize() set, to surrounding free items, and inserts the result.
     ///The given index itself should not be in the free items chain yet.
     ///Returns whether the item was inserted somewhere.
@@ -1007,6 +1041,7 @@ class Bucket {
     uint m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
+    char* m_mappedData; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
     short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
     uint m_objectMapSize;
     short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
@@ -1552,11 +1587,12 @@ class ItemRepository : public AbstractItemRepository {
   ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
   ///or the equals(..) function. That would completely destroy the consistency.
   ///@param index The index. It must be valid(match an existing item), and nonzero.
-  ///@param dynamic will be applied to the item.
-  ///@warning Use applyDynamicAction instead whenever possible! If you use this, make sure you lock mutex()
-  ///         before calling, and hold it at least until you're ready with any modifications.
+  ///@warning If you use this, make sure you lock mutex() before calling,
+  ///         and hold it until you're ready using/changing the data..
+  
   Item* dynamicItemFromIndex(unsigned int index, const DynamicData* dynamic = 0) {
     Q_ASSERT(index);
+    Q_ASSERT(!dynamic);
 
     ThisLocker lock(m_mutex);
 
@@ -1569,7 +1605,7 @@ class ItemRepository : public AbstractItemRepository {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
     }
-    bucketPtr->setChanged();
+    bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
     return const_cast<Item*>(bucketPtr->itemFromIndex(indexInBucket, dynamic));
   }
@@ -1592,7 +1628,7 @@ class ItemRepository : public AbstractItemRepository {
       initializeBucket(bucket);
       bucketPtr = m_fastBuckets[bucket];
     }
-    bucketPtr->setChanged();
+    bucketPtr->prepareChange();
     unsigned short indexInBucket = index & 0xffff;
     action(const_cast<Item&>(*bucketPtr->itemFromIndex(indexInBucket, 0)));
   }
@@ -1601,6 +1637,7 @@ class ItemRepository : public AbstractItemRepository {
   ///@param dynamic will be applied to the item.
   const Item* itemFromIndex(unsigned int index, const DynamicData* dynamic = 0) const {
     Q_ASSERT(index);
+    Q_ASSERT(!dynamic);
 
     ThisLocker lock(m_mutex);
 
@@ -2027,6 +2064,9 @@ class ItemRepository : public AbstractItemRepository {
       m_dynamicFile->write((char*)&m_freeSpaceBucketsSize, sizeof(uint));
       m_freeSpaceBuckets.clear();
     }else{
+      m_file->close();
+      bool res = m_file->open( QFile::ReadOnly ); //Re-open in read-only mode, so we create a read-only m_fileMap
+      Q_ASSERT(res);
       //Check that the version is correct
       uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
 
@@ -2062,6 +2102,13 @@ class ItemRepository : public AbstractItemRepository {
       m_dynamicFile->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
     }
 
+#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
+    m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
+    m_fileMapSize = m_file->size() - BucketStartOffset;
+#else
+    m_fileMap = 0;
+    m_fileMapSize = 0;
+#endif
     //To protect us from inconsistency due to crashes. flush() is not enough.
     m_file->close();
     m_dynamicFile->close();
@@ -2073,8 +2120,6 @@ class ItemRepository : public AbstractItemRepository {
 
   ///@warning by default, this does not store the current state to disk.
   virtual void close(bool doStore = false) {
-    if(!m_currentOpenPath.isEmpty()) {
-    }
     m_currentOpenPath.clear();
 
     if(doStore)
@@ -2084,6 +2129,8 @@ class ItemRepository : public AbstractItemRepository {
       m_file->close();
     delete m_file;
     m_file = 0;
+    m_fileMap = 0;
+    m_fileMapSize = 0;
 
     if(m_dynamicFile)
       m_dynamicFile->close();
@@ -2154,15 +2201,41 @@ class ItemRepository : public AbstractItemRepository {
 
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new MyBucket();
-      if(m_file) {
-        if(m_file->open( QFile::ReadOnly )) {
-          m_fastBuckets[bucketNumber]->initialize(m_file, BucketStartOffset + (bucketNumber-1) * MyBucket::DataSize);
-          m_file->close();
+      bool doMMapLoading = false;
+#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
+      doMMapLoading = true;
+#endif
+      
+      uint offset = ((bucketNumber-1) * MyBucket::DataSize);
+      if(m_file && offset < m_fileMapSize && doMMapLoading && *((uint*)(m_fileMap + offset)) == 0) {
+//         kDebug() << "loading bucket mmap:" << bucketNumber;
+        m_fastBuckets[bucketNumber]->initializeFromMap(((char*)m_fileMap) + offset);
+      } else if(m_file) {
+        //Either memory-mapping is disabled, or the item is not in the existing memory-map, 
+        //so we have to load it the classical way.
+        bool res = m_file->open( QFile::ReadOnly );
+        
+        if(offset + BucketStartOffset < m_file->size()) {
+          Q_ASSERT(res);
+          offset += BucketStartOffset;
+          m_file->seek(offset);
+          uint monsterBucketExtent;
+          m_file->read((char*)(&monsterBucketExtent), sizeof(unsigned int));;
+          m_file->seek(offset);
+          QByteArray data = m_file->read((1+monsterBucketExtent) * MyBucket::DataSize);
+          m_fastBuckets[bucketNumber]->initializeFromMap(data.data());
+          m_fastBuckets[bucketNumber]->prepareChange();
         }else{
-          kFatal() << "cannot open repository-file for reading";
+          m_fastBuckets[bucketNumber]->initialize(0);
         }
-      } else
+        
+        m_file->close();
+        
+      }else{
         m_fastBuckets[bucketNumber]->initialize(0);
+      }
+    }else{
+      m_fastBuckets[bucketNumber]->initialize(0);
     }
   }
 
@@ -2261,6 +2334,8 @@ class ItemRepository : public AbstractItemRepository {
   ItemRepositoryRegistry* m_registry;
   //File that contains the buckets
   QFile* m_file;
+  uchar* m_fileMap;
+  uint m_fileMapSize;
   //File that contains more dynamic data, like the list of buckets with deleted items
   QFile* m_dynamicFile;
   uint m_repositoryVersion;
