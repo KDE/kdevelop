@@ -180,7 +180,8 @@ public:
 
       mhash += 17 * m_isConstant + 19 * m_isReference + 23 * m_pointerDepth + 31 * m_pointerConstantMask;
 
-      m_hash = mhash;
+      if(mhash != m_hash)
+        m_hash = mhash;//The local class may be in read-only memory, so only  change m_hash if it's actually a change
     }
     return m_hash;
   }
