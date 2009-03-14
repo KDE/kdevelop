@@ -908,11 +908,12 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
 }*/
 
 struct TopDUContext::FindDeclarationsAcceptor {
-  FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check) : top(_top), target(_target), check(_check) {
+  FindDeclarationsAcceptor(const TopDUContext* _top, DeclarationList& _target, const DeclarationChecker& _check, SearchFlags _flags) : top(_top), target(_target), check(_check) {
     cache = _top->m_local->currentCache();
+    flags = _flags;
   }
 
-  void operator() (const AliasChainElement& element) {
+  bool operator() (const AliasChainElement& element) {
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
@@ -923,7 +924,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
 
     //If the identifier wasn't found in the identifier repository, the item cannot exist.
     if(id.isEmpty() && !element.identifier.isEmpty())
-      return;
+      return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDeclarationIterator filter;
@@ -936,6 +937,9 @@ struct TopDUContext::FindDeclarationsAcceptor {
     } else
       filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
 
+    if(!filter && !unchecked)
+      return true;
+    
     while(filter || unchecked) {
 
       IndexedDeclaration iDecl;
@@ -969,12 +973,15 @@ struct TopDUContext::FindDeclarationsAcceptor {
     }
 
     check.createVisibleCache = 0;
+    
+    return !top->foundEnough(target, flags);
   }
 
   const TopDUContext* top;
   CacheData* cache;
   DeclarationList& target;
   const DeclarationChecker& check;
+  QFlags< KDevelop::DUContext::SearchFlag > flags;
 };
 
 bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags) const
@@ -988,7 +995,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 #endif
 
   DeclarationChecker check(this, position, dataType, flags);
-  FindDeclarationsAcceptor storer(this, ret, check);
+  FindDeclarationsAcceptor storer(this, ret, check, flags);
 
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindDeclarationsAcceptor.
   ///That stores the found declaration to the output.
@@ -1023,7 +1030,7 @@ struct TopDUContext::ApplyAliasesBuddyInfo {
 
 ///@todo Implement a cache so at least the global import checks don't need to be done repeatedly. The cache should be thread-local, using DUChainPointer for the hashed items, and when an item was deleted, it should be discarded
 template<class Acceptor>
-void TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
+bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
 {
   if(recursionDepth > maxApplyAliasesRecursion) {
     QList<QualifiedIdentifier> searches = identifier->toList();
@@ -1103,26 +1110,30 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
           if(identifier->next.isEmpty()) {
             //Just insert the aliased namespace identifier
-            accept(*newAliasedElement);
+            if(!accept(*newAliasedElement))
+              return false;
           }else{
             //Create an identifiers where namespace-alias part is replaced with the alias target
             FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
-              applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1);
+              if(!applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1))
+                return false;
           }
         }
       }
     }else{
       if(!identifier->identifier.isEmpty())
-        return; //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
+        return true; //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
     }
   }
 
   if(!foundAlias) { //If we haven't found an alias, put the current versions into the result list. Additionally we will compute the identifiers transformed through "using".
     if(identifier->next.isEmpty()) {
-      accept(newElement); //We're at the end of a qualified identifier, accept it
+      if(!accept(newElement)) //We're at the end of a qualified identifier, accept it
+        return false;
     } else {
       FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
-        applyAliases(&newElement, next, accept, position, canBeNamespace, 0, recursionDepth+1);
+        if(!applyAliases(&newElement, next, accept, position, canBeNamespace, 0, recursionDepth+1))
+          return false;
     }
   }
 
@@ -1191,11 +1202,13 @@ void TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   #endif
           //Prevent endless recursion by checking whether we're actually doing a change
           if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
-          applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1);
+            if(!applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1))
+              return false;
         }
       }
     }
   }
+  return true;
 }
 
 template<class Acceptor>
@@ -1206,11 +1219,11 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
 }
 
 struct TopDUContext::FindContextsAcceptor {
-  FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check) : top(_top), target(_target), check(_check) {
+  FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check, SearchFlags _flags) : top(_top), target(_target), check(_check), flags(_flags) {
     cache = _top->m_local->currentCache();
   }
 
-  void operator() (const AliasChainElement& element) {
+  bool operator() (const AliasChainElement& element) {
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << element.qualifiedIdentifier().toString();
 #endif
@@ -1220,7 +1233,7 @@ struct TopDUContext::FindContextsAcceptor {
 
     //If the identifier wasn't found in the identifier repository, the item cannot exist.
     if(id.isEmpty() && !element.identifier.isEmpty())
-      return;
+      return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDUContextIterator filter;
@@ -1253,19 +1266,21 @@ struct TopDUContext::FindContextsAcceptor {
 
       target << ctx;
     }
+    return true;
   }
 
   const TopDUContext* top;
   CacheData* cache;
   QList<DUContext*>& target;
   const ContextChecker& check;
+  SearchFlags flags;
 };
 
 void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const {
 
   ENSURE_CAN_READ
   ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
-  FindContextsAcceptor storer(this, ret, check);
+  FindContextsAcceptor storer(this, ret, check, flags);
 
   ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindContextsAcceptor.
   ///That stores the found declaration to the output.

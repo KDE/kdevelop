@@ -552,6 +552,8 @@ public:
    * \returns the requested context if one was found, otherwise null.
    *
    * \warning this may return contexts which are not in this tree, you may need to lock them too...
+   * \warning this function is not as far developed as findDeclarations(..), and does not respect all of the details
+   *                so always use findDeclarations(..) instead when possible!
    */
   QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* source = 0, SearchFlags flags = NoSearchFlags) const;
 
