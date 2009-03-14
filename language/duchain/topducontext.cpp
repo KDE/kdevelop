@@ -937,9 +937,6 @@ struct TopDUContext::FindDeclarationsAcceptor {
     } else
       filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
 
-    if(!filter && !unchecked)
-      return true;
-    
     while(filter || unchecked) {
 
       IndexedDeclaration iDecl;
