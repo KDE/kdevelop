@@ -52,8 +52,12 @@ class CreateLocalDeclarationAction : public IAssistantAction {
           return i18n("Create local declaration %1 %2", type()->toString(), problem->type->identifier().toString());
         }
     private:
+      
         AbstractType::Ptr type() const {
-          return TypeUtils::realType(TypeUtils::removeConstants(problem->type->assigned.type.abstractType()));
+          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(problem->type->assigned.type.abstractType()))->indexed().abstractType();
+          if(ret)
+            ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier
+          return ret;
         }
         KSharedPtr< Cpp::MissingDeclarationProblem > problem;
         QString m_description;
