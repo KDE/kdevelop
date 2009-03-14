@@ -80,7 +80,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
               int num = 1;
               foreach(OverloadResolver::Parameter arg, problem->type->arguments) {
                 Cpp::SourceCodeInsertion::SignatureItem item;
-                item.type = arg.type;
+                item.type = type(arg.type);
                 item.name = QString("arg%1").arg(num);
                 signature << item;
                 ++num;
@@ -183,7 +183,10 @@ class CreateMemberDeclarationAction : public IAssistantAction {
         }
         
         AbstractType::Ptr type(AbstractType::Ptr base) const {
-          return TypeUtils::realType(TypeUtils::removeConstants(base));
+          AbstractType::Ptr ret = TypeUtils::realType(TypeUtils::removeConstants(base))->indexed().abstractType();
+          if(ret)
+            ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier
+          return ret;
         }
       
         KSharedPtr< Cpp::MissingDeclarationProblem > problem;
