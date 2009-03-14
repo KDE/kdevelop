@@ -244,6 +244,10 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     insertion.setContext(classContext);
     
     insertion.insertSlot(completionContext()->followingText(), QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
+
+    QString name = completionContext()->followingText();
+    if(name.isEmpty() && m_declaration)
+      name = m_declaration->identifier().toString();
     
     lock.unlock();
     
@@ -254,7 +258,7 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
 
     ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
 
-    QString localText = "SLOT(" + completionContext()->followingText() + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
+    QString localText = "SLOT(" + name + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
     document->replaceText(word, localText);
   }else{
     document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
