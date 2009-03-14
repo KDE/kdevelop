@@ -126,8 +126,10 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier exchangeQualifiedIdentifier(KDeve
 KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier unTypedefType(KDevelop::Declaration* decl, KDevelop::TypeIdentifier type);
 
 ///Returns a shortened string version of the type attached to the given declaration, using the uses to resolve typedefs and such.
-///@param desiredLength the desired length. No guarantee that the resulting string will be this short.
-KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
+///@param desiredLength the desired length. No guarantee that the resulting string will be this short. With the default-value, no shortening will happen in most cases.
+///@param stripPrefix this prefix will be stripped from qualified identifiers. This is useful to remove parts of the current context.
+KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, int desiredLength = 10000, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
+KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::AbstractType::Ptr type, int desiredLength = 10000, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
 
 KDEVCPPDUCHAIN_EXPORT bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend);
 

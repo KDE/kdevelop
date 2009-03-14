@@ -192,13 +192,13 @@ QString KDevelop::SourceCodeInsertion::applyIndentation(QString decl) const {
   return ret.join("\n");;
 }
 
-QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature) {
+QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature, DUContext* context) {
   QString ret;
   foreach(SourceCodeInsertion::SignatureItem item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
     AbstractType::Ptr type = TypeUtils::removeConstants(item.type);
-    ret += (type ? type->toString() : QString("<none>"));
+    ret += Cpp::shortenedTypeString(type, 100000, context->scopeIdentifier(true));
     
     if(!item.name.isEmpty())
       ret += " " + item.name;
@@ -207,9 +207,12 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature)
 }
 
 bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy, bool isConstant) {
-  QString decl = returnType->toString() + " " + name.toString() + "(" + makeSignatureString(signature) + ")";
+  if(!m_context)
+    return false;
   
   returnType = TypeUtils::removeConstants(returnType);
+  
+  QString decl = Cpp::shortenedTypeString(returnType, 100000, m_context->scopeIdentifier(true)) + " " + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
   
   if(isConstant)
     decl += " const";
@@ -225,9 +228,12 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
 
 bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr type) {
 
+  if(!m_context)
+    return false;
+  
   type = TypeUtils::removeConstants(type);
   
-  QString decl = type->toString() + " " + name.toString() + ";\n";
+  QString decl = Cpp::shortenedTypeString(type, 100000, m_context->scopeIdentifier(true)) + " " + name.toString() + ";\n";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   

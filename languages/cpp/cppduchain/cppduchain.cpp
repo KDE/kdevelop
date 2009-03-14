@@ -460,6 +460,16 @@ KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDe
   return ret;
 }
 
+int reservedIdentifierCount(QString name) {
+  QStringList l = name.split("::");
+  int ret = 0;
+  foreach(QString s, l)
+    if(s.startsWith('_'))
+      ++ret;
+    
+  return ret;
+}
+
 AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
   struct ShortenAliasExchanger : public KDevelop::TypeExchanger {
     virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
@@ -472,7 +482,7 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
       if(alias) {
         //If the aliased type has less involved template arguments, prefer it
         AbstractType::Ptr shortenedTarget = exchange(alias->type());
-        if(shortenedTarget && shortenedTarget->toString().count('<') < alias->toString().count('<')) {
+        if(shortenedTarget && shortenedTarget->toString().count('<') < alias->toString().count('<') && reservedIdentifierCount(shortenedTarget->toString()) <= reservedIdentifierCount(alias->toString())) {
           shortenedTarget->setModifiers(shortenedTarget->modifiers() | alias->modifiers());
           return shortenedTarget;
         }
@@ -489,6 +499,7 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
   return type;
 }
 
+
 QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdentifier stripPrefix) {
   AbstractType::Ptr type = decl->abstractType();
   if(decl->isTypeAlias()) {
@@ -503,6 +514,11 @@ QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdent
     type = funType->returnType();
   }
   
+  return shortenedTypeString(type);
+}
+
+QString shortenedTypeString(KDevelop::AbstractType::Ptr type, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
+
   bool isReference = false;
   if(type.cast<ReferenceType>()) {
     isReference = true;

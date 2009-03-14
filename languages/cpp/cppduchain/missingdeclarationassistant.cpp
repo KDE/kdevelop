@@ -41,17 +41,25 @@ class CreateLocalDeclarationAction : public IAssistantAction {
         }
         virtual void execute() {
           DUChainReadLocker lock(DUChain::lock());
-//           if(DUContext* searchFrom = problem->type->searchStartContext.data()) {
+          if(DUContext* searchFrom = problem->type->searchStartContext.data()) {
             KDevelop::DocumentChangeSet changes;
-            changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->range().start, problem->range().start), QString(),  type()->toString() + " "));
+            changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->range().start, problem->range().start), QString(),  typeString() + " "));
             lock.unlock();
             changes.applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
-//           }
+          }
         }
         virtual QString description() const {
-          return i18n("Create local declaration %1 %2", type()->toString(), problem->type->identifier().toString());
+          return i18n("Create local declaration %1 %2", typeString(20), problem->type->identifier().toString());
         }
     private:
+      
+        QString typeString(int maxSize = 10000) const {
+          DUChainReadLocker lock(DUChain::lock());
+          if(DUContext* searchFrom = problem->type->searchStartContext.data())
+            return Cpp::shortenedTypeString(type(), maxSize, searchFrom->scopeIdentifier(true));
+          else
+            return QString();
+        }
       
         AbstractType::Ptr type() const {
           AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(problem->type->assigned.type.abstractType()))->indexed().abstractType();
@@ -131,9 +139,19 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           return container;
         }
       
+        QString typeString(AbstractType::Ptr type) const {
+          DUChainReadLocker lock(DUChain::lock());
+          if(!type)
+            return "<no type>";
+          if(DUContext* container = useContainer())
+            return Cpp::shortenedTypeString(type, 30, container->scopeIdentifier(true));
+          else
+            return QString();
+        }
+      
         QString returnString() const {
           if(returnType()){
-            return returnType()->toString();
+            return typeString(returnType());
           }else {
             return QString();
           }
@@ -176,14 +194,6 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           KDevelop::IntegralType* i = new KDevelop::IntegralType;
           i->setDataType(KDevelop::IntegralType::TypeVoid);
           return AbstractType::Ptr(i);
-        }
-        
-        QString typeString(AbstractType::Ptr base) const {
-          AbstractType::Ptr t = type(base);
-          if(t)
-            return t->toString();
-          else
-            return "<no type>";
         }
         
         AbstractType::Ptr type(AbstractType::Ptr base) const {
