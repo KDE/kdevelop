@@ -31,6 +31,7 @@
 #include "krossvcsjob.h"
 #include "wrappers/krossvcsrevision.h"
 #include "wrappers/krossvcslocation.h"
+#include <vcs/widgets/vcsimportmetadatawidget.h>
 
 using namespace KDevelop;
 
@@ -56,9 +57,12 @@ QString KrossDistributedVersionControl::name() const
     return result.toString();
 }
 
-KDevelop::VcsImportMetadataWidget * KrossDistributedVersionControl::createImportMetadataWidget(QWidget *)
+KDevelop::VcsImportMetadataWidget * KrossDistributedVersionControl::createImportMetadataWidget(QWidget * w)
 {
-    return 0;
+    QVariantList args;
+    args << qVariantFromValue<QObject*>(w);
+    QVariant result=action->callFunction( "createImportMetadataWidget", args);
+    return qobject_cast<KDevelop::VcsImportMetadataWidget *>(result.value<QObject*>());
 }
 
 bool KrossDistributedVersionControl::isVersionControlled(const KUrl & url)
