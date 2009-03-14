@@ -45,6 +45,11 @@ namespace TypeUtils {
   ///@todo remove all parameters except type
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realType(const AbstractType::Ptr& type, const TopDUContext* topContext = 0, bool* constant = 0);
 
+  /**
+   * Returns the dereferenced type, keeping typedef types.
+   */
+  KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr realTypeKeepAliases(const AbstractType::Ptr& type);
+  
   KDEVCPPDUCHAIN_EXPORT AbstractType::Ptr pointsToType(const AbstractType::Ptr& type, const AbstractType::Ptr& pointsTo);
 
   /**

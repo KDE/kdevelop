@@ -52,7 +52,24 @@ using namespace KDevelop;
 
     return base;
   }
-  
+
+  AbstractType::Ptr realTypeKeepAliases(const AbstractType::Ptr& _base) {
+
+    AbstractType::Ptr base = _base;
+    ReferenceType::Ptr ref = base.cast<ReferenceType>();
+
+    while( ref ) {
+      uint hadModifiers = base->modifiers();
+      base = ref->baseType();
+      if(base)
+        base->setModifiers(base->modifiers() | hadModifiers);
+      
+      ref = base.cast<ReferenceType>();
+    }
+
+    return base;
+  }
+
   bool isPointerType(const AbstractType::Ptr& type) {
     return realType(type, 0).cast<PointerType>();
   }
