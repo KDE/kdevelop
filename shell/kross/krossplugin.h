@@ -33,6 +33,7 @@ namespace KDevelop { class IDocument; }
 class KrossToolViewFactory;
 class QToolBar;
 class QMainWindow;
+class KAboutData;
 
 class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, public KrossDistributedVersionControl
 {
@@ -41,7 +42,7 @@ class KrossPlugin : public KDevelop::IPlugin, public KrossBuildSystemManager, pu
     Q_INTERFACES( KDevelop::IProjectFileManager )
     Q_INTERFACES( KDevelop::IDistributedVersionControl )
     public:
-        explicit KrossPlugin( QObject* parent = 0, const QVariantList& args = QVariantList() );
+        explicit KrossPlugin( const QString& scriptfile, const KAboutData& about, QObject* parent = 0);
         virtual ~KrossPlugin();
 
         KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);

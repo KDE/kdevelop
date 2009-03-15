@@ -44,28 +44,17 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
-KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
-    : KDevelop::IPlugin( KComponentData(), parent ), KrossDistributedVersionControl(this),
+KrossPlugin::KrossPlugin( const QString& scriptfile, const KAboutData& about, QObject* parent )
+    : KDevelop::IPlugin( KComponentData( about ), parent ), KrossDistributedVersionControl(this),
     action(0)
 {
-    kDebug() << "Krossing the krossed paths of this krossed world" << args;
+    kDebug() << "Krossing the krossed paths of this krossed world" << scriptfile;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     
-    Q_ASSERT(args.count() >= 2);
-    QStringList interfaces = args[0].toStringList();
-    QString name = args[1].toString();
-
-    KUrl file=KStandardDirs::installPath("kdedir");
-    file.addPath("lib");
-    file.addPath("kde4");
-    file.addPath(name);
-    m_pluginDir=file;
-    file.addPath(name+".py");
-
     Kross::Manager::self().setStrictTypesEnabled(false);
-    action = new Kross::Action(this, file);
-    action->setFile(file.toLocalFile());
+    action = new Kross::Action(this, scriptfile);
+    action->setFile(scriptfile);
     
     action->addObject(KDevelop::ICore::self(), "ICore");
     action->addObject(KDevelop::DUChain::self(), "DUChain");

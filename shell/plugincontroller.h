@@ -50,7 +50,6 @@ class PluginControllerPrivate;
  */
 class KDEVPLATFORMSHELL_EXPORT PluginController: public IPluginController
 {
-
     Q_OBJECT
 friend class Core;
 friend class CorePrivate;

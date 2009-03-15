@@ -49,6 +49,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 
+#include <kross/krossplugin.h>
+
 #include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
@@ -319,18 +321,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0L;
     }
 
-    // Do not load KDevKrossManager directly, it is indirectly loaded when loading
-    // any plugins written in a supported scripting language
-    // The kross-manager plugin needs the name+interfaces of the script-plugin
-    // as argument
-    // At a later point in time, we should try to move the plugin's code directly
-    // into shell
-    if( info.pluginName() == "KDevKrossManager" )
-    {
-        kDebug() << "tried to load KDevKrossManager, ignoring";
-        return 0;
-    }
-
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
@@ -345,6 +335,19 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         kWarning() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
     }
+    
+    bool isKrossPlugin = false;
+    QString krossScriptFile;
+    if( info.property("X-KDevelop-PluginType").toString() == "Kross" ) 
+    {
+        isKrossPlugin = true;
+        krossScriptFile = KStandardDirs::locate( "data", info.property("X-KDE-Library").toString(), KComponentData("kdevkrossplugins") );
+        if( krossScriptFile.isEmpty() || !QFileInfo( krossScriptFile ).exists() || !QFileInfo( krossScriptFile ).isReadable() )
+        {
+            kWarning() << "Unable to load kross plugin" << pluginId << ". Script file" << krossScriptFile << "not found or not readable";
+            return 0;
+        }
+    }
 
     kDebug() << "Attempting to load '" << pluginId << "'";
     emit loadingPlugin( info.pluginName() );
@@ -356,22 +359,33 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         QVariant prop = info.property( "X-KDevelop-PluginType" );
         kDebug() << "Checked... starting to load:" << info.name() << "type:" << prop;
-        if(prop.toString()=="Kross")
+        
+        loadDependencies( info );
+        loadOptionalDependencies( info );
+        
+        if( isKrossPlugin )
         {
+            // Kross is special, we create always the same "plugin" which hooks up
+            // the script and makes the connection between C++ and script side
             kDebug() << "it is a kross plugin!!";
-            QStringList interfaces=info.property( "X-KDevelop-Interfaces" ).toStringList();
-            plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
-                            QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='KDevKrossManager'" ),
-                            d->core, QVariantList() << interfaces << info.pluginName(), &str_error );
-            kDebug() << "kross plugin:" << plugin;
+            QString tmp = info.name();
+            int len = tmp.toUtf8().size();
+            char* name = new char[len+1];
+            memcpy( name, tmp.toUtf8().data(), len );
+            name[len] = '\0';
+            tmp = info.comment();
+            len = tmp.toUtf8().size();
+            char* comment = new char[len+1];
+            memcpy( comment, tmp.toUtf8().data(), len );
+            comment[len] = '\0';
+            plugin = new KrossPlugin( krossScriptFile, KAboutData( info.pluginName().toUtf8(), info.pluginName().toUtf8(),
+                              ki18n( name ), info.version().toUtf8(), ki18n( comment ), KAboutLicense::byKeyword( info.license() ).key() ), d->core );
         }
         else
         {
             plugin = KServiceTypeTrader::createInstanceFromQuery<IPlugin>( QLatin1String( "KDevelop/Plugin" ),
                     QString::fromLatin1( "[X-KDE-PluginInfo-Name]=='%1'" ).arg( pluginId ), d->core, QVariantList(), &str_error );
         }
-        loadDependencies( info );
-        loadOptionalDependencies( info );
     }
 
     if ( plugin )
