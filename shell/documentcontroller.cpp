@@ -58,7 +58,8 @@ namespace KDevelop
 
 struct DocumentControllerPrivate {
     DocumentControllerPrivate(DocumentController* c)
-    : controller(c)
+        : controller(c)
+        , fileOpenRecent(0)
     {
     }
 
@@ -166,7 +167,8 @@ void KDevelop::DocumentController::initialize()
 
 void DocumentController::cleanup()
 {
-    d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
+    if (d->fileOpenRecent)
+        d->fileOpenRecent->saveEntries( KConfigGroup(KGlobal::config(), "Recent Files" ) );
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.

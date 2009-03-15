@@ -169,6 +169,9 @@ UiController::UiController(Core *core)
              SIGNAL( focusChanged( QWidget*, QWidget* ) ),
             this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
 
+    if (!defaultMainWindow())
+        return;
+
     KActionCollection * actions = defaultMainWindow()->actionCollection();
 
     KAction* assistantaction1 = actions->addAction("assistant_action_1");
