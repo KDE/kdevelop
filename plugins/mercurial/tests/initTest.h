@@ -1,5 +1,9 @@
 /***************************************************************************
+ *   This file was taken from KDevelop's git plugin                        *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *                                                                         *
+ *   Adapted for Mercurial                                                 *
+ *   Copyright 2009 Fabian Wiesel <fabian.wiesel@fu-berlin.de>             *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -18,17 +22,42 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_JOB_TEST_H
-#define DVCS_JOB_TEST_H
+#ifndef MERCURIAL_INIT_H
+#define MERCURIAL_INIT_H
 
 #include <QtCore/QObject>
 
-class DVcsJobTest: public QObject
+class MercurialPlugin;
+
+namespace KDevelop {
+class TestCore;
+}
+
+class MercurialInitTest: public QObject
 {
     Q_OBJECT
 
-public slots:
-    void checkDVCS();
+private:
+    void repoInit();
+    void addFiles();
+    void commitFiles();
+    void cloneRepository();
+    // void importTestData();
+    // void checkoutTestData();
+
+private slots:
+    void initTestCase();
+    void testInit();
+    void testAdd();
+    void testCommit();
+    void testBranching();
+    void revHistory();
+    void cleanupTestCase();
+
+private:
+    MercurialPlugin* m_proxy;
+    KDevelop::TestCore* m_testCore;
+    void removeTempDirs();
 };
 
 #endif

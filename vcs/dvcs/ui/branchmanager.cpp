@@ -29,14 +29,13 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include "../idvcsexecutor.h"
 #include "../dvcsjob.h"
+#include "../dvcsplugin.h"
 
-BranchManager::BranchManager(const QString &_repo, KDevelop::IDVCSexecutor* executor, QWidget *parent)
+BranchManager::BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent)
     : KDialog(parent)
+    , d(executor)
 {
-    d = executor;
-
     //we do the same in prepareJob, so actually it isn't required
     QFileInfo repoInfo = QFileInfo(_repo);
     if (repoInfo.isFile())
@@ -98,7 +97,7 @@ void BranchManager::createBranch()
     }
 
     kDebug() << "Creating " << baseBranch << " based on " << newBranch;
-    DVCSjob *branchJob = d->branch(repo, baseBranch, newBranch);
+    KDevelop::VcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
 
     if (branchJob)
     {
@@ -138,7 +137,7 @@ void BranchManager::renameBranch(QListWidgetItem * item)
     if (ret == QMessageBox::Cancel)
         return;
 
-    DVCSjob *branchJob = d->branch(repo, newBranch, baseBranch, QStringList("-m"));
+    KDevelop::VcsJob *branchJob = d->branch(repo, newBranch, baseBranch, QStringList("-m"));
     if (branchJob)
     {
         kDebug() << "Renaming " << baseBranch << " to " << newBranch;
@@ -166,7 +165,7 @@ void BranchManager::delBranch()
     if (ret == QMessageBox::Cancel)
         return;
 
-    DVCSjob *branchJob = d->branch(repo, baseBranch, QString(), QStringList("-D"));
+    KDevelop::VcsJob *branchJob = d->branch(repo, baseBranch, QString(), QStringList("-D"));
     if (branchJob)
     {
         kDebug() << "Removing " << baseBranch;
@@ -186,7 +185,7 @@ void BranchManager::checkoutBranch()
         return;
     }
 
-    DVCSjob *branchJob = d->checkout(repo, baseBranch);
+    KDevelop::VcsJob *branchJob = d->switchBranch(repo, baseBranch);
     if (branchJob)
     {
         //we don't run here, because we have to save all unsaved files (reload proj), checkout and then reload again

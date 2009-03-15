@@ -28,15 +28,15 @@
 
 #include <vcs/dvcs/dvcsjob.h>
 
-void DVCSjobTest::checkDVCS()
+void DVcsJobTest::checkDVCS()
 {
     qDebug() << "check!!!";
-    DVCSjob* bzrJob = new DVCSjob(0);
+    DVcsJob* bzrJob = new DVcsJob(0);
     bzrJob->clear();
     QVERIFY(bzrJob);
-    QVERIFY(bzrJob->status() == DVCSjob::JobNotStarted);
+    QVERIFY(bzrJob->status() == DVcsJob::JobNotStarted);
 
-    bzrJob->setDirectory("/tmp");
+    bzrJob->setDirectory(QDir::temp());
     *bzrJob << "bzr";
     *bzrJob << "root";
     QVERIFY(!bzrJob->exec());
@@ -45,12 +45,12 @@ void DVCSjobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of bzr" ;
     }
 
-    DVCSjob* hgJob = new DVCSjob(0);
+    DVcsJob* hgJob = new DVcsJob(0);
     hgJob->clear();
     QVERIFY(hgJob);
-    QVERIFY(hgJob->status() == DVCSjob::JobNotStarted);
+    QVERIFY(hgJob->status() == DVcsJob::JobNotStarted);
     hgJob->clear();
-    hgJob->setDirectory("/tmp");
+    hgJob->setDirectory(QDir::temp());
     *hgJob << "hg";
     *hgJob << "root";
     QVERIFY(!hgJob->exec());
@@ -59,12 +59,12 @@ void DVCSjobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of hg" ;
     }
 
-    DVCSjob* bzr2Job = new DVCSjob(0);
+    DVcsJob* bzr2Job = new DVcsJob(0);
     bzr2Job->clear();
     QVERIFY(bzr2Job);
-    QVERIFY(bzr2Job->status() == DVCSjob::JobNotStarted);
+    QVERIFY(bzr2Job->status() == DVcsJob::JobNotStarted);
     bzr2Job->clear();
-    bzr2Job->setDirectory("/tmp");
+    bzr2Job->setDirectory(QDir::temp());
     *bzr2Job << "bzr";
     *bzr2Job << "root";
     QVERIFY(!bzr2Job->exec());
@@ -73,12 +73,12 @@ void DVCSjobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of bzr2" ;
     }
 
-    DVCSjob* hg2Job = new DVCSjob(0);
+    DVcsJob* hg2Job = new DVcsJob(0);
     hg2Job->clear();
     QVERIFY(hg2Job);
-    QVERIFY(hg2Job->status() == DVCSjob::JobNotStarted);
+    QVERIFY(hg2Job->status() == DVcsJob::JobNotStarted);
     hg2Job->clear();
-    hg2Job->setDirectory("/tmp");
+    hg2Job->setDirectory(QDir::temp());
     *hg2Job << "hg";
     *hg2Job << "root";
     QVERIFY(!hg2Job->exec());
@@ -91,7 +91,7 @@ void DVCSjobTest::checkDVCS()
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    DVCSjobTest tester;
+    DVcsJobTest tester;
     QTimer::singleShot(200, &tester, SLOT(checkDVCS()));
     tester.checkDVCS();
 //    QTimer *timer = new QTimer;

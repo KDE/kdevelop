@@ -25,7 +25,7 @@
 
 #include "commitView.h"
 
-CommitLogModel::CommitLogModel(const QList<DVCScommit> revisions, QObject* parent)
+CommitLogModel::CommitLogModel(const QList<DVcsEvent> revisions, QObject* parent)
     : QAbstractItemModel(parent)
 {
     headerInfo << "Graph" << "Short Log" << "Author" << "Date";
@@ -63,7 +63,7 @@ QVariant CommitLogModel::data(const QModelIndex& index, int role) const
     if (!index.isValid() || role != Qt::DisplayRole)
         return QVariant();
 
-    const DVCScommit &revision = revs.at(index.row());
+    const DVcsEvent &revision = revs.at(index.row());
 
     int column = index.column();
 

@@ -74,7 +74,6 @@ public:
     KDevelop::VcsJob* checkout(const KDevelop::VcsMapping &mapping);
 
     //DVCS
-    KDevelop::VcsJob* add_dvcs(const KUrl &repository, const KUrl::List& localLocations);
     KDevelop::VcsJob* init(const KUrl& location);
     KDevelop::VcsJob* clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryRoot);
     KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);

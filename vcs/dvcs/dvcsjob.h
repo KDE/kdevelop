@@ -34,7 +34,8 @@
 #include "../vcsexport.h"
 #include "../vcsjob.h"
 
-class DVCSjobPrivate;
+class QDir;
+class DVcsJobPrivate;
 
 /**
  * This class is capable of running our dvcs commands. 
@@ -86,12 +87,12 @@ class DVCSjobPrivate;
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-class KDEVPLATFORMVCS_EXPORT DVCSjob : public KDevelop::VcsJob
+class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    DVCSjob(KDevelop::IPlugin* parent);
-    virtual ~DVCSjob();
+    DVcsJob(KDevelop::IPlugin* parent);
+    virtual ~DVcsJob();
 
     /**
      * Call this method to clear the job (for example, before setting another job).
@@ -108,7 +109,7 @@ public:
      * @param directory Should contain only absolute path. Relative path or "" (working dir) are deprecated and will make job failed.
      * @note In DVCS plugins directory variable is used to get relative pathes.
      */
-    void setDirectory(const QString& directory);
+    void setDirectory(const QDir & directory);
 
     /**
      * Sets standart Input file.
@@ -118,25 +119,25 @@ public:
     /**
      * Returns current working directory.
      */
-    QString getDirectory();
+    QDir const & getDirectory() const;
 
     /**
      * Call this method to set command to execute and its arguments.
      * @note Don't forget <<"one two"; is not the same as <<"one"<<"two"; Use one word(command, arg) per one QString!
      */
-    DVCSjob& operator<<(const QString& arg);
+    DVcsJob& operator<<(const QString& arg);
 
     /**
      * Overloaded convenience function.
      * @see operator<<(const QString& arg).
      */
-    DVCSjob& operator<<(const char* arg);
+    DVcsJob& operator<<(const char* arg);
 
     /**
      * Overloaded convenience function.
      * @see operator<<(const QString& arg).
      */
-    DVCSjob& operator<<(const QStringList& args);
+    DVcsJob& operator<<(const QStringList& args);
 
     /**
      * Call this mehod to start this job.
@@ -161,9 +162,14 @@ public:
     QString dvcsCommand() const;
 
     /**
-     * @return The whole output of the job.
+     * @return The whole output of the job as a string. (Might fail on binary data)
      */
     QString output() const;
+
+    /**
+     * @return The whole binary output of the job
+     */
+    QByteArray rawOutput() const;
 
     // Begin:  KDevelop::VcsJob
 
@@ -216,17 +222,17 @@ public Q_SLOTS:
     bool isRunning() const;
 
 Q_SIGNALS:
-    void readyForParsing(DVCSjob *job);
+    void readyForParsing(DVcsJob *job);
 
 private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
-    void slotReceivedStdout(const QStringList&);
-    void slotReceivedStderr(const QStringList&);
+    void slotReceivedStdout();
+    void slotReceivedStderr();
 
 private:
     void jobIsReady();
-    DVCSjobPrivate* const d;
+    DVcsJobPrivate* const d;
     QVariant results;
 };
 

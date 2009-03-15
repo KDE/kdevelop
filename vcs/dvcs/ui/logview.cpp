@@ -23,7 +23,7 @@
 #include "../dvcsplugin.h"
 #include "../dvcsjob.h"
 
-LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, DVCSjob* job, QWidget *parent)
+LogView::LogView(KDevelop::DistributedVersionControlPlugin* plugin, DVcsJob* job, QWidget *parent)
     : QWidget(parent), Ui::LogViewBase(), m_plugin(plugin)
 {
     Ui::LogViewBase::setupUi(this);
@@ -46,20 +46,20 @@ void LogView::slotJobFinished(KJob* job)
         return;
     }
 
-    DVCSjob * dvcsJob = dynamic_cast<DVCSjob*>(job);
+    DVcsJob * dvcsJob = dynamic_cast<DVcsJob*>(job);
     if (!dvcsJob) {
         return;
     }
 
-    QList<DVCScommit> logEntries;
-    m_plugin->proxy()->parseOutput(dvcsJob->output(), logEntries);
+    QList<DVcsEvent> logEntries;
+    m_plugin->parseLogOutput(dvcsJob, logEntries);
 
     if (logEntries.size() == 0) {
         textbrowser->append(i18n("No log information found"));
     } else {
         QString html;
 
-        foreach(const DVCScommit &item, logEntries) {
+        foreach(const DVcsEvent &item, logEntries) {
             html += "<b>"+i18n("Commit")+":</b> "+item.getCommit()+"<br>";
             html += "<b>"+i18n("Author")+":</b> "+item.getAuthor()+"<br>";
             html += "<b>"+i18n("Date")+":</b> "+item.getDate()+"<br>";

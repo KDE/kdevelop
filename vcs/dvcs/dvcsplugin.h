@@ -31,24 +31,19 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugin.h>
 
-#include "../vcsexport.h"
-
-#include "idvcsexecutor.h"
+#include "dvcsevent.h"
+#include <vcs/vcsexport.h>
+#include <vcs/vcsstatusinfo.h>
 
 class QString;
 class KDevDVCSViewFactory;
-
-struct DistributedVersionControlPluginPrivate {
-    KDevDVCSViewFactory* m_factory;
-    KDevelop::IDVCSexecutor* m_exec;
-    KUrl::List m_ctxUrlList;
-};
-
+class DVcsJob;
 
 namespace KDevelop
 {
 class VcsJob;
 class ContextMenuExtension;
+struct DistributedVersionControlPluginPrivate;
 
 /**
  * DistributedVersionControlPlugin is a base class for git/hg/bzr plugins. This class implements
@@ -64,29 +59,29 @@ class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, p
 public:
 
     DistributedVersionControlPlugin(QObject *parent, KComponentData compData);
-    virtual ~DistributedVersionControlPlugin(){}
+    virtual ~DistributedVersionControlPlugin();
 
     // Begin: KDevelop::IBasicVersionControl
-    virtual QString name() const;
-    virtual bool isVersionControlled(const KUrl& localLocation);
+    virtual QString name() const = 0;
+    virtual bool isVersionControlled(const KUrl& localLocation) = 0;
     virtual VcsJob* repositoryLocation(const KUrl& localLocation);
     virtual VcsJob* add(const KUrl::List& localLocations,
-                        IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive);
-    virtual VcsJob* remove(const KUrl::List& localLocations);
+                        IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
+    virtual VcsJob* remove(const KUrl::List& localLocations) = 0;
     virtual VcsJob* status(const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion);
+                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
     virtual VcsJob* copy(const KUrl& localLocationSrc,
-                         const KUrl& localLocationDstn); ///Not used in DVCS;
+                         const KUrl& localLocationDst);
     virtual VcsJob* move(const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst); ///Not used in DVCS;
+                         const KUrl& localLocationDst);
     virtual VcsJob* revert(const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion);
+                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive);
     virtual VcsJob* update(const KUrl::List& localLocations,
                            const VcsRevision& rev,
-                           IBasicVersionControl::RecursionMode recursion);
+                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive);
     virtual VcsJob* commit(const QString& message,
                            const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive);
+                           IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive) = 0;
     virtual VcsJob* diff(const VcsLocation& localOrRepoLocationSrc,
                          const VcsLocation& localOrRepoLocationDst,
                          const VcsRevision& srcRevision,
@@ -95,7 +90,7 @@ public:
                          IBasicVersionControl::RecursionMode = IBasicVersionControl::Recursive);
     virtual VcsJob* log(const KUrl& localLocation,
                         const VcsRevision& rev,
-                        unsigned long limit);
+                        unsigned long limit) = 0;
     virtual VcsJob* log(const KUrl& localLocation,
                         const VcsRevision& rev,
                         const VcsRevision& limit);
@@ -112,20 +107,16 @@ public:
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::IDistributedVersionControl
-    virtual VcsJob* add_dvcs(const KUrl &repository, const KUrl::List& localLocations);
-    virtual VcsJob* init(const KUrl& localRepositoryRoot);
+    virtual VcsJob* init(const KUrl& localRepositoryRoot) = 0;
     virtual VcsJob* clone(const VcsLocation& localOrRepoLocationSrc,
-                          const KUrl& localRepositoryRoot);
+                          const KUrl& localRepositoryRoot) = 0;
     virtual VcsJob* push(const KUrl& localRepositoryLocation,
                          const VcsLocation& localOrRepoLocationDst);
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation);
     virtual VcsJob* reset(const KUrl& repository, 
-                          const QStringList &args, const KUrl::List& files);
+                          const QStringList &args, const KUrl::List& files) = 0;
     // End:  KDevelop::IDistributedVersionControl
-
-    /** Returns pointer to IDVCSexecutor used in DistributedVersionControlPlugin */
-    IDVCSexecutor* proxy();
 
     /** Used in KDevelop's appwizardplugin (creates import widget) */
     virtual VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
@@ -136,14 +127,41 @@ public:
      */
     virtual ContextMenuExtension contextMenuExtension(Context*);
 
+   /**
+     * Parses the output generated by a @code dvcs log @endcode command and
+     * fills the given QList with all commits infos found in the given output.
+     * @param job The finished job of a @code dvcs log @endcode call
+     * @param revisions Will be filled with all revision infos found in @p jobOutput
+     * TODO: Change it to pass the results in @code job->getResults() @endcode
+     */
+    virtual void parseLogOutput(const DVcsJob * job,
+                             QList<DVcsEvent>& revisions) const = 0;
+
+
+
+    // In tree branch-management
+    virtual DVcsJob* switchBranch(const QString &repository, const QString &branch) = 0;
+
+    /** Branch. */
+    virtual DVcsJob* branch(const QString &repository, const QString &basebranch = QString(),
+                            const QString &branch = QString(), const QStringList &args = QStringList()) = 0;
+    //parsers for branch:
+    /** Returns current branch. */
+    virtual QString curBranch(const QString &repository) = 0;
+
+    /** Returns the list of branches. */
+    virtual QStringList branches(const QString &repository) = 0;
+    // End: In tree branch-management
+
 public Q_SLOTS:
     //slots for context menu
     void ctxCommit();
-    void ctxAdd();
+    void ctxPush();
+    void ctxPull();
+//     void ctxAdd();
     void ctxRemove();
     void ctxCheckout();
-    void ctxLog();
-    void ctxStatus();
+//     void ctxLog();
     void ctxRevHistory();
 
     // slots for menu
@@ -173,10 +191,58 @@ Q_SIGNALS:
     void addNewTabToMainView(QWidget* tab, QString label);
 
 protected:
-    const KUrl urlFocusedDocument() const;
+    ///////////////////
+    /** Checks if dirPath is located in DVCS repository */
+    virtual bool isValidDirectory(const KUrl &dirPath) = 0;
 
-protected:
-    DistributedVersionControlPluginPrivate* const d;
+    // Additional interface to be implemented by derived plugins
+    //commit dialog helpers:
+    /** Returns the list of modified files (diff between workdir and index). */
+    virtual QList<QVariant> getModifiedFiles(const QString &directory);
+    /** Returns the list of already cached files (diff between index and HEAD). */
+    virtual QList<QVariant> getCachedFiles(const QString &directory);
+    /** Files are not in the repo, but in the repository location. */
+    virtual QList<QVariant> getOtherFiles(const QString &directory);
+
+    /** empty_cmd is used when something is not implemented, but has to return any job */
+    virtual DVcsJob* empty_cmd();
+
+    /** Returs the list of all commits (in all branches).
+     * @see CommitView and CommitViewDelegate to see how this list is used.
+     */
+    virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
+
+    const KUrl urlFocusedDocument() const;
+    KDevDVCSViewFactory * dvcsViewFactory() const;
+
+    /** RequestedOperation is used to know if we should check the repo with isValidDirectory
+     * or we want to create new repo (init/clone).
+     */
+    enum RequestedOperation {
+        NormalOperation, /**< add/commit/etc, check if we are in the repo */
+        Init             /**< we need init/clone, so don't call isValidDirectory, we're not in the repo, but yet ;) */
+    };
+
+    /** This method checks RequestedOperation, clears the job and sets working directory.
+     * Returns false only if op == NormalOperation and we are not in the repository.
+     * @param job the DVCSjob to be prepared
+     * @param repository working directiry
+     * @param op shows if the method should run isValidDirectory
+     */
+    virtual bool prepareJob(DVcsJob* job, const QString& repository,
+                            enum RequestedOperation op = NormalOperation);
+    /** Add files as args to the job. It changes absolute pathes to relatives */
+    static bool addFileList(DVcsJob* job, const KUrl::List& urls);
+
+    /** Always returns directory path.
+     * @param path a path of a file or a directory.
+     * @return if path argument if file then returns parent directory, otherwice path arg is returned.
+     * @todo it will be nice to change prepareJob() so it can change its repository argument.
+     */
+    static QString stripPathToDir(const QString &path);
+
+private:
+    DistributedVersionControlPluginPrivate * const d;
 };
 
 }

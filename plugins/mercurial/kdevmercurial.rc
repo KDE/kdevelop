@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="KDevMercurial" version="1">
+
+  <Menu name="dvcs_popup">
+    <text context="@title:menu">Mercurial</text>
+    <Action name="dvcs_init" />
+    <Action name="dvcs_clone" />
+  </Menu>
+
+</kpartgui>

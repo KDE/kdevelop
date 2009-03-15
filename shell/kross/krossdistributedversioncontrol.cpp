@@ -223,11 +223,6 @@ VcsJob* KrossDistributedVersionControl::resolve( const KUrl::List& localLocation
     return new KrossVcsJob("resolve", QVariantList() << localLocations << recursion, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::add_dvcs(const KUrl &repository,
-                                                 const KUrl::List& localLocations)
-{
-    return add(localLocations);
-}
 
 VcsJob* KrossDistributedVersionControl::init(const KUrl& location)
 {

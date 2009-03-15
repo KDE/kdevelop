@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 
-class DVCSjobTest: public QObject
+class DVcsJobTest: public QObject
 {
     Q_OBJECT
 

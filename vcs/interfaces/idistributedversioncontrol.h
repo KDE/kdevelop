@@ -41,16 +41,6 @@ public:
     virtual ~IDistributedVersionControl(){}
 
     /**
-     * Add file contents to the index. It can be implemented in the same way as IBasicVC::add.
-     * But since IBasicVC::add is used just to add files to the repo, we have to add this method to the
-     * interface. The only difference is that IBasicVC::add is disabled for files, which are already in DVCS.
-     * 
-     * @param repository repository path.
-     * @param localLocations list of files to add.
-     */
-    virtual VcsJob* add_dvcs(const KUrl &repository, const KUrl::List& localLocations) = 0;
-
-    /**
      * Create a new repository inside the given local directory.
      */
     virtual VcsJob* init(const KUrl& localRepositoryRoot) = 0;

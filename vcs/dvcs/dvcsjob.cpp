@@ -33,132 +33,139 @@
 #include <KDE/KDebug>
 #include <KDE/KLocale>
 
-#include <util/processlinemaker.h>
 #include <interfaces/iplugin.h>
+#include <QDir>
 
-struct DVCSjobPrivate
+struct DVcsJobPrivate
 {
-    DVCSjobPrivate() : commMode(KProcess::SeparateChannels), vcsplugin(0)
+    DVcsJobPrivate() : childproc(new KProcess), commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
-        childproc = new KProcess;
-        lineMaker = new KDevelop::ProcessLineMaker( childproc );
         isRunning = failed = wasStarted = false;
     }
 
-    ~DVCSjobPrivate() {
-        if (lineMaker) delete lineMaker;
-        if (childproc) delete childproc;
+    ~DVcsJobPrivate() {
+        delete childproc;
     }
-
-    KDevelop::ProcessLineMaker* lineMaker;
 
     KProcess*   childproc;
     QStringList command;
     QString     server;
-    QString     directory;
+    QDir        directory;
     bool        isRunning;
     bool        wasStarted;
     bool        failed;
-    QStringList outputLines;
+    QByteArray  output;
     KProcess::OutputChannelMode commMode;
     KDevelop::IPlugin* vcsplugin;
 };
 
-DVCSjob::DVCSjob(KDevelop::IPlugin* parent)
-    : VcsJob(parent), d(new DVCSjobPrivate)
+DVcsJob::DVcsJob(KDevelop::IPlugin* parent)
+    : VcsJob(parent), d(new DVcsJobPrivate)
 {
     d->vcsplugin = parent;
 }
 
-DVCSjob::~DVCSjob()
+DVcsJob::~DVcsJob()
 {
     delete d;
 }
 
-void DVCSjob::clear()
+void DVcsJob::clear()
 {
     //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy.
     //Also DVCSjob can't set it, so it's ok.
     d->command.clear();
-    d->outputLines.clear();
+    d->output.clear();
     d->server.clear();
-    d->directory.clear();
+    d->directory = QDir::temp();
     d->isRunning = d->failed = d->wasStarted = false;
 }
 
-void DVCSjob::setServer(const QString& server)
+void DVcsJob::setServer(const QString& server)
 {
     d->server = server;
 }
 
-void DVCSjob::setDirectory(const QString& directory)
+void DVcsJob::setDirectory(const QDir& directory)
 {
     d->directory = directory;
 }
 
-void DVCSjob::setStandardInputFile(const QString &fileName)
+void DVcsJob::setStandardInputFile(const QString &fileName)
 {
     d->childproc->setStandardInputFile(fileName);
 }
 
-QString DVCSjob::getDirectory()
+const QDir & DVcsJob::getDirectory() const
 {
     return d->directory;
 }
 
-bool DVCSjob::isRunning() const
+bool DVcsJob::isRunning() const
 {
     return d->isRunning;
 }
 
-DVCSjob& DVCSjob::operator<<(const QString& arg)
+DVcsJob& DVcsJob::operator<<(const QString& arg)
 {
     d->command.append( arg );
     return *this;
 }
 
-DVCSjob& DVCSjob::operator<<(const char* arg)
+DVcsJob& DVcsJob::operator<<(const char* arg)
 {
     d->command.append( arg );
     return *this;
 }
 
-DVCSjob& DVCSjob::operator<<(const QStringList& args)
+DVcsJob& DVcsJob::operator<<(const QStringList& args)
 {
     d->command << args;
     return *this;
 }
 
-QString DVCSjob::dvcsCommand() const
+QString DVcsJob::dvcsCommand() const
 {
     return d->command.join(" ");
 }
 
-QString DVCSjob::output() const
+QString DVcsJob::output() const
 {
-    return d->outputLines.join("\n");
+    QByteArray stdoutbuf = rawOutput();
+    int endpos = stdoutbuf.size();
+    if (isRunning()) {    // We may have received only part of a code-point
+        endpos = stdoutbuf.lastIndexOf('\n')+1; // Include the final newline or become 0, when there is no newline
+    }
+
+    return QString::fromLocal8Bit(stdoutbuf, endpos);
 }
 
-void DVCSjob::setResults(const QVariant &res) 
+QByteArray DVcsJob::rawOutput() const
+{
+    return d->output;
+}
+
+void DVcsJob::setResults(const QVariant &res)
 {
     results = res;
 }
 
-QVariant DVCSjob::fetchResults()
+QVariant DVcsJob::fetchResults()
 {
     return results;
 }
 
-void DVCSjob::setExitStatus(const bool exitStatus)
+void DVcsJob::setExitStatus(const bool exitStatus)
 {
     d->failed = exitStatus;
 }
 
-void DVCSjob::start()
+void DVcsJob::start()
 {
     Q_ASSERT_X(!d->isRunning, "DVCSjob::start", "Another proccess was started using this job class");
     d->wasStarted = true;
 
+#if 0
     //do not allow to run commands in the application's working dir
     //TODO: change directory to KUrl, check if it's a relative path
     if(d->directory.isEmpty() ) 
@@ -167,9 +174,10 @@ void DVCSjob::start()
         slotProcessError(QProcess::UnknownError);
         return;
     }
-
-    kDebug() << "Working directory:" << d->directory;
-    d->childproc->setWorkingDirectory(d->directory);
+#endif
+    const QString workingDirectory = d->directory.absolutePath();
+    kDebug() << "Working directory:" << workingDirectory;
+    d->childproc->setWorkingDirectory(workingDirectory);
 
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
@@ -177,14 +185,14 @@ void DVCSjob::start()
     connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
             SLOT(slotProcessError(QProcess::ProcessError)));
 
-    connect(d->lineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
-            SLOT(slotReceivedStdout(const QStringList&)));
-    connect(d->lineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
-            SLOT(slotReceivedStderr(const QStringList&)) );
+    connect(d->childproc, SIGNAL(readyReadStandardError()),
+                SLOT(slotReceivedStderr()));
+    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
+                SLOT(slotReceivedStdout()));
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
-    d->outputLines.clear();
+    d->output.clear();
     d->isRunning = true;
     d->childproc->setOutputChannelMode( d->commMode );
     d->childproc->setProgram( d->command );
@@ -194,17 +202,17 @@ void DVCSjob::start()
     d->childproc->start();
 }
 
-void DVCSjob::setCommunicationMode(KProcess::OutputChannelMode comm)
+void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 {
     d->commMode = comm;
 }
 
-void DVCSjob::cancel()
+void DVcsJob::cancel()
 {
     d->childproc->kill();
 }
 
-void DVCSjob::slotProcessError( QProcess::ProcessError err )
+void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -248,7 +256,7 @@ void DVCSjob::slotProcessError( QProcess::ProcessError err )
     jobIsReady();
 }
 
-void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
+void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
@@ -262,25 +270,19 @@ void DVCSjob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     jobIsReady();
 }
 
-void DVCSjob::slotReceivedStdout(const QStringList& output)
+void DVcsJob::slotReceivedStdout()
 {
     // accumulate output
-    d->outputLines += output;
-
-    kDebug()<<"received output:";
-    kDebug()<<output.join("\n");
+    d->output.append(d->childproc->readAllStandardOutput());
 }
 
-void DVCSjob::slotReceivedStderr(const QStringList& output)
+void DVcsJob::slotReceivedStderr()
 {
     // accumulate output
-    d->outputLines += output;
-
-    kDebug()<<"received error:";
-    kDebug()<<output.join("\n");
+    d->output.append(d->childproc->readAllStandardError());
 }
 
-KDevelop::VcsJob::JobStatus DVCSjob::status() const
+KDevelop::VcsJob::JobStatus DVcsJob::status() const
 {
     if (!d->wasStarted)
         return KDevelop::VcsJob::JobNotStarted;
@@ -291,16 +293,16 @@ KDevelop::VcsJob::JobStatus DVCSjob::status() const
     return KDevelop::VcsJob::JobSucceeded;
 }
 
-KDevelop::IPlugin* DVCSjob::vcsPlugin() const
+KDevelop::IPlugin* DVcsJob::vcsPlugin() const
 {
     return d->vcsplugin;
 }
 
-void DVCSjob::jobIsReady()
+void DVcsJob::jobIsReady()
 {
     emit readyForParsing(this); //let parsers to set status
     emitResult(); //KJob
     emit resultsReady(this); //VcsJob
 }
 
-KProcess* DVCSjob::getChildproc() {return d->childproc;}
+KProcess* DVcsJob::getChildproc() {return d->childproc;}

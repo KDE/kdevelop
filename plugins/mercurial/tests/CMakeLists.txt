@@ -6,27 +6,26 @@
 
 if (UNIX)
 
-# Running the test only makes sense if the git command line client
+# Running the test only makes sense if the mercurial command line client
 # is present. So check for it before adding the test...
-FIND_PROGRAM(GIT NAMES git
+FIND_PROGRAM(MERCURIAL NAMES hg
 	PATHS
 	/bin
 	/usr/bin
 	/usr/local/bin
 )
 
-if (GIT)
-
+if (MERCURIAL)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-	set(gitInitTest_SRCS initTest.cpp ../gitplugin.cpp)
-    kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})
-	target_link_libraries(kdevgit-test
+	set(mercurialInitTest_SRCS initTest.cpp ../mercurialplugin.cpp)
+    kde4_add_unit_test(kdevmercurial-test ${mercurialInitTest_SRCS})
+	target_link_libraries(kdevmercurial-test
 		${QT_QTTEST_LIBRARY}
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
         kdevplatformtestshell
 	)
-endif (GIT)
+endif (MERCURIAL)
 
 endif (UNIX)

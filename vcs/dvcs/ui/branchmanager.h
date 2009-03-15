@@ -32,14 +32,14 @@ class KJob;
 
 namespace KDevelop
 {
-    class IDVCSexecutor;
+    class DistributedVersionControlPlugin;
 }
 
 class BranchManager : public KDialog, public Ui::BranchDialogBase
 {
     Q_OBJECT
 public:
-    BranchManager(const QString &_repo, KDevelop::IDVCSexecutor* executor, QWidget *parent = 0);
+    BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
     ~BranchManager();
 
 signals:
@@ -57,7 +57,7 @@ private slots:
 private:
     QString repo;
     QString lastActivated;
-    KDevelop::IDVCSexecutor* d;
+    KDevelop::DistributedVersionControlPlugin* d;
 
 };
 

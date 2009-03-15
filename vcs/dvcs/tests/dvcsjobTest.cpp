@@ -26,12 +26,12 @@
 
 #include <vcs/dvcs/dvcsjob.h>
 
-void DVCSjobTest::testJob()
+void DVcsJobTest::testJob()
 {
 
-    DVCSjob* job = new DVCSjob(0);
+    DVcsJob* job = new DVcsJob(0);
     QVERIFY(job);
-    QVERIFY(job->status() == DVCSjob::JobNotStarted);
+    QVERIFY(job->status() == DVcsJob::JobNotStarted);
 
     //makes sence for bug 172309. With default (true) we have crash, with false — dead lock
     //should be removed after we fix the problem
@@ -42,25 +42,25 @@ void DVCSjobTest::testJob()
     //but it will be a wrong style to work with jobs.
     const QString echoCommand("echo -n test");
     *job << echoCommand;
-    job->setDirectory("/tmp"); //working directory ("") is depricated by DVCSjob
+    job->setDirectory(QDir::temp()); //working directory ("") is deprecated by DVCSjob
     QVERIFY(!job->exec());
-    QVERIFY(job->status() == DVCSjob::JobFailed);
+    QVERIFY(job->status() == DVcsJob::JobFailed);
     QCOMPARE(job->dvcsCommand(), echoCommand);
 
     //check our clear() method. It's simple, but having bugs here is dangerous
     job->clear();
     QVERIFY(job);
     QVERIFY(!job->isRunning());
-    QVERIFY(job->status() == DVCSjob::JobNotStarted);
+    QVERIFY(job->status() == DVcsJob::JobNotStarted);
     QVERIFY(job->fetchResults().isNull());
     QVERIFY(job->getChildproc());
     QCOMPARE(job->dvcsCommand(), QString());
-    QCOMPARE(job->getDirectory(), QString());
+    QCOMPARE(job->getDirectory(), QDir::temp());
     QCOMPARE(job->output(), QString());
 
 }
 
 
-QTEST_MAIN(DVCSjobTest)
+QTEST_MAIN(DVcsJobTest)
 
 #include "dvcsjobTest.moc"

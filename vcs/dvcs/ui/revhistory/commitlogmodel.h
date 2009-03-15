@@ -24,8 +24,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
-
-#include "../../idvcsexecutor.h"
+#include <dvcs/dvcsevent.h>
 
 // namespace KDevelop
 // {
@@ -39,7 +38,7 @@ class CommitLogModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    CommitLogModel(const QList<DVCScommit> revisions, QObject* parent = 0);
+    CommitLogModel(const QList<DVcsEvent> revisions, QObject* parent = 0);
     ~CommitLogModel() {};
 
     QVariant data(const QModelIndex &index, int role) const;
@@ -49,12 +48,12 @@ public:
     QModelIndex parent(const QModelIndex& index) const;
     int rowCount(const QModelIndex& par = QModelIndex()) const;
     int columnCount(const QModelIndex&) const;
-    int branchCount(const int i)const {return branchCnt;}
-    QList<int>getProperties(const int i)const {return revs[i].getProperties();}
+    int branchCount(const int) const {return branchCnt;}
+    QList<int>getProperties(const int i) const {return revs[i].getProperties();}
 
 private:
     QStringList headerInfo;
-    QList<DVCScommit> revs;
+    QList<DVcsEvent> revs;
 
     int rowCnt;
     int branchCnt;

@@ -31,7 +31,6 @@ set(kdevplatformvcs_LIB_SRCS
     models/vcsitemeventmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
-    dvcs/idvcsexecutor.cpp
     dvcs/ui/dvcsmainview.cpp
     dvcs/ui/dvcsgenericoutputview.cpp
     dvcs/ui/importdialog.cpp
@@ -102,6 +101,5 @@ install(FILES
 install(FILES
     dvcs/dvcsjob.h
     dvcs/dvcsplugin.h
-    dvcs/idvcsexecutor.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs COMPONENT Devel
 )

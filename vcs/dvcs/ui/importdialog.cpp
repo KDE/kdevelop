@@ -28,7 +28,6 @@
 #include <KDebug>
 
 #include "../dvcsplugin.h"
-#include "../idvcsexecutor.h"
 #include "../dvcsjob.h"
 #include "importmetadatawidget.h"
 
@@ -52,7 +51,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    DVCSjob *job = dynamic_cast<DVCSjob*>( m_plugin->init(m_widget->getRepositoryLocation()) );
+    KDevelop::VcsJob *job = m_plugin->init(m_widget->getRepositoryLocation());
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 m_plugin, SLOT( jobFinished(KJob*) ));

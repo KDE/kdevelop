@@ -47,7 +47,7 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
-#include<interfaces/contextmenuextension.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "../vcsmapping.h"
 #include "../vcsjob.h"
@@ -65,194 +65,123 @@
 
 namespace KDevelop
 {
+struct DistributedVersionControlPluginPrivate {
+    KDevDVCSViewFactory* m_factory;
+    KUrl::List m_ctxUrlList;
+};
 
 //class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
-    :IPlugin(compData, parent), d(new DistributedVersionControlPluginPrivate())
+    : IPlugin(compData, parent)
+    , d(new DistributedVersionControlPluginPrivate())
 {
     QString EasterEgg = i18n("Horses are forbidden to eat fire hydrants in Marshalltown, Iowa.");
     Q_UNUSED(EasterEgg)
     d->m_factory = new KDevDVCSViewFactory(this);
 }
 
+DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
+{
+    if (!core()->uiController())
+        delete d->m_factory; // When there is a GUI, it will probably owned by UIController
+    delete d;
+}
+
 // Begin:  KDevelop::IBasicVersionControl
 
-QString DistributedVersionControlPlugin::name() const
-{
-    return d->m_exec->name();
-}
-
-bool DistributedVersionControlPlugin::isVersionControlled(const KUrl& localLocation)
-{
-    return d->m_exec->isValidDirectory(localLocation);
-}
-
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::repositoryLocation(const KUrl & localLocation)
+        DistributedVersionControlPlugin::repositoryLocation(const KUrl &)
 {
-    Q_UNUSED(localLocation)
-    return NULL;
+    return empty_cmd();
 }
 
-//Note: recursion is not used
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::add(const KUrl::List & localLocations,
-                                             IBasicVersionControl::RecursionMode recursion)
+QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &)
 {
-    Q_UNUSED(recursion)
-    ///TODO: why do we send localLocations twice? In most cases [0] is a repo pass and an dir item to add path
-    return d->m_exec->add(localLocations[0].path(), localLocations);
+    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
+    return QList<QVariant>();
 }
 
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::remove(const KUrl::List & localLocations)
+QList<QVariant> DistributedVersionControlPlugin::getCachedFiles(const QString &)
 {
-    QFileInfo info(localLocations[0].toLocalFile() );
-
-    return d->m_exec->remove(info.absolutePath(), localLocations);
+    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
+    return QList<QVariant>();
 }
 
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::status(const KUrl::List & localLocations,
-                                                IBasicVersionControl::RecursionMode recursion)
+QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &)
 {
-    QFileInfo info( localLocations[0].toLocalFile() );
-
-    //it's a hack!!! See VcsCommitDialog::setCommitCandidates and the usage of DVCSjob/IDVCSexecutor
-    //We need results just in status, so we set them here before execution in VcsCommitDialog::setCommitCandidates
-    QString repo = localLocations[0].toLocalFile();
-    QList<QVariant> statuses;
-
-    statuses << d->m_exec->getCachedFiles(repo)
-             << d->m_exec->getModifiedFiles(repo)
-             << d->m_exec->getOtherFiles(repo);
-    DVCSjob* statJob = d->m_exec->status(info.absolutePath(),
-                                 localLocations,
-                                 (recursion == IBasicVersionControl::Recursive) ? true:false);
-    statJob->setResults(QVariant(statuses));
-    return statJob;
-}
-
-///Not used in DVCS;
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::copy(const KUrl& localLocationSrc,
-                                              const KUrl& localLocationDstn)
-{
-    Q_UNUSED(localLocationSrc)
-    Q_UNUSED(localLocationDstn)
-    return d->m_exec->empty_cmd();
-}
-
-///Not used in DVCS;
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::move(const KUrl& localLocationSrc,
-                                              const KUrl& localLocationDst )
-{
-    Q_UNUSED(localLocationSrc)
-    Q_UNUSED(localLocationDst)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::revert(const KUrl::List & localLocations,
-                                                IBasicVersionControl::RecursionMode recursion)
-{
-    Q_UNUSED(localLocations)
-    Q_UNUSED(recursion)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::update(const KUrl::List & localLocations, const VcsRevision & rev,
-                                                IBasicVersionControl::RecursionMode recursion)
-{
-    Q_UNUSED(localLocations)
-    Q_UNUSED(rev)
-    Q_UNUSED(recursion)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::commit(const QString & message, const KUrl::List & localLocations,
-                                                IBasicVersionControl::RecursionMode recursion)
-{
-    //used by appwizard plugin only (and maybe something that opens a project)
-    Q_UNUSED(recursion)
-    QString msg = message;
-
-    return d->m_exec->commit(localLocations[0].path(), msg, localLocations);
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
-                                              const VcsLocation & localOrRepoLocationDst,
-                                              const VcsRevision & srcRevision,
-                                              const VcsRevision & dstRevision,
-                                              VcsDiff::Type, IBasicVersionControl::RecursionMode)
-{
-    Q_UNUSED(localOrRepoLocationSrc)
-    Q_UNUSED(localOrRepoLocationDst)
-    Q_UNUSED(srcRevision)
-    Q_UNUSED(dstRevision)
-
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::log(const KUrl& localLocation,
-                                             const VcsRevision& rev,
-                                             unsigned long limit )
-{
-    Q_UNUSED(localLocation)
-    Q_UNUSED(rev)
-    Q_UNUSED(limit)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::log(const KUrl& localLocation,
-                                             const VcsRevision& rev,
-                                             const VcsRevision& limit )
-{
-    Q_UNUSED(localLocation)
-    Q_UNUSED(rev)
-    Q_UNUSED(limit)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::annotate(const KUrl& localLocation,
-                                                  const VcsRevision& rev )
-{
-    Q_UNUSED(localLocation)
-    Q_UNUSED(rev)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::merge(const VcsLocation& localOrRepoLocationSrc,
-                                               const VcsLocation& localOrRepoLocationDst,
-                                               const VcsRevision& srcRevision,
-                                               const VcsRevision& dstRevision,
-                                               const KUrl& localLocation )
-{
-    Q_UNUSED(localOrRepoLocationSrc)
-    Q_UNUSED(localOrRepoLocationDst)
-    Q_UNUSED(srcRevision)
-    Q_UNUSED(dstRevision)
-    Q_UNUSED(localLocation)
-    return d->m_exec->empty_cmd();
+    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
+    return QList<QVariant>();
 }
 
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::resolve(const KUrl::List& localLocations,
-                                                 IBasicVersionControl::RecursionMode recursion )
+        DistributedVersionControlPlugin::copy(const KUrl&, const KUrl&)
 {
-    Q_UNUSED(localLocations)
-    Q_UNUSED(recursion)
-    return d->m_exec->empty_cmd();
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::move(const KUrl&, const KUrl& )
+{
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::revert(const KUrl::List &, IBasicVersionControl::RecursionMode)
+{
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::update(const KUrl::List &, const VcsRevision &,
+                                                IBasicVersionControl::RecursionMode)
+{
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::diff(const VcsLocation &,
+                                              const VcsLocation &,
+                                              const VcsRevision &,
+                                              const VcsRevision &,
+                                              VcsDiff::Type,
+                                              IBasicVersionControl::RecursionMode)
+{
+    return empty_cmd();
+}
+
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::log(const KUrl& url,
+                                             const VcsRevision& from,
+                                             const VcsRevision& to)
+{
+    Q_UNUSED(to)
+    return log(url, from, 0);
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::annotate(const KUrl&,
+                                                  const VcsRevision&)
+{
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::merge(const VcsLocation&,
+                                               const VcsLocation&,
+                                               const VcsRevision&,
+                                               const VcsRevision&,
+                                               const KUrl&)
+{
+    return empty_cmd();
+}
+
+KDevelop::VcsJob*
+        DistributedVersionControlPlugin::resolve(const KUrl::List&,
+                                                 IBasicVersionControl::RecursionMode)
+{
+    return empty_cmd();
 }
 
 // End:  KDevelop::IBasicVersionControl
@@ -261,67 +190,33 @@ KDevelop::VcsJob*
 // Begin:  KDevelop::IDistributedVersionControl
 
 KDevelop::VcsJob*
-DistributedVersionControlPlugin::add_dvcs(const KUrl &repository, const KUrl::List& localLocations)
+        DistributedVersionControlPlugin::push(const KUrl&,
+                                              const VcsLocation&)
 {
-    return add(localLocations);
+    return empty_cmd();
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::init(const KUrl& localRepositoryRoot)
+        DistributedVersionControlPlugin::pull(const VcsLocation&,
+                                              const KUrl&)
 {
-    Q_UNUSED(localRepositoryRoot)
-    return d->m_exec->init(localRepositoryRoot);
+    return empty_cmd();
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::clone(const VcsLocation& localOrRepoLocationSrc,
-                                               const KUrl& localRepositoryRoot)
+        DistributedVersionControlPlugin::checkout(const VcsMapping &)
 {
-    Q_UNUSED(localOrRepoLocationSrc)
-    Q_UNUSED(localRepositoryRoot)
-    return d->m_exec->empty_cmd();
+    return empty_cmd();
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::push(const KUrl& localRepositoryLocation,
-                                              const VcsLocation& localOrRepoLocationDst)
+        DistributedVersionControlPlugin::reset(const KUrl&,
+                                               const QStringList &, const KUrl::List&)
 {
-    Q_UNUSED(localRepositoryLocation)
-    Q_UNUSED(localOrRepoLocationDst)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::pull(const VcsLocation& localOrRepoLocationSrc,
-                                              const KUrl& localRepositoryLocation)
-{
-    Q_UNUSED(localOrRepoLocationSrc)
-    Q_UNUSED(localRepositoryLocation)
-    return d->m_exec->empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::checkout(const VcsMapping &mapping)
-{
-    //repo and branch
-    return d->m_exec->checkout(mapping.sourceLocations()[0].localUrl().path(),
-                               mapping.sourceLocations()[1].localUrl().path());
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::reset(const KUrl& repository,
-                                               const QStringList &args, const KUrl::List& files)
-{
-    return d->m_exec->reset(repository.path(), args, files);
+    return empty_cmd();
 }
 
 // End:  KDevelop::IDistributedVersionControl
-
-
-KDevelop::IDVCSexecutor* DistributedVersionControlPlugin::proxy()
-{
-    return d->m_exec;
-}
 
 
 KDevelop::VcsImportMetadataWidget*
@@ -394,8 +289,18 @@ KDevelop::ContextMenuExtension
     QMenu* menu = new QMenu(name() );
     if(hasVersionControlledEntries)
     {
+#if 0   // Duplicated functionality "Version Control"->"Add"
         action = new KAction(i18n("Add to index"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxAdd()) );
+        menu->addAction( action );
+#endif
+
+        action = new KAction(i18n("Push..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxPush()) );
+        menu->addAction( action );
+
+        action = new KAction(i18n("Pull..."), this);
+        connect( action, SIGNAL(triggered()), this, SLOT(ctxPull()) );
         menu->addAction( action );
 
         action = new KAction(i18n("Branch Manager"), this);
@@ -406,13 +311,11 @@ KDevelop::ContextMenuExtension
         connect( action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()) );
         menu->addAction( action );
 
-        action = new KAction(i18n("Status"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxStatus()) );
-        menu->addAction( action );
-
+#if 0   // Duplicated functionality "Version Control"->"History..."
         action = new KAction(i18n("Log View"), this);
         connect( action, SIGNAL(triggered()), this, SLOT(ctxLog()) );
         menu->addAction( action );
+#endif
         menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction() );
     }
 
@@ -437,22 +340,23 @@ void DistributedVersionControlPlugin::ctxCommit()
 //     CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().path(), proxy());
 //     cmtManager->show();
 }
-
+#if 0
 void DistributedVersionControlPlugin::ctxAdd()
 {
     VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
-    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+    DVcsJob* job = dynamic_cast<DVcsJob*>(j);
     if (job) {
         connect(job, SIGNAL(result(KJob*) ),
                 this, SIGNAL(jobFinished(KJob*) ));
         job->start();
     }
 }
+#endif
 
 void DistributedVersionControlPlugin::ctxRemove()
 {
     VcsJob* j = remove(DistributedVersionControlPlugin::d->m_ctxUrlList);
-    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+    DVcsJob* job = dynamic_cast<DVcsJob*>(j);
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SIGNAL( jobFinished(KJob*) ));
@@ -462,44 +366,52 @@ void DistributedVersionControlPlugin::ctxRemove()
 
 void DistributedVersionControlPlugin::ctxCheckout()
 {
-    BranchManager *brManager = new BranchManager(d->m_ctxUrlList.first().path(), proxy());
+    BranchManager *brManager = new BranchManager(d->m_ctxUrlList.first().path(), this);
     connect(brManager, SIGNAL(checkouted(KJob*) ),
             this, SLOT(checkoutFinished(KJob*) ));
     brManager->show();
 }
 
+void DistributedVersionControlPlugin::ctxPush()
+{
+    VcsJob* j = push(d->m_ctxUrlList.first().path(), VcsLocation());
+    DVcsJob* job = dynamic_cast<DVcsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL(result(KJob*) ),
+                this, SIGNAL(jobFinished(KJob*) ));
+        job->start();
+    }
+}
+
+void DistributedVersionControlPlugin::ctxPull()
+{
+    VcsJob* j = pull(VcsLocation(), d->m_ctxUrlList.first().path());
+    DVcsJob* job = dynamic_cast<DVcsJob*>(j);
+    if (job) {
+        connect(job, SIGNAL(result(KJob*) ),
+                this, SIGNAL(jobFinished(KJob*) ));
+        job->start();
+    }
+}
+#if 0
 void DistributedVersionControlPlugin::ctxLog()
 {
     VcsRevision rev;
     VcsJob* j = log(d->m_ctxUrlList.first(), rev, 0);
-    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+    DVcsJob* job = dynamic_cast<DVcsJob*>(j);
     if (job) {
         ICore::self()->runController()->registerJob(job);
         LogView* view = new LogView(this, job);
         emit addNewTabToMainView( view, i18n("Log") );
     }
 }
-
-void DistributedVersionControlPlugin::ctxStatus()
-{
-    KUrl url = urlFocusedDocument();
-    KUrl::List urls;
-    urls << url;
-
-    KDevelop::VcsJob* j = status(url, KDevelop::IBasicVersionControl::Recursive);
-    DVCSjob* job = dynamic_cast<DVCSjob*>(j);
-    if (job) {
-        DVCSgenericOutputView* view = new DVCSgenericOutputView(this, job);
-        emit addNewTabToMainView(view, i18n("Status") );
-        KDevelop::ICore::self()->runController()->registerJob(job);
-    }
-}
+#endif
 
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl url = urlFocusedDocument();
 
-    CommitLogModel* model = new CommitLogModel(proxy()->getAllCommits(url.path()));
+    CommitLogModel* model = new CommitLogModel(getAllCommits(url.path()));
     CommitView *revTree = new CommitView;
     revTree->setModel(model);
 
@@ -508,14 +420,15 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 
 void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
-    DVCSjob* checkoutJob = dynamic_cast<DVCSjob*>(_checkoutJob);
+    DVcsJob* checkoutJob = dynamic_cast<DVcsJob*>(_checkoutJob);
 
-    kDebug() << "checkout url is: " << KUrl(checkoutJob->getDirectory() );
-    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(checkoutJob->getDirectory() ));
+    QString workingDir = checkoutJob->getDirectory().absolutePath();
+    kDebug() << "checkout url is: " << workingDir;
+    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(workingDir));
 
     if( !curProject )
     {
-        kDebug() << "couldn't find project for url:" << checkoutJob->getDirectory();
+        kDebug() << "couldn't find project for url:" << workingDir;
         return;
     }
     KUrl projectFile = curProject->projectFileUrl();
@@ -525,11 +438,94 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
     if (!checkoutJob->exec())
         kDebug() << "CHECKOUT PROBLEM!";
 
-    kDebug() << "projectFile is " << projectFile << " JobDir is " <<checkoutJob->getDirectory();
+    kDebug() << "projectFile is " << projectFile << " JobDir is " << workingDir;
     kDebug() << "Project was closed, now it will be opened";
     core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
 //     emit jobFinished(_checkoutJob); //couses crash!
+}
+
+KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
+{
+    return d->m_factory;
+}
+
+bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& repository, RequestedOperation op)
+{
+    if (!job) {
+        return false;
+    }
+    // Only do this check if it's a normal operation like diff, log ...
+    // For other operations like "git clone" isValidDirectory() would fail as the
+    // directory is not yet under git control
+    if (op == NormalOperation &&
+        !isValidDirectory(repository)) {
+        kDebug() << repository << " is not a valid repository";
+        return false;
+    }
+
+    QFileInfo repoInfo = QFileInfo(repository);
+    if (!repoInfo.isAbsolute()) {
+        //We don't want to have empty or non-absolute pathes for working dir
+        return false;
+    }
+
+    // clear commands and args from a possible previous run
+    job->clear();
+
+    //repository is sent by ContextMenu, so we check if it is a file and use it's path
+    if (repoInfo.isFile())
+        job->setDirectory(repoInfo.absoluteDir());
+    else
+        job->setDirectory(QDir(repository));
+
+    return true;
+}
+
+QString DistributedVersionControlPlugin::stripPathToDir(const QString &path)
+{
+    QFileInfo repoInfo = QFileInfo(path);
+    if (repoInfo.isFile())
+        return repoInfo.path();
+    else if (path.endsWith(QDir::separator()))
+        return path;
+    else
+        return path + QDir::separator();
+}
+
+bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List& urls)
+{
+    QStringList args;
+    const QDir & dir = job->getDirectory();
+    const QString workingDir = dir.absolutePath();
+
+    foreach(const KUrl &url, urls) {
+        ///@todo this is ok for now, but what if some of the urls are not
+        ///      to the given repository
+        //all urls should be relative to the working directory!
+        //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
+        QString file;
+        if (!url.isRelative())
+            file = dir.relativeFilePath(url.path());
+        else
+            file = url.path();
+
+        if (file.isEmpty())
+            file = ".";
+
+        args << file;
+        kDebug() << "url is: " << url << "job->getDirectory(): " << workingDir << " file is: " << file;
+    }
+
+    *job << args;
+    return true;
+}
+
+DVcsJob* DistributedVersionControlPlugin::empty_cmd()
+{
+    DVcsJob* j = new DVcsJob(this);
+    *j << "echo" << "-n";
+    return j;
 }
 
 }

@@ -153,21 +153,21 @@ void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, c
 
     switch(type)
     {
-    case DVCScommit::INITIAL:
+    case DVcsEvent::INITIAL:
         p->drawLine(P_90, P_CENTER);
         break;
-    case DVCScommit::HEAD:
+    case DVcsEvent::HEAD:
         p->drawLine(P_270, P_CENTER);
         break;
-    case DVCScommit::BRANCH:
-    case DVCScommit::MERGE:
-    case DVCScommit::CROSS:
+    case DVcsEvent::BRANCH:
+    case DVcsEvent::MERGE:
+    case DVcsEvent::CROSS:
         p->drawLine(P_90, P_270);
         break;
-    case DVCScommit::HCROSS:
+    case DVcsEvent::HCROSS:
         p->drawLine(P_0, P_180);
         break;
-    case DVCScommit::MERGE_RIGHT:
+    case DVcsEvent::MERGE_RIGHT:
     {
         p->drawLine(P_180, P_CENTER);
         p->drawLine(P_CENTER, P_90);
@@ -207,9 +207,9 @@ void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, c
 
     // center symbol, e.g. rect or ellipse
     switch (type) {
-    case DVCScommit::INITIAL:
-    case DVCScommit::BRANCH:
-    case DVCScommit::HEAD:
+    case DVcsEvent::INITIAL:
+    case DVcsEvent::BRANCH:
+    case DVcsEvent::HEAD:
     {
         p->setPen(Qt::NoPen);
         p->setBrush(col);
@@ -217,7 +217,7 @@ void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, c
         break;
     }
     //we always have parent branch at the right
-    case DVCScommit::MERGE:
+    case DVcsEvent::MERGE:
     {
         kDebug() << "MERGE!";
         p->setPen(Qt::NoPen);
