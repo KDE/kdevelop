@@ -73,7 +73,6 @@ public:
     IPlugin* manager;
     IPlugin* vcsPlugin;
     ProjectFolderItem* topItem;
-    QStandardItem* loadingItem;
     QString name;
     KSharedConfig::Ptr m_cfg;
     IProject *project;
@@ -84,7 +83,6 @@ public:
     void reloadDone()
     {
         reloading = false;
-        Core::self()->projectController()->projectModel()->removeRow(loadingItem->row());
         Core::self()->projectController()->projectModel()->appendRow(topItem);
         if (scheduleReload) {
             scheduleReload = false;
@@ -178,7 +176,6 @@ public:
     void importDone( KJob* )
     {
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
-        projCtrl->projectModel()->removeRow(loadingItem->row());
         projCtrl->projectModel()->appendRow(topItem);
         projCtrl->projectImportingFinished( project );
     }
@@ -369,7 +366,6 @@ Project::Project( QObject *parent )
     d->vcsPlugin = 0;
     d->reloading = false;
     d->scheduleReload = false;
-    d->loadingItem=0;
 }
 
 Project::~Project()
@@ -415,8 +411,6 @@ void Project::reloadModel()
     ProjectModel* model = Core::self()->projectController()->projectModel();
     model->removeRow( d->topItem->row() );
 
-    d->loadingItem=new QStandardItem(i18n("Reloading %1...", d->name));
-    Core::self()->projectController()->projectModel()->appendRow(d->loadingItem);
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
     if (!d->importTopItem(iface))
     {
@@ -446,11 +440,8 @@ bool Project::open( const KUrl& projectFileUrl_ )
         return false;
 
     Q_ASSERT(d->manager);
-    d->loadingItem=new QStandardItem(i18n("Loading %1...", d->name));
-    Core::self()->projectController()->projectModel()->appendRow(d->loadingItem);
 
     if (!d->importTopItem(iface) ) {
-        Core::self()->projectController()->projectModel()->removeRow(d->loadingItem->row());
         return false;
     }
 
