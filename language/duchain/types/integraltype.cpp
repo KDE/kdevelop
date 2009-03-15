@@ -113,6 +113,9 @@ QString IntegralType::toString() const
     case TypeArray:
       name = "array";
       break;
+    case TypeNull:
+      name = "null";
+      break;
     default:
       name = "<unknown>";
       break;
