@@ -29,6 +29,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/declaration.cpp
     duchain/classmemberdeclaration.cpp
     duchain/classfunctiondeclaration.cpp
+    duchain/classdeclaration.cpp
     duchain/use.cpp
     duchain/smartconverter.cpp
     duchain/forwarddeclaration.cpp
@@ -197,6 +198,7 @@ install(FILES
     duchain/classmemberdeclaration.h
     duchain/classmemberdeclarationdata.h
     duchain/classfunctiondeclaration.h
+    duchain/classdeclaration.h
     duchain/functiondefinition.h
     duchain/use.h
     duchain/smartconverter.h

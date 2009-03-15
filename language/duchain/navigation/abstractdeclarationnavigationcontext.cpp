@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <duchain/types/typealiastype.h>
+#include <duchain/classdeclaration.h>
 #include <typeinfo>
 
 namespace KDevelop {
@@ -437,10 +438,38 @@ void AbstractDeclarationNavigationContext::htmlClass()
 {
   StructureType::Ptr klass = m_declaration->abstractType().cast<StructureType>();
   Q_ASSERT(klass);
-
-  ///@todo Use information from ClassDeclaration to print whether it's a struct/union/etc.
-  modifyHtml() += "class ";
-  eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
+  
+  ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(klass->declaration(m_topContext.data()));
+  if(classDecl) {
+    switch ( classDecl->classType() ) {
+      case ClassDeclarationData::Class:
+        modifyHtml() += "class ";
+        break;
+      case ClassDeclarationData::Struct:
+        modifyHtml() += "struct ";
+        break;
+      case ClassDeclarationData::Union:
+        modifyHtml() += "union ";
+        break;
+      case ClassDeclarationData::Interface:
+        modifyHtml() += "interface ";
+        break;
+      default:
+        modifyHtml() += "<unknown type> ";
+        break;
+    }
+    eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
+    
+    FOREACH_FUNCTION( const KDevelop::BaseClassInstance& base, classDecl->baseClasses ) {
+      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
+      eventuallyMakeTypeLinks(base.baseClass.abstractType());
+    }
+    modifyHtml() += " ";
+  } else {
+    /// @todo How can we get here? and should this really be a class?
+    modifyHtml() += "class ";
+    eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
+  }
 }
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
