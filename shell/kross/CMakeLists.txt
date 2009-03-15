@@ -62,39 +62,3 @@ else(KDEVCPPDUCHAIN)
     message(STATUS "KDEVCPPDUCHAIN pointing to cppduchain directory in kdevelop not in the cache. Re-Generating kross-wrappers not supported, will use the pre-generated code.")
 endif(KDEVCPPDUCHAIN)
 
-set(kdevkrossplugin_SRCS
-    krossplugin.cpp
-    krossbuildsystemmanager.cpp
-    krossdistributedversioncontrol.cpp
-    krosstoolviewfactory.cpp
-    krossvcsjob.cpp
-    wrappers/krossiuicontroller.cpp
-    wrappers/krossidocument.cpp
-    wrappers/krosscontext.cpp
-    wrappers/krosscontextmenuextension.cpp
-    wrappers/krossvcsrevision.cpp
-    wrappers/krossvcslocation.cpp
-    wrappers/krosstopducontext.cpp
-    wrappers/krossducontext.cpp
-    wrappers/krossprojectmodel.cpp
-    wrappers/krossilanguage.cpp
-    wrappers/krossdeclaration.cpp
-    wrappers/krossuse.cpp
-    wrappers/krossidentifier.cpp
-    wrappers/krossduchainlock.cpp
-    wrappers/krossiproblem.cpp
-    wrappers/krossibuildsystemmanager.cpp
-    wrappers/krossiprojectfilemanager.cpp
-    wrappers/krossiprojectbuilder.cpp
-    wrappers/krossirun.cpp
-    wrappers/krosseditorcontext.cpp
-    wrappers/krossqtoolbar.cpp
-)
-
-kde4_add_plugin(kdevkrossplugin ${kdevkrossplugin_SRCS})
-target_link_libraries(kdevkrossplugin ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KROSSCORE_LIBS}
-    kdevplatforminterfaces kdevplatformproject kdevplatformvcs kdevplatformlanguage kdevplatformveritas ${KDE4_KROSSUI_LIBS})
-
-install(TARGETS kdevkrossplugin DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES kdevkrossplugin.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-

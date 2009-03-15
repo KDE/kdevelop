@@ -34,6 +34,33 @@ set(kdevplatformshell_LIB_SRCS
     selectioncontroller.cpp
     documentationcontroller.cpp
     documentationview.cpp
+
+    kross/krossplugin.cpp
+    kross/krossbuildsystemmanager.cpp
+    kross/krossdistributedversioncontrol.cpp
+    kross/krosstoolviewfactory.cpp
+    kross/krossvcsjob.cpp
+    kross/wrappers/krossiuicontroller.cpp
+    kross/wrappers/krossidocument.cpp
+    kross/wrappers/krosscontext.cpp
+    kross/wrappers/krosscontextmenuextension.cpp
+    kross/wrappers/krossvcsrevision.cpp
+    kross/wrappers/krossvcslocation.cpp
+    kross/wrappers/krosstopducontext.cpp
+    kross/wrappers/krossducontext.cpp
+    kross/wrappers/krossprojectmodel.cpp
+    kross/wrappers/krossilanguage.cpp
+    kross/wrappers/krossdeclaration.cpp
+    kross/wrappers/krossuse.cpp
+    kross/wrappers/krossidentifier.cpp
+    kross/wrappers/krossduchainlock.cpp
+    kross/wrappers/krossiproblem.cpp
+    kross/wrappers/krossibuildsystemmanager.cpp
+    kross/wrappers/krossiprojectfilemanager.cpp
+    kross/wrappers/krossiprojectbuilder.cpp
+    kross/wrappers/krossirun.cpp
+    kross/wrappers/krosseditorcontext.cpp
+    kross/wrappers/krossqtoolbar.cpp
 )
 
 set(kdevplatformshell_UI
@@ -51,9 +78,11 @@ target_link_libraries(kdevplatformshell
         ${KDE4_KNOTIFYCONFIG_LIBS} 
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES} 
+        ${KDE4_KROSSCORE_LIBS}
         ${QT_QTDESIGNER_LIBRARY} 
         kdevplatforminterfaces 
         kdevplatformproject 
+        kdevplatformvcs
         kdevplatformlanguage 
         sublime 
         kdevplatformutil 
