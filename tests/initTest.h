@@ -27,32 +27,38 @@
 
 #include <QtCore/QObject>
 
-class GitExecutor;
+class GitPlugin;
+
+namespace KDevelop
+{
+    class TestCore;
+}
 
 class GitInitTest: public QObject
 {
     Q_OBJECT
 
-    private:
-        void repoInit();
-        void addFiles();
-        void commitFiles();
-//         void cloneRepository();
-//         void importTestData();
-//         void checkoutTestData();
+private:
+    void repoInit();
+    void addFiles();
+    void commitFiles();
+//     void cloneRepository();
+//     void importTestData();
+//     void checkoutTestData();
 
-    private slots:
-        void initTestCase();
-        void testInit();
-        void testAdd();
-        void testCommit();
-        void testBranching();
-        void revHistory();
-        void cleanupTestCase();
+private slots:
+    void initTestCase();
+    void testInit();
+    void testAdd();
+    void testCommit();
+    void testBranching();
+    void revHistory();
+    void cleanupTestCase();
 
-    private:
-        GitExecutor* m_proxy;
-        void removeTempDirs();
+private:
+    KDevelop::TestCore* m_testCore;
+    GitPlugin* m_plugin;
+    void removeTempDirs();
 };
 
 #endif

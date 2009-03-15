@@ -5,7 +5,6 @@ add_subdirectory(tests)
 
 set(kdevgit_PART_SRCS
     gitplugin.cpp
-    gitexecutor.cpp
 )
 
 kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
@@ -16,6 +15,7 @@ target_link_libraries(kdevgit
     kdevplatformutil
     kdevplatforminterfaces
     kdevplatformvcs
+    kdevplatformshell
     kdevplatformproject
 )
 

@@ -23,15 +23,15 @@
 
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/dvcs/dvcsplugin.h>
-#include <qobject.h>
+#include <QObject>
+#include <vcs/vcsstatusinfo.h>
+
 
 namespace KDevelop
 {
     class VcsJob;
     class VcsRevision;
 }
-
-class GitExecutor;
 
 /**
  * This is the main class of KDevelop's Git plugin.
@@ -43,20 +43,86 @@ class GitPlugin: public KDevelop::DistributedVersionControlPlugin
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
-
-friend class GitExecutor;
-
+    friend class GitInitTest;
 public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
 
-    //TODO:Things to be moved to DVCSplugin, but not moved because require executor changes in all implemented DVCS
+    QString name() const;
+
+    bool isVersionControlled(const KUrl &path);
+
+    KDevelop::VcsJob* add(const KUrl::List& localLocations,
+                          KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* remove(const KUrl::List& files);
+    KDevelop::VcsJob* status(const KUrl::List& localLocations,
+                             KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* commit(const QString& message,
+                             const KUrl::List& localLocations,
+                             KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
                           unsigned long limit);
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
                           const KDevelop::VcsRevision& limit);
+
+    // Begin:  KDevelop::IDistributedVersionControl
+    KDevelop::VcsJob* init(const KUrl & directory);
+    KDevelop::VcsJob* clone(const KDevelop::VcsLocation & localOrRepoLocationSrc,
+                            const KUrl& localRepositoryRoot);
+
+    KDevelop::VcsJob* reset(const KUrl& repository,
+                            const QStringList &args,
+                            const KUrl::List& files);
+    // End:  KDevelop::IDistributedVersionControl
+
+    DVcsJob* var(const QString &directory);
+
+    // Branch management
+
+    DVcsJob* switchBranch(const QString &repository,
+                          const QString &branch);
+    DVcsJob* branch(const QString &repository,
+                    const QString &basebranch = QString(),
+                    const QString &branch = QString(),
+                    const QStringList &args = QStringList());
+
+    QString curBranch(const QString &repository);
+    QStringList branches(const QString &repository);
+
+    //commit dialog helpers, send to main helper the arg for git-ls-files:
+    QList<QVariant> getModifiedFiles(const QString &directory);
+    QList<QVariant> getCachedFiles(const QString &directory);
+    QList<QVariant> getOtherFiles(const QString &directory);
+
+    //graph helpers
+    QList<DVcsEvent> getAllCommits(const QString &repo);
+
+    //used in log
+    void parseLogOutput(const DVcsJob * job,
+                        QList<DVcsEvent>& commits) const;
+
+protected:
+    bool isValidDirectory(const KUrl &dirPath);
+
+    DVcsJob* lsFiles(const QString &repository,
+                     const QStringList &args);
+    DVcsJob* gitRevList(const QString &repository,
+                        const QStringList &args);
+    DVcsJob* gitRevParse(const QString &repository,
+                         const QStringList &args);
+
+private:
+    //commit dialog "main" helper
+    QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
+
+    void initBranchHash(const QString &repo);
+
+    static KDevelop::VcsStatusInfo::State charToState(const char ch);
+    static KDevelop::VcsStatusInfo::State lsTagToState(const char ch);
+
+    QList<QStringList> branchesShas;
 };
 
 #endif
