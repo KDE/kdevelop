@@ -1,6 +1,10 @@
 # KDE Config File
 [General]
 Name=Simple CMake-based C++ application
+Name[pt]=Aplicação simples em C++ com CMake
+Name[pt_BR]=Aplicação simples em C++ com CMake
+Name[sv]=Enkelt CMake-baserat C++ program
+Name[uk]=Проста заснована на CMake програма C++
 Category=C++/No GUI (CMake)
 Icon=default-kdevelop
 ShowFilesAfterGeneration=%{dest}/src/main.cpp
