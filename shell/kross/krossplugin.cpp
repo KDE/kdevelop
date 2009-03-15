@@ -44,17 +44,6 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
-K_PLUGIN_FACTORY(KrossSupportFactory, registerPlugin<KrossPlugin>(); )
-K_EXPORT_PLUGIN(KrossSupportFactory(KAboutData("kdevkrossmanager","kdevkross",ki18n("Kross Manager"),"0.1")))
-
-extern "C"
-{
-    KDE_EXPORT QObject* krossmodule()
-    {
-        return new KrossPlugin();
-    }
-}
-
 KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
     : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this),
     action(0)
