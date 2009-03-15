@@ -21,12 +21,13 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
 #include <language/duchain/types/enumerationtype.h>
+#include <language/duchain/types/enumeratortype.h>
 #include <language/duchain/abstractfunctiondeclaration.h>
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include <templatedeclaration.h>
 #include <KDE/KDebug>
 #include <QtCore/QQueue>
