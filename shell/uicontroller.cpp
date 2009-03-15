@@ -622,8 +622,9 @@ void UiController::registerStatus(QObject* status)
 void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant) {
-        d->currentShownAssistant->hide();
+        AssistantPopup::Ptr oldPopup = d->currentShownAssistant;
         d->currentShownAssistant.clear();
+        oldPopup->hide();
     }
 }
 
@@ -667,8 +668,10 @@ void UiController::assistantHide() {
     if(d->currentShownAssistant) {
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
-        d->currentShownAssistant->hide();
+
+        AssistantPopup::Ptr oldPopup = d->currentShownAssistant;
         d->currentShownAssistant.clear();
+        oldPopup->hide();
     }
     d->currentShownAssistant = 0;
 }
