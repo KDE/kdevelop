@@ -215,7 +215,7 @@ void IncludePathComputer::computeBackground() {
         }else{
             kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem->setSource(KDevelop::ProblemData::Preprocessor);
-            problem->setDescription(i18n("Include path resolver:") + " " + result.errorMessage);
+            problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
             problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2", m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
             problem->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
         }

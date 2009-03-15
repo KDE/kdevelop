@@ -363,7 +363,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
           //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: ( there were too many tries within this folder OR this file was already tried ) AND The last tries have not expired yet
           if( /*((*it).failedFiles.size() > 3 || (*it).failedFiles.find( file ) != (*it).failedFiles.end()) &&*/ (*it).failTime.secsTo( QDateTime::currentDateTime() ) < CACHE_FAIL_FOR_SECONDS ) {
             PathResolutionResult ret(false); //Fake that the result is ok
-            ret.errorMessage = i18n("Cached: ") + (*it).errorMessage;
+            ret.errorMessage = i18n("Cached: %1", (*it).errorMessage );
             ret.longErrorMessage = (*it).longErrorMessage;
             ret.paths = (*it).paths;
             return ret;

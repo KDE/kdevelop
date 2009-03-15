@@ -192,7 +192,7 @@ QWidget* IncludeFileData::expandingWidget() const {
   }
   
   foreach( const KUrl& u, inclusionPath )
-    htmlPrefix += i18n("Included through") + " " + QString("KDEV_FILE_LINK{%1}").arg(u.pathOrUrl()) + "<br/>";
+    htmlPrefix += i18n("Included through %1 <br/>", QString("KDEV_FILE_LINK{%1}").arg(u.pathOrUrl()) );
   
   return new NavigationWidget( m_item, getCurrentTopDUContext(), htmlPrefix, htmlSuffix );
 }

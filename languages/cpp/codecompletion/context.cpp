@@ -1148,7 +1148,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                         NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(decl.first), KDevelop::CodeCompletionContext::Ptr(parentContext()), decl.second + 50);
                         item->useAlternativeText = true;
                         m_connectedSignal = IndexedDeclaration(decl.first);
-                        item->alternativeText = i18n("Connect to") + " " + decl.first->qualifiedIdentifier().toString() + "(" + QString::fromUtf8(m_connectedSignalNormalizedSignature) + ")";
+                        item->alternativeText = i18n("Connect to %1 (%2)", decl.first->qualifiedIdentifier().toString(), QString::fromUtf8(m_connectedSignalNormalizedSignature) );
                         item->m_isQtSignalSlotCompletion = true;
                         items << CompletionTreeItemPointer(item);
                         connectedSignal = IndexedDeclaration(decl.first);
