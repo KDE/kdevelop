@@ -97,3 +97,8 @@ install(FILES
     testcore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
+
+if(NOT WIN32)
+   macro_optional_add_subdirectory(kross)
+endif(NOT WIN32)
+

@@ -22,8 +22,8 @@
 
 #include "krossbuildsystemmanager.h"
 #include "krosstoolviewfactory.h"
-#include "kross/wrappers/krosscontext.h"
-#include "kross/wrappers/krosscontextmenuextension.h"
+#include "wrappers/krosscontext.h"
+#include "wrappers/krosscontextmenuextension.h"
 
 #include <kross/core/manager.h>
 #include <KUrl>
