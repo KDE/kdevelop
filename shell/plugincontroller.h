@@ -166,7 +166,7 @@ private:
 
     bool checkForDependencies( const KPluginInfo& info, QStringList& missing ) const;
 
-    void loadDependencies( const KPluginInfo& );
+    bool loadDependencies( const KPluginInfo&, QString& failedPlugin );
     void loadOptionalDependencies( const KPluginInfo& info );
 
     void cleanup();

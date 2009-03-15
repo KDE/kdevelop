@@ -362,7 +362,12 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         QVariant prop = info.property( "X-KDevelop-PluginType" );
         kDebug() << "Checked... starting to load:" << info.name() << "type:" << prop;
         
-        loadDependencies( info );
+        QString failedPlugin;
+        if( !loadDependencies( info, failedPlugin ) ) 
+        {
+            kWarning() << "Could not load a required dependency:" << failedPlugin;
+            return 0;
+        }
         loadOptionalDependencies( info );
         
         if( isKrossPlugin )
@@ -472,18 +477,29 @@ void PluginController::loadOptionalDependencies( const KPluginInfo& info )
     }
 }
 
-void PluginController::loadDependencies( const KPluginInfo& info )
+bool PluginController::loadDependencies( const KPluginInfo& info, QString& failedPlugin )
 {
     QVariant prop = info.property( "X-KDevelop-IRequired" );
+    QStringList loadedPlugins;
     if( prop.canConvert<QStringList>() )
     {
         QStringList deps = prop.toStringList();
         foreach( const QString &iface, deps )
         {
             KPluginInfo info = queryPlugins( QString("'%1' in [X-KDevelop-Interfaces]").arg(iface) ).first();
-            loadPluginInternal( info.pluginName() );
+            if( !loadPluginInternal( info.pluginName() ) )
+            {
+                foreach( const QString& name, loadedPlugins )
+                {
+                    unloadPlugin( name );
+                }
+                failedPlugin = info.pluginName();
+                return false;
+            }
+            loadedPlugins << info.pluginName();
         }
     }
+    return true;
 }
 
 IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
