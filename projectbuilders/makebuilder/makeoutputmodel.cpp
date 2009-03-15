@@ -50,8 +50,8 @@ class FilteredItem
 
 const int MakeOutputModel::MakeItemTypeRole = Qt::UserRole + 1;
 
-MakeOutputModel::MakeOutputModel( QObject* parent )
-    : QAbstractListModel(parent)
+MakeOutputModel::MakeOutputModel( const KUrl& builddir, QObject* parent )
+    : QAbstractListModel(parent), buildDir( builddir )
 {
 }
 
@@ -107,9 +107,13 @@ void MakeOutputModel::activate( const QModelIndex& index )
     FilteredItem item = items.at( index.row() );
     if( item.isActivatable )
     {
+        kDebug() << "activating:" << item.lineNo << item.url;
         KTextEditor::Cursor range( item.lineNo, 0);
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         docCtrl->openDocument( item.url, range );
+    } else 
+    {
+        kDebug() << "not an activateable item";
     }
 }
 
@@ -169,7 +173,13 @@ KUrl MakeOutputModel::urlForFile( const QString& filename ) const
     KUrl u;
     if( fi.isRelative() )
     {
-        u = KUrl( currentDir );
+        if( currentDir.isEmpty() ) 
+        {
+            u = buildDir;
+        } else
+        {
+            u = KUrl( currentDir );
+        }
         u.addPath( filename );
     } else 
     {

@@ -22,10 +22,10 @@
 #define MAKEOUTPUTMODEL_H
 
 #include <QtCore/QAbstractListModel>
-#include <outputview/ioutputviewmodel.h>
 #include <QString>
+#include <kurl.h>
+#include <outputview/ioutputviewmodel.h>
 
-class KUrl;
 class FilteredItem;
 
 class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
@@ -42,7 +42,7 @@ public:
 
     static const int MakeItemTypeRole;
 
-    explicit MakeOutputModel( QObject* parent = 0 );
+    explicit MakeOutputModel( const KUrl& builddir , QObject* parent = 0 );
 
     // IOutputViewModel interfaces
     void activate( const QModelIndex& index );
@@ -61,6 +61,7 @@ private:
     bool isValidIndex( const QModelIndex& ) const;
     QList<FilteredItem> items;
     QString currentDir;
+    KUrl buildDir;
 };
 
 Q_DECLARE_METATYPE( MakeOutputModel::OutputItemType )

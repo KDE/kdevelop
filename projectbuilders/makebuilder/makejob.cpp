@@ -95,7 +95,7 @@ void MakeJob::start()
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
 
-    setModel(new MakeOutputModel(), IOutputView::TakeOwnership);
+    setModel(new MakeOutputModel(buildDir), IOutputView::TakeOwnership);
     setDelegate(m_builder->delegate());
 
     startOutput();
