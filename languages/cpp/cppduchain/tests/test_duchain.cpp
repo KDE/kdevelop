@@ -50,7 +50,7 @@
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"
 #include "rpp/preprocessor.h"
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
@@ -1028,9 +1028,9 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(defStructA->type<CppClassType>());
     QVERIFY(defStructA->internalContext());
     QCOMPARE(defStructA->internalContext()->localDeclarations().count(), 1);
-    Cpp::ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
     QVERIFY(classDecl);
-    QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
+    QCOMPARE(classDecl->classType(), ClassDeclarationData::Struct);
 
     QVERIFY(!findDeclaration(top, Identifier("i")));
     QVERIFY(findDeclaration(top, QualifiedIdentifier("A::i")));
@@ -1061,9 +1061,9 @@ void TestDUChain::testDeclareStruct()
     QCOMPARE(defStructA->uses().count(), 1);
     QCOMPARE(defStructA->uses().begin()->count(), 1);
     QVERIFY(defStructA->type<CppClassType>());
-    Cpp::ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
     QVERIFY(classDecl);
-    QCOMPARE(classDecl->classType(), Cpp::ClassDeclarationData::Struct);
+    QCOMPARE(classDecl->classType(), ClassDeclarationData::Struct);
 
     DUContext* structA = top->childContexts().first();
     QVERIFY(structA->parentContext());
@@ -2182,13 +2182,13 @@ void TestDUChain::testBaseClasses() {
   QCOMPARE(defClassB->identifier(), Identifier("B"));
   QVERIFY(defClassB->type<CppClassType>());
 
-  Cpp::ClassDeclaration* defClassC = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[2]);
+  ClassDeclaration* defClassC = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[2]);
   QVERIFY(defClassC);
   QCOMPARE(defClassC->identifier(), Identifier("C"));
   QVERIFY(defClassC->type<CppClassType>());
   QCOMPARE( defClassC->baseClassesSize(), 1u );
 
-  Cpp::ClassDeclaration* defClassD = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[3]);
+  ClassDeclaration* defClassD = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[3]);
   QVERIFY(defClassD);
   QCOMPARE(defClassD->identifier(), Identifier("D"));
   QVERIFY(defClassD->type<CppClassType>());
@@ -2215,7 +2215,7 @@ void TestDUChain::testBaseClasses() {
   QVERIFY( findDeclaration( defClassA->internalContext(), Identifier("aValue") ) );
 
   ///Now test a template-class as base-class
-  Cpp::ClassDeclaration* defClassF = dynamic_cast<Cpp::ClassDeclaration*>(top->localDeclarations()[4]);
+  ClassDeclaration* defClassF = dynamic_cast<ClassDeclaration*>(top->localDeclarations()[4]);
   QVERIFY(defClassF);
   QCOMPARE(defClassF->identifier(), Identifier("F"));
   QVERIFY(defClassF->type<CppClassType>());

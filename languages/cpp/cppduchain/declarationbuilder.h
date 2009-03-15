@@ -26,13 +26,11 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/classfunctiondeclaration.h>
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 namespace KDevelop
 {
 class Declaration;
-}
-namespace Cpp {
 class ClassDeclaration;
 }
 
@@ -126,7 +124,7 @@ private:
   //Opens a Declaration that has the isDefinition flag set
   KDevelop::Declaration* openDefinition(NameAST* name, AST* range, bool collapseRange = false);
   //Opens a ClassDeclaration
-  Cpp::ClassDeclaration* openClassDefinition(NameAST* name, AST* range, bool collapseRange, Cpp::ClassDeclarationData::ClassType classType);
+  KDevelop::ClassDeclaration* openClassDefinition(NameAST* name, AST* range, bool collapseRange, KDevelop::ClassDeclarationData::ClassType classType);
   //Opens either a ClassFunctionDeclaration, a FunctionDeclaration, or a FunctionDefinition
   Declaration* openFunctionDeclaration(NameAST* name, AST* rangeNode);
   //Opens either a ClassMemberDeclaration, or a Declaration

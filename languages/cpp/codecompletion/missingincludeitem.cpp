@@ -29,7 +29,7 @@
 #include "model.h"
 #include <klocale.h>
 #include <ktexteditor/document.h>
-#include <classdeclaration.h>
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainutils.h>
 #include <declarationbuilder.h>
 #include <language/duchain/stringhelpers.h>

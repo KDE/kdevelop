@@ -25,7 +25,7 @@
 #include "veritascppexport.h"
 #include "classskeleton.h"
 
-namespace Cpp { class ClassDeclaration; }
+namespace KDevelop { class ClassDeclaration; }
 
 namespace Veritas
 {
@@ -54,7 +54,7 @@ class VERITASCPP_EXPORT StubConstructor
 public:
     StubConstructor();
     virtual ~StubConstructor();
-    ClassSkeleton morph(Cpp::ClassDeclaration*);
+    ClassSkeleton morph(KDevelop::ClassDeclaration*);
 };
 
 }

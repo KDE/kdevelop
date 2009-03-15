@@ -34,7 +34,7 @@
 #include <language/duchain/namespacealiasdeclaration.h>
 #include "../cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
-#include <classdeclaration.h>
+#include <language/duchain/classdeclaration.h>
 #include "../cppduchain/qtfunctiondeclaration.h"
 #include <language/duchain/use.h>
 #include <typeutils.h>
@@ -356,16 +356,16 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
           if( dec->kind() == Declaration::Type && !dec->type<FunctionType>() && !dec->isTypeAlias() ) {
               if (CppClassType::Ptr classType =  dec->type<CppClassType>()){
-                Cpp::ClassDeclaration* classDecl  = dynamic_cast<Cpp::ClassDeclaration*>(dec);
+                ClassDeclaration* classDecl  = dynamic_cast<ClassDeclaration*>(dec);
                 if(classDecl) {
                   switch (classDecl->classType()) {
-                    case Cpp::ClassDeclarationData::Class:
+                    case ClassDeclarationData::Class:
                       return indentation + "class";
                       break;
-                    case Cpp::ClassDeclarationData::Struct:
+                    case ClassDeclarationData::Struct:
                       return indentation + "struct";
                       break;
-                    case Cpp::ClassDeclarationData::Union:
+                    case ClassDeclarationData::Union:
                       return indentation + "union";
                       break;
                   }

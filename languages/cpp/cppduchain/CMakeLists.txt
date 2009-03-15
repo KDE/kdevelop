@@ -44,7 +44,6 @@ set(kdevcppduchain_LIB_SRCS
     type_visitor.cpp
     builtinoperators.cpp
     expressionevaluationresult.cpp
-    classdeclaration.cpp
     navigation/navigationwidget.cpp
     navigation/declarationnavigationcontext.cpp
     navigation/includenavigationcontext.cpp

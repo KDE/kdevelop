@@ -21,7 +21,7 @@
 #include <language/duchain/ducontext.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include "typeconversion.h"
 #include <declarationbuilder.h>
 
@@ -143,7 +143,7 @@ using namespace KDevelop;
   ///Returns whether base is a base-class of c
   void getMemberFunctions(const CppClassType::Ptr& klass, const TopDUContext* topContext, QHash<KDevelop::FunctionType::Ptr, ClassFunctionDeclaration*>& functions, const QString& functionName, bool mustBeConstant)  {
     Declaration* klassDecl = klass->declaration(topContext);
-    Cpp::ClassDeclaration* cppClassDecl = dynamic_cast<Cpp::ClassDeclaration*>(klassDecl);
+    ClassDeclaration* cppClassDecl = dynamic_cast<ClassDeclaration*>(klassDecl);
     DUContext* context = klassDecl ? klassDecl->internalContext() : 0;
 
     int functionCount = functions.size();
@@ -167,7 +167,7 @@ using namespace KDevelop;
 
     if(cppClassDecl) {
       //equivalent to using the imported parent-contexts
-      FOREACH_FUNCTION(const Cpp::BaseClassInstance& base, cppClassDecl->baseClasses) {
+      FOREACH_FUNCTION(const KDevelop::BaseClassInstance& base, cppClassDecl->baseClasses) {
         if( base.access != KDevelop::Declaration::Private ) { //we need const-cast here because the constant list makes also the pointers constant, which is not intended
           CppClassType::Ptr baseClass = base.baseClass.type<CppClassType>();
           if( baseClass )
@@ -204,8 +204,8 @@ using namespace KDevelop;
     }
   }
   bool isPublicBaseClass( const CppClassType::Ptr& c, const CppClassType::Ptr& base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) {
-    Cpp::ClassDeclaration* fromDecl = dynamic_cast<Cpp::ClassDeclaration*>(c->declaration(topContext));
-    Cpp::ClassDeclaration* toDecl = dynamic_cast<Cpp::ClassDeclaration*>(base->declaration(topContext));
+    ClassDeclaration* fromDecl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
+    ClassDeclaration* toDecl = dynamic_cast<ClassDeclaration*>(base->declaration(topContext));
     if(fromDecl && toDecl)
       return fromDecl->isPublicBaseClass(toDecl, topContext, baseConversionLevels);
     else

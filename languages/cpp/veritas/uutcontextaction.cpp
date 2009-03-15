@@ -49,7 +49,7 @@
 #include <language/interfaces/editorcontext.h>
 
 // kdevelop
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 using Veritas::ClassSkeleton;
 using Veritas::ClassSerializer;
@@ -58,7 +58,6 @@ using Veritas::UUTConstructor;
 using Veritas::UUTContextAction;
 using Veritas::DocumentAccess;
 using namespace KDevelop;
-using namespace Cpp;
 
 namespace
 {

@@ -31,7 +31,6 @@ class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigat
   protected:
     virtual KDevelop::AbstractType::Ptr typeToShow(KDevelop::AbstractType::Ptr type);
     virtual void setPreviousContext(AbstractNavigationContext* previous);
-    virtual void htmlClass();
     virtual void htmlIdentifiedType(KDevelop::AbstractType::Ptr type, const KDevelop::IdentifiedType* idType);
 };
 

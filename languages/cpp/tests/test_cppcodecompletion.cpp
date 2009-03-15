@@ -45,7 +45,7 @@
 #include "expressionparser.h"
 #include "codecompletion/context.h"
 #include "cpppreprocessenvironment.h"
-#include "cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include "cppduchain/missingdeclarationproblem.h"
 #include "cppduchain/missingdeclarationassistant.h"
 #include <qstandarditemmodel.h>
@@ -1086,7 +1086,7 @@ void TestCppCodeCompletion::testAcrossHeaderTemplateReferences()
     QCOMPARE(decl->abstractType()->toString(), QString("Test< Dummy >"));
   }
   {
-    Cpp::ClassDeclaration* decl = dynamic_cast<Cpp::ClassDeclaration*>(findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end));
+    ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(findDeclaration(top, QualifiedIdentifier("Test2<Dummy>"), top->range().end));
     QVERIFY(decl);
     QVERIFY(decl->abstractType());
     CppClassType::Ptr classType = decl->abstractType().cast<CppClassType>();

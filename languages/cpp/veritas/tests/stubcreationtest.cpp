@@ -29,7 +29,7 @@
 
 #include "classdeclarationfactory.h"
 
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include <language/editor/simplecursor.h>
 
 
@@ -40,7 +40,6 @@ using Veritas::MethodSkeleton;
 using Veritas::Test::StubCreationTest;
 using Veritas::Test::DeclarationFactory;
 
-using namespace Cpp;
 using namespace KDevelop;
 
 /////////////////////////// fixture //////////////////////////////////////////

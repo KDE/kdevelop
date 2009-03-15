@@ -31,7 +31,7 @@
 
 #include "../typeutils.h"
 #include "../templatedeclaration.h"
-#include "../classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include "../cppduchain.h"
 
 namespace Cpp {
@@ -52,23 +52,6 @@ void DeclarationNavigationContext::setPreviousContext(KDevelop::AbstractNavigati
     if(m_declaration.data() && dynamic_cast<TemplateDeclaration*>(m_declaration.data()))
       //If this is a template, take the top-context from the previous context, because we cannot have correct visibility from here
       setTopContext(previous->topContext());
-  }
-}
-
-void DeclarationNavigationContext::htmlClass()
-{
-  AbstractDeclarationNavigationContext::htmlClass();
-
-  StructureType::Ptr klass = m_declaration->abstractType().cast<StructureType>();
-  Q_ASSERT(klass);
-
-  Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(klass->declaration(m_topContext.data()));
-  if(classDecl) {
-    FOREACH_FUNCTION( const Cpp::BaseClassInstance& base, classDecl->baseClasses ) {
-      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QString("virtual") : QString()) + " ";
-      eventuallyMakeTypeLinks(base.baseClass.abstractType());
-    }
-    modifyHtml() += " ";
   }
 }
 

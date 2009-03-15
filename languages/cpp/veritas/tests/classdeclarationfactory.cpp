@@ -25,7 +25,7 @@
 #include <language/duchain/duchainlock.h>
 
 // kdevelop
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include "../cppduchain/declarationbuilder.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/usebuilder.h"
@@ -56,7 +56,7 @@ DeclarationFactory::~DeclarationFactory()
 
 namespace
 {
-Cpp::ClassDeclaration* classDeclarationIn(DUContext* ctx)
+ClassDeclaration* classDeclarationIn(DUContext* ctx)
 {
     Q_ASSERT(ctx->localDeclarations().count() !=0 );
     Declaration* dcl = ctx->localDeclarations().first();
@@ -67,7 +67,7 @@ Cpp::ClassDeclaration* classDeclarationIn(DUContext* ctx)
 }
 }
 
-Cpp::ClassDeclaration* DeclarationFactory::classFromText(const QByteArray& text)
+ClassDeclaration* DeclarationFactory::classFromText(const QByteArray& text)
 {
     if (m_lock->locked()) m_lock->unlock();
     TopDUContext* top = parseText(text);
@@ -91,7 +91,7 @@ Cpp::ClassDeclaration* DeclarationFactory::classFromText(const QByteArray& text)
         }
     }
     
-    Cpp::ClassDeclaration* clazz = classDeclarationIn(context);
+    ClassDeclaration* clazz = classDeclarationIn(context);
     if (m_lock->locked()) m_lock->unlock();
     return clazz;
 }

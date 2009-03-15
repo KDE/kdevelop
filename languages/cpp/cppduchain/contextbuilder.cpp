@@ -131,7 +131,7 @@ void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
   m_onlyComputeVisible = onlyVisible;
 }
 
-void ContextBuilder::addBaseType( Cpp::BaseClassInstance base ) {
+void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base ) {
   DUChainWriteLocker lock(DUChain::lock());
 
   addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.

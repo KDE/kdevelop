@@ -37,7 +37,7 @@
 #include "cppducontext.h"
 #include <language/duchain/use.h>
 #include "templateparameterdeclaration.h"
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 
 using namespace Cpp;

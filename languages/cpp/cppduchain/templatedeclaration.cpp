@@ -36,7 +36,7 @@
 #include "templateparameterdeclaration.h"
 #include "cppducontext.h"
 #include "expressionparser.h"
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include <language/duchain/duchainregister.h>
 #include <name_compiler.h>
 #include <parsesession.h>
@@ -569,7 +569,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
     if( instantiatedDeclaration ) {
       ///We do not need to respect forward-declarations here, because they are not allowed as base-classes.
-      Cpp::ClassDeclaration* klass = dynamic_cast<Cpp::ClassDeclaration*>( instantiatedDeclaration );
+      ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( instantiatedDeclaration );
       if( klass ) { //It could also be a function
         ///Resolve template-dependent base-classes(They can not be found in the imports-list, because their type is DelayedType and those have no context)
         uint num = 0;

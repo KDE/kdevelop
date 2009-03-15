@@ -54,7 +54,7 @@
 #include "cpptypes.h"
 #include "cppduchain.h"
 #include "cpptypes.h"
-#include "classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 #include "cppdebughelper.h"
 #include "name_visitor.h"
@@ -598,7 +598,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   return declaration;
 }
 
-Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange, ClassDeclarationData::ClassType classType) {
+ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* range, bool collapseRange, ClassDeclarationData::ClassType classType) {
   Identifier id;
 
   if(!name) {
@@ -607,7 +607,7 @@ Cpp::ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AS
     id = Identifier::unique( uniqueClassNumber.fetchAndAddRelaxed(1) );
   }
 
-  Cpp::ClassDeclaration* ret = openDeclaration<Cpp::ClassDeclaration>(name, range, id, collapseRange);
+  ClassDeclaration* ret = openDeclaration<ClassDeclaration>(name, range, id, collapseRange);
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
   ret->clearBaseClasses();

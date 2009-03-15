@@ -263,8 +263,8 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
     }
     
     if(!behindExistingItem) {
-      Cpp::ClassDeclaration* classDecl = dynamic_cast<Cpp::ClassDeclaration*>(m_context->owner());
-      if(kind != Slot && m_access == Declaration::Public && classDecl && classDecl->classType() == Cpp::ClassDeclarationData::Struct) {
+      ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(m_context->owner());
+      if(kind != Slot && m_access == Declaration::Public && classDecl && classDecl->classType() == ClassDeclarationData::Struct) {
         //Nothing to do, we can just insert into a struct if it should be public
       }else{
         ret.prefix = accessString();

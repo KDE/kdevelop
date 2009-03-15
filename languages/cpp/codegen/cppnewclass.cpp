@@ -38,7 +38,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
 
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 #include "../codecompletion/implementationhelperitem.h"
 #include "../codecompletion/missingincludeitem.h"
 
@@ -244,7 +244,7 @@ void CppNewClass::generateHeader()
     foreach (const QString& inherits, field("classInheritance").toStringList()) {
       // TODO: properly strip qualifiers
       // TODO: move lookup to CppClassIdentifierPage
-      Cpp::BaseClassInstance base;
+      KDevelop::BaseClassInstance base;
       if (inherits.beginsWith("protected "))
         base.access = Declaration::Protected;
       else if (inherits.beginsWith("private "))

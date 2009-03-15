@@ -48,7 +48,7 @@
 #include <language/duchain/duchainlock.h>
 
 // kdevelop
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 using Veritas::ClassSkeleton;
 using Veritas::ClassSerializer;
@@ -57,7 +57,6 @@ using Veritas::IncludeSerializer;
 using Veritas::IncludeGuardSerializer;
 using Veritas::StubContextAction;
 using namespace KDevelop;
-using namespace Cpp;
 
 namespace
 {

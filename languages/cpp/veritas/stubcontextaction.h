@@ -28,7 +28,7 @@
 
 class KAction;
 namespace KDevelop { class Context; class ContextMenuExtension; }
-namespace Cpp { class ClassDeclaration; }
+namespace KDevelop { class ClassDeclaration; }
 
 namespace Veritas
 {
@@ -54,7 +54,7 @@ private slots:
     void constructStub();
 
 private:
-    Cpp::ClassDeclaration* m_clazz;
+    KDevelop::ClassDeclaration* m_clazz;
     KAction* m_constructStub;
 };
 

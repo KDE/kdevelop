@@ -30,14 +30,13 @@
 #include <language/duchain/classfunctiondeclaration.h>
 
 // kdevelop
-#include "../cppduchain/classdeclaration.h"
+#include <language/duchain/classdeclaration.h>
 
 using Veritas::ClassSkeleton;
 using Veritas::MethodSkeleton;
 using Veritas::ConstructorSkeleton;
 using Veritas::StubConstructor;
 using namespace KDevelop;
-using namespace Cpp;
 
 namespace
 {
