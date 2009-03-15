@@ -45,7 +45,7 @@
 #include <interfaces/contextmenuextension.h>
 
 KrossPlugin::KrossPlugin( QObject* parent, const QVariantList& args )
-    : KDevelop::IPlugin( KrossSupportFactory::componentData(), parent ), KrossDistributedVersionControl(this),
+    : KDevelop::IPlugin( KComponentData(), parent ), KrossDistributedVersionControl(this),
     action(0)
 {
     kDebug() << "Krossing the krossed paths of this krossed world" << args;
