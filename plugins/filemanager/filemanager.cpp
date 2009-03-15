@@ -86,6 +86,7 @@ void FileManager::setupActions()
     tbActions << (dirop->actionCollection()->action("forward"));
     tbActions << (dirop->actionCollection()->action("reload"));
     tbActions << (dirop->actionCollection()->action("sorting menu"));
+    tbActions << (dirop->actionCollection()->action("show hidden"));
 
     KAction* action = new KAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
