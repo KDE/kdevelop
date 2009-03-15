@@ -73,11 +73,11 @@ int main (int argc, char *argv[])
                          0,
                          ki18n("Simple KDE ssh client provider"),
                          "0.1",
-                         ki18n("Displays KPasswordDialog and performs ssh connection using libssh. After connecting it executes 'svnserve -t' and provides tunneling."),
+                         ki18n("Displays a KDE Password Dialog and establishes an ssh connection using libssh. After connecting it executes 'svnserve -t' to provide tunneling."),
                          KAboutData::License_GPL,
                          ki18n("(c) 2009"),
-                         ki18n("Use this client instead of standard ssh when using subversion to provide KPasswordDialog"
-                               " instead of CLI ssh password prompt."),
+                         ki18n("Use this client instead of standard ssh when using subversion to provide a KDE Password Dialog"
+                               " instead of a command-line ssh password prompt."),
                          "http://kde.org",
                          "submit@bugs.kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData );
@@ -114,7 +114,7 @@ int main (int argc, char *argv[])
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if(sock < 0)
     {
-        show_error(i18n("Can not create socket, operation aborted!"));
+        show_error(i18n("Cannot create socket, operation aborted."));
         return 1;
     }
     
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
     struct hostent *he;
     if (!(he = gethostbyname(host.c_str()) ) )
     {
-        show_error(i18n("Get host by name failed, operation aborted!"));
+        show_error(i18n("Get host by name failed, operation aborted."));
         return 1;
     }
     addr.sin_addr = *((struct in_addr *)he->h_addr);
@@ -131,7 +131,7 @@ int main (int argc, char *argv[])
     if(connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
     {
         perror("connect");
-        show_error(i18n("Can not connect to host, operation aborted!"));
+        show_error(i18n("Cannot connect to host, operation aborted."));
         return 1;
     }
 
@@ -139,19 +139,19 @@ int main (int argc, char *argv[])
     LIBSSH2_SESSION *session;
     if (!(session = libssh2_session_init()) )
     {
-        shutdown_ssh(session, i18n("Can not start a ssh session, operation aborted!"));
+        shutdown_ssh(session, i18n("Cannot start an ssh session, operation aborted."));
         return 1;
     }
 
     if (libssh2_session_startup(session, sock)) {
-        shutdown_ssh(session, i18n("SSH connection failed, operation aborted!"));
+        shutdown_ssh(session, i18n("SSH connection failed, operation aborted."));
         return 1;
     }
     
     char* auth_methods = 0;
     if (!(auth_methods = libssh2_userauth_list(session, username.c_str(), username.size()+1)))
     {
-        shutdown_ssh(session, i18n("Server do not support any authentication methods for user, operation aborted!"));
+        shutdown_ssh(session, i18n("Server does not support any authentication methods for the user, operation aborted."));
         return 1;
     }
     kDebug() << "Supported auth methods:" << auth_methods;
@@ -190,26 +190,26 @@ int main (int argc, char *argv[])
             break;
         default:
             //shouldn't happen
-            shutdown_ssh(session, i18n("Unsupported authentication type, it can be a bug. Operation aborted!"));
+            shutdown_ssh(session, i18n("Unsupported authentication type, could possibly be a bug. Operation aborted."));
             return 1;
     }
 
     if (auth)
     {
-        shutdown_ssh(session, i18n("Authentication failed, operation aborted!"));
+        shutdown_ssh(session, i18n("Authentication failed, operation aborted."));
         return 1; 
     }
     
     LIBSSH2_CHANNEL *channel;
     
     if (!(channel = libssh2_channel_open_session(session))) {
-        shutdown_ssh(session, i18n("Can not open ssh channel, operation aborted!"));
+        shutdown_ssh(session, i18n("Cannot open ssh channel, operation aborted."));
         return 1; 
     }
 
     if(libssh2_channel_exec(channel, "svnserve -t") )
     {
-        shutdown_ssh(session, i18n("Failed to launch 'svnserver -t', operation aborted!"));
+        shutdown_ssh(session, i18n("Failed to launch 'svnserver -t', operation aborted."));
         return 1;
     }
     
@@ -221,7 +221,7 @@ int main (int argc, char *argv[])
     int flags = fcntl(0, F_GETFL, 0);
     if (fcntl(0, F_SETFL, flags | O_NONBLOCK))
     {
-        shutdown_ssh(session, i18n("Can not set non-blocking mode for stdin, operation aborted!"));
+        shutdown_ssh(session, i18n("Cannot set non-blocking mode for stdin, operation aborted."));
         return 1;
     }
 
