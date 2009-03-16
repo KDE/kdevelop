@@ -43,7 +43,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT BaseClassInstance
   bool virtualInheritance;
 };
 
-DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclarationData : public KDevelop::ClassMemberDeclarationData
 {
