@@ -52,7 +52,7 @@ void MercurialInitTest::initTestCase()
 {
     AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
-    m_testCore->initialize(KDevelop::Core::Setup(KDevelop::Core::NoUi|KDevelop::Core::LoadNoPlugins));
+    m_testCore->initialize(KDevelop::Core::NoUi);
 //     m_testCore->initialize(KDevelop::Core::Default);
     m_proxy = new MercurialPlugin(m_testCore);
     removeTempDirs();
