@@ -193,7 +193,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         MacroMap *m_macros;
         const CacheValues* m_cache;
         Definitions m_defs;
-        QStringList m_filesRead;
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
 

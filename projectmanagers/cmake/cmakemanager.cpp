@@ -74,6 +74,7 @@
 #include "cmakecodecompletionmodel.h"
 #include "icmakebuilder.h"
 #include "cmakeutils.h"
+#include "cmaketypes.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -84,6 +85,7 @@
 #include <language/duchain/smartconverter.h>
 #include <language/duchain/use.h>
 #include <ktexteditor/smartinterface.h>
+#include <interfaces/idocumentation.h>
 
 using namespace KDevelop;
 
@@ -170,6 +172,8 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     executable="cmake";
 #endif
     QString cmakeCmd = CMakeProjectVisitor::findFile(executable, envVars);
+    m_doc = new CMakeDocumentation(cmakeCmd, this);
+    
     QString versionOutput=CMake::executeProcess(cmakeCmd, QStringList("--version"));
     QRegExp rx("([0-9]+).([0-9]+)-patch ([0-9]+)");
     rx.indexIn(versionOutput);
@@ -211,7 +215,6 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
 #endif
 
-    m_doc=new CMakeDocumentation(cmakeCmd);
     kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;
 }
 
@@ -469,21 +472,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
             vm->remove("CMAKE_CURRENT_LIST_FILE");
             vm->remove("CMAKE_CURRENT_SOURCE_DIR");
             vm->remove("CMAKE_CURRENT_BINARY_DIR");
-
-            EditorIntegrator editor;
-            editor.setCurrentUrl(IndexedString(v.context()->url().toUrl()));
-            LockedSmartInterface smart(editor.smart());
-            if(smart)
-            {
-                smart->clearRevision();
-                
-                DUChainWriteLocker lock(DUChain::lock());
-                SmartConverter converter(&editor);
-                converter.convertDUChain(v.context());
-                CMakeHighlighting highlight;
-                highlight.highlightDUChain(v.context());
-                smart->useRevision(smart->currentRevision());
-            }
 
             /*{
             kDebug() << "dumpiiiiiing" << folder->url();
@@ -904,18 +892,19 @@ void CMakeProjectManager::jumpToDeclaration()
     }
 }
 
-CacheValues CMakeProjectManager::readCache(const KUrl &path)
+CacheValues CMakeProjectManager::readCache(const KUrl &path) const
 {
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        kDebug() << "error. Could not find the file";
+        kDebug() << "error. Could not find the file" << path;
         return CacheValues();
     }
 
     CacheValues ret;
     QTextStream in(&file);
     kDebug(9042) << "Reading cache:" << path;
+    QStringList currentComment;
     while (!in.atEnd())
     {
         QString line = in.readLine().trimmed();
@@ -924,9 +913,11 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path)
             CacheLine c;
             c.readLine(line);
             if(c.flag().isEmpty())
-                ret[c.name()]=c.value();
+                ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
 //             kDebug(9042) << "Cache line" << line << c.name();
         }
+        else if(line.startsWith("//"))
+            currentComment += line.right(line.count()-2);
     }
     return ret;
 }
@@ -1168,17 +1159,10 @@ QWidget* CMakeProjectManager::specialLanguageObjectNavigationWidget(const KUrl& 
         }
     }
 
+    CMakeNavigationWidget* doc=0;
     if(decl)
     {
-        QString id=decl->identifier().toString();
-        QString desc=m_doc->description(decl);
-        if(desc.isEmpty()) {
-            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, decl);
-            return doc;
-        } else {
-            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, id, desc);
-            return doc;
-        }
+        doc=new CMakeNavigationWidget(top, decl);
     }
     else
     {
@@ -1193,14 +1177,37 @@ QWidget* CMakeProjectManager::specialLanguageObjectNavigationWidget(const KUrl& 
         {}
         
         QString id=e->text(KTextEditor::Range(start, end));
-        QString desc=m_doc->description(id);
-        if(!desc.isEmpty())
+        KSharedPtr<IDocumentation> desc=m_doc->description(id, url);
+        if(!desc.isNull())
         {
-            CMakeNavigationWidget* doc=new CMakeNavigationWidget(top, id, desc);
-            return doc;
+            doc=new CMakeNavigationWidget(top, desc);
         }
     }
-    return 0;
+    
+    return doc;
+}
+
+QPair<QString, QString> CMakeProjectManager::cacheValue(KDevelop::IProject* project, const QString& id) const
+{
+    QPair<QString, QString> ret;
+    if(project==0 && !m_projectCache.keys().isEmpty())
+    {
+        project=m_projectCache.keys().first();
+    }
+    
+    kDebug() << "cache value " << id << project << (m_projectCache.contains(project) && m_projectCache[project].contains(id));
+    if(m_projectCache.contains(project) && m_projectCache[project].contains(id))
+    {
+        const CacheEntry& e=m_projectCache[project].value(id);
+        ret.first=e.value;
+        ret.second=e.doc;
+    }
+    return ret;
+}
+
+KSharedPtr< KDevelop::IDocumentation > CMakeProjectManager::documentationForDeclaration(KDevelop::Declaration* declaration)
+{
+    return m_doc->documentationForDeclaration(declaration);
 }
 
 #include "cmakemanager.moc"

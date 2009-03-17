@@ -30,8 +30,15 @@ struct Macro
     bool isFunction;
 };
 
+struct CacheEntry
+{
+    CacheEntry(const QString& v=QString(), const QString &d=QString()) : value(v), doc(d) {}
+    QString value;
+    QString doc;
+};
+
 typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> Definitions;
-typedef QHash<QString, QString> CacheValues;
+typedef QHash<QString, CacheEntry> CacheValues;
 
 #endif

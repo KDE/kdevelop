@@ -125,7 +125,7 @@ QStringList CMakeProjectVisitor::theValue(const QString& exp, const IntPair& the
         if(m_vars->contains(var))
             vars = m_vars->value(var);
         else if(m_cache->contains(var))
-            vars = m_cache->value(var).split(';');
+            vars = m_cache->value(var).value.split(';');
     }
     else if(type=="ENV")
     {
@@ -368,7 +368,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
     //TODO: Must deal with ENV{something} case
     QStringList values;
     if(set->storeInCache() && m_cache->contains(set->variableName()))
-        values = m_cache->value(set->variableName()).split(';');
+        values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
     kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
@@ -503,9 +503,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         if(m_vars->contains(var))
             instPath = m_vars->value(var).join(QString());
         else if(m_cache->contains(var))
-            instPath = m_cache->value(var);
+            instPath = m_cache->value(var).value;
 
-         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var) << instPath;
+         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
 
 #if defined(Q_OS_WIN)
         modulePath.prepend(instPath);
@@ -622,8 +622,8 @@ int CMakeProjectVisitor::visit(const FindProgramAst *fprog)
         return 1;
     if(m_cache->contains(fprog->variableName()))
     {
-        kDebug(9042) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName());
-        m_vars->insert(fprog->variableName(), m_cache->value(fprog->variableName()).split(';'));
+        kDebug(9042) << "FindProgram: cache" << fprog->variableName() << m_cache->value(fprog->variableName()).value;
+        m_vars->insert(fprog->variableName(), m_cache->value(fprog->variableName()).value.split(';'));
         return 1;
     }
 
@@ -678,7 +678,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     if(m_cache->contains(fpath->variableName()))
     {
         kDebug() << "FindPath: cache" << fpath->variableName();
-        m_vars->insert(fpath->variableName(), m_cache->value(fpath->variableName()).split(';'));
+        m_vars->insert(fpath->variableName(), m_cache->value(fpath->variableName()).value.split(';'));
         return 1;
     }
 
@@ -724,7 +724,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
     if(m_cache->contains(flib->variableName()))
     {
         kDebug(9042) << "FindLibrary: cache" << flib->variableName();
-        m_vars->insert(flib->variableName(), m_cache->value(flib->variableName()).split(';'));
+        m_vars->insert(flib->variableName(), m_cache->value(flib->variableName()).value.split(';'));
         return 1;
     }
 
@@ -788,7 +788,7 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     if(m_cache->contains(ffile->variableName()))
     {
         kDebug(9042) << "FindFile: cache" << ffile->variableName();
-        m_vars->insert(ffile->variableName(), m_cache->value(ffile->variableName()).split(';'));
+        m_vars->insert(ffile->variableName(), m_cache->value(ffile->variableName()).value.split(';'));
         return 1;
     }
 

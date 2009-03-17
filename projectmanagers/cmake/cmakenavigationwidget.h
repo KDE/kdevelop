@@ -21,13 +21,19 @@
 #ifndef CMAKENAVIGATIONWIDGET_H
 #define CMAKENAVIGATIONWIDGET_H
 
+#include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
+
+namespace KDevelop { class IDocumentation; }
 
 class CMakeNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
     public:
-        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, const QString& name, const QString& html);
+        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, const KSharedPtr<KDevelop::IDocumentation>& doc);
         CMakeNavigationWidget(KDevelop::TopDUContextPointer top, KDevelop::Declaration* decl);
+        
+    private:
+        KDevelop::NavigationContextPointer ptr;
 };
 
 #endif // CMAKENAVIGATIONWIDGET_H

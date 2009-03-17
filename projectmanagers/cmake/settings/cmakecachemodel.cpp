@@ -53,11 +53,10 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
         QString line = in.readLine().trimmed();
         if(line.startsWith("//"))
             currentComment += line.right(line.count()-2);
-        else if(!line.isEmpty()) //it is a variable
+        else if(!line.isEmpty() && !line.startsWith('#')) //it is a variable
         {
             CacheLine c;
-            if(!line.startsWith('#'))
-                c.readLine(line);
+            c.readLine(line);
             
             if(c.isCorrect())
             {
@@ -106,15 +105,15 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KUrl &path)
                 currentIdx++;
                 currentComment.clear();
             }
-            else if(line.startsWith('#') && line.contains("INTERNAL"))
-            {
-                m_internalBegin=currentIdx;
+        }
+        else if(line.startsWith('#') && line.contains("INTERNAL"))
+        {
+            m_internalBegin=currentIdx;
 //                 kDebug(9032) << "Comment: " << line << " -.- " << currentIdx;
-            }
-            else if(!line.startsWith('#'))
-            {
-                kDebug(9032) << "unrecognized cache line: " << line;
-            }
+        }
+        else if(!line.startsWith('#'))
+        {
+            kDebug(9032) << "unrecognized cache line: " << line;
         }
     }
 }

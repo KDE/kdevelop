@@ -21,6 +21,7 @@
 #include "cmakenavigationwidget.h"
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/duchain/navigation/abstractdeclarationnavigationcontext.h>
+#include <interfaces/idocumentation.h>
 
 using namespace KDevelop;
 
@@ -48,11 +49,11 @@ class CMakeDeclarationNavigationContext: public AbstractDeclarationNavigationCon
             : AbstractDeclarationNavigationContext(decl, top) {}
 };
 
-CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const QString& name, const QString& html)
+CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const KSharedPtr<IDocumentation>& doc)
 {
     initBrowser(200);
 
-    setContext( NavigationContextPointer(new CMakeNavigationContext(top, name, html)) );
+    setContext( NavigationContextPointer(new CMakeNavigationContext(top, doc->name(), doc->description())) );
 }
 
 CMakeNavigationWidget::CMakeNavigationWidget(KDevelop::DUChainPointer< KDevelop::TopDUContext > top, KDevelop::Declaration* decl)

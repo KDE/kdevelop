@@ -34,6 +34,7 @@
 
 #include "cmakelistsparser.h"
 #include "cmakeprojectvisitor.h"
+#include "cmakedocumentation.h"
 
 class QDir;
 class QObject;
@@ -59,12 +60,16 @@ class CMakeFolderItem;
 class ICMakeBuilder;
 
 class CMakeProjectManager
-    : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager, public KDevelop::ILanguageSupport
+    : public KDevelop::IPlugin
+    , public KDevelop::IBuildSystemManager
+    , public KDevelop::ILanguageSupport
+    , public KDevelop::IDocumentationProvider
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::ILanguageSupport )
+Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
     explicit CMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
@@ -101,7 +106,9 @@ public:
     static QStringList guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version);
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
-
+    
+    QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
+    
     //LanguageSupport
     virtual QString name() const;
     virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
@@ -109,6 +116,8 @@ public:
     virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
+    //IDocumentationProvider
+    virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
 public slots:
     void dirtyFile(const QString& file);
 
@@ -119,7 +128,7 @@ private:
     static QString guessCMakeRoot(const QString& cmakeBin, const QStringList& version);
     void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
-    CacheValues readCache(const KUrl &path);
+    CacheValues readCache(const KUrl &path) const;
 
     
     void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);

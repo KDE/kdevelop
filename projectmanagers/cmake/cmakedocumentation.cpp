@@ -22,9 +22,14 @@
 #include "cmakeutils.h"
 #include <KDebug>
 #include <language/duchain/declaration.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/idocumentation.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include "cmakemanager.h"
 
-CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd)
-    : mCMakeCmd(cmakeCmd)
+CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m)
+    : mCMakeCmd(cmakeCmd), m_manager(m)
 {
     collectIds("--help-command-list", Command);
     collectIds("--help-variable-list", Variable);
@@ -41,12 +46,26 @@ void CMakeDocumentation::collectIds(const QString& param, Type type)
     }
 }
 
-QString CMakeDocumentation::description(const QString& identifier)
+class CMakeDoc : public KDevelop::IDocumentation
+{
+    public:
+        CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
+        
+        virtual QWidget* documentationWidget(QWidget* ) { return 0; }
+        virtual QString description() const { return mDesc; }
+        virtual QString name() const { return mName; }
+        virtual bool providesWidget() const { return false; }
+    private:
+        QString mName, mDesc;
+};
+
+KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file)
 {
     kDebug() << "seeking documentation for " << identifier;
     QString arg, id=identifier.toLower();
+    Type t;
     if(m_typeForName.contains(id)) {
-        switch(m_typeForName[id])
+        switch(t=m_typeForName[id])
         {
             case Command:
                 arg="--help-command";
@@ -64,17 +83,28 @@ QString CMakeDocumentation::description(const QString& identifier)
         qDebug() << "type for" << id << m_typeForName[id];
     }
     
-    if(arg.isEmpty())
-        return QString();
+    QString desc;
+    if(!arg.isEmpty())
+        desc="<pre>"+CMake::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
+    
+    {
+        KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
+        QPair<QString, QString> entry = m_manager->cacheValue(p, identifier);
+        if(!entry.first.isEmpty())
+            desc += i18n("<br /><em>Cache Value:</em> %1\n", entry.first);
+        
+        if(!entry.second.isEmpty())
+            desc += i18n("<br /><em>Cache Documentation:</em> %1\n", entry.second);
+        kDebug() << "cache info:" << entry << file;
+    }
+    
+    if(desc.isEmpty())
+        return KSharedPtr<KDevelop::IDocumentation>();
     else
-        return "<pre>"+CMake::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
+        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
 }
 
-QString CMakeDocumentation::description(const KDevelop::Declaration* decl)
+KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
 {
-    QString ret=description(decl->identifier().toString());
-    if(ret.isEmpty())
-    {}
-    
-    return ret;
+    return description(decl->identifier().toString(), decl->url().toUrl());
 }

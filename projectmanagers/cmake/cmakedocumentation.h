@@ -21,27 +21,31 @@
 #ifndef CMAKEDOCUMENTATION_H
 #define CMAKEDOCUMENTATION_H
 
-//NOTE: This should probably be merged at some point with the KDevplatform documentation support.
-// I'm just not doing it right now because I want to track cmake needs first.
-
 #include <QString>
 #include <QMap>
 #include <QStringList>
+#include <QVariantList>
+#include <interfaces/iplugin.h>
+#include <interfaces/idocumentationprovider.h>
 
 namespace KDevelop { class Declaration; }
+class CMakeProjectManager;
+class KUrl;
 
-class CMakeDocumentation
+class CMakeDocumentation : public KDevelop::IDocumentationProvider
 {
     public:
-        CMakeDocumentation(const QString& cmakeCmd);
-        QString description(const QString& identifier);
-        QString description(const KDevelop::Declaration* decl);
+        CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m);
+        KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
+        
+        virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
     private:
         enum Type { Command, Variable, Module, Property, Policy };
         void collectIds(const QString& param, Type type);
         
         QMap<QString, Type> m_typeForName;
         QString mCMakeCmd;
+        CMakeProjectManager* m_manager;
 };
 
 #endif // CMAKEDOCUMENTATION_H
