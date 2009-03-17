@@ -32,6 +32,7 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
 {
     public:
+        typedef KSharedPtr<IDocumentation> Ptr;
         virtual ~IDocumentation();
         
         /** @returns the name of the documented information*/
@@ -44,6 +45,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
             \param parent defines the widget's parent
         */
         virtual QWidget* documentationWidget(QWidget* parent=0)=0;
+        
+        /** @returns whether the widget can provide extended information. */
+        virtual bool providesWidget() const =0;
 };
 
 }

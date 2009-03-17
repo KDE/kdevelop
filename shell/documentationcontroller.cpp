@@ -92,6 +92,7 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
             kDebug(9529) << "Documentation provider found:" << doc;
             ret=doc->documentationForDeclaration(decl);
             
+            kDebug(9529) << "Documentation proposed: " << ret;
             if(ret)
                 break;
         }
