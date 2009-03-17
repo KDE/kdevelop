@@ -83,4 +83,4 @@ X-KDE-PluginInfo-Author=Harald Fernengel, Hamish Rodda
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Category=Global
 X-KDevelop-Interfaces=org.kdevelop.IRunProvider
-X-KDevelop-Mode=NoGUI
+X-KDevelop-Mode=GUI
