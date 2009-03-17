@@ -131,13 +131,12 @@ private:
     CacheValues readCache(const KUrl &path) const;
 
     
-    void initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
+    KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
                                                     KDevelop::ReferencedTopDUContext parent);
 
     CMakeDocumentation* m_doc;
-    VariableMap m_varsDef;
     QStringList m_modulePathDef;
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
@@ -151,7 +150,6 @@ private:
     ICMakeBuilder* m_builder;
     CMakeHighlighting *m_highlight;
     QList<KDevelop::ProjectTargetItem*> m_targets;
-    KDevelop::ReferencedTopDUContext m_buildstrapContext;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
 };
