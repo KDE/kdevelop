@@ -1231,7 +1231,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
         //Show override helper items
         QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer > overridable;
         foreach(const DUContext::Import &import, m_duContext->importedParentContexts())
-          getOverridable(m_duContext.data(), import.context(m_duContext->topContext()), overridable, Ptr(this));
+        {
+          DUContext* ctx = import.context(m_duContext->topContext());
+          if(ctx)
+            getOverridable(m_duContext.data(), ctx, overridable, Ptr(this));
+        }
         
         if(!overridable.isEmpty()) {
           eventuallyAddGroup(i18n("Virtual Override"), 0, overridable.values());
