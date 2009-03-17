@@ -21,6 +21,7 @@
 #include "cmakedocumentation.h"
 #include "cmakeutils.h"
 #include <KDebug>
+#include <QTimer>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentation.h>
@@ -30,6 +31,11 @@
 
 CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m)
     : mCMakeCmd(cmakeCmd), m_manager(m)
+{
+    QTimer::singleShot(0, this, SLOT(delayedInitialization()));
+}
+
+void CMakeDocumentation::delayedInitialization()
 {
     collectIds("--help-command-list", Command);
     collectIds("--help-variable-list", Variable);

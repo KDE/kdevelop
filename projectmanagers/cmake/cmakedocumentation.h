@@ -32,13 +32,17 @@ namespace KDevelop { class Declaration; }
 class CMakeProjectManager;
 class KUrl;
 
-class CMakeDocumentation : public KDevelop::IDocumentationProvider
+class CMakeDocumentation : public QObject
 {
+    Q_OBJECT
     public:
         CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m);
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
         
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+    public slots:
+        void delayedInitialization();
+        
     private:
         enum Type { Command, Variable, Module, Property, Policy };
         void collectIds(const QString& param, Type type);
