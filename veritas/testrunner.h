@@ -21,8 +21,8 @@
 #ifndef VERITAS_ITESTRUNNER_H
 #define VERITAS_ITESTRUNNER_H
 
-#include "interfaces/iplugin.h"
-#include "veritas/veritasexport.h"
+#include "../interfaces/iplugin.h"
+#include "veritasexport.h"
 
 class QWidget;
 namespace KDevelop { class IProject; }

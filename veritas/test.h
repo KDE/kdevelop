@@ -22,8 +22,8 @@
 #ifndef VERITAS_TEST_H
 #define VERITAS_TEST_H
 
-#include "veritas/testresult.h"
-#include "veritas/veritasexport.h"
+#include "testresult.h"
+#include "veritasexport.h"
 
 #include <QtCore/QMap>
 #include <QtCore/QList>
