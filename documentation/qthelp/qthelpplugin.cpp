@@ -181,6 +181,8 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
             
             return m_view;
         }
+        
+        virtual bool providesWidget() const { return true; }
 
 	private:
 		QMap<QString, QUrl> m_info;
