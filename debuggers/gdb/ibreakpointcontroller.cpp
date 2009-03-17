@@ -56,14 +56,12 @@ IBreakpointController::IBreakpointController(QObject* parent, IBreakpoints* univ
 
     //new ModelTest(this, this);
 
-    if (KDevelop::ICore::self()) {
-        foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
-            slotPartAdded(p);
-        connect(KDevelop::ICore::self()->partController(),
-                SIGNAL(partAdded(KParts::Part*)),
-                this,
-                SLOT(slotPartAdded(KParts::Part*)));
-    }
+    foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
+        slotPartAdded(p);
+    connect(KDevelop::ICore::self()->partController(),
+            SIGNAL(partAdded(KParts::Part*)),
+            this,
+            SLOT(slotPartAdded(KParts::Part*)));
 }
 
 void IBreakpointController::slotPartAdded(KParts::Part* part)
