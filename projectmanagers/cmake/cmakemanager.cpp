@@ -43,13 +43,10 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
-#include <interfaces/irun.h>
-#include <interfaces/iruncontroller.h>
 #include <project/projectmodel.h>
 #include <project/importprojectjob.h>
 #include <language/duchain/parsingenvironment.h>
@@ -201,13 +198,17 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop
     version.takeFirst();
     
     VariableMap m_varsDef;
-    m_modulePathDef=guessCMakeModulesDirectories(cmakeCmd, version);
+    QStringList modulePathDef=guessCMakeModulesDirectories(cmakeCmd, version);
+    m_modulePathPerProject[project]=modulePathDef;
+    kDebug(9042) << "found module path is" << modulePathDef;
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
     m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(version[0]));
     m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(version[1]));
     m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(version[2]));
+    
+    QStringList cmakeInitScripts;
 #ifdef Q_OS_WIN
     cmakeInitScripts << "CMakeMinGWFindMake.cmake";
     cmakeInitScripts << "CMakeMSYSFindMake.cmake";
@@ -221,7 +222,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop
     cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
 
-    m_varsDef.insert("CMAKE_MODULE_PATH", m_modulePathDef);
+    m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd, version)));
 
 #ifdef Q_OS_WIN32
@@ -236,8 +237,6 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop
     m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
 #endif
 
-    kDebug(9042) << "modPath" << m_varsDef.value("CMAKE_MODULE_PATH") << m_modulePathDef;
-    
     m_macrosPerProject[project].clear();
     m_varsPerProject[project]=m_varsDef;
     m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
@@ -258,21 +257,21 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop
         if( !l.isEmpty() )
             group.writeEntry("CMakeDir", l);
         else
-            group.writeEntry("CMakeDir", m_modulePathDef);
+            group.writeEntry("CMakeDir", modulePathDef);
     }
     else
-        group.writeEntry("CMakeDir", m_modulePathDef);
+        group.writeEntry("CMakeDir", modulePathDef);
 
     
-    KDevelop::ReferencedTopDUContext m_buildstrapContext;
+    KDevelop::ReferencedTopDUContext buildstrapContext;
     {
         DUChainWriteLocker lock(DUChain::lock());
-        m_buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
+        buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
 
-        DUChain::self()->addDocumentChain(m_buildstrapContext);
+        DUChain::self()->addDocumentChain(buildstrapContext);
         Q_ASSERT(DUChain::self()->chainForDocument(KUrl("buildstrap")));
     }
-    ReferencedTopDUContext ref=m_buildstrapContext;
+    ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, cmakeInitScripts)
     {
         ref = includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()),
@@ -290,13 +289,10 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
     cmakeInfoFile.addPath("CMakeLists.txt");
 
     KUrl folderUrl=project->folder();
-    kDebug(9042) << "found module path is" << m_modulePathDef;
     kDebug(9042) << "file is" << cmakeInfoFile.path();
 
     if ( !cmakeInfoFile.isLocalFile() )
     {
-//         KMessageBox::error( ICore::self()->uiControllerInternal()->defaultMainWindow(),
-//                                 i18n("Not a local file. CMake support doesn't handle remote projects") );
         kWarning() << "error. not a local file. CMake support doesn't handle remote projects";
     }
     else
@@ -342,7 +338,6 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 
         m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
-        m_modulePathPerProject[project]=m_modulePathDef;
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
 
@@ -580,7 +575,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
                     item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
                     kDebug(9042) << "..........Adding:" << sourceFile;
                 }
-                m_targets.append(targetItem);
             }
 
         }
@@ -629,7 +623,12 @@ bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
 
 QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 {
-    return m_targets;
+    QList<KDevelop::ProjectTargetItem*> ret;
+    foreach(IProject* p, m_realRoot.keys())
+    {
+        ret+=p->projectItem()->targetList();
+    }
+    return ret;
 }
 
 

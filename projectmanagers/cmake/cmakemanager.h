@@ -136,8 +136,6 @@ private:
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
                                                     KDevelop::ReferencedTopDUContext parent);
 
-    CMakeDocumentation* m_doc;
-    QStringList m_modulePathDef;
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
@@ -145,11 +143,10 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KDevelop::IProject*, KUrl> m_realRoot;
     QMap<KDevelop::IProject*, KUrl> m_subprojectRoot;
-
-    QStringList cmakeInitScripts;
+    
+    CMakeDocumentation* m_doc;
     ICMakeBuilder* m_builder;
     CMakeHighlighting *m_highlight;
-    QList<KDevelop::ProjectTargetItem*> m_targets;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
 };
