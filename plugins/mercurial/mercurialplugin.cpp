@@ -27,16 +27,16 @@
 #include <algorithm>
 #include <memory>
 
-#include <QDir>
-#include <QDateTime>
-#include <QFileInfo>
+#include <QtCore/QDir>
+#include <QtCore/QDateTime>
+#include <QtCore/QFileInfo>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KLocalizedString>
-#include <KAboutData>
-#include <KDateTime>
-#include <KDebug>
+#include <KDE/KPluginFactory>
+#include <KDE/KPluginLoader>
+#include <KDE/KLocalizedString>
+#include <KDE/KAboutData>
+#include <KDE/KDateTime>
+#include <KDE/KDebug>
 
 #include <interfaces/icore.h>
 
@@ -261,7 +261,7 @@ VcsJob* MercurialPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
 
     if (QString::null == srcRev
         || QString::null == dstRev
-        || "" == srcRev)    // We cannot handle working-directory file as src argument
+        || srcRev.isEmpty())    // We cannot handle working-directory file as src argument
         return NULL;
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
@@ -410,7 +410,7 @@ VcsJob* MercurialPlugin::annotate(const KUrl& localLocation,
     *job << "hg" << "annotate" << "-n" << "-u" << "-d";
     QString srev = toMercurialRevision(rev);
 
-    if (srev != QString::null && srev != "")
+    if (srev != QString::null && !srev.isEmpty())
         *job << "-r" << srev;
 
     *job << localLocation.path();
@@ -693,7 +693,7 @@ void MercurialPlugin::parseLogOutputBasicVersionControl(DVcsJob* job) const
 
         QList<VcsItemEvent> items;
 
-        // TODO: Convince Mercurial to seperate the files with newlines, in order to allow whitespaces in filenames
+        // TODO: Convince Mercurial to separate the files with newlines, in order to allow whitespaces in filenames
         foreach (const QString & file, mods.split(QChar(' '), QString::SkipEmptyParts)) {
             VcsItemEvent item;
             item.setActions(VcsItemEvent::ContentsModified);
@@ -895,18 +895,18 @@ QString MercurialPlugin::toMercurialRevision(const VcsRevision & vcsrev)
         case VcsRevision::Working:
             return QString("");
         case VcsRevision::Previous:
-            return QString::null;   // TODO: needs to be implemented
+            return QString();   // TODO: needs to be implemented
         case VcsRevision::Start:
             return QString("0");
         default:
-            return QString::null;
+            return QString();
         }
     case VcsRevision::GlobalNumber:
         return QString::number(vcsrev.revisionValue().toLongLong());
     case VcsRevision::Date:
     case VcsRevision::FileNumber:   // No file number for mercurial
     default:
-        return QString::null;
+        return QString();
     }
 }
 
