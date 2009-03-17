@@ -268,7 +268,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
   }
   
-    if(!shorten && doc) {
+    if(!shorten && doc && doc->providesWidget()) {
       modifyHtml() += "<br />" + i18n("Show documentation for ");
       makeLink( m_declaration->qualifiedIdentifier().toString(), m_declaration, NavigationAction::ShowDocumentation );
     }
