@@ -25,7 +25,7 @@
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
-#include "cmakemanager.h"
+#include <project/interfaces/ibuildsystemmanager.h>
 
 CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
     : KDevelop::ProjectBuildFolderItem( project, name, item )

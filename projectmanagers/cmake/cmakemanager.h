@@ -31,10 +31,10 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/iplugin.h>
+#include <interfaces/idocumentationprovider.h>
 
 #include "cmakelistsparser.h"
 #include "cmakeprojectvisitor.h"
-#include "cmakedocumentation.h"
 
 class QDir;
 class QObject;
