@@ -9,6 +9,7 @@ Name[pt]=Construtor de Projectos do QMake
 Name[pt_BR]=Construtor de Projectos do QMake
 Name[sv]=QMake-projektbyggverktyg
 Name[uk]=Інструмент збирання проектів QMake
+Name[x-test]=xxQMake Project Builderxx
 Name[zh_CN]=QMake 工程构建器
 Name[zh_TW]=QMake 專案建立器
 Comment=Builds QMake Projects

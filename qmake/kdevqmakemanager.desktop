@@ -9,6 +9,7 @@ Name[pt]=Gestor de Projectos do QMake
 Name[pt_BR]=Gestor de Projectos do QMake
 Name[sv]=QMake-projekthantering
 Name[uk]=Керування проектами QMake
+Name[x-test]=xxQMake Project Managerxx
 Name[zh_CN]=QMake 工程管理器
 Name[zh_TW]=QMake 專案管理員
 Comment=Imports and edits qmake projects
