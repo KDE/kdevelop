@@ -86,7 +86,7 @@
 
 using namespace KDevelop;
 
-K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeProjectManager>(); )
+K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
 namespace {
@@ -137,7 +137,7 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
 
 }
 
-CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
+CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
@@ -155,12 +155,12 @@ CMakeProjectManager::CMakeProjectManager( QObject* parent, const QVariantList& )
     m_doc = new CMakeDocumentation(cmakeCmd, this);
 }
 
-CMakeProjectManager::~CMakeProjectManager()
+CMakeManager::~CMakeManager()
 {
     delete m_doc;
 }
 
-KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
+KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     KUrl path = CMake::currentBuildDir(item->project());
     if(path.isEmpty())
@@ -187,7 +187,7 @@ KUrl CMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     return path;
 }
 
-KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop::IProject* project, const KUrl& baseUrl)
+KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project, const KUrl& baseUrl)
 {
     QString cmakeCmd=KStandardDirs::findExe("cmake");
     
@@ -281,7 +281,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectManager::initializeProject(KDevelop
     return ref;
 }
 
-KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *project )
+KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 {
     CMakeFolderItem* m_rootItem=0;
     KUrl cmakeInfoFile(project->projectFileUrl());
@@ -356,7 +356,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::import( KDevelop::IProject *pr
 }
 
 
-KDevelop::ReferencedTopDUContext CMakeProjectManager::includeScript(const QString& file,
+KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file,
                                                         KDevelop::IProject * project, ReferencedTopDUContext parent)
 {
     kDebug(9042) << "Running cmake script: " << file;
@@ -399,7 +399,7 @@ QStringList removeMatches(const QString& exp, const QStringList& orig)
     return ret;
 }
 
-QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
+QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
@@ -605,7 +605,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeProjectManager::parse( KDevelop::Projec
     return folderList;
 }
 
-bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
+bool CMakeManager::reload(KDevelop::ProjectBaseItem* item)
 {
     CMakeFolderItem* folderItem = dynamic_cast<CMakeFolderItem*>(item);
     if (folderItem) {
@@ -621,7 +621,7 @@ bool CMakeProjectManager::reload(KDevelop::ProjectBaseItem* item)
     return true;
 }
 
-QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
+QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 {
     QList<KDevelop::ProjectTargetItem*> ret;
     foreach(IProject* p, m_realRoot.keys())
@@ -632,7 +632,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeProjectManager::targets() const
 }
 
 
-KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
+KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) const
 {
     CMakeFolderItem* folder=0;
 //     kDebug(9042) << "Querying inc dirs for " << item;
@@ -652,7 +652,7 @@ KUrl::List CMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem *it
     return l;
 }
 
-QHash< QString, QString > CMakeProjectManager::defines(KDevelop::ProjectBaseItem *item ) const
+QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item ) const
 {
     CMakeFolderItem* folder=0;
     kDebug(9042) << "Querying defines dirs for " << item;
@@ -669,13 +669,13 @@ QHash< QString, QString > CMakeProjectManager::defines(KDevelop::ProjectBaseItem
     return folder->definitions();
 }
 
-KDevelop::IProjectBuilder * CMakeProjectManager::builder(KDevelop::ProjectFolderItem *) const
+KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *) const
 {
     Q_ASSERT(m_builder);
     return m_builder;
 }
 
-QString CMakeProjectManager::guessCMakeShare(const QString& cmakeBin)
+QString CMakeManager::guessCMakeShare(const QString& cmakeBin)
 {
     KUrl bin(cmakeBin);
     bin=bin.upUrl();
@@ -683,7 +683,7 @@ QString CMakeProjectManager::guessCMakeShare(const QString& cmakeBin)
     return bin.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
-QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
+QString CMakeManager::guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
 {
     QString ret;
     KUrl bin(guessCMakeShare(cmakeBin));
@@ -707,7 +707,7 @@ QString CMakeProjectManager::guessCMakeRoot(const QString & cmakeBin, const QStr
     return ret;
 }
 
-QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
+QStringList CMakeManager::guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
 {
     return QStringList(guessCMakeRoot(cmakeBin, version)+"/Modules");
 }
@@ -745,7 +745,7 @@ QStringList CMakeProjectManager::guessCMakeModulesDirectories(const QString& cma
 }*/
 
 //Copied from ImportJob
-void CMakeProjectManager::reimport(CMakeFolderItem* fi)
+void CMakeManager::reimport(CMakeFolderItem* fi)
 {
     QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
     QList<KDevelop::ProjectFolderItem*> initial;
@@ -764,7 +764,7 @@ void CMakeProjectManager::reimport(CMakeFolderItem* fi)
     }
 }
 
-void CMakeProjectManager::dirtyFile(const QString & dirty)
+void CMakeManager::dirtyFile(const QString & dirty)
 {
     KUrl dirtyFile(dirty);
     KUrl dir(dirtyFile.upUrl());
@@ -818,32 +818,32 @@ void CMakeProjectManager::dirtyFile(const QString & dirty)
     }
 }
 
-QList< KDevelop::ProjectTargetItem * > CMakeProjectManager::targets(KDevelop::ProjectFolderItem * folder) const
+QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
 {
     return folder->targetList();
 }
 
-QString CMakeProjectManager::name() const
+QString CMakeManager::name() const
 {
     return "CMake";
 }
 
-KDevelop::ParseJob * CMakeProjectManager::createParseJob(const KUrl &)
+KDevelop::ParseJob * CMakeManager::createParseJob(const KUrl &)
 {
     return 0;
 }
 
-KDevelop::ILanguage * CMakeProjectManager::language()
+KDevelop::ILanguage * CMakeManager::language()
 {
     return core()->languageController()->language(name());
 }
 
-const KDevelop::ICodeHighlighting* CMakeProjectManager::codeHighlighting() const
+const KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 {
     return m_highlight;
 }
 
-ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Context* context )
+ContextMenuExtension CMakeManager::contextMenuExtension( KDevelop::Context* context )
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::contextMenuExtension( context );
@@ -866,7 +866,7 @@ ContextMenuExtension CMakeProjectManager::contextMenuExtension( KDevelop::Contex
     return menuExt;
 }
 
-void CMakeProjectManager::jumpToDeclaration()
+void CMakeManager::jumpToDeclaration()
 {
     DUChainAttatched* du=dynamic_cast<DUChainAttatched*>(m_clickedItems.first());
     if(du)
@@ -886,7 +886,7 @@ void CMakeProjectManager::jumpToDeclaration()
     }
 }
 
-CacheValues CMakeProjectManager::readCache(const KUrl &path) const
+CacheValues CMakeManager::readCache(const KUrl &path) const
 {
     QFile file(path.toLocalFile());
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -916,7 +916,7 @@ CacheValues CMakeProjectManager::readCache(const KUrl &path) const
     return ret;
 }
 
-KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
+KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
     Q_ASSERT(QFile::exists(folder.toLocalFile()));
     KUrl lists=parent->url();
@@ -955,7 +955,7 @@ KDevelop::ProjectFolderItem* CMakeProjectManager::addFolder( const KUrl& folder,
     return 0;
 }
 
-bool CMakeProjectManager::removeFolder( KDevelop::ProjectFolderItem* it)
+bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
 {
     KUrl lists=it->url().upUrl();
     lists.addPath("CMakeLists.txt");
@@ -1040,7 +1040,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
     return ret;
 }
 
-bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
+bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
     bool ret=true;
     if(!static_cast<ProjectBaseItem*>(it->parent())->target())
@@ -1056,7 +1056,7 @@ bool CMakeProjectManager::removeFile( KDevelop::ProjectFileItem* it)
     return ret;
 }
 
-bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
 {
     if(it->parent()!=target)
         return false; //It is not a cmake-managed file
@@ -1094,14 +1094,14 @@ bool CMakeProjectManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, K
 }
 
 //This is being called from ::parse() so we shouldn't make it block the ui
-KDevelop::ProjectFileItem* CMakeProjectManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
+KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
 {
     ProjectFileItem* it = new KDevelop::ProjectFileItem( parent->project(), url, parent );
     parent->project()->addToFileSet( KDevelop::IndexedString( url ) );
     return it;
 }
 
-bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
 {
     QSet<QString> headerExt=QSet<QString>() << ".h" << ".hpp" << ".hxx";
     foreach(const QString& ext, headerExt)
@@ -1138,7 +1138,7 @@ bool CMakeProjectManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevel
     return ret;
 }
 
-QWidget* CMakeProjectManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
+QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position)
 {
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
     Declaration *decl=0;
@@ -1181,7 +1181,7 @@ QWidget* CMakeProjectManager::specialLanguageObjectNavigationWidget(const KUrl& 
     return doc;
 }
 
-QPair<QString, QString> CMakeProjectManager::cacheValue(KDevelop::IProject* project, const QString& id) const
+QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, const QString& id) const
 {
     QPair<QString, QString> ret;
     if(project==0 && !m_projectCache.keys().isEmpty())
@@ -1199,7 +1199,7 @@ QPair<QString, QString> CMakeProjectManager::cacheValue(KDevelop::IProject* proj
     return ret;
 }
 
-KSharedPtr< KDevelop::IDocumentation > CMakeProjectManager::documentationForDeclaration(KDevelop::Declaration* declaration)
+KSharedPtr< KDevelop::IDocumentation > CMakeManager::documentationForDeclaration(KDevelop::Declaration* declaration)
 {
     return m_doc->documentationForDeclaration(declaration);
 }

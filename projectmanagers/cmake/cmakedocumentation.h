@@ -29,14 +29,14 @@
 #include <interfaces/idocumentationprovider.h>
 
 namespace KDevelop { class Declaration; }
-class CMakeProjectManager;
+class CMakeManager;
 class KUrl;
 
 class CMakeDocumentation : public QObject
 {
     Q_OBJECT
     public:
-        CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m);
+        CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m);
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
         
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
@@ -49,7 +49,7 @@ class CMakeDocumentation : public QObject
         
         QMap<QString, Type> m_typeForName;
         QString mCMakeCmd;
-        CMakeProjectManager* m_manager;
+        CMakeManager* m_manager;
 };
 
 #endif // CMAKEDOCUMENTATION_H

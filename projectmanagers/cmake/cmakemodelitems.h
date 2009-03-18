@@ -37,8 +37,6 @@ namespace KDevelop {
     class Declaration;
 }
 
-class CMakeProjectManager;
-
 class DescriptorAttatched
 {
     public:

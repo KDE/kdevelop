@@ -59,7 +59,7 @@ namespace KDevelop
 class CMakeFolderItem;
 class ICMakeBuilder;
 
-class CMakeProjectManager
+class CMakeManager
     : public KDevelop::IPlugin
     , public KDevelop::IBuildSystemManager
     , public KDevelop::ILanguageSupport
@@ -71,9 +71,9 @@ Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::ILanguageSupport )
 Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    explicit CMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit CMakeManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
-    virtual ~CMakeProjectManager();
+    virtual ~CMakeManager();
     virtual Features features() const { return Features(Folders | Targets | Files ); }
 //     virtual KDevelop::IProject* project() const;
     virtual KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;

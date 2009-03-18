@@ -29,7 +29,7 @@
 #include <interfaces/icore.h>
 #include "cmakemanager.h"
 
-CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeProjectManager* m)
+CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m)
     : mCMakeCmd(cmakeCmd), m_manager(m)
 {
     QTimer::singleShot(0, this, SLOT(delayedInitialization()));
