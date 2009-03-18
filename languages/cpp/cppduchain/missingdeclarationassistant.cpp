@@ -41,7 +41,7 @@ class CreateLocalDeclarationAction : public IAssistantAction {
         }
         virtual void execute() {
           DUChainReadLocker lock(DUChain::lock());
-          if(DUContext* searchFrom = problem->type->searchStartContext.data()) {
+          if(/*DUContext* searchFrom = */problem->type->searchStartContext.data()) {
             KDevelop::DocumentChangeSet changes;
             changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->range().start, problem->range().start), QString(),  typeString() + " "));
             lock.unlock();
@@ -125,8 +125,9 @@ class CreateMemberDeclarationAction : public IAssistantAction {
               return "protected";
             case Declaration::Private:
               return "private";
-          }
-          return QString();
+            default:
+              return QString();
+          }      
         }
       
         DUContext* useContainer() const {

@@ -235,7 +235,10 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
 const QualifiedIdentifier& NameASTVisitor::identifier() const
 {
   if(m_stopSearch)
-    return QualifiedIdentifier();
+  {
+    static const QualifiedIdentifier tmpQI;
+    return tmpQI;
+  }
   return _M_name;
 }
 

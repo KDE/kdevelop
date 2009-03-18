@@ -600,7 +600,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     int end = offset + includeRx.matchedLength();
 
     QString path = fullOutput.mid( start, end-start ).trimmed();
-    if( path.startsWith( '"' ) || path.startsWith( '\'') && path.length() > 2 ) {
+    if( path.startsWith( '"' ) || ( path.startsWith( '\'') && path.length() > 2 ) ) {
       //probable a quoted path
       if( path.endsWith(path.left(1)) ) {
         //Quotation is ok, remove it

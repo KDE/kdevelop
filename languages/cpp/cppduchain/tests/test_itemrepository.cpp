@@ -69,7 +69,7 @@ TestItem* createItem(uint id, uint size) {
   ret = new (data) TestItem(id, dataSize);
   
   //Fill in same random pattern
-  for(int a = 0; a < dataSize; ++a)
+  for(uint a = 0; a < dataSize; ++a)
     data[sizeof(TestItem) + a] = (char)(a + id);
   
   return ret;
@@ -92,7 +92,7 @@ class TestItemRepository : public QObject {
       srand(time(NULL));
       uint highestSeenIndex = 0;
       
-      for(int a = 0; a < cycles; ++a) {
+      for(uint a = 0; a < cycles; ++a) {
         
         {
           //Insert an item
@@ -118,7 +118,7 @@ class TestItemRepository : public QObject {
             maxSize = itemSize;
         }
         
-        for(int a = 0; a < checksPerCycle; ++a) {
+        for(uint a = 0; a < checksPerCycle; ++a) {
             //Check an item
             uint pick = rand() % itemId;
             if(realItemsById.contains(pick)) {
@@ -127,7 +127,7 @@ class TestItemRepository : public QObject {
               QVERIFY(realItemsByIndex.contains(index));
               realItemsByIndex[index]->verifySame(repository.itemFromIndex(index));
               
-              if(rand() % 100 < deletionProbability) {
+              if((uint) (rand() % 100) < deletionProbability) {
                 ++totalDeletions;
                 //Delete the item
                 repository.deleteItem(index);

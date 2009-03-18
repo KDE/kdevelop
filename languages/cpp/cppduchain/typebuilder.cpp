@@ -87,7 +87,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
 //   PushValue<bool> setNotInTypedef(m_inTypedef, false);
   
-  int kind = editor()->parseSession()->token_stream->kind(node->class_key);
+  /*int kind = */editor()->parseSession()->token_stream->kind(node->class_key);
   CppClassType::Ptr classType = CppClassType::Ptr(new CppClassType());
 
   openType(classType);

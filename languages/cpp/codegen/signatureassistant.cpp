@@ -85,7 +85,7 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
       m_definitionId = otherSide->id();
       m_definitionContext = KDevelop::ReferencedTopDUContext(otherSide->topContext());
     }
-  }else if(definition = KDevelop::FunctionDefinition::definition(funDecl)) {
+  }else if((definition = KDevelop::FunctionDefinition::definition(funDecl))) {
     m_editingDefinition = false;
     
     otherSide = definition;

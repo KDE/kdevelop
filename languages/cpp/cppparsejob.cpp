@@ -346,8 +346,8 @@ const KTextEditor::Range& CPPParseJob::textRangeToParse() const
 
 CPPInternalParseJob::CPPInternalParseJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
-    , m_priority(0)
     , m_initialized(false)
+    , m_priority(0)
 {
 }
 

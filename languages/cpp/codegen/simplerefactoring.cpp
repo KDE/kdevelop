@@ -116,12 +116,13 @@ void SimpleRefactoring::executeNewClassAction() {
   if(action) {
     ProjectBaseItem* item = action->data().value<ProjectBaseItem*>();
     KUrl url;
-    ProjectFolderItem* folder;
+    ProjectFolderItem* folder = 0;
     if(item->folder()) {
       folder=item->folder();
     } else if(item->target()) {
       folder=static_cast<ProjectBaseItem*>(item->parent())->folder();
     }
+    Q_ASSERT(folder);
     CppNewClass newClassWizard(qApp->activeWindow(), folder->url());
     int result=newClassWizard.exec();
     if(result==QDialog::Accepted) {

@@ -507,9 +507,11 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
 
       foreach(Declaration* decl, context->localDeclarations())
       {
+#ifdef QT_DEBUG
         TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl);
         Q_ASSERT(tempDecl);
 //         tempDecl->instantiate(parameterInstantiationInformation, source, true);
+#endif
 
         TemplateParameterDeclaration* templateDecl = dynamic_cast<TemplateParameterDeclaration*>(decl);
         Q_ASSERT(templateDecl); //Only template-parameter declarations are allowed in template-contexts
@@ -878,7 +880,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 
   if(!forceLocal) {
     ///Apply default-parameters
-    if(templateContext && (templateContext->localDeclarations().count() > templateArguments.templateParametersSize() || templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1)) {
+    if(templateContext && (templateContext->localDeclarations().count() > templateArguments.templateParametersSize() || (templateArguments.templateParametersSize() == 1 && !templateArguments.templateParameters()[0].isValid() && templateContext->localDeclarations().count() >= 1))) {
       //Do a little fake instantiation so all the default-parameters are correctly applied right here. Then, they can be used
       //during specialization-matching.
       DUContext* newTemplateContext = instantiateDeclarationAndContext( surroundingContext, source, templateContext, templateArguments, 0, 0, true );
@@ -934,7 +936,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
     
       UnAliasExchanger exchanger(source);
       
-      for(int a = 0; a < templateArguments.templateParametersSize(); ++a)
+      for(uint a = 0; a < templateArguments.templateParametersSize(); ++a)
         newTemplateArguments.templateParametersList().append(exchanger.exchange(templateArguments.templateParameters()[a].abstractType())->indexed());
       
       templateArguments = newTemplateArguments;
@@ -1006,8 +1008,11 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
 
   Declaration* clone = decl->clone();
   Q_ASSERT(clone);
+
+#ifdef QT_DEBUG
   TemplateDeclaration* cloneTemplateDecl = dynamic_cast<TemplateDeclaration*>(clone);
   Q_ASSERT(cloneTemplateDecl);
+#endif
 
   ///Now eventually create the virtual contexts, and fill new information into the declaration
   instantiateDeclarationAndContext( surroundingContext, source, decl->internalContext(), templateArguments, clone, decl );

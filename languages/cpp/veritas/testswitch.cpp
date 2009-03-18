@@ -155,9 +155,8 @@ Declaration* dominantClassInCpp(TopDUContext* ctx)
 {
     kDebug() << "";
     QMap<Declaration*, int> classes;
-    Declaration* clazz = 0;
     foreach(Declaration* d, ctx->localDeclarations()) {
-        if (clazz = isMemberFunctionDefinition(d)) {
+        if (Declaration* const clazz = isMemberFunctionDefinition(d)) {
             updateClassCount(clazz, classes);
         }
     }
@@ -235,7 +234,7 @@ KUrl findTargetLocation(QualifiedIdentifier target)
 /*    if (count > 0) {
         url = KUrl(matches->declaration()->url().str());
     }*/
-    for(int i=0; i<count; ++i, ++matches) {
+    for(uint i=0; i<count; ++i, ++matches) {
         Declaration* matched = matches->declaration();
         if (!matched || matched->url().isEmpty()) continue;
         kDebug() << "matched " << matched->toString() << " " << matched->url().str();

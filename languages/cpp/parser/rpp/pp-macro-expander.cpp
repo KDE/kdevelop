@@ -70,9 +70,9 @@ void trim(QVector<uint>& array) {
 using namespace rpp;              
 
 pp_frame::pp_frame(pp_macro* __expandingMacro, const QList<pp_actual>& __actuals)
-  : expandingMacro(__expandingMacro)
+  : depth(0)
+  , expandingMacro(__expandingMacro)
   , actuals(__actuals)
-  , depth(0)
 {
 }
 

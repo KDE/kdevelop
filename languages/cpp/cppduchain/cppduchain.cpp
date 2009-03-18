@@ -411,7 +411,7 @@ Identifier removeTemplateParameters(Identifier id, int behindPosition) {
   ret.clearTemplateIdentifiers();
   for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a) {
     TypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
-    if(a < behindPosition)
+    if((int) a < behindPosition)
       ret.appendTemplateIdentifier(replacement);
     else {
       ret.appendTemplateIdentifier(TypeIdentifier("..."));

@@ -222,9 +222,8 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
   if(completionContext() && completionContext()->duContext()) {
     const TopDUContext* top = completionContext()->duContext()->topContext();
     
-    Declaration* decl = 0;
     if(completionContext()->memberAccessContainer().allDeclarations.size())
-      if( decl = completionContext()->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
+      if( Declaration * const decl = completionContext()->memberAccessContainer().allDeclarations[0].getDeclaration(top) ) {
         AbstractType::Ptr t = decl->abstractType();
         IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
         if(idType)
@@ -243,7 +242,7 @@ QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMat
   {
     Cpp::CodeCompletionContext::Function f( completionContext()->functions()[listOffset] );
 
-    if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > f.matchedArguments ) {
+    if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > (uint) f.matchedArguments ) {
       ret << f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments];
     }
   }
@@ -368,6 +367,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                     case ClassDeclarationData::Union:
                       return indentation + "union";
                       break;
+                    default:
+                      ;
                   }
                 }else if(dec->isForwardDeclaration()) {
                   return indentation + "class"; ///@todo Would be useful to have the class/struct/union info also for forward-declarations

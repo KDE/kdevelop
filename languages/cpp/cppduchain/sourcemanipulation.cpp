@@ -31,7 +31,7 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
     
     bool inComment = false; //This is a bit stupid
     bool unsure = false;
-    int unsureStart = -1;
+//    int unsureStart = -1;
     
     for(int a = 0; a < checkLines; ++a) {
       QString line = m_codeRepresentation->line(a).trimmed();
@@ -133,7 +133,7 @@ void KDevelop::SourceCodeInsertion::setAccess(KDevelop::Declaration::AccessPolic
   m_access = access;
 }
 
-KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topContext) : m_topContext(topContext), m_access(Declaration::Public), m_context(topContext) {
+KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topContext) : m_context(topContext), m_access(Declaration::Public), m_topContext(topContext) {
   m_codeRepresentation = KDevelop::createCodeRepresentation(m_topContext->url());
 }
 
@@ -149,8 +149,9 @@ QString KDevelop::SourceCodeInsertion::accessString() const {
       return "protected";
     case KDevelop::Declaration::Private:
       return "private";
+    default:
+      return QString();
   }
-  return QString();
 }
 
 QString KDevelop::SourceCodeInsertion::indentation() const {
