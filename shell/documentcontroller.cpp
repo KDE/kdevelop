@@ -293,7 +293,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             dir = KUrl( activeDocument()->url().directory() );
         }else
         {
-            dir = Core::self()->projectController()->projectsBaseDirectory();
+            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
         url = KFileDialog::getOpenUrl( dir, i18n( "*.*|Text File\n" ),
@@ -303,6 +303,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if ( url.isEmpty() )
         //still no url
         return 0;
+
+    KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
 
     bool emitOpened = false;
 
