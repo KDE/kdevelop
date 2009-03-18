@@ -9,6 +9,7 @@ Name[pt]=Gestor de Projectos do CMake
 Name[pt_BR]=Gestor de Projectos do CMake
 Name[sv]=CMake-projekthantering
 Name[uk]=Керування проектами CMake
+Name[x-test]=xxCMake Project Managerxx
 Name[zh_CN]=CMake 工程管理器
 Name[zh_TW]=CMake 專案管理員
 Comment=Allows KDevelop to manager CMake based projects

@@ -10,6 +10,7 @@ Name[pt]=Construtor de Projectos do CMake
 Name[pt_BR]=Construtor de Projectos do CMake
 Name[sv]=CMake-projektbyggverktyg
 Name[uk]=Інструмент збирання проектів CMake
+Name[x-test]=xxCMake Project Builderxx
 Name[zh_CN]=CMake 工程构建器
 Name[zh_TW]=CMake 專案建立器
 Comment=Builds CMake Projects

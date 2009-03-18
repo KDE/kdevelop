@@ -28,6 +28,7 @@ Name[pt]=Relatório de Cobertura do Código
 Name[pt_BR]=Relatório de Cobertura do Código
 Name[sv]=Kodtäckningsrapport
 Name[uk]=Звіт щодо покриття коду
+Name[x-test]=xxCode Coverage Reportxx
 Name[zh_CN]=代码覆盖率汇报
 Name[zh_TW]=源碼範圍報告
 ServiceTypes=KDevelop/Plugin

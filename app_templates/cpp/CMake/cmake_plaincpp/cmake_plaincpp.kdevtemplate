@@ -6,6 +6,7 @@ Name[pt]=Aplicação simples em C++ com CMake
 Name[pt_BR]=Aplicação simples em C++ com CMake
 Name[sv]=Enkelt CMake-baserat C++ program
 Name[uk]=Проста заснована на CMake програма C++
+Name[x-test]=xxSimple CMake-based C++ applicationxx
 Name[zh_TW]=簡單的使用 CMake 的 C++ 應用程式
 Category=C++/No GUI (CMake)
 Icon=default-kdevelop

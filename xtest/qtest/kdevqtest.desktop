@@ -31,6 +31,7 @@ Name[pt]=Execução do QTest
 Name[pt_BR]=Execução do QTest
 Name[sv]=Körning för QTest
 Name[uk]=Засіб запуску QTest
+Name[x-test]=xxQTest Runnerxx
 Name[zh_CN]=QTest 运行器
 Name[zh_TW]=Qtest 執行者
 GenericName=Unit test runner
