@@ -43,6 +43,7 @@ GenericName[pt]=Suporte ao Controlo de Versões
 GenericName[pt_BR]=Suporte ao Controlo de Versões
 GenericName[sv]=Stöd för versionskontroll
 GenericName[uk]=Підтримка керування версіями
+GenericName[x-test]=xxVersion Control Supportxx
 GenericName[zh_CN]=版本控制支持
 GenericName[zh_TW]=版本控制支援
 ServiceTypes=KDevelop/Plugin

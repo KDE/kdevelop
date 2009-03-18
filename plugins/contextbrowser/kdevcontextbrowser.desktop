@@ -38,6 +38,7 @@ GenericName[pt]=Ferramenta de Navegação do Código
 GenericName[pt_BR]=Ferramenta de Navegação do Código
 GenericName[sv]=Kodnavigeringsverktyg
 GenericName[uk]=Інструмент навігації кодом
+GenericName[x-test]=xxCode Navigation Toolxx
 GenericName[zh_CN]=代码导航工具
 GenericName[zh_TW]=源碼導覽工具
 ServiceTypes=KDevelop/Plugin
