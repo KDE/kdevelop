@@ -180,6 +180,7 @@ QString cursorItemText() {
 
 QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
   m_dialog = new KDialog( ICore::self()->uiController()->activeMainWindow() );
+  m_dialog->setInitialSize(QSize(800, 400));
   m_dialog->setButtons( KDialog::Ok | KDialog::Cancel );
 
   o.setupUi( m_dialog->mainWidget() );
