@@ -2817,10 +2817,10 @@ void TestDUChain::testTemplateReference() {
   AbstractType::Ptr argType = top->childContexts()[1]->localDeclarations()[0]->abstractType();
   QVERIFY(argType.cast<ReferenceType>());
   QCOMPARE(argType->toString().remove(' '), QString("CC<constA*>&"));
-  QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], 10000).remove(' '), QString("CC<constA*>&"));
+  QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], top, 10000).remove(' '), QString("CC<constA*>&"));
   QVERIFY(top->localDeclarations()[3]->abstractType());
-  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], 10000).remove(' '), QString("constA&"));
-  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[4], 10000).remove(' '), QString("constA***"));
+  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], top, 10000).remove(' '), QString("constA&"));
+  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[4], top, 10000).remove(' '), QString("constA***"));
 }
 
 void TestDUChain::testTemplates() {

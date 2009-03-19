@@ -56,7 +56,7 @@ class CreateLocalDeclarationAction : public IAssistantAction {
         QString typeString(int maxSize = 10000) const {
           DUChainReadLocker lock(DUChain::lock());
           if(DUContext* searchFrom = problem->type->searchStartContext.data())
-            return Cpp::shortenedTypeString(type(), maxSize, searchFrom->scopeIdentifier(true));
+            return Cpp::shortenedTypeString(type(), searchFrom->topContext(), maxSize, searchFrom->scopeIdentifier(true));
           else
             return QString();
         }
@@ -145,7 +145,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           if(!type)
             return "<no type>";
           if(DUContext* container = useContainer())
-            return Cpp::shortenedTypeString(type, 30, container->scopeIdentifier(true));
+            return Cpp::shortenedTypeString(type, container->topContext(), 30, container->scopeIdentifier(true));
           else
             return QString();
         }

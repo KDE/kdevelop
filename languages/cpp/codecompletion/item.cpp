@@ -215,7 +215,10 @@ bool declarationNeedsTemplateParameters(Declaration* decl) {
 
 QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const
 {
-  return Cpp::shortenedTypeString(decl.data(), desiredTypeLength);
+  if(completionContext() && completionContext()->duContext())
+    return Cpp::shortenedTypeString(decl.data(), (completionContext() && completionContext()->duContext()) ? completionContext()->duContext()->topContext() : 0, desiredTypeLength);
+  else
+    return QString("no type string available");
 }
 
 KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() const {

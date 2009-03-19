@@ -28,6 +28,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/parsingenvironment.h>
 #include <sourcemanipulation.h>
+#include <cppduchain.h>
 
 namespace Cpp {
 
@@ -111,13 +112,14 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   if(!m_declaration)
     return QString();
 
+  ///@todo Move these functionalities into sourcemanipulation.cpp
   if(m_type == Override) {
     if(!useAlternativeText) {
       if(m_declaration) {
         newText = "virtual ";
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
-            newText += asFunction->returnType()->toString() + " ";
+            newText += Cpp::simplifiedTypeString(asFunction->returnType(), completionContext()->duContext()) + " ";
         
         newText += m_declaration->identifier().toString();
         newText += signaturePart(true);
@@ -153,7 +155,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
       
       if(asFunction && asFunction->returnType())
-          newText += asFunction->returnType()->toString() + " ";
+          newText += Cpp::simplifiedTypeString(asFunction->returnType(), completionContext()->duContext()) + " ";
       newText += scope.toString();
       newText += signaturePart(false);
       newText += " {\n";

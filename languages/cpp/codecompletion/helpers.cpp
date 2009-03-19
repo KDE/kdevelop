@@ -144,7 +144,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
         if(noShortening)
           ret += argument->toString();
         else
-          ret += Cpp::shortenedTypeString(*paramNameIt, desiredArgumentTypeLength, item.stripPrefix());
+          ret += Cpp::shortenedTypeString(*paramNameIt, top, desiredArgumentTypeLength, item.stripPrefix());
         ret += " " + (*paramNameIt)->identifier().toString();
       } else if (argument)
         ret += argument->toString();

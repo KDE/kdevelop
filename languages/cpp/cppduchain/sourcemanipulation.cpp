@@ -199,7 +199,7 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
     if(!ret.isEmpty())
       ret += ", ";
     AbstractType::Ptr type = TypeUtils::removeConstants(item.type);
-    ret += Cpp::shortenedTypeString(type, 100000, context->scopeIdentifier(true));
+    ret += Cpp::simplifiedTypeString(type, context);
     
     if(!item.name.isEmpty())
       ret += " " + item.name;
@@ -213,7 +213,7 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   
   returnType = TypeUtils::removeConstants(returnType);
   
-  QString decl = Cpp::shortenedTypeString(returnType, 100000, m_context->scopeIdentifier(true)) + " " + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
+  QString decl = Cpp::simplifiedTypeString(returnType, m_context) + " " + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
   
   if(isConstant)
     decl += " const";
@@ -234,7 +234,7 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
   
   type = TypeUtils::removeConstants(type);
   
-  QString decl = Cpp::shortenedTypeString(type, 100000, m_context->scopeIdentifier(true)) + " " + name.toString() + ";\n";
+  QString decl = Cpp::simplifiedTypeString(type, m_context) + " " + name.toString() + ";\n";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
@@ -315,7 +315,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
         return false;
       }
       
-      forwardDeclaration = "typedef " + decl->abstractType()->toString() + " " + decl->identifier().toString() + ";\n";
+      forwardDeclaration = "typedef " + Cpp::simplifiedTypeString(decl->abstractType(), m_context) + " " + decl->identifier().toString() + ";\n";
     }else{
       DUContext* templateContext = getTemplateContext(decl);
       if(templateContext) {
@@ -335,7 +335,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
           if(templParamType) {
             forwardDeclaration += "class ";
           }else if(paramDecl->abstractType()) {
-            forwardDeclaration += paramDecl->abstractType()->toString() + " ";
+            forwardDeclaration += Cpp::simplifiedTypeString(paramDecl->abstractType(), m_context) + " ";
           }
           
           forwardDeclaration += paramDecl->identifier().toString();

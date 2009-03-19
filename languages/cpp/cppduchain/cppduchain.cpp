@@ -499,8 +499,84 @@ AbstractType::Ptr shortenTypeForViewing(AbstractType::Ptr type) {
   return type;
 }
 
+///Returns a type that has all template types replaced with DelayedType's that have their template default parameters stripped away.
+///The returned type should not actively be used in the  type-system, but rather only for displaying.
+AbstractType::Ptr stripTemplateDefaultParameters(KDevelop::AbstractType::Ptr type, TopDUContext* top) {
+  
+  if(!type)
+    return AbstractType::Ptr();
+  
+  struct ShortenTemplateDefaultParameter : public KDevelop::TypeExchanger {
+    TopDUContext* top;
+    ShortenTemplateDefaultParameter(TopDUContext* _top) : top(_top) {
+    }
+    
+    virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {
+      if(!type)
+        return type;
+//       kDebug() << "simplifying" << type->toString();
+      
+      KDevelop::AbstractType::Ptr newType( type->clone() );
+      
+      if(const KDevelop::IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(type.unsafeData())) {
+        KDevelop::Declaration* decl = idType->declaration(top);
+        if(TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl)) 
+        {
+          TypeIdentifier newTypeName;
+          if(decl->context()->type() == DUContext::Class && decl->context()->owner()) {
+            //Strip template default-parameters from the parent class
+            AbstractType::Ptr parentType = stripTemplateDefaultParameters(decl->context()->owner()->abstractType(), top);
+            if(parentType)
+              newTypeName = TypeIdentifier(parentType->toString());
+          }
+          if(newTypeName.isEmpty())
+            newTypeName = decl->context()->scopeIdentifier(true);
+          
+          Identifier currentId;
+          if(!idType->qualifiedIdentifier().isEmpty())
+            currentId.setIdentifier(idType->qualifiedIdentifier().last().identifier().str());
+          
+          KDevelop::InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
+          int neededParameters = 0;
+          KDevelop::InstantiationInformation newInformation(instantiationInfo);
+          newInformation.templateParametersList().clear();
+          
+          for(neededParameters = 0; neededParameters < instantiationInfo.templateParametersSize(); ++neededParameters) {
+            newInformation.templateParametersList().append(instantiationInfo.templateParameters()[neededParameters]);
+            AbstractType::Ptr niceParam = stripTemplateDefaultParameters(instantiationInfo.templateParameters()[neededParameters].abstractType(), top);
+            if(niceParam) {
+              currentId.appendTemplateIdentifier(niceParam->toString());
+//               kDebug() << "testing param" << niceParam->toString();
+            }
+            
+            if(tempDecl->instantiate(newInformation, top) == decl) {
+//               kDebug() << "got full instantiation";
+              break;
+            }
+          }
+          
+          newTypeName.push(currentId);
+          
+          DelayedType::Ptr ret(new KDevelop::DelayedType);
+          ret->setIdentifier(newTypeName);
+//           kDebug() << "created delayed type" << ret->toString();
+          return ret.cast<AbstractType>();
+        }else{
+          return type;
+        }
+      }      
+      newType->exchangeTypes(this);
+      
+      return newType;
+    }
+  };
+  
+  ShortenTemplateDefaultParameter exchanger(top);
+  type = exchanger.exchange(type);
+  return type;
+}
 
-QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdentifier stripPrefix) {
+QString shortenedTypeString(KDevelop::Declaration* decl, KDevelop::TopDUContext* top, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
   AbstractType::Ptr type = decl->abstractType();
   if(decl->isTypeAlias()) {
       if(type.cast<TypeAliasType>())
@@ -514,10 +590,15 @@ QString shortenedTypeString(Declaration* decl, int desiredLength, QualifiedIdent
     type = funType->returnType();
   }
   
-  return shortenedTypeString(type);
+  return shortenedTypeString(type, top, desiredLength, stripPrefix);
 }
 
-QString shortenedTypeString(KDevelop::AbstractType::Ptr type, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
+QString simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* visibilityFrom) {
+  ///@todo Nicely respect the source visibility context
+  return shortenedTypeString(type, visibilityFrom ? visibilityFrom->topContext() : 0, 100000, visibilityFrom ? visibilityFrom->scopeIdentifier(true) : QualifiedIdentifier());
+}
+
+QString shortenedTypeString(KDevelop::AbstractType::Ptr type, TopDUContext* top, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
 
   bool isReference = false;
   if(type.cast<ReferenceType>()) {
@@ -527,9 +608,12 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, int desiredLength,
 
   type = shortenTypeForViewing(type);
   
+  if(top)
+    type = stripTemplateDefaultParameters(type, top);
+  
   if(!type)
     return QString();
-
+  
   TypeIdentifier identifier = TypeIdentifier(type->toString());
   if(isReference)
     identifier.setIsReference(true);

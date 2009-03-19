@@ -35,6 +35,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/parsingenvironment.h>
 #include "signatureassistant.h"
+#include "cppduchain.h"
 
 using namespace  KDevelop;
 using namespace Cpp;
@@ -145,12 +146,12 @@ DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDev
   return 0;
 }
 
-QString makeSignatureString(QList<SignatureItem> signature) {
+QString makeSignatureString(QList<SignatureItem> signature, DUContext* visibilityFrom) {
   QString ret;
   foreach(SignatureItem item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
-    ret += (item.first.abstractType() ? item.first.abstractType()->toString() : QString("<none>"));
+    ret += Cpp::simplifiedTypeString(item.first.abstractType(),  visibilityFrom);
     
     if(!item.second.isEmpty())
       ret += " " + item.second;
@@ -172,7 +173,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     
     virtual QString description() const {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-      return i18n("Update Definition from %1(%2) to (%3)", m_otherSideId.qualifiedIdentifier().toString(), makeSignatureString(m_oldSignature), makeSignatureString(m_newSignature));
+      return i18n("Update Definition from %1(%2) to (%3)", m_otherSideId.qualifiedIdentifier().toString(), makeSignatureString(m_oldSignature, m_otherSideContext.data()), makeSignatureString(m_newSignature, m_otherSideContext.data()));
     }
     
     virtual void execute() {
@@ -214,7 +215,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
       }
       
       DocumentChangeSet changes;
-      DocumentChangePointer change(new DocumentChange(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature)));
+      DocumentChangePointer change(new DocumentChange(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data())));
       change->m_ignoreOldText = true;
       changes.addChange( change );
       DocumentChangeSet::ChangeResult result = changes.applyAllChanges(DocumentChangeSet::WarnOnFailedChange);
