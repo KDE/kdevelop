@@ -27,6 +27,7 @@
 #include <interfaces/idocumentation.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
+#include <kmimetype.h>
 #include "cmakemanager.h"
 
 CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m)
@@ -67,6 +68,9 @@ class CMakeDoc : public KDevelop::IDocumentation
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file)
 {
+    if(KMimeType::findByUrl(file)->name()!="text/x-cmake")
+        return KSharedPtr<KDevelop::IDocumentation>();
+    
     kDebug() << "seeking documentation for " << identifier;
     QString arg, id=identifier.toLower();
     Type t;
