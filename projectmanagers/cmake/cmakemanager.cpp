@@ -265,11 +265,22 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
+        KUrl buildStrapUrl = baseUrl.path();
+        buildStrapUrl.addPath("buildstrap");
         DUChainWriteLocker lock(DUChain::lock());
-        buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
-
-        DUChain::self()->addDocumentChain(buildstrapContext);
-        Q_ASSERT(DUChain::self()->chainForDocument(KUrl("buildstrap")));
+        
+        buildstrapContext = DUChain::self()->chainForDocument(buildStrapUrl);
+        
+        if(buildstrapContext) {
+            buildstrapContext->clearLocalDeclarations();
+            buildstrapContext->clearImportedParentContexts();
+            buildstrapContext->deleteChildContextsRecursively();
+        }else{
+            buildstrapContext=new TopDUContext(IndexedString(buildStrapUrl), SimpleRange(0,0, 0,0));
+            DUChain::self()->addDocumentChain(buildstrapContext);
+        }
+        
+        Q_ASSERT(buildstrapContext);
     }
     ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, cmakeInitScripts)
