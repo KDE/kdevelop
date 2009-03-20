@@ -260,9 +260,13 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
       declarationCount = maxDeclarationCount;
     
     for(uint a = 0; a < declarationCount; ++a) {
+      KDevelop::ParsingEnvironmentFilePointer env = DUChain::self()->environmentFileForDocument(declarations[a].indexedTopContext());
+      if(!env || !dynamic_cast<Cpp::EnvironmentFile*>(env.data()))
+        continue;
+      
       Declaration* decl = declarations[a].declaration();
       
-      if(!decl || decl->topContext()->language() != IndexedString("C++") || !decl->topContext()->parsingEnvironmentFile())
+      if(!decl)
         continue;
       if(dynamic_cast<KDevelop::AliasDeclaration*>(decl))
         continue;
