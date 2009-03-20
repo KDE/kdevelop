@@ -580,8 +580,10 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     DUChainWriteLocker lock(DUChain::lock());
     KDevelop::ReferencedTopDUContext topctx=DUChain::self()->chainForDocument(path);
     
+    ///@todo Create unique versions of all used top-context on a per-project basis using ParsignEnvironmentFile for disambiguation.
     if(topctx)
     {
+        ///@todo Where is the importing of contexts handled here?
         EditorIntegrator editor;
         editor.setCurrentUrl(topctx->url());
         
@@ -600,6 +602,9 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
         DUChain::self()->addDocumentChain(topctx);
 
         Q_ASSERT(DUChain::self()->chainForDocument(path));
+        ///@todo This is problematic when the same file is used from within multiple CMakeLists.txts,
+        ///      for example a standard macro like FindKDE4.cmake, because it creates a cross-dependency
+        ///      between the topducontext's of independent projects, like for example kdebase and kdevplatform
         topctx->addImportedParentContext(aux);
         aux->addImportedParentContext(topctx);
     }
