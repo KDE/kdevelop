@@ -52,6 +52,14 @@
 
 #define ITEMREPOSITORY_USE_MMAP_LOADING
 
+//Assertion macro that prevents warnings if debugging is disabled
+//Only use it to verify values, it should not call any functions, since else the function will even be called in release mode
+#ifdef QT_NO_DEBUG
+#define VERIFY(X) if(!(X)) {kWarning() << "Failed to verify expression" << #X;}
+#else
+#define VERIFY(X) Q_ASSERT(X)
+#endif
+
 ///When this is uncommented, a 64-bit test-value is written behind the area an item is allowed to write into before
 ///createItem(..) is called, and an assertion triggers when it was changed during createItem(), which means createItem wrote too long.
 ///The problem: This temporarily overwrites valid data in the following item, so it will cause serious problems if that data is accessed
@@ -319,9 +327,7 @@ class Bucket {
     
     void initializeFromMap(char* current) {
       if(!m_data) {
-#ifndef QT_NO_DEBUG
           char* start = current;
-#endif
           readOne(current, m_monsterBucketExtent);
           Q_ASSERT(current - start == 4);
           readOne(current, m_available);
@@ -337,9 +343,7 @@ class Bucket {
 
           m_changed = false;
           m_lastUsed = 0;
-#ifndef QT_NO_DEBUG          
-          Q_ASSERT(current - start == (DataSize - ItemRepositoryBucketSize));
-#endif
+          VERIFY(current - start == (DataSize - ItemRepositoryBucketSize));
       }
     }
 
@@ -756,17 +760,10 @@ class Bucket {
       return (Item*)(m_data+index);
     }
 
-    inline const Item* itemFromIndex(unsigned short index,                                     
-#ifdef QT_NO_DEBUG
-                                      const DynamicData*
-#else
-                                      const DynamicData* dynamic
-#endif                                      
-
-    ) const {
+    inline const Item* itemFromIndex(unsigned short index, const DynamicData* dynamic) const {
       m_lastUsed = 0;
       Item* ret((Item*)(m_data+index));
-      Q_ASSERT(!dynamic);
+      VERIFY(!dynamic);
 //       if(dynamic)
 //         dynamic->apply(m_data + index - AdditionalSpacePerItem);
       return ret;
@@ -2076,11 +2073,8 @@ class ItemRepository : public AbstractItemRepository {
       m_freeSpaceBuckets.clear();
     }else{
       m_file->close();
-#ifndef QT_NO_DEBUG
-      bool res = 
-#endif      
-      m_file->open( QFile::ReadOnly ); //Re-open in read-only mode, so we create a read-only m_fileMap
-      Q_ASSERT(res);
+      bool res = m_file->open( QFile::ReadOnly ); //Re-open in read-only mode, so we create a read-only m_fileMap
+      VERIFY(res);
       //Check that the version is correct
       uint storedVersion = 0, hashSize = 0, itemRepositoryVersion = 0;
 
@@ -2227,13 +2221,10 @@ class ItemRepository : public AbstractItemRepository {
       } else if(m_file) {
         //Either memory-mapping is disabled, or the item is not in the existing memory-map, 
         //so we have to load it the classical way.
-#ifndef QT_NO_DEBUG        
-        bool res = 
-#endif        
-        m_file->open( QFile::ReadOnly );
+        bool res = m_file->open( QFile::ReadOnly );
         
         if(offset + BucketStartOffset < m_file->size()) {
-          Q_ASSERT(res);
+          VERIFY(res);
           offset += BucketStartOffset;
           m_file->seek(offset);
           uint monsterBucketExtent;
