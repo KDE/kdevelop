@@ -15,6 +15,7 @@ Comment[uk]=За допомогою цього додатка можна інт�
 Comment[x-test]=xxThis plugin integrates Mercurial to KDevelopxx
 Comment[zh_TW]=此外掛程式將 Mercurial 整合進 KDevelop
 Name=Mercurial Support
+Name[es]=Implementación de Mercurial
 Name[nds]=Mercurial-Ünnerstütten
 Name[pt]=Suporte para Mercurial
 Name[pt_BR]=Suporte para Mercurial
