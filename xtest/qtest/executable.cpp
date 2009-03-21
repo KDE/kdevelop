@@ -59,12 +59,12 @@ void setQTestOptions(ISettings* settings, QStringList& argv)
 int Executable::s_count = 0;
 
 Executable::Executable()
-    :     m_timer(new QTimer(this)),
-          m_parserTimeout(new QTimer(this)),
-          m_proc(0),
+    :     m_settings(0),
           m_output(0),
+          m_proc(0),
           m_parser(0),
-          m_settings(0)
+          m_timer(new QTimer(this)),
+          m_parserTimeout(new QTimer(this))          
 {
     m_parserTimeout->setSingleShot(true);
     m_parserTimeout->setInterval(150);
