@@ -112,6 +112,10 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   if(!m_declaration)
     return QString();
 
+  DUContext* duContext = 0;
+  if(completionContext())
+    duContext = completionContext()->duContext(); ///@todo Take the DUContext from somewhere lese
+  
   ///@todo Move these functionalities into sourcemanipulation.cpp
   if(m_type == Override) {
     if(!useAlternativeText) {
@@ -119,7 +123,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
         newText = "virtual ";
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
-            newText += Cpp::simplifiedTypeString(asFunction->returnType(), completionContext()->duContext()) + " ";
+            newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
         
         newText += m_declaration->identifier().toString();
         newText += signaturePart(true);
@@ -155,7 +159,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
       
       if(asFunction && asFunction->returnType())
-          newText += Cpp::simplifiedTypeString(asFunction->returnType(), completionContext()->duContext()) + " ";
+          newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
       newText += scope.toString();
       newText += signaturePart(false);
       newText += " {\n";
