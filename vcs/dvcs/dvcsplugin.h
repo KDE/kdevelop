@@ -82,12 +82,12 @@ public:
     virtual VcsJob* commit(const QString& message,
                            const KUrl::List& localLocations,
                            IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive) = 0;
-    virtual VcsJob* diff(const VcsLocation& localOrRepoLocationSrc,
-                         const VcsLocation& localOrRepoLocationDst,
+    virtual VcsJob* diff( const KUrl& fileOrDirectory,
                          const VcsRevision& srcRevision,
                          const VcsRevision& dstRevision,
-                         VcsDiff::Type,
-                         IBasicVersionControl::RecursionMode = IBasicVersionControl::Recursive);
+                          VcsDiff::Type = VcsDiff::DiffUnified,
+                          IBasicVersionControl::RecursionMode recursion
+                                       = IBasicVersionControl::Recursive );
     virtual VcsJob* log(const KUrl& localLocation,
                         const VcsRevision& rev,
                         unsigned long limit) = 0;
@@ -96,11 +96,6 @@ public:
                         const VcsRevision& limit);
     virtual VcsJob* annotate(const KUrl& localLocation,
                              const VcsRevision& rev);
-    virtual VcsJob* merge(const VcsLocation& localOrRepoLocationSrc,
-                          const VcsLocation& localOrRepoLocationDst,
-                          const VcsRevision& srcRevision,
-                          const VcsRevision& dstRevision,
-                          const KUrl& localLocation);
     virtual VcsJob* resolve(const KUrl::List& localLocations,
                             IBasicVersionControl::RecursionMode recursion);
     virtual VcsJob* checkout(const VcsMapping &mapping);

@@ -162,8 +162,7 @@ KDevelop::VcsJob * KrossDistributedVersionControl::repositoryLocation(const KUrl
     return new KrossVcsJob("repositoryLocation", QVariantList() << localLocation, action, m_plugin, action);
 }
 
-KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc,
-                                                        const KDevelop::VcsLocation & localOrRepoLocationDst,
+KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KUrl & fileOrDirectory,
                                                         const KDevelop::VcsRevision & srcRevision,
                                                         const KDevelop::VcsRevision & dstRevision,
                                                         KDevelop::VcsDiff::Type t,
@@ -172,11 +171,10 @@ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KDevelop::VcsLocat
     QVariant srcrev=Handlers::kDevelopVcsRevisionHandler(&srcRevision);
     QVariant dstrev=Handlers::kDevelopVcsRevisionHandler(&dstRevision);
     
-    QVariant srcloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationSrc);
-    QVariant dstloc=Handlers::kDevelopVcsLocationHandler(&localOrRepoLocationDst);
+    QVariant obj=qVariantFromValue(fileOrDirectory);
     
-    return new KrossVcsJob("repositoryLocation",
-                                         QVariantList() << srcloc << dstloc << srcrev << dstrev << QVariant(t) << QVariant(recursion), action, m_plugin, action);
+    return new KrossVcsJob("diff",
+                                         QVariantList() << obj << srcrev << dstrev << QVariant(t) << QVariant(recursion), action, m_plugin, action);
     return 0;
 }
 

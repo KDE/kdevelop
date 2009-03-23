@@ -76,7 +76,19 @@ public:
                             KDevelop::IBasicVersionControl::RecursionMode recursion
                                       = KDevelop::IBasicVersionControl::Recursive );
 
-    KDevelop::VcsJob* diff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
+    KDevelop::VcsJob* diff( const KUrl& fileOrDirectory,
+                          const KDevelop::VcsRevision& srcRevision,
+                          const KDevelop::VcsRevision& dstRevision,
+                          KDevelop::VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
+                          KDevelop::IBasicVersionControl::RecursionMode recursion
+                                       = KDevelop::IBasicVersionControl::Recursive );
+
+    /**
+     * Retrieves a diff between the two locations at the given revisions
+     *
+     * The diff is in unified diff format for text files by default
+     */
+    KDevelop::VcsJob* diff2( const KDevelop::VcsLocation& localOrRepoLocationSrc,
                             const KDevelop::VcsLocation& localOrRepoLocationDst,
                             const KDevelop::VcsRevision& srcRevision,
                             const KDevelop::VcsRevision& dstRevision,

@@ -216,7 +216,17 @@ KDevelop::VcsJob* KDevSvnPlugin::commit( const QString& message, const KUrl::Lis
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::diff( const KDevelop::VcsLocation& src,
+KDevelop::VcsJob* KDevSvnPlugin::diff( const KUrl& fileOrDirectory,
+                        const KDevelop::VcsRevision& srcRevision,
+                        const KDevelop::VcsRevision& dstRevision,
+                        KDevelop::VcsDiff::Type diffType,
+                        KDevelop::IBasicVersionControl::RecursionMode recurse)
+{
+    KDevelop::VcsLocation loc(fileOrDirectory);
+    return diff2(loc, loc, srcRevision, dstRevision, diffType, recurse);
+}
+
+KDevelop::VcsJob* KDevSvnPlugin::diff2( const KDevelop::VcsLocation& src,
                 const KDevelop::VcsLocation& dst,
                 const KDevelop::VcsRevision& srcRevision,
                 const KDevelop::VcsRevision& dstRevision,
@@ -488,7 +498,7 @@ void KDevSvnPlugin::ctxDiffHead()
     KDevelop::VcsRevision srcRev,dstRev;
     srcRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Head), KDevelop::VcsRevision::Special );
     dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
-    KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
+    KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), srcRev, dstRev );
 
     //TODO: Fix this, the job should execute asynchronously via runcontroller
     job->exec();
@@ -512,7 +522,7 @@ void KDevSvnPlugin::ctxDiffBase()
     KDevelop::VcsRevision srcRev,dstRev;
     srcRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Base), KDevelop::VcsRevision::Special );
     dstRev.setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>(KDevelop::VcsRevision::Working), KDevelop::VcsRevision::Special );
-    KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), m_ctxUrlList.first(), srcRev, dstRev );
+    KDevelop::VcsJob* job = diff( m_ctxUrlList.first(), srcRev, dstRev );
 
     //TODO: same as above ctxDiffHead
     job->exec();

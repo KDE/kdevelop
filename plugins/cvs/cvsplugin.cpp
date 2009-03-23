@@ -296,6 +296,7 @@ bool CvsPlugin::isVersionControlled(const KUrl & localLocation)
 
 KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)
 {
+    Q_UNUSED(localLocation);
     return NULL;
 }
 
@@ -322,6 +323,7 @@ KDevelop::VcsJob * CvsPlugin::remove(const KUrl::List & localLocations)
 
 KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop::VcsRevision::RevisionType )
 {
+    Q_UNUSED(localLocation)
     return NULL;
 }
 
@@ -372,7 +374,7 @@ KDevelop::VcsJob * CvsPlugin::copy(const KUrl & localLocationSrc, const KUrl & l
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::move(const KUrl & localLocationSrc, const KUrl & localLocationDst)
+KDevelop::VcsJob * CvsPlugin::move(const KUrl &, const KUrl &)
 {
     return NULL;
 }
@@ -408,6 +410,7 @@ KDevelop::VcsJob * CvsPlugin::update(const KUrl::List & localLocations, const KD
 
 KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(recursion);
     QString msg = message;
     if( msg.isEmpty() )
     {
@@ -426,9 +429,9 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::diff(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
+KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
 {
-    CvsJob* job = d->m_proxy->diff (localOrRepoLocationSrc.localUrl(), srcRevision, dstRevision, "-u"/*always unified*/);
+    CvsJob* job = d->m_proxy->diff (fileOrDirectory, srcRevision, dstRevision, "-u"/*always unified*/);
     return job;
 }
 
@@ -450,11 +453,6 @@ KDevelop::VcsJob * CvsPlugin::annotate(const KUrl & localLocation, const KDevelo
 {
     CvsJob* job = d->m_proxy->annotate( localLocation, rev );
     return job;
-}
-
-KDevelop::VcsJob * CvsPlugin::merge(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KDevelop::VcsLocation & localOrRepoLocationDst, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, const KUrl & localLocation)
-{
-    return NULL;
 }
 
 KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)

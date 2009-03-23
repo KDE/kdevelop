@@ -264,7 +264,7 @@ void KDevVcsCommonPlugin::revert()
 void KDevVcsCommonPlugin::diffToHead()
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob* job = iface->diff( url, url,
+    KDevelop::VcsJob* job = iface->diff( url,
                                          KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Head ),
                                          KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ) );
 
@@ -295,7 +295,7 @@ void KDevVcsCommonPlugin::diffJobFinished( KJob* job )
 void KDevVcsCommonPlugin::diffToBase()
 {
     SINGLEURL_SETUP_VARS
-    KDevelop::VcsJob* job = iface->diff( url, url,
+    KDevelop::VcsJob* job = iface->diff( url,
                                          KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Base ),
                                          KDevelop::VcsRevision::createSpecialRevision( KDevelop::VcsRevision::Working ) );
 

@@ -140,8 +140,7 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::diff(const VcsLocation &,
-                                              const VcsLocation &,
+        DistributedVersionControlPlugin::diff(const KUrl &,
                                               const VcsRevision &,
                                               const VcsRevision &,
                                               VcsDiff::Type,
@@ -163,16 +162,6 @@ KDevelop::VcsJob*
 KDevelop::VcsJob*
         DistributedVersionControlPlugin::annotate(const KUrl&,
                                                   const VcsRevision&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-        DistributedVersionControlPlugin::merge(const VcsLocation&,
-                                               const VcsLocation&,
-                                               const VcsRevision&,
-                                               const VcsRevision&,
-                                               const KUrl&)
 {
     return empty_cmd();
 }

@@ -75,8 +75,7 @@ public:
     KDevelop::VcsJob* commit(const QString& message,
                     const KUrl::List& localLocations,
                     KDevelop::IBasicVersionControl::RecursionMode recursion);
-    KDevelop::VcsJob* diff(const KDevelop::VcsLocation & localOrRepoLocationSrc,
-                  const KDevelop::VcsLocation & localOrRepoLocationDst,
+    KDevelop::VcsJob* diff(const KUrl& fileOrDirectory,
                   const KDevelop::VcsRevision & srcRevision,
                   const KDevelop::VcsRevision & dstRevision,
                   KDevelop::VcsDiff::Type diffType,

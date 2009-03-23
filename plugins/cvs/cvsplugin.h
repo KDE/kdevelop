@@ -68,8 +68,7 @@ public:
     virtual KDevelop::VcsJob* commit( const QString& message,
                 const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* diff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
-                const KDevelop::VcsLocation& localOrRepoLocationDst,
+    virtual KDevelop::VcsJob* diff( const KUrl& fileOrDirectory,
                 const KDevelop::VcsRevision& srcRevision,
                 const KDevelop::VcsRevision& dstRevision,
                 KDevelop::VcsDiff::Type,
@@ -82,11 +81,6 @@ public:
                 const KDevelop::VcsRevision& limit );
     virtual KDevelop::VcsJob* annotate( const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev );
-    virtual KDevelop::VcsJob* merge( const KDevelop::VcsLocation& localOrRepoLocationSrc,
-                const KDevelop::VcsLocation& localOrRepoLocationDst,
-                const KDevelop::VcsRevision& srcRevision,
-                const KDevelop::VcsRevision& dstRevision,
-                const KUrl& localLocation );
     virtual KDevelop::VcsJob* resolve( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
     // End:  KDevelop::IBasicVersionControl

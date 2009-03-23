@@ -107,7 +107,7 @@ public:
      * @returns a job that executes the addition
      */
     virtual VcsJob* add( const KUrl::List& localLocations,
-                         RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                         RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
      * removes a local versioned file or directory from the version control system
@@ -131,7 +131,7 @@ public:
                           const KUrl& localLocationDst ) = 0;
 
     virtual VcsJob* status( const KUrl::List& localLocations,
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                            RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
      * revert all local changes on the given file, making its content equal
@@ -139,7 +139,7 @@ public:
      * unedit() (if not a no-op) is implied.
      */
     virtual VcsJob* revert( const KUrl::List& localLocations,
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                            RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
      * fetches the latest changes from the repository, if there are
@@ -153,27 +153,26 @@ public:
      */
     virtual VcsJob* update( const KUrl::List& localLocations,
                             const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ),
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                            RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Checks in the changes of the given file(s)/dir(s) into the repository
      */
     virtual VcsJob* commit( const QString& message,
                             const KUrl::List& localLocations,
-                            RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                            RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
     /**
-     * Retrieves a diff between the two locations at the given revisions
+     * Retrieves a diff between two revisions of a file
      *
      * The diff is in unified diff format for text files by default
      */
-    virtual VcsJob* diff( const VcsLocation& localOrRepoLocationSrc,
-                          const VcsLocation& localOrRepoLocationDst,
+    virtual VcsJob* diff( const KUrl& fileOrDirectory,
                           const VcsRevision& srcRevision,
                           const VcsRevision& dstRevision,
-                          VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
+                          VcsDiff::Type = VcsDiff::DiffUnified,
                           IBasicVersionControl::RecursionMode recursion
-                                       = KDevelop::IBasicVersionControl::Recursive ) = 0;
+                                       = IBasicVersionControl::Recursive ) = 0;
 
     /**
      * Retrieve the history of a given local url
@@ -221,17 +220,6 @@ public:
      */
     virtual VcsJob* annotate( const KUrl& localLocation,
                               const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ) ) = 0;
-
-    /**
-     * merge/integrate the changes between src and dest into the given local file
-     *
-     * Note: This might create conflicts in the file(s) that are changed
-     */
-    virtual VcsJob* merge( const VcsLocation& localOrRepoLocationSrc,
-                           const VcsLocation& localOrRepoLocationDst,
-                           const VcsRevision& srcRevision,
-                           const VcsRevision& dstRevision,
-                           const KUrl& localLocation ) = 0;
 
     /**
      * check for conflicts in the given file and eventually present a

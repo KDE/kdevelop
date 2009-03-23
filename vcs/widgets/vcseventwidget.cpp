@@ -133,9 +133,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
             KDevelop::VcsRevision prev;
             prev.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Previous ),
                                    KDevelop::VcsRevision::Special );
-            KDevelop::VcsLocation loc( m_url );
-
-            KDevelop::VcsJob* job = iface->diff( loc, loc, prev, ev.revision() );
+            KDevelop::VcsJob* job = iface->diff( m_url, prev, ev.revision() );
 
             VcsDiffWidget* widget = new VcsDiffWidget( job );
             widget->setRevisions( prev, ev.revision() );
@@ -159,8 +157,7 @@ void VcsEventWidgetPrivate::diffRevisions()
             QModelIndexList l = m_ui->eventView->selectionModel()->selectedRows();
             KDevelop::VcsEvent ev1 = m_logModel->eventForIndex( l.first() );
             KDevelop::VcsEvent ev2 = m_logModel->eventForIndex( l.last() );
-            KDevelop::VcsLocation loc( m_url );
-            KDevelop::VcsJob* job = iface->diff( loc, loc, ev1.revision(), ev2.revision() );
+            KDevelop::VcsJob* job = iface->diff( m_url, ev1.revision(), ev2.revision() );
 
             VcsDiffWidget* widget = new VcsDiffWidget( job );
             widget->setRevisions( ev1.revision(), ev2.revision() );

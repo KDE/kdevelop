@@ -55,12 +55,12 @@ public:
     KDevelop::VcsJob* repositoryLocation(const KUrl::List& files);
     KDevelop::VcsJob* repositoryLocation( const KUrl& localLocation );
     
-    KDevelop::VcsJob* diff( const KDevelop::VcsLocation& localOrRepoLocationSrc,
-                          const KDevelop::VcsLocation& localOrRepoLocationDst,
+    KDevelop::VcsJob* diff( const KUrl& fileOrDirectory,
                           const KDevelop::VcsRevision& srcRevision,
                           const KDevelop::VcsRevision& dstRevision,
                           KDevelop::VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
-                          KDevelop::IBasicVersionControl::RecursionMode recursion= KDevelop::IBasicVersionControl::Recursive );
+                          KDevelop::IBasicVersionControl::RecursionMode recursion
+                                       = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* log(const KUrl& file, const KDevelop::VcsRevision& rev, long unsigned int limit);
     KDevelop::VcsJob* log(const KUrl& file, const KDevelop::VcsRevision&, const KDevelop::VcsRevision&);
     KDevelop::VcsJob* annotate(const KUrl& file, const KDevelop::VcsRevision& rev);

@@ -243,8 +243,7 @@ VcsJob* MercurialPlugin::commit(const QString& message,
     return job.release();
 }
 
-VcsJob* MercurialPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
-                const VcsLocation & localOrRepoLocationDst,
+VcsJob* MercurialPlugin::diff(const KUrl& fileOrDirectory,
                 const VcsRevision & srcRevision,
                 const VcsRevision & dstRevision,
                 VcsDiff::Type diffType,
@@ -252,10 +251,8 @@ VcsJob* MercurialPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
 {
     Q_UNUSED(diffType)
     Q_UNUSED(recursionMode)
-    //TODO: Honour recursionmode and diffType, handle non-local diffs and a working revision as a src element
-    if (VcsLocation::LocalLocation != localOrRepoLocationSrc.type()
-            || VcsLocation::LocalLocation != localOrRepoLocationDst.type()
-            || localOrRepoLocationSrc.localUrl() != localOrRepoLocationDst.localUrl()) {
+    //TODO: Honour recursionmode and diffType, handle working-dir revision as a src element
+    if (!fileOrDirectory.isLocalFile()) {
         return NULL;
     }
 
@@ -264,15 +261,14 @@ VcsJob* MercurialPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
 
     if (QString::null == srcRev
         || QString::null == dstRev
-        || srcRev.isEmpty())    // We cannot handle working-directory file as src argument
+        || srcRev.isEmpty())    // We cannot handle the working-directory revision as src argument
         return NULL;
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    const QString srcPath = localOrRepoLocationSrc.localUrl().path();
-//     const QString dstPath = localOrRepoLocationDst.localUrl().path();
+    const QString srcPath = fileOrDirectory.path();
 
-    if (!prepareJob(job.get(), srcPath, MercurialPlugin::Init)) {
+    if (!prepareJob(job.get(), srcPath)) {
         return NULL;
     }
 
@@ -281,9 +277,9 @@ VcsJob* MercurialPlugin::diff(const VcsLocation & localOrRepoLocationSrc,
     if (diffType == VcsDiff::DiffUnified)
         *job << "-U" << "3";    // Default from GNU diff
 
-//     *job << "-r" << srcRev;
-//     if ("" != dstRev)
-//         *job << "-r" << dstRev;
+    *job << "-r" << srcRev;
+    if ("" != dstRev)
+        *job << "-r" << dstRev;
     *job << "--";
     *job << srcPath;
 
