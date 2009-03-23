@@ -84,19 +84,18 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 
 bool GitPlugin::isVersionControlled(const KUrl &path)
 {
-    QString workDir = path.path();
-    QString filename;
-    QFileInfo fsObject(workDir);
-    if (fsObject.isFile())
-    {
-        workDir = fsObject.path();
-        filename = fsObject.fileName();
-    }
-    else
+    QFileInfo fsObject(path.path());
+    if (!fsObject.isFile()) {
         return isValidDirectory(path);
+    }
 
-    QStringList otherFiles = getLsFiles(workDir);
-    return otherFiles.contains(filename);
+    QString workDir = fsObject.path();
+    QString filename = fsObject.fileName();
+
+    QStringList listfiles("--");
+    listfiles.append(filename);
+    QStringList otherFiles = getLsFiles(workDir, listfiles);
+    return !otherFiles.empty();
 }
 
 VcsJob* GitPlugin::init(const KUrl &directory)
@@ -117,6 +116,7 @@ VcsJob* GitPlugin::clone(const KDevelop::VcsLocation & localOrRepoLocationSrc, c
     if (prepareJob(job, localRepositoryRoot.toLocalFile(), GitPlugin::Init) ) {
         *job << "git";
         *job << "clone";
+        *job << "--";
         *job << localOrRepoLocationSrc.localUrl().pathOrUrl();
         return job;
     }
@@ -134,6 +134,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
     if (prepareJob(job, localLocations.front().path()) ) {
         *job << "git";
         *job << "add";
+        *job << "--";
         addFileList(job, localLocations);
 
         return job;
@@ -167,7 +168,7 @@ VcsJob* GitPlugin::commit(const QString& message,
 {
     Q_UNUSED(recursion)
 
-    if (localLocations.empty())
+    if (localLocations.empty() || message.isEmpty())
         return NULL;
 
     DVcsJob* job = new DVcsJob(this);
@@ -177,6 +178,8 @@ VcsJob* GitPlugin::commit(const QString& message,
         *job << "-m";
         //Note: the message is quoted somewhere else, so if we quote here then we have quotes in the commit log
         *job << message;
+        *job << "--";
+        addFileList(job, localLocations);
         return job;
     }
     if (job) delete job;
@@ -192,6 +195,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     if (prepareJob(job, files.front().path()) ) {
         *job << "git";
         *job << "rm";
+        *job << "--";
         addFileList(job, files);
         return job;
     }
@@ -210,6 +214,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     if (prepareJob(job, localLocation.path()) ) {
         *job << "git";
         *job << "log";
+        *job << "--";
         addFileList(job, localLocation);
         return job;
     }
@@ -246,6 +251,7 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "checkout";
+        *job << "--";
         *job << branch;
         return job;
     }
@@ -263,6 +269,7 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
             *job << args;
+        *job << "--";
         if (!branch.isEmpty())
             *job << branch;
         if (!basebranch.isEmpty())
@@ -285,6 +292,7 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
         //Empty branch has 'something' so it breaks the command
         if (!args.isEmpty())
             *job << args;
+        *job << "--";
         addFileList(job, files);
         return job;
     }
