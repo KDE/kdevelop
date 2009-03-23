@@ -393,7 +393,8 @@ void CppLanguageSupport::switchDefinitionDeclaration()
           (document && document->textDocument() && document->textDocument()->activeView() && !targetRange.contains(document->textDocument()->activeView()->cursorPosition()))) {
         KTextEditor::Cursor pos(normalizeCursor(targetRange.start()));
         core()->documentController()->openDocument(url, KTextEditor::Range(pos, pos));
-      }
+      }else if(document)
+        core()->documentController()->openDocument(url);
       return;
     }else{
       kDebug(9007) << "Definition has no assigned declaration";
