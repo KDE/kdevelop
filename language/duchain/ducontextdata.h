@@ -165,8 +165,8 @@ public:
   bool needsLocalDeclarationsHash();
   
   //Iterates through all visible declarations within a given context, including the ones propagated from sub-contexts
-  struct VisibleDeclarationIterator {
-    
+  class VisibleDeclarationIterator {
+  public:
     struct StackEntry {
       StackEntry() : data(0), item(0), endItem(0), nextChild(0) {
       }

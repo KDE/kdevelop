@@ -37,28 +37,29 @@ class IndexedString;
  *
  * Does not need a d-pointer, is only a container-class.
  * */
-struct KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
+class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {
-  ///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using KUrl::pathOrUrl at some point
-  ///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
-  static ModificationRevision revisionForFile(const IndexedString& fileName);
-  
-  ///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access
-  static void clearModificationCache(const IndexedString& fileName);
-  
-  ///The default-revision is 1, because that is the kate smart-revision for cleanly opened documents
-  ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 1 );
+  public:	
+	///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using KUrl::pathOrUrl at some point
+	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
+	static ModificationRevision revisionForFile(const IndexedString& fileName);
 
-  bool operator <( const ModificationRevision& rhs ) const;
+	///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access
+	static void clearModificationCache(const IndexedString& fileName);
 
-  bool operator==( const ModificationRevision& rhs ) const;
+	///The default-revision is 1, because that is the kate smart-revision for cleanly opened documents
+	ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 1 );
 
-  bool operator!=( const ModificationRevision& rhs ) const;
+	bool operator <( const ModificationRevision& rhs ) const;
 
-  QString toString() const;
+	bool operator==( const ModificationRevision& rhs ) const;
 
-  uint modificationTime;  //On-disk modification-time of a document in time_t format
-  int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
+	bool operator!=( const ModificationRevision& rhs ) const;
+
+	QString toString() const;
+
+	uint modificationTime;  //On-disk modification-time of a document in time_t format
+	  int revision;        //SmartInterface revision of a document(0 if the document is not loaded)
 };
 
 }

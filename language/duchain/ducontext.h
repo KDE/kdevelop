@@ -211,6 +211,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUContext : public DUChainBase
   friend class DUContextData;
   friend class DUContextDynamicData;
   friend class Definition;
+  friend class VisibleDeclarationIterator;
 
 public:
   /**
