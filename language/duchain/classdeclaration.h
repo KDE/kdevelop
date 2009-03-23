@@ -55,7 +55,13 @@ public:
     Interface
   };
   
-  ClassDeclarationData() : m_classType(Class) {
+  enum ClassModifier {
+    Final,
+    Abstract,
+    None
+  };
+  
+  ClassDeclarationData() : m_classType(Class), m_classModifier(None) {
     initializeAppendedLists();
   }
 
@@ -67,10 +73,13 @@ public:
     initializeAppendedLists();
     copyListsFrom(rhs);
     m_classType = rhs.m_classType;
+    m_classModifier = rhs.m_classModifier;
   }
   
   /// Type of the class (struct, class, etc.)
   ClassType m_classType;
+  /// Modifier of the class (final, abstract, etc.)
+  ClassModifier m_classModifier;
 
   START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::ClassMemberDeclarationData);
   APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
@@ -109,6 +118,10 @@ public:
   
   ClassDeclarationData::ClassType classType() const;
   
+  void setClassModifier(ClassDeclarationData::ClassModifier modifier);
+  
+  ClassDeclarationData::ClassModifier classModifier() const;
+  
   enum {
     Identity = 17
   };
@@ -120,5 +133,5 @@ private:
 
 }
 
-#endif // FUNCTIONDECLARATION_H
+#endif // CLASSDECLARATION_H
 

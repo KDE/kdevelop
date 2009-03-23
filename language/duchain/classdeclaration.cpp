@@ -105,7 +105,33 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
 }
 
 QString ClassDeclaration::toString() const {
-  return "class " + identifier().toString();
+  QString ret;
+  switch ( classModifier() ) {
+    case ClassDeclarationData::None:
+      //nothing
+      break;
+    case ClassDeclarationData::Abstract:
+      ret += "abstract ";
+      break;
+    case ClassDeclarationData::Final:
+      ret += "final ";
+      break;
+  }
+  switch ( classType() ) {
+    case ClassDeclarationData::Class:
+      ret += "class ";
+      break;
+    case ClassDeclarationData::Interface:
+      ret += "interface ";
+      break;
+    case ClassDeclarationData::Union:
+      ret += "union ";
+      break;
+    case ClassDeclarationData::Struct:
+      ret += "struct ";
+      break;
+  }
+  return ret + identifier().toString();
 }
 
 ClassDeclarationData::ClassType ClassDeclaration::classType() const {
@@ -115,6 +141,15 @@ ClassDeclarationData::ClassType ClassDeclaration::classType() const {
 void ClassDeclaration::setClassType(ClassDeclarationData::ClassType type) {
   d_func_dynamic()->m_classType = type;
 }
+
+ClassDeclarationData::ClassModifier ClassDeclaration::classModifier() const {
+  return d_func()->m_classModifier;
+}
+
+void ClassDeclaration::setClassModifier(ClassDeclarationData::ClassModifier modifier) {
+  d_func_dynamic()->m_classModifier = modifier;
+}
+
 
 /*
 class TBase
