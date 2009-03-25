@@ -1,5 +1,7 @@
 add_subdirectory(dvcs/tests)
 add_subdirectory(dvcs/test2)
+add_subdirectory(tests)
+
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9509)
 
 set(kdevplatformvcs_UIS
