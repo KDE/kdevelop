@@ -336,7 +336,7 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
       AbstractType::Ptr fromNonConstant = realType(from, m_topContext)->indexed().abstractType();
 
       //When copying, the type becomes non-constant
-      if(fromNonConstant->modifiers() & AbstractType::ConstModifier)
+      if(fromNonConstant && fromNonConstant->modifiers() & AbstractType::ConstModifier)
         fromNonConstant->setModifiers(fromNonConstant->modifiers() & ~(AbstractType::ConstModifier));
       
       ConversionRank ret = standardConversion( fromNonConstant, to, removeCategories(categories,LValueTransformationCategory), maxCategories-1 );
