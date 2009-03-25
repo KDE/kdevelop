@@ -162,6 +162,9 @@ public:
    */
   Q_SCRIPTABLE void addDocumentChain(TopDUContext* chain);
 
+  /// Returns true if the global duchain instance has already been deleted
+  Q_SCRIPTABLE static bool deleted();
+  
   /// Returns the global static instance.
   Q_SCRIPTABLE static DUChain* self();
 

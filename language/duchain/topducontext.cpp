@@ -73,7 +73,7 @@ ReferencedTopDUContext::ReferencedTopDUContext(const ReferencedTopDUContext& rhs
 }
 
 ReferencedTopDUContext::~ReferencedTopDUContext() {
-  if(m_topContext)
+  if(m_topContext && !DUChain::deleted())
     DUChain::self()->refCountDown(m_topContext);
 }
 
@@ -314,12 +314,14 @@ public:
         foreach(TopDUContext* user, m_dataUsers)
           user->m_local->removeImportedContextRecursively(top, false);
 
-        removeImportedContextRecursion(top, top, 1, rebuild);
-
-        QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
-        for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
-          if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == top)
-            removeImportedContextRecursion(top, it.key(), it->first+1, rebuild); //Remove all contexts that are imported through the context
+        if(!m_ctxt->usingImportsCache()) {
+          removeImportedContextRecursion(top, top, 1, rebuild);
+  
+          QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = top->m_local->m_recursiveImports;
+          for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
+            if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == top)
+              removeImportedContextRecursion(top, it.key(), it->first+1, rebuild); //Remove all contexts that are imported through the context
+          }
         }
       }
     }
@@ -346,9 +348,9 @@ public:
 
 //     context->m_local->needImportStructure();
 
-    addImportedContextRecursion(context, context, 1, temporary);
-
     if(!m_ctxt->usingImportsCache()) {
+      addImportedContextRecursion(context, context, 1, temporary);
+
       QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
       for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it)
         addImportedContextRecursion(context, it.key(), (*it).first+1, temporary); //Add contexts that were imported earlier into the given one
@@ -368,9 +370,10 @@ public:
       user->m_local->removeImportedContextRecursively(context, false);
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
+    if(!m_ctxt->usingImportsCache()) {
+    
     removeImportedContextRecursion(context, context, 1, rebuild);
 
-    if(!m_ctxt->usingImportsCache()) {
       QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
       for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
         if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)
@@ -396,9 +399,10 @@ public:
       if(local)
         removeFromVector(m_importedContexts, DUContext::Import(context));
 
-      removeImportedContextRecursion(context, context, 1, rebuild);
-
       if(!m_ctxt->usingImportsCache()) {
+        
+        removeImportedContextRecursion(context, context, 1, rebuild);
+
         QHash<const TopDUContext*, QPair<int, const TopDUContext*> > b = context->m_local->m_recursiveImports;
         for(RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
           if(m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)

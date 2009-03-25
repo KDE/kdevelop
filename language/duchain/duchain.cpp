@@ -68,6 +68,7 @@ Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
 Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
 
+namespace {
 //Additional "soft" cleanup steps that are done before the actual cleanup.
 //During "soft" cleanup, the consistency is not guaranteed. The repository is
 //marked to be updating during soft cleanup, so if kdevelop crashes, it will be cleared.
@@ -76,6 +77,10 @@ Q_DECLARE_METATYPE(KDevelop::ReferencedTopDUContext)
 const int SOFT_CLEANUP_STEPS = 1;
 
 const uint cleanupEverySeconds = 140;
+
+//Set to true as soon as the duchain is deleted
+bool duChainDeleted = false;
+}
 
 namespace KDevelop
 {
@@ -279,8 +284,11 @@ public:
     instance = new DUChain();
     m_cleanup = new CleanupThread(this);
     m_cleanup->start();
+    
+    duChainDeleted = false;
   }
   ~DUChainPrivate() {
+    duChainDeleted = true;
     m_cleanup->stopThread();
     delete m_cleanup;
     delete instance;
@@ -450,10 +458,9 @@ public:
       loaded.insert(index);
       
       l.unlock();
-      
+      kDebug() << "starting to load" << index;
       TopDUContext* chain = TopDUContextDynamicData::load(index);
       if(chain) {
-//         kDebug() << "url" << chain->url().str();
         chain->setParsingEnvironmentFile(loadInformation(chain->url(), chain->ownIndex()));
 
         if(!chain->usingImportsCache()) {
@@ -862,6 +869,7 @@ DUChain::DUChain()
 
 DUChain::~DUChain()
 {
+  duChainDeleted = true;
 }
 
 DUChain* DUChain::self()
@@ -1321,6 +1329,10 @@ void DUChain::refCountUp(TopDUContext* top) {
     sdDUChainPrivate->m_referenceCounts.insert(top, 1);
   else
     ++sdDUChainPrivate->m_referenceCounts[top];
+}
+
+bool DUChain::deleted() {
+  return duChainDeleted;
 }
 
 void DUChain::refCountDown(TopDUContext* top) {
