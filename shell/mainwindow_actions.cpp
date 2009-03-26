@@ -73,14 +73,6 @@ void MainWindowPrivate::gotoPreviousWindow()
     gotoPrevNextWindow(false);
 }
 
-void MainWindowPrivate::gotoFirstWindow()
-{
-}
-
-void MainWindowPrivate::gotoLastWindow()
-{
-}
-
 void MainWindowPrivate::configureToolbars()
 {}
 
