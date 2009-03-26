@@ -167,7 +167,7 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
                     d->insertRow( i18nc("version controlled file was modified", "Modified"), path );
                     break;
                 case VcsStatusInfo::ItemUnknown:
-                    d->insertRow( i18nc("file is not known to versioncontrolsystem", "Unknown"), 
+                    d->insertRow( i18nc("file is not known to versioncontrolsystem", "Unknown"),
                                   path, newGreen, Qt::Unchecked );
                     break;
                 //DVCS part
@@ -231,7 +231,12 @@ KUrl::List VcsCommitDialog::checkedUrls() const
         if (!resetFiles.isEmpty())
         {
             repo = resetFiles[0];
-            idvcs->reset(repo, QStringList(QString("--")), resetFiles)->exec();
+            KJob* j = idvcs->reset(repo, QStringList(QString("--")), resetFiles);
+            if (!j) {
+                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not reset files. %1 returned no job to execute.", idvcs->name()));
+            } else {
+                j->exec();
+            }
         }
         if (!addFiles.isEmpty())
         {
