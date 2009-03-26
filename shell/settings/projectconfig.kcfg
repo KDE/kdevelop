@@ -14,7 +14,7 @@
     <entry name="parseAllProjectSources" key="Parse All Project Sources" type="Bool" default="false">
         <default>false</default>
         <label>Schedule all project source code to be parsed by the language support in the background</label>
-        <whatsthis>If this option is set, KDevelop will shedule all source code
+        <whatsthis>If this option is set, KDevelop will schedule all source code
         found by the current build system for parsing by the appropriate language
         support part.  This will enable more complete language support, but may
         be slower.</whatsthis>
