@@ -1,5 +1,5 @@
 /* KDevelop coverage plugin
- *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *    Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,12 +99,11 @@ void LcovJob::initProcess()
     args << "-o"
          //<< m_tmpPath
          << "-"
-         << "--wcwd"
-         << m_root.pathOrUrl()
          << m_root.pathOrUrl();
     KConfigGroup grp = KGlobal::config()->group("Code Coverage");
     KUrl geninfo = grp.readEntry("geninfoPath", KUrl("/usr/bin/geninfo") );
     m_lcov->setProgram( geninfo.toLocalFile(), args);
+    m_lcov->setWorkingDirectory(m_root.pathOrUrl());
     m_lcov->setOutputChannelMode(KProcess::SeparateChannels);
     m_lineMaker = new ProcessLineMaker(m_lcov);
 
