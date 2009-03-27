@@ -50,7 +50,7 @@
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 
-// #define ifDebug(x) x
+#define ifDebug(x) x
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -151,7 +151,7 @@ bool removePrefixWord(QString& expression, QString word) {
   return false;
 }
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false), m_useStoredItems(false), m_doAccessFiltering(doAccessFiltering)
 {
 #ifndef TEST_COMPLETION  
   MissingIncludeCompletionModel::self().stop();
@@ -209,6 +209,8 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
 
   ifDebug( log( QString("depth %1").arg(depth) + " end of processed text: " + m_text ); )
 
+  if(doConstructorCompletion())
+    return;
   ///@todo template-parameters
 
   ///First: find out what kind of completion we are dealing with
@@ -364,7 +366,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
-  if( expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') ) {
+  if( expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') || expressionPrefix.endsWith(':') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
 
@@ -635,6 +637,109 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   }
 }
 
+bool CodeCompletionContext::doConstructorCompletion() {
+  QString text = m_text.trimmed();
+  LOCKDUCHAIN;
+
+  QStringList hadItems;
+  
+  text = text.trimmed();
+
+  //Jump over all initializers
+  while(!text.isEmpty() && text.endsWith(',')) {
+    text = text.left(text.length()-1).trimmed();
+    //Skip initializer expression
+    int start_expr = Utils::expressionAt( text, text.length() );
+    QString skip = text.mid(start_expr, text.length() - start_expr);
+    
+    if(skip.contains('('))
+      hadItems << skip.left(skip.indexOf('(')).trimmed();
+    
+    text = text.left(start_expr).trimmed();
+
+    kDebug() << "skipped" << skip << "new text:" << text;
+  }
+  
+  kDebug() << "should end with:" << text;
+  
+  if(!text.trimmed().endsWith(':'))
+    return false;
+
+  text = text.left(text.length()-1).trimmed();
+  kDebug() << "should end with )" << text;
+  //Now we have the declaration in text
+  if(!text.endsWith(')'))
+    return false;
+  kDebug() << "declaration:" << text;
+  
+  int argumentsStart = text.length()-1;
+  QStringList arguments;
+  skipFunctionArguments(text, arguments, argumentsStart);
+  if(argumentsStart <= 0)
+    return false;
+  
+  int identifierStart = Utils::expressionAt( m_text, argumentsStart-1 );
+  if(identifierStart < 0 || identifierStart == argumentsStart)
+    return false;
+  
+  m_text = QString();
+  
+  QualifiedIdentifier id(text.mid(identifierStart, argumentsStart-1-identifierStart));
+  kDebug() << "identifier:" << id;
+  if(id.isEmpty())
+    return false;
+  id = id.left(id.count()-1);
+  
+  DUContext* container = 0;
+  
+  if(!id.isEmpty()) {
+    //Find the class
+    QList< KDevelop::Declaration* > decls = m_duContext->findDeclarations(id);
+    if(decls.isEmpty()) {
+      kDebug() << "did not find class declaration for" << id.toString();
+      return false;
+    }
+    container = decls[0]->logicalInternalContext(m_duContext->topContext());
+  }else if(m_duContext->parentContext() && m_duContext->parentContext()->type() == DUContext::Class && m_duContext->parentContext()->owner()) {
+    container = m_duContext->parentContext();
+  }
+  
+  if(!container)
+    return false;
+  
+  m_onlyShowVariables = true;
+  m_onlyShowTypes = false;
+  m_isConstructorCompletion = true;
+  m_memberAccessOperation = MemberAccess;
+  m_doAccessFiltering = false;
+  m_useStoredItems = true;
+  
+  QSet<QString> hadItemsSet = hadItems.toSet();
+  
+  QList<CompletionTreeItemPointer> items;
+  
+  int pos = 1;
+  
+  //Pre-compute the items
+  foreach(Declaration* decl, container->localDeclarations(m_duContext->topContext())) {
+    if(decl->kind() == Declaration::Instance && !decl->isFunctionDeclaration()) {
+      if(!hadItemsSet.contains(decl->identifier().toString())) {
+        items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(decl), KDevelop::CodeCompletionContext::Ptr(this), pos ));
+        ++pos;
+      }
+    }
+  }
+  
+  eventuallyAddGroup(i18n("Initialize"), 0, items);
+  
+  return true;
+  ///Step 1: Skip to the ':', to find the back of the function declaration. On the way, all expressions need to be constructor decls.
+}
+
+bool CodeCompletionContext::isConstructorInitialization() {
+  return m_isConstructorCompletion;
+}
+
 CodeCompletionContext::AdditionalContextType CodeCompletionContext::additionalContextType() const {
   return m_contextType;
 }
@@ -778,6 +883,8 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
   return ret;
 }
 
+
+
 KDevelop::IndexedType CodeCompletionContext::applyPointerConversionForMatching(KDevelop::IndexedType type, bool fromLValue) const {
   if(!m_duContext)
     return KDevelop::IndexedType();
@@ -914,7 +1021,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
     bool ignoreParentContext = false;
 
-    if(!m_storedItems.isEmpty()) {
+    if(!m_storedItems.isEmpty() || m_useStoredItems) {
       items = m_storedItems;
     }else{
       switch(memberAccessOperation()) {
@@ -941,6 +1048,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
 
                 if (shouldAbort)
                   return items;
+                kDebug() << "container:" << ctx->scopeIdentifier(true).toString();
 
                 foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
                   //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
@@ -1243,9 +1351,11 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
       }
 
       if(!parentContext() && (m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
-        QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
-        if(!helpers.isEmpty()) {
-          eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
+        if(!m_onlyShowVariables && !m_isConstructorCompletion) {
+          QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
+          if(!helpers.isEmpty()) {
+            eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
+          }
         }
       }
     }
@@ -1475,6 +1585,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   
   if(m_onlyShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
     return false;
+  
+  if(m_onlyShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
+    return false;
     
   if(m_onlyShowSignals || m_onlyShowSlots) {
     Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
@@ -1492,7 +1605,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
 }
 
 bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUContext* declarationContext, bool typeIsConst) {
-  if(doAccessFiltering && decl) {
+  if(m_doAccessFiltering && decl) {
     if (typeIsConst && decl->type<FunctionType>() && !(decl->abstractType()->modifiers() & AbstractType::ConstModifier))
       return false;
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))

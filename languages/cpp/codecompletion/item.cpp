@@ -41,6 +41,7 @@
 #include <cppduchain.h>
 #include <templatedeclaration.h>
 #include <language/codecompletion/codecompletionhelper.h>
+#include "context.h"
 
 using namespace KDevelop;
 
@@ -130,7 +131,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     lock.lock();
   }
     
-  if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) /*|| m_declaration->kind() == Declaration::Type*/) ) {
+  if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
     //Do some intelligent stuff for functions with the parens:
     lock.unlock();
     insertFunctionParenText(document, word, m_declaration, jumpForbidden);

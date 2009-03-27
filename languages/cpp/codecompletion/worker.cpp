@@ -57,8 +57,11 @@ KDevelop::CodeCompletionContext* CodeCompletionWorker::createCompletionContext(K
   return new Cpp::CodeCompletionContext( context, contextText, followingText );
 }
 
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
+void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& _contextRange, const QString& _contextText)
 {
+  KTextEditor::Range contextRange(_contextRange);
+  QString contextText(_contextText);
+  
   TopDUContextPointer topContext;
   {
     DUChainReadLocker lock(DUChain::lock());
@@ -71,6 +74,18 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       return;
     }
   }
+  
+  {
+    DUChainReadLocker lock(DUChain::lock());
+    if(context && context->owner() && context->owner()->type<FunctionType>()) {
+      if(!context->owner()->type<FunctionType>()->returnType()) {
+        //For constructor completion, we need some more context
+        contextRange.start().setLine(contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0);
+        contextText = view->document()->text(contextRange);
+      }
+    }
+  }
+  
   
   //We will have some caching in TopDUContext until this objects lifetime is over
   TopDUContext::Cache cache(topContext);

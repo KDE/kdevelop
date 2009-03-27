@@ -175,6 +175,8 @@ namespace Cpp {
       
       void setFollowingText(QString str);
       
+      bool isConstructorInitialization();
+      
     private:
       QList<CompletionTreeItemPointer> keywordCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
@@ -220,6 +222,10 @@ namespace Cpp {
        * Example: For "bla[" it returns "["
        * */
       QString getEndOperator( const QString& str ) const;
+      
+      ///Does specialized code-completion for constructor-initializers
+      ///Returns true if constructor completion is done, and no other completion should be applied
+      bool doConstructorCompletion();
       ///Should map a position in m_text to a position in the underlying document
       MemberAccessOperation m_memberAccessOperation;
       QString m_expression;
@@ -251,8 +257,11 @@ namespace Cpp {
       QList<KDevelop::CompletionTreeElementPointer> m_storedUngroupedItems;
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
-      bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots;
+      bool m_useStoredItems; //If this is true, m_storedItems will be used instead of computing items, no matter whether it is empty or not.
+      bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots, m_onlyShowVariables;
       bool m_isDeclarationTypePrefix;//True if the expression is set to the type-part of a declaration like "int i"
+      bool m_isConstructorCompletion;
+      bool m_doAccessFiltering;
 
       friend class ImplementationHelperItem;
   };

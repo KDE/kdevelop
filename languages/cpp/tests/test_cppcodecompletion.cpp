@@ -107,7 +107,6 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 }
 
 void TestCppCodeCompletion::testConstructorCompletion() {
-  return;
   {
     QByteArray test = "class Class { Class(); int m_1; float m_2; char m_3; }; ";
 
@@ -116,25 +115,37 @@ void TestCppCodeCompletion::testConstructorCompletion() {
     DUChainWriteLocker lock(DUChain::lock());
     
     {
+      kDebug() << "TEST 2";
+      CompletionItemTester tester(context, "class Class { Class(); int m_1; float m_2; char m_3; }; Class::Class(int m1, float m2, char m3) : m_1(1), m_2(m2), ");
+      
+      //At first, only the members should be shown
+      kDebug() << tester.names;
+      QCOMPARE(tester.names, QStringList() << "m_3"); //m_1 should not be shown, because it is already initialized
+      ///@todo Make sure that the item also inserts parens
+    }
+
+    {
       CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : ");
       
       //At first, only the members should be shown
+      kDebug() << tester.names;
       QCOMPARE(tester.names, QStringList() << "m_1" << "m_2" << "m_3");
       ///@todo Make sure that the item also inserts parens
     }
 
     {
+      kDebug() << "TEST 3";
       CompletionItemTester tester(context, "Class::Class(int m1, float m2, char m3) : m_1(");
       
       //At first, only the members should be shown
       QVERIFY(tester.names.size());
       QVERIFY(tester.completionContext->parentContext()); //There must be a type-hinting context
+      QVERIFY(tester.completionContext->parentContext()->parentContext()); //There must be a type-hinting context
+      QVERIFY(!tester.completionContext->isConstructorInitialization());
+      QVERIFY(!tester.completionContext->parentContext()->isConstructorInitialization());
+      QVERIFY(tester.completionContext->parentContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
+      QVERIFY(tester.completionContext->parentContext()->parentContext()->isConstructorInitialization());
     }
-    
-    
-    QCOMPARE(context->childContexts().count(), 2);
-    QCOMPARE(context->childContexts()[1]->importedParentContexts().count(), 1);
-    QCOMPARE(context->childContexts()[1]->importedParentContexts()[0].context(context->topContext()), context->childContexts()[0]);
   }
 
 }
@@ -340,7 +351,7 @@ void TestCppCodeCompletion::testConstVisibility() {
   kDebug() << "list:" << CompletionItemTester(top->childContexts()[2], "a.").names << CompletionItemTester(top->childContexts()[2], "a.").names.size();
   QCOMPARE(CompletionItemTester(top->childContexts()[2], "a.").names.toSet(), QSet<QString>() << "e");
   kDebug() << "list:" << CompletionItemTester(top->childContexts()[4], "").names << CompletionItemTester(top->childContexts()[4], "").names.size();
-  QCOMPARE(CompletionItemTester(top->childContexts()[4], "").names.toSet(), QSet<QString>() << "e" << "test" << "main");
+  QCOMPARE(CompletionItemTester(top->childContexts()[4], "").names.toSet(), QSet<QString>() << "e" << "test" << "main" << "this");
 }
 
 void TestCppCodeCompletion::testFriendVisibility() {
