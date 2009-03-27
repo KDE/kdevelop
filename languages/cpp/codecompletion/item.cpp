@@ -242,12 +242,18 @@ KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() con
 
 QList<KDevelop::IndexedType> NormalDeclarationCompletionItem::typeForArgumentMatching() const {
   QList<KDevelop::IndexedType> ret;
-  if( m_declaration && completionContext() && completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && listOffset < completionContext()->functions().count() )
+  if( m_declaration && completionContext() && completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess )
   {
-    Cpp::CodeCompletionContext::Function f( completionContext()->functions()[listOffset] );
+    if(listOffset < completionContext()->functions().count()) {
+      Cpp::CodeCompletionContext::Function f( completionContext()->functions()[listOffset] );
 
-    if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > (uint) f.matchedArguments ) {
-      ret << f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments];
+      if( f.function.isValid() && f.function.isViable() && f.function.declaration() && f.function.declaration()->type<FunctionType>() && f.function.declaration()->type<FunctionType>()->indexedArgumentsSize() > (uint) f.matchedArguments ) {
+        ret << f.function.declaration()->type<FunctionType>()->indexedArguments()[f.matchedArguments];
+      }
+    }
+    
+    if(ret.isEmpty() && m_declaration->kind() == Declaration::Instance && !m_declaration->isFunctionDeclaration()) {
+      ret << m_declaration->indexedType();
     }
   }
   return ret;

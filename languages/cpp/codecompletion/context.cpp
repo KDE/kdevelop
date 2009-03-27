@@ -50,7 +50,7 @@
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 
-#define ifDebug(x) x
+// #define ifDebug(x) x
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
@@ -656,21 +656,15 @@ bool CodeCompletionContext::doConstructorCompletion() {
       hadItems << skip.left(skip.indexOf('(')).trimmed();
     
     text = text.left(start_expr).trimmed();
-
-    kDebug() << "skipped" << skip << "new text:" << text;
   }
-  
-  kDebug() << "should end with:" << text;
   
   if(!text.trimmed().endsWith(':'))
     return false;
 
   text = text.left(text.length()-1).trimmed();
-  kDebug() << "should end with )" << text;
   //Now we have the declaration in text
   if(!text.endsWith(')'))
     return false;
-  kDebug() << "declaration:" << text;
   
   int argumentsStart = text.length()-1;
   QStringList arguments;
@@ -685,7 +679,6 @@ bool CodeCompletionContext::doConstructorCompletion() {
   m_text = QString();
   
   QualifiedIdentifier id(text.mid(identifierStart, argumentsStart-1-identifierStart));
-  kDebug() << "identifier:" << id;
   if(id.isEmpty())
     return false;
   id = id.left(id.count()-1);
