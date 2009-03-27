@@ -14,7 +14,6 @@
  ***************************************************************************/
 
 #include "gdbcommand.h"
-#include "breakpoint.h"
 #include "variablewidget.h"
 
 using namespace GDBMI;
@@ -99,31 +98,6 @@ UserCommand::UserCommand(GDBMI::CommandType type, const QString& s)
 bool UserCommand::isUserCommand() const
 {
     return true;
-}
-
-
-ModifyBreakpointCommand::ModifyBreakpointCommand(
-    GDBMI::CommandType type, const QString& command, const Breakpoint* bp)
-: GDBCommand(type, command),
-  bp_(bp)
-{}
-
-QString
-ModifyBreakpointCommand::cmdToSend()
-{
-    if (bp_->dbgId() > 0)
-    {
-        QString s(initialString());
-        s = s.arg(bp_->dbgId()) + '\n';
-        return s.toLatin1();
-    }
-    else
-    {
-        // The ID can be -1 either if breakpoint set command
-        // failed, or if breakpoint is somehow already deleted.
-        // In either case, should not do anything.
-        return "";
-    }
 }
 
 

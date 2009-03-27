@@ -160,29 +160,6 @@ public:
     bool isUserCommand() const;
 };
 
-/** This command is used to change some property of breakpoint.
-    It holds a pointer to a Breakpoint object and will substitute
-    breakpoint id into the command string.
-
-    So, the command can be issued before the breakpoint id is know. That
-    is, it's possible to queue add + modify pair. The add command will
-    set breakpoint id and modify command will use it.
-*/
-class ModifyBreakpointCommand : public GDBCommand
-{
-public:
-    /** The 'comamnd' should include a single format specifier "%1" that
-        will be replaced with the id of breakpoint.
-    */
-    ModifyBreakpointCommand(GDBMI::CommandType type, const QString& command, const Breakpoint* bp);
-
-public: // DbgCommand overrides
-    virtual QString cmdToSend();
-
-private:
-    const Breakpoint* bp_;
-};
-
 /** This is a class for raw CLI commands. Instead of invoking
     user provided hook with MI response, it invokes the a hook
     with lists of strings.
