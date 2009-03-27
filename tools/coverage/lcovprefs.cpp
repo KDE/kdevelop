@@ -53,6 +53,7 @@ void LCovPrefs::load()
 
 void LCovPrefs::defaults()
 {
+    KCModule::defaults();
 }
 
 #include "lcovprefs.moc"
