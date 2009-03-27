@@ -40,7 +40,6 @@
 
 #include "gdbparser.h"
 #include "gdbcommand.h"
-#include "gdbbreakpointwidget.h"
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
 #include "variableitem.h"

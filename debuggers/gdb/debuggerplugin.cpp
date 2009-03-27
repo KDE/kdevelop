@@ -67,11 +67,9 @@
 #include <language/interfaces/editorcontext.h>
 
 #include "variablewidget.h"
-#include "gdbbreakpointwidget.h"
 #include "framestackwidget.h"
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
-#include "breakpoint.h"
 #include "processselection.h"
 #include "memviewdlg.h"
 #include "gdbparser.h"

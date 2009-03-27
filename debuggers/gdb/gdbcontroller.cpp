@@ -47,7 +47,6 @@
 
 #include <util/environmentgrouplist.h>
 
-#include "breakpoint.h"
 #include "gdbcommand.h"
 #include "stty.h"
 #include "mi/miparser.h"

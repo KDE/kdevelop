@@ -60,23 +60,9 @@ public:
     BreakpointController(GDBController* parent);
     GDBController* controller() const;
 
-    FilePosBreakpoint* findBreakpoint(const QString& file, int line) const;
-    Watchpoint* findWatchpoint(const QString& variableName) const;
-    Watchpoint* findWatchpointByAddress(quint64 address) const;
-    Breakpoint* findBreakpointById(int id) const;
-
-    Breakpoint* addBreakpoint(Breakpoint *bp);
-    void removeBreakpoint(Breakpoint *bp);
-
-    QList<Breakpoint*> breakpoints() const { return m_breakpoints; }
-
-    void removeAllBreakpoints();
 
 private slots:
     void slotEvent(event_t);
-    void slotBreakpointModified(Breakpoint* b);
-    void slotBreakpointEnabledChanged(Breakpoint* b);
-    void slotUpdateBreakpointMarks(KParts::Part* part);
 
     void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
     void slotToggleBreakpoint(const QString &filename, int lineNum);
@@ -86,9 +72,6 @@ private slots:
                      KTextEditor::MarkInterface::MarkChangeAction);
 
 private:
-    void adjustMark(Breakpoint* bp, bool add);
-    void handleBreakpointList(const GDBMI::ResultRecord& r);
-    QList<Breakpoint*> m_breakpoints;
 };
 
 }

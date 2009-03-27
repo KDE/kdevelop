@@ -12,6 +12,7 @@ Near term:
 
        - Implement locals.                  
 
+       - Revive breakpoint tracing.
 
 KDEV4 Debugger overall:
 

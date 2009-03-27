@@ -28,6 +28,9 @@
 #include <keditlistbox.h>
 #include <kmessagebox.h>
 
+/* WARNING: this code was not yet ported to KDevelop4 and is unused, but is 
+   intended to be ported.  */
+
 namespace GDBDebugger
 {
 

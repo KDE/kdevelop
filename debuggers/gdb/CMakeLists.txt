@@ -37,20 +37,18 @@ set(kdevgdb_PART_SRCS
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp
-    breakpoint.cpp
     variablewidget.cpp
 #    abstractvariableitem.cpp
 #    variableitem.cpp
 #    frameitem.cpp
 #    watchitem.cpp
     variablecollection.cpp
-#    gdbbreakpointwidget.cpp
     framestackwidget.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
     processselection.cpp
     gdboutputwidget.cpp
-    debuggertracingdialog.cpp
+#    debuggertracingdialog.cpp
     breakpointcontroller.cpp
     ibreakpointcontroller.cpp
     ibreakpoints.cpp
