@@ -60,7 +60,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::Filter<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
+class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );
@@ -83,6 +83,8 @@ class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, publ
     KUrl m_baseUrl;
     QString m_lastSearchedPrefix;
 
+    QList<Cpp::IncludeItem> m_baseItems;
+    
     bool m_allowImports, m_allowPossibleImports, m_allowImporters;
 
     ///Cache for all documents that import the current one

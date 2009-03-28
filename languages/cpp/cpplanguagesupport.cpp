@@ -100,7 +100,7 @@
 // #define CALLGRIND_TRACE_UI_LOCKUP
 
 #define DEBUG_UI_LOCKUP
-#define LOCKUP_INTERVAL 140
+#define LOCKUP_INTERVAL 300
 
 #ifdef CALLGRIND_TRACE_UI_LOCKUP
 #define DEBUG_UI_LOCKUP
@@ -542,17 +542,20 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
   return comp.result();
 }
 
-QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath) const {
+QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths) const {
 
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<Cpp::IncludeItem> ret;
 
-    KUrl::List paths = findIncludePaths(source, 0);
+    KUrl::List paths = addIncludePaths;
+    if(!onlyAddedIncludePaths) {
+      paths += findIncludePaths(source, 0);
 
-    if(local) {
-        KUrl localPath = source;
-        localPath.setFileName(QString());
-        paths.push_front(localPath);
+      if(local) {
+          KUrl localPath = source;
+          localPath.setFileName(QString());
+          paths.push_front(localPath);
+      }
     }
 
     int pathNumber = 0;
@@ -569,20 +572,27 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             continue;
         }
         KUrl searchPathUrl = path;
+        QString absoluteBase = searchPathUrl.path();
         searchPathUrl.addPath(addPath);
         QString searchPath = searchPathUrl.path();
+
         QDirIterator dirContent(searchPath);
 
         while(dirContent.hasNext()) {
              dirContent.next();
             Cpp::IncludeItem item;
             item.name = dirContent.fileName();
+
             if(item.name.startsWith('.') || item.name.endsWith("~")) //This filters out ".", "..", and hidden files, and backups
               continue;
-            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(dirContent.fileInfo().suffix()))
+            QString suffix = dirContent.fileInfo().suffix();
+            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && !sourceExtensions.contains(suffix))
               continue;
+            
+            item.name = addPath + item.name;
+            
             item.isDirectory = dirContent.fileInfo().isDir();
-            item.basePath = searchPath;
+            item.basePath = absoluteBase;
             item.pathNumber = pathNumber;
 
             ret << item;

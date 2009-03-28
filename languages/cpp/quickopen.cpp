@@ -69,7 +69,7 @@ IncludeFileData::IncludeFileData( const IncludeItem& item, const TopDUContextPoi
 QString IncludeFileData::text() const
 {
   if(m_item.isDirectory)
-    return m_item.name + QDir::separator();
+    return m_item.name + '/';
   else
     return m_item.name;
 }
@@ -78,8 +78,14 @@ bool IncludeFileData::execute( QString& filterText ) {
   if( m_item.isDirectory ) {
     //Change the filter-text to match the sub-directory
     KUrl u( filterText );
-    u.setFileName( m_item.name );
-    filterText = u.path( KUrl::AddTrailingSlash );
+//     kDebug() << "filter-text:" << u;
+    QString addName = m_item.name;
+    if(addName.contains('/'))
+      addName = addName.split('/').last();
+    u.setFileName( addName );                                   
+//     kDebug() << "with added:" << u;
+    filterText = u.path( KUrl::AddTrailingSlash ); 
+//     kDebug() << "new:" << filterText;
     return false;
   } else {
     KUrl u = m_item.url();
@@ -284,31 +290,49 @@ QList<IncludeItem> getAllIncludedItems( TopDUContextPointer ctx, QString prefixP
   return ret.values();
 }
 
-void IncludeFileDataProvider::setFilterText( const QString& text )
+void IncludeFileDataProvider::setFilterText( const QString& _text )
 {
-  QString filterText;
-  if( text.contains( QDir::separator() ) )
+  QString text(_text);
+    ///If the text contains '/', list items under the given prefix additionally
+
+  if( text.contains( '/' ) )
   {
-    ///If the text contains '/', list items under the given prefix,
-    ///and filter them by the text behind the last '/'
+    KUrl::List addIncludePaths;
+    QList<IncludeItem> allIncludeItems = m_baseItems;
+    
+    bool explicitPath = false;
+    if(text.startsWith('/')) {
+      addIncludePaths << KUrl("/");
+      allIncludeItems.clear();
+      text = text.mid(1);
+      explicitPath = true;
+    } else if(text.startsWith("~/")) {
+      addIncludePaths << KUrl(QDir::homePath());
+      allIncludeItems.clear();
+      text = text.mid(2);
+      explicitPath = true;
+    }else if(text.startsWith("../")) {
+      KUrl u(m_baseUrl);
+      u.setFileName(QString());
+      if(!u.isEmpty())
+        u = u.upUrl();
+      addIncludePaths << u;
+      allIncludeItems.clear();
+      text = text.mid(3);
+      explicitPath = true;
+    }
+    
     KUrl u( text );
 
-    if( text.trimmed().endsWith( QDir::separator() ) )
-      filterText = QString();
-    else
-      filterText = u.fileName();
-    
     u.setFileName( QString() );
     QString prefixPath = u.path();
 
-    if( prefixPath != m_lastSearchedPrefix )
+    if( prefixPath != m_lastSearchedPrefix && !prefixPath.isEmpty() )
     {
       kDebug(9007) << "extracted prefix " << prefixPath;
 
-      QList<IncludeItem> allIncludeItems;
-
-      if( m_allowPossibleImports )
-        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath );
+      if( m_allowPossibleImports || explicitPath )
+        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath );
 
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
@@ -321,30 +345,11 @@ void IncludeFileDataProvider::setFilterText( const QString& text )
     if( !m_lastSearchedPrefix.isEmpty() || text.isEmpty() ) {
       ///We were searching in a sub-path, but are not any more, or we are initializing the search with an empty text.
       m_lastSearchedPrefix = QString();
-
-      QList<IncludeItem> allIncludeItems;
-
-      if( m_allowPossibleImports )
-        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
-
-      if( m_allowImports )
-        allIncludeItems += getAllIncludedItems( m_duContext );
-      
-      foreach( const IndexedString &u, m_importers ) {
-        IncludeItem i;
-        i.isDirectory = false;
-        i.name = u.str();
-        i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
-        allIncludeItems << i;
-      }
-      
-      setItems( allIncludeItems );
+      setItems(m_baseItems);
     }
-
-    filterText = text;
   }
 
-  setFilter( filterText );
+  setFilter( text.split('/'), QChar('/') );
 }
 
 void IncludeFileDataProvider::reset()
@@ -374,7 +379,25 @@ void IncludeFileDataProvider::reset()
     }
   }
   
-  setFilterText(QString());
+  QList<IncludeItem> allIncludeItems;
+
+  if( m_allowPossibleImports )
+    allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
+
+  if( m_allowImports )
+    allIncludeItems += getAllIncludedItems( m_duContext );
+  
+  foreach( const IndexedString &u, m_importers ) {
+    IncludeItem i;
+    i.isDirectory = false;
+    i.name = u.str();
+    i.pathNumber = -1; //We mark this as an importer by putting pathNumber to -1
+    allIncludeItems << i;
+  }
+  
+  m_baseItems = allIncludeItems;
+  
+  clearFilter();
 }
 
 uint IncludeFileDataProvider::itemCount() const
