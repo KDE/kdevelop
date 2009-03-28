@@ -40,6 +40,7 @@
 #include "functiondefinition.h"
 #include "specializationstore.h"
 #include "persistentsymboltable.h"
+#include "classdeclaration.h"
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -404,6 +405,10 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
 QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
   QList<Declaration*> ret;
+  
+  if(!dynamic_cast<const ClassDeclaration*>(decl))
+    return ret;
+
   if(maxAllowedSteps == 0)
     return ret;
 
@@ -429,12 +434,14 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
     const IndexedDeclaration* allDeclarations;
     PersistentSymbolTable::self().declarations(decl->qualifiedIdentifier(), count, allDeclarations);
     for(uint a = 0; a < count; ++a) {
+      ++maxAllowedSteps;
+      
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
         ret += getInheriters(allDeclarations[a].data(), maxAllowedSteps, false);
-        
-        if(maxAllowedSteps == 0)
-          return ret;
       }
+      
+      if(maxAllowedSteps == 0)
+        return ret;
     }
   }
   
