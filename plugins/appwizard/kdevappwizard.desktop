@@ -17,6 +17,7 @@ Comment[x-test]=xxApplication Wizardxx
 Comment[zh_CN]=应用程序向导
 Comment[zh_TW]=應用程式精靈
 Name=New Project Wizard
+Name[de]=Projekt-Assistent
 Name[es]=Asistente de nuevo proyecto
 Name[fr]=Assistant de création de nouveau projet
 Name[gl]=Asistente para novos proxectos

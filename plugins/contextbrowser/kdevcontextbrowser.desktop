@@ -15,6 +15,7 @@ Comment[x-test]=xxThis plugin shows information about the current language conte
 Comment[zh_CN]=此插件在侧边视图中显示关于当前语言上下文的信息，并加亮突出相关的声明和调用。
 Comment[zh_TW]=此外掛程式顯示關於目前語言的資訊，並將相關的宣告與使用突顯出來。
 Name=Code Browser
+Name[de]=Quelltext-Browser
 Name[el]=Περιηγητής κώδικα
 Name[es]=Navegador de código
 Name[fr]=Navigateur de code
