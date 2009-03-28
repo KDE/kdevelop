@@ -152,6 +152,24 @@ void TestCppCodeCompletion::testConstructorCompletion() {
 
 void TestCppCodeCompletion::testAssistant() {
   {
+    QByteArray test = "int n; class C { C() : member(n) {} }; }";
+
+    TopDUContext* context = parse( test, DumpAll );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->problems().count(), 1);
+    {
+      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QVERIFY(mdp);
+      ///@todo Make this work
+      kDebug() << "problem:" << mdp->description();
+/*      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("value"));
+      QVERIFY(mdp->type->assigned.type.isValid());
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(context->childContexts().count(), 3);*/
+    }
+  }
+  {
     QByteArray test = "class C {}; void test() {C c; c.value = 5; int i = c.value2; i = c.value3(); }";
 
     TopDUContext* context = parse( test, DumpAll );
