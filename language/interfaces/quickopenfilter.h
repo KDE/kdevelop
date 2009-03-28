@@ -145,7 +145,7 @@ class FilterWithSeparator {
       
       if(text.isEmpty() || m_oldFilterText.isEmpty()) {
           filterBase = m_items;
-      } else if(m_oldFilterText.mid(0, m_oldFilterText.length()-1) == text.mid(0, text.length()-1) && text.last().startsWith(m_oldFilterText.last())) {
+      } else if(m_oldFilterText.mid(0, m_oldFilterText.count()-1) == text.mid(0, text.count()-1) && text.last().startsWith(m_oldFilterText.last())) {
         //Good, the prefix is the same, and the last item has been extended
       }else if(m_oldFilterText.size() == text.size()-1 && m_oldFilterText == text.mid(0, text.size()-1)) {
         //Good, an item has been added
