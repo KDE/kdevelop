@@ -116,5 +116,8 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
 {
-    return description(decl->identifier().toString(), decl->url().toUrl());
+    if(KUrl(decl->url().str()).fileName().toLower() != "cmakelists.txt")
+        return KSharedPtr<KDevelop::IDocumentation>();
+    else
+        return description(decl->identifier().toString(), decl->url().toUrl());
 }
