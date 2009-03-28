@@ -493,6 +493,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             data.vm.remove("CMAKE_CURRENT_LIST_FILE");
             data.vm.remove("CMAKE_CURRENT_SOURCE_DIR");
             data.vm.remove("CMAKE_CURRENT_BINARY_DIR");
+            
+            m_varsPerProject[item->project()]=data.vm;
+            m_macrosPerProject[item->project()]=data.mm;
 
             /*{
             kDebug() << "dumpiiiiiing" << folder->url();
