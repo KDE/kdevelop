@@ -278,7 +278,7 @@ VcsJob* MercurialPlugin::diff(const KUrl& fileOrDirectory,
         *job << "-U" << "3";    // Default from GNU diff
 
     *job << "-r" << srcRev;
-    if ("" != dstRev)
+    if (!dstRev.isEmpty())
         *job << "-r" << dstRev;
     *job << "--";
     *job << srcPath;
