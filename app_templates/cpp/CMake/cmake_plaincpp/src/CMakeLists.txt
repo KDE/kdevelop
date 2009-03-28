@@ -1,2 +1,0 @@
-ADD_EXECUTABLE(%{APPNAMELC} main.cpp)
-
