@@ -105,12 +105,30 @@ namespace QTest {
 //the template parameter is your language specific CodeCompletionContext
 template <class T>
 struct CodeCompletionItemTester {
+   
+  typedef KSharedPtr< KDevelop::CompletionTreeElement > Element;
+    
   CodeCompletionItemTester(DUContext* context, QString text = "; ") {
     completionContext = new  T(DUContextPointer(context), text, QString());
     bool abort = false;
     items = completionContext->completionItems(context->range().end, abort);
+    
+    
+    addElements(completionContext->ungroupedElements());
+    
     foreach(Item i, items)
       names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+  }
+  
+  void addElements(QList<Element> elements) {
+    foreach(Element element, elements) {
+      Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
+      if(item)
+        items << item;
+      CompletionTreeNode* node = dynamic_cast<CompletionTreeNode*>(element.data());
+      if(node)
+        addElements(node->children);
+    }
   }
   
   QStringList names; //Names of all completion-items, not sorted

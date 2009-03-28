@@ -37,8 +37,15 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
 
   bool haveArguments = false;
 
+  if(!declaration)
+    return;
+  
   if( declaration->kind() == Declaration::Type || (declaration->type<FunctionType>() && declaration->type<FunctionType>()->indexedArgumentsSize()) )
     haveArguments = true;
+  
+  if( declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration())
+    haveArguments = true; //probably a constructor initializer
+  
   //Need to have a paren behind
   QString suffix = document->text( KTextEditor::Range( word.end(), word.end() + KTextEditor::Cursor(1, 0) ) );
   if( suffix.trimmed().startsWith('(') ) {
