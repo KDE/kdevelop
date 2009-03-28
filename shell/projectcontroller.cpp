@@ -69,6 +69,8 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "openprojectdialog.h"
+#include <interfaces/iruncontroller.h>
+#include <language/backgroundparser/parseprojectjob.h>
 
 namespace KDevelop
 {
@@ -518,14 +520,8 @@ void ProjectController::projectImportingFinished( IProject* project )
     KUrl::List parseList;
     if (parseAllProjectSources())
     {
-        // Add the project files to the background parser to be parsed.
-        QList<ProjectFileItem*> files = project->files();
-        foreach ( ProjectFileItem* file, files )
-        {
-            parseList.append( file->url() );
-        }
-        //Add low-priority parse jobs, with only the minimum parsed information
-        Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::VisibleDeclarationsAndContexts, 10000 );
+        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
+        ICore::self()->runController()->registerJob(parseProjectJob);
     } else
     {
         // Add all currently open files that belong to the project to the background-parser,

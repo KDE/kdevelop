@@ -34,6 +34,8 @@
 
 #include "interfacesexport.h"
 
+class KJob;
+
 template<typename T> class QList;
 template<typename T> class QSet;
 

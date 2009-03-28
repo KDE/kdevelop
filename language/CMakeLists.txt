@@ -16,6 +16,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
+    backgroundparser/parseprojectjob.cpp
 
     duchain/specializationstore.cpp
     duchain/codemodel.cpp

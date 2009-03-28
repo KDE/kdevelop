@@ -27,6 +27,7 @@
 #include "iproject.h"
 
 #include <QtDBus/QtDBus>
+#include <language/duchain/indexedstring.h>
 
 namespace KDevelop
 {
@@ -43,4 +44,3 @@ IProject::~IProject()
 }
 
 #include "iproject.moc"
-
