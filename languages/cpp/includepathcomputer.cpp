@@ -58,6 +58,7 @@ void IncludePathComputer::computeForeground() {
           m_hasPath.insert(u);
         }
     }
+    kDebug() << "cannot compute include-paths without source-file";
     m_ready = true;
     return;
   }
@@ -106,10 +107,18 @@ void IncludePathComputer::computeForeground() {
 
     if(!m_gotPathsFromManager)
       kDebug(9007) << "Did not find a build-manager for" << m_source;
+}
+
+
+
+void IncludePathComputer::computeBackground() {
+    if(m_ready)
+      return;
+    
+    QList<QString> standardPaths = CppLanguageSupport::self()->standardIncludePaths();
     
     if(m_ret.isEmpty()) {
-      //Got no useful include-paths. It's possible that the source-file is not part of the project yet,
-      //so pick another source-file from the same directory
+      //Try taking the include-paths from another file in the directory
       kDebug(9007) << "Did not get any include-paths for" << m_source;
       QFileInfo fileInfo(m_source.path());
       QDirIterator it(fileInfo.dir().path());
@@ -123,9 +132,14 @@ void IncludePathComputer::computeForeground() {
               if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
                 Q_ASSERT(envFile);
+                if(!envFile->missingIncludeFiles().isEmpty())
+                  continue;
+                if(envFile->includePaths().size() <= standardPaths.size() )
+                  continue;
                 foreach(KDevelop::IndexedString str, envFile->includePaths()) {
                   m_ret << str.toUrl();
                 }
+                kDebug(9007) << "took include-paths for" <<  m_source << "from duchain of" <<  file;
                 m_ready = true;
                 return;
               }
@@ -136,11 +150,7 @@ void IncludePathComputer::computeForeground() {
         }
       }
     }
-}
-
-
-
-void IncludePathComputer::computeBackground() {
+    
     if(m_ready)
       return;
     
@@ -239,7 +249,7 @@ void IncludePathComputer::computeBackground() {
     }
 
     //Insert the standard-paths at the end
-    foreach( const QString& path, CppLanguageSupport::self()->standardIncludePaths()) {
+    foreach( const QString& path, standardPaths) {
       KUrl u(path);
       if(!m_hasPath.contains(u))
         m_ret << KUrl(path);
