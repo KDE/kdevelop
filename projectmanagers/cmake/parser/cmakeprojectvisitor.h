@@ -42,7 +42,6 @@ namespace KDevelop
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
-        enum TargetType { Library, Executable, Custom };
         explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
         virtual ~CMakeProjectVisitor() {}
         
@@ -92,24 +91,18 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setVariableMap( VariableMap* vars );
         void setMacroMap( MacroMap* macros ) { m_macros=macros; }
         void setModulePath(const QStringList& mp) { m_modulePath=mp; }
-        void setDefinitions(const Definitions& defs) { m_defs=defs; }
+        void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
 
         const VariableMap* variables() const { return m_vars; }
-        const Definitions& definitions() const { return m_defs; }
+        const CMakeDefinitions& definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
         QStringList subdirectories() const { return m_subdirectories; }
-        QStringList targets() const { return m_filesPerTarget.keys(); }
-        QStringList files(const QString &target) const { return m_filesPerTarget[target]; }
-        QStringList targetDependencies(const QString & target) const;
+        QList<Target> targets() const { return m_targetForId.values(); }
+        QStringList resolveDependencies(const QStringList& target) const;
         QStringList includeDirectories() const { return m_includeDirectories; }
-        QString targetProperty(const QString& targetName, const QString &propName) const
-            { return m_targetProperties[targetName][propName]; }
-        bool targetHasProperty(const QString& targetName, const QString &propName) const
-            { return m_targetProperties[targetName].contains(propName); }
             
-        CMakeFunctionDesc folderDeclarationDescriptor(const QString& name) const { return m_folderDesc[name]; }
-        CMakeFunctionDesc targetDeclarationDescriptor(const QString& name) const { return m_targetDesc[name]; }
+        QMap<QString, CMakeFunctionDesc> folderDeclarations() const { return m_folderDesc; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
         
@@ -124,11 +117,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
                                     const QStringList& pathSuffixes=QStringList()) const;
         
         KDevelop::ReferencedTopDUContext context() const { return m_topctx; }
-        const QMap<QString, KDevelop::IndexedDeclaration>& declarationsPerTarget() { return m_declarationsPerTarget; }
         QStringList resolveVariable(const CMakeFunctionArgument &exp);
 
         bool hasMacro(const QString& name) const;
-        TargetType targetType(const QString& targetName) { return m_targetsType[targetName]; }
 
         struct VisitorState
         {
@@ -162,10 +153,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeFunctionDesc resolveVariables(const CMakeFunctionDesc &exp);
         QStringList value(const QString& exp, const QList<IntPair>& poss, int& desired) const;
         QStringList theValue(const QString& exp, const IntPair& p) const;
-
-        typedef QMap<QString, QString> TargetProperties;
         
-        void defineTarget(const QString& id, const QStringList& sources, TargetType t);
+        void defineTarget(const QString& id, const QStringList& sources, Target::Type t);
         int notImplemented(const QString& n) const;
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
@@ -179,20 +168,16 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QString m_projectName;
         QStringList m_subdirectories;
         QStringList m_includeDirectories;
-        QMap<QString, QStringList> m_filesPerTarget;
         QMap<QString, QStringList> m_generatedFiles;
-        QMap<QString, KDevelop::IndexedDeclaration> m_declarationsPerTarget;
-        QMap<QString, TargetType> m_targetsType;
-        QMap<QString, TargetProperties> m_targetProperties;
         QMap<QString, CMakeFunctionDesc> m_folderDesc;
-        QMap<QString, CMakeFunctionDesc> m_targetDesc;
+        QMap<QString, Target> m_targetForId;
         
         QStack< VisitorState > m_backtrace;
         QString m_root;
         VariableMap *m_vars;
         MacroMap *m_macros;
         const CacheValues* m_cache;
-        Definitions m_defs;
+        CMakeDefinitions m_defs;
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
 

@@ -272,7 +272,7 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
-            m_targetProperties[tname][t.first] += t.second;
+            m_targetForId[tname].prop[t.first] += t.second;
         }
     }
     return 1;
@@ -326,31 +326,34 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
     return p;
 }
 
-void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, TargetType t)
+void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, Target::Type t)
 {
-    if (!m_targetsType.contains(id))
+    if (!m_targetForId.contains(id))
         kDebug(9032) << "warning! there already was a target called" << id;
-    m_targetsType[id]=t;
 
     VisitorState p=stackTop();
 
     DUChainWriteLocker lock(DUChain::lock());
     Declaration *d = new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
     d->setIdentifier( Identifier(id) );
-    m_declarationsPerTarget.insert(id, d);
-//     kDebug(9042) << "looooooool" << d
-//         << p.code->at(p.line).writeBack() << p.code->at(p.line).filePath << ':' << p.line;
-    m_filesPerTarget.insert(id, sources);
-    m_targetDesc[id]=p.code->at(p.line);
+    
+    Target target;
+    target.name=id;
+    target.declaration=d;
+    target.files=sources;
+    target.type=t;
+    target.desc=p.code->at(p.line);
+    
+    m_targetForId[id]=target;
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 {
     if(!exec->isImported())
-        defineTarget(exec->executable(), exec->sourceLists(), Executable);
+        defineTarget(exec->executable(), exec->sourceLists(), Target::Executable);
     else
         kDebug(9042) << "imported executable" << exec->executable();
-    kDebug(9042) << "exec:" << exec->executable() << "->" << m_filesPerTarget.contains(exec->executable())
+    kDebug(9042) << "exec:" << exec->executable() << "->" << m_targetForId.contains(exec->executable())
         << "imported" << exec->isImported();
     return 1;
 }
@@ -358,7 +361,7 @@ int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
 int CMakeProjectVisitor::visit(const AddLibraryAst *lib)
 {
     if(!lib->isImported())
-        defineTarget(lib->libraryName(), lib->sourceLists(), Library);
+        defineTarget(lib->libraryName(), lib->sourceLists(), Target::Library);
     kDebug(9042) << "lib:" << lib->libraryName();
     return 1;
 }
@@ -1737,7 +1740,7 @@ int CMakeProjectVisitor::visit(const CustomTargetAst *ctar)
     kDebug(9042) << "custom_target " << ctar->target() << ctar->dependencies() << ", " << ctar->commandArgs();
     kDebug(9042) << ctar->content()[ctar->line()].writeBack();
 
-    defineTarget(ctar->target(), ctar->dependencies(), Custom);
+    defineTarget(ctar->target(), ctar->dependencies(), Target::Custom);
     return 1;
 }
 
@@ -2022,10 +2025,10 @@ QStringList CMakeProjectVisitor::dependees(const QString& s) const
     return ret;
 }
 
-QStringList CMakeProjectVisitor::targetDependencies(const QString & target) const
+QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) const
 {
     QStringList ret;
-    foreach(const QString& s, m_filesPerTarget[target])
+    foreach(const QString& s, files)
     {
         if(isGenerated(s))
         {

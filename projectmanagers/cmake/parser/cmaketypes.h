@@ -21,6 +21,7 @@
 
 #include "cmakelistsparser.h"
 #include "variablemap.h"
+namespace KDevelop { class Declaration; }
 
 struct Macro
 {
@@ -37,8 +38,20 @@ struct CacheEntry
     QString doc;
 };
 
+struct Target
+{
+    typedef QMap<QString, QString> Properties;
+    enum Type { Library, Executable, Custom };
+    KDevelop::Declaration* declaration;
+    QStringList files;
+    Type type;
+    CMakeFunctionDesc desc;
+    Properties prop;
+    QString name;
+};
+
 typedef QHash<QString, Macro> MacroMap;
-typedef QHash<QString, QString> Definitions;
+typedef QHash<QString, QString> CMakeDefinitions;
 typedef QHash<QString, CacheEntry> CacheValues;
 
 #endif

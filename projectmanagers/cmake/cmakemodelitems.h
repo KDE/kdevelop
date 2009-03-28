@@ -69,8 +69,8 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         virtual ~CMakeFolderItem() {}
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
-        Definitions definitions() const { return m_defines; }
-        void setDefinitions(const Definitions& defs) { m_defines=defs; }
+        CMakeDefinitions definitions() const { return m_defines; }
+        void setDefinitions(const CMakeDefinitions& defs) { m_defines=defs; }
         
         void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }
         KDevelop::ReferencedTopDUContext topDUContext() const { return m_topcontext;}
@@ -78,7 +78,7 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;
-        Definitions m_defines;
+        CMakeDefinitions m_defines;
 };
 
 class CMakeExecutableTargetItem 
