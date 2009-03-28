@@ -43,6 +43,8 @@ class ApplyChangesWidget : public KDialog
         void jump( const QModelIndex &);
         
     private:
+        void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
+        
         KParts::ReadWritePart* m_part;
         QStandardItemModel* m_changes;
         QStandardItem *m_itemChange;

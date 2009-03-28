@@ -50,6 +50,7 @@ ApplyChangesWidget::ApplyChangesWidget(const QString& info, const KUrl& url, QWi
     m_changes->setHorizontalHeaderLabels(QStringList(i18n("Text")) << i18n("Action"));
     
     QTreeView *changesView=new QTreeView(w);
+    changesView->setRootIsDecorated(false);
     changesView->setModel(m_changes);
     v->addWidget(m_part->widget());
     v->addWidget(changesView);
@@ -78,8 +79,9 @@ KTextEditor::Document* ApplyChangesWidget::document() const
 }
 
 Q_DECLARE_METATYPE(KTextEditor::Range)
-void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type)
+void ApplyChangesWidget::addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type)
 {
+    bool isFirst=mit->rowCount()==0;
     QStringList edition=document->textLines(range);
     if(edition.first().isEmpty())
         edition.takeFirst();
@@ -90,6 +92,8 @@ void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTe
     it->setEditable(false);
     action->setEditable(false);
     mit->appendRow(QList<QStandardItem*>() << it << action);
+    if(isFirst)
+        jump(it->index());
 }
 
 void ApplyChangesWidget::jump( const QModelIndex & idx)
