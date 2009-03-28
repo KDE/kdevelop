@@ -784,9 +784,16 @@ void CMakeManager::dirtyFile(const QString & dirty)
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
-        kDebug(9032) << dirtyFile << "is dirty" << files;
+        kDebug(9032) << dirtyFile << "is dirty" << files.count();
 
-        Q_ASSERT(p->fileCount()>0);
+        // Debug output as apparently the Q_ASSERT after this is sometimes hitting
+        // See https://bugs.kde.org/show_bug.cgi?id=187335
+        if( files.count() > 1 ) {
+            foreach(ProjectFileItem* item, files) {
+                kDebug() << "item:" << item << item->url() << item->text() << item->parent()->type() << item->parent()->text();
+            }
+        }
+
         Q_ASSERT(files.count()==1);
         CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
 
