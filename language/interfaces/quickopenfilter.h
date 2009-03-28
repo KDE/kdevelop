@@ -23,6 +23,8 @@
 #define QUICKOPEN_FILTER_H
 
 #include <QtCore/QRegExp>
+#include <QStringList>
+#include <kdebug.h>
 
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.
@@ -102,6 +104,94 @@ class Filter {
     
   private:
     QString m_oldFilterText;
+    QList<Item> m_filtered;
+    QList<Item> m_items;
+};
+}
+
+namespace KDevelop {
+template<class Item>
+class FilterWithSeparator {
+  public:
+    virtual ~FilterWithSeparator() {
+    }
+    ///Clears the filter, but not the data.
+    void clearFilter() {
+      m_filtered = m_items;
+      m_oldFilterText.clear();
+    }
+
+    ///Clears the filter and sets new data. The filter-text will be lost.
+    void setItems( const QList<Item>& data ) {
+      m_items = data;
+      clearFilter();
+    }
+
+    const QList<Item>& items() const {
+      return m_items;
+    }
+
+    ///Returns the data that is left after the filtering
+    const QList<Item>& filteredItems() const {
+      return m_filtered;
+    }
+
+    ///Changes the filter-text and refilters the data
+    ///@param separator Should be a QChar, or if needed a QString
+    template<class SeparatorType>
+    void setFilter( const QStringList& text, const SeparatorType& separator )
+    {
+      QList<Item> filterBase = m_filtered;
+      
+      if(text.isEmpty() || m_oldFilterText.isEmpty()) {
+          filterBase = m_items;
+      } else if(m_oldFilterText.mid(0, m_oldFilterText.length()-1) == text.mid(0, text.length()-1) && text.last().startsWith(m_oldFilterText.last())) {
+        //Good, the prefix is the same, and the last item has been extended
+      }else if(m_oldFilterText.size() == text.size()-1 && m_oldFilterText == text.mid(0, text.size()-1)) {
+        //Good, an item has been added
+      }else{
+        //Start filtering based on the whole data, there was a big change to the filter
+        filterBase = m_items;
+      }
+      
+      //QRegExp exp(text, Qt::CaseInsensitive, QRegExp::Wildcard);
+
+      m_filtered.clear();
+
+      foreach( const Item& data, filterBase ) {
+          QString toFilter = itemText(data);
+          
+          int searchStart = 0;
+          for(QStringList::const_iterator it = text.constBegin(); it != text.constEnd(); ++it) {
+              if(searchStart != 0) {
+                  searchStart = toFilter.indexOf(separator, searchStart);
+                  if(searchStart == -1)
+                      break;
+                  ++searchStart;
+              }
+              
+              searchStart = toFilter.indexOf(*it, searchStart, Qt::CaseInsensitive);
+              if(searchStart == -1)
+                  break;
+              
+              ++searchStart;
+          }
+          
+          if(searchStart == -1)
+              continue;
+          
+          m_filtered << data;
+      }
+      
+      m_oldFilterText = text;
+    }
+    
+  protected:
+    ///Should return the text an item should be filtered by.
+    virtual QString itemText( const Item& data ) const = 0;
+    
+  private:
+    QStringList m_oldFilterText;
     QList<Item> m_filtered;
     QList<Item> m_items;
 };

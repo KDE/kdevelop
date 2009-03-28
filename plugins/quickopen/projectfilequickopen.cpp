@@ -115,7 +115,7 @@ ProjectFileDataProvider::ProjectFileDataProvider() {
 }
 
 void ProjectFileDataProvider::setFilterText( const QString& text ) {
-  Base::setFilter( text );
+  Base::setFilter( text.split('/'), QChar('/') );
 }
 
 namespace

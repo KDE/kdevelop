@@ -65,7 +65,7 @@ class ProjectFileData : public KDevelop::QuickOpenDataBase {
  * It provides all files from all open projects.
  * */
 
-typedef KDevelop::Filter<ProjectFile> Base;
+typedef KDevelop::FilterWithSeparator<ProjectFile> Base;
 
 class ProjectFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public Base, public KDevelop::QuickOpenFileSetInterface {
   public:
