@@ -47,7 +47,7 @@ ParseProjectJob::ParseProjectJob(KDevelop::IProject* project) {
     
     setCapabilities(Killable);
     
-    setObjectName(i18n("Process %1 files in %2", m_totalFiles, m_project->name()));
+    setObjectName(i18np("Process 1 file in %2","Process %1 files in %2", m_totalFiles, m_project->name()));
 }
 
 void ParseProjectJob::deleteNow() {

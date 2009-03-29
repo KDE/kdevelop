@@ -103,5 +103,6 @@ install(FILES
 install(FILES
     dvcs/dvcsjob.h
     dvcs/dvcsplugin.h
+    dvcs/dvcsevent.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/dvcs COMPONENT Devel
 )
