@@ -320,6 +320,13 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       allIncludeItems.clear();
       text = text.mid(3);
       explicitPath = true;
+    }else if(text.startsWith("./")) {
+      KUrl u(m_baseUrl);
+      u.setFileName(QString());
+      addIncludePaths << u;
+      allIncludeItems.clear();
+      text = text.mid(2);
+      explicitPath = true;
     }
     
     KUrl u( text );
