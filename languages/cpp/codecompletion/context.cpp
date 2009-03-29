@@ -779,6 +779,18 @@ void CodeCompletionContext::processFunctionCallAccess() {
 
   m_functions = helper.resolve(true);
 
+  if(m_contextType == BinaryOperatorFunctionCall) {
+    //Filter away all global binary operators that do not have the first argument matched
+    QList< Function > oldFunctions = m_functions;
+    m_functions.clear();
+    foreach(Function f, oldFunctions) {
+      if(f.matchedArguments == 1 && !f.function.isViable())
+        continue;
+      else
+        m_functions << f;
+    }
+  }
+  
 //   if( declarations.isEmpty() ) {
 //     log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
 //     return;
