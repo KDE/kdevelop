@@ -20,17 +20,25 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <kaction.h>
+#include <QMetaType>
 
 using namespace KDevelop;
 
+Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>);
+
 KAction* KDevelop::IAssistantAction::toKAction() const {
     KAction* ret = new KAction(KIcon(icon()), description(), 0);
+    qRegisterMetaType<KSharedPtr<IAssistantAction> >("KSharedPtr<IAssistantAction>()");
+    
+    //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
+    ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
+    
     connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
     return ret;
 }
 
 KDevelop::IAssistant::~IAssistant() {
-
+    Q_ASSERT(ref == 0);
 }
 
 KDevelop::IAssistantAction::~IAssistantAction() {
