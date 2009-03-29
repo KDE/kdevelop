@@ -24,7 +24,7 @@
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>);
+Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
 
 KAction* KDevelop::IAssistantAction::toKAction() const {
     KAction* ret = new KAction(KIcon(icon()), description(), 0);
