@@ -53,6 +53,8 @@
 #include "partcontroller.h"
 #include "plugincontroller.h"
 #include "documentcontroller.h"
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 namespace KDevelop {
 
@@ -254,12 +256,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
     }
 
-    if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)) {
-        KConfigGroup group(KGlobal::config(), "Language Support");
-        bool automaticInvocation = group.readEntry( "Automatic Invocation", false );
-
-        cc->setAutomaticInvocationEnabled(automaticInvocation);
-    }
+    if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
+        cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
 
     return view;
 }
