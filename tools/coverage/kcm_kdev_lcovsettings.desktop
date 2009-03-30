@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevelop
 
 Name=lcov settings
 Name[es]=Preferencias de lcov
+Name[fr]=Paramètres d'lcov
 Name[ga]=Socruithe lcov
 Name[nds]=LCov-Instellen
 Name[pt]=Configuração do LCov
@@ -22,6 +23,7 @@ Name[zh_CN]=lcov 设置
 Name[zh_TW]=Icov 設定
 Comment=Configure lcov settings
 Comment[es]=Configurar las preferencias de lcov
+Comment[fr]=Configurer les réglages d'lcov
 Comment[ga]=Cumraigh socruithe lcov
 Comment[nds]=LCov instellen
 Comment[pt]=Configurar as opções do LCov
