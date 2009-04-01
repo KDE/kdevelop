@@ -121,6 +121,9 @@ void SimpleRefactoring::executeNewClassAction() {
       folder=item->folder();
     } else if(item->target()) {
       folder=static_cast<ProjectBaseItem*>(item->parent())->folder();
+    } else {
+      KMessageBox::error(0, i18n("Cannot create a new class since there was no folder given."), i18n("Error"));
+      return;
     }
     Q_ASSERT(folder);
     CppNewClass newClassWizard(qApp->activeWindow(), folder->url());
