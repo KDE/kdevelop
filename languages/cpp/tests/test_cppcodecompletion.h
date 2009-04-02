@@ -97,6 +97,8 @@ private slots:
   void testImportTypedef();
   void testConstructorCompletion();
   void testAssistant();
+  void testCompletionInExternalClassDefinition();
+  void testCompletionBehindTypedeffedConstructor();
 
 public:
   enum DumpArea {
