@@ -44,17 +44,13 @@ GenericName[x-test]=xxBzr frontendxx
 GenericName[zh_CN]=Bzr 前端
 GenericName[zh_TW]=Bzr 前端介面
 ServiceTypes=KDevelop/Plugin
-<<<<<<< Updated upstream:shell/kross/examples/bzrkdevelop/kdevbzr.desktop
 X-KDE-Library=kdevbzr/kdevbzr.py
-=======
-X-KDE-Library=kdevbzr
->>>>>>> Stashed changes:plugins/bzr/kdevbzr.desktop
 X-KDE-PluginInfo-Name=kdevbzr
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-Version=0.01
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Version=6
 X-KDevelop-Category=Global
+X-KDevelop-Properties=GlobalFileManagement
 X-KDevelop-PluginType=Kross
-X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl, org.kdevelop.IDistributedVersionControl
-X-KDevelop-Mode=GUI
+X-KDevelop-Interfaces=org.kdevelop.IBasicVersionControl, IDistributedVersionControl

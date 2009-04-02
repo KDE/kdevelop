@@ -8,17 +8,29 @@ import sys
 
 import bzrlib
 from bzrlib import (
+    bugtracker,
+    bundle,
     bzrdir,
+    delta,
+    config,
     errors,
+    globbing,
+    ignores,
+    log,
+    merge as _mod_merge,
+    merge_directive,
+    osutils,
+    reconfigure,
+    revision as _mod_revision,
+    symbol_versioning,
     transport,
     tree as _mod_tree,
+    ui,
+    urlutils,
     )
 
 def name():
 	return "Bazaar"
-
-def createImportMetadataWidget(w, default_w):
-    return default_w
 
 def pathHelper(fullpath):
 	ret={}
