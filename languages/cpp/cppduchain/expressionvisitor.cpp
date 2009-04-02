@@ -1590,7 +1590,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     
     {
       LOCKDUCHAIN;
-      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = m_lastDeclarations.first()->logicalDeclaration(topContext())->type<CppClassType>()) ) {
+      if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = unAliasedType(m_lastDeclarations.first()->logicalDeclaration(topContext())->abstractType()).cast<CppClassType>()) ) {
 
         if( constructedType && constructedType->declaration(topContext()) && constructedType->declaration(topContext())->internalContext() )
         {
