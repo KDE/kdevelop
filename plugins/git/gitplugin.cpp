@@ -251,7 +251,6 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "checkout";
-        *job << "--";
         *job << branch;
         return job;
     }
