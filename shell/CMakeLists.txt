@@ -3,6 +3,9 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9501 )
 add_subdirectory(settings)
 add_subdirectory(tests)
 
+
+include_directories(${CMAKE_BINARY_DIR}/vcs)
+
 set(kdevplatformshell_LIB_SRCS
     assistantpopup.cpp
     mainwindow.cpp

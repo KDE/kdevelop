@@ -32,6 +32,7 @@
 #include "wrappers/krossvcsrevision.h"
 #include "wrappers/krossvcslocation.h"
 #include <vcs/widgets/vcsimportmetadatawidget.h>
+#include <vcs/dvcs/ui/importmetadatawidget.h>
 
 using namespace KDevelop;
 
@@ -59,10 +60,13 @@ QString KrossDistributedVersionControl::name() const
 
 KDevelop::VcsImportMetadataWidget * KrossDistributedVersionControl::createImportMetadataWidget(QWidget * w)
 {
-    QVariantList args;
-    args << qVariantFromValue<QObject*>(w);
-    QVariant result=action->callFunction( "createImportMetadataWidget", args);
-    return qobject_cast<KDevelop::VcsImportMetadataWidget *>(result.value<QObject*>());
+    //for now return widget common for all dvcs systems instead of returning the same, but
+    //from .py
+    return new ImportMetadataWidget(w);
+//     QVariantList args;
+//     args << qVariantFromValue<QObject*>(w);
+//     QVariant result=action->callFunction( "createImportMetadataWidget", args);
+//     return qobject_cast<KDevelop::VcsImportMetadataWidget *>(result.value<QObject*>());
 }
 
 bool KrossDistributedVersionControl::isVersionControlled(const KUrl & url)

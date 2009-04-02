@@ -12,7 +12,6 @@ Comment[nds]=Dit Moduul bett Bazaar na KDevelop in
 Comment[pt]=Este 'plugin' integra o Bazaar no KDevelop
 Comment[pt_BR]=Esta extensão integra o Bazaar ao KDevelop
 Comment[ro]=Acest modul integrează Bazaar în KDevelop
-Comment[ru]=Этот модуль добавляет поддержку работы с Bazaar в KDevelop
 Comment[sv]=Insticksprogrammet integrerar Bazaar i KDevelop
 Comment[tr]=Bu eklenti Bazaar uygulamasını KDevelop ile bütünleştirir
 Comment[uk]=За допомогою цього додатка можна інтегрувати Bazaar до KDevelop
@@ -36,7 +35,6 @@ GenericName[pa]=ਬਾਜ਼ਾਰ ਫਰੰਟ-ਐਂਡ
 GenericName[pt]=Interface para o Bzr
 GenericName[pt_BR]=Interface do Bzr
 GenericName[ro]=Interfață Bzr
-GenericName[ru]=Интерфейс к bzr
 GenericName[sv]=Bzr-gränssnitt
 GenericName[tr]=Bzr önyüzü
 GenericName[uk]=Графічна оболонка Bzr
@@ -44,11 +42,7 @@ GenericName[x-test]=xxBzr frontendxx
 GenericName[zh_CN]=Bzr 前端
 GenericName[zh_TW]=Bzr 前端介面
 ServiceTypes=KDevelop/Plugin
-<<<<<<< Updated upstream:shell/kross/examples/bzrkdevelop/kdevbzr.desktop
-X-KDE-Library=kdevbzr/kdevbzr.py
-=======
 X-KDE-Library=kdevbzr
->>>>>>> Stashed changes:plugins/bzr/kdevbzr.desktop
 X-KDE-PluginInfo-Name=kdevbzr
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-Version=0.01

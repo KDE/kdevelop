@@ -40,7 +40,8 @@ class VcsLocation;
  * a Git repository
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class ImportMetadataWidget : public KDevelop::VcsImportMetadataWidget, private Ui::ImportMetadataWidget
+class KDEVPLATFORMVCS_EXPORT ImportMetadataWidget : 
+                public KDevelop::VcsImportMetadataWidget, private Ui::ImportMetadataWidget
 {
     Q_OBJECT
 public:
