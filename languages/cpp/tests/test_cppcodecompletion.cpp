@@ -259,9 +259,10 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   TEST_FILE_PARSE_ONLY
   QByteArray test = "class C {void test() {}; int i; };";
 
-  DUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
   DUChainWriteLocker lock(DUChain::lock());
 
+  QVERIFY(context->type() != DUContext::Helper);
   QCOMPARE(context->childContexts().count(), 1);
   DUContext* CContext = context->childContexts()[0];
   QCOMPARE(CContext->type(), DUContext::Class);
@@ -272,31 +273,10 @@ void TestCppCodeCompletion::testPrivateVariableCompletion() {
   QVERIFY(testContext->owner());
   QCOMPARE(testContext->localScopeIdentifier(), QualifiedIdentifier("test"));
   lock.unlock();
-  Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(testContext), "; ", QString()) );
-  bool abort = false;
-  typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
   
-  QList <Item > items = cptr->completionItems(context->range().end, abort);
-  
-  bool hadThis = false;
-  
-  foreach(Item i, items) {
-    Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
-    kDebug() << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
-    if(decItem) {
-      kDebug() << typeid(*i.data()).name();
-      QVERIFY(decItem);
-      kDebug() << decItem->declaration()->toString();
-    }else{
-      Cpp::TypeConversionCompletionItem* conversion = dynamic_cast<Cpp::TypeConversionCompletionItem*>(i.data());
-      QVERIFY(conversion);
-      QCOMPARE(conversion->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString(), QString("this"));
-      hadThis = true;
-    }
-  }
-  //"this" is not found, because it's part of the keyword-completion now
-//   QVERIFY(hadThis);
-  QCOMPARE(items.count(), 3); //C, test, i, and "this"
+  CompletionItemTester tester(testContext);
+  kDebug() << "names:" << tester.names;
+  QCOMPARE(tester.names.toSet(), (QStringList() << "C" << "i" << "test" << "this").toSet());
 
   lock.lock();
   release(context);
@@ -437,16 +417,19 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
 }
 
 void TestCppCodeCompletion::testCompletionInExternalClassDefinition() {
-    QByteArray method("class A { class Q; class B; }; class A::B {class C {};};");
-    TopDUContext* top = parse(method, DumpAll);
+    {
+      QByteArray method("class A { class Q; class B; }; class A::B {class C;}; class A::B::C{void test(); }; void A::B::test() {}; void A::B::C::test() {}");
+      TopDUContext* top = parse(method, DumpAll);
 
-    DUChainWriteLocker lock(DUChain::lock());
-    QCOMPARE(top->childContexts().count(), 2);
-    QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
-    QVERIFY(CompletionItemTester(top->childContexts()[1]).names.contains("Q"));
-    QVERIFY(CompletionItemTester(top->childContexts()[1]->childContexts()[0]).names.contains("Q"));
-    
-    release(top);
+      DUChainWriteLocker lock(DUChain::lock());
+      QCOMPARE(top->childContexts().count(), 7);
+      QCOMPARE(top->childContexts()[1]->childContexts().count(), 1);
+      QVERIFY(CompletionItemTester(top->childContexts()[1]->childContexts()[0]).names.contains("Q"));
+      QVERIFY(CompletionItemTester(top->childContexts()[2]->childContexts()[0]).names.contains("Q"));
+      QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("Q"));
+      QVERIFY(CompletionItemTester(top->childContexts()[5]).names.contains("Q"));
+      release(top);
+    }
 }
 
 void TestCppCodeCompletion::testTemplateMemberAccess() {
