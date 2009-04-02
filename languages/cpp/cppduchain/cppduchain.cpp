@@ -615,13 +615,14 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, TopDUContext* top,
     return QString();
   
   TypeIdentifier identifier = TypeIdentifier(type->toString());
-  if(isReference)
-    identifier.setIsReference(true);
   
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
   
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
+
+  if(isReference)
+    identifier.setIsReference(true);
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
