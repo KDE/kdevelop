@@ -87,7 +87,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Kurt Granroth"), ki18n( "KDE application templates" ), "kurth@granroth.org" );
     aboutData.addCredit( ki18n("Ian Reinhart Geiser"), ki18n( "Dist part, bash support, application templates" ), "geiseri@yahoo.com" );
     aboutData.addCredit( ki18n("Matthias Hoelzer-Kluepfel"), ki18n( "Several components, htdig indexing" ), "hoelzer@kde.org" );
-    aboutData.addCredit( ki18n("Victor Roeder"), ki18n( "Help with Automake manager and persistant class store" ), "victor_roeder@gmx.de" );
+    aboutData.addCredit( ki18n("Victor Roeder"), ki18n( "Help with Automake manager and persistent class store" ), "victor_roeder@gmx.de" );
     aboutData.addCredit( ki18n("Simon Hausmann"), ki18n( "Help with KParts infrastructure" ), "hausmann@kde.org" );
     aboutData.addCredit( ki18n("Oliver Kellogg"), ki18n( "Ada support" ), "okellogg@users.sourceforge.net" );
     aboutData.addCredit( ki18n("Jakob Simon-Gaarde"), ki18n( "QMake projectmanager" ), "jsgaarde@tdcspace.dk" );
@@ -102,7 +102,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( ki18n("Dimitri van Heesch"), ki18n( "Doxygen wizard" ), "dimitri@stack.nl" );
     aboutData.addCredit( ki18n("Hugo Varotto"), ki18n( "Fileselector component" ), "hugo@varotto-usa.com" );
     aboutData.addCredit( ki18n("Matt Newell"), ki18n( "Fileselector component" ), "newellm@proaxis.com" );
-    aboutData.addCredit( ki18n("Daniel Engelschalt"), ki18n( "C++ code completion, persistant class store" ), "daniel.engelschalt@gmx.net" );
+    aboutData.addCredit( ki18n("Daniel Engelschalt"), ki18n( "C++ code completion, persistent class store" ), "daniel.engelschalt@gmx.net" );
     aboutData.addCredit( ki18n("Stephane Ancelot"), ki18n( "Patches" ), "sancelot@free.fr" );
     aboutData.addCredit( ki18n("Jens Zurheide"), ki18n( "Patches" ), "jens.zurheide@gmx.de" );
     aboutData.addCredit( ki18n("Luc Willems"), ki18n( "Help with Perl support" ), "Willems.luc@pandora.be" );
