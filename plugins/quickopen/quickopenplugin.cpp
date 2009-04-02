@@ -873,7 +873,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
         return false;
     }
     virtual bool accept(DUContext* ctx) {
-      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other )
+      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other || ctx->type() == DUContext::Helper )
         return true;
       else
         return false;
