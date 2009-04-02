@@ -1053,6 +1053,10 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
 
 void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
 {
+  if((currentDepth > 300 && currentDepth < 1000) || currentDepth > 1300) {
+    kDebug() << "too much depth";
+    return;
+  }
   DUCHAIN_D(DUContext);
   
     if(hadContexts.contains(this) && !searchInParents)
