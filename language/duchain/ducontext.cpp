@@ -1054,50 +1054,55 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
 void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
 {
   DUCHAIN_D(DUContext);
-  if(hadContexts.contains(this))
-    return;
-  hadContexts[this] = true;
+  
+    if(hadContexts.contains(this) && !searchInParents)
+      return;
+  
+    if(!hadContexts.contains(this)) {
+      hadContexts[this] = true;
 
-  if( (type() == DUContext::Namespace || type() == DUContext::Global) && currentDepth < 1000 )
-    currentDepth += 1000;
+      if( (type() == DUContext::Namespace || type() == DUContext::Global) && currentDepth < 1000 )
+        currentDepth += 1000;
 
-  {
-    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-    DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-    while(it) {
-      Declaration* decl = *it;
+      {
+        QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+        DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+        while(it) {
+          Declaration* decl = *it;
 
-      if ( decl && (!position.isValid() || decl->range().start <= position) )
-        definitions << qMakePair(decl, currentDepth);
-      ++it;
+          if ( decl && (!position.isValid() || decl->range().start <= position) )
+            definitions << qMakePair(decl, currentDepth);
+          ++it;
+        }
+      }
+
+      for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
+        const Import* import(&d->m_importedContexts()[a]);
+        DUContext* context = import->context(source);
+        while( !context && a > 0 ) {
+          --a;
+          import = &d->m_importedContexts()[a];
+          context = import->context(source);
+        }
+        if( !context )
+          break;
+
+        if(context == this) {
+          kDebug() << "resolved self as import:" << scopeIdentifier(true);
+          continue;
+        }
+
+
+        if( position.isValid() && import->position.isValid() && position < import->position )
+          continue;
+
+        context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
+      }
     }
-  }
-
-  for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
-    const Import* import(&d->m_importedContexts()[a]);
-    DUContext* context = import->context(source);
-    while( !context && a > 0 ) {
-      --a;
-      import = &d->m_importedContexts()[a];
-      context = import->context(source);
-    }
-    if( !context )
-      break;
-
-    if(context == this) {
-      kDebug() << "resolved self as import:" << scopeIdentifier(true);
-      continue;
-    }
-
-
-    if( position.isValid() && import->position.isValid() && position < import->position )
-      continue;
-
-    context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
-  }
-
-  if (searchInParents && parentContext())                            ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-    parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, true, currentDepth+1);
+    
+  ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
+  if (parentContext() && (searchInParents || shouldSearchInParent(InImportedParentContext)))
+    parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, searchInParents, currentDepth+1);
 }
 
 void DUContext::deleteLocalDeclarations()
