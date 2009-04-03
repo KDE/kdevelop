@@ -26,9 +26,6 @@ set(kdevplatforminterfaces_LIB_SRCS
     idocumentationprovider.cpp
     idocumentation.cpp
     idocumentationcontroller.cpp
-    #scripting/scriptdocument.cpp
-    #scripting/scripttools.cpp
-    #scripting/scriptingmanager.cpp
 )
 
 
