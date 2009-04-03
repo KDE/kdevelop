@@ -123,7 +123,7 @@ public:
     bool areasRestored;
 
     //Currently shown assistant popup.
-    AssistantPopup::Ptr currentShownAssistant;
+    QPointer<AssistantPopup> currentShownAssistant;
 
 private:
     UiController *m_controller;
@@ -625,9 +625,10 @@ void UiController::registerStatus(QObject* status)
 void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant) {
-        AssistantPopup::Ptr oldPopup = d->currentShownAssistant;
-        d->currentShownAssistant.clear();
+        AssistantPopup* oldPopup = d->currentShownAssistant;
+        d->currentShownAssistant = 0;
         oldPopup->hide();
+        oldPopup->deleteLater(); //We have to do deleteLater, so we don't get problems when an assistant hides itself
     }
 }
 
@@ -639,7 +640,7 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
     TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
     if(textWidget && textWidget->editorView()) {
 
-        d->currentShownAssistant = AssistantPopup::Ptr( new AssistantPopup(textWidget->editorView(), assistant) );
+        d->currentShownAssistant = new AssistantPopup(textWidget->editorView(), assistant);
         if(assistant->actions().count())
             d->currentShownAssistant->show();
 
@@ -672,11 +673,12 @@ void UiController::assistantHide() {
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
         disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
 
-        AssistantPopup::Ptr oldPopup = d->currentShownAssistant;
-        d->currentShownAssistant.clear();
+        AssistantPopup* oldPopup = d->currentShownAssistant;
+        d->currentShownAssistant = 0;
         oldPopup->hide();
+
+        oldPopup->deleteLater(); //We have to do deleteLater, so we don't get problems when an assistant hides itself
     }
-    d->currentShownAssistant = 0;
 }
 
 void UiController::assistantActionsChanged() {

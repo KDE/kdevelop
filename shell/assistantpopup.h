@@ -24,7 +24,7 @@
 #include <ksharedptr.h>
 
 
-class AssistantPopup : public QFrame, public KShared
+class AssistantPopup : public QFrame
 {
     Q_OBJECT
 public:
