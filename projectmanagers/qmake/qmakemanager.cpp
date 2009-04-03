@@ -125,6 +125,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                 }
                 kDebug(9024) << "adding file:" << u;
                 new KDevelop::ProjectFileItem( item->project(), u, target );
+                new KDevelop::ProjectFileItem( item->project(), u, folderitem );
                 item->project()->addToFileSet( KDevelop::IndexedString( u ) );
             }
         }
