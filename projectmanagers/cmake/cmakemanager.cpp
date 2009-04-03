@@ -606,6 +606,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     }
 
                     new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
+                    new KDevelop::ProjectFileItem( item->project(), sourceFile, folder );
                     item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
                     kDebug(9042) << "..........Adding:" << sourceFile;
                 }
