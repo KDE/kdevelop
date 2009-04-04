@@ -188,13 +188,13 @@ KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* pr
         QHash<QString,QString> qmvars = queryQMake( project );
         QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
         mkspecs->read();
-        QMakeCache* cache = findQMakeCache( projecturl.path() );
+        QMakeCache* cache = findQMakeCache( projecturl.toLocalFile() );
         if( cache )
         {
             cache->setMkSpecs( mkspecs );
             cache->read();
         }
-        QMakeProjectFile* scope = new QMakeProjectFile( projecturl.path() );
+        QMakeProjectFile* scope = new QMakeProjectFile( projecturl.toLocalFile() );
         scope->setMkSpecs( mkspecs );
 	if( cache )
 	{
