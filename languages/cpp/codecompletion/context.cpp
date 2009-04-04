@@ -364,7 +364,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       }
     }
   }
-
+  
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
   if( expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') || expressionPrefix.endsWith(':') ) {
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
@@ -388,10 +388,10 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if(!m_duContext)
       return;
 
-    if(parentContext()->functionName() == "SIGNAL" || parentContext()->functionName() == "SLOT") {
-      if(parentContext()->functionName() == "SIGNAL")
+    if(parentContext()->m_expression == "SIGNAL" || parentContext()->m_expression == "SLOT") {
+      if(parentContext()->m_expression == "SIGNAL")
         m_onlyShowSignals = true;
-      if(parentContext()->functionName() == "SLOT") {
+      if(parentContext()->m_expression == "SLOT") {
         m_onlyShowSlots = true;
       }
       
