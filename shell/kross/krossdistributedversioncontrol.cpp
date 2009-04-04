@@ -149,7 +149,7 @@ KDevelop::VcsJob * KrossDistributedVersionControl::diff(const KUrl::List & files
 {
     QVariant revision=Handlers::kDevelopVcsRevisionHandler(&rev);
     
-    return new KrossVcsJob("commit", QVariantList() << files << revision << mode, action, m_plugin, action);
+    return new KrossVcsJob("diff", QVariantList() << files << revision << mode, action, m_plugin, action);
 }
 
 KDevelop::VcsJob * KrossDistributedVersionControl::repositoryLocation(const KUrl::List & files)
@@ -242,15 +242,17 @@ VcsJob* KrossDistributedVersionControl::pull(const KDevelop::VcsLocation& localO
     return new KrossVcsJob("pull", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocation, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::checkout(const KDevelop::VcsMapping& mapping)
+VcsJob* KrossDistributedVersionControl::checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode mode)
 {
-    //TODO empty QVarianList
-    return new KrossVcsJob("checkout", QVariantList(), action, m_plugin, action);
+    QVariant srcloc = Handlers::kDevelopVcsLocationHandler(&sourceRepository);
+    QVariant recursion(mode==Recursive);
+
+    return new KrossVcsJob("checkout", QVariantList() << srcloc << destinationDirectory << recursion, action, m_plugin, action);
 }
 
 VcsJob* KrossDistributedVersionControl::reset(const KUrl &repository, const QStringList &args, const KUrl::List &files)
 {
-    return new KrossVcsJob("checkout", QVariantList() << repository << args << files, action, m_plugin, action);
+    return new KrossVcsJob("reset", QVariantList() << repository << args << files, action, m_plugin, action);
 }
 
 #include "krossdistributedversioncontrol.moc"

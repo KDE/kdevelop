@@ -31,9 +31,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/context.h>
-#include <vcs/vcsmapping.h>
 
-#include<interfaces/contextmenuextension.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "cvsmainview.h"
 #include "cvsproxy.h"
@@ -460,65 +459,48 @@ KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelo
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::import(const KDevelop::VcsMapping& localLocation, const QString& commitMessage)
+KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository)
 {
-    QList<KDevelop::VcsLocation> list = localLocation.sourceLocations();
-    if (list.size() < 1) {
-        return NULL;
-    }
-
-    KDevelop::VcsLocation srcLocation = list[0];
-    KDevelop::VcsLocation destLocation = localLocation.destinationLocation(list[0]);
-
-    if (srcLocation.type() != KDevelop::VcsLocation::LocalLocation) {
-        return NULL;
-    }
-    if (destLocation.type() != KDevelop::VcsLocation::RepositoryLocation) {
-        return NULL;
+    if (commitMessage.isEmpty()
+            || !sourceDirectory.isLocalFile()
+            || !destinationRepository.isValid()
+            || destinationRepository.type() != KDevelop::VcsLocation::RepositoryLocation) {
+        return 0;
     }
 
     kDebug(9500) << "CVS Import requested "
-                 << "src:"<<srcLocation.localUrl().path()
-                 << "srv:"<<destLocation.repositoryServer()
-                 << "module:"<<destLocation.repositoryModule() << endl;
+                 << "src:" << sourceDirectory.path()
+                 << "srv:" << destinationRepository.repositoryServer()
+                 << "module:" << destinationRepository.repositoryModule();
 
-    CvsJob* job = d->m_proxy->import( srcLocation.localUrl(),
-				destLocation.repositoryServer(),
-				destLocation.repositoryModule(),
-				destLocation.userData().toString(),
-				destLocation.repositoryTag(),
+    CvsJob* job = d->m_proxy->import( sourceDirectory,
+				destinationRepository.repositoryServer(),
+				destinationRepository.repositoryModule(),
+				destinationRepository.userData().toString(),
+				destinationRepository.repositoryTag(),
 				commitMessage);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsMapping & mapping)
+KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    QList<KDevelop::VcsLocation> list = mapping.sourceLocations();
-    if (list.size() < 1) {
-        return NULL;
-    }
-
-    KDevelop::VcsLocation srcLocation = list[0];
-    KDevelop::VcsLocation destLocation = mapping.destinationLocation(list[0]);
-
-    if (srcLocation.type() != KDevelop::VcsLocation::RepositoryLocation) {
-        return NULL;
-    }
-    if (destLocation.type() != KDevelop::VcsLocation::LocalLocation) {
-        return NULL;
+    if (!destinationDirectory.isLocalFile()
+            || !sourceRepository.isValid()
+            || sourceRepository.type() != KDevelop::VcsLocation::RepositoryLocation) {
+        return 0;
     }
 
     kDebug(9500) << "CVS Checkout requested "
-                 << "dest:"<<destLocation.localUrl().path()
-                 << "srv:"<<srcLocation.repositoryServer()
-                 << "module:"<<srcLocation.repositoryModule()
-                 << "branch:"<<srcLocation.repositoryBranch() << endl;
+                 << "dest:"<< destinationDirectory.path()
+                 << "srv:"<< sourceRepository.repositoryServer()
+                 << "module:"<< sourceRepository.repositoryModule()
+                 << "branch:"<< sourceRepository.repositoryBranch() << endl;
 
-    CvsJob* job = d->m_proxy->checkout(destLocation.localUrl(),
-                                       srcLocation.repositoryServer(),
-                                       srcLocation.repositoryModule(),
+    CvsJob* job = d->m_proxy->checkout(destinationDirectory,
+                                       sourceRepository.repositoryServer(),
+                                       sourceRepository.repositoryModule(),
                                        "",
-                                       srcLocation.repositoryBranch(),
+                                       sourceRepository.repositoryBranch(),
                                        true, true);
     return job;
 }

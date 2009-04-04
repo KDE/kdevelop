@@ -20,7 +20,6 @@
 #include "cvsproxy.h"
 #include "cvsjob.h"
 
-#include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 
 #include "importmetadatawidget.h"
@@ -40,7 +39,8 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    CvsJob *job = dynamic_cast<CvsJob*>( m_plugin->import(m_widget->mapping(), m_widget->message() ) );
+    KDevelop::VcsJob *job = m_plugin->import(m_widget->message(), m_widget->source(),
+                                                m_widget->destination());
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 this, SLOT( jobFinished(KJob*) ));

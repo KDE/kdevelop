@@ -29,12 +29,6 @@
 
 #include "ui_importmetadatawidget.h"
 
-namespace KDevelop
-{
-class VcsMapping;
-class VcsLocation;
-}
-
 /**
  * Asks the user for all options needed to import an existing directory into
  * a Git repository
@@ -47,8 +41,8 @@ public:
     ImportMetadataWidget(QWidget* parent=0);
     virtual ~ImportMetadataWidget();
 
-    virtual QString getRepositoryLocation() const;
-    virtual KDevelop::VcsMapping mapping() const; //TODO: check if it is used
+    virtual KUrl source() const;
+    virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const; //Is not used, it returns QString("")
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );

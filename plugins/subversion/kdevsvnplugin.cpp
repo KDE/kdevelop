@@ -44,7 +44,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
-#include <vcs/vcsmapping.h>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/vcsannotationwidget.h>
@@ -293,18 +292,18 @@ KDevelop::VcsJob* KDevSvnPlugin::resolve( const KUrl::List& /*localLocations*/,
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::import( const KDevelop::VcsMapping& mapping, const QString& msg )
+KDevelop::VcsJob* KDevSvnPlugin::import( const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     SvnImportJob* job = new SvnImportJob( this );
-    job->setMapping( mapping );
-    job->setMessage( msg );
+    job->setMapping( sourceDirectory, destinationRepository);
+    job->setMessage( commitMessage );
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsMapping& mapping )
+KDevelop::VcsJob* KDevSvnPlugin::checkout( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnCheckoutJob* job = new SvnCheckoutJob( this );
-    job->setMapping( mapping );
+    job->setMapping( sourceRepository, destinationDirectory, recursion );
     return job;
 }
 
@@ -653,7 +652,7 @@ void KDevSvnPlugin::ctxImport( )
     dlg.setMainWidget( widget );
     if( dlg.exec() == QDialog::Accepted )
     {
-        KDevelop::ICore::self()->runController()->registerJob( import( widget->mapping(), widget->message() ) );
+        KDevelop::ICore::self()->runController()->registerJob( import(widget->message(), widget->source(), widget->destination()) );
     }
 }
 
@@ -672,7 +671,7 @@ void KDevSvnPlugin::ctxCheckout( )
     dlg.setMainWidget( widget );
     if( dlg.exec() == QDialog::Accepted )
     {
-        KDevelop::ICore::self()->runController()->registerJob( checkout( widget->mapping() ) );
+        KDevelop::ICore::self()->runController()->registerJob( checkout(widget->source(), widget->destination(), widget->recursionMode()) );
     }
 }
 

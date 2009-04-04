@@ -22,22 +22,24 @@
 #define SVNIMPORTJOB_P_H
 
 #include "svninternaljobbase.h"
-#include <vcs/vcsmapping.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class SvnImportInternalJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
     SvnImportInternalJob( SvnJobBase* parent = 0 );
-    void setMapping( const KDevelop::VcsMapping& );
+    void setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 
     QString message() const;
-    KDevelop::VcsMapping mapping() const;
+    bool isValid() const;
+    KUrl source() const;
 protected:
     void run();
 private:
-    KDevelop::VcsMapping m_mapping;
+    KUrl m_sourceDirectory;
+    KDevelop::VcsLocation m_destinationRepository;
     QString m_message;
 };
 

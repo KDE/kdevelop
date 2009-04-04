@@ -117,9 +117,9 @@ public:
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl
-    KDevelop::VcsJob* import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage );
+    KDevelop::VcsJob* import( const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
 
-    KDevelop::VcsJob* checkout( const KDevelop::VcsMapping & mapping );
+    KDevelop::VcsJob* checkout( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive );
 
     KDevelop::VcsJob* edit( const KUrl& localLocation );
 

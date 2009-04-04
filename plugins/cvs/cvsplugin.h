@@ -83,6 +83,7 @@ public:
                 const KDevelop::VcsRevision& rev );
     virtual KDevelop::VcsJob* resolve( const KUrl::List& localLocations,
                 KDevelop::IBasicVersionControl::RecursionMode recursion );
+    virtual KDevelop::VcsJob* checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl
@@ -90,9 +91,8 @@ public:
     virtual KDevelop::VcsJob* unedit( const KUrl& localLocation );
     virtual KDevelop::VcsJob* localRevision( const KUrl& localLocation,
                                              KDevelop::VcsRevision::RevisionType );
-    virtual KDevelop::VcsJob* import( const KDevelop::VcsMapping& localLocation, const QString& commitMessage );
-    virtual KDevelop::VcsJob* checkout( const KDevelop::VcsMapping& mapping );
-    // End:  KDevelop::ICentralizedVersionControl
+    virtual KDevelop::VcsJob* import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository);
+// End:  KDevelop::ICentralizedVersionControl
 
     CvsProxy* proxy();
 

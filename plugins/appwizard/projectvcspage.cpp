@@ -29,7 +29,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
 
-#include <vcs/vcsmapping.h>
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 
@@ -53,8 +52,8 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
             {
                 widget->setSourceLocationEditable( false );
                 m_ui->vcsTypes->insertItem( idx, iface->name() );
-                importWidgets.insert( idx, widget );
-                vcsPlugins.insert( idx, qMakePair( controller->pluginInfo( plugin ).pluginName(), iface->name() ) );
+                importWidgets.push_back( widget );
+                vcsPlugins.push_back( qMakePair( controller->pluginInfo( plugin ).pluginName(), iface->name() ) );
                 m_ui->vcsImportOptions->insertWidget( idx, widget );
                 idx++;
             }
@@ -64,41 +63,52 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
              m_ui->vcsImportOptions, SLOT( setCurrentIndex(int) ) );
 }
 
-ProjectVcsPage::~ ProjectVcsPage( )
+ProjectVcsPage::~ProjectVcsPage( )
 {
     delete m_ui;
 }
 
 void ProjectVcsPage::setSourceLocation( const KUrl& s )
 {
-    foreach( int idx, importWidgets.keys() )
+    foreach(KDevelop::VcsImportMetadataWidget* widget, importWidgets)
     {
-        importWidgets[idx]->setSourceLocation( KDevelop::VcsLocation( s ) );
+        widget->setSourceLocation( KDevelop::VcsLocation( s ) );
     }
 }
 
 QString ProjectVcsPage::pluginName() const
 {
-    int idx = m_ui->vcsTypes->currentIndex();
-    if( idx > 0)
-        return vcsPlugins[idx].first;
+    int idx = m_ui->vcsTypes->currentIndex() - 1;
+    if ( idx < 0 || idx >= vcsPlugins.size())
     return "";
+
+    return vcsPlugins[idx].first;
 }
 
 
 QString ProjectVcsPage::commitMessage() const
 {
-    int idx = m_ui->vcsTypes->currentIndex();
-    if( idx )
+    int idx = m_ui->vcsTypes->currentIndex() - 1;
+    if ( idx < 0 || idx >= importWidgets.size())
+        return QString();
+
         return importWidgets[idx]->message();
-    return "";
 }
 
-KDevelop::VcsMapping ProjectVcsPage::mapping() const
+KUrl ProjectVcsPage::source() const
 {
-    int idx = m_ui->vcsTypes->currentIndex();
-    if( idx )
-        return importWidgets[idx]->mapping();
-    return KDevelop::VcsMapping();
+    int idx = m_ui->vcsTypes->currentIndex() - 1;
+    if ( idx < 0 || idx >= importWidgets.size())
+        return KUrl();
+
+    return importWidgets[idx]->source();
 }
 
+KDevelop::VcsLocation ProjectVcsPage::destination() const
+{
+    int idx = m_ui->vcsTypes->currentIndex() - 1;
+    if ( idx < 0 || idx >= importWidgets.size())
+        return KDevelop::VcsLocation();
+
+    return importWidgets[idx]->destination();
+}

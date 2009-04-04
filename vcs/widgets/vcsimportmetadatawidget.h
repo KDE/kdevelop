@@ -23,11 +23,13 @@
 
 #include <QtGui/QWidget>
 #include "../vcsexport.h"
+#include <vcs/interfaces/ibasicversioncontrol.h>
+
+class KUrl;
 
 namespace KDevelop
 {
 
-class VcsMapping;
 class VcsLocation;
 
 class KDEVPLATFORMVCS_EXPORT VcsImportMetadataWidget : public QWidget
@@ -36,7 +38,8 @@ Q_OBJECT
 public:
     VcsImportMetadataWidget( QWidget* parent );
     virtual ~VcsImportMetadataWidget();
-    virtual VcsMapping mapping() const = 0;
+    virtual KUrl source() const = 0;
+    virtual VcsLocation destination() const = 0;
     virtual QString message() const = 0;
 public Q_SLOTS:
     virtual void setSourceLocation( const VcsLocation& ) = 0;

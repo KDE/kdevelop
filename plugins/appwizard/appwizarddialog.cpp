@@ -61,20 +61,19 @@ ApplicationInfo AppWizardDialog::appInfo() const
     a.name = m_selectionPage->appName();
     a.location = m_selectionPage->location();
     a.appTemplate = m_selectionPage->selectedTemplate();
+    a.vcsPluginName = m_vcsPage->pluginName();
+
     if( !m_vcsPage->pluginName().isEmpty() )
     {
-        a.importInformation = m_vcsPage->mapping();
-        a.vcsPluginName = m_vcsPage->pluginName();
-        a.checkoutInformation = KDevelop::VcsMapping();
-        KDevelop::VcsLocation srcloc = a.importInformation.sourceLocations().first();
-        a.checkoutInformation.addMapping( a.importInformation.destinationLocation( srcloc ), srcloc, a.importInformation.mappingFlag( srcloc ) );
+        a.repository = m_vcsPage->destination();
+        a.sourceLocation = m_vcsPage->source();
         a.importCommitMessage = m_vcsPage->commitMessage();
-    }else
+    }
+    else
     {
-        a.importInformation = KDevelop::VcsMapping();
-        a.checkoutInformation = KDevelop::VcsMapping();
-        a.vcsPluginName = "";
-        a.importCommitMessage = "";
+        a.repository = KDevelop::VcsLocation();
+        a.sourceLocation.clear();
+        a.importCommitMessage.clear();
     }
     return a;
 }

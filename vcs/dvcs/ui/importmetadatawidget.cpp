@@ -27,7 +27,6 @@
 #include <KMessageBox>
 #include <KDebug>
 
-#include <vcsmapping.h>
 #include <vcslocation.h>
 
 ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
@@ -44,19 +43,17 @@ ImportMetadataWidget::~ImportMetadataWidget()
     delete m_ui;
 }
 
-QString ImportMetadataWidget::getRepositoryLocation() const
+KUrl ImportMetadataWidget::source() const
 {
-    return m_ui->sourceLoc->url().path();
+    return m_ui->sourceLoc->url();
 }
 
-KDevelop::VcsMapping ImportMetadataWidget::mapping( ) const
+KDevelop::VcsLocation ImportMetadataWidget::destination() const
 {
-    KDevelop::VcsLocation loc;
-    loc.setLocalUrl( m_ui->sourceLoc->url() );
-    KDevelop::VcsLocation dest = loc; // Used for compatibility with VcsMapping
-    KDevelop::VcsMapping map;
-    map.addMapping(loc, dest, KDevelop::VcsMapping::Recursive);
-    return map;
+    // Used for compatibility with import
+    KDevelop::VcsLocation dest;
+    dest.setRepositoryServer(m_ui->sourceLoc->url().url());
+    return dest;
 }
 
 QString ImportMetadataWidget::message( ) const

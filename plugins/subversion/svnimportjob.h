@@ -22,13 +22,7 @@
 #define SVNIMPORTJOB_H
 
 #include "svnjobbase.h"
-#include <QString>
-#include <QVariant>
-
-namespace KDevelop
-{
-class VcsMapping;
-}
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class SvnImportInternalJob;
 
@@ -41,7 +35,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setMapping( const KDevelop::VcsMapping& locations );
+    void setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
     void setMessage( const QString& );
 private:
     SvnImportInternalJob* m_job;

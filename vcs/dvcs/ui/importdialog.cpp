@@ -31,7 +31,6 @@
 #include "../dvcsjob.h"
 #include "importmetadatawidget.h"
 
-#include <vcsmapping.h>
 #include <vcslocation.h>
 
 using KDevelop::DistributedVersionControlPlugin;
@@ -51,7 +50,7 @@ ImportDialog::~ImportDialog()
 
 void ImportDialog::accept()
 {
-    KDevelop::VcsJob *job = m_plugin->init(m_widget->getRepositoryLocation());
+    KDevelop::VcsJob *job = m_plugin->init(m_widget->source());
     if (job) {
         connect(job, SIGNAL( result(KJob*) ),
                 m_plugin, SLOT( jobFinished(KJob*) ));

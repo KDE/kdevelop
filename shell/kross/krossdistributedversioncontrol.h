@@ -25,7 +25,6 @@
 #include <QList>
 
 #include <vcs/vcsjob.h>
-#include <vcs/vcsmapping.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
 
 namespace Kross { class Action; }
@@ -71,7 +70,7 @@ public:
                            const KDevelop::VcsRevision& dstRevision,
                            const KUrl& localLocation );
     KDevelop::VcsJob* resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion );
-    KDevelop::VcsJob* checkout(const KDevelop::VcsMapping &mapping);
+    KDevelop::VcsJob* checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive );
 
     //DVCS
     KDevelop::VcsJob* init(const KUrl& location);

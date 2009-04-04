@@ -23,6 +23,7 @@
 
 #include "appwizardpagewidget.h"
 #include <QMap>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 namespace Ui
 {
@@ -32,7 +33,6 @@ class ProjectVcsPage;
 namespace KDevelop
 {
 class IPluginController;
-class VcsMapping;
 class VcsImportMetadataWidget;
 }
 
@@ -51,11 +51,12 @@ public slots:
     void setSourceLocation( const KUrl& );
 public:
     QString pluginName() const;
-    KDevelop::VcsMapping mapping() const;
+    KUrl source() const;
+    KDevelop::VcsLocation destination() const;
     QString commitMessage() const;
 private:
-    QMap<int, KDevelop::VcsImportMetadataWidget*> importWidgets;
-    QMap<int, QPair<QString,QString> > vcsPlugins;
+    QList<KDevelop::VcsImportMetadataWidget*> importWidgets;
+    QList<QPair<QString,QString> > vcsPlugins;
     Ui::ProjectVcsPage* m_ui;
 };
 

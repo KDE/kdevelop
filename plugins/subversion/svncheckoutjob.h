@@ -22,12 +22,11 @@
 #define SVNCHECKOUTJOB_H
 
 #include "svnjobbase.h"
-#include <QString>
-#include <QVariant>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 namespace KDevelop
 {
-class VcsMapping;
+class VcsLocation;
 }
 
 class SvnInternalCheckoutJob;
@@ -41,7 +40,7 @@ public:
     void start();
     SvnInternalJobBase* internalJob() const;
 
-    void setMapping( const KDevelop::VcsMapping& locations );
+    void setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 private:
     SvnInternalCheckoutJob* m_job;
 

@@ -14,7 +14,7 @@
 #include <QMap>
 #include <kurl.h>
 
-#include <vcs/vcsmapping.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class KPageWidgetItem;
 class QSignalMapper;
@@ -33,8 +33,8 @@ public:
     QString name;
     KUrl location;
     QString vcsPluginName;
-    KDevelop::VcsMapping importInformation;
-    KDevelop::VcsMapping checkoutInformation;
+    KUrl sourceLocation;
+    KDevelop::VcsLocation repository;
     QString importCommitMessage;
     QString appTemplate;
 };

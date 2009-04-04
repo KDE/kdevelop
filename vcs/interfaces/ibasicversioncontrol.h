@@ -33,7 +33,6 @@ namespace KDevelop
 {
 
 class VcsJob;
-class VcsMapping;
 class VcsLocation;
 class VcsImportMetadataWidget;
 /**
@@ -229,11 +228,10 @@ public:
                              RecursionMode recursion ) = 0;
 
     /**
-     * Checks out files or dirs from a repository (in DVCS from any commit) into a local directory
-     * hierarchy. The mapping exactly tells which file in the repository
-     * should go to which local file
+     * Checks out files or dirs from a repository into a local directory
+     * hierarchy.
      */
-    virtual VcsJob* checkout( const VcsMapping& mapping ) = 0;
+    virtual VcsJob* checkout(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
 
 };
 

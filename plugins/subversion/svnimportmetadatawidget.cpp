@@ -11,7 +11,6 @@
 
 #include "svnimportmetadatawidget.h"
 #include "ui_importmetadatawidget.h"
-#include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 
 SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
@@ -31,15 +30,16 @@ void SvnImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& im
     m_ui->srcEdit->setUrl( importdir.localUrl() );
 }
 
-KDevelop::VcsMapping SvnImportMetadataWidget::mapping() const
+KUrl SvnImportMetadataWidget::source() const
 {
-    KDevelop::VcsLocation loc;
-    loc.setLocalUrl( m_ui->srcEdit->url() );
+    return m_ui->srcEdit->url();
+}
+
+KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
+{
     KDevelop::VcsLocation destloc;
     destloc.setRepositoryServer(m_ui->dest->url().url());
-    KDevelop::VcsMapping map;
-    map.addMapping( loc, destloc , m_ui->recursive->isChecked() ? KDevelop::VcsMapping::Recursive : KDevelop::VcsMapping::NonRecursive );
-    return map;
+    return destloc;
 }
 
 void SvnImportMetadataWidget::setSourceLocationEditable( bool enable )

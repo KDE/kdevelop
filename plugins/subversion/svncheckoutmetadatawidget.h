@@ -12,18 +12,12 @@
 #define SVN_CHECKOUTMETADATAWIDGET_H
 
 #include <QWidget>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 namespace Ui
 {
 class SvnCheckoutMetadataWidget;
 }
-
-namespace KDevelop
-{
-class VcsMapping;
-}
-
-class KUrl;
 
 class SvnCheckoutMetadataWidget : public QWidget
 {
@@ -32,7 +26,10 @@ public:
     SvnCheckoutMetadataWidget( QWidget *parent );
     virtual ~SvnCheckoutMetadataWidget();
     void setDestinationLocation( const KUrl& );
-    KDevelop::VcsMapping mapping() const;
+    virtual KDevelop::VcsLocation source() const;
+    virtual KUrl destination() const;
+    virtual KDevelop::IBasicVersionControl::RecursionMode recursionMode() const;
+
 private:
     Ui::SvnCheckoutMetadataWidget* m_ui;
 };

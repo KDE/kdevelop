@@ -44,22 +44,30 @@ void SvnImportInternalJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        KDevelop::VcsMapping map = mapping();
-        KDevelop::VcsLocation src = map.sourceLocations().first();
-        KDevelop::VcsLocation dest = map.destinationLocation( src );
-        bool recurse = ( map.mappingFlag( src ) == KDevelop::VcsMapping::Recursive );
-        QByteArray srcba = src.localUrl().toLocalFile().toUtf8();
-        QByteArray destba = dest.repositoryServer().toUtf8();
-        QByteArray msg = message().toUtf8();
-        cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), recurse );
+        QMutexLocker l( m_mutex );
+        QByteArray srcba = m_sourceDirectory.toLocalFile().toUtf8();
+        QByteArray destba = m_destinationRepository.repositoryServer().toUtf8();
+        QByteArray msg = m_message.toUtf8();
+        cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while importing: "
-                << mapping().sourceLocations().first().localUrl()
+                << m_sourceDirectory
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
+}
+
+bool SvnImportInternalJob::isValid() const
+{
+    return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && !m_destinationRepository.repositoryServer().isEmpty();
+}
+
+KUrl SvnImportInternalJob::source() const
+{
+    QMutexLocker l( m_mutex );
+    return m_sourceDirectory;
 }
 
 void SvnImportInternalJob::setMessage( const QString& message )
@@ -68,17 +76,13 @@ void SvnImportInternalJob::setMessage( const QString& message )
     m_message = message;
 }
 
-void SvnImportInternalJob::setMapping( const KDevelop::VcsMapping& mapping )
+void SvnImportInternalJob::setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     QMutexLocker l( m_mutex );
-    m_mapping = mapping;
+    m_sourceDirectory = sourceDirectory;
+    m_destinationRepository = destinationRepository;
 }
 
-KDevelop::VcsMapping SvnImportInternalJob::mapping() const
-{
-    QMutexLocker l( m_mutex );
-    return m_mapping;
-}
 QString SvnImportInternalJob::message() const
 {
     QMutexLocker l( m_mutex );
@@ -100,13 +104,13 @@ QVariant SvnImportJob::fetchResults()
 
 void SvnImportJob::start()
 {
-    if( m_job->mapping().sourceLocations().isEmpty() || !m_job->mapping().sourceLocations().first().localUrl().isValid() )
+    if( m_job->isValid() )
     {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to import" ) );
     }else
     {
-        kDebug(9510) << "importing:" << m_job->mapping().sourceLocations().first().localUrl();
+        kDebug(9510) << "importing:" << m_job->source();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }
@@ -116,10 +120,10 @@ SvnInternalJobBase* SvnImportJob::internalJob() const
     return m_job;
 }
 
-void SvnImportJob::setMapping( const KDevelop::VcsMapping& mapping )
+void SvnImportJob::setMapping( const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     if( status() == KDevelop::VcsJob::JobNotStarted )
-        m_job->setMapping( mapping );
+        m_job->setMapping( sourceDirectory, destinationRepository);
 }
 
 void SvnImportJob::setMessage( const QString& msg )

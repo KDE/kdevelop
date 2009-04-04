@@ -37,30 +37,13 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
-      <string>Recursive:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QCheckBox" name="recursive" >
-     <property name="text" >
-      <string/>
-     </property>
-     <property name="checked" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="1" >
     <widget class="KUrlRequester" name="srcEdit" />
    </item>
-   <item row="3" column="1" >
+   <item row="2" column="1" >
     <widget class="KTextEdit" name="message" />
    </item>
-   <item row="3" column="0" >
+   <item row="2" column="0" >
     <widget class="QLabel" name="label" >
      <property name="text" >
       <string>Commit Message:</string>
@@ -75,12 +58,12 @@
  <customwidgets>
   <customwidget>
    <class>KTextEdit</class>
-   <extends>QTextEdit</extends>
+   <extends></extends>
    <header>ktextedit.h</header>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
-   <extends>QFrame</extends>
+   <extends></extends>
    <header>kurlrequester.h</header>
   </customwidget>
  </customwidgets>

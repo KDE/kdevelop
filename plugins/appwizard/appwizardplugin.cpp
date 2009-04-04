@@ -44,7 +44,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
@@ -61,7 +60,6 @@ using KDevelop::IDistributedVersionControl;
 using KDevelop::IPlugin;
 using KDevelop::VcsJob;
 using KDevelop::VcsLocation;
-using KDevelop::VcsMapping;
 
 K_PLUGIN_FACTORY(AppWizardFactory,
     registerPlugin<AppWizardPlugin>();
@@ -153,21 +151,21 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     }
     kDebug() << "Initializing DVCS repository:" << dest.toLocalFile();
 
-    job = dvcs->add(KUrl::List(dest), IBasicVersionControl::Recursive);
+    job = dvcs->add(KUrl::List(dest), KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
     job = dvcs->commit(QString("initial project import from KDevelop"), KUrl::List(dest),
-                            IBasicVersionControl::Recursive);
+                            KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not import project into %1.", dvcs->name()), scratchArea, dest);
         return false;
     }
 
-    return true; // We'r good
+    return true; // We're good
 }
 
 /*! Setup version control for a new project defined by @p info. Use @p scratchArea for temporary files  */
@@ -175,33 +173,20 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 {
     Q_ASSERT(cvcs);
 
-    KUrl dest = info.location;
-    VcsMapping import;
-    VcsLocation srcloc = info.importInformation.sourceLocations().first();
-    import.addMapping( VcsLocation( KUrl( scratchArea.name() ) ),
-                       info.importInformation.destinationLocation( srcloc ),
-                       info.importInformation.mappingFlag( srcloc ) );
-
-    VcsLocation importLoc(KUrl( scratchArea.name()));
-    kDebug() << "Importing" << srcloc.localUrl() << "to"
-             << import.destinationLocation(importLoc).repositoryServer();
-    kDebug() << "Using temp dir" << scratchArea.name()
-             << import.sourceLocations().first().localUrl();
-    VcsLocation checkoutLoc = info.checkoutInformation.sourceLocations().first();
-    kDebug() << "Checking out" << checkoutLoc.repositoryServer()
-             << "to" << info.checkoutInformation.destinationLocation(checkoutLoc).localUrl();
-
-    VcsJob* job = cvcs->import( import, info.importCommitMessage );
-    if(job && job->exec() && job->status() == VcsJob::JobSucceeded )
-    {
-        VcsJob* job = cvcs->checkout( info.checkoutInformation );
+    kDebug() << "Importing" << info.sourceLocation << "to"
+             << info.repository.repositoryServer();
+    VcsJob* job = cvcs->import( info.importCommitMessage, info.sourceLocation, info.repository);
         if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
         {
-            vcsError(i18n("Could not checkout imported project"), scratchArea, dest);
+        vcsError(i18n("Could not import project"), scratchArea, info.repository.repositoryServer());
             return false;
         }
-    } else {
-        vcsError(i18n("Could not import project"), scratchArea, dest);
+
+    kDebug() << "Checking out";
+    job = cvcs->checkout( info.repository, info.sourceLocation, IBasicVersionControl::Recursive);
+    if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
+    {
+        vcsError(i18n("Could not checkout imported project"), scratchArea, info.repository.repositoryServer());
         return false;
     }
 

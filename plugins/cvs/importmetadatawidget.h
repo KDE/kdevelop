@@ -20,7 +20,6 @@ class CvsPlugin;
 
 namespace KDevelop
 {
-class VcsMapping;
 class VcsLocation;
 }
 
@@ -36,7 +35,8 @@ public:
     ImportMetadataWidget(QWidget* parent=0);
     virtual ~ImportMetadataWidget();
 
-    virtual KDevelop::VcsMapping mapping() const;
+    virtual KUrl source() const;
+    virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );

@@ -98,7 +98,7 @@ public:
                              const VcsRevision& rev);
     virtual VcsJob* resolve(const KUrl::List& localLocations,
                             IBasicVersionControl::RecursionMode recursion);
-    virtual VcsJob* checkout(const VcsMapping &mapping);
+    virtual VcsJob* checkout(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive );
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::IDistributedVersionControl

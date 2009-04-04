@@ -22,7 +22,6 @@ set(kdevplatformvcs_LIB_SRCS
     vcslocation.cpp
     vcsdiff.cpp
     vcsevent.cpp
-    vcsmapping.cpp
     vcsstatusinfo.cpp
     widgets/vcsimportmetadatawidget.cpp
     widgets/vcseventwidget.cpp
@@ -68,7 +67,6 @@ install(FILES
     vcsdiff.h
     vcsevent.h
     vcsstatusinfo.h
-    vcsmapping.h
     vcslocation.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs COMPONENT Devel
 )

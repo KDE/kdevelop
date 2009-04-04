@@ -39,7 +39,6 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <plugins/cvs/cvsjob.h>
 #include <iostream>
-#include <vcs/vcsmapping.h>
 
 #define PATHETIC    // A little motivator to make things work right :)
 #if defined(PATHETIC)
@@ -68,8 +67,9 @@ const QString simpleAltText("No, foo()! It's bar()!\n");
 
 using namespace KDevelop;
 
-void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceeded)
+void validatingExecJob(int line, VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceeded)
 {
+    TRACE("Called from line" << line);
     QVERIFY(j);
     // Print the commmands in full, for easier bug location
 #if 0
@@ -81,7 +81,7 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
 
     if (!j->exec()) {
         kDebug() << j->errorString();
-#if 0
+#if 1
         // On error, wait for key in order to allow manual state inspection
         char c;
         std::cin.read(&c, 1);
@@ -123,7 +123,7 @@ void fetchStatus(int line, QList<VcsStatusInfo> & statuslist, IBasicVersionContr
     TRACE("Called from line" << line);
     VcsJob* j = vcs->status(list, recursion);
     QVERIFY(j);
-    validatingExecJob(j);
+    validatingExecJob(line, j);
     QVariant untyped = j->fetchResults();
     QVERIFY(untyped.canConvert(QVariant::List));
     QList<QVariant> untypedList = untyped.toList();
@@ -201,7 +201,7 @@ void Repo::add(int line, KUrl::List const & objects, IBasicVersionControl::Recur
 
     TRACE("Adding: " << objects2); //  << " to " << rootUrl;
 
-    validatingExecJob(vcs->add(objects2, mode));
+    validatingExecJob(__LINE__, vcs->add(objects2, mode));
     verifyState(line);
 }
 
@@ -239,7 +239,7 @@ void Repo::commit(int line, const QString& message, const KUrl::List& objects, K
 
     TRACE("Commiting: " << objects);
 
-    validatingExecJob(vcs->commit(message, objects2, mode));
+    validatingExecJob(__LINE__, vcs->commit(message, objects2, mode));
     verifyState(line);
 }
 
@@ -345,18 +345,18 @@ void VcsBlackBoxTest::initTestCase()
             ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
             QVERIFY(icentr);
             Repo::WorkDirPtr remoteRepos(new KTempDir());
-            KProcess cmd;
-            cmd.setWorkingDirectory(remoteRepos->name());
             kDebug() << "Component: \"" << p->componentData().componentName() << "\" Name: \"" << icentr->name() << '"';
             QVERIFY2(!icentr->name().isEmpty(), "IBasicVersionControl must return a non-empty name");
 
             if (icentr->name() == "Subversion") {
+                KProcess cmd;
+                cmd.setWorkingDirectory(remoteRepos->name());
                 cmd << "svnadmin" << "create" << ".";
                 QCOMPARE(cmd.execute(10000), 0);
-                VcsLocation loc;
-                loc.setRepositoryServer("file://" + remoteRepos->name());
-                m_primary.push_back(RepoPtr(new CRepo(icentr, loc, remoteRepos)));
-                m_secondary.push_back(RepoPtr(new CRepo(icentr, loc, remoteRepos)));
+                VcsLocation repositoryLocation;
+                repositoryLocation.setRepositoryServer("file://" + remoteRepos->name());
+                m_primary.push_back(RepoPtr(new CRepo(icentr, repositoryLocation, remoteRepos)));
+                m_secondary.push_back(RepoPtr(new CRepo(icentr, repositoryLocation, remoteRepos)));
             }
             else if (icentr->name() == "CVS") {
                 static const QString repoSubDirName("repo");
@@ -364,22 +364,21 @@ void VcsBlackBoxTest::initTestCase()
                 QDir repodir(remoteRepos->name());
                 repodir.mkdir(repoSubDirName);
                 repodir.mkdir(emptyImportDirName);
-                VcsLocation loc;
+                VcsLocation repositoryLocation;
+                repositoryLocation.setRepositoryServer(remoteRepos->name() + repoSubDirName);
+                repositoryLocation.setRepositoryModule("testmodule");
+                KProcess cmd;
                 cmd.setWorkingDirectory(remoteRepos->name() + emptyImportDirName);
-                loc.setRepositoryServer(remoteRepos->name() + repoSubDirName);
-                loc.setRepositoryModule("testmodule");
-                cmd << "cvs" << "-d" << loc.repositoryServer() << "init";
+                cmd << "cvs" << "-d" << repositoryLocation.repositoryServer() << "init";
                 QCOMPARE(cmd.execute(10000), 0);
-                cmd.clearProgram();
-                VcsMapping importmap;
-                loc.setRepositoryTag("start");
-                loc.setUserData(qVariantFromValue(QString("vcsBlackBoxTest")));
-                importmap.addMapping(VcsLocation(KUrl(remoteRepos->name() + emptyImportDirName)), loc, KDevelop::VcsMapping::Recursive);
-                validatingExecJob(icentr->import(importmap, "Inital import"));
-                loc.setUserData(QVariant());
-                loc.setRepositoryTag(QString());
-                m_primary.push_back(RepoPtr(new CRepo(icentr, loc, remoteRepos)));
-                m_secondary.push_back(RepoPtr(new CRepo(icentr, loc, remoteRepos)));
+                repositoryLocation.setRepositoryTag("start");
+                repositoryLocation.setUserData(qVariantFromValue(QString("vcsBlackBoxTest")));
+                KUrl emptySourcedir(remoteRepos->name() + emptyImportDirName);
+                validatingExecJob(__LINE__, icentr->import("Inital import", emptySourcedir, repositoryLocation));
+                repositoryLocation.setUserData(QVariant());
+                repositoryLocation.setRepositoryTag(QString());
+                m_primary.push_back(RepoPtr(new CRepo(icentr, repositoryLocation, remoteRepos)));
+                m_secondary.push_back(RepoPtr(new CRepo(icentr, repositoryLocation, remoteRepos)));
             }
         }
     }
@@ -402,13 +401,13 @@ void VcsBlackBoxTest::repoInit(DRepo& r, DRepo& s)
 
     // make job that creates the local repository
 
-    validatingExecJob(r.dvcs->init(repo0));
+    validatingExecJob(__LINE__, r.dvcs->init(repo0));
 
     // Post-Init: First sub-directory is version-controlled
     QVERIFY(r.vcs->isVersionControlled(repo0));
     QVERIFY(!s.vcs->isVersionControlled(repo1));
 
-    validatingExecJob(s.dvcs->init(repo1));
+    validatingExecJob(__LINE__, s.dvcs->init(repo1));
 
     // Post-Init: Second sub-directory is also version-controlled
     QVERIFY(r.vcs->isVersionControlled(repo0));
@@ -434,24 +433,12 @@ void VcsBlackBoxTest::repoInit(CRepo& r, CRepo& s)
     QVERIFY(!r.vcs->isVersionControlled(wd0));
     QVERIFY(!s.vcs->isVersionControlled(wd1));
     
-    {
-        VcsLocation wdloc;
-        wdloc.setLocalUrl(wd0);
-        VcsMapping map;
-        map.addMapping(r.repositoryLocation, wdloc, VcsMapping::Recursive);
-        validatingExecJob(r.cvcs->checkout(map));
-    }
+    validatingExecJob(__LINE__, r.cvcs->checkout(r.repositoryLocation, wd0, IBasicVersionControl::Recursive));
 
     QVERIFY(r.vcs->isVersionControlled(wd0));
     QVERIFY(!s.vcs->isVersionControlled(wd1));
 
-    {
-        VcsLocation wdloc;
-        wdloc.setLocalUrl(wd1);
-        VcsMapping map;
-        map.addMapping(s.repositoryLocation, wdloc, VcsMapping::Recursive);
-        validatingExecJob(s.cvcs->checkout(map));
-    }
+    validatingExecJob(__LINE__, s.cvcs->checkout(s.repositoryLocation, wd1, IBasicVersionControl::Recursive));
 
     QVERIFY(r.vcs->isVersionControlled(wd0));
     QVERIFY(s.vcs->isVersionControlled(wd1));
@@ -501,7 +488,7 @@ void VcsBlackBoxTest::testAddRevert(Repo & r)
 
     // Reverting the add in the same order as they were added
     for (Repo::StateMap::iterator i = r.state.begin(); i != r.state.end(); ++i) {
-        validatingExecJob(vcs->revert(KUrl::List(i->url())));
+        validatingExecJob(__LINE__, vcs->revert(KUrl::List(i->url())));
         i->setState(VcsStatusInfo::ItemUnknown);
         r.verifyState(__LINE__);
     }
@@ -517,7 +504,7 @@ void VcsBlackBoxTest::testAddRevert(Repo & r)
 
     // Reverting the add in different order
     for (Repo::StateMap::iterator i = r.state.begin(); i != r.state.end(); ++i) {
-        validatingExecJob(vcs->revert(KUrl::List(i->url())));
+        validatingExecJob(__LINE__, vcs->revert(KUrl::List(i->url())));
         i->setState(VcsStatusInfo::ItemUnknown);
         r.verifyState(__LINE__);
     }
@@ -526,7 +513,7 @@ void VcsBlackBoxTest::testAddRevert(Repo & r)
     r.add(__LINE__, KUrl::List(r.rootUrl), IBasicVersionControl::Recursive);
 
     // Batch revert
-    validatingExecJob(vcs->revert(r.objects()));
+    validatingExecJob(__LINE__, vcs->revert(r.objects()));
 
     for (Repo::StateMap::iterator i = r.state.begin(); i != r.state.end(); ++i) {
         i->setState(VcsStatusInfo::ItemUnknown);
@@ -573,7 +560,7 @@ void VcsBlackBoxTest::testCommitModifyRevert(Repo & r)
     readVerify(__LINE__, r.state[objects[1]], keywordText);
 
     // Now revert the correct file
-    validatingExecJob(r.vcs->revert(KUrl::List(objects[0]), IBasicVersionControl::NonRecursive));
+    validatingExecJob(__LINE__, r.vcs->revert(KUrl::List(objects[0]), IBasicVersionControl::NonRecursive));
     r.state[objects[0]].setState(VcsStatusInfo::ItemUpToDate);
     r.verifyState(__LINE__);
     readVerify(__LINE__, r.state[objects[0]], simpleText);
@@ -584,7 +571,7 @@ void VcsBlackBoxTest::testCommitModifyRevert(Repo & r)
     r.verifyState(__LINE__);
 
     // Revert recursively
-    validatingExecJob(r.vcs->revert(KUrl::List(KUrl(r.workingDir->name())), IBasicVersionControl::Recursive));
+    validatingExecJob(__LINE__, r.vcs->revert(KUrl::List(KUrl(r.workingDir->name())), IBasicVersionControl::Recursive));
 
     for (Repo::StateMap::iterator i = r.state.begin(); i != r.state.end(); ++i) {
         i->setState(VcsStatusInfo::ItemUpToDate);

@@ -23,20 +23,23 @@
 
 
 #include "svninternaljobbase.h"
-#include <vcs/vcsmapping.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
 
 class SvnInternalCheckoutJob : public SvnInternalJobBase
 {
     Q_OBJECT
 public:
     SvnInternalCheckoutJob( SvnJobBase* parent = 0 );
-    void setMapping( const KDevelop::VcsMapping& );
+    void setMapping(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion);
 
-    KDevelop::VcsMapping mapping() const;
+    bool isValid() const;
+    KDevelop::VcsLocation source() const;
 protected:
     void run();
 private:
-    KDevelop::VcsMapping m_mapping;
+    KDevelop::VcsLocation m_sourceRepository;
+    KUrl m_destinationDirectory;
+    KDevelop::IBasicVersionControl::RecursionMode m_recursion;
 };
 
 

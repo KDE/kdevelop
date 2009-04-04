@@ -40,12 +40,6 @@ namespace KDevelop
 class ICentralizedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
-    enum RecursionMode
-    {
-        Recursive    /**< run recursively through subdirectories */,
-        NonRecursive /**< don't run recursively through subdirectories */
-    };
-
     virtual ~ICentralizedVersionControl(){}
 
     /**
@@ -82,7 +76,7 @@ public:
     /**
      * take a mapping of local to repository locations and import that into the repository
      */
-    virtual VcsJob* import( const VcsMapping& localLocation, const QString& commitMessage ) = 0;
+    virtual VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory, const VcsLocation & destinationRepository) = 0;
 };
 
 }

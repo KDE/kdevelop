@@ -37,6 +37,12 @@ SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
 {
 }
 
+bool SvnInternalCheckoutJob::isValid() const
+{
+    QMutexLocker l( m_mutex );
+    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile();
+}
+
 void SvnInternalCheckoutJob::run()
 {
     initBeforeRun();
@@ -44,18 +50,17 @@ void SvnInternalCheckoutJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        KDevelop::VcsMapping map = mapping();
-        KDevelop::VcsLocation src = map.sourceLocations().first();
-        KDevelop::VcsLocation dest = map.destinationLocation( src );
-        bool recurse = ( map.mappingFlag( src ) == KDevelop::VcsMapping::Recursive );
-        QByteArray srcba = src.repositoryServer().toUtf8();
-        QByteArray destba = dest.localUrl().toLocalFile().toUtf8();
+        QMutexLocker l( m_mutex );
+        bool recurse = ( m_recursion == KDevelop::IBasicVersionControl::Recursive );
+        QByteArray srcba = m_sourceRepository.repositoryServer().toUtf8();
+        QByteArray destba = m_destinationDirectory.toLocalFile().toUtf8();
         kDebug(9510) << srcba << destba;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision(svn::Revision::HEAD), recurse );
     }catch( svn::ClientException ce )
     {
+        QMutexLocker l( m_mutex );
         kDebug(9510) << "Exception while checking out: "
-                << mapping().sourceLocations().first().repositoryServer()
+                << m_sourceRepository.repositoryServer()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
@@ -63,17 +68,20 @@ void SvnInternalCheckoutJob::run()
 }
 
 
-void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsMapping& mapping )
+void SvnInternalCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
     QMutexLocker l( m_mutex );
-    m_mapping = mapping;
+    m_sourceRepository = sourceRepository;
+    m_destinationDirectory = destinationDirectory;
+    m_recursion = recursion;
 }
 
-KDevelop::VcsMapping SvnInternalCheckoutJob::mapping() const
+KDevelop::VcsLocation SvnInternalCheckoutJob::source() const
 {
     QMutexLocker l( m_mutex );
-    return m_mapping;
+    return m_sourceRepository;
 }
+
 
 SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
     : SvnJobBase( parent )
@@ -90,13 +98,11 @@ QVariant SvnCheckoutJob::fetchResults()
 
 void SvnCheckoutJob::start()
 {
-    if( m_job->mapping().sourceLocations().isEmpty() )
-    {
+    if (!m_job->isValid() ) {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to checkout" ) );
-    }else
-    {
-        kDebug(9510) << "checking out:" << m_job->mapping().sourceLocations().first().repositoryServer();
+    } else {
+        kDebug(9510) << "checking out: " << m_job->source().repositoryServer();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }
@@ -106,13 +112,13 @@ SvnInternalJobBase* SvnCheckoutJob::internalJob() const
     return m_job;
 }
 
-void SvnCheckoutJob::setMapping( const KDevelop::VcsMapping& mapping )
+void SvnCheckoutJob::setMapping( const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion )
 {
-    if( status() == KDevelop::VcsJob::JobNotStarted )
-        m_job->setMapping( mapping );
+    if( status() == KDevelop::VcsJob::JobNotStarted ) {
+        m_job->setMapping(sourceRepository, destinationDirectory, recursion);
+    }
 }
 
 
 #include "svncheckoutjob.moc"
 #include "svncheckoutjob_p.moc"
-

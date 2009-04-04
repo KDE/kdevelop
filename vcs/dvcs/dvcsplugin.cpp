@@ -49,8 +49,6 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
-#include "../vcsmapping.h"
-#include "../vcsjob.h"
 #include "dvcsjob.h"
 #include "ui/dvcsmainview.h"
 #include "ui/dvcsgenericoutputview.h"
@@ -193,7 +191,7 @@ KDevelop::VcsJob*
 }
 
 KDevelop::VcsJob*
-        DistributedVersionControlPlugin::checkout(const VcsMapping &)
+        DistributedVersionControlPlugin::checkout(const VcsLocation &, const KUrl &, RecursionMode)
 {
     return empty_cmd();
 }

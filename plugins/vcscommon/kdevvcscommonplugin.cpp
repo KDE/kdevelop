@@ -240,6 +240,7 @@ KDevelop::ContextMenuExtension KDevVcsCommonPlugin::contextMenuExtension( KDevel
     menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("diffToHead") );
     menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("history") );
     menuExt.addAction( KDevelop::ContextMenuExtension::VcsGroup, m_actions.value("annotation") );
+
     return menuExt;
 }
 

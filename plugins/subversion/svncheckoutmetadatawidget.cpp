@@ -14,7 +14,6 @@
 #include <kurl.h>
 #include <kurlrequester.h>
 
-#include <vcs/vcsmapping.h>
 #include <vcs/vcslocation.h>
 
 SvnCheckoutMetadataWidget::SvnCheckoutMetadataWidget( QWidget *parent )
@@ -28,18 +27,26 @@ SvnCheckoutMetadataWidget::~SvnCheckoutMetadataWidget()
     delete m_ui;
 }
 
-KDevelop::VcsMapping SvnCheckoutMetadataWidget::mapping() const
+KDevelop::VcsLocation SvnCheckoutMetadataWidget::source() const
 {
-    KDevelop::VcsMapping map;
     KDevelop::VcsLocation src;
     src.setRepositoryServer( m_ui->src->url().url() );
-    map.addMapping( src, KDevelop::VcsLocation( m_ui->dest->url() ), m_ui->recurse->isChecked() ? KDevelop::VcsMapping::Recursive : KDevelop::VcsMapping::NonRecursive );
-    return map;
+    return src;
+}
+
+KUrl SvnCheckoutMetadataWidget::destination() const
+{
+    return m_ui->dest->url();
 }
 
 void SvnCheckoutMetadataWidget::setDestinationLocation( const KUrl& url )
 {
     m_ui->dest->setUrl( url );
+}
+
+KDevelop::IBasicVersionControl::RecursionMode SvnCheckoutMetadataWidget::recursionMode() const
+{
+    return m_ui->recurse->isChecked() ? KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive ;
 }
 
 #include "svncheckoutmetadatawidget.moc"
