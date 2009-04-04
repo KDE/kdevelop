@@ -1925,6 +1925,9 @@ void TestDUChain::testFunctionDefinition2() {
     QCOMPARE(top->childContexts()[1]->type(), DUContext::Function);
     QCOMPARE(top->childContexts()[1]->range().start.column, 20);
     QCOMPARE(top->childContexts()[1]->range().end.column, 20);
+    //Many parts of kdevelop assume that the compound parens are included in the range, so it has to stay like that
+    QCOMPARE(top->childContexts()[0]->range(), SimpleRange(1, 7, 1, 13));
+    QCOMPARE(top->childContexts()[2]->range(), SimpleRange(1, 22, 1, 24));
 
     QVERIFY(!top->childContexts()[2]->inSymbolTable());
 
