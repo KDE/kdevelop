@@ -126,6 +126,8 @@ KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdenti
       classContext = context->importedParentContexts()[0].context(source);
   } else if(context->type() == DUContext::Class) {
     classContext = context;
+  }else if(context->type() == DUContext::Namespace) {
+    return context->scopeIdentifier(true);
   }else{
     //This must be a function-definition, like void A::B::test() {}
     Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<DUContext*>(context));

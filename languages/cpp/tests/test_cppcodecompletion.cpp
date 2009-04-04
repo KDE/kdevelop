@@ -525,7 +525,8 @@ void TestCppCodeCompletion::testSameNamespace() {
 
 //   lock.unlock();
   {
-    kDebug() << CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names;
+    kDebug() << CompletionItemTester(top->childContexts()[1]).names;
+    QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "A");
     QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "test2" << "test" << "A");
   }
   
