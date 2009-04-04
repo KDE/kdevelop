@@ -38,7 +38,7 @@ KDevelop::ProjectFolderItem* DummyBSM::import(KDevelop::IProject *project )
     qDebug() << "importing" << m_controlledFiles;
     foreach(const KUrl& url, m_controlledFiles)
     {
-        QString cpp=url.path().replace(".h", ".cpp");
+        QString cpp=url.toLocalFile().replace(".h", ".cpp");
         new KDevelop::ProjectFileItem(project, url, m_target);
         new KDevelop::ProjectFileItem(project, KUrl(cpp), m_target);
         qDebug() << "adding file to dummy" << url << cpp;

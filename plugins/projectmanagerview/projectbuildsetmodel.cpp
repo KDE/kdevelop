@@ -42,7 +42,7 @@ QString getRelativeFolder( KDevelop::ProjectBaseItem* item )
           || item->type() == KDevelop::ProjectBaseItem::BuildFolder )
     {
 
-        return item->project()->relativeUrl( item->folder()->url() ).path();
+        return item->project()->relativeUrl( item->folder()->url() ).toLocalFile();
     }else
     {
         return getRelativeFolder( dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );

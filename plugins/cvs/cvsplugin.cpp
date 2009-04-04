@@ -358,7 +358,7 @@ KDevelop::VcsJob * CvsPlugin::edit(const KUrl & localLocation)
 
 KDevelop::VcsJob * CvsPlugin::copy(const KUrl & localLocationSrc, const KUrl & localLocationDstn)
 {
-    bool ok = QFile::copy(localLocationSrc.path(), localLocationDstn.path());
+    bool ok = QFile::copy(localLocationSrc.toLocalFile(), localLocationDstn.path());
     if (!ok) {
         return NULL;
     }
@@ -469,7 +469,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& s
     }
 
     kDebug(9500) << "CVS Import requested "
-                 << "src:" << sourceDirectory.path()
+                 << "src:" << sourceDirectory.toLocalFile()
                  << "srv:" << destinationRepository.repositoryServer()
                  << "module:" << destinationRepository.repositoryModule();
 
@@ -491,7 +491,7 @@ KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsLocation & sourceRepos
     }
 
     kDebug(9500) << "CVS Checkout requested "
-                 << "dest:"<< destinationDirectory.path()
+                 << "dest:"<< destinationDirectory.toLocalFile()
                  << "srv:"<< sourceRepository.repositoryServer()
                  << "module:"<< sourceRepository.repositoryModule()
                  << "branch:"<< sourceRepository.repositoryBranch() << endl;

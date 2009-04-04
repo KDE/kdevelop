@@ -417,7 +417,7 @@ void KDevSvnPlugin::ctxHistory()
     KDevelop::VcsJob *job = log( m_ctxUrlList.first(), start, 0 );
     KDialog* dlg = new KDialog();
     dlg->setButtons( KDialog::Close );
-    dlg->setCaption( i18n( "Subversion Log (%1)", m_ctxUrlList.first().path() ) );
+    dlg->setCaption( i18n( "Subversion Log (%1)", m_ctxUrlList.first().toLocalFile() ) );
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget( m_ctxUrlList.first(), job, dlg );
     dlg->setMainWidget( logWidget );
     connect( dlg, SIGNAL( destroyed( QObject* ) ), job, SLOT( deleteLater() ) );
@@ -560,8 +560,8 @@ void KDevSvnPlugin::ctxCopy()
     KUrl source = m_ctxUrlList.first();
     if( source.isLocalFile() )
     {
-        QString dir = source.path();
-        bool isFile = QFileInfo( source.path() ).isFile();
+        QString dir = source.toLocalFile();
+        bool isFile = QFileInfo( source.toLocalFile() ).isFile();
         if( isFile )
         {
             dir = source.directory();
@@ -595,8 +595,8 @@ void KDevSvnPlugin::ctxMove()
         KUrl source = m_ctxUrlList.first();
     if( source.isLocalFile() )
     {
-        QString dir = source.path();
-        bool isFile = QFileInfo( source.path() ).isFile();
+        QString dir = source.toLocalFile();
+        bool isFile = QFileInfo( source.toLocalFile() ).isFile();
         if( isFile )
         {
             dir = source.directory();

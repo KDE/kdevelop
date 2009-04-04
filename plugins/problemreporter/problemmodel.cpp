@@ -89,7 +89,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return p->description();
                     case File: {
-                        QString relative = KUrl::relativePath(m_base.path(), p->finalLocation().document().str());
+                        QString relative = KUrl::relativePath(m_base.toLocalFile(), p->finalLocation().document().str());
                         if(relative.startsWith(".."))
                             return p->finalLocation().document().str();
                         else
@@ -120,7 +120,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File: {
-                        return KUrl::relativePath(m_base.path(), p->locationStack().at(index.row()).document().str());
+                        return KUrl::relativePath(m_base.toLocalFile(), p->locationStack().at(index.row()).document().str());
                     } case Line:
                         if (p->finalLocation().isValid())
                             return QString::number(p->finalLocation().start().line() + 1);

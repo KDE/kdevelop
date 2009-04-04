@@ -545,7 +545,7 @@ KDevelop::RunJob::RunJob(RunController* controller, const IRun & run)
             instrumentorName = m_provider->translatedInstrumentor(run.instrumentor());
         }
     }
-    setObjectName(i18n("%1: %2", instrumentorName, run.executable().path()));
+    setObjectName(i18n("%1: %2", instrumentorName, run.executable().toLocalFile()));
 }
 
 void KDevelop::RunJob::start()
@@ -577,7 +577,7 @@ void KDevelop::RunJob::start()
     if (m_run.instrumentor() != "konsole") {
         setStandardToolView(IOutputView::RunView);
         setDelegate(m_controller->delegate());
-        setTitle(m_run.executable().path());
+        setTitle(m_run.executable().toLocalFile());
         setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
         startOutput();
     }

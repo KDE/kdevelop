@@ -109,7 +109,7 @@ void SvnInternalStatusJob::run()
         kDebug(9510) << "Fetching status info for:" << url;
         try
         {
-            QByteArray ba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
+            QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
             svn::StatusEntries se = cli.status( ba.data(), recursive() );
             for( svn::StatusEntries::const_iterator it = se.begin(); it != se.end() ; ++it )
             {

@@ -76,7 +76,7 @@ void CheckoutDialog::jobFinished(KJob * job)
 
     if (error) {
         KMessageBox::error(this,
-            i18n("Some errors occurred while checking out into") + localWorkingDir->url().path(),
+            i18n("Some errors occurred while checking out into") + localWorkingDir->url().toLocalFile(),
             i18n("Checkout Error"));
     } else {
         KDialog::accept();

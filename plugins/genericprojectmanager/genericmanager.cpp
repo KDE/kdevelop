@@ -102,14 +102,14 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     for ( int j = 0; j < item->rowCount(); ++j ) {
         if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
             KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
-            QFileInfo fileInfo(f->url().path());
+            QFileInfo fileInfo(f->url().toLocalFile());
             if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
                 item->removeRow(j);
                 j--;
             }
         } else if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
             KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
-            QFileInfo fileInfo(f->url().path());
+            QFileInfo fileInfo(f->url().toLocalFile());
             if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
                 item->removeRow(j);
                 j--;
@@ -161,7 +161,7 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
         }
     }
 
-    m_watchers[item->project()]->addDir(item->url().path(), KDirWatch::WatchDirOnly);
+    m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchDirOnly);
 
     return folder_list;
 }
@@ -187,7 +187,7 @@ void GenericProjectManager::dirty( const QString &fileName )
 {
     foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects() ) {
         foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl( KUrl(fileName) ) ) {
-            kDebug() << "reloading item" << item->url().path();
+            kDebug() << "reloading item" << item->url().toLocalFile();
             parse(item);
         }
     }

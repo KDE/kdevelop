@@ -53,7 +53,7 @@ public:
 
     virtual QIODevice* file(const QString& name) {
         m_filesAccessed << name;
-        return m_files[m_currentDirectory.resolved(name).path()];
+        return m_files[m_currentDirectory.resolved(name).toLocalFile()];
     }
 
     virtual KUrl currentDirectory() const {
@@ -94,7 +94,7 @@ void CTestfileParserTest::emptyDirectory()
 void CTestfileParserTest::emptyCTestfile()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(), "\n");
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(), "\n");
 
     m_parser->parse(m_someDir);
 
@@ -105,7 +105,7 @@ void CTestfileParserTest::emptyCTestfile()
 void CTestfileParserTest::subdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(), "SUBDIRS(foobar)\n");
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(), "SUBDIRS(foobar)\n");
 
     m_parser->parse(m_someDir);
 
@@ -120,7 +120,7 @@ void CTestfileParserTest::subdir()
 void CTestfileParserTest::multipleSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "SUBDIRS(foo)\n"
                            "SUBDIRS(bar)\n");
 
@@ -134,7 +134,7 @@ void CTestfileParserTest::multipleSubdir()
 void CTestfileParserTest::addtest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n");
 
     m_parser->parse(m_someDir);
@@ -147,7 +147,7 @@ void CTestfileParserTest::addtest()
 void CTestfileParserTest::multipleAddtest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "ADD_TEST(bar \"bar.exe\")\n");
 
@@ -162,7 +162,7 @@ void CTestfileParserTest::multipleAddtest()
 void CTestfileParserTest::mixedAddtestSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "SUBDIRS(foobar)\n"
                            "ADD_TEST(moo \"/path/to/moo.exe\")\n"
@@ -182,14 +182,14 @@ void CTestfileParserTest::addtestInSubdirs()
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
     initializeDirectoryContents(KUrl(m_someDir, "foobar/"), QStringList() << "CTestTestfile.cmake");
     initializeDirectoryContents(KUrl(m_someDir, "moobaz/"), QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "SUBDIRS(foobar)\n"
                            "SUBDIRS(moobaz)\n");
-    initializeFileContents(KUrl(m_someDir, "foobar/CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "foobar/CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(moo \"/path/to/moo.exe\")\n"
                            "SUBDIRS(zoo)\n");
-    initializeFileContents(KUrl(m_someDir, "moobaz/CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "moobaz/CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(bar \"bar.exe\")\n");
 
     m_parser->parse(m_someDir);
@@ -204,7 +204,7 @@ void CTestfileParserTest::addtestInSubdirs()
 void CTestfileParserTest::garbageLines()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "// comment here\n"
                            "ADD_TEST(foo \"/path/to/foo.exe\")\n"
                            "just some garbage\n"
@@ -225,7 +225,7 @@ void CTestfileParserTest::garbageLines()
 void CTestfileParserTest::addTestMultipleArguments()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(zoo \"/path/to/zoo\" \"arg1\" \"arg2\")\n");
 
     m_parser->parse(m_someDir);
@@ -241,7 +241,7 @@ void CTestfileParserTest::addTestMultipleArguments()
 void CTestfileParserTest::illFormattedAddTest()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "ADD_TEST(foobar)\n" // No test exe location
                            "ADD_TEST()\n"
                            "ADD_TES(moo \"/path/to/moo.exe\")\n" // missing T in ADD_TES
@@ -257,7 +257,7 @@ void CTestfileParserTest::illFormattedAddTest()
 void CTestfileParserTest::illFormattedSubdir()
 {
     initializeDirectoryContents(m_someDir, QStringList() << "CTestTestfile.cmake");
-    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").path(),
+    initializeFileContents(KUrl(m_someDir, "CTestTestfile.cmake").toLocalFile(),
                            "SUBDIRS()\n" // No dir name
                            "SUBDIR(moo)\n" // missing S in SUBDIRS
                            "SUBDIRS(zoo\n"); // no ending ')'

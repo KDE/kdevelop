@@ -38,7 +38,7 @@ CvsProxy::~CvsProxy()
 
 bool CvsProxy::isValidDirectory(const KUrl & dirPath) const
 {
-    QString path = dirPath.path();
+    QString path = dirPath.toLocalFile();
     QFileInfo fsObject(path);
     if (fsObject.isFile())
         path = fsObject.path() + QDir::separator() + "CVS";

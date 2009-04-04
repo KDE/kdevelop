@@ -44,13 +44,13 @@ bool FilesystemAccess::changeDir(const KUrl& dir)
 
 QStringList FilesystemAccess::listing()
 {
-    QDir dir(currentDirectory().path());
+    QDir dir(currentDirectory().toLocalFile());
     return dir.entryList();
 }
 
 QIODevice* FilesystemAccess::file(const QString& name)
 {
-    return new QFile(KUrl(currentDirectory(),name).path());
+    return new QFile(KUrl(currentDirectory(),name).toLocalFile());
 }
 
 KUrl FilesystemAccess::currentDirectory() const

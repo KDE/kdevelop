@@ -514,7 +514,7 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
         return 0;
     }
 
-    KSaveFile file(url.path());
+    KSaveFile file(url.toLocalFile());
     if ( ! file.open() ) {
         KMessageBox::error( window, i18n( "Cannot create file." ) );
         return 0;

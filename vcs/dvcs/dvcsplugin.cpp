@@ -314,7 +314,7 @@ void DistributedVersionControlPlugin::slotInit()
 {
     KUrl url = urlFocusedDocument();
 
-    QFileInfo repoInfo = QFileInfo(url.path());
+    QFileInfo repoInfo = QFileInfo(url.toLocalFile());
     if (repoInfo.isFile())
         url = repoInfo.path();
 
@@ -324,7 +324,7 @@ void DistributedVersionControlPlugin::slotInit()
 
 void DistributedVersionControlPlugin::ctxCommit()
 {
-//     CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().path(), proxy());
+//     CommitManager* cmtManager = new CommitManager(d->m_ctxUrlList.first().toLocalFile(), proxy());
 //     cmtManager->show();
 }
 #if 0
@@ -353,7 +353,7 @@ void DistributedVersionControlPlugin::ctxRemove()
 
 void DistributedVersionControlPlugin::ctxCheckout()
 {
-    BranchManager *brManager = new BranchManager(d->m_ctxUrlList.first().path(), this);
+    BranchManager *brManager = new BranchManager(d->m_ctxUrlList.first().toLocalFile(), this);
     connect(brManager, SIGNAL(checkouted(KJob*) ),
             this, SLOT(checkoutFinished(KJob*) ));
     brManager->show();
@@ -361,7 +361,7 @@ void DistributedVersionControlPlugin::ctxCheckout()
 
 void DistributedVersionControlPlugin::ctxPush()
 {
-    VcsJob* j = push(d->m_ctxUrlList.first().path(), VcsLocation());
+    VcsJob* j = push(d->m_ctxUrlList.first().toLocalFile(), VcsLocation());
     DVcsJob* job = dynamic_cast<DVcsJob*>(j);
     if (job) {
         connect(job, SIGNAL(result(KJob*) ),
@@ -372,7 +372,7 @@ void DistributedVersionControlPlugin::ctxPush()
 
 void DistributedVersionControlPlugin::ctxPull()
 {
-    VcsJob* j = pull(VcsLocation(), d->m_ctxUrlList.first().path());
+    VcsJob* j = pull(VcsLocation(), d->m_ctxUrlList.first().toLocalFile());
     DVcsJob* job = dynamic_cast<DVcsJob*>(j);
     if (job) {
         connect(job, SIGNAL(result(KJob*) ),
@@ -398,7 +398,7 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl url = urlFocusedDocument();
 
-    CommitLogModel* model = new CommitLogModel(getAllCommits(url.path()));
+    CommitLogModel* model = new CommitLogModel(getAllCommits(url.toLocalFile()));
     CommitView *revTree = new CommitView;
     revTree->setModel(model);
 
@@ -493,9 +493,9 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
         //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
         QString file;
         if (!url.isRelative())
-            file = dir.relativeFilePath(url.path());
+            file = dir.relativeFilePath(url.toLocalFile());
         else
-            file = url.path();
+            file = url.toLocalFile();
 
         if (file.isEmpty())
             file = ".";

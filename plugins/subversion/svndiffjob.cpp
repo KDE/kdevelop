@@ -70,7 +70,7 @@ void SvnInternalDiffJob::run()
                 KUrl url = source().localUrl();
                 if( url.isLocalFile() )
                 {
-                    srcba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
+                    srcba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
                 }else
                 {
                     srcba = url.url( KUrl::RemoveTrailingSlash ).toUtf8();
@@ -85,7 +85,7 @@ void SvnInternalDiffJob::run()
                 KUrl url = destination().localUrl();
                 if( url.isLocalFile() )
                 {
-                    dstba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
+                    dstba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
                 }else
                 {
                     dstba = url.url().toUtf8();
@@ -112,7 +112,7 @@ void SvnInternalDiffJob::run()
                 KUrl url = source().localUrl();
                 if( url.isLocalFile() )
                 {
-                    srcba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
+                    srcba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
                 }else
                 {
                     srcba = url.url().toUtf8();
@@ -364,7 +364,7 @@ void SvnDiffJob::setDiff( const QString& diff )
                 l.setLocalUrl( KUrl( s ) );
             }else
             {
-                QString repoLocation = KUrl( l.repositoryServer() ).path( KUrl::RemoveTrailingSlash );
+                QString repoLocation = KUrl( l.repositoryServer() ).toLocalFile( KUrl::RemoveTrailingSlash );
                 QFileInfo fi( repoLocation );
                 if( s == fi.fileName() )
                 {

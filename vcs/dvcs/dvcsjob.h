@@ -72,7 +72,7 @@ class DVcsJobPrivate;
  * Usage example 2:
  * @code
  * DVCSjob *branchJob = d->branch(repo, baseBranch, newBranch);
- * DVCSjob* job = gitRevParse(dirPath.path(), QStringList(QString("--is-inside-work-tree")));
+ * DVCSjob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
  * if (job)
  * {
  *     job->exec();

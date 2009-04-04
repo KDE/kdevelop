@@ -94,7 +94,7 @@ void validatingExecJob(int line, VcsJob* j, VcsJob::JobStatus status = VcsJob::J
 void readVerify(int line, VcsStatusInfo const & status, QString const & contents)
 {
     TRACE("Called from line" << line);
-    QFile f(status.url().path());
+    QFile f(status.url().toLocalFile());
     QVERIFY(f.open(QIODevice::ReadOnly));
     QTextStream filecontents(&f);
     QCOMPARE(filecontents.readAll(), contents);
@@ -103,7 +103,7 @@ void readVerify(int line, VcsStatusInfo const & status, QString const & contents
 void verifiedWrite(int line, VcsStatusInfo & status, QString const & contents)
 {
     TRACE("Called from line" << line);
-    QFile f(status.url().path());
+    QFile f(status.url().toLocalFile());
     QVERIFY(f.open(QIODevice::WriteOnly));
     QTextStream filecontents(&f);
     filecontents << contents;
@@ -174,7 +174,7 @@ void Repo::add(int line, KUrl::List const & objects, IBasicVersionControl::Recur
 
     foreach(const KUrl & o, objects0) {
 
-        QFileInfo fi(o.path());
+        QFileInfo fi(o.toLocalFile());
 
         if (fi.isFile()) {
             KUrl parentDir = KUrl(fi.absolutePath());
@@ -211,7 +211,7 @@ void Repo::commit(int line, const QString& message, const KUrl::List& objects, K
     TRACE("Called from line" << line);
     KUrl::List objects2;
     foreach(const KUrl & o, objects) {
-        QFileInfo fi(o.path());
+        QFileInfo fi(o.toLocalFile());
 
         if (fi.isFile()) {
             // We commit all the parent directories, too

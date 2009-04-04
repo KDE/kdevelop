@@ -94,7 +94,7 @@ bool MercurialPlugin::isValidDirectory(const KUrl & directory)
 
 bool MercurialPlugin::isVersionControlled(const KUrl & url)
 {
-    const QFileInfo fsObject(url.path());
+    const QFileInfo fsObject(url.toLocalFile());
 
     if (!fsObject.isFile()) {
         return isValidDirectory(url);
@@ -179,7 +179,7 @@ VcsJob* MercurialPlugin::add(const KUrl::List& localLocations, IBasicVersionCont
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocations.front().path())) {
+    if (!prepareJob(job.get(), localLocations.front().toLocalFile())) {
         return NULL;
     }
 
@@ -196,11 +196,11 @@ VcsJob* MercurialPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLoc
 {
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocationSrc.path())) {
+    if (!prepareJob(job.get(), localLocationSrc.toLocalFile())) {
         return NULL;
     }
 
-    *job << "hg" << "cp" << "--" << localLocationSrc.path() << localLocationDst.path();
+    *job << "hg" << "cp" << "--" << localLocationSrc.toLocalFile() << localLocationDst.path();
 
     return job.release();
 }
@@ -210,11 +210,11 @@ VcsJob* MercurialPlugin::move(const KUrl& localLocationSrc,
 {
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocationSrc.path())) {
+    if (!prepareJob(job.get(), localLocationSrc.toLocalFile())) {
         return NULL;
     }
 
-    *job << "hg" << "mv" << "--" << localLocationSrc.path() << localLocationDst.path();
+    *job << "hg" << "mv" << "--" << localLocationSrc.toLocalFile() << localLocationDst.path();
 
     return job.release();
 }
@@ -229,7 +229,7 @@ VcsJob* MercurialPlugin::commit(const QString& message,
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocations.front().path())) {
+    if (!prepareJob(job.get(), localLocations.front().toLocalFile())) {
         return NULL;
     }
 
@@ -266,7 +266,7 @@ VcsJob* MercurialPlugin::diff(const KUrl& fileOrDirectory,
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    const QString srcPath = fileOrDirectory.path();
+    const QString srcPath = fileOrDirectory.toLocalFile();
 
     if (!prepareJob(job.get(), srcPath)) {
         return NULL;
@@ -295,7 +295,7 @@ VcsJob* MercurialPlugin::remove(const KUrl::List& files)
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), files.front().path())) {
+    if (!prepareJob(job.get(), files.front().toLocalFile())) {
         return NULL;
     }
 
@@ -309,7 +309,7 @@ VcsJob* MercurialPlugin::status(const KUrl::List& localLocations, IBasicVersionC
 {
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocations.front().path())) {
+    if (!prepareJob(job.get(), localLocations.front().toLocalFile())) {
         return NULL;
     }
 
@@ -359,7 +359,7 @@ VcsJob* MercurialPlugin::revert(const KUrl::List& localLocations,
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocations.front().path())) {
+    if (!prepareJob(job.get(), localLocations.front().toLocalFile())) {
         return NULL;
     }
 
@@ -379,7 +379,7 @@ VcsJob* MercurialPlugin::log(const KUrl& localLocation,
     Q_UNUSED(limit)
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocation.path())) {
+    if (!prepareJob(job.get(), localLocation.toLocalFile())) {
         return NULL;
     }
 
@@ -406,7 +406,7 @@ VcsJob* MercurialPlugin::annotate(const KUrl& localLocation,
 
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), localLocation.path())) {
+    if (!prepareJob(job.get(), localLocation.toLocalFile())) {
         return NULL;
     }
 
@@ -418,7 +418,7 @@ VcsJob* MercurialPlugin::annotate(const KUrl& localLocation,
 
     *job << "--";
 
-    *job << localLocation.path();
+    *job << localLocation.toLocalFile();
     connect(job.get(), SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseAnnotations(DVcsJob*)));
 
     return job.release();
@@ -467,7 +467,7 @@ VcsJob* MercurialPlugin::reset(const KUrl &repository, const QStringList &args, 
 {
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 
-    if (!prepareJob(job.get(), repository.path())) {
+    if (!prepareJob(job.get(), repository.toLocalFile())) {
         return NULL;
     }
 

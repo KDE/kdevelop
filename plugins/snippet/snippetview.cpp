@@ -84,7 +84,7 @@ void SnippetView::slotAddRepo()
         SnippetStore::instance()->createNewRepository(
                 NULL, // create a new toplevel repository
                 addrepoui.name->text(),
-                addrepoui.location->url().path());
+                addrepoui.location->url().toLocalFile());
     }
 }
 

@@ -45,7 +45,7 @@ void SvnInternalAddJob::run()
     {
         try
         {
-            QByteArray ba = url.path( KUrl::RemoveTrailingSlash ).toUtf8();
+            QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
             cli.add( svn::Path( ba.data() ), recursive() );
         }catch( svn::ClientException ce )
         {

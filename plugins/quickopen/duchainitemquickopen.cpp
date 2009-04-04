@@ -126,7 +126,7 @@ QString DUChainItemData::htmlDescription() const {
 
   QString ret = "<small><small>" + text;
   if(!m_item.m_project.isEmpty()) {
-      ret = i18n("Project") + ' ' + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().path() +*/; //Show only the path because of limited space
+      ret = i18n("Project") + ' ' + m_item.m_project + (ret.isEmpty() ? ", " : "") + ret/*", " + i18n("path") + totalUrl().toLocalFile() +*/; //Show only the path because of limited space
   }
 
   ret += "</small></small>";

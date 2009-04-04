@@ -48,11 +48,11 @@ void MoveRepository::accept()
 
     QString newLocation;
     if ( repo_->QStandardItem::parent() ) {
-        QDir dir( location->url().path() );
+        QDir dir( location->url().toLocalFile() );
         dir.cdUp();
         newLocation = dir.path() + QDir::separator() + name->text();
     } else {
-        newLocation = location->url().path();
+        newLocation = location->url().toLocalFile();
     }
 
     repo_->changeLocation( newLocation, name->text() );

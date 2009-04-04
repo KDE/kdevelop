@@ -42,8 +42,8 @@ void SvnInternalMoveJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        QByteArray srcba = sourceLocation().path( KUrl::RemoveTrailingSlash ).toUtf8();
-        QByteArray dstba = destinationLocation().path( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray srcba = sourceLocation().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray dstba = destinationLocation().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
         cli.move( svn::Path( srcba.data() ), svn::Revision(), svn::Path( dstba.data() ), force() );
     }catch( svn::ClientException ce )
     {

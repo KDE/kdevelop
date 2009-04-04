@@ -417,7 +417,7 @@ m_allDeclarations(allDeclarations) {
       KDevelop::IProject* project = ICore::self()->projectController()->findProjectForUrl(topContext.data()->url().toUrl());
       if(project) {
         projectName = project->name();
-        fileName = project->relativeUrl(topContext.data()->url().toUrl()).path();
+        fileName = project->relativeUrl(topContext.data()->url().toUrl()).toLocalFile();
       }
     }
 

@@ -83,11 +83,11 @@ bool ExecutePlugin::execute(const IRun & run, KJob* job)
     KDevelop::EnvironmentGroupList l(KGlobal::config());
     process->setProperty("job", QVariant::fromValue(static_cast<void*>(job)));
     process->setEnvironment(l.createEnvironment(run.environmentKey(), process->systemEnvironment()));
-    process->setWorkingDirectory(run.workingDirectory().path());
+    process->setWorkingDirectory(run.workingDirectory().toLocalFile());
 
-    process->setProperty("executable", run.executable().path());
+    process->setProperty("executable", run.executable().toLocalFile());
 
-    QString executable = run.executable().path();
+    QString executable = run.executable().toLocalFile();
     QStringList args;
 
     if (!run.runAsUser().isEmpty()) {

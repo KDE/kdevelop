@@ -474,7 +474,7 @@ void Project::close()
 
 bool Project::inProject( const KUrl& url ) const
 {
-    if( url.isLocalFile() && QFileInfo( url.path() ).isFile() )
+    if( url.isLocalFile() && QFileInfo( url.toLocalFile() ).isFile() )
         return d->fileSet.contains( IndexedString( url ) );
     return ( !d->itemsForUrl( url ).isEmpty() );
 }
