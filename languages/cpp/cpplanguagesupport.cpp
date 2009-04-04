@@ -228,7 +228,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 }
 
 bool CppLanguageSupport::isHeader(const KUrl &url) const {
-  QFileInfo fi( url.path() );
+  QFileInfo fi( url.toLocalFile() );
   QString path = fi.filePath();
   // extract the exension
   QString ext = fi.suffix();
@@ -240,7 +240,7 @@ bool CppLanguageSupport::isHeader(const KUrl &url) const {
 
 KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) const
 {
-  QString urlPath = url.path(); ///@todo Make this work with real urls
+  QString urlPath = url.toLocalFile(); ///@todo Make this work with real urls
 
 // get the path of the currently active document
   QFileInfo fi( urlPath );
@@ -316,7 +316,7 @@ KUrl CppLanguageSupport::sourceOrHeaderCandidate( const KUrl &url, bool fast ) c
   QString candidateFileWoExtString;
   foreach ( const KUrl& url, projectFileList )
   {
-    candidateFileWoExt.setFile(url.path());
+    candidateFileWoExt.setFile(url.toLocalFile());
     //kDebug( 9007 ) << "candidate file: " << url << endl;
     if( !candidateFileWoExt.suffix().isEmpty() )
       candidateFileWoExtString = candidateFileWoExt.fileName().replace( "." + candidateFileWoExt.suffix(), "" );
@@ -505,7 +505,7 @@ void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
     foreach(IDocument* doc, core()->documentController()->openDocuments()) {
         if(project->inProject(doc->url())) {
           bool isSource = false;
-          QString path = doc->url().path();
+          QString path = doc->url().toLocalFile();
 
           foreach(const QString& str, sourceExtensions)
             if(path.endsWith(str))
@@ -572,9 +572,9 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             continue;
         }
         KUrl searchPathUrl = path;
-        QString absoluteBase = searchPathUrl.path();
+        QString absoluteBase = searchPathUrl.toLocalFile();
         searchPathUrl.addPath(addPath);
-        QString searchPath = searchPathUrl.path();
+        QString searchPath = searchPathUrl.toLocalFile();
 
         QDirIterator dirContent(searchPath);
 
@@ -612,7 +612,7 @@ QPair<KUrl, KUrl> CppLanguageSupport::findInclude(const KUrl::List& includePaths
 #endif
 
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
-      QString check = localPath.path(KUrl::AddTrailingSlash) + includeName;
+      QString check = localPath.toLocalFile(KUrl::AddTrailingSlash) + includeName;
         QFileInfo info(check);
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
@@ -635,14 +635,14 @@ restart:
             }
         }
 
-        QString check = path.path(KUrl::AddTrailingSlash) + includeName;
+        QString check = path.toLocalFile(KUrl::AddTrailingSlash) + includeName;
         QFileInfo info(check);
 
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
             ret.first = KUrl(info.absoluteFilePath());
             ret.first.cleanPath();
-            ret.second = path.path();
+            ret.second = path.toLocalFile();
             return ret;
         }
     }

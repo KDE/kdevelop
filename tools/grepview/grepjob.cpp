@@ -145,7 +145,7 @@ void GrepJob::start()
                 files << "-o" << "-name" << *it;
         }
         QStringList findCmd;
-        findCmd << directory.path();
+        findCmd << directory.toLocalFile();
         if (!recursiveFlag)
             findCmd << "-maxdepth" << "1";
 

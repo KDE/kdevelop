@@ -151,7 +151,7 @@ void ModelBuilder::reload(KDevelop::IProject* project_)
         veriConf.writeEntry( "framework", "QTest" );
         QStringList exes;
         foreach(const TestExecutableInfo& te, m_testExes) {
-            exes << te.workingDirectory().resolved(te.command()).path();
+            exes << te.workingDirectory().resolved(te.command()).toLocalFile();
         }
         veriConf.writeEntry( "executables", exes);
         delete fsm;
@@ -256,7 +256,7 @@ void ModelBuilder::fetchTestCommands()
 
     KUrl buildRoot_ = buildRoot();
     if (!buildRoot_.isValid()) return;
-    QDir buildDir(buildRoot_.path());
+    QDir buildDir(buildRoot_.toLocalFile());
     QList<Veritas::TestExecutableInfo> testExes;
 
     KConfigGroup proj = project()->projectConfiguration()->group("Project");

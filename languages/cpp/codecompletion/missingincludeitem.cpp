@@ -67,7 +67,7 @@ bool isBlacklistedInclude(KUrl url) {
 
   url = url.upUrl();
   //Do not allow including directly from the bits directory. Instead use one of the forwarding headers in other directories, when possible.
-  if(url.fileName() == "bits" && url.path().contains("/include/c++/")) {
+  if(url.fileName() == "bits" && url.toLocalFile().contains("/include/c++/")) {
     return true;
   }
   
@@ -94,7 +94,7 @@ QList<KDevelop::CompletionTreeItemPointer> itemsForFile(QString displayTextPrefi
     return ret;
   
   foreach(const KUrl& includePath, includePaths) {
-    QString relative = KUrl::relativePath( QFileInfo(includePath.path()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
+    QString relative = KUrl::relativePath( QFileInfo(includePath.toLocalFile()).canonicalFilePath(), QFileInfo(file).canonicalFilePath() );
     if(relative.startsWith("./"))
       relative = relative.mid(2);
     
@@ -143,13 +143,13 @@ QStringList candidateIncludeFiles(Declaration* decl) {
       if(ptr->topContext()->localDeclarations().count())
         continue;
       
-      QString file(ptr->url().toUrl().path());
+      QString file(ptr->url().toUrl().toLocalFile());
       ret << file;
     }
   }
   
   if(!inBlacklistDir)
-    ret << decl->url().toUrl().path();
+    ret << decl->url().toUrl().toLocalFile();
   
   return ret;
 }
@@ -283,7 +283,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
         if(context->topContext()->imports(decl->topContext(), SimpleCursor::invalid()))
           continue;
         
-        QString file(decl->url().toUrl().path());
+        QString file(decl->url().toUrl().toLocalFile());
         
         bool inBlacklistDir = isBlacklistedInclude(decl->url().toUrl());
         
@@ -297,7 +297,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
             if(ptr->topContext()->localDeclarations().count())
               continue;
             
-            QString file(ptr->url().toUrl().path());
+            QString file(ptr->url().toUrl().toLocalFile());
             ret += itemsForFile(displayTextPrefix, file, includePaths, currentPath, decl, argumentHintDepth, directives);
           }
         }

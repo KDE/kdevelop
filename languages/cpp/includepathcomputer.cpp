@@ -43,7 +43,7 @@ IncludePathComputer::IncludePathComputer(const KUrl& file, QList<KDevelop::Probl
 
 void IncludePathComputer::computeForeground() {
 
-  if(headerExtensions.contains(QFileInfo(m_source.path()).suffix())) {
+  if(headerExtensions.contains(QFileInfo(m_source.toLocalFile()).suffix())) {
     //This file is a header. Since a header doesn't represent a target, we just try to get the include-paths for the corresponding source-file, if there is one.
     KUrl newSource = CppLanguageSupport::self()->sourceOrHeaderCandidate(m_source, true);
     if(newSource.isValid())
@@ -120,7 +120,7 @@ void IncludePathComputer::computeBackground() {
     if(m_ret.isEmpty()) {
       //Try taking the include-paths from another file in the directory
       kDebug(9007) << "Did not get any include-paths for" << m_source;
-      QFileInfo fileInfo(m_source.path());
+      QFileInfo fileInfo(m_source.toLocalFile());
       QDirIterator it(fileInfo.dir().path());
       while(it.hasNext()) {
         QString file = it.next();
@@ -161,7 +161,7 @@ void IncludePathComputer::computeBackground() {
 
         if(!m_effectiveBuildDirectory.isEmpty()) {
             ///@todo remote directories?
-            m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.path(), m_effectiveBuildDirectory.path());
+            m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
         } else {
             if(!m_projectDirectory.isEmpty() && m_problems) {
                 //Report that the build-manager did not return the build-directory, for debugging
@@ -174,7 +174,7 @@ void IncludePathComputer::computeBackground() {
             }
             m_includeResolver.resetOutOfSourceBuild();
         }
-        CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.path());
+        CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
         if (result) {
             bool hadMissingPath = false;
             if( !m_gotPathsFromManager ) {

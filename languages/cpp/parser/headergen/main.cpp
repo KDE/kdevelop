@@ -443,7 +443,7 @@ void HeaderGenerator::run()
 
   int fileCount = 0;
 
-  QFile kdelibsExport(kdeIncludes.path(KUrl::AddTrailingSlash) + "kdelibs_export.h");
+  QFile kdelibsExport(kdeIncludes.toLocalFile(KUrl::AddTrailingSlash) + "kdelibs_export.h");
   if (!kdelibsExport.open(QIODevice::ReadOnly)) {
     kWarning() << "Could not open kdelibs_export.h in kde includes directory.  Are you sure you have installed kdelibs?" ;
     status = -1;
@@ -519,7 +519,7 @@ void HeaderGenerator::run()
         }
 
         foreach (const QString& className, hg.m_classes) {
-          QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + className);
+          QString forwardingHeaderPath(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + className);
           QString classDirectory;
           int index = className.lastIndexOf('/');
           if (index > 0)
@@ -583,7 +583,7 @@ void HeaderGenerator::run()
         QString namespaceName = it.key();
 
         // Found a namespace without a class... install a file for it
-        QString forwardingHeaderPath(outputDirectory.path(KUrl::AddTrailingSlash) + namespaceName);
+        QString forwardingHeaderPath(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + namespaceName);
         QString namespaceDirectory;
         int index = namespaceName.lastIndexOf('/');
         if (index > 0)
@@ -615,7 +615,7 @@ void HeaderGenerator::run()
     ts = 0;
   }
 
-  QFile cmakelist(outputDirectory.path(KUrl::AddTrailingSlash) + "CMakeLists.txt");
+  QFile cmakelist(outputDirectory.toLocalFile(KUrl::AddTrailingSlash) + "CMakeLists.txt");
   if (!cmakelist.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
     kWarning() << "Could not open cmake list file for writing." ;
     status = -1;

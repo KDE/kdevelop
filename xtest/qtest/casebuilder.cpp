@@ -53,7 +53,7 @@ void CaseBuilder::setSuiteName(const QString& suite)
 Case* CaseBuilder::construct()
 {
     Q_ASSERT(m_executable);
-    QFileInfo exeLocation(m_executable->location().path());
+    QFileInfo exeLocation(m_executable->location().toLocalFile());
 
     QString cazeName = m_executable->name();
     if (!m_suite.isEmpty() && cazeName.startsWith(m_suite + '-')) {

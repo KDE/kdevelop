@@ -119,7 +119,7 @@ void GrepViewPlugin::showDialog()
         if( proj && proj->folder().isLocalFile() )
         {
             dlg->setEnableProjectBox(! proj->files().isEmpty() );
-            dlg->setDirectory( proj->folder().path() );
+            dlg->setDirectory( proj->folder().toLocalFile() );
         }
     }
 

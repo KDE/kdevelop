@@ -80,11 +80,11 @@ bool ValgrindControl::run(const KDevelop::IRun& run, KJob* job)
     arguments << "--xml=yes";
     if (m_server && m_server->serverPort() != 0)
         arguments << QString("--log-socket=127.0.0.1:%1").arg(m_server->serverPort());
-    arguments << run.executable().path();
+    arguments << run.executable().toLocalFile();
     arguments << run.arguments();
 
     m_process->setReadChannel(QProcess::StandardError);
-    m_process->setProgram(plugin()->valgrindExecutable().path(), arguments);
+    m_process->setProgram(plugin()->valgrindExecutable().toLocalFile(), arguments);
 
     m_process->start();
 
@@ -134,7 +134,7 @@ void ValgrindControl::processErrored(QProcess::ProcessError e)
 {
     switch (e) {
         case QProcess::FailedToStart:
-            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from \"%1.\"", plugin()->valgrindExecutable().path()), i18n("Failed to start Valgrind"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from \"%1.\"", plugin()->valgrindExecutable().toLocalFile()), i18n("Failed to start Valgrind"));
             break;
         case QProcess::Crashed:
             KMessageBox::error(qApp->activeWindow(), i18n("Valgrind crashed."), i18n("Valgrind Error"));

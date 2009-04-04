@@ -75,7 +75,7 @@ void QTestOutputJob::start()
 
 void QTestOutputJob::outputFile(const KUrl& path)
 {
-    QString path_ = path.path();
+    QString path_ = path.toLocalFile();
     QFile f(path_);
     if (!f.exists()) {
         kError() << "Test output file does not exist [" << path_ << "]";

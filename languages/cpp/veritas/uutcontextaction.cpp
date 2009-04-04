@@ -69,7 +69,7 @@ QString activeUrl()
     if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
         return "";
     } else {
-        QFileInfo fi(doc->url().path()); 
+        QFileInfo fi(doc->url().toLocalFile()); 
         return fi.absolutePath() + QDir::separator() + fi.baseName() + "gen." + fi.completeSuffix();
     }
 }

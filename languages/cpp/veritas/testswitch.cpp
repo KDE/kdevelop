@@ -70,7 +70,7 @@ IDocument* activeDocument()
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 bool isHeader(const KUrl& url)
 {
-    QFileInfo fi(url.path());
+    QFileInfo fi(url.toLocalFile());
     return headerExtensions.contains(fi.suffix());
 }
 
@@ -333,7 +333,7 @@ void TestSwitch::swapTest_UnitUnderTest()
 
     DUChainReadLocker lock(DUChain::lock());
     TopDUContext* docCtx = documentContextFor(doc->url());
-    STOP_IF(!docCtx, QString("Failed to get chain for %1").arg(doc->url().path()))
+    STOP_IF(!docCtx, QString("Failed to get chain for %1").arg(doc->url().toLocalFile()))
 
     Declaration* clazz = (isHeader(doc->url())) ?
         dominantClassInHeader(docCtx) :

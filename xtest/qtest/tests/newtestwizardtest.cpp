@@ -158,7 +158,7 @@ void NewTestWizardTest::validateOnlyNonExistingFiles()
     KUrl existingFile(QDir::tempPath());
     existingFile.adjustPath(KUrl::AddTrailingSlash);
     existingFile.addPath("foo_file.cxx");
-    QFile f(existingFile.path());
+    QFile f(existingFile.toLocalFile());
     f.open(QIODevice::WriteOnly);
     f.write("123");
     f.close();

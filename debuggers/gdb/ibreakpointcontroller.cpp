@@ -174,7 +174,7 @@ void IBreakpointController::markChanged(
 
     switch (action) {
         case KTextEditor::MarkInterface::MarkAdded: {
-            IFilePosBreakpoint* fileBreakpoint = new IFilePosBreakpoint(this, document->url().path(), mark.line);
+            IFilePosBreakpoint* fileBreakpoint = new IFilePosBreakpoint(this, document->url().toLocalFile(), mark.line);
             addBreakpoint(fileBreakpoint);
         }
             break;
@@ -184,7 +184,7 @@ void IBreakpointController::markChanged(
             foreach (IBreakpoint* breakpoint, m_breakpoints)
                 if (IFilePosBreakpoint* fileBreakpoint = qobject_cast<IFilePosBreakpoint*>(breakpoint))
                     if (mark.line == fileBreakpoint->lineNum())
-                        if (document->url().path() == fileBreakpoint->fileName()) {
+                        if (document->url().toLocalFile() == fileBreakpoint->fileName()) {
                             fileBreakpoint->remove();
                             removeBreakpoint(fileBreakpoint);
                         }

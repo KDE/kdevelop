@@ -160,7 +160,7 @@ void GrepDialog::syncButtonClicked( )
         KUrl url = doc->url();
         if ( url.isLocalFile() )
         {
-            directoryRequester->lineEdit()->setText( url.upUrl().path( KUrl::LeaveTrailingSlash ) );
+            directoryRequester->lineEdit()->setText( url.upUrl().toLocalFile( KUrl::LeaveTrailingSlash ) );
         }
     }
 }

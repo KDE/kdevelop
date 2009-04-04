@@ -190,7 +190,7 @@ int main( int argc, char *argv[] )
             {
                 KUrl u = QDir::currentPath();
                 u.addPath(file);
-                file = u.path();
+                file = u.toLocalFile();
             }
             core->documentController()->openDocument(KUrl(file), line);
         }

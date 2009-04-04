@@ -194,7 +194,7 @@ void GDBController::configure()
         }
 
         if (config_configGdbScript_.isValid())
-          queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.path()));
+          queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
 
 
         if (restart)
@@ -674,7 +674,7 @@ bool GDBController::startDebugger()
     queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",  config_outputRadix_)));
 
     if (config_configGdbScript_.isValid())
-        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.path()));
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
 
     return true;
 }
@@ -725,7 +725,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
     queueCmd(new GDBCommand(InferiorTtySet, tty));
 
     // Change the "Working directory" to the correct one
-    QString dir = QString::fromLatin1(QFile::encodeName( run.workingDirectory().path() ));
+    QString dir = QString::fromLatin1(QFile::encodeName( run.workingDirectory().toLocalFile() ));
     if (!dir.isEmpty())
         queueCmd(new GDBCommand(EnvironmentCd, dir));
 
@@ -763,8 +763,8 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
 
         QProcess *proc = new QProcess;
         QStringList arguments;
-        arguments << "-c" << config_runShellScript_.path() +
-            ' ' + run.executable().path().toLatin1() + options;
+        arguments << "-c" << config_runShellScript_.toLocalFile() +
+            ' ' + run.executable().toLocalFile() + QString::fromAscii( options );
 
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
@@ -778,14 +778,14 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         // Future: the shell script should be able to pass info (like pid)
         // to the gdb script...
 
-        kDebug(9012) << "Running gdb script " << config_runGdbScript_.path();
-        queueCmd(new GDBCommand(NonMI, "source " + config_runGdbScript_.path()));
+        kDebug(9012) << "Running gdb script " << config_runGdbScript_.toLocalFile();
+        queueCmd(new GDBCommand(NonMI, "source " + config_runGdbScript_.toLocalFile()));
 
         // Note: script could contain "run" or "continue"
     }
     else
     {
-        QFileInfo app(run.executable().path());
+        QFileInfo app(run.executable().toLocalFile());
 
         if (!app.exists())
         {
@@ -821,7 +821,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         }
         else
         {
-            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, run.executable().path()));
+            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, run.executable().toLocalFile()));
             raiseEvent(connected_to_program);
             queueCmd(new GDBCommand(ExecRun));
         }
@@ -899,7 +899,7 @@ void GDBController::examineCoreFile(const KUrl& coreFile)
       startDebugger();
 
     // TODO support non-local URLs
-    queueCmd(new GDBCommand(NonMI, "core " + coreFile.path()));
+    queueCmd(new GDBCommand(NonMI, "core " + coreFile.toLocalFile()));
 
     raiseEvent(connected_to_program);
     raiseEvent(program_state_changed);
@@ -973,7 +973,7 @@ void GDBController::runUntil(const KUrl& url, int line)
         queueCmd(new GDBCommand(ExecUntil, line));
     else
         queueCmd(new GDBCommand(ExecUntil,
-                QString("%1:%2").arg(url.path()).arg(line)));
+                QString("%1:%2").arg(url.toLocalFile()).arg(line)));
 }
 
 // **************************************************************************
@@ -984,8 +984,8 @@ void GDBController::jumpTo(const KUrl& url, int line)
         return;
 
     if (url.isValid()) {
-        queueCmd(new GDBCommand(NonMI, QString("tbreak %1:%2").arg(url.path()).arg(line)));
-        queueCmd(new GDBCommand(NonMI, QString("jump %1:%2").arg(url.path()).arg(line)));
+        queueCmd(new GDBCommand(NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
+        queueCmd(new GDBCommand(NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
     }
 }
 

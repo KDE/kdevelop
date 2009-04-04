@@ -84,7 +84,7 @@ bool IncludeFileData::execute( QString& filterText ) {
       addName = addName.split('/').last();
     u.setFileName( addName );                                   
 //     kDebug() << "with added:" << u;
-    filterText = u.path( KUrl::AddTrailingSlash ); 
+    filterText = u.toLocalFile( KUrl::AddTrailingSlash ); 
 //     kDebug() << "new:" << filterText;
     return false;
   } else {
@@ -332,7 +332,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
     KUrl u( text );
 
     u.setFileName( QString() );
-    QString prefixPath = u.path();
+    QString prefixPath = u.toLocalFile();
 
     if( prefixPath != m_lastSearchedPrefix && !prefixPath.isEmpty() )
     {

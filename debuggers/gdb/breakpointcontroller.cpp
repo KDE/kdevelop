@@ -74,7 +74,7 @@ GDBController * BreakpointController::controller() const
 
 void BreakpointController::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-    slotToggleBreakpoint(url.path(), cursor.line() + 1);
+    slotToggleBreakpoint(url.toLocalFile(), cursor.line() + 1);
 }
 
 void BreakpointController::slotToggleBreakpoint(const QString &fileName, int lineNum)
@@ -156,7 +156,7 @@ void BreakpointController::markChanged(
     if (action == KTextEditor::MarkInterface::MarkAdded)
     {
         // FIXME: check that there's no breakpoint at this line already?
-        universe_->addCodeBreakpoint(doc->url().path(KUrl::RemoveTrailingSlash) 
+        universe_->addCodeBreakpoint(doc->url().toLocalFile(KUrl::RemoveTrailingSlash) 
                                      + ":" + QString::number(mark.line+1));
     }
     else

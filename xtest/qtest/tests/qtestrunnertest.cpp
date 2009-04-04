@@ -401,8 +401,8 @@ void QTestRunnerTest::skip()
     KUrl file(__FILE__);
     file = file.upUrl();
     file.addPath("suite1/skip.cpp");
-    result1 << "command" << "skipCommand (skipped)" << file.path() << "8";
-    result2 << "commandData" << "skipDataCommand (skipped)" << file.path() << "13";
+    result1 << "command" << "skipCommand (skipped)" << file.toLocalFile() << "8";
+    result2 << "commandData" << "skipDataCommand (skipped)" << file.toLocalFile() << "13";
     m_runner->verifyResultItems(QList<QStringList>() << result1 << result2);
 
     QMap<QString, Veritas::TestState> states;

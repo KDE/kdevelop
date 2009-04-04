@@ -260,7 +260,7 @@ KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
         wd = m_build + '/' + wd.mid( m_source.length() );
         KUrl u( wd );
         u.cleanPath();
-        wd = u.path();
+        wd = u.toLocalFile();
       }
   }
   return KUrl(wd);
@@ -294,7 +294,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     
     if(!workingDirectory.isEmpty())
       u.addPath( workingDirectory );
-    workingDirectory = u.path();
+    workingDirectory = u.toLocalFile();
   } else
     workingDirectory = _workingDirectory;
 
@@ -334,7 +334,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
       if(sourceDir.cdUp() && !fileName.isAbsolute()) {
         QString checkFor = localName + "/" + file;
-//         std::cout << "checking in " << sourceDir.path().toUtf8().data() << " for " << checkFor.toUtf8().data() << std::endl;;
+//         std::cout << "checking in " << sourceDir.toLocalFile().toUtf8().data() << " for " << checkFor.toUtf8().data() << std::endl;;
         PathResolutionResult oneUp = resolveIncludePath(checkFor, sourceDir.path(), maxStepsUp-1);
         if(oneUp.success)
           return oneUp;
@@ -384,7 +384,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     absoluteFile = workingDirectory + '/' + file;
   KUrl u( absoluteFile );
   u.cleanPath();
-  absoluteFile = u.path();
+  absoluteFile = u.toLocalFile();
 
   int dot;
   if( (dot = file.lastIndexOf( '.' )) == -1 )
@@ -397,7 +397,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     wd = QDir::currentPath() + '/' + wd;
     KUrl u( wd );
     u.cleanPath();
-    wd = u.path();
+    wd = u.toLocalFile();
   }
 
   wd = mapToBuild(wd).toLocalFile();
@@ -538,7 +538,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
               newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
             KUrl u( newWorkingDirectory );
             u.cleanPath();
-            newWorkingDirectory = u.path();
+            newWorkingDirectory = u.toLocalFile();
           }
         }
         QFileInfo d( newWorkingDirectory );
@@ -555,10 +555,10 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             u.cleanPath();
             ///Try once with absolute, and if that fails with relative path of the file
             SourcePathInformation newSource( newWorkingDirectory );
-            PathResolutionResult res = resolveIncludePathInternal( u.path(), newWorkingDirectory, makeParams, newSource );
+            PathResolutionResult res = resolveIncludePathInternal( u.toLocalFile(), newWorkingDirectory, makeParams, newSource );
             if( res )
               return res;
-            return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.path()), newWorkingDirectory, makeParams , newSource );
+            return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.toLocalFile()), newWorkingDirectory, makeParams , newSource );
           }else{
             return PathResolutionResult( false, i18n("Recursive make call failed"), i18n("The parameter string \"%1\" does not seem to be valid. Output was: %2.", makeParams, fullOutput) );
           }
@@ -613,7 +613,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
     KUrl u( path );
     u.cleanPath();
 
-    ret.paths << u.path();
+    ret.paths << u.toLocalFile();
 
     offset = end-1;
   }

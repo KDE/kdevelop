@@ -107,7 +107,7 @@ void CppNewClass::generateHeader()
   KUrl url = field("headerUrl").value<KUrl>();
 
   QFile file;
-  file.setFileName(url.path());
+  file.setFileName(url.toLocalFile());
   if (!file.open(QIODevice::WriteOnly)) {
     KMessageBox::error(this, i18n("Unable to open '%1' to write the new class header.", url.prettyUrl()), i18n("Header generation error"));
     return;
@@ -293,7 +293,7 @@ void CppNewClass::generateImplementation()
   KUrl url = field("implementationUrl").value<KUrl>();
 
   QFile file;
-  file.setFileName(url.path());
+  file.setFileName(url.toLocalFile());
   if (!file.open(QIODevice::WriteOnly)) {
     KMessageBox::error(this, i18n("Unable to open '%1' to write the new class implementation.", url.prettyUrl()), i18n("Implementation generation error"));
     return;
@@ -304,7 +304,7 @@ void CppNewClass::generateImplementation()
   output << "/*\n" << field("license").toString() << "*/\n\n";
 
   // #include our header
-  QString path = KUrl::relativePath(url.directory(), headerUrl.path());
+  QString path = KUrl::relativePath(url.directory(), headerUrl.toLocalFile());
   if(path.startsWith("./"))
     path = path.mid(2);
   output << "#include \"" << path << "\"\n\n";

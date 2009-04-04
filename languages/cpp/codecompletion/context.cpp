@@ -819,7 +819,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   //Extract the prefix-path
   KUrl u(line);
   u.setFileName(QString());
-  QString prefixPath = u.path();
+  QString prefixPath = u.toLocalFile();
   kDebug(9007) << "extracted prefix " << prefixPath;
 
   LOCKDUCHAIN;

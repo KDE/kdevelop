@@ -39,7 +39,7 @@ template<> inline char* toString(const QVariant& va)
 }
 template<> inline char* toString(const KUrl& url)
 {
-    return qstrdup(url.path().toLatin1().constData());
+    return qstrdup(url.toLocalFile().toLatin1().constData());
 }
 
 } // namespace QTest

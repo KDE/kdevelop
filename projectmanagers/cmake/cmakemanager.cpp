@@ -266,7 +266,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     
     KDevelop::ReferencedTopDUContext buildstrapContext;
     {
-        KUrl buildStrapUrl = baseUrl.path();
+        KUrl buildStrapUrl = baseUrl.toLocalFile();
         buildStrapUrl.addPath("buildstrap");
         DUChainWriteLocker lock(DUChain::lock());
         
@@ -301,7 +301,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     cmakeInfoFile.addPath("CMakeLists.txt");
 
     KUrl folderUrl=project->folder();
-    kDebug(9042) << "file is" << cmakeInfoFile.path();
+    kDebug(9042) << "file is" << cmakeInfoFile.toLocalFile();
 
     if ( !cmakeInfoFile.isLocalFile() )
     {

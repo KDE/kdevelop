@@ -940,7 +940,7 @@ void OutputParserTest::assertResult(const TestResult& expected, const TestResult
 void OutputParserTest::qassertResult(TestResult* expected, TestResult* actual, const QString& testName)
 {
     Q_ASSERT_EQUALS(expected->state(), actual->state(), state);
-    Q_ASSERT_EQUALS(expected->file().path(), actual->file().path(), file);
+    Q_ASSERT_EQUALS(expected->file().toLocalFile(), actual->file().path(), file);
     Q_ASSERT_EQUALS(expected->line(), actual->line(), line);
     Q_ASSERT_EQUALS(expected->message(), actual->message(), message);
 }

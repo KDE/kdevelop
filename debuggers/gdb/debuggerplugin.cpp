@@ -591,7 +591,7 @@ void CppDebuggerPlugin::slotRunToCursor()
     if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
         if (cursor.isValid())
-            controller->runUntil(doc->url().path(), cursor.line() + 1);
+            controller->runUntil(doc->url().toLocalFile(), cursor.line() + 1);
     }
 }
 
@@ -600,7 +600,7 @@ void CppDebuggerPlugin::slotJumpToCursor()
     if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
         KTextEditor::Cursor cursor = doc->cursorPosition();
         if (cursor.isValid())
-            controller->jumpTo(doc->url().path(), cursor.line() + 1);
+            controller->jumpTo(doc->url().toLocalFile(), cursor.line() + 1);
     }
 }
 

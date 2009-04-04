@@ -68,7 +68,7 @@ QString activeUrl()
     if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
         return "";
     } else {
-        return doc->url().path();
+        return doc->url().toLocalFile();
     }
 }
 
@@ -80,7 +80,7 @@ QString stubUrl()
     if (!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
         return "";
     } else {
-        QFileInfo fi(doc->url().path()); 
+        QFileInfo fi(doc->url().toLocalFile()); 
         return fi.absolutePath() + QDir::separator() + fi.baseName() + "stub." + fi.completeSuffix();
     }
 }

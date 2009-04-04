@@ -117,7 +117,7 @@ void SuiteBuilder::constructSuites()
     foreach(const TestExecutableInfo& testExe, m_testExes) {
         QString suiteName = m_suiteNames[testExe.workingDirectory()];
         if (!m_suites.contains(suiteName)) {
-            QFileInfo suiteDir(testExe.workingDirectory().path());
+            QFileInfo suiteDir(testExe.workingDirectory().toLocalFile());
             Suite* suite = new Suite(suiteName, suiteDir, m_root);
             m_suites[suiteName] = suite;
         }

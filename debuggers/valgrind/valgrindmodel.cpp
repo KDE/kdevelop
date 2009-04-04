@@ -324,9 +324,9 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
                 case Source:
                     if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
                         if (f->line >= 0)
-                            return f->url().path() + ':' + f->line;
+                            return f->url().toLocalFile() + ':' + f->line;
                         else
-                            return f->url().path();
+                            return f->url().toLocalFile();
                     break;
             }
             break;
