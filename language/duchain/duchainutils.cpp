@@ -308,6 +308,9 @@ Declaration* DUChainUtils::declarationForDefinition(Declaration* definition, Top
 }
 
 Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& cursor, DUContext* ctx) {
+  if(!ctx)
+    return 0;
+  
   foreach(Declaration* decl, ctx->localDeclarations())
     if(decl->range().start.line == cursor.line)
       return decl;
