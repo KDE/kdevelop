@@ -24,7 +24,7 @@
 
 #include <QtCore/QRegExp>
 #include <QStringList>
-#include <kdebug.h>
+#include <KDE/KDebug>
 
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.
