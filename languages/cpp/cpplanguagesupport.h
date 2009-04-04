@@ -105,8 +105,9 @@ public:
      * @param addPath This path is added behind each include-path, and the content of the resulting directory used.
      * @param addIncludePaths A list of include-paths that should be used for listing, additionally to the known ones
      * @param onlyAddedIncludePaths If this is true, only the include-paths given in @p addIncludePaths will be used
+     * @param prependAddedPathToName If this is true, @p addPath is prepended to each of the returned items paths
      * */
-    QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false ) const;
+    QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prepentAddedPathToName = false ) const;
 
     ///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
     ///@param problems If this is nonzero, eventual problems will be added to the list

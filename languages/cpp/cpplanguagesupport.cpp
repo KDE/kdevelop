@@ -542,7 +542,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
   return comp.result();
 }
 
-QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths) const {
+QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prepentAddedPathToName) const {
 
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<Cpp::IncludeItem> ret;
@@ -589,7 +589,8 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && !sourceExtensions.contains(suffix))
               continue;
             
-            item.name = addPath + item.name;
+            if(prepentAddedPathToName)
+              item.name = addPath + item.name;
             
             item.isDirectory = dirContent.fileInfo().isDir();
             item.basePath = absoluteBase;

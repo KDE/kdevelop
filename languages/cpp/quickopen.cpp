@@ -339,7 +339,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       kDebug(9007) << "extracted prefix " << prefixPath;
 
       if( m_allowPossibleImports || explicitPath )
-        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath );
+        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath, true );
 
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
@@ -389,7 +389,7 @@ void IncludeFileDataProvider::reset()
   QList<IncludeItem> allIncludeItems;
 
   if( m_allowPossibleImports )
-    allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString() );
+    allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString(), KUrl::List(), false, true );
 
   if( m_allowImports )
     allIncludeItems += getAllIncludedItems( m_duContext );
