@@ -36,10 +36,14 @@ public:
 
   void startInteractiveRename(KDevelop::IndexedDeclaration decl);
   
-private slots:
+public slots:
   void executeRenameAction();
   void executeNewClassAction();
-    
+  void executeMoveIntoSourceAction();
+  private:
+    ///Duchain does not need to be read-locked
+    ///If @p allowUse is false, a declaration that is declared in the current line is returned(if one exists)
+    KDevelop::IndexedDeclaration declarationUnderCursor(bool allowUse = true);
 };
 
 #endif

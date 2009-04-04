@@ -49,6 +49,16 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
+#include <templatedeclaration.h>
+#include <cpplanguagesupport.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <ktexteditor/document.h>
+#include <sourcemanipulation.h>
+#include <language/duchain/types/functiontype.h>
+#include <kparts/mainwindow.h>
+#include <language/duchain/duchainutils.h>
+#include <dumptree.h>
 
 Q_DECLARE_METATYPE(ProjectBaseItem*)
 
@@ -82,7 +92,6 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
     //Actions on declarations
     qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
 
-    DUChainReadLocker lock(DUChain::lock());
 
     Declaration* declaration = declContext->declaration().data();
 
@@ -93,6 +102,18 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
       connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
 
       extension.addAction(ContextMenuExtension::RefactorGroup, action);
+      
+      if(declaration->isFunctionDeclaration() && declaration->isDefinition() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
+        !dynamic_cast<Cpp::TemplateDeclaration*>(declaration)) {
+        AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
+        if(funDecl && !funDecl->isInline()) {
+          //Is a candidate for moving into source
+          QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
+          action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+//           action->setIcon(KIcon("arrow-right"));
+          connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
+        }
+      }
     }
   }
   if(ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context)) {
@@ -143,10 +164,114 @@ void SimpleRefactoring::executeNewClassAction() {
   }
 }
 
+void SimpleRefactoring::executeMoveIntoSourceAction() {
+  QAction* action = qobject_cast<QAction*>(sender());
+  if(action) {
+    IndexedDeclaration iDecl = action->data().value<IndexedDeclaration>();
+    if(!iDecl.isValid())
+      iDecl = declarationUnderCursor(false);
+    
+    DUChainReadLocker lock(DUChain::lock());
+    Declaration* decl = iDecl.data();
+    if(!decl) {
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
+      return;
+    }
+    
+    KDevelop::IndexedString url = decl->url();
+    KUrl targetUrl = decl->url().toUrl();
+    if(headerExtensions.contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
+      targetUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate(targetUrl);
+    }
+    if(!targetUrl.isValid()) {
+      ///@todo Create source-file if it doesn't exist yet
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source-file available for %1", targetUrl.prettyUrl()));
+      return;
+    }
+
+    
+    lock.unlock();
+    KDevelop::ReferencedTopDUContext top = DUChain::self()->waitForUpdate(url, KDevelop::TopDUContext::AllDeclarationsAndContexts);
+    KDevelop::ReferencedTopDUContext targetTopContext = DUChain::self()->waitForUpdate(IndexedString(targetUrl), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+    lock.lock();
+    
+    if(!targetTopContext) {
+      ///@todo Eventually create source-file if it doesn't exist yet
+      lock.unlock();
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed to update duchain for %1", targetUrl.prettyUrl()));
+      return;
+    }
+    kDebug() << "moving" << decl->qualifiedIdentifier();
+    AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+    FunctionType::Ptr funType = decl->type<FunctionType>();
+
+    if(top && iDecl.data() && iDecl.data() == decl)
+    {
+      if( !(decl->internalContext() && decl->internalContext()->type() == DUContext::Other && funDecl && funDecl->internalFunctionContext() && funType) ) {
+        lock.unlock();
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Cannot create definition for this declaration"));
+        return;
+      }
+      
+      KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(decl->url().toUrl());
+      if(doc && doc->textDocument()) {
+        QString body = doc->textDocument()->text(decl->internalContext()->range().textRange());
+        SourceCodeInsertion ins(targetTopContext);
+        QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
+
+        ins.setSubScope(namespaceIdentifier);
+        
+        QList<SourceCodeInsertion::SignatureItem> signature;
+        
+        foreach(Declaration* argument,  funDecl->internalFunctionContext()->localDeclarations()) {
+          SourceCodeInsertion::SignatureItem item;
+          item.name = argument->identifier().toString();
+          item.type = argument->abstractType();
+          signature.append(item);
+        }
+        
+        kDebug() << "qualified id:" << decl->qualifiedIdentifier() << "from mid:" << decl->qualifiedIdentifier().mid(namespaceIdentifier.count()) << namespaceIdentifier.count();
+        
+        Identifier id(IndexedString(decl->qualifiedIdentifier().mid(namespaceIdentifier.count()).toString()));
+        kDebug() << "id:" << id;
+        
+        if(!ins.insertFunctionDeclaration(id, funType->returnType(), signature, funType->modifiers() & AbstractType::ConstModifier, body)) {
+          lock.unlock();
+          KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Insertion failed"));
+          return;
+        }
+        
+        lock.unlock();
+        if(!ins.changes().applyAllChanges()) {
+          KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Applying changes failed"));
+          return;
+        }
+        
+        doc->textDocument()->replaceText(decl->internalContext()->range().textRange(), QString(";"));
+        ICore::self()->languageController()->backgroundParser()->addDocument(url.toUrl());
+        ICore::self()->languageController()->backgroundParser()->addDocument(targetUrl);
+        
+      }else{
+        lock.unlock();
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No document for %1", decl->url().toUrl().prettyUrl()));
+      }
+    }else{
+      lock.unlock();
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Declaration lost while updating"));
+    }
+    
+  }else{
+    kWarning() << "strange problem";
+  }
+
+}
+
 void SimpleRefactoring::executeRenameAction() {
   QAction* action = qobject_cast<QAction*>(sender());
   if(action) {
     IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
+    if(!decl.isValid())
+      decl = declarationUnderCursor();
     startInteractiveRename(decl);
   }else{
     kWarning() << "strange problem";
@@ -214,14 +339,16 @@ DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, D
 }
 
 void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl) {
-  if(!doRefactoringWarning())
-    return;
+//   if(!doRefactoringWarning())
+//     return;
 
   DUChainReadLocker lock(DUChain::lock());
 
   Declaration* declaration = decl.data();
-  if(!declaration)
+  if(!declaration) {
+    KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
     return;
+  }
 
   if(FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration))
     declaration = definition->declaration(declaration->topContext());
@@ -340,3 +467,18 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
       return;
   }
 }
+
+KDevelop::IndexedDeclaration SimpleRefactoring::declarationUnderCursor(bool allowUse) {
+  KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(doc && doc->textDocument() && doc->textDocument()->activeView()) {
+    DUChainReadLocker lock(DUChain::lock());
+    if(allowUse)
+      return DUChainUtils::itemUnderCursor(doc->url(), SimpleCursor(doc->textDocument()->activeView()->cursorPosition()));
+    else
+      return DUChainUtils::declarationInLine(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
+  }
+  
+  return KDevelop::IndexedDeclaration();
+}
+
+// #include "simplerefactoring.moc"

@@ -213,6 +213,17 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     newClassAction->setText( i18n("Create &New Class") );
     connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
 
+    KAction* renameDeclarationAction = actions->addAction("code_rename_declaration");
+    renameDeclarationAction->setText( i18n("Rename Declaration") );
+    renameDeclarationAction->setIcon(KIcon("edit-rename"));
+    renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
+    connect(renameDeclarationAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeRenameAction()));
+
+    KAction* moveIntoSourceAction = actions->addAction("code_move_definition");
+    moveIntoSourceAction->setText( i18n("Move into Source") );
+    moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
+    connect(moveIntoSourceAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeMoveIntoSourceAction()));
+    
     Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
     ts->setStandardMacros(m_standardMacros);
     ts->connectAction(actionCollection());
@@ -542,7 +553,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
   return comp.result();
 }
 
-QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prepentAddedPathToName) const {
+QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName) const {
 
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<Cpp::IncludeItem> ret;
@@ -589,7 +600,7 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && !sourceExtensions.contains(suffix))
               continue;
             
-            if(prepentAddedPathToName)
+            if(prependAddedPathToName)
               item.name = addPath + item.name;
             
             item.isDirectory = dirContent.fileInfo().isDir();

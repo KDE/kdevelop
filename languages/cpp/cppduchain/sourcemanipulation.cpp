@@ -66,6 +66,31 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
   return lineNumber;
 }
 
+//Re-indents the code so the leftmost line starts at zero
+QString zeroIndentation(QString str, int fromLine = 0) {
+  QStringList lines = str.split('\n');
+  QStringList ret;
+  
+  if(fromLine < lines.size()) {
+    ret = lines.mid(0, fromLine);
+    lines = lines.mid(fromLine);
+  }
+    
+  
+  QRegExp nonWhiteSpace("\\S");
+  int minLineStart = 10000;
+  foreach(QString line, lines) {
+    int lineStart = line.indexOf(nonWhiteSpace);
+    if(lineStart < minLineStart)
+      minLineStart = lineStart;
+  }
+  
+  foreach(QString line, lines)
+    ret << line.mid(minLineStart);
+
+  return ret.join("\n");
+}
+
 KDevelop::DocumentChangeSet& KDevelop::SourceCodeInsertion::changes() {
   return m_changeSet;
 }
@@ -95,7 +120,9 @@ void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier sc
       foundChild = false;
       
       foreach(DUContext* child, context->childContexts()) {
-        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && child->range().start < m_insertBefore) {
+        kDebug() << "checking child" << child->localScopeIdentifier().toString() << "against" << needNamespace.first();
+        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && (child->range().start < m_insertBefore || !m_insertBefore.isValid())) {
+          kDebug() << "taking";
           context = child;
           foundChild = true;
           needNamespace.pop_front();
@@ -134,7 +161,11 @@ void KDevelop::SourceCodeInsertion::setAccess(KDevelop::Declaration::AccessPolic
 }
 
 KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topContext) : m_context(topContext), m_access(Declaration::Public), m_topContext(topContext) {
+  if(m_topContext->parsingEnvironmentFile() && m_topContext->parsingEnvironmentFile()->isProxyContext()) {
+    kWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
+  }
   m_codeRepresentation = KDevelop::createCodeRepresentation(m_topContext->url());
+  m_insertBefore = SimpleCursor::invalid();
 }
 
 KDevelop::SourceCodeInsertion::~SourceCodeInsertion() {
@@ -207,22 +238,27 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
   return ret;
 }
 
-bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, KDevelop::Declaration::AccessPolicy policy, bool isConstant) {
+bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, bool isConstant, QString body) {
   if(!m_context)
     return false;
   
   returnType = TypeUtils::removeConstants(returnType);
   
-  QString decl = Cpp::simplifiedTypeString(returnType, m_context) + " " + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
+  QString decl = (returnType ? (Cpp::simplifiedTypeString(returnType, m_context) + " ") : QString()) + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
   
   if(isConstant)
     decl += " const";
   
-  decl += ";\n";
+  if(body.isEmpty())
+    decl += ";";
+  else
+    decl += " " + zeroIndentation(body, 1);
+  
+  decl += "\n";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
-  decl = applyIndentation(applySubScope(insertion.prefix +decl));
+  decl = "\n" + applyIndentation(applySubScope(insertion.prefix +decl));
   
   return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(insertion.line, 0, insertion.line, 0), QString(), decl));
 }
@@ -259,15 +295,19 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
             (kind == Variable && decl->kind() == Declaration::Instance && !dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
           behindExistingItem = true;
           ret.line = decl->range().end.line+1;
+        if(decl->internalContext())
+          ret.line = decl->internalContext()->range().end.line+1;
         }
       }
     }
+    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->range().textRange() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
+    kDebug() << "is proxy:" << m_context->topContext()->parsingEnvironmentFile()->isProxyContext() << "count of declarations:" << m_context->topContext()->localDeclarations().size();
     
     if(!behindExistingItem) {
       ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(m_context->owner());
       if(kind != Slot && m_access == Declaration::Public && classDecl && classDecl->classType() == ClassDeclarationData::Struct) {
         //Nothing to do, we can just insert into a struct if it should be public
-      }else{
+      }else if(m_context->type() == DUContext::Class) {
         ret.prefix = accessString();
         if(kind == Slot)
         ret.prefix +=  " slots";
@@ -353,7 +393,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
     //Put declarations to the end, and namespaces to the begin
     KTextEditor::Cursor position;
     
-    if(!m_scope.isEmpty() || m_context->range().end > m_insertBefore) {
+    if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->range().end > m_insertBefore)) {
       //To the begin
       position = m_context->range().start.textCursor();
       
@@ -370,7 +410,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       position = m_context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
     }
     int firstValidLine = firstValidCodeLineBefore(position.line());
-    if(firstValidLine > position.line() && m_context == m_topContext && firstValidLine < m_insertBefore.line) {
+    if(firstValidLine > position.line() && m_context == m_topContext && (!m_insertBefore.isValid() || firstValidLine < m_insertBefore.line)) {
       position.setLine(firstValidLine);
       position.setColumn(0);
     }

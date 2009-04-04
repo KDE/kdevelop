@@ -40,7 +40,6 @@ public:
   virtual void setSubScope(KDevelop::QualifiedIdentifier scope);
   ///Set optional access-policy for the inserted items
   virtual void setAccess(KDevelop::Declaration::AccessPolicy access);
-
   ///Adds a variable declaration using the parameters given before
   virtual bool insertVariableDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr type);
 
@@ -48,8 +47,9 @@ public:
     AbstractType::Ptr type;
     QString name;
   };
-  
-  virtual bool insertFunctionDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr returnType, QList< KDevelop::SourceCodeInsertion::SignatureItem > signature, KDevelop::Declaration::AccessPolicy policy = KDevelop::Declaration::Public, bool isConstant = false);
+
+  ///@param body Optional function-body, including parens
+  virtual bool insertFunctionDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr returnType, QList< KDevelop::SourceCodeInsertion::SignatureItem > signature, bool isConstant = false, QString body = QString());
   
   ///Use the returned change-set to eventually let the user review the changes, and apply them.
   KDevelop::DocumentChangeSet& changes();
