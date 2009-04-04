@@ -89,7 +89,7 @@ public:
     * @warning The duchain must _not_ be locked when this is called!
     *
     */
-   KDevelop::ReferencedTopDUContext waitForUpdate(const IndexedString& document, TopDUContext::Features minFeatures);
+   KDevelop::ReferencedTopDUContext waitForUpdate(const IndexedString& document, TopDUContext::Features minFeatures, bool wantProxyContext = false);
    
   /**
    * Return any chain for the given document

@@ -1349,7 +1349,7 @@ void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
   emit declarationSelected(decl);
 }
 
-KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures) {
+KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool wantProxyContext) {
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
   WaitForUpdate waiter;
@@ -1371,7 +1371,13 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
     usleep(10000);
 //     waiter.m_wait.wait(&waiter.m_waitMutex, 10);
   }
-  
+
+  if(!wantProxyContext) {
+    DUChainReadLocker readLock(DUChain::lock());
+    if(waiter.m_topContext && waiter.m_topContext->parsingEnvironmentFile() && waiter.m_topContext->parsingEnvironmentFile()->isProxyContext() && !waiter.m_topContext->importedParentContexts().isEmpty())
+      return waiter.m_topContext->importedParentContexts()[0].context(0)->topContext();
+  }
+
   return waiter.m_topContext;
 }
 
