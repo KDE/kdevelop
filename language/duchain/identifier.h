@@ -112,6 +112,7 @@ public:
   /**
    * @param start The position in the given string where to start searching for the identifier(optional).
    * @param takenRange If this is nonzero, it will be filled with the length of the range from the beginning of the given string, that was used to construct this identifier.(optional)
+   * @warning The identifier is parsed in a C++-similar way, and the result may not be what you expect. If you want to prevent that parsing, use the constructor that takes IndexedString.
    * */
   explicit Identifier(const QString& str, uint start = 0, uint* takenRange = 0);
   ///Preferred constructor, ise this if you already have an IndexedString available. This does not decompose the given string.
