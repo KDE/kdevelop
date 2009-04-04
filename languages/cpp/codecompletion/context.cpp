@@ -1217,7 +1217,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
                 }
               }
               
-              if(!hasCopyConstructor) {
+              if(!hasCopyConstructor && m_knownArgumentExpressions.isEmpty()) {
                   QString showName = m_expressionResult.type.abstractType()->toString() + "(";
                   items << CompletionTreeItemPointer( new TypeConversionCompletionItem( showName, m_expressionResult.type, depth(), KSharedPtr <Cpp::CodeCompletionContext >(this) ) );
               }
