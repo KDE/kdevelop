@@ -22,7 +22,7 @@
 #ifndef DVCSEVENT_H
 #define DVCSEVENT_H
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 /**
  * This class is used to store all required Commit(Revision) data: commit (sha string),
