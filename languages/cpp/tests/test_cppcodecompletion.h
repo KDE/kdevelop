@@ -99,6 +99,7 @@ private slots:
   void testAssistant();
   void testCompletionInExternalClassDefinition();
   void testCompletionBehindTypedeffedConstructor();
+  void testSubClassVisibility();
 
 public:
   enum DumpArea {
