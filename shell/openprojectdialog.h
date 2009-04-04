@@ -27,7 +27,7 @@ class OpenProjectDialog : public KAssistantDialog
 {
 Q_OBJECT
 public:
-    OpenProjectDialog( QWidget* parent = 0 );
+    OpenProjectDialog( const KUrl& startUrl, QWidget* parent = 0 );
     KUrl projectFileUrl();
     QString projectName();
     QString projectManager();

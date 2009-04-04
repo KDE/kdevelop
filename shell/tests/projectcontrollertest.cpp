@@ -63,7 +63,7 @@ public:
     bool m_reopen;
 
 public slots:
-    virtual KUrl askProjectConfigLocation() { return KUrl(); }
+    virtual KUrl askProjectConfigLocation(const KUrl& startUrl) { return KUrl(); }
     virtual bool userWantsReopen() { return m_reopen; }
 };
 

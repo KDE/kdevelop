@@ -71,6 +71,7 @@ Boston, MA 02110-1301, USA.
 #include "openprojectdialog.h"
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
+#include <kio/job.h>
 
 namespace KDevelop
 {
@@ -105,9 +106,10 @@ public:
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
     IProject* m_configuringProject;
     ProjectController* q;
+    bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p)
+        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false)
     {
     }
 
@@ -240,10 +242,10 @@ bool projectFileExists( const KUrl& u )
     }
 }
 
-KUrl ProjectDialogProvider::askProjectConfigLocation()
+KUrl ProjectDialogProvider::askProjectConfigLocation(const KUrl& startUrl)
 {
     Q_ASSERT(d);
-    OpenProjectDialog dlg( Core::self()->uiController()->activeMainWindow() );
+    OpenProjectDialog dlg( startUrl, Core::self()->uiController()->activeMainWindow() );
     if(dlg.exec() == QDialog::Rejected)
         return KUrl();
     
@@ -354,6 +356,11 @@ void ProjectController::setupActions()
     d->m_recentAction->setWhatsThis(
         i18n( "<b>Open recent project</b><p>Opens recently opened project.</p>" ) );
     d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
+    
+    KAction* openProjectForFileAction = new KAction( this );
+    ac->addAction("project_open_for_file", openProjectForFileAction);
+    openProjectForFileAction->setText("Open Project for Current File");
+    connect( openProjectForFileAction, SIGNAL(triggered(bool)), SLOT(openProjectForUrlSlot(bool)));
 }
 
 ProjectController::~ProjectController()
@@ -419,6 +426,72 @@ IProject* ProjectController::projectAt( int num ) const
 QList<IProject*> ProjectController::projects() const
 {
     return d->m_projects;
+}
+
+void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryList entries ) {
+    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(_job));
+    Q_ASSERT(job);
+    foreach(KIO::UDSEntry entry, entries) {
+        if(d->m_foundProjectFile)
+            break;
+        if(!entry.isDir()) {
+            QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
+            
+            if(name.endsWith(".kdev4")) {
+                //We have found a project-file, open it
+                KUrl u(job->url());
+                u.addPath(name);
+                openProject(u);
+                d->m_foundProjectFile = true;
+            }
+        }
+    }
+}
+
+void ProjectController::openProjectForUrlSlot(bool) {
+    if(ICore::self()->documentController()->activeDocument()) {
+        KUrl url = ICore::self()->documentController()->activeDocument()->url();
+        IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+        if(!project) {
+            openProjectForUrl(url);
+        }else{
+            KMessageBox::error(Core::self()->uiController()->activeMainWindow(), i18n("Project already open: %1", project->name()));
+        }
+    }else{
+        KMessageBox::error(Core::self()->uiController()->activeMainWindow(), i18n("No active document"));
+    }
+}
+
+
+void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
+    KUrl dirUrl(sourceUrl);
+    dirUrl.setFileName(QString());
+    KUrl testAt = dirUrl;
+    
+    d->m_foundProjectFile = false;
+    
+    while(!testAt.path().isEmpty()) {
+        KUrl testProjectFile(testAt);
+        KIO::ListJob* job = KIO::listDir(testAt);
+        
+        connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)), SLOT(eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList)));
+        
+        KIO::NetAccess::synchronousRun(job, ICore::self()->uiController()->activeMainWindow());
+        if(d->m_foundProjectFile) {
+            //Fine! We have directly opened the project
+            d->m_foundProjectFile = false;
+            return;
+        }
+        KUrl oldTest = testAt;
+        testAt = testAt.upUrl();
+        if(oldTest == testAt)
+            break;
+    }
+    
+    KUrl askForOpen = d->dialog->askProjectConfigLocation(dirUrl);
+    
+    if(askForOpen.isValid())
+        openProject(askForOpen);
 }
 
 void ProjectController::openProject( const KUrl &projectFile )

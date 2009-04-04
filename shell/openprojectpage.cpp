@@ -34,12 +34,16 @@
 namespace KDevelop
 {
 
-OpenProjectPage::OpenProjectPage( QWidget* parent )
+OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
         : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
 
-    fileWidget = new KFileWidget( Core::self()->projectController()->projectsBaseDirectory(), this);
+    KUrl start = Core::self()->projectController()->projectsBaseDirectory();
+    if(startUrl.isValid())
+        start = startUrl;
+    
+    fileWidget = new KFileWidget( start, this);
 
     QStringList filters;
     QStringList allEntry;

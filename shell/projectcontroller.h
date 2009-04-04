@@ -22,10 +22,14 @@ Boston, MA 02110-1301, USA.
 #define KDEVPROJECTCONTROLLER_H
 
 #include <interfaces/iprojectcontroller.h>
+#include <kio/udsentry.h>
 
 #include "shellexport.h"
 
 class QModelIndex;
+namespace KIO {
+    class Job;
+}
 
 namespace KDevelop
 {
@@ -42,7 +46,7 @@ public:
     virtual ~IProjectDialogProvider();
 
 public Q_SLOTS:
-    virtual KUrl askProjectConfigLocation() = 0;
+    virtual KUrl askProjectConfigLocation(const KUrl& startUrl = KUrl()) = 0;
     virtual bool userWantsReopen() = 0;
 };
 
@@ -74,11 +78,14 @@ public:
     KUrl projectsBaseDirectory() const;
 
 public Q_SLOTS:
+    virtual void openProjectForUrl( const KUrl &sourceUrl );
     virtual void openProject( const KUrl &KDev4ProjectFile = KUrl() );
     void projectImportingFinished( IProject* );
     virtual void closeProject( IProject* );
     virtual void closeAllProjects();
     virtual void configureProject( IProject* );
+    void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
+    void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
 
 protected:
@@ -120,7 +127,7 @@ public:
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    virtual KUrl askProjectConfigLocation();
+    virtual KUrl askProjectConfigLocation(const KUrl& sta);
     virtual bool userWantsReopen();
 };
 

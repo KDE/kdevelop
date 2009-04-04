@@ -88,6 +88,11 @@ public:
 
 public Q_SLOTS:
     /**
+     * Tries finding a project-file for the given source-url and opens it.
+     * If no .kdev4 project file is found, the user is asked to import a project.
+     */
+        virtual void openProjectForUrl( const KUrl &sourceUrl ) = 0;
+    /**
      * open the project from the given kdev4 project file. This only reads
      * the file and starts creating the project model from it. The opening process
      * is finished once @ref projectOpened signal is emitted.
