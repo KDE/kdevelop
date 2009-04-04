@@ -74,6 +74,23 @@ IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index
   return IndexedString();
 }
 
+DUContext* AbstractFunctionDeclaration::internalFunctionContext() const {
+  const Declaration* selfDecl = dynamic_cast<const Declaration*>(this);
+  Q_ASSERT(selfDecl);
+  DUContext* ctx = selfDecl->internalContext();
+  //Follow the context imports until a function context is found
+  while(ctx && ctx->type() != DUContext::Function) {
+    QVector< DUContext::Import > imports = ctx->importedParentContexts();
+    if(!imports.isEmpty()) {
+      ctx = imports.first().context(selfDecl->topContext());
+    }else{
+      return 0;
+    }
+  }
+  return ctx;
+}
+
+
 }
 
 

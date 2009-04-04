@@ -25,6 +25,7 @@
 
 namespace KDevelop
 {
+class DUContext;
 
 class AbstractFunctionDeclarationData
 {
@@ -64,6 +65,11 @@ public:
   ///Only used for class-member function declarations(see ClassFunctionDeclaration)
   bool isExplicit() const;
   void setExplicit(bool isExplicit);
+  
+  ///Conveniency function, returns the context of type DUContext::Function that is attached to this declaration
+  ///This does not equal internalContext(), because internalContext() may point to the function body
+  ///May return zero if no function context is attached
+  DUContext* internalFunctionContext() const;
   
   /**
    * Returns the default-parameters that are set. The last default-parameter matches the last
