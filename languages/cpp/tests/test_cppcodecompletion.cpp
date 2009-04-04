@@ -507,30 +507,54 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
 }
 
 void TestCppCodeCompletion::testSameNamespace() {
-
-  //                 0         1         2         3         4         5         6         7
-  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("namespace A { class C { }; void test2(); } namespace A { void test() { } }");
-
-  TopDUContext* top = parse(method, DumpNone);
-
-  DUChainWriteLocker lock(DUChain::lock());
-
-  QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 2);
-  QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
-  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
-  FunctionDefinition* funDef = dynamic_cast<KDevelop::FunctionDefinition*>(top->childContexts()[1]->localDeclarations()[0]);
-  QVERIFY(!funDef->hasDeclaration());
-
-//   lock.unlock();
   {
-    kDebug() << CompletionItemTester(top->childContexts()[1]).names;
-    QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "A");
-    QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "test2" << "test" << "A");
+    addInclude("testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
+    
+    QByteArray method("#include \"testSameNamespaceClassHeader.h\"\n namespace A {\n namespace AA {\n};\n };\n");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+    {
+      kDebug() << CompletionItemTester(top->childContexts()[0]).names;
+      QCOMPARE(CompletionItemTester(top->childContexts()[0]).names.toSet(), QSet<QString>() << "B" << "A" << "AA");
+      QCOMPARE(CompletionItemTester(top->childContexts()[0]->childContexts()[0]).names.toSet(), QSet<QString>() << "B" << "A" << "AA");
+    }
+    
+    release(top);
   }
-  
-  release(top);
+
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+    QByteArray method("namespace A { class C { }; void test2(); } namespace A { void test() { } class C {};}");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2);
+    FunctionDefinition* funDef = dynamic_cast<KDevelop::FunctionDefinition*>(top->childContexts()[1]->localDeclarations()[0]);
+    QVERIFY(!funDef->hasDeclaration());
+
+  //   lock.unlock();
+    {
+      kDebug() << CompletionItemTester(top->childContexts()[1]->childContexts()[2]).names;
+      QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[2]).names.toSet(), QSet<QString>() << "C" << "A");
+      QCOMPARE(CompletionItemTester(top->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "A");
+      QCOMPARE(CompletionItemTester(top->childContexts()[1]->childContexts()[1]).names.toSet(), QSet<QString>() << "C" << "test2" << "test" << "A");
+    }
+    
+    release(top);
+  }
 }
 
 void TestCppCodeCompletion::testUnnamedNamespace() {
