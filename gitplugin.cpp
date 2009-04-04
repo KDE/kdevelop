@@ -68,7 +68,7 @@ QString GitPlugin::name() const
 
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 {
-    KDevelop::VcsJob* job = gitRevParse(dirPath.path(), QStringList(QString("--is-inside-work-tree")));
+    KDevelop::VcsJob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
     if (job)
     {
         job->exec();
@@ -78,13 +78,13 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
             return true;
         }
     }
-    kDebug() << "Dir:" << dirPath.path() << " is not inside work tree of git" ;
+    kDebug() << "Dir:" << dirPath.toLocalFile() << " is not inside work tree of git" ;
     return false;
 }
 
 bool GitPlugin::isVersionControlled(const KUrl &path)
 {
-    QFileInfo fsObject(path.path());
+    QFileInfo fsObject(path.toLocalFile());
     if (!fsObject.isFile()) {
         return isValidDirectory(path);
     }
@@ -131,7 +131,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
         return NULL;
 
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocations.front().path()) ) {
+    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
         *job << "git";
         *job << "add";
         *job << "--";
@@ -172,7 +172,7 @@ VcsJob* GitPlugin::commit(const QString& message,
         return NULL;
 
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocations.front().path()) ) {
+    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
         *job << "git";
         *job << "commit";
         *job << "-m";
@@ -192,7 +192,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         return NULL;
 
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, files.front().path()) ) {
+    if (prepareJob(job, files.front().toLocalFile()) ) {
         *job << "git";
         *job << "rm";
         *job << "--";
@@ -211,7 +211,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     Q_UNUSED(rev)
     Q_UNUSED(limit)
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.path()) ) {
+    if (prepareJob(job, localLocation.toLocalFile()) ) {
         *job << "git";
         *job << "log";
         *job << "--";
@@ -285,7 +285,7 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
         return NULL;
 
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository.path()) ) {
+    if (prepareJob(job, repository.toLocalFile()) ) {
         *job << "git";
         *job << "reset";
         //Empty branch has 'something' so it breaks the command
@@ -403,7 +403,7 @@ QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory)
         VcsStatusInfo status;
         status.setUrl(file);
         status.setState(charToState(stCh.toAscii() ) );
-        kDebug() << line[97] << " " << file.path();
+        kDebug() << line[97] << " " << file.toLocalFile();
 
         modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
     }
@@ -459,7 +459,7 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory)
         status.setState(VcsStatusInfo::State(charToState(stCh.toAscii() ) +
                                              VcsStatusInfo::ItemAddedIndex - VcsStatusInfo::ItemAdded) );
 
-        kDebug() << line[97] << " " << file.path();
+        kDebug() << line[97] << " " << file.toLocalFile();
 
         cachedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
     }
