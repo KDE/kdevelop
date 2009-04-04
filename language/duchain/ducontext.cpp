@@ -1105,7 +1105,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     }
     
   ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-  if (parentContext() && (searchInParents || shouldSearchInParent(InImportedParentContext)))
+  if (parentContext() && (searchInParents || (shouldSearchInParent(InImportedParentContext)) && parentContext()->type() == DUContext::Helper) )
     parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, searchInParents, currentDepth+1);
 }
 
