@@ -74,6 +74,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public KShared
 public:
     Problem();
     Problem(ProblemData& data);
+    ~Problem();
 
     ProblemData::Source source() const;
     void setSource(ProblemData::Source source);
@@ -119,12 +120,16 @@ public:
      */
     virtual Severity severity() const;
 
-        /**
+     /**
      * If this problem can be solved, this may return an assistant for the solution.
-     * The default-implementation returns zero.
      */
     virtual KSharedPtr<IAssistant> solutionAssistant() const;
 
+    /**
+     * Set an assistant for solving this problem
+     */
+    void setSolutionAssistant(KSharedPtr<IAssistant> assistant);
+    
     enum {
         Identity = 15
     };
@@ -132,6 +137,7 @@ public:
     private:
     Problem(const Problem& other);
     Problem& operator=(const Problem& rhs);
+    KSharedPtr< KDevelop::IAssistant > m_solution;
     
     DUCHAIN_DECLARE_DATA(Problem)
 };

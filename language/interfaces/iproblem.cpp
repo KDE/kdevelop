@@ -36,6 +36,9 @@ Problem::Problem()
 KDevelop::Problem::Problem(KDevelop::ProblemData& data) : DUChainBase(data) {
 }
 
+KDevelop::Problem::~Problem() {
+}
+
 KDevelop::IndexedString KDevelop::Problem::url() const
 {
     return d_func()->url;
@@ -104,7 +107,11 @@ void Problem::setSource(ProblemData::Source source)
 }
 
 KSharedPtr< KDevelop::IAssistant > KDevelop::Problem::solutionAssistant() const {
-    return KSharedPtr< KDevelop::IAssistant >();
+    return m_solution;
+}
+
+void KDevelop::Problem::setSolutionAssistant(KSharedPtr< KDevelop::IAssistant > assistant) {
+    m_solution = assistant;
 }
 
 KDevelop::Problem::Severity KDevelop::Problem::severity() const {
