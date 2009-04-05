@@ -92,6 +92,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
     //Actions on declarations
     qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
 
+    DUChainReadLocker lock(DUChain::lock());
 
     Declaration* declaration = declContext->declaration().data();
 
