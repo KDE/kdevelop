@@ -1,6 +1,8 @@
 File=lcovconfig.kcfg
 ClassName=LCovSettings
+Inherits=LCovSettingsBase
 Singleton=true
+IncludeFiles=\"lcovsettingsbase.h\"
 UseEnumTypes=true
 SetUserTexts=true
 ItemAccessors=true

@@ -1,5 +1,5 @@
 /* KDevelop coverage plugin
- *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *    Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 
 #include "reportmodel.h"
 #include "coveredfile.h"
+#include <KConfigGroup>
+#include <KGlobal>
 #include <KLocale>
 
 using Veritas::CoveredFile;
@@ -231,6 +233,19 @@ ReportModel::ReportModel(QObject* parent)
             << i18n("visited")
             << i18n("SLOC");
     setHorizontalHeaderLabels(headers);
+
+    KConfigGroup group = KGlobal::config()->group("Code Coverage");
+    if (group.hasGroup("Color Range")) {
+        m_colorRange.load(group.group("Color Range"));
+    } else {
+        m_colorRange.setMode(ColorRange::Discrete);
+        StopPoints stopPoints;
+        stopPoints.append(StopPoint(0.25, QColor("black")));
+        stopPoints.append(StopPoint(0.50, QColor("red")));
+        stopPoints.append(StopPoint(0.75, QColor("orange")));
+        stopPoints.append(StopPoint(1, QColor("green")));
+        m_colorRange.setStopPoints(stopPoints);
+    }
 }
 
 void ReportModel::setRootDirectory(const KUrl& root)
@@ -264,16 +279,6 @@ QList<QStandardItem*> ReportModel::createFileRow(CoveredFile* f)
     QList<QStandardItem*> row;
     row << file << file->coverageRatioItem() << file->nrofCoveredLinesItem() << file->slocItem();
     return row;
-}
-
-QBrush brushForCoverage(double percent)
-{
-    QString color;
-    if      (percent < 5)  color = "black";
-    else if (percent < 30) color = "red";
-    else if (percent < 60) color = "orange";
-    else                   color = "green";
-    return QBrush(QColor(color));
 }
 
 // slot called when new CoveredFile has been parsed
@@ -314,5 +319,9 @@ void ReportModel::updateColoredCoverageColumn(ReportDirItem* dir)
     it->setData(dir->coverageRatio(), Qt::DisplayRole);
 }
 
+QBrush ReportModel::brushForCoverage(double percent)
+{
+    return QBrush(m_colorRange.colorAt(percent / 100));
+}
 
 #include "reportmodel.moc"

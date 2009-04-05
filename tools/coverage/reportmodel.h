@@ -1,5 +1,5 @@
 /* KDevelop coverage plugin
- *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *    Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <KUrl>
 
 #include "coverageexport.h"
+#include "colorrange.h"
 
 namespace Veritas
 {
@@ -64,10 +65,23 @@ private:
     void appendDir(const QString& dir);
     void updateColoredCoverageColumn(ReportDirItem* dir);
 
+    /**
+     * Returns the brush with the color for the given coverage percent.
+     *
+     * @param percent The coverage percent.
+     * @return The brush.
+     */
+    QBrush brushForCoverage(double percent);
+
 private:
     KUrl m_root;
     QHash<KUrl, ReportFileItem*> m_files;
     QMap<QString, ReportDirItem*> m_dirs;
+
+    /**
+     * The color range used to associate colors with coverage percent values.
+     */
+    ColorRange m_colorRange;
 };
 
 // TODO merge this with the CoveredFile class, it is totally redundant to have both waste resources

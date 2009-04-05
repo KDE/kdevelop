@@ -1,6 +1,5 @@
-/* KDevelop Project Settings
- *
- * Copyright 2006  Matt Rogers <mattr@kde.org>
+/* KDevelop coverage plugin
+ *    Copyright 2009 Daniel Calviño Sánchez <danxuliu@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,27 +17,34 @@
  * 02110-1301, USA.
  */
 
-#ifndef LCOVPREFS_H
-#define LCOVPREFS_H
+#ifndef VERITAS_COVERAGE_GRADIENTCOLORRANGETEST_H
+#define VERITAS_COVERAGE_GRADIENTCOLORRANGETEST_H
 
-#include <kcmodule.h>
+#include <QtCore/QObject>
+#include <QColor>
 
-#include <kurl.h>
+namespace Veritas {
 
-class LCovPrefs : public KCModule
+class GradientColorRangeTest: public QObject
 {
-    Q_OBJECT
-public:
-    LCovPrefs( QWidget *parent, const QVariantList &args );
+Q_OBJECT
+private slots:
 
-    virtual void save();
-    virtual void load();
-    virtual void defaults();
+    void testConstructor();
+    void testSetStopPoints();
+    void testColorAtWithNoMiddleStopPoints();
+    void testColorAtWithSeveralStopPoints();
 
-public slots:
+private:
 
-    void changeState(bool changed);
+    /**
+     * Checks that actual has the three RGB components equal to the RGB
+     * components +-1 of expected.
+     */
+    void assertFuzzyColor(const QColor& actual, const QColor& expected);
 
 };
+
+}
 
 #endif

@@ -18,6 +18,9 @@ set(veritascoverage_SRCS
     reportmodel.cpp
     reportproxymodel.cpp
     drilldownview.cpp
+    colorrange.cpp
+    discretecolorrange.cpp
+    gradientcolorrange.cpp
     tests/viewstub.cpp
     tests/pluginstub.cpp)
 
@@ -54,9 +57,17 @@ install(TARGETS kdevcoverage DESTINATION ${PLUGIN_INSTALL_DIR})
 
 if( NOT KDE_VERSION VERSION_LESS "4.2.2" )
 
-  set(lcovsettings_cfg_SRCS lcovprefs.cpp)
+  set(lcovsettings_cfg_SRCS
+      lcovprefs.cpp
+      lcovprefswidget.cpp
+      lcovsettingsbase.cpp
+      stoppointwidget.cpp
+      colorrangebar.cpp
+      colorrange.cpp
+      discretecolorrange.cpp
+      gradientcolorrange.cpp)
   
-  kde4_add_ui_files( lcovsettings_cfg_SRCS lcovprefs.ui )
+  kde4_add_ui_files( lcovsettings_cfg_SRCS lcovprefswidget.ui stoppointwidget.ui)
   kde4_add_kcfg_files( lcovsettings_cfg_SRCS lcovconfig.kcfgc )
   kde4_add_plugin( kcm_kdev_lcovsettings ${lcovsettings_cfg_SRCS} )
   target_link_libraries( kcm_kdev_lcovsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )

@@ -23,6 +23,7 @@
 #include <kaboutdata.h>
 
 #include "lcovconfig.h"
+#include "lcovprefswidget.h"
 
 K_PLUGIN_FACTORY(LCovPrefsFactory, registerPlugin<LCovPrefs>();)
 K_EXPORT_PLUGIN(LCovPrefsFactory(KAboutData("kcm_kdev_lcovsettings", "kdevelop", ki18n("LCov Settings"), "0.1")))
@@ -32,9 +33,12 @@ LCovPrefs::LCovPrefs( QWidget *parent, const QVariantList &args )
 {
 
     QVBoxLayout * l = new QVBoxLayout( this );
-    QWidget* w = new QWidget(parent);
-    preferencesDialog.setupUi( w );
+    QWidget* w = new LCovPrefsWidget(LCovSettings::self(), parent);
     l->addWidget( w );
+
+    connect(w, SIGNAL(changed(bool)), this, SLOT(changeState(bool)));
+    connect(LCovSettings::self(), SIGNAL(colorRangeChanged()),
+            w, SLOT(reloadColorRange()));
 
     addConfig( LCovSettings::self(), w );
 
@@ -43,17 +47,25 @@ LCovPrefs::LCovPrefs( QWidget *parent, const QVariantList &args )
 
 void LCovPrefs::save()
 {
+    LCovSettings::self()->writeConfig();
     KCModule::save();
 }
 
 void LCovPrefs::load()
 {
+    LCovSettings::self()->readConfig();
     KCModule::load();
 }
 
 void LCovPrefs::defaults()
 {
+    LCovSettings::self()->setDefaults();
     KCModule::defaults();
+}
+
+void LCovPrefs::changeState(bool changed)
+{
+    unmanagedWidgetChangeState(changed);
 }
 
 #include "lcovprefs.moc"

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LCovPrefsWidget</class>
+ <widget class="QWidget" name="LCovPrefsWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>427</width>
+    <height>346</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QGroupBox" name="pathsGroupBox">
+     <property name="title">
+      <string extracomment="@title:group">Paths</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="geninfoPathLabel">
+        <property name="text">
+         <string>geninfo Executable:</string>
+        </property>
+        <property name="buddy">
+         <cstring>kcfg_geninfoPath</cstring>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="KUrlRequester" name="kcfg_geninfoPath">
+        <property name="toolTip">
+         <string>Select the geninfo executable to use for extracting visualization from coverage data</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="colorsGroupBox">
+     <property name="whatsThis">
+      <string extracomment="@info:whatsthis">Configuration for coverage report colors.
+
+In the directory view of the coverage report, each directory coverage percentage is represented using a color. 
+
+The color associated to each percentage is got from a color range, made up of several stop points. Stop points represent a color at a specific percentage. 
+
+A color range has two different and independent modes: discrete and gradient. In discrete type, all percentage values between the previous stop point and the current one have the color of the current one. In gradient type, the values are interpolated between the previous stop point color and the current one color.</string>
+     </property>
+     <property name="title">
+      <string extracomment="@title:group">Report colors</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,10">
+      <item>
+       <widget class="QFrame" name="colorRangeBarFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string extracomment="@info:tooltip">Current color range</string>
+        </property>
+        <property name="whatsThis">
+         <string extracomment="@info:whatsthis">Representation of the color range to be used in the coverage report colors.</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="typeLabel">
+          <property name="text">
+           <string extracomment="@label:listbox">Type:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KComboBox" name="modeComboBox">
+          <property name="toolTip">
+           <string extracomment="@info:tooltip">Color range type</string>
+          </property>
+          <property name="whatsThis">
+           <string extracomment="@info:whatsthis">Choose the type of color range to be used in the coverage report colors.</string>
+          </property>
+          <item>
+           <property name="text">
+            <string extracomment="@item:inlistbox Discrete color range type">Discrete</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string extracomment="@item:inlistbox Gradient color range type">Gradient</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QScrollArea" name="stopPointsScrollArea">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>387</width>
+           <height>154</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout"/>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QFrame</extends>
+   <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
