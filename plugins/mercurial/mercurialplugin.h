@@ -56,7 +56,7 @@ class MercurialPlugin
     friend class MercurialExecutor;
 
 public:
-    MercurialPlugin(QObject *parent, const QVariantList & args = QVariantList());
+    explicit MercurialPlugin(QObject *parent, const QVariantList & args = QVariantList());
     ~MercurialPlugin();
 
     bool isValidDirectory(const KUrl &dirPath);

@@ -747,7 +747,7 @@ void MercurialPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& comm
                 QStringList unparsedParentList = parents.split(QChar(' '), QString::SkipEmptyParts);
                 // id:Short-node
                 static const unsigned int shortNodeSuffixLen = 13;
-                foreach(QString p, unparsedParentList) {
+                foreach(const QString & p, unparsedParentList) {
                     QString ids = p.left(p.size() - shortNodeSuffixLen);
                     id = ids.toUInt(&success);
 
