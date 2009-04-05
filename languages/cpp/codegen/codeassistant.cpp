@@ -154,9 +154,9 @@ void StaticCodeAssistant::documentActivated(KDevelop::IDocument* doc) {
 
 void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top) {
     //Check whether one of the problems is in the current line, and if yes, show its assistant
-    kDebug() << "checking, problem-count:" << top->problems().size();
+//     kDebug() << "checking, problem-count:" << top->problems().size();
     foreach(KDevelop::ProblemPointer problem, top->problems()) {
-      kDebug() << "range of problem:" << problem->range().textRange() << "matching to" << m_currentView->cursorPosition().line();
+//       kDebug() << "range of problem:" << problem->range().textRange() << "matching to" << m_currentView->cursorPosition().line();
       if(m_currentView && m_currentView->cursorPosition().line() == problem->range().start.line) {
         IAssistant::Ptr solution = problem->solutionAssistant();
         if(solution) {
