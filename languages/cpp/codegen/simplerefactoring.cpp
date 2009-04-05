@@ -104,7 +104,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
 
       extension.addAction(ContextMenuExtension::RefactorGroup, action);
       
-      if(declaration->isFunctionDeclaration() && declaration->isDefinition() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
+      if(declContext->use().isEmpty() && declaration->isFunctionDeclaration() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
         !dynamic_cast<Cpp::TemplateDeclaration*>(declaration)) {
         AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
         if(funDecl && !funDecl->isInline()) {
@@ -113,6 +113,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
           action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
 //           action->setIcon(KIcon("arrow-right"));
           connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
+          extension.addAction(ContextMenuExtension::RefactorGroup, action);
         }
       }
     }
