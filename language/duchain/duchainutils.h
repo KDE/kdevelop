@@ -82,6 +82,7 @@ namespace DUChainUtils {
   ///@param collectVersions If this is true, the persistent symbol table is used to first find all registered
   ///                       versions of this class, and then get the inheriters from them all together. This is needed for C++.
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
+  ///                                           If you really want _all_ inheriters, you should initialize it with a very large value.
   KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions = true);
 
   ///Gets all functions that override the function @param overriddenDeclaration, starting the search at @param currentClass
