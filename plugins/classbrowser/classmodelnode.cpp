@@ -1,0 +1,498 @@
+/*
+ * KDevelop Class Browser
+ *
+ * Copyright 2007-2009 Hamish Rodda <rodda@kde.org>
+ * Copyright 2009 Lior Mualem <lior.m.kde@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "classmodelnode.h"
+
+#include <typeinfo>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/persistentsymboltable.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/classdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
+#include <language/duchain/types/functiontype.h>
+
+using namespace KDevelop;
+using namespace ClassModelNodes;
+
+IdentifierNode::IdentifierNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model)
+  : DynamicNode(a_identifier.toString(), a_model)
+  , m_identifier(a_identifier)
+{
+}
+
+IdentifierNode::IdentifierNode(const QString& a_displayName,
+                               const KDevelop::QualifiedIdentifier& a_identifier,
+                               NodesModelInterface* a_model)
+  : DynamicNode(a_displayName, a_model)
+  , m_identifier(a_identifier)
+{
+}
+
+IdentifierNode::IdentifierNode(const QString& a_displayName,
+                               KDevelop::Declaration* a_decl,
+                               NodesModelInterface* a_model)
+  : DynamicNode(a_displayName, a_model)
+  , m_identifier(a_decl->qualifiedIdentifier())
+  , m_cachedDeclaration(a_decl)
+{
+}
+
+IdentifierNode* IdentifierNode::findNode(Node* a_parentNode, const KDevelop::IndexedQualifiedIdentifier& a_identifier)
+{
+  foreach (Node* node, a_parentNode->getChildren())
+  {
+    IdentifierNode* identifierNode = dynamic_cast<IdentifierNode*>(node);
+    if ( identifierNode && (identifierNode->m_identifier == a_identifier) )
+      return identifierNode;
+  }
+
+  return 0;
+}
+
+QualifiedIdentifier IdentifierNode::qualifiedIdentifier() const
+{
+  return QualifiedIdentifier(m_identifier);
+}
+
+Declaration* IdentifierNode::getDeclaration()
+{
+  if ( m_cachedDeclaration )
+    return m_cachedDeclaration.data();
+
+  uint declarationCount = 0;
+  const IndexedDeclaration* declarations = 0;
+  PersistentSymbolTable::self().declarations(
+    m_identifier,
+    declarationCount,
+    declarations );
+
+  for ( uint i = 0; i < declarationCount; ++i )
+  {
+    // See if this declaration matches and return it.
+    Declaration* decl = dynamic_cast<Declaration*>(declarations[i].declaration());
+    if ( decl && !decl->isForwardDeclaration() )
+    {
+      m_cachedDeclaration = decl;
+      break;
+    }
+  }
+
+  return m_cachedDeclaration.data();
+}
+
+bool IdentifierNode::getIcon(QIcon& a_resultIcon)
+{
+  // Load the cached icon if it's null.
+  if ( m_cachedIcon.isNull() )
+  {
+    DUChainReadLocker readLock(DUChain::lock());
+
+    Declaration* decl = getDeclaration();
+    if ( decl )
+      m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
+  }
+
+  // If it's still null then no icon exists.
+  if ( m_cachedIcon.isNull() )
+    return false;
+
+  a_resultIcon = m_cachedIcon;
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+ClassNode::ClassNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model)
+  : IdentifierNode(a_identifier.last().toString(), a_identifier, a_model)
+{
+}
+
+ClassNode::~ClassNode()
+{
+  if ( !m_cachedUrl.isEmpty() )
+  {
+    ClassModelNodesController::self().unregisterForChanges(m_cachedUrl, this);
+    m_cachedUrl = IndexedString();
+  }
+}
+
+void ClassNode::populateNode()
+{
+  // Add special folders
+  addNode(new BaseClassesFolderNode(m_model));
+  addNode(new DerivedClassesFolderNode(m_model));
+
+  DUChainReadLocker readLock(DUChain::lock());
+
+  if ( updateClassDeclarations() )
+  {
+    m_cachedUrl = getDeclaration()->url();
+    ClassModelNodesController::self().registerForChanges(m_cachedUrl, this);
+  }
+}
+
+template <> inline bool qMapLessThanKey(const IndexedIdentifier &key1, const IndexedIdentifier &key2)
+{
+  return key1.index < key2.index;
+}
+
+bool ClassNode::updateClassDeclarations()
+{
+  bool hadChanges = false;
+  SubIdentifiersMap existingIdentifiers = m_subIdentifiers;
+
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(getDeclaration());
+
+  if ( klass )
+  {
+    foreach(Declaration* decl, klass->internalContext()->localDeclarations())
+    {
+      // Ignore forward declarations.
+      if ( decl->isForwardDeclaration() )
+        continue;
+
+      // Don't add existing declarations.
+      if ( existingIdentifiers.contains( decl->ownIndex() ) )
+      {
+        existingIdentifiers.remove(decl->ownIndex());
+        continue;
+      }
+
+      Node* newNode = 0;
+      if ( ClassFunctionDeclaration* funcDecl = dynamic_cast<ClassFunctionDeclaration*>(decl) )
+        newNode = new FunctionNode( funcDecl, m_model );
+      else if ( ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(decl) )
+        newNode = new ClassNode(classDecl->qualifiedIdentifier(), m_model);
+      else if ( ClassMemberDeclaration* varDecl = dynamic_cast<ClassMemberDeclaration*>(decl) )
+        newNode = new VariableNode( varDecl, m_model );
+      else
+      {
+        // Debug - for reference.
+        kDebug() << "class: " << klass->toString() << "name: " << decl->toString() << " - unknown declaration type: " << typeid(*decl).name();
+      }
+
+      if ( newNode )
+      {
+        addNode(newNode);
+
+        // Also remember the identifier.
+        m_subIdentifiers.insert(decl->ownIndex(), newNode);
+
+        hadChanges = true;
+      }
+    }
+  }
+
+  // Remove old existing identifiers
+  for ( SubIdentifiersMap::iterator iter = existingIdentifiers.begin();
+        iter != existingIdentifiers.end();
+        ++iter )
+  {
+    iter.value()->removeSelf();
+    m_subIdentifiers.remove(iter.key());
+    hadChanges = true;
+  }
+
+  return hadChanges;
+}
+
+void ClassNode::nodeCleared()
+{
+  if ( !m_cachedUrl.isEmpty() )
+  {
+    ClassModelNodesController::self().unregisterForChanges(m_cachedUrl, this);
+    m_cachedUrl = IndexedString();
+  }
+
+  m_subIdentifiers.clear();
+}
+
+void ClassModelNodes::ClassNode::documentChanged(const KDevelop::IndexedString&)
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  if ( updateClassDeclarations() )
+    recursiveSort();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesModelInterface* a_model)
+  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
+{
+  // Append the argument signature to the identifier's name (which is what the displayName is.
+  if (FunctionType::Ptr type = a_decl->type<FunctionType>())
+    m_displayName += type->partToString(FunctionType::SignatureArguments);
+
+  // Add special values for ctor / dtor to sort first
+  if ( a_decl->isConstructor() || a_decl->isDestructor() )
+    m_sortableString = "0" + m_displayName;
+  else
+    m_sortableString = "1" + m_displayName;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+VariableNode::VariableNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model)
+  : IdentifierNode(a_decl->toString(), a_decl, a_model)
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+DynamicFolderNode::DynamicFolderNode(const QString& a_displayName, NodesModelInterface* a_model)
+  : DynamicNode(a_displayName, a_model)
+{
+}
+
+bool DynamicFolderNode::getIcon(QIcon& a_resultIcon)
+{
+  static KIcon folderIcon("folder");
+  a_resultIcon = folderIcon;
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+FolderNode::FolderNode(const QString& a_displayName, NodesModelInterface* a_model)
+  : Node(a_displayName, a_model)
+{
+}
+
+bool FolderNode::getIcon(QIcon& a_resultIcon)
+{
+  static KIcon folderIcon("folder");
+  a_resultIcon = folderIcon;
+  return true;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+BaseClassesFolderNode::BaseClassesFolderNode(NodesModelInterface* a_model)
+  : DynamicFolderNode("Base classes", a_model)
+{
+
+}
+
+void BaseClassesFolderNode::populateNode()
+{
+  DUChainReadLocker readLock(DUChain::lock());
+  
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(getParent())->getDeclaration() );
+  if ( klass )
+  {
+    // I use the imports instead of the baseClasses in the ClassDeclaration because I need
+    // to get to the base class identifier which is not directly accessible through the
+    // baseClasses function.
+    foreach( const DUContext::Import& import, klass->internalContext()->importedParentContexts() )
+    {
+      DUContext* baseContext = import.context( klass->topContext() );
+      if ( baseContext && baseContext->type() == DUContext::Class )
+      {
+        Declaration* baseClassDeclaration = baseContext->owner();
+        if ( baseClassDeclaration )
+        {
+          // Add the base class.
+          addNode( new ClassNode(baseClassDeclaration->qualifiedIdentifier(), m_model) );
+        }
+      }
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+DerivedClassesFolderNode::DerivedClassesFolderNode(NodesModelInterface* a_model)
+  : DynamicFolderNode("Derived classes", a_model)
+{
+
+}
+
+void DerivedClassesFolderNode::populateNode()
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(getParent())->getDeclaration() );
+  if ( klass )
+  {
+    uint steps = 10000;
+    QList< Declaration* > inheriters = DUChainUtils::getInheriters(klass, steps, true);
+
+    foreach( Declaration* decl, inheriters )
+      addNode( new ClassNode(decl->qualifiedIdentifier(), m_model) );
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+Node::Node(const QString& a_displayName, NodesModelInterface* a_model)
+  : m_parentNode(0)
+  , m_displayName(a_displayName)
+  , m_model(a_model)
+{
+}
+
+Node::~Node()
+{
+  // Notify the model about the removal of this nodes' children.
+  if ( !m_children.empty() && m_model )
+    m_model->nodesRemoved(this, 0, m_children.size()-1);
+
+  clear();
+}
+
+
+void Node::clear()
+{
+  qDeleteAll(m_children);
+  m_children.clear();
+}
+
+void Node::addNode(Node* a_child)
+{
+/// @note This is disabled for performance reasons - we add them to the bottom and a
+///       sort usually follows which causes a layout change to be fired.
+//   m_model->nodesAboutToBeAdded(this, m_children.size(), 1);
+  a_child->m_parentNode = this;
+  m_children.push_back(a_child);
+//   m_model->nodesAdded(this);
+}
+
+void Node::removeNode(Node* a_child)
+{
+  int row = a_child->row();
+  m_children.removeAt(row);
+  m_model->nodesRemoved(this, row, row );
+  delete a_child;
+}
+
+// Sort algorithm for the nodes.
+struct SortNodesFunctor
+{
+  bool operator() (Node* a_lhs, Node* a_rhs)
+  {
+    if ( a_lhs->getScore() == a_rhs->getScore() )
+    {
+      return a_lhs->getSortableString() < a_rhs->getSortableString();
+    }
+    else
+      return a_lhs->getScore() < a_rhs->getScore();
+  }
+};
+
+void Node::recursiveSortInternal()
+{
+  // Sort my nodes.
+  qSort(m_children.begin(), m_children.end(), SortNodesFunctor());
+
+  // Tell each node to sort it self.
+  foreach (Node* node, m_children)
+    node->recursiveSortInternal();
+}
+
+void Node::recursiveSort()
+{
+  m_model->nodesLayoutAboutToBeChanged(this);
+  
+  recursiveSortInternal();
+  
+  m_model->nodesLayoutChanged(this);
+}
+
+int Node::row()
+{
+  if ( m_parentNode == 0 )
+    return -1;
+
+  return m_parentNode->m_children.indexOf(this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+DynamicNode::DynamicNode(const QString& a_displayName, NodesModelInterface* a_model)
+  : Node(a_displayName, a_model)
+  , m_populated(false)
+{
+
+}
+
+void DynamicNode::collapse()
+{
+  if ( !m_populated )
+    return;
+
+  if ( !m_children.empty() )
+  {
+    // Notify model for this node.
+    m_model->nodesRemoved(this, 0, m_children.size()-1);
+  }
+
+  // Clear sub-nodes.
+  clear();
+
+  // This shouldn't be called from clear since clear is called also from the d-tor
+  // and the function is virtual.
+  nodeCleared();
+
+  // Mark the fact that we've been collapsed
+  m_populated = false;
+}
+
+void DynamicNode::expand()
+{
+  performPopulateNode();
+}
+
+void DynamicNode::performPopulateNode()
+{
+  if ( m_populated )
+    return;
+
+  populateNode();
+
+  // We're populated.
+  m_populated = true;
+
+  // Sort the list.
+  recursiveSort();
+}
+
+bool DynamicNode::hasChildren() const
+{
+  // To get a true status, we'll need to populate the node.
+  const_cast<DynamicNode*>(this)->performPopulateNode();
+
+  return !m_children.empty();
+}
+
+
+// kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
