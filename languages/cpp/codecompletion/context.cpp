@@ -711,7 +711,8 @@ bool CodeCompletionContext::doConstructorCompletion() {
   
   QList<CompletionTreeItemPointer> items;
   
-  int pos = 1;
+  int pos = 1000;
+  bool initializedNormalItems = false;
   
   //Pre-compute the items
   foreach(Declaration* decl, container->localDeclarations(m_duContext->topContext())) {
@@ -719,9 +720,24 @@ bool CodeCompletionContext::doConstructorCompletion() {
       if(!hadItemsSet.contains(decl->identifier().toString())) {
         items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(decl), KDevelop::CodeCompletionContext::Ptr(this), pos ));
         ++pos;
+      }else{
+        initializedNormalItems = true;
       }
     }
   }
+
+  if(!initializedNormalItems) {
+    //Only offer constructor initializations before variables were initialized
+    pos = 0;
+    foreach(DUContext::Import import, container->importedParentContexts()) {
+      DUContext* ctx = import.context(m_duContext->topContext());
+      if(ctx && ctx->type() == DUContext::Class && ctx->owner()) {
+          items.insert(pos, CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(ctx->owner()), KDevelop::CodeCompletionContext::Ptr(this), pos )));
+          ++pos;
+      }
+    }
+  }
+  
   
   eventuallyAddGroup(i18n("Initialize"), 0, items);
   

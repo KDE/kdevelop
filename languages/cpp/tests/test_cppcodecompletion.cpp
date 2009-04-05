@@ -120,7 +120,7 @@ void TestCppCodeCompletion::testSubClassVisibility() {
 
 void TestCppCodeCompletion::testConstructorCompletion() {
   {
-    QByteArray test = "class Class { Class(); int m_1; float m_2; char m_3; }; ";
+    QByteArray test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; }; ";
 
     //74
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
@@ -141,7 +141,7 @@ void TestCppCodeCompletion::testConstructorCompletion() {
       
       //At first, only the members should be shown
       kDebug() << tester.names;
-      QCOMPARE(tester.names, QStringList() << "m_1" << "m_2" << "m_3");
+      QCOMPARE(tester.names, QStringList() << "A" <<  "m_1" << "m_2" << "m_3");
       ///@todo Make sure that the item also inserts parens
     }
 
