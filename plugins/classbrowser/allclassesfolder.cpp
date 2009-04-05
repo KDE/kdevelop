@@ -204,7 +204,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
     else if ( item.kind & CodeModelItem::Class )
     {
       // Ignore empty unnamed classes.
-      if ( id.toString().isEmpty() )
+      if ( id.last().toString().isEmpty() )
         continue;
     
       // See if it matches our filter?
