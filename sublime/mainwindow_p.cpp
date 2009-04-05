@@ -49,6 +49,7 @@ AreaSelectorWidget::AreaSelectorWidget(QWidget *parent,
 : QWidget(parent), window_(window), controller_(controller)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
     combo_ = new QComboBox(this);
     layout->addWidget(combo_);
     QToolButton* button = new QToolButton(this);
