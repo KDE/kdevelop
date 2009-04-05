@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
