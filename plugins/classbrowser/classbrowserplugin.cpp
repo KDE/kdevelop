@@ -25,6 +25,7 @@
 
 #include <QAction>
 
+#include <typeinfo>
 #include <klocale.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -45,6 +46,7 @@
 #include "classmodel.h"
 #include "classtree.h"
 #include <language/interfaces/codecontext.h>
+#include <language/interfaces/editorcontext.h>
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
 K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("Browser for all known classes"), KAboutData::License_GPL)))
@@ -78,12 +80,10 @@ private:
 ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevClassBrowserFactory::componentData(), parent)
     , m_factory(new ClassBrowserFactory(this))
-    , m_model(new ClassModel())
+    , m_activeClassTree(0)
 {
   core()->uiController()->addToolView(i18n("Classes"), m_factory);
   setXMLFile( "kdevclassbrowser.rc" );
-
-  //connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_model, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
@@ -95,54 +95,61 @@ void ClassBrowserPlugin::unload()
   core()->uiController()->removeToolView(m_factory);
 }
 
-ClassModel* ClassBrowserPlugin::model() const
-{
-  return m_model;
-}
-
 KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelop::Context* context)
 {
   KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
 
-  if( context->type() != KDevelop::Context::CodeContext )
-      return menuExt;
+  // No context menu if we don't have a class browser at hand.
+  if ( m_activeClassTree == 0 )
+    return menuExt;
 
   KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+
   if (!codeContext)
       return menuExt;
 
   DUChainReadLocker readLock(DUChain::lock());
+  DUChainBasePointer base(codeContext->declaration().data());
 
-  IndexedDeclaration decl = codeContext->declaration();
-
-  DUChainBasePointer base(decl.data());
+  if (base)
+  {
+    QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
+    connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
+    findInBrowser->setData(QVariant::fromValue(base));
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
   
-  if (base) {
+/* LM: Old code - here for reference only and should be removed or updated eventually.
     QAction* openDec = new QAction(i18n("Open &Declaration"), this);
     connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
     openDec->setData(QVariant::fromValue(base));
-//     menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDec);
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDec);
 
     QAction* openDef = new QAction(i18n("Open De&finition"), this);
     connect(openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
     openDef->setData(QVariant::fromValue(base));
-//     menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDef);
-
-    Declaration* dec = 0;
-
-    if (DUContext* d = dynamic_cast<DUContext*>(base.data())) {
-      dec = d->owner();
-    } else if (0 != (dec = dynamic_cast<Declaration*>(base.data()))) {
-  // ### do something here
-    }
-
-    /*if(!model()->definitionForObject(base))
-      openDef->setEnabled(false);
-    if(!model()->declarationForObject(base))
-      openDec->setEnabled(false);*/
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDef);
+*/
   }
 
   return menuExt;
+}
+
+void ClassBrowserPlugin::findInClassBrowser()
+{
+  Q_ASSERT(qobject_cast<QAction*>(sender()));
+
+  if ( m_activeClassTree == 0 )
+    return;
+
+  DUChainReadLocker readLock(DUChain::lock());
+
+  QAction* a = static_cast<QAction*>(sender());
+
+  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
+
+  DeclarationPointer decl = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
+  if (decl)
+    m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
 }
 
 void ClassBrowserPlugin::openDeclaration()

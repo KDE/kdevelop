@@ -43,8 +43,8 @@ ClassModel::ClassModel()
 {
   m_topNode = new FolderNode("Top Node", this);
 
-  m_resultsFolder = new FilteredAllClassesFolder(this);
-  m_topNode->addNode( m_resultsFolder );
+  m_allClassesNode = new FilteredAllClassesFolder(this);
+  m_topNode->addNode( m_allClassesNode );
 }
 
 ClassModel::~ClassModel()
@@ -54,7 +54,7 @@ ClassModel::~ClassModel()
 
 void ClassModel::updateFilterString(QString a_newFilterString)
 {
-  m_resultsFolder->updateFilterString(a_newFilterString);
+  m_allClassesNode->updateFilterString(a_newFilterString);
 }
 
 
@@ -179,6 +179,16 @@ KDevelop::DUChainBase* ClassModel::duObjectForIndex(const QModelIndex& a_index)
   // Non was found.
   return 0;
 }
+
+QModelIndex ClassModel::getIndexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id)
+{
+  ClassNode* node = m_allClassesNode->findClassNode(a_id);
+  if ( node == 0 )
+    return QModelIndex();
+
+  return index(node);
+}
+
 
 void ClassModel::nodesLayoutAboutToBeChanged(ClassModelNodes::Node*)
 {

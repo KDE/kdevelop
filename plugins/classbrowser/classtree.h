@@ -27,6 +27,7 @@
 
 #include "language/duchain/duchainbase.h"
 #include "language/duchain/duchainobserver.h"
+#include <language/duchain/identifier.h>
 
 class ClassBrowserPlugin;
 class KLineEdit;
@@ -50,7 +51,7 @@ public:
 
 private:
   ClassBrowserPlugin* m_plugin;
-
+  ClassModel* m_model;
   ClassTree* m_tree;
   KLineEdit* m_searchLine;
 };
@@ -63,9 +64,12 @@ public:
   ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
   virtual ~ClassTree();
 
+public:
+  /// Find the given a_id in the tree and highlight it.
+  void highlightIdentifier(KDevelop::IndexedQualifiedIdentifier a_id);
+
 protected:
   virtual void contextMenuEvent(QContextMenuEvent* e);
-
   ClassModel* model();
 
 private Q_SLOTS:

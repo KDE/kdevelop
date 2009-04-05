@@ -36,6 +36,7 @@ namespace KDevelop
   class DUContext;
   class IProject;
   class DUChainBase;
+  class IndexedQualifiedIdentifier;
 }
 
 namespace ClassModelNodes
@@ -80,7 +81,10 @@ public:
   /// @note DUCHAINS READER LOCK MUST BE TAKEN!
   KDevelop::DUChainBase* duObjectForIndex(const QModelIndex& a_index);
 
-  /// Return the model inde associated with the given node.
+  /// Call this to retrieve the index for the node associated with the specified id.
+  QModelIndex getIndexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id);
+
+  /// Return the model index associated with the given node.
   QModelIndex index(ClassModelNodes::Node* a_node) const;
 
 public Q_SLOTS:
@@ -97,7 +101,7 @@ private: // NodesModelInterface overrides
 private:
   /// Main level node - it's usually invisible.
   ClassModelNodes::Node* m_topNode;
-  ClassModelNodes::FilteredAllClassesFolder* m_resultsFolder;
+  ClassModelNodes::FilteredAllClassesFolder* m_allClassesNode;
 
 public Q_SLOTS:
   /// This slot needs to be attached to collapsed signal in the tree view.

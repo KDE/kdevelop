@@ -41,6 +41,10 @@ class DocumentClassesFolder : public QObject, public DynamicFolderNode
 public:
   DocumentClassesFolder(const QString& a_displayName, NodesModelInterface* a_model);
 
+public: // Operations
+  /// Find a class node in the lists by its id.
+  ClassNode* findClassNode(const KDevelop::IndexedQualifiedIdentifier& a_id);
+
 protected: // Documents list handling.
   /// Parse a single document for classes and add them to the list.
   void parseDocument(const KDevelop::IndexedString& a_file);
@@ -125,7 +129,7 @@ public:
 public: // Operations.
   /// Call this to update the classes filter string.
   void updateFilterString(QString a_newFilterString);
-  
+
 private: // DocumentClassesFolder overrides
   virtual bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id);
 

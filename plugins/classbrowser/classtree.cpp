@@ -65,59 +65,29 @@ using namespace KDevelop;
 ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   : QWidget(parent)
   , m_plugin(plugin)
+  , m_model(new ClassModel())
   , m_tree(new ClassTree(this, plugin))
-  , m_searchLine(0)
+  , m_searchLine(new KLineEdit(this))
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Classes"));
   setWindowIcon(SmallIcon("class"));
 
+  // Set tree in the plugin
+  m_plugin->setActiveClassTree(m_tree);
+
   // Set model in the tree view
-  m_tree->setModel(m_plugin->model());
+  m_tree->setModel(m_model);
 
   // We need notification in the model for the collapse/expansion of nodes.
   connect(m_tree, SIGNAL(collapsed(const QModelIndex&)),
-          m_plugin->model(), SLOT(collapsed(const QModelIndex&)));
+          m_model, SLOT(collapsed(const QModelIndex&)));
   connect(m_tree, SIGNAL(expanded(const QModelIndex&)),
-          m_plugin->model(), SLOT(expanded(const QModelIndex&)));
+          m_model, SLOT(expanded(const QModelIndex&)));
 
-  /*KAction* action = new KAction(i18n( "Scope" ), this);
-  action->setToolTip(i18n("Select how much of the code model to display."));
-  addAction(action);
-
-  QMenu *modeMenu = new QMenu(this);
-  action->setMenu(modeMenu);
-  QActionGroup* ag = new QActionGroup(modeMenu);
-  ag->setExclusive(true);
-  QAction *currentdoc = ag->addAction( i18n( "&Current Document" ) );
-  currentdoc->setCheckable( true );
-  currentdoc->setData(ModeCurrentDocument);
-  QAction* project = ag->addAction( i18n( "&Project" ) );
-  project->setData(ModeProject);
-  project->setCheckable( true );
-  project->trigger();
-  QAction* all = ag->addAction( i18n( "&All" ) );
-  all->setData(ModeAll);
-  all->setCheckable( true );
-  modeMenu->addActions(ag->actions());
-
-  connect( ag, SIGNAL( triggered(QAction*) ), this, SLOT( setMode(QAction*) ) );
-
-  action = new KAction(i18n( "Filter" ), this);
-  action->setToolTip(i18n("Filter the class browser by item type"));
-  addAction(action);
-
-  KMenu *filterMenu = new KMenu(this);
-  action->setMenu(filterMenu);
-  action = new KAction(i18n("Current Document Language Only"), filterMenu);
-  action->setChecked(true);
-  filterMenu->addAction(action);
-  //connect(action, SIGNAL(triggered(bool)), this, SLOT(slotCurrentDocumentLangugage(bool)));*/
-
-  m_searchLine = new KLineEdit(this);
+  // Init search box
   m_searchLine->setClearButtonShown( true );
-  connect(m_searchLine, SIGNAL(textChanged(QString)), m_plugin->model(), SLOT(updateFilterString(QString)));
-
+  connect(m_searchLine, SIGNAL(textChanged(QString)), m_model, SLOT(updateFilterString(QString)));
   QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
   searchLabel->setBuddy( m_searchLine );
 
@@ -140,6 +110,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
 ClassWidget::~ClassWidget()
 {
+  delete m_model;
 }
 
 
@@ -186,7 +157,7 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 
 ClassModel* ClassTree::model()
 {
-  return m_plugin->model();
+  return static_cast<ClassModel*>(QTreeView::model());
 }
 
 void ClassTree::itemActivated(const QModelIndex& index)
@@ -204,6 +175,19 @@ void ClassTree::itemActivated(const QModelIndex& index)
     m_plugin->core()->documentController()->openDocument(url, range.start());
   }
 }
+
+void ClassTree::highlightIdentifier(KDevelop::IndexedQualifiedIdentifier a_id)
+{
+  QModelIndex index = model()->getIndexForIdentifier(a_id);
+  if ( !index.isValid() )
+    return;
+
+  // expand and select the item.
+  selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
+  scrollTo(index, PositionAtCenter);
+  expand(index);
+}
+
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
 

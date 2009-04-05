@@ -346,7 +346,9 @@ void DerivedClassesFolderNode::populateNode()
     QList< Declaration* > inheriters = DUChainUtils::getInheriters(klass, steps, true);
 
     foreach( Declaration* decl, inheriters )
+    {
       addNode( new ClassNode(decl->qualifiedIdentifier(), m_model) );
+    }
   }
 }
 

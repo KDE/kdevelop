@@ -152,6 +152,20 @@ QList< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()
   return m_openFiles.keys();
 }
 
+ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier& a_id)
+{
+  // Look in all the documents.
+  foreach(const ClassNodeIDsMap& idsMap, m_openFiles)
+  {
+    ClassNodeIDsMap::const_iterator iter = idsMap.find(a_id);
+    if ( iter !=  idsMap.end() )
+      return iter.value();
+  }
+
+  // Not found.
+  return 0;
+}
+
 void DocumentClassesFolder::closeDocument(const IndexedString& a_file)
 {
   // Get list of nodes associated with this file and remove them.

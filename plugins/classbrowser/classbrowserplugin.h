@@ -27,28 +27,30 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
+class ClassTree;
+
 class ClassBrowserPlugin : public KDevelop::IPlugin
 {
-    Q_OBJECT
+  Q_OBJECT
 
-  public:
-    ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~ClassBrowserPlugin();
+public:
+  ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
+  virtual ~ClassBrowserPlugin();
 
-    // KDevelop::Plugin methods
-    virtual void unload();
+  void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }
 
-    class ClassModel* model() const;
+public: // KDevelop::Plugin overrides
+  virtual void unload();
+  virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
-    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+private Q_SLOTS:
+  void openDeclaration();
+  void openDefinition();
+  void findInClassBrowser();
 
-  private Q_SLOTS:
-    void openDeclaration();
-    void openDefinition();
-
-  private:
-    class ClassBrowserFactory* m_factory;
-    ClassModel* m_model;
+private:
+  class ClassBrowserFactory* m_factory;
+  ClassTree* m_activeClassTree;
 };
 
 #endif // CLASSBROWSERPART_H
