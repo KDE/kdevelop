@@ -1,0 +1,42 @@
+[Desktop Entry]
+Icon=kdevelop
+Type=Service
+ServiceTypes=KCModule
+
+X-KDE-ModuleType=Library
+X-KDE-Library=kcm_kdev_gdb
+X-KDE-FactoryName=kcm_kdev_gdb
+X-KDE-ParentApp=kdevplatformproject
+X-KDE-ParentComponents=kdevplatformproject
+X-KDE-CfgDlgHierarchy=GENERAL
+
+Name=Debugger Settings
+Name[de]=Debugger-Einstellungen
+Name[es]=Preferencias del depurador
+Name[et]=Siluri seadistused
+Name[fr]=Configuration du débogeur
+Name[ga]=Socruithe an Dífhabhtóra
+Name[gl]=Configuración do depurador
+Name[ja]=デバッガの設定
+Name[nds]=Fehlersöker instellen
+Name[pt]=Configuração do Depurador
+Name[pt_BR]=Configuração do Depurador
+Name[sv]=Avlusarinställningar
+Name[tr]=Hata Ayıklayıcı Ayarları
+Name[uk]=Параметри зневадника
+Name[x-test]=xxDebugger Settingsxx
+Comment=Configure GDB settings
+Comment[de]=GDB-Einstellungen
+Comment[es]=Configurar preferencias de GDB
+Comment[et]=GDB seadistamine
+Comment[fr]=Configurer les paramètres GDB
+Comment[ga]=Cumraigh socruithe GDB
+Comment[gl]=Configurar as opcións do GDB
+Comment[ja]=GDB のオプションを設定
+Comment[nds]=GDB instellen
+Comment[pt]=Configurar as opções do GDB
+Comment[pt_BR]=Configurar as opções do GDB
+Comment[sv]=Anpassa GDB-inställningar
+Comment[tr]=GDB ayarlarını yapılandır
+Comment[uk]=Налаштувати параметри GDB
+Comment[x-test]=xxConfigure GDB settingsxx
