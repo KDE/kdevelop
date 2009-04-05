@@ -188,6 +188,13 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
 
 void TestCppCodeCompletion::testAssistant() {
   {
+    QByteArray test = "#define A hallo(3) = 1\n void test() { A; bla = 5; }";
+
+    TopDUContext* context = parse( test, DumpAll );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->problems().count(), 1);
+  }
+  {
     QByteArray test = "int n; class C { C() : member(n) {} }; }";
 
     TopDUContext* context = parse( test, DumpAll );

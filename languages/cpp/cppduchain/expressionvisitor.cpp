@@ -52,7 +52,7 @@
 //because the problem report contains a lot of information, and the problem currently appears very often.
 //#define DEBUG_FUNCTION_CALLS
 
-const uint maxExpressionVisitorProblems = 100;
+const uint maxExpressionVisitorProblems = 400;
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
 
@@ -523,7 +523,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           CppEditorIntegrator editor(session());
           
           problem->setFinalLocation(DocumentRange(m_currentContext->url().str(), editor.findRange(node).textRange()));
-          if(!problem->range().isEmpty() && !session()->positionAndSpaceAt(node->start_token).first.macroExpansion.isValid())
+          if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
             m_problems << problem;
         }
         m_lastType = missing.cast<KDevelop::AbstractType>();
