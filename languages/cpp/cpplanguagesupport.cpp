@@ -553,7 +553,7 @@ KUrl::List CppLanguageSupport::findIncludePaths(const KUrl& source, QList<KDevel
   return comp.result();
 }
 
-QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName) const {
+QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName, bool allowSourceFiles) const {
 
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<Cpp::IncludeItem> ret;
@@ -597,7 +597,7 @@ QList<Cpp::IncludeItem> CppLanguageSupport::allFilesInIncludePath(const KUrl& so
             if(item.name.startsWith('.') || item.name.endsWith("~")) //This filters out ".", "..", and hidden files, and backups
               continue;
             QString suffix = dirContent.fileInfo().suffix();
-            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && !sourceExtensions.contains(suffix))
+            if(!dirContent.fileInfo().suffix().isEmpty() && !headerExtensions.contains(suffix) && (!allowSourceFiles || !sourceExtensions.contains(suffix)))
               continue;
             
             if(prependAddedPathToName)
