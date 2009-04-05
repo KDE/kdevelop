@@ -34,7 +34,7 @@
 #include <QLabel>
 
 #include <klocale.h>
-#include <kicon.h>
+#include <kiconloader.h>
 #include <kaction.h>
 #include <KMenu>
 #include <KLineEdit>
@@ -70,7 +70,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 {
   setObjectName("Class Browser Tree");
   setWindowTitle(i18n("Classes"));
-  setWindowIcon(KIcon("class"));
+  setWindowIcon(SmallIcon("class"));
 
   // Set model in the tree view
   m_tree->setModel(m_plugin->model());
