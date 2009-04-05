@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=CMake
 Name[hi]=सी-मेक
+Name[hne]=सी-मेक
 Name[ne]=सीमेक
 Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
@@ -24,6 +25,7 @@ Comment[fr]=Configurer les options de CMake
 Comment[ga]=Cumraigh socruithe CMake
 Comment[gl]=Configura os parámetros de CMake
 Comment[hi]=सीमेक विन्यास कॉन्फ़िगर करें
+Comment[hne]=सीमेक सेटिंग कान्फिगर करव
 Comment[it]=Configura impostazioni CMake
 Comment[ja]=CMake のオプションを設定します
 Comment[ko]=CMake 설정 편집
