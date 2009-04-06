@@ -324,6 +324,10 @@ void ReportWidget::startLcovJob()
         m_oldDirFilter = filterBox()->text();
     }
 
+    m_ui->coverageRatio->setText("-");
+    m_ui->nrofCoveredLines->setText("-");
+    m_ui->sloc->setText("-");
+
     m_state = DirView;
     
     if (m_model) delete m_model;
