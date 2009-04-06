@@ -44,9 +44,9 @@
 
 In the directory view of the coverage report, each directory coverage percentage is represented using a color. 
 
-The color associated to each percentage is got from a color range, made up of several stop points. Stop points represent a color at a specific percentage. 
+The color associated to each percentage is taken from a color range, made up of several stop points. Stop points represent a color at a specific percentage. 
 
-A color range has two different and independent modes: discrete and gradient. In discrete type, all percentage values between the previous stop point and the current one have the color of the current one. In gradient type, the values are interpolated between the previous stop point color and the current one color.</string>
+A color range has two different and independent modes: discrete and gradient. In discrete type, all percentage values between the previous stop point and the current one have the color of the current one. In gradient type, the values are interpolated between the previous stop point's color and the current stop point's color.</string>
      </property>
      <property name="title">
       <string extracomment="@title:group">Report colors</string>
