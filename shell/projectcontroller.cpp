@@ -464,8 +464,7 @@ void ProjectController::openProjectForUrlSlot(bool) {
 
 
 void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
-    KUrl dirUrl(sourceUrl);
-    dirUrl.setFileName(QString());
+    KUrl dirUrl = sourceUrl.upUrl();
     KUrl testAt = dirUrl;
     
     d->m_foundProjectFile = false;
