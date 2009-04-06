@@ -29,6 +29,11 @@
 
 class ClassTree;
 
+namespace KDevelop
+{
+  class Declaration;
+}
+
 class ClassBrowserPlugin : public KDevelop::IPlugin
 {
   Q_OBJECT
