@@ -1,5 +1,5 @@
 /* KDevelop coverage plugin
- *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *    Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,6 +244,64 @@ void ReportWidgetTest::statisticsSelectingSeveralDirectories()
     QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ShiftModifier);
 
     assertStatistics(m_reportWidget, 8, 4, 50.0);
+}
+
+//Selects second and fourth directories
+void ReportWidgetTest::statisticsSelectingSeveralDirectoriesNotContiguous()
+{
+    setModelFor(m_reportWidget);
+
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::NoModifier, 500);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ControlModifier);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Down, Qt::ControlModifier);
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Space, Qt::ControlModifier);
+
+    assertStatistics(m_reportWidget, 2, 1, 50.0);
+}
+
+//Selects second and fourth directories
+void ReportWidgetTest::statisticsSelectingSeveralDirectoriesNotContiguousUsingMouse()
+{
+    setModelFor(m_reportWidget);
+
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+
+    QModelIndex dirIndex = table(m_reportWidget)->model()->index(1, 0);
+    QPoint point = table(m_reportWidget)->visualRect(dirIndex).center();
+    //The widget used must be the viewport, as simulating the mouse press on
+    //the table doesn't even deliver a mousePressEvent to it (I don't know
+    //why)
+    QTest::mousePress(table(m_reportWidget)->viewport(), Qt::LeftButton,
+                      Qt::NoModifier, point, 500);
+
+    dirIndex = table(m_reportWidget)->model()->index(3, 1);
+    point = table(m_reportWidget)->visualRect(dirIndex).center();
+    QTest::mouseClick(table(m_reportWidget)->viewport(), Qt::LeftButton,
+                      Qt::ControlModifier, point);
+
+    assertStatistics(m_reportWidget, 2, 1, 50.0);
+}
+
+//Selects first directory, and clicks on an empty space
+void ReportWidgetTest::statisticsAfterClearingSelection()
+{
+    setModelFor(m_reportWidget);
+
+    m_reportWidget->show();
+    table(m_reportWidget)->setFocus();
+    QTest::keyClick(table(m_reportWidget), Qt::Key_Space, Qt::NoModifier, 500);
+
+    QModelIndex dirIndex = table(m_reportWidget)->model()->index(3, 0);
+    QPoint point = table(m_reportWidget)->visualRect(dirIndex).bottomLeft();
+    point.setX(point.x() + 10);
+    point.setY(point.y() + 10);
+    QTest::mousePress(table(m_reportWidget)->viewport(), Qt::LeftButton,
+                      Qt::NoModifier, point);
+
+    assertStatistics(m_reportWidget, 0, 0, 0.0);
 }
 
 //Selects first and second directory, and slides in second directory

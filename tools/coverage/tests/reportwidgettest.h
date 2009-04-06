@@ -1,5 +1,5 @@
 /* KDevelop coverage plugin
- *    Copyright 2008 Manuel Breugelmans <mbr.nxi@gmail.com>
+ *    Copyright 2008-2009 Manuel Breugelmans <mbr.nxi@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,10 +51,13 @@ private slots:
     void setCoverageStatisticsWithInvalidIndex();
     void setCoverageStatisticsWithFileIndex();
 
-   void statisticsSelectingSingleDirectory();
-   void statisticsSelectingSeveralDirectories();
-   void statisticsAfterSlidingRight();
-   void statisticsAfterSlidingLeft();
+    void statisticsSelectingSingleDirectory();
+    void statisticsSelectingSeveralDirectories();
+    void statisticsSelectingSeveralDirectoriesNotContiguous();
+    void statisticsSelectingSeveralDirectoriesNotContiguousUsingMouse();
+    void statisticsAfterClearingSelection();
+    void statisticsAfterSlidingRight();
+    void statisticsAfterSlidingLeft();
 
 private:
         

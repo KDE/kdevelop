@@ -188,9 +188,12 @@ void DrillDownView::animateSlide(int moveDirection)
     animation.start();
 }
 
+//TODO Since Qt 4.4.2, clicking on an empty space of the QTableView clears
+//the selection. Remove this whole method when required Qt version for
+//KDevelop is >= 4.4.2
 void DrillDownView::mousePressEvent(QMouseEvent* event)
 {
-    if (selectionModel()) {
+    if (selectionModel() && !indexAt(event->pos()).isValid()) {
         selectionModel()->clearSelection();
     }
     QTableView::mousePressEvent(event);
