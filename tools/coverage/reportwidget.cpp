@@ -316,6 +316,14 @@ void ReportWidget::startLcovJob()
 {
     Q_ASSERT(m_delegate); Q_ASSERT(m_targetDirectory); Q_ASSERT(m_ui->startButton->isEnabled());
     m_ui->startButton->setEnabled(false);
+
+    if (m_state == FileView) {
+        filterBox()->setReadOnly(false);
+        filterBox()->setText(m_oldDirFilter);
+    } else {
+        m_oldDirFilter = filterBox()->text();
+    }
+
     m_state = DirView;
     
     if (m_model) delete m_model;
@@ -328,6 +336,7 @@ void ReportWidget::startLcovJob()
     m_proxy = new ReportProxyModel(this);
     table()->setModel(m_proxy);
     m_proxy->setSourceModel(m_model);
+    m_proxy->setFilterWildcard(m_oldDirFilter);
 
     //Since Qt 4.1 (or maybe 4.0, but not documented), setting the model
     //replaces the previous selection model, so it must be connected again
