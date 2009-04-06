@@ -304,7 +304,7 @@ void GitInitTest::commitFiles()
 // {
 //     kDebug() << "Do not clone people, clone Git repos!";
 //     // make job that clones the local repository, created in the previous test
-//     DVcsJob* j = m_proxy->clone(KUrl(gitTest_BaseDir), KUrl(gitTest_BaseDir2));
+//     DVcsJob* j = m_proxy->createWorkingCopy(KUrl(gitTest_BaseDir), KUrl(gitTest_BaseDir2));
 //     QVERIFY( j );
 //
 //     // try to start the job

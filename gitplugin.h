@@ -54,6 +54,9 @@ public:
 
     KDevelop::VcsJob* add(const KUrl::List& localLocations,
                           KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+    KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc,
+                            const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode);
+
     KDevelop::VcsJob* remove(const KUrl::List& files);
     KDevelop::VcsJob* status(const KUrl::List& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
@@ -69,9 +72,6 @@ public:
 
     // Begin:  KDevelop::IDistributedVersionControl
     KDevelop::VcsJob* init(const KUrl & directory);
-    KDevelop::VcsJob* clone(const KDevelop::VcsLocation & localOrRepoLocationSrc,
-                            const KUrl& localRepositoryRoot);
-
     KDevelop::VcsJob* reset(const KUrl& repository,
                             const QStringList &args,
                             const KUrl::List& files);
