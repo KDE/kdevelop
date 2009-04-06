@@ -22,8 +22,7 @@
    <item>
     <widget class="QLabel" name="textLabel1" >
      <property name="text" >
-      <string>Debug arguments can be set on the Run Options page
- or directly in the project manager</string>
+      <string>Debug arguments can be set on the Run Options page, or directly in the project manager.</string>
      </property>
      <property name="wordWrap" >
       <bool>false</bool>
@@ -55,7 +54,7 @@
       <string>Gdb executable</string>
      </property>
      <property name="whatsThis" >
-      <string>To run "gdb" binary from $PATH, leave this field empty. To run a custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or by specifying the full path to a gdb executable.</string>
+      <string>To run the "gdb" binary from $PATH, leave this field empty. To run a custom gdb, for example, for a different architecture, enter the executable name here. You can either run gdb from $PATH, but with a different name (say, "arm-gdb"), by typing the name here, or by specifying the full path to a gdb executable.</string>
      </property>
     </widget>
    </item>
@@ -68,7 +67,7 @@
       </sizepolicy>
      </property>
      <property name="toolTip" >
-      <string>Run gdb in a special shell (mainly for automake projects)</string>
+      <string>Run gdb in a special shell (mainly for automake projects.)</string>
      </property>
      <property name="whatsThis" >
       <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and libtool is needed to get it to run inside gdb.</string>
@@ -87,7 +86,7 @@
    <item>
     <widget class="KUrlRequester" name="kcfg_debuggingShell" >
      <property name="toolTip" >
-      <string>Run gdb in a special shell (mainly for automake projects)</string>
+      <string>Run gdb in a special shell (mainly for automake projects.)</string>
      </property>
      <property name="whatsThis" >
       <string>If you want gdb to be executed by a special shell or tool insert it here. The main use-case is for Automake based projects where the application is actually only a script and &lt;b>libtool&lt;/b> is needed to get it to run inside gdb.</string>
@@ -286,10 +285,10 @@ Otherwise leave it unchecked.</string>
         <property name="whatsThis" >
          <string>This shell script is run after the Config gdb script has been sourced by gdb.
 When debugging remotely this script is intended to actually start the remote process.
-[It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step]
-1) Find a way to execute a command remotely - rsh, ssh, telnet, ...
+[It is expected that the debug executable can be reached on the target, maybe by downloading it as a final build step.]
+1) Find a way to execute a command remotely - rsh, ssh, telnet, ....
 2a) Execute "gdbserver ... application" on target.
-or if your executable contains the gdb stub
+... or if your executable contains the gdb stub:
 2b) Execute "application" on target.</string>
         </property>
        </widget>
@@ -315,8 +314,8 @@ or if your executable contains the gdb stub
         <property name="whatsThis" >
          <string>This script is sourced by gdb after the two preceding scripts have been executed.
 This script is intended for the actual commands needed to connect to a remotely running executable.
-	shell sleep 5	wait for remote program to start
-	target remote ...	connect to the remote debugger
+	shell sleep 5	wait for remote program to start;
+	target remote ...	connect to the remote debugger;
 	continue	[optional] run debugging to the first breakpoint.</string>
         </property>
        </widget>

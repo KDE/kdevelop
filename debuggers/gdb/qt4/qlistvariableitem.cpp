@@ -93,7 +93,7 @@ void QListVariableItem::handleEnd(const GDBMI::ResultRecord& r)
         for (int i = m_begin; i < m_end; ++i)
             addChild(QString("%1.d.array[%2]").arg(gdbExpression()).arg(i), childType);
 
-        setResult(i18n("<%1 items>", m_end - m_begin));
+        setResult(i18np("<1 item>", "<%1 items>", m_end - m_begin));
     }
 }
 

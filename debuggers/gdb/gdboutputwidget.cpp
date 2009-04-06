@@ -75,7 +75,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
 
     m_Interrupt = new QToolButton( this );
     m_Interrupt->setIcon ( KIcon ( "media-playback-pause" ) );
-    m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
+    m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands." ) );
 
     QVBoxLayout *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(m_gdbView);

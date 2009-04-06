@@ -243,7 +243,7 @@ void GDBController::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     {
         KMessageBox::information(
             qApp->activeWindow(),
-            i18n("<b>Gdb command sent when debugger is not running</b><br>"
+            i18n("<b>Gdb command sent when debugger is not running.</b><br>"
             "The command was:<br> %1", cmd->initialString()),
             i18n("Internal error"));
         return;

@@ -528,7 +528,7 @@ void CppDebuggerPlugin::slotDebuggerAbnormalExit()
         qApp->activeWindow(),
         i18n("<b>GDB exited abnormally</b>"
              "<p>This is likely a bug in GDB. "
-             "Examine the gdb output window and then stop the debugger"),
+             "Examine the gdb output window and then stop the debugger."),
         i18n("GDB exited abnormally"));
 
     // Note: we don't stop the debugger here, becuse that will hide gdb
@@ -679,7 +679,7 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
     if (changedState & s_appNotStarted) {
         if (newState & s_appNotStarted) {
             m_startDebugger->setText( i18n("&Start") );
-            m_startDebugger->setToolTip( i18n("Runs the program in the debugger") );
+            m_startDebugger->setToolTip( i18n("Runs the program in the debugger.") );
             m_startDebugger->setWhatsThis( i18n("Start in debugger\n\n"
                                                   "Starts the debugger with the project's main "
                                                   "executable. You may set some breakpoints "
@@ -700,7 +700,7 @@ void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags n
                 "Continues the execution of your application in the "
                 "debugger. This only takes effect when the application "
                 "has been halted by the debugger (i.e. a breakpoint has "
-                "been activated or the interrupt was pressed).") );
+                "been activated or the interrupt was pressed.)") );
             m_startDebugger->disconnect(this);
             connect(m_startDebugger, SIGNAL(triggered(bool)), controller, SLOT(slotRun()));
             m_startDebugger->setEnabled(true);
