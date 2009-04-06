@@ -24,6 +24,7 @@
 #include <KUrl>
 #include <KAction>
 
+#include <memory>
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
@@ -45,23 +46,22 @@
 #include "importdialog.h"
 #include "importmetadatawidget.h"
 #include <language/interfaces/editorcontext.h>
+#include <vcs/vcspluginhelper.h>
 
-K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>(); )
+K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
 K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))
 
-class KDevCvsViewFactory: public KDevelop::IToolViewFactory{
+class KDevCvsViewFactory: public KDevelop::IToolViewFactory
+{
 public:
     KDevCvsViewFactory(CvsPlugin *plugin): m_plugin(plugin) {}
-    virtual QWidget* create(QWidget *parent = 0)
-    {
+    virtual QWidget* create(QWidget *parent = 0) {
         return new CvsMainView(m_plugin, parent);
     }
-    virtual Qt::DockWidgetArea defaultPosition()
-    {
+    virtual Qt::DockWidgetArea defaultPosition() {
         return Qt::BottomDockWidgetArea;
     }
-    virtual QString id() const
-    {
+    virtual QString id() const {
         return "org.kdevelop.CVSView";
     }
 
@@ -69,33 +69,34 @@ private:
     CvsPlugin *m_plugin;
 };
 
-class CvsPluginPrivate {
+class CvsPluginPrivate
+{
 public:
+    explicit CvsPluginPrivate(CvsPlugin *pThis)
+            : m_factory(new KDevCvsViewFactory(pThis))
+            , m_proxy(new CvsProxy(pThis))
+            , m_common(new KDevelop::VcsPluginHelper(pThis, pThis)) {}
+
     KDevCvsViewFactory* m_factory;
     QPointer<CvsProxy> m_proxy;
-    KUrl::List m_ctxUrlList;
+    std::auto_ptr<KDevelop::VcsPluginHelper> m_common;
 };
 
-CvsPlugin::CvsPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin(KDevCvsFactory::componentData(), parent)
+CvsPlugin::CvsPlugin(QObject *parent, const QVariantList &)
+        : KDevelop::IPlugin(KDevCvsFactory::componentData(), parent)
+        , d(new CvsPluginPrivate(this))
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::ICentralizedVersionControl )
+    KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
+    KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
 
-    d = new CvsPluginPrivate();
-
-    d->m_factory = new KDevCvsViewFactory(this);
     core()->uiController()->addToolView(i18n("CVS"), d->m_factory);
 
     setXMLFile("kdevcvs.rc");
     setupActions();
-
-    d->m_proxy = new CvsProxy(this);
 }
 
 CvsPlugin::~CvsPlugin()
 {
-    delete d;
 }
 
 
@@ -124,9 +125,9 @@ void CvsPlugin::setupActions()
 const KUrl CvsPlugin::urlFocusedDocument() const
 {
     KParts::ReadOnlyPart *plugin =
-            dynamic_cast<KParts::ReadOnlyPart*>( core()->partController()->activePart() );
-    if ( plugin ) {
-        if (plugin->url().isLocalFile() ) {
+        dynamic_cast<KParts::ReadOnlyPart*>(core()->partController()->activePart());
+    if (plugin) {
+        if (plugin->url().isLocalFile()) {
             return plugin->url();
         }
     }
@@ -161,125 +162,98 @@ void CvsPlugin::slotStatus()
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
         CvsGenericOutputView* view = new CvsGenericOutputView(this, job);
-        emit addNewTabToMainView( view, i18n("Status") );
+        emit addNewTabToMainView(view, i18n("Status"));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
 
-
 KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context)
 {
-    KUrl::List ctxUrlList;
-    if( context->type() == KDevelop::Context::ProjectItemContext )
-    {
-        KDevelop::ProjectItemContext *itemCtx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
-        if( itemCtx )
-        {
-            QList<KDevelop::ProjectBaseItem *> baseItemList = itemCtx->items();
-
-            // now general case
-            foreach( KDevelop::ProjectBaseItem* _item, baseItemList )
-            {
-                if( _item->folder() ){
-                    KDevelop::ProjectFolderItem *folderItem = dynamic_cast<KDevelop::ProjectFolderItem*>(_item);
-                    ctxUrlList << folderItem->url();
-                }
-                else if( _item->file() ){
-                    KDevelop::ProjectFileItem *fileItem = dynamic_cast<KDevelop::ProjectFileItem*>(_item);
-                    ctxUrlList << fileItem->url();
-                }
-            }
-        }
-    }else if( context->type() == KDevelop::Context::EditorContext )
-    {
-        KDevelop::EditorContext *itemCtx = dynamic_cast<KDevelop::EditorContext*>(context);
-        ctxUrlList << itemCtx->url();
-    }else if( context->type() == KDevelop::Context::FileContext )
-    {
-        KDevelop::FileContext *itemCtx = dynamic_cast<KDevelop::FileContext*>(context);
-        ctxUrlList += itemCtx->urls();
-    }
-
-
-    KDevelop::ContextMenuExtension menuExt;
+    d->m_common->setupFromContext(context);
+    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
 
     bool hasVersionControlledEntries = false;
-    foreach( const KUrl &url, ctxUrlList )
-    {
-        if( isVersionControlled( url ) )
-        {
+    foreach(const KUrl &url, ctxUrlList) {
+        if (isVersionControlled(url)) {
             hasVersionControlledEntries = true;
             break;
         }
     }
-    if( ctxUrlList.isEmpty() )
-        return IPlugin::contextMenuExtension( context );
 
-
-    d->m_ctxUrlList = ctxUrlList;
-    QList<QAction*> actions;
-    KAction *action;
     kDebug() << "version controlled?" << hasVersionControlledEntries;
+
+    if (!hasVersionControlledEntries)
+        return IPlugin::contextMenuExtension(context);
+
     QMenu* menu = new QMenu("CVS");
-    if( hasVersionControlledEntries )
-    {
-        // Just add actions which are not covered by the cvscommon plugin
-        action = new KAction(i18n("Edit"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxEdit()) );
-        menu->addAction( action );
-
-        action = new KAction(i18n("Unedit"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()) );
-        menu->addAction( action );
-
-        action = new KAction(i18n("Show Editors"), this);
-        connect( action, SIGNAL(triggered()), this, SLOT(ctxEditors()) );
-        menu->addAction( action );
-
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+    QList<QAction*> commonActions = d->m_common->commonActions();
+    if (!commonActions.empty()) {
+        menu->addActions(commonActions);
+        menu->addSeparator();
     }
+
+    KAction *action;
+    // Just add actions which are not covered by the cvscommon plugin
+    action = new KAction(i18n("Edit"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(ctxEdit()));
+    menu->addAction(action);
+
+    action = new KAction(i18n("Unedit"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(ctxUnEdit()));
+    menu->addAction(action);
+
+    action = new KAction(i18n("Show Editors"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(ctxEditors()));
+    menu->addAction(action);
+
+    KDevelop::ContextMenuExtension menuExt;
+    menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction());
 
     return menuExt;
 }
 
 void CvsPlugin::ctxEdit()
 {
-    KUrl url = d->m_ctxUrlList.first();
+    KUrl::List const & urls = d->m_common->contextUrlList();
+    Q_ASSERT(!urls.empty());
 
-    KDevelop::VcsJob* j = edit(url);
+    KDevelop::VcsJob* j = edit(urls.front());
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                this, SIGNAL(jobFinished(KJob*)));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
 void CvsPlugin::ctxUnEdit()
 {
-    KUrl url = d->m_ctxUrlList.first();
+    KUrl::List const & urls = d->m_common->contextUrlList();
+    Q_ASSERT(!urls.empty());
 
-    KDevelop::VcsJob* j = unedit(url);
+    KDevelop::VcsJob* j = unedit(urls.front());
     CvsJob* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        connect(job, SIGNAL( result(KJob*) ),
-                this, SIGNAL( jobFinished(KJob*) ));
+        connect(job, SIGNAL(result(KJob*)),
+                this, SIGNAL(jobFinished(KJob*)));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
 }
 
 void CvsPlugin::ctxEditors()
 {
+    KUrl::List const & urls = d->m_common->contextUrlList();
+    Q_ASSERT(!urls.empty());
     ///@todo find a common base directory for the files
-    QFileInfo info( d->m_ctxUrlList[0].toLocalFile() );
+    QFileInfo info(urls.front().toLocalFile());
 
-    CvsJob* job = d->m_proxy->editors( info.absolutePath(),
-                                       d->m_ctxUrlList);
+    CvsJob* job = d->m_proxy->editors(info.absolutePath(),
+                                      urls);
     if (job) {
         KDevelop::ICore::self()->runController()->registerJob(job);
         EditorsView* view = new EditorsView(this, job);
-        emit addNewTabToMainView( view, i18n("Editors") );
+        emit addNewTabToMainView(view, i18n("Editors"));
     }
 }
 
@@ -302,25 +276,25 @@ KDevelop::VcsJob * CvsPlugin::repositoryLocation(const KUrl & localLocation)
 KDevelop::VcsJob * CvsPlugin::add(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->add( info.absolutePath(),
-                                   localLocations,
-                                   (recursion == KDevelop::IBasicVersionControl::Recursive) ? true:false);
+    CvsJob* job = d->m_proxy->add(info.absolutePath(),
+                                  localLocations,
+                                  (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::remove(const KUrl::List & localLocations)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->remove( info.absolutePath(),
-                                      localLocations);
+    CvsJob* job = d->m_proxy->remove(info.absolutePath(),
+                                     localLocations);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop::VcsRevision::RevisionType )
+KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop::VcsRevision::RevisionType)
 {
     Q_UNUSED(localLocation)
     return NULL;
@@ -329,30 +303,30 @@ KDevelop::VcsJob * CvsPlugin::localRevision(const KUrl & localLocation, KDevelop
 KDevelop::VcsJob * CvsPlugin::status(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->status( info.absolutePath(),
-                                      localLocations,
-                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true:false);
+    CvsJob* job = d->m_proxy->status(info.absolutePath(),
+                                     localLocations,
+                                     (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false);
     return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::unedit(const KUrl & localLocation)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocation.toLocalFile() );
+    QFileInfo info(localLocation.toLocalFile());
 
-    CvsJob* job = d->m_proxy->unedit( info.absolutePath(),
-                                      localLocation);
+    CvsJob* job = d->m_proxy->unedit(info.absolutePath(),
+                                     localLocation);
     return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::edit(const KUrl & localLocation)
 {
-    QFileInfo info( localLocation.toLocalFile() );
+    QFileInfo info(localLocation.toLocalFile());
 
-    CvsJob* job = d->m_proxy->edit( info.absolutePath(),
-                                    localLocation);
+    CvsJob* job = d->m_proxy->edit(info.absolutePath(),
+                                   localLocation);
     return job;
 }
 
@@ -363,12 +337,12 @@ KDevelop::VcsJob * CvsPlugin::copy(const KUrl & localLocationSrc, const KUrl & l
         return NULL;
     }
 
-    QFileInfo infoDstn( localLocationDstn.toLocalFile() );
+    QFileInfo infoDstn(localLocationDstn.toLocalFile());
     KUrl::List listDstn;
     listDstn << localLocationDstn;
 
-    CvsJob* job = d->m_proxy->add( infoDstn.absolutePath(),
-                                   listDstn, true);
+    CvsJob* job = d->m_proxy->add(infoDstn.absolutePath(),
+                                  listDstn, true);
 
     return job;
 }
@@ -381,29 +355,29 @@ KDevelop::VcsJob * CvsPlugin::move(const KUrl &, const KUrl &)
 KDevelop::VcsJob * CvsPlugin::revert(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
     KDevelop::VcsRevision rev;
-    CvsJob* job = d->m_proxy->update( info.absolutePath(),
-                                      localLocations,
-                                      rev,
-                                      "-C",
-                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true:false,
-                                      false, false);
+    CvsJob* job = d->m_proxy->update(info.absolutePath(),
+                                     localLocations,
+                                     rev,
+                                     "-C",
+                                     (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false,
+                                     false, false);
     return job;
 }
 
 KDevelop::VcsJob * CvsPlugin::update(const KUrl::List & localLocations, const KDevelop::VcsRevision & rev, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->update( info.absolutePath(),
-                                      localLocations,
-                                      rev,
-                                      "",
-                                      (recursion == KDevelop::IBasicVersionControl::Recursive) ? true:false,
-                                      false, false);
+    CvsJob* job = d->m_proxy->update(info.absolutePath(),
+                                     localLocations,
+                                     rev,
+                                     "",
+                                     (recursion == KDevelop::IBasicVersionControl::Recursive) ? true : false,
+                                     false, false);
     return job;
 }
 
@@ -411,26 +385,24 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const KUrl::List &
 {
     Q_UNUSED(recursion);
     QString msg = message;
-    if( msg.isEmpty() )
-    {
+    if (msg.isEmpty()) {
         CommitDialog dlg;
-        if( dlg.exec() == QDialog::Accepted )
-        {
+        if (dlg.exec() == QDialog::Accepted) {
             msg = dlg.message();
         }
     }
     ///@todo find a common base directory for the files
-    QFileInfo info( localLocations[0].toLocalFile() );
+    QFileInfo info(localLocations[0].toLocalFile());
 
-    CvsJob* job = d->m_proxy->commit( info.absolutePath(),
-                                      localLocations,
-                                      msg);
+    CvsJob* job = d->m_proxy->commit(info.absolutePath(),
+                                     localLocations,
+                                     msg);
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode )
+KDevelop::VcsJob * CvsPlugin::diff(const KUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    CvsJob* job = d->m_proxy->diff (fileOrDirectory, srcRevision, dstRevision, "-u"/*always unified*/);
+    CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, "-u"/*always unified*/);
     return job;
 }
 
@@ -438,7 +410,7 @@ KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::Vc
 {
     Q_UNUSED(limit)
 
-    CvsJob* job = d->m_proxy->log( localLocation, rev );
+    CvsJob* job = d->m_proxy->log(localLocation, rev);
     return job;
 }
 
@@ -450,7 +422,7 @@ KDevelop::VcsJob * CvsPlugin::log(const KUrl & localLocation, const KDevelop::Vc
 
 KDevelop::VcsJob * CvsPlugin::annotate(const KUrl & localLocation, const KDevelop::VcsRevision & rev)
 {
-    CvsJob* job = d->m_proxy->annotate( localLocation, rev );
+    CvsJob* job = d->m_proxy->annotate(localLocation, rev);
     return job;
 }
 
@@ -469,16 +441,16 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& s
     }
 
     kDebug(9500) << "CVS Import requested "
-                 << "src:" << sourceDirectory.toLocalFile()
-                 << "srv:" << destinationRepository.repositoryServer()
-                 << "module:" << destinationRepository.repositoryModule();
+    << "src:" << sourceDirectory.toLocalFile()
+    << "srv:" << destinationRepository.repositoryServer()
+    << "module:" << destinationRepository.repositoryModule();
 
-    CvsJob* job = d->m_proxy->import( sourceDirectory,
-				destinationRepository.repositoryServer(),
-				destinationRepository.repositoryModule(),
-				destinationRepository.userData().toString(),
-				destinationRepository.repositoryTag(),
-				commitMessage);
+    CvsJob* job = d->m_proxy->import(sourceDirectory,
+                                     destinationRepository.repositoryServer(),
+                                     destinationRepository.repositoryModule(),
+                                     destinationRepository.userData().toString(),
+                                     destinationRepository.repositoryTag(),
+                                     commitMessage);
     return job;
 }
 
@@ -491,10 +463,10 @@ KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsLocation & sourceRepos
     }
 
     kDebug(9500) << "CVS Checkout requested "
-                 << "dest:"<< destinationDirectory.toLocalFile()
-                 << "srv:"<< sourceRepository.repositoryServer()
-                 << "module:"<< sourceRepository.repositoryModule()
-                 << "branch:"<< sourceRepository.repositoryBranch() << endl;
+    << "dest:" << destinationDirectory.toLocalFile()
+    << "srv:" << sourceRepository.repositoryServer()
+    << "module:" << sourceRepository.repositoryModule()
+    << "branch:" << sourceRepository.repositoryBranch() << endl;
 
     CvsJob* job = d->m_proxy->checkout(destinationDirectory,
                                        sourceRepository.repositoryServer(),
@@ -510,7 +482,7 @@ QString CvsPlugin::name() const
 {
     return i18n("CVS");
 }
-KDevelop::VcsImportMetadataWidget* CvsPlugin::createImportMetadataWidget( QWidget* parent )
+KDevelop::VcsImportMetadataWidget* CvsPlugin::createImportMetadataWidget(QWidget* parent)
 {
     return new ImportMetadataWidget(parent);
 }

@@ -8,34 +8,39 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KDEVVCSCOMMONPLUGIN_H
-#define KDEVVCSCOMMONPLUGIN_H
+#ifndef VCSPLUGINCOMMON_H
+#define VCSPLUGINCOMMON_H
 
-#include <interfaces/iplugin.h>
+#include "vcsexport.h"
+
 #include <kurl.h>
-#include <QtCore/QVariant>
-#include <QtCore/QHash>
+#include <memory>
 
 class KJob;
+class QAction;
+class QActionGroup;
 
 namespace KDevelop
 {
+class IPlugin;
+class IBasicVersionControl;
 class Context;
+class ContextMenuExtension;
 class VcsCommitDialog;
 class ProjectBaseItem;
-class ContextMenuExtension;
-}
 
-class KAction;
-
-class KDevVcsCommonPlugin: public KDevelop::IPlugin
+class KDEVPLATFORMVCS_EXPORT VcsPluginHelper
+            : public QObject
 {
     Q_OBJECT
 public:
-    KDevVcsCommonPlugin( QObject *parent, const QVariantList & = QVariantList() );
-    virtual ~KDevVcsCommonPlugin();
+    VcsPluginHelper(IPlugin * parent, IBasicVersionControl * vcs);
+    virtual ~VcsPluginHelper();
 
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+    void setupFromContext(KDevelop::Context*);
+    KUrl::List const & contextUrlList();
+    QList<QAction*> commonActions();
+
 private slots:
     void commit();
     void add();
@@ -46,17 +51,16 @@ private slots:
     void diffToHead();
     void diffToBase();
     void update();
-    void executeCommit( KDevelop::VcsCommitDialog* dlg );
-    void cancelCommit( KDevelop::VcsCommitDialog* dlg );
-    void diffJobFinished( KJob* job );
+    void executeCommit(KDevelop::VcsCommitDialog* dlg);
+    void cancelCommit(KDevelop::VcsCommitDialog* dlg);
+    void diffJobFinished(KJob* job);
 private:
-    KDevelop::IPlugin* findVcsPluginForProjectItem( KDevelop::ProjectBaseItem* item ) const;
-    KUrl urlForItem( KDevelop::ProjectBaseItem* item ) const;
-    KDevelop::IPlugin* findVcsPluginForNonProjectUrl( const KUrl& url ) const;
-    KDevelop::IPlugin* findVcsPluginForUrl( const KUrl& url ) const;
-    QHash<IPlugin*, KUrl::List> m_ctxUrls;
-    QHash<QString, KAction*> m_actions;
+    KUrl urlForItem(KDevelop::ProjectBaseItem* item) const;
+
+    struct VcsPluginHelperPrivate;
+    std::auto_ptr<VcsPluginHelperPrivate> d;
 };
 
-#endif
+} // namespace KDevelop
 
+#endif

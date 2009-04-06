@@ -18,12 +18,14 @@
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
 #include <qobject.h>
+#include <auto_ptr.h>
 
 class CvsProxy;
 namespace KDevelop
 {
 class ContextMenuExtension;
 }
+class CvsPluginPrivate;
 /**
  * This is the main class of KDevelop's CVS plugin.
  *
@@ -31,66 +33,66 @@ class ContextMenuExtension;
  *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
-class CvsPlugin: public KDevelop::IPlugin , public KDevelop::ICentralizedVersionControl
+class CvsPlugin : public KDevelop::IPlugin, public KDevelop::ICentralizedVersionControl
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IBasicVersionControl KDevelop::ICentralizedVersionControl )
+    Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::ICentralizedVersionControl)
 
-friend class CvsProxy;
+    friend class CvsProxy;
 
 public:
-    CvsPlugin( QObject *parent, const QVariantList & args = QVariantList() );
+    explicit CvsPlugin(QObject *parent, const QVariantList & args = QVariantList());
     virtual ~CvsPlugin();
 
     virtual QString name() const;
-    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget( QWidget* parent );
+    virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
 
     // From KDevelop::IPlugin
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
     // Begin:  KDevelop::IBasicVersionControl
-    virtual bool isVersionControlled( const KUrl& localLocation );
-    virtual KDevelop::VcsJob* repositoryLocation( const KUrl& localLocation );
-    virtual KDevelop::VcsJob* add( const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* remove( const KUrl::List& localLocations );
-    virtual KDevelop::VcsJob* copy( const KUrl& localLocationSrc,
-                                    const KUrl& localLocationDstn );
-    virtual KDevelop::VcsJob* move( const KUrl& localLocationSrc,
-                                    const KUrl& localLocationDst );
-    virtual KDevelop::VcsJob* status( const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* revert( const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* update( const KUrl::List& localLocations,
-                const KDevelop::VcsRevision& rev,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* commit( const QString& message,
-                const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
-    virtual KDevelop::VcsJob* diff( const KUrl& fileOrDirectory,
-                const KDevelop::VcsRevision& srcRevision,
-                const KDevelop::VcsRevision& dstRevision,
-                KDevelop::VcsDiff::Type,
-                KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive );
-    virtual KDevelop::VcsJob* log( const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev,
-                unsigned long limit );
-    virtual KDevelop::VcsJob* log( const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev,
-                const KDevelop::VcsRevision& limit );
-    virtual KDevelop::VcsJob* annotate( const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev );
-    virtual KDevelop::VcsJob* resolve( const KUrl::List& localLocations,
-                KDevelop::IBasicVersionControl::RecursionMode recursion );
+    virtual bool isVersionControlled(const KUrl& localLocation);
+    virtual KDevelop::VcsJob* repositoryLocation(const KUrl& localLocation);
+    virtual KDevelop::VcsJob* add(const KUrl::List& localLocations,
+                                  KDevelop::IBasicVersionControl::RecursionMode recursion);
+    virtual KDevelop::VcsJob* remove(const KUrl::List& localLocations);
+    virtual KDevelop::VcsJob* copy(const KUrl& localLocationSrc,
+                                   const KUrl& localLocationDstn);
+    virtual KDevelop::VcsJob* move(const KUrl& localLocationSrc,
+                                   const KUrl& localLocationDst);
+    virtual KDevelop::VcsJob* status(const KUrl::List& localLocations,
+                                     KDevelop::IBasicVersionControl::RecursionMode recursion);
+    virtual KDevelop::VcsJob* revert(const KUrl::List& localLocations,
+                                     KDevelop::IBasicVersionControl::RecursionMode recursion);
+    virtual KDevelop::VcsJob* update(const KUrl::List& localLocations,
+                                     const KDevelop::VcsRevision& rev,
+                                     KDevelop::IBasicVersionControl::RecursionMode recursion);
+    virtual KDevelop::VcsJob* commit(const QString& message,
+                                     const KUrl::List& localLocations,
+                                     KDevelop::IBasicVersionControl::RecursionMode recursion);
+    virtual KDevelop::VcsJob* diff(const KUrl& fileOrDirectory,
+                                   const KDevelop::VcsRevision& srcRevision,
+                                   const KDevelop::VcsRevision& dstRevision,
+                                   KDevelop::VcsDiff::Type,
+                                   KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive);
+    virtual KDevelop::VcsJob* log(const KUrl& localLocation,
+                                  const KDevelop::VcsRevision& rev,
+                                  unsigned long limit);
+    virtual KDevelop::VcsJob* log(const KUrl& localLocation,
+                                  const KDevelop::VcsRevision& rev,
+                                  const KDevelop::VcsRevision& limit);
+    virtual KDevelop::VcsJob* annotate(const KUrl& localLocation,
+                                       const KDevelop::VcsRevision& rev);
+    virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations,
+                                      KDevelop::IBasicVersionControl::RecursionMode recursion);
     virtual KDevelop::VcsJob* checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl
-    virtual KDevelop::VcsJob* edit( const KUrl& localLocation );
-    virtual KDevelop::VcsJob* unedit( const KUrl& localLocation );
-    virtual KDevelop::VcsJob* localRevision( const KUrl& localLocation,
-                                             KDevelop::VcsRevision::RevisionType );
+    virtual KDevelop::VcsJob* edit(const KUrl& localLocation);
+    virtual KDevelop::VcsJob* unedit(const KUrl& localLocation);
+    virtual KDevelop::VcsJob* localRevision(const KUrl& localLocation,
+                                            KDevelop::VcsRevision::RevisionType);
     virtual KDevelop::VcsJob* import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository);
 // End:  KDevelop::ICentralizedVersionControl
 
@@ -128,9 +130,8 @@ signals:
     void addNewTabToMainView(QWidget* tab, QString label);
 
 private:
-    class CvsPluginPrivate* d;
-
     void setupActions();
+    std::auto_ptr<CvsPluginPrivate> d;
 };
 
 #endif

@@ -19,6 +19,7 @@ set(kdevplatformvcs_LIB_SRCS
     vcsjob.cpp
     vcsrevision.cpp
     vcsannotation.cpp
+    vcspluginhelper.cpp
     vcslocation.cpp
     vcsdiff.cpp
     vcsevent.cpp
@@ -65,6 +66,7 @@ install(FILES
     vcsrevision.h
     vcsannotation.h
     vcsdiff.h
+    vcspluginhelper.h
     vcsevent.h
     vcsstatusinfo.h
     vcslocation.h
