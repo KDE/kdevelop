@@ -302,7 +302,7 @@ KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const KUr
     return job;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob* KDevSvnPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     SvnCheckoutJob* job = new SvnCheckoutJob(this);
     job->setMapping(sourceRepository, destinationDirectory, recursion);
@@ -652,7 +652,7 @@ void KDevSvnPlugin::ctxCheckout()
     dlg.setMainWidget(widget);
 
     if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::ICore::self()->runController()->registerJob(checkout(widget->source(), widget->destination(), widget->recursionMode()));
+        KDevelop::ICore::self()->runController()->registerJob(createWorkingCopy(widget->source(), widget->destination(), widget->recursionMode()));
     }
 }
 

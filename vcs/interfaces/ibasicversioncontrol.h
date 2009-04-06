@@ -228,10 +228,15 @@ public:
                              RecursionMode recursion ) = 0;
 
     /**
-     * Checks out files or dirs from a repository into a local directory
-     * hierarchy.
+     * Creates a working copy of the latest revision of the repository sourceRepository in
+     * the newly created directory destinationDirectory.
+     * In the case of a decentralized VCSs, there is no working copy without repository,
+     * therefor checkout() includes the creation of a local copy of the repository.
+     * 
+     * @param sourceRepository source of the checkout
+     * @param destinationDirectory location of the created working copy (local repository)
      */
-    virtual VcsJob* checkout(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
+    virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
 
 };
 

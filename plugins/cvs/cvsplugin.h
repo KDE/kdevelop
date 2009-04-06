@@ -85,7 +85,7 @@ public:
                                        const KDevelop::VcsRevision& rev);
     virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations,
                                       KDevelop::IBasicVersionControl::RecursionMode recursion);
-    virtual KDevelop::VcsJob* checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+    virtual KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl

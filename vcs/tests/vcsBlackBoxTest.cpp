@@ -433,12 +433,12 @@ void VcsBlackBoxTest::repoInit(CRepo& r, CRepo& s)
     QVERIFY(!r.vcs->isVersionControlled(wd0));
     QVERIFY(!s.vcs->isVersionControlled(wd1));
     
-    validatingExecJob(__LINE__, r.cvcs->checkout(r.repositoryLocation, wd0, IBasicVersionControl::Recursive));
+    validatingExecJob(__LINE__, r.cvcs->createWorkingCopy(r.repositoryLocation, wd0, IBasicVersionControl::Recursive));
 
     QVERIFY(r.vcs->isVersionControlled(wd0));
     QVERIFY(!s.vcs->isVersionControlled(wd1));
 
-    validatingExecJob(__LINE__, s.cvcs->checkout(s.repositoryLocation, wd1, IBasicVersionControl::Recursive));
+    validatingExecJob(__LINE__, s.cvcs->createWorkingCopy(s.repositoryLocation, wd1, IBasicVersionControl::Recursive));
 
     QVERIFY(r.vcs->isVersionControlled(wd0));
     QVERIFY(s.vcs->isVersionControlled(wd1));

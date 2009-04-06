@@ -267,7 +267,7 @@ void MercurialInitTest::commitFiles()
 void MercurialInitTest::cloneRepository()
 {
     // make job that clones the local repository, created in the previous test
-    VcsJob* j = m_proxy->clone(KUrl(mercurialTest_BaseDir), KUrl(mercurialTest_BaseDir2));
+    VcsJob* j = m_proxy->createWorkingCopy(KUrl(mercurialTest_BaseDir), KUrl(mercurialTest_BaseDir2));
     QVERIFY(j);
 
     // try to start the job

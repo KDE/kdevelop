@@ -70,11 +70,10 @@ public:
                            const KDevelop::VcsRevision& dstRevision,
                            const KUrl& localLocation );
     KDevelop::VcsJob* resolve( const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion );
-    KDevelop::VcsJob* checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive );
+    KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive );
 
     //DVCS
     KDevelop::VcsJob* init(const KUrl& location);
-    KDevelop::VcsJob* clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryRoot);
     KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
     KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
     KDevelop::VcsJob* reset(const KUrl &repository, const QStringList &args, const KUrl::List &files);

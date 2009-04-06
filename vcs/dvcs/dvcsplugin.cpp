@@ -197,7 +197,7 @@ DistributedVersionControlPlugin::pull(const VcsLocation&,
 }
 
 KDevelop::VcsJob*
-DistributedVersionControlPlugin::checkout(const VcsLocation &, const KUrl &, RecursionMode)
+DistributedVersionControlPlugin::createWorkingCopy(const VcsLocation &, const KUrl &, RecursionMode)
 {
     return empty_cmd();
 }

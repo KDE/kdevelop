@@ -44,7 +44,7 @@ class MercurialExecutor;
  * This is the main class of KDevelop's Mercurial plugin.
  *
  * It implements the DVCS dependent things not implemented in KDevelop::DistributedVersionControlPlugin
- * @author Fabian Wiesel <fabian.wiesel@fu-berlin.de>
+ * @author Fabian Wiesel <fabian.wiesel@googlemail.com>
  */
 
 class MercurialPlugin
@@ -52,8 +52,6 @@ class MercurialPlugin
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::IDistributedVersionControl)
-
-    friend class MercurialExecutor;
 
 public:
     explicit MercurialPlugin(QObject *parent, const QVariantList & args = QVariantList());
@@ -64,7 +62,7 @@ public:
     QString name() const;
 
     KDevelop::VcsJob* init(const KUrl & directory);
-    KDevelop::VcsJob* clone(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl & repository);
+    KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl & repository, IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* add(const KUrl::List& localLocations,
                  KDevelop::IBasicVersionControl::RecursionMode recursion  = KDevelop::IBasicVersionControl::Recursive);
     KDevelop::VcsJob* copy(const KUrl& localLocationSrc,

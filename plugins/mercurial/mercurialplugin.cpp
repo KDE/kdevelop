@@ -123,7 +123,7 @@ VcsJob* MercurialPlugin::init(const KUrl &directory)
     return job.release();
 }
 
-VcsJob* MercurialPlugin::clone(const VcsLocation & localOrRepoLocationSrc, const KUrl& directory)
+VcsJob* MercurialPlugin::createWorkingCopy(const VcsLocation & localOrRepoLocationSrc, const KUrl& directory, IBasicVersionControl::RecursionMode)
 {
     std::auto_ptr<DVcsJob> job(new DVcsJob(this));
 

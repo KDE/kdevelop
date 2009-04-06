@@ -227,11 +227,6 @@ VcsJob* KrossDistributedVersionControl::init(const KUrl& location)
     return new KrossVcsJob("init", QVariantList() << location, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::clone(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocationSrc)
-{
-    return new KrossVcsJob("clone", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocationSrc, action, m_plugin, action);
-}
-
 VcsJob* KrossDistributedVersionControl::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
     return new KrossVcsJob("push", QVariantList() << localRepositoryLocation << localOrRepoLocationDst.localUrl(), action, m_plugin, action);
@@ -242,12 +237,12 @@ VcsJob* KrossDistributedVersionControl::pull(const KDevelop::VcsLocation& localO
     return new KrossVcsJob("pull", QVariantList() << localOrRepoLocationSrc.localUrl() << localRepositoryLocation, action, m_plugin, action);
 }
 
-VcsJob* KrossDistributedVersionControl::checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode mode)
+VcsJob* KrossDistributedVersionControl::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode mode)
 {
     QVariant srcloc = Handlers::kDevelopVcsLocationHandler(&sourceRepository);
     QVariant recursion(mode==Recursive);
 
-    return new KrossVcsJob("checkout", QVariantList() << srcloc << destinationDirectory << recursion, action, m_plugin, action);
+    return new KrossVcsJob("createWorkingCopy", QVariantList() << srcloc << destinationDirectory << recursion, action, m_plugin, action);
 }
 
 VcsJob* KrossDistributedVersionControl::reset(const KUrl &repository, const QStringList &args, const KUrl::List &files)

@@ -454,7 +454,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& s
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::checkout(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     if (!destinationDirectory.isLocalFile()
             || !sourceRepository.isValid()

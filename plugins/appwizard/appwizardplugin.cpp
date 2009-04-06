@@ -183,7 +183,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
         }
 
     kDebug() << "Checking out";
-    job = cvcs->checkout( info.repository, info.sourceLocation, IBasicVersionControl::Recursive);
+    job = cvcs->createWorkingCopy( info.repository, info.sourceLocation, IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
         vcsError(i18n("Could not checkout imported project"), scratchArea, info.repository.repositoryServer());

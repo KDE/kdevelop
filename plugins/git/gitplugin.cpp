@@ -110,7 +110,7 @@ VcsJob* GitPlugin::init(const KUrl &directory)
     return NULL;
 }
 
-VcsJob* GitPlugin::clone(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl& localRepositoryRoot)
+VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode)
 {
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localRepositoryRoot.toLocalFile(), GitPlugin::Init) ) {

@@ -46,16 +46,6 @@ public:
     virtual VcsJob* init(const KUrl& localRepositoryRoot) = 0;
 
     /**
-     * Create a new repository by cloning another one into a newly created
-     * local directory, including all of the other repository's history.
-     *
-     * @param localOrRepoLocationSrc The repository that will be cloned.
-     * @param localRepositoryRoot The root folder of the newly created repository.
-     */
-    virtual VcsJob* clone(const VcsLocation& localOrRepoLocationSrc,
-                          const KUrl& localRepositoryRoot) = 0;
-
-    /**
      * Export the locally committed revisions to another repository.
      *
      * @param localRepositoryLocation Any location inside the local repository.
