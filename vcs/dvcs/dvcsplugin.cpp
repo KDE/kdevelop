@@ -63,6 +63,7 @@
 #include <vcs/vcspluginhelper.h>
 #include <memory>
 #include <KMenu>
+#include <kparts/mainwindow.h>
 
 namespace KDevelop
 {
@@ -258,7 +259,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     menu->addAction(action);
 
     action = new KAction(i18n("Branch Manager"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxCheckout()));
+    connect(action, SIGNAL(triggered()), this, SLOT(ctxBranchManager()));
     menu->addAction(action);
 
     action = new KAction(i18n("Revision History"), this);
@@ -310,6 +311,14 @@ void DistributedVersionControlPlugin::ctxPull()
                 this, SIGNAL(jobFinished(KJob*)));
         job->start();
     }
+}
+
+void DistributedVersionControlPlugin::ctxBranchManager()
+{
+    KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
+    Q_ASSERT(!ctxUrlList.isEmpty());    
+    BranchManager * branchManager = new BranchManager(ctxUrlList.front().toLocalFile(), this, core()->uiController()->activeMainWindow());
+    branchManager->show();
 }
 
 void DistributedVersionControlPlugin::ctxRevHistory()

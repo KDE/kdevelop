@@ -150,7 +150,7 @@ public Q_SLOTS:
     //slots for context menu
     void ctxPush();
     void ctxPull();
-//     void ctxLog();
+    void ctxBranchManager();
     void ctxRevHistory();
 
     // slots for menu
