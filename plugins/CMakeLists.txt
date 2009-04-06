@@ -1,6 +1,6 @@
 macro_optional_add_subdirectory(konsole)
 add_subdirectory(filemanager)
-add_subdirectory(vcscommon)
+#add_subdirectory(vcscommon)
 add_subdirectory(appwizard)
 add_subdirectory(projectmanagerview)
 add_subdirectory(genericprojectmanager)
