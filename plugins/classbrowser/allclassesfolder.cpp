@@ -93,13 +93,14 @@ void DocumentClassesFolder::branchModified(KDevelop::DUContextPointer context)
 
 void DocumentClassesFolder::branchRemoved(KDevelop::DUContextPointer context)
 {
-  DUChainReadLocker readLock(DUChain::lock());
+  //Getting a read-lock may lead to UI lockups when the background-parser is writing the duchain
+/*  DUChainReadLocker readLock(DUChain::lock());
 
   if ( !context )
     return;
 
   /// @todo
-  kDebug() << "Del: " << context->url().toUrl() << " " << context->range().start.line << "-" << context->range().end.line;
+  kDebug() << "Del: " << context->url().toUrl() << " " << context->range().start.line << "-" << context->range().end.line;*/
 }
 
 void DocumentClassesFolder::updateChangedFiles()
@@ -125,7 +126,7 @@ void DocumentClassesFolder::updateChangedFiles()
 void DocumentClassesFolder::nodeCleared()
 {
   disconnect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), this, SLOT(branchModified(KDevelop::DUContextPointer)));
-  disconnect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)));
+//   disconnect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)));
 
   // Clear cached namespaces list (node was cleared).
   m_namespaces.clear();
@@ -141,7 +142,7 @@ void DocumentClassesFolder::populateNode()
 {
   // Get notification for file changes.
   connect(DUChain::self()->notifier(), SIGNAL(branchModified(KDevelop::DUContextPointer)), this, SLOT(branchModified(KDevelop::DUContextPointer)), Qt::QueuedConnection);
-  connect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)), Qt::QueuedConnection);
+//   connect(DUChain::self()->notifier(), SIGNAL(branchRemoved(KDevelop::DUContextPointer)), this, SLOT(branchRemoved(KDevelop::DUContextPointer)), Qt::QueuedConnection);
 
   // Start updates timer - this is the required delay.
   m_updateTimer->start(2000);
