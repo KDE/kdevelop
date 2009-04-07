@@ -252,11 +252,16 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 }
             }
             if(jumpTo.first.isValid() && jumpTo.second.isValid()) {
-                if(mouseEvent->button() == Qt::LeftButton && mouseEvent->type() == QEvent::MouseButtonPress) {
-                    view->setCursorPosition(textCursor);
-                    ICore::self()->documentController()->openDocument(jumpTo.first, jumpTo.second.textCursor());
-                    event->accept();
-                    return true;
+                if(mouseEvent->button() == Qt::LeftButton) {
+                    if(mouseEvent->type() == QEvent::MouseButtonPress) {
+                        m_buttonPressPosition = textCursor;
+//                         view->setCursorPosition(textCursor);
+//                         return false;
+                    }else if(mouseEvent->type() == QEvent::MouseButtonRelease && textCursor == m_buttonPressPosition) {
+                        ICore::self()->documentController()->openDocument(jumpTo.first, jumpTo.second.textCursor());
+//                         event->accept();
+//                         return true;
+                    }
                 }else if(mouseEvent->type() == QEvent::MouseMove) {
                     //Make the cursor a "hand"
                     setHandCursor(widget);

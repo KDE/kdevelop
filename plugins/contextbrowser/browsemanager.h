@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QPointer>
 #include <qevent.h>
+#include <ktexteditor/cursor.h>
 
 
 class QWidget;
@@ -101,6 +102,7 @@ class BrowseManager : public QObject {
         QMap<QPointer<QWidget>, QCursor> m_oldCursors;
         QTimer* m_delayedBrowsingTimer;
         QPointer<KTextEditor::View> m_browingStartedInView;
+        KTextEditor::Cursor m_buttonPressPosition;
 };
 
 #endif
