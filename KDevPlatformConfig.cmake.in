@@ -31,7 +31,7 @@ set( KDEVPLATFORM_INCLUDE_DIR "@INCLUDE_INSTALL_DIR@/kdevplatform" )
 
 else(NOT WIN32)
 
-set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../include/kdevplatform" )
+set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../../include/kdevplatform" )
 
 endif(NOT WIN32)
 
@@ -54,8 +54,6 @@ _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
-
-include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
 mark_as_advanced(
     KDEVPLATFORM_INTERFACES_LIBRARY
