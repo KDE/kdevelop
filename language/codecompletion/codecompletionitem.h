@@ -41,8 +41,8 @@ namespace KDevelop
 {
 class CodeCompletionModel;
 
-class CompletionTreeNode;
-class CompletionTreeItem;
+struct CompletionTreeNode;
+struct CompletionTreeItem;
 class IndexedType;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public KShared {
