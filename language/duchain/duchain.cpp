@@ -338,8 +338,6 @@ public:
       if (context->smartRange())
         ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
 
-      instance->branchRemoved(context);
-
       if(!context->isOnDisk())
         instance->removeFromEnvironmentManager(context);
 
@@ -347,7 +345,7 @@ public:
       //DUChain is write-locked, so we can do whatever we want on the top-context, including deleting it
       context->deleteSelf();
       l.relock();
-      
+
       m_chainsByIndex.erase(it);
     }
   }
@@ -671,6 +669,7 @@ public:
           //Since we've released the write-lock in between, we've got to call store() again to be sure that none of the data is dynamic
           //If nothing has changed, it is only a low-cost call.
           unload->m_dynamicData->store();
+          Q_ASSERT(!unload->d_func()->m_dynamic);
           removeDocumentChainFromMemory(unload);
           workOnContexts.remove(unload);
           unloadedOne = true;
@@ -904,10 +903,10 @@ void DUChain::updateContextEnvironment( TopDUContext* context, ParsingEnvironmen
   branchModified(context);
 }
 
-
 void DUChain::removeDocumentChain( TopDUContext* context )
 {
   ENSURE_CHAIN_WRITE_LOCKED;
+  branchRemoved(context);
   context->m_dynamicData->deleteOnDisk();
   sdDUChainPrivate->removeDocumentChainFromMemory(context);
 }
