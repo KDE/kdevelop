@@ -421,6 +421,12 @@ void TopDUContextDynamicData::store() {
     ///      Then we also won't need to load the data if only the meta-data changed.
   if(!m_dataLoaded)
     loadData();
+  
+  ///If the data is mapped, and we re-write the file, we must make sure that the data is copied out of the map,
+  ///even if only metadata is changed.
+  ///@todo If we split up data and metadata, we don't need to do this
+  if(m_mappedData)
+    contentDataChanged = true;
 
   m_topContext->makeDynamic();
   m_topContextData.clear();
@@ -520,6 +526,7 @@ void TopDUContextDynamicData::store() {
           Q_ASSERT(((size_t)m_fastDeclarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastDeclarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
         }
       }
+    }
 
     saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
     Q_ASSERT(actualTopContextDataSize == topContextDataSize);
@@ -556,8 +563,6 @@ void TopDUContextDynamicData::store() {
     }else{
       kWarning() << "Cannot open top-context for writing";
     }
-  }
-  
 //   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }
 
