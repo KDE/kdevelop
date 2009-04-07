@@ -56,16 +56,25 @@ DocumentRangeObjectData::DocumentRangeObjectData(const DocumentRangeObjectData& 
 DocumentRangeObjectDynamicPrivate::DocumentRangeObjectDynamicPrivate() : m_smartRange(0), m_smartMutex(0), m_ownsRange(DocumentRangeObject::DontOwn) {
 }
 
+void DocumentRangeObject::aboutToWriteData() {
+}
+
 void DocumentRangeObject::syncFromSmart() const {
     if(!dd_ptr)
       return;
-    
+
     QMutexLocker l(dd_ptr->m_smartMutex);
 
-    if(!dd_ptr->m_smartRange)
+    ///@todo This sucks: If the data isn't writable, we won't get the update
+    ///But we also cannot make the data writable using aboutToWriteData, because we don't have a write lock
+    if(!dd_ptr->m_smartRange || !canWriteData())
         return;
 
     d_ptr->m_range = *dd_ptr->m_smartRange;
+}
+
+bool DocumentRangeObject::canWriteData() const {
+  return true;
 }
 
 void DocumentRangeObject::syncToSmart() const {
@@ -100,7 +109,7 @@ DocumentRangeObject::DocumentRangeObject(DocumentRangeObject& useDataFrom)
   Q_ASSERT(d_ptr);
 }
 
-void DocumentRangeObject::setData(DocumentRangeObjectData* data, bool constructorCalled)
+void DocumentRangeObject::setData(DocumentRangeObjectData* data, bool /*constructorCalled*/)
 {
   Q_ASSERT(data);
   if(d_ptr->m_dynamic && m_ownsData)
@@ -189,6 +198,7 @@ SimpleRange DocumentRangeObject::range( ) const
 
 void DocumentRangeObject::setRange(const SimpleRange& range)
 {
+    aboutToWriteData();
     d_ptr->m_range = range;
     syncToSmart();
 }
@@ -212,7 +222,8 @@ void DocumentRangeObject::rangeDeleted(KTextEditor::SmartRange * range)
     // Already smart locked
     Q_ASSERT(dd_ptr);
     Q_ASSERT(range == dd_ptr->m_smartRange);
-    d_ptr->m_range = SimpleRange(*range);
+    if(canWriteData()) ///@todo this sux
+      d_ptr->m_range = SimpleRange(*range);
     delete dd_ptr;
     dd_ptr = 0;
 }

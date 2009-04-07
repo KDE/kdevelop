@@ -212,6 +212,12 @@ protected:
      */
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
+    //Called before the data in d_ptr is written by DocumentRangeObject
+    virtual void aboutToWriteData();
+
+    //Called to test whether the data is allowed to be written automatically(from syncFromSmart)
+    virtual bool canWriteData() const;
+    
 private:
     void syncFromSmart() const;
     void syncToSmart() const;
