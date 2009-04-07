@@ -55,6 +55,8 @@ _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 
+include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
+
 mark_as_advanced(
     KDEVPLATFORM_INTERFACES_LIBRARY
     KDEVPLATFORM_LANGUAGE_LIBRARY
