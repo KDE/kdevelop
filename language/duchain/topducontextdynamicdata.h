@@ -32,6 +32,7 @@ class DUContext;
 class Declaration;
 class IndexedString;
 class IndexedDUContext;
+class DUChainBaseData;
 
 typedef QPair<QByteArray, uint> ArrayWithPosition;
 
@@ -100,7 +101,6 @@ class TopDUContextDynamicData {
   private:
     void unmap();
     //Converts away from an mmap opened file to a data array
-    void dataFromMap();
     
     QString filePath() const;
 
@@ -120,7 +120,7 @@ class TopDUContextDynamicData {
     
     const char* pointerInData(uint offset) const;
 
-    ItemDataInfo writeDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& oldData, uint& totalDataOffset);
+    ItemDataInfo writeDataInfo(const ItemDataInfo& info, const DUChainBaseData* data, uint& totalDataOffset);
 
     TopDUContext* m_topContext;
     //May contain zero contexts if they were deleted
