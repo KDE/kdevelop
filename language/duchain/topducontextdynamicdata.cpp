@@ -72,6 +72,7 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
     memcpy(&target, item.d_func(), size);
     item.setData(&target, false);
   }
+  Q_ASSERT(item.d_func() == &target);
 
   Q_ASSERT(!item.d_func()->isDynamic());
 }
@@ -90,7 +91,7 @@ const char* KDevelop::TopDUContextDynamicData::pointerInData(const QList<ArrayWi
 const char* KDevelop::TopDUContextDynamicData::pointerInData(uint totalOffset) const {
   Q_ASSERT(!m_mappedData || m_data.isEmpty());
   
-  if(m_mappedData)
+  if(m_mappedData && m_mappedDataSize)
     return (char*)m_mappedData + totalOffset;
   
   for(int a = 0; a < m_data.size(); ++a) {
@@ -134,7 +135,7 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   return ret;
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_deleting(false), m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_mappedFile(0), m_mappedData(0), m_mappedDataSize(0) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_deleting(false), m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_mappedFile(0), m_mappedData(0), m_mappedDataSize(0), m_itemRetrievalForbidden(false) {
 }
 
 void KDevelop::TopDUContextDynamicData::clearContextsAndDeclartions() {
@@ -268,6 +269,7 @@ void TopDUContextDynamicData::loadData() const {
   if(m_mappedData) {
     m_mappedFile = file;
     m_mappedDataSize = file->size() - file->pos();
+    file->close(); //Close the file, so there is less open file descriptors(May be problematic)
   }else{
     kDebug() << "Failed to map" << fileName;
   }
@@ -454,6 +456,8 @@ void TopDUContextDynamicData::store() {
     m_contextDataOffsets.clear();
     m_declarationDataOffsets.clear();
 
+    m_itemRetrievalForbidden = true;
+    
     for(int a = 0; a < m_fastContextsSize; ++a) {
       if(!m_fastContexts[a]) {
         if(oldContextDataOffsets.size() > a && oldContextDataOffsets[a].dataOffset) {
@@ -470,6 +474,9 @@ void TopDUContextDynamicData::store() {
         saveDUChainItem(m_data, *m_fastContexts[a], currentDataOffset);
         verifyDataInfo(m_contextDataOffsets.back(), m_data);
         Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
+        if(m_mappedData) {
+          Q_ASSERT(((size_t)m_fastContexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastContexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+        }
       }
     }
 
@@ -490,55 +497,67 @@ void TopDUContextDynamicData::store() {
         saveDUChainItem(m_data, *m_fastDeclarations[a], currentDataOffset);
         verifyDataInfo(m_declarationDataOffsets.back(), m_data);
         Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
+        if(m_mappedData) {
+          Q_ASSERT(((size_t)m_fastDeclarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastDeclarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+        }
       }
     }
-  }
 
-  for(int a = 0; a < m_fastContextsSize; ++a)
-    if(m_fastContexts[a]) {
-      Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
-    }
+    m_itemRetrievalForbidden = false;
 
-  for(int a = 0; a < m_fastDeclarationsSize; ++a)
-    if(m_fastDeclarations[a]) {
-      Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
-    }
+    for(int a = 0; a < m_fastContextsSize; ++a)
+      if(m_fastContexts[a]) {
+        Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
+        if(m_mappedData) {
+          Q_ASSERT(((size_t)m_fastContexts[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastContexts[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+        }
+      }
 
-  saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
-  Q_ASSERT(actualTopContextDataSize == topContextDataSize);
-  Q_ASSERT(m_topContextData.size() == 1);
-  Q_ASSERT(!m_topContext->d_func()->isDynamic());
+    for(int a = 0; a < m_fastDeclarationsSize; ++a)
+      if(m_fastDeclarations[a]) {
+        Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
+        if(m_mappedData) {
+          Q_ASSERT(((size_t)m_fastDeclarations[a]->d_func()) < ((size_t)m_mappedData) || ((size_t)m_fastDeclarations[a]->d_func()) > ((size_t)m_mappedData) + m_mappedDataSize);
+        }
+      }
 
-  unmap();
-  
-  QFile file(filePath());
-  if(file.open(QIODevice::WriteOnly)) {
+    saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
+    Q_ASSERT(actualTopContextDataSize == topContextDataSize);
+    Q_ASSERT(m_topContextData.size() == 1);
+    Q_ASSERT(!m_topContext->d_func()->isDynamic());
 
-    file.resize(0);
+    unmap();
     
-    file.write((char*)&topContextDataSize, sizeof(uint));
-    foreach(const ArrayWithPosition& pos, m_topContextData)
-      file.write(pos.first.constData(), pos.second);
+    QFile file(filePath());
+    if(file.open(QIODevice::WriteOnly)) {
 
-    uint writeValue = m_contextDataOffsets.size();
-    file.write((char*)&writeValue, sizeof(uint));
-    file.write((char*)m_contextDataOffsets.data(), sizeof(ItemDataInfo) * m_contextDataOffsets.size());
+      file.resize(0);
+      
+      file.write((char*)&topContextDataSize, sizeof(uint));
+      foreach(const ArrayWithPosition& pos, m_topContextData)
+        file.write(pos.first.constData(), pos.second);
 
-    writeValue = m_declarationDataOffsets.size();
-    file.write((char*)&writeValue, sizeof(uint));
-    file.write((char*)m_declarationDataOffsets.data(), sizeof(ItemDataInfo) * m_declarationDataOffsets.size());
+      uint writeValue = m_contextDataOffsets.size();
+      file.write((char*)&writeValue, sizeof(uint));
+      file.write((char*)m_contextDataOffsets.data(), sizeof(ItemDataInfo) * m_contextDataOffsets.size());
 
-    foreach(const ArrayWithPosition& pos, m_data)
-      file.write(pos.first.constData(), pos.second);
+      writeValue = m_declarationDataOffsets.size();
+      file.write((char*)&writeValue, sizeof(uint));
+      file.write((char*)m_declarationDataOffsets.data(), sizeof(ItemDataInfo) * m_declarationDataOffsets.size());
 
-    m_onDisk = true;
+      foreach(const ArrayWithPosition& pos, m_data)
+        file.write(pos.first.constData(), pos.second);
 
-    if (file.size() == 0)
-      kWarning() << "Saving zero size top ducontext data";
+      m_onDisk = true;
 
-  }else{
-    kWarning() << "Cannot open top-context for writing";
+      if (file.size() == 0)
+        kWarning() << "Saving zero size top ducontext data";
+
+    }else{
+      kWarning() << "Cannot open top-context for writing";
+    }
   }
+  
 //   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
 }
 
@@ -595,6 +614,9 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
     else {
       uint realIndex = index-1;
       if(!m_fastDeclarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
+        
+        Q_ASSERT(!m_itemRetrievalForbidden);
+        
         m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_declarationDataOffsets[realIndex].dataOffset))));
         if(!m_fastDeclarations[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
@@ -689,6 +711,9 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
         return *fastContextsPos;
 
       if(!*fastContextsPos && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
+
+        Q_ASSERT(!m_itemRetrievalForbidden);
+        
         //Construct the context, and eventuall its parent first
         *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_contextDataOffsets[realIndex].dataOffset))));
         if(!*fastContextsPos) {

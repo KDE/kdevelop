@@ -150,6 +150,7 @@ class TopDUContextDynamicData {
     mutable QFile* m_mappedFile;
     mutable uchar* m_mappedData;
     mutable size_t m_mappedDataSize;
+    mutable bool m_itemRetrievalForbidden;
 };
 }
 
