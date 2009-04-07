@@ -18,7 +18,7 @@
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
 #include <qobject.h>
-#include <auto_ptr.h>
+#include <memory>
 
 class CvsProxy;
 namespace KDevelop
