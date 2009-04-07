@@ -34,6 +34,10 @@
 
 //#define DEBUG_DATA_INFO
 
+///Problem: When enabling top-context loading using mmap, a SIGBUS will happen while storing.
+///it seems like there are too many mmaps or something like that.
+// #define USE_MMAP
+
 using namespace KDevelop;
 
 QMutex KDevelop::TopDUContextDynamicData::m_temporaryDataMutex(QMutex::Recursive);
@@ -73,11 +77,27 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   Q_ASSERT(!item.d_func()->isDynamic());
 }
 
-const char* KDevelop::TopDUContextDynamicData::pointerInData(const QList< KDevelop::ArrayWithPosition >& data, uint totalOffset) {
+const char* KDevelop::TopDUContextDynamicData::pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset) {
+  
   for(int a = 0; a < data.size(); ++a) {
     if(totalOffset < data[a].second)
       return data[a].first.constData() + totalOffset;
     totalOffset -= data[a].second;
+  }
+  Q_ASSERT(0); //Offset doesn't exist in the data
+  return 0;
+}
+
+const char* KDevelop::TopDUContextDynamicData::pointerInData(uint totalOffset) const {
+  Q_ASSERT(!m_mappedData || m_data.isEmpty());
+  
+  if(m_mappedData)
+    return (char*)m_mappedData + totalOffset;
+  
+  for(int a = 0; a < m_data.size(); ++a) {
+    if(totalOffset < m_data[a].second)
+      return m_data[a].first.constData() + totalOffset;
+    totalOffset -= m_data[a].second;
   }
   Q_ASSERT(0); //Offset doesn't exist in the data
   return 0;
@@ -116,7 +136,7 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   return ret;
 }
 
-TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_deleting(false) {
+TopDUContextDynamicData::TopDUContextDynamicData(TopDUContext* topContext) : m_deleting(false), m_topContext(topContext), m_fastContexts(0), m_fastContextsSize(0), m_fastDeclarations(0), m_fastDeclarationsSize(0), m_onDisk(false), m_dataLoaded(true), m_mappedFile(0), m_mappedData(0), m_mappedDataSize(0) {
 }
 
 void KDevelop::TopDUContextDynamicData::clearContextsAndDeclartions() {
@@ -137,6 +157,22 @@ void KDevelop::TopDUContextDynamicData::clearContextsAndDeclartions() {
 
 TopDUContextDynamicData::~TopDUContextDynamicData() {
   clearContextsAndDeclartions();
+  unmap();
+}
+
+void KDevelop::TopDUContextDynamicData::unmap() {
+  kDebug() << "unmapping" << m_topContext->ownIndex();
+  delete m_mappedFile;
+  m_mappedFile = 0;
+  m_mappedData = 0;
+  m_mappedDataSize = 0;
+}
+
+void KDevelop::TopDUContextDynamicData::dataFromMap() {
+  if(m_mappedFile && m_data.isEmpty()) {
+    QByteArray data = m_mappedFile->readAll();
+    m_data.append(qMakePair(data, (uint)data.size()));
+  }
 }
 
 QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIndex) {
@@ -217,28 +253,42 @@ void TopDUContextDynamicData::loadData() const {
   KStandardDirs::makeDir(baseDir);
 
   QString fileName = baseDir + '/' + QString("%1").arg(m_topContext->ownIndex());
-  QFile file(fileName);
-  bool open = file.open(QIODevice::ReadOnly);
+  QFile* file = new QFile(fileName);
+  bool open = file->open(QIODevice::ReadOnly);
   Q_ASSERT(open);
-  Q_ASSERT(file.size());
+  Q_ASSERT(file->size());
 
   //Skip the offsets, we're already read them
   //Skip top-context data
   uint readValue;
-  file.read((char*)&readValue, sizeof(uint));
-  file.seek(readValue + file.pos());
+  file->read((char*)&readValue, sizeof(uint));
+  file->seek(readValue + file->pos());
 
-  file.read((char*)&readValue, sizeof(uint));
+  file->read((char*)&readValue, sizeof(uint));
   m_contextDataOffsets.resize(readValue);
-  file.read((char*)m_contextDataOffsets.data(), sizeof(ItemDataInfo) * m_contextDataOffsets.size());
+  file->read((char*)m_contextDataOffsets.data(), sizeof(ItemDataInfo) * m_contextDataOffsets.size());
 
-  file.read((char*)&readValue, sizeof(uint));
+  file->read((char*)&readValue, sizeof(uint));
   m_declarationDataOffsets.resize(readValue);
-  file.read((char*)m_declarationDataOffsets.data(), sizeof(ItemDataInfo) * m_declarationDataOffsets.size());
+  file->read((char*)m_declarationDataOffsets.data(), sizeof(ItemDataInfo) * m_declarationDataOffsets.size());
 
-  QByteArray data = file.readAll();
-
-  m_data.append(qMakePair(data, (uint)data.size()));
+#ifdef USE_MMAP
+  
+  m_mappedData = file->map(file->pos(), file->size() - file->pos());
+  if(m_mappedData) {
+    m_mappedFile = file;
+    m_mappedDataSize = file->size() - file->pos();
+  }else{
+    kDebug() << "Failed to map" << fileName;
+  }
+  
+#endif
+  
+  if(!m_mappedFile) {
+    QByteArray data = file->readAll();
+    m_data.append(qMakePair(data, (uint)data.size()));
+    delete file;
+  }
 
   //Fill with zeroes for now, will be initialized on-demand
   m_contexts.resize(m_contextDataOffsets.size());
@@ -250,6 +300,7 @@ void TopDUContextDynamicData::loadData() const {
   m_fastDeclarationsSize = m_declarations.size();
 
   m_dataLoaded = true;
+  
 }
 
 TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
@@ -373,12 +424,13 @@ void TopDUContextDynamicData::store() {
     contentDataChanged = true;
   }
 
-
     ///@todo Save the meta-data into a repository, and only the actual content data into a file.
     ///      This will make saving+loading more efficient, and will reduce the disk-usage.
     ///      Then we also won't need to load the data if only the meta-data changed.
   if(!m_dataLoaded)
     loadData();
+
+  dataFromMap();
 
   QFile file(filePath());
   if(file.open(QIODevice::WriteOnly)) {
@@ -454,12 +506,14 @@ void TopDUContextDynamicData::store() {
     }
 
     for(int a = 0; a < m_fastContextsSize; ++a)
-      if(m_fastContexts[a])
+      if(m_fastContexts[a]) {
         Q_ASSERT(!m_fastContexts[a]->d_func()->isDynamic());
+      }
 
     for(int a = 0; a < m_fastDeclarationsSize; ++a)
-      if(m_fastDeclarations[a])
+      if(m_fastDeclarations[a]) {
         Q_ASSERT(!m_fastDeclarations[a]->d_func()->isDynamic());
+      }
 
     saveDUChainItem(m_topContextData, *m_topContext, actualTopContextDataSize);
     Q_ASSERT(actualTopContextDataSize == topContextDataSize);
@@ -490,6 +544,7 @@ void TopDUContextDynamicData::store() {
     kWarning() << "Cannot open top-context for writing";
   }
 //   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
+  unmap();
 }
 
 uint TopDUContextDynamicData::allocateDeclarationIndex(Declaration* decl, bool temporary) {
@@ -545,11 +600,11 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
     else {
       uint realIndex = index-1;
       if(!m_fastDeclarations[realIndex] && realIndex < (uint)m_declarationDataOffsets.size() && m_declarationDataOffsets[realIndex].dataOffset) {
-        m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_data, m_declarationDataOffsets[realIndex].dataOffset))));
+        m_fastDeclarations[realIndex] = static_cast<Declaration*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_declarationDataOffsets[realIndex].dataOffset))));
         if(!m_fastDeclarations[realIndex]) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_data, m_declarationDataOffsets[realIndex].dataOffset)))->classId;
+          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_declarationDataOffsets[realIndex].dataOffset)))->classId;
           Q_ASSERT(0);
         }else{
           DUContext* context = getContextForIndex(m_declarationDataOffsets[realIndex].parentContext);
@@ -640,11 +695,11 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
 
       if(!*fastContextsPos && realIndex < (uint)m_contextDataOffsets.size() && m_contextDataOffsets[realIndex].dataOffset) {
         //Construct the context, and eventuall its parent first
-        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_data, m_contextDataOffsets[realIndex].dataOffset))));
+        *fastContextsPos = dynamic_cast<DUContext*>(DUChainItemSystem::self().create((DUChainBaseData*)(pointerInData(m_contextDataOffsets[realIndex].dataOffset))));
         if(!*fastContextsPos) {
           //When this happens, the declaration has not been registered correctly.
           //We can stop here, because else we will get crashes later.
-          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_data, m_contextDataOffsets[realIndex].dataOffset)))->classId;
+          kError() << "Failed to load declaration with identity" << ((DUChainBaseData*)(pointerInData(m_contextDataOffsets[realIndex].dataOffset)))->classId;
         }else{
           (*fastContextsPos)->rebuildDynamicData(getContextForIndex(m_contextDataOffsets[realIndex].parentContext), index);
         }

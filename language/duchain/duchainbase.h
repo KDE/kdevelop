@@ -149,6 +149,11 @@ protected:
 
   ///Called after loading to rebuild the dynamic data. If this is a context, this should recursively work on all sub-contexts.
   virtual void rebuildDynamicData(DUContext* parent, uint ownIndex);
+  
+  void aboutToWriteData();
+  
+  //Reimplemented to make prevent DocumentRangeObject from writing the data when it is un-writable
+  virtual bool canWriteData() const;
 private:
   
   mutable KSharedPtr<DUChainPointerData> m_ptr;

@@ -106,6 +106,14 @@ void DUChainBase::rebuildDynamicData(DUContext* parent, uint ownIndex)
     Q_UNUSED(ownIndex)
 }
 
+void DUChainBase::aboutToWriteData() {
+  makeDynamic();
+}
+
+bool DUChainBase::canWriteData() const {
+  return d_func()->m_dynamic;
+}
+
 void DUChainBase::makeDynamic() {
   Q_ASSERT(d_ptr);
   if(!d_func()->m_dynamic) {

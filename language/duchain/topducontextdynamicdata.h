@@ -1,3 +1,4 @@
+class QFile;
 /* This  is part of KDevelop
     Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
@@ -97,6 +98,10 @@ class TopDUContextDynamicData {
   bool m_deleting; ///Flag used during destruction
   
   private:
+    void unmap();
+    //Converts away from an mmap opened file to a data array
+    void dataFromMap();
+    
     QString filePath() const;
 
     void loadData() const;
@@ -110,8 +115,10 @@ class TopDUContextDynamicData {
     };
     
     static void verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data);
-    
+
     static const char* pointerInData(const QList<ArrayWithPosition>& data, uint totalOffset);
+    
+    const char* pointerInData(uint offset) const;
 
     ItemDataInfo writeDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& oldData, uint& totalDataOffset);
 
@@ -139,6 +146,10 @@ class TopDUContextDynamicData {
     mutable QList<ArrayWithPosition> m_topContextData;
     bool m_onDisk;
     mutable bool m_dataLoaded;
+
+    mutable QFile* m_mappedFile;
+    mutable uchar* m_mappedData;
+    mutable size_t m_mappedDataSize;
 };
 }
 
