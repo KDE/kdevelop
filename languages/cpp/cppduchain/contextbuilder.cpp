@@ -44,6 +44,7 @@
 #include "rpp/chartools.h"
 #include <language/duchain/dumpchain.h>
 #include "tokens.h"
+#include <klocalizedstring.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -131,7 +132,16 @@ void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
   m_onlyComputeVisible = onlyVisible;
 }
 
-void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base ) {
+void ContextBuilder::createUserProblem(AST* node, QString text) {
+    DUChainWriteLocker lock(DUChain::lock());
+    KDevelop::ProblemPointer problem(new KDevelop::Problem);
+    problem->setDescription(text);
+    problem->setSource(KDevelop::ProblemData::DUChainBuilder);
+    problem->setFinalLocation(DocumentRange(HashedString(currentContext()->url().str()), editor()->findRange(node).textRange()));
+    currentContext()->topContext()->addProblem(problem);
+}
+
+void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifierAST *node ) {
   DUChainWriteLocker lock(DUChain::lock());
 
   addImportedContexts(); //Make sure the template-contexts are imported first, before any parent-class contexts.
@@ -146,10 +156,14 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base ) {
       currentContext()->addImportedParentContext( ctx );
     }else{
       currentContext()->addIndirectImport( DUContext::Import(idType->declarationId()) );
-      kDebug(9007) << "Could not resolve base-class, adding it indirectly: " << (base.baseClass ? base.baseClass.abstractType()->toString() : QString());
+      QString text = i18n("Could not resolve base-class, adding it indirectly: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
+      lock.unlock();
+      createUserProblem(node, text);
     }
   } else if( !baseClass.cast<DelayedType>() ) {
-    kDebug(9007) << "Got invalid base-class" << (base.baseClass ? base.baseClass.abstractType()->toString() : QString());
+    QString text = i18n("Invalid base-class: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
+    lock.unlock();
+    createUserProblem(node, text);
   }
 }
 

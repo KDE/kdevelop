@@ -1069,7 +1069,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
       kWarning() << "base-specifier without class declaration";
     }
   }
-  addBaseType(instance);
+  addBaseType(instance, node);
 }
 
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)

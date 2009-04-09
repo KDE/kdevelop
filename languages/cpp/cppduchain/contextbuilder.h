@@ -148,7 +148,7 @@ protected:
    */
   void identifierForNode(NameAST* id, TypeSpecifierAST** typeSpecifier, QualifiedIdentifier& target);
 
-  virtual void addBaseType( KDevelop::BaseClassInstance base );
+  virtual void addBaseType( KDevelop::BaseClassInstance base, BaseSpecifierAST *node );
   
   ///Open/close prefix contexts around the class specifier that make the qualified identifier
   ///of the class Declaration match, because Declarations have only unqualified names.
@@ -203,6 +203,9 @@ protected:
   TopDUContext* topContext() const {
     return currentContext()->topContext();
   }
+
+  //DUChain must not be locked
+  void createUserProblem(AST* node, QString problem);
 
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
