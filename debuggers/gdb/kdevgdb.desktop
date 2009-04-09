@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides a frontend for GDB, a source-level debugger for C, C++ and more.
+Comment[de]=Dieses Modul stellt eine Oberfläche für GDB zur Verfügung. GDB ist ein Debugger für C, C++ und weitere.
 Comment[el]=Αυτό το πρόσθετο προσφέρει ένα σύστημα περιβάλλοντος για το GDB, έναν αποσφαλματωτή επιπέδου πηγαίου κώδικα για τις C, C++ και άλλες γλώσσες.
 Comment[es]=Este complemento proporciona una interfaz para GDB, un depurador a nivel de código fuente para C, C++ y demás.
 Comment[et]=See plugin pakub GDB kasutajaliidest. GDB on C, C++ ja veel mitme keele lähtekoodi tasandil tegutsev siluja.
@@ -20,6 +21,7 @@ Comment[x-test]=xxThis plugin provides a frontend for GDB, a source-level debugg
 Comment[zh_CN]=此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。
 Comment[zh_TW]=這個外掛程式提供 GDB 的前端介面。
 Name=GDB Support
+Name[de]=Unterstützung für GDB
 Name[el]=Υποστήριξη GDB
 Name[es]=Implementación de GDB
 Name[et]=GDB toetus

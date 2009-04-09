@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Manager
+Name[de]=CMake-Projektverwaltung
 Name[es]=Gestor de proyecto CMake
 Name[fr]=Gestionnaire de projets CMake
 Name[ja]=CMake プロジェクトマネージャ
