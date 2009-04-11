@@ -186,8 +186,8 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       targetUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate(targetUrl);
     }
     if(!targetUrl.isValid()) {
-      ///@todo Create source-file if it doesn't exist yet
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source-file available for %1", targetUrl.prettyUrl()));
+      ///@todo Create source file if it doesn't exist yet
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source file available for %1", targetUrl.prettyUrl()));
       return;
     }
 
@@ -198,7 +198,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
     lock.lock();
     
     if(!targetTopContext) {
-      ///@todo Eventually create source-file if it doesn't exist yet
+      ///@todo Eventually create source file if it doesn't exist yet
       lock.unlock();
       KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed to update duchain for %1", targetUrl.prettyUrl()));
       return;
