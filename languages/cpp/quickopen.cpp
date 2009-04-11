@@ -211,41 +211,40 @@ QString IncludeFileData::htmlDescription() const
     return QString( i18n("Directory %1", path.pathOrUrl()) );
   } else {
     if(m_includedFrom) {
+      DUChainReadLocker lock( DUChain::lock() );
+      if(!m_includedFrom)
+        return QString();
 
-    DUChainReadLocker lock( DUChain::lock() );
-    if(!m_includedFrom)
-      return QString();
-    
-    KUrl u = m_item.url();
+      KUrl u = m_item.url();
 
-    QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
+      QList<TopDUContext*> allChains = DUChain::self()->chainsForDocument(u);
 
-    foreach( TopDUContext* t, allChains )
-    {
-      if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
+      foreach( TopDUContext* t, allChains )
       {
-/*        QString ret = i18n("Included through") + " ";
-        KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
-        if(!inclusion.isEmpty()) {
-          for(int a = 0; a < inclusion.size(); ++a) {
-            if(a >= 1)
-              ret += ", ";
-            if(a > 2) {
-              ret += "...";
-              return ret;
-            }else{
-              ret += KUrl(inclusion[a].ctx->url().str()).fileName();
+        if( m_includedFrom.data()->imports( t, m_includedFrom->range().end ) )
+        {
+/*          QString ret = i18n("Included through") + " ";
+          KDevelop::ImportTrace inclusion = m_includedFrom->importTrace(t);
+          if(!inclusion.isEmpty()) {
+            for(int a = 0; a < inclusion.size(); ++a) {
+              if(a >= 1)
+                ret += ", ";
+              if(a > 2) {
+                ret += "...";
+                return ret;
+              }else{
+                ret += KUrl(inclusion[a].ctx->url().str()).fileName();
+              }
             }
-          }
-          return ret;
-        }*/
+            return ret;
+          }*/
+        }
       }
-    }
     }else{
       return i18n( "In %1th include-path", m_item.pathNumber );
     }
   }
-  
+
   return " ";
 }
 
