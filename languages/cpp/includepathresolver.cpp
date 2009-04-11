@@ -619,7 +619,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   }
 
   if(ret.paths.isEmpty())
-    return PathResolutionResult( false, i18n("Could not extract include paths from make output"), i18n("Folder: \"%1\"  Command: \"%2\"Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+    return PathResolutionResult( false, i18n("Could not extract include paths from make output"), i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
   
   return ret;
 }
