@@ -52,7 +52,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip" >
-         <string>The same as git-branch -D</string>
+         <string>The same as git branch -D</string>
         </property>
         <property name="text" >
          <string>Delete</string>
