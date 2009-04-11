@@ -156,12 +156,12 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifie
       currentContext()->addImportedParentContext( ctx );
     }else{
       currentContext()->addIndirectImport( DUContext::Import(idType->declarationId()) );
-      QString text = i18n("Could not resolve base-class, adding it indirectly: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
+      QString text = i18n("Could not resolve base class, adding it indirectly: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
       lock.unlock();
       createUserProblem(node, text);
     }
   } else if( !baseClass.cast<DelayedType>() ) {
-    QString text = i18n("Invalid base-class: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
+    QString text = i18n("Invalid base class: %1", (base.baseClass ? base.baseClass.abstractType()->toString() : QString()));
     lock.unlock();
     createUserProblem(node, text);
   }
