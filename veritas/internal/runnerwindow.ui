@@ -148,7 +148,7 @@
          <item>
           <widget class="QLabel" name="labelRunText" >
            <property name="text" >
-            <string>RanPlaceHolder</string>
+            <string comment="KDE:DoNotExtract" >RanPlaceHolder</string>
            </property>
           </widget>
          </item>
