@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef VCSPLUGINCOMMON_H
-#define VCSPLUGINCOMMON_H
+#ifndef VCSPLUGINHELPER_H
+#define VCSPLUGINHELPER_H
 
 #include "vcsexport.h"
 
@@ -41,7 +41,7 @@ public:
     KUrl::List const & contextUrlList();
     QList<QAction*> commonActions();
 
-private slots:
+private Q_SLOTS:
     void commit();
     void add();
     void remove();
