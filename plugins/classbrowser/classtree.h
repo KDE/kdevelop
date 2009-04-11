@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DUCHAINTREE_H
-#define DUCHAINTREE_H
+#ifndef CLASSTREE_H
+#define CLASSTREE_H
 
 #include <QtGui/QTreeView>
 

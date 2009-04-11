@@ -248,9 +248,9 @@ FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesMode
 
   // Add special values for ctor / dtor to sort first
   if ( a_decl->isConstructor() || a_decl->isDestructor() )
-    m_sortableString = "0" + m_displayName;
+    m_sortableString = '0' + m_displayName;
   else
-    m_sortableString = "1" + m_displayName;
+    m_sortableString = '1' + m_displayName;
 }
 
 //////////////////////////////////////////////////////////////////////////////

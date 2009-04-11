@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSBROWSERPART_H
-#define CLASSBROWSERPART_H
+#ifndef CLASSBROWSERPLUGIN_H
+#define CLASSBROWSERPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -58,6 +58,6 @@ private:
   ClassTree* m_activeClassTree;
 };
 
-#endif // CLASSBROWSERPART_H
+#endif // CLASSBROWSERPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on

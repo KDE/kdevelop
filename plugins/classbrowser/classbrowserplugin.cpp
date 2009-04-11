@@ -23,7 +23,7 @@
 
 #include "classbrowserplugin.h"
 
-#include <QAction>
+#include <QtGui/QAction>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -44,7 +44,6 @@
 
 #include "classmodel.h"
 #include "classtree.h"
-#include <language/interfaces/codecontext.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/functiondeclaration.h>

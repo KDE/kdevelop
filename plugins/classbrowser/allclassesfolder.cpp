@@ -430,7 +430,7 @@ void FilteredAllClassesFolder::updateFilterString(QString a_newFilterString)
   if ( m_filterString.isEmpty() )
     m_displayName = "All projects classes";
   else
-    m_displayName = "Filtered classes for '" + m_filterString + "'";
+    m_displayName = "Filtered classes for '" + m_filterString + '\'';
 
 #if 1 // Choose speed over correctness.
   // Close the node and re-open it should be quicker than reload each document
