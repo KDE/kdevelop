@@ -209,7 +209,7 @@ int main (int argc, char *argv[])
 
     if(libssh2_channel_exec(channel, "svnserve -t") )
     {
-        shutdown_ssh(session, i18n("Failed to launch 'svnserver -t', operation aborted."));
+        shutdown_ssh(session, i18n("Failed to launch 'svnserve -t', operation aborted."));
         return 1;
     }
     

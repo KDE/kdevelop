@@ -88,7 +88,7 @@ void BranchManager::createBranch()
     if (d->branches(repo).contains(newBranch))
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                i18n("Branch \"%1\" is already exist.\n"
+                                i18n("Branch \"%1\" already exists.\n"
                                         "Pick another name.",
                                         newBranch));
         connect(branchWidget, SIGNAL(itemChanged ( QListWidgetItem *)),
@@ -118,7 +118,7 @@ void BranchManager::renameBranch(QListWidgetItem * item)
     if (d->branches(repo).contains(newBranch))
     {
         KMessageBox::messageBox(this, KMessageBox::Sorry,
-                                i18n("Branch \"%1\" is already exist.\n"
+                                i18n("Branch \"%1\" already exists.\n"
                                         "Pick another name.",
                                         newBranch));
         //a hack to prevent another one renameBranch() after resetting item to the old value

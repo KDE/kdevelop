@@ -238,7 +238,7 @@ void MainWindowPrivate::setupActions()
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
     action->setToolTip( i18n( "New Window" ) );
-    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of current area.</p>" ) );
+    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of the current area.</p>" ) );
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
