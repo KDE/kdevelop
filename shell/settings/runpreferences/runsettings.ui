@@ -178,7 +178,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string comment="KDE:DoNotExtract" >+</string>
+         <string comment="KDE::DoNotExtract" >+</string>
         </property>
        </widget>
       </item>
@@ -198,7 +198,7 @@
          <bool>false</bool>
         </property>
         <property name="text" >
-         <string comment="KDE:DoNotExtract" >-</string>
+         <string comment="KDE::DoNotExtract" >-</string>
         </property>
        </widget>
       </item>
