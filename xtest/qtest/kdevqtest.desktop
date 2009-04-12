@@ -24,6 +24,7 @@ Comment[zh_CN]=QTestLib 测试运行器
 Comment[zh_TW]=QTestLib 測試執行者
 
 Name=QTest Runner
+Name[de]=QTest ausführen
 Name[es]=Ejecución de QTest
 Name[fr]=Exécuteur de QTest
 Name[ga]=Feidhmitheoir QTest

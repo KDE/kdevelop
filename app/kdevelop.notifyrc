@@ -118,7 +118,7 @@ Name[zh_TW]=行程錯誤
 Comment=Process finished with errors
 Comment[cs]=Proces dokončen s chybami
 Comment[da]=Processen afsluttede med fejl
-Comment[de]=Prozes mit Fehlern beendet
+Comment[de]=Prozess mit Fehlern beendet
 Comment[el]=Η διεργασία τερμάτισε με σφάλματα
 Comment[es]=Proceso terminado con errores
 Comment[et]=Protsess lõppes vigadega
@@ -155,6 +155,7 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
+Name[de]=Projekt wird geladen
 Name[es]=Cargando proyecto
 Name[et]=Projekti laadimine
 Name[fr]=Chargement du projet
@@ -169,6 +170,7 @@ Name[x-test]=xxLoading Projectxx
 Name[zh_CN]=正在装入工程
 Name[zh_TW]=載入專案中
 Comment=A project loading process has just started
+Comment[de]=Es ist ein Projekt-Ladeprozess gestartet
 Comment[es]=Acaba de comenzar un proceso de carga de proyecto
 Comment[et]=Projekti laadimine just käivitati
 Comment[fr]=Un processus de chargement de projet vient de démarrer
@@ -185,6 +187,7 @@ Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
+Name[de]=Projekt erfolgreich geladen
 Name[es]=Proyecto cargado con éxito
 Name[et]=Projekt on edukalt laaditud
 Name[fr]=Le projet a été chargé avec succès
@@ -199,6 +202,7 @@ Name[x-test]=xxProject Loaded Successfullyxx
 Name[zh_CN]=工程成功装入
 Name[zh_TW]=專案已成功載入
 Comment=A project has been loaded successfully
+Comment[de]=Ein Projekt wurde erfolgreich geladen
 Comment[es]=Un proyecto ha sido cargado con éxito
 Comment[et]=Projekt on edukalt laaditud
 Comment[fr]=Un projet a été chargé avec succès
