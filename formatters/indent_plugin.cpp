@@ -67,7 +67,7 @@ QString IndentPlugin::description()
 		"<b>indent</b> understands a substantial amount about the syntax of C,"
 		" but it also attempts to cope with incomplete and misformed syntax.<br />"
 		"Home Page: <a href=\"http://www.gnu.org/software/indent/\">"
-		"http://www.gnu.org/software/indent</a>/");
+		"http://www.gnu.org/software/indent/</a>");
 	else
 		return ISourceFormatter::missingExecutableMessage("indent");
 }
