@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop MSVC Manager
+Name[de]=KDevelop-MSVC-Verwaltung
 Name[el]=Διαχειριστής MSVC του KDevelop
 Name[es]=Gestor MSVC de KDeveloop
 Name[fr]=Gestionnaire MSVC pour KDevelop

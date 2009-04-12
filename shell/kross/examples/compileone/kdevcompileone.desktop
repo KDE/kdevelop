@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Compile a file
+Comment[de]=Eine Datei kompilieren
 Comment[el]=Μεταγλώττιση ενός αρχείου
 Comment[es]=Compilar un archivo
 Comment[fr]=Compiler un fichier

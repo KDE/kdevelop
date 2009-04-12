@@ -33,6 +33,7 @@ Name[x-test]=xxProjectxx
 Name[zh_CN]=工程
 Name[zh_TW]=專案
 Comment=Configure Project settings
+Comment[de]=Projekteinstellungen einrichten
 Comment[el]=Ρυθμίσεις έργου
 Comment[es]=Configurar las preferencias del proyecto
 Comment[fr]=Configurer les paramètres du projet

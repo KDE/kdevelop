@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates CVS to KDevelop
+Comment[de]=Dieses Modul integriert CVS in KDevelop.
 Comment[el]=Το πρόσθετο αυτό ενσωματώνει το CVS στο KDevelop
 Comment[es]=Este complemento integra CVS en KDevelop
 Comment[fr]=Ce module externe intègre CVS à KDevelop
@@ -40,6 +41,7 @@ Name[x-test]=xxCVS Supportxx
 Name[zh_CN]=CVS 支持
 Name[zh_TW]=CVS 支援
 GenericName=Version Control Support
+GenericName[de]=Unterstützung für Versionskontrollsysteme
 GenericName[es]=Implementación de Control de Versiones
 GenericName[fr]=Prise en charge du contrôle de versions
 GenericName[ja]=バージョン管理のサポート

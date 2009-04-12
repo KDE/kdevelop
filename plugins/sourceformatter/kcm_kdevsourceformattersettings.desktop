@@ -10,6 +10,7 @@ X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
 Name=Source Formatter Settings
+Name[de]=Einstellungen zur Quelltextformatierung
 Name[el]=Ρυθμίσεις διαμόρφωσης πηγαίου
 Name[es]=Preferencias del formateador de código
 Name[fr]=Paramètres du formateur de sources

@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Language Support
+Name[de]=Sprachunterstützung
 Name[el]=Υποστήριξη γλώσσας
 Name[es]=Implementación de lenguaje
 Name[fr]=Prise en charge des langages
@@ -28,6 +29,7 @@ Name[x-test]=xxLanguage Supportxx
 Name[zh_CN]=语言支持
 Name[zh_TW]=語言支援
 Comment=Configure code-completion and semantic highlighting
+Comment[de]=Quelltextvervollständigung und semantische Hervorhebung einrichten
 Comment[el]=Ρυθμίσεις συμπλήρωσης κώδικα και σημειολογικού τονισμού
 Comment[es]=Configurar terminación de código y resalte semántico
 Comment[fr]=Configurer le complétement de code et la mise en surbrillance de la sémantique

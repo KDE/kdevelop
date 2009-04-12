@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.
+Comment[de]=Dieses Modul zeigt Informationen über den aktuellen Sprachkontext an und hebt die wichtigen Deklarationen und Benutzungen hervor.
 Comment[el]=Αυτό το πρόσθετο εμφανίζει πληροφορίες σχετικά με την τρέχουσα γλώσσα σε μια πλευρική προβολή, και τονίζει τις σχετικές δηλώσεις και χρήσεις.
 Comment[es]=Este complemento muestra información sobre el contexto del lenguaje actual en una vista lateral, resaltando declaraciones relevantes y usos.
 Comment[fr]=Ce module externe affiche des informations sur le contexte du langage actuel dans une vue latérale, et met en surbrillance les déclarations et utilisations pertinentes.
@@ -33,6 +34,7 @@ Name[x-test]=xxCode Browserxx
 Name[zh_CN]=代码浏览器
 Name[zh_TW]=源碼瀏覽器
 GenericName=Code Navigation Tool
+GenericName[de]=Werkzeug zur Quelltextnavigation
 GenericName[es]=Herramienta de navegación por el código
 GenericName[fr]=Outil de navigation de code
 GenericName[nds]=Kode-Navigatschoon

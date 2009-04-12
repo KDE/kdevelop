@@ -33,6 +33,7 @@ Name[x-test]=xxEnvironmentxx
 Name[zh_CN]=环境
 Name[zh_TW]=環境
 Comment=Configure Environment Variable settings
+Comment[de]=Umgebungsvariablen einrichten
 Comment[el]=Ρυθμίσεις μεταβλητών περιβάλλοντος
 Comment[es]=Configurar las preferencias de las variables de entorno
 Comment[fr]=Configurer les paramètres de variables d'environnement

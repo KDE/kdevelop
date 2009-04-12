@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=GUI Example
+Comment[de]=GUI-Beispiel
 Comment[el]=Παράδειγμα GUI
 Comment[es]=Ejemplo de interfaz gráfica
 Comment[fr]=Exemple d'interface graphique

@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Background Parser
+Name[de]=Hintergrund-Parser
 Name[el]=Αναλυτής παρασκηνίου
 Name[es]=Analizador en segundo plano
 Name[fr]=Analyseur syntaxique d'arrière-plan
@@ -27,6 +28,7 @@ Name[x-test]=xxBackground Parserxx
 Name[zh_CN]=后台解析
 Name[zh_TW]=背景剖析器
 Comment=Configure Background Parser settings
+Comment[de]=Hintergrund-Parser einrichten
 Comment[el]=Ρυθμίσεις αναλυτή παρασκηνίου
 Comment[es]=Configurar las preferencias del analizador en segundo plano
 Comment[fr]=Configurer les paramètres de l'analyseur syntaxique d'arrière-plan

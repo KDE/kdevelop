@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin brings a filemanager to KDevelop.
+Comment[de]=Dieses Modul integriert einen Datei-Browser in KDevelop.
 Comment[el]=Αυτό το πρόσθετο ενσωματώνει ένα διαχειριστή αρχείων στο KDevelop
 Comment[es]=Este complemento proporciona un gestor de archivos a KDevelop.
 Comment[fr]=Ce module externe offre un gestionnaire de fichiers pour KDevelop.
@@ -19,6 +20,7 @@ Comment[x-test]=xxThis plugin brings a filemanager to KDevelop.xx
 Comment[zh_CN]=此插件对 KDevelop 整合一个文件管理器。
 Comment[zh_TW]=此外掛程式讓 KDevelop 可使用檔案管理員。
 Name=KDE File Manager Integration
+Name[de]=KDE-Dateimanager-Integration
 Name[es]=Integración del gestor de archivos de KDE
 Name[fr]=Intégration du gestionnaire de fichiers de KDE
 Name[ja]=KDE のファイルマネージャの統合

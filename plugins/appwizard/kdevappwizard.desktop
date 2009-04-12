@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Application Wizard
+Comment[de]=Anwendungsassistent
 Comment[es]=Asistente de aplicaciones
 Comment[fr]=Assistant d'applications
 Comment[ga]=Treoraí Feidhmchláir
@@ -32,6 +33,7 @@ Name[x-test]=xxNew Project Wizardxx
 Name[zh_CN]=新工程向导
 Name[zh_TW]=新增專案精靈
 GenericName=Application Wizard
+GenericName[de]=Anwendungsassistent
 GenericName[es]=Asistente de aplicaciones
 GenericName[fr]=Assistant d'applications
 GenericName[ga]=Treoraí Feidhmchláir

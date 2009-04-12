@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides a browsable model of the currently parsed classes and other items.
+Comment[de]=Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.
 Comment[el]=Αυτό το πρόσθετο προσφέρει ένα μοντέλο περιήγησης των αναλυμένων κλάσεων και άλλων αντικειμένων.
 Comment[es]=Este complemento proporciona un modelo navegable de las clases analizadas actualmente y otros elementos.
 Comment[fr]=Ce module externe fournit un modèle navigable des classes et autres éléments dont l'analyse syntaxique est en cours.

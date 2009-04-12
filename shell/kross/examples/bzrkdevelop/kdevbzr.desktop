@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin integrates Bazaar to KDevelop
+Comment[de]=Dieses Modul integriert Bazaar in KDevelop.
 Comment[el]=Αυτό το πρόσθετο ενσωματώνει το Bazaar στο KDevelop
 Comment[es]=Este complemento integra Bazaar en KDevelop
 Comment[fr]=Ce module externe intègre Bazaar à KDevelop
