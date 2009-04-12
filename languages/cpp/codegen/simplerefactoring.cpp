@@ -187,7 +187,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
     }
     if(!targetUrl.isValid()) {
       ///@todo Create source file if it doesn't exist yet
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source file available for %1", targetUrl.prettyUrl()));
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No source file available for %1.", targetUrl.prettyUrl()));
       return;
     }
 
@@ -200,7 +200,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
     if(!targetTopContext) {
       ///@todo Eventually create source file if it doesn't exist yet
       lock.unlock();
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed to update duchain for %1", targetUrl.prettyUrl()));
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed to update DU chain for %1.", targetUrl.prettyUrl()));
       return;
     }
     kDebug() << "moving" << decl->qualifiedIdentifier();
@@ -211,7 +211,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
     {
       if( !(decl->internalContext() && decl->internalContext()->type() == DUContext::Other && funDecl && funDecl->internalFunctionContext() && funType) ) {
         lock.unlock();
-        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Cannot create definition for this declaration"));
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Cannot create definition for this declaration."));
         return;
       }
       
