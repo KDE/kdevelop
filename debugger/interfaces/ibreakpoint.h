@@ -73,10 +73,10 @@ public:
     static const int location_column = 3;
     static const int condition_column = 4;
     virtual void sendMaybe()=0;
-    
+
+    void setLocation(const QString& location);
 protected:
     friend class IBreakpoints;
-    void setLocation(const QString& location);
 
     int id_;
     bool enabled_;
