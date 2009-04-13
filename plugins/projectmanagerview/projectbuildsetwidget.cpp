@@ -106,6 +106,9 @@ ProjectBuildSetWidget::~ProjectBuildSetWidget()
 
 void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 {
+    if( m_ui->itemView->selectionModel()->selectedRows().isEmpty() )
+        return;
+
     KMenu m;
     m.setTitle( i18n("Buildset") );
     m.addAction( i18n( "Remove from buildset" ), this, SLOT( removeItems() ) );
