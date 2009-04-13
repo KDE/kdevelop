@@ -57,7 +57,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
     QString location = config.readEntry("location", "");
     QString condition = config.readEntry("condition", "");
 
-    dirty_.insert(location_column);
+    dirty_.insert(LocationColumn);
 
     setData(QVector<QString>() << "" << "" << "" << location << condition);
 }
@@ -72,7 +72,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
 
 void IBreakpoint::setColumn(int index, const QVariant& value)
 {
-    if (index == enable_column)
+    if (index == EnableColumn)
     {
         enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
     }
@@ -82,7 +82,7 @@ void IBreakpoint::setColumn(int index, const QVariant& value)
     if (pleaseEnterLocation_ && value.toString().isEmpty())
         return;
 
-    if (index == location_column || index == condition_column)
+    if (index == LocationColumn || index == ConditionColumn)
     {
         itemData[index] = value;
         if (pleaseEnterLocation_)
@@ -101,15 +101,15 @@ void IBreakpoint::setColumn(int index, const QVariant& value)
 void IBreakpoint::markOut()
 {
     id_ = -1;
-    dirty_.insert(location_column);
-    dirty_.insert(condition_column);
+    dirty_.insert(LocationColumn);
+    dirty_.insert(ConditionColumn);
 }
 
 QVariant IBreakpoint::data(int column, int role) const
 {
     if (pleaseEnterLocation_)
     {
-        if (column != location_column)
+        if (column != LocationColumn)
         {
             if (role == Qt::DisplayRole)
                 return QString();
@@ -128,7 +128,7 @@ QVariant IBreakpoint::data(int column, int role) const
             return QString();
     }
 
-    if (column == enable_column)
+    if (column == EnableColumn)
     {
         if (role == Qt::CheckStateRole)
             return enabled_ ? Qt::Checked : Qt::Unchecked;
@@ -138,7 +138,7 @@ QVariant IBreakpoint::data(int column, int role) const
             return QVariant();
     }
 
-    if (column == state_column)
+    if (column == StateColumn)
     {
         if (role == Qt::DecorationRole)
         {
@@ -157,15 +157,15 @@ QVariant IBreakpoint::data(int column, int role) const
             return QVariant();
     }
 
-    if (column == type_column && role == Qt::DisplayRole)
+    if (column == TypeColumn && role == Qt::DisplayRole)
     {
         return string_kinds[kind_];
     }
 
     if (role == Qt::DecorationRole)
     {
-        if ((column == location_column && errors_.contains(location_column))
-            || (column == condition_column && errors_.contains(condition_column)))
+        if ((column == LocationColumn && errors_.contains(LocationColumn))
+            || (column == ConditionColumn && errors_.contains(ConditionColumn)))
         {
             /* FIXME: does this leak? Is this efficient? */
             return KIcon("dialog-warning");
@@ -173,9 +173,9 @@ QVariant IBreakpoint::data(int column, int role) const
         return QVariant();
     }
 
-    if (column == location_column && role == Qt::DisplayRole
+    if (column == LocationColumn && role == Qt::DisplayRole
         && !address_.isEmpty())
-        return QString("%1 (%2)").arg(itemData[location_column].toString())
+        return QString("%1 (%2)").arg(itemData[LocationColumn].toString())
             .arg(address_);
 
     return TreeItem::data(column, role);
@@ -188,8 +188,8 @@ void IBreakpoint::setDeleted()
 
 void IBreakpoint::setLocation(const QString& location)
 {
-    itemData[location_column] = location;
-    dirty_.insert(location_column);
+    itemData[LocationColumn] = location;
+    dirty_.insert(LocationColumn);
     reportChange();
     sendMaybe();
 }
@@ -198,15 +198,15 @@ void IBreakpoint::save(KConfigGroup& config)
 {
     config.writeEntry("kind", string_kinds[kind_]);
     config.writeEntry("enabled", enabled_);
-    config.writeEntry("location", itemData[location_column]);
-    config.writeEntry("condition", itemData[condition_column]);
+    config.writeEntry("location", itemData[LocationColumn]);
+    config.writeEntry("condition", itemData[ConditionColumn]);
 }
 
-const int IBreakpoint::enable_column;
-const int IBreakpoint::state_column;
-const int IBreakpoint::type_column;
-const int IBreakpoint::location_column;
-const int IBreakpoint::condition_column;
+const int IBreakpoint::EnableColumn;
+const int IBreakpoint::StateColumn;
+const int IBreakpoint::TypeColumn;
+const int IBreakpoint::LocationColumn;
+const int IBreakpoint::ConditionColumn;
 
 const char *IBreakpoint::string_kinds[LastBreakpointKind] = {
     "Code",

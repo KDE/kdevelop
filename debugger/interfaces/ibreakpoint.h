@@ -67,11 +67,11 @@ public:
     
     void save(KConfigGroup& config);
 
-    static const int enable_column = 0;
-    static const int state_column = 1;
-    static const int type_column = 2;
-    static const int location_column = 3;
-    static const int condition_column = 4;
+    static const int EnableColumn = 0;
+    static const int StateColumn = 1;
+    static const int TypeColumn = 2;
+    static const int LocationColumn = 3;
+    static const int ConditionColumn = 4;
     virtual void sendMaybe()=0;
 
     void setLocation(const QString& location);
