@@ -23,6 +23,7 @@
 #include "problemreporterplugin.h"
 
 #include <QTreeWidget>
+#include <QMenu>
 
 #include <klocale.h>
 #include <kpluginfactory.h>
@@ -155,6 +156,8 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         kDebug() << "failed to lock duchain in time";
         return extension;
       }
+      
+    QList<QAction*> actions;
     
     TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
     if(top) {
@@ -163,10 +166,20 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
           KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
           if(solution) {
             foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
-              extension.addAction(ContextMenuExtension::RefactorGroup, action->toKAction());
+              actions << action->toKAction();
           }
         }
       }
+    }
+    
+    if(!actions.isEmpty()) {
+      QAction* menuAction = new QAction(i18n("Solve Problem"), 0);
+      QMenu* menu(new QMenu(i18n("Solve Problem"), 0));
+      menuAction->setMenu(menu);
+      foreach(QAction* action, actions)
+        menu->addAction(action);
+      
+      extension.addAction(ContextMenuExtension::ExtensionGroup, menuAction);
     }
   }
   return extension;
