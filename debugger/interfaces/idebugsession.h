@@ -48,14 +48,30 @@ public:
         StoppedState
     };
 public:
+    /**
+     * Current state of the debug session
+     */
     virtual DebuggerState state() const = 0;
+
     virtual StackModel* stackModel() const = 0;
+
     virtual IBreakpointController *breakpointController() const = 0;
 
+    /**
+     * Should return if restart is currently avaliable
+     */
     virtual bool restartAvaliable() const = 0;
 
+    /**
+     * Execution-Job that started the debug session.
+     *
+     * Can be 0 if it is eg a JIT debug session.
+     */
     KJob* job() const;
 
+    /**
+     * Returns if the debugee is currently running. This includes paused.
+     */
     bool isRunning() const;
 
 public Q_SLOTS:
