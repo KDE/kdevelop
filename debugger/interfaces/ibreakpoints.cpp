@@ -86,4 +86,15 @@ void IBreakpoints::sendMaybe()
     }
 }
 
+KDevelop::IBreakpoint* KDevelop::IBreakpoints::breakpoint(int row)
+{
+    return dynamic_cast<IBreakpoint*>(child(row));
+}
+
+int KDevelop::IBreakpoints::breakpointCount() const
+{
+    return childCount();
+}
+
+
 #include "ibreakpoints.moc"

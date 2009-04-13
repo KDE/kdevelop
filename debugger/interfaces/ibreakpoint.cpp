@@ -194,12 +194,22 @@ void IBreakpoint::setLocation(const QString& location)
     sendMaybe();
 }
 
+QString KDevelop::IBreakpoint::location()
+{
+    return itemData[LocationColumn].toString();
+}
+
 void IBreakpoint::save(KConfigGroup& config)
 {
     config.writeEntry("kind", string_kinds[kind_]);
     config.writeEntry("enabled", enabled_);
     config.writeEntry("location", itemData[LocationColumn]);
     config.writeEntry("condition", itemData[ConditionColumn]);
+}
+
+IBreakpoint::BreakpointKind IBreakpoint::kind() const
+{
+    return kind_;
 }
 
 const int IBreakpoint::EnableColumn;

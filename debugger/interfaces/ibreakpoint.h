@@ -75,6 +75,8 @@ public:
     virtual void sendMaybe()=0;
 
     void setLocation(const QString& location);
+    QString location();
+    BreakpointKind kind() const;
 protected:
     friend class IBreakpoints;
 

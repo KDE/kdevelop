@@ -50,6 +50,9 @@ public:
     virtual void createHelperBreakpoint()=0;
     IBreakpoint *breakpointById(int id);
 
+    IBreakpoint *breakpoint(int row);
+    int breakpointCount() const;
+
     void errorEmit(IBreakpoint *b, const QString& message, int column) { emit error(b, message, column); }
 Q_SIGNALS:
     void error(KDevelop::IBreakpoint *b, const QString& message, int column);
