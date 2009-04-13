@@ -151,7 +151,7 @@ bool removePrefixWord(QString& expression, QString word) {
   return false;
 }
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false), m_useStoredItems(false), m_doAccessFiltering(doAccessFiltering)
+CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_useStoredItems(false), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false), m_doAccessFiltering(doAccessFiltering)
 {
 #ifndef TEST_COMPLETION  
   MissingIncludeCompletionModel::self().stop();
