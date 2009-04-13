@@ -47,7 +47,13 @@ public:
     virtual IBreakpoint* addWatchpoint()=0;
     virtual IBreakpoint* addWatchpoint(const QString& expression)=0;
     virtual IBreakpoint* addReadWatchpoint()=0;
-    virtual void createHelperBreakpoint()=0;
+
+    /**
+     * Must create a "please enter location" item, that will
+     * turn into real breakpoint when user types something.
+     */
+    virtual void createHelperBreakpoint() = 0;
+
     IBreakpoint *breakpointById(int id);
 
     IBreakpoint *breakpoint(int row);
