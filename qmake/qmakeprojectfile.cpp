@@ -23,8 +23,8 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
-#include <QtCore/QProcess>
 
+#include <kprocess.h>
 #include <kurl.h>
 #include <kdebug.h>
 
@@ -67,7 +67,8 @@ bool QMakeProjectFile::read()
     }
 
     // Let's cache the Qt include dir
-    KProcess qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
+    KProcess qtInc;
+    qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
     qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
     qtInc.start();
     if ( !qtInc.waitForFinished() )
