@@ -64,7 +64,6 @@ private:
 
     friend class Breakpoints;
 
-    static const char *string_kinds[LastBreakpointKind];
     GDBController* controller_;
 };
 
