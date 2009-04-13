@@ -109,7 +109,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     KMenu m;
     m.setTitle( i18n("Buildset") );
     m.addAction( i18n( "Remove from buildset" ), this, SLOT( removeItems() ) );
-    m.exec( m_ui->itemView->mapToGlobal( p ) );
+    m.exec( m_ui->itemView->viewport()->mapToGlobal( p ) );
 }
 
 void ProjectBuildSetWidget::addItems()
