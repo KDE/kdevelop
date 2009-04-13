@@ -1039,6 +1039,7 @@ QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor&
 
 QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) const
 {
+  Q_UNUSED(source);
   ENSURE_CAN_READ
 
   QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
@@ -1106,7 +1107,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
     }
     
   ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-  if (parentContext() && (searchInParents || (shouldSearchInParent(InImportedParentContext)) && parentContext()->type() == DUContext::Helper) )
+  if (parentContext() && (searchInParents || ((shouldSearchInParent(InImportedParentContext)) && (parentContext()->type() == DUContext::Helper))) )
     parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, searchInParents, currentDepth+1);
 }
 

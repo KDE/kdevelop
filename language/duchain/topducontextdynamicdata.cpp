@@ -104,6 +104,8 @@ const char* KDevelop::TopDUContextDynamicData::pointerInData(uint totalOffset) c
 }
 
 void TopDUContextDynamicData::verifyDataInfo(const ItemDataInfo& info, const QList<ArrayWithPosition>& data) {
+  Q_UNUSED(info);
+  Q_UNUSED(data);
 #ifdef DEBUG_DATA_INFO
   DUChainBaseData* item = (DUChainBaseData*)(pointerInData(data, info.dataOffset));
   int size = DUChainItemSystem::self().dynamicSize(*item);

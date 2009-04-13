@@ -266,7 +266,7 @@ class DUChainPrivate
       DUChainPrivate* m_data;
   };
 public:
-  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information"), m_cleanupDisabled(false)
+  DUChainPrivate() : m_chainsMutex(QMutex::Recursive), instance(0), m_cleanupDisabled(false), m_destroyed(false), m_environmentListInfo("Environment Lists"), m_environmentInfo("Environment Information")
   {
     m_chainsByIndex.set_empty_key(0);
     m_chainsByIndex.set_deleted_key(0xffffffff);

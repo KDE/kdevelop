@@ -1278,7 +1278,7 @@ struct TopDUContext::FindContextsAcceptor {
 };
 
 void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const {
-
+  Q_UNUSED(source);
   ENSURE_CAN_READ
   ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
   FindContextsAcceptor storer(this, ret, check, flags);
