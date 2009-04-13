@@ -49,6 +49,7 @@ class ISourceFormatterController;
 class ISession;
 class ISelectionController;
 class IDocumentationController;
+class IDebugController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -109,6 +110,9 @@ public:
     
     /** @return the documetation controller */
     Q_SCRIPTABLE virtual KDevelop::IDocumentationController* documentationController() = 0;
+
+    /** @return the debug controller */
+    Q_SCRIPTABLE virtual KDevelop::IDebugController* debugController() = 0;
 
     /** @return the component data of the framework, different from the main component which is created by the application */
     virtual KComponentData componentData() const = 0;

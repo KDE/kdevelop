@@ -48,6 +48,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
+#include <interfaces/idebugcontroller.h>
 
 #include <kross/krossplugin.h>
 
@@ -569,6 +570,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
         IPlugin* plug = d->loadedPlugins[info];
         exts << plug->contextMenuExtension( context );
     }
+    exts << ICore::self()->debugController()->contextMenuExtension( context );
     return exts;
 }
 

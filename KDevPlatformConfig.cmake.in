@@ -16,6 +16,7 @@
 # KDEVPLATFORM_VCS_LIBRARY             - the vcs library
 # KDEVPLATFORM_VERITAS                 - the veritas library
 # KDEVPLATFORM_SOURCEFORMATTER_LIBRARY - the sourceformatter library
+# KDEVPLATFORM_DEBUGGER_LIBRARY        - debugger module library
 #
 # Copyright 2008  Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -54,6 +55,7 @@ _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
+_kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
@@ -68,4 +70,5 @@ mark_as_advanced(
     KDEVPLATFORM_VCS_LIBRARY
     KDEVPLATFORM_VERITAS_LIBRARY
     KDEVPLATFORM_SOURCEFORMATTER_LIBRARY
+    KDEVPLATFORM_DEBUGGER_LIBRARY
 )

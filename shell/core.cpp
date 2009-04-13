@@ -48,6 +48,7 @@
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "selectioncontroller.h"
+#include "debugcontroller.h"
 #include "kdevplatformversion.h"
 
 namespace KDevelop {
@@ -139,6 +140,11 @@ void CorePrivate::initialize(Core::Setup mode)
         documentationController = new DocumentationController(m_core);
     }
 
+    if( !debugController )
+    {
+        debugController = new DebugController(m_core);
+    }
+
     kDebug() << "initializing ui controller";
     sessionController->initialize();
     if(!(mode & Core::NoUi)) uiController->initialize();
@@ -170,6 +176,7 @@ void CorePrivate::initialize(Core::Setup mode)
     sourceFormatterController->initialize();
     selectionController->initialize();
     documentationController->initialize();
+    debugController->initialize();
 }
 CorePrivate::~CorePrivate()
 {
@@ -184,6 +191,7 @@ CorePrivate::~CorePrivate()
     delete sessionController;
     delete sourceFormatterController;
     delete documentationController;
+    delete debugController;
 }
 
 
@@ -342,6 +350,16 @@ ISelectionController* Core::selectionController()
 IDocumentationController* Core::documentationController()
 {
     return d->documentationController;
+}
+
+IDebugController* Core::debugController()
+{
+    return d->debugController;
+}
+
+DebugController* Core::debugControllerInternal()
+{
+    return d->debugController;
 }
 
 QString Core::version()

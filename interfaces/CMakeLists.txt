@@ -26,6 +26,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     idocumentationprovider.cpp
     idocumentation.cpp
     idocumentationcontroller.cpp
+    idebugcontroller.cpp
 )
 
 
@@ -74,6 +75,7 @@ install(FILES
     idocumentation.h
     idocumentationprovider.h
     idocumentationcontroller.h
+    idebugcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

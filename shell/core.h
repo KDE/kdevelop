@@ -37,6 +37,7 @@ class CorePrivate;
 class SourceFormatterController;
 class SelectionController;
 class DocumentationController;
+class DebugController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -84,6 +85,9 @@ public:
     /** @copydoc ICore::documentationController() */
     virtual IDocumentationController* documentationController();
 
+    /** @copydoc ICore::debugController() */
+    virtual IDebugController* debugController();
+
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
 
@@ -111,6 +115,9 @@ public:
 
     /** @return run controller */
     RunController *runControllerInternal();
+
+    /** @return debug controller */
+    DebugController *debugControllerInternal();
 
     /**
      * @return session controller

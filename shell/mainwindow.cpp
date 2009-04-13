@@ -41,6 +41,7 @@ Boston, MA 02110-1301, USA.
 #include "plugincontroller.h"
 #include "uicontroller.h"
 #include "documentcontroller.h"
+#include "debugcontroller.h"
 
 namespace KDevelop
 {
@@ -133,6 +134,7 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentStateChanged(KDevelop::IDocument*)), SLOT(documentStateChanged(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
+    guiFactory()->addClient(Core::self()->debugControllerInternal());
     d->setupGui();
 }
 

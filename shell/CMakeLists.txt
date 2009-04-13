@@ -34,6 +34,7 @@ set(kdevplatformshell_LIB_SRCS
     selectioncontroller.cpp
     documentationcontroller.cpp
     documentationview.cpp
+    debugcontroller.cpp
 
     kross/krossplugin.cpp
     kross/krossbuildsystemmanager.cpp
@@ -61,6 +62,8 @@ set(kdevplatformshell_LIB_SRCS
     kross/wrappers/krossirun.cpp
     kross/wrappers/krosseditorcontext.cpp
     kross/wrappers/krossqtoolbar.cpp
+
+    debugger/framestackwidget.cpp
 )
 
 set(kdevplatformshell_UI
@@ -86,7 +89,8 @@ target_link_libraries(kdevplatformshell
         kdevplatformlanguage 
         sublime 
         kdevplatformutil 
-        kdevplatformoutputview)
+        kdevplatformoutputview
+        kdevplatformdebugger)
 # need to add kdevplatform* once those are exported targets
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES 
         ${KDE4_KDEUI_LIBS}
@@ -126,6 +130,8 @@ install(FILES
     testcore.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
+
+install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
 
 if(NOT WIN32)
    macro_optional_add_subdirectory(kross)
