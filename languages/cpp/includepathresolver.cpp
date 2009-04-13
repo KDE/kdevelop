@@ -98,7 +98,7 @@ namespace CppTools {
 
             if( utimes( (*it).toLocal8Bit().constData(), times ) != 0 )
             {
-              ifTest( cout << "failed to touch" << (*it).toUtf8().constData() << endl );
+              ifTest( cout << "failed to touch " << (*it).toUtf8().constData() << endl );
             }
           }
         }
@@ -116,7 +116,7 @@ namespace CppTools {
       void unModify() {
         for( StatMap::const_iterator it = m_stat.constBegin(); it != m_stat.constEnd(); ++it ) {
 
-          ifTest( cout << "untouching" << it.key().toUtf8().constData() << endl );
+          ifTest( cout << "untouching " << it.key().toUtf8().constData() << endl );
 
           struct stat s;
           if( stat( it.key().toLocal8Bit().constData(), &s ) == 0 ) {
@@ -128,11 +128,11 @@ namespace CppTools {
               times[1].tv_usec = 0;
               times[1].tv_sec = (*it).st_mtime;
               if( utimes( it.key().toLocal8Bit().constData(), times ) != 0 ) {
-                ifTest( cout << "failed to untouch" << it.key().toUtf8().constData() << endl );
+                ifTest( cout << "failed to untouch " << it.key().toUtf8().constData() << endl );
               }
             } else {
               ///The file was modified since we changed the modtime
-              ifTest( cout << "will not untouch" << it.key().toUtf8().constData() << "because the modification-time has changed" << endl );
+              ifTest( cout << "will not untouch " << it.key().toUtf8().constData() << " because the modification-time has changed" << endl );
             }
           }
         }
@@ -255,7 +255,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
   QString wd = url.toLocalFile();
   if( m_outOfSource ) {
-      if( wd.startsWith( m_source ) ) {
+      if( wd.startsWith( m_source ) && !wd.startsWith(m_build) ) {
         //Move the current working-directory out of source, into the build-system
         wd = m_build + '/' + wd.mid( m_source.length() );
         KUrl u( wd );
@@ -303,7 +303,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   QDir sourceDir( workingDirectory );
 
   ///If there is a .kdev_include_paths file, use it.
-  ///For some reason, the reading does not work.
 // #ifdef READ_CUSTOM_INCLUDE_PATHS
   QFileInfo customIncludePaths( sourceDir, ".kdev_include_paths" );
   if(customIncludePaths.exists()) {
@@ -313,8 +312,56 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       QByteArray read = f.readAll();
       QList<QByteArray> lines = read.split('\n');
       foreach(QByteArray line, lines)
-        if(!line.isEmpty())
-          result.paths << QString::fromLocal8Bit(line);
+        if(!line.isEmpty()) {
+          QString textLine = QString::fromLocal8Bit(line);
+          if(textLine.startsWith("RESOLVE:") && !m_outOfSource) {
+            std::cout << "found resolve line: " << textLine.toLocal8Bit().data() << std::endl;
+            
+            //Resolve using the build- and source-directory specified in the file
+            
+            int sourceIndex = textLine.indexOf(" SOURCE=");
+            if(sourceIndex != -1) {
+              std::cout << "found source specification" << std::endl;
+              int buildIndex = textLine.indexOf(" BUILD=", sourceIndex);
+              if(buildIndex != -1) {
+                std::cout << "found build specification" << std::endl;
+                int sourceStart = sourceIndex+8;
+                QString sourceDir = textLine.mid(sourceStart, buildIndex - sourceStart).trimmed();
+                int buildStart = buildIndex + 7;
+                QString buildDir = textLine.mid(buildStart, textLine.length()-buildStart).trimmed();
+                
+                std::cout << "directories: " << sourceDir.toLocal8Bit().data() << " " << buildDir.toLocal8Bit().data() << std::endl;
+                
+                if(sourceDir != buildDir) {
+                  setOutOfSourceBuildSystem(sourceDir, buildDir);
+                  
+                  QStringList fileParts = file.split("/");
+                  
+                  //Add all directories that were stepped up to the file again
+                  
+                  QString useFile = file;
+                  QString useWorkingDirectory = workingDirectory;
+                  if(fileParts.count() > 1) {
+                    useWorkingDirectory += "/" +  QStringList(fileParts.mid(0, fileParts.size()-1)).join("/");
+                    useFile = fileParts.last();
+                  }
+                  
+                  std::cout << "starting sub-resolver with " << useFile.toLocal8Bit().data() << " " << useWorkingDirectory.toLocal8Bit().data() << std::endl;
+                  
+                  PathResolutionResult subResult = resolveIncludePath(useFile, useWorkingDirectory, maxStepsUp + fileParts.count() - 1);
+                  result.paths += subResult.paths;
+                  if(!subResult) {
+                    std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl;
+                  }
+                  
+                  resetOutOfSourceBuild();
+                }
+              }
+            }
+          }else{
+            result.paths << textLine;
+          }
+        }
       
       f.close();
       return result;
@@ -579,7 +626,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   PathResolutionResult ret( true );
   ret.longErrorMessage = fullOutput;
-  ifTest( cout << "full output" << fullOutput.toAscii().data() );
+  ifTest( cout << "full output" << fullOutput.toAscii().data() << endl );
 
   int offset = 0;
   
@@ -629,6 +676,10 @@ void IncludePathResolver::resetOutOfSourceBuild() {
 }
 
   void IncludePathResolver::setOutOfSourceBuildSystem( const QString& source, const QString& build ) {
+    if(source == build) {
+      resetOutOfSourceBuild();
+      return;
+    }
   m_outOfSource = true;
   m_source = source;
   m_build = build;
