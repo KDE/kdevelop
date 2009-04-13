@@ -1102,12 +1102,12 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         if( position.isValid() && import->position.isValid() && position < import->position )
           continue;
 
-        context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, false, currentDepth+1);
+        context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
       }
     }
     
   ///Only respect the position if the parent-context is not a class(@todo this is language-dependent)
-  if (parentContext() && (searchInParents || ((shouldSearchInParent(InImportedParentContext)) && (parentContext()->type() == DUContext::Helper))) )
+  if (parentContext() && searchInParents )
     parentContext()->mergeDeclarationsInternal(definitions, parentContext()->type() == DUContext::Class ? parentContext()->range().end : position, hadContexts, source, searchInParents, currentDepth+1);
 }
 
