@@ -241,7 +241,7 @@ QString IncludeFileData::htmlDescription() const
         }
       }
     }else{
-      return i18n( "In %1th include-path", m_item.pathNumber );
+      return i18n( "In %1th include path", m_item.pathNumber );
     }
   }
 
