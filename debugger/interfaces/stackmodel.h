@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVELOP_STACKMODEL_H
-#define KDEVELOP_STACKMODEL_H
+#ifndef KDEV_STACKMODEL_H
+#define KDEV_STACKMODEL_H
 
 #include "../util/treemodel.h"
 #include "../debuggerexport.h"

@@ -9,11 +9,16 @@ set( kdevplatformdebugger_LIB_SRCS
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
+    interfaces/ibreakpoint.cpp
+    interfaces/ibreakpoints.cpp
+    interfaces/ibreakpointcontroller.cpp
 )
 kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
-target_link_libraries(kdevplatformdebugger 
+target_link_libraries(kdevplatformdebugger
+        kdevplatforminterfaces
         ${QT_QTCORE_LIBRARY} 
         ${KDE4_KDEUI_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
     )
 set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformdebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -27,6 +32,9 @@ install(FILES
 install(FILES
     interfaces/idebugsession.h
     interfaces/stackmodel.h
+    interfaces/ibreakpointcontroller.h
+    interfaces/ibreakpoints.h
+    interfaces/ibreakpoint.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES
