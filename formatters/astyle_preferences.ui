@@ -393,7 +393,7 @@ correctly.
 </string>
             </property>
             <property name="text" >
-             <string>Break bl&amp;ocks all</string>
+             <string>Break all bl&amp;ocks</string>
             </property>
            </widget>
           </item>
