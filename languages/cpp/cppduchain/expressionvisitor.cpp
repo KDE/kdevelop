@@ -595,7 +595,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
             static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<double>(val);
           }
         } else {
-          qint64 val;
+          qint64 val = 0;
           uint mod = AbstractType::NoModifiers;
 
           if( num.endsWith("u") || ( num.length() > 1 && num[1] == 'x' ) )
