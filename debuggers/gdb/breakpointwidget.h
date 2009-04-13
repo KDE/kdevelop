@@ -25,7 +25,7 @@
 #include "kdebug.h"
 
 #include "gdbcontroller.h"
-#include "newbreakpoint.h"
+#include "breakpoint.h"
 #include "breakpointcontroller.h"
 #include "breakpoints.h"
 
@@ -87,7 +87,7 @@ namespace GDBDebugger
             layout->addStretch();
         }
 
-        void setItem(NewBreakpoint *b)
+        void setItem(Breakpoint *b)
         {
             if (!b)
             {
@@ -362,7 +362,7 @@ namespace GDBDebugger
         void edit(KDevelop::IBreakpoint *n)
         {
             QModelIndex index = controller_->breakpoints()
-                ->indexForItem(n, NewBreakpoint::location_column);
+                ->indexForItem(n, Breakpoint::location_column);
             table_->setCurrentIndex(index);
             table_->edit(index);
         }
@@ -404,7 +404,7 @@ namespace GDBDebugger
 	    if (!selected.empty())
 	    {    
 		details_->setItem(
-                    static_cast<NewBreakpoint*>(
+                    static_cast<Breakpoint*>(
                         controller_->breakpoints()->itemForIndex(
                             selected.indexes().first())));
 	    }
@@ -436,7 +436,7 @@ namespace GDBDebugger
                hit count is read, so it remains stale.  For that reason,
                we get to notice when breakpoint changes.  */
             details_->setItem(
-                static_cast<NewBreakpoint*>(
+                static_cast<Breakpoint*>(
                     controller_->breakpoints()->itemForIndex(index)));
         }
 

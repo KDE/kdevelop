@@ -19,8 +19,8 @@
    Boston, MA 02111-1307, USA.
 */
 
-#ifndef NEWBREAKPOINT_H
-#define NEWBREAKPOINT_H
+#ifndef BREAKPOINT_H
+#define BREAKPOINT_H
 
 #include <QSet>
 
@@ -34,15 +34,15 @@ namespace GDBDebugger
     
 class GDBController;
 
-class NewBreakpoint : public KDevelop::IBreakpoint
+class Breakpoint : public KDevelop::IBreakpoint
 {
 public:
-    NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, BreakpointKind kind);
-    NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, const KConfigGroup& config);
+    Breakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, BreakpointKind kind);
+    Breakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, const KConfigGroup& config);
 
     /* This constructor creates a "please enter location" item, that will
        turn into real breakpoint when user types something.  */
-    NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent,
+    Breakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent,
                   GDBController* controller);
 
     void update(const GDBMI::Value &b);

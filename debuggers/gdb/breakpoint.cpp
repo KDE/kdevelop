@@ -20,7 +20,7 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include "newbreakpoint.h"
+#include "breakpoint.h"
 #include "breakpoints.h"
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
@@ -37,27 +37,27 @@ using namespace KDevelop;
 namespace GDBDebugger
 {
 
-NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller, BreakpointKind kind)
 : KDevelop::IBreakpoint(model, parent, kind), controller_(controller)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
 
-NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller,
                              const KConfigGroup& config)
 : KDevelop::IBreakpoint(model, parent, config), controller_(controller)
 {
 }
 
-NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller)
 : KDevelop::IBreakpoint(model, parent), controller_(controller)
 {
 }
 
-void NewBreakpoint::update(const GDBMI::Value &b)
+void Breakpoint::update(const GDBMI::Value &b)
 {
     id_ = b["number"].toInt();
 
@@ -149,7 +149,7 @@ void NewBreakpoint::update(const GDBMI::Value &b)
 #endif
 }
 
-void NewBreakpoint::sendMaybe()
+void Breakpoint::sendMaybe()
 {
     if (pleaseEnterLocation_)
         return;
@@ -183,7 +183,7 @@ void NewBreakpoint::sendMaybe()
         else
             controller_->addCommand(
                 new GDBCommand(BreakDelete, QString::number(id_),
-                               this, &NewBreakpoint::handleDeleted));
+                               this, &Breakpoint::handleDeleted));
     }
     else if (dirty_.contains(location_column))
     {
@@ -193,7 +193,7 @@ void NewBreakpoint::sendMaybe()
                this one.  */
             controller_->addCommand(
                 new GDBCommand(BreakDelete, QString::number(id_),
-                               this, &NewBreakpoint::handleDeleted));
+                               this, &Breakpoint::handleDeleted));
         }
         else
         {
@@ -201,7 +201,7 @@ void NewBreakpoint::sendMaybe()
                 controller_->addCommand(
                     new GDBCommand(BreakInsert,
                                    itemData[location_column].toString(),
-                                   this, &NewBreakpoint::handleInserted, true));
+                                   this, &Breakpoint::handleInserted, true));
             else
                 controller_->addCommand(
                     new GDBCommand(
@@ -209,7 +209,7 @@ void NewBreakpoint::sendMaybe()
                         QString("&(%1)").arg(
                             itemData[location_column].toString()),
                         this,
-                        &NewBreakpoint::handleAddressComputed, true));
+                        &Breakpoint::handleAddressComputed, true));
         }
     }
     else if (dirty_.contains(enable_column))
@@ -217,7 +217,7 @@ void NewBreakpoint::sendMaybe()
         controller_->addCommand(
             new GDBCommand(enabled_ ? BreakEnable : BreakDisable,
                            QString::number(id_),
-                           this, &NewBreakpoint::handleEnabledOrDisabled,
+                           this, &Breakpoint::handleEnabledOrDisabled,
                            true));
     }
     else if (dirty_.contains(condition_column))
@@ -226,11 +226,11 @@ void NewBreakpoint::sendMaybe()
             new GDBCommand(BreakCondition,
                            QString::number(id_) + ' ' +
                            itemData[condition_column].toString(),
-                           this, &NewBreakpoint::handleConditionChanged, true));
+                           this, &Breakpoint::handleConditionChanged, true));
     }
 }
 
-void NewBreakpoint::handleDeleted(const GDBMI::ResultRecord &v)
+void Breakpoint::handleDeleted(const GDBMI::ResultRecord &v)
 {
     Q_UNUSED(v);
     // FIXME: if deleting breakpoint for real, should commit suicide.
@@ -245,7 +245,7 @@ void NewBreakpoint::handleDeleted(const GDBMI::ResultRecord &v)
     }
 }
 
-void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
+void Breakpoint::handleInserted(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
@@ -271,7 +271,7 @@ void NewBreakpoint::handleInserted(const GDBMI::ResultRecord &r)
     }
 }
 
-void NewBreakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
+void Breakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
 {
     Q_UNUSED(r);
     // FIXME: handle error. Enable error most likely means the
@@ -281,7 +281,7 @@ void NewBreakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
     sendMaybe();
 }
 
-void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
+void Breakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
@@ -301,7 +301,7 @@ void NewBreakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
     }
 }
 
-void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
+void Breakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
@@ -325,7 +325,7 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
             new GDBCommand(
                 BreakWatch,
                 opt + QString("*%1").arg(address_),
-                this, &NewBreakpoint::handleInserted, true));
+                this, &Breakpoint::handleInserted, true));
     }
 }
 

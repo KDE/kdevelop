@@ -22,7 +22,7 @@
 
 #include "breakpointcontroller.h"
 
-#include "newbreakpoint.h"
+#include "breakpoint.h"
 #include "breakpoints.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"

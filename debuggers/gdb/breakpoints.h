@@ -32,7 +32,6 @@ namespace GDBMI { class ResultRecord; }
 namespace GDBDebugger
 {
 class GDBController;
-class NewBreakpoint;
 
 class Breakpoints : public KDevelop::IBreakpoints
 {

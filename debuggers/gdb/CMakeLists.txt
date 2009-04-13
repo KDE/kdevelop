@@ -60,7 +60,7 @@ set(kdevgdb_PART_SRCS
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
     breakpoints.cpp
-    newbreakpoint.cpp
+    breakpoint.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
@@ -119,7 +119,7 @@ set(gdbtest_PART_SRCS
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
     breakpoints.cpp
-    newbreakpoint.cpp
+    breakpoint.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
