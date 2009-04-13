@@ -12,6 +12,8 @@ set( kdevplatformdebugger_LIB_SRCS
     interfaces/ibreakpoint.cpp
     interfaces/ibreakpoints.cpp
     interfaces/ibreakpointcontroller.cpp
+    breakpoint/breakpointwidget.cpp
+    breakpoint/breakpointdetails.cpp
 )
 kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
 target_link_libraries(kdevplatformdebugger
@@ -42,4 +44,9 @@ install(FILES
     util/treeitem.h
     util/treeview.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/util COMPONENT Devel
+)
+install(FILES
+    breakpoint/breakpointwidget.h
+    breakpoint/breakpointdetails.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
 )
