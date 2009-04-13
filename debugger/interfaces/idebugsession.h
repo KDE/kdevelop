@@ -29,6 +29,7 @@ class KJob;
 
 namespace KDevelop {
 class StackModel;
+class IBreakpointController;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
 {
@@ -49,6 +50,8 @@ public:
 public:
     virtual DebuggerState state() const = 0;
     virtual StackModel* stackModel() const = 0;
+    virtual IBreakpointController *breakpointController() const = 0;
+
     virtual bool restartAvaliable() const = 0;
 
     KJob* job() const;

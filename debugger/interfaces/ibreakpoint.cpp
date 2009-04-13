@@ -28,7 +28,7 @@
 
 using namespace KDevelop;
 
-IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent, kind_t kind)
+IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
   pending_(false), pleaseEnterLocation_(false)
@@ -44,14 +44,14 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
 {
     QString kindString = config.readEntry("kind", "");
     int i;
-    for (i = 0; i < last_breakpoint_kind; ++i)
+    for (i = 0; i < LastBreakpointKind; ++i)
         if (string_kinds[i] == kindString)
         {
-            kind_ = (kind_t)i;
+            kind_ = (BreakpointKind)i;
             break;
         }
     /* FIXME: maybe, should silently ignore this breakpoint.  */
-    Q_ASSERT(i < last_breakpoint_kind);
+    Q_ASSERT(i < LastBreakpointKind);
     enabled_ = config.readEntry("enabled", false);
 
     QString location = config.readEntry("location", "");
@@ -65,7 +65,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
 IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), 
-  kind_(code_breakpoint), pending_(false), pleaseEnterLocation_(true)
+  kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true)
 {   
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
@@ -208,7 +208,7 @@ const int IBreakpoint::type_column;
 const int IBreakpoint::location_column;
 const int IBreakpoint::condition_column;
 
-const char *IBreakpoint::string_kinds[last_breakpoint_kind] = {
+const char *IBreakpoint::string_kinds[LastBreakpointKind] = {
     "Code",
     "Write",
     "Read",

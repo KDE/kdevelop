@@ -53,7 +53,7 @@ public:
 Q_SIGNALS:
     void error(KDevelop::IBreakpoint *b, const QString& message, int column);
 
-public slots:
+public Q_SLOTS:
     void save();
     virtual void load()=0;
 };

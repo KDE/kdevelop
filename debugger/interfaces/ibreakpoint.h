@@ -33,10 +33,15 @@ namespace KDevelop
 class KDEVPLATFORMDEBUGGER_EXPORT IBreakpoint : public TreeItem
 {
 public:
-    enum kind_t { code_breakpoint = 0, write_breakpoint, read_breakpoint,
-                  access_breakpoint, last_breakpoint_kind };
+    enum BreakpointKind {
+        CodeBreakpoint = 0,
+        WriteBreakpoint,
+        ReadBreakpoint,
+        AccessBreakpoint,
+        LastBreakpointKind
+    };
 
-    IBreakpoint(TreeModel *model, TreeItem *parent, kind_t kind);
+    IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind);
     IBreakpoint(TreeModel *model, TreeItem *parent, const KConfigGroup& config);
 
     /** This constructor creates a "please enter location" item, that will
@@ -79,14 +84,14 @@ protected:
     QSet<int> errors_;
     bool deleted_;
     int hitCount_;
-    kind_t kind_;
+    BreakpointKind kind_;
     /* The GDB 'pending' flag.  */
     bool pending_;
     /* For watchpoints, the address it is set at.  */
     QString address_;
     bool pleaseEnterLocation_;
 
-    static const char *string_kinds[last_breakpoint_kind];
+    static const char *string_kinds[LastBreakpointKind];
 };
 
 }

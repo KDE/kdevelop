@@ -72,7 +72,7 @@ protected:
         ExecutionPointMark     = KTextEditor::MarkInterface::markType06
     };
 
-signals:
+Q_SIGNALS:
 
     /**
     * The user has toggled a breakpoint.
@@ -89,7 +89,7 @@ signals:
     */
     void toggledBreakpointEnabled(const QString &fileName, int lineNum);
 
-private slots:
+private Q_SLOTS:
 
     void slotPartAdded(KParts::Part* part);
 
