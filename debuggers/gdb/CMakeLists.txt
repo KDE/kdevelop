@@ -59,9 +59,6 @@ set(kdevgdb_PART_SRCS
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    ibreakpointcontroller.cpp
-    ibreakpoints.cpp
-    inewbreakpoint.cpp
     breakpoints.cpp
     newbreakpoint.cpp
     stackmanager.cpp
@@ -121,9 +118,6 @@ set(gdbtest_PART_SRCS
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    ibreakpointcontroller.cpp
-    ibreakpoints.cpp
-    inewbreakpoint.cpp
     breakpoints.cpp
     newbreakpoint.cpp
     stackmanager.cpp

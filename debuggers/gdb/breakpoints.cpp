@@ -54,7 +54,7 @@ void Breakpoints::createHelperBreakpoint()
     appendChild(n);
 }
 
-KDevelop::INewBreakpoint* Breakpoints::addCodeBreakpoint()
+KDevelop::IBreakpoint* Breakpoints::addCodeBreakpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::code_breakpoint);
@@ -62,17 +62,17 @@ KDevelop::INewBreakpoint* Breakpoints::addCodeBreakpoint()
     return n;
 }
 
-KDevelop::INewBreakpoint* 
+KDevelop::IBreakpoint*
 Breakpoints::addCodeBreakpoint(const QString& location)
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::code_breakpoint);
     insertChild(childItems.size()-1, n);
-    n->setColumn(KDevelop::INewBreakpoint::location_column, location);
+    n->setColumn(KDevelop::IBreakpoint::location_column, location);
     return n;
 }
 
-KDevelop::INewBreakpoint* Breakpoints::addWatchpoint()
+KDevelop::IBreakpoint* Breakpoints::addWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::write_breakpoint);
@@ -80,7 +80,7 @@ KDevelop::INewBreakpoint* Breakpoints::addWatchpoint()
     return n;
 }
 
-KDevelop::INewBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
+KDevelop::IBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::write_breakpoint);
@@ -89,7 +89,7 @@ KDevelop::INewBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
     return n;
 }
 
-KDevelop::INewBreakpoint* Breakpoints::addReadWatchpoint()
+KDevelop::IBreakpoint* Breakpoints::addReadWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
                                          NewBreakpoint::read_breakpoint);

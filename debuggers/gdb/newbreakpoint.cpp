@@ -39,7 +39,7 @@ namespace GDBDebugger
 
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller, kind_t kind)
-: KDevelop::INewBreakpoint(model, parent, kind), controller_(controller)
+: KDevelop::IBreakpoint(model, parent, kind), controller_(controller)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
 }
@@ -47,13 +47,13 @@ NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller,
                              const KConfigGroup& config)
-: KDevelop::INewBreakpoint(model, parent, config), controller_(controller)
+: KDevelop::IBreakpoint(model, parent, config), controller_(controller)
 {
 }
 
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller)
-: KDevelop::INewBreakpoint(model, parent), controller_(controller)
+: KDevelop::IBreakpoint(model, parent), controller_(controller)
 {
 }
 

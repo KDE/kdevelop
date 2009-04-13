@@ -31,10 +31,11 @@
 #include <KParts/Part>
 #include <KTextEditor/Cursor>
 
+#include <debugger/interfaces/ibreakpointcontroller.h>
+
 #include "mi/gdbmi.h"
 #include "gdbglobal.h"
 
-#include "ibreakpointcontroller.h"
 
 namespace KDevelop { class IDocument; }
 

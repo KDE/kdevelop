@@ -201,9 +201,9 @@ namespace GDBDebugger
                     this, SLOT(slotBreakpointHit(int)));
 
             connect(controller->breakpoints()->breakpointsItem(),
-                    SIGNAL(error(KDevelop::INewBreakpoint *, const QString&, int)),
+                    SIGNAL(error(KDevelop::IBreakpoint *, const QString&, int)),
                     this,
-                    SLOT(breakpointError(KDevelop::INewBreakpoint *, const QString&, int)));
+                    SLOT(breakpointError(KDevelop::IBreakpoint *, const QString&, int)));
 
             setupPopupMenu();
         }
@@ -359,7 +359,7 @@ namespace GDBDebugger
         }
 
     private:
-        void edit(KDevelop::INewBreakpoint *n)
+        void edit(KDevelop::IBreakpoint *n)
         {
             QModelIndex index = controller_->breakpoints()
                 ->indexForItem(n, NewBreakpoint::location_column);
@@ -416,7 +416,7 @@ namespace GDBDebugger
                that is added in GDB outside kdevelop.  In this case we'll
                first try to find the breakpoint, and fail, and only then
                update the breakpoint table and notice the new one.  */
-            KDevelop::INewBreakpoint *b = controller_->breakpoints()->breakpointsItem()
+            KDevelop::IBreakpoint *b = controller_->breakpoints()->breakpointsItem()
                 ->breakpointById(id);
             if (b)
             {
@@ -440,7 +440,7 @@ namespace GDBDebugger
                     controller_->breakpoints()->itemForIndex(index)));
         }
 
-        void breakpointError(KDevelop::INewBreakpoint *b, const QString& msg, int column)
+        void breakpointError(KDevelop::IBreakpoint *b, const QString& msg, int column)
         {
             // FIXME: we probably should prevent this error notification during
             // initial setting of breakpoint, to avoid a cloud of popups.

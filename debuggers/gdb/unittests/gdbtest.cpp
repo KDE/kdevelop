@@ -21,18 +21,19 @@
 #include <QtTest/QTest>
 #include <QSignalSpy>
 #include <QDebug>
+#include <QApplication>
+#include <QFileInfo>
+#include <QDir>
 
 #include <shell/testcore.h>
 #include <shell/shellextension.h>
 
-#include "debugsession.h"
-#include <QApplication>
-#include <gdbcontroller.h>
-#include <breakpointcontroller.h>
-#include <QFileInfo>
-#include <QDir>
 #include <debugger/interfaces/stackmodel.h>
-#include <inewbreakpoint.h>
+#include <debugger/interfaces/ibreakpoint.h>
+
+#include "breakpointcontroller.h"
+#include "gdbcontroller.h"
+#include "debugsession.h"
 
 using namespace GDBDebugger;
 

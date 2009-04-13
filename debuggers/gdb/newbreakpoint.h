@@ -22,8 +22,10 @@
 #ifndef NEWBREAKPOINT_H
 #define NEWBREAKPOINT_H
 
-#include "inewbreakpoint.h"
 #include <QSet>
+
+#include <debugger/interfaces/ibreakpoint.h>
+
 
 class KConfigGroup;
 namespace GDBMI { class Value; class ResultRecord; }
@@ -32,7 +34,7 @@ namespace GDBDebugger
     
 class GDBController;
 
-class NewBreakpoint : public KDevelop::INewBreakpoint
+class NewBreakpoint : public KDevelop::IBreakpoint
 {
 public:
     NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, kind_t kind);

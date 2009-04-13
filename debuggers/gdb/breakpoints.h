@@ -22,7 +22,8 @@
 #ifndef BREAKPOINTS_H
 #define BREAKPOINTS_H
 
-#include "ibreakpoints.h"
+#include <debugger/interfaces/ibreakpoints.h>
+
 
 class QModelIndex;
 
@@ -46,11 +47,11 @@ public:
     void fetchMoreChildren() {}
     virtual void createHelperBreakpoint();
     
-    KDevelop::INewBreakpoint* addCodeBreakpoint();
-    KDevelop::INewBreakpoint* addCodeBreakpoint(const QString& location);
-    KDevelop::INewBreakpoint* addWatchpoint();
-    KDevelop::INewBreakpoint* addWatchpoint(const QString& expression);
-    KDevelop::INewBreakpoint* addReadWatchpoint();
+    KDevelop::IBreakpoint* addCodeBreakpoint();
+    KDevelop::IBreakpoint* addCodeBreakpoint(const QString& location);
+    KDevelop::IBreakpoint* addWatchpoint();
+    KDevelop::IBreakpoint* addWatchpoint(const QString& expression);
+    KDevelop::IBreakpoint* addReadWatchpoint();
 
 public slots:
     void load();
