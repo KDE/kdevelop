@@ -63,7 +63,7 @@ class GDBController : public QObject
     Q_OBJECT
 
 public:
-    GDBController(QObject* parent);
+    GDBController(QObject* parent = 0);
     ~GDBController();
 
     /**
@@ -261,15 +261,6 @@ private Q_SLOTS:
 
     void configure();
 
-    void slotRun();
-    void slotKill();
-    void slotRestart();
-    void slotStepInto();
-    void slotStepOver();
-    void slotStepIntoInstruction();
-    void slotStepOverInstruction();
-    void slotStepOut();
-
     void slotUserGDBCmd(const QString&);
 
     // Pops up a dialog box with some hopefully
@@ -279,11 +270,17 @@ private Q_SLOTS:
 
     void slotKillGdb();
 
-    void slotShowStep(const QString &fileName, int lineNum);
-
+public Q_SLOTS:
+    void slotRun();
+    void slotKill();
+    void slotRestart();
+    void slotStepInto();
+    void slotStepOver();
+    void slotStepIntoInstruction();
+    void slotStepOverInstruction();
+    void slotStepOut();
 
 Q_SIGNALS:
-    void gotoSourcePosition   (const QString &fileName, int lineNum);
     void rawGDBMemoryDump     (char *buf);
     void rawGDBRegisters      (char *buf);
     void rawGDBLibraries      (char *buf);

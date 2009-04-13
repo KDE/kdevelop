@@ -35,8 +35,8 @@
 #include <KParts/PartManager>
 #include <KDebug>
 
-#include "util/treeitem.h"
-#include "util/treemodel.h"
+#include <debugger/util/treeitem.h>
+#include <debugger/util/treemodel.h>
 
 // #include "modeltest.h"
 
@@ -85,13 +85,6 @@ void BreakpointController::slotToggleBreakpoint(const QString &fileName, int lin
 
 void BreakpointController::slotEvent(event_t e)
 {
-    if (e == program_running ||
-        e == program_exited ||
-        e == debugger_exited)
-    {
-        clearExecutionPoint();
-    }
-
     switch(e)
     {
     case program_state_changed:

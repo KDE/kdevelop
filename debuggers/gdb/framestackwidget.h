@@ -27,7 +27,7 @@
 
 #include "gdbcontroller.h"
 #include "mi/miparser.h"
-#include "util/treeview.h"
+#include <debugger/util/treeview.h>
 
 namespace GDBDebugger
 {
@@ -39,7 +39,7 @@ class FrameStackItem;
 /**
  * @author John Birch
  */
-class FramestackWidget : public AsyncTreeView
+class FramestackWidget : public KDevelop::AsyncTreeView
 {
     Q_OBJECT
 

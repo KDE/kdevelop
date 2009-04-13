@@ -22,7 +22,7 @@
 #ifndef INEWBREAKPOINT_H
 #define INEWBREAKPOINT_H
 
-#include "util/treeitem.h"
+#include <debugger/util/treeitem.h>
 #include <QSet>
 
 class KConfigGroup;

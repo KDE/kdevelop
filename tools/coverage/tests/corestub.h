@@ -57,7 +57,8 @@ public:
         m_selectionController(0),
         m_session(0),
         m_partController(0),
-        m_documentationController(0) {}
+        m_documentationController(0),
+        m_debugController(0) {}
 
     virtual ~Core() {}
     virtual KDevelop::IDocumentController *documentController() {
@@ -87,6 +88,9 @@ public:
     virtual KDevelop::IDocumentationController* documentationController() {
         return m_documentationController;
     }
+    virtual KDevelop::IDebugController* debugController() {
+        return m_debugController;
+    }
     virtual KDevelop::ISession* activeSession() {
         return m_session;
     }
@@ -108,6 +112,7 @@ public:
     KDevelop::ISession* m_session;
     KParts::PartManager* m_partController;
     KDevelop::IDocumentationController* m_documentationController;
+    KDevelop::IDebugController* m_debugController;
 };
 
 }

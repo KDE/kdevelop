@@ -95,9 +95,6 @@ GDBController::GDBController(QObject* parent)
 
     connect(this, SIGNAL(event(event_t)),
             m_variableCollection, SLOT(slotEvent(event_t)));
-
-    connect( this, SIGNAL(showStepInSource(const QString&, int, const QString&)),
-             this, SLOT(slotShowStep(const QString&, int)));
 }
 
 // **************************************************************************
@@ -378,6 +375,7 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
     }
 
     QString reason = r["reason"].literal();
+
     if (reason == "exited-normally" || reason == "exited")
     {
         programNoApp("Exited normally", false);
@@ -871,8 +869,6 @@ void GDBController::stopDebugger()
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
     QTimer::singleShot(5000, this, SLOT(slotKillGdb()));
-
-    breakpoints()->clearExecutionPoint();
 }
 
 void GDBController::slotKillGdb()
@@ -1318,19 +1314,6 @@ StackManager * GDBController::stackManager() const
 BreakpointController* GDBController::breakpoints() const
 {
     return m_breakpointController;
-}
-
-void GDBController::slotShowStep(const QString &fileName, int lineNum)
-{
-    if ( ! fileName.isEmpty() )
-    {
-        // Debugger counts lines from 1
-        breakpoints()->gotoExecutionPoint(KUrl( fileName ), lineNum-1);
-    }
-    else
-    {
-        breakpoints()->clearExecutionPoint();
-    }
 }
 
 void GDBController::programRunning()

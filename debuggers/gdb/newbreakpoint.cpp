@@ -32,6 +32,7 @@
 #include <KIcon>
 
 using namespace GDBMI;
+using namespace KDevelop;
 
 namespace GDBDebugger
 {

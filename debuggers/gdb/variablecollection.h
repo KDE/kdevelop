@@ -25,8 +25,8 @@
 
 #include "mi/gdbmi.h"
 #include "gdbglobal.h"
-#include "util/treemodel.h"
-#include "util/treeitem.h"
+#include <debugger/util/treemodel.h>
+#include <debugger/util/treeitem.h>
 
 #include <interfaces/idocument.h>
 
@@ -46,15 +46,15 @@ class FrameItem;
 class WatchItem;
 class VariableItem;
 
-class Variable : public TreeItem
+class Variable : public KDevelop::TreeItem
 {
 public:
-    Variable(TreeModel* model, TreeItem* parent, 
+    Variable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent, 
              GDBController* controller,
              const QString& expression,
              const QString& display = "");
 
-    Variable(TreeModel* model, TreeItem* parent, 
+    Variable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent, 
              GDBController* controller,
              const GDBMI::Value& value);
 
@@ -97,13 +97,13 @@ private:
     static QMap<QString, Variable*> allVariables_;
 };
 
-class TooltipRoot : public TreeItem
+class TooltipRoot : public KDevelop::TreeItem
 {
 public:
     Variable* var;
 
-    TooltipRoot(TreeModel* model)
-    : TreeItem(model)
+    TooltipRoot(KDevelop::TreeModel* model)
+    : KDevelop::TreeItem(model)
     {}
 
     void init(GDBController* controller, const QString& expression)
@@ -115,10 +115,10 @@ public:
     void fetchMoreChildren() {}
 };
 
-class Watches : public TreeItem
+class Watches : public KDevelop::TreeItem
 {
 public:
-    Watches(TreeModel* model, TreeItem* parent);
+    Watches(KDevelop::TreeModel* model, KDevelop::TreeItem* parent);
     Variable* add(const QString& expression);
 
     GDBController* controller();
@@ -136,10 +136,10 @@ private:
     Variable* finishResult_;
 };
 
-class VariablesRoot : public TreeItem
+class VariablesRoot : public KDevelop::TreeItem
 {
 public:
-    VariablesRoot(TreeModel* model);
+    VariablesRoot(KDevelop::TreeModel* model);
 
     GDBController* controller();
 
@@ -153,7 +153,7 @@ private:
     Watches *watches_;
 };
 
-class VariableCollection : public TreeModel
+class VariableCollection : public KDevelop::TreeModel
 {
     Q_OBJECT
 

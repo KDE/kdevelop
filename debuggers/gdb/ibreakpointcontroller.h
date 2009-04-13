@@ -22,8 +22,8 @@
 #ifndef IBREAKPOINTCONTROLLER_H
 #define IBREAKPOINTCONTROLLER_H
 
-#include "util/treemodel.h"
-#include "util/treeitem.h"
+#include <debugger/util/treemodel.h>
+#include <debugger/util/treeitem.h>
 #include "ibreakpoints.h"
 
 #include <ktexteditor/markinterface.h>
@@ -49,19 +49,6 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
-
-    /**
-    * Displays an icon in the file at the line that the debugger has stoped
-    * at.
-    * @param url        The file the debugger has stopped at.
-    * @param lineNum    The line number to display. Note: We may not know it.
-    */
-    void gotoExecutionPoint(const KUrl &url, int lineNum=-1);
-
-    /**
-    * Remove the executution point being displayed.
-    */
-    void clearExecutionPoint();
 
     enum Columns {
         Enable,

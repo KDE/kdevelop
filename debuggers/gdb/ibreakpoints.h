@@ -22,17 +22,15 @@
 #ifndef IBREAKPOINTS_H
 #define IBREAKPOINTS_H
 
-#include "util/treeitem.h"
+#include <debugger/util/treeitem.h>
 #include "ibreakpointcontroller.h"
-
-class QModelIndex;
 
 namespace KDevelop
 {
 class INewBreakpoint;
 class IBreakpointController;
 
-class IBreakpoints : public TreeItem
+class IBreakpoints : public KDevelop::TreeItem
 {
     Q_OBJECT
 public:

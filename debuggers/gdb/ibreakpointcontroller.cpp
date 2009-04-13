@@ -56,12 +56,14 @@ IBreakpointController::IBreakpointController(QObject* parent, IBreakpoints* univ
 
     //new ModelTest(this, this);
 
-    foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
-        slotPartAdded(p);
-    connect(KDevelop::ICore::self()->partController(),
-            SIGNAL(partAdded(KParts::Part*)),
-            this,
-            SLOT(slotPartAdded(KParts::Part*)));
+    if (KDevelop::ICore::self()->partController()) { //TODO remove if
+        foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
+            slotPartAdded(p);
+        connect(KDevelop::ICore::self()->partController(),
+                SIGNAL(partAdded(KParts::Part*)),
+                this,
+                SLOT(slotPartAdded(KParts::Part*)));
+    }
 }
 
 void IBreakpointController::slotPartAdded(KParts::Part* part)
@@ -117,45 +119,6 @@ Qt::ItemFlags IBreakpointController::flags(const QModelIndex &index) const
             Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 
     return static_cast<Qt::ItemFlags>(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-}
-
-void IBreakpointController::clearExecutionPoint()
-{
-    kDebug(9012) << "clearExecutionPoint";
-    foreach (KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments())
-    {
-        MarkInterface *iface = dynamic_cast<MarkInterface*>(document->textDocument());
-        if (!iface)
-            continue;
-
-        QHashIterator<int, KTextEditor::Mark*> it = iface->marks();
-        while (it.hasNext())
-        {
-            Mark* mark = it.next().value();
-            if( mark->type & ExecutionPointMark )
-                iface->removeMark( mark->line, ExecutionPointMark );
-        }
-    }
-}
-
-void IBreakpointController::gotoExecutionPoint(const KUrl &url, int lineNum)
-{
-    clearExecutionPoint();
-    kDebug(9012) << "gotoExecutionPoint";
-    KDevelop::IDocument* document = KDevelop::ICore::self()
-        ->documentController()
-        ->openDocument(url, KTextEditor::Cursor(lineNum, 0));
-
-    if( !document )
-        return;
-
-    MarkInterface *iface = dynamic_cast<MarkInterface*>(document->textDocument());
-    if( !iface )
-        return;
-
-    document->textDocument()->blockSignals(true);
-    iface->addMark( lineNum, ExecutionPointMark );
-    document->textDocument()->blockSignals(false);
 }
 
 void IBreakpointController::markChanged(

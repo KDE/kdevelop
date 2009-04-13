@@ -8,8 +8,8 @@
 #include "gdbcommand.h"
 #include "mi/gdbmi.h"
 
-#include "util/treeview.h"
-#include "util/treemodel.h"
+#include <debugger/util/treeview.h>
+#include <debugger/util/treemodel.h>
 #include "util/activetooltip.h"
 
 #include <QWidget>
@@ -27,6 +27,7 @@
 #include <KLocale>
 
 using namespace GDBDebugger;
+using namespace KDevelop;
 
 VariableToolTip::VariableToolTip(QWidget* parent, QPoint position, 
                                  GDBController* controller,

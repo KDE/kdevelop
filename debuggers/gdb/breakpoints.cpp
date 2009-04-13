@@ -24,7 +24,7 @@
 #include "gdbcontroller.h"
 #include "newbreakpoint.h"
 #include "gdbcommand.h"
-#include "util/treemodel.h"
+#include <debugger/util/treemodel.h>
 #include "mi/gdbmi.h"
 
 #include <KConfigGroup>

@@ -20,9 +20,10 @@
 
 #include <kcombobox.h>
 
+#include <debugger/util/treeview.h>
+
 #include "gdbcontroller.h"
 #include "mi/gdbmi.h"
-#include "util/treeview.h"
 #include "variablecollection.h"
 
 class KMenu;
@@ -63,7 +64,7 @@ private:
 /***************************************************************************/
 /***************************************************************************/
 
-class VariableTree : public AsyncTreeView
+class VariableTree : public KDevelop::AsyncTreeView
 {
     Q_OBJECT
 public:

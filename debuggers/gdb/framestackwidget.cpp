@@ -43,29 +43,13 @@ using namespace GDBDebugger;
 
 FramestackWidget::FramestackWidget(CppDebuggerPlugin* plugin, GDBController* controller,
                                    QWidget *parent)
-: AsyncTreeView(controller->stackManager()->model(), parent),
+: AsyncTreeView(controller->stackManager(), parent),
   controller_(controller), firstShow_(true)
 {
-    setToolTip(i18n("<b>Frame stack</b><p>"
-                    "Often referred to as the \"call stack\", "
-                    "this is a list showing which function is "
-                    "currently active, and what called each "
-                    "function to get to this point in your "
-                    "program. By clicking on an item you "
-                    "can see the values in any of the "
-                    "previous calling functions."));
-    setWindowIcon(KIcon("view-list-text"));
-    setRootIsDecorated(true);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-
-    setSelectionBehavior(QAbstractItemView::SelectRows);
-    setSelectionMode(QAbstractItemView::SingleSelection);
-    header()->setHighlightSections(false);
 
 //    header()->hide();
 
 //    setModel(controller->stackManager());
-    controller->stackManager()->setAutoUpdate(isVisible());
 
     connect(selectionModel(), 
             SIGNAL(selectionChanged(QItemSelection, QItemSelection)),

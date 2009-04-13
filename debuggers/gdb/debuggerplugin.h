@@ -55,7 +55,6 @@ class ProcessLineMaker;
 
 namespace GDBDebugger
 {
-
 class GDBBreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
@@ -64,6 +63,7 @@ class GDBController;
 class VariableWidget;
 class GDBOutputWidget;
 class ViewerWidget;
+class DebugSession;
 
 class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider, public KDevelop::IStatus
 {
@@ -72,6 +72,8 @@ class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvide
     Q_INTERFACES(KDevelop::IStatus)
 
 public:
+    friend class DebugSession;
+
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
 
@@ -111,7 +113,6 @@ Q_SIGNALS:
     void raiseOutputViews();
     void raiseFramestackViews();
     void raiseVariableViews();
-    void clearViews();
 
     void addWatchVariable(const QString& variable);
     void evaluateExpression(const QString& variable);
@@ -120,12 +121,10 @@ Q_SIGNALS:
 
     void addMemoryView();
 
-    void toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor);
 
 private Q_SLOTS:
     void setupDBus();
     void slotDebugExternalProcess(QObject* interface);
-    void toggleBreakpoint();
     void contextEvaluate();
     void contextWatch();
 //    void projectOpened();
@@ -134,21 +133,13 @@ private Q_SLOTS:
     void slotStartDebugger();
     void slotExamineCore();
     void slotAttachProcess();
-    void slotStopDebugger();
-    void slotRunToCursor();
-    void slotJumpToCursor();
-
-    void slotGotoSource(const QString &fileName, int lineNum);
 
     void slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner);
     void slotCloseDrKonqi();
 
-    void slotDebuggerAbnormalExit();
-
-    void slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
-
     void applicationStandardOutputLines(const QStringList& lines);
     void applicationStandardErrorLines(const QStringList& lines);
+    void slotFinished();
 
     void controllerMessage(const QString&, int);
 
@@ -167,13 +158,11 @@ private:
     KConfigGroup config() const;
 
     void attachProcess(int pid);
-    void setupController();
     void setupActions();
 
-    GDBController *controller;
+    DebugSession *createSession();
+
     QPointer<KToolBar> floatingToolBar;
-    KDevelop::ProcessLineMaker* procLineMaker;
-    KDevelop::ProcessLineMaker* gdbLineMaker;
 
     QHash<QString, QDBusInterface*> m_drkonqis;
     QSignalMapper* m_drkonqiMap;
@@ -181,31 +170,17 @@ private:
     QString m_contextIdent;
     QByteArray m_drkonqi;
 
-    DBGStateFlags debuggerState_;
     // Set to true after each debugger restart
     // Currently used to auto-show variables view
     // on the first pause.
     bool justRestarted_;
 
-    // Set by 'startDebugger' and cleared by 'slotStopDebugger'.
-    bool running_;
-
     KConfigGroup m_config;
 
-    KJob* currentJob_;
-
     KAction* m_startDebugger;
-    KAction* m_restartDebugger;
-    KAction* m_stopDebugger;
-    KAction* m_interruptDebugger;
-    KAction* m_runToCursor;
-    KAction* m_setToCursor;
-    KAction* m_stepOver;
-    KAction* m_stepIntoInstruction;
-    KAction* m_stepInto;
-    KAction* m_stepOverInstruction;
-    KAction* m_stepOut;
-    KAction* m_toggleBreakpoint;
+    DebugSession* m_session;
+
+    GDBController* m_controller;
 };
 
 }

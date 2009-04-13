@@ -61,10 +61,11 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/context.h>
-#include <util/processlinemaker.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/editorcontext.h>
+#include <interfaces/idebugcontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 #include "variablewidget.h"
 #include "framestackwidget.h"
@@ -78,6 +79,7 @@
 #include "gdbglobal.h"
 #include "variablecollection.h"
 #include "breakpointwidget.h"
+#include "debugsession.h"
 
 #include <iostream>
 
@@ -135,9 +137,7 @@ private:
 
 CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
-    controller(0), debuggerState_(s_dbgNotStarted|s_appNotStarted),
-    justRestarted_(false),
-    running_(false), m_config(KGlobal::config(), "GDB Debugger")
+    m_session(0), m_config(KGlobal::config(), "GDB Debugger")
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
@@ -145,55 +145,41 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     setXMLFile("kdevgdbui.rc");
 
     // Setup widgets and dbgcontroller
-
-    controller = new GDBController(this);
+    m_controller = new GDBController(this);
 
     core()->uiController()->addToolView(
         i18n("Breakpoints"),
         new DebuggerToolFactory<BreakpointWidget>(
-            this, controller, "org.kdevelop.debugger.BreakpointsView",
-            Qt::BottomDockWidgetArea));
-
-    core()->uiController()->addToolView(
-        i18n("Variables"),
-        new DebuggerToolFactory<VariableWidget>(
-            this, controller, "org.kdevelop.debugger.VariablesView",
-            Qt::LeftDockWidgetArea));
-
-    core()->uiController()->addToolView(
-        i18n("Frame Stack"),
-        new DebuggerToolFactory<FramestackWidget>(
-            this, controller, "org.kdevelop.debugger.StackView",
+            this, m_controller, "org.kdevelop.debugger.BreakpointsView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
         i18n("Disassemble"),
         new DebuggerToolFactory<DisassembleWidget>(
-            this, controller, "org.kdevelop.debugger.DisassemblerView",
+            this, m_controller, "org.kdevelop.debugger.DisassemblerView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
         i18n("GDB"),
         new DebuggerToolFactory<GDBOutputWidget>(
-            this, controller, "org.kdevelop.debugger.ConsoleView",
+            this, m_controller, "org.kdevelop.debugger.ConsoleView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
         i18n("Debug views"),
         new DebuggerToolFactory<ViewerWidget>(
-            this, controller, "org.kdevelop.debugger.VariousViews",
+            this, m_controller, "org.kdevelop.debugger.VariousViews",
             Qt::BottomDockWidgetArea));
+
+    core()->uiController()->addToolView(
+        i18n("Variables"),
+        new DebuggerToolFactory<VariableWidget>(
+            this, m_controller, "org.kdevelop.debugger.VariablesView",
+            Qt::LeftDockWidgetArea));
 
     setupActions();
 
     setupDBus();
-
-    procLineMaker = new KDevelop::ProcessLineMaker(this);
-
-    connect( procLineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
-             this, SLOT(applicationStandardOutputLines(const QStringList&)));
-    connect( procLineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
-             this, SLOT(applicationStandardErrorLines(const QStringList&)) );
 
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window
@@ -202,15 +188,13 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 // PORTING TODO broken - need intermediate signal?
 //     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
 //              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
-
-    setupController();
 }
 
 void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = m_startDebugger = new KAction(KIcon("dbgrun"), i18n("&Start"), this);
+    KAction* action = m_startDebugger = new KAction(KIcon("dbgrun"), i18n("&Start with GDB"), this);
     action->setShortcut(Qt::Key_F9);
     action->setToolTip( i18n("Start in debugger") );
     action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
@@ -221,91 +205,6 @@ void CppDebuggerPlugin::setupActions()
                                "about variables, frame stack, and so on.") );
     ac->addAction("debug_run", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStartDebugger()));
-
-    m_restartDebugger = action = new KAction(KIcon("dbgrestart"), i18n("&Restart"), this);
-    action->setToolTip( i18n("Restart program") );
-    action->setWhatsThis( i18n("<b>Restarts application</b><p>"
-                               "Restarts applications from the beginning."
-                              ) );
-    action->setEnabled(false);
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotRestart()));
-    ac->addAction("debug_restart", action);
-
-
-    m_stopDebugger = action = new KAction(KIcon("process-stop"), i18n("Sto&p"), this);
-    action->setToolTip( i18n("Stop debugger") );
-    action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStopDebugger()));
-    ac->addAction("debug_stop", action);
-
-    m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
-    action->setToolTip( i18n("Interrupt application") );
-    action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current GDB command."));
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotPauseApp()));
-    ac->addAction("debug_pause", action);
-
-    m_runToCursor = action = new KAction(KIcon("dbgrunto"), i18n("Run to &Cursor"), this);
-    action->setToolTip( i18n("Run to cursor") );
-    action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotRunToCursor()));
-    ac->addAction("debug_runtocursor", action);
-
-
-    m_setToCursor = action = new KAction(KIcon("dbgjumpto"), i18n("Set E&xecution Position to Cursor"), this);
-    action->setToolTip( i18n("Jump to cursor") );
-    action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotJumpToCursor()));
-    ac->addAction("debug_jumptocursor", action);
-
-    m_stepOver = action = new KAction(KIcon("dbgnext"), i18n("Step &Over"), this);
-    action->setShortcut(Qt::Key_F10);
-    action->setToolTip( i18n("Step over the next line") );
-    action->setWhatsThis( i18n("<b>Step over</b><p>"
-                               "Executes one line of source in the current source file. "
-                               "If the source line is a call to a function the whole "
-                               "function is executed and the app will stop at the line "
-                               "following the function call.") );
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOver()));
-    ac->addAction("debug_stepover", action);
-
-
-    m_stepOverInstruction = action = new KAction(KIcon("dbgnextinst"), i18n("Step over Ins&truction"), this);
-    action->setToolTip( i18n("Step over instruction") );
-    action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOverInstruction()));
-    ac->addAction("debug_stepoverinst", action);
-
-
-    m_stepInto = action = new KAction(KIcon("dbgstep"), i18n("Step &Into"), this);
-    action->setShortcut(Qt::Key_F11);
-    action->setToolTip( i18n("Step into the next statement") );
-    action->setWhatsThis( i18n("<b>Step into</b><p>"
-                               "Executes exactly one line of source. If the source line "
-                               "is a call to a function then execution will stop after "
-                               "the function has been entered.") );
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepInto()));
-    ac->addAction("debug_stepinto", action);
-
-
-    m_stepIntoInstruction = action = new KAction(KIcon("dbgstepinst"), i18n("Step into I&nstruction"), this);
-    action->setToolTip( i18n("Step into instruction") );
-    action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction."));
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepIntoInstruction()));
-    ac->addAction("debug_stepintoinst", action);
-
-
-    m_stepOut = action = new KAction(KIcon("dbgstepout"), i18n("Step O&ut"), this);
-    action->setShortcut(Qt::Key_F12);
-    action->setToolTip( i18n("Steps out of the current function") );
-    action->setWhatsThis( i18n("<b>Step out</b><p>"
-                               "Executes the application until the currently executing "
-                               "function is completed. The debugger will then display "
-                               "the line after the original call to that function. If "
-                               "program execution is in the outermost frame (i.e. in "
-                               "main()) then this operation has no effect.") );
-    connect(action, SIGNAL(triggered(bool)), controller, SLOT(slotStepOut()));
-    ac->addAction("debug_stepout", action);
-
 
     action = new KAction(KIcon("dbgmemview"), i18n("Viewers"), this);
     action->setToolTip( i18n("Debugger viewers") );
@@ -335,12 +234,6 @@ void CppDebuggerPlugin::setupActions()
     action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
     ac->addAction("debug_attach", action);
-
-    m_toggleBreakpoint = action = new KAction(i18n("Toggle Breakpoint"), this);
-    action->setToolTip(i18n("Toggle breakpoint"));
-    action->setWhatsThis(i18n("<b>Toggle breakpoint</b><p>Toggles the breakpoint at the current line in editor."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(toggleBreakpoint()));
-    ac->addAction("debug_toggle_breakpoint", action);
 }
 
 void CppDebuggerPlugin::setupDBus()
@@ -398,7 +291,6 @@ void CppDebuggerPlugin::slotCloseDrKonqi()
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
-    delete controller;
     delete floatingToolBar;
 
     GDBParser::destroy();
@@ -423,7 +315,7 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
 
     m_contextIdent = econtext->currentWord();
 
-    bool running = !(debuggerState_ & s_dbgNotStarted);
+    bool running = m_session && m_session->isRunning();
 
     // If debugger is running, we insert items at the top.
     // The reason is user has explicitly run the debugger, so he's
@@ -433,15 +325,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
     //if (!running)
         //popup->addSeparator();
 
-    if (running)
-    {
-        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_runToCursor);
-    }
-
-    if (econtext->url().isLocalFile())
-    {
-        menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, m_toggleBreakpoint);
-    }
     if (!m_contextIdent.isEmpty())
     {
         // PORTING TODO
@@ -460,20 +343,6 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
     return menuExt;
 }
 
-
-void CppDebuggerPlugin::toggleBreakpoint()
-{
-    if (KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument()) {
-      KTextEditor::Cursor cursor = document->cursorPosition();
-
-      if (!cursor.isValid())
-        return;
-
-      emit toggleBreakpoint(document->url(), cursor);
-    }
-}
-
-
 void CppDebuggerPlugin::contextWatch()
 {
     emit addWatchVariable(m_contextIdent);
@@ -484,72 +353,36 @@ void CppDebuggerPlugin::contextEvaluate()
     emit evaluateExpression(m_contextIdent);
 }
 
-void CppDebuggerPlugin::setupController()
-{
-    // variableTree -> gdbBreakpointWidget
-//     connect( variableTree,          SIGNAL(toggleWatchpoint(const QString &)),
-//              gdbBreakpointWidget,   SLOT(slotToggleWatchpoint(const QString &)));
-
-    // controller -> this
-    connect( controller,            SIGNAL(debuggerAbnormalExit()),
-         this,                  SLOT(slotDebuggerAbnormalExit()));
-
-    connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
-             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
-
-    connect(controller, SIGNAL(showMessage(const QString&, int)), this, SLOT(controllerMessage(const QString&, int)));
-
-    // controller -> procLineMaker
-    connect( controller,            SIGNAL(ttyStdout(const QByteArray&)),
-             procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
-    connect( controller,            SIGNAL(ttyStderr(const QByteArray&)),
-             procLineMaker,         SLOT(slotReceivedStderr(const QByteArray&)));
-
-//     connect(statusBarIndicator, SIGNAL(doubleClicked()),
-//             controller, SLOT(explainDebuggerStatus()));
-
-    // TODO: reimplement / re-enable
-    //connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
-    //connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
-
-    connect(this, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), controller->breakpoints(), SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
-}
-
 bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)
 {
     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
-
-    currentJob_ = job;
-
-    return controller->startProgram(run, job);
+    return createSession()->startProgram(run, job);
 }
 
-void CppDebuggerPlugin::slotStopDebugger()
+DebugSession* CppDebuggerPlugin::createSession()
 {
-    controller->stopDebugger();
-
-    emit reset();
+    if (m_session) {
+        delete m_session;
+    }
+    m_session = new DebugSession(m_controller);
+    KDevelop::ICore::self()->debugController()->addSession(m_session);
+    connect(m_session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
+    connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(applicationStandardOutputLines(QStringList)));
+    connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(applicationStandardErrorLines(QStringList)));
+    connect(m_session, SIGNAL(reset()), SIGNAL(reset()));
+    connect(m_session, SIGNAL(finished()), SLOT(slotFinished()));
+    connect(m_session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
+    connect(m_session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
+    connect(m_session, SIGNAL(raiseVariableViews()), SIGNAL(raiseVariableViews()));
+    return m_session;
 }
 
-void CppDebuggerPlugin::slotDebuggerAbnormalExit()
-{
-    emit raiseOutputViews();
-
-    KMessageBox::information(
-        qApp->activeWindow(),
-        i18n("<b>GDB exited abnormally</b>"
-             "<p>This is likely a bug in GDB. "
-             "Examine the gdb output window and then stop the debugger"),
-        i18n("GDB exited abnormally"));
-
-    // Note: we don't stop the debugger here, becuse that will hide gdb
-    // window and prevent the user from finding the exact reason of the
-    // problem.
-}
 
 void CppDebuggerPlugin::projectClosed()
 {
-    slotStopDebugger();
+    if (m_session) {
+        m_session->stopDebugger();
+    }
 }
 
 void CppDebuggerPlugin::slotExamineCore()
@@ -562,7 +395,7 @@ void CppDebuggerPlugin::slotExamineCore()
 
     emit showMessage(this, i18n("Examining core file %1", coreFile.url()), 1000);
 
-    controller->examineCoreFile(coreFile);
+    createSession()->examineCoreFile(coreFile);
 }
 
 
@@ -582,32 +415,7 @@ void CppDebuggerPlugin::attachProcess(int pid)
 {
     emit showMessage(this, i18n("Attaching to process %1", pid), 1000);
 
-    controller->attachToProcess(pid);
-}
-
-
-void CppDebuggerPlugin::slotRunToCursor()
-{
-    if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
-        KTextEditor::Cursor cursor = doc->cursorPosition();
-        if (cursor.isValid())
-            controller->runUntil(doc->url().toLocalFile(), cursor.line() + 1);
-    }
-}
-
-void CppDebuggerPlugin::slotJumpToCursor()
-{
-    if (KDevelop::IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument()) {
-        KTextEditor::Cursor cursor = doc->cursorPosition();
-        if (cursor.isValid())
-            controller->jumpTo(doc->url().toLocalFile(), cursor.line() + 1);
-    }
-}
-
-void CppDebuggerPlugin::slotGotoSource(const QString &fileName, int lineNum)
-{
-    if ( ! fileName.isEmpty() )
-        KDevelop::ICore::self()->documentController()->openDocument(KUrl( fileName ), KTextEditor::Cursor(lineNum, 0));
+    createSession()->attachToProcess(pid);
 }
 
 // Used to disable breakpoint actions when non-text document selected
@@ -631,8 +439,8 @@ KConfigGroup CppDebuggerPlugin::config() const
 
 void CppDebuggerPlugin::abort(KJob* job)
 {
-    Q_UNUSED(job);
-    slotStopDebugger();
+    Q_ASSERT(job == m_session->job());
+    m_session->stopDebugger();
 }
 
 QString CppDebuggerPlugin::statusName() const
@@ -642,166 +450,13 @@ QString CppDebuggerPlugin::statusName() const
 
 void CppDebuggerPlugin::slotStartDebugger()
 {
-    if (debuggerState_ & s_dbgNotStarted) {
-        // Prevent multiple runs while setting up
-        // TODO: remove restriction if supporting multiple debug sessions
-        m_startDebugger->setEnabled(false);
+    // Prevent multiple runs while setting up
+    // TODO: remove restriction if supporting multiple debug sessions
+    m_startDebugger->setEnabled(false);
 
-        KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-        run.setInstrumentor("gdb");
-        KDevelop::ICore::self()->runController()->execute(run);
-    }
-}
-
-void CppDebuggerPlugin::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
-{
-    QString message;
-
-    DBGStateFlags changedState = oldState ^ newState;
-    if (changedState & s_dbgNotStarted) {
-        if (newState & s_dbgNotStarted) {
-            message = i18n("Debugger stopped");
-            if (floatingToolBar)
-                floatingToolBar->hide();
-
-        } else {
-            if (config().readEntry("Floating Toolbar", false))
-            {
-            #ifndef QT_MAC
-                if (!floatingToolBar) {
-                    floatingToolBar = new KToolBar(qApp->activeWindow());
-                    floatingToolBar->show();
-                }
-            #endif
-            }
-        }
-
-        //core()->running(this, false);
-        // TODO enable/disable tool views as applicable
-    }
-
-    // As soon as debugger clears 's_appNotStarted' flag, we
-    // set 'justRestarted' variable.
-    // The other approach would be to set justRestarted in slotRun, slotCore
-    // and slotAttach.
-    // Note that setting this var in startDebugger is not OK, because the
-    // initial state of debugger is exactly the same as state after pause,
-    // so we'll always show varaibles view.
-    if (changedState & s_appNotStarted) {
-        if (newState & s_appNotStarted) {
-            m_startDebugger->setText( i18n("&Start") );
-            m_startDebugger->setToolTip( i18n("Runs the program in the debugger") );
-            m_startDebugger->setWhatsThis( i18n("Start in debugger\n\n"
-                                                  "Starts the debugger with the project's main "
-                                                  "executable. You may set some breakpoints "
-                                                  "before this, or you can interrupt the program "
-                                                  "while it is running, in order to get information "
-                                                  "about variables, frame stack, and so on.") );
-            m_startDebugger->disconnect(controller);
-            connect(m_startDebugger, SIGNAL(triggered(bool)), this, SLOT(slotStartDebugger()));
-
-            stateChanged("stopped");
-
-            justRestarted_ = false;
-
-        } else {
-            m_startDebugger->setText( i18n("&Continue") );
-            m_startDebugger->setToolTip( i18n("Continues the application execution") );
-            m_startDebugger->setWhatsThis( i18n("Continue application execution\n\n"
-                "Continues the execution of your application in the "
-                "debugger. This only takes effect when the application "
-                "has been halted by the debugger (i.e. a breakpoint has "
-                "been activated or the interrupt was pressed).") );
-            m_startDebugger->disconnect(this);
-            connect(m_startDebugger, SIGNAL(triggered(bool)), controller, SLOT(slotRun()));
-
-            if ( config().readEntry("Raise GDB On Start", false ) )
-            {
-                emit raiseOutputViews();
-            }
-            else
-            {
-                emit raiseFramestackViews();
-            }
-
-            emit clearViews();
-
-            stateChanged("active");
-            justRestarted_ = true;
-        }
-    }
-
-    /* The 'start' command should be enabled either when:
-       - Debugger is not running
-       - Debugger is running and application is also running,
-       in which case 'start' continues execution.  */
-    if ((newState & s_dbgNotStarted)
-        || (!(newState & s_dbgNotStarted) && !(newState & s_appNotStarted)))
-    {
-        m_startDebugger->setEnabled(true);
-    }
-    else
-    {
-        m_startDebugger->setEnabled(false);
-    }
-
-    if (changedState & s_explicitBreakInto)
-        if (!(newState & s_explicitBreakInto))
-            message = "Application interrupted";
-
-    if (changedState & s_programExited) {
-        if (newState & s_programExited) {
-            message = i18n("Process exited");
-            stateChanged("stopped");
-        }
-    }
-
-    if (changedState & s_appRunning) {
-        if (newState & s_appRunning) {
-            message = "Application is running";
-            stateChanged("active");
-        }
-        else
-        {
-            if (!(newState & s_appNotStarted)) {
-                message = "Application is paused";
-                stateChanged("paused");
-
-                // On the first stop, show the variables view.
-                // We do it on first stop, and not at debugger start, because
-                // a program might just successfully run till completion. If we show
-                // the var views on start and hide on stop, this will look like flicker.
-                // On the other hand, if application is paused, it's very
-                // likely that the user wants to see variables.
-                if (justRestarted_)
-                {
-                    justRestarted_ = false;
-                    //mainWindow()->setViewAvailable(variableWidget, true);
-                    emit raiseVariableViews();
-                }
-            }
-        }
-    }
-
-
-    bool program_running = !(newState & s_appNotStarted);
-    bool attached_or_core = (newState & s_attached) || (newState & s_core);
-
-    // If program is started, enable the 'restart' comand.
-    m_restartDebugger->setEnabled(program_running && !attached_or_core);
-
-    if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
-      {
-	emit finished(currentJob_);
-	currentJob_ = 0;
-      }
-
-    // And now? :-)
-    kDebug(9012) << "Debugger state: " << newState << ": ";
-    kDebug(9012) << "   " << message;
-
-    if (!message.isEmpty())
-        emit showMessage(this, message, 3000);
+    KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
+    run.setInstrumentor("gdb");
+    KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void CppDebuggerPlugin::demandAttention() const
@@ -814,14 +469,28 @@ void CppDebuggerPlugin::demandAttention() const
 
 void CppDebuggerPlugin::applicationStandardOutputLines(const QStringList& lines)
 {
+    Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
+    DebugSession* session = static_cast<DebugSession*>(sender());
     foreach (const QString& line, lines)
-        emit output(controller->job(), line, KDevelop::IRunProvider::StandardOutput);
+        emit output(session->job(), line, KDevelop::IRunProvider::StandardOutput);
 }
 
 void CppDebuggerPlugin::applicationStandardErrorLines(const QStringList& lines)
 {
+    Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
+    DebugSession* session = static_cast<DebugSession*>(sender());
     foreach (const QString& line, lines)
-        emit output(controller->job(), line, KDevelop::IRunProvider::StandardError);
+        emit output(session->job(), line, KDevelop::IRunProvider::StandardError);
+}
+
+void CppDebuggerPlugin::slotFinished()
+{
+    Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
+    DebugSession* session = static_cast<DebugSession*>(sender());
+    if (session->job()) {
+        emit finished(session->job());
+    }
+    m_startDebugger->setDisabled(false);
 }
 
 void CppDebuggerPlugin::controllerMessage( const QString& msg, int timeout )

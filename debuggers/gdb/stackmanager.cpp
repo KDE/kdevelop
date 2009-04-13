@@ -31,13 +31,14 @@
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
 
-#include "util/treeitem.h"
-#include "util/treemodel.h"
+#include <debugger/util/treeitem.h>
+#include <debugger/util/treemodel.h>
 
 // #include "modeltest.h"
 
 using namespace GDBMI;
 using namespace GDBDebugger;
+using namespace KDevelop;
 
 namespace GDBDebugger {
 
@@ -163,7 +164,9 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
                 f->updateSelf(stack[i+1]);
             }
             else
+            {
                 appendChild(new Frame(model(), this, stack[i+1]));
+            }
         }
         while (i < childItems.count())
             removeChild(i);
@@ -187,6 +190,7 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
 
 class DebugUniverse : public TreeItem
 {
+    Q_OBJECT
 public:
     DebugUniverse(TreeModel* model, GDBController *controller,
                   StackManager *stackManager)
@@ -275,16 +279,11 @@ private:
 }
 
 StackManager::StackManager(GDBController* controller)
-  : controller_(controller), autoUpdate_(false)
+  : KDevelop::StackModel(QVector<QString>() << "ID" << "Function" << "Source"),
+    controller_(controller)
 {
-    QVector<QString> header;
-    header.push_back("ID");
-    header.push_back("Function");
-    header.push_back("Source");
-
-    model_ = new TreeModel (header, this);
-    universe_ = new DebugUniverse(model_, controller, this);
-    model_->setRootItem(universe_);
+    universe_ = new DebugUniverse(this, controller, this);
+    setRootItem(universe_);
 
     // new ModelTest(model_, this);
 
@@ -298,26 +297,9 @@ StackManager::~StackManager()
 {
 }
 
-GDBController* StackManager::controller() const
+void StackManager::update()
 {
-    return controller_;
-}
-
-TreeModel *StackManager::model()
-{
-    return model_;
-}
-
-void StackManager::setAutoUpdate(bool b)
-{
-    if (!autoUpdate_ && b && !controller_->stateIsOn(s_appNotStarted))
-        universe_->update();
-    autoUpdate_ = b;
-}
-
-void StackManager::updateThreads()
-{
-    if (autoUpdate_)
+    if (m_autoUpdate)
         universe_->update();
 }
 
@@ -327,8 +309,8 @@ void StackManager::slotEvent(event_t e)
     {
         case program_state_changed:
 
-            if (autoUpdate_)
-                updateThreads();
+            if (m_autoUpdate)
+                update();
 
             break;
 
@@ -348,4 +330,5 @@ void StackManager::slotEvent(event_t e)
     }
 }
 
+#include "moc_stackmanager.cpp"
 #include "stackmanager.moc"

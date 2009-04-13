@@ -27,7 +27,6 @@ namespace GDBDebugger
 {
 
 
-class Breakpoint;
 class VarItem;
 class ValueCallback;
 
