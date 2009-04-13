@@ -44,6 +44,7 @@
 #include "../language/interfaces/editorcontext.h"
 #include "../sublime/view.h"
 #include "debugger/framestackwidget.h"
+#include "core.h"
 
 
 namespace KDevelop {
@@ -93,12 +94,10 @@ private:
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient()
 {
-    kDebug();
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
-    kDebug() << actionCollection();
-    kDebug() << actionCollection()->actions().count();
 
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
     setupActions();
 
     ICore::self()->uiController()->addToolView(
