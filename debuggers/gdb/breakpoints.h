@@ -40,7 +40,6 @@ public:
     Breakpoints(KDevelop::IBreakpointController *model, GDBController *controller);
 
     void sendToGDB();
-    void markOut();
 
     void update();
     void fetchMoreChildren() {}

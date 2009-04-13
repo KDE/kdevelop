@@ -47,14 +47,8 @@ public:
 
     void update(const GDBMI::Value &b);
 
-    /* Mark this breakpoint as no longer inserted, due to GDB
-       no longer running.  */
-    void markOut();
-
     virtual void sendMaybe();
 
-    void save(KConfigGroup& config);
-        
 private:
     void handleDeleted(const GDBMI::ResultRecord &v);
     void handleInserted(const GDBMI::ResultRecord &r);
