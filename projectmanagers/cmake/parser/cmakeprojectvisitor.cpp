@@ -1283,7 +1283,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::GLOB: {
             QString current;
-            if(file->path().isEmpty())
+            if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
                 current=file->path();
@@ -1294,7 +1294,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         } break;
         case FileAst::GLOB_RECURSE: {
             QString current;
-            if(file->path().isEmpty())
+            if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
                 current=file->path();
