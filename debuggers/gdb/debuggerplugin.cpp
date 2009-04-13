@@ -315,7 +315,7 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
 
     m_contextIdent = econtext->currentWord();
 
-    bool running = m_session && m_session->isRunning();
+    //bool running = m_session && m_session->isRunning();
 
     // If debugger is running, we insert items at the top.
     // The reason is user has explicitly run the debugger, so he's
