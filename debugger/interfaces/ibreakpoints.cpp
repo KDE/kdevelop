@@ -75,4 +75,15 @@ void IBreakpoints::remove(const QModelIndex &index)
     b->sendMaybe();
 }
 
+
+void IBreakpoints::sendMaybe()
+{
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        IBreakpoint *b = dynamic_cast<IBreakpoint *>(child(i));
+        Q_ASSERT(b);
+        b->sendMaybe();
+    }
+}
+
 #include "ibreakpoints.moc"

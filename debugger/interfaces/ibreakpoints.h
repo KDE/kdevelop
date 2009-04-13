@@ -37,6 +37,7 @@ public:
     IBreakpoints(IBreakpointController *model);
 
     void markOut();
+    void sendMaybe();
 
     void remove(const QModelIndex &index);
     virtual void update() =0;
