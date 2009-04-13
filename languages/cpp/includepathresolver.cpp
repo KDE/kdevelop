@@ -277,6 +277,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       b = false;
     }
   };
+  
+  //Prefer this result when returning a "fail"
+  PathResolutionResult resultOnFail;
 
   if( m_isResolving )
     return PathResolutionResult(false, i18n("Tried include path resolution while another resolution process was still running") );
@@ -315,22 +318,22 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
         if(!line.isEmpty()) {
           QString textLine = QString::fromLocal8Bit(line);
           if(textLine.startsWith("RESOLVE:") && !m_outOfSource) {
-            std::cout << "found resolve line: " << textLine.toLocal8Bit().data() << std::endl;
+            ifTest( std::cout << "found resolve line: " << textLine.toLocal8Bit().data() << std::endl; )
             
             //Resolve using the build- and source-directory specified in the file
             
             int sourceIndex = textLine.indexOf(" SOURCE=");
             if(sourceIndex != -1) {
-              std::cout << "found source specification" << std::endl;
+              ifTest( std::cout << "found source specification" << std::endl; )
               int buildIndex = textLine.indexOf(" BUILD=", sourceIndex);
               if(buildIndex != -1) {
-                std::cout << "found build specification" << std::endl;
+                ifTest( std::cout << "found build specification" << std::endl; )
                 int sourceStart = sourceIndex+8;
                 QString sourceDir = textLine.mid(sourceStart, buildIndex - sourceStart).trimmed();
                 int buildStart = buildIndex + 7;
                 QString buildDir = textLine.mid(buildStart, textLine.length()-buildStart).trimmed();
                 
-                std::cout << "directories: " << sourceDir.toLocal8Bit().data() << " " << buildDir.toLocal8Bit().data() << std::endl;
+                ifTest( std::cout << "directories: " << sourceDir.toLocal8Bit().data() << " " << buildDir.toLocal8Bit().data() << std::endl; )
                 
                 if(sourceDir != buildDir) {
                   setOutOfSourceBuildSystem(sourceDir, buildDir);
@@ -346,12 +349,13 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
                     useFile = fileParts.last();
                   }
                   
-                  std::cout << "starting sub-resolver with " << useFile.toLocal8Bit().data() << " " << useWorkingDirectory.toLocal8Bit().data() << std::endl;
+                  ifTest( std::cout << "starting sub-resolver with " << useFile.toLocal8Bit().data() << " " << useWorkingDirectory.toLocal8Bit().data() << std::endl; )
                   
                   PathResolutionResult subResult = resolveIncludePath(useFile, useWorkingDirectory, maxStepsUp + fileParts.count() - 1);
-                  result.paths += subResult.paths;
-                  if(!subResult) {
-                    std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl;
+                  subResult.paths += result.paths;
+                  result = subResult;
+                  if(!result) {
+                    ifTest( std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl; )
                   }
                   
                   resetOutOfSourceBuild();
@@ -364,7 +368,13 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
         }
       
       f.close();
-      return result;
+      if(!result.paths.isEmpty())
+        return result;
+      else if(!result && !result.errorMessage.isEmpty()) {
+        //Remember the failed result behind the mapping, and return it if
+        //we cannot resolve correct without mapping
+        resultOnFail = result;
+      }
     }
   }
 // #endif
@@ -387,7 +397,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
           return oneUp;
       }
     }
-    return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
+    
+    if(!resultOnFail.errorMessage.isEmpty())
+      return resultOnFail;
+    else
+      return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
   }
 
   Enabler e( m_isResolving );
@@ -435,7 +449,12 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   int dot;
   if( (dot = file.lastIndexOf( '.' )) == -1 )
-    return PathResolutionResult( false, i18n( "Filename %1 seems to be malformed", file ) );
+  {
+    if(!resultOnFail.errorMessage.isEmpty())
+      return resultOnFail;
+    else
+      return PathResolutionResult( false, i18n( "Filename %1 seems to be malformed", file ) );
+  }
 
   targetName = file.left( dot );
 
@@ -508,6 +527,10 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       ce.failedFiles.clear();
     }
   }
+
+
+  if(!res && !resultOnFail.errorMessage.isEmpty())
+    return resultOnFail;
 
   return res;
 }
