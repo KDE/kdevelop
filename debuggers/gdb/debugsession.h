@@ -41,7 +41,6 @@ namespace KTextEditor {
 class Cursor;
 }
 namespace KDevelop {
-class StackModel;
 class ProcessLineMaker;
 }
 namespace GDBDebugger {
@@ -55,7 +54,11 @@ public:
     DebugSession(GDBController* controller);
     virtual DebuggerState state() const;
     virtual KDevelop::StackModel* stackModel() const;
+    virtual KDevelop::IBreakpointController *breakpointController() const;
+
     virtual bool restartAvaliable() const;
+
+    
 
     GDBController* controller() { return m_controller; }
 

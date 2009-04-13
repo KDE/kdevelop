@@ -38,7 +38,7 @@ namespace GDBDebugger
 {
 
 NewBreakpoint::NewBreakpoint(TreeModel *model, TreeItem *parent,
-                             GDBController* controller, kind_t kind)
+                             GDBController* controller, BreakpointKind kind)
 : KDevelop::IBreakpoint(model, parent, kind), controller_(controller)
 {
     setData(QVector<QString>() << "" << "" << "" << "" << "");
@@ -197,7 +197,7 @@ void NewBreakpoint::sendMaybe()
         }
         else
         {
-            if (kind_ == code_breakpoint)
+            if (kind_ == CodeBreakpoint)
                 controller_->addCommand(
                     new GDBCommand(BreakInsert,
                                    itemData[location_column].toString(),
@@ -316,9 +316,9 @@ void NewBreakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
         address_ = r["value"].literal();
 
         QString opt;
-        if (kind_ == read_breakpoint)
+        if (kind_ == ReadBreakpoint)
             opt = "-r ";
-        else if (kind_ == access_breakpoint)
+        else if (kind_ == AccessBreakpoint)
             opt = "-a ";
 
         controller_->addCommand(

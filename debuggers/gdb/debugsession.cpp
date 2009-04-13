@@ -77,6 +77,12 @@ KDevelop::StackModel* DebugSession::stackModel() const
     return m_controller->stackManager();
 }
 
+KDevelop::IBreakpointController* DebugSession::breakpointController() const
+{
+    return m_controller->breakpoints();
+}
+
+
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
     return m_sessionState;
 }

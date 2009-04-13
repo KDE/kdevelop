@@ -37,7 +37,7 @@ class GDBController;
 class NewBreakpoint : public KDevelop::IBreakpoint
 {
 public:
-    NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, kind_t kind);
+    NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, BreakpointKind kind);
     NewBreakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent, GDBController* controller, const KConfigGroup& config);
 
     /* This constructor creates a "please enter location" item, that will
@@ -64,7 +64,7 @@ private:
 
     friend class Breakpoints;
 
-    static const char *string_kinds[last_breakpoint_kind];
+    static const char *string_kinds[LastBreakpointKind];
     GDBController* controller_;
 };
 

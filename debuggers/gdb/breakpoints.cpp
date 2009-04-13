@@ -57,7 +57,7 @@ void Breakpoints::createHelperBreakpoint()
 KDevelop::IBreakpoint* Breakpoints::addCodeBreakpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
-                                         NewBreakpoint::code_breakpoint);
+                                         NewBreakpoint::CodeBreakpoint);
     insertChild(childItems.size()-1, n);
     return n;
 }
@@ -66,7 +66,7 @@ KDevelop::IBreakpoint*
 Breakpoints::addCodeBreakpoint(const QString& location)
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
-                                         NewBreakpoint::code_breakpoint);
+                                         NewBreakpoint::CodeBreakpoint);
     insertChild(childItems.size()-1, n);
     n->setColumn(KDevelop::IBreakpoint::location_column, location);
     return n;
@@ -75,7 +75,7 @@ Breakpoints::addCodeBreakpoint(const QString& location)
 KDevelop::IBreakpoint* Breakpoints::addWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
-                                         NewBreakpoint::write_breakpoint);
+                                         NewBreakpoint::WriteBreakpoint);
     insertChild(childItems.size()-1, n);
     return n;
 }
@@ -83,7 +83,7 @@ KDevelop::IBreakpoint* Breakpoints::addWatchpoint()
 KDevelop::IBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
-                                         NewBreakpoint::write_breakpoint);
+                                         NewBreakpoint::WriteBreakpoint);
     insertChild(childItems.size()-1, n);
     n->setLocation(expression);
     return n;
@@ -92,7 +92,7 @@ KDevelop::IBreakpoint* Breakpoints::addWatchpoint(const QString& expression)
 KDevelop::IBreakpoint* Breakpoints::addReadWatchpoint()
 {
     NewBreakpoint* n = new NewBreakpoint(model(), this, controller_,
-                                         NewBreakpoint::read_breakpoint);
+                                         NewBreakpoint::ReadBreakpoint);
     insertChild(childItems.size()-1, n);
 
     return n;
@@ -125,14 +125,14 @@ void Breakpoints::handleBreakpointList(const GDBMI::ResultRecord &r)
         NewBreakpoint *b = dynamic_cast<NewBreakpoint*>(breakpointById(id));
         if (!b)
         {
-            NewBreakpoint::kind_t kind = NewBreakpoint::code_breakpoint;
+            NewBreakpoint::BreakpointKind kind = NewBreakpoint::CodeBreakpoint;
             QString type = mi_b["type"].literal();
             if (type == "watchpoint" || type == "hw watchpoint")
-                kind = NewBreakpoint::write_breakpoint;
+                kind = NewBreakpoint::WriteBreakpoint;
             else if (type == "read watchpoint")
-                kind = NewBreakpoint::read_breakpoint;
+                kind = NewBreakpoint::ReadBreakpoint;
             else if (type == "acc watchpoint")
-                kind = NewBreakpoint::access_breakpoint;
+                kind = NewBreakpoint::AccessBreakpoint;
 
             b = new NewBreakpoint (model(), this, controller_, kind);
             appendChild(b);
