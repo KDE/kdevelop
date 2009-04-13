@@ -1,4 +1,4 @@
-#TODO: add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9507 )
+add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 
 
 ########### next target ###############

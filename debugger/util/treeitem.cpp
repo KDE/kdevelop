@@ -162,7 +162,7 @@ public:
 
     void clicked()
     {
-        kDebug(9012) << "Ellipsis item clicked";
+        kDebug() << "Ellipsis item clicked";
         /* FIXME: restore
            Q_ASSERT (parentItem->hasMore()); */
         parentItem->fetchMoreChildren();
