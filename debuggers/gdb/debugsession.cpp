@@ -58,7 +58,6 @@ DebugSession::DebugSession(GDBController* controller)
     connect( m_procLineMaker, SIGNAL(receivedStderrLines(const QStringList&)),
              this, SIGNAL(applicationStandardErrorLines(const QStringList&)) );
     connect( m_controller, SIGNAL(showStepInSource(QString,int,QString)), SLOT(slotShowStepInSource(QString,int,QString)));
-    //connect( m_controller, clearIt(),
     setupController();
 }
 
