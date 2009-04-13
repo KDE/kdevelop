@@ -178,7 +178,7 @@ void DebugController::setupActions()
 
     m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
-    action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current GDB command.</p>"));
+    action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current debugger command.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(interruptDebugger()));
     ac->addAction("debug_pause", action);
 

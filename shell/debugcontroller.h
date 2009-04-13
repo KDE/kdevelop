@@ -47,7 +47,7 @@ public:
 
     virtual void addSession(IDebugSession* session);
     IDebugSession* currentSession();
-    
+
     virtual ContextMenuExtension contextMenuExtension( Context* context );
 
 private Q_SLOTS:

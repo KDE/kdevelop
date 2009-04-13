@@ -50,7 +50,7 @@ public:
     virtual DebuggerState state() const = 0;
     virtual StackModel* stackModel() const = 0;
     virtual bool restartAvaliable() const = 0;
-    
+
     KJob* job() const;
 
     bool isRunning() const;
