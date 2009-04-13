@@ -1283,6 +1283,8 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::GLOB: {
             QString current;
+            //TODO: The contains part here is a workaround for a bug elsewhere in cmake parser
+            // For some reason the variable doesn't exist on MacOSX, while its fine on other platforms
             if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
@@ -1294,6 +1296,8 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         } break;
         case FileAst::GLOB_RECURSE: {
             QString current;
+            //TODO: The contains part here is a workaround for a bug elsewhere in cmake parser
+            // For some reason the variable doesn't exist on MacOSX, while its fine on other platforms
             if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
