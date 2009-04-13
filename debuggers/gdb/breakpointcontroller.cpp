@@ -893,9 +893,11 @@ void BreakpointController::removeBreakpoint(Breakpoint* bp)
         return;
 
     int row = m_breakpoints.indexOf(bp);
-    Q_ASSERT(row != -1);
     if (row == -1)
+    {
+        kWarning( "Tried to remove a breakpoint that doesn't exist!" );
         return;
+    }
 
     beginRemoveRows(QModelIndex(), row, row);
     m_breakpoints.removeAt(row);
