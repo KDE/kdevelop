@@ -107,15 +107,26 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 }
 
 void TestCppCodeCompletion::testSubClassVisibility() {
+  {
     QByteArray test = "struct A { int am; struct B { int bm; }; }; void test() { A::B b; } ";
 
-    //74
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->childContexts().count(), 3);
     QCOMPARE(CompletionItemTester(context->childContexts()[2], "b.").names, QStringList() << "bm");
 
     release(context);
+  }
+  {
+    QByteArray test = "struct A { int am; struct B; }; struct A::B {int bm; }; void test() { A::B b; } ";
+
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 4);
+    QCOMPARE(CompletionItemTester(context->childContexts()[3], "b.").names, QStringList() << "bm");
+
+    release(context);
+  }
 }
 
 void TestCppCodeCompletion::testConstructorCompletion() {
