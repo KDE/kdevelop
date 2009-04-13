@@ -66,7 +66,7 @@ KDevelop::IBreakpoint*
 Breakpoints::addCodeBreakpoint(const QString& location)
 {
     KDevelop::IBreakpoint* n = addCodeBreakpoint();
-    n->setColumn(KDevelop::IBreakpoint::location_column, location);
+    n->setColumn(KDevelop::IBreakpoint::LocationColumn, location);
     return n;
 }
 

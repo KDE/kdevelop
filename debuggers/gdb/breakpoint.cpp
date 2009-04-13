@@ -77,20 +77,20 @@ void Breakpoint::update(const GDBMI::Value &b)
                just fine, but after KDevelop restart, we'll try to add the
                breakpoint using basically "watch *&(foo)".  I'm not sure if
                that's a problem or not.  */
-            itemData[location_column] = b["original-location"].literal();
+            itemData[LocationColumn] = b["original-location"].literal();
         }
     }
     else
     {
-        itemData[location_column] = "Your GDB is too old";
+        itemData[LocationColumn] = "Your GDB is too old";
     }
 
 
-    if (!dirty_.contains(condition_column)
-        && !errors_.contains(condition_column))
+    if (!dirty_.contains(ConditionColumn)
+        && !errors_.contains(ConditionColumn))
     {
         if (b.hasField("cond"))
-            itemData[condition_column] = b["cond"].literal();
+            itemData[ConditionColumn] = b["cond"].literal();
     }
 
     if (b.hasField("addr") && b["addr"].literal() == "<PENDING>")
@@ -185,7 +185,7 @@ void Breakpoint::sendMaybe()
                 new GDBCommand(BreakDelete, QString::number(id_),
                                this, &Breakpoint::handleDeleted));
     }
-    else if (dirty_.contains(location_column))
+    else if (dirty_.contains(LocationColumn))
     {
         if (id_ != -1)
         {
@@ -200,19 +200,19 @@ void Breakpoint::sendMaybe()
             if (kind_ == CodeBreakpoint)
                 controller_->addCommand(
                     new GDBCommand(BreakInsert,
-                                   itemData[location_column].toString(),
+                                   itemData[LocationColumn].toString(),
                                    this, &Breakpoint::handleInserted, true));
             else
                 controller_->addCommand(
                     new GDBCommand(
                         DataEvaluateExpression,
                         QString("&(%1)").arg(
-                            itemData[location_column].toString()),
+                            itemData[LocationColumn].toString()),
                         this,
                         &Breakpoint::handleAddressComputed, true));
         }
     }
-    else if (dirty_.contains(enable_column))
+    else if (dirty_.contains(EnableColumn))
     {
         controller_->addCommand(
             new GDBCommand(enabled_ ? BreakEnable : BreakDisable,
@@ -220,12 +220,12 @@ void Breakpoint::sendMaybe()
                            this, &Breakpoint::handleEnabledOrDisabled,
                            true));
     }
-    else if (dirty_.contains(condition_column))
+    else if (dirty_.contains(ConditionColumn))
     {
         controller_->addCommand(
             new GDBCommand(BreakCondition,
                            QString::number(id_) + ' ' +
-                           itemData[condition_column].toString(),
+                           itemData[ConditionColumn].toString(),
                            this, &Breakpoint::handleConditionChanged, true));
     }
 }
@@ -249,15 +249,15 @@ void Breakpoint::handleInserted(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
-        errors_.insert(location_column);
-        dirty_.remove(location_column);
+        errors_.insert(LocationColumn);
+        dirty_.remove(LocationColumn);
         reportChange();
         static_cast<Breakpoints*>(parentItem)
-            ->errorEmit(this, r["msg"].literal(), location_column);
+            ->errorEmit(this, r["msg"].literal(), LocationColumn);
     }
     else
     {
-        dirty_.remove(location_column);
+        dirty_.remove(LocationColumn);
         if (r.hasField("bkpt"))
             update(r["bkpt"]);
         else
@@ -276,7 +276,7 @@ void Breakpoint::handleEnabledOrDisabled(const GDBMI::ResultRecord &r)
     Q_UNUSED(r);
     // FIXME: handle error. Enable error most likely means the
     // breakpoint itself cannot be inserted in the target.
-    dirty_.remove(enable_column);
+    dirty_.remove(EnableColumn);
     reportChange();
     sendMaybe();
 }
@@ -285,17 +285,17 @@ void Breakpoint::handleConditionChanged(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
-        errors_.insert(condition_column);
-        dirty_.remove(condition_column);
+        errors_.insert(ConditionColumn);
+        dirty_.remove(ConditionColumn);
         reportChange();
         static_cast<Breakpoints*>(parentItem)
-            ->errorEmit(this, r["msg"].literal(), condition_column);
+            ->errorEmit(this, r["msg"].literal(), ConditionColumn);
     }
     else
     {
         /* GDB does not print the breakpoint in response to -break-condition.
            Presumably, it means that the condition is always what we want.  */
-        dirty_.remove(condition_column);
+        dirty_.remove(ConditionColumn);
         reportChange();
         sendMaybe();
     }
@@ -305,11 +305,11 @@ void Breakpoint::handleAddressComputed(const GDBMI::ResultRecord &r)
 {
     if (r.reason == "error")
     {
-        errors_.insert(location_column);
-        dirty_.remove(location_column);
+        errors_.insert(LocationColumn);
+        dirty_.remove(LocationColumn);
         reportChange();
         static_cast<Breakpoints*>(parentItem)
-            ->errorEmit(this, r["msg"].literal(), location_column);
+            ->errorEmit(this, r["msg"].literal(), LocationColumn);
     }
     else
     {

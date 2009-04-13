@@ -362,7 +362,7 @@ namespace GDBDebugger
         void edit(KDevelop::IBreakpoint *n)
         {
             QModelIndex index = controller_->breakpoints()
-                ->indexForItem(n, Breakpoint::location_column);
+                ->indexForItem(n, Breakpoint::LocationColumn);
             table_->setCurrentIndex(index);
             table_->edit(index);
         }
