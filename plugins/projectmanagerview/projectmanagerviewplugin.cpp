@@ -223,7 +223,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         KDevelop::ProjectFolderItem *prjitem = item->folder();
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
-            KAction* close = new KAction( i18n( "Close Project(s)" ), this );
+            KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
             close->setIcon(KIcon("project-close"));
             connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
