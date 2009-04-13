@@ -138,16 +138,6 @@ void Breakpoints::handleBreakpointList(const GDBMI::ResultRecord &r)
     }        
 }
 
-void Breakpoints::sendToGDB()
-{
-    for (int i = 0; i < childItems.size(); ++i)
-    {
-        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
-        Q_ASSERT(b);
-        b->sendMaybe();
-    }
-}
-
 void Breakpoints::load()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");

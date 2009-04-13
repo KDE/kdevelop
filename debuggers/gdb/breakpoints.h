@@ -39,8 +39,6 @@ class Breakpoints : public KDevelop::IBreakpoints
 public:
     Breakpoints(KDevelop::IBreakpointController *model, GDBController *controller);
 
-    void sendToGDB();
-
     void update();
     void fetchMoreChildren() {}
     virtual void createHelperBreakpoint();

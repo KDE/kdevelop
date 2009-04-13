@@ -95,7 +95,7 @@ void BreakpointController::slotEvent(event_t e)
     case connected_to_program:
         {
             kDebug(9012) << "connected to program";
-            dynamic_cast<Breakpoints*>(breakpointsItem())->sendToGDB();
+            breakpointsItem()->sendMaybe();
             break;
         }
     case program_exited:
