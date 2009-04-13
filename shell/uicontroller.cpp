@@ -625,6 +625,9 @@ void UiController::registerStatus(QObject* status)
 void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant) {
+        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
+        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
+        
         AssistantPopup* oldPopup = d->currentShownAssistant;
         d->currentShownAssistant = 0;
         oldPopup->hide();
@@ -644,8 +647,8 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         if(assistant->actions().count())
             d->currentShownAssistant->show();
 
-        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()));
-        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()));
+        connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
+        connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::DirectConnection);
     }
 }
 
@@ -669,16 +672,8 @@ void UiController::assistantAction4(bool) {
 }
 
 void UiController::assistantHide() {
-    if(d->currentShownAssistant) {
-        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(hide()), this, SLOT(assistantHide()));
-        disconnect(d->currentShownAssistant->assistant().data(), SIGNAL(actionsChanged()), this, SLOT(assistantActionsChanged()));
-
-        AssistantPopup* oldPopup = d->currentShownAssistant;
-        d->currentShownAssistant = 0;
-        oldPopup->hide();
-
-        oldPopup->deleteLater(); //We have to do deleteLater, so we don't get problems when an assistant hides itself
-    }
+    if(d->currentShownAssistant)
+        hideAssistant(d->currentShownAssistant->assistant());
 }
 
 void UiController::assistantActionsChanged() {
