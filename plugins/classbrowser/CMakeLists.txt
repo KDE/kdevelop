@@ -1,7 +1,10 @@
 
+find_package(Boost 1.35.0 REQUIRED)
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )

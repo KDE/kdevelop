@@ -57,23 +57,6 @@ IdentifierNode::IdentifierNode(const QString& a_displayName,
 {
 }
 
-IdentifierNode* IdentifierNode::findNode(Node* a_parentNode, const KDevelop::IndexedQualifiedIdentifier& a_identifier)
-{
-  foreach (Node* node, a_parentNode->getChildren())
-  {
-    IdentifierNode* identifierNode = dynamic_cast<IdentifierNode*>(node);
-    if ( identifierNode && (identifierNode->m_identifier == a_identifier) )
-      return identifierNode;
-  }
-
-  return 0;
-}
-
-QualifiedIdentifier IdentifierNode::qualifiedIdentifier() const
-{
-  return QualifiedIdentifier(m_identifier);
-}
-
 Declaration* IdentifierNode::getDeclaration()
 {
   if ( m_cachedDeclaration )
@@ -234,6 +217,26 @@ void ClassModelNodes::ClassNode::documentChanged(const KDevelop::IndexedString&)
 
   if ( updateClassDeclarations() )
     recursiveSort();
+}
+
+ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id)
+{
+  // Make sure we have sub nodes.
+  performPopulateNode();
+
+  /// @todo This is slow - we go over all the sub identifiers but the assumption is that
+  ///       this function call is rare and the list is not that long.
+  foreach(Node* item, m_subIdentifiers)
+  {
+    ClassNode* classNode = dynamic_cast<ClassNode*>(item);
+    if ( classNode == 0 )
+      continue;
+
+    if ( classNode->getIdentifier() == a_id )
+      return classNode;
+  }
+
+  return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -449,6 +452,16 @@ DynamicNode::DynamicNode(const QString& a_displayName, NodesModelInterface* a_mo
 
 void DynamicNode::collapse()
 {
+  performNodeCleanup();
+}
+
+void DynamicNode::expand()
+{
+  performPopulateNode();
+}
+
+void DynamicNode::performNodeCleanup()
+{
   if ( !m_populated )
     return;
 
@@ -469,15 +482,15 @@ void DynamicNode::collapse()
   m_populated = false;
 }
 
-void DynamicNode::expand()
-{
-  performPopulateNode();
-}
-
-void DynamicNode::performPopulateNode()
+void DynamicNode::performPopulateNode(bool a_forceRepopulate)
 {
   if ( m_populated )
-    return;
+  {
+    if ( a_forceRepopulate )
+      performNodeCleanup();
+    else
+      return;
+  }
 
   populateNode();
 

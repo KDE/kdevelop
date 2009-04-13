@@ -32,6 +32,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <QTimer>
 
+#include <boost/foreach.hpp>
+
 using namespace KDevelop;
 using namespace ClassModelNodes;
 
@@ -72,6 +74,13 @@ bool StaticNamespaceFolderNode::getIcon(QIcon& a_resultIcon)
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
+
+DocumentClassesFolder::OpenedFileClassItem::OpenedFileClassItem(const KDevelop::IndexedString& a_file, const KDevelop::IndexedQualifiedIdentifier& a_classIdentifier, ClassModelNodes::ClassNode* a_nodeItem)
+  : file(a_file)
+  , classIdentifier(a_classIdentifier)
+  , nodeItem(a_nodeItem)
+{
+}
 
 DocumentClassesFolder::DocumentClassesFolder(const QString& a_displayName, NodesModelInterface* a_model)
   : DynamicFolderNode(a_displayName, a_model)
@@ -148,58 +157,108 @@ void DocumentClassesFolder::populateNode()
   m_updateTimer->start(2000);
 }
 
-QList< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()
+QSet< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()
 {
-  return m_openFiles.keys();
+  return m_openFiles;
 }
 
 ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier& a_id)
 {
-  // Make sure that the classes node is expanded, otherwise
+  // Make sure that the classes node is populated, otherwise
   // the lookup will not work.
-  expand();
+  performPopulateNode();
 
-  // Look in all the documents.
-  foreach(const ClassNodeIDsMap& idsMap, m_openFiles)
+  ClassIdentifierIterator iter = m_openFilesClasses.get<ClassIdentifierIndex>().find(a_id);
+  if ( iter == m_openFilesClasses.get<ClassIdentifierIndex>().end() )
+    return 0;
+
+  // If the node is invisible - make it visible by going over the identifiers list.
+  if ( iter->nodeItem == 0 )
   {
-    ClassNodeIDsMap::const_iterator iter = idsMap.find(a_id);
-    if ( iter !=  idsMap.end() )
-      return iter.value();
-  }
+    QualifiedIdentifier qualifiedIdentifier = a_id.identifier();
 
-  // Not found.
-  return 0;
+    // Ignore zero length identifiers.
+    if ( qualifiedIdentifier.count() == 0 )
+      return 0;
+    
+    ClassNode* closestNode = 0;
+    int closestNodeIdLen = qualifiedIdentifier.count();
+
+    // First find the closest visible class node by reverse iteration over the id list.
+    while ( (closestNodeIdLen > 0) && (closestNode == 0) )
+    {
+      // Omit one from the end.
+      --closestNodeIdLen;
+      
+      // Find the closest class.
+      closestNode = findClassNode(qualifiedIdentifier.mid(0, closestNodeIdLen));
+    }
+
+    if ( closestNode != 0 )
+    {
+      // Start iterating forward from this node by exposing each class.
+      // By the end of this loop, closestNode should hold the actual node.
+      while ( closestNode && (closestNodeIdLen < qualifiedIdentifier.count()) )
+      {
+        // Try the next Id.
+        ++closestNodeIdLen;
+        closestNode = closestNode->findSubClass(qualifiedIdentifier.mid(0, closestNodeIdLen));
+      }
+    }
+    
+    return closestNode;
+  }
+  
+  return iter->nodeItem;
 }
 
 void DocumentClassesFolder::closeDocument(const IndexedString& a_file)
 {
-  // Get list of nodes associated with this file and remove them.
-  ClassNodeIDsMap values = m_openFiles.value(a_file);
-  foreach( ClassNode* node, values )
-    removeClassNode(node);
+   // Get list of nodes associated with this file and remove them.
+  std::pair< FileIterator, FileIterator > range = m_openFilesClasses.get<FileIndex>().equal_range( a_file );
+  if ( range.first != m_openFilesClasses.get<FileIndex>().end() )
+  {
+    BOOST_FOREACH( const OpenedFileClassItem& item, range )
+    {
+      if ( item.nodeItem )
+        removeClassNode(item.nodeItem);
+    }
 
-  // Clear the file from the list.
-  m_openFiles.remove(a_file);
+    // Clear the lists
+    m_openFilesClasses.get<FileIndex>().erase(range.first, range.second);
+  }
+
+  // Clear the file from the list of monitored documents.
+   m_openFiles.remove(a_file);
 }
 
 bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file)
 {
-  uint itemCount = 0;
-  const CodeModelItem* items;
-  CodeModel::self().items(a_file, itemCount, items);
+  uint codeModelItemCount = 0;
+  const CodeModelItem* codeModelItems;
+  CodeModel::self().items(a_file, codeModelItemCount, codeModelItems);
 
   // List of declared namespaces in this file.
   QSet< QualifiedIdentifier > declaredNamespaces;
 
   // List of removed classes - it initially contains all the known classes, we'll eliminate them
-  // one by one later on.
-  ClassNodeIDsMap removedClasses = m_openFiles[a_file];
+  // one by one later on when we encounter them in the document.
+  QMap< IndexedQualifiedIdentifier, FileIterator > removedClasses;
+  {
+    std::pair< FileIterator, FileIterator > range = m_openFilesClasses.get<FileIndex>().equal_range( a_file );
+    for ( FileIterator iter = range.first;
+          iter != range.second;
+          ++iter )
+    {
+      removedClasses.insert(iter->classIdentifier, iter);
+    }
+  }
 
   bool documentChanged = false;
 
-  for(uint i = 0; i < itemCount; ++i)
+  for(uint codeModelItemIndex = 0; codeModelItemIndex < codeModelItemCount; ++codeModelItemIndex)
   {
-    const CodeModelItem& item = items[i];
+    const CodeModelItem& item = codeModelItems[codeModelItemIndex];
 
     // Don't insert unknown or forward declarations into the class browser
     if ( (item.kind & CodeModelItem::Unknown) || (item.kind & CodeModelItem::ForwardDeclaration) )
@@ -230,9 +289,10 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
       if ( isClassFiltered(id) )
         continue;
 
-      // Make sure this class is new.
+      // Is this a new class or an existing class?
       if ( removedClasses.contains(id) )
       {
+        // It already exist - remove it from the known classes and continue.
         removedClasses.remove(id);
         continue;
       }
@@ -292,16 +352,17 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
         parentNode = this;
       }
 
+      ClassNode* newNode = 0;
       if ( parentNode != 0 )
       {
-        // Make sure it's a new ID.
-        ClassNode* newNode = new ClassNode(id, m_model);
+        // Create the new node and add it.
+        newNode = new ClassNode(id, m_model);
         parentNode->addNode( newNode );
-
-        // We have this ID - remove it.
-        m_openFiles[a_file].insert(id, newNode);
-        documentChanged = true;
       }
+
+      // Insert it to the map - newNode can be 0 - meaning the class is hidden.
+      m_openFilesClasses.insert( OpenedFileClassItem( a_file, id, newNode ) );
+      documentChanged = true;
     }
   }
 
@@ -312,13 +373,12 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
   foreach( const QualifiedIdentifier& id, declaredNamespaces )
     removeEmptyNamespace(id);
 
-  // Remove erased classes.
-  for ( ClassNodeIDsMap::iterator iter = removedClasses.begin();
-        iter != removedClasses.end();
-        ++iter )
+  // Clear erased classes.
+  foreach( const FileIterator& item, removedClasses )
   {
-    removeClassNode(iter.value());
-    m_openFiles[a_file].remove(iter.key());
+    if ( item->nodeItem )
+      removeClassNode(item->nodeItem);
+    m_openFilesClasses.get<FileIndex>().erase(item);
     documentChanged = true;
   }
 
@@ -329,7 +389,7 @@ void DocumentClassesFolder::parseDocument(const IndexedString& a_file)
 {
   // Add the document to the list of open files - this means we monitor it.
   if ( !m_openFiles.contains(a_file) )
-    m_openFiles.insert(a_file, ClassNodeIDsMap() );
+    m_openFiles.insert(a_file);
 
   updateDocument(a_file);
 }
@@ -474,8 +534,7 @@ void FilteredAllClassesFolder::updateFilterString(QString a_newFilterString)
 #if 1 // Choose speed over correctness.
     // Close the node and re-open it should be quicker than reload each document
     // and remove indevidual nodes (at the cost of loosing the current selection).
-    collapse();
-    expand();
+    performPopulateNode(true);
 #else
     bool hadChanges = false;
 

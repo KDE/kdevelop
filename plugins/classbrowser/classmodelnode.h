@@ -125,6 +125,9 @@ public:
   /// Return true if the node was populated already.
   bool isPopulated() const { return m_populated; }
 
+  /// Populate the node and mark the flag - called from expand or can be used internally.
+  void performPopulateNode(bool a_forceRepopulate = false);
+
 public: // Node overrides.
   virtual void collapse();
   virtual void expand();
@@ -142,8 +145,8 @@ protected: // overridables
 private:
   bool m_populated;
 
-  /// Populate the node and mark the flag.
-  void performPopulateNode();
+  /// Clear all the child nodes and mark flag.
+  void performNodeCleanup();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -158,12 +161,8 @@ public:
   IdentifierNode(const QString& a_displayName, KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public:
-  /// Lookup a child node by it's identifier.
-  /// @return 0 if none was found for the identifier or the node pointer.
-  static IdentifierNode* findNode(Node* a_parentNode, const KDevelop::IndexedQualifiedIdentifier& a_identifier);
-
   /// Returns the qualified identifier for this node by going through the tree
-  KDevelop::QualifiedIdentifier qualifiedIdentifier() const;
+  const KDevelop::IndexedQualifiedIdentifier& getIdentifier() const { return m_identifier; }
 
 public: // Node overrides
   virtual bool getIcon(QIcon& a_resultIcon);
@@ -188,6 +187,10 @@ class ClassNode : public IdentifierNode, public ClassModelNodeDocumentChangedInt
 public:
   ClassNode(const KDevelop::QualifiedIdentifier& a_identifier, NodesModelInterface* a_model);
   virtual ~ClassNode();
+
+  /// Lookup a contained class and return the related node.
+  /// @return the the node pointer or 0 if non was found.
+  ClassNode* findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
 public: // Node overrides
   virtual int getScore() const { return 3; }

@@ -23,6 +23,9 @@
 #define ALLCLASSESFOLDER_H
 
 #include "classmodelnode.h"
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/ordered_index.hpp>
 
 namespace KDevelop
 {
@@ -56,7 +59,7 @@ protected: // Documents list handling.
   void closeDocument(const KDevelop::IndexedString& a_file);
 
   /// Returns a list of documents we have monitored.
-  QList< KDevelop::IndexedString > getAllOpenDocuments();
+  QSet< KDevelop::IndexedString > getAllOpenDocuments();
 
 protected: // Overridables
   /// Override this to filter the found classes.
@@ -80,15 +83,68 @@ private: // File updates related.
   /// Timer for batch updates.
   QTimer* m_updateTimer;
 
+private: // Opened class identifiers container definition.
+  // An opened class item.
+  struct OpenedFileClassItem
+  {
+    OpenedFileClassItem();
+    OpenedFileClassItem(const KDevelop::IndexedString& a_file,
+                        const KDevelop::IndexedQualifiedIdentifier& a_classIdentifier,
+                        ClassNode* a_nodeItem);
+
+    /// The file this class declaration comes from.
+    KDevelop::IndexedString file;
+
+    /// The identifier for this class.
+    KDevelop::IndexedQualifiedIdentifier classIdentifier;
+
+    /// An existing node item. It maybe 0 - meaning the class node is currently hidden.
+    ClassNode* nodeItem;
+  };
+
+  // Index definitions.
+  struct FileIndex {};
+  struct ClassIdentifierIndex {};
+
+  // Member types definitions.
+  typedef boost::multi_index::member<
+    OpenedFileClassItem,
+    KDevelop::IndexedString,
+    &OpenedFileClassItem::file> FileMember;
+  typedef boost::multi_index::member<
+    OpenedFileClassItem,
+    KDevelop::IndexedQualifiedIdentifier,
+    &OpenedFileClassItem::classIdentifier> ClassIdentifierMember;
+
+  // Container definition.
+  typedef boost::multi_index::multi_index_container<
+    OpenedFileClassItem,
+    boost::multi_index::indexed_by<
+      boost::multi_index::ordered_non_unique<
+        boost::multi_index::tag<FileIndex>,
+        FileMember
+      >,
+      boost::multi_index::ordered_unique<
+        boost::multi_index::tag<ClassIdentifierIndex>,
+        ClassIdentifierMember
+      >
+    >
+  > OpenFilesContainer;
+
+  // Iterators definition.
+  typedef OpenFilesContainer::index_iterator<FileIndex>::type FileIterator;
+  typedef OpenFilesContainer::index_iterator<ClassIdentifierIndex>::type ClassIdentifierIterator;
+
+  /// Maps all displayed classes and their referenced files.
+  OpenFilesContainer m_openFilesClasses;
+
+  /// Holds a set of open files.
+  QSet< KDevelop::IndexedString > m_openFiles;
+
 private:
   typedef QMap< KDevelop::IndexedQualifiedIdentifier, StaticNamespaceFolderNode* > NamespacesMap;
   /// Holds a map between an identifier and a namespace folder we hold.
   NamespacesMap m_namespaces;
-
-  typedef QMap< KDevelop::IndexedQualifiedIdentifier, ClassNode* > ClassNodeIDsMap;
-  typedef QMap< KDevelop::IndexedString, ClassNodeIDsMap > OpenFilesMap;
-  /// Maps all displayed classes and their referenced files.
-  OpenFilesMap m_openFiles;
 
   /// Recursively create a namespace folder for the specified identifier if it doesn't
   /// exist, cache it and return it (or just return it from the cache).
