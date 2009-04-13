@@ -23,6 +23,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
+#include <QtCore/QProcess>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -37,7 +38,7 @@ const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
+    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0), m_qtIncludeDir()
 {
 }
 
@@ -64,6 +65,20 @@ bool QMakeProjectFile::read()
             m_variableValues[var] = m_cache->variableValues( var );
         }
     }
+
+    // Let's cache the Qt include dir
+    KProcess qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
+    qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    qtInc.start();
+    if ( !qtInc.waitForFinished() )
+    {
+        kDebug(9024) << "Failed to query Qt header path using qmake";
+    } else
+    {
+        QByteArray result = qtInc.readAll();
+        m_qtIncludeDir = QString::fromLocal8Bit( result );
+    }
+
     return QMakeFile::read();
 }
 
@@ -152,11 +167,56 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     kDebug(9024) << variableValues("QMAKE_INCDIR_QT");
     if( variableValues("CONFIG").contains("qt") )
     {
-        //@TODO add QtCore,QtGui and so on depending on CONFIG values,
-        //      as QMAKE_INCDIR_QT only contains the include/ dir
-        foreach( const QString& val, variableValues("QMAKE_INCDIR_QT") )
+        KUrl url(m_qtIncludeDir);
+        if( !list.contains( url ) )
+            list << url;
+
+        foreach( const QString& module, variableValues("QT") )
         {
-            KUrl url(val);
+            KUrl url;
+            if ( module == "core" )
+                url.setUrl(m_qtIncludeDir + "/QtCore");
+            else if ( module == "gui" )
+                url.setUrl(m_qtIncludeDir + "/QtGui");
+            else if ( module == "network" )
+                url.setUrl(m_qtIncludeDir + "/QtNetwork");
+            else if ( module == "opengl" )
+                url.setUrl(m_qtIncludeDir + "/QtOpenGL");
+            else if ( module == "phonon" )
+                url.setUrl(m_qtIncludeDir + "/Phonon");
+            else if ( module == "script" )
+                url.setUrl(m_qtIncludeDir + "/QtScript");
+            else if ( module == "scripttools" )
+                url.setUrl(m_qtIncludeDir + "/QtScriptTools");
+            else if ( module == "sql" )
+                url.setUrl(m_qtIncludeDir + "/QtSql");
+            else if ( module == "svg" )
+                url.setUrl(m_qtIncludeDir + "/QtSvg");
+            else if ( module == "webkit" )
+                url.setUrl(m_qtIncludeDir + "/QtWebKit");
+            else if ( module == "xml" )
+                url.setUrl(m_qtIncludeDir + "/QtXml");
+            else if ( module == "xmlpatterns" )
+                url.setUrl(m_qtIncludeDir + "/QtXmlPatterns");
+            else if ( module == "qt3support" )
+                url.setUrl(m_qtIncludeDir + "/Qt3Support");
+            else if ( module == "designer" )
+                url.setUrl(m_qtIncludeDir + "/QtDesigner");
+            else if ( module == "uitools" )
+                url.setUrl(m_qtIncludeDir + "/QtUiTools");
+            else if ( module == "help" )
+                url.setUrl(m_qtIncludeDir + "/QtHelp");
+            else if ( module == "assistant" )
+                url.setUrl(m_qtIncludeDir + "/QtAssistant");
+            else if ( module == "qtestlib" )
+                url.setUrl(m_qtIncludeDir + "/QtTest");
+            else if ( module == "qaxcontainer" )
+                url.setUrl(m_qtIncludeDir + "/ActiveQt");
+            else if ( module == "qaxserver" )
+                url.setUrl(m_qtIncludeDir + "/ActiveQt");
+            else if ( module == "dbus" )
+                url.setUrl(m_qtIncludeDir + "/QtDBus");
+
             if( !list.contains( url ) )
                 list << url;
         }
