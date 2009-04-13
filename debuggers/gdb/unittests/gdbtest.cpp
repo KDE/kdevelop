@@ -178,13 +178,8 @@ void GdbTest::testStack()
     QCOMPARE(model->data(model->index(0,1), Qt::DisplayRole).toString(), QString("foo"));
     QCOMPARE(model->data(model->index(0,2), Qt::DisplayRole).toString(), fileName+QString(":4"));
 
-    kDebug() << "---------------------------------------------------------------------------------";
     model->expanded(model->index(0,0));
     QTest::qWait(200);
-    kDebug() << model->rowCount(QModelIndex());
-    kDebug() << model->rowCount(model->index(0,0));
-    kDebug() << model->rowCount(model->index(0,1));
-    kDebug() << model->rowCount(model->index(0,2));
     QCOMPARE(model->rowCount(model->index(0,0)), 1);
     QCOMPARE(model->data(model->index(0,0,model->index(0,0)), Qt::DisplayRole).toString(), QString("#1"));
     QCOMPARE(model->data(model->index(0,1,model->index(0,0)), Qt::DisplayRole).toString(), QString("main"));
