@@ -398,7 +398,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
       setParentContext(KSharedPtr<KDevelop::CodeCompletionContext>(parentContext()->parentContext()));
     }
 
-    if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess) {
+    if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess && m_expression.isEmpty()) {
       foreach(const Cpp::OverloadResolutionFunction &function, parentContext()->functions()) {
         if(function.function.declaration() && (function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect" || function.function.declaration()->qualifiedIdentifier().toString() == "QObject::disconnect")) {
           FunctionType::Ptr funType = function.function.declaration()->type<FunctionType>();
