@@ -38,7 +38,10 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
     codegen/signatureassistant.cpp
+    codegen/unresolvedincludeassistant.cpp
 )
+
+kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS codegen/ui/custom_include_paths.ui)
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
 if(BUILD_kdev_includepathresolver)

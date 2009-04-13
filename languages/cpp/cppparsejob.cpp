@@ -625,9 +625,7 @@ void CPPInternalParseJob::run()
         DUChainWriteLocker l(DUChain::lock());
 
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
-          if(problem->finalLocation().start().line() >= contentEnvironmentFile->contentStartLine()) {
-            contentContext->addProblem(problem);
-          }
+          contentContext->addProblem(problem);
         }
 
         foreach( KDevelop::ProblemPointer p, control.problems() ) {

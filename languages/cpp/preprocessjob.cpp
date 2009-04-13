@@ -56,6 +56,7 @@
 #include "cpppreprocessenvironment.h"
 
 #include "cppdebughelper.h"
+#include "codegen/unresolvedincludeassistant.h"
 
 // #define ifDebug(x) x
 
@@ -664,6 +665,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
         p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
         p->setLocationStack(parentJob()->includeStack());
+        p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
         parentJob()->addPreprocessorProblem(p);
 
         ///@todo respect all the specialties like starting search at a specific path

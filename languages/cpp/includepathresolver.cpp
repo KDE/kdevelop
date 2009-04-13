@@ -224,6 +224,89 @@ using namespace CppTools;
 IncludePathResolver::Cache IncludePathResolver::m_cache;
 QMutex IncludePathResolver::m_cacheMutex;
 
+bool CustomIncludePathsSettings::isValid() const {
+  return !storagePath.isEmpty();
+}
+
+bool CppTools::CustomIncludePathsSettings::delete_() {
+  QString file = storagePath + "/.kdev_include_paths";
+  return QFile::remove(file);
+}
+
+CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath) {
+  QDir sourceDir( storagePath );
+  CustomIncludePathsSettings ret;
+
+  ///If there is a .kdev_include_paths file, use it.
+// #ifdef READ_CUSTOM_INCLUDE_PATHS
+  QFileInfo customIncludePaths( sourceDir, ".kdev_include_paths" );
+  if(customIncludePaths.exists()) {
+    
+    QFile f(customIncludePaths.filePath());
+    if(f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      ret.storagePath = storagePath;
+      
+      QString read = QString::fromLocal8Bit(f.readAll());
+      QStringList lines = read.split('\n', QString::SkipEmptyParts);
+      foreach(QString line, lines) {
+        if(!line.isEmpty()) {
+          QString textLine = line;
+          if(textLine.startsWith("RESOLVE:")) {
+            ifTest( std::cout << "found resolve line: " << textLine.toLocal8Bit().data() << std::endl; )
+            
+            //Resolve using the build- and source-directory specified in the file
+            
+            int sourceIndex = textLine.indexOf(" SOURCE=");
+            if(sourceIndex != -1) {
+              ifTest( std::cout << "found source specification" << std::endl; )
+              int buildIndex = textLine.indexOf(" BUILD=", sourceIndex);
+              if(buildIndex != -1) {
+                ifTest( std::cout << "found build specification" << std::endl; )
+                int sourceStart = sourceIndex+8;
+                QString sourceDir = textLine.mid(sourceStart, buildIndex - sourceStart).trimmed();
+                int buildStart = buildIndex + 7;
+                QString buildDir = textLine.mid(buildStart, textLine.length()-buildStart).trimmed();
+                
+                ifTest( std::cout << "directories: " << sourceDir.toLocal8Bit().data() << " " << buildDir.toLocal8Bit().data() << std::endl; )
+                ret.buildDir = buildDir;
+                ret.sourceDir = sourceDir;
+              }
+            }
+          }else{
+            ret.paths << textLine;
+          }
+        }
+      }
+      
+      f.close();
+    }
+  }
+  return ret;
+}
+
+bool CppTools::CustomIncludePathsSettings::write() {
+  QDir source( storagePath );
+  QFileInfo customIncludePaths( source, ".kdev_include_paths" );
+  QFile f(customIncludePaths.filePath());
+  if(f.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    if(buildDir != sourceDir) {
+      f.write("RESOLVE: SOURCE=");
+      f.write(sourceDir.toLocal8Bit());
+      f.write(" BUILD=");
+      f.write(buildDir.toLocal8Bit());
+      f.write("\n");
+      foreach(QString customPath, paths) {
+        f.write(customPath.toLocal8Bit());
+        f.write("\n");
+      }
+    }
+    return true;
+  }else{
+    return false;
+  }
+}
+
 bool IncludePathResolver::executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const
 {
   ifTest( cout << "executing " << command.toUtf8().constData() << endl );
@@ -266,6 +349,11 @@ KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
   return KUrl(wd);
 }
 
+void CppTools::IncludePathResolver::clearCache() {
+  QMutexLocker l( &m_cacheMutex );
+  m_cache.clear();
+}
+
 PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& file, const QString& _workingDirectory, int maxStepsUp ) {
 
   struct Enabler {
@@ -303,80 +391,55 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data() << "  file: " << file.toLocal8Bit().data() << std::endl; )
   
-  QDir sourceDir( workingDirectory );
-
-  ///If there is a .kdev_include_paths file, use it.
-// #ifdef READ_CUSTOM_INCLUDE_PATHS
-  QFileInfo customIncludePaths( sourceDir, ".kdev_include_paths" );
-  if(customIncludePaths.exists()) {
-    QFile f(customIncludePaths.filePath());
-    if(f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-      PathResolutionResult result(true);
-      QByteArray read = f.readAll();
-      QList<QByteArray> lines = read.split('\n');
-      foreach(QByteArray line, lines)
-        if(!line.isEmpty()) {
-          QString textLine = QString::fromLocal8Bit(line);
-          if(textLine.startsWith("RESOLVE:") && !m_outOfSource) {
-            ifTest( std::cout << "found resolve line: " << textLine.toLocal8Bit().data() << std::endl; )
-            
-            //Resolve using the build- and source-directory specified in the file
-            
-            int sourceIndex = textLine.indexOf(" SOURCE=");
-            if(sourceIndex != -1) {
-              ifTest( std::cout << "found source specification" << std::endl; )
-              int buildIndex = textLine.indexOf(" BUILD=", sourceIndex);
-              if(buildIndex != -1) {
-                ifTest( std::cout << "found build specification" << std::endl; )
-                int sourceStart = sourceIndex+8;
-                QString sourceDir = textLine.mid(sourceStart, buildIndex - sourceStart).trimmed();
-                int buildStart = buildIndex + 7;
-                QString buildDir = textLine.mid(buildStart, textLine.length()-buildStart).trimmed();
-                
-                ifTest( std::cout << "directories: " << sourceDir.toLocal8Bit().data() << " " << buildDir.toLocal8Bit().data() << std::endl; )
-                
-                if(sourceDir != buildDir) {
-                  setOutOfSourceBuildSystem(sourceDir, buildDir);
-                  
-                  QStringList fileParts = file.split("/");
-                  
-                  //Add all directories that were stepped up to the file again
-                  
-                  QString useFile = file;
-                  QString useWorkingDirectory = workingDirectory;
-                  if(fileParts.count() > 1) {
-                    useWorkingDirectory += "/" +  QStringList(fileParts.mid(0, fileParts.size()-1)).join("/");
-                    useFile = fileParts.last();
-                  }
-                  
-                  ifTest( std::cout << "starting sub-resolver with " << useFile.toLocal8Bit().data() << " " << useWorkingDirectory.toLocal8Bit().data() << std::endl; )
-                  
-                  PathResolutionResult subResult = resolveIncludePath(useFile, useWorkingDirectory, maxStepsUp + fileParts.count() - 1);
-                  subResult.paths += result.paths;
-                  result = subResult;
-                  if(!result) {
-                    ifTest( std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl; )
-                  }
-                  
-                  resetOutOfSourceBuild();
-                }
-              }
-            }
-          }else{
-            result.paths << textLine;
-          }
-        }
+  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::read(workingDirectory);
+  
+  if(customPaths.isValid()) {
+    PathResolutionResult result(true);
+    if(!m_outOfSource && customPaths.buildDir != customPaths.sourceDir) {
+      QString sourceDir = customPaths.sourceDir;
+      QString buildDir = customPaths.buildDir;
       
-      f.close();
-      if(!result.paths.isEmpty())
-        return result;
-      else if(!result && !result.errorMessage.isEmpty()) {
-        //Remember the failed result behind the mapping, and return it if
-        //we cannot resolve correct without mapping
-        resultOnFail = result;
+      if(sourceDir != buildDir) {
+        setOutOfSourceBuildSystem(sourceDir, buildDir);
+        
+        QStringList fileParts = file.split("/");
+        
+        //Add all directories that were stepped up to the file again
+        
+        QString useFile = file;
+        QString useWorkingDirectory = workingDirectory;
+        if(fileParts.count() > 1) {
+          useWorkingDirectory += "/" +  QStringList(fileParts.mid(0, fileParts.size()-1)).join("/");
+          useFile = fileParts.last();
+        }
+        
+        ifTest( std::cout << "starting sub-resolver with " << useFile.toLocal8Bit().data() << " " << useWorkingDirectory.toLocal8Bit().data() << std::endl; )
+        
+        PathResolutionResult subResult = resolveIncludePath(useFile, useWorkingDirectory, maxStepsUp + fileParts.count() - 1);
+        subResult.paths += result.paths;
+        result = subResult;
+        if(!result) {
+          ifTest( std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl; )
+        }
+        
+        resetOutOfSourceBuild();
       }
+      
+    }
+    result.paths += customPaths.paths;
+    
+    if(!result.paths.isEmpty())
+      return result;
+    
+    else if(!result && !result.errorMessage.isEmpty()) {
+      //Remember the failed result behind the mapping, and return it if
+      //we cannot resolve correct without mapping
+      resultOnFail = result;
     }
   }
+  
+  QDir sourceDir( workingDirectory );
+
 // #endif
   
   QDir dir = QDir( mapToBuild(sourceDir.absolutePath()).toLocalFile() );

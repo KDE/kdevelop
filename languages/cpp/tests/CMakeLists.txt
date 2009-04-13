@@ -28,6 +28,7 @@ set(cppcodecompletiontest_SRCS
   ../setuphelpers.cpp
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
+  ../codegen/unresolvedincludeassistant.cpp
   ../codecompletion/worker.cpp
   ../includepathcomputer.cpp
   ../codecompletion/missingincludemodel.cpp

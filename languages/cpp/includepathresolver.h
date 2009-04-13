@@ -39,6 +39,21 @@ namespace CppTools {
       return success;
     }
   };
+  
+  struct CustomIncludePathsSettings {
+    QString storagePath; //Directory the custom file is in
+    QString sourceDir;
+    QString buildDir;
+    QStringList paths;
+    bool isValid() const ;
+    
+    static CustomIncludePathsSettings read(QString storagePath);
+    
+    //Stores these settings exclusively, overwriting any old ones for the storage path
+    bool write();
+    //Deletes these settings
+    bool delete_();
+  };
 
   class SourcePathInformation;
 
@@ -54,6 +69,8 @@ namespace CppTools {
       void setOutOfSourceBuildSystem( const QString& source, const QString& build );
       ///resets to in-source build system
       void resetOutOfSourceBuild();
+      
+      static void clearCache();
     private:
       bool m_isResolving;
       struct CacheEntry {
