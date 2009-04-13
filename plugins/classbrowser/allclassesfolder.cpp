@@ -155,6 +155,10 @@ QList< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()
 
 ClassNode* DocumentClassesFolder::findClassNode(const IndexedQualifiedIdentifier& a_id)
 {
+  // Make sure that the classes node is expanded, otherwise
+  // the lookup will not work.
+  expand();
+
   // Look in all the documents.
   foreach(const ClassNodeIDsMap& idsMap, m_openFiles)
   {
@@ -239,14 +243,47 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
       // Check if it's namespaced and add it to the proper namespace.
       if ( id.count() > 1 )
       {
+        QualifiedIdentifier parentIdentifier(id.left(-1));
+
         // Look up the namespace in the cache.
         // If we fail to find it we assume that the parent context is a class
         // and in that case, when the parent class gets expanded, it will show it.
-        NamespacesMap::iterator iter = m_namespaces.find(id.left(-1));
+        NamespacesMap::iterator iter = m_namespaces.find(parentIdentifier);
         if ( iter != m_namespaces.end() )
         {
           // Add to the namespace node.
           parentNode = iter.value();
+        }
+        else
+        {
+          // Reaching here means we didn't encounter any namespace declaration in the document
+          // But a class might still be declared under a namespace.
+          // So we'll perform a more through search to see if it's under a namespace.
+
+          DUChainReadLocker readLock(DUChain::lock());
+
+          uint declsCount = 0;
+          const IndexedDeclaration* decls;
+          PersistentSymbolTable::self().declarations(parentIdentifier, declsCount, decls);
+
+          for ( uint i = 0; i < declsCount; ++i )
+          {
+            // Look for the first valid declaration.
+            if ( decls->declaration() )
+            {
+              // See if it should be namespaced.
+              if ( decls->declaration()->kind() == Declaration::Namespace )
+              {
+                // This should create the namespace folder and add it to the cache.
+                parentNode = getNamespaceFolder(parentIdentifier);
+                
+                // Add to the locally created namespaces.
+                declaredNamespaces.insert(parentIdentifier);
+              }
+              
+              break;
+            }
+          }
         }
       }
       else
@@ -272,7 +309,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
   // We need this because when a file gets unloaded, we unload the declared classes in it
   // and if a namespace has no class in it, it'll forever exist and no one will remove it
   // from the children list.
-  foreach( QualifiedIdentifier id, declaredNamespaces )
+  foreach( const QualifiedIdentifier& id, declaredNamespaces )
     removeEmptyNamespace(id);
 
   // Remove erased classes.
@@ -432,28 +469,37 @@ void FilteredAllClassesFolder::updateFilterString(QString a_newFilterString)
   else
     m_displayName = "Filtered classes for '" + m_filterString + '\'';
 
+  if ( isPopulated() )
+  {
 #if 1 // Choose speed over correctness.
-  // Close the node and re-open it should be quicker than reload each document
-  // and remove indevidual nodes (at the cost of loosing the current selection).
-  collapse();
-  expand();
+    // Close the node and re-open it should be quicker than reload each document
+    // and remove indevidual nodes (at the cost of loosing the current selection).
+    collapse();
+    expand();
 #else
-  bool hadChanges = false;
-  
-  // Reload the documents.
-  foreach( const IndexedString& file, getAllOpenDocuments() )
-    hadChanges |= updateDocument(file);
-    
-  // Sort if we've updated documents. If nothing changed, the title changed so
-  // mark the node as updated.
-  if ( hadChanges )
-    recursiveSort();
+    bool hadChanges = false;
+
+    // Reload the documents.
+    foreach( const IndexedString& file, getAllOpenDocuments() )
+      hadChanges |= updateDocument(file);
+
+    // Sort if we've updated documents.
+    if ( hadChanges )
+      recursiveSort();
+    else
+    {
+      // If nothing changed, the title changed so mark the node as updated.
+      m_model->nodesLayoutAboutToBeChanged(this);
+      m_model->nodesLayoutChanged(this);
+    }
+#endif
+  }
   else
   {
+    // Displayed name changed only...
     m_model->nodesLayoutAboutToBeChanged(this);
     m_model->nodesLayoutChanged(this);
   }
-#endif
 }
 
 bool FilteredAllClassesFolder::isClassFiltered(const KDevelop::QualifiedIdentifier& a_id)

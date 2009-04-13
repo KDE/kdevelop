@@ -122,6 +122,9 @@ class DynamicNode : public Node
 public:
   DynamicNode(const QString& a_displayName, NodesModelInterface* a_model);
 
+  /// Return true if the node was populated already.
+  bool isPopulated() const { return m_populated; }
+
 public: // Node overrides.
   virtual void collapse();
   virtual void expand();
