@@ -19,7 +19,7 @@
 #ifndef CPP_MISSINGINCLUDEASSISTANT_H
 #define CPP_MISSINGINCLUDEASSISTANT_H
 
-#include <../../kdevplatform/interfaces/iassistant.h>
+#include <kdevplatform/interfaces/iassistant.h>
 #include <language/duchain/indexedstring.h>
 #include <kurl.h>
 
