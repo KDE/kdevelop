@@ -155,8 +155,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 {
                     last=false;
                     QString dir;
-                    if(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
-                        dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+                    Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
+                    dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                     QFileInfo f(dir, v);
                     if(f.exists())
                     {

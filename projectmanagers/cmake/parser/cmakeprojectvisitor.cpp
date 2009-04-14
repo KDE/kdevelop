@@ -442,6 +442,7 @@ QString CMakeProjectVisitor::findFile(const QString &file, const QStringList &fo
 
 int CMakeProjectVisitor::visit(const IncludeAst *inc)
 {
+    Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath + m_vars->value("CMAKE_CURRENT_SOURCE_DIR");
     kDebug(9042) << "Include:" << inc->includeFile() << "@" << modulePath << " into ";
 
@@ -1254,6 +1255,7 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 
 int CMakeProjectVisitor::visit(const FileAst *file)
 {
+    Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
     switch(file->type()) //TODO
     {
         case FileAst::WRITE:
@@ -1283,9 +1285,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::GLOB: {
             QString current;
-            //TODO: The contains part here is a workaround for a bug elsewhere in cmake parser
-            // For some reason the variable doesn't exist on MacOSX, while its fine on other platforms
-            if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
+            if(file->path().isEmpty())
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
                 current=file->path();
@@ -1296,9 +1296,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         } break;
         case FileAst::GLOB_RECURSE: {
             QString current;
-            //TODO: The contains part here is a workaround for a bug elsewhere in cmake parser
-            // For some reason the variable doesn't exist on MacOSX, while its fine on other platforms
-            if(file->path().isEmpty() && m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
+            if(file->path().isEmpty())
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
             else
                 current=file->path();
@@ -1378,8 +1376,9 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
     QString dir;
-    if(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"))
-        dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
+
+    dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
     QFileInfo fi(dir, filecomp->fileName());
 
     QString val;
