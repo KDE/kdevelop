@@ -1,6 +1,4 @@
 
-find_package(Boost 1.35.0 REQUIRED)
-
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_SOURCE_DIR}

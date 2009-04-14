@@ -13,7 +13,11 @@ add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(sourceformatter)
 add_subdirectory(documentswitcher)
-add_subdirectory(classbrowser)
+
+macro_optional_find_package( Boost 1.35.0 )
+if(Boost_FOUND)
+  add_subdirectory(classbrowser)
+endif(Boost_FOUND)
 
 macro_optional_find_package(SubversionLibrary)
 macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integration" "http://subversion.tigris.org" FALSE "1.3.0" "The subversion libraries are needed for the Subversion support" )
