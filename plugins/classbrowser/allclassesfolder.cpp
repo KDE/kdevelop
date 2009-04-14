@@ -140,8 +140,9 @@ void DocumentClassesFolder::nodeCleared()
   // Clear cached namespaces list (node was cleared).
   m_namespaces.clear();
 
-  // Clear open files list
+  // Clear open files and classes list
   m_openFiles.clear();
+  m_openFilesClasses.clear();
 
   // Stop the update timer.
   m_updateTimer->stop();
