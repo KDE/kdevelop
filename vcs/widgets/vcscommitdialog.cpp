@@ -92,6 +92,7 @@ VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
 
 VcsCommitDialog::~VcsCommitDialog()
 {
+    delete d;
 }
 
 void VcsCommitDialog::setRecursive( bool recursive )

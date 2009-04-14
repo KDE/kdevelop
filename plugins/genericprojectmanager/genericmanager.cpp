@@ -56,7 +56,9 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 }
 
 GenericProjectManager::~GenericProjectManager()
-{}
+{
+    delete d;
+}
 
 bool GenericProjectManager::isValid( const QFileInfo &fileInfo,
     const QStringList &includes, const QStringList &excludes ) const
