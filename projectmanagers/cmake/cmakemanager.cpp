@@ -383,6 +383,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     MacroMap *mm=&m_macrosPerProject[project];
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(project->folder().toLocalFile(KUrl::RemoveTrailingSlash)));
 
     CMakeProjectVisitor v(file, parent);
     v.setCacheValues( &m_projectCache[project] );
