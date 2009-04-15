@@ -310,7 +310,7 @@ void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), rowCount(), rowCount()+count );
+    beginInsertRows( QModelIndex(), rowCount(), rowCount()+count-1 );
     m_items += items;
     endInsertRows();
 }
@@ -331,7 +331,7 @@ void ProjectBuildSetModel::moveRowsToTop(int row, int count)
 {
     QList<BuildItem> items = m_items.mid( row, count );
     removeRows( row, count );
-    beginInsertRows( QModelIndex(), 0, count );
+    beginInsertRows( QModelIndex(), 0, count-1 );
     for( int i = 0; i < count; i++ )
     {
         m_items.insert( 0+i, items.at( i ) ); 
