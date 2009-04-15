@@ -90,13 +90,17 @@ void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )
 
 void ProjectBuildSetWidget::selectionChanged()
 {
-    kDebug() << "checking selectionmodel:" << m_ui->itemView->selectionModel()->selectedRows();
-    m_ui->removeItemButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
+    QModelIndexList selectedRows = m_ui->itemView->selectionModel()->selectedRows();
+    kDebug() << "checking selectionmodel:" << selectedRows;
+    m_ui->removeItemButton->setEnabled( !selectedRows.isEmpty() );
     m_ui->addItemButton->setEnabled( !m_view->selectedItems().isEmpty() );
-    m_ui->upButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
-    m_ui->downButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
-    m_ui->bottomButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
-    m_ui->topButton->setEnabled( !m_ui->itemView->selectionModel()->selectedRows().isEmpty() );
+
+    bool enableUp = selectedRows.count() > 0 && selectedRows.first().row() != 0;
+    bool enableDown = selectedRows.count() > 0 && selectedRows.last().row() != m_ui->itemView->model()->rowCount() - 1;
+    m_ui->upButton->setEnabled( enableUp );
+    m_ui->downButton->setEnabled( enableDown );
+    m_ui->bottomButton->setEnabled( enableDown );
+    m_ui->topButton->setEnabled( enableUp );
 }
 
 ProjectBuildSetWidget::~ProjectBuildSetWidget()
