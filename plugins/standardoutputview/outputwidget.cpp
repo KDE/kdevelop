@@ -22,11 +22,10 @@
 #include "outputwidget.h"
 
 #include "standardoutputview.h"
-#include <QtCore/QSignalMapper>
 #include <QtCore/QTimer>
 #include <QtGui/QAbstractItemDelegate>
 #include <QtGui/QItemSelectionModel>
-#include <QtGui/QListView>
+#include <QtGui/QTreeView>
 #include <QtGui/QToolButton>
 #include <QtGui/QScrollBar>
 #include <QtGui/QVBoxLayout>
@@ -40,16 +39,15 @@
 #include <ktabwidget.h>
 
 #include <outputview/ioutputviewmodel.h>
+#include <util/focusedtreeview.h>
 
 #include "toolviewdata.h"
 
 OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
-    : QWidget( parent ), tabwidget(0), data(tvdata), scrollModelViewMapper(new QSignalMapper(this)), scrollModelViewMapper2(new QSignalMapper(this))
+    : QWidget( parent ), tabwidget(0), data(tvdata)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
-    connect(scrollModelViewMapper, SIGNAL(mapped(int)), this, SLOT(scrollToBottom(int)));
-    connect(scrollModelViewMapper2, SIGNAL(mapped(int)), this, SLOT(doScrollToBottom(int)));
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
@@ -103,14 +101,15 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 
 void OutputWidget::addOutput( int id )
 {
-    QListView* listview = createListView(id);
+    QTreeView* listview = createListView(id);
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
+    
     enableActions();
 }
 
-void OutputWidget::setCurrentWidget( QListView* view )
+void OutputWidget::setCurrentWidget( QTreeView* view )
 {
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
@@ -134,13 +133,13 @@ void OutputWidget::changeModel( int id )
     if( data->outputdata.contains( id ) && views.contains( id ) )
     {
         OutputData* od = data->outputdata.value(id);
-        scrollModelViewMapper->removeMappings( views.value( id )->model() );
         views.value( id )->setModel(od->model);
+        disconnect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), this,
+                    SLOT(rowsInserted(const QModelIndex&, int, int)) );
         if( od->behaviour & KDevelop::IOutputView::AutoScroll && od->model )
         {
-            scrollModelViewMapper->setMapping( od->model, id );
             connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-                     scrollModelViewMapper, SLOT(map()) );
+                     SLOT(rowsInserted(const QModelIndex&, int, int)) );
         }
     }
     else
@@ -155,7 +154,7 @@ void OutputWidget::removeOutput( int id )
     {
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
-            QListView* w = views.value(id);
+            QTreeView* w = views.value(id);
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
                 int idx = tabwidget->indexOf( w );
@@ -173,7 +172,9 @@ void OutputWidget::removeOutput( int id )
             views.value( id )->setModel( 0 );
             views.value( id )->setItemDelegate( 0 );
         }
-        scrollModelViewMapper->removeMappings( data->outputdata.value( id )->model );
+        disconnect( data->outputdata.value( id )->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+                    this, SLOT(rowsInserted(const QModelIndex&, int, int)) );
+        
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -297,19 +298,19 @@ void OutputWidget::activate(const QModelIndex& index)
     }
 }
 
-QListView* OutputWidget::createListView(int id)
+QTreeView* OutputWidget::createListView(int id)
 {
-    QListView* listview = 0;
+    QTreeView* listview = 0;
     if( !views.contains(id) )
     {
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             kDebug() << "creating listview";
-            listview = new QListView(this);
+            listview = new KDevelop::FocusedTreeView(this);
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-            listview->setViewMode( QListView::ListMode );
-            listview->setMovement( QListView::Static );
-            listview->setResizeMode( QListView::Fixed );
+            listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+            listview->setRootIsDecorated(false);
+            
             views[id] = listview;
             connect( listview, SIGNAL(activated(const QModelIndex&)),
                      this, SLOT(activate(const QModelIndex&)));
@@ -328,10 +329,11 @@ QListView* OutputWidget::createListView(int id)
         {
             if( views.isEmpty() )
             {
-                listview = new QListView(this);
+                listview = new KDevelop::FocusedTreeView(this);
                 listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-                listview->setViewMode( QListView::ListMode );
-                listview->setUniformItemSizes( true );
+                listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+                listview->setRootIsDecorated(false);
+
                 layout()->addWidget( listview );
                 connect( listview, SIGNAL(activated(const QModelIndex&)),
                          this, SLOT(activate(const QModelIndex&)));
@@ -406,31 +408,16 @@ void OutputWidget::enableActions()
     }
 }
 
-void OutputWidget::scrollToBottom( int id )
-{
-    if( views.contains( id ) && views.value( id )->verticalScrollBar()->value() == views.value( id )->verticalScrollBar()->maximum() )
-    {
-        kDebug() << "starting auto-scroll timer";
-        if (!scrollTimers.contains(id)) {
-            QTimer* timer = new QTimer(this);
-            timer->setSingleShot( true );
-            scrollTimers[id] = timer;
-            scrollModelViewMapper2->setMapping(timer, id);
-            connect(timer, SIGNAL(timeout()), scrollModelViewMapper2, SLOT(map()));
+void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
+    for( QMap< int, QTreeView* >::const_iterator it = views.constBegin(); it != views.constEnd(); ++it) {
+        if((*it)->model() == sender()) {
+            QModelIndex pre = (*it)->model()->index(from-1, 0);
+            kDebug() << pre.isValid() << (*it)->visualRect(pre).isValid() << (to == (*it)->model()->rowCount()-1);
+            kDebug() << (*it)->rect() << (*it)->visualRect(pre);
+            if(!pre.isValid() || ((*it)->visualRect(pre).isValid() && (*it)->rect ().intersects((*it)->visualRect(pre)) && to == (*it)->model()->rowCount()-1)) {
+                (*it)->scrollToBottom();
+            }
         }
-
-        if (!scrollTimers[id]->isActive())
-            // 100ms delay in scrolling, for performance reasons
-            scrollTimers[id]->start(100);
-    }
-}
-
-void OutputWidget::doScrollToBottom( int id )
-{
-    if( views.contains( id ) )
-    {
-        kDebug() << "doing auto-scroll";
-        views.value( id )->scrollToBottom();
     }
 }
 
@@ -439,7 +426,6 @@ void OutputWidget::scrollToIndex( const QModelIndex& idx )
     QWidget* w = currentWidget();
     if( !w )
         return;
-    kDebug() << "scrolling to index:" << idx;
     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
     view->scrollTo( idx );
 }

@@ -28,7 +28,7 @@ class QString;
 class StandardOutputView;
 class QSignalMapper;
 class QStackedWidget;
-class QListView;
+class QTreeView;
 class QToolButton;
 class ToolViewData;
 class KTabWidget;
@@ -59,16 +59,15 @@ Q_SIGNALS:
 private slots:
     void nextOutput();
     void previousOutput();
-    void scrollToBottom( int );
-    void doScrollToBottom( int );
+    void rowsInserted(const QModelIndex&, int, int);
 
 private:
-    QListView* createListView(int id);
-    void setCurrentWidget( QListView* view );
+    QTreeView* createListView(int id);
+    void setCurrentWidget( QTreeView* view );
     QWidget* currentWidget();
     void enableActions();
 
-    QMap<int, QListView*> views;
+    QMap<int, QTreeView*> views;
     QMap<int, QTimer*> scrollTimers;
     KTabWidget* tabwidget;
     QStackedWidget* stackwidget;
@@ -76,8 +75,6 @@ private:
     QToolButton* m_closeButton;
     KAction* nextAction;
     KAction* previousAction;
-    QSignalMapper* scrollModelViewMapper;
-    QSignalMapper* scrollModelViewMapper2;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
 };

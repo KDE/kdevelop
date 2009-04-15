@@ -3,6 +3,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9508 )
 ########### next target ###############
 
 set(kdevplatformutil_LIB_SRCS
+    focusedtreeview.cpp
     processlinemaker.cpp
     commandexecutor.cpp
     environmentselectionwidget.cpp
@@ -34,6 +35,7 @@ install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DE
 ########### install files ###############
 
 install( FILES
+    focusedtreeview.h
     activetooltip.h
     processlinemaker.h
     commandexecutor.h
