@@ -308,7 +308,8 @@ QTreeView* OutputWidget::createListView(int id)
             kDebug() << "creating listview";
             listview = new KDevelop::FocusedTreeView(this);
             listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-            listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+            listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
+            listview->setHeaderHidden(true);
             listview->setRootIsDecorated(false);
             
             views[id] = listview;
@@ -331,8 +332,9 @@ QTreeView* OutputWidget::createListView(int id)
             {
                 listview = new KDevelop::FocusedTreeView(this);
                 listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
-                listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+                listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
                 listview->setRootIsDecorated(false);
+                listview->setHeaderHidden(true);
 
                 layout()->addWidget( listview );
                 connect( listview, SIGNAL(activated(const QModelIndex&)),
