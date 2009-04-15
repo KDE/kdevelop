@@ -248,15 +248,15 @@ QList<BuildItem> ProjectBuildSetModel::items()
 
 void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 {
-    emit layoutAboutToBeChanged();
-    for( int i = 0; i < m_items.count(); i++ )
+    for( int i = m_items.count() - 1; i >= 0; i-- )
     {
         if( m_items.at(i).projectName() == project->name() )
         {
+            beginRemoveRows( QModelIndex(), i, i );
             m_items.removeAt(i);
+            endRemoveRows();
         }
-    }    
-    emit layoutChanged();
+    }  
 }
 
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
