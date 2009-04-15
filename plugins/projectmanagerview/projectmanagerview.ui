@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ProjectManagerView</class>
- <widget class="QWidget" name="ProjectManagerView" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ProjectManagerView">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,26 +10,29 @@
     <height>632</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" >
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QSplitter" name="splitter" >
-     <property name="orientation" >
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="ProjectTreeView" name="projectTreeView" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="ProjectTreeView" name="projectTreeView">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>5</verstretch>
        </sizepolicy>
       </property>
      </widget>
-     <widget class="QWidget" name="" >
-      <layout class="QVBoxLayout" name="verticalLayout" >
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="ProjectBuildSetWidget" native="1" name="buildSetView" >
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+        <widget class="ProjectBuildSetWidget" name="buildSetView" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>1</verstretch>
           </sizepolicy>
@@ -40,8 +44,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>projectTreeView</zorder>
-  <zorder>splitter</zorder>
  </widget>
  <customwidgets>
   <customwidget>
