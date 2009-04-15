@@ -23,6 +23,7 @@
 
 #include "../languageexport.h"
 #include <QtCore/QString>
+#include <QSet>
 
 namespace KTextEditor {
   class SmartRange;
@@ -31,6 +32,7 @@ namespace KTextEditor {
 namespace KDevelop
 {
 class DUContext;
+class TopDUContext;
 
 class KDEVPLATFORMLANGUAGE_EXPORT DumpChain
 {
@@ -39,13 +41,15 @@ public:
   virtual ~DumpChain();
 
   ///@param context The context to dump
-  ///@param imported internal
-  void dump(KDevelop::DUContext* context, bool imported = false);
+  ///@param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
+  void dump(DUContext* context, int allowedDepth = 0);
   
   QString dumpRanges(KTextEditor::SmartRange* range, QString indent = QString());
 
 private:
   int indent;
+  TopDUContext* top;
+  QSet<DUContext*> had;
 };
 }
 #endif // DUMPCHAIN_H

@@ -39,7 +39,7 @@ using namespace KDevelop;
 
 
 DumpChain::DumpChain()
-  : indent(0)
+  : indent(0), top(0)
 {
 }
 
@@ -47,8 +47,11 @@ DumpChain::~ DumpChain( )
 {
 }
 
-void DumpChain::dump( DUContext * context, bool imported )
+void DumpChain::dump( DUContext * context, int allowedDepth )
 {
+    if(!top)
+      top = context->topContext();
+    
           enum ContextType {
     Global    /**< A context that declares functions, namespaces or classes */,
     Namespace /**< A context that declares namespace members */,
@@ -70,13 +73,13 @@ void DumpChain::dump( DUContext * context, bool imported )
     case Helper: type = "Helper"; break;
     case Other: type = "Other"; break;
   }
-  kDebug() << QString(indent * 2, ' ') << (imported ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+  kDebug() << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
 
       
   if( !context )
     return;
-  if (!imported) {
-    foreach (Declaration* dec, context->localDeclarations()) {
+  if (allowedDepth >= 0) {
+    foreach (Declaration* dec, context->localDeclarations(top)) {
       
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
@@ -90,23 +93,37 @@ void DumpChain::dump( DUContext * context, bool imported )
           kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();
       }
     }
+  }else{
+    kDebug() << QString((indent+1) * 2, ' ') << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts";
   }
 
   ++indent;
-  if (!imported) {
-    ///@todo Think whether this is used for top-contexts, and if it is, prevent endless recursion due to loops
+  {
     foreach (const DUContext::Import &parent, context->importedParentContexts()) {
-      if(!parent.context(context->topContext())) {
-          kDebug() << "Could not get parent, is it registered in the DUChain?";
+      DUContext* import = parent.context(top);
+      if(!import) {
+          kDebug() << QString((indent+2) * 2+1, ' ') << "Could not get parent, is it registered in the DUChain?";
           continue;
       }
-      dump(parent.context(context->topContext()), true);
+      
+      if(had.contains(import)) {
+        kDebug() << QString((indent+2) * 2+1, ' ') << "skipping" << import->scopeIdentifier(true) << "because it was already printed";
+        continue;
+      }
+      had.insert(import);
+      
+      dump(import, allowedDepth-1);
     }
 
     foreach (DUContext* child, context->childContexts())
       dump(child);
   }
   --indent;
+  
+  if(indent == 0) {
+    top = 0;
+    had.clear();
+  }
 }
 
 QString DumpChain::dumpRanges(KTextEditor::SmartRange* range, QString indent)
