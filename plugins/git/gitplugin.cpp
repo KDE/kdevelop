@@ -68,17 +68,48 @@ QString GitPlugin::name() const
 
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 {
-    KDevelop::VcsJob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
-    if (job)
-    {
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        {
-            kDebug() << "Dir:" << dirPath << " is inside work tree of git" ;
-            return true;
+    static const QString gitDir(".git");
+    const QString initialPath(dirPath.toLocalFile(KUrl::RemoveTrailingSlash));
+
+    KUrl possibleRepoRoot = m_lastRepoRoot;
+    if (!m_lastRepoRoot.isValid() || !m_lastRepoRoot.isParentOf(dirPath)) {
+        const QFileInfo finfo(initialPath);
+        QDir dir;
+        if (finfo.isFile()) {
+            dir = finfo.absoluteDir();
+        } else {
+            dir = QDir(initialPath);
+            dir.makeAbsolute();
         }
+
+        while (!dir.cd(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
+
+        if (gitDir != dir.dirName()) {  // We didn't find .git, so no need to call git
+            kDebug() << "Dir:" << dirPath << " is not inside work tree of git \"" << initialPath << '"';
+            return false;
+        }
+        dir.cdUp();
+        possibleRepoRoot.setDirectory(dir.absolutePath());
     }
-    kDebug() << "Dir:" << dirPath.toLocalFile() << " is not inside work tree of git" ;
+
+    // We might have found a valid repository, call git to verify it
+    KDevelop::VcsJob* job = gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
+
+    if (!job) {
+        kDebug() << "Failed creating job";
+        return false;
+    }
+
+        job->exec();
+    if (job->status() == KDevelop::VcsJob::JobSucceeded) {
+        kDebug() << "Dir:" << dirPath << " is inside work tree of git (" << possibleRepoRoot << ')';
+        m_lastRepoRoot = possibleRepoRoot;
+            return true;
+    } else if (m_lastRepoRoot == possibleRepoRoot) {   // Not a repository anymore
+        m_lastRepoRoot = KUrl(); // Restart from scratch
+        return isValidDirectory(dirPath);
+        }
+
     return false;
 }
 

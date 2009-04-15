@@ -128,6 +128,7 @@ protected:
     static KDevelop::VcsStatusInfo::State charToState(const char ch);
 
     QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
+    KUrl m_lastRepoRoot;
 };
 
 #endif

@@ -123,6 +123,7 @@ private:
     static KDevelop::VcsStatusInfo::State lsTagToState(const char ch);
 
     QList<QStringList> branchesShas;
+    KUrl m_lastRepoRoot;
 };
 
 #endif

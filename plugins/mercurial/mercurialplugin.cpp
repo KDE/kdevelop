@@ -77,7 +77,11 @@ bool MercurialPlugin::isValidDirectory(const KUrl & directory)
 {
     // Mercurial uses the same test, so we don't lose any functionality
     static const QString hgDir(".hg");
-    const QString initialPath(directory.toLocalFile());
+
+    if (m_lastRepoRoot.isParentOf(directory))
+        return true;
+
+    const QString initialPath(directory.toLocalFile(KUrl::RemoveTrailingSlash));
     const QFileInfo finfo(initialPath);
     QDir dir;
     if (finfo.isFile()) {
@@ -89,7 +93,12 @@ bool MercurialPlugin::isValidDirectory(const KUrl & directory)
 
     while (!dir.cd(hgDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .hg
 
-    return hgDir == dir.dirName();
+    if (hgDir != dir.dirName())
+        return false;
+
+    dir.cdUp(); // Leave .hg
+    m_lastRepoRoot.setDirectory(dir.absolutePath());
+    return true;
 }
 
 bool MercurialPlugin::isVersionControlled(const KUrl & url)
