@@ -414,9 +414,7 @@ void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
     for( QMap< int, QTreeView* >::const_iterator it = views.constBegin(); it != views.constEnd(); ++it) {
         if((*it)->model() == sender()) {
             QModelIndex pre = (*it)->model()->index(from-1, 0);
-            kDebug() << pre.isValid() << (*it)->visualRect(pre).isValid() << (to == (*it)->model()->rowCount()-1);
-            kDebug() << (*it)->rect() << (*it)->visualRect(pre);
-            if(!pre.isValid() || ((*it)->visualRect(pre).isValid() && (*it)->rect ().intersects((*it)->visualRect(pre)) && to == (*it)->model()->rowCount()-1)) {
+            if(!pre.isValid() || ((*it)->visualRect(pre).isValid() && (*it)->viewport()->rect().intersects((*it)->visualRect(pre)) && to == (*it)->model()->rowCount()-1)) {
                 (*it)->scrollToBottom();
             }
         }
