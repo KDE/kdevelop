@@ -51,7 +51,7 @@ public:
 
 public: // Node overrides
   virtual bool getIcon(QIcon& a_resultIcon);
-  virtual int getScore() const { return 1; }
+  virtual int getScore() const { return 101; }
 
 private:
   /// The namespace identifier.

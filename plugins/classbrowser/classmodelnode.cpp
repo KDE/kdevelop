@@ -30,6 +30,7 @@
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/types/functiontype.h>
+#include <language/duchain/types/enumerationtype.h>
 
 using namespace KDevelop;
 using namespace ClassModelNodes;
@@ -85,22 +86,67 @@ Declaration* IdentifierNode::getDeclaration()
 
 bool IdentifierNode::getIcon(QIcon& a_resultIcon)
 {
-  // Load the cached icon if it's null.
-  if ( m_cachedIcon.isNull() )
-  {
-    DUChainReadLocker readLock(DUChain::lock());
+  DUChainReadLocker readLock(DUChain::lock());
 
-    Declaration* decl = getDeclaration();
-    if ( decl )
-      m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
+  Declaration* decl = getDeclaration();
+  if ( decl )
+    a_resultIcon = DUChainUtils::iconForDeclaration(decl);
+
+  return !a_resultIcon.isNull();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+EnumNode::EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model)
+  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
+{
+  // Set display name for anonymous enums
+  if ( m_displayName.isEmpty() )
+    m_displayName = "*Anonymous*";
+}
+
+bool EnumNode::getIcon(QIcon& a_resultIcon)
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
+  if ( decl == 0 )
+  {
+    static KIcon Icon("enum");
+    a_resultIcon = Icon;
+  }
+  else
+  {
+    if ( decl->accessPolicy() == Declaration::Protected )
+    {
+      static KIcon Icon("protected_enum");
+      a_resultIcon = Icon;
+    }
+    else if ( decl->accessPolicy() == Declaration::Private )
+    {
+      static KIcon Icon("private_enum");
+      a_resultIcon = Icon;
+    }
+    else
+    {
+      static KIcon Icon("enum");
+      a_resultIcon = Icon;
+    }
   }
 
-  // If it's still null then no icon exists.
-  if ( m_cachedIcon.isNull() )
-    return false;
-
-  a_resultIcon = m_cachedIcon;
   return true;
+}
+
+void EnumNode::populateNode()
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  Declaration* decl = getDeclaration();
+
+  if ( decl->internalContext() )
+    foreach( Declaration* enumDecl, decl->internalContext()->localDeclarations() )
+      addNode( new EnumNode(enumDecl, m_model) );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -163,12 +209,15 @@ bool ClassNode::updateClassDeclarations()
       }
 
       Node* newNode = 0;
-      if ( ClassFunctionDeclaration* funcDecl = dynamic_cast<ClassFunctionDeclaration*>(decl) )
+
+      if ( EnumerationType::Ptr enumType = decl->type<EnumerationType>() )
+        newNode = new EnumNode( decl, m_model );
+      else if ( ClassFunctionDeclaration* funcDecl = dynamic_cast<ClassFunctionDeclaration*>(decl) )
         newNode = new FunctionNode( funcDecl, m_model );
       else if ( ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(decl) )
         newNode = new ClassNode(classDecl->qualifiedIdentifier(), m_model);
-      else if ( ClassMemberDeclaration* varDecl = dynamic_cast<ClassMemberDeclaration*>(decl) )
-        newNode = new VariableNode( varDecl, m_model );
+      else if ( ClassMemberDeclaration* memDecl = dynamic_cast<ClassMemberDeclaration*>(decl) )
+        newNode = new ClassMemberNode( memDecl, m_model );
       else
       {
         // Debug - for reference.
@@ -259,9 +308,41 @@ FunctionNode::FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesMode
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-VariableNode::VariableNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model)
-  : IdentifierNode(a_decl->toString(), a_decl, a_model)
+ClassMemberNode::ClassMemberNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model)
+  : IdentifierNode(a_decl->identifier().toString(), a_decl, a_model)
 {
+}
+
+bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
+{
+  DUChainReadLocker readLock(DUChain::lock());
+
+  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
+  if ( decl == 0 )
+    return false;
+
+  if ( decl->isTypeAlias() )
+  {
+    static KIcon Icon("typedef");
+    a_resultIcon = Icon;
+  }
+  else if ( decl->accessPolicy() == Declaration::Protected )
+  {
+    static KIcon Icon("protected_field");
+    a_resultIcon = Icon;
+  }
+  else if ( decl->accessPolicy() == Declaration::Private )
+  {
+    static KIcon Icon("private_field");
+    a_resultIcon = Icon;
+  }
+  else
+  {
+    static KIcon Icon("field");
+    a_resultIcon = Icon;
+  }
+
+  return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -438,6 +519,18 @@ int Node::row()
     return -1;
 
   return m_parentNode->m_children.indexOf(this);
+}
+
+QIcon ClassModelNodes::Node::getCachedIcon()
+{
+  // Load the cached icon if it's null.
+  if ( m_cachedIcon.isNull() )
+  {
+    if ( !getIcon(m_cachedIcon) )
+      m_cachedIcon = QIcon();
+  }
+
+  return m_cachedIcon;
 }
 
 //////////////////////////////////////////////////////////////////////////////

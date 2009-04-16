@@ -85,6 +85,10 @@ public: // Info retrieval
   /// Returns a list of child nodes
   const QList<Node*>& getChildren() const { return m_children; }
 
+  /// Return an icon representation for the node.
+  /// @note It calls the internal getIcon and caches the result.
+  QIcon getCachedIcon();
+
 public: // overridables
   /// Return a score when sorting the nodes.
   virtual int getScore() const = 0;
@@ -95,6 +99,7 @@ public: // overridables
   /// We use this string when sorting items.
   virtual QString getSortableString() const { return m_displayName; }
 
+protected:
   /// fill a_resultIcon with a display icon for the node.
   /// @param a_resultIcon returned icon.
   /// @return true if result was returned.
@@ -110,6 +115,7 @@ protected:
   typedef QList< Node* > NodesList;
   NodesList m_children;
   QString m_displayName;
+  QIcon m_cachedIcon;
   NodesModelInterface* m_model;
 };
 
@@ -174,8 +180,22 @@ public: // Overridables
 
 private:
   KDevelop::IndexedQualifiedIdentifier m_identifier;
-  QIcon m_cachedIcon;
   KDevelop::DeclarationPointer m_cachedDeclaration;
+};
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+/// A node that represents an enum value.
+class EnumNode : public IdentifierNode
+{
+public:
+  EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
+
+public: // Node overrides
+  virtual int getScore() const { return 102; }
+  virtual bool getIcon(QIcon& a_resultIcon);
+  virtual void populateNode();
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -193,7 +213,7 @@ public:
   ClassNode* findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
 public: // Node overrides
-  virtual int getScore() const { return 3; }
+  virtual int getScore() const { return 300; }
   virtual void populateNode();
   virtual void nodeCleared();
   virtual bool hasChildren() const { return true; }
@@ -225,7 +245,7 @@ public:
   FunctionNode(KDevelop::ClassFunctionDeclaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual int getScore() const { return 4; }
+  virtual int getScore() const { return 400; }
   virtual QString getSortableString() const { return m_sortableString; }
 
 private:
@@ -236,13 +256,14 @@ private:
 //////////////////////////////////////////////////////////////////////////////
 
 /// Provides display for a single class variable.
-class VariableNode : public IdentifierNode
+class ClassMemberNode : public IdentifierNode
 {
 public:
-  VariableNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model);
+  ClassMemberNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  virtual int getScore() const { return 5; }
+  virtual int getScore() const { return 500; }
+  virtual bool getIcon(QIcon& a_resultIcon);
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -256,7 +277,7 @@ public:
 
 public: // Node overrides
   virtual bool getIcon(QIcon& a_resultIcon);
-  virtual int getScore() const { return 1; }
+  virtual int getScore() const { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -270,7 +291,7 @@ public:
 
 public: // Node overrides
   virtual bool getIcon(QIcon& a_resultIcon);
-  virtual int getScore() const { return 1; }
+  virtual int getScore() const { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////

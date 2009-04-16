@@ -99,8 +99,8 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 
   if ( role == Qt::DecorationRole )
   {
-    QIcon icon;
-    return node->getIcon(icon) ? icon : QVariant();
+    QIcon icon = node->getCachedIcon();
+    return icon.isNull() ? QVariant() : icon;
   }
 
   return QVariant();
