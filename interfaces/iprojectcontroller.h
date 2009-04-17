@@ -86,6 +86,8 @@ public:
      */
     Q_SCRIPTABLE virtual bool isProjectNameUsed( const QString& name ) const = 0;
 
+    virtual KUrl projectsBaseDirectory() const = 0;
+
 public Q_SLOTS:
     /**
      * Tries finding a project-file for the given source-url and opens it.
@@ -110,8 +112,6 @@ public Q_SLOTS:
     virtual void closeProject( IProject* ) = 0;
     virtual void configureProject( IProject* ) = 0;
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
-
-    virtual KUrl projectsBaseDirectory() const = 0;
 
 Q_SIGNALS:
     /**
