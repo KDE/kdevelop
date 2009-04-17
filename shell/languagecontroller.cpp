@@ -35,6 +35,7 @@
 #include "language.h"
 #include "settings/ccpreferences.h"
 #include "completionsettings.h"
+#include <QThread>
 
 namespace KDevelop {
 
@@ -193,9 +194,11 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
                         languages << *it;
                 }
             }
-    }
+        }
         
-        if(!languages.isEmpty() || a)
+        //Never use findByUrl from within a background thread, and never load a language support
+        //from within the backgruond thread. Both is unsafe, and can lead to crashes
+        if(!languages.isEmpty() || a || QThread::currentThread() != thread())
             return languages;
         
         ///Crashy and unsafe part: Load missing language-supports

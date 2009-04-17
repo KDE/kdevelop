@@ -45,7 +45,12 @@ public:
     Q_SCRIPTABLE virtual QList<ILanguage*>activeLanguages() = 0;
     /** @return the language for given @p name. */
     Q_SCRIPTABLE virtual ILanguage* language(const QString &name) const = 0;
-    /** @return the languages that support the MIME type of @p url. */
+    /** @return the languages that support the MIME type of @p url.
+      * @warning If this is called from within the foreground thread,
+      *          the language support is loaded if required.
+      *          If it is called from a background thread, it can not
+      *          be loaded, and thus zero will be returned.
+      * */
     Q_SCRIPTABLE virtual QList<ILanguage*> languagesForUrl(const KUrl &url) = 0;
     
     /** @return All languages currently loaded */
