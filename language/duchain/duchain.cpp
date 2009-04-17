@@ -687,6 +687,7 @@ public:
           //This can happen in case of loops. We have o unload everything at one time.
           kDebug(9505) << "found" << hadUnloadable << "unloadable contexts, but could not unload separately. Unloading atomically.";
           unloadAllUnreferenced = true;
+          hadUnloadable = 0; //Reset to 0, so we cannot loop forever
           goto unloadContexts;
         }
       }
