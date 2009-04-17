@@ -130,14 +130,19 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     /// Destructor.
     ~PersistentSymbolTable();
 
+    ///Adds declaration @p declaration with id @p id to the symbol table
+    ///@warning DUChain must be write locked
     void addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
 
+    ///Adds declaration @p declaration with id @p id to the symbol table
+    ///@warning DUChain must be write locked
     void removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration);
 
     ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way.
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     ///@param count A reference that will be filled with the count of retrieved declarations
     ///@param declarations A reference to a pointer, that will be filled with a pointer to the retrieved declarations.
+    ///@warning DUChain must be read locked as long as the returned data is used
     void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 
     typedef ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler> Declarations;
@@ -145,6 +150,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way, and returns
     ///them in a structure that is more convenient than declarations().
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
+    ///@warning DUChain must be read locked as long as the returned data is used
     Declarations getDeclarations(const IndexedQualifiedIdentifier& id) const;
 
     typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true> CachedIndexedRecursiveImports;
@@ -154,15 +160,20 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
     FilteredDeclarationIterator getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
-    
+
+    ///Adds context @p context with id @p id to the symbol table
+    ///@warning DUChain must be write locked
     void addContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
 
+    ///Removes context @p context with id @p id to the symbol table
+    ///@warning DUChain must be write locked
     void removeContext(const IndexedQualifiedIdentifier& id, const IndexedDUContext& context);
 
     ///Retrieves all the contexts for a given IndexedQualifiedIdentifier in an efficient way.
     ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
     ///@param count A reference that will be filled with the count of retrieved contexts
     ///@param contexts A reference to a pointer, that will be filled with a pointer to the retrieved contexts.
+    ///@warning DUChain must be read locked as long as the returned data is used
     void contexts(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDUContext*& contexts) const;
     
     typedef ConstantConvenientEmbeddedSet<IndexedDUContext, IndexedDUContextHandler> Contexts;
@@ -170,6 +181,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///Retrieves all the contexts for a given IndexedQualifiedIdentifier in an efficient way, and returns them
     ///in a more user-friendly structure then contexs().
     ///@param id The IndexedQualifiedIdentifier for which the contexts should be retrieved
+    ///@warning DUChain must be read locked as long as the returned data is used
     Contexts getContexts(const IndexedQualifiedIdentifier& id) const;
     
     typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDUContext, IndexedDUContextHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DUContextTopContextExtractor> FilteredDUContextIterator;
@@ -177,6 +189,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @param visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
+    ///@warning DUChain must be read locked as long as the returned data is used
     FilteredDUContextIterator getFilteredContexts(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
     
     static PersistentSymbolTable& self();
