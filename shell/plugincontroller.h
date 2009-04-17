@@ -171,6 +171,8 @@ private:
 
     void cleanup();
     void initialize();
+    
+    bool isEnabled( const KPluginInfo& info );
 
 private:
     class PluginControllerPrivate* const d;

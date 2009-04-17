@@ -199,6 +199,13 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
     return loadPluginInternal( pluginName );
 }
 
+bool PluginController::isEnabled( const KPluginInfo& info ) 
+{
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
+    bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
+    return isGlobalPlugin( info ) && isEnabled;
+}
+
 void PluginController::initialize()
 {
     QMap<QString, bool> pluginMap;
@@ -536,8 +543,10 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
         IPlugin* plugin;
         if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];
-        else
+        else if( isEnabled( info ) )
             plugin = loadPluginInternal( info.pluginName() );
+        else
+            continue;
 
         if (plugin)
             plugins << plugin;
