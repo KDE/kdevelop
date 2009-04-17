@@ -334,6 +334,13 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( d->loadedPlugins.contains( info ) )
         return d->loadedPlugins[ info ];
 
+    if( !isEnabled( info ) )
+    {
+        // Do not load disabled plugins
+        kWarning() << "Not loading plugin named" << pluginId << "because its been disabled!";
+        return 0;
+    }
+
     if( !hasMandatoryProperties( info ) ) {
         kWarning() << "Unable to load plugin named " << pluginId << "! Doesn't have all mandatory properties set";
         return 0;
@@ -543,10 +550,8 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
         IPlugin* plugin;
         if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];
-        else if( isEnabled( info ) )
+        else 
             plugin = loadPluginInternal( info.pluginName() );
-        else
-            continue;
 
         if (plugin)
             plugins << plugin;
