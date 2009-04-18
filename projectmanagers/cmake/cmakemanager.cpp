@@ -1026,7 +1026,7 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
 
 bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add)
 {
-    bool ret=true;
+    bool ret=false;
     QString txt=doc->text(r.textRange());
     if(!add && txt.contains(name))
     {
@@ -1055,6 +1055,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
         if(add && decls.isEmpty())
         {
             doc->insertText(r.textRange().start(), name);
+            kDebug(9042) << ">>>>>>>>>>>>>>>>>>>>>>" << name << r.textRange().start();
             ret=true;
         }
         else foreach(Declaration* d, decls)
@@ -1076,7 +1077,8 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
             if(!r.isEmpty())
             {
-                ret = ret && followUses(doc, r, name, lists, add);
+                kDebug(9042) << "+++++++++++++++++++++" << ret << name;
+                ret = ret || followUses(doc, r, name, lists, add);
             }
         }
     }
@@ -1171,13 +1173,11 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, true);
 
-    if(e.exec())
-    {
-        bool saved=e.document()->documentSave();
-        if(!saved)
+    if(ret && e.exec())
+        ret=e.document()->documentSave();
+    if(!ret)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Cannot save the change."));
-    }
     return ret;
 }
 
