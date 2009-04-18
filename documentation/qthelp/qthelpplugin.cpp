@@ -213,35 +213,41 @@ QString qtDocsLocation(const QString& qmake)
 	return ret;
 }
 
+
+
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
 	, m_engine(KStandardDirs::locateLocal("data", "qthelpcollection", QtHelpFactory::componentData()))
 {
 	QStringList qmakes;
     KStandardDirs::findAllExe(qmakes, "qmake");
-	QString fileName;
+	QString dirName;
     foreach(const QString& qmake, qmakes) {
-        fileName=qtDocsLocation(qmake)+"/qch/qt.qch";
+        dirName=qtDocsLocation(qmake)+qtDocsLocation(qmake)+"/qch/";
+        QString fileName=dirName+"qt.qch";
         if(QFile::exists(fileName)) {
             kDebug() << "checking doc: " << fileName;
             break;
-        }
+        } else
+            dirName.clear();
     }
     
+    QDir d(dirName);
+	foreach(const QString& fileName, d.entryList()) {
+        bool b=m_engine.setupData();
+        kDebug() << "setup" << b << m_engine.error();
+        
+        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+        
+        if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
+            kDebug() << "loading doc" << fileName << fileNamespace;
+            if(m_engine.registerDocumentation(fileName))
+                kDebug() << "documentation added successfully" << fileName;
+            else
+                kDebug() << "error >> " << fileName << m_engine.error();
+        }
+    }
 	bool b=m_engine.setupData();
-	kDebug() << "setup" << b << m_engine.error();
-	
-	QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-	
-	if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-		kDebug() << "loading doc" << fileName << fileNamespace;
-		if(m_engine.registerDocumentation(fileName))
-			kDebug() << "documentation added successfully" << fileName;
-		else
-			kDebug() << "error >> " << fileName << m_engine.error();
-	}
-	
-	b=m_engine.setupData();
 	kDebug() << "registered" << b << m_engine.error() << m_engine.registeredDocumentations();
 }
 
