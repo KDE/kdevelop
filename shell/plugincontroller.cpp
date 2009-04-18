@@ -203,7 +203,8 @@ bool PluginController::isEnabled( const KPluginInfo& info )
 {
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
-    return isGlobalPlugin( info ) && isEnabled;
+    kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
+    return !isGlobalPlugin( info ) || isEnabled;
 }
 
 void PluginController::initialize()
