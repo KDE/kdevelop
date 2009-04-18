@@ -23,7 +23,7 @@
 
 #include "../languageexport.h"
 #include <QtCore/QString>
-#include <QSet>
+#include <QtCore/QSet>
 
 namespace KTextEditor {
   class SmartRange;
