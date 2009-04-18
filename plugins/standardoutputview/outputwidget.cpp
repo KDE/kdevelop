@@ -167,6 +167,7 @@ void OutputWidget::removeOutput( int id )
                 stackwidget->removeWidget( w );
             }
             delete w;
+            views.remove( id );
         } else
         {
             views.value( id )->setModel( 0 );
