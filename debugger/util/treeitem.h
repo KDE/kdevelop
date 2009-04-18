@@ -22,15 +22,15 @@
 #ifndef TREEITEM_H
 #define TREEITEM_H
 
-#include <QList>
-#include <QVariant>
-#include <QTimer>
-#include <QVector>
+#include <QtCore/QList>
+#include <QtCore/QVariant>
+#include <QtCore/QTimer>
+#include <QtCore/QVector>
 
 #include <iostream>
 
 #include "../debuggerexport.h"
-#include <KDebug>
+//#include <KDebug>
 
 namespace KDevelop {
 

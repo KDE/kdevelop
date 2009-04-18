@@ -58,7 +58,7 @@ public:
     virtual IBreakpointController *breakpointController() const = 0;
 
     /**
-     * Should return if restart is currently avaliable
+     * Should return if restart is currently available
      */
     virtual bool restartAvaliable() const = 0;
 

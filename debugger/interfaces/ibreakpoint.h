@@ -22,7 +22,7 @@
 #ifndef KDEV_IBREAKPOINT_H
 #define KDEV_IBREAKPOINT_H
 
-#include <QSet>
+#include <QtCore/QSet>
 #include "../util/treeitem.h"
 
 class KConfigGroup;

@@ -22,7 +22,7 @@
 #ifndef TREEVIEW_H
 #define TREEVIEW_H
 
-#include <QTreeView>
+#include <QtGui/QTreeView>
 
 #include "../debuggerexport.h"
 
@@ -40,7 +40,7 @@ class TreeModel;
         // Well, I really, really, need this.
         using QTreeView::indexRowSizeHint;
 
-    private slots:
+    private Q_SLOTS:
         void slotExpanded(const QModelIndex &index);
         void slotCollapsed(const QModelIndex &index);
         void slotClicked(const QModelIndex &index);

@@ -19,10 +19,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
  
+#include "treeitem.h"
+
 #include <QStringList>
 #include <QModelIndex>
 
-#include "treeitem.h"
 #include "treemodel.h"
 
 #include "kdebug.h"
