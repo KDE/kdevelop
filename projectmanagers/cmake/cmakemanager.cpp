@@ -1055,7 +1055,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
         if(add && decls.isEmpty())
         {
             doc->insertText(r.textRange().start(), name);
-            kDebug(9042) << ">>>>>>>>>>>>>>>>>>>>>>" << name << r.textRange().start();
             ret=true;
         }
         else foreach(Declaration* d, decls)
@@ -1077,7 +1076,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
             if(!r.isEmpty())
             {
-                kDebug(9042) << "+++++++++++++++++++++" << ret << name;
                 ret = ret || followUses(doc, r, name, lists, add);
             }
         }
