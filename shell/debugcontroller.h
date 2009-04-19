@@ -21,8 +21,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEV_DEBUGGERSHELLPLUGIN_H
-#define KDEV_DEBUGGERSHELLPLUGIN_H
+#ifndef KDEV_DEBUGGCONTROLLER_H
+#define KDEV_DEBUGGCONTROLLER_H
 
 #include <QtCore/QVariantList>
 #include <QtCore/QPointer>
