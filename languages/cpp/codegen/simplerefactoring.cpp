@@ -138,7 +138,6 @@ void SimpleRefactoring::executeNewClassAction() {
   QAction* action = qobject_cast<QAction*>(sender());
   if(action) {
     ProjectBaseItem* item = action->data().value<ProjectBaseItem*>();
-    KUrl url;
     ProjectFolderItem* folder = 0;
     if(item->folder()) {
       folder=item->folder();
