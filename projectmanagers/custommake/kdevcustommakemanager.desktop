@@ -3,6 +3,7 @@ Type=Service
 Name=Custom Makefile Project Manager
 Name[es]=Gestor de proyecto Makefile personalizado
 Name[fr]=Gestionnaire de projets Makefiles personnalisés
+Name[it]=Gestore progetto Makefile personalizzato
 Name[ja]=カスタム Makefile プロジェクトマネージャ
 Name[nds]=Egen-Makefile-Projektpleger
 Name[pt]=Gestor de Projectos de Makefiles Personalizadas
