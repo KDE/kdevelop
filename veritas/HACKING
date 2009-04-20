@@ -42,6 +42,6 @@ to be the party pooper.
 
 Tests that expose a bug or show a new feature that isn't fixed/implemented yet
 can be committed. To make them stand out from the regression suite their names 
-shall be be prefixed with 'tdd', which stands for 'test driven development'.
+should be prefixed with 'tdd', which stands for 'test driven development'.
 
 -------------------------------------------------------------------------------
