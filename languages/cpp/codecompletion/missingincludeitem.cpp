@@ -427,7 +427,23 @@ ForwardDeclarationItem::ForwardDeclarationItem(KDevelop::DeclarationPointer decl
 QVariant ForwardDeclarationItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   if(role == Qt::DisplayRole && index.column() == KTextEditor::CodeCompletionModel::Prefix)
     return i18n("Add Forward-Declaration");
-  return NormalDeclarationCompletionItem::data(index, role, model);
+
+  if(role == Qt::DecorationRole && index.column() == KTextEditor::CodeCompletionModel::Icon) {
+    RETURN_CACHED_ICON("dialog-ok"); ///@todo Better icon for the create-forward declaration action
+  }
+  
+  QVariant ret = NormalDeclarationCompletionItem::data(index, role, model);
+  
+  if(role == Qt::DisplayRole && index.column() == KTextEditor::CodeCompletionModel::Name) {
+    //Add some text behind the item, so we get some more info in minimal completion mode
+    DUChainReadLocker lock(DUChain::lock());
+    if(m_declaration)
+      return m_declaration->qualifiedIdentifier().toString() + ": " + i18n("forward-declare");
+    return ret;
+//     return m_displayTextPrefix + ": " + i18n("Add Forward-Declaration");
+  }
+  
+  return ret;
 }
 
 void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
