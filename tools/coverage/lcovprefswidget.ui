@@ -153,7 +153,6 @@ A color range has two different and independent modes: discrete and gradient. In
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
