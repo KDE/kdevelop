@@ -197,11 +197,12 @@ QString escapeFromBracketMatching(QString str) {
 }
 
 void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
-  
-  str = escapeForBracketMatching(str);
+  QString withStrings = escapeForBracketMatching(str);
+  str = escapeForBracketMatching(clearStrings(str));
   
   //Blank out everything that can confuse the bracket-matching algorithm
   QString reversed = reverse( str.left(argumentsStart) );
+  QString withStringsReversed = reverse( withStrings.left(argumentsStart) );
   //Now we should decrease argumentStart at the end by the count of steps we go right until we find the beginning of the function
   SafetyCounter s( 1000 );
 
@@ -212,7 +213,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
     int lastPos = pos;
     pos = KDevelop::findCommaOrEnd( reversed, pos )  ;
     if( pos > lastPos ) {
-      QString arg = reverse( reversed.mid(lastPos, pos-lastPos) ).trimmed();
+      QString arg = reverse( withStringsReversed.mid(lastPos, pos-lastPos) ).trimmed();
       if( !arg.isEmpty() )
         skippedArguments.push_front( escapeFromBracketMatching(arg) ); //We are processing the reversed reverseding, so push to front
     }
