@@ -635,8 +635,11 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
         details << "destructor";
       if( classFunDecl->isConversionFunction() )
         details << "conversion-function";
+      if( classFunDecl->isAbstract() )
+        details << "abstract";
     }
   }
+  
   return details;
 }
 
