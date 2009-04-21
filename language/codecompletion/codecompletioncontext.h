@@ -76,7 +76,7 @@ namespace KDevelop {
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
        * */
-      virtual CodeCompletionContext* parentContext();
+      CodeCompletionContext* parentContext();
 
       ///Sets the new parent context, and also updates the depth
       void setParentContext(KSharedPtr<CodeCompletionContext> newParent);
