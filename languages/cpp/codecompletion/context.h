@@ -110,7 +110,7 @@ namespace Cpp {
        * The parentContext() should always have the access-operation FunctionCallAccess.
        * When a completion-list is computed, the members of the list can be highlighted that match the corresponding parentContext()->functions() function-argument, or parentContext()->additionalMatchTypes()
        * */
-      virtual CodeCompletionContext* parentContext();
+      CodeCompletionContext* parentContext();
 
       ///@return the used access-operation
       MemberAccessOperation memberAccessOperation() const;
@@ -176,6 +176,9 @@ namespace Cpp {
       void setFollowingText(QString str);
       
       bool isConstructorInitialization();
+      
+      ///If this is a function call context, this returns the arguments to the function that are already known
+      QList<ExpressionEvaluationResult> knownArgumentTypes() const;
       
     private:
       QList<CompletionTreeItemPointer> keywordCompletionItems();

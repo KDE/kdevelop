@@ -1121,7 +1121,9 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
   DeclarationBuilderBase::visitUsingDirective(node);
 
   if( compilingContexts() ) {
-    NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, globalImportIdentifier);
+    SimpleRange range = editor()->findRange(node->start_token);
+    DUChainWriteLocker lock(DUChain::lock());
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, globalImportIdentifier, false, false, &range);
     {
       DUChainWriteLocker lock(DUChain::lock());
       QualifiedIdentifier id;
@@ -1153,9 +1155,10 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
   }
 
   if( compilingContexts() ) {
-    NamespaceAliasDeclaration* decl = openDeclaration<NamespaceAliasDeclaration>(0, node, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()));
+    SimpleRange range = editor()->findRange(node->namespace_name);
+    DUChainWriteLocker lock(DUChain::lock());
+    NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()), false, false, &range);
     {
-      DUChainWriteLocker lock(DUChain::lock());
       QualifiedIdentifier id;
       identifierForNode(node->alias_name, id);
       decl->setImportIdentifier( resolveNamespaceIdentifier(id, currentDeclaration()->range().start) );

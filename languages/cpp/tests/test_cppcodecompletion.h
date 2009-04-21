@@ -77,6 +77,7 @@ private slots:
   void testCompletionPrefix();
   void cleanupTestCase();
   void testForwardDeclaration();
+  void testArgumentMatching();
   void testAcrossHeaderReferences();
   void testAcrossHeaderTemplateReferences();
   void testAcrossHeaderTemplateResolution();

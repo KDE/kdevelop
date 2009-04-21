@@ -77,7 +77,10 @@ protected:
   virtual void visitUsing(UsingAST *);
   void visitTypeId(TypeIdAST* type_id);
   virtual void visitClassSpecifier(ClassSpecifierAST* node);
+  virtual void visitUsingDirective(UsingDirectiveAST* node);
+  virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node);
 private:
+  void buildUsesForName(NameAST* name);
 
   void visitExpression(AST* node);
 

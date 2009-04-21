@@ -201,7 +201,6 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if(depth == 0) {
     preprocessText( line );
     m_text = clearComments( m_text );
-    m_text = clearStrings( m_text );
   }
     
    m_text = stripFinalWhitespace( m_text );
@@ -745,6 +744,10 @@ bool CodeCompletionContext::doConstructorCompletion() {
   ///Step 1: Skip to the ':', to find the back of the function declaration. On the way, all expressions need to be constructor decls.
 }
 
+QList< Cpp::ExpressionEvaluationResult > CodeCompletionContext::knownArgumentTypes() const {
+  return m_knownArgumentTypes;
+}
+
 bool CodeCompletionContext::isConstructorInitialization() {
   return m_isConstructorCompletion;
 }
@@ -1018,10 +1021,16 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
 void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext) {
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
-    if(classFun && classFun->isVirtual() && !classFun->isConstructor() && !classFun->isDestructor()) {
+    if(classFun && (classFun->isVirtual() || classFun->isConstructor())) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
-      if(!overridable.contains(key) && base->findLocalDeclarations(classFun->identifier(), SimpleCursor::invalid(), 0, key.first.abstractType()).isEmpty())
-        overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext)));
+      if(base->owner()) {
+        if(classFun->isConstructor() || classFun->isDestructor())
+          key.second = base->owner()->identifier().identifier();
+        if(classFun->isDestructor())
+          key.second = IndexedString("~" + key.second.str());
+      }
+      if(!overridable.contains(key) && base->findLocalDeclarations(KDevelop::Identifier(key.second), SimpleCursor::invalid(), 0, key.first.abstractType(), KDevelop::DUContext::OnlyFunctions).isEmpty())
+        overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext, (classFun && classFun->isAbstract()) ? 1 : 2)));
     }
   }
 
@@ -1419,7 +1428,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   }
 
   foreach(DUContext* child, context->childContexts())
-    if(child->type() == DUContext::Namespace || child->type() == DUContext::Class)
+    if(child->type() == DUContext::Namespace || child->type() == DUContext::Class || child->type() == DUContext::Helper)
       ret += getImplementationHelpersInternal(minimumScope, child);
   return ret;
 }

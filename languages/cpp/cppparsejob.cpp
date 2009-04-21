@@ -358,8 +358,10 @@ LineContextPair contentFromProxy(LineContextPair ctx) {
           ReferencedTopDUContext ref(ctx.context);
         }
         if(ctx.context->importedParentContexts().isEmpty()) {
-          kDebug() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
-          Q_ASSERT(0);
+          kWarning() << "proxy-context for" << ctx.context->url().str() << "has no imports!" << ctx.context->ownIndex();
+          ///@todo Find out how this can happen
+//           Q_ASSERT(0);
+          return LineContextPair(0, 0);
         }
         
         Q_ASSERT(!ctx.context->importedParentContexts().isEmpty());
@@ -449,7 +451,11 @@ void CPPInternalParseJob::run()
     {
         DUChainReadLocker lock(DUChain::lock());
         foreach ( const LineContextPair &context, parentJob()->includedFiles() ) {
-            importedContentChains << contentFromProxy(context);
+            LineContextPair pair = contentFromProxy(context);
+            if(!pair.context)
+              continue;
+            
+            importedContentChains << pair;
             encounteredIncludeUrls << context.context->url();
         }
     }
@@ -466,6 +472,8 @@ void CPPInternalParseJob::run()
           foreach ( const LineContextPair &topContext, currentJob->includedFiles() ) {
               //As above, we work with the content-contexts.
               LineContextPair context = contentFromProxy(topContext);
+              if(!context.context)
+                continue;
               DUContextPointer ptr(context.context);
               if( !importsContext(importedContentChains, context.context)  && (!updatingContentContext ||       !importsContext(updatingContentContext->importedParentContexts(), context.context)) ) {
                 if(!updatingContentContext || !updatingContentContext->imports(context.context, updatingContentContext->range().end)) {
@@ -717,6 +725,8 @@ void CPPInternalParseJob::run()
         if(import.temporary)
           continue;
         LineContextPair context = contentFromProxy(import);
+        if(!context.context)
+          continue;
         Q_ASSERT(context.context);
         Q_ASSERT(contentContext->imports(context.context.data(), SimpleCursor::invalid()));
       }
@@ -848,6 +858,8 @@ void CPPParseJob::processDelayedImports() {
       }
       Q_ASSERT(m_parseJob->contentContext);
       LineContextPair content = contentFromProxy(context);
+      if(!content.context)
+        continue;
       Q_ASSERT(content.context);
       content.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(content.sourceLine, 0));
       content.context->updateImportsCache();

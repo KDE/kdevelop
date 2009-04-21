@@ -37,13 +37,35 @@ ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::De
 
 #define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
 
+QString ImplementationHelperItem::getOverrideName() const {
+  QString ret;
+  if(m_declaration) {
+    ret = m_declaration->identifier().toString();
+  
+    KDevelop::ClassFunctionDeclaration* classDecl = dynamic_cast<KDevelop::ClassFunctionDeclaration*>(declaration().data());
+    if(classDecl && completionContext() && completionContext()->duContext()) {
+      if(classDecl->isConstructor() || classDecl->isDestructor())
+        ret = completionContext()->duContext()->localScopeIdentifier().toString();
+      if(classDecl->isDestructor())
+        ret = "~" + ret;
+    }
+  }
+  return ret;
+}
+
 QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
   QVariant ret = NormalDeclarationCompletionItem::data(index, role, model);
   if(role == Qt::DecorationRole) {
     if(index.column() == KTextEditor::CodeCompletionModel::Icon) {
       switch(m_type) {
-        case Override:
+        case Override: {
+          KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+          KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+          if(classFunction && classFunction->isAbstract())
+            RETURN_CACHED_ICON("flag-red");
+          
           RETURN_CACHED_ICON("CTparents");
+        }
         case CreateDefinition:
           RETURN_CACHED_ICON("CTsuppliers"); ///@todo Better icon?
         case CreateSignalSlot:
@@ -74,12 +96,20 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
           ret = cDecl->identifier().toString();
         
         return ret;
+      }else if(m_type == Override) {
+        ret = getOverrideName();
       }
       if(declaration().data() && m_type != Override) {
         QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
         if(!parentScope.isEmpty())
           ret = parentScope.toString() + "::" + ret.toString();
       }
+    }
+    if(index.column() == KTextEditor::CodeCompletionModel::Arguments) {
+      KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+      KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+      if(classFunction && classFunction->isAbstract())
+        ret = ret.toString() + " = 0";
     }
   }
   
@@ -116,16 +146,21 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   if(completionContext())
     duContext = completionContext()->duContext(); ///@todo Take the DUContext from somewhere lese
   
+  KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+  
   ///@todo Move these functionalities into sourcemanipulation.cpp
   if(m_type == Override) {
     if(!useAlternativeText) {
-      if(m_declaration) {
+      
+      if(!classFunction || !classFunction->isConstructor())
         newText = "virtual ";
+      if(m_declaration) {
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
             newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
         
-        newText += m_declaration->identifier().toString();
+        newText += getOverrideName();
+        
         newText += signaturePart(true);
         newText += ";";
       } else {
@@ -162,6 +197,38 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
           newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
       newText += scope.toString();
       newText += signaturePart(false);
+      
+      if(classFunction && classFunction->isConstructor()) {
+        KDevelop::DUContext* funCtx = classFunction->internalFunctionContext();
+        if(funCtx) {
+          int argsGiven = 0;
+          bool started = false;
+          QVector< KDevelop::DUContext::Import > imports = classFunction->context()->importedParentContexts();
+          for(KDevelop::DUContext::Import* it = imports.begin(); it != imports.end() && argsGiven < funCtx->localDeclarations().size(); ++it) {
+            KDevelop::DUContext* ctx = it->context(topContext);
+            if(ctx && ctx->type() == DUContext::Class && ctx->owner()) {
+              Declaration* parentClassDecl = ctx->owner();
+              
+              if(!started)
+                newText += ": ";
+              else
+                newText += ", ";
+              started = true;
+              
+              newText += parentClassDecl->identifier().toString() + "(";
+              int take = funCtx->localDeclarations().size()-argsGiven; ///@todo Allow distributing the arguments among multiple parents in multipe-inheritance case
+              for(int a = 0; a < take; ++a) {
+                if(a)
+                  newText += ", ";
+                newText += funCtx->localDeclarations()[argsGiven]->identifier().toString();
+                ++argsGiven;
+              }
+              newText += ")";
+            }
+          }
+        }
+      }
+      
       newText += " {\n";
       
       if(asFunction) {

@@ -106,6 +106,24 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testArgumentMatching() {
+  {
+    QByteArray test = "#define A(x) #x\n void test(char* a, char* b, int c) { } ";
+
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 2);
+    CompletionItemTester tester(context->childContexts()[1], "test(\"hello\", A(a),");
+    QVERIFY(tester.completionContext->parentContext());
+    QCOMPARE(tester.completionContext->parentContext()->knownArgumentTypes().count(), 2);
+    QVERIFY(tester.completionContext->parentContext()->knownArgumentTypes()[0].type.abstractType());
+    QVERIFY(tester.completionContext->parentContext()->knownArgumentTypes()[1].type.abstractType());
+    QCOMPARE(tester.completionContext->parentContext()->knownArgumentTypes()[0].type.abstractType()->toString(), QString("const char*"));
+    QCOMPARE(tester.completionContext->parentContext()->knownArgumentTypes()[1].type.abstractType()->toString(), QString("const char*"));
+    release(context);
+  }
+}
+
 void TestCppCodeCompletion::testSubClassVisibility() {
   {
     QByteArray test = "struct A { int am; struct B { int bm; }; }; void test() { A::B b; } ";

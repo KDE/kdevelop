@@ -1617,7 +1617,6 @@ void TestDUChain::testDeclareUsingNamespace2()
 {
   TEST_FILE_PARSE_ONLY
 
-///@todo Correclty build namespace-uses for namespace-aliases and and "using namespace"
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
   QByteArray method("namespace foo2 {int bar2; namespace SubFoo { int subBar2; } }; namespace foo { int bar; using namespace foo2; } namespace GFoo{ namespace renamedFoo2 = foo2; using namespace renamedFoo2; using namespace SubFoo; int gf; } using namespace GFoo; int test() { return bar; }");
@@ -1676,7 +1675,7 @@ void TestDUChain::testDeclareUsingNamespace()
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray method("namespace foo { int bar; } using namespace foo; namespace alternativeFoo = foo; int test() { return bar; }");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -1685,11 +1684,18 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(top->localDeclarations().count(), 4);
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QVERIFY(findDeclaration(top, Identifier("foo")));
+  QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 2);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 65-22, 0, 68-22));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 97-22, 0, 100-22));
 
-//   QCOMPARE(top->namespaceAliases().count(), 1);
-//   QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
-//   QCOMPARE(top->namespaceAliases().first()->textCursor(), Cursor(0, 47));
 
+//   QCOMPARE(top->localDeclarations()[0]->range()
+  QCOMPARE(top->localDeclarations()[1]->range(), SimpleRange(0, 33, 0, 42));
+  kDebug() << top->localDeclarations()[2]->range().textRange();
+  QCOMPARE(top->localDeclarations()[2]->range(), SimpleRange(0, 58, 0, 72));
+  
+  
   DUContext* fooCtx = top->childContexts().first();
   QCOMPARE(fooCtx->childContexts().count(), 0);
   QCOMPARE(fooCtx->localDeclarations().count(), 1);

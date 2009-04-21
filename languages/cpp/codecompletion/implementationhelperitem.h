@@ -43,6 +43,10 @@ public:
   QString insertionText(KUrl currentDocumentUrl = KUrl(), KDevelop::SimpleCursor currentDocumentCursor = KDevelop::SimpleCursor(), QualifiedIdentifier forceParentScope = QualifiedIdentifier());
   
   virtual bool dataChangedWithInput() const;
+
+  private:
+  ///DUChain must be read-locked
+  QString getOverrideName() const;
 };
 
 }

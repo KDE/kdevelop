@@ -159,14 +159,30 @@ void UseBuilder::visitExpression(AST* node) {
   visitor.parse( node );
 }
 
-void UseBuilder::visitBaseSpecifier(BaseSpecifierAST* node) {
-  UseExpressionVisitor visitor( editor()->parseSession(), this );
-  if(node->name) {
-    if( !node->name->ducontext )
-      node->name->ducontext = currentContext();
-    
-    visitor.parse( node->name );
+void UseBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node) {
+  DefaultVisitor::visitNamespaceAliasDefinition(node);
+  buildUsesForName(node->alias_name);
+}
+
+void UseBuilder::visitUsingDirective(UsingDirectiveAST* node) {
+  DefaultVisitor::visitUsingDirective(node);
+  buildUsesForName(node->name);
+}
+
+void UseBuilder::buildUsesForName(NameAST* name) {
+  if(name) {
+    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    if(name) {
+      if( !name->ducontext )
+        name->ducontext = currentContext();
+      
+      visitor.parse( name );
+    }
   }
+}
+
+void UseBuilder::visitBaseSpecifier(BaseSpecifierAST* node) {
+  buildUsesForName(node->name);
 }
 
 void UseBuilder::visitMemInitializer(MemInitializerAST * node)
