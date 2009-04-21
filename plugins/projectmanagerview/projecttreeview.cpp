@@ -60,7 +60,19 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setIndentation(10);
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    if( style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this) == KGlobalSettings::singleClick() )
+    {
+        connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+    } else
+    {
+        if( KGlobalSettings::singleClick() )
+        {
+            connect( this, SIGNAL( clicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+        } else
+        {
+            connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
+        }
+    }
 }
 
 ProjectTreeView::~ProjectTreeView()
