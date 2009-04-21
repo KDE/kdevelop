@@ -35,7 +35,10 @@ KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
-{}
+{
+    setDynamicSortFilter(true);
+    sort(0); //initiate sorting regardless of the view
+}
 
 KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
 {

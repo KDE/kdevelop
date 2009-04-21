@@ -64,9 +64,12 @@ using namespace KDevelop;
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidget *parent )
         : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
 {
-    setWindowTitle(i18n("Projects"));
-
     m_ui->setupUi( this );
+
+    setWindowTitle(i18n("Projects"));
+    setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
+    setWindowTitle( i18n( "Project Manager" ) );
+    setWhatsThis( i18n( "Project Manager" ) );
 
     m_syncAction = new KAction(this);
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -101,15 +104,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     QStandardItemModel *overviewModel = ICore::self()->projectController()->projectModel();
     m_modelFilter = new ProjectProxyModel( this );
     m_modelFilter->setSourceModel(overviewModel);
-    m_modelFilter->setDynamicSortFilter(true);
+
     m_ui->projectTreeView->setModel( m_modelFilter );
-    m_ui->projectTreeView->setSortingEnabled(true);
-    m_ui->projectTreeView->sortByColumn( 0, Qt::AscendingOrder );
     m_ui->projectTreeView->setSelectionModel( new ProxySelectionModel( m_ui->projectTreeView, ICore::self()->projectController()->projectSelectionModel(), this ) );
-//     m_ui->projectTreeView->setModel( overviewModel );c
-    setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
-    setWindowTitle( i18n( "Project Manager" ) );
-    setWhatsThis( i18n( "Project Manager" ) );
+ 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
