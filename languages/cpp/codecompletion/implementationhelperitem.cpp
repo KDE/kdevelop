@@ -229,7 +229,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
         }
       }
       
-      newText += " {\n";
+      newText += "\n{\n";
       
       if(asFunction) {
       
