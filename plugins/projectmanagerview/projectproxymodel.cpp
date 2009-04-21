@@ -21,6 +21,7 @@
 #include <project/projectmodel.h>
 #include <KDebug>
 #include <qfileinfo.h>
+#include <kmimetype.h>
 
 KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
 {
@@ -51,18 +52,20 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     if(!iLeft || !iRight) return false;
 
     KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(iLeft->type()), rightType=baseType(iRight->type());
-    if( leftType == rightType )
+    if(leftType==rightType)
     {
-        return iLeft->text() < iRight->text();
+        if(leftType==KDevelop::ProjectBaseItem::File)
+        {
+            KMimeType::Ptr thisMime=KMimeType::findByUrl(iLeft->file()->url()), otherMime=KMimeType::findByUrl(iRight->file()->url());
+    
+            if(thisMime->name()!=otherMime->name())
+                return thisMime->name()<otherMime->name();
+        }
+        return *iLeft<*iRight;
     }
-    if( leftType == KDevelop::ProjectBaseItem::Folder )
-    {
-        return true;
-    }
-    if( leftType == KDevelop::ProjectBaseItem::Target && rightType != KDevelop::ProjectBaseItem::Folder )
-    {
-        return true;
-    }
+    else
+        return leftType<rightType;
+    
     return false;
 }
 
