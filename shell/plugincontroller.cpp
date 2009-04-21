@@ -359,7 +359,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if( info.property("X-KDevelop-PluginType").toString() == "Kross" ) 
     {
         isKrossPlugin = true;
-        krossScriptFile = KStandardDirs::locate( "data", info.property("X-KDE-Library").toString(), KComponentData("kdevkrossplugins") );
+        krossScriptFile = KStandardDirs::locate( "appdata", info.service()->library(), KComponentData("kdevkrossplugins"));
         if( krossScriptFile.isEmpty() || !QFileInfo( krossScriptFile ).exists() || !QFileInfo( krossScriptFile ).isReadable() )
         {
             kWarning() << "Unable to load kross plugin" << pluginId << ". Script file" << krossScriptFile << "not found or not readable";
