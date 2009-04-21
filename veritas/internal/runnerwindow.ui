@@ -213,7 +213,6 @@
    </property>
   </action>
  </widget>
- <layoutdefault spacing="6" margin="6" />
  <customwidgets>
   <customwidget>
    <class>Veritas::TestBar</class>

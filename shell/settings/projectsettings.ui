@@ -83,7 +83,6 @@ files for parsing:</string>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
   <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
