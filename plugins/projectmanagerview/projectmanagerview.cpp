@@ -68,7 +68,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     setWindowTitle(i18n("Projects"));
     setWindowIcon( SmallIcon( "kdevelop" ) ); //FIXME
-    setWindowTitle( i18n( "Project Manager" ) );
     setWhatsThis( i18n( "Project Manager" ) );
 
     m_syncAction = new KAction(this);
