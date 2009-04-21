@@ -71,8 +71,9 @@ bool isLeftParen( QChar c1 ) {
 
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
-int expressionAt( const QString& text, int index ) {
-
+int expressionAt( const QString& _text, int index ) {
+  QString text = KDevelop::clearStrings(_text);
+  
   if( index == 0 )
     return 0;
 
