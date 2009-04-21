@@ -267,15 +267,16 @@ QString stripFinalWhitespace(QString str) {
 }
 
 QString clearComments( QString str, QChar replacement ) {
-  if( str.isEmpty() ) return "";
 
+  QString withoutStrings = clearStrings(str, '$');
+  
   SafetyCounter s( 1000 );
   int lastPos = 0;
   int pos;
   int len = str.length();
-  while( (pos = str.indexOf( "/*", lastPos )) != -1 ) {
+  while( (pos = withoutStrings.indexOf( "/*", lastPos )) != -1 ) {
     if( !s ) return str;
-    int i = str.indexOf( "*/", pos );
+    int i = withoutStrings.indexOf( "*/", pos );
     if( i != -1 && i <= len - 2 ) {
       fillString( str, pos, i+2, replacement );
       lastPos = i+2;
@@ -286,9 +287,9 @@ QString clearComments( QString str, QChar replacement ) {
   }
 
   lastPos = 0;
-  while( (pos = str.indexOf( "//", lastPos )) != -1 ) {
+  while( (pos = withoutStrings.indexOf( "//", lastPos )) != -1 ) {
     if( !s ) return str;
-    int i = str.indexOf( '\n', pos );
+    int i = withoutStrings.indexOf( '\n', pos );
     if( i != -1 && i <= len - 1 ) {
       fillString( str, pos, i+1, replacement );
       lastPos = i+1;
