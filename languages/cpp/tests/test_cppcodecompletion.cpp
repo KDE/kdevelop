@@ -381,6 +381,16 @@ void TestCppCodeCompletion::testCompletionPrefix() {
   }
 }
 
+void TestCppCodeCompletion::testStringProblem() {
+  TEST_FILE_PARSE_ONLY
+  QByteArray method("void test() {int i;};");
+  TopDUContext* top = parse(method, DumpNone);
+  QCOMPARE(top->childContexts().count(), 2);
+  CompletionItemTester tester(top->childContexts()[1],QString("bla url(\"http://wwww.bla.de/\");"));
+  
+  QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
+}
+
 void TestCppCodeCompletion::testInheritanceVisibility() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("class A { public: class AMyClass {}; }; class B : protected A { public: class BMyClass {}; }; class C : private B{ public: class CMyClass {}; }; class D : public C { class DMyClass{}; }; ");

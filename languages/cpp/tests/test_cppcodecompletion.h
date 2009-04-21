@@ -102,6 +102,7 @@ private slots:
   void testCompletionBehindTypedeffedConstructor();
   void testSubClassVisibility();
   void testSignalSlotCompletion();
+  void testStringProblem();
 
 public:
   enum DumpArea {
