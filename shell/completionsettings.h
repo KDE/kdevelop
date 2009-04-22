@@ -30,7 +30,7 @@ public:
     CompletionSettings()
         : m_level(MinimalWhenAutomatic), m_automatic(true), m_enableSemanticHighlighting(true),
           m_highlightSemanticProblems(true), m_showMultiLineInformation(true),
-          m_localColorizationLevel(120), m_globalColorizationLevel(60)
+          m_localColorizationLevel(170), m_globalColorizationLevel(255)
     {
     }
 

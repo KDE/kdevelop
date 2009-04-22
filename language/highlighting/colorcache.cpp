@@ -88,8 +88,8 @@ ColorCache::ColorCache(QObject* parent)
 
   // first time initilialization
 
-  m_localColorRatio = 255 - ICore::self()->languageController()->completionSettings()->localColorizationLevel();
-  m_globalColorRatio = 255 - ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
+  m_localColorRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
+  m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
 
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
