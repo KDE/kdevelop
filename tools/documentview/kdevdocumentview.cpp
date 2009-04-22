@@ -187,7 +187,7 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
     if ( !mimeItem )
     {
-        mimeItem = new KDevMimeTypeItem( mimeType.toLatin1() );
+        mimeItem = new KDevMimeTypeItem( mimeType );
         m_documentModel->insertRow( m_documentModel->rowCount(), mimeItem );
         setExpanded( m_documentModel->indexFromItem( mimeItem ), false);
     }
