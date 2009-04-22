@@ -21,13 +21,13 @@
  * 02110-1301, USA.
  */
 
-#ifndef KDEV_DEBUGGCONTROLLER_H
-#define KDEV_DEBUGGCONTROLLER_H
+#ifndef KDEV_DEBUGCONTROLLER_H
+#define KDEV_DEBUGCONTROLLER_H
 
 #include <QtCore/QVariantList>
 #include <QtCore/QPointer>
-#include <kxmlguiclient.h>
-#include <KTextEditor/MarkInterface>
+#include <KDE/KXMLGUIClient>
+#include <KDE/KTextEditor/MarkInterface>
 
 #include "../interfaces/idebugcontroller.h"
 #include "../debugger/interfaces/idebugsession.h"
