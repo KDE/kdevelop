@@ -20,7 +20,6 @@
 #include <kmessagebox.h>
 #include <klistwidgetsearchline.h>
 
-
 #include <QLabel>
 #include <QLayout>
 #include <QTreeWidget>
@@ -62,6 +61,8 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     setCaption(i18n("Attach to Process"));
     setButtons( KDialog::Ok | KDialog::Cancel );
 
+    resize(700, 440);
+    
     QStringList cmd;
     psProc = new KDevelop::CommandExecutor("ps");
 #ifdef USE_SOLARIS
@@ -109,6 +110,7 @@ ProcessSelectionDialog::~ProcessSelectionDialog()
 
 int ProcessSelectionDialog::pidSelected()
 {
+    
 	return m_ui->pids->currentItem()->text(0).toInt();
 }
 
@@ -122,18 +124,22 @@ void ProcessSelectionDialog::slotReceivedOutput(const QStringList& lines)
     foreach( const QString& line, lines )
     {
         ps_output_line.exactMatch( line );
-        new QTreeWidgetItem(m_ui->pids,
-                            QStringList()
-                                << ps_output_line.cap(1)
+        QStringList items;
+        items                << ps_output_line.cap(1)
                                 << ps_output_line.cap(2)
                                 << ps_output_line.cap(3)
                                 << ps_output_line.cap(4)
-                                << ps_output_line.cap(5));
+                                << ps_output_line.cap(5);
+         if(items[0].toInt() == getpid())
+             continue; //Don't show the current process in the list
+        new QTreeWidgetItem(m_ui->pids, items);
 
     }
     // Need to set focus here too, as K3ListView will
     // 'steal' it otherwise.
     m_ui->search->searchLine()->setFocus();
+    for(int a = 0; a < m_ui->pids->columnCount(); ++a)
+        m_ui->pids->resizeColumnToContents(a);
 }
 
 /***************************************************************************/
