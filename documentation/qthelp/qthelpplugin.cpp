@@ -223,7 +223,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     KStandardDirs::findAllExe(qmakes, "qmake");
 	QString dirName;
     foreach(const QString& qmake, qmakes) {
-        dirName=qtDocsLocation(qmake)+qtDocsLocation(qmake)+"/qch/";
+        dirName=qtDocsLocation(qmake)+"/qch/";
         QString fileName=dirName+"qt.qch";
         if(QFile::exists(fileName)) {
             kDebug() << "checking doc: " << fileName;
@@ -232,23 +232,27 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
             dirName.clear();
     }
     
-    QDir d(dirName);
-	foreach(const QString& fileName, d.entryList()) {
-        bool b=m_engine.setupData();
-        kDebug() << "setup" << b << m_engine.error();
-        
-        QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-        
-        if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-            kDebug() << "loading doc" << fileName << fileNamespace;
-            if(m_engine.registerDocumentation(fileName))
-                kDebug() << "documentation added successfully" << fileName;
-            else
-                kDebug() << "error >> " << fileName << m_engine.error();
+    if(!dirName.isEmpty()) {
+        QDir d(dirName);
+        foreach(const QString& fileName, d.entryList()) {
+            bool b=m_engine.setupData();
+            kDebug() << "setup" << b << m_engine.error();
+            
+            QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
+            
+            if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
+                kDebug() << "loading doc" << fileName << fileNamespace;
+                if(m_engine.registerDocumentation(fileName))
+                    kDebug() << "documentation added successfully" << fileName;
+                else
+                    kDebug() << "error >> " << fileName << m_engine.error();
+            }
         }
+        bool b=m_engine.setupData();
+        kDebug() << "registered" << b << m_engine.error() << m_engine.registeredDocumentations();
     }
-	bool b=m_engine.setupData();
-	kDebug() << "registered" << b << m_engine.error() << m_engine.registeredDocumentations();
+    else
+        kDebug() << "no QtHelp fond at all";
 }
 
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec)
@@ -257,11 +261,11 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
 	
 	if(dec) {
         KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-        QStringList idLIst;
+        QStringList idList;
         for(int a = 0; a < qid.count(); ++a)
-            idLIst << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
+            idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
         
-		QString id = idLIst.join("::");
+		QString id = idList.join("::");
 		if(!id.isEmpty()) {
 			QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
             
