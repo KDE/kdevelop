@@ -76,7 +76,7 @@ struct KDEVCPPDUCHAIN_EXPORT CppClassTypeData : public KDevelop::StructureTypeDa
 class KDEVCPPDUCHAIN_EXPORT CppClassType : public KDevelop::StructureType
 {
 public:
-  CppClassType(const CppClassType& rhs) : KDevelop::StructureType(copyData<CppClassTypeData>(*rhs.d_func())) {
+  CppClassType(const CppClassType& rhs) : KDevelop::StructureType(copyData<CppClassType>(*rhs.d_func())) {
   }
 
   CppClassType(CppClassTypeData& data) : KDevelop::StructureType(data) {
@@ -122,14 +122,13 @@ typedef CppTemplateParameterTypeBase::Data CppTemplateParameterTypeData;
 class KDEVCPPDUCHAIN_EXPORT CppTemplateParameterType : public CppTemplateParameterTypeBase
 {
 public:
-  CppTemplateParameterType(const CppTemplateParameterType& rhs) : CppTemplateParameterTypeBase(copyData<CppTemplateParameterTypeData>(*rhs.d_func())) {
+  CppTemplateParameterType(const CppTemplateParameterType& rhs) : CppTemplateParameterTypeBase(copyData<CppTemplateParameterType>(*rhs.d_func())) {
   }
 
   CppTemplateParameterType(CppTemplateParameterTypeData& data) : CppTemplateParameterTypeBase(data) {
   }
 
-  CppTemplateParameterType() : CppTemplateParameterTypeBase(createData<CppTemplateParameterTypeData>()) {
-    d_func_dynamic()->setTypeClassId<CppTemplateParameterType>();
+  CppTemplateParameterType() : CppTemplateParameterTypeBase(createData<CppTemplateParameterType>()) {
   }
 
   typedef TypePtr<CppTemplateParameterType> Ptr;

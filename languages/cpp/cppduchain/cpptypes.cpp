@@ -39,8 +39,7 @@ AbstractType* CppClassType::clone() const {
   return new CppClassType(*this);
 }
 
-CppClassType::CppClassType() : KDevelop::StructureType(createData<Data>()) {
-  d_func_dynamic()->setTypeClassId<CppClassType>();
+CppClassType::CppClassType() : KDevelop::StructureType(createData<CppClassType>()) {
 }
 
 uint CppClassType::hash() const
