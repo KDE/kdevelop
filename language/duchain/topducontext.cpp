@@ -1427,7 +1427,7 @@ void TopDUContext::removeImportedParentContexts(const QList<TopDUContext*>& cont
 }
 
 /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.)
-bool TopDUContext::inDuChain() const {
+bool TopDUContext::inDUChain() const {
   return m_local->m_inDuChain;
 }
 

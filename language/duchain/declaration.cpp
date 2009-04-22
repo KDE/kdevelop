@@ -97,7 +97,7 @@ bool Declaration::inDUChain() const {
   if( !context() )
     return false;
   TopDUContext* top = topContext();
-  return top && top->inDuChain();
+  return top && top->inDUChain();
 }
 
 Declaration::Declaration( const SimpleRange& range, DUContext* context )

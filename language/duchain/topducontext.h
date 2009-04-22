@@ -155,7 +155,7 @@ public:
   bool deleting() const;
 
   /// Returns true if this object is registered in the du-chain. If it is not, all sub-objects(context, declarations, etc.) can be changed
-  bool inDuChain() const;
+  virtual bool inDUChain() const;
   /// This flag is only used by DUChain, never change it from outside.
   void setInDuChain(bool);
 
