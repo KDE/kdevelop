@@ -32,7 +32,7 @@ public:
     StackModel(const QVector<QString>& headers, QObject *parent = 0);
 
     void setAutoUpdate(bool autoUpdate);
-    virtual void update();
+    virtual void update()=0;
 
 protected:
     bool m_autoUpdate;

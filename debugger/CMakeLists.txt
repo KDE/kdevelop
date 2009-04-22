@@ -6,6 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 set( kdevplatformdebugger_LIB_SRCS
     interfaces/idebugsession.cpp
     interfaces/stackmodel.cpp
+    interfaces/stackitem.cpp
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
@@ -33,10 +34,11 @@ install(FILES
 )
 install(FILES
     interfaces/idebugsession.h
-    interfaces/stackmodel.h
     interfaces/ibreakpointcontroller.h
     interfaces/ibreakpoints.h
     interfaces/ibreakpoint.h
+    interfaces/stackmodel.h
+    interfaces/stackitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES

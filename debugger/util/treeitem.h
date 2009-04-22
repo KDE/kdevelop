@@ -26,6 +26,7 @@
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
+#include <QtGui/QIcon>
 
 #include <iostream>
 
@@ -61,7 +62,7 @@ protected: // Interface for derived classes
     TreeItem(TreeModel* model, TreeItem *parent = 0);
 
     /** Set the data to be shown for the item itself.  */
-    void setData(const QVector<QString> &data);
+    void setData(const QVector<QVariant> &data);
 
     /** Adds a new child and notifies the interested parties.  
         Clears the "hasMore" flag.  */
@@ -102,6 +103,7 @@ protected: // Backend implementation of Model/View
     void setExpanded(bool b) { expanded_ = b; }
 
     virtual void clicked() {}
+    virtual QVariant icon(int column) const;
 
 protected:
     QVector<TreeItem*> childItems;

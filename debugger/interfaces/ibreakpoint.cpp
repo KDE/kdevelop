@@ -32,7 +32,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind
   deleted_(false), hitCount_(0), kind_(kind),
   pending_(false), pleaseEnterLocation_(false)
 {
-    setData(QVector<QString>() << "" << "" << "" << "" << "");
+    setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
 IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
@@ -58,7 +58,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
 
     dirty_.insert(LocationColumn);
 
-    setData(QVector<QString>() << "" << "" << "" << location << condition);
+    setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
 }
 
 IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
@@ -66,7 +66,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
   deleted_(false), hitCount_(0), 
   kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true)
 {   
-    setData(QVector<QString>() << "" << "" << "" << "" << "");
+    setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
 void IBreakpoint::setColumn(int index, const QVariant& value)

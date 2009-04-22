@@ -43,12 +43,9 @@ TreeItem::~TreeItem()
     delete ellipsis_;
 }
 
-void TreeItem::setData(const QVector<QString> &data)
+void TreeItem::setData(const QVector<QVariant> &data)
 {
-    itemData.clear();
-    foreach (const QString &s, data) {
-        itemData.push_back(s);
-    }
+    itemData=data;
 }
 
 void TreeItem::appendChild(TreeItem *item, bool initial)
@@ -149,10 +146,11 @@ int TreeItem::columnCount() const
 
 QVariant TreeItem::data(int column, int role) const
 {
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
-        return QVariant();
-
-    return itemData.value(column);
+    if (role == Qt::DecorationRole)
+        return icon(column);
+    else if (role==Qt::DisplayRole || role == Qt::EditRole)
+        return itemData.value(column);
+    return QVariant();
 }
 
 TreeItem *TreeItem::parent()
@@ -174,7 +172,7 @@ public:
     EllipsisItem(TreeModel *model, TreeItem *parent)
     : TreeItem(model, parent)
     {
-        QVector<QString> data;
+        QVector<QVariant> data;
         data.push_back("...");
         for (int i = 1; i < model->columnCount(QModelIndex()); ++i)
             data.push_back("");
@@ -223,5 +221,8 @@ void TreeItem::setHasMoreInitial(bool more)
         ellipsis_ = new EllipsisItem (model(), this);
     }
 }
+
+QVariant KDevelop::TreeItem::icon(int column) const { return QVariant(); }
+
 
 #include "treeitem.moc"

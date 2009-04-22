@@ -1,6 +1,4 @@
 /*
-   Copyright 2009 Niko Sams <niko.sams@gmail.com>
-
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -16,18 +14,34 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "stackmodel.h"
+#ifndef STACKITEM_H
+#define STACKITEM_H
 
-using namespace KDevelop;
+#include <debugger/util/treeitem.h>
+#include "../debuggerexport.h"
 
-KDevelop::StackModel::StackModel(const QVector< QString >& headers, QObject* parent)
-   : TreeModel(headers, parent), m_autoUpdate(false)
+namespace KDevelop
 {
+class StackModel;
+
+class KDEVPLATFORMDEBUGGER_EXPORT StackItem : public TreeItem
+{
+    Q_OBJECT
+    public:
+        StackItem(StackModel* model, TreeItem* parent, const QString& prefix);
+        int id() const;
+        void setInformation(int id, const QString& name, const QPair<QString, int>& location);
+        StackModel* stackModel();
+        
+        virtual void clicked();
+        virtual QVariant icon(int column) const;
+    private:
+        QPair<QString, int> mLocation;
+        QString mPrefix;
+        StackModel* mModel;
+        int mId;
+};
+
 }
 
-void KDevelop::StackModel::setAutoUpdate(bool autoUpdate) {
-    m_autoUpdate = autoUpdate;
-    if (autoUpdate) update();
-}
-
-#include "stackmodel.moc"
+#endif // STACKITEM_H
