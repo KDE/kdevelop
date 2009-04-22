@@ -219,8 +219,10 @@ void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, 
 }
 
 void ContextBrowserPlugin::stopDelayedBrowsing() {
-  if(m_currentToolTip)
-    delete m_currentToolTip;
+  if(m_currentToolTip) {
+    m_currentToolTip->deleteLater();
+    m_currentToolTip = 0;
+  }
 }
 
 void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
@@ -277,8 +279,10 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
         contextView->setNavigationWidget(navigationWidget);
       }
       
-    if(m_currentToolTip)
-      delete m_currentToolTip;
+    if(m_currentToolTip) {
+      m_currentToolTip->deleteLater();
+      m_currentToolTip = 0;
+    }
     
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
