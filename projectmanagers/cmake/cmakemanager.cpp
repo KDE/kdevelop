@@ -226,6 +226,19 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
     m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd, version)));
 
+    //Defines the behaviour that can't be identified on initialization scripts
+#ifdef Q_OS_WIN32
+    m_varsDef.insert("WIN32", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_WIN32", QStringList("1"));
+#else
+    m_varsDef.insert("UNIX", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("1"));
+#endif
+#ifdef Q_OS_MAC
+    m_varsDef.insert("APPLE", QStringList("1"));
+    m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
+#endif
+
     m_macrosPerProject[project].clear();
     m_varsPerProject[project]=m_varsDef;
     m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
