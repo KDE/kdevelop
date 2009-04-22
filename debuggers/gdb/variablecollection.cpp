@@ -25,7 +25,6 @@
 
 #include "gdbcontroller.h"
 #include "variableitem.h"
-#include "frameitem.h"
 #include "watchitem.h"
 #include "tooltipwidget.h"
 

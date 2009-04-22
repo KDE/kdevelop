@@ -68,7 +68,6 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "variablewidget.h"
-#include "framestackwidget.h"
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "processselection.h"

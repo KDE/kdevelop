@@ -43,7 +43,6 @@
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
 #include "variableitem.h"
-#include "frameitem.h"
 #include "variablecollection.h"
 #include "watchitem.h"
 
