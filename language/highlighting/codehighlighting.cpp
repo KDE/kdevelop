@@ -129,10 +129,6 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context) const
 
   DUChainReadLocker lock(DUChain::lock());
 
-  ///@todo - do we really want to do that? or do we only want to regnerate the "generated" colors?
-  /// why would we want to do that? the list shouldn't change
-  ColorCache::self()->regenerateColors();
-
   if(!ICore::self()->languageController()->completionSettings()->semanticHighlightingEnabled()) {
     kDebug() << "highighting disabled";
     deleteHighlighting(context);
