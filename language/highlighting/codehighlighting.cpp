@@ -25,6 +25,7 @@
 #include <QApplication>
 #include <QPalette>
 
+#include <KColorScheme>
 #include <kcolorutils.h>
 #include <KTextEditor/SmartRange>
 #include <KTextEditor/SmartInterface>
@@ -127,13 +128,20 @@ uint backgroundColor() {
 }
 */
 
+uint foregroundColor() {
+  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
+  ///@todo store the scheme somewhere (or only the colors we need) and update when neccessary
+  ///      esp. we need to adapt to changes in the colorscheme of kate => needs new interface
+  return KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color().rgb();
+}
+
 void generateColors(int count) {
   colors.clear();
-  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  uint standardColor(0u); //QApplication::palette().foreground().color().rgb());
+  uint standardColor = foregroundColor();
+  
   uint step = totalColorInterpolationSteps() / count;
   uint currentPos = colorOffset;
-  kDebug() << "text color:" << (void*)QApplication::palette().text().color().rgb();
+  kDebug() << "text color:" << (void*) standardColor;
   for(int a = 0; a < count; ++a) {
     kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*)interpolate( currentPos );
     colors.append( tint(interpolate( currentPos ), standardColor, foregroundRatio) );
