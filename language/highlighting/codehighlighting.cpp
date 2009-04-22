@@ -54,23 +54,23 @@ class ConfigurableHighlightingColors {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
       setDefaultAttribute(a);
     }
-    
+
     void addAttribute(int number, KTextEditor::Attribute::Ptr attribute) {
       m_attributes[number] = attribute;
     }
-    
+
     KTextEditor::Attribute::Ptr getAttribute(int number) const {
       return m_attributes[number];
     }
-    
+
     void setDefaultAttribute(KTextEditor::Attribute::Ptr defaultAttrib) {
       m_defaultAttribute = defaultAttrib;
     }
-    
+
     KTextEditor::Attribute::Ptr defaultAttribute() const {
       return m_defaultAttribute;
     }
-    
+
   private:
     KTextEditor::Attribute::Ptr m_defaultAttribute;
     QHash<int, KTextEditor::Attribute::Ptr> m_attributes;
@@ -89,11 +89,6 @@ uchar foregroundRatio = 140; ///How the color should be mixed with the foregroun
 uint mix(uint color1, uint color2, uchar ratio) {
   return KColorUtils::mix(QColor(color1), QColor(color2), float(ratio) / float(0xff)).rgb();
   //return (((quint64)color1) * (((quint64)0xff) - ratio) + ((quint64)color2) * ratio) / (quint64)0xff;
-}
-
-///@param ratio ratio between 0 and 0xff
-uint tint(uint color1, uint color2, uchar ratio) {
-  return KColorUtils::tint(QColor(color1), QColor(color2), float(ratio) / float(0xff)).rgb();
 }
 
 uint totalColorInterpolationStepCount = 6;
@@ -130,25 +125,26 @@ uint backgroundColor() {
 
 uint foregroundColor() {
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  ///@todo store the scheme somewhere (or only the colors we need) and update when neccessary
+  ///@todo store the scheme somewhere (or only the colors we need) and update when neccessary for better performance
   ///      esp. we need to adapt to changes in the colorscheme of kate => needs new interface
   return KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color().rgb();
 }
 
+uint blend(uint color) {
+  return KColorUtils::tint( foregroundColor(), color, float(foregroundRatio) / float(0xff) ).rgb();
+}
+
 void generateColors(int count) {
   colors.clear();
-  uint standardColor = foregroundColor();
-  
   uint step = totalColorInterpolationSteps() / count;
   uint currentPos = colorOffset;
-  kDebug() << "text color:" << (void*) standardColor;
+  kDebug() << "text color:" << (void*) foregroundColor();
   for(int a = 0; a < count; ++a) {
-    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*)interpolate( currentPos );
-    colors.append( tint(interpolate( currentPos ), standardColor, foregroundRatio) );
-    //colors.append( interpolate(currentPos).rgb() );
+    colors.append( blend(interpolate( currentPos )) );
+    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) colors.last();
     currentPos += step;
   }
-  colors.append(standardColor);
+  colors.append(foregroundColor());
   validColorCount = colors.count()-1;
 }
 
@@ -173,87 +169,102 @@ class CodeHighlightingColors : public KDevelop::ConfigurableHighlightingColors {
 
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x005912)); //Dark green
+      a->setForeground(QColor(blend(0x005912))); //Dark green
       addAttribute(CodeHighlighting::ClassType, a);
+      kDebug() << "Class color: " << (void*) 0x005912 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x35938d));
+      a->setForeground(QColor(blend(0x35938d)));
       addAttribute(CodeHighlighting::TypeAliasType, a);
+      kDebug() << "TypeAlias color: " << (void*) 0x35938d << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x6c101e)); //Dark red
+      a->setForeground(QColor(blend(0x6c101e))); //Dark red
       addAttribute(CodeHighlighting::EnumType, a);
+      kDebug() << "Enum color: " << (void*) 0x6c101e << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x862a38)); //Greyish red
+      a->setForeground(QColor(blend(0x862a38))); //Greyish red
       addAttribute(CodeHighlighting::EnumeratorType, a);
+      kDebug() << "Enumerator color: " << (void*) 0x862a38 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x21005A)); // Navy blue
+      a->setForeground(QColor(blend(0x21005A))); // Navy blue
       addAttribute(CodeHighlighting::FunctionType, a);
+      kDebug() << "Function color: " << (void*) 0x21005A << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x443069));// Dark Burple (blue / purple)
+      a->setForeground(QColor(blend(0x443069)));// Dark Burple (blue / purple)
       addAttribute(CodeHighlighting::MemberVariableType, a);
+      kDebug() << "MemberVariable color: " << (void*) 0x443069 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0xae7d00)); //Light orange
+      a->setForeground(QColor(blend(0xae7d00))); //Light orange
       addAttribute(CodeHighlighting::LocalClassMemberType, a);
+      kDebug() << "LocalClassMember color: " << (void*) 0xae7d00 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x705000)); //Dark orange
+      a->setForeground(QColor(blend(0x705000))); //Dark orange
       addAttribute(CodeHighlighting::InheritedClassMemberType, a);
+      kDebug() << "InheritedClassMember color: " << (void*) 0x705000 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x0C4D3C));
+      a->setForeground(QColor(blend(0x0C4D3C)));
       addAttribute(CodeHighlighting::LocalVariableType, a);
+      kDebug() << "LocalVariable color: " << (void*) 0x0C4D3C << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x300085)); // Less dark navy blue
+      a->setForeground(QColor(blend(0x300085))); // Less dark navy blue
       addAttribute(CodeHighlighting::FunctionVariableType, a);
+      kDebug() << "FunctionVariable color: " << (void*) 0x300085 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x9F3C5F)); // Rose
+      a->setForeground(QColor(blend(0x9F3C5F))); // Rose
       addAttribute(CodeHighlighting::NamespaceVariableType, a);
+      kDebug() << "NamespaceVariable color: " << (void*) 0x9F3C5F << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x12762B)); // Grass green
+      a->setForeground(QColor(blend(0x12762B))); // Grass green
       addAttribute(CodeHighlighting::GlobalVariableType, a);
+      kDebug() << "GlobalVariable color: " << (void*) 0x12762B << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x6B2840)); // Dark rose
+      a->setForeground(QColor(blend(0x6B2840))); // Dark rose
       addAttribute(CodeHighlighting::NamespaceType, a);
+      kDebug() << "Namespace color: " << (void*) 0x6B2840 << "->" << (void*) a->foreground().color().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute(*defaultAttribute()));
 //       a->setForeground(QColor(0x8b0019)); // Pure red
-      a->setUnderlineColor(QColor(0x8b0019)); // Pure red
+      a->setUnderlineColor(QColor(blend(0x8b0019))); // Pure red
       a->setUnderlineStyle(QTextCharFormat::WaveUnderline);
       addAttribute(CodeHighlighting::ErrorVariableType, a);
+      kDebug() << "ErrorVariable underline color: " << (void*) 0x8b0019 << "->" << (void*) a->underlineColor().rgb();
     }
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-      a->setForeground(QColor(0x5C5C5C)); // Gray
+      a->setForeground(QColor(blend(0x5C5C5C))); // Gray
       addAttribute(CodeHighlighting::ForwardDeclarationType, a);
+      kDebug() << "ForwardDeclaration color: " << (void*) 0x5C5C5C << "->" << (void*) a->foreground().color().rgb();
     }
 /*      case ScopeType:
       case TemplateType:
       case TemplateParameterType:
       case CodeType:
       case FileType:*/
-    
+
   }
 };
 
@@ -281,7 +292,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
   }
 
   if (!a || color ) {
-    
+
     a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*configurableColors().getAttribute(type)));
 
     switch (context) {
@@ -332,13 +343,13 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context) const
   DUChainReadLocker lock(DUChain::lock());
 
   regenerateColors();
-  
+
   if(!ICore::self()->languageController()->completionSettings()->semanticHighlightingEnabled()) {
     kDebug() << "highighting disabled";
     deleteHighlighting(context);
     return;
   }
-  
+
   m_contextClasses.clear();
   m_useClassCache = true;
 
@@ -380,10 +391,10 @@ void CodeHighlighting::highlightDUChainSimple(DUContext* context) const
 void CodeHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
   if (!context->smartRange())
     return;
-  
+
   {
     LOCK_SMART(context->smartRange());
-      
+
     foreach (Declaration* dec, context->localDeclarations())
       if(dec->smartRange())
         dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
@@ -403,7 +414,7 @@ void CodeHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, 
     return;
 
   TopDUContext* top = context->topContext();
-  
+
   //Merge the colors from the function arguments
   foreach( const DUContext::Import &imported, context->importedParentContexts() ) {
     if(!imported.context(top) || (imported.context(top)->type() != DUContext::Other && imported.context(top)->type() != DUContext::Function))
@@ -543,7 +554,7 @@ CodeHighlighting::Types CodeHighlighting::typeForDeclaration(Declaration * dec, 
   Types type = LocalVariableType;
   if(dec->kind() == Declaration::Namespace)
     return NamespaceType;
-  
+
   if (context && dec->context()->type() == DUContext::Class) {
     //It is a use.
     //Determine the class we're in
@@ -606,11 +617,11 @@ void CodeHighlighting::highlightUse(DUContext* context, int index, uint color) c
   if (SmartRange* range = context->useSmartRange(index)) {
     Types type = ErrorVariableType;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
-    
+
     type = typeForDeclaration(decl, context);
-    
+
     LOCK_SMART(range);
-    
+
     if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
       range->setAttribute(attributeForType(type, ReferenceContext, color));
     else
