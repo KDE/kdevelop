@@ -33,7 +33,7 @@ REGISTER_TYPE(FunctionType);
 
 DEFINE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
-FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(copyData<FunctionTypeData>(*rhs.d_func())) {
+FunctionType::FunctionType(const FunctionType& rhs) : AbstractType(copyData<FunctionType>(*rhs.d_func())) {
 }
 
 FunctionType::FunctionType(FunctionTypeData& data) : AbstractType(data) {
@@ -73,9 +73,8 @@ bool FunctionType::equals(const AbstractType* _rhs) const
 }
 
 FunctionType::FunctionType()
-  : AbstractType(createData<FunctionTypeData>())
+  : AbstractType(createData<FunctionType>())
 {
-  d_func_dynamic()->setTypeClassId<FunctionType>();
 }
 
 FunctionType::~FunctionType()

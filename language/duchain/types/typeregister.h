@@ -91,7 +91,7 @@ class TypeFactory : public AbstractTypeFactory {
 
     if((bool)from.m_dynamic == (bool)!constant) {
       //We have a problem, "from" and "to" should both be either dynamic or constant. We must copy once more.
-      Data* temp = &AbstractType::copyData<Data>(static_cast<const Data&>(from));
+      Data* temp = &AbstractType::copyDataDirectly<Data>(static_cast<const Data&>(from));
 
       new (&to) Data(*temp); //Call the copy constructor to initialize the target
 

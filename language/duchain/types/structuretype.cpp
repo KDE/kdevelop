@@ -32,7 +32,7 @@ namespace KDevelop
 REGISTER_TYPE(StructureType);
 
 StructureType::StructureType(const StructureType& rhs)
-  : StructureTypeBase(copyData<StructureTypeData>(*rhs.d_func()))
+  : StructureTypeBase(copyData<StructureType>(*rhs.d_func()))
 {
 }
 
@@ -61,9 +61,8 @@ bool StructureType::equals(const AbstractType* _rhs) const
 }
 
 StructureType::StructureType()
-  : StructureTypeBase(createData<StructureTypeData>())
+  : StructureTypeBase(createData<StructureType>())
 {
-  d_func_dynamic()->setTypeClassId<StructureType>();
 }
 
 StructureType::~StructureType()

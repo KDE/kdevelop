@@ -31,7 +31,7 @@ namespace KDevelop
 
 REGISTER_TYPE(PointerType);
 
-PointerType::PointerType(const PointerType& rhs) : AbstractType(copyData<PointerTypeData>(*rhs.d_func())) {
+PointerType::PointerType(const PointerType& rhs) : AbstractType(copyData<PointerType>(*rhs.d_func())) {
 }
 
 PointerType::PointerType(PointerTypeData& data) : AbstractType(data) {
@@ -57,9 +57,8 @@ bool PointerType::equals(const AbstractType* _rhs) const
 }
 
 PointerType::PointerType()
-  : AbstractType(createData<PointerTypeData>())
+  : AbstractType(createData<PointerType>())
 {
-  d_func_dynamic()->setTypeClassId<PointerType>();
 }
 
 void PointerType::accept0 (TypeVisitor *v) const

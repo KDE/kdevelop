@@ -31,7 +31,7 @@ namespace KDevelop
 
 REGISTER_TYPE(ArrayType);
 
-ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(copyData<ArrayTypeData>(*rhs.d_func())) {
+ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(copyData<ArrayType>(*rhs.d_func())) {
 }
 
 ArrayType::ArrayType(ArrayTypeData& data) : AbstractType(data) {
@@ -58,9 +58,8 @@ bool ArrayType::equals(const AbstractType* _rhs) const
 }
 
 ArrayType::ArrayType()
-  : AbstractType(createData<ArrayTypeData>())
+  : AbstractType(createData<ArrayType>())
 {
-  d_func_dynamic()->setTypeClassId<ArrayType>();
 }
 
 ArrayType::~ArrayType()

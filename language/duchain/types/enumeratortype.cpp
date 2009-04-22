@@ -29,7 +29,7 @@ namespace KDevelop {
 REGISTER_TYPE(EnumeratorType);
 
 EnumeratorType::EnumeratorType(const EnumeratorType& rhs)
-  : EnumeratorTypeBase(copyData<EnumeratorTypeData>(*rhs.d_func()))
+  : EnumeratorTypeBase(copyData<EnumeratorType>(*rhs.d_func()))
 {
 }
 
@@ -39,9 +39,8 @@ EnumeratorType::EnumeratorType(EnumeratorTypeData& data)
 }
 
 EnumeratorType::EnumeratorType()
-  : EnumeratorTypeBase(createData<EnumeratorTypeData>())
+  : EnumeratorTypeBase(createData<EnumeratorType>())
 {
-  d_func_dynamic()->setTypeClassId<EnumeratorType>();
   IntegralType::setDataType(TypeInt);
   setModifiers(ConstModifier);
 }

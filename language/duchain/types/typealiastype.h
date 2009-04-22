@@ -36,14 +36,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeAliasType : public TypeAliasTypeBase
 public:
   typedef TypePtr<TypeAliasType> Ptr;
 
-  TypeAliasType(const TypeAliasType& rhs) : TypeAliasTypeBase(copyData<TypeAliasTypeData>(*rhs.d_func())) {
+  TypeAliasType(const TypeAliasType& rhs) : TypeAliasTypeBase(copyData<TypeAliasType>(*rhs.d_func())) {
   }
 
   TypeAliasType(TypeAliasTypeData& data) : TypeAliasTypeBase(data) {
   }
 
-  TypeAliasType() : TypeAliasTypeBase(createData<TypeAliasTypeData>()) {
-    d_func_dynamic()->setTypeClassId<TypeAliasType>();
+  TypeAliasType() : TypeAliasTypeBase(createData<TypeAliasType>()) {
   }
 
   KDevelop::AbstractType::Ptr type() const;

@@ -71,12 +71,11 @@ void DelayedType::setKind(Kind kind) {
 }
 
 DelayedType::DelayedType()
-  : AbstractType(createData<DelayedTypeData>())
+  : AbstractType(createData<DelayedType>())
 {
-  d_func_dynamic()->setTypeClassId<DelayedType>();
 }
 
-DelayedType::DelayedType(const DelayedType& rhs) : AbstractType(copyData<DelayedTypeData>(*rhs.d_func())) {
+DelayedType::DelayedType(const DelayedType& rhs) : AbstractType(copyData<DelayedType>(*rhs.d_func())) {
 }
 
 DelayedType::~DelayedType()

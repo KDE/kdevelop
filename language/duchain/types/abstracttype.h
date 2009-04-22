@@ -59,16 +59,21 @@ class TypeExchanger;
  *  until we save it back to the static memory-region again.
  *
  * When creating an own type, you must:
- * - Implement equals(..), clone(), hash()
+ * - Implement equals(..), hash(). They should _fully_ distinguish all types, in regard to all stored information.
+ *  * implement a copy-constructor in which you copy the data from the source using copyData<YourType>()
+ *  * Implement clone() in which you use the copy-constructor to clone the type
  * - Add an enumerator "Identity" that contains an arbitrary unique identity value of the type
  * - Add a typedef "BaseType" that specifies the base type, which must be a type that also follows these rules(@todo)
  * - Register the type in a source-file using REGISTER_TYPE(..), @see typeregister.h
  * - Add a typedef "Data", that contains the actual data of the type using the mechanisms described in appendedlist.h.
  *   That data type must follow the same inheritance chain as the type itself, so it must be based on BaseType::Data.
  *   @see AbstractTypeData
- * - When creating a data object in a constructor, you must call setTypeClassId<YourType>() on that data to mark it.
+ * - When creating a data object in a constructor, use createData<YourType>()
+ * - Use TYPE_DECLARE_DATA(YourType) to declare the data access functions, and  then use d_func() and d_func_dynamic() to 
+ *   access your type data
+ * - Create a constructor that only takes a reference to the type data, and passes it to the parent type
  *
- *   Every type can have only one other type as base-class,
+ *   Every type can have only one other type as base-type,
  *   but it can have additional base-classes that are not a direct part of the type-system(@see IdentifiedType).
  *
  *  \sa appendedlist.h
@@ -212,8 +217,25 @@ public:
    * \param rhs data to copy
    * \returns copy of the data
    */
+
+  template<class Type>
+  static typename Type::Data& copyData(const typename Type::Data& rhs) {
+    size_t size;
+    if(!rhs.m_dynamic)
+      size = sizeof(typename Type::Data); //Create a dynamic data instance
+    else
+      size = rhs.dynamicSize(); //Create a constant data instance, that holds all the data embedded.
+
+    typename Type::Data& ret(*new (new char[size]) typename Type::Data(rhs));
+    ret.template setTypeClassId<Type>();
+    return ret;
+  }
+
+  /**
+   * As above, but does not support copying data into a lower class(Should not be used while cloning)
+   */
   template<class DataType>
-  static DataType& copyData(const DataType& rhs) {
+  static DataType& copyDataDirectly(const DataType& rhs) {
     size_t size;
     if(!rhs.m_dynamic)
       size = sizeof(DataType); //Create a dynamic data instance
@@ -223,21 +245,16 @@ public:
     return *new (new char[size]) DataType(rhs);
   }
 
-  template<class Type>
-  static typename Type::Data& copyDataDownwards(const typename Type::Data& rhs) {
-    typename Type::Data& ret(copyData<typename Type::Data>(rhs));
-    ret.template setTypeClassId<Type>();
-    return ret;
-  }
-  
   /**
    * Method to create internal data structures. Use this in normal constructors.
    *
    * \returns the internal data structure
    */
-  template<class DataType>
-  static DataType& createData() {
-    return *new (new char[sizeof(DataType)]) DataType();
+  template<class Type>
+  static typename Type::Data& createData() {
+    typename Type::Data& ret(*new (new char[sizeof(typename Type::Data)]) typename Type::Data());
+    ret.template setTypeClassId<Type>();
+    return ret;
   }
 
   typedef AbstractTypeData Data;

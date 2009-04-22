@@ -58,9 +58,8 @@ void AbstractType::setModifiers(quint64 modifiers)
 }
 
 AbstractType::AbstractType()
-  : d_ptr(&createData<AbstractTypeData>())
+  : d_ptr(&createData<AbstractType>())
 {
-  d_func_dynamic()->setTypeClassId<AbstractType>();
 }
 
 AbstractType::~AbstractType()

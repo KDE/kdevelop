@@ -32,7 +32,7 @@ namespace KDevelop
 {
 REGISTER_TYPE(ReferenceType);
 
-ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(copyData<ReferenceTypeData>(*rhs.d_func())) {
+ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(copyData<ReferenceType>(*rhs.d_func())) {
 }
 
 ReferenceType::ReferenceType(ReferenceTypeData& data) : AbstractType(data) {
@@ -58,9 +58,8 @@ bool ReferenceType::equals(const AbstractType* _rhs) const
 }
 
 ReferenceType::ReferenceType()
-  : AbstractType(createData<ReferenceTypeData>())
+  : AbstractType(createData<ReferenceType>())
 {
-  d_func_dynamic()->setTypeClassId<ReferenceType>();
 }
 
 ReferenceType::~ReferenceType()

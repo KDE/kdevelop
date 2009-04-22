@@ -29,7 +29,7 @@ namespace KDevelop {
 REGISTER_TYPE(ConstantIntegralType);
 
 ConstantIntegralType::ConstantIntegralType(const ConstantIntegralType& rhs)
-  : IntegralType(copyData<ConstantIntegralTypeData>(*rhs.d_func()))
+  : IntegralType(copyData<ConstantIntegralType>(*rhs.d_func()))
 {
 }
 
@@ -39,9 +39,8 @@ ConstantIntegralType::ConstantIntegralType(ConstantIntegralTypeData& data)
 }
 
 ConstantIntegralType::ConstantIntegralType(uint type)
-  : IntegralType(createData<ConstantIntegralTypeData>())
+  : IntegralType(createData<ConstantIntegralType>())
 {
-  d_func_dynamic()->setTypeClassId<ConstantIntegralType>();
   setDataType(type);
   setModifiers(ConstModifier);
 }

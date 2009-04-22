@@ -31,7 +31,7 @@ namespace KDevelop {
 REGISTER_TYPE(EnumerationType);
 
 EnumerationType::EnumerationType(const EnumerationType& rhs)
-  : EnumerationTypeBase(copyData<EnumerationTypeData>(*rhs.d_func()))
+  : EnumerationTypeBase(copyData<EnumerationType>(*rhs.d_func()))
 {
 }
 
@@ -59,9 +59,8 @@ bool EnumerationType::equals(const AbstractType* _rhs) const
 }
 
 EnumerationType::EnumerationType()
-  : EnumerationTypeBase(createData<EnumerationTypeData>())
+  : EnumerationTypeBase(createData<EnumerationType>())
 {
-  d_func_dynamic()->setTypeClassId<EnumerationType>();
   IntegralType::setDataType(TypeInt);
 }
 
