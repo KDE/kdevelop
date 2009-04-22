@@ -17,6 +17,8 @@
 #ifndef STACKITEM_H
 #define STACKITEM_H
 
+#include <QtCore/QPair>
+
 #include <debugger/util/treeitem.h>
 #include "../debuggerexport.h"
 
@@ -30,7 +32,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT StackItem : public TreeItem
     public:
         StackItem(StackModel* model, TreeItem* parent, const QString& prefix);
         int id() const;
-        void setInformation(int id, const QString& name, const QPair<QString, int>& location);
+        void setInformation(int id, const QString& name, const QPair <QString, int>& location);
         StackModel* stackModel();
         
         virtual void clicked();
