@@ -289,8 +289,8 @@ void CppNewClass::generateHeader()
 
 void CppNewClass::generateImplementation()
 {
-  KUrl headerUrl = field("headerUrl").value<KUrl>();
-  KUrl url = field("implementationUrl").value<KUrl>();
+  KUrl headerUrl = this->headerUrl();
+  KUrl url = implementationUrl();
 
   QFile file;
   file.setFileName(url.toLocalFile());

@@ -30,11 +30,13 @@ namespace KDevelop {
 
 class SimpleRefactoring : public QObject {
   Q_OBJECT
+
 public:
   static SimpleRefactoring& self();
   void doContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context);
 
   void startInteractiveRename(KDevelop::IndexedDeclaration decl);
+  void createNewClass(KDevelop::ProjectBaseItem* item);
   
 public slots:
   void executeRenameAction();

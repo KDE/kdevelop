@@ -60,6 +60,8 @@ public:
   virtual CppClassIdentifierPage* newIdentifierPage();
   virtual CppOverridesPage* newOverridesPage();
 
+  KUrl implementationUrl() const { return field("implementationUrl").value<KUrl>(); }
+  KUrl headerUrl() const { return field("headerUrl").value<KUrl>(); }
 private:
   QStringList m_baseClasses;
   KUrl m_url;

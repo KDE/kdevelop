@@ -953,11 +953,8 @@ bool CppLanguageSupport::needsUpdate(const Cpp::EnvironmentFilePointer& file, co
 
 void CppLanguageSupport::newClassWizard()
 {
-  KUrl baseUrl;
-  if(core()->documentController()->activeDocument())
-    baseUrl = core()->documentController()->activeDocument()->url().upUrl();
-  CppNewClass newClassWizard(qApp->activeWindow(), baseUrl);
-  newClassWizard.exec();
+  //TODO: Should give some hint on where it should be added
+  SimpleRefactoring::self().createNewClass(0);
 }
 
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {

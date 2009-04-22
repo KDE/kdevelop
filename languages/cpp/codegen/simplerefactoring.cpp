@@ -59,6 +59,8 @@
 #include <kparts/mainwindow.h>
 #include <language/duchain/duchainutils.h>
 #include <dumptree.h>
+#include <KDialog>
+#include <QListWidget>
 
 Q_DECLARE_METATYPE(ProjectBaseItem*)
 
@@ -123,7 +125,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
     foreach(KDevelop::ProjectBaseItem* item, projectContext->items()) {
       if(item->folder() || item->target()) {
         //Allow creating a class in the folder
-        QAction* action = new QAction(i18n("Create Class"), this);
+        QAction* action = new QAction(i18n  ("Create Class"), this);
         action->setData(QVariant::fromValue<ProjectBaseItem*>(item));
 //         action->setIcon(KIcon("edit-rename"));
         connect(action, SIGNAL(triggered(bool)), this, SLOT(executeNewClassAction()));
@@ -138,30 +140,75 @@ void SimpleRefactoring::executeNewClassAction() {
   QAction* action = qobject_cast<QAction*>(sender());
   if(action) {
     ProjectBaseItem* item = action->data().value<ProjectBaseItem*>();
-    ProjectFolderItem* folder = 0;
-    if(item->folder()) {
-      folder=item->folder();
-    } else if(item->target()) {
-      folder=static_cast<ProjectBaseItem*>(item->parent())->folder();
-    } else {
-      KMessageBox::error(0, i18n("Cannot create a new class since there was no folder given."), i18n("Error"));
-      return;
-    }
-    Q_ASSERT(folder);
-    CppNewClass newClassWizard(qApp->activeWindow(), folder->url());
-    int result=newClassWizard.exec();
-    if(result==QDialog::Accepted) {
-      IProject* p=item->project();
-      ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.field("implementationUrl").value<KUrl>(), folder);
-      ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.field("headerUrl").value<KUrl>(), folder);
-      
-      if(item->target()) {
-        p->buildSystemManager()->addFileToTarget(file, item->target());
-        p->buildSystemManager()->addFileToTarget(header, item->target());
-      }
-    }
+    createNewClass(item);
   }else{
     kWarning() << "strange problem";
+  }
+}
+
+void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
+{
+  KUrl u;
+  if(item) {
+    ProjectFolderItem* ff = 0;
+    if(item->folder())
+      ff=item->folder();
+    else if(item->target())
+      ff=static_cast<ProjectBaseItem*>(item->parent())->folder();
+  }
+  
+  CppNewClass newClassWizard(qApp->activeWindow(), u);
+  int result=newClassWizard.exec();
+  if(result==QDialog::Accepted) {
+    IProject* p=item->project();
+    QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
+    if(folderList.isEmpty())
+      return;
+    ProjectFolderItem* folder = folderList.first();
+    
+    if(!item)
+      item=folder;
+    ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
+    ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.headerUrl(), folder);
+    
+    if(item->target()) {
+      p->buildSystemManager()->addFileToTarget(file, item->target());
+      p->buildSystemManager()->addFileToTarget(header, item->target());
+    } else if(item->project()->buildSystemManager() &&
+              item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets) {
+      QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
+      for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
+        KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
+        t=bit->targetList();
+      }
+      
+      if(!t.isEmpty()) {
+        KDialog d;
+        QWidget *w=new QWidget(&d);
+        w->setLayout(new QVBoxLayout);
+        w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
+        QListWidget* targetsWidget=new QListWidget(w);
+        targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        bool b=false;
+        foreach(ProjectTargetItem* it, t) {
+          targetsWidget->addItem(it->text());
+          b=true;
+        }
+        w->layout()->addWidget(targetsWidget);
+        if(b)
+          targetsWidget->setCurrentRow(0);
+        d.setButtons( KDialog::Ok | KDialog::Cancel);
+        d.enableButtonOk(b);
+        d.setMainWidget(w);
+      
+        if(d.exec()==QDialog::Accepted) {
+          if(targetsWidget->selectedItems().isEmpty())
+            QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
+          else
+            p->buildSystemManager()->addFileToTarget(file, t[targetsWidget->currentRow()]);
+        }
+      }
+    }
   }
 }
 
