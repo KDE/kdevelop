@@ -35,6 +35,11 @@ KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_argumen
  * Private data structure for AbstractType.
  *
  * Inherit from this for custom type private data.
+ *
+ * Within your inherited data types, you can use the mechanisms described in appendedlist.h
+ *
+ * You must explicitly implement the copy constructor, see appendedlist.h for more information on copying dynamic data.
+ * When calling initalizeAppendedLists() as described there, you should always use m_dynamic as parameter.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractTypeData
 {
@@ -75,7 +80,7 @@ public:
   bool inRepository : 1;
 
   APPENDED_LISTS_STUB(AbstractTypeData)
-
+  
   /// Returns the pure data size of this class(not including anything dynamic).
   uint classSize() const;
 
