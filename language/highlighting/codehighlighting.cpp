@@ -131,7 +131,12 @@ uint foregroundColor() {
 }
 
 uint blend(uint color) {
-  return KColorUtils::tint( foregroundColor(), color, float(foregroundRatio) / float(0xff) ).rgb();
+  if ( KColorUtils::luma(QColor(foregroundColor())) >= 0.5 ) {
+    // for dark color schemes, produce a fitting color first
+    color = KColorUtils::tint(foregroundColor(), color, 0.5).rgb();
+  }
+  // adapt contrast
+  return KColorUtils::mix( foregroundColor(), color, float(foregroundRatio) / float(0xff) ).rgb();
 }
 
 void generateColors(int count) {
