@@ -336,9 +336,11 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 }
 
 KUrl IncludePathResolver::mapToBuild(const KUrl& url) {
-  QString wd = url.toLocalFile();
+  KUrl wdUrl = url;
+  wdUrl.cleanPath();
+  QString wd = wdUrl.toLocalFile(KUrl::RemoveTrailingSlash);
   if( m_outOfSource ) {
-      if( wd.startsWith( m_source ) && !wd.startsWith(m_build) ) {
+    if( wd.startsWith( m_source ) && !wd.startsWith(m_build) ) {
         //Move the current working-directory out of source, into the build-system
         wd = m_build + '/' + wd.mid( m_source.length() );
         KUrl u( wd );
@@ -767,8 +769,12 @@ void IncludePathResolver::resetOutOfSourceBuild() {
       return;
     }
   m_outOfSource = true;
-  m_source = source;
-  m_build = build;
+  KUrl sourceUrl(source);
+  sourceUrl.cleanPath();
+  m_source = sourceUrl.toLocalFile(KUrl::RemoveTrailingSlash);
+  KUrl buildUrl(build);
+  buildUrl.cleanPath();
+  m_build = buildUrl.toLocalFile(KUrl::RemoveTrailingSlash);
 }
 
 #ifdef TEST
