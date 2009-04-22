@@ -45,7 +45,9 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
 {
     m_srcFolder = srcFolder;
-    m_chooserUi->buildFolder->setUrl(KUrl( srcFolder.toLocalFile() + "/build" ) );
+    KUrl proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
+    proposedBuildUrl.cleanPath();
+    m_chooserUi->buildFolder->setUrl(proposedBuildUrl);
     update();
 }
 
