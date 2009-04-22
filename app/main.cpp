@@ -49,6 +49,7 @@
 
 #include "splashscreen.h"
 #include "kdevideextension.h"
+#include <KMessageBox>
 
 using KDevelop::Core;
 
@@ -116,89 +117,60 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
     options.add("profile <profile>", ki18n( "Profile to load" ));
-    options.add("project <project>", ki18n( "Project to load" ));
-    options.add("+file(s)", ki18n( "Files to load" ));
+    options.add("project <project>", ki18n( "Url to project to load" ));
+    options.add("+files", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     KApplication app;
     KDevIDEExtension::init();
-
-    SplashScreen *splash = 0;
-    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-    if ( !splashFile.isEmpty() )
-    {
-        QPixmap pm;
-        pm.load( splashFile );
-        splash = new SplashScreen( pm );
-        splash->show();
-        splash->repaint();
-    }
-
+    
     Core::initialize();
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
 
-    if ( splash )
+    QStringList projectNames = args->getOptionList("project");
+    if(!projectNames.isEmpty())
     {
-        QObject::connect(core->pluginController(), SIGNAL(loadingPlugin(QString)),
-                         splash, SLOT(showMessage(QString)));
-        QTimer::singleShot(0, splash, SLOT(deleteLater()));
-        splash->showMessage( i18n( "Starting GUI" ) );
-    }
-
-    bool openedProject = false;
-    QString projectName = args->getOption("project");
-    if ( !projectName.isEmpty() )
-    {
-        core->projectController()->openProject( KUrl(projectName) );
-        openedProject = true;
-    }
-    else if( args->count() > 0 )
-    {
-        for ( int i=0; i<args->count(); i++)
+        foreach(const QString& p, projectNames)
         {
-            KUrl url = args->url( i );
+            KUrl url(p);
             QString ext = QFileInfo( url.fileName() ).suffix();
             if( ext == "kdev4" )
             {
                 core->projectController()->openProject( url );
-                openedProject = true;
             }
         }
     }
 
-    if( !openedProject )
+    int count=args->count();
+    kDebug() << "Opening files: " << count;
+    for(int i=0; i<count; ++i)
     {
-        for( int a=0; a<args->count(); ++a )
+        QString file=args->arg(i);
+        kDebug() << "....... Opening" << file;
+        //Allow opening specific lines in documents, like mydoc.cpp:10
+        int lineNumberOffset = file.lastIndexOf(':');
+        KTextEditor::Cursor line;
+        if( lineNumberOffset != -1 )
         {
-            QString file = args->arg(a);
-            //Allow opening specific lines in documents, like mydoc.cpp:10
-            int lineNumberOffset = file.lastIndexOf(':');
-            KTextEditor::Cursor line;
-            if( lineNumberOffset != -1 )
+            bool isInt;
+            int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
+            if (isInt)
             {
-                bool isInt;
-                int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
-                if (isInt)
-                {
-                    file = file.left(lineNumberOffset);
-                    line = KTextEditor::Cursor(lineNr, 0);
-                }
+                file = file.left(lineNumberOffset);
+                line = KTextEditor::Cursor(lineNr, 0);
             }
+        }
 
-            if( KUrl::isRelativeUrl(file) )
-            {
-                KUrl u = QDir::currentPath();
-                u.addPath(file);
-                file = u.toLocalFile();
-            }
-            core->documentController()->openDocument(KUrl(file), line);
-        }
-        if( splash && args->count() == 1 )
-        {
-            splash->showMessage(args->url(0).pathOrUrl());
-        }
+        KUrl f(file);
+        kDebug() << "________" << KUrl::isRelativeUrl(file) << f.isRelative();
+        if( f.isRelative() )
+            f=KUrl(QDir::currentPath(), file);
+        
+        if(!core->documentController()->openDocument(f, line))
+            KMessageBox::error(0, i18n("Could not open %1", args->arg(i)));
     }
+    args->clear();
 
     return app.exec();
 }
