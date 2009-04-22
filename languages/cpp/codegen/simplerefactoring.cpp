@@ -182,23 +182,25 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
         t=bit->targetList();
       }
       
-      if(!t.isEmpty()) {
+      if(t.isEmpty()) //Do not do anything
+      {}
+      if(t.count()==1) //Just choose this one
+        p->buildSystemManager()->addFileToTarget(file, t.first());
+      else {
         KDialog d;
         QWidget *w=new QWidget(&d);
         w->setLayout(new QVBoxLayout);
         w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
         QListWidget* targetsWidget=new QListWidget(w);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        bool b=false;
         foreach(ProjectTargetItem* it, t) {
           targetsWidget->addItem(it->text());
-          b=true;
         }
         w->layout()->addWidget(targetsWidget);
-        if(b)
-          targetsWidget->setCurrentRow(0);
+        
+        targetsWidget->setCurrentRow(0);
         d.setButtons( KDialog::Ok | KDialog::Cancel);
-        d.enableButtonOk(b);
+        d.enableButtonOk(true);
         d.setMainWidget(w);
       
         if(d.exec()==QDialog::Accepted) {
