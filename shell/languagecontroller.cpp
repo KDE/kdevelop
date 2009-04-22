@@ -30,6 +30,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/duchain/duchain.h>
 
 #include "core.h"
 #include "language.h"
@@ -124,6 +125,9 @@ LanguageController::~LanguageController()
 
 void LanguageController::initialize()
 {
+    // make sure the DUChain is setup before we try to access it from different threads at the same time
+    DUChain::self();
+
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
             SLOT(documentActivated(KDevelop::IDocument*)));
 }
