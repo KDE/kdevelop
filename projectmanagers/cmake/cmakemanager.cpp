@@ -183,6 +183,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 
     QString relative=KUrl::relativeUrl( projectPath, fi->url() );
     path.addPath(relative);
+    path.cleanPath();
 
     kDebug() << "Build folder: " << path;
     return path;
