@@ -61,7 +61,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::ParsingEnvironmentFile > parsingEnvironmentFile() const { return wrapped->parsingEnvironmentFile(); }
 		Q_SCRIPTABLE bool deleting() const { return wrapped->deleting(); }
-		Q_SCRIPTABLE bool inDuChain() const { return wrapped->inDuChain(); }
+		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }
 		Q_SCRIPTABLE void setInDuChain(bool x0) { wrapped->setInDuChain(x0); }
 		Q_SCRIPTABLE bool isOnDisk() const { return wrapped->isOnDisk(); }
 		Q_SCRIPTABLE QList< KSharedPtr< KDevelop::Problem > > problems() const { return wrapped->problems(); }
