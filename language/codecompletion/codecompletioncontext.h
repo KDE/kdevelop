@@ -24,6 +24,7 @@
 
 #include "../duchain/duchainpointer.h"
 #include "../languageexport.h"
+#include "../editor/simplecursor.h"
 
 namespace KTextEditor {
   class View;
@@ -55,7 +56,7 @@ namespace KDevelop {
        * @param knownArgumentExpressions has no effect when firstContext is set
        * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, int depth = 0);
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const KDevelop::SimpleCursor& position, int depth = 0);
       virtual ~CodeCompletionContext();
 
       ///@return whether this context is valid for code-completion
@@ -67,7 +68,7 @@ namespace KDevelop {
       ///Computes the full set of completion items, using the information retrieved earlier.
       ///Should only be called on the first context, parent contexts are included in the computations.
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
-      virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort, bool fullCompletion = true) = 0;
+      virtual QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) = 0;
 
       ///After completionItems(..) has been called, this may return completion-elements that are already grouped, for example using custom grouping(@see CompletionCustomGroupNode
       virtual QList<KDevelop::CompletionTreeElementPointer> ungroupedElements();
@@ -91,6 +92,7 @@ namespace KDevelop {
       QString m_text;
       int m_depth;
       bool m_valid;
+      KDevelop::SimpleCursor m_position;
 
       KDevelop::DUContextPointer m_duContext;
 

@@ -108,7 +108,7 @@ void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
 
 }
 
-KDevelop::CodeCompletionContext* KDevelop::CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText) const {
+CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText, const KDevelop::SimpleCursor& position) const {
   return 0;
 }
 
@@ -121,7 +121,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   
   kDebug() << "added text:" << followingText;
   
-  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText ) );
+  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, SimpleCursor(position) ) );
   if (KDevelop::CodeCompletionModel* m = model())
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 
@@ -133,7 +133,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       kDebug() << "Completion context disappeared before completions could be calculated";
       return;
     }
-    QList<CompletionTreeItemPointer> items = completionContext->completionItems(SimpleCursor(position), aborting(), fullCompletion());
+    QList<CompletionTreeItemPointer> items = completionContext->completionItems(aborting(), fullCompletion());
 
     if (aborting()) {
       failed();

@@ -109,9 +109,9 @@ struct CodeCompletionItemTester {
   typedef KSharedPtr< KDevelop::CompletionTreeElement > Element;
     
   CodeCompletionItemTester(DUContext* context, QString text = "; ") {
-    completionContext = new  T(DUContextPointer(context), text, QString());
+    completionContext = new  T(DUContextPointer(context), text, QString(), context->range().end);
     bool abort = false;
-    items = completionContext->completionItems(context->range().end, abort);
+    items = completionContext->completionItems(abort);
     
     
     addElements(completionContext->ungroupedElements());
