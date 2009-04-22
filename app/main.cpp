@@ -165,7 +165,7 @@ int main( int argc, char *argv[] )
             f=KUrl(QDir::currentPath(), file);
         
         if(!core->documentController()->openDocument(f, line))
-            KMessageBox::error(0, i18n("Could not open %1", args->arg(i)));
+            kWarning() << i18n("Could not open %1") << args->arg(i);
     }
     args->clear();
 
