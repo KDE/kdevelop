@@ -26,14 +26,14 @@
 
 #include <QtCore/QMetaEnum>
 
-#include <KLocale>
-#include <KDebug>
-#include <KActionCollection>
-#include <KAction>
-#include <KParts/Part>
-#include <KParts/PartManager>
-#include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
+#include <KDE/KLocale>
+#include <KDE/KDebug>
+#include <KDE/KActionCollection>
+#include <KDE/KAction>
+#include <KDE/KParts/Part>
+#include <KDE/KParts/PartManager>
+#include <KDE/KTextEditor/Document>
+#include <KDE/KTextEditor/MarkInterface>
 
 #include "../interfaces/idocument.h"
 #include "../interfaces/icore.h"
