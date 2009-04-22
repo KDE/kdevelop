@@ -4,14 +4,8 @@ add_subdirectory(unittests)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
-find_package(KDE4 REQUIRED)
-find_package(KDevPlatform REQUIRED)
-
 include_directories(
-    ${KDE4_INCLUDES}
-    ${KDEVPLATFORM_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${gdb_SOURCE_DIR}
     )
 #add_subdirectory(tests)
 
@@ -83,14 +77,11 @@ kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
 kde4_add_plugin(kdevgdb ${kdevgdb_PART_SRCS})
 target_link_libraries(kdevgdb sublime
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
-    ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDEVPLATFORM_DEBUGGER_LIBRARY}
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_KPARTS_LIBRARY}
 )
 
 install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -144,9 +135,9 @@ target_link_libraries(gdbtest
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_DEBUGGER_LIBRARY}
     ${KDEVPLATFORM_TESTSHELL_LIBRARY}
+    ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBRARY}
 )
