@@ -58,7 +58,7 @@ namespace Cpp {
       ///Computes the full set of completion items, using the information retrieved earlier.
       ///Should only be called on the first context, parent contexts are included in the computations.
       ///@param Abort is checked regularly, and if it is false, the computation is aborted.
-      virtual QList<CompletionTreeItemPointer> completionItems(const KDevelop::SimpleCursor& position, bool& abort, bool fullCompletion = true);
+      virtual QList<CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true);
       
       virtual QList< KSharedPtr< KDevelop::CompletionTreeElement > > ungroupedElements();
 
@@ -101,7 +101,7 @@ namespace Cpp {
        * @param knownArgumentExpressions has no effect when firstContext is set
        * @param line Optional line that will be used to filter the macros
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
+      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, const KDevelop::SimpleCursor& position, int depth = 0, const QStringList& knownArgumentExpressions = QStringList(), int line = -1 );
       ~CodeCompletionContext();
 
       AdditionalContextType additionalContextType() const;
@@ -190,7 +190,7 @@ namespace Cpp {
       void replaceCurrentAccess(QString old, QString _new);
 
       ///Computes the completion-items for the case that no special kind of access is used(just a list of all suitable items is needed)
-      void standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items);
+      void standardAccessCompletionItems(QList<CompletionTreeItemPointer>& items);
 
       void processFunctionCallAccess();
 

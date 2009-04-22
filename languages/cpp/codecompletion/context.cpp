@@ -151,7 +151,15 @@ bool removePrefixWord(QString& expression, QString word) {
   return false;
 }
 
-CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QString& text, const QString& followingText, int depth, const QStringList& knownArgumentExpressions, int line ) : KDevelop::CodeCompletionContext(context, text, depth), m_memberAccessOperation(NoMemberAccess), m_knownArgumentExpressions(knownArgumentExpressions), m_contextType(Normal), m_pointerConversionsBeforeMatching(0), m_useStoredItems(false), m_onlyShowTypes(false), m_onlyShowSignals(false), m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false), m_doAccessFiltering(doAccessFiltering)
+CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, const KDevelop::SimpleCursor& position, int depth, const QStringList& knownArgumentExpressions, int line )
+  : KDevelop::CodeCompletionContext(context, text, position, depth),
+    m_memberAccessOperation(NoMemberAccess),
+    m_knownArgumentExpressions(knownArgumentExpressions),
+    m_contextType(Normal),
+    m_pointerConversionsBeforeMatching(0),
+    m_useStoredItems(false), m_onlyShowTypes(false), m_onlyShowSignals(false),
+    m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false),
+    m_doAccessFiltering(doAccessFiltering)
 {
 #ifndef TEST_COMPLETION  
   MissingIncludeCompletionModel::self().stop();
@@ -237,7 +245,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( m_text.endsWith('(') || m_text.endsWith( '<' ) ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), m_position, +1 );
       m_text.clear();
     }else{
       ExpressionParser expressionParser;
@@ -270,7 +278,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( endsWithOperator( m_text ) && (m_memberAccessOperation != StaticMemberChoose || !m_text.trimmed().endsWith(">"))) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), m_position, depth+1 );
       m_text.clear();
     }else{
       m_memberAccessOperation = FunctionCallAccess;
@@ -378,7 +386,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     QString parentContextText = expressionPrefix.left(parentContextEnd);
 
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
-    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), depth+1, otherArguments );
+    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), m_position, depth+1, otherArguments );
   }
 
   ///Handle signal/slot access
@@ -448,7 +456,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) || expressionPrefix.endsWith("return") ) {
     log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
-    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), depth+1 );
+    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), m_position, depth+1 );
   }
 
   ///Now care about m_expression. It may still contain keywords like "new "
@@ -462,7 +470,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   if( removePrefixWord(expr, "return") )  {
     if(!expr.isEmpty() || depth == 0) {
       //Create a new context for the "return"
-      m_parentContext = new CodeCompletionContext( m_duContext, "return", QString(), depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, "return", QString(), m_position, depth+1 );
     }else{
       m_memberAccessOperation = ReturnAccess;
     }
@@ -475,7 +483,7 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
     if(!expr.isEmpty() || depth == 0) {
       //Create a new context for the "delete"
       // TODO add brackets if necessary?
-      m_parentContext = new CodeCompletionContext( m_duContext, "delete", QString(), depth+1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, "delete", QString(), m_position, depth+1 );
     }else{
       //m_memberAccessOperation = DeleteAccess;
     }
@@ -1044,7 +1052,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeElement > > CodeCompletionContext::un
   return m_storedUngroupedItems;
 }
 
-QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KDevelop::SimpleCursor& position, bool& shouldAbort, bool fullCompletion) {
+QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& shouldAbort, bool fullCompletion) {
     LOCKDUCHAIN;
     QList<CompletionTreeItemPointer> items;
 
@@ -1353,13 +1361,13 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(const KD
           break;
         default:
           if(depth() == 0)
-            standardAccessCompletionItems(position, items);
+            standardAccessCompletionItems(items);
           break;
       }
     }
 
     if(!ignoreParentContext && fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
-      items = parentContext()->completionItems( position, shouldAbort, fullCompletion ) + items;
+      items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0) {
       //Eventually add missing include-completion in cases like SomeNamespace::NotIncludedClass|
@@ -1472,7 +1480,7 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::speci
   return items;
 }
 
-void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::SimpleCursor& position, QList<CompletionTreeItemPointer>& items) {
+void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeItemPointer>& items) {
   //Normal case: Show all visible declarations
   typedef QPair<Declaration*, int> DeclarationDepthPair;
   QSet<QualifiedIdentifier> hadNamespaceDeclarations;
@@ -1483,16 +1491,16 @@ void CodeCompletionContext::standardAccessCompletionItems(const KDevelop::Simple
       typeIsConst = true;
   }
 
-  QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : position, m_duContext->topContext());
+  QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : m_position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
-  QList<DUContext*> unnamed = m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(), position);
+  QList<DUContext*> unnamed = m_duContext->findContexts(DUContext::Namespace, QualifiedIdentifier(), m_position);
   foreach(DUContext* ns, unnamed)
-    decls += ns->allDeclarations(position, m_duContext->topContext(), false);
+    decls += ns->allDeclarations(m_position, m_duContext->topContext(), false);
 
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts
-    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, position, 0, DUContext::NoFiltering );
+    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, m_position, 0, DUContext::NoFiltering );
 
     QSet<QualifiedIdentifier> ids;
     foreach(Declaration* importDecl, imports) {

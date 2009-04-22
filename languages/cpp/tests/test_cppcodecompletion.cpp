@@ -372,10 +372,10 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext());
     bool abort = false;
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(top->range().end, abort).size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(top->range().end, abort).size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(top->range().end, abort)[0]->typeForArgumentMatching().size());
-    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(top->range().end, abort)[0]->typeForArgumentMatching().size());
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort).size());
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort).size());
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
     
     release(top);
   }
@@ -657,11 +657,11 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
 
 //   lock.unlock();
   {
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString()) );
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top), "; ", QString(), top->range().end) );
     bool abort = false;
     typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
     
-    QList <Item > items = cptr->completionItems(top->range().end, abort);
+    QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
@@ -673,11 +673,11 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
     QCOMPARE(items.count(), 0); //C, test, and i
   }
   {
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[3]), "; ", QString()) );
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(top->childContexts()[3]), "; ", QString(), top->range().end) );
     bool abort = false;
     typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;
     
-    QList <Item > items = cptr->completionItems(top->range().end, abort);
+    QList <Item > items = cptr->completionItems(abort);
     foreach(Item i, items) {
       Cpp::NormalDeclarationCompletionItem* decItem  = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(i.data());
       QVERIFY(decItem);
@@ -712,7 +712,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   lock.unlock();
   {
     ///Test whether a recursive function-call context is created correctly
-    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, ", QString() ) );
+    Cpp::CodeCompletionContext::Ptr cptr( new  Cpp::CodeCompletionContext(DUContextPointer(DUContextPointer(context)), "; globalFunction(globalFunction(globalHonk, ", QString(), SimpleCursor::invalid() ) );
     Cpp::CodeCompletionContext& c(*cptr);
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
@@ -756,7 +756,7 @@ void TestCppCodeCompletion::testCompletionContext() {
   {
     ///The context is a function, and there is no prefix-expression, so it should be normal completion.
     DUContextPointer contPtr(context);
-    Cpp::CodeCompletionContext c(contPtr, "{", QString() );
+    Cpp::CodeCompletionContext c(contPtr, "{", QString(), SimpleCursor::invalid() );
     QVERIFY( c.isValid() );
     QVERIFY( c.memberAccessOperation() == Cpp::CodeCompletionContext::NoMemberAccess );
     QVERIFY( !c.memberAccessContainer().isValid() );

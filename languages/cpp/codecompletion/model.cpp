@@ -174,7 +174,7 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::Completio
     if(argumentFunctions) {
       QList<IndexedType> types;
       bool abort = false;
-      foreach(CompletionTreeItemPointer item, argumentFunctions->completionItems(SimpleCursor::invalid(), abort, false))
+      foreach(CompletionTreeItemPointer item, argumentFunctions->completionItems(abort, false))
         types += item->typeForArgumentMatching();
       
       setStaticMatchContext(types);
