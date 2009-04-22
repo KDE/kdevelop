@@ -3,6 +3,7 @@
  *
  * Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
  * Copyright 2006 Hamish Rodda <rodda@kde.org>
+ * Copyright 2009 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -31,7 +32,7 @@
 #include "../interfaces/icodehighlighting.h"
 
 namespace KTextEditor { class SmartRange; }
-namespace KDevelop 
+namespace KDevelop
 {
 class DUContext;
 class Declaration;
@@ -67,7 +68,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
       MemberVariableType,
       NamespaceVariableType,
       GlobalVariableType,
-      
+
       //Most of these are currently not used:
       ArgumentType,
       CodeType,
@@ -92,13 +93,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     void highlightDUChain(KDevelop::TopDUContext* context) const;
 
     void deleteHighlighting(KDevelop::DUContext* context) const;
-  
-    virtual void highlightDeclaration(KDevelop::Declaration* declaration, uint color) const;
-    virtual void highlightUse(KDevelop::DUContext* context, int index, uint color) const;
+
+    virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor &color) const;
+    virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color) const;
     virtual void highlightUses(KDevelop::DUContext* context) const;
 
     //color should be zero when undecided
-    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, uint color ) const;
+    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
   private:
@@ -120,7 +121,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     //A temporary hash for speedup
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
-  
+
     //Here the colors of function context are stored until they are merged into the function body
     mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
     mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
@@ -133,3 +134,5 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 }
 
 #endif
+
+// kate: space-indent on; indent-width 2; replace-trailing-space-save on; show-tabs on; tab-indents on; tab-width 2;

@@ -110,6 +110,8 @@ set(kdevplatformlanguage_LIB_SRCS
     util/setrepository.cpp
     util/navigationtooltip.cpp
 
+    highlighting/colorcache.cpp
+    highlighting/configurablecolors.cpp
     highlighting/codehighlighting.cpp
 )
 
