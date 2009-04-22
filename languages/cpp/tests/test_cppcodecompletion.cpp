@@ -385,6 +385,7 @@ void TestCppCodeCompletion::testStringProblem() {
   TEST_FILE_PARSE_ONLY
   QByteArray method("void test() {int i;};");
   TopDUContext* top = parse(method, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().count(), 2);
   CompletionItemTester tester(top->childContexts()[1],QString("bla url(\"http://wwww.bla.de/\");"));
   
@@ -1797,8 +1798,10 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
   UseBuilder useBuilder(session);
   useBuilder.buildUses(ast);
-  foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
+  foreach(KDevelop::ProblemPointer problem, useBuilder.problems()) {
+    DUChainWriteLocker lock(DUChain::lock());
     top->addProblem(problem);
+  }
 
   if (dump & DumpDUChain) {
     kDebug(9007) << "===== DUChain:";
