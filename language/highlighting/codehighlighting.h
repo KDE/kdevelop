@@ -107,7 +107,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
-  KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
+    KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
     /**
      * @param context Should be the context from where the declaration is used, if a use is highlighted.
      * */
@@ -126,9 +126,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
     mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
 
-  //Should be used to enable/disable the colorization of local variables and their uses
-  bool m_localColorization;
-  mutable bool m_useClassCache;
+    //Should be used to enable/disable the colorization of local variables and their uses
+    bool m_localColorization;
+    mutable bool m_useClassCache;
 };
 
 }
