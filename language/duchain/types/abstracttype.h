@@ -132,6 +132,7 @@ public:
 
   /**
    * Visitor method.  Called by TypeVisitor to visit the type heirachy.
+   * Do not reimplement this, reimplement accept0 instead.
    *
    * \param v visitor which is calling this function.
    */
@@ -187,7 +188,8 @@ public:
     TypeDelayed   /**< a delayed type */,
     TypeEnumeration /**< an enumeration type */,
     TypeEnumerator /**< an enumerator type */,
-    TypeAlias      /**< a type-alias type */
+    TypeAlias      /**< a type-alias type */,
+    TypeUnsure /**< may represent multiple different types */
   };
 
   /**

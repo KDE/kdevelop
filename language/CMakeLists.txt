@@ -73,6 +73,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/types/enumeratortype.cpp
     duchain/types/typeutils.cpp
     duchain/types/typealiastype.cpp
+    duchain/types/unsuretype.cpp
 
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
@@ -232,6 +233,7 @@ install(FILES
 )
 
 install(FILES
+    duchain/types/unsuretype.h
     duchain/types/identifiedtype.h
     duchain/types/typesystem.h
     duchain/types/typeregister.h
