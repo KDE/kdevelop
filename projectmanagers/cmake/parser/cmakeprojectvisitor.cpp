@@ -1926,6 +1926,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         }
         if(element->isDeprecated()) {
             kDebug(9032) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";
+            DUChainWriteLocker lock(DUChain::lock());
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
