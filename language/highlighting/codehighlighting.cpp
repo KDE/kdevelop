@@ -90,6 +90,11 @@ uint mix(uint color1, uint color2, uchar ratio) {
   //return (((quint64)color1) * (((quint64)0xff) - ratio) + ((quint64)color2) * ratio) / (quint64)0xff;
 }
 
+///@param ratio ratio between 0 and 0xff
+uint tint(uint color1, uint color2, uchar ratio) {
+  return KColorUtils::tint(QColor(color1), QColor(color2), float(ratio) / float(0xff)).rgb();
+}
+
 uint totalColorInterpolationStepCount = 6;
 uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
 //Do less steps when interpolating to/from green: Green is very dominant, and different mixed green tones are hard to distinguish(and always seem green).
@@ -130,7 +135,7 @@ void generateColors(int count) {
   kDebug() << "text color:" << (void*)QApplication::palette().text().color().rgb();
   for(int a = 0; a < count; ++a) {
     kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*)interpolate( currentPos );
-    colors.append( mix(mix(interpolate( currentPos ), backgroundColor(), backgroundRatio), standardColor, foregroundRatio) );
+    colors.append( tint(interpolate( currentPos ), standardColor, foregroundRatio) );
     //colors.append( interpolate(currentPos).rgb() );
     currentPos += step;
   }
