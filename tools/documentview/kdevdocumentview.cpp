@@ -67,13 +67,6 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
-
-    m_save = KStandardAction::save(this, SLOT(saveSelected()), this);
-    KAction* close  = KStandardAction::close(this, SLOT(closeSelected()), this);
-
-    m_ctxMenu = new KMenu(this);
-    m_ctxMenu->addAction(close);
-    m_ctxMenu->addAction(m_save);
 }
 
 KDevDocumentView::~KDevDocumentView()
@@ -153,8 +146,14 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     }
     if (!m_selectedDocs.isEmpty())
     {
-        m_save->setEnabled( someDocHasChanges() );
-        m_ctxMenu->exec( event->globalPos() );
+        KMenu* ctxMenu=new KMenu(this);
+        ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
+        KAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
+        save->setEnabled(someDocHasChanges());
+        ctxMenu->addAction(save);
+
+        connect(ctxMenu,SIGNAL(aboutToHide()),ctxMenu,SLOT(deleteLater()));
+        ctxMenu->popup( event->globalPos() );
     }
 }
 
@@ -184,7 +183,7 @@ void KDevDocumentView::saved( KDevelop::IDocument* )
 
 void KDevDocumentView::opened( KDevelop::IDocument* document )
 {
-    QString mimeType = document->mimeType() ->comment();
+    QString mimeType = document->mimeType()->comment();
     KDevMimeTypeItem *mimeItem = m_documentModel->mimeType( mimeType );
     if ( !mimeItem )
     {

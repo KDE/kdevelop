@@ -78,8 +78,6 @@ private:
     KDevDocumentViewDelegate* m_delegate;
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
-    KMenu* m_ctxMenu;
-    KAction* m_save;
 };
 
 #endif // KDEVDOCUMENTVIEW_H
