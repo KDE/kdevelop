@@ -129,6 +129,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     //Should be used to enable/disable the colorization of local variables and their uses
     bool m_localColorization;
     mutable bool m_useClassCache;
+
+  private slots:
+    /// when the colors change we must invalidate our local caches
+    void adaptToColorChanges();
 };
 
 }

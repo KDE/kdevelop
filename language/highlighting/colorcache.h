@@ -60,7 +60,11 @@ class ColorCache : public QObject
 
   public slots:
     /// will regenerate colors after taking changes in the color configuration into account
-    void regenerateColors();
+    void adaptToColorChanges();
+
+  signals:
+    /// will be emitted whenever the colors got changed
+    void colorsGotChanged();
 
   private:
     ColorCache(QObject *parent = 0);

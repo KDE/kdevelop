@@ -54,10 +54,21 @@ CodeHighlighting::CodeHighlighting( QObject * parent )
 {
   // make sure the singleton is setup
   ColorCache::initialize();
+
+  connect(ColorCache::self(), SIGNAL(colorsGotChanged()),
+           this, SLOT(adaptToColorChanges()));
 }
 
 CodeHighlighting::~CodeHighlighting( )
 {
+}
+
+void CodeHighlighting::adaptToColorChanges()
+{
+  m_declarationAttributes.clear();
+  m_definitionAttributes.clear();
+  m_depthAttributes.clear();
+  m_referenceAttributes.clear();
 }
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Contexts context, const QColor &color ) const

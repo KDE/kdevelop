@@ -29,6 +29,11 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
+#include "../../interfaces/idocument.h"
+#include "../../interfaces/idocumentcontroller.h"
+#include "../../interfaces/ilanguage.h"
+#include "../interfaces/ilanguagesupport.h"
+#include "../duchain/duchain.h"
 
 #include "configurablecolors.h"
 
@@ -75,12 +80,19 @@ ColorCache::ColorCache(QObject* parent)
   m_self = this;
 
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
-           this, SLOT(regenerateColors()));
+           this, SLOT(adaptToColorChanges()));
 
   connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-           this, SLOT(regenerateColors()));
+           this, SLOT(adaptToColorChanges()));
 
-  regenerateColors();
+  // first time initilialization
+  m_foregroundRatio = 255 - ICore::self()->languageController()->completionSettings()->localVariableColorizationLevel();
+  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
+  m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
+
+  m_defaultColors = new CodeHighlightingColors(this);
+
+  generateColors(10);
 }
 
 ColorCache::~ColorCache()
@@ -118,19 +130,32 @@ void ColorCache::generateColors(uint count)
   m_colors.append(m_foregroundColor);
 }
 
-void ColorCache::ColorCache::regenerateColors()
+void ColorCache::ColorCache::adaptToColorChanges()
 {
   m_foregroundRatio = 255 - ICore::self()->languageController()->completionSettings()->localVariableColorizationLevel();
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
 
-  if ( m_defaultColors ) {
-    delete m_defaultColors;
-  }
+  delete m_defaultColors;
 
   m_defaultColors = new CodeHighlightingColors(this);
 
   generateColors(10);
+
+  emit colorsGotChanged();
+
+  // rehighlight open documents
+  foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    if ( TopDUContext* top = DUChain::self()->chainForDocument(doc->url()) ) {
+      foreach ( ILanguage* lang, ICore::self()->languageController()->languagesForUrl(doc->url()) ) {
+        if ( ILanguageSupport* langSupport = lang->languageSupport() ) {
+          if ( const ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
+            highlighting->highlightDUChain(top);
+          }
+        }
+      }
+    }
+  }
 }
 
 QColor ColorCache::blend(QColor color) const
