@@ -27,7 +27,11 @@
 
 class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
-    CompletionSettings() : m_level(MinimalWhenAutomatic), m_automatic(true), m_enableSemanticHighlighting(true), m_highlightSemanticProblems(true), m_showMultiLineInformation(true), m_localVariableColorizationLevel(120) {
+    CompletionSettings()
+        : m_level(MinimalWhenAutomatic), m_automatic(true), m_enableSemanticHighlighting(true),
+          m_highlightSemanticProblems(true), m_showMultiLineInformation(true),
+          m_localColorizationLevel(120), m_globalColorizationLevel(60)
+    {
     }
 
     bool readBoolConfig(QString name, bool _default = false) const {
@@ -60,8 +64,12 @@ public:
         emit settingsChanged(this);
     }
     
-    virtual int localVariableColorizationLevel() const {
-        return readIntConfig("localVariableColorization", m_localVariableColorizationLevel);
+    virtual int localColorizationLevel() const {
+        return readIntConfig("localColorization", m_localColorizationLevel);
+    }
+    
+    virtual int globalColorizationLevel() const {
+        return readIntConfig("globalColorization", m_globalColorizationLevel);
     }
     
     virtual bool semanticHighlightingEnabled() const {
@@ -80,7 +88,8 @@ public:
     
     CompletionLevel m_level;
     bool m_automatic, m_enableSemanticHighlighting, m_highlightSemanticProblems, m_showMultiLineInformation;
-    int m_localVariableColorizationLevel;
+    int m_localColorizationLevel;
+    int m_globalColorizationLevel;
 };
 
 #endif

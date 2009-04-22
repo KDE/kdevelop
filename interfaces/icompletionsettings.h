@@ -40,7 +40,9 @@ namespace KDevelop {
             
             Q_SCRIPTABLE virtual bool semanticHighlightingEnabled() const = 0;
             
-            Q_SCRIPTABLE virtual int localVariableColorizationLevel() const = 0;
+            Q_SCRIPTABLE virtual int localColorizationLevel() const = 0;
+            
+            Q_SCRIPTABLE virtual int globalColorizationLevel() const = 0;
             
             Q_SCRIPTABLE virtual bool highlightSemanticProblems() const = 0;
             

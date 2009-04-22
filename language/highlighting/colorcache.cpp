@@ -73,7 +73,8 @@ namespace KDevelop {
 ColorCache* ColorCache::m_self = 0;
 
 ColorCache::ColorCache(QObject* parent)
-  : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0), m_foregroundRatio(0)
+  : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0),
+    m_localColorRatio(0), m_globalColorRatio(0)
 {
   Q_ASSERT(m_self == 0);
 
@@ -86,7 +87,10 @@ ColorCache::ColorCache(QObject* parent)
            this, SLOT(adaptToColorChanges()));
 
   // first time initilialization
-  m_foregroundRatio = 255 - ICore::self()->languageController()->completionSettings()->localVariableColorizationLevel();
+
+  m_localColorRatio = 255 - ICore::self()->languageController()->completionSettings()->localColorizationLevel();
+  m_globalColorRatio = 255 - ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
+
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
 
@@ -122,7 +126,7 @@ void ColorCache::generateColors(uint count)
   uint currentPos = m_colorOffset;
   kDebug() << "text color:" << m_foregroundColor;
   for(uint a = 0; a < count; ++a) {
-    m_colors.append( blend( interpolate( currentPos ) ) );
+    m_colors.append( blendLocalColor( interpolate( currentPos ) ) );
     kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();
     currentPos += step;
   }
@@ -132,7 +136,8 @@ void ColorCache::generateColors(uint count)
 
 void ColorCache::ColorCache::adaptToColorChanges()
 {
-  m_foregroundRatio = 255 - ICore::self()->languageController()->completionSettings()->localVariableColorizationLevel();
+  m_localColorRatio = 255 - ICore::self()->languageController()->completionSettings()->localColorizationLevel();
+  m_globalColorRatio = 255 - ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
   m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
 
@@ -158,14 +163,24 @@ void ColorCache::ColorCache::adaptToColorChanges()
   }
 }
 
-QColor ColorCache::blend(QColor color) const
+QColor ColorCache::blend(QColor color, uchar ratio) const
 {
   if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
   }
   // adapt contrast
-  return KColorUtils::mix( m_foregroundColor, color, float(m_foregroundRatio) / float(0xff) );
+  return KColorUtils::mix( m_foregroundColor, color, float(ratio) / float(0xff) );
+}
+
+QColor ColorCache::blendGlobalColor(QColor color) const
+{
+  return blend(color, m_globalColorRatio);
+}
+
+QColor ColorCache::blendLocalColor(QColor color) const
+{
+  return blend(color, m_localColorRatio);
 }
 
 CodeHighlightingColors* ColorCache::defaultColors() const

@@ -47,7 +47,15 @@ class ColorCache : public QObject
     static void initialize();
 
     /// adapt a given color to the current color scheme
-    QColor blend(QColor color) const;
+    /// @p ratio between 0 and 255 where 0 gives @see m_foregroundColor
+    /// and 255 gives @p color
+    QColor blend(QColor color, uchar ratio) const;
+
+    /// blend a color for local colorization according to the user settings
+    QColor blendLocalColor(QColor color) const;
+
+    /// blend a color for global colorization according to the user settings
+    QColor blendGlobalColor(QColor color) const;
 
     /// access the default colors
     CodeHighlightingColors* defaultColors() const;
@@ -88,9 +96,13 @@ class ColorCache : public QObject
     /// the text color for the current color scheme
     QColor m_foregroundColor;
 
-    /// How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only
-    /// foreground color, and 0 only the chosen color.
-    uchar m_foregroundRatio;
+    /// How generated colors for local variables should be mixed with the foreground color.
+    /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+    uchar m_localColorRatio;
+
+    /// How global colors (i.e. for types, uses, etc.) should be mixed with the foreground color.
+    /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
+    uchar m_globalColorRatio;
 };
 
 }

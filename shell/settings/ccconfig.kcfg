@@ -24,7 +24,10 @@
     <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
     <default>true</default>
     </entry>
-    <entry name="localVariableColorization" key="localVariableColorization" type="Int">
+    <entry name="localColorization" key="localColorization" type="Int">
+    <default>120</default>
+    </entry>
+    <entry name="globalColorization" key="globalColorization" type="Int">
     <default>120</default>
     </entry>
   </group>
