@@ -136,12 +136,12 @@ ColorMap emptyColorMap() {
 
 void CodeHighlighting::highlightDUChain(TopDUContext* context) const
 {
-  kDebug() << "highighting du chain";
+  kDebug() << "highlighting du chain";
 
   DUChainReadLocker lock(DUChain::lock());
 
   if(!ICore::self()->languageController()->completionSettings()->semanticHighlightingEnabled()) {
-    kDebug() << "highighting disabled";
+    kDebug() << "highlighting disabled";
     deleteHighlighting(context);
     return;
   }
@@ -161,8 +161,10 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context) const
 
 void CodeHighlighting::highlightDUChainSimple(DUContext* context) const
 {
-  if (!context->smartRange())
+  if (!context->smartRange()) {
+    kDebug() << "not a smart range! highlighting aborted";
     return;
+  }
 
   bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
 
