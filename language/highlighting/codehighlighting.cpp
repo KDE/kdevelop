@@ -166,7 +166,6 @@ CodeHighlighting::~CodeHighlighting( )
 class CodeHighlightingColors : public KDevelop::ConfigurableHighlightingColors {
   public:
   CodeHighlightingColors() : KDevelop::ConfigurableHighlightingColors("KDev Semantic Highlighting") {
-
     {
       KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
       a->setForeground(QColor(blend(0x005912))); //Dark green
@@ -462,10 +461,10 @@ void CodeHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, 
 
   for(int a = 0; a < context->usesCount(); ++a) {
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
-    uint colorNum = validColorCount;
+    uint color = 0;
     if( colorsForDeclarations.contains(decl) )
-      colorNum = colorsForDeclarations[decl];
-    highlightUse(context, a, colors[colorNum]);
+      color = colors[colorsForDeclarations[decl]];
+    highlightUse(context, a, color);
   }
 
   foreach (DUContext* child, context->childContexts()) {
