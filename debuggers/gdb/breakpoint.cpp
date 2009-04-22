@@ -41,7 +41,7 @@ Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
                              GDBController* controller, BreakpointKind kind)
 : KDevelop::IBreakpoint(model, parent, kind), controller_(controller)
 {
-    setData(QVector<QString>() << "" << "" << "" << "" << "");
+    setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
 Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,

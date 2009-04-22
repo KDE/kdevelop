@@ -50,34 +50,30 @@ QString get_function_or_address(const GDBMI::Value &frame)
         return frame["addr"].literal();
 }
 
-QString get_source(const GDBMI::Value &frame)
+QPair<QString, int> get_source(const GDBMI::Value &frame)
 {
+    QPair<QString, int> ret(QString(), 0);
     if (frame.hasField("file"))
-        return frame["file"].literal() + ':' +  frame["line"].literal();
+        ret=qMakePair(frame["file"].literal(), frame["line"].toInt());
     else if (frame.hasField("from"))
-        return frame["from"].literal();
-    else
-        return "";
+        ret.first=frame["from"].literal();
+    
+    return ret;
 }
 
-Frame::Frame(TreeModel* model, Thread* parent, const GDBMI::Value& frame)
-: TreeItem(model, parent)
+Frame::Frame(StackModel* model, Thread* parent, const GDBMI::Value& frame)
+    : StackItem(model, parent, "#")
 {
     updateSelf(frame);
 }
 
 void Frame::updateSelf(const GDBMI::Value& frame)
 {
-    id_ = frame["level"].toInt();
-    setData(QVector<QString>()
-            << ('#' + frame["level"].literal())
-            << get_function_or_address(frame)
-            << get_source(frame));
+    setInformation(frame["level"].toInt(), get_function_or_address(frame), get_source(frame));
 }
 
-Thread::Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
-               const GDBMI::Value& thread)
-: TreeItem(model, parent), controller_(controller)
+Thread::Thread(KDevelop::StackModel* model, KDevelop::TreeItem* parent, GDBDebugger::GDBController* controller, const GDBMI::Value& thread)
+    : StackItem(model, parent, i18n("Frame ")), controller_(controller)
 {
     id_ = thread["id"].toInt();
 
@@ -88,10 +84,7 @@ Thread::Thread(TreeModel* model, TreeItem* parent, GDBController *controller,
 void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
 {
     const GDBMI::Value& frame = thread["frame"];
-    setData(QVector<QString>()
-            << ("Thread " + thread["id"].literal())
-            << get_function_or_address(frame)
-            << get_source(frame));
+    setInformation(frame["level"].toInt(), get_function_or_address(frame), get_source(frame));
     if (!initial)
         reportChange();
 
@@ -165,7 +158,7 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
             }
             else
             {
-                appendChild(new Frame(model(), this, stack[i+1]));
+                appendChild(new Frame(stackModel(), this, stack[i+1]));
             }
         }
         while (i < childItems.count())
@@ -180,10 +173,10 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
             kDebug(9012) << "Got wrong frames\n";
             return;
         }
+        
         for (int i = 0; i < step && (i+1) < stack.size(); ++i)
-        {
-            appendChild(new Frame(model(), this, stack[i+1]));
-        }
+            appendChild(new Frame(stackModel(), this, stack[i+1]));
+        
         setHasMore(stack.size() > step);
     }
 }
@@ -192,9 +185,9 @@ class DebugUniverse : public TreeItem
 {
     Q_OBJECT
 public:
-    DebugUniverse(TreeModel* model, GDBController *controller,
+    DebugUniverse(StackModel* model, GDBController *controller,
                   StackManager *stackManager)
-    : TreeItem(model), controller_(controller), stackManager_(stackManager)
+    : TreeItem(model), controller_(controller), stackManager_(stackManager), mModel(model)
     {}
 
     void update()
@@ -219,7 +212,7 @@ private:
         // Collect the set of ids that are present in
         // target now.
         QSet<int> present;
-        for (unsigned i = 0; i < threads.size(); ++i)
+        for (int i = 0; i < threads.size(); ++i)
             present.insert(threads[i]["id"].toInt());
 
         // Remove threads that are no longer present
@@ -258,8 +251,7 @@ private:
         }
 
         for (; gidx >= 0; --gidx)
-            appendChild(new Thread(model(), this,
-                                   controller_, threads[gidx]));
+            appendChild(new Thread(mModel, this, controller_, threads[gidx]));
 
         for (int i = 0; i < childItems.size(); ++i)
         {
@@ -267,7 +259,7 @@ private:
             if (t->id() == current_id)
             {
                 emit stackManager_
-                    ->selectThreadReally(model()->indexForItem(t, 0));
+                    ->selectThreadReally(mModel->indexForItem(t, 0));
             }
         }
 
@@ -275,6 +267,7 @@ private:
 
     GDBController* controller_;
     StackManager* stackManager_;
+    StackModel* mModel;
 };
 }
 

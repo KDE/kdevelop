@@ -27,7 +27,7 @@
 
 #include "mi/miparser.h"
 #include "gdbglobal.h"
-#include <debugger/util/treeitem.h>
+#include <debugger/interfaces/stackitem.h>
 #include <debugger/interfaces/stackmodel.h>
 
 namespace KDevelop {
@@ -38,11 +38,11 @@ namespace GDBDebugger
 {
 class GDBController;
 
-class Thread : public KDevelop::TreeItem
+class Thread : public KDevelop::StackItem
 {
     Q_OBJECT
 public:
-    Thread(KDevelop::TreeModel* model, KDevelop::TreeItem* parent, GDBController *controller,
+    Thread(KDevelop::StackModel* model, KDevelop::TreeItem* parent, GDBController *controller,
            const GDBMI::Value& thread);
 
     int id() const { return id_; }
@@ -59,16 +59,14 @@ public:
     static const int step = 5;
 };
 
-class Frame : public KDevelop::TreeItem
+class Frame : public KDevelop::StackItem
 {
     Q_OBJECT
 public:
-    Frame(KDevelop::TreeModel* model, Thread* parent, const GDBMI::Value& frame);
+    Frame(KDevelop::StackModel* model, Thread* parent, const GDBMI::Value& frame);
     void updateSelf(const GDBMI::Value& frame);
 
     Thread* thread() { return static_cast<Thread*>(parentItem); }
-
-    int id() const { return id_; }
 
     void fetchMoreChildren() {}
 

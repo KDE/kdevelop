@@ -68,9 +68,9 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
     if (display.isEmpty())
-        setData(QVector<QString>() << expression << "");
+        setData(QVector<QVariant>() << expression << QString());
     else
-        setData(QVector<QString>() << display << "");
+        setData(QVector<QVariant>() << display << QString());
 }
 
 Variable::Variable(TreeModel* model, TreeItem* parent, 
@@ -253,7 +253,7 @@ QMap<QString, Variable*> Variable::allVariables_;
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(0)
 {
-    setData(QVector<QString>() << "Auto" << "");
+    setData(QVector<QVariant>() << "Auto" << QString());
 }
 
 Variable* Watches::add(const QString& expression)

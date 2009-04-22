@@ -136,7 +136,7 @@ private:
 
 CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
-    m_session(0), m_config(KGlobal::config(), "GDB Debugger")
+    m_config(KGlobal::config(), "GDB Debugger"), m_session(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )

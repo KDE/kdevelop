@@ -245,6 +245,7 @@ namespace GDBMI
         */
         virtual QString literal() const;
 
+        //NOTE: Wouldn't it be better to use literal().toInt and get rid of that?
         /** If the value is a string literal, converts it to int and
             returns. If conversion fails, or the value cannot be
             converted to int, throws type_error.
