@@ -80,9 +80,9 @@ QList<uint>  colors;
 uint validColorCount = 0; //Must always be colors.count()-1, because the last color must be the fallback text color
 uint colorOffset = 0; //Maybe make this configurable: An offset where to start stepping through the color wheel
 uchar foregroundRatio = 140; ///How the color should be mixed with the foreground color. Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
-uchar backgroundRatio = 0; ///Mixing in background color makes the colors less annoying
+// uchar backgroundRatio = 0; ///Mixing in background color makes the colors less annoying
 
-uint backgroundTinting = 0;
+// uint backgroundTinting = 0;
 
 ///@param ratio ratio between 0 and 0xff
 uint mix(uint color1, uint color2, uchar ratio) {
@@ -120,11 +120,12 @@ uint interpolate(uint step) {
 
   return mix(interpolationWaypoints[waypoint], interpolationWaypoints[nextWaypoint], (step * 0xff) / interpolationLengths[waypoint]);
 }
-
+/*
 uint backgroundColor() {
   ///@todo Find the correct text background color from kate
   return 0xffffff;
 }
+*/
 
 void generateColors(int count) {
   colors.clear();
