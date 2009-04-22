@@ -171,11 +171,11 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 
     KUrl projectPath = m_realRoot[item->project()];
 
-    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
+    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     for(; !fi && item; )
     {
-        item=dynamic_cast<ProjectBaseItem*>(item->parent());
-        fi=dynamic_cast<ProjectFolderItem*>(item);
+        item=static_cast<ProjectBaseItem*>(item->parent());
+        fi=dynamic_cast<CMakeFolderItem*>(item);
     }
     if(!fi) {
         return path;
