@@ -26,6 +26,7 @@
 #include <KDebug>
 #include <KProcess>
 #include <QFile>
+#include <KStandardDirs>
 
 QTEST_MAIN( CMakeCompliance )
 
@@ -70,12 +71,12 @@ void CMakeCompliance::testEnumerate()
 void CMakeCompliance::testEnumerate_data()
 {
     QTest::addColumn<QString>( "exe" );
-    QStringList paths=CMakeProjectVisitor::envVarDirectories("PATH");
+    QStringList cmakes;
+    KStandardDirs::findAllExe(cmakes, "cmake");
     
-    foreach(const QString& path, paths)
+    foreach(const QString& path, cmakes)
     {
-        if(QFile::exists(path+"/cmake"))
-            QTest::newRow( qPrintable(path+"/cmake") ) << (path+"/cmake");
+        QTest::newRow( qPrintable(path) ) << (path);
     }
 }
 
