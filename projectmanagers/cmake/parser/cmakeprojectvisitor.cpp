@@ -272,7 +272,7 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
-            m_targetForId[tname].prop[t.first] += t.second;
+            m_props[TARGET][tname][t.first] += t.second;
         }
     }
     return 1;
@@ -1813,6 +1813,19 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
     return 1;
 }
 
+int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
+{
+    if(setp->type()==GLOBAL)
+        m_props[GLOBAL][QString()][setp->name()]=setp->values();
+    else
+    {
+        CategoryType& cm=m_props[setp->type()];
+        foreach(const QString &it, setp->args())
+            cm[it].insert(setp->name(), setp->values());
+    }
+    return 1;
+}
+
 int CMakeProjectVisitor::visit( const WhileAst * whileast)
 {
     CMakeCondition cond(this);
@@ -2056,3 +2069,4 @@ QStringList CMakeProjectVisitor::resolveDependencies(const QStringList & files) 
     }
     return ret;
 }
+

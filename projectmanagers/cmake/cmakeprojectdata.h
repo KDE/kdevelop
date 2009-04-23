@@ -15,6 +15,7 @@ struct CMakeProjectData
     
     VariableMap vm;
     MacroMap mm;
+    CMakeProperties properties;
 };
 
 #endif

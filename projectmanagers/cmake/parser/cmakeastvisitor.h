@@ -64,6 +64,7 @@ class RemoveDefinitionsAst;
 class SetAst;
 class SetTargetPropsAst;
 class SeparateArgumentsAst;
+class SetPropertyAst;
 class StringAst;
 class SubdirsAst;
 class TryCompileAst;
@@ -108,6 +109,7 @@ class CMakeAstVisitor {
         virtual int visit( const RemoveDefinitionsAst * ) = 0;
         virtual int visit( const SetAst * ) = 0;
         virtual int visit( const SetTargetPropsAst * ) = 0;
+        virtual int visit( const SetPropertyAst * ) = 0;
         virtual int visit( const StringAst * ) = 0;
         virtual int visit( const SubdirsAst * ) = 0;
         virtual int visit( const TryCompileAst * ) = 0;

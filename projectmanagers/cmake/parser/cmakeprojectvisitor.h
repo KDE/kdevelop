@@ -75,6 +75,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const SetAst * );
         virtual int visit( const ForeachAst * );
         virtual int visit( const ProjectAst * );
+        virtual int visit( const SetPropertyAst* );
         virtual int visit( const SetTargetPropsAst * );
         virtual int visit( const StringAst * );
         virtual int visit( const SubdirsAst * );
@@ -127,7 +128,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
             int line;
             KDevelop::ReferencedTopDUContext context;
         };
-        
+        CMakeProperties properties() { return m_props; }
     protected:
         struct IntPair
         {
@@ -159,11 +160,11 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         bool haveToFind(const QString &varName);
         void createDefinitions(const CMakeAst* ast);
         void createUses(const CMakeFunctionDesc& ast);
-        unsigned int currentIdentity() const;
         void printBacktrace(const QStack<VisitorState> &backtrace);
         VisitorState stackTop() const;
         QStringList dependees(const QString& s) const;
 
+        CMakeProperties m_props;
         QStringList m_modulePath;
         QString m_projectName;
         QStringList m_subdirectories;

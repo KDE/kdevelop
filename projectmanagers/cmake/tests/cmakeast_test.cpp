@@ -2989,6 +2989,33 @@ void CMakeAstTest::testSetBadParse_data()
 
 
 
+void CMakeAstTest::testSetPropertyGoodParse()
+{
+    TDD_TODO;
+    QFETCH( CMakeFunctionDesc, function );
+    SetPropertyAst* ast = new SetPropertyAst();
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testSetPropertyGoodParse_data()
+{
+}
+
+void CMakeAstTest::testSetPropertyBadParse()
+{
+    TDD_TODO;
+    QFETCH( CMakeFunctionDesc, function );
+    SetPropertyAst* ast = new SetPropertyAst();
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testSetPropertyBadParse_data()
+{
+}
+
+
 
 
 

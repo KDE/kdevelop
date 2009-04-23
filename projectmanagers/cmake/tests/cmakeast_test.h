@@ -284,6 +284,10 @@ private slots:
     void testSetDirectoryPropsGoodParse_data();
     void testSetDirectoryPropsBadParse();
     void testSetDirectoryPropsBadParse_data();
+    void testSetPropertyGoodParse();
+    void testSetPropertyGoodParse_data();
+    void testSetPropertyBadParse();
+    void testSetPropertyBadParse_data();
     void testSetSourceFilesPropsGoodParse();
     void testSetSourceFilesPropsGoodParse_data();
     void testSetSourceFilesPropsBadParse();

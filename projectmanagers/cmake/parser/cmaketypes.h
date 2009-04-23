@@ -46,9 +46,12 @@ struct Target
     QStringList files;
     Type type;
     CMakeFunctionDesc desc;
-    Properties prop;
     QString name;
 };
+
+enum PropertyType { GLOBAL, DIRECTORY, TARGET, SOURCE, TEST };
+typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
+typedef QMap<PropertyType, CategoryType > CMakeProperties;
 
 typedef QHash<QString, Macro> MacroMap;
 typedef QHash<QString, QString> CMakeDefinitions;

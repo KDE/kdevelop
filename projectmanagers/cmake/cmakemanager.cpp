@@ -169,8 +169,6 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
         return KUrl();
     }
 
-    KUrl projectPath = m_realRoot[item->project()];
-
     CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
     for(; !fi && item; )
     {
@@ -181,6 +179,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
         return path;
     }
 
+    KUrl projectPath = m_realRoot[item->project()];
     QString relative=KUrl::relativeUrl( projectPath, fi->url() );
     path.addPath(relative);
     path.cleanPath();
@@ -486,6 +485,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 data.includeDirectories=v.includeDirectories();
                 data.targets=v.targets();
                 data.folderDeclarations=v.folderDeclarations();
+                data.properties=v.properties();
                 
                 QList<Target>::iterator it=data.targets.begin(), itEnd=data.targets.end();
                 for(; it!=itEnd; ++it)
@@ -572,8 +572,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             {
                 QStringList files=t.files;
                 QString outputName=t.name;
-                if(t.prop.contains("OUTPUT_NAME"))
-                    outputName=t.prop.value("OUTPUT_NAME");
+                if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
+                    outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
 
                 KDevelop::ProjectTargetItem* targetItem;
                 switch(t.type)

@@ -29,6 +29,7 @@
 #include "cmakeexport.h"
 #include "cmakelistsparser.h"
 #include "cmakeastvisitor.h"
+#include "cmaketypes.h"
 
 class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
 {
@@ -139,7 +140,6 @@ private:
 #define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
     public:                                                         \
         returnType returnName() const { return m_##returnName; }    \
-        void set##setterName( setterType );                         \
     private:                                                        \
         returnType m_##returnName;
 
@@ -411,6 +411,15 @@ CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
 CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )
+
+
+CMAKE_BEGIN_AST_CLASS( SetPropertyAst )
+CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
+CMAKE_ADD_AST_MEMBER( bool, bool, append, Append )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, args, Arguments )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
+CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values )
+CMAKE_END_AST_CLASS( SetPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetDirPropertyAst )
@@ -845,4 +854,6 @@ CMAKE_END_AST_CLASS( FunctionAst )
 CMAKE_BEGIN_AST_CLASS( ReturnAst )
 CMAKE_END_AST_CLASS( ReturnAst )
 
+
 #endif
+

@@ -97,6 +97,7 @@ CMAKE_REGISTER_AST( SetDirectoryPropsAst, set_directory_properties )
 CMAKE_REGISTER_AST( SetSourceFilesPropsAst, set_source_files_properties )
 CMAKE_REGISTER_AST( SetTargetPropsAst, set_target_properties )
 CMAKE_REGISTER_AST( SetTestsPropsAst, set_tests_properties )
+CMAKE_REGISTER_AST( SetPropertyAst, set_property )
 CMAKE_REGISTER_AST( SourceGroupAst, source_group )
 CMAKE_REGISTER_AST( SeparateArgumentsAst, separate_arguments )
 CMAKE_REGISTER_AST( SiteNameAst, site_name )
@@ -3259,6 +3260,8 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                     if(!correct) return false;
                     s=None;
                     continue;
+                case None:
+                    break;
             }
             
             if(arg.value=="LENGTH")
@@ -3892,5 +3895,54 @@ void ReturnAst::writeBack( QString& ) const
 bool ReturnAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     return func.arguments.isEmpty() && func.name.toLower()=="return";
+}
+
+SetPropertyAst::SetPropertyAst()
+{
+}
+
+SetPropertyAst::~SetPropertyAst()
+{
+}
+
+void SetPropertyAst::writeBack( QString& ) const
+{
+}
+
+bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="set_property" || func.arguments.count() < 4)
+        return false;
+    
+    PropertyType t;
+    QString propName=func.arguments.first().value;
+    if(propName=="GLOBAL") t=GLOBAL;
+    else if(propName=="DIRECTORY") t=DIRECTORY;
+    else if(propName=="TARGET") t=TARGET;
+    else if(propName=="SOURCE") t=SOURCE;
+    else if(propName=="TEST") t=TEST;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
+    for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND"; ++it)
+    {
+        m_args.append(it->value);
+    }
+    if(it!=itEnd)
+        m_append=it->value=="APPEND";
+    
+    if(m_append)
+        ++it;
+    if(it!=itEnd)
+        ++it; //PROPERTY
+    else
+        return false;
+    
+    m_name=it->value;
+    for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND"; ++it)
+    {
+        m_values.append(it->value);
+    }
+    
+    return !m_name.isEmpty();
 }
 
