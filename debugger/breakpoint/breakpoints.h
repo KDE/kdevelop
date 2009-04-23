@@ -27,6 +27,7 @@
 namespace KDevelop
 {
 class Breakpoint;
+class BreakpointModel;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Breakpoints : public KDevelop::TreeItem
 {
