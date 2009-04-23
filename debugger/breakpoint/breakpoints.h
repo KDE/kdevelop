@@ -18,44 +18,43 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KDEV_IBREAKPOINTS_H
-#define KDEV_IBREAKPOINTS_H
+#ifndef KDEV_BREAKPOINTS_H
+#define KDEV_BREAKPOINTS_H
 
 #include "../util/treeitem.h"
-#include "ibreakpointcontroller.h"
+#include "breakpointcontroller.h"
 
 namespace KDevelop
 {
-class IBreakpoint;
-class IBreakpointController;
+class Breakpoint;
+class BreakpointController;
 
-class KDEVPLATFORMDEBUGGER_EXPORT IBreakpoints : public KDevelop::TreeItem
+class KDEVPLATFORMDEBUGGER_EXPORT Breakpoints : public KDevelop::TreeItem
 {
     Q_OBJECT
 public:
-    IBreakpoints(IBreakpointController *model);
+    Breakpoints(BreakpointController *model);
 
     void markOut();
     void sendMaybe();
 
     void remove(const QModelIndex &index);
-    virtual void update() =0;
 
-    virtual IBreakpoint* addCodeBreakpoint()=0;
-    virtual IBreakpoint* addCodeBreakpoint(const QString& location)=0;
-    virtual IBreakpoint* addWatchpoint()=0;
-    virtual IBreakpoint* addWatchpoint(const QString& expression)=0;
-    virtual IBreakpoint* addReadWatchpoint()=0;
+    KDevelop::Breakpoint* addCodeBreakpoint();
+    KDevelop::Breakpoint* addCodeBreakpoint(const QString& location);
+    KDevelop::Breakpoint* addWatchpoint();
+    KDevelop::Breakpoint* addWatchpoint(const QString& expression);
+    KDevelop::Breakpoint* addReadWatchpoint();
 
     /**
      * Must create a "please enter location" item, that will
      * turn into real breakpoint when user types something.
      */
-    virtual void createHelperBreakpoint() = 0;
+    virtual void createHelperBreakpoint();
 
-    IBreakpoint *breakpointById(int id);
+    Breakpoint *breakpointById(int id);
 
-    IBreakpoint *breakpoint(int row);
+    Breakpoint *breakpoint(int row);
     int breakpointCount() const;
 
     /**
@@ -65,13 +64,17 @@ public:
      */
     void removeBreakpoint(int row);
 
-    void errorEmit(IBreakpoint *b, const QString& message, int column) { emit error(b, message, column); }
+    void fetchMoreChildren() {}
+
+    void errorEmit(Breakpoint *b, const QString& message, int column) { emit error(b, message, column); }
 Q_SIGNALS:
-    void error(KDevelop::IBreakpoint *b, const QString& message, int column);
+    void error(KDevelop::Breakpoint *b, const QString& message, int column);
 
 public Q_SLOTS:
     void save();
-    virtual void load()=0;
+    virtual void load() {
+        //TODO NIKO
+    }
 };
 
 }
