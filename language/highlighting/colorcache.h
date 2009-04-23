@@ -52,31 +52,40 @@ class ColorCache : public QObject
     QColor blend(QColor color, uchar ratio) const;
 
     /// blend a color for local colorization according to the user settings
+    /// @see blend()
     QColor blendLocalColor(QColor color) const;
 
     /// blend a color for global colorization according to the user settings
+    /// @see blend()
     QColor blendGlobalColor(QColor color) const;
 
     /// access the default colors
     CodeHighlightingColors* defaultColors() const;
 
     /// access the generated colors
+    /// @see validColorCount()
     QColor generatedColor(uint num) const;
 
     /// returns the number of valid generated colors
+    /// @see generatedColor()
     uint validColorCount() const;
 
   public slots:
     /// will regenerate colors after taking changes in the color configuration into account
+    /// @see colorsGotChanged()
     void adaptToColorChanges();
 
   signals:
     /// will be emitted whenever the colors got changed
+    /// @see adaptToColorChanges()
     void colorsGotChanged();
 
   private:
     ColorCache(QObject *parent = 0);
     static ColorCache* m_self;
+
+    /// setup colors for the current settings
+    void setupColors();
 
     /// get @p count colors from the color wheel and adapt them to the current color scheme
     void generateColors(uint count);

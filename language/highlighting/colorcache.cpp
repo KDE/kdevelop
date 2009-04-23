@@ -86,17 +86,7 @@ ColorCache::ColorCache(QObject* parent)
   connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
            this, SLOT(adaptToColorChanges()));
 
-  // first time initilialization
-
-  m_localColorRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
-  m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
-
-  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
-
-  m_defaultColors = new CodeHighlightingColors(this);
-
-  generateColors(10);
+  setupColors();
 }
 
 ColorCache::~ColorCache()
@@ -119,6 +109,23 @@ void ColorCache::initialize()
   m_self = new ColorCache;
 }
 
+void ColorCache::setupColors()
+{
+  m_localColorRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
+  m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
+
+  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
+  m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
+
+  if ( m_defaultColors ) {
+    delete m_defaultColors;
+  }
+
+  m_defaultColors = new CodeHighlightingColors(this);
+
+  generateColors(10);
+}
+
 void ColorCache::generateColors(uint count)
 {
   m_colors.clear();
@@ -136,16 +143,7 @@ void ColorCache::generateColors(uint count)
 
 void ColorCache::ColorCache::adaptToColorChanges()
 {
-  m_localColorRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
-  m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
-  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
-
-  delete m_defaultColors;
-
-  m_defaultColors = new CodeHighlightingColors(this);
-
-  generateColors(10);
+  setupColors();
 
   emit colorsGotChanged();
 
