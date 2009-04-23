@@ -39,16 +39,6 @@ class Breakpoints : public KDevelop::IBreakpoints
 public:
     Breakpoints(KDevelop::IBreakpointController *model, GDBController *controller);
 
-    void update();
-    void fetchMoreChildren() {}
-    virtual void createHelperBreakpoint();
-    
-    KDevelop::IBreakpoint* addCodeBreakpoint();
-    KDevelop::IBreakpoint* addCodeBreakpoint(const QString& location);
-    KDevelop::IBreakpoint* addWatchpoint();
-    KDevelop::IBreakpoint* addWatchpoint(const QString& expression);
-    KDevelop::IBreakpoint* addReadWatchpoint();
-
 public slots:
     void load();
 

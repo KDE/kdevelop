@@ -29,9 +29,8 @@
 #include <shell/shellextension.h>
 
 #include <debugger/interfaces/stackmodel.h>
-#include <debugger/interfaces/ibreakpoint.h>
+#include <debugger/breakpoint/breakpointcontroller.h>
 
-#include "breakpointcontroller.h"
 #include "gdbcontroller.h"
 #include "debugsession.h"
 #include <KGlobal>

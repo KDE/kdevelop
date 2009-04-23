@@ -52,16 +52,13 @@ set(kdevgdb_PART_SRCS
     processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
-    breakpointcontroller.cpp
-    breakpoints.cpp
-    breakpoint.cpp
+    gdbbreakpointcontroller.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
 #    qt4/qstringvariableitem.cpp
 #    qt4/qlistvariableitem.cpp
-    breakpointwidget.cpp
 #    modeltest.cpp
     tooltipwidget.cpp
     stringhelpers.cpp
@@ -108,16 +105,13 @@ set(gdbtest_PART_SRCS
     processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
-    breakpointcontroller.cpp
-    breakpoints.cpp
-    breakpoint.cpp
+    gdbbreakpointcontroller.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
 #    qt4/qstringvariableitem.cpp
 #    qt4/qlistvariableitem.cpp
-    breakpointwidget.cpp
 #    modeltest.cpp
     tooltipwidget.cpp
     stringhelpers.cpp

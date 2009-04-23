@@ -54,7 +54,6 @@ public:
     DebugSession(GDBController* controller);
     virtual DebuggerState state() const;
     virtual KDevelop::StackModel* stackModel() const;
-    virtual KDevelop::IBreakpointController *breakpointController() const;
 
     virtual bool restartAvaliable() const;
 
