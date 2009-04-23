@@ -422,8 +422,14 @@ public:
       QMutexLocker lock(m_environmentListInfo.mutex()); //Lock the mutex to make sure the item isn't changed while it's being iterated
       const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
 
-      FOREACH_FUNCTION(uint topContextIndex, item->items)
-        ret << ParsingEnvironmentFilePointer(loadInformation(url, topContextIndex));
+      FOREACH_FUNCTION(uint topContextIndex, item->items) {
+        KSharedPtr< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(url, topContextIndex));
+        if(p) {
+         ret << p;
+        }else{
+          kDebug() << "Failed to load enviromment-information for" << TopDUContextDynamicData::loadUrl(topContextIndex).str();
+        }
+      }
     }
 
     QMutexLocker l(&m_chainsMutex);
