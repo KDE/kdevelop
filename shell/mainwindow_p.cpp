@@ -22,6 +22,8 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 
 #include <QApplication>
+#include <QBoxLayout>
+#include <QLabel>
 
 #include <kmenu.h>
 #include <kdebug.h>
@@ -68,7 +70,14 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
 void MainWindowPrivate::setupGui()
 {
     m_statusBar = new KDevelop::StatusBar(m_mainWindow);
-    m_mainWindow->setStatusBar(m_statusBar);
+    setupStatusBar();
+}
+
+void MainWindowPrivate::setupStatusBar()
+{
+    QWidget *location = m_mainWindow->statusBarLocation();
+    if (m_statusBar)
+        location->layout()->addWidget(m_statusBar);
 }
 
 void MainWindowPrivate::addPlugin( IPlugin *plugin )

@@ -92,6 +92,9 @@ Q_SIGNALS:
 
 
 protected:
+    QWidget *statusBarLocation();
+    virtual void initializeStatusBar();
+
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
     Reimplement in subclasses to save more and don't forget to call inherited method.*/

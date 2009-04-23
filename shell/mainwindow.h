@@ -72,6 +72,7 @@ public Q_SLOTS:
 protected:
     virtual void initialize();
     virtual void cleanup();
+    virtual void initializeStatusBar();
 
 private Q_SLOTS:
     void documentActivated( KDevelop::IDocument* document );

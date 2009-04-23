@@ -95,6 +95,8 @@ public:
 
     IdealDockWidget* widgetForAction(QAction* action) const;
 
+    QWidget* corner();
+
 private Q_SLOTS:
     void showWidget(bool checked);
     void anchor(bool anchor);
@@ -109,6 +111,7 @@ private:
     QHash<QAction *, IdealToolButton *> _buttons;
     QHash<QAction *, IdealDockWidget*> _widgets;
     QActionGroup* _actions;
+    QWidget *_corner;
 };
 
 class IdealDockWidget : public QDockWidget
@@ -204,6 +207,8 @@ public:
     void setMaximizeActionStatus(bool checked);
     void setShowDockStatus(IdealMainLayout::Role role, bool checked);
 
+    QWidget *statusBarLocation() const;
+
 Q_SIGNALS:
     void dockShown(Sublime::View*, Sublime::Position pos, bool shown);
 
@@ -232,6 +237,7 @@ private:
     IdealButtonBarWidget *rightBarWidget;
     IdealButtonBarWidget *bottomBarWidget;
     IdealButtonBarWidget *topBarWidget;
+    QWidget *bottomStatusBarLocation;
 
     KAction* m_showLeftDock;
     KAction* m_showRightDock;

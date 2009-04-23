@@ -192,6 +192,11 @@ void MainWindow::registerStatus(QObject* status)
     d->registerStatus(status);
 }
 
+void MainWindow::initializeStatusBar()
+{
+    d->setupStatusBar();
+}
+
 }
 
 #include "mainwindow.moc"

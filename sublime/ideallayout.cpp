@@ -79,10 +79,10 @@ IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget 
 
 {
     if (orientation == Qt::Vertical)
-        setContentsMargins(2, 0, 2, 0);
+        setContentsMargins(IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN, 0);
     else
-        setContentsMargins(0, 2, 0, 0);
-    setSpacing(2);
+        setContentsMargins(0, IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN);
+    setSpacing(IDEAL_LAYOUT_SPACING);
     invalidate();
 }
 

@@ -54,6 +54,7 @@ public:
 
     void setupActions();
     void setupGui();
+    void setupStatusBar();
     void registerStatus(QObject*);
 
 public Q_SLOTS:

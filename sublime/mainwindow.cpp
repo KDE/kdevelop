@@ -36,6 +36,7 @@
 #include "view.h"
 #include "controller.h"
 #include "container.h"
+#include "ideal.h"
 
 namespace Sublime {
 
@@ -70,10 +71,17 @@ void MainWindow::setArea(Area *area)
     d->area = area;
     d->reconstruct();
     d->activateFirstVisibleView();
+    initializeStatusBar();
     emit areaChanged(area);
     d->ignoreDockShown = false;
     
     loadSettings();
+}
+
+void MainWindow::initializeStatusBar()
+{
+    //nothing here, reimplement in the subclasses if you want to have status bar
+    //inside the bottom toolview buttons row
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -271,6 +279,11 @@ void MainWindow::loadGeometry(const KConfigGroup &config)
 void MainWindow::enableAreaSettingsSave()
 {
     d->autoAreaSettingsSave = true;
+}
+
+QWidget *MainWindow::statusBarLocation()
+{
+    return d->idealMainWidget->statusBarLocation();
 }
 
 }

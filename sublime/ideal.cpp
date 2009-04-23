@@ -36,6 +36,8 @@
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
+#include <QVBoxLayout>
+#include <QLabel>
 
 using namespace Sublime;
 
@@ -114,11 +116,29 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     : QWidget(parent)
     , _area(area)
     , _actions(new QActionGroup(this))
+    , _corner(0)
 {
     // TODO Only for now...
     _actions->setExclusive(true);
 
-    (void) new IdealButtonBarLayout(orientation(), this);
+    if (area == Qt::BottomDockWidgetArea)
+    {
+        QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::RightToLeft, this);
+        statusLayout->setMargin(0);
+        statusLayout->setSpacing(IDEAL_LAYOUT_SPACING);
+        statusLayout->setContentsMargins(0, IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN);
+
+        IdealButtonBarLayout *l = new IdealButtonBarLayout(orientation());
+        statusLayout->addLayout(l);
+
+        _corner = new QWidget(this);
+        QBoxLayout *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, _corner);
+        cornerLayout->setMargin(0);
+        cornerLayout->setSpacing(0);
+        statusLayout->addWidget(_corner);
+    }
+    else
+        (void) new IdealButtonBarLayout(orientation(), this);
 }
 
 KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
@@ -147,6 +167,11 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     _actions->addAction(action);
 
     return action;
+}
+
+QWidget* IdealButtonBarWidget::corner()
+{
+    return _corner;
 }
 
 void IdealButtonBarWidget::removeAction(QAction * action)
@@ -425,7 +450,7 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     rightBarWidget->hide();
 
     bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this);
-    bottomBarWidget->hide();
+    bottomStatusBarLocation = bottomBarWidget->corner();
 
     topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this);
     topBarWidget->hide();
@@ -1039,6 +1064,11 @@ void Sublime::IdealMainWidget::focusEditor()
     if (View* view = static_cast<MainWindow*>(parent())->activeView())
         if (view->hasWidget())
             view->widget()->setFocus(Qt::ShortcutFocusReason);
+}
+
+QWidget *IdealMainWidget::statusBarLocation() const
+{
+    return bottomStatusBarLocation;
 }
 
 IdealDockWidgetButton::IdealDockWidgetButton(QWidget *parent)
