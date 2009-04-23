@@ -81,7 +81,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         virtual bool parseFunctionInfo( const CMakeFunctionDesc& ); \
         QList<CMakeFunctionArgument> outputArguments;
 
-#define CMAKE_ADD_AST_MEMBER( returnType, setterType, returnName, setterName ) \
+#define CMAKE_ADD_AST_MEMBER( returnType, returnName )             \
     public:                                                         \
         returnType returnName() const { return m_##returnName; }    \
     private:                                                        \
@@ -101,122 +101,122 @@ CMAKE_BEGIN_AST_CLASS( CustomCommandAst )
         PreLink,
         PostBuild };
 
-    CMAKE_ADD_AST_MEMBER( bool, bool, isForTarget, ForTarget )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, targetName, TargetName )
-    CMAKE_ADD_AST_MEMBER( BuildStage, BuildStage, buildStage, BuildStage )
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, outputs, Outputs )
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, commands, Commands )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, mainDependency, MainDependency)    
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, otherDependencies, OtherDependencies)
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, source, Source )
-    CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim)
-    CMAKE_ADD_AST_MEMBER( bool, bool, append, Append)
+    CMAKE_ADD_AST_MEMBER( bool, isForTarget )
+    CMAKE_ADD_AST_MEMBER( QString, targetName )
+    CMAKE_ADD_AST_MEMBER( BuildStage, buildStage )
+    CMAKE_ADD_AST_MEMBER( QStringList, outputs )
+    CMAKE_ADD_AST_MEMBER( QStringList, commands )
+    CMAKE_ADD_AST_MEMBER( QString, mainDependency )    
+    CMAKE_ADD_AST_MEMBER( QStringList, otherDependencies )
+    CMAKE_ADD_AST_MEMBER( QString, workingDirectory )
+    CMAKE_ADD_AST_MEMBER( QString, comment )
+    CMAKE_ADD_AST_MEMBER( QString, source )
+    CMAKE_ADD_AST_MEMBER( bool, isVerbatim )
+    CMAKE_ADD_AST_MEMBER( bool, append )
 CMAKE_END_AST_CLASS( CustomCommandAst )
 
 CMAKE_BEGIN_AST_CLASS( MacroCallAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
-CMAKE_ADD_AST_MEMBER( QStringList, const QString&, arguments, Arguments )
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( QStringList, arguments )
 CMAKE_END_AST_CLASS( MacroCallAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
 typedef QMap<QString, QStringList> cmdAndArgs; //Just to make preprocessor not to cry
-CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
-CMAKE_ADD_AST_MEMBER( bool, bool, buildAlways, BuildAlways )
-CMAKE_ADD_AST_MEMBER( cmdAndArgs, const cmdAndArgs &, commandArgs, CommandArgs )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, dependencies, Dependencies )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDir, WorkingDir )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )
-CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim )
+CMAKE_ADD_AST_MEMBER( QString, target )
+CMAKE_ADD_AST_MEMBER( bool, buildAlways )
+CMAKE_ADD_AST_MEMBER( cmdAndArgs, commandArgs )
+CMAKE_ADD_AST_MEMBER( QStringList, dependencies )
+CMAKE_ADD_AST_MEMBER( QString, workingDir )
+CMAKE_ADD_AST_MEMBER( QString, comment )
+CMAKE_ADD_AST_MEMBER( bool, isVerbatim )
 CMAKE_END_AST_CLASS( CustomTargetAst )
 
 CMAKE_BEGIN_AST_CLASS( AddDefinitionsAst )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, definitions, Definitions )
+CMAKE_ADD_AST_MEMBER( QStringList, definitions )
 CMAKE_END_AST_CLASS( AddDefinitionsAst )
 
 CMAKE_BEGIN_AST_CLASS( AddDependenciesAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, dependencies, Dependencies )
+CMAKE_ADD_AST_MEMBER( QString, target )
+CMAKE_ADD_AST_MEMBER( QStringList, dependencies )
 CMAKE_END_AST_CLASS( AddDependenciesAst )
 
 CMAKE_BEGIN_AST_CLASS( AddExecutableAst )
-CMAKE_ADD_AST_MEMBER( QString,  const QString&, executable, Executable )
-CMAKE_ADD_AST_MEMBER( bool, bool, isWin32, Win32 )
-CMAKE_ADD_AST_MEMBER( bool, bool, isOsXBundle, OsXBundle )
-CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
-CMAKE_ADD_AST_MEMBER( bool, bool, isImported, IsImported )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
+CMAKE_ADD_AST_MEMBER( QString, executable )
+CMAKE_ADD_AST_MEMBER( bool, isWin32 )
+CMAKE_ADD_AST_MEMBER( bool, isOsXBundle )
+CMAKE_ADD_AST_MEMBER( bool, excludeFromAll )
+CMAKE_ADD_AST_MEMBER( bool, isImported )
+CMAKE_ADD_AST_MEMBER( QStringList, sourceLists )
 CMAKE_END_AST_CLASS( AddExecutableAst )
 
 CMAKE_BEGIN_AST_CLASS( AddLibraryAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, libraryName, LibraryName )
-CMAKE_ADD_AST_MEMBER( bool, bool, isShared, IsShared )
-CMAKE_ADD_AST_MEMBER( bool, bool, isStatic, IsStatic )
-CMAKE_ADD_AST_MEMBER( bool, bool, isModule, IsModule )
-CMAKE_ADD_AST_MEMBER( bool, bool, isImported, IsImported )
-CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, sourceLists, SourceLists )
+CMAKE_ADD_AST_MEMBER( QString, libraryName )
+CMAKE_ADD_AST_MEMBER( bool, isShared )
+CMAKE_ADD_AST_MEMBER( bool, isStatic )
+CMAKE_ADD_AST_MEMBER( bool, isModule )
+CMAKE_ADD_AST_MEMBER( bool, isImported )
+CMAKE_ADD_AST_MEMBER( bool, excludeFromAll )
+CMAKE_ADD_AST_MEMBER( QStringList, sourceLists )
 CMAKE_END_AST_CLASS( AddLibraryAst )
 
 CMAKE_BEGIN_AST_CLASS( AddSubdirectoryAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, sourceDir, SourceDir )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, binaryDir, BinaryDir )
-CMAKE_ADD_AST_MEMBER( bool, bool, excludeFromAll, ExcludeFromAll )
+CMAKE_ADD_AST_MEMBER( QString, sourceDir )
+CMAKE_ADD_AST_MEMBER( QString, binaryDir )
+CMAKE_ADD_AST_MEMBER( bool, excludeFromAll )
 CMAKE_END_AST_CLASS( AddSubdirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( AddTestAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, testName, TestName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, exeName, exeName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, testArgs, TestArgs )
+CMAKE_ADD_AST_MEMBER( QString, testName )
+CMAKE_ADD_AST_MEMBER( QString, exeName )
+CMAKE_ADD_AST_MEMBER( QStringList, testArgs )
 CMAKE_END_AST_CLASS( AddTestAst )
 
 
 CMAKE_BEGIN_AST_CLASS( AuxSourceDirectoryAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, dirName, DirName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, variableName )
+CMAKE_ADD_AST_MEMBER( QString, dirName )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( AuxSourceDirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( BuildCommandAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, makeCommand, MakeCommand )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, makeCommand )
 CMAKE_END_AST_CLASS( BuildCommandAst )
 
 
 CMAKE_BEGIN_AST_CLASS( BuildNameAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, buildName, BuildName )
+CMAKE_ADD_AST_MEMBER( QString, buildName )
 CMAKE_END_AST_CLASS( BuildNameAst )
 
 
 CMAKE_BEGIN_AST_CLASS( CMakeMinimumRequiredAst )
-CMAKE_ADD_AST_MEMBER( QList<int>, QList<int>, version, Version )
-CMAKE_ADD_AST_MEMBER( bool, bool, wrongVersionIsFatal, WrongVersionIsFatal )
+CMAKE_ADD_AST_MEMBER( QList<int>, version )
+CMAKE_ADD_AST_MEMBER( bool, wrongVersionIsFatal )
 CMAKE_END_AST_CLASS( CMakeMinimumRequiredAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ConfigureFileAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, inputFile, InputFile )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputFile, OutputFile )
-CMAKE_ADD_AST_MEMBER( bool, bool, copyOnly, CopyOnly )
-CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes )
-CMAKE_ADD_AST_MEMBER( bool, bool, atsOnly, AtsOnly )
-CMAKE_ADD_AST_MEMBER( bool, bool, immediate, Immediate )
+CMAKE_ADD_AST_MEMBER( QString, inputFile )
+CMAKE_ADD_AST_MEMBER( QString, outputFile )
+CMAKE_ADD_AST_MEMBER( bool, copyOnly )
+CMAKE_ADD_AST_MEMBER( bool, escapeQuotes )
+CMAKE_ADD_AST_MEMBER( bool, atsOnly )
+CMAKE_ADD_AST_MEMBER( bool, immediate )
 CMAKE_END_AST_CLASS( ConfigureFileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( CreateTestSourcelistAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, driverName, DriverName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, tests, Tests )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, extraIncludes, ExtraIncludes)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, function, Function)
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( QString, driverName )
+CMAKE_ADD_AST_MEMBER( QStringList, tests )
+CMAKE_ADD_AST_MEMBER( QStringList, extraIncludes )
+CMAKE_ADD_AST_MEMBER( QString, function )
 CMAKE_END_AST_CLASS( CreateTestSourcelistAst )
 
 
 CMAKE_BEGIN_AST_CLASS( EnableLanguageAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, language, Language )
+CMAKE_ADD_AST_MEMBER( QString, language )
 CMAKE_END_AST_CLASS( EnableLanguageAst )
 
 
@@ -226,134 +226,134 @@ CMAKE_END_AST_CLASS( EnableTestingAst )
 
 CMAKE_BEGIN_AST_CLASS( ExecProgramAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER( QString, const QString&, executableName, ExecutableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, arguments, Arguments )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, returnValue, ReturnValue )
+CMAKE_ADD_AST_MEMBER( QString, executableName )
+CMAKE_ADD_AST_MEMBER( QString, workingDirectory )
+CMAKE_ADD_AST_MEMBER( QStringList, arguments )
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, returnValue )
 CMAKE_END_AST_CLASS( ExecProgramAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExecuteProcessAst )
-CMAKE_ADD_AST_MEMBER( QList<QStringList>, const QList<QStringList>&, commands, Commands )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, resultVariable, ResultVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, errorVariable, ErrorVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, inputFile, InputFile )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputFile, OutputFile )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, errorFile, ErrorFile )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
-CMAKE_ADD_AST_MEMBER( float, float, timeout, Timeout )
-CMAKE_ADD_AST_MEMBER( bool, bool, isOutputQuiet, OutputQuiet )
-CMAKE_ADD_AST_MEMBER( bool, bool, isErrorQuiet, ErrorQuiet )
-CMAKE_ADD_AST_MEMBER( bool, bool, isOutputStrip, OutputStrip )
-CMAKE_ADD_AST_MEMBER( bool, bool, isErrorStrip, ErrorStrip )
+CMAKE_ADD_AST_MEMBER( QList<QStringList>, commands )
+CMAKE_ADD_AST_MEMBER( QString, resultVariable )
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, errorVariable )
+CMAKE_ADD_AST_MEMBER( QString, inputFile )
+CMAKE_ADD_AST_MEMBER( QString, outputFile )
+CMAKE_ADD_AST_MEMBER( QString, errorFile )
+CMAKE_ADD_AST_MEMBER( QString, workingDirectory )
+CMAKE_ADD_AST_MEMBER( float, timeout )
+CMAKE_ADD_AST_MEMBER( bool, isOutputQuiet )
+CMAKE_ADD_AST_MEMBER( bool, isErrorQuiet )
+CMAKE_ADD_AST_MEMBER( bool, isOutputStrip )
+CMAKE_ADD_AST_MEMBER( bool, isErrorStrip )
 CMAKE_END_AST_CLASS( ExecuteProcessAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExportLibraryDepsAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER(QString, const QString&, file, File)
-CMAKE_ADD_AST_MEMBER(bool, bool, append, Append)
+CMAKE_ADD_AST_MEMBER( QString, file )
+CMAKE_ADD_AST_MEMBER( bool, append )
 CMAKE_END_AST_CLASS( ExportLibraryDepsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FileAst )
 enum TypeFile { WRITE, APPEND, READ, GLOB, GLOB_RECURSE, REMOVE, REMOVE_RECURSE,
             MAKE_DIRECTORY, RELATIVE_PATH, TO_CMAKE_PATH, TO_NATIVE_PATH, STRINGS, DOWNLOAD };
-CMAKE_ADD_AST_MEMBER(TypeFile, TypeFile, type, Type)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, path, Path )
-CMAKE_ADD_AST_MEMBER(QString, const QString&, variable, Variable )
-CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, message, Message )
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, globbingExpressions, GlobbingExpressions )
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, directories, Directories )
+CMAKE_ADD_AST_MEMBER( TypeFile, type )
+CMAKE_ADD_AST_MEMBER( QString, path )
+CMAKE_ADD_AST_MEMBER( QString, variable )
+CMAKE_ADD_AST_MEMBER( QString, directory )
+CMAKE_ADD_AST_MEMBER( QString, message )
+CMAKE_ADD_AST_MEMBER( QStringList, globbingExpressions )
+CMAKE_ADD_AST_MEMBER( QStringList, directories )
 
-CMAKE_ADD_AST_MEMBER(KUrl, const KUrl&, url, Url )
-CMAKE_ADD_AST_MEMBER(int, int, timeout, Timeout )
+CMAKE_ADD_AST_MEMBER( KUrl, url )
+CMAKE_ADD_AST_MEMBER( int, timeout )
 
-CMAKE_ADD_AST_MEMBER(int, int, limitCount, LimitCount)
-CMAKE_ADD_AST_MEMBER(int, int, limitInput, LimitInput)
-CMAKE_ADD_AST_MEMBER(int, int, limitOutput, LimitOutput)
-CMAKE_ADD_AST_MEMBER(int, int, lengthMinimum, LenghtMinimum)
-CMAKE_ADD_AST_MEMBER(int, int, lengthMaximum, LenghtMaximum)
-CMAKE_ADD_AST_MEMBER(bool, bool, newlineConsume, NewlineConsume)
-CMAKE_ADD_AST_MEMBER(bool, bool, noHexConversion, NoHexConversion)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
+CMAKE_ADD_AST_MEMBER( int, limitCount )
+CMAKE_ADD_AST_MEMBER( int, limitInput )
+CMAKE_ADD_AST_MEMBER( int, limitOutput )
+CMAKE_ADD_AST_MEMBER( int, lengthMinimum )
+CMAKE_ADD_AST_MEMBER( int, lengthMaximum )
+CMAKE_ADD_AST_MEMBER( bool, newlineConsume )
+CMAKE_ADD_AST_MEMBER( bool, noHexConversion )
+CMAKE_ADD_AST_MEMBER( QString, regex )
 CMAKE_END_AST_CLASS( FileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindFileAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, hints, Hints )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QStringList, filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, path )
+CMAKE_ADD_AST_MEMBER( QStringList, hints )
+CMAKE_ADD_AST_MEMBER( QStringList, pathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, documentation )
 
-CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
+CMAKE_ADD_AST_MEMBER( bool, noDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, noSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindFileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindLibraryAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, hints, Hints )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QStringList, filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, path )
+CMAKE_ADD_AST_MEMBER( QStringList, hints )
+CMAKE_ADD_AST_MEMBER( QStringList, pathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, documentation )
 
-CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
+CMAKE_ADD_AST_MEMBER( bool, noDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, noSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindLibraryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindPackageAst ) //FIXME: there are things that I don't understand
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
-CMAKE_ADD_AST_MEMBER( int, int, minorVersion, MinorVersion )
-CMAKE_ADD_AST_MEMBER( int, int, majorVersion, MajorVersion )
-CMAKE_ADD_AST_MEMBER( bool, bool, isQuiet, Quiet )
-CMAKE_ADD_AST_MEMBER( bool, bool, noModule, NoModule )
-CMAKE_ADD_AST_MEMBER( bool, bool, isRequired, Required )
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( int, minorVersion )
+CMAKE_ADD_AST_MEMBER( int, majorVersion )
+CMAKE_ADD_AST_MEMBER( bool, isQuiet )
+CMAKE_ADD_AST_MEMBER( bool, noModule )
+CMAKE_ADD_AST_MEMBER( bool, isRequired )
 CMAKE_END_AST_CLASS( FindPackageAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindPathAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, hints, Hints )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QStringList, filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, path )
+CMAKE_ADD_AST_MEMBER( QStringList, hints )
+CMAKE_ADD_AST_MEMBER( QStringList, pathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, documentation )
 
-CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
+CMAKE_ADD_AST_MEMBER( bool, noDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, noSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindPathAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FindProgramAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, filenames, Filenames )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, path, Path )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, hints, Hints )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, pathSuffixes, PathSuffixes )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QStringList, filenames )
+CMAKE_ADD_AST_MEMBER( QStringList, path )
+CMAKE_ADD_AST_MEMBER( QStringList, hints )
+CMAKE_ADD_AST_MEMBER( QStringList, pathSuffixes )
+CMAKE_ADD_AST_MEMBER( QString, documentation )
 
-CMAKE_ADD_AST_MEMBER( bool, bool, noDefaultPath, NoDefaultPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeEnvironmentPath, NoCmakeEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakePath, NoCmakePath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noSystemEnvironmentPath, NoSystemEnvironmentPath )
-CMAKE_ADD_AST_MEMBER( bool, bool, noCmakeSystemPath, NoCmakeSystemPath )
+CMAKE_ADD_AST_MEMBER( bool, noDefaultPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakePath )
+CMAKE_ADD_AST_MEMBER( bool, noSystemEnvironmentPath )
+CMAKE_ADD_AST_MEMBER( bool, noCmakeSystemPath )
 CMAKE_END_AST_CLASS( FindProgramAst )
 
 
@@ -363,37 +363,37 @@ CMAKE_END_AST_CLASS( FltkWrapUiAst )
 
 CMAKE_BEGIN_AST_CLASS( ForeachAst )
     struct rangeValues { int start, stop, step; };
-CMAKE_ADD_AST_MEMBER( QString, const QString&, loopVar, LoopVar )
-CMAKE_ADD_AST_MEMBER( rangeValues, const rangeValues&, ranges, Ranges )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, arguments, arguments )
-CMAKE_ADD_AST_MEMBER( bool, bool, range, Range )
+CMAKE_ADD_AST_MEMBER( QString, loopVar )
+CMAKE_ADD_AST_MEMBER( rangeValues, ranges )
+CMAKE_ADD_AST_MEMBER( QStringList, arguments )
+CMAKE_ADD_AST_MEMBER( bool, range )
 CMAKE_END_AST_CLASS( ForeachAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
         enum PropertyType { VARIABLES, CACHE_VARIABLES, COMMANDS, MACROS };
-CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( PropertyType, type )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetPropertyAst )
-CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
-CMAKE_ADD_AST_MEMBER( bool, bool, append, Append )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, args, Arguments )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values )
+CMAKE_ADD_AST_MEMBER( PropertyType, type )
+CMAKE_ADD_AST_MEMBER( bool, append )
+CMAKE_ADD_AST_MEMBER( QStringList, args )
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( QStringList, values )
 CMAKE_END_AST_CLASS( SetPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetPropertyAst )
-CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, typeName, TypeName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
+CMAKE_ADD_AST_MEMBER( PropertyType, type )
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, typeName )
+CMAKE_ADD_AST_MEMBER( QString, name )
 
 enum Behaviour { None, SET, DEFINED, BRIEF_DOCS, FULL_DOCS };
-CMAKE_ADD_AST_MEMBER( Behaviour, Behaviour, behaviour, Behaviour )
+CMAKE_ADD_AST_MEMBER( Behaviour, behaviour )
 CMAKE_END_AST_CLASS( GetPropertyAst )
 
 
@@ -403,53 +403,53 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
         enum ComponentType { PATH, ABSOLUTE, NAME, EXT, NAME_WE, PROGRAM };
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, fileName, FileName )
-CMAKE_ADD_AST_MEMBER( ComponentType, ComponentType, type, Type )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, programArgs, ProgramArgs )
-CMAKE_ADD_AST_MEMBER( bool, bool, cache, Cache )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, fileName )
+CMAKE_ADD_AST_MEMBER( ComponentType, type )
+CMAKE_ADD_AST_MEMBER( QStringList, programArgs )
+CMAKE_ADD_AST_MEMBER( bool, cache )
 CMAKE_END_AST_CLASS( GetFilenameComponentAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetSourceFilePropAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, filename, Filename)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, property, Property)
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, filename )
+CMAKE_ADD_AST_MEMBER( QString, property )
 CMAKE_END_AST_CLASS( GetSourceFilePropAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetTargetPropAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, property, Property)
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, target )
+CMAKE_ADD_AST_MEMBER( QString, property )
 CMAKE_END_AST_CLASS( GetTargetPropAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetTestPropAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, test, Test)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, property, Property)
+CMAKE_ADD_AST_MEMBER( QString, test )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, property )
 CMAKE_END_AST_CLASS( GetTestPropAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IfAst )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, condition, Condition )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, kind, Kind )
+CMAKE_ADD_AST_MEMBER( QStringList, condition )
+CMAKE_ADD_AST_MEMBER( QString, kind )
 CMAKE_END_AST_CLASS( IfAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, includeFile, IncludeFile )
-CMAKE_ADD_AST_MEMBER( bool, bool, optional, Optional )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, resultVariable, ResultVariable)
+CMAKE_ADD_AST_MEMBER( QString, includeFile )
+CMAKE_ADD_AST_MEMBER( bool, optional )
+CMAKE_ADD_AST_MEMBER( QString, resultVariable )
 CMAKE_END_AST_CLASS( IncludeAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeDirectoriesAst )
         enum IncludeType { DEFAULT=0, AFTER, BEFORE };
-CMAKE_ADD_AST_MEMBER( IncludeType, IncludeType, includeType, IncludeType )
-CMAKE_ADD_AST_MEMBER( bool, bool, isSystem, System )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, includedDirectories, IncludedDirectories )
+CMAKE_ADD_AST_MEMBER( IncludeType, includeType )
+CMAKE_ADD_AST_MEMBER( bool, isSystem )
+CMAKE_ADD_AST_MEMBER( QStringList, includedDirectories )
 CMAKE_END_AST_CLASS( IncludeDirectoriesAst )
 
 
@@ -458,8 +458,8 @@ CMAKE_END_AST_CLASS( IncludeExternalMsProjectAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeRegularExpressionAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, match, Match)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, complain, Complain)
+CMAKE_ADD_AST_MEMBER( QString, match )
+CMAKE_ADD_AST_MEMBER( QString, complain )
 CMAKE_END_AST_CLASS( IncludeRegularExpressionAst )
 
 
@@ -480,37 +480,37 @@ struct InstallFileForm {
 };
 //TODO
 
-CMAKE_ADD_AST_MEMBER(QList<InstallTargetForm>, const QList<InstallTargetForm>&, targets, Targets)
+CMAKE_ADD_AST_MEMBER( QList<InstallTargetForm>, targets )
 CMAKE_END_AST_CLASS( InstallAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallFilesAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, extension, Extension)
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, files, Files)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
+CMAKE_ADD_AST_MEMBER( QString, directory )
+CMAKE_ADD_AST_MEMBER( QString, extension )
+CMAKE_ADD_AST_MEMBER( QStringList, files )
+CMAKE_ADD_AST_MEMBER( QString, regex )
 CMAKE_END_AST_CLASS( InstallFilesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallProgramsAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, files, Files)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, regex, Regex)
+CMAKE_ADD_AST_MEMBER( QString, directory )
+CMAKE_ADD_AST_MEMBER( QStringList, files )
+CMAKE_ADD_AST_MEMBER( QString, regex )
 CMAKE_END_AST_CLASS( InstallProgramsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( InstallTargetsAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER(QString, const QString&, directory, Directory)
-CMAKE_ADD_AST_MEMBER(QStringList, const QStringList&, targets, Targets)
-CMAKE_ADD_AST_MEMBER(QString, const QString&, runtimeDir, runtimeDir)
+CMAKE_ADD_AST_MEMBER( QString, directory )
+CMAKE_ADD_AST_MEMBER( QStringList, targets )
+CMAKE_ADD_AST_MEMBER( QString, runtimeDir )
 CMAKE_END_AST_CLASS( InstallTargetsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( LinkDirectoriesAst )
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, directories, Directories)
+    CMAKE_ADD_AST_MEMBER( QStringList, directories )
 CMAKE_END_AST_CLASS( LinkDirectoriesAst )
 
 
@@ -518,86 +518,86 @@ CMAKE_BEGIN_AST_CLASS( LinkLibrariesAst )
     CMAKE_MARK_AS_DEPRECATED()
     enum BuildType { Optimized, Debug, None };
     typedef QPair<QString, BuildType> LibraryType;
-    CMAKE_ADD_AST_MEMBER( QList<LibraryType>, const QList<LibraryType>&, libraries, Libraries)
+    CMAKE_ADD_AST_MEMBER( QList<LibraryType>, libraries )
 CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ListAst )
     enum ListType { LENGTH, GET, APPEND, FIND, INSERT, REMOVE_ITEM, REMOVE_AT, SORT, REVERSE };
-    CMAKE_ADD_AST_MEMBER( ListType, ListType, type, type)
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, list, List)
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, output, Output)
-    CMAKE_ADD_AST_MEMBER( QList<int>, const QList<int> &, index, Index)
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, elements, Elements)
+    CMAKE_ADD_AST_MEMBER( ListType, type )
+    CMAKE_ADD_AST_MEMBER( QString, list )
+    CMAKE_ADD_AST_MEMBER( QString, output )
+    CMAKE_ADD_AST_MEMBER( QList<int>, index )
+    CMAKE_ADD_AST_MEMBER( QStringList, elements )
 CMAKE_END_AST_CLASS( ListAst )
 
 
 CMAKE_BEGIN_AST_CLASS( LoadCacheAst )
     typedef QPair<QString, QString> PrefixEntry;
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, cachePath, CachePath)
-    CMAKE_ADD_AST_MEMBER( PrefixEntry, const PrefixEntry&, prefixes, Prefixes)
+    CMAKE_ADD_AST_MEMBER( QString, cachePath )
+    CMAKE_ADD_AST_MEMBER( PrefixEntry, prefixes )
     
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, exclude, Exclude)
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, includeInternals, IncludeInternals)
+    CMAKE_ADD_AST_MEMBER( QStringList, exclude )
+    CMAKE_ADD_AST_MEMBER( QStringList, includeInternals )
 CMAKE_END_AST_CLASS( LoadCacheAst )
 
 
 CMAKE_BEGIN_AST_CLASS( LoadCommandAst )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, cmdName, cmdName)
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, location, Location)
+    CMAKE_ADD_AST_MEMBER( QString, cmdName )
+    CMAKE_ADD_AST_MEMBER( QStringList, location )
 CMAKE_END_AST_CLASS( LoadCommandAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MacroAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, macroName, MacroName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, knownArgs, KnownArgs )
+CMAKE_ADD_AST_MEMBER( QString, macroName )
+CMAKE_ADD_AST_MEMBER( QStringList, knownArgs )
 CMAKE_END_AST_CLASS( MacroAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MakeDirectoryAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER( QString, const QString&, directory, Directory )
+CMAKE_ADD_AST_MEMBER( QString, directory )
 CMAKE_END_AST_CLASS( MakeDirectoryAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MarkAsAdvancedAst )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, advancedVars, AdvancedVars)
-CMAKE_ADD_AST_MEMBER( bool, bool, isClear, Clear)
-CMAKE_ADD_AST_MEMBER( bool, bool, isForce, Force)
+CMAKE_ADD_AST_MEMBER( QStringList, advancedVars )
+CMAKE_ADD_AST_MEMBER( bool, isClear )
+CMAKE_ADD_AST_MEMBER( bool, isForce )
 CMAKE_END_AST_CLASS( MarkAsAdvancedAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MathAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, expression, Expression)
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, expression )
 CMAKE_END_AST_CLASS( MathAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MessageAst )
 enum MessageType { SEND_ERROR, STATUS, FATAL_ERROR };
-CMAKE_ADD_AST_MEMBER( MessageType, MessageType, type, Type)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, message, Message )
+CMAKE_ADD_AST_MEMBER( MessageType, type )
+CMAKE_ADD_AST_MEMBER( QStringList, message )
 CMAKE_END_AST_CLASS( MessageAst )
 
 
 CMAKE_BEGIN_AST_CLASS( OptionAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, description, Description )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, defaultValue, defaultValue )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QString, description )
+CMAKE_ADD_AST_MEMBER( QString, defaultValue )
 CMAKE_END_AST_CLASS( OptionAst )
 
 
 CMAKE_BEGIN_AST_CLASS( OutputRequiredFilesAst )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, srcFile, SrcFile)
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, outputFile, OutputFile)
+    CMAKE_ADD_AST_MEMBER( QString, srcFile )
+    CMAKE_ADD_AST_MEMBER( QString, outputFile )
 CMAKE_END_AST_CLASS( OutputRequiredFilesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ProjectAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, projectName, ProjectName )
-CMAKE_ADD_AST_MEMBER( bool, bool, useCpp, UseCpp )
-CMAKE_ADD_AST_MEMBER( bool, bool, useC, UseC )
-CMAKE_ADD_AST_MEMBER( bool, bool, useJava, UseJava )
+CMAKE_ADD_AST_MEMBER( QString, projectName )
+CMAKE_ADD_AST_MEMBER( bool, useCpp )
+CMAKE_ADD_AST_MEMBER( bool, useC )
+CMAKE_ADD_AST_MEMBER( bool, useJava )
 CMAKE_END_AST_CLASS( ProjectAst )
 
 
@@ -611,68 +611,68 @@ CMAKE_END_AST_CLASS( QtWrapUiAst )
 
 CMAKE_BEGIN_AST_CLASS( RemoveAst )
     CMAKE_MARK_AS_DEPRECATED()
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values)
+    CMAKE_ADD_AST_MEMBER( QString, variableName )
+    CMAKE_ADD_AST_MEMBER( QStringList, values )
 CMAKE_END_AST_CLASS( RemoveAst )
 
 
 CMAKE_BEGIN_AST_CLASS( RemoveDefinitionsAst )
-    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, definitions, Definitions)
+    CMAKE_ADD_AST_MEMBER( QStringList, definitions )
 CMAKE_END_AST_CLASS( RemoveDefinitionsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SeparateArgumentsAst )
-    CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName)
+    CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( SeparateArgumentsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values )
-CMAKE_ADD_AST_MEMBER( bool, bool, storeInCache, StoreInCache )
-CMAKE_ADD_AST_MEMBER( bool, bool, forceStoring, ForceStoring )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, entryType, EntryType )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, documentation, Documentation )
-CMAKE_ADD_AST_MEMBER( bool, bool, parentScope, ParentScope)
+CMAKE_ADD_AST_MEMBER( QString, variableName )
+CMAKE_ADD_AST_MEMBER( QStringList, values )
+CMAKE_ADD_AST_MEMBER( bool, storeInCache )
+CMAKE_ADD_AST_MEMBER( bool, forceStoring )
+CMAKE_ADD_AST_MEMBER( QString, entryType )
+CMAKE_ADD_AST_MEMBER( QString, documentation )
+CMAKE_ADD_AST_MEMBER( bool, parentScope )
 CMAKE_END_AST_CLASS( SetAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetDirectoryPropsAst )
         typedef QPair<QString, QString> PropPair;
-CMAKE_ADD_AST_MEMBER( QList<PropPair>, const QList<PropPair>&, properties, Properties)
+CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetDirectoryPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetSourceFilesPropsAst )
         typedef QPair<QString, QString> PropPair;
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, files, Files)
-CMAKE_ADD_AST_MEMBER( QList<PropPair>, const QList<PropPair>&, properties, Properties)
+CMAKE_ADD_AST_MEMBER( QStringList, files )
+CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetSourceFilesPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetTargetPropsAst )
         typedef QPair<QString, QString> PropPair;
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, targets, Targets )
-CMAKE_ADD_AST_MEMBER( QList<PropPair>, const QList<PropPair>&, properties, Properties)
+CMAKE_ADD_AST_MEMBER( QStringList, targets )
+CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetTargetPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetTestsPropsAst )
         typedef QPair<QString, QString> PropPair;
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, tests, Tests)
-CMAKE_ADD_AST_MEMBER( QList<PropPair>, const QList<PropPair>&, properties, Properties)
+CMAKE_ADD_AST_MEMBER( QStringList, tests )
+CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetTestsPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SiteNameAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, variableName, VariableName )
+CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( SiteNameAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SourceGroupAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, files, Files)
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( QString, regex )
+CMAKE_ADD_AST_MEMBER( QStringList, files )
 CMAKE_END_AST_CLASS( SourceGroupAst )
 
 
@@ -680,86 +680,86 @@ CMAKE_BEGIN_AST_CLASS( StringAst )
 enum StringAstType { REGEX, REPLACE, COMPARE, ASCII, CONFIGURE,
     TOUPPER, TOLOWER, LENGTH, SUBSTRING, STRIP, RANDOM };
 enum CommandType { MATCH, MATCHALL, REGEX_REPLACE, EQUAL, NOTEQUAL, LESS, GREATER };
-CMAKE_ADD_AST_MEMBER( StringAstType, StringAstType, type, Type )
-CMAKE_ADD_AST_MEMBER( CommandType, CommandType, cmdType, CmdType )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, regex, Regex )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, string, String)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, replace, Replace )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, input, Input)
-CMAKE_ADD_AST_MEMBER( bool, bool, only, Only )
-CMAKE_ADD_AST_MEMBER( bool, bool, escapeQuotes, EscapeQuotes )
-CMAKE_ADD_AST_MEMBER( int, int, begin, Begin )
-CMAKE_ADD_AST_MEMBER( int, int, length, Length )
+CMAKE_ADD_AST_MEMBER( StringAstType, type )
+CMAKE_ADD_AST_MEMBER( CommandType, cmdType )
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, regex )
+CMAKE_ADD_AST_MEMBER( QString, string )
+CMAKE_ADD_AST_MEMBER( QString, replace )
+CMAKE_ADD_AST_MEMBER( QStringList, input )
+CMAKE_ADD_AST_MEMBER( bool, only )
+CMAKE_ADD_AST_MEMBER( bool, escapeQuotes )
+CMAKE_ADD_AST_MEMBER( int, begin )
+CMAKE_ADD_AST_MEMBER( int, length )
 CMAKE_END_AST_CLASS( StringAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SubdirDependsAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER( QString, const QString&, subdir, Subdir)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, directories, Directories)
+CMAKE_ADD_AST_MEMBER( QString, subdir )
+CMAKE_ADD_AST_MEMBER( QStringList, directories )
 CMAKE_END_AST_CLASS( SubdirDependsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SubdirsAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, directories, Directories)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, exluceFromAll, ExcludeFromAll)
-CMAKE_ADD_AST_MEMBER( bool, bool, preorder, Preorder)
+CMAKE_ADD_AST_MEMBER( QStringList, directories )
+CMAKE_ADD_AST_MEMBER( QStringList, exluceFromAll )
+CMAKE_ADD_AST_MEMBER( bool, preorder )
 CMAKE_END_AST_CLASS( SubdirsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TargetLinkLibrariesAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, target, Target )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, otherLibs, OtherLibs )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, debugLibs, DebugLibs )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, optimizedLibs, OptimizedLibs )
+CMAKE_ADD_AST_MEMBER( QString, target )
+CMAKE_ADD_AST_MEMBER( QStringList, otherLibs )
+CMAKE_ADD_AST_MEMBER( QStringList, debugLibs )
+CMAKE_ADD_AST_MEMBER( QStringList, optimizedLibs )
 CMAKE_END_AST_CLASS( TargetLinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TryCompileAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, resultName, ResultName)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, binDir, BinDir)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, source, source)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, projectName, ProjectName)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, targetName, TargetName)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, cmakeFlags, CMakeFlags)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, compileDefinitions, compileDefinitions)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputName, OutputName)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, copyFile, CopyFile)
+CMAKE_ADD_AST_MEMBER( QString, resultName )
+CMAKE_ADD_AST_MEMBER( QString, binDir )
+CMAKE_ADD_AST_MEMBER( QString, source )
+CMAKE_ADD_AST_MEMBER( QString, projectName )
+CMAKE_ADD_AST_MEMBER( QString, targetName )
+CMAKE_ADD_AST_MEMBER( QStringList, cmakeFlags )
+CMAKE_ADD_AST_MEMBER( QStringList, compileDefinitions )
+CMAKE_ADD_AST_MEMBER( QString, outputName )
+CMAKE_ADD_AST_MEMBER( QString, copyFile )
 CMAKE_END_AST_CLASS( TryCompileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( TryRunAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, runResultVar, RunResultVar)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, compileResultVar, CompileResultVar )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, binDir, BinDir)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, srcFile, SrcFile )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, cmakeFlags, CMakeFlags )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, compileDefs, CompileDefs )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVar, OutputVar)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, args, Args )
+CMAKE_ADD_AST_MEMBER( QString, runResultVar )
+CMAKE_ADD_AST_MEMBER( QString, compileResultVar )
+CMAKE_ADD_AST_MEMBER( QString, binDir )
+CMAKE_ADD_AST_MEMBER( QString, srcFile )
+CMAKE_ADD_AST_MEMBER( QStringList, cmakeFlags )
+CMAKE_ADD_AST_MEMBER( QStringList, compileDefs )
+CMAKE_ADD_AST_MEMBER( QString, outputVar )
+CMAKE_ADD_AST_MEMBER( QStringList, args )
 CMAKE_END_AST_CLASS( TryRunAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UseMangledMesaAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, pathToMesa, PathToMesa)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, outputDir, OutputDir)
+CMAKE_ADD_AST_MEMBER( QString, pathToMesa )
+CMAKE_ADD_AST_MEMBER( QString, outputDir )
 CMAKE_END_AST_CLASS( UseMangledMesaAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UtilitySourceAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, cacheEntry, CacheEntry)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, executableName, ExecutableName)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, pathToSource, PathToSource)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, fileList, FileList)
+CMAKE_ADD_AST_MEMBER( QString, cacheEntry )
+CMAKE_ADD_AST_MEMBER( QString, executableName )
+CMAKE_ADD_AST_MEMBER( QString, pathToSource )
+CMAKE_ADD_AST_MEMBER( QStringList, fileList )
 CMAKE_END_AST_CLASS( UtilitySourceAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VariableRequiresAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, testVariable, TestVariable)
-CMAKE_ADD_AST_MEMBER( QString, const QString&, resultVariable, ResultVariable)
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, requiredVariables, requiredVariables)
+CMAKE_ADD_AST_MEMBER( QString, testVariable )
+CMAKE_ADD_AST_MEMBER( QString, resultVariable )
+CMAKE_ADD_AST_MEMBER( QStringList, requiredVariables )
 CMAKE_END_AST_CLASS( VariableRequiresAst )
 
 
@@ -780,22 +780,20 @@ CMAKE_END_AST_CLASS( VtkWrapTclAst )
 
 
 CMAKE_BEGIN_AST_CLASS( WhileAst )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, condition, Condition )
+CMAKE_ADD_AST_MEMBER( QStringList, condition )
 CMAKE_END_AST_CLASS( WhileAst )
 
 
 CMAKE_BEGIN_AST_CLASS( WriteFileAst )
 CMAKE_MARK_AS_DEPRECATED()
-CMAKE_ADD_AST_MEMBER( QString, const QString&, filename, Filename )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, message, Message )
-CMAKE_ADD_AST_MEMBER( bool, bool, append, Append )
+CMAKE_ADD_AST_MEMBER( QString, filename )
+CMAKE_ADD_AST_MEMBER( QString, message )
+CMAKE_ADD_AST_MEMBER( bool, append )
 CMAKE_END_AST_CLASS( WriteFileAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomInvokationAst )
-CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, const CMakeFunctionDesc&,
-                      function, Function )
-CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, const QList<CMakeFunctionArgument>&,
-                      arguments, Arguments )
+CMAKE_ADD_AST_MEMBER( CMakeFunctionDesc, function )
+CMAKE_ADD_AST_MEMBER( QList<CMakeFunctionArgument>, arguments )
 CMAKE_END_AST_CLASS( CustomInvokationAst )
 
 //CMake 2.6
@@ -804,26 +802,26 @@ CMAKE_END_AST_CLASS( BreakAst )
 
 CMAKE_BEGIN_AST_CLASS( CMakePolicyAst )
 enum Action { VERSION, SET, PUSH, POP };
-CMAKE_ADD_AST_MEMBER( Action, Action, action, Action )
-        //VERSION
-        CMAKE_ADD_AST_MEMBER( QList<int>, const QList<int>&, version, Version )
-        
-        //SET
-        CMAKE_ADD_AST_MEMBER( int, int, policyNum, PolicyNum)
-        CMAKE_ADD_AST_MEMBER( bool, bool, isNew, New)
+CMAKE_ADD_AST_MEMBER( Action, action )
+//VERSION
+CMAKE_ADD_AST_MEMBER( QList<int>, version )
+
+//SET
+CMAKE_ADD_AST_MEMBER( int, policyNum )
+CMAKE_ADD_AST_MEMBER( bool, isNew )
 CMAKE_END_AST_CLASS( CMakePolicyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ExportAst )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, targets, Targets)
-CMAKE_ADD_AST_MEMBER( QString, const QString &, targetNamespace, TargetNamespace)
-CMAKE_ADD_AST_MEMBER( bool, bool, append, append)
-CMAKE_ADD_AST_MEMBER( QString, const QString &, filename, filename)
+CMAKE_ADD_AST_MEMBER( QStringList, targets )
+CMAKE_ADD_AST_MEMBER( QString, targetNamespace )
+CMAKE_ADD_AST_MEMBER( bool, append )
+CMAKE_ADD_AST_MEMBER( QString, filename )
 CMAKE_END_AST_CLASS( ExportAst )
 
 CMAKE_BEGIN_AST_CLASS( FunctionAst )
-CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
-CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, knownArgs, KnownArgs )
+CMAKE_ADD_AST_MEMBER( QString, name )
+CMAKE_ADD_AST_MEMBER( QStringList, knownArgs )
 CMAKE_END_AST_CLASS( FunctionAst )
 
 CMAKE_BEGIN_AST_CLASS( ReturnAst )
