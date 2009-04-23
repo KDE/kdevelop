@@ -49,6 +49,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT UnsureTypeData : public AbstractTypeData {
 class KDEVPLATFORMLANGUAGE_EXPORT UnsureType : public AbstractType
 {
 public:
+  typedef TypePtr<UnsureType> Ptr;
+
   UnsureType(const UnsureType& rhs);
   UnsureType();
   UnsureType(UnsureTypeData& data);
