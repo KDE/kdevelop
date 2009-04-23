@@ -52,9 +52,7 @@ static void gotoPrevNextWindow(bool next)
         return;
 
     int viewIndex = index->views().indexOf(activeView);
-    kDebug() << "VIEW INDEX:" << viewIndex << "VIEW COUNT:" << index->views().count();
     foreach (Sublime::View *v, index->views())
-        kDebug() << "   " << v->document()->title();
     viewIndex = next ? viewIndex + 1 : viewIndex -1;
 
     if (viewIndex < 0)
@@ -63,10 +61,7 @@ static void gotoPrevNextWindow(bool next)
         viewIndex = 0;
 
     if (viewIndex >= 0 && viewIndex < index->views().count())
-    {
-        kDebug() << "x";
         ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
-    }
 }
 
 void MainWindowPrivate::gotoNextWindow()
