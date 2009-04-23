@@ -47,9 +47,11 @@
 namespace GDBDebugger {
 
 DebugSession::DebugSession(GDBController* controller)
-    : m_gdbState(s_dbgNotStarted|s_appNotStarted),
-      m_controller(controller), m_sessionState(NotStartedState), justRestarted_(false),
-      m_config(KGlobal::config(), "GDB Debugger")
+    : m_controller(controller)
+    , m_gdbState(s_dbgNotStarted|s_appNotStarted)
+    , m_sessionState(NotStartedState)
+    , justRestarted_(false)
+    , m_config(KGlobal::config(), "GDB Debugger")
 {
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
