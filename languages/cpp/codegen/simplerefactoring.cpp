@@ -150,11 +150,12 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
   KUrl u;
   if(item) {
-    ProjectFolderItem* ff = 0;
-    if(item->folder())
-      ff=item->folder();
-    else if(item->target())
+    ProjectFolderItem* ff = item->folder();
+    if(!ff && item->target())
       ff=static_cast<ProjectBaseItem*>(item->parent())->folder();
+    
+    if(ff)
+      u=ff->url();
   }
   
   CppNewClass newClassWizard(qApp->activeWindow(), u);
