@@ -36,7 +36,7 @@ class Document;
 This container is placed inside mainwindow splitters to show widgets
 for views in the area.
 */
-class SUBLIME_EXPORT Container: public KTabWidget {
+class SUBLIME_EXPORT Container: public QWidget {
 Q_OBJECT
 public:
     Container(QWidget *parent = 0);
@@ -49,25 +49,26 @@ public:
     /** @return true if widget is placed inside this container.*/
     bool hasWidget(QWidget *w);
 
-    View *viewForWidget(QWidget *w) const;
+    int count() const;
+    QWidget *currentWidget() const;
+    void setCurrentWidget(QWidget *w);
+    QWidget *widget(int i) const;
+    int indexOf(QWidget *w) const;
+    void setTabIcon(int index, const QIcon &icon) const;
 
-    virtual void paintEvent(QPaintEvent *ev);
+    View *viewForWidget(QWidget *w) const;
 
     void setTabBarHidden(bool hide);
 
-    using KTabWidget::tabBar;
-
-protected:
-    using KTabWidget::addTab;
-    using KTabWidget::insertTab;
-    using KTabWidget::removeTab;
-
 Q_SIGNALS:
-  void activateView(Sublime::View* view);
+    void activateView(Sublime::View* view);
+    void closeRequest(QWidget *w);
 
 private Q_SLOTS:
-  void widgetActivated(int idx);
-  void documentTitleChanged(Sublime::Document* doc);
+    void widgetActivated(int idx);
+    void documentTitleChanged(Sublime::Document* doc);
+    void statusChanged(Sublime::View *view);
+    void closeRequest(int idx);
 private:
 
     struct ContainerPrivate * const d;

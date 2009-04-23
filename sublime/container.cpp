@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2006-2009 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -19,10 +19,15 @@
 #include "container.h"
 
 #include <QMap>
-#include <QLayout>
-#include <QTabBar>
-#include <QStackedLayout>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QStylePainter>
+#include <QStackedWidget>
+#include <QStyleOptionTabBarBase>
 
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktabbar.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -32,7 +37,8 @@
 
 #include "view.h"
 #include "document.h"
-#include "containerstyle.h"
+#include <QStackedWidget>
+#include <qstyle.h>
 
 namespace Sublime {
 
@@ -40,35 +46,105 @@ namespace Sublime {
 
 struct ContainerPrivate {
     QMap<QWidget*, View*> viewForWidget;
+
+    KTabBar *tabBar;
+    QStackedWidget *stack;
+    QLabel *fileNameCorner;
+    QLabel *statusCorner;
 };
 
+class UnderlinedLabel: public QLabel {
+public:
+    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0)
+        :QLabel(parent, f), m_tabBar(tabBar)
+    {
+    }
+
+protected:
+    virtual void paintEvent(QPaintEvent *ev)
+    {
+        QLabel::paintEvent(ev);
+
+        if (m_tabBar->isVisible() && m_tabBar->count() > 0)
+        {
+            QStylePainter p(this);
+            QStyleOptionTabBarBase optTabBase;
+            optTabBase.init(m_tabBar);
+            optTabBase.shape = m_tabBar->shape();
+
+            QStyleOptionTab tabOverlap;
+            tabOverlap.shape = m_tabBar->shape();
+            int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
+            QRect rect;
+            rect.setRect(0, height()-overlap, width(), overlap);
+            optTabBase.rect = rect;
+            p.drawPrimitive(QStyle::PE_FrameTabBarBase, optTabBase);
+        }
+    }
+
+    KTabBar *m_tabBar;
+};
+
+
+class StatusLabel: public UnderlinedLabel {
+public:
+    StatusLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0):
+        UnderlinedLabel(tabBar, parent, f)
+    {
+        setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    }
+
+    virtual QSize minimumSizeHint() const
+    {
+        QRect rect = style()->itemTextRect(fontMetrics(), QRect(), Qt::AlignRight, true, i18n("Line: 00000 Col: 000"));
+        QStyleOptionTab tabOverlap;
+        tabOverlap.shape = m_tabBar->shape();
+        int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
+        rect.setHeight(rect.height()+overlap);
+        return rect.size();
+    }
+};
 
 
 // class Container
 
 Container::Container(QWidget *parent)
-    :KTabWidget(parent), d(new ContainerPrivate())
+    :QWidget(parent), d(new ContainerPrivate())
 {
     KAcceleratorManager::setNoAccel(this);
 
-    // Set the widget style to a forwarding proxy style that removes the tabwidget frame,
-    // and draws a tabbar base underneath the tabbar.
-    setStyle(new ContainerStyle(this));
-    // The base will be drawn on the frame instead of on the tabbar, so it extends across
-    // the whole widget.
-    tabBar()->setDrawBase(false);
+    QBoxLayout *l = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    l->setMargin(0);
+    l->setSpacing(0);
+
+    QBoxLayout *h = new QBoxLayout(QBoxLayout::LeftToRight);
+    h->setMargin(0);
+    h->setSpacing(0);
+
+    d->tabBar = new KTabBar(this);
+    h->addWidget(d->tabBar);
+    d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
+    h->addWidget(d->fileNameCorner);
+    d->statusCorner = new StatusLabel(d->tabBar, this);
+    h->addWidget(d->statusCorner);
+    l->addLayout(h);
+
+    d->stack = new QStackedWidget(this);
+    l->addWidget(d->stack);
+
+    connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
+    connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
 #if KDE_VERSION < KDE_MAKE_VERSION(4,2,60)
-    setHoverCloseButton(true);
-    setCloseButtonEnabled(true);
-    setTabReorderingEnabled(true);
+    d->tabBar->setHoverCloseButton(true);
+    d->tabBar->setCloseButtonEnabled(true);
+    d->tabBar->setTabReorderingEnabled(true);
 #else
-    setTabsClosable(true);
-    setMovable(true);
+    d->tabBar->setTabsClosable(true);
+    d->tabBar->setMovable(true);
 #endif
-    connect(this, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
 }
 
 Container::~Container()
@@ -76,11 +152,16 @@ Container::~Container()
     delete d;
 }
 
+void Container::closeRequest(int idx)
+{
+    emit closeRequest((widget(idx)));
+}
+
 void Container::widgetActivated(int idx)
 {
     if (idx < 0)
         return;
-    if (QWidget* w = widget(idx)) {
+    if (QWidget* w = d->stack->widget(idx)) {
         w->setFocus();
         if(d->viewForWidget.contains(w))
             emit activateView(d->viewForWidget[w]);
@@ -90,9 +171,16 @@ void Container::widgetActivated(int idx)
 void Container::addWidget(View *view)
 {
     QWidget *w = view->widget(this);
-    addTab(w, view->document()->title());
+    int idx = d->stack->addWidget(w);
+    d->tabBar->insertTab(idx, view->document()->title());
     d->viewForWidget[w] = view;
+    connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+}
+
+void Container::statusChanged(Sublime::View* view)
+{
+    d->statusCorner->setText(view->viewStatus());
 }
 
 void Container::documentTitleChanged(Sublime::Document* doc)
@@ -100,27 +188,65 @@ void Container::documentTitleChanged(Sublime::Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
-            int tabIndex = indexOf(it.key());
+            int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
-                setTabText(tabIndex, doc->title());
+                d->tabBar->setTabText(tabIndex, doc->title());
             }
             break;
         }
     }
 }
 
+int Container::count() const
+{
+    return d->stack->count();
+}
+
+QWidget* Container::currentWidget() const
+{
+    return d->stack->currentWidget();
+}
+
+void Container::setCurrentWidget(QWidget* w)
+{
+    d->stack->setCurrentWidget(w);
+    d->tabBar->setCurrentIndex(d->stack->indexOf(w));
+    if (View *view = d->viewForWidget[w])
+    {
+        statusChanged(view);
+        d->fileNameCorner->setText(view->document()->title());
+    }
+}
+
+QWidget* Container::widget(int i) const
+{
+    return d->stack->widget(i);
+}
+
+int Container::indexOf(QWidget* w) const
+{
+    return d->stack->indexOf(w);
+}
+
 void Sublime::Container::removeWidget(QWidget *w)
 {
     if (w) {
-        removeTab(indexOf(w));
+        d->tabBar->removeTab(d->stack->indexOf(w));
+        d->stack->removeWidget(w);
+        if (d->tabBar->currentIndex() != -1)
+            d->fileNameCorner->setText(d->tabBar->tabText(d->tabBar->currentIndex()));
         View* view = d->viewForWidget.take(w);
-        disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+        if (view)
+        {
+            disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+            disconnect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
+        }
     }
 }
 
 bool Container::hasWidget(QWidget *w)
 {
-    return indexOf(w) != -1;
+    return d->stack->indexOf(w) != -1;
 }
 
 View *Container::viewForWidget(QWidget *w) const
@@ -128,17 +254,23 @@ View *Container::viewForWidget(QWidget *w) const
     return d->viewForWidget[w];
 }
 
-void Container::paintEvent(QPaintEvent *ev)
+void Container::setTabIcon(int index, const QIcon& icon) const
 {
-    //paint ourselves only if tabbar is visible
-    if (tabBar()->isVisible())
-        KTabWidget::paintEvent(ev);
-    //otherwise don't paint anything (especially the border around the widget)
+    d->tabBar->setTabIcon(index, icon);
 }
 
 void Container::setTabBarHidden(bool hide)
 {
-    KTabWidget::setTabBarHidden(hide);
+    if (hide)
+    {
+        d->tabBar->hide();
+        d->fileNameCorner->show();
+    }
+    else
+    {
+        d->fileNameCorner->hide();
+        d->tabBar->show();
+    }
 }
 
 }

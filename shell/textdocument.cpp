@@ -567,11 +567,6 @@ KDevelop::TextEditorWidget::TextEditorWidget(QWidget* parent)
     d->widgetLayout->setSpacing(0);
 
     setLayout(d->widgetLayout);
-    
-    d->statusBar = new KStatusBar(this);
-    d->statusLabel = new QLabel(d->statusBar);
-    d->statusBar->addPermanentWidget(d->statusLabel);
-    d->widgetLayout->addWidget(d->statusBar);
 }
 
 KDevelop::TextEditorWidget::~TextEditorWidget()
@@ -582,7 +577,6 @@ KDevelop::TextEditorWidget::~TextEditorWidget()
 void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition)
 {
     d->status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(newPosition.line() + 1, 0), KGlobal::locale()->formatNumber(newPosition.column() + 1, 0));
-    d->statusLabel->setText(d->status);
     emit statusChanged();
 }
 
