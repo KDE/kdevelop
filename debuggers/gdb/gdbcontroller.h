@@ -50,7 +50,6 @@ class STTY;
 class CommandQueue;
 class VariableCollection;
 class StackManager;
-class BreakpointController;
 class GDB;
 
 /**
@@ -170,11 +169,6 @@ public:
      * Return the shared frame stack model
      */
     StackManager* stackManager() const;
-
-    /**
-     * Returns the breakpoint controller for this gdb session
-     */
-    BreakpointController* breakpoints() const;
 
     using QObject::event;
 
@@ -350,7 +344,6 @@ private:
 
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;
-    BreakpointController* m_breakpointController;
 
     KJob* gdbExecuteJob_;
 };

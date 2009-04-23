@@ -25,24 +25,23 @@
 
 #include "debugsession.h"
 
-#include <QtCore/QCoreApplication>
+#include <QtGui/QApplication>
 
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <KToolBar>
 #include <KParts/MainWindow>
+#include <KSharedConfig>
 
 #include <interfaces/idocument.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 #include <util/processlinemaker.h>
 
 #include "gdbcontroller.h"
-#include "breakpointcontroller.h"
-#include <interfaces/idocumentcontroller.h>
 #include "stackmanager.h"
-#include "stackmanager.h"
-#include <QApplication>
+#include "gdbbreakpointcontroller.h"
 
 namespace GDBDebugger {
 
@@ -53,6 +52,8 @@ DebugSession::DebugSession(GDBController* controller)
     , justRestarted_(false)
     , m_config(KGlobal::config(), "GDB Debugger")
 {
+    new GDBBreakpointController(this);
+
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
     connect( m_procLineMaker, SIGNAL(receivedStdoutLines(const QStringList&)),
@@ -62,6 +63,11 @@ DebugSession::DebugSession(GDBController* controller)
     connect( m_controller, SIGNAL(showStepInSource(QString,int,QString)), SLOT(slotShowStepInSource(QString,int,QString)));
     setupController();
 }
+
+DebugSession::~DebugSession()
+{
+}
+
 
 void DebugSession::slotShowStepInSource(const QString& file, int line, const QString& address)
 {
@@ -121,7 +127,7 @@ void DebugSession::setupController()
     //connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
     //connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
 
-    connect(this, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), m_controller->breakpoints(), SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
+    //TODO NIKO connect(this, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), m_controller->breakpoints(), SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
 }
 
 void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState)

@@ -2,14 +2,15 @@
 #include "tooltipwidget.h"
 
 #include "variablecollection.h"
-#include "breakpointcontroller.h"
-#include "breakpoints.h"
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "mi/gdbmi.h"
 
 #include <debugger/util/treeview.h>
 #include <debugger/util/treemodel.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <debugger/breakpoint/breakpointcontroller.h>
 #include "util/activetooltip.h"
 
 #include <QWidget>
@@ -117,7 +118,7 @@ void VariableToolTip::addWatchpoint(const GDBMI::ResultRecord& r)
     // FIXME: handle error.
     if (r.reason == "done")
     {
-        controller_->breakpoints()->breakpointsItem()
+        KDevelop::ICore::self()->debugController()->breakpointController()->breakpointsItem()
             ->addWatchpoint(r["path_expr"].literal());
     }
     close();

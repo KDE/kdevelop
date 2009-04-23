@@ -53,7 +53,7 @@
 #include "gdbcommandqueue.h"
 #include "variablecollection.h"
 #include "stackmanager.h"
-#include "breakpointcontroller.h"
+#include "gdbbreakpointcontroller.h"
 #include "gdb.h"
 
 using namespace std;
@@ -84,7 +84,6 @@ GDBController::GDBController(QObject* parent)
         gdb_(0),
         m_variableCollection(new VariableCollection(this)),
         m_stackManager(new StackManager(this)),
-        m_breakpointController(new BreakpointController(this)),
         gdbExecuteJob_(0)
 {
     configure();
@@ -1309,11 +1308,6 @@ VariableCollection * GDBController::variables() const
 StackManager * GDBController::stackManager() const
 {
     return m_stackManager;
-}
-
-BreakpointController* GDBController::breakpoints() const
-{
-    return m_breakpointController;
 }
 
 void GDBController::programRunning()

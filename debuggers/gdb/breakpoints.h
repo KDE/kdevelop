@@ -44,8 +44,6 @@ public slots:
 
 private:
 
-    void handleBreakpointList(const GDBMI::ResultRecord &r);
-
     GDBController *controller_;
 };
 

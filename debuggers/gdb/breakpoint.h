@@ -45,14 +45,9 @@ public:
     Breakpoint(KDevelop::TreeModel *model, KDevelop::TreeItem *parent,
                   GDBController* controller);
 
-    void update(const GDBMI::Value &b);
-
     virtual void sendMaybe();
 
 private:
-    void handleDeleted(const GDBMI::ResultRecord &v);
-    void handleInserted(const GDBMI::ResultRecord &r);
-    void handleEnabledOrDisabled(const GDBMI::ResultRecord &r);
     void handleConditionChanged(const GDBMI::ResultRecord &r);
     void handleAddressComputed(const GDBMI::ResultRecord &r);
 

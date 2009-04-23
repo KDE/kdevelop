@@ -44,6 +44,7 @@ namespace KDevelop {
 class ProcessLineMaker;
 }
 namespace GDBDebugger {
+class GDBBreakpointController;
 class GDBController;
 
 
@@ -52,6 +53,8 @@ class DebugSession : public KDevelop::IDebugSession
     Q_OBJECT
 public:
     DebugSession(GDBController* controller);
+    ~DebugSession();
+
     virtual DebuggerState state() const;
     virtual KDevelop::StackModel* stackModel() const;
 
