@@ -123,7 +123,7 @@ enum Stage {NAMES, PATHS, PATH_SUFFIXES, HINTS};
 
 CustomCommandAst::CustomCommandAst()
 {
-    m_forTarget = false;
+    m_isForTarget = false; //only used here? :S
     m_buildStage = PostBuild;
     m_isVerbatim = false;
     m_append = false;
@@ -209,22 +209,22 @@ bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             switch (doing)
             {
             case doing_working_directory:
-                m_workingDir = copy;
+                m_workingDirectory = copy;
                 break;
             case doing_source:
                 m_source = copy;
                 break;
             case doing_main_dependency:
-                m_mainDep = copy;
+                m_mainDependency = copy;
                 break;
             case doing_command:
                 m_commands.append( copy );
                 break;
             case doing_target:
-                m_target = copy;
+                m_targetName = copy;
                 break;
             case doing_depends:
-                m_otherDeps.append( copy );
+                m_otherDependencies.append( copy );
                 break;
             case doing_outputs:
             case doing_output:
@@ -248,10 +248,10 @@ bool CustomCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     // At this point we could complain about the lack of arguments.  For
     // the moment, let's say that COMMAND, TARGET are always required.
-    if ( m_outputs.isEmpty() && m_target.isEmpty() )
+    if ( m_outputs.isEmpty() && m_targetName.isEmpty() )
         return false;
 
-    if ( m_source.isEmpty() && !m_target.isEmpty() && !m_outputs.isEmpty())
+    if ( m_source.isEmpty() && !m_targetName.isEmpty() && !m_outputs.isEmpty())
         return false;
 
     if ( m_append && m_outputs.isEmpty() )

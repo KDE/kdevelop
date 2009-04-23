@@ -67,62 +67,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
 
 };
 
-class KDEVCMAKECOMMON_EXPORT CustomCommandAst : public CMakeAst
-{
-public:
-    CustomCommandAst();
-    ~CustomCommandAst();
-
-    enum BuildStage {
-        PreBuild,
-        PreLink,
-        PostBuild };
-    bool isForTarget() const { return m_forTarget; }
-
-    QString targetName() const { return m_target; }
-    void setTargetName( const QString& target ) { m_target = target; }
-
-    BuildStage buildStage() const { return m_buildStage; }
-    void setBuildStage( BuildStage bs ) { m_buildStage = bs; }
-
-    void setOutputs( const QStringList& outputs ) { m_outputs = outputs; }
-    QStringList outputs() const { return m_outputs; }
-
-    void setCommands( const QStringList& commands ) { m_commands = commands; }
-    QStringList commands() const { return m_commands; }
-
-    void setMainDependency( const QString& mainDep ) { m_mainDep = mainDep; }
-    QString mainDependency() const { return m_mainDep; }
-
-    void setOtherDependencies( const QStringList& otherDeps) { m_otherDeps = otherDeps; }
-    QStringList otherDependencies() const { return m_otherDeps; }
-
-    void setWorkingDirectory( const QString& workingDir ) { m_workingDir = workingDir; }
-    QString workingDirectory() const { return m_workingDir; }
-
-    void setComment( const QString& comment ) { m_comment = comment; }
-    QString comment() const { return m_comment; }
-    
-    virtual int accept(CMakeAstVisitor* visitor) const { return visitor->visit(this); }
-
-    virtual void writeBack( QString& ) const;
-    virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
-
-private:
-    QString m_target;
-    bool m_forTarget;
-    BuildStage m_buildStage;
-    QStringList m_outputs;
-    QStringList m_commands;
-    QString m_mainDep;
-    QStringList m_otherDeps;
-    QString m_workingDir;
-    QString m_comment;
-    bool m_isVerbatim;
-    bool m_append;
-    QString m_source;
-};
-
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
@@ -150,6 +94,26 @@ private:
 #define CMAKE_MARK_AS_DEPRECATED() virtual bool isDeprecated() const { return true; }
 
 #define CMAKE_END_AST_CLASS( klassName ) };
+
+CMAKE_BEGIN_AST_CLASS( CustomCommandAst )
+    enum BuildStage {
+        PreBuild,
+        PreLink,
+        PostBuild };
+
+    CMAKE_ADD_AST_MEMBER( bool, bool, isForTarget, ForTarget )
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, targetName, TargetName )
+    CMAKE_ADD_AST_MEMBER( BuildStage, BuildStage, buildStage, BuildStage )
+    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, outputs, Outputs )
+    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, commands, Commands )
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, mainDependency, MainDependency)    
+    CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, otherDependencies, OtherDependencies)
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, workingDirectory, WorkingDirectory )
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, comment, Comment )
+    CMAKE_ADD_AST_MEMBER( QString, const QString&, source, Source )
+    CMAKE_ADD_AST_MEMBER( bool, bool, isVerbatim, Verbatim)
+    CMAKE_ADD_AST_MEMBER( bool, bool, append, Append)
+CMAKE_END_AST_CLASS( CustomCommandAst )
 
 CMAKE_BEGIN_AST_CLASS( MacroCallAst )
 CMAKE_ADD_AST_MEMBER( QString, const QString&, name, Name )
