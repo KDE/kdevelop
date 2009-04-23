@@ -522,6 +522,10 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
             modulePath.prepend(instPath+"/share/"+name.toLower()+post);
             modulePath.prepend(instPath+"/lib/"+name.toLower()+post);
         }
+        
+        QString varName=pack->name()+"_DIR";
+        if(m_cache->contains(varName))
+            modulePath.prepend(m_cache->value(varName));
 
         possibs+=QString("%1Config.cmake").arg(pack->name());
         possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
@@ -1662,7 +1666,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         }   break;
         case StringAst::CONFIGURE:
             //This is not up to the cmake support
-            kDebug(9032) << "warning! String feature not supported!" << sast->content()[sast->line()].writeBack();
+            kDebug(9032) << "warning! String configure is not supported!" << sast->content()[sast->line()].writeBack();
             break;
         case StringAst::TOUPPER:
             m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
@@ -1706,8 +1710,8 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
             kDebug(9042) << "get cmake prop: variables:" << m_vars->size();
             output = m_vars->keys();
             break;
-        case GetCMakePropertyAst::CACHE_VARIABLES: //FIXME: We do not have cache yet
-            output = m_vars->keys();
+        case GetCMakePropertyAst::CACHE_VARIABLES:
+            output = m_cache->keys();
             break;
         case GetCMakePropertyAst::COMMANDS:      //FIXME: We do not have commands yet
             output = QStringList();
