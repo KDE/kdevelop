@@ -27,6 +27,8 @@
 
 #include <klocale.h>
 
+#include <KColorUtils>
+
 #include "../declaration.h"
 #include "../ducontext.h"
 #include "../duchainlock.h"
@@ -77,6 +79,16 @@ QSize AbstractNavigationWidget::sizeHint() const
 
 void AbstractNavigationWidget::initBrowser(int height) {
   m_browser = new KTextBrowser;
+  
+  // since we can embed arbitrary HTML we have to make sure it stays readable all the time by flipping the palette for dark color schemes
+  {
+    qreal ratio = KColorUtils::contrastRatio( QColor( Qt::black ), QApplication::palette().background().color() );
+    if (  ratio < 5.0 ) {
+      // flip the palette and reduce the contrast
+      m_browser->setPalette( QPalette( QApplication::palette().background().color(),
+                                       KColorUtils::darken( QApplication::palette().foreground().color(), ratio / 5.0 ) ) );
+    }
+  }
 
   m_browser->setOpenLinks(false);
   m_browser->setOpenExternalLinks(false);
