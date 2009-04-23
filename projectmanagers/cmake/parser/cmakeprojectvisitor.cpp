@@ -1815,6 +1815,7 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
+    kDebug() << "setprops";
     if(setp->type()==GLOBAL)
         m_props[GLOBAL][QString()][setp->name()]=setp->values();
     else
@@ -1823,6 +1824,20 @@ int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
         foreach(const QString &it, setp->args())
             cm[it].insert(setp->name(), setp->values());
     }
+    return 1;
+}
+
+int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
+{
+    kDebug() << "getprops";
+    QStringList retv;
+    QString catn;
+    if(getp->type()!=GLOBAL)
+    {
+        catn=getp->typeName();
+    }
+    retv=m_props[getp->type()][catn][getp->name()];
+    m_vars->insert(getp->outputVariable(), retv);
     return 1;
 }
 

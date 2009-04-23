@@ -422,6 +422,17 @@ CMAKE_ADD_AST_MEMBER( QStringList, const QStringList&, values, Values )
 CMAKE_END_AST_CLASS( SetPropertyAst )
 
 
+CMAKE_BEGIN_AST_CLASS( GetPropertyAst )
+CMAKE_ADD_AST_MEMBER( PropertyType, PropertyType, type, Type )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, outputVariable, OutputVariable )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, typeName, TypeName )
+CMAKE_ADD_AST_MEMBER( QString, const QString&, name, name )
+
+enum Behaviour { None, SET, DEFINED, BRIEF_DOCS, FULL_DOCS };
+CMAKE_ADD_AST_MEMBER( Behaviour, Behaviour, behaviour, Behaviour )
+CMAKE_END_AST_CLASS( GetPropertyAst )
+
+
 CMAKE_BEGIN_AST_CLASS( GetDirPropertyAst )
 CMAKE_END_AST_CLASS( GetDirPropertyAst )
 

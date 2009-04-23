@@ -3021,6 +3021,46 @@ void CMakeAstTest::testSetPropertyBadParse_data()
 
 
 
+void CMakeAstTest::testGetPropertyGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    GetPropertyAst* ast = new GetPropertyAst();
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testGetPropertyGoodParse_data()
+{
+    CMakeFunctionDesc func1;
+    func1.name = "get_property";
+
+    QStringList argList1;
+    argList1=QString("_CTEST_TARGETS_ADDED GLOBAL PROPERTY CTEST_TARGETS_ADDED").split(" ");
+
+    func1.addArguments( argList1 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "good get" ) << func1;
+}
+
+void CMakeAstTest::testGetPropertyBadParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    GetPropertyAst* ast = new GetPropertyAst();
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testGetPropertyBadParse_data()
+{
+}
+
+
+
+
+
+
+
 void CMakeAstTest::testSetDirectoryPropsGoodParse()
 {
     TDD_TODO;

@@ -65,6 +65,7 @@ CMAKE_REGISTER_AST( ForeachAst, foreach )
 CMAKE_REGISTER_AST( FunctionAst, function )
 CMAKE_REGISTER_AST( GetCMakePropertyAst, get_cmake_property )
 CMAKE_REGISTER_AST( GetDirPropertyAst, get_directory_property )
+CMAKE_REGISTER_AST( GetPropertyAst, get_property )
 CMAKE_REGISTER_AST( GetSourceFilePropAst, get_source_file_property )
 CMAKE_REGISTER_AST( GetTargetPropAst, get_target_property )
 CMAKE_REGISTER_AST( GetTestPropAst, get_test_property )
@@ -3921,6 +3922,8 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     else if(propName=="TARGET") t=TARGET;
     else if(propName=="SOURCE") t=SOURCE;
     else if(propName=="TEST") t=TEST;
+    else
+        return false;
     
     QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd=func.arguments.constEnd();
     for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND"; ++it)
@@ -3946,3 +3949,54 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return !m_name.isEmpty();
 }
 
+
+
+GetPropertyAst::GetPropertyAst()
+{}
+
+GetPropertyAst::~GetPropertyAst()
+{}
+
+void GetPropertyAst::writeBack( QString& ) const
+{}
+
+bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
+{
+    if(func.name.toLower()!="get_property" || func.arguments.count() < 4 || func.arguments.count() > 6)
+        return false;
+    
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin(), itEnd=func.arguments.constEnd();
+    m_outputVariable=it->value;
+    ++it;
+    
+    PropertyType t;
+    QString propName=it->value;
+    if(propName=="GLOBAL") t=GLOBAL;
+    else if(propName=="DIRECTORY") t=DIRECTORY;
+    else if(propName=="TARGET") t=TARGET;
+    else if(propName=="SOURCE") t=SOURCE;
+    else if(propName=="TEST") t=TEST;
+    else if(propName=="VARIABLE") t=VARIABLE;
+    else
+        return false;
+    ++it;
+    if(it->value!="PROPERTY") {
+        m_typeName=it->value;
+        ++it;
+    }
+    if(it->value!="PROPERTY") return false;
+    ++it;
+    
+    m_name=it->value;
+    ++it;
+    m_behaviour=None;
+    if(it!=itEnd) {
+        QString ee=it->value;
+        if(ee=="SET") m_behaviour=SET;
+        else if(ee=="DEFINED") m_behaviour=DEFINED;
+        else if(ee=="BRIEF_DOCS") m_behaviour=BRIEF_DOCS;
+        else if(ee=="FULL_DOCS") m_behaviour=FULL_DOCS;
+    }
+    
+    return !m_name.isEmpty();
+}

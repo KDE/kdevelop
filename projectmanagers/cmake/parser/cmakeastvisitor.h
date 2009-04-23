@@ -48,6 +48,7 @@ class ForeachAst;
 class FunctionAst;
 class GetCMakePropertyAst;
 class GetFilenameComponentAst;
+class GetPropertyAst;
 class GetSourceFilePropAst;
 class IfAst;
 class IncludeAst;
@@ -94,6 +95,7 @@ class CMakeAstVisitor {
         virtual int visit( const FunctionAst * ) = 0;
         virtual int visit( const GetCMakePropertyAst * ) = 0;
         virtual int visit( const GetFilenameComponentAst * ) = 0;
+        virtual int visit( const GetPropertyAst * ) = 0;
         virtual int visit( const GetSourceFilePropAst * )=0;
         virtual int visit( const IfAst * ) = 0;
         virtual int visit( const IncludeAst * ) = 0;

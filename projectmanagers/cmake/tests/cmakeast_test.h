@@ -148,6 +148,10 @@ private slots:
     void testGetFilenameComponentGoodParse_data();
     void testGetFilenameComponentBadParse();
     void testGetFilenameComponentBadParse_data();
+    void testGetPropertyGoodParse();
+    void testGetPropertyGoodParse_data();
+    void testGetPropertyBadParse();
+    void testGetPropertyBadParse_data();
     void testGetSourceFilePropGoodParse();
     void testGetSourceFilePropGoodParse_data();
     void testGetSourceFilePropBadParse();
