@@ -63,6 +63,12 @@ IBreakpointController::IBreakpointController(QObject* parent, IBreakpoints* univ
                 this,
                 SLOT(slotPartAdded(KParts::Part*)));
     }
+
+
+    connect (KDevelop::ICore::self()->documentController(),
+             SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
+             this,
+             SLOT(textDocumentCreated(KDevelop::IDocument*)));
 }
 
 void IBreakpointController::slotPartAdded(KParts::Part* part)
@@ -80,10 +86,23 @@ void IBreakpointController::slotPartAdded(KParts::Part* part)
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
         iface->setEditableMarks( BookmarkMark | BreakpointMark );
-#if 0
-        connect( doc, 
-                 SIGNAL(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)), this, SLOT(markChanged(KTextEditor::Document*, KTextEditor::Mark, KTextEditor::MarkInterface::MarkChangeAction)) );
-#endif
+    }
+}
+
+void IBreakpointController::textDocumentCreated(KDevelop::IDocument* doc)
+{
+    KTextEditor::MarkInterface *iface =
+        qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+
+    if( iface ) {
+        connect (doc->textDocument(), SIGNAL(
+                     markChanged(KTextEditor::Document*,
+                                 KTextEditor::Mark,
+                                 KTextEditor::MarkInterface::MarkChangeAction)),
+                 this,
+                 SLOT(markChanged(KTextEditor::Document*,
+                                 KTextEditor::Mark,
+                                  KTextEditor::MarkInterface::MarkChangeAction)));
     }
 }
 
@@ -125,6 +144,16 @@ void IBreakpointController::markChanged(
     KTextEditor::Mark mark, 
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
+    if (action == KTextEditor::MarkInterface::MarkAdded)
+    {
+        // FIXME: check that there's no breakpoint at this line already?
+        universe_->addCodeBreakpoint(document->url().toLocalFile(KUrl::RemoveTrailingSlash)
+                                     + ":" + QString::number(mark.line+1));
+    }
+    else
+    {
+        kDebug() << "It'd remove a breakpoint, but it's not implemented yet\n";
+    }
 #if 0
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */

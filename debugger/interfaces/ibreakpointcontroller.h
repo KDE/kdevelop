@@ -33,6 +33,7 @@ namespace KParts { class Part; }
 
 namespace KDevelop
 {
+class IDocument;
 class IBreakpoints;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public TreeModel
@@ -99,6 +100,8 @@ private Q_SLOTS:
     * these source changes.
     */
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
+
+    void textDocumentCreated(KDevelop::IDocument*);
 
 protected:
     IBreakpoints* universe_;
