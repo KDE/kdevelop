@@ -65,9 +65,6 @@ public:
 private slots:
     void slotEvent(event_t);
 
-    void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
-    void slotToggleBreakpoint(const QString &filename, int lineNum);
-
 private:
 };
 
