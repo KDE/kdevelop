@@ -72,6 +72,8 @@ public Q_SLOTS:
 
     void viewAddNewToolView();
 
+    void raiseEditor();
+
     void newWindow();
     void splitHorizontal();
     void splitVertical();
