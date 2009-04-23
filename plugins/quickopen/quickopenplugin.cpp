@@ -205,7 +205,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
       QAction* action = new QAction(type, itemsMenu);
       action->setCheckable(true);
       action->setChecked(initialItems.isEmpty() || initialItems.contains( type ));
-      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()) );
+      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()), Qt::QueuedConnection );
       itemsMenu->addAction(action);
     }
 
@@ -219,7 +219,7 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
       action->setCheckable(true);
       action->setChecked(initialScopes.isEmpty() || initialScopes.contains( scope ) );
 
-      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()) );
+      connect( action, SIGNAL(toggled(bool)), this, SLOT(updateProviders()), Qt::QueuedConnection );
       scopesMenu->addAction(action);
     }
     
