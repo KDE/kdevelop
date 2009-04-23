@@ -30,6 +30,9 @@
 class KUrl;
 
 namespace KParts { class Part; }
+namespace KTextEditor {
+class Cursor;
+}
 
 namespace KDevelop
 {
@@ -102,6 +105,9 @@ private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
 
     void textDocumentCreated(KDevelop::IDocument*);
+
+    void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
+    void slotToggleBreakpoint(const QString &filename, int lineNum);
 
 protected:
     IBreakpoints* universe_;

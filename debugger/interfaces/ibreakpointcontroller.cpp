@@ -86,6 +86,13 @@ void IBreakpointController::slotPartAdded(KParts::Part* part)
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
         iface->setEditableMarks( BookmarkMark | BreakpointMark );
+
+        /*
+        // When a file is loaded then we need to tell the editor (display window)
+        // which lines contain a breakpoint.
+        foreach (IBreakpoint* breakpoint, universe_)
+            adjustMark(breakpoint, true);
+        */
     }
 }
 
@@ -471,5 +478,17 @@ QModelIndex IBreakpointController::indexForBreakpoint(IBreakpoint * breakpoint, 
     return createIndex(row, column, breakpoint);
 }
 #endif
+
+
+
+void IBreakpointController::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
+{
+    slotToggleBreakpoint(url.toLocalFile(), cursor.line() + 1);
+}
+
+void IBreakpointController::slotToggleBreakpoint(const QString &fileName, int lineNum)
+{
+    // FIXME: implement.
+}
 
 #include "ibreakpointcontroller.moc"
