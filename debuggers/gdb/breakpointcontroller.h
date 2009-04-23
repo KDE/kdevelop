@@ -67,10 +67,6 @@ private slots:
 
     void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
     void slotToggleBreakpoint(const QString &filename, int lineNum);
-    void textDocumentCreated(KDevelop::IDocument*);
-    void markChanged(KTextEditor::Document*, 
-                     KTextEditor::Mark mark, 
-                     KTextEditor::MarkInterface::MarkChangeAction);
 
 private:
 };
