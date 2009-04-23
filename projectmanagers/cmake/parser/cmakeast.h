@@ -71,7 +71,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         CMakeAst* Create##klassName() { return new klassName; }            \
         bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
 
-#define CMAKE_BEGIN_AST_CLASS( klassName ) class KDEVCMAKECOMMON_EXPORT klassName : public CMakeAst {  \
+#define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
     public:                                                  \
         klassName();                                         \
        ~klassName();                                         \

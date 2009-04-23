@@ -1,7 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2006 Matt Rogers <mattr@kde.org>
- * Copyright 2007-2008 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2007-2009 Aleix Pol <aleixpol@kde.org>
  *
  * Some parts of this code are based on CMake
  * Copyright 2002 Kitware, Inc. Insight Consortium <kitware@kitware.com>
