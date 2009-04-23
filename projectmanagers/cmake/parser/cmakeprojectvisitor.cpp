@@ -525,7 +525,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         
         QString varName=pack->name()+"_DIR";
         if(m_cache->contains(varName))
-            modulePath.prepend(m_cache->value(varName));
+            modulePath.prepend(m_cache->value(varName).value);
 
         possibs+=QString("%1Config.cmake").arg(pack->name());
         possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
