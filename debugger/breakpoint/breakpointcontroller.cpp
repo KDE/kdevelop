@@ -19,9 +19,9 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ibreakpointcontroller.h"
-#include "ibreakpoint.h"
-#include "ibreakpoints.h"
+#include "breakpointcontroller.h"
+#include "breakpoint.h"
+#include "breakpoints.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -39,8 +39,9 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-IBreakpointController::IBreakpointController(QObject* parent, IBreakpoints* universe)
-    : TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition", parent), universe_(universe)
+BreakpointController::BreakpointController(QObject* parent, Breakpoints* universe)
+    : TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition", parent),
+      universe_(new Breakpoints(this))
 {
     setRootItem(universe_);
     universe_->load();
@@ -71,7 +72,7 @@ IBreakpointController::IBreakpointController(QObject* parent, IBreakpoints* univ
              SLOT(textDocumentCreated(KDevelop::IDocument*)));
 }
 
-void IBreakpointController::slotPartAdded(KParts::Part* part)
+void BreakpointController::slotPartAdded(KParts::Part* part)
 {
     if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part))
     {
@@ -90,13 +91,13 @@ void IBreakpointController::slotPartAdded(KParts::Part* part)
         /*
         // When a file is loaded then we need to tell the editor (display window)
         // which lines contain a breakpoint.
-        foreach (IBreakpoint* breakpoint, universe_)
+        foreach (Breakpoint* breakpoint, universe_)
             adjustMark(breakpoint, true);
         */
     }
 }
 
-void IBreakpointController::textDocumentCreated(KDevelop::IDocument* doc)
+void BreakpointController::textDocumentCreated(KDevelop::IDocument* doc)
 {
     KTextEditor::MarkInterface *iface =
         qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
@@ -114,7 +115,7 @@ void IBreakpointController::textDocumentCreated(KDevelop::IDocument* doc)
 }
 
 QVariant 
-IBreakpointController::headerData(int section, Qt::Orientation orientation,
+BreakpointController::headerData(int section, Qt::Orientation orientation,
                                  int role) const
 { 
     if (orientation == Qt::Horizontal && role == Qt::DecorationRole
@@ -127,7 +128,7 @@ IBreakpointController::headerData(int section, Qt::Orientation orientation,
     return TreeModel::headerData(section, orientation, role);
 }
 
-Qt::ItemFlags IBreakpointController::flags(const QModelIndex &index) const
+Qt::ItemFlags BreakpointController::flags(const QModelIndex &index) const
 {
     /* FIXME: all this logic must be in item */
     if (!index.isValid())
@@ -138,15 +139,15 @@ Qt::ItemFlags IBreakpointController::flags(const QModelIndex &index) const
             Qt::ItemIsEnabled | Qt::ItemIsSelectable 
             | Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
 
-    if (index.column() == IBreakpoint::LocationColumn
-        || index.column() == IBreakpoint::ConditionColumn)
+    if (index.column() == Breakpoint::LocationColumn
+        || index.column() == Breakpoint::ConditionColumn)
         return static_cast<Qt::ItemFlags>(
             Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 
     return static_cast<Qt::ItemFlags>(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
 
-void IBreakpointController::markChanged(
+void BreakpointController::markChanged(
     KTextEditor::Document *document, 
     KTextEditor::Mark mark, 
     KTextEditor::MarkInterface::MarkChangeAction action)
@@ -179,7 +180,7 @@ void IBreakpointController::markChanged(
 
         case KTextEditor::MarkInterface::MarkRemoved:
             // Find this breakpoint and delete it
-            foreach (IBreakpoint* breakpoint, m_breakpoints)
+            foreach (Breakpoint* breakpoint, m_breakpoints)
                 if (IFilePosBreakpoint* fileBreakpoint = qobject_cast<IFilePosBreakpoint*>(breakpoint))
                     if (mark.line == fileBreakpoint->lineNum())
                         if (document->url().toLocalFile() == fileBreakpoint->fileName()) {
@@ -198,31 +199,31 @@ void IBreakpointController::markChanged(
 #endif
 }
 
-const QPixmap* IBreakpointController::inactiveBreakpointPixmap()
+const QPixmap* BreakpointController::inactiveBreakpointPixmap()
 {
   static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
-const QPixmap* IBreakpointController::activeBreakpointPixmap()
+const QPixmap* BreakpointController::activeBreakpointPixmap()
 {
   static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
   return &pixmap;
 }
 
-const QPixmap* IBreakpointController::reachedBreakpointPixmap()
+const QPixmap* BreakpointController::reachedBreakpointPixmap()
 {
   static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
   return &pixmap;
 }
 
-const QPixmap* IBreakpointController::disabledBreakpointPixmap()
+const QPixmap* BreakpointController::disabledBreakpointPixmap()
 {
   static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
   return &pixmap;
 }
 
-const QPixmap* IBreakpointController::executionPointPixmap()
+const QPixmap* BreakpointController::executionPointPixmap()
 {
   static QPixmap pixmap=KIcon("go-next").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
@@ -231,13 +232,13 @@ const QPixmap* IBreakpointController::executionPointPixmap()
 
 //NOTE: Isn't that done by TreeModel? why don't we remove this?
 #if 0
-int IBreakpointController::columnCount(const QModelIndex & parent) const
+int BreakpointController::columnCount(const QModelIndex & parent) const
 {
     Q_UNUSED(parent);
     return Last + 1;
 }
 
-QVariant IBreakpointController::data(const QModelIndex & index, int role) const
+QVariant BreakpointController::data(const QModelIndex & index, int role) const
 {
     Breakpoint* breakpoint = breakpointForIndex(index);
     if (!breakpoint)
@@ -314,7 +315,7 @@ QVariant IBreakpointController::data(const QModelIndex & index, int role) const
     return QVariant();
 }
 
-Qt::ItemFlags IBreakpointController::flags(const QModelIndex & index) const
+Qt::ItemFlags BreakpointController::flags(const QModelIndex & index) const
 {
     Qt::ItemFlags flags = Qt::ItemIsSelectable;
 
@@ -329,7 +330,7 @@ Qt::ItemFlags IBreakpointController::flags(const QModelIndex & index) const
     return flags;
 }
 
-QVariant IBreakpointController::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant BreakpointController::headerData(int section, Qt::Orientation orientation, int role) const
 {
     switch (section) {
         case Enable:
@@ -353,7 +354,7 @@ QVariant IBreakpointController::headerData(int section, Qt::Orientation orientat
     return QVariant();
 }
 
-QModelIndex IBreakpointController::index(int row, int column, const QModelIndex & parent) const
+QModelIndex BreakpointController::index(int row, int column, const QModelIndex & parent) const
 {
     if (row < 0 || column < 0 || column > Last)
         return QModelIndex();
@@ -364,14 +365,14 @@ QModelIndex IBreakpointController::index(int row, int column, const QModelIndex 
     return createIndex(row, column, m_breakpoints.at(row));
 }
 
-QModelIndex IBreakpointController::parent(const QModelIndex & index) const
+QModelIndex BreakpointController::parent(const QModelIndex & index) const
 {
     Q_UNUSED(index);
 
     return QModelIndex();
 }
 
-int IBreakpointController::rowCount(const QModelIndex & parent) const
+int BreakpointController::rowCount(const QModelIndex & parent) const
 {
     if (!parent.isValid())
         return m_breakpoints.count();
@@ -379,7 +380,7 @@ int IBreakpointController::rowCount(const QModelIndex & parent) const
     return 0;
 }
 
-bool IBreakpointController::setData(const QModelIndex & index, const QVariant & value, int role)
+bool BreakpointController::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     Breakpoint* bp = breakpointForIndex(index);
     if (!bp)
@@ -453,7 +454,7 @@ bool IBreakpointController::setData(const QModelIndex & index, const QVariant & 
     return changed;
 }
 
-Breakpoint * IBreakpointController::breakpointForIndex(const QModelIndex & index) const
+Breakpoint * BreakpointController::breakpointForIndex(const QModelIndex & index) const
 {
     if (!index.isValid())
         return 0;
@@ -463,10 +464,10 @@ Breakpoint * IBreakpointController::breakpointForIndex(const QModelIndex & index
 
 #endif
 
-IBreakpoints* IBreakpointController::breakpointsItem() { return universe_; }
+Breakpoints* BreakpointController::breakpointsItem() { return universe_; }
 
 #if 0
-QModelIndex IBreakpointController::indexForBreakpoint(IBreakpoint * breakpoint, int column) const
+QModelIndex BreakpointController::indexForBreakpoint(Breakpoint * breakpoint, int column) const
 {
     if (!breakpoint)
         return QModelIndex();
@@ -481,14 +482,14 @@ QModelIndex IBreakpointController::indexForBreakpoint(IBreakpoint * breakpoint, 
 
 
 
-void IBreakpointController::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
+void BreakpointController::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
     slotToggleBreakpoint(url.toLocalFile(), cursor.line() + 1);
 }
 
-void IBreakpointController::slotToggleBreakpoint(const QString &fileName, int lineNum)
+void BreakpointController::slotToggleBreakpoint(const QString &fileName, int lineNum)
 {
     // FIXME: implement.
 }
 
-#include "ibreakpointcontroller.moc"
+#include "breakpointcontroller.moc"

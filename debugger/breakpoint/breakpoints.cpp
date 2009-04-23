@@ -19,8 +19,9 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ibreakpoints.h"
-#include "ibreakpoint.h"
+#include "breakpoints.h"
+#include "breakpoint.h"
+#include "breakpointcontroller.h"
 
 #include <KConfigGroup>
 #include <KGlobal>
@@ -28,21 +29,21 @@
 
 using namespace KDevelop;
 
-IBreakpoints::IBreakpoints(IBreakpointController *model)
+Breakpoints::Breakpoints(BreakpointController *model)
  : TreeItem(model)
 {}
 
-void IBreakpoints::markOut()
+void Breakpoints::markOut()
 {
     for (int i = 0; i < childItems.size(); ++i)
     {
-        IBreakpoint *b = dynamic_cast<IBreakpoint *>(child(i));
+        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
         Q_ASSERT(b);
         b->markOut();
     }
 }
 
-void IBreakpoints::save()
+void Breakpoints::save()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     // Note that the last item is always "click to create" item, which
@@ -50,50 +51,94 @@ void IBreakpoints::save()
     breakpoints.writeEntry("number", childItems.size()-1);
     for (int i = 0; i < childItems.size()-1; ++i)
     {
-        IBreakpoint *b = dynamic_cast<IBreakpoint *>(child(i));
+        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
         KConfigGroup g = breakpoints.group(QString::number(i));
         b->save(g);
     }
 }
 
-IBreakpoint *IBreakpoints::breakpointById(int id)
+Breakpoint *Breakpoints::breakpointById(int id)
 {
     for (int i = 0; i < childItems.size(); ++i)
     {
-        IBreakpoint *b = static_cast<IBreakpoint *>(child(i));
+        Breakpoint *b = static_cast<Breakpoint *>(child(i));
         if (b->id() == id)
             return b;
     }
     return NULL;
 }
 
-void IBreakpoints::remove(const QModelIndex &index)
+void Breakpoints::remove(const QModelIndex &index)
 {
-    IBreakpoint *b = static_cast<IBreakpoint *>(model()->itemForIndex(index));
+    Breakpoint *b = static_cast<Breakpoint *>(model()->itemForIndex(index));
     b->setDeleted();
     b->sendMaybe();
 }
 
 
-void IBreakpoints::sendMaybe()
+void Breakpoints::sendMaybe()
 {
     for (int i = 0; i < childItems.size(); ++i)
     {
-        IBreakpoint *b = dynamic_cast<IBreakpoint *>(child(i));
+        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
         Q_ASSERT(b);
         b->sendMaybe();
     }
 }
 
-KDevelop::IBreakpoint* KDevelop::IBreakpoints::breakpoint(int row)
+Breakpoint* Breakpoints::breakpoint(int row)
 {
-    return dynamic_cast<IBreakpoint*>(child(row));
+    return dynamic_cast<Breakpoint*>(child(row));
 }
 
-int KDevelop::IBreakpoints::breakpointCount() const
+int Breakpoints::breakpointCount() const
 {
     return childCount();
 }
 
+void Breakpoints::createHelperBreakpoint()
+{
+    Breakpoint* n = new Breakpoint(model(), this);
+    appendChild(n);
+}
 
-#include "ibreakpoints.moc"
+Breakpoint* Breakpoints::addCodeBreakpoint()
+{
+    Breakpoint* n = new Breakpoint(model(), this, Breakpoint::CodeBreakpoint);
+    insertChild(childItems.size()-1, n);
+    return n;
+}
+
+Breakpoint*
+Breakpoints::addCodeBreakpoint(const QString& location)
+{
+    Breakpoint* n = addCodeBreakpoint();
+    n->setColumn(Breakpoint::LocationColumn, location);
+    return n;
+}
+
+Breakpoint* Breakpoints::addWatchpoint()
+{
+    Breakpoint* n = new Breakpoint(model(), this, Breakpoint::WriteBreakpoint);
+    insertChild(childItems.size()-1, n);
+    return n;
+}
+
+Breakpoint* Breakpoints::addWatchpoint(const QString& expression)
+{
+    Breakpoint* n = addWatchpoint();
+    n->setLocation(expression);
+    return n;
+}
+
+Breakpoint* Breakpoints::addReadWatchpoint()
+{
+    Breakpoint* n = new Breakpoint(model(), this, Breakpoint::ReadBreakpoint);
+    insertChild(childItems.size()-1, n);
+
+    return n;
+}
+
+
+
+#include "breakpoints.moc"

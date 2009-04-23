@@ -25,7 +25,7 @@
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
-#include "ibreakpoints.h"
+#include "breakpoints.h"
 
 class KUrl;
 
@@ -37,17 +37,17 @@ class Cursor;
 namespace KDevelop
 {
 class IDocument;
-class IBreakpoints;
+class Breakpoints;
 
-class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public TreeModel
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointController : public TreeModel
 {
     Q_OBJECT
 
 public:
-    IBreakpointController(QObject* parent, IBreakpoints* universe);
-    virtual ~IBreakpointController() {}
+    BreakpointController(QObject* parent, Breakpoints* universe);
+    virtual ~BreakpointController() {}
 
-    IBreakpoints* breakpointsItem();
+    Breakpoints* breakpointsItem();
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
@@ -110,7 +110,7 @@ private Q_SLOTS:
     void slotToggleBreakpoint(const QString &filename, int lineNum);
 
 protected:
-    IBreakpoints* universe_;
+    Breakpoints* universe_;
 
     static const QPixmap* inactiveBreakpointPixmap();
     static const QPixmap* activeBreakpointPixmap();

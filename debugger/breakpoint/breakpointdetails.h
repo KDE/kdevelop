@@ -29,7 +29,7 @@ class QLineEdit;
 class QLabel;
 
 namespace KDevelop {
-class IBreakpoint;
+class Breakpoint;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointDetails : public QWidget
 {
@@ -37,7 +37,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointDetails : public QWidget
 public:
     BreakpointDetails(QWidget *parent);
 
-    void setItem(IBreakpoint *b);
+    void setItem(Breakpoint *b);
 
 private Q_SLOTS:
     void showExplanation(const QString& link);

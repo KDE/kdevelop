@@ -18,8 +18,8 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KDEV_IBREAKPOINT_H
-#define KDEV_IBREAKPOINT_H
+#ifndef KDEV_BREAKPOINT_H
+#define KDEV_BREAKPOINT_H
 
 #include <QtCore/QSet>
 #include "../util/treeitem.h"
@@ -29,7 +29,7 @@ class KConfigGroup;
 namespace KDevelop
 {
 
-class KDEVPLATFORMDEBUGGER_EXPORT IBreakpoint : public TreeItem
+class KDEVPLATFORMDEBUGGER_EXPORT Breakpoint : public TreeItem
 {
 public:
     enum BreakpointKind {
@@ -40,12 +40,12 @@ public:
         LastBreakpointKind
     };
 
-    IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind);
-    IBreakpoint(TreeModel *model, TreeItem *parent, const KConfigGroup& config);
+    Breakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind);
+    Breakpoint(TreeModel *model, TreeItem *parent, const KConfigGroup& config);
 
     /** This constructor creates a "please enter location" item, that will
        turn into real breakpoint when user types something.  */
-    IBreakpoint(TreeModel *model, TreeItem *parent);
+    Breakpoint(TreeModel *model, TreeItem *parent);
 
     int id() const { return id_; }
     void fetchMoreChildren() {}
@@ -71,13 +71,15 @@ public:
     static const int TypeColumn = 2;
     static const int LocationColumn = 3;
     static const int ConditionColumn = 4;
-    virtual void sendMaybe()=0;
+    void sendMaybe() {
+        //TODO NIKO
+    }
 
     void setLocation(const QString& location);
     QString location();
     BreakpointKind kind() const;
 protected:
-    friend class IBreakpoints;
+    friend class Breakpoints;
 
     int id_;
     bool enabled_;

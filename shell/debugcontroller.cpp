@@ -45,6 +45,8 @@
 #include "../sublime/view.h"
 #include "debugger/framestackwidget.h"
 #include "core.h"
+#include "../debugger/breakpoint/breakpointcontroller.h"
+#include "../debugger/breakpoint/breakpointwidget.h"
 
 
 namespace KDevelop {
@@ -92,7 +94,7 @@ private:
 };
 
 DebugController::DebugController(QObject *parent)
-    : IDebugController(parent), KXMLGUIClient()
+    : IDebugController(parent), KXMLGUIClient(), m_breakpointController(new BreakpointController())
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
@@ -104,6 +106,12 @@ DebugController::DebugController(QObject *parent)
         i18n("Frame Stack"),
         new DebuggerToolFactory<FramestackWidget>(
             this, "org.kdevelop.debugger.StackView",
+            Qt::BottomDockWidgetArea));
+
+    ICore::self()->uiController()->addToolView(
+        i18n("Breakpoints"),
+        new DebuggerToolFactory<BreakpointWidget>(
+            this, "org.kdevelop.debugger.BreakpointsView",
             Qt::BottomDockWidgetArea));
 
     foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
@@ -120,6 +128,10 @@ void DebugController::initialize()
     stateChanged("stopped");
 }
 
+BreakpointController* DebugController::breakpointController()
+{
+    return m_breakpointController;
+}
 
 void DebugController::partAdded(KParts::Part* part)
 {

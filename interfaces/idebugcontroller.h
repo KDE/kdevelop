@@ -26,6 +26,7 @@
 #include "interfacesexport.h"
 
 namespace KDevelop {
+class BreakpointController;
 class ContextMenuExtension;
 class Context;
 class IDebugSession;
@@ -39,6 +40,8 @@ public:
 
     virtual void addSession(IDebugSession* session) = 0;
     virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
+
+    virtual BreakpointController *breakpointController() = 0;
 
 Q_SIGNALS:
     void sessionAdded(IDebugSession* session);

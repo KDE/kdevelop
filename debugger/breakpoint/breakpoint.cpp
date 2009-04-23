@@ -19,15 +19,15 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ibreakpoint.h"
-#include "ibreakpoints.h"
+#include "breakpoint.h"
+#include "breakpoints.h"
 #include <KLocale>
 #include <KIcon>
 #include <KConfigGroup>
 
 using namespace KDevelop;
 
-IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind)
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
   pending_(false), pleaseEnterLocation_(false)
@@ -35,7 +35,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
-IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
                              const KConfigGroup& config)
 : TreeItem(model, parent), id_(-1), enabled_(true),
   deleted_(false), hitCount_(0),
@@ -61,7 +61,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent,
     setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
 }
 
-IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
+Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), 
   kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true)
@@ -69,7 +69,7 @@ IBreakpoint::IBreakpoint(TreeModel *model, TreeItem *parent)
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
-void IBreakpoint::setColumn(int index, const QVariant& value)
+void Breakpoint::setColumn(int index, const QVariant& value)
 {
     if (index == EnableColumn)
     {
@@ -87,7 +87,7 @@ void IBreakpoint::setColumn(int index, const QVariant& value)
         if (pleaseEnterLocation_)
         {
             pleaseEnterLocation_ = false;
-            static_cast<IBreakpoints*>(parentItem)->createHelperBreakpoint();
+            static_cast<Breakpoints*>(parentItem)->createHelperBreakpoint();
         }
     }
 
@@ -97,14 +97,14 @@ void IBreakpoint::setColumn(int index, const QVariant& value)
     sendMaybe();
 }
 
-void IBreakpoint::markOut()
+void Breakpoint::markOut()
 {
     id_ = -1;
     dirty_.insert(LocationColumn);
     dirty_.insert(ConditionColumn);
 }
 
-QVariant IBreakpoint::data(int column, int role) const
+QVariant Breakpoint::data(int column, int role) const
 {
     if (pleaseEnterLocation_)
     {
@@ -180,12 +180,12 @@ QVariant IBreakpoint::data(int column, int role) const
     return TreeItem::data(column, role);
 }
 
-void IBreakpoint::setDeleted()
+void Breakpoint::setDeleted()
 {
     deleted_ = true;
 }
 
-void IBreakpoint::setLocation(const QString& location)
+void Breakpoint::setLocation(const QString& location)
 {
     itemData[LocationColumn] = location;
     dirty_.insert(LocationColumn);
@@ -193,12 +193,12 @@ void IBreakpoint::setLocation(const QString& location)
     sendMaybe();
 }
 
-QString KDevelop::IBreakpoint::location()
+QString KDevelop::Breakpoint::location()
 {
     return itemData[LocationColumn].toString();
 }
 
-void IBreakpoint::save(KConfigGroup& config)
+void Breakpoint::save(KConfigGroup& config)
 {
     config.writeEntry("kind", string_kinds[kind_]);
     config.writeEntry("enabled", enabled_);
@@ -206,18 +206,18 @@ void IBreakpoint::save(KConfigGroup& config)
     config.writeEntry("condition", itemData[ConditionColumn]);
 }
 
-IBreakpoint::BreakpointKind IBreakpoint::kind() const
+Breakpoint::BreakpointKind Breakpoint::kind() const
 {
     return kind_;
 }
 
-const int IBreakpoint::EnableColumn;
-const int IBreakpoint::StateColumn;
-const int IBreakpoint::TypeColumn;
-const int IBreakpoint::LocationColumn;
-const int IBreakpoint::ConditionColumn;
+const int Breakpoint::EnableColumn;
+const int Breakpoint::StateColumn;
+const int Breakpoint::TypeColumn;
+const int Breakpoint::LocationColumn;
+const int Breakpoint::ConditionColumn;
 
-const char *IBreakpoint::string_kinds[LastBreakpointKind] = {
+const char *Breakpoint::string_kinds[LastBreakpointKind] = {
     "Code",
     "Write",
     "Read",

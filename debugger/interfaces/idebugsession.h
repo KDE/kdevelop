@@ -55,8 +55,6 @@ public:
 
     virtual StackModel* stackModel() const = 0;
 
-    virtual IBreakpointController *breakpointController() const = 0;
-
     /**
      * Should return if restart is currently available
      */

@@ -10,9 +10,9 @@ set( kdevplatformdebugger_LIB_SRCS
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
-    interfaces/ibreakpoint.cpp
-    interfaces/ibreakpoints.cpp
-    interfaces/ibreakpointcontroller.cpp
+    breakpoint/breakpoint.cpp
+    breakpoint/breakpoints.cpp
+    breakpoint/breakpointcontroller.cpp
     breakpoint/breakpointwidget.cpp
     breakpoint/breakpointdetails.cpp
 )
@@ -34,9 +34,6 @@ install(FILES
 )
 install(FILES
     interfaces/idebugsession.h
-    interfaces/ibreakpointcontroller.h
-    interfaces/ibreakpoints.h
-    interfaces/ibreakpoint.h
     interfaces/stackmodel.h
     interfaces/stackitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
@@ -50,5 +47,8 @@ install(FILES
 install(FILES
     breakpoint/breakpointwidget.h
     breakpoint/breakpointdetails.h
+    breakpoint/breakpoint.h
+    breakpoint/breakpoints.h
+    breakpoint/breakpointcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
 )

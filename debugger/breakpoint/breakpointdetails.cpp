@@ -28,7 +28,7 @@
 
 #include <KLocalizedString>
 
-#include "../interfaces/ibreakpoint.h"
+#include "../breakpoint/breakpoint.h"
 #include <QWhatsThis>
 
 using namespace KDevelop;
@@ -86,7 +86,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
 }
 
 
-void BreakpointDetails::setItem(IBreakpoint *b)
+void BreakpointDetails::setItem(Breakpoint *b)
 {
     if (!b)
     {

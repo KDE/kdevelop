@@ -31,15 +31,15 @@ class QTableView;
 class QMenu;
 
 namespace KDevelop {
-class IBreakpointController;
-class IBreakpoint;
+class DebugController;
+class Breakpoint;
 class BreakpointDetails;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public QWidget
 {
     Q_OBJECT
 public:
-    BreakpointWidget(IBreakpointController *controller, QWidget *parent);
+    BreakpointWidget(DebugController *controller, QWidget *parent);
  
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
@@ -48,7 +48,7 @@ protected:
 private:
     void setupPopupMenu();
 
-    void edit(KDevelop::IBreakpoint *n);
+    void edit(KDevelop::Breakpoint *n);
 
 private Q_SLOTS:
 #if 0
@@ -61,14 +61,14 @@ private Q_SLOTS:
     void slotSelectionChanged(const QItemSelection& selected, const QItemSelection&);
     void slotBreakpointHit(int id);
     void slotDataChanged(const QModelIndex& index, const QModelIndex&);
-    void breakpointError(KDevelop::IBreakpoint *b, const QString& msg, int column);
+    void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
 
 private:
     QTableView* table_;
     BreakpointDetails* details_;
     QMenu* popup_;
     bool firstShow_;
-    IBreakpointController *m_breakpointController;
+    DebugController *m_debugController;
 };
 
 }

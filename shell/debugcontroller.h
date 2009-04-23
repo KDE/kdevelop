@@ -50,6 +50,8 @@ public:
 
     virtual ContextMenuExtension contextMenuExtension( Context* context );
 
+    virtual BreakpointController* breakpointController();
+
 private Q_SLOTS:
     void startDebugger();
     void restartDebugger();
@@ -104,6 +106,7 @@ private:
     KAction* m_toggleBreakpoint;
 
     QPointer<IDebugSession> m_currentSession;
+    BreakpointController *m_breakpointController;
 };
 
 }
