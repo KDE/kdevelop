@@ -54,6 +54,7 @@ QString UnsureType::toString() const {
     else
       ret += "none";
   }
+  ret += ")";
   
   return ret;
 }
