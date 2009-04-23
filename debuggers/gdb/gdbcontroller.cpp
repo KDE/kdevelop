@@ -53,7 +53,7 @@
 #include "gdbcommandqueue.h"
 #include "variablecollection.h"
 #include "stackmanager.h"
-#include "gdbbreakpointcontroller.h"
+#include "breakpointcontroller.h"
 #include "gdb.h"
 
 using namespace std;

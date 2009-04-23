@@ -52,7 +52,7 @@ set(kdevgdb_PART_SRCS
     processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
-    gdbbreakpointcontroller.cpp
+    breakpointcontroller.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
@@ -105,7 +105,7 @@ set(gdbtest_PART_SRCS
     processselection.cpp
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
-    gdbbreakpointcontroller.cpp
+    breakpointcontroller.cpp
     stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp

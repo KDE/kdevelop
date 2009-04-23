@@ -44,7 +44,7 @@ namespace KDevelop {
 class ProcessLineMaker;
 }
 namespace GDBDebugger {
-class GDBBreakpointController;
+class BreakpointController;
 class GDBController;
 
 

@@ -1,0 +1,415 @@
+/* This file is part of the KDE project
+   Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
+   Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
+   Copyright (C) 2006, 2008 Vladimir Prus <ghost@cs.msu.su>
+   Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
+*/
+
+#include "breakpointcontroller.h"
+
+#include <KDebug>
+
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <debugger/breakpoint/breakpointmodel.h>
+#include <debugger/breakpoint/breakpoint.h>
+
+#include "gdbcontroller.h"
+#include "gdbcommand.h"
+#include "debugsession.h"
+
+using namespace GDBMI;
+
+namespace GDBDebugger {
+
+KDevelop::BreakpointModel *breakpointModel()
+{
+    return KDevelop::ICore::self()->debugController()->breakpointModel();
+}
+
+struct Handler : public QObject
+{
+    Handler(BreakpointController *c, KDevelop::Breakpoint *b)
+        : controller(c), breakpoint(b) {}
+
+    BreakpointController *controller;
+    KDevelop::Breakpoint *breakpoint;
+};
+
+struct EnabledOrDisabledHandler : public Handler
+{
+    EnabledOrDisabledHandler(BreakpointController *c, KDevelop::Breakpoint *b)
+        : Handler(c, b) {}
+
+    void handle(const GDBMI::ResultRecord &r)
+    {
+        Q_UNUSED(r);
+        // FIXME: handle error. Enable error most likely means the
+        // breakpoint itself cannot be inserted in the target.
+        controller->sendMaybe(breakpoint);
+        delete this;
+    }
+};
+
+struct InsertedHandler : public Handler
+{
+    InsertedHandler(BreakpointController *c, KDevelop::Breakpoint *b)
+        : Handler(c, b) {}
+
+    void handle(const GDBMI::ResultRecord &r)
+    {
+        kDebug() << controller->m_dirty[breakpoint];
+
+        if (r.reason == "error") {
+            /* TODO NIKO
+            errors_.insert(LocationColumn);
+            reportChange();
+            static_cast<Breakpoints*>(parentItem)
+                ->errorEmit(this, r["msg"].literal(), LocationColumn);
+            */
+        } else {
+            if (r.hasField("bkpt")) {
+                controller->update(breakpoint, r["bkpt"]);
+            } else {
+                // For watchpoint creation, GDB basically does not say
+                // anything.  Just record id.
+                controller->m_dontSendChanges = true;
+                breakpoint->setId(r["wpt"]["number"].toInt());
+                controller->m_dontSendChanges = false;
+            }
+            controller->sendMaybe(breakpoint);
+        }
+        delete this;
+    }
+};
+
+struct DeletedHandler : public Handler
+{
+    DeletedHandler(BreakpointController *c, KDevelop::Breakpoint *b)
+        : Handler(c, b) {}
+
+    void handle(const GDBMI::ResultRecord &r)
+    {
+        Q_UNUSED(r);
+        if (!breakpoint->deleted()) {
+            breakpoint->setId(-1);
+            controller->sendMaybe(breakpoint);
+        }
+        delete this;
+    }
+};
+
+
+BreakpointController::BreakpointController(DebugSession* parent)
+    : QObject(parent), m_dontSendChanges(false)
+{
+    // FIXME: maybe, all debugger components should derive from
+    // a base class that does this connect.
+    connect(controller(),     SIGNAL(event(event_t)),
+            this,       SLOT(slotEvent(event_t)));
+
+    connect(breakpointModel(),
+            SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex,QModelIndex)));
+    connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)), SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
+
+}
+
+DebugSession *BreakpointController::debugSession() const
+{
+    return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
+}
+
+GDBController * BreakpointController::controller() const
+{
+    return debugSession()->controller();
+}
+
+void BreakpointController::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    if (m_dontSendChanges) return;
+
+    kDebug() << debugSession()->state();
+
+    Q_ASSERT(topLeft.parent() == bottomRight.parent());
+    Q_ASSERT(topLeft.row() == bottomRight.row());
+    Q_ASSERT(topLeft.column() == bottomRight.column());
+    KDevelop::Breakpoint *b = breakpointModel()->breakpointsItem()->breakpoint(topLeft.row());
+    m_dirty[b].insert(topLeft.column());
+    kDebug() << topLeft.column() << m_dirty;
+    if (debugSession()->isRunning()) {
+        sendMaybe(b);
+    }
+}
+
+void BreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
+{
+    kDebug() << breakpoint;
+    sendMaybe(breakpoint);
+}
+
+
+
+void BreakpointController::slotEvent(event_t e)
+{
+    switch(e) {
+        case program_state_changed:
+            controller()->addCommand(
+                new GDBCommand(GDBMI::BreakList,
+                            "",
+                            this,
+                            &BreakpointController::handleBreakpointList));
+            break;
+
+        case connected_to_program:
+        {
+            kDebug() << "connected to program";
+            KDevelop::Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
+            kDebug() << breakpoints->breakpointCount();
+            for (int i=0; i < breakpoints->breakpointCount(); ++i) {
+                KDevelop::Breakpoint *breakpoint = breakpoints->breakpoint(i);
+                if (breakpoint->pleaseEnterLocation()) continue;
+                m_dirty[breakpoint].clear();
+                m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
+                sendMaybe(breakpoint);
+            }
+            break;
+        }
+        case debugger_exited:
+            breakpointModel()->breakpointsItem()->markOut();
+            break;
+        default:
+            break;
+    }
+}
+
+void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
+{
+    kDebug() << breakpoint << breakpoint->pleaseEnterLocation() << this->m_dirty;
+
+    if (breakpoint->pleaseEnterLocation()) return;
+
+    if (controller()->stateIsOn(s_dbgNotStarted)) {
+        return;
+    }
+
+    /** See what is dirty, and send the changes.  For simplicity, send
+        changes one-by-one and call sendToGDB again in the completion
+        handler.
+        FIXME: should handle and annotate the errors?
+    */
+    if (breakpoint->deleted())
+    {
+        if (breakpoint->id() != -1) {
+            DeletedHandler *handler = new DeletedHandler(this, breakpoint);
+            controller()->addCommand(
+                new GDBCommand(BreakDelete, QString::number(breakpoint->id()),
+                               handler, &DeletedHandler::handle));
+        }
+    }
+    else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
+        if (!breakpoint->enabled()) {
+            m_dirty[breakpoint].clear();
+        } else {
+            if (breakpoint->id() != -1) {
+                /* We already have GDB breakpoint for this, so we need to remove
+                this one.  */
+                DeletedHandler *handler = new DeletedHandler(this, breakpoint);
+                controller()->addCommand(
+                    new GDBCommand(BreakDelete, QString::number(breakpoint->id()),
+                                handler, &DeletedHandler::handle));
+            } else {
+                if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+                    InsertedHandler *handler = new InsertedHandler(this, breakpoint);
+                    controller()->addCommand(
+                        new GDBCommand(BreakInsert,
+                                    breakpoint->location(),
+                                    handler, &InsertedHandler::handle, true));
+                } else {
+                    #if 0
+                    TODO NIKO
+                    controller()->addCommand(
+                        new GDBCommand(
+                            DataEvaluateExpression,
+                            QString("&(%1)").arg(
+                                itemData[LocationColumn].toString()),
+                            this,
+                            &Breakpoint::handleAddressComputed, true));
+                    #endif
+                }
+                m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+            }
+        }
+    } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
+        Q_ASSERT(breakpoint->id() != -1);
+        EnabledOrDisabledHandler *handler = new EnabledOrDisabledHandler(this, breakpoint);
+        controller()->addCommand(
+            new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
+                           QString::number(breakpoint->id()),
+                           handler, &EnabledOrDisabledHandler::handle,
+                           true));
+        m_dirty[breakpoint].remove(KDevelop::Breakpoint::EnableColumn);
+    }
+    #if 0
+    TODO NIKO
+    else if (dirty_.contains(ConditionColumn))
+    {
+        controller_->addCommand(
+            new GDBCommand(BreakCondition,
+                           QString::number(id_) + ' ' +
+                           itemData[ConditionColumn].toString(),
+                           this, &Breakpoint::handleConditionChanged, true));
+    }
+    #endif
+}
+
+void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
+{
+    const GDBMI::Value& blist = r["BreakpointTable"]["body"];
+
+    /* Remove breakpoints that are gone in GDB.  In future, we might
+       want to inform the user that this happened. */
+    QSet<int> present_in_gdb;
+    for (int i = 0, e = blist.size(); i != e; ++i)
+    {
+        present_in_gdb.insert(blist[i]["number"].toInt());
+    }
+
+    KDevelop::Breakpoints* breakpoints = breakpointModel()->breakpointsItem();
+
+    for (int i = 0; i < breakpoints->breakpointCount(); ++i) {
+        KDevelop::Breakpoint *b = breakpoints->breakpoint(i);
+        if (b->id() != -1 && !present_in_gdb.contains(b->id())) {
+            breakpoints->removeBreakpoint(i);
+        }
+    }
+
+    for(int i = 0, e = blist.size(); i != e; ++i)
+    {
+        const GDBMI::Value& mi_b = blist[i];
+        int id = mi_b["number"].toInt();
+
+        KDevelop::Breakpoint *b = breakpoints->breakpointById(id);
+        if (!b) {
+            QString type = mi_b["type"].literal();
+            if (type == "watchpoint" || type == "hw watchpoint") {
+                b = breakpoints->addWatchpoint();
+            } else if (type == "read watchpoint") {
+                b = breakpoints->addReadWatchpoint();
+            } else if (type == "acc watchpoint") {
+                //TODO KDevelop::Breakpoint::AccessBreakpoint;
+            } else {
+                b = breakpoints->addCodeBreakpoint();
+            }
+        }
+
+        update(b, mi_b);
+    }
+}
+
+void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)
+{
+    m_dontSendChanges = true;
+
+    breakpoint->setId(b["number"].toInt());
+
+    QString type = b["type"].literal();
+    if (b.hasField("original-location")) {
+        if (breakpoint->address().isEmpty()) {
+            /* If the address is not empty, it means that the breakpoint
+               is set by KDevelop, not by the user, and that we want to
+               show the original expression, not the address, in the table.
+               TODO: this also means that if used added a watchpoint in gdb
+               like "watch foo", then we'll show it in the breakpoint table
+               just fine, but after KDevelop restart, we'll try to add the
+               breakpoint using basically "watch *&(foo)".  I'm not sure if
+               that's a problem or not.  */
+            breakpoint->setColumn(KDevelop::Breakpoint::LocationColumn, b["original-location"].literal());
+        }
+    } else {
+        breakpoint->setColumn(KDevelop::Breakpoint::LocationColumn, "Your GDB is too old");
+    }
+
+
+    if (!m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)
+        /*TODO NIKO && !errors_.contains(ConditionColumn)*/)
+    {
+        if (b.hasField("cond")) {
+            breakpoint->setColumn(KDevelop::Breakpoint::ConditionColumn, b["cond"].literal());
+        }
+    }
+
+    if (b.hasField("addr") && b["addr"].literal() == "<PENDING>")
+        breakpoint->setPending(true);
+    else
+        breakpoint->setPending(false);
+
+    breakpoint->setHitCount(b["times"].toInt());
+
+#if 0
+    {bp_watchpoint, "watchpoint"},
+    {bp_hardware_watchpoint, "hw watchpoint"},
+    {bp_read_watchpoint, "read watchpoint"},
+    {bp_access_watchpoint, "acc watchpoint"},
+#endif
+
+#if 0
+    {
+        bp->setHits(b["times"].toInt());
+        if (b.hasField("ignore"))
+            bp->setIgnoreCount(b["ignore"].toInt());
+        else
+            bp->setIgnoreCount(0);
+        if (b.hasField("cond"))
+            bp->setConditional(b["cond"].literal());
+        else
+            bp->setConditional(QString::null);
+
+        // TODO: make the above functions do this instead
+        bp->notifyModified();
+    }
+    else
+    {
+        // It's a breakpoint added outside, most probably
+        // via gdb console. Add it now.
+        QString type = b["type"].literal();
+
+        if (type == "breakpoint" || type == "hw breakpoint")
+        {
+            if (b.hasField("fullname") && b.hasField("line"))
+            {
+                Breakpoint* bp = new FilePosBreakpoint(this,
+                                                       b["fullname"].literal(),
+                                                       b["line"].literal().toInt());
+
+                bp->setActive(m_activeFlag, id);
+                bp->setActionAdd(false);
+                bp->setPending(false);
+
+                addBreakpoint(bp);
+            }
+        }
+
+    }
+#endif
+
+    m_dontSendChanges = false;
+}
+
+}
+
+#include "breakpointcontroller.moc"
