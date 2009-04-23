@@ -29,7 +29,6 @@ class KJob;
 
 namespace KDevelop {
 class StackModel;
-class IBreakpointController;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
 {

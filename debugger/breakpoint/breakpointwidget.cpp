@@ -31,10 +31,11 @@
 #include <KIcon>
 #include <KLocalizedString>
 #include <KPassivePopup>
+#include <KDebug>
 
 #include "breakpointdetails.h"
 #include "../breakpoint/breakpoint.h"
-#include "../breakpoint/breakpointcontroller.h"
+#include "../breakpoint/breakpointmodel.h"
 #include "../../shell/debugcontroller.h"
 
 using namespace KDevelop;
@@ -67,7 +68,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 
     table_->verticalHeader()->hide();
 
-    table_->setModel(m_debugController->breakpointController());
+    table_->setModel(m_debugController->breakpointModel());
 
     connect(table_->selectionModel(),
             SIGNAL(selectionChanged(const QItemSelection&,
@@ -75,7 +76,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
             this, SLOT(slotSelectionChanged(const QItemSelection &,
                                             const QItemSelection&)));
 
-    connect(m_debugController->breakpointController(),
+    connect(m_debugController->breakpointModel(),
             SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
             this,
             SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
@@ -84,7 +85,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 //     connect(controller, SIGNAL(breakpointHit(int)),
 //             this, SLOT(slotBreakpointHit(int)));
 
-    connect(m_debugController->breakpointController()->breakpointsItem(),
+    connect(m_debugController->breakpointModel()->breakpointsItem(),
             SIGNAL(error(KDevelop::Breakpoint *, const QString&, int)),
             this,
             SLOT(breakpointError(KDevelop::Breakpoint *, const QString&, int)));
@@ -130,6 +131,7 @@ void BreakpointWidget::setupPopupMenu()
         this,
         SLOT(slotRemoveBreakpoint()));
     breakpointDelete->setShortcut(Qt::Key_Delete);
+    breakpointDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(breakpointDelete);
 
     #if 0
@@ -246,7 +248,7 @@ void BreakpointWidget::showEvent(QShowEvent * event)
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
-    QModelIndex index = m_debugController->breakpointController()->indexForItem(n, Breakpoint::LocationColumn);
+    QModelIndex index = m_debugController->breakpointModel()->indexForItem(n, Breakpoint::LocationColumn);
     table_->setCurrentIndex(index);
     table_->edit(index);
 }
@@ -254,26 +256,26 @@ void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 
 void BreakpointWidget::slotAddBlankBreakpoint()
 {
-    edit(m_debugController->breakpointController()->breakpointsItem()->addCodeBreakpoint());
+    edit(m_debugController->breakpointModel()->breakpointsItem()->addCodeBreakpoint());
 }
 
 void BreakpointWidget::slotAddBlankWatchpoint()
 {
-    edit(m_debugController->breakpointController()->breakpointsItem()->addWatchpoint());
+    edit(m_debugController->breakpointModel()->breakpointsItem()->addWatchpoint());
 }
 
 void BreakpointWidget::slotAddBlankReadWatchpoint()
 {
-    edit(m_debugController->breakpointController()->breakpointsItem()->addReadWatchpoint());
+    edit(m_debugController->breakpointModel()->breakpointsItem()->addReadWatchpoint());
 }
 
 void BreakpointWidget::slotRemoveBreakpoint()
 {
     QItemSelectionModel* sel = table_->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
-    if (!selected.empty())
-    {
-        m_debugController->breakpointController()->breakpointsItem()->remove(selected.first());
+    kDebug() << selected;
+    if (!selected.isEmpty()) {
+        m_debugController->breakpointModel()->breakpointsItem()->remove(selected.first());
     }
 }
 
@@ -284,7 +286,7 @@ void BreakpointWidget::slotSelectionChanged(const QItemSelection& selected,
     {
     details_->setItem(
                 static_cast<Breakpoint*>(
-                    m_debugController->breakpointController()->itemForIndex(selected.indexes().first())));
+                    m_debugController->breakpointModel()->itemForIndex(selected.indexes().first())));
     }
 }
 
@@ -294,11 +296,11 @@ void BreakpointWidget::slotBreakpointHit(int id)
         that is added in GDB outside kdevelop.  In this case we'll
         first try to find the breakpoint, and fail, and only then
         update the breakpoint table and notice the new one.  */
-    KDevelop::Breakpoint *b = m_debugController->breakpointController()->breakpointsItem()
+    KDevelop::Breakpoint *b = m_debugController->breakpointModel()->breakpointsItem()
         ->breakpointById(id);
     if (b)
     {
-        QModelIndex index = m_debugController->breakpointController()->indexForItem(b, 0);
+        QModelIndex index = m_debugController->breakpointModel()->indexForItem(b, 0);
         table_->selectionModel()->select(
             index,
             QItemSelectionModel::Rows
@@ -313,7 +315,7 @@ void BreakpointWidget::slotDataChanged(const QModelIndex& index, const QModelInd
         hit count is read, so it remains stale.  For that reason,
         we get to notice when breakpoint changes.  */
     details_->setItem(
-        static_cast<Breakpoint*>(m_debugController->breakpointController()->itemForIndex(index)));
+        static_cast<Breakpoint*>(m_debugController->breakpointModel()->itemForIndex(index)));
 }
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
@@ -323,7 +325,7 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     if (!table_->isVisible())
         return;
 
-    QModelIndex index = m_debugController->breakpointController()->indexForItem(b, column);
+    QModelIndex index = m_debugController->breakpointModel()->indexForItem(b, column);
     QPoint p = table_->visualRect(index).topLeft();
     p = table_->mapToGlobal(p);
 

@@ -20,14 +20,18 @@
 */
 
 #include "breakpoint.h"
-#include "breakpoints.h"
+
 #include <KLocale>
 #include <KIcon>
 #include <KConfigGroup>
+#include <KDebug>
+
+#include "breakpointmodel.h"
+#include "breakpoints.h"
 
 using namespace KDevelop;
 
-Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind)
+Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
   pending_(false), pleaseEnterLocation_(false)
@@ -35,7 +39,7 @@ Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind)
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
-Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
+Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
                              const KConfigGroup& config)
 : TreeItem(model, parent), id_(-1), enabled_(true),
   deleted_(false), hitCount_(0),
@@ -61,12 +65,17 @@ Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent,
     setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
 }
 
-Breakpoint::Breakpoint(TreeModel *model, TreeItem *parent)
+Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), 
   kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true)
 {   
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
+}
+
+BreakpointModel *Breakpoint::breakpointModel()
+{
+    return static_cast<BreakpointModel*>(model_);
 }
 
 void Breakpoint::setColumn(int index, const QVariant& value)
@@ -95,8 +104,6 @@ void Breakpoint::setColumn(int index, const QVariant& value)
     errors_.remove(index);
 
     reportChange(index);
-
-    sendMaybe();
 }
 
 void Breakpoint::markOut()
@@ -184,7 +191,11 @@ QVariant Breakpoint::data(int column, int role) const
 
 void Breakpoint::setDeleted()
 {
+    kDebug();
     deleted_ = true;
+    breakpointModel()->emitBreakpointDeleted(this);
+    removeSelf();
+    //TODO actually delete the breakpoint after all debug engines have processed it
 }
 
 void Breakpoint::setLocation(const QString& location)
@@ -237,25 +248,30 @@ bool Breakpoint::pending()
     return pending_;
 }
 
-void KDevelop::Breakpoint::setHitCount(int hitCount)
+void Breakpoint::setHitCount(int hitCount)
 {
     hitCount_ = hitCount;
     reportChange();
 }
 
-bool KDevelop::Breakpoint::hitCount()
+bool Breakpoint::hitCount()
 {
     return hitCount_;
 }
 
-bool KDevelop::Breakpoint::pleaseEnterLocation()
+bool Breakpoint::pleaseEnterLocation()
 {
     return pleaseEnterLocation_;
 }
 
-bool KDevelop::Breakpoint::deleted()
+bool Breakpoint::deleted()
 {
     return deleted_;
+}
+
+bool Breakpoint::enabled()
+{
+    return data(EnableColumn, Qt::CheckStateRole).toBool();
 }
 
 
@@ -271,3 +287,5 @@ const char *Breakpoint::string_kinds[LastBreakpointKind] = {
     "Read",
     "Access"
 };
+
+#include "breakpoint.moc"

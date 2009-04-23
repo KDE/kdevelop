@@ -21,7 +21,6 @@
 
 #include "breakpoints.h"
 #include "breakpoint.h"
-#include "breakpointcontroller.h"
 
 #include <KConfigGroup>
 #include <KGlobal>
@@ -29,9 +28,14 @@
 
 using namespace KDevelop;
 
-Breakpoints::Breakpoints(BreakpointController *model)
+Breakpoints::Breakpoints(BreakpointModel *model)
  : TreeItem(model)
 {}
+
+BreakpointModel* Breakpoints::model()
+{
+    return static_cast<BreakpointModel*>(model_);
+}
 
 void Breakpoints::markOut()
 {
@@ -72,18 +76,6 @@ void Breakpoints::remove(const QModelIndex &index)
 {
     Breakpoint *b = static_cast<Breakpoint *>(model()->itemForIndex(index));
     b->setDeleted();
-    b->sendMaybe();
-}
-
-
-void Breakpoints::sendMaybe()
-{
-    for (int i = 0; i < childItems.size(); ++i)
-    {
-        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
-        Q_ASSERT(b);
-        b->sendMaybe();
-    }
 }
 
 Breakpoint* Breakpoints::breakpoint(int row)
@@ -98,9 +90,8 @@ int Breakpoints::breakpointCount() const
 
 void KDevelop::Breakpoints::removeBreakpoint(int row)
 {
-    removeChild(row);
+    breakpoint(row)->removeSelf();
 }
-
 
 void Breakpoints::createHelperBreakpoint()
 {

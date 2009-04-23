@@ -28,9 +28,11 @@ class KConfigGroup;
 
 namespace KDevelop
 {
+class BreakpointModel;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Breakpoint : public TreeItem
 {
+    Q_OBJECT
 public:
     enum BreakpointKind {
         CodeBreakpoint = 0,
@@ -40,12 +42,12 @@ public:
         LastBreakpointKind
     };
 
-    Breakpoint(TreeModel *model, TreeItem *parent, BreakpointKind kind);
-    Breakpoint(TreeModel *model, TreeItem *parent, const KConfigGroup& config);
+    Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind);
+    Breakpoint(BreakpointModel *model, TreeItem *parent, const KConfigGroup& config);
 
     /** This constructor creates a "please enter location" item, that will
        turn into real breakpoint when user types something.  */
-    Breakpoint(TreeModel *model, TreeItem *parent);
+    Breakpoint(BreakpointModel *model, TreeItem *parent);
 
     int id() const { return id_; }
     void setId(int id);
@@ -72,9 +74,6 @@ public:
     static const int TypeColumn = 2;
     static const int LocationColumn = 3;
     static const int ConditionColumn = 4;
-    void sendMaybe() {
-        //TODO NIKO
-    }
 
     void setLocation(const QString& location);
     QString location();
@@ -92,8 +91,14 @@ public:
     bool pleaseEnterLocation();
 
     bool deleted();
+    
+    bool enabled();
+    
+    using TreeItem::removeSelf;
 protected:
     friend class Breakpoints;
+    
+    BreakpointModel *breakpointModel();
 
     int id_;
     bool enabled_;

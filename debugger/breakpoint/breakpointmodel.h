@@ -18,8 +18,8 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef KDEV_IBREAKPOINTCONTROLLER_H
-#define KDEV_IBREAKPOINTCONTROLLER_H
+#ifndef KDEV_BREAKPOINTMODEL_H
+#define KDEV_BREAKPOINTMODEL_H
 
 #include <KDE/KTextEditor/MarkInterface>
 
@@ -38,14 +38,15 @@ namespace KDevelop
 {
 class IDocument;
 class Breakpoints;
+class Breakpoint;
 
-class KDEVPLATFORMDEBUGGER_EXPORT BreakpointController : public TreeModel
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel
 {
     Q_OBJECT
 
 public:
-    BreakpointController(QObject* parent);
-    virtual ~BreakpointController() {}
+    BreakpointModel(QObject* parent);
+    virtual ~BreakpointModel() {}
 
     Breakpoints* breakpointsItem();
 
@@ -76,21 +77,11 @@ protected:
     };
 
 Q_SIGNALS:
-
     /**
-    * The user has toggled a breakpoint.
-    */
-    void toggledBreakpoint(const QString &fileName, int lineNum);
-
-    /**
-    * The user wants to edit the properties of a breakpoint.
-    */
-    void editedBreakpoint(const QString &fileName, int lineNum);
-
-    /**
-    * The user wants to enable/disable a breakpoint.
-    */
-    void toggledBreakpointEnabled(const QString &fileName, int lineNum);
+     * A breakpoint has been deleted by the user. The breakpoint object
+     * still exists as is has eventualle be deleted from the debugger engine.
+     */
+    void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
 
 private Q_SLOTS:
 
@@ -112,11 +103,16 @@ private Q_SLOTS:
 protected:
     Breakpoints* universe_;
 
+
     static const QPixmap* inactiveBreakpointPixmap();
     static const QPixmap* activeBreakpointPixmap();
     static const QPixmap* reachedBreakpointPixmap();
     static const QPixmap* disabledBreakpointPixmap();
     static const QPixmap* executionPointPixmap();
+
+private:
+    friend class Breakpoint;
+    void emitBreakpointDeleted(Breakpoint* breakpoint);
 };
 
 

@@ -45,7 +45,7 @@
 #include "../sublime/view.h"
 #include "debugger/framestackwidget.h"
 #include "core.h"
-#include "../debugger/breakpoint/breakpointcontroller.h"
+#include "../debugger/breakpoint/breakpointmodel.h"
 #include "../debugger/breakpoint/breakpointwidget.h"
 
 
@@ -94,7 +94,7 @@ private:
 };
 
 DebugController::DebugController(QObject *parent)
-    : IDebugController(parent), KXMLGUIClient(), m_breakpointController(new BreakpointController(this))
+    : IDebugController(parent), KXMLGUIClient(), m_breakpointModel(new BreakpointModel(this))
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
@@ -128,9 +128,9 @@ void DebugController::initialize()
     stateChanged("stopped");
 }
 
-BreakpointController* DebugController::breakpointController()
+BreakpointModel* DebugController::breakpointModel()
 {
-    return m_breakpointController;
+    return m_breakpointModel;
 }
 
 void DebugController::partAdded(KParts::Part* part)

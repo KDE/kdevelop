@@ -22,21 +22,19 @@
 #define KDEV_BREAKPOINTS_H
 
 #include "../util/treeitem.h"
-#include "breakpointcontroller.h"
+#include "breakpointmodel.h"
 
 namespace KDevelop
 {
 class Breakpoint;
-class BreakpointController;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Breakpoints : public KDevelop::TreeItem
 {
     Q_OBJECT
 public:
-    Breakpoints(BreakpointController *model);
+    Breakpoints(BreakpointModel *model);
 
     void markOut();
-    void sendMaybe();
 
     void remove(const QModelIndex &index);
 
@@ -67,6 +65,8 @@ public:
     void fetchMoreChildren() {}
 
     void errorEmit(Breakpoint *b, const QString& message, int column) { emit error(b, message, column); }
+    
+    BreakpointModel *model();
 Q_SIGNALS:
     void error(KDevelop::Breakpoint *b, const QString& message, int column);
 
