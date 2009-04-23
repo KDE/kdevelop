@@ -76,6 +76,7 @@ protected: // Interface for derived classes
 
     /** Report change in data of this item.  */
     void reportChange();
+    void reportChange(int column);
 
     /** Clears all children.  */
     void clear();

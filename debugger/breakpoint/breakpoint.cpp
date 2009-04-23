@@ -93,7 +93,9 @@ void Breakpoint::setColumn(int index, const QVariant& value)
 
     dirty_.insert(index);
     errors_.remove(index);
-    reportChange();
+
+    reportChange(index);
+
     sendMaybe();
 }
 
@@ -187,15 +189,12 @@ void Breakpoint::setDeleted()
 
 void Breakpoint::setLocation(const QString& location)
 {
-    itemData[LocationColumn] = location;
-    dirty_.insert(LocationColumn);
-    reportChange();
-    sendMaybe();
+    setColumn(LocationColumn, location);
 }
 
 QString KDevelop::Breakpoint::location()
 {
-    return itemData[LocationColumn].toString();
+    return data(LocationColumn, Qt::DisplayRole).toString();
 }
 
 void Breakpoint::save(KConfigGroup& config)
@@ -210,6 +209,55 @@ Breakpoint::BreakpointKind Breakpoint::kind() const
 {
     return kind_;
 }
+
+void Breakpoint::setId(int id)
+{
+    id_ = id;
+}
+
+void Breakpoint::setAddress(const QString& address)
+{
+    address_ = address;
+    reportChange();
+}
+
+QString Breakpoint::address()
+{
+    return address_;
+}
+
+void Breakpoint::setPending(bool pending)
+{
+    pending_ = pending;
+    reportChange();
+}
+
+bool Breakpoint::pending()
+{
+    return pending_;
+}
+
+void KDevelop::Breakpoint::setHitCount(int hitCount)
+{
+    hitCount_ = hitCount;
+    reportChange();
+}
+
+bool KDevelop::Breakpoint::hitCount()
+{
+    return hitCount_;
+}
+
+bool KDevelop::Breakpoint::pleaseEnterLocation()
+{
+    return pleaseEnterLocation_;
+}
+
+bool KDevelop::Breakpoint::deleted()
+{
+    return deleted_;
+}
+
 
 const int Breakpoint::EnableColumn;
 const int Breakpoint::StateColumn;

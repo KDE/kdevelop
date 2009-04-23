@@ -96,6 +96,12 @@ int Breakpoints::breakpointCount() const
     return childCount();
 }
 
+void KDevelop::Breakpoints::removeBreakpoint(int row)
+{
+    removeChild(row);
+}
+
+
 void Breakpoints::createHelperBreakpoint()
 {
     Breakpoint* n = new Breakpoint(model(), this);

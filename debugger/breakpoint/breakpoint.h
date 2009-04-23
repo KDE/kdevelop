@@ -48,6 +48,7 @@ public:
     Breakpoint(TreeModel *model, TreeItem *parent);
 
     int id() const { return id_; }
+    void setId(int id);
     void fetchMoreChildren() {}
 
     /** Mark this breakpoint as no longer inserted, due to GDB
@@ -78,6 +79,19 @@ public:
     void setLocation(const QString& location);
     QString location();
     BreakpointKind kind() const;
+
+    void setAddress(const QString& address);
+    QString address();
+
+    void setPending(bool pending);
+    bool pending();
+
+    void setHitCount(int hitCount);
+    bool hitCount();
+
+    bool pleaseEnterLocation();
+
+    bool deleted();
 protected:
     friend class Breakpoints;
 

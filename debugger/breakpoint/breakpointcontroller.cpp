@@ -39,7 +39,7 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-BreakpointController::BreakpointController(QObject* parent, Breakpoints* universe)
+BreakpointController::BreakpointController(QObject* parent)
     : TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition", parent),
       universe_(new Breakpoints(this))
 {

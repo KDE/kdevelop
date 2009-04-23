@@ -94,7 +94,7 @@ private:
 };
 
 DebugController::DebugController(QObject *parent)
-    : IDebugController(parent), KXMLGUIClient(), m_breakpointController(new BreakpointController())
+    : IDebugController(parent), KXMLGUIClient(), m_breakpointController(new BreakpointController(this))
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");

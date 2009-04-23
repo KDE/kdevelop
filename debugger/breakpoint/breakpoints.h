@@ -58,6 +58,13 @@ public:
     IBreakpoint *breakpoint(int row);
     int breakpointCount() const;
 
+    /**
+     * Removed the Breakpoint from the Model. This won't do any communication with
+     * the Debug-Engine to remove it there too.
+     * only the Debug-Engine should call this
+     */
+    void removeBreakpoint(int row);
+
     void errorEmit(IBreakpoint *b, const QString& message, int column) { emit error(b, message, column); }
 Q_SIGNALS:
     void error(KDevelop::IBreakpoint *b, const QString& message, int column);

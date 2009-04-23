@@ -94,6 +94,13 @@ void TreeItem::reportChange()
     emit model_->dataChanged(index, index2);
 }
 
+void KDevelop::TreeItem::reportChange(int column)
+{
+    QModelIndex index = model_->indexForItem(this, column);
+    emit model_->dataChanged(index, index);
+}
+
+
 void TreeItem::removeChild(int index)
 {
     QModelIndex modelIndex = model_->indexForItem(this, 0);

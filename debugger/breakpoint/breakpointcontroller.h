@@ -44,7 +44,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointController : public TreeModel
     Q_OBJECT
 
 public:
-    BreakpointController(QObject* parent, Breakpoints* universe);
+    BreakpointController(QObject* parent);
     virtual ~BreakpointController() {}
 
     Breakpoints* breakpointsItem();
