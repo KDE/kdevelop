@@ -83,7 +83,6 @@ void CCPreferences::writeToSettings()
     if(preferencesDialog->kcfg_alwaysMinimalCompletion->isChecked())
         settings.m_level = ICompletionSettings::Minimal;
     
-    settings.m_enableSemanticHighlighting = preferencesDialog->kcfg_enableSemanticHighlighting->isChecked();
     settings.m_localColorizationLevel = preferencesDialog->kcfg_localColorization->value();
     settings.m_globalColorizationLevel = preferencesDialog->kcfg_globalColorization->value();
     settings.m_highlightSemanticProblems = preferencesDialog->kcfg_highlightSemanticProblems->isChecked();

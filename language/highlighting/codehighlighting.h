@@ -126,8 +126,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
     mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
 
-    //Should be used to enable/disable the colorization of local variables and their uses
+    // Should be used to enable/disable the colorization of local variables and their uses
     bool m_localColorization;
+    // Should be used to enable/disable the colorization of global types and their uses
+    bool m_globalColorization;
+
     mutable bool m_useClassCache;
 
   private slots:

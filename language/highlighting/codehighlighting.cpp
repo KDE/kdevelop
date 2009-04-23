@@ -50,10 +50,12 @@ using namespace KTextEditor;
 namespace KDevelop {
 
 CodeHighlighting::CodeHighlighting( QObject * parent )
-  : QObject(parent), m_localColorization(true), m_useClassCache(false)
+  : QObject(parent), m_localColorization(true), m_globalColorization(true), m_useClassCache(false)
 {
   // make sure the singleton is setup
   ColorCache::initialize();
+
+  adaptToColorChanges();
 
   connect(ColorCache::self(), SIGNAL(colorsGotChanged()),
            this, SLOT(adaptToColorChanges()));
@@ -65,6 +67,11 @@ CodeHighlighting::~CodeHighlighting( )
 
 void CodeHighlighting::adaptToColorChanges()
 {
+  // disable local highlighting if the ratio is set to 0
+  m_localColorization = ICore::self()->languageController()->completionSettings()->localColorizationLevel() > 0;
+  // disable global highlighting if the ratio is set to 0
+  m_globalColorization = ICore::self()->languageController()->completionSettings()->globalColorizationLevel() > 0;
+
   m_declarationAttributes.clear();
   m_definitionAttributes.clear();
   m_depthAttributes.clear();
@@ -140,7 +147,7 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context) const
 
   DUChainReadLocker lock(DUChain::lock());
 
-  if(!ICore::self()->languageController()->completionSettings()->semanticHighlightingEnabled()) {
+  if ( !m_localColorization && !m_globalColorization ) {
     kDebug() << "highlighting disabled";
     deleteHighlighting(context);
     return;
