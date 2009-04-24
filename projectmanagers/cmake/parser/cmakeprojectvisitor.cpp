@@ -374,7 +374,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
+    kDebug(9042) << "setting variable:" << set->variableName()/* << "to" << values*/;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
@@ -1564,7 +1564,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
 
 int CMakeProjectVisitor::visit(const StringAst *sast)
 {
-    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->input();
+    kDebug(9042) << "String to" /*<< sast->input()*/ << sast->outputVariable();
     switch(sast->type())
     {
         case StringAst::REGEX:
