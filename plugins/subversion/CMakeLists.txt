@@ -87,6 +87,7 @@ target_link_libraries(kdevsubversion
                     ${KDE4_KTEXTEDITOR_LIBS}
                     kdevplatforminterfaces
                     kdevplatformvcs
+                    kdevplatformoutputview
                     kdevplatformproject
                     kdevplatformlanguage
                     ${KDE4_THREADWEAVER_LIBRARIES}

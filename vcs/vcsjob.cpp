@@ -1,6 +1,6 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                     *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -17,6 +17,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
+#include <klocale.h>
 
 #include "vcsjob.h"
 
@@ -29,8 +30,9 @@ namespace KDevelop
     };
 
     VcsJob::VcsJob( QObject* parent )
-        : KJob(parent), d(new VcsJobPrivate)
+        : OutputJob(parent), d(new VcsJobPrivate)
     {
+        setStandardToolView(IOutputView::VcsView);
     }
 
     VcsJob::~VcsJob()

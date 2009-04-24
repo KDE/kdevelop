@@ -52,6 +52,7 @@ target_link_libraries(kdevplatformvcs
     kdevplatformutil
     kdevplatformproject
     kdevplatformlanguage
+    kdevplatformoutputview
 )
 # add kdevplatform* when they're exported targets
 target_link_libraries(kdevplatformvcs LINK_INTERFACE_LIBRARIES 

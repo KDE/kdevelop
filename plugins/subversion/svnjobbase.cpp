@@ -11,6 +11,7 @@
 #include "svnjobbase.h"
 
 #include <QEvent>
+#include <QStandardItemModel>
 
 #include <kpassworddialog.h>
 #include <klocale.h>
@@ -52,7 +53,7 @@ void SvnJobBase::askForLogin( const QString& realm )
 void SvnJobBase::showNotification( const QString& path, const QString& msg )
 {
     kDebug( 9510 ) << "notification" << path << msg;
-    //TODO: Use a passive popup for important messages, like showing the committed revision number or....
+    outputMessage(msg);
 }
 
 void SvnJobBase::askForCommitMessage()
@@ -114,6 +115,7 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
     if( internalJob() == job )
     {
         kDebug(9510) << "Job is done";
+        outputMessage(i18n("Completed"));
         m_status = KDevelop::VcsJob::JobSucceeded;
     }
     emitResult();
@@ -127,6 +129,7 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
         QString msg = internalJob()->errorMessage();
         if( !msg.isEmpty() )
             setErrorText( i18n( "Error executing Job:\n%1", msg ) );
+        outputMessage(errorText());
         kDebug(9510) << "Job failed";
         m_status = KDevelop::VcsJob::JobFailed;
     }
@@ -136,6 +139,13 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
 KDevelop::IPlugin* SvnJobBase::vcsPlugin() const
 {
     return m_part;
+}
+
+void SvnJobBase::outputMessage(const QString& message)
+{
+    if (!model()) return;
+    QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
+    m->appendRow(new QStandardItem(message));
 }
 
 #include "svnjobbase.moc"

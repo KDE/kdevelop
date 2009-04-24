@@ -25,6 +25,7 @@
 #include <QMutexLocker>
 
 #include <ThreadWeaver.h>
+#include <QStandardItemModel>
 #include <kparts/mainwindow.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -137,10 +138,19 @@ SvnInternalJobBase* SvnCommitJob::internalJob() const
 
 void SvnCommitJob::start()
 {
+    setTitle("commit");
+    setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+    startOutput();
+
+    QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
+    m->setColumnCount(1);
+    m->appendRow(new QStandardItem(i18n("Committing...")));
+
     if( m_job->urls().isEmpty() )
     {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to execute commit" ) );
+        m->appendRow(new QStandardItem(errorText()));
     }else
     {
         ThreadWeaver::Weaver::instance()->enqueue( m_job );

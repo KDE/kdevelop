@@ -59,6 +59,7 @@ protected:
     KDevSvnPlugin* m_part;
 
 private:
+    void outputMessage(const QString &message);
     KDevelop::VcsJob::JobStatus m_status;
 };
 

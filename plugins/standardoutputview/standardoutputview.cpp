@@ -147,6 +147,11 @@ int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolVie
             return registerToolView( i18n("Test"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
             break;
         }
+        case KDevelop::IOutputView::VcsView:
+        {
+            return registerToolView( i18n("Version Control"), KDevelop::IOutputView::HistoryView, KIcon("system-run"));
+            break;
+        }
     }
 
     return -1;

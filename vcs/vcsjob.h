@@ -22,7 +22,7 @@
 #ifndef VCSJOB_H
 #define VCSJOB_H
 
-#include <KDE/KJob>
+#include <outputview/outputjob.h>
 
 #include "vcsexport.h"
 
@@ -41,7 +41,7 @@ class IPlugin;
  * and the results provided by the job.
  *
  */
-class KDEVPLATFORMVCS_EXPORT VcsJob : public KJob
+class KDEVPLATFORMVCS_EXPORT VcsJob : public OutputJob
 {
     Q_OBJECT
 public:
