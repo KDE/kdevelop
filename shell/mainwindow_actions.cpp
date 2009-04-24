@@ -73,11 +73,6 @@ void MainWindowPrivate::gotoPreviousWindow()
     gotoPrevNextWindow(false);
 }
 
-void MainWindowPrivate::raiseEditor()
-{
-    m_mainWindow->activateView(m_mainWindow->activeView());
-}
-
 void MainWindowPrivate::configureToolbars()
 {}
 

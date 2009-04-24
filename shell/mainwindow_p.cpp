@@ -249,13 +249,6 @@ void MainWindowPrivate::setupActions()
     action->setToolTip( i18n( "New Window" ) );
     action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of the current area.</p>" ) );
 
-    action = actionCollection()->addAction( "raise_editor" );
-    action->setText( i18n( "Raise &Editor" ) );
-    action->setShortcut( Qt::META + Qt::Key_C );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( raiseEditor() ) );
-    action->setToolTip( i18n( "Raise Editor" ) );
-    action->setWhatsThis( i18n( "<b>Raise Editor</b><p>Focuses the previously active editor.</p>" ) );
-
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
     action->setText( i18n( "Split View &Top/Bottom" ) );
