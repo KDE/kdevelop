@@ -263,6 +263,11 @@ void QuickOpenWidgetHandler::run() {
   o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
+  if (!m_preselectedText.isEmpty())
+  {
+    o.searchLine->setText(m_preselectedText);
+    o.searchLine->selectAll();
+  }
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& )), this, SLOT(currentChanged( const QItemSelection&, const QItemSelection& )) );
 }
@@ -271,6 +276,11 @@ QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
   //if( m_model->treeView() == o.list )
   m_model->setTreeView( 0 );
   delete m_dialog;
+}
+
+void QuickOpenWidgetHandler::setPreselectedText(const QString& text)
+{
+  m_preselectedText = text;
 }
 
 void QuickOpenWidgetHandler::updateProviders() {
@@ -601,6 +611,16 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
     useScopes << i18n("Currently Open");
 
   m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Quick Open"), m_model, initialItems, useScopes );
+  if (!(modes & Files) || modes == QuickOpenPlugin::All)
+  {
+    KDevelop::IDocument *currentDoc = core()->documentController()->activeDocument();
+    if (currentDoc && currentDoc->isTextDocument())
+    {
+      QString preselected = currentDoc->textSelection().isEmpty() ? currentDoc->textWord() : currentDoc->textDocument()->text(currentDoc->textSelection());
+      m_currentWidgetHandler->setPreselectedText(preselected);
+    }
+  }
+  
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   m_currentWidgetHandler->run();
 }

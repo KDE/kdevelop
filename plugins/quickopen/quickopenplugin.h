@@ -135,8 +135,10 @@ class QuickOpenWidgetHandler : public QObject {
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
+  QString m_preselectedText;
   public:
   Ui::QuickOpen o;
+  void setPreselectedText(const QString &text);
 };
 
 #endif // QUICKOPENPLUGIN_H
