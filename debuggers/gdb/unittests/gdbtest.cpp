@@ -270,26 +270,29 @@ void GdbTest::testStack()
     KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel()->breakpointsItem();
     breakpoints->addCodeBreakpoint(fileName, 21);
-    session.startProgram(run, 0);
+    QVERIFY(session.startProgram(run, 0));
     waitForState(session, DebugSession::PausedState);
 
     KDevelop::StackModel *model = session.stackModel();
     model->setAutoUpdate(true);
-    QTest::qWait(100);
+    QTest::qWait(200);
 
     QCOMPARE(model->rowCount(QModelIndex()), 1);
-    QCOMPARE(model->columnCount(QModelIndex()), 3);
+    QCOMPARE(model->columnCount(QModelIndex()), 1);
 
-    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("Thread 1"));
-    QCOMPARE(model->data(model->index(0,1), Qt::DisplayRole).toString(), QString("foo"));
-    QCOMPARE(model->data(model->index(0,2), Qt::DisplayRole).toString(), fileName+QString(":22"));
+    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#0 at foo"));
 
-    model->expanded(model->index(0,0));
     QTest::qWait(200);
-    QCOMPARE(model->rowCount(model->index(0,0)), 1);
-    QCOMPARE(model->data(model->index(0,0,model->index(0,0)), Qt::DisplayRole).toString(), QString("#1"));
-    QCOMPARE(model->data(model->index(0,1,model->index(0,0)), Qt::DisplayRole).toString(), QString("main"));
-    QCOMPARE(model->data(model->index(0,2,model->index(0,0)), Qt::DisplayRole).toString(), fileName+QString(":27"));
+    KDevelop::FramesModel* fmodel=model->modelForThread(0);
+    QCOMPARE(fmodel->rowCount(), 2);
+    QCOMPARE(fmodel->columnCount(), 3);
+    QCOMPARE(fmodel->framesCount(), 2);
+    QCOMPARE(fmodel->data(fmodel->index(0,0), Qt::DisplayRole).toString(), QString("0"));
+    QCOMPARE(fmodel->data(fmodel->index(0,1), Qt::DisplayRole).toString(), QString("foo"));
+    QCOMPARE(fmodel->data(fmodel->index(0,2), Qt::DisplayRole).toString(), fileName+QString(":22"));
+    QCOMPARE(fmodel->data(fmodel->index(1,0), Qt::DisplayRole).toString(), QString("1"));
+    QCOMPARE(fmodel->data(fmodel->index(1,1), Qt::DisplayRole).toString(), QString("main"));
+    QCOMPARE(fmodel->data(fmodel->index(1,2), Qt::DisplayRole).toString(), fileName+QString(":27"));
 
 
     session.run();
