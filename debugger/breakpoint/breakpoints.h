@@ -23,6 +23,7 @@
 
 #include "../util/treeitem.h"
 #include "breakpointmodel.h"
+class KUrl;
 
 namespace KDevelop
 {
@@ -38,7 +39,7 @@ public:
     void remove(const QModelIndex &index);
 
     KDevelop::Breakpoint* addCodeBreakpoint();
-    KDevelop::Breakpoint* addCodeBreakpoint(const QString& location);
+    KDevelop::Breakpoint* addCodeBreakpoint(const KUrl& location, int line);
     KDevelop::Breakpoint* addWatchpoint();
     KDevelop::Breakpoint* addWatchpoint(const QString& expression);
     KDevelop::Breakpoint* addReadWatchpoint();

@@ -99,10 +99,10 @@ Breakpoint* Breakpoints::addCodeBreakpoint()
 }
 
 Breakpoint*
-Breakpoints::addCodeBreakpoint(const QString& location)
+Breakpoints::addCodeBreakpoint(const KUrl& url, int line)
 {
     Breakpoint* n = addCodeBreakpoint();
-    n->setColumn(Breakpoint::LocationColumn, location);
+    n->setLocation(url, line);
     return n;
 }
 
@@ -116,7 +116,7 @@ Breakpoint* Breakpoints::addWatchpoint()
 Breakpoint* Breakpoints::addWatchpoint(const QString& expression)
 {
     Breakpoint* n = addWatchpoint();
-    n->setLocation(expression);
+    //TODO NIKO n->setLocation(expression);
     return n;
 }
 

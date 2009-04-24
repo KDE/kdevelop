@@ -22,6 +22,7 @@
 #define KDEV_BREAKPOINT_H
 
 #include <QtCore/QSet>
+#include <KUrl>
 #include "../util/treeitem.h"
 
 class KConfigGroup;
@@ -56,12 +57,8 @@ public:
     void setColumn(int index, const QVariant& value);
     void setDeleted();
 
-    int hitCount() const { return hitCount_; }
-
     QVariant data(int column, int role) const;
 
-    bool pending() const { return pending_; }
-    
     void save(KConfigGroup& config);
 
     static const int EnableColumn = 0;
@@ -69,25 +66,32 @@ public:
     static const int TypeColumn = 2;
     static const int LocationColumn = 3;
     static const int ConditionColumn = 4;
-
-    void setLocation(const QString& location);
+    
+    void setUrl(const KUrl &url);
+    KUrl url() const;
+    
+    void setLine(int line);
+    int line() const;
+    
+    void setLocation(const KUrl& url, int line);
     QString location();
+
     BreakpointKind kind() const;
 
     void setAddress(const QString& address);
-    QString address();
+    QString address() const;
 
     void setPending(bool pending);
-    bool pending();
+    bool pending() const;
 
     void setHitCount(int hitCount);
-    bool hitCount();
+    bool hitCount() const;
 
-    bool pleaseEnterLocation();
+    bool pleaseEnterLocation() const;
 
-    bool deleted();
+    bool deleted() const;
     
-    bool enabled();
+    bool enabled() const;
     
     using TreeItem::removeSelf;
 protected:
@@ -106,6 +110,8 @@ protected:
     /* For watchpoints, the address it is set at.  */
     QString address_;
     bool pleaseEnterLocation_;
+    KUrl m_url;
+    int m_line;
 
     static const char *string_kinds[LastBreakpointKind];
 };

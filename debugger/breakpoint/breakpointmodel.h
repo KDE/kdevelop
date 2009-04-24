@@ -67,7 +67,6 @@ public:
     };
     
     void toggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
-    void toggleBreakpoint(const QString &filename, int lineNum);
 
 protected:
     enum MarkType {

@@ -157,25 +157,23 @@ void BreakpointModel::markChanged(
         && type != (MarkInterface::MarkTypes)DisabledBreakpointMark)
         return;
 
-    QString location = document->url().toLocalFile(KUrl::RemoveTrailingSlash) + ":" + QString::number(mark.line+1);
-    kDebug() << action << location;
     if (action == KTextEditor::MarkInterface::MarkAdded) {
         bool alreadyExists = false;
         for(int i=0; i<universe_->breakpointCount(); ++i) {
             Breakpoint *b = universe_->breakpoint(i);
-            if (b->location() == location && !b->deleted()) {
+            if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
                 alreadyExists = true;
                 break;
             }
         }
         if (!alreadyExists) {
-            universe_->addCodeBreakpoint(location);
+            universe_->addCodeBreakpoint(document->url(), mark.line);
         }
     } else {
         // Find this breakpoint and delete it
         for(int i=0; i<universe_->breakpointCount(); ++i) {
             Breakpoint *b = universe_->breakpoint(i);
-            if (b->location() == location && !b->deleted()) {
+            if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
                 b->setDeleted();
             }
         }
@@ -475,21 +473,14 @@ QModelIndex BreakpointModel::indexForBreakpoint(Breakpoint * breakpoint, int col
 
 void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-    toggleBreakpoint(url.toLocalFile(KUrl::RemoveTrailingSlash), cursor.line() + 1);
-}
-
-void BreakpointModel::toggleBreakpoint(const QString &fileName, int lineNum)
-{
-    QString location = fileName + ":" + QString::number(lineNum);
-
     for(int i=0; i<universe_->breakpointCount(); ++i) {
         Breakpoint *b = universe_->breakpoint(i);
-        if (b->location() == location && !b->deleted()) {
+        if (b->url() == url && b->line() == cursor.line() && !b->deleted()) {
             b->setDeleted();
             return;
         }
     }
-    universe_->addCodeBreakpoint(location);
+    universe_->addCodeBreakpoint(url, cursor.line());
 }
 
 void KDevelop::BreakpointModel::_breakpointDeleted(KDevelop::Breakpoint* breakpoint)
@@ -502,37 +493,33 @@ void KDevelop::BreakpointModel::_breakpointDeleted(KDevelop::Breakpoint* breakpo
 
 void KDevelop::BreakpointModel::updateMarks()
 {
-    QMap<QString, QSet<int> > breakpoints;
+    QMap<KUrl, QSet<int> > breakpoints;
     for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
         Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
         if (breakpoint->pleaseEnterLocation()) continue;
         if (breakpoint->deleted()) continue;
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-        QString location = breakpoint->location().left(breakpoint->location().lastIndexOf(':'));
-        int line = breakpoint->location().right(breakpoint->location().length() - breakpoint->location().lastIndexOf(':') - 1).toInt();
-        line--;
-        breakpoints[location] << line;
+        breakpoints[breakpoint->url()] << breakpoint->line();
     }
     kDebug() << breakpoints;
     foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
-        QString loc = doc->url().toLocalFile(KUrl::RemoveTrailingSlash);
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
         foreach (KTextEditor::Mark *m, mark->marks()) {
             kDebug() << m->line << m->type;
             if (m->type & BreakpointMark) {
-                if (!breakpoints.contains(loc) || !breakpoints[loc].contains(m->line)) {
+                if (!breakpoints.contains(doc->url()) || !breakpoints[doc->url()].contains(m->line)) {
                     kDebug() << "removeMark";
                     mark->removeMark(m->line, BreakpointMark);
                 } else {
-                    breakpoints[loc].remove(m->line);
+                    breakpoints[doc->url()].remove(m->line);
                 }
             }
         }
     }
     kDebug() << breakpoints;
     
-    QMapIterator<QString, QSet<int> > i(breakpoints);
+    QMapIterator<KUrl, QSet<int> > i(breakpoints);
     while (i.hasNext()) {
         i.next();
         foreach (int line, i.value()) {

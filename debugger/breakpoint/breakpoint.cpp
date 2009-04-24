@@ -34,7 +34,7 @@ using namespace KDevelop;
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
-  pending_(false), pleaseEnterLocation_(false)
+  pending_(false), pleaseEnterLocation_(false), m_line(-1)
 {
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
@@ -90,14 +90,19 @@ void Breakpoint::setColumn(int index, const QVariant& value)
 
     if (index == LocationColumn || index == ConditionColumn)
     {
-        itemData[index] = value;
-        if (pleaseEnterLocation_)
-        {
+        if (index == LocationColumn) {
+            QString s = value.toString();
+            m_url = KUrl(s.left(s.lastIndexOf(':')));
+            m_line = s.right(s.length() - s.lastIndexOf(':') - 1).toInt() - 1;
+        } else {
+            itemData[index] = value;
+        }
+        if (pleaseEnterLocation_) {
             pleaseEnterLocation_ = false;
             static_cast<Breakpoints*>(parentItem)->createHelperBreakpoint();
         }
     }
-
+    
     errors_.remove(index);
 
     reportChange(index);
@@ -172,10 +177,14 @@ QVariant Breakpoint::data(int column, int role) const
         return QVariant();
     }
 
-    if (column == LocationColumn && role == Qt::DisplayRole
-        && !address_.isEmpty())
-        return QString("%1 (%2)").arg(itemData[LocationColumn].toString())
-            .arg(address_);
+    if (column == LocationColumn && role == Qt::DisplayRole) {
+        QString ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
+        ret += ":" + QString::number(m_line+1);
+        if (!address_.isEmpty()) {
+            ret = QString("%1 (%2)").arg(ret).arg(address_);
+        }
+        return ret;
+    }
 
     return TreeItem::data(column, role);
 }
@@ -189,15 +198,31 @@ void Breakpoint::setDeleted()
     //TODO actually delete the breakpoint after all debug engines have processed it
 }
 
-void Breakpoint::setLocation(const QString& location)
+int Breakpoint::line() const {
+    return m_line;
+}
+void Breakpoint::setLine(int line) {
+    m_line = line;
+    reportChange(LocationColumn);
+}
+void Breakpoint::setUrl(const KUrl& url) {
+    m_url = url;
+    reportChange(LocationColumn);
+}
+KUrl Breakpoint::url() const {
+    return m_url;
+}
+void Breakpoint::setLocation(const KUrl& url, int line)
 {
-    setColumn(LocationColumn, location);
+    m_url = url;
+    m_line = line;
+    reportChange(LocationColumn);
 }
 
-QString KDevelop::Breakpoint::location()
-{
+QString KDevelop::Breakpoint::location() {
     return data(LocationColumn, Qt::DisplayRole).toString();
 }
+
 
 void Breakpoint::save(KConfigGroup& config)
 {
@@ -223,7 +248,7 @@ void Breakpoint::setAddress(const QString& address)
     reportChange();
 }
 
-QString Breakpoint::address()
+QString Breakpoint::address() const
 {
     return address_;
 }
@@ -234,7 +259,7 @@ void Breakpoint::setPending(bool pending)
     reportChange();
 }
 
-bool Breakpoint::pending()
+bool Breakpoint::pending() const
 {
     return pending_;
 }
@@ -245,22 +270,22 @@ void Breakpoint::setHitCount(int hitCount)
     reportChange();
 }
 
-bool Breakpoint::hitCount()
+bool Breakpoint::hitCount() const
 {
     return hitCount_;
 }
 
-bool Breakpoint::pleaseEnterLocation()
+bool Breakpoint::pleaseEnterLocation() const
 {
     return pleaseEnterLocation_;
 }
 
-bool Breakpoint::deleted()
+bool Breakpoint::deleted() const
 {
     return deleted_;
 }
 
-bool Breakpoint::enabled()
+bool Breakpoint::enabled() const
 {
     return data(EnableColumn, Qt::CheckStateRole).toBool();
 }
