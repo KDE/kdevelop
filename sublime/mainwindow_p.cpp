@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2006-2007 Alexander Dymo  <adymo@kdevelop.org>       *
+ *   Copyright 2006-2009 Alexander Dymo  <adymo@kdevelop.org>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -29,6 +29,8 @@
 #include <QtGui/QCommonStyle>
 
 #include <kdebug.h>
+#include <klocale.h>
+#include <kactionmenu.h>
 #include <kacceleratormanager.h>
 #include <kactioncollection.h>
 
@@ -105,10 +107,131 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 :controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
  ignoreDockShown(false), autoAreaSettingsSave(false), m_mainWindow(w)
 {
-    recreateCentralWidget();
+    KActionCollection *ac = m_mainWindow->actionCollection();
 
     KAction* action = new AreaSelectionAction(this, controller);
-    m_mainWindow->actionCollection()->addAction("switch_area", action);
+    ac->addAction("switch_area", action);
+
+    action = new KAction(i18n("Show Left Dock"), this);
+    action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_L);
+    connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
+    ac->addAction("show_left_dock", action);
+
+    action = new KAction(i18n("Show Right Dock"), this);
+    action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_R);
+    connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
+    ac->addAction("show_right_dock", action);
+
+    action = new KAction(i18n("Show Bottom Dock"), this);
+    action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_B);
+    connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
+    ac->addAction("show_bottom_dock", action);
+
+    action = new KAction(i18n("Show Top Dock"), this);
+    action->setCheckable(true);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_T);
+    connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
+    ac->addAction("show_top_dock", action);
+
+    action = new KAction(i18n("Focus Editor"), this);
+    action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
+    m_mainWindow->actionCollection()->addAction("focus_editor", action);
+
+    action = new KAction(i18n("Hide/Restore Docks"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
+    connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
+    ac->addAction("hide_all_docks", action);
+
+    action = new KAction(i18n("Select Next Dock"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
+    connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
+    ac->addAction("select_next_dock", action);
+
+    action = new KAction(i18n("Select Previous Dock"), this);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
+    connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
+    ac->addAction("select_previous_dock", action);
+
+    action = new KAction(i18n("Remove view"), this);
+    connect(action, SIGNAL(triggered(bool)), SLOT(removeView()));
+    ac->addAction("remove_view", action);
+
+    action = new KAction(i18n("Anchor Current Dock"), this);
+    action->setCheckable(true);
+    action->setEnabled(false);
+    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_A);
+    connect(action, SIGNAL(toggled(bool)), SLOT(anchorCurrentDock(bool)));
+    ac->addAction("anchor_current_dock", action);
+
+    action = new KAction(i18n("Maximize Current Dock"), this);
+    action->setCheckable(true);
+    action->setEnabled(false);
+    connect(action, SIGNAL(toggled(bool)), SLOT(maximizeCurrentDock(bool)));
+    ac->addAction("maximize_current_dock", action);
+
+    action = new KActionMenu(i18n("Docks"), this);
+    ac->addAction("docks_submenu", action);
+
+    recreateCentralWidget();
+}
+
+void MainWindowPrivate::showLeftDock(bool b)
+{
+    idealMainWidget->showLeftDock(b);
+}
+
+void MainWindowPrivate::showBottomDock(bool b)
+{
+    idealMainWidget->showBottomDock(b);
+}
+
+void MainWindowPrivate::showRightDock(bool b)
+{
+    idealMainWidget->showRightDock(b);
+}
+
+void MainWindowPrivate::showTopDock(bool b)
+{
+    idealMainWidget->showTopDock(b);
+}
+
+void MainWindowPrivate::anchorCurrentDock(bool b)
+{
+    idealMainWidget->anchorCurrentDock(b);
+}
+
+void MainWindowPrivate::maximizeCurrentDock(bool b)
+{
+    idealMainWidget->maximizeCurrentDock(b);
+}
+
+void MainWindowPrivate::focusEditor()
+{
+    idealMainWidget->focusEditor();
+}
+
+void MainWindowPrivate::toggleDocksShown()
+{
+    idealMainWidget->toggleDocksShown();
+}
+
+void MainWindowPrivate::removeView()
+{
+    idealMainWidget->removeView();
+}
+
+void MainWindowPrivate::selectNextDock()
+{
+    idealMainWidget->selectNextDock();
+}
+
+void MainWindowPrivate::selectPreviousDock()
+{
+    idealMainWidget->selectPreviousDock();
 }
 
 Area::WalkerMode MainWindowPrivate::IdealToolViewCreator::operator() (View *view, Sublime::Position position)

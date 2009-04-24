@@ -466,69 +466,17 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
 
     connect(parent, SIGNAL(settingsLoaded()), m_mainLayout, SLOT(loadSettings()));
 
-    KAction* action = m_showLeftDock = new KAction(i18n("Show Left Dock"), this);
-    action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_L);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));
-    ac->addAction("show_left_dock", action);
+    Q_ASSERT(parent->action("docks_submenu"));
+    Q_ASSERT(qobject_cast<KActionMenu*>(parent->action("docks_submenu")));
 
-    m_showRightDock = action = new KAction(i18n("Show Right Dock"), this);
-    action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_R);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showRightDock(bool)));
-    ac->addAction("show_right_dock", action);
+    m_showLeftDock = qobject_cast<KAction*>(parent->action("show_left_dock"));
+    m_showRightDock = qobject_cast<KAction*>(parent->action("show_right_dock"));
+    m_showBottomDock = qobject_cast<KAction*>(parent->action("show_bottom_dock"));
+    m_showTopDock = qobject_cast<KAction*>(parent->action("show_top_dock"));
 
-    m_showBottomDock = action = new KAction(i18n("Show Bottom Dock"), this);
-    action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_B);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showBottomDock(bool)));
-    ac->addAction("show_bottom_dock", action);
-
-    m_showTopDock = action = new KAction(i18n("Show Top Dock"), this);
-    action->setCheckable(true);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_T);
-    connect(action, SIGNAL(toggled(bool)), SLOT(showTopDock(bool)));
-    ac->addAction("show_top_dock", action);
-
-    action = new KAction(i18n("Hide/Restore Docks"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
-    connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
-    ac->addAction("hide_all_docks", action);
-
-    action = new KAction(i18n("Focus Editor"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_E);
-    connect(action, SIGNAL(triggered(bool)), SLOT(focusEditor()));
-    ac->addAction("focus_editor", action);
-
-    m_anchorCurrentDock = action = new KAction(i18n("Anchor Current Dock"), this);
-    action->setCheckable(true);
-    action->setEnabled(false);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_A);
-    connect(action, SIGNAL(toggled(bool)), SLOT(anchorCurrentDock(bool)));
-    ac->addAction("anchor_current_dock", action);
-
-    m_maximizeCurrentDock = action = new KAction(i18n("Maximize Current Dock"), this);
-    action->setCheckable(true);
-    action->setEnabled(false);
-    connect(action, SIGNAL(toggled(bool)), SLOT(maximizeCurrentDock(bool)));
-    ac->addAction("maximize_current_dock", action);
-
-    action = new KAction(i18n("Select Next Dock"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
-    connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
-    ac->addAction("select_next_dock", action);
-
-    action = new KAction(i18n("Select Previous Dock"), this);
-    action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
-    connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
-    ac->addAction("select_previous_dock", action);
-
-    action = new KAction(i18n("Remove view"), this);
-    connect(action, SIGNAL(triggered(bool)), SLOT(removeView()));
-    ac->addAction("remove_view", action);
-
-    action = m_docks = new KActionMenu(i18n("Docks"), this);
-    ac->addAction("docks_submenu", action);
+    m_anchorCurrentDock = qobject_cast<KAction*>(parent->action("anchor_current_dock"));
+    m_maximizeCurrentDock = qobject_cast<KAction*>(parent->action("maximize_current_dock"));
+    m_docks = qobject_cast<KActionMenu*>(parent->action("docks_submenu"));
 }
 
 void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)

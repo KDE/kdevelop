@@ -108,6 +108,18 @@ private slots:
     void widgetResized(IdealMainLayout::Role role, int thickness);
     void widgetCloseRequest(QWidget* widget);
 
+    void showLeftDock(bool b);
+    void showRightDock(bool b);
+    void showBottomDock(bool b);
+    void showTopDock(bool b);
+    void anchorCurrentDock(bool b);
+    void maximizeCurrentDock(bool b);
+    void focusEditor();
+    void toggleDocksShown();
+    void selectNextDock();
+    void selectPreviousDock();
+    void removeView();
+
 protected:
     virtual bool eventFilter(QObject *, QEvent *event);
 
