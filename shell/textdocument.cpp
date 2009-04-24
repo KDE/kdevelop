@@ -152,6 +152,14 @@ struct TextDocumentPrivate {
         EditorIntegrator::addDocument( m_textDocument->textDocument() );
         m_textDocument->notifyLoaded();
     }
+    
+    void documentSaved(KTextEditor::Document* document, bool saveAs)
+    {
+        Q_UNUSED(document);
+        Q_UNUSED(saveAs);
+        m_textDocument->notifySaved();
+        m_textDocument->notifyStateChanged();
+    }
 
 private:
     TextDocument *m_textDocument;
@@ -237,6 +245,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
                  this, SLOT(textChanged(KTextEditor::Document*)));
         connect(d->document, SIGNAL(documentUrlChanged(KTextEditor::Document*)),
                  this, SLOT(documentUrlChanged(KTextEditor::Document*)));
+        connect(d->document, SIGNAL(documentSavedOrUploaded(KTextEditor::Document*,bool)),
+                 this, SLOT(documentSaved(KTextEditor::Document*,bool)));
 
         KTextEditor::ModificationInterface *iface = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         if (iface)
@@ -347,8 +357,6 @@ bool TextDocument::save(DocumentSaveMode mode)
 
     if (d->document->save())
     {
-        notifyStateChanged();
-        notifySaved();
         return true;
     }
     return false;
