@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="74" name="kdevelop" >
+<kpartgui version="77" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -26,6 +26,9 @@
   <Menu name="view">
     <text context="@title:menu">&amp;View</text>
     <Action name="add_toolview"/>
+    <Action name="select_next_dock"/>
+    <Action name="select_previous_dock"/>
+    <Action name="docks_submenu"/>
     <Action name="user_interface"/>
     <DefineGroup name="history_operations"/>
     <Action name="history_back"/>
@@ -128,17 +131,13 @@
     <Separator/>
     <DefineGroup name="window_operations"/>
     <Separator/>
+    <Action name="focus_editor"/>
+    <Separator/>
     <Action name="show_left_dock"/>
     <Action name="show_right_dock"/>
     <Action name="show_top_dock"/>
     <Action name="show_bottom_dock"/>
-    <Action name="focus_editor"/>
     <Action name="hide_all_docks"/>
-    <Action name="anchor_current_dock"/>
-    <Action name="maximize_current_dock"/>
-    <Action name="select_next_dock"/>
-    <Action name="select_previous_dock"/>
-    <Action name="docks_submenu"/>
     <Separator/>
     <Merge/>
   </Menu>
