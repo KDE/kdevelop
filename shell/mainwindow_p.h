@@ -92,6 +92,8 @@ public Q_SLOTS:
 
     void quitAll();
 
+    void fixToolbar();
+
     bool applicationQuitRequested() const;
 
     void configureSessions();
