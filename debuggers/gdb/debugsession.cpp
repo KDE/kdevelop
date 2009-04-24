@@ -126,8 +126,6 @@ void DebugSession::setupController()
     // TODO: reimplement / re-enable
     //connect(this, SIGNAL(addWatchVariable(const QString&)), controller->variables(), SLOT(slotAddWatchVariable(const QString&)));
     //connect(this, SIGNAL(evaluateExpression(const QString&)), controller->variables(), SLOT(slotEvaluateExpression(const QString&)));
-
-    //TODO NIKO connect(this, SIGNAL(toggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)), m_controller->breakpoints(), SLOT(slotToggleBreakpoint(const KUrl&, const KTextEditor::Cursor&)));
 }
 
 void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
@@ -312,17 +310,6 @@ void DebugSession::stepInto()
 void DebugSession::stepIntoInstruction()
 {
     m_controller->slotStepIntoInstruction();
-}
-void DebugSession::toggleBreakpoint()
-{
-    if (KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument()) {
-      KTextEditor::Cursor cursor = document->cursorPosition();
-
-      if (!cursor.isValid())
-        return;
-
-      emit toggleBreakpoint(document->url(), cursor);
-    }
 }
 
 void DebugSession::slotDebuggerAbnormalExit()

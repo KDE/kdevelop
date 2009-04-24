@@ -67,7 +67,6 @@ public:
 Q_SIGNALS:
     void applicationStandardOutputLines(const QStringList& lines);
     void applicationStandardErrorLines(const QStringList& lines);
-    void toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor);
     void showMessage(const QString&, int);
     void reset();
     void raiseOutputViews();
@@ -88,7 +87,6 @@ public Q_SLOTS:
     virtual void stepInto();
     virtual void stepOverInstruction();
     virtual void stepOut();
-    virtual void toggleBreakpoint();
 
     void examineCoreFile(const KUrl& coreFile);
     void attachToProcess(int pid);
