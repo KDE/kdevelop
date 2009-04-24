@@ -27,13 +27,13 @@
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
 #include "breakpoints.h"
-#include <KTextEditor/SmartCursorWatcher>
 
 class KUrl;
 
 namespace KParts { class Part; }
 namespace KTextEditor {
 class Cursor;
+class SmartCursor;
 }
 
 
@@ -43,7 +43,7 @@ class IDocument;
 class Breakpoints;
 class Breakpoint;
 
-class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel, private KTextEditor::SmartCursorWatcher
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel
 {
     Q_OBJECT
 
@@ -103,7 +103,7 @@ private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
-    
+    void cursorDeleted(KTextEditor::SmartCursor* cursor);    
 protected:
     Breakpoints* universe_;
 
@@ -118,8 +118,7 @@ private:
     friend class Breakpoint;
     void _breakpointDeleted(Breakpoint *breakpoint);
     
-    //reimplemented KTextEditor::SmartCursorWatcher
-    virtual void cursorDeleted(KTextEditor::SmartCursor* cursor);
+    bool m_dontUpdateMarks;
 };
 
 

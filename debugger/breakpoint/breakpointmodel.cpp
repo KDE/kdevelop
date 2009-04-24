@@ -35,6 +35,7 @@
 #include "../interfaces/idocument.h"
 #include "breakpoint.h"
 #include "breakpoints.h"
+#include <KTextEditor/SmartCursorNotifier>
 
 
 using namespace KDevelop;
@@ -42,7 +43,7 @@ using namespace KTextEditor;
 
 BreakpointModel::BreakpointModel(QObject* parent)
     : TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition", parent),
-      universe_(new Breakpoints(this))
+      universe_(new Breakpoints(this)), m_dontUpdateMarks(false)
 {
     setRootItem(universe_);
     universe_->load();
@@ -174,6 +175,8 @@ void BreakpointModel::markChanged(
             KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(document);
             if (smart) {
                 KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(mark.line, 0));
+                connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
+                            SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
                 breakpoint->setSmartCursor(cursor);
             }
             
@@ -502,6 +505,8 @@ void KDevelop::BreakpointModel::_breakpointDeleted(KDevelop::Breakpoint* breakpo
 
 void KDevelop::BreakpointModel::updateMarks()
 {
+    if (m_dontUpdateMarks) return;
+
     QMap<KUrl, QSet<int> > breakpoints;
     for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
         Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
@@ -542,12 +547,13 @@ void KDevelop::BreakpointModel::updateMarks()
             if (!smart) continue;
             for (int j=0; j<breakpointsItem()->breakpointCount(); ++j) {
                 Breakpoint *breakpoint = breakpointsItem()->breakpoint(j);
-                kDebug() << breakpoint;
                 if (breakpoint->pleaseEnterLocation()) continue;
                 if (breakpoint->deleted()) continue;
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                 if (i.key() == breakpoint->url() && line == breakpoint->line()) {
                     KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(line, 0));
+                    connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
+                                SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
                     breakpoint->setSmartCursor(cursor);
                 }
             }
@@ -563,7 +569,9 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
         if (breakpoint->smartCursor()) {
             if (breakpoint->smartCursor()->document() != doc->textDocument()) continue;
             if (breakpoint->smartCursor()->line() == breakpoint->line()) continue;
+            m_dontUpdateMarks = true;
             breakpoint->setLine(breakpoint->smartCursor()->line());
+            m_dontUpdateMarks = false;
         }
     }
 }
