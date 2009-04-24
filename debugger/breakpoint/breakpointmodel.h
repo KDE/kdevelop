@@ -18,14 +18,16 @@
    If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 #ifndef KDEV_BREAKPOINTMODEL_H
 #define KDEV_BREAKPOINTMODEL_H
 
-#include <KDE/KTextEditor/MarkInterface>
+#include <KTextEditor/MarkInterface>
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
 #include "breakpoints.h"
+#include <KTextEditor/SmartCursorWatcher>
 
 class KUrl;
 
@@ -34,13 +36,14 @@ namespace KTextEditor {
 class Cursor;
 }
 
+
 namespace KDevelop
 {
 class IDocument;
 class Breakpoints;
 class Breakpoint;
 
-class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel, private KTextEditor::SmartCursorWatcher
 {
     Q_OBJECT
 
@@ -53,7 +56,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
-
+ 
     enum Columns {
         Enable,
         Type,
@@ -87,6 +90,8 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void updateMarks();
+
     void slotPartAdded(KParts::Part* part);
 
     /**
@@ -96,8 +101,8 @@ private Q_SLOTS:
     * these source changes.
     */
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
-
     void textDocumentCreated(KDevelop::IDocument*);
+    void documentSaved(KDevelop::IDocument*);
     
 protected:
     Breakpoints* universe_;
@@ -112,9 +117,9 @@ protected:
 private:
     friend class Breakpoint;
     void _breakpointDeleted(Breakpoint *breakpoint);
-
-private Q_SLOTS:
-    void updateMarks();
+    
+    //reimplemented KTextEditor::SmartCursorWatcher
+    virtual void cursorDeleted(KTextEditor::SmartCursor* cursor);
 };
 
 

@@ -26,7 +26,9 @@
 #include "../util/treeitem.h"
 
 class KConfigGroup;
-
+namespace KTextEditor {
+class SmartCursor;
+}
 namespace KDevelop
 {
 class BreakpointModel;
@@ -93,6 +95,9 @@ public:
     
     bool enabled() const;
     
+    void setSmartCursor(KTextEditor::SmartCursor *cursor);
+    KTextEditor::SmartCursor *smartCursor() const;
+    
     using TreeItem::removeSelf;
 protected:
     friend class Breakpoints;
@@ -112,6 +117,7 @@ protected:
     bool pleaseEnterLocation_;
     KUrl m_url;
     int m_line;
+    KTextEditor::SmartCursor *m_smartCursor;
 
     static const char *string_kinds[LastBreakpointKind];
 };

@@ -34,7 +34,8 @@ using namespace KDevelop;
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), id_(-1), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
-  pending_(false), pleaseEnterLocation_(false), m_line(-1)
+  pending_(false), pleaseEnterLocation_(false), m_line(-1),
+  m_smartCursor(0)
 {
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
@@ -289,6 +290,14 @@ bool Breakpoint::enabled() const
 {
     return data(EnableColumn, Qt::CheckStateRole).toBool();
 }
+
+void KDevelop::Breakpoint::setSmartCursor(KTextEditor::SmartCursor* cursor) {
+    m_smartCursor = cursor;
+}
+KTextEditor::SmartCursor* KDevelop::Breakpoint::smartCursor() const {
+    return m_smartCursor;
+}
+
 
 
 const int Breakpoint::EnableColumn;
