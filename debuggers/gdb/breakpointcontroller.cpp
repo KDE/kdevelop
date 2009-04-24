@@ -166,6 +166,7 @@ void BreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
 
 void BreakpointController::slotEvent(event_t e)
 {
+    KDevelop::Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
     switch(e) {
         case program_state_changed:
             controller()->addCommand(
@@ -178,21 +179,29 @@ void BreakpointController::slotEvent(event_t e)
         case connected_to_program:
         {
             kDebug() << "connected to program";
-            KDevelop::Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
             kDebug() << breakpoints->breakpointCount();
             for (int i=0; i < breakpoints->breakpointCount(); ++i) {
                 KDevelop::Breakpoint *breakpoint = breakpoints->breakpoint(i);
                 if (breakpoint->pleaseEnterLocation()) continue;
                 m_dirty[breakpoint].clear();
                 m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
-                breakpoint->setId(-1);
+                m_dirty[breakpoint].insert(KDevelop::Breakpoint::ConditionColumn);
                 sendMaybe(breakpoint);
             }
             break;
         }
         case debugger_exited:
-            breakpointModel()->breakpointsItem()->markOut();
+        {
+            for (int i=0; i < breakpoints->breakpointCount(); ++i) {
+                KDevelop::Breakpoint *breakpoint = breakpoints->breakpoint(i);
+                if (breakpoint->pleaseEnterLocation()) continue;
+                m_dirty[breakpoint].clear();
+                m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
+                m_dirty[breakpoint].insert(KDevelop::Breakpoint::ConditionColumn);
+                breakpoint->setId(-1);
+            }
             break;
+        }
         default:
             break;
     }
