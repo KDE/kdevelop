@@ -689,6 +689,7 @@ void DocumentController::closeAllOtherDocuments()
                 }
             }
         }
+        activeView->widget()->setFocus();
     }
 }
 
