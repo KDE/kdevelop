@@ -38,15 +38,16 @@ namespace GDBDebugger
 {
 class GDBController;
 
-class Thread : public KDevelop::StackItem
+class Thread : public KDevelop::ThreadItem
 {
     Q_OBJECT
 public:
-    Thread(KDevelop::StackModel* model, KDevelop::TreeItem* parent, GDBController *controller,
+    Thread(KDevelop::StackModel* model, GDBController *controller,
            const GDBMI::Value& thread);
 
     int id() const { return id_; }
 
+    virtual void clicked();
     void updateSelf(const GDBMI::Value& thread, bool initial = false);
 
     void fetchMoreChildren();
@@ -56,14 +57,14 @@ public:
     GDBController* controller_;
     int id_;
 
-    static const int step = 5;
+    static const int step = 25;
 };
 
-class Frame : public KDevelop::StackItem
+class Frame : public KDevelop::FrameItem
 {
     Q_OBJECT
 public:
-    Frame(KDevelop::StackModel* model, Thread* parent, const GDBMI::Value& frame);
+    Frame(KDevelop::FramesModel* model, Thread* parent, const GDBMI::Value& frame);
     void updateSelf(const GDBMI::Value& frame);
 
     Thread* thread() { return static_cast<Thread*>(parentItem); }

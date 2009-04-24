@@ -61,8 +61,8 @@ QPair<QString, int> get_source(const GDBMI::Value &frame)
     return ret;
 }
 
-Frame::Frame(StackModel* model, Thread* parent, const GDBMI::Value& frame)
-    : StackItem(model, parent, "#")
+Frame::Frame(FramesModel* model, Thread* parent, const GDBMI::Value& frame)
+    : FrameItem(model)
 {
     updateSelf(frame);
 }
@@ -72,13 +72,13 @@ void Frame::updateSelf(const GDBMI::Value& frame)
     setInformation(frame["level"].toInt(), get_function_or_address(frame), get_source(frame));
 }
 
-Thread::Thread(KDevelop::StackModel* model, KDevelop::TreeItem* parent, GDBDebugger::GDBController* controller, const GDBMI::Value& thread)
-    : StackItem(model, parent, i18n("Frame ")), controller_(controller)
+Thread::Thread(KDevelop::StackModel* model, GDBDebugger::GDBController* controller, const GDBMI::Value& thread)
+    : ThreadItem(model), controller_(controller)
 {
     id_ = thread["id"].toInt();
 
     updateSelf(thread, true);
-    setHasMoreInitial(true);
+    setHasMoreInitial(false);
 }
 
 void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
@@ -90,18 +90,6 @@ void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
 
     if (isExpanded())
         fetchMoreChildren_1(true);
-    else if (!initial) {
-        /* We actually don't know if there are children or not.
-           I don't really want to emit -stack-list-frames for each
-           thread, and -thread-info does not say if thread has more
-           that one frame.
-           So, mark this item as having children.  If there are none,
-           which happens inside main, user will see the frames disappear
-           when opening item.  It's better than showing the item as
-           having no children, as otherwise user won't be able to
-           expand it.  */
-        setHasMore(true);
-    }
 }
 
 void Thread::fetchMoreChildren()
@@ -124,7 +112,7 @@ void Thread::fetchMoreChildren_1(bool clear)
     if (clear)
         now = 0;
     else
-        now = childItems.size();
+        now = framesModel()->framesCount();
     int next = now + step + 1;
     if (clear)
         now = 0;
@@ -149,35 +137,34 @@ void Thread::handleFrameList(const GDBMI::ResultRecord& r)
            Also note that we ignore the first stack frame
            here.  */
         int i;
-        for (i = 0; i < step && (i+1) < stack.size(); ++i)
+        for (i = 0; i < step && i< stack.size(); ++i)
         {
-            if (i < childItems.count())
+            if (i < framesModel()->framesCount())
             {
                 Frame *f = static_cast<Frame *>(child(i));
-                f->updateSelf(stack[i+1]);
+                f->updateSelf(stack[i]);
             }
             else
             {
-                appendChild(new Frame(stackModel(), this, stack[i+1]));
+                framesModel()->addFrame(new Frame(framesModel(), this, stack[i]));
             }
         }
-        while (i < childItems.count())
+        while (i < framesModel()->framesCount())
             removeChild(i);
-
-        setHasMore(stack.size() > step+1);
+        framesModel()->setHasMoreFrames(stack.size() > step);
     }
     else
     {
-        if (first  != childItems.size())
+        if (first != framesModel()->framesCount())
         {
             kDebug(9012) << "Got wrong frames\n";
             return;
         }
         
-        for (int i = 0; i < step && (i+1) < stack.size(); ++i)
-            appendChild(new Frame(stackModel(), this, stack[i+1]));
+        for (int i = 0; i < step && i<stack.size(); ++i)
+            framesModel()->addFrame(new Frame(framesModel(), this, stack[i]));
         
-        setHasMore(stack.size() > step);
+        framesModel()->setHasMoreFrames(stack.size() > step);
     }
 }
 
@@ -251,7 +238,7 @@ private:
         }
 
         for (; gidx >= 0; --gidx)
-            appendChild(new Thread(mModel, this, controller_, threads[gidx]));
+            appendChild(new Thread(mModel, controller_, threads[gidx]));
 
         for (int i = 0; i < childItems.size(); ++i)
         {
@@ -271,8 +258,13 @@ private:
 };
 }
 
+void GDBDebugger::Thread::clicked()
+{
+    KDevelop::ThreadItem::clicked();
+}
+
 StackManager::StackManager(GDBController* controller)
-  : KDevelop::StackModel(QVector<QString>() << "ID" << "Function" << "Source"),
+  : KDevelop::StackModel(),
     controller_(controller)
 {
     universe_ = new DebugUniverse(this, controller, this);
