@@ -37,16 +37,6 @@ BreakpointModel* Breakpoints::model()
     return static_cast<BreakpointModel*>(model_);
 }
 
-void Breakpoints::markOut()
-{
-    for (int i = 0; i < childItems.size(); ++i)
-    {
-        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
-        Q_ASSERT(b);
-        b->markOut();
-    }
-}
-
 void Breakpoints::save()
 {
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");

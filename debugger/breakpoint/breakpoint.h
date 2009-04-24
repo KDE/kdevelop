@@ -53,10 +53,6 @@ public:
     void setId(int id);
     void fetchMoreChildren() {}
 
-    /** Mark this breakpoint as no longer inserted, due to GDB
-       no longer running.  */
-    void markOut();
-
     void setColumn(int index, const QVariant& value);
     void setDeleted();
 
@@ -65,7 +61,6 @@ public:
     QVariant data(int column, int role) const;
 
     bool pending() const { return pending_; }
-    bool dirty() const { return !dirty_.empty(); }
     
     void save(KConfigGroup& config);
 
@@ -102,7 +97,6 @@ protected:
 
     int id_;
     bool enabled_;
-    QSet<int> dirty_;
     QSet<int> errors_;
     bool deleted_;
     int hitCount_;

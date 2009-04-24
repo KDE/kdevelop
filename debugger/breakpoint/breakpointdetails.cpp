@@ -100,12 +100,14 @@ void BreakpointDetails::setItem(Breakpoint *b)
     hits_->setEnabled(true);
     ignore_->setEnabled(true);
 
+    /* TODO NIKO
     if (b->pending())
         status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
     else if (b->dirty())
         status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
     else
         status_->setText("Breakpoint is active");
+     */
 
     if (b->hitCount())
         hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));

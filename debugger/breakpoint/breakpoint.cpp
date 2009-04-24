@@ -60,8 +60,6 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
     QString location = config.readEntry("location", "");
     QString condition = config.readEntry("condition", "");
 
-    dirty_.insert(LocationColumn);
-
     setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
 }
 
@@ -100,17 +98,9 @@ void Breakpoint::setColumn(int index, const QVariant& value)
         }
     }
 
-    dirty_.insert(index);
     errors_.remove(index);
 
     reportChange(index);
-}
-
-void Breakpoint::markOut()
-{
-    id_ = -1;
-    dirty_.insert(LocationColumn);
-    dirty_.insert(ConditionColumn);
 }
 
 QVariant Breakpoint::data(int column, int role) const
@@ -150,7 +140,7 @@ QVariant Breakpoint::data(int column, int role) const
     {
         if (role == Qt::DecorationRole)
         {
-            if (dirty_.empty())
+            if (false/*dirty_.empty()*/)
             {
                 if (pending_)
                     return KIcon("help-contents");            
@@ -158,6 +148,7 @@ QVariant Breakpoint::data(int column, int role) const
             }
             else
                 return KIcon("system-switch-user");
+            
         }
         else if (role == Qt::DisplayRole)
             return "";

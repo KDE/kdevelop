@@ -35,8 +35,6 @@ class KDEVPLATFORMDEBUGGER_EXPORT Breakpoints : public KDevelop::TreeItem
 public:
     Breakpoints(BreakpointModel *model);
 
-    void markOut();
-
     void remove(const QModelIndex &index);
 
     KDevelop::Breakpoint* addCodeBreakpoint();
