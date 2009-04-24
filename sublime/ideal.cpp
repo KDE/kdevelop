@@ -136,6 +136,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
         cornerLayout->setMargin(0);
         cornerLayout->setSpacing(0);
         statusLayout->addWidget(_corner);
+        statusLayout->addStretch(1);
     }
     else
         (void) new IdealButtonBarLayout(orientation(), this);
