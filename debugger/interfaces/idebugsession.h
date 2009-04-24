@@ -84,7 +84,6 @@ public Q_SLOTS:
     virtual void stepInto() = 0;
     virtual void stepOverInstruction() = 0;
     virtual void stepOut() = 0;
-    virtual void toggleBreakpoint() = 0;
 
 Q_SIGNALS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);

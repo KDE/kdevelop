@@ -75,7 +75,9 @@ Breakpoint *Breakpoints::breakpointById(int id)
 void Breakpoints::remove(const QModelIndex &index)
 {
     Breakpoint *b = static_cast<Breakpoint *>(model()->itemForIndex(index));
-    b->setDeleted();
+    if (!b->pleaseEnterLocation()) {
+        b->setDeleted();
+    }
 }
 
 Breakpoint* Breakpoints::breakpoint(int row)
@@ -132,10 +134,7 @@ Breakpoint* Breakpoints::addReadWatchpoint()
 {
     Breakpoint* n = new Breakpoint(model(), this, Breakpoint::ReadBreakpoint);
     insertChild(childItems.size()-1, n);
-
     return n;
 }
-
-
 
 #include "breakpoints.moc"

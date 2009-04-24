@@ -467,9 +467,13 @@ void DebugController::stepOut() {
         m_currentSession->stepOut();
     }
 }
-void DebugController::toggleBreakpoint() {
-    if (m_currentSession) {
-        m_currentSession->toggleBreakpoint();
+
+void DebugController::toggleBreakpoint()
+{
+    if (KDevelop::IDocument* document = KDevelop::ICore::self()->documentController()->activeDocument()) {
+        KTextEditor::Cursor cursor = document->cursorPosition();
+        if (!cursor.isValid()) return;
+        breakpointModel()->toggleBreakpoint(document->url(), cursor);
     }
 }
 

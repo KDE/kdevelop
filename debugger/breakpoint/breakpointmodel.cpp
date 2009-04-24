@@ -3,6 +3,7 @@
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
    Copyright (C) 2006, 2008 Vladimir Prus <ghost@cs.msu.su>
    Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
+   Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,6 +54,7 @@ BreakpointModel::BreakpointModel(QObject* parent)
             universe_, SLOT(save()));
     connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
             universe_, SLOT(save()));
+    connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateMarks()));
 
     //new ModelTest(this, this);
 
@@ -87,13 +89,8 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
         iface->setEditableMarks( BookmarkMark | BreakpointMark );
-
-        /*
-        // When a file is loaded then we need to tell the editor (display window)
-        // which lines contain a breakpoint.
-        foreach (Breakpoint* breakpoint, universe_)
-            adjustMark(breakpoint, true);
-        */
+        
+        updateMarks();
     }
 }
 
@@ -161,9 +158,19 @@ void BreakpointModel::markChanged(
         return;
 
     QString location = document->url().toLocalFile(KUrl::RemoveTrailingSlash) + ":" + QString::number(mark.line+1);
+    kDebug() << action << location;
     if (action == KTextEditor::MarkInterface::MarkAdded) {
-        // FIXME: check that there's no breakpoint at this line already?
-        universe_->addCodeBreakpoint(location);
+        bool alreadyExists = false;
+        for(int i=0; i<universe_->breakpointCount(); ++i) {
+            Breakpoint *b = universe_->breakpoint(i);
+            if (b->location() == location && !b->deleted()) {
+                alreadyExists = true;
+                break;
+            }
+        }
+        if (!alreadyExists) {
+            universe_->addCodeBreakpoint(location);
+        }
     } else {
         // Find this breakpoint and delete it
         for(int i=0; i<universe_->breakpointCount(); ++i) {
@@ -466,32 +473,77 @@ QModelIndex BreakpointModel::indexForBreakpoint(Breakpoint * breakpoint, int col
 
 
 
-void BreakpointModel::slotToggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
+void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-    slotToggleBreakpoint(url.toLocalFile(), cursor.line() + 1);
+    toggleBreakpoint(url.toLocalFile(KUrl::RemoveTrailingSlash), cursor.line() + 1);
 }
 
-void BreakpointModel::slotToggleBreakpoint(const QString &fileName, int lineNum)
+void BreakpointModel::toggleBreakpoint(const QString &fileName, int lineNum)
 {
-    // FIXME: implement.
-}
+    QString location = fileName + ":" + QString::number(lineNum);
 
-void KDevelop::BreakpointModel::emitBreakpointDeleted(KDevelop::Breakpoint* breakpoint)
-{
-    kDebug() << breakpoint;
-    
-    QString location = breakpoint->location().left(breakpoint->location().lastIndexOf(':'));
-    int line = breakpoint->location().right(breakpoint->location().length() - breakpoint->location().lastIndexOf(':') - 1).toInt();
-    line--;
-    kDebug() << location << line;
-    foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
-        KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-        if (doc->url().toLocalFile(KUrl::RemoveTrailingSlash) == location) {
-            mark->removeMark(line, BreakpointMark | ActiveBreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark);
+    for(int i=0; i<universe_->breakpointCount(); ++i) {
+        Breakpoint *b = universe_->breakpoint(i);
+        if (b->location() == location && !b->deleted()) {
+            b->setDeleted();
+            return;
         }
     }
-    
+    universe_->addCodeBreakpoint(location);
+}
+
+void KDevelop::BreakpointModel::_breakpointDeleted(KDevelop::Breakpoint* breakpoint)
+{
+    kDebug() << breakpoint;
+    updateMarks();
     emit breakpointDeleted(breakpoint);
 }
+
+
+void KDevelop::BreakpointModel::updateMarks()
+{
+    QMap<QString, QSet<int> > breakpoints;
+    for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
+        Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
+        if (breakpoint->pleaseEnterLocation()) continue;
+        if (breakpoint->deleted()) continue;
+        if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
+        QString location = breakpoint->location().left(breakpoint->location().lastIndexOf(':'));
+        int line = breakpoint->location().right(breakpoint->location().length() - breakpoint->location().lastIndexOf(':') - 1).toInt();
+        line--;
+        breakpoints[location] << line;
+    }
+    kDebug() << breakpoints;
+    foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
+        QString loc = doc->url().toLocalFile(KUrl::RemoveTrailingSlash);
+        KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+        if (!mark) continue;
+        foreach (KTextEditor::Mark *m, mark->marks()) {
+            kDebug() << m->line << m->type;
+            if (m->type & BreakpointMark) {
+                if (!breakpoints.contains(loc) || !breakpoints[loc].contains(m->line)) {
+                    kDebug() << "removeMark";
+                    mark->removeMark(m->line, BreakpointMark);
+                } else {
+                    breakpoints[loc].remove(m->line);
+                }
+            }
+        }
+    }
+    kDebug() << breakpoints;
+    
+    QMapIterator<QString, QSet<int> > i(breakpoints);
+    while (i.hasNext()) {
+        i.next();
+        foreach (int line, i.value()) {
+            IDocument *doc = ICore::self()->documentController()->documentForUrl(i.key());
+            if (!doc) continue;
+            KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+            if (!mark) continue;
+            mark->addMark(line, BreakpointMark);
+        }
+    }    
+}
+
 
 #include "breakpointmodel.moc"

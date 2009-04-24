@@ -193,7 +193,7 @@ void Breakpoint::setDeleted()
 {
     kDebug();
     deleted_ = true;
-    breakpointModel()->emitBreakpointDeleted(this);
+    breakpointModel()->_breakpointDeleted(this);
     removeSelf();
     //TODO actually delete the breakpoint after all debug engines have processed it
 }

@@ -66,6 +66,9 @@ public:
         Last = Tracing
     };
     
+    void toggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
+    void toggleBreakpoint(const QString &filename, int lineNum);
+
 protected:
     enum MarkType {
         BookmarkMark           = KTextEditor::MarkInterface::markType01,
@@ -96,10 +99,7 @@ private Q_SLOTS:
     void markChanged(KTextEditor::Document *document, KTextEditor::Mark mark, KTextEditor::MarkInterface::MarkChangeAction action);
 
     void textDocumentCreated(KDevelop::IDocument*);
-
-    void slotToggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
-    void slotToggleBreakpoint(const QString &filename, int lineNum);
-
+    
 protected:
     Breakpoints* universe_;
 
@@ -112,7 +112,10 @@ protected:
 
 private:
     friend class Breakpoint;
-    void emitBreakpointDeleted(Breakpoint* breakpoint);
+    void _breakpointDeleted(Breakpoint *breakpoint);
+
+private Q_SLOTS:
+    void updateMarks();
 };
 
 
