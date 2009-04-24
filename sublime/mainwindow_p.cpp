@@ -146,12 +146,12 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(triggered(bool)), SLOT(toggleDocksShown()));
     ac->addAction("hide_all_docks", action);
 
-    action = new KAction(i18n("Select Next Dock"), this);
+    action = new KAction(i18n("Next Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_N);
     connect(action, SIGNAL(triggered(bool)), SLOT(selectNextDock()));
     ac->addAction("select_next_dock", action);
 
-    action = new KAction(i18n("Select Previous Dock"), this);
+    action = new KAction(i18n("Previous Tool View"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_P);
     connect(action, SIGNAL(triggered(bool)), SLOT(selectPreviousDock()));
     ac->addAction("select_previous_dock", action);
@@ -173,7 +173,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, SIGNAL(toggled(bool)), SLOT(maximizeCurrentDock(bool)));
     ac->addAction("maximize_current_dock", action);
 
-    action = new KActionMenu(i18n("Docks"), this);
+    action = new KActionMenu(i18n("Tool Views"), this);
     ac->addAction("docks_submenu", action);
 
     recreateCentralWidget();
