@@ -52,7 +52,6 @@ static void gotoPrevNextWindow(bool next)
         return;
 
     int viewIndex = index->views().indexOf(activeView);
-    foreach (Sublime::View *v, index->views())
     viewIndex = next ? viewIndex + 1 : viewIndex -1;
 
     if (viewIndex < 0)
