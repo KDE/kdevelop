@@ -396,9 +396,9 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         if(textView && textView->textView()) {
             applyRange = false;
             if (range.isEmpty())
-                textView->textView()->setCursorPosition( range.start() );
+                doc->setCursorPosition( range.start() );
             else
-                textView->textView()->setSelection( range );
+                doc->setTextSelection( range );
         }else if(textView) {
             textView->setInitialRange(range);
         }
