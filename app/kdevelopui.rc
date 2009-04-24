@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="70" name="kdevelop" >
+<kpartgui version="74" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -26,14 +26,12 @@
   <Menu name="view">
     <text context="@title:menu">&amp;View</text>
     <Action name="add_toolview"/>
-    <Action name="remove_view"/>
     <Action name="user_interface"/>
     <DefineGroup name="history_operations"/>
     <Action name="history_back"/>
     <Action name="history_forward"/>
     <Separator/>
     <Action name="file_switchto"/>
-    <Action name="raise_editor"/>
     <Separator/>
     <DefineGroup name="error_operations"/>
     <Separator/>
