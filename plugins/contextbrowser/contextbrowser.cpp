@@ -232,8 +232,10 @@ void ContextBrowserPlugin::startDelayedBrowsing(KTextEditor::View* view) {
 }
 
 void ContextBrowserPlugin::hideTooTip() {
-  m_currentToolTip->deleteLater();
-  m_currentToolTip = 0;
+  if(m_currentToolTip) {
+    m_currentToolTip->deleteLater();
+    m_currentToolTip = 0;
+  }
 }
 
 
