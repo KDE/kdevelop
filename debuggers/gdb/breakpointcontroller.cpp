@@ -185,6 +185,7 @@ void BreakpointController::slotEvent(event_t e)
                 if (breakpoint->pleaseEnterLocation()) continue;
                 m_dirty[breakpoint].clear();
                 m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
+                breakpoint->setId(-1);
                 sendMaybe(breakpoint);
             }
             break;
