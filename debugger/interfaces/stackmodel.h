@@ -22,20 +22,42 @@
 #include "../util/treemodel.h"
 #include "../debuggerexport.h"
 
-namespace KDevelop {
+namespace KDevelop
+{
+class ThreadItem;
+class FrameItem;
+class DumbItem;
 
+class KDEVPLATFORMDEBUGGER_EXPORT FramesModel : public KDevelop::TreeModel
+{
+    Q_OBJECT
+    public:
+        FramesModel(QObject *parent, ThreadItem* thread);
+        
+        void addFrame(FrameItem* );
+        void setHasMoreFrames(bool);
+        void moreItems();
+        int framesCount() const;
+        void removeAll() const;
+    private slots:
+        void initialize(); 
+    private:
+        DumbItem* mRoot;
+        ThreadItem* mThread;
+};
 
 class KDEVPLATFORMDEBUGGER_EXPORT StackModel : public TreeModel
 {
     Q_OBJECT
-public:
-    StackModel(const QVector<QString>& headers, QObject *parent = 0);
+    public:
+        StackModel(QObject *parent = 0);
 
-    void setAutoUpdate(bool autoUpdate);
-    virtual void update()=0;
-
-protected:
-    bool m_autoUpdate;
+        void setAutoUpdate(bool autoUpdate);
+        virtual void update()=0;
+        FramesModel* modelForThread(int id);
+        bool hasThreads() const;
+    protected:
+        bool m_autoUpdate;
 };
 
 }

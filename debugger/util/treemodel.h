@@ -48,6 +48,7 @@ public:
     void clicked(const QModelIndex &index);
 
     void setEditable(bool);
+    TreeItem* root() const;
 
 public: // QAbstractItemModel overrides
     QVariant data(const QModelIndex &index, int role) const;

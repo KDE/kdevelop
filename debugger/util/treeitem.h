@@ -49,7 +49,7 @@ public: // Methods that the derived classes should implement
     /** Fetches more children, and adds them by calling appendChild.
         The amount of children to fetch is up to the implementation.
         After fetching, should call setHasMore.  */
-    virtual void fetchMoreChildren() = 0;
+    virtual void fetchMoreChildren()=0;
 
     virtual void setColumn(int index, const QVariant& data) { Q_UNUSED(index); Q_UNUSED(data); }
 

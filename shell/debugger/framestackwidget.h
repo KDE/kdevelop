@@ -24,25 +24,34 @@
 #ifndef KDEVELOP_FRAMESTACKWIDGET_H
 #define KDEVELOP_FRAMESTACKWIDGET_H
 
-#include "../../debugger/util/treeview.h"
+#include <QSplitter>
+
+class QModelIndex;
+class QListView;
 
 namespace KDevelop {
 class IDebugSession;
 class DebugController;
+class AsyncTreeView;
 
-class FramestackWidget : public AsyncTreeView
+class FramestackWidget : public QSplitter
 {
     Q_OBJECT
-public:
-    FramestackWidget( DebugController* controller, QWidget *parent=0 );
-    virtual ~FramestackWidget();
-protected:
-    virtual void showEvent(QShowEvent* );
-    virtual void hideEvent(QHideEvent* );
-private Q_SLOTS:
-    void sessionAdded(IDebugSession* session);
-private:
-    DebugController *m_controller;
+    public:
+        FramestackWidget( DebugController* controller, QWidget *parent=0 );
+        virtual ~FramestackWidget();
+    protected:
+        virtual void showEvent(QShowEvent* );
+        virtual void hideEvent(QHideEvent* );
+    private Q_SLOTS:
+        void sessionAdded(IDebugSession* session);
+        void setThreadShown(const QModelIndex& idx);
+        void checkFetchMoreFrames();
+        void assignSomeThread();
+    private:
+        DebugController *m_controller;
+        AsyncTreeView *mFrames;
+        QListView *mThreads;
 };
 
 }

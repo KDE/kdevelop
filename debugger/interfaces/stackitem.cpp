@@ -19,36 +19,38 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <KIcon>
+#include <KLocalizedString>
 
-KDevelop::StackItem::StackItem(KDevelop::StackModel* model, KDevelop::TreeItem* parent, const QString& prefix)
-    : TreeItem(model, parent), mPrefix(prefix), mModel(model)
-{}
+KDevelop::FrameItem::FrameItem(KDevelop::FramesModel* model)
+    : TreeItem(model, model->root()), mModel(model)
+{ Q_ASSERT(model->root()); }
 
-int KDevelop::StackItem::id() const
+int KDevelop::FrameItem::id() const
 {
     return mId;
 }
 
-void KDevelop::StackItem::setInformation(int id, const QString& name, const QPair< QString, int >& location)
+void KDevelop::FrameItem::setInformation(int id, const QString& name, const QPair< QString, int >& location)
 {
     mId=id;
     mLocation=location;
-    setData(QVector<QVariant>() << (mPrefix+QString::number(id))
+    setData(QVector<QVariant>() << QString::number(id)
                                 << name
                                 << QString(location.first+':'+QString::number(location.second)));
 }
 
-KDevelop::StackModel* KDevelop::StackItem::stackModel()
+KDevelop::FramesModel* KDevelop::FrameItem::framesModel()
 {
+    Q_ASSERT(mModel);
     return mModel;
 }
 
-void KDevelop::StackItem::clicked()
+void KDevelop::FrameItem::clicked()
 {
     ICore::self()->documentController()->openDocument(mLocation.first, KTextEditor::Cursor(mLocation.second-1, 0));
 }
 
-QVariant KDevelop::StackItem::icon(int column) const
+QVariant KDevelop::FrameItem::icon(int column) const
 {
     if(column==2) {
         KMimeType::Ptr p=KMimeType::findByUrl(mLocation.first);
@@ -56,3 +58,40 @@ QVariant KDevelop::StackItem::icon(int column) const
     }
     return QVariant();
 }
+
+void KDevelop::ThreadItem::clicked()
+{
+    KDevelop::TreeItem::clicked();
+}
+
+KDevelop::FramesModel* KDevelop::ThreadItem::framesModel()
+{
+    Q_ASSERT(mFramesModel && mFramesModel->rowCount()>=0);
+    return mFramesModel;
+}
+
+int KDevelop::ThreadItem::id() const
+{
+    return mId;
+}
+
+KDevelop::StackModel* KDevelop::ThreadItem::stackModel()
+{
+    return mStackModel;
+}
+
+KDevelop::ThreadItem::ThreadItem(KDevelop::StackModel* model)
+    : TreeItem(model, model->root()), mFramesModel(0), mStackModel(model)
+{
+    Q_ASSERT(model->root());
+    mFramesModel=new FramesModel(mStackModel, this);
+}
+
+void KDevelop::ThreadItem::setInformation(int id, const QString& name, const QPair< QString, int >& location)
+{
+    mId=id;
+    QPair< QString, int > mLocation=location;
+    setData(QVector<QVariant>() << i18n("#%1 at %2", id, name));
+}
+
+#include "moc_stackitem.cpp"

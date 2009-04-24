@@ -19,6 +19,7 @@
 #include "documentationview.h"
 #include <QAction>
 #include <QVBoxLayout>
+#include <QLabel>
 #include <KDebug>
 #include <KIcon>
 #include <KLocale>
@@ -37,6 +38,8 @@ DocumentationView::DocumentationView(QWidget* parent)
     connect(mBack, SIGNAL(triggered()), this, SLOT(browseBack()));
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
     mCurrent=mHistory.begin();
+    
+    layout()->addWidget(new QLabel(i18n("There is no documentation selected yet"), this));
 }
 
 void DocumentationView::browseBack()
@@ -59,8 +62,7 @@ void DocumentationView::browseForward()
 
 void DocumentationView::replaceView(QWidget* newView)
 {
-    if(layout()->count()!=1)
-        delete layout()->takeAt(1);
+    delete layout()->takeAt(1);
     layout()->addWidget(newView);
 }
 

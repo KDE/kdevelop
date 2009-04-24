@@ -25,22 +25,43 @@
 namespace KDevelop
 {
 class StackModel;
+class FramesModel;
 
-class KDEVPLATFORMDEBUGGER_EXPORT StackItem : public TreeItem
+class KDEVPLATFORMDEBUGGER_EXPORT ThreadItem : public TreeItem
 {
     Q_OBJECT
     public:
-        StackItem(StackModel* model, TreeItem* parent, const QString& prefix);
+        ThreadItem(StackModel* model);
+        int id() const;
+        virtual void clicked();
+        StackModel* stackModel();
+        FramesModel* framesModel();
+        
+        void setInformation(int id, const QString& name, const QPair <QString, int>& location);
+    private:
+        QPair<QString, int> mLocation;
+        int mId;
+        FramesModel* mFramesModel;
+        StackModel* mStackModel;
+};
+
+class KDEVPLATFORMDEBUGGER_EXPORT FrameItem : public TreeItem
+{
+    Q_OBJECT
+    public:
+        FrameItem(FramesModel* model);
         int id() const;
         void setInformation(int id, const QString& name, const QPair <QString, int>& location);
-        StackModel* stackModel();
+        FramesModel* framesModel();
         
         virtual void clicked();
         virtual QVariant icon(int column) const;
+        
     private:
+        virtual void fetchMoreChildren() {}
+        
         QPair<QString, int> mLocation;
-        QString mPrefix;
-        StackModel* mModel;
+        FramesModel* mModel;
         int mId;
 };
 

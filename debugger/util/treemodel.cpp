@@ -124,8 +124,10 @@ int TreeModel::rowCount(const QModelIndex &parent) const
     else
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
-
-    return parentItem->childCount();
+    if(parentItem)
+        return parentItem->childCount();
+    else
+        return 0;
 }
 
 TreeItem* TreeModel::itemForIndex(const QModelIndex& index) const
@@ -190,5 +192,11 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
     }
     return false;
 }
+
+KDevelop::TreeItem* KDevelop::TreeModel::root() const
+{
+    return root_;
+}
+
 
 #include "treemodel.moc"
