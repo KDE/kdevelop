@@ -237,6 +237,7 @@ void DocumentController::setupActions()
 
     action = d->closeAllOthers = ac->addAction( "file_closeother" );
     action->setIcon(KIcon("window-close"));
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllOtherDocuments() ) );
     action->setToolTip( i18n( "Close all other documents" ) );
