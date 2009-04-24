@@ -178,10 +178,10 @@ QVariant Breakpoint::data(int column, int role) const
         return QVariant();
     }
 
-    if (column == LocationColumn && role == Qt::DisplayRole) {
+    if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         QString ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
         ret += ":" + QString::number(m_line+1);
-        if (!address_.isEmpty()) {
+        if (!address_.isEmpty() && role == Qt::DisplayRole) {
             ret = QString("%1 (%2)").arg(ret).arg(address_);
         }
         return ret;
