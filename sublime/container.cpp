@@ -94,6 +94,7 @@ public:
         UnderlinedLabel(tabBar, parent, f)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        setSizePolicy(QSizePolicy::Maximum, sizePolicy().verticalPolicy());
     }
 
     virtual QSize minimumSizeHint() const
