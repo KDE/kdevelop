@@ -7,6 +7,7 @@ set( kdevplatformdebugger_LIB_SRCS
     interfaces/idebugsession.cpp
     interfaces/stackmodel.cpp
     interfaces/stackitem.cpp
+    interfaces/ibreakpointcontroller.cpp
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
@@ -36,6 +37,7 @@ install(FILES
     interfaces/idebugsession.h
     interfaces/stackmodel.h
     interfaces/stackitem.h
+    interfaces/ibreakpointcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES
