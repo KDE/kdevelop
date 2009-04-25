@@ -28,6 +28,7 @@
 #include "../../interfaces/icore.h"
 #include "../breakpoint/breakpointmodel.h"
 #include "../../interfaces/idebugcontroller.h"
+#include "../breakpoint/breakpoint.h"
 
 namespace KDevelop {
 
@@ -38,7 +39,13 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     connect(breakpointModel(),
             SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex,QModelIndex)));
     connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)), SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
-
+    
+    Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
+    for (int i=0; i < breakpoints->breakpointCount(); ++i) {
+        Breakpoint *breakpoint = breakpoints->breakpoint(i);
+        m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
+        m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+    }
 }
 
 IDebugSession* IBreakpointController::debugSession() const
@@ -51,6 +58,16 @@ BreakpointModel* IBreakpointController::breakpointModel() const
     return ICore::self()->debugController()->breakpointModel();
 }
 
+void IBreakpointController::sendMaybeAll()
+{
+    Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
+    kDebug() << breakpoints->breakpointCount();
+    for (int i=0; i < breakpoints->breakpointCount(); ++i) {
+        Breakpoint *breakpoint = breakpoints->breakpoint(i);
+        if (breakpoint->pleaseEnterLocation()) continue;
+        sendMaybe(breakpoint);
+    }
+}
 
 void IBreakpointController::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 {

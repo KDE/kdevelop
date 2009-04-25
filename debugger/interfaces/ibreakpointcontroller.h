@@ -44,6 +44,7 @@ protected:
     IDebugSession *debugSession() const;
     BreakpointModel *breakpointModel() const;
 
+    void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;
 
     QMap<KDevelop::Breakpoint*, QSet<int> > m_dirty;
