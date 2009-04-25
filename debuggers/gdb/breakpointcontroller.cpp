@@ -3,6 +3,7 @@
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
    Copyright (C) 2006, 2008 Vladimir Prus <ghost@cs.msu.su>
    Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
+   Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,11 +37,6 @@
 using namespace GDBMI;
 
 namespace GDBDebugger {
-
-KDevelop::BreakpointModel *breakpointModel()
-{
-    return KDevelop::ICore::self()->debugController()->breakpointModel();
-}
 
 struct Handler : public QObject
 {
@@ -116,16 +112,12 @@ struct DeletedHandler : public Handler
 
 
 BreakpointController::BreakpointController(DebugSession* parent)
-    : QObject(parent), m_dontSendChanges(false)
+    : KDevelop::IBreakpointController(parent)
 {
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(controller(),     SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
-
-    connect(breakpointModel(),
-            SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex,QModelIndex)));
-    connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)), SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
 
 }
 
@@ -139,28 +131,6 @@ GDBController * BreakpointController::controller() const
     return debugSession()->controller();
 }
 
-void BreakpointController::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
-{
-    if (m_dontSendChanges) return;
-
-    kDebug() << debugSession()->state();
-
-    Q_ASSERT(topLeft.parent() == bottomRight.parent());
-    Q_ASSERT(topLeft.row() == bottomRight.row());
-    Q_ASSERT(topLeft.column() == bottomRight.column());
-    KDevelop::Breakpoint *b = breakpointModel()->breakpointsItem()->breakpoint(topLeft.row());
-    m_dirty[b].insert(topLeft.column());
-    kDebug() << topLeft.column() << m_dirty;
-    if (debugSession()->isRunning()) {
-        sendMaybe(b);
-    }
-}
-
-void BreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
-{
-    kDebug() << breakpoint;
-    sendMaybe(breakpoint);
-}
 
 
 

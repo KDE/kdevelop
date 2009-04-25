@@ -2,6 +2,7 @@
    Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
    Copyright (C) 2007 Hamish Rodda <rodda@kde.org>
+   Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +23,8 @@
 #define BREAKPOINTCONTROLLER_H
 
 #include <QObject>
-#include <QMap>
-#include <QSet>
+
+#include <debugger/interfaces/ibreakpointcontroller.h>
 
 #include "gdbglobal.h"
 
@@ -32,9 +33,6 @@ class QModelIndex;
 namespace GDBMI {
 class ResultRecord;
 class Value;
-}
-namespace KDevelop {
-class Breakpoint;
 }
 
 namespace GDBDebugger
@@ -49,7 +47,7 @@ struct DeletedHandler;
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class BreakpointController : public QObject
+class BreakpointController : public KDevelop::IBreakpointController
 {
     Q_OBJECT
 
@@ -58,14 +56,12 @@ public:
 
 private slots:
     void slotEvent(event_t);
-    void dataChanged(const QModelIndex &, const QModelIndex &);
-    void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
 
 private:
     GDBController* controller() const;
     DebugSession* debugSession() const;
 
-    void sendMaybe(KDevelop::Breakpoint *breakpoint);
+    virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);
 
     void handleInserted(const GDBMI::ResultRecord &r);
     void handleBreakpointList(const GDBMI::ResultRecord &r);
@@ -75,8 +71,7 @@ private:
     friend struct InsertedHandler;
     friend struct EnabledOrDisabledHandler;
     friend struct DeletedHandler;
-    QMap<KDevelop::Breakpoint*, QSet<int> > m_dirty;
-    bool m_dontSendChanges;
+
 };
 
 }
