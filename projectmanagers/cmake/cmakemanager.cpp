@@ -601,7 +601,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     }
                     
                     bool removed=entries.remove( sourceFile.fileName() );
-                    if(removed) {
+                    if(removed && folder->url()==sourceFile.upUrl()) {
                         //Even if a file is inside 2 targets we do not want to have it
                         //2 times on the folder.
                         new KDevelop::ProjectFileItem( item->project(), sourceFile, folder );
