@@ -65,13 +65,14 @@ bool ValgrindControl::run(const KDevelop::IRun& run, KJob* job)
 
     if (!m_server) {
         m_server = new QTcpServer(this);
-        connect(m_server, SIGNAL(newConnection()), SLOT(newValgrindConnection()));
         if (!m_server->listen()) {
             kWarning() << "Could not open TCP socket for communication with Valgrind: "
                        << m_server->errorString();
             delete m_server;
             m_server = 0;
         }
+        if(m_server)
+            connect(m_server, SIGNAL(newConnection()), SLOT(newValgrindConnection()));
     }
 
     QStringList arguments;
@@ -97,8 +98,7 @@ void ValgrindControl::stop()
 }
 
 void ValgrindControl::readFromValgrind( )
-{
-}
+{}
 
 void ValgrindControl::newValgrindConnection()
 {
@@ -122,7 +122,12 @@ void ValgrindControl::newValgrindConnection()
 
 void ValgrindControl::socketError(QAbstractSocket::SocketError)
 {
-    KMessageBox::error(qApp->activeWindow(), i18n("Socket error while communicating with valgrind: \"%1\"", m_connection->errorString()), i18n("Valgrind communication error"));
+    Q_ASSERT(m_connection);
+    
+    //FIXME: The user should be notified about that but we cannot use KMessageBox because we might not be on
+    //the UI thread.
+    kWarning() << i18n("Socket error while communicating with valgrind: \"%1\"", m_connection->errorString()) <<
+                          i18n("Valgrind communication error");
 }
 
 ValgrindPlugin * ValgrindControl::plugin() const
