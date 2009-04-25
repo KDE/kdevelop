@@ -22,6 +22,7 @@
 #define KDEVPROJECTTREEVIEW_H
 
 #include <QtGui/QTreeView>
+#include <QtCore/QPointer>
 
 class KUrl;
 class QMenu;
@@ -38,6 +39,7 @@ class ProjectFolderItem;
 class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectBaseItem;
+class NavigationToolTip;
 }
 
 class ProjectTreeView: public QTreeView
@@ -53,6 +55,8 @@ class ProjectTreeView: public QTreeView
         KDevelop::ProjectFolderItem *currentFolderItem() const;
         KDevelop::ProjectFileItem *currentFileItem() const;
         KDevelop::ProjectTargetItem *currentTargetItem() const;
+        
+        virtual bool event(QEvent* event);
 
 
     Q_SIGNALS:
@@ -68,9 +72,11 @@ class ProjectTreeView: public QTreeView
 
     private:
         KDevelop::IProject* m_ctxProject;
+        QPointer<KDevelop::NavigationToolTip> m_tooltip;
         bool mouseClickChangesSelection;
         bool rightButtonClicked;
         void appendActions(QMenu& menu, const QList<QAction*>& actions);
+        QPersistentModelIndex m_idx;
 };
 
 #endif // KDEVPROJECTMANAGER_H

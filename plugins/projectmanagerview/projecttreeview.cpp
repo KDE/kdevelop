@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2007 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2009 Aleix Pol <aleixpol@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -34,15 +35,19 @@
 #include <kurl.h>
 #include <klocale.h>
 
+#include <project/projectmodel.h>
+#include <language/duchain/duchainutils.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <project/projectmodel.h>
 #include <interfaces/context.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
 
 #include "projectmanagerviewplugin.h"
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/util/navigationtooltip.h>
 
 using namespace KDevelop;
 
@@ -247,6 +252,44 @@ void ProjectTreeView::openProjectConfig()
     }
 }
 
+bool ProjectTreeView::event(QEvent* event)
+{
+    kDebug() << "eeeeeeeeeevent" << event;
+    if(event->type()==QEvent::ToolTip)
+    {
+        QPoint p=mapFromGlobal(QCursor::pos());
+        QModelIndex idxView = indexAt(p);
+        
+        QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+        QModelIndex idx = proxy->mapToSource(idxView);
+        
+        ProjectBaseItem* it=projectModel()->item(idx);
+        kDebug() << "found item" << idx << m_idx;
+        if((m_idx!=idx || !m_tooltip) && it && it->file())
+        {
+            m_idx=idx;
+            ProjectFileItem* file=it->file();
+            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            TopDUContext* top= DUChainUtils::standardContextForUrl(file->url());
+            
+            if(m_tooltip)
+                m_tooltip->close();
+            
+            if(top)
+            {
+                QWidget* navigationWidget = top->createNavigationWidget();
+                
+                m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
+                m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
+                kDebug() << "tooltip size" << m_tooltip->size();
+                ActiveToolTip::showToolTip(m_tooltip);
+                return true;
+            }
+        }
+    }
+    
+    return QAbstractItemView::event(event);
+}
 
 #include "projecttreeview.moc"
 
