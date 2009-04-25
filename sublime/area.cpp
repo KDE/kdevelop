@@ -89,6 +89,7 @@ struct AreaPrivate {
     QMap<QString, Sublime::Position> desiredToolViews;
     QMap<Sublime::Position, QString> shownToolView;
     QMap<Sublime::Position, int> thickness;
+    QString iconName;
 };
 
 
@@ -103,6 +104,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     setObjectName(name);
     d->title = title;
     d->controller = controller;
+    d->iconName = "kdevelop";
     initialize();
 }
 
@@ -348,6 +350,16 @@ int Area::thickness(Sublime::Position pos) const
     if (!d->thickness.count(pos))
         return -1;
     return (d->thickness)[pos];
+}
+
+QString Area::iconName() const
+{
+    return d->iconName;
+}
+
+void Area::setIconName(const QString& iconName)
+{
+    d->iconName = iconName;
 }
 
 }

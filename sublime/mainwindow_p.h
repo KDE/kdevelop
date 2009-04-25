@@ -135,40 +135,6 @@ private:
     QMap<QAction*, Area*> m_actionAreas;
 };
 
-class AreaSelectorWidget : public QWidget
-{
-Q_OBJECT
-public:
-    AreaSelectorWidget(QWidget* parent, MainWindow* window, 
-                       Controller* controller);
-        
-private Q_SLOTS:
-    void activateArea(int index);
-    void resetCurrentArea();
-    void areaChanged(Sublime::Area* area);
-
-private:
-    MainWindow* window_;
-    Controller* controller_;
-    QComboBox* combo_;
-    QVector<QString> areaIds_;
-};
-
-class AreaSelectionAction : public KAction
-{
-public:
-    AreaSelectionAction(MainWindowPrivate* parent, Controller* controller)
-    : KAction(parent), window_(parent->m_mainWindow),
-      controller_(controller) {}
-
-    QWidget* createWidget(QWidget* parent);
-
-private:
-    MainWindow* window_;
-    Controller* controller_;
-};
-
-
 }
 
 #endif

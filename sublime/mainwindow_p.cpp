@@ -42,66 +42,11 @@
 #include "controller.h"
 #include "mainwindow.h"
 #include "ideal.h"
+#include <KToolBar>
+#include <KSelectAction>
+#include <ktoggleaction.h>
 
 namespace Sublime {
-
-AreaSelectorWidget::AreaSelectorWidget(QWidget *parent,
-                                       MainWindow* window,
-                                       Controller* controller)
-: QWidget(parent), window_(window), controller_(controller)
-{
-    QHBoxLayout* layout = new QHBoxLayout(this);
-    layout->setMargin(0);
-    combo_ = new QComboBox(this);
-    layout->addWidget(combo_);
-    QToolButton* button = new QToolButton(this);
-    button->setIcon(KIcon("configure"));
-    button->setPopupMode(QToolButton::InstantPopup);
-    layout->addWidget(button);
-
-    QMenu *menu = new QMenu(button);
-    menu->addAction("Reset Current Area", this,
-                    SLOT(resetCurrentArea()));
-    menu->addAction("New Area");
-    menu->addAction("Delete Area");
-    button->setMenu(menu);
-
-    foreach (Area *a, controller_->defaultAreas())
-    {
-        areaIds_.push_back(a->objectName());
-        combo_->addItem(a->title());
-        if (a->title() == window->area()->title())
-            combo_->setCurrentIndex(combo_->count()-1);
-    }
-    connect (combo_, SIGNAL(activated(int)), this, SLOT(activateArea(int)));
-    connect (window_, SIGNAL(areaChanged(Sublime::Area*)),
-             this, SLOT(areaChanged(Sublime::Area*)));
-}
-
-void AreaSelectorWidget::resetCurrentArea()
-{
-    controller_->resetCurrentArea(window_);
-}
-
-void AreaSelectorWidget::activateArea(int index)
-{
-    controller_->showArea(areaIds_[index], window_);
-}
-
-void AreaSelectorWidget::areaChanged(Sublime::Area* area)
-{
-    for (int i = 0; i < combo_->count(); ++i)
-        if (combo_->itemText(i) == area->title())
-        {
-            combo_->setCurrentIndex(i);
-            break;
-        }
-}
-
-QWidget* AreaSelectionAction::createWidget(QWidget* parent)
-{
-    return new AreaSelectorWidget(parent, window_, controller_);
-}
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 :controller(controller), area(0), activeView(0), activeToolView(0), centralWidget(0),
@@ -109,10 +54,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
 
-    KAction* action = new AreaSelectionAction(this, controller);
-    ac->addAction("switch_area", action);
-
-    action = new KAction(i18n("Show Left Dock"), this);
+    KAction* action = new KAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_L);
     connect(action, SIGNAL(toggled(bool)), SLOT(showLeftDock(bool)));

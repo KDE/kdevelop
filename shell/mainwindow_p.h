@@ -57,6 +57,8 @@ public:
     void setupStatusBar();
     void registerStatus(QObject*);
 
+    void setupAreaSelectorActions();
+
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );
     void removePlugin( IPlugin *plugin );
@@ -99,6 +101,8 @@ public Q_SLOTS:
     void configureSessions();
     void configureNotifications();
     void showAboutPlatform();
+
+    void toggleArea(bool b);
 
 private:
     KActionCollection *actionCollection();

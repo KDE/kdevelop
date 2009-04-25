@@ -70,6 +70,7 @@ public:
         Sublime::Area* a =
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
+        a->setIconName("document-edit");
         controller->addDefaultArea(a);
 
         desired.clear();
@@ -79,6 +80,7 @@ public:
         desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
         a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
         a->setDesiredToolViews(desired);
+        a->setIconName("tools-report-bug");
         controller->addDefaultArea(a);
 
         desired.clear();
@@ -86,7 +88,8 @@ public:
         desired["org.kdevelop.CoverageReport"] = Sublime::Right;
         a = new Sublime::Area(m_controller, "test", i18n("Test"));
         a->setDesiredToolViews(desired);
-        controller->addDefaultArea(a);        
+        a->setIconName("applications-engineering");
+        controller->addDefaultArea(a);
 
         if(!(Core::self()->setupFlags() & Core::NoUi)) 
         {

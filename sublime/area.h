@@ -72,6 +72,9 @@ public:
     QString title() const;
     void setTitle(const QString &title);
 
+    QString iconName() const;
+    void setIconName(const QString &iconName);
+
     /**Adds the @p view to the list of views at the given area index.*/
     void addView(View *view, AreaIndex *index);
 

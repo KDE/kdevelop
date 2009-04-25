@@ -35,7 +35,9 @@ Boston, MA 02110-1301, USA.
 #include <kdebug.h>
 #include <ktexteditor/view.h>
 #include <kxmlguifactory.h>
+#include <ktoggleaction.h>
 
+#include <sublime/area.h>
 #include "shellextension.h"
 #include "partcontroller.h"
 #include "plugincontroller.h"
@@ -114,6 +116,8 @@ void MainWindow::loadSettings()
         setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
     else if( bottomright == 1 )
         setCorner( Qt::BottomRightCorner, Qt::BottomDockWidgetArea );
+
+    d->setupAreaSelectorActions();
 
     Sublime::MainWindow::loadSettings();
 }
