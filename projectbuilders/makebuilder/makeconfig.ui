@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MakeConfig</class>
- <widget class="QWidget" name="MakeConfig" >
-  <property name="geometry" >
+ <widget class="QWidget" name="MakeConfig">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,167 +10,210 @@
     <height>362</height>
    </rect>
   </property>
-  <layout class="QFormLayout" name="formLayout" >
-   <property name="fieldGrowthPolicy" >
+  <layout class="QFormLayout" name="formLayout">
+   <property name="fieldGrowthPolicy">
     <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
    </property>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_8" >
-     <property name="text" >
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
       <string>Abort on first error:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QCheckBox" name="kcfg_abortOnFirstError" >
-     <property name="text" >
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="kcfg_abortOnFirstError">
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_7" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
       <string>Display commands but do not execute them:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QCheckBox" name="kcfg_displayOnly" >
-     <property name="text" >
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="kcfg_displayOnly">
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>Run more than one job at once:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QCheckBox" name="kcfg_runMoreThanOneJob" >
-     <property name="text" >
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="kcfg_runMoreThanOneJob">
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="enabled" >
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_31">
+     <property name="text">
+      <string>Install as root:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QCheckBox" name="kcfg_installAsRoot">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label">
+     <property name="enabled">
       <bool>false</bool>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Number of simultaneous jobs:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QSpinBox" name="kcfg_numberOfJobs" >
-     <property name="enabled" >
+   <item row="5" column="1">
+    <widget class="QSpinBox" name="kcfg_numberOfJobs">
+     <property name="enabled">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
       <string>Make executable:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <widget class="KUrlRequester" name="kcfg_makeBinary" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="6" column="1">
+    <widget class="KUrlRequester" name="kcfg_makeBinary">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" >
-    <widget class="QLabel" name="label_6" >
-     <property name="text" >
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
       <string>Default make target:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="5" column="1" >
-    <widget class="KLineEdit" name="kcfg_defaultTarget" >
-     <property name="showClearButton" stdset="0" >
+   <item row="7" column="1">
+    <widget class="KLineEdit" name="kcfg_defaultTarget">
+     <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="6" column="0" >
-    <widget class="QLabel" name="label_5" >
-     <property name="text" >
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
       <string>Additional make options:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="6" column="1" >
-    <widget class="KLineEdit" name="kcfg_additionalOptions" >
-     <property name="showClearButton" stdset="0" >
+   <item row="8" column="1">
+    <widget class="KLineEdit" name="kcfg_additionalOptions">
+     <property name="showClearButton" stdset="0">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="7" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Active Environment Profile:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="7" column="1" >
-    <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+   <item row="9" column="1">
+    <widget class="KDevelop::EnvironmentSelectionWidget" name="kcfg_environmentProfile">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="editable" >
+     <property name="editable">
       <bool>false</bool>
      </property>
-     <property name="insertPolicy" >
+     <property name="insertPolicy">
       <enum>QComboBox::NoInsert</enum>
      </property>
-     <property name="autoCompletion" >
+     <property name="autoCompletion">
       <bool>false</bool>
      </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="rootinstallationcommandLabel">
+     <property name="text">
+      <string>Root installation command:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="KComboBox" name="kcfg_suCommand">
+     <item>
+      <property name="text">
+       <string>kdesu</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>kdesudo</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
@@ -183,7 +227,7 @@
   <customwidget>
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
-   <header location="global" >util/environmentselectionwidget.h</header>
+   <header location="global">util/environmentselectionwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -194,11 +238,11 @@
    <receiver>kcfg_numberOfJobs</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>144</x>
      <y>81</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>511</x>
      <y>116</y>
     </hint>
@@ -210,11 +254,11 @@
    <receiver>label</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>74</x>
      <y>77</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>81</x>
      <y>101</y>
     </hint>

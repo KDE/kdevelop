@@ -218,6 +218,15 @@ QStringList MakeJob::computeBuildCommand() const
         cmdline << m_overrideTarget;
     }
 
+    bool runAsRoot = builderGroup.readEntry("Install As Root", false);
+    if (runAsRoot && m_command == InstallCommand)
+    {
+        int suCommand = builderGroup.readEntry("Su Command", 0);
+        QStringList kdesuline;
+        kdesuline << ((suCommand == 0) ? "kdesu" : "kdesudo" ) << "-t" << "-c" << cmdline.join(" ");
+        cmdline = kdesuline;
+    }
+
     return cmdline;
 }
 
