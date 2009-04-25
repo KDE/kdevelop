@@ -292,6 +292,8 @@ void BreakpointWidget::slotSelectionChanged(const QItemSelection& selected,
 
 void BreakpointWidget::slotBreakpointHit(int id)
 {
+#if 0
+TODO NIKO
     /* This method will not do the right thing if we hit a breakpoint
         that is added in GDB outside kdevelop.  In this case we'll
         first try to find the breakpoint, and fail, and only then
@@ -306,6 +308,7 @@ void BreakpointWidget::slotBreakpointHit(int id)
             QItemSelectionModel::Rows
             | QItemSelectionModel::ClearAndSelect);
     }
+#endif
 }
 
 void BreakpointWidget::slotDataChanged(const QModelIndex& index, const QModelIndex&)

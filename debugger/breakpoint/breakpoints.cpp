@@ -51,17 +51,6 @@ void Breakpoints::save()
     }
 }
 
-Breakpoint *Breakpoints::breakpointById(int id)
-{
-    for (int i = 0; i < childItems.size(); ++i)
-    {
-        Breakpoint *b = static_cast<Breakpoint *>(child(i));
-        if (b->id() == id)
-            return b;
-    }
-    return NULL;
-}
-
 void Breakpoints::remove(const QModelIndex &index)
 {
     Breakpoint *b = static_cast<Breakpoint *>(model()->itemForIndex(index));

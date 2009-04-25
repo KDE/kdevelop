@@ -50,8 +50,6 @@ public:
      */
     virtual void createHelperBreakpoint();
 
-    Breakpoint *breakpointById(int id);
-
     Breakpoint *breakpoint(int row);
     int breakpointCount() const;
 

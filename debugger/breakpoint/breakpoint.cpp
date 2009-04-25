@@ -32,7 +32,7 @@
 using namespace KDevelop;
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
-: TreeItem(model, parent), id_(-1), enabled_(true), 
+: TreeItem(model, parent), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
   pending_(false), pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
@@ -42,7 +42,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind 
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
                              const KConfigGroup& config)
-: TreeItem(model, parent), id_(-1), enabled_(true),
+: TreeItem(model, parent), enabled_(true),
   deleted_(false), hitCount_(0),
   pending_(false), pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
@@ -66,7 +66,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
 }
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
-: TreeItem(model, parent), id_(-1), enabled_(true), 
+: TreeItem(model, parent), enabled_(true), 
   deleted_(false), hitCount_(0), 
   kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true), m_line(-1),
   m_smartCursor(0)
@@ -238,11 +238,6 @@ void Breakpoint::save(KConfigGroup& config)
 Breakpoint::BreakpointKind Breakpoint::kind() const
 {
     return kind_;
-}
-
-void Breakpoint::setId(int id)
-{
-    id_ = id;
 }
 
 void Breakpoint::setAddress(const QString& address)

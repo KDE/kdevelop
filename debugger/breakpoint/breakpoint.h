@@ -52,8 +52,6 @@ public:
        turn into real breakpoint when user types something.  */
     Breakpoint(BreakpointModel *model, TreeItem *parent);
 
-    int id() const { return id_; }
-    void setId(int id);
     void fetchMoreChildren() {}
 
     void setColumn(int index, const QVariant& value);
@@ -104,7 +102,6 @@ protected:
     
     BreakpointModel *breakpointModel();
 
-    int id_;
     bool enabled_;
     QSet<int> errors_;
     bool deleted_;
