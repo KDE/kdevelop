@@ -145,7 +145,11 @@ void SvnJobBase::outputMessage(const QString& message)
 {
     if (!model()) return;
     QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
-    m->appendRow(new QStandardItem(message));
+    QStandardItem *previous = m->item(m->rowCount()-1);
+    if (message == "." && previous && previous->text().contains(QRegExp("\\.+")))
+        previous->setText(previous->text() + message);
+    else
+        m->appendRow(new QStandardItem(message));
 }
 
 #include "svnjobbase.moc"
