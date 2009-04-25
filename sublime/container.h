@@ -59,6 +59,7 @@ public:
     View *viewForWidget(QWidget *w) const;
 
     void setTabBarHidden(bool hide);
+    void setOpenAfterCurrent(bool after);
 
 Q_SIGNALS:
     void activateView(Sublime::View* view);

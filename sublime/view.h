@@ -65,10 +65,13 @@ public:
     /// Restore view state from configuration
     virtual void setState(const QString& state);
 
+    void notifyPositionChanged(int newPositionInArea);
+
 Q_SIGNALS:
     void raise(Sublime::View*);
     /// Notify that the status for this document has changed
     void statusChanged(Sublime::View*);
+    void positionChanged(Sublime::View*, int);
 
 public Q_SLOTS:
     void requestRaise();

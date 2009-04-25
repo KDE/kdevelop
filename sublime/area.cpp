@@ -147,6 +147,7 @@ Area::~Area()
 void Sublime::Area::addView(View *view, AreaIndex *index)
 {
     index->add(view);
+    connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
     emit viewAdded(index, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
@@ -360,6 +361,12 @@ QString Area::iconName() const
 void Area::setIconName(const QString& iconName)
 {
     d->iconName = iconName;
+}
+
+void Area::positionChanged(View *view, int newPos)
+{
+    AreaIndex *index = indexOf(view);
+    index->views().move(index->views().indexOf(view), newPos);
 }
 
 }

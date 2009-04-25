@@ -197,6 +197,9 @@ Q_SIGNALS:
     /**Emitted when a toolview is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
 
+private Q_SLOTS:
+    void positionChanged(Sublime::View*, int);
+
 private:
     template <typename Operator>
     WalkerMode walkViewsInternal(Operator &op, AreaIndex *index);

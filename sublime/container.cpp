@@ -51,6 +51,8 @@ struct ContainerPrivate {
     QStackedWidget *stack;
     QLabel *fileNameCorner;
     QLabel *statusCorner;
+
+    bool openAfterCurrent;
 };
 
 class UnderlinedLabel: public QLabel {
@@ -146,6 +148,8 @@ Container::Container(QWidget *parent)
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
 #endif
+
+    setOpenAfterCurrent(group.readEntry("TabBarOpenAfterCurrent", 1) == 1);
 }
 
 Container::~Container()
@@ -172,7 +176,14 @@ void Container::widgetActivated(int idx)
 void Container::addWidget(View *view)
 {
     QWidget *w = view->widget(this);
-    int idx = d->stack->addWidget(w);
+    int idx = 0;
+    if (d->openAfterCurrent)
+    {
+        idx = d->stack->insertWidget(d->stack->currentIndex()+1, w);
+        view->notifyPositionChanged(idx);
+    }
+    else
+        d->stack->addWidget(w);
     d->tabBar->insertTab(idx, view->document()->title());
     d->viewForWidget[w] = view;
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
@@ -274,11 +285,17 @@ void Container::setTabBarHidden(bool hide)
     }
 }
 
+void Container::setOpenAfterCurrent(bool after)
+{
+    d->openAfterCurrent = after;
+}
+
 void Container::tabMoved(int from, int to)
 {
     QWidget *w = d->stack->widget(from);
     d->stack->removeWidget(w);
     d->stack->insertWidget(to, w);
+    d->viewForWidget[w]->notifyPositionChanged(to);
 }
 
 }

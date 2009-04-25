@@ -219,7 +219,10 @@ void MainWindow::loadSettings()
     
     KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
     foreach (Container *container, findChildren<Container*>())
+    {
         container->setTabBarHidden(uiGroup.readEntry("TabBarVisibility", 1) == 0);
+        container->setOpenAfterCurrent(uiGroup.readEntry("TabBarOpenAfterCurrent", 1) == 1);
+    }
 
     cg.sync();
 

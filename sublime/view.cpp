@@ -120,6 +120,11 @@ QString View::viewStatus() const
     return QString();
 }
 
+void View::notifyPositionChanged(int newPositionInArea)
+{
+    emit positionChanged(this, newPositionInArea);
+}
+
 }
 
 #include "view.moc"
