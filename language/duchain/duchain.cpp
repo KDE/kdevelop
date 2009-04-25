@@ -868,6 +868,7 @@ DUChain::DUChain()
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
   }
 }
@@ -1303,6 +1304,14 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   }else{
     ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
   }
+}
+
+void DUChain::documentRenamed(KDevelop::IDocument* doc)
+{
+  if(sdDUChainPrivate->m_destroyed)
+    return;
+
+  ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
 }
 
 Uses* DUChain::uses()

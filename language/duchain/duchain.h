@@ -231,6 +231,7 @@ private Q_SLOTS:
   void documentAboutToBeDeleted(KTextEditor::Document* doc);
   void documentAboutToBeDeletedFinal(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
+  void documentRenamed(KDevelop::IDocument* document);
   void aboutToQuit();
 private:
   /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
