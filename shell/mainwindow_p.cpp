@@ -86,6 +86,7 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
     Q_ASSERT( plugin );
 
     m_mainWindow->guiFactory()->addClient( plugin );
+    setupAreaSelectorActions();
 }
 
 void MainWindowPrivate::removePlugin( IPlugin *plugin )
@@ -93,6 +94,7 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
     Q_ASSERT( plugin );
 
     m_mainWindow->guiFactory()->removeClient( plugin );
+    setupAreaSelectorActions();
 }
 
 void MainWindowPrivate::activePartChanged(KParts::Part *part)
