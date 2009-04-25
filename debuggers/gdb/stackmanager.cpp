@@ -180,10 +180,12 @@ public:
 
     void update()
     {
-        controller_->addCommand(
-            new GDBCommand(ThreadInfo, "",
-                           this,
-                           &DebugUniverse::handleThreadInfo));
+        if (!controller_->stateIsOn(s_dbgNotStarted)) {
+            controller_->addCommand(
+                new GDBCommand(ThreadInfo, "",
+                            this,
+                            &DebugUniverse::handleThreadInfo));
+        }
     }
 
     void fetchMoreChildren() {}
