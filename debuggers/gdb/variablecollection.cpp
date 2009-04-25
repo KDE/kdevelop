@@ -427,7 +427,7 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
     if (!w)
         w = view;
     
-    activeTooltip_ = new VariableToolTip(w, global, controller_, expression);
+    activeTooltip_ = new VariableToolTip(w, global+QPoint(30,30), controller_, expression);
 }
 
 void VariableCollection::slotEvent(event_t event)
