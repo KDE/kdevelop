@@ -401,14 +401,14 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return v.context();
 }
 
-QStringList removeMatches(const QString& exp, const QStringList& orig)
+QSet<QString> removeMatches(const QString& exp, const QStringList& orig)
 {
-    QStringList ret;
+    QSet<QString> ret;
     QRegExp rx(exp);
     foreach(const QString& str, orig)
     {
         if(rx.indexIn(str)<0)
-            ret.append(str);
+            ret.insert(str);
     }
     return ret;
 }
@@ -418,8 +418,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
-    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
-    entries = removeMatches("\\w*~$|\\w*\\.bak$", entries);
+    QStringList entriesL = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    QSet<QString> entries = removeMatches("\\w*~$|\\w*\\.bak$", entriesL);
     if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
         Q_ASSERT(folder->rowCount()==0);
@@ -525,10 +525,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
                 if(subroot.isParentOf(path) || path.isParentOf(subroot))
                 {
-                    if(entries.contains(subf))
-                    {
-                        entries.removeAll(subf);
-                    }
+                    entries.remove(subf);
 
                     CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, folder );
                     kDebug() << "folder: " << a << a->index();
@@ -602,14 +599,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         sourceFile.adjustPath( KUrl::RemoveTrailingSlash );
                         sourceFile.addPath( sFile );
                     }
-
-                    if( entries.contains( sourceFile.fileName() ) )
-                    {
-                        entries.removeAll( sourceFile.fileName() );
+                    
+                    bool removed=entries.remove( sourceFile.fileName() );
+                    if(removed) {
+                        //Even if a file is inside 2 targets we do not want to have it
+                        //2 times on the folder.
+                        new KDevelop::ProjectFileItem( item->project(), sourceFile, folder );
                     }
 
                     new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                    new KDevelop::ProjectFileItem( item->project(), sourceFile, folder );
                     item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
                     kDebug(9042) << "..........Adding:" << sourceFile;
                 }
