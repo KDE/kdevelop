@@ -133,7 +133,6 @@ GDBController * BreakpointController::controller() const
 
 void BreakpointController::slotEvent(event_t e)
 {
-    KDevelop::Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
     switch(e) {
         case program_state_changed:
             controller()->addCommand(
@@ -146,15 +145,7 @@ void BreakpointController::slotEvent(event_t e)
         case connected_to_program:
         {
             kDebug() << "connected to program";
-            kDebug() << breakpoints->breakpointCount();
-            for (int i=0; i < breakpoints->breakpointCount(); ++i) {
-                KDevelop::Breakpoint *breakpoint = breakpoints->breakpoint(i);
-                if (breakpoint->pleaseEnterLocation()) continue;
-                m_dirty[breakpoint].clear();
-                m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
-                m_dirty[breakpoint].insert(KDevelop::Breakpoint::ConditionColumn);
-                sendMaybe(breakpoint);
-            }
+            sendMaybeAll();
             break;
         }
         case debugger_exited:
