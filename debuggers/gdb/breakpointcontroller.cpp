@@ -159,8 +159,6 @@ void BreakpointController::slotEvent(event_t e)
 
 void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
 {
-    kDebug() << breakpoint << breakpoint->pleaseEnterLocation() << this->m_dirty;
-
     if (breakpoint->pleaseEnterLocation()) return;
 
     if (controller()->stateIsOn(s_dbgNotStarted)) {

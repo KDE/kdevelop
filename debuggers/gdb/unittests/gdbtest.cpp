@@ -167,7 +167,6 @@ void GdbTest::testChangeLocationBreakpoint()
     KDevelop::Breakpoints *breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel()->breakpointsItem();
 
-    //add disabled breakpoint before startProgram
     KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 25);
 
     session.startProgram(run, 0);
