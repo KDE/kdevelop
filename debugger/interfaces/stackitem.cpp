@@ -30,13 +30,13 @@ int KDevelop::FrameItem::id() const
     return mId;
 }
 
-void KDevelop::FrameItem::setInformation(int id, const QString& name, const QPair< QString, int >& location)
+void KDevelop::FrameItem::setInformation(int id, const QString& name, const QString& location, int line)
 {
     mId=id;
-    mLocation=location;
+    mLocation=qMakePair(location, line);
     setData(QVector<QVariant>() << QString::number(id)
                                 << name
-                                << QString(location.first+':'+QString::number(location.second)));
+                                << QString(location+':'+QString::number(line)));
 }
 
 KDevelop::FramesModel* KDevelop::FrameItem::framesModel()
@@ -57,11 +57,6 @@ QVariant KDevelop::FrameItem::icon(int column) const
         return KIcon(p->iconName());
     }
     return QVariant();
-}
-
-void KDevelop::ThreadItem::clicked()
-{
-    KDevelop::TreeItem::clicked();
 }
 
 KDevelop::FramesModel* KDevelop::ThreadItem::framesModel()
@@ -87,10 +82,9 @@ KDevelop::ThreadItem::ThreadItem(KDevelop::StackModel* model)
     mFramesModel=new FramesModel(mStackModel, this);
 }
 
-void KDevelop::ThreadItem::setInformation(int id, const QString& name, const QPair< QString, int >& location)
+void KDevelop::ThreadItem::setInformation(int id, const QString& name)
 {
     mId=id;
-    QPair< QString, int > mLocation=location;
     setData(QVector<QVariant>() << i18n("#%1 at %2", id, name));
 }
 

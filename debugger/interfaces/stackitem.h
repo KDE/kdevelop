@@ -33,13 +33,11 @@ class KDEVPLATFORMDEBUGGER_EXPORT ThreadItem : public TreeItem
     public:
         ThreadItem(StackModel* model);
         int id() const;
-        virtual void clicked();
         StackModel* stackModel();
         FramesModel* framesModel();
         
-        void setInformation(int id, const QString& name, const QPair <QString, int>& location);
+        void setInformation(int id, const QString& name);
     private:
-        QPair<QString, int> mLocation;
         int mId;
         FramesModel* mFramesModel;
         StackModel* mStackModel;
@@ -51,7 +49,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FrameItem : public TreeItem
     public:
         FrameItem(FramesModel* model);
         int id() const;
-        void setInformation(int id, const QString& name, const QPair <QString, int>& location);
+        void setInformation(int id, const QString& name, const QString& file, int line);
         FramesModel* framesModel();
         
         virtual void clicked();
