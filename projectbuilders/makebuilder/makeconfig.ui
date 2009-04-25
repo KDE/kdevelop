@@ -239,12 +239,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>144</x>
-     <y>81</y>
+     <x>369</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>511</x>
-     <y>116</y>
+     <x>736</x>
+     <y>144</y>
     </hint>
    </hints>
   </connection>
@@ -255,12 +255,44 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>74</x>
-     <y>77</y>
+     <x>299</x>
+     <y>62</y>
     </hint>
     <hint type="destinationlabel">
-     <x>81</x>
-     <y>101</y>
+     <x>158</x>
+     <y>139</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_installAsRoot</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_suCommand</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>74</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>102</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_installAsRoot</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>rootinstallationcommandLabel</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>349</x>
+     <y>76</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>97</y>
     </hint>
    </hints>
   </connection>
