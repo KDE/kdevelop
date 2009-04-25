@@ -217,7 +217,7 @@ QString qtDocsLocation(const QString& qmake)
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
-	, m_engine(KStandardDirs::locateLocal("data", "qthelpcollection", QtHelpFactory::componentData()))
+	, m_engine(KStandardDirs::locateLocal("appdata", "qthelpcollection", QtHelpFactory::componentData()))
 {
 	QStringList qmakes;
     KStandardDirs::findAllExe(qmakes, "qmake");
@@ -234,10 +234,8 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     
     if(!dirName.isEmpty()) {
         QDir d(dirName);
-        foreach(const QString& fileName, d.entryList()) {
-            bool b=m_engine.setupData();
-            kDebug() << "setup" << b << m_engine.error();
-            
+        foreach(const QString& file, d.entryList()) {
+            QString fileName=dirName+'/'+file;
             QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
             
             if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
@@ -247,12 +245,13 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
                 else
                     kDebug() << "error >> " << fileName << m_engine.error();
             }
+            bool b=m_engine.setupData();
+            kDebug() << "setup" << b << fileNamespace << m_engine.error();
         }
-        bool b=m_engine.setupData();
-        kDebug() << "registered" << b << m_engine.error() << m_engine.registeredDocumentations();
+        kDebug() << "registered" << m_engine.error() << m_engine.registeredDocumentations();
     }
     else
-        kDebug() << "no QtHelp fond at all";
+        kDebug() << "no QtHelp found at all";
 }
 
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec)
