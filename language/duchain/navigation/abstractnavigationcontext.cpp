@@ -100,8 +100,8 @@ void AbstractNavigationContext::makeLink( const QString& name, QString targetId,
   }
   
   QString str = Qt::escape(name);
-  if( m_linkCount == m_selectedLink ) ///@todo Change background-color here instead of foreground-color
-    str = "<font color=\"#880088\">" + str + "</font>";
+  if( m_linkCount == m_selectedLink )
+    str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
 
   modifyHtml() +=  "<a href=\"" + targetId + "\"" + ((m_linkCount == m_selectedLink && m_currentPositionLine == -1) ? QString(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
 
