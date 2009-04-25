@@ -55,19 +55,21 @@ FramestackWidget::FramestackWidget(DebugController* controller, QWidget* parent)
                     "can see the values in any of the "
                     "previous calling functions.</p>"));
     setWindowIcon(KIcon("view-list-text"));
-    QWidget* w=new QWidget(this);
-    mThreads=new QListView(w);
+    mThreadsWidget=new QWidget(this);
+    mThreads=new QListView(mThreadsWidget);
     mFrames=new AsyncTreeView(0, this);
     
-    w->setLayout(new QVBoxLayout());
-    w->layout()->addWidget(new QLabel(i18n("Threads:")));
-    w->layout()->addWidget(mThreads);
-    addWidget(w);
+    mThreadsWidget->setLayout(new QVBoxLayout());
+    mThreadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
+    mThreadsWidget->layout()->addWidget(mThreads);
+    mThreadsWidget->hide();
+    addWidget(mThreadsWidget);
     addWidget(mFrames);
     
     setStretchFactor(1, 3);
     connect(mFrames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
     mFrames->setRootIsDecorated(false);
+    connect(mThreads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -94,13 +96,19 @@ void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-    if (m_controller->currentSession()) {
+    if (m_controller->currentSession()
+        && m_controller->currentSession()->state() != KDevelop::IDebugSession::StoppedState)
+    {
+        kDebug();
         StackModel* model = m_controller->currentSession()->stackModel();
         model->setAutoUpdate(true);
         mThreads->setModel(model);
         
-        connect(mThreads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
         connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)), this, SLOT(assignSomeThread()));
+        assignSomeThread();
+        
+        connect(m_controller->currentSession(), SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+                    SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
     }
 }
 
@@ -124,11 +132,26 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
 void KDevelop::FramestackWidget::assignSomeThread()
 {
     StackModel* model=m_controller->currentSession()->stackModel();
+    kDebug() << mFrames->model() << model->hasThreads();
     if(!mFrames->model() && model->hasThreads()) {
         QModelIndex idx=mThreads->model()->index(0,0);
         setThreadShown(idx);
     }
+    if (false && model->rowCount() <= 1) {
+        mThreadsWidget->hide();
+    } else {
+        mThreadsWidget->show();
+    }
 }
+
+void FramestackWidget::stateChanged(KDevelop::IDebugSession::DebuggerState state)
+{
+    if (state == KDevelop::IDebugSession::StoppedState) {
+        mThreads->setModel(0);
+        mFrames->setModel(0);
+    }
+}
+
 
 
 #include "framestackwidget.moc"

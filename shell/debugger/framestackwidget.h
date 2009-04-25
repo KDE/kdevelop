@@ -25,6 +25,7 @@
 #define KDEVELOP_FRAMESTACKWIDGET_H
 
 #include <QSplitter>
+#include "../../debugger/interfaces/idebugsession.h"
 
 class QModelIndex;
 class QListView;
@@ -48,10 +49,12 @@ class FramestackWidget : public QSplitter
         void setThreadShown(const QModelIndex& idx);
         void checkFetchMoreFrames();
         void assignSomeThread();
+        void stateChanged(KDevelop::IDebugSession::DebuggerState state);
     private:
         DebugController *m_controller;
         AsyncTreeView *mFrames;
         QListView *mThreads;
+        QWidget* mThreadsWidget;
 };
 
 }
