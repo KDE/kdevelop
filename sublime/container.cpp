@@ -134,6 +134,7 @@ Container::Container(QWidget *parent)
 
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
     connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
+    connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -271,6 +272,13 @@ void Container::setTabBarHidden(bool hide)
         d->fileNameCorner->hide();
         d->tabBar->show();
     }
+}
+
+void Container::tabMoved(int from, int to)
+{
+    QWidget *w = d->stack->widget(from);
+    d->stack->removeWidget(w);
+    d->stack->insertWidget(to, w);
 }
 
 }

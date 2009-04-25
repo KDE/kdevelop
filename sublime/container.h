@@ -69,6 +69,7 @@ private Q_SLOTS:
     void documentTitleChanged(Sublime::Document* doc);
     void statusChanged(Sublime::View *view);
     void closeRequest(int idx);
+    void tabMoved(int from, int to);
 private:
 
     struct ContainerPrivate * const d;
