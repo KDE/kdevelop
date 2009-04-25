@@ -19,7 +19,6 @@
 #include "stackmodel.h"
 #include "stackitem.h"
 #include <KLocalizedString>
-#include <KDebug>
 
 using namespace KDevelop;
 
@@ -58,7 +57,6 @@ KDevelop::FramesModel::FramesModel(QObject* parent, ThreadItem* thread)
 
 void KDevelop::FramesModel::initialize()
 {
-    kDebug() << "dodongoooooooooooo";
     setRootItem(mRoot);
 }
 
