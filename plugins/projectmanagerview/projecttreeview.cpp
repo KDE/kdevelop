@@ -254,7 +254,6 @@ void ProjectTreeView::openProjectConfig()
 
 bool ProjectTreeView::event(QEvent* event)
 {
-    kDebug() << "eeeeeeeeeevent" << event;
     if(event->type()==QEvent::ToolTip)
     {
         QPoint p=mapFromGlobal(QCursor::pos());
@@ -264,7 +263,6 @@ bool ProjectTreeView::event(QEvent* event)
         QModelIndex idx = proxy->mapToSource(idxView);
         
         ProjectBaseItem* it=projectModel()->item(idx);
-        kDebug() << "found item" << idx << m_idx;
         if((m_idx!=idx || !m_tooltip) && it && it->file())
         {
             m_idx=idx;
