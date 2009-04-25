@@ -85,7 +85,7 @@ struct InsertedHandler : public Handler
                 // For watchpoint creation, GDB basically does not say
                 // anything.  Just record id.
                 controller->m_dontSendChanges = true;
-                breakpoint->setId(r["wpt"]["number"].toInt());
+                controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
                 controller->m_dontSendChanges = false;
             }
             controller->sendMaybe(breakpoint);
@@ -103,7 +103,7 @@ struct DeletedHandler : public Handler
     {
         Q_UNUSED(r);
         if (!breakpoint->deleted()) {
-            breakpoint->setId(-1);
+            controller->m_ids.remove(breakpoint);
             controller->sendMaybe(breakpoint);
         }
         delete this;
@@ -130,9 +130,6 @@ GDBController * BreakpointController::controller() const
 {
     return debugSession()->controller();
 }
-
-
-
 
 void BreakpointController::slotEvent(event_t e)
 {
@@ -162,14 +159,6 @@ void BreakpointController::slotEvent(event_t e)
         }
         case debugger_exited:
         {
-            for (int i=0; i < breakpoints->breakpointCount(); ++i) {
-                KDevelop::Breakpoint *breakpoint = breakpoints->breakpoint(i);
-                if (breakpoint->pleaseEnterLocation()) continue;
-                m_dirty[breakpoint].clear();
-                m_dirty[breakpoint].insert(KDevelop::Breakpoint::LocationColumn);
-                m_dirty[breakpoint].insert(KDevelop::Breakpoint::ConditionColumn);
-                breakpoint->setId(-1);
-            }
             break;
         }
         default:
@@ -194,10 +183,10 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     */
     if (breakpoint->deleted())
     {
-        if (breakpoint->id() != -1) {
+        if (m_ids.contains(breakpoint)) {
             DeletedHandler *handler = new DeletedHandler(this, breakpoint);
             controller()->addCommand(
-                new GDBCommand(BreakDelete, QString::number(breakpoint->id()),
+                new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                handler, &DeletedHandler::handle));
         }
     }
@@ -205,12 +194,12 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         if (!breakpoint->enabled()) {
             m_dirty[breakpoint].clear();
         } else {
-            if (breakpoint->id() != -1) {
+            if (m_ids.contains(breakpoint)) {
                 /* We already have GDB breakpoint for this, so we need to remove
                 this one.  */
                 DeletedHandler *handler = new DeletedHandler(this, breakpoint);
                 controller()->addCommand(
-                    new GDBCommand(BreakDelete, QString::number(breakpoint->id()),
+                    new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                 handler, &DeletedHandler::handle));
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
@@ -235,11 +224,11 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
-        Q_ASSERT(breakpoint->id() != -1);
+        Q_ASSERT(m_ids.contains(breakpoint));
         EnabledOrDisabledHandler *handler = new EnabledOrDisabledHandler(this, breakpoint);
         controller()->addCommand(
             new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
-                           QString::number(breakpoint->id()),
+                           QString::number(m_ids[breakpoint]),
                            handler, &EnabledOrDisabledHandler::handle,
                            true));
         m_dirty[breakpoint].remove(KDevelop::Breakpoint::EnableColumn);
@@ -273,7 +262,7 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 
     for (int i = 0; i < breakpoints->breakpointCount(); ++i) {
         KDevelop::Breakpoint *b = breakpoints->breakpoint(i);
-        if (b->id() != -1 && !present_in_gdb.contains(b->id())) {
+        if (m_ids.contains(b) && !present_in_gdb.contains(m_ids[b])) {
             breakpoints->removeBreakpoint(i);
         }
     }
@@ -282,8 +271,8 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
     {
         const GDBMI::Value& mi_b = blist[i];
         int id = mi_b["number"].toInt();
-
-        KDevelop::Breakpoint *b = breakpoints->breakpointById(id);
+        
+        KDevelop::Breakpoint* b = m_ids.key(id);
         if (!b) {
             QString type = mi_b["type"].literal();
             if (type == "watchpoint" || type == "hw watchpoint") {
@@ -304,8 +293,10 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)
 {
     m_dontSendChanges = true;
+    
+    if (breakpoint->deleted()) return;
 
-    breakpoint->setId(b["number"].toInt());
+    m_ids[breakpoint] = b["number"].toInt();
 
     QString type = b["type"].literal();
     if (b.hasField("original-location")) {

@@ -71,6 +71,8 @@ private:
     friend struct InsertedHandler;
     friend struct EnabledOrDisabledHandler;
     friend struct DeletedHandler;
+    
+    QMap<KDevelop::Breakpoint*, int> m_ids;
 
 };
 
