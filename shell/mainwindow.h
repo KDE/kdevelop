@@ -49,9 +49,6 @@ public:
     explicit MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
     virtual ~MainWindow();
 
-    //FIXME document this
-    virtual void fillContextMenu( KMenu *menu, const Context *context );
-
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
 

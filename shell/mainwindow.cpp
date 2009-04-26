@@ -149,18 +149,6 @@ void MainWindow::cleanup()
 {
 }
 
-void MainWindow::fillContextMenu( KMenu *menu, const Context *context )
-{
-    //Perhaps we get rid of this framework and instead have every Context contains
-    //a kactioncollection.  Plugins could add their actions directly to the context
-    //object retrieved from Core... ??
-    emit contextMenu( menu, context );
-
-    //Put this in every context menu so that plugins will be encouraged to allow shortcuts
-    QAction * action = actionCollection() ->action( "settings_configure_shortcuts" );
-    menu->addAction( action );
-}
-
 void MainWindow::setVisible( bool visible )
 {
     KXmlGuiWindow::setVisible( visible );
