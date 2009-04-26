@@ -71,6 +71,7 @@ private Q_SLOTS:
     void statusChanged(Sublime::View *view);
     void closeRequest(int idx);
     void tabMoved(int from, int to);
+    void wheelScroll(int);
 private:
 
     struct ContainerPrivate * const d;

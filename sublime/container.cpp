@@ -138,6 +138,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(widgetActivated(int)));
     connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
+    connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -156,6 +157,31 @@ Container::Container(QWidget *parent)
 Container::~Container()
 {
     delete d;
+}
+
+void Container::wheelScroll(int delta)
+{
+    int nextIndex = -1;
+    if( delta < 0 )
+    {
+        if( d->tabBar->currentIndex() == 0 )
+        {
+            nextIndex = d->tabBar->count() - 1;
+        } else
+        {
+            nextIndex = d->tabBar->currentIndex() -1;
+        }
+    } else 
+    {
+        if( d->tabBar->currentIndex() == d->tabBar->count() - 1 )
+        {
+            nextIndex = 0;
+        } else
+        {
+            nextIndex = d->tabBar->currentIndex() + 1;
+        }
+    }
+    widgetActivated( nextIndex );
 }
 
 void Container::closeRequest(int idx)
