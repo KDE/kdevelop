@@ -1,4 +1,3 @@
-class QModelIndex;
 /* This file is part of the KDE project
    Copyright (C) 2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright (C) 2002 John Firebaugh <jfirebaugh@kde.org>
@@ -17,8 +16,8 @@ class QModelIndex;
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KDEVELOP_IBREAKPOINTCONTROLLER_H
@@ -28,7 +27,9 @@ class QModelIndex;
 #include <QMap>
 #include <QSet>
 #include "../debuggerexport.h"
+#include "idebugsession.h"
 
+class QModelIndex;
 namespace KDevelop {
 class BreakpointModel;
 class Breakpoint;
@@ -38,16 +39,27 @@ class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public QObject
 {
     Q_OBJECT
 public:
+    enum BreakpointState {
+        DirtyState,
+        PendingState,
+        CleanState
+    };
+
     IBreakpointController(IDebugSession* parent);
+    
+    BreakpointState breakpointState(const Breakpoint *breakpoint) const;
 
 protected:
     IDebugSession *debugSession() const;
     BreakpointModel *breakpointModel() const;
 
+    void breakpointStateChanged(Breakpoint* breakpoint);
+
     void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;
 
-    QMap<KDevelop::Breakpoint*, QSet<int> > m_dirty;
+    QMap<const Breakpoint*, QSet<int> > m_dirty;
+    QSet<const Breakpoint*> m_pending;
     bool m_dontSendChanges;
 
 private Q_SLOTS:

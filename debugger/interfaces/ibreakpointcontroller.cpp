@@ -35,7 +35,6 @@ namespace KDevelop {
 IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     : QObject(parent), m_dontSendChanges(false)
 {
-
     connect(breakpointModel(),
             SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex,QModelIndex)));
     connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)), SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
@@ -45,6 +44,7 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
         Breakpoint *breakpoint = breakpoints->breakpoint(i);
         m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
         m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+        breakpointStateChanged(breakpoint);
     }
 }
 
@@ -79,11 +79,14 @@ void IBreakpointController::dataChanged(const QModelIndex &topLeft, const QModel
     Q_ASSERT(topLeft.row() == bottomRight.row());
     Q_ASSERT(topLeft.column() == bottomRight.column());
     KDevelop::Breakpoint *b = breakpointModel()->breakpointsItem()->breakpoint(topLeft.row());
-    m_dirty[b].insert(topLeft.column());
-    kDebug() << topLeft.column() << m_dirty;
-    if (debugSession()->isRunning()) {
-        sendMaybe(b);
+    if (topLeft.column() != Breakpoint::StateColumn) {
+        m_dirty[b].insert(topLeft.column());
+        breakpointStateChanged(b);
+        if (debugSession()->isRunning()) {
+            sendMaybe(b);
+        }
     }
+    kDebug() << topLeft.column() << m_dirty;
 }
 
 void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
@@ -91,6 +94,26 @@ void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
     kDebug() << breakpoint;
     sendMaybe(breakpoint);
 }
+
+IBreakpointController::BreakpointState IBreakpointController::breakpointState(const Breakpoint* breakpoint) const
+{
+    if (!m_dirty.contains(breakpoint) || m_dirty[breakpoint].isEmpty()) {
+        if (m_pending.contains(breakpoint)) {
+            return PendingState;
+        }
+        return CleanState;
+    }
+    return DirtyState;
+}
+
+void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
+{
+    if (breakpoint->pleaseEnterLocation()) return;
+    if (breakpoint->deleted()) return;
+    breakpoint->reportChange(Breakpoint::StateColumn);
+}
+
+
 }
 
 #include "ibreakpointcontroller.moc"

@@ -46,7 +46,7 @@ public:
     void initialize();
 
     virtual void addSession(IDebugSession* session);
-    IDebugSession* currentSession();
+    virtual IDebugSession* currentSession();
 
     virtual ContextMenuExtension contextMenuExtension( Context* context );
 

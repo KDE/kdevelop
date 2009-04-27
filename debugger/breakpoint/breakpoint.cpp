@@ -28,13 +28,17 @@
 
 #include "breakpointmodel.h"
 #include "breakpoints.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/idebugcontroller.h"
+#include "../interfaces/idebugsession.h"
+#include "../interfaces/ibreakpointcontroller.h"
 
 using namespace KDevelop;
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), enabled_(true), 
   deleted_(false), hitCount_(0), kind_(kind),
-  pending_(false), pleaseEnterLocation_(false), m_line(-1),
+  pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
 {
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
@@ -44,7 +48,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
                              const KConfigGroup& config)
 : TreeItem(model, parent), enabled_(true),
   deleted_(false), hitCount_(0),
-  pending_(false), pleaseEnterLocation_(false), m_line(-1),
+  pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
 {
     QString kindString = config.readEntry("kind", "");
@@ -68,7 +72,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
 : TreeItem(model, parent), enabled_(true), 
   deleted_(false), hitCount_(0), 
-  kind_(CodeBreakpoint), pending_(false), pleaseEnterLocation_(true), m_line(-1),
+  kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
   m_smartCursor(0)
 {   
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
@@ -146,22 +150,35 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == StateColumn)
     {
-        if (role == Qt::DecorationRole)
-        {
-            if (false/*dirty_.empty()*/)
-            {
-                if (pending_)
-                    return KIcon("help-contents");            
-                return KIcon("dialog-apply");
-            }
-            else
-                return KIcon("system-switch-user");
-            
+        IDebugSession* session = ICore::self()->debugController()->currentSession();
+        IBreakpointController::BreakpointState state;
+        if (session) {
+            state = session->breakpointController()->breakpointState(this);
+        } else {
+            state = IBreakpointController::DirtyState;
         }
-        else if (role == Qt::DisplayRole)
+        if (role == Qt::DecorationRole) {
+            switch (state) {
+                case IBreakpointController::DirtyState:
+                    return KIcon("system-switch-user");
+                case IBreakpointController::PendingState:
+                    return KIcon("help-contents");            
+                case IBreakpointController::CleanState:
+                    return KIcon("dialog-apply");
+            }
+        } else if (role == Qt::ToolTipRole) {
+            switch (state) {
+                case IBreakpointController::DirtyState:
+                    return i18n("dirty");
+                case IBreakpointController::PendingState:
+                    return i18n("pending");
+                case IBreakpointController::CleanState:
+                    return i18n("clean");
+            }
+        } else if (role == Qt::DisplayRole) {
             return "";
-        else
-            return QVariant();
+        }
+        return QVariant();
     }
 
     if (column == TypeColumn && role == Qt::DisplayRole)
@@ -249,17 +266,6 @@ void Breakpoint::setAddress(const QString& address)
 QString Breakpoint::address() const
 {
     return address_;
-}
-
-void Breakpoint::setPending(bool pending)
-{
-    pending_ = pending;
-    reportChange();
-}
-
-bool Breakpoint::pending() const
-{
-    return pending_;
 }
 
 void Breakpoint::setHitCount(int hitCount)

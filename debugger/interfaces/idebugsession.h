@@ -28,6 +28,8 @@ class KUrl;
 class KJob;
 
 namespace KDevelop {
+class IBreakpointController;
+class Breakpoint;
 class StackModel;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
@@ -46,6 +48,7 @@ public:
         StoppingState,
         StoppedState
     };
+
 public:
     /**
      * Current state of the debug session
@@ -70,6 +73,8 @@ public:
      * Returns if the debugee is currently running. This includes paused.
      */
     bool isRunning() const;
+    
+    IBreakpointController *breakpointController();
 
 public Q_SLOTS:
     virtual void startDebugger() = 0;
@@ -93,6 +98,7 @@ Q_SIGNALS:
 
 protected:
     KJob *m_job;
+    IBreakpointController *m_breakpointController;
 };
 
 }

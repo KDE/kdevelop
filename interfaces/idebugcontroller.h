@@ -39,6 +39,7 @@ public:
     virtual ~IDebugController();
 
     virtual void addSession(IDebugSession* session) = 0;
+    virtual IDebugSession *currentSession() = 0;
     virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
 
     virtual BreakpointModel *breakpointModel() = 0;

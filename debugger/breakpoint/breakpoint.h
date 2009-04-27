@@ -81,9 +81,6 @@ public:
     void setAddress(const QString& address);
     QString address() const;
 
-    void setPending(bool pending);
-    bool pending() const;
-
     void setHitCount(int hitCount);
     bool hitCount() const;
 
@@ -99,6 +96,7 @@ public:
     using TreeItem::removeSelf;
 protected:
     friend class Breakpoints;
+    friend class IBreakpointController;
     
     BreakpointModel *breakpointModel();
 
@@ -107,8 +105,6 @@ protected:
     bool deleted_;
     int hitCount_;
     BreakpointKind kind_;
-    /* The GDB 'pending' flag.  */
-    bool pending_;
     /* For watchpoints, the address it is set at.  */
     QString address_;
     bool pleaseEnterLocation_;
