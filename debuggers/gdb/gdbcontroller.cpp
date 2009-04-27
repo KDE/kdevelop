@@ -646,6 +646,8 @@ bool GDBController::startDebugger()
     // and to whom. Organise a few things, then set up the tty for the application,
     // and the application itself
 
+    queueCmd(new CliCommand(GDBMI::GdbShow, "version", this, &GDBController::handleVersion));
+
     if (config_displayStaticMembers_)
         queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members on"));
     else
@@ -1315,6 +1317,33 @@ void GDBController::programRunning()
     setStateOn(s_appRunning);
     raiseEvent(program_running);
 }
+
+void GDBController::handleVersion(const QStringList& s)
+{
+    const int minVersion1 = 6;
+    const int minVersion2 = 8;
+    const int minVersion3 = 50;
+
+    kDebug() << s.first();
+    QRegExp rx("^GNU gdb \\(GDB\\) ([0-9]+)\\.([0-9]+)\\.([0-9]+)");
+    rx.indexIn(s.first());
+    if (rx.cap(1).toInt() < minVersion1
+        || (rx.cap(1).toInt() == minVersion1 && (rx.cap(2).toInt() < minVersion2
+            || (rx.cap(2).toInt() == minVersion2 && rx.cap(3).toInt() < minVersion3))))
+    {
+        if (qApp->type() == QApplication::Tty)  {
+            //for unittest
+            qFatal("You need gdb 6.8.50 or higher.");
+        }
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>You need gdb 6.8.50 or higher.</b><br />"
+            "You are using: %1", s.first()),
+            i18n("gdb error"));
+        stopDebugger();
+    }
+}
+
 
 }
 

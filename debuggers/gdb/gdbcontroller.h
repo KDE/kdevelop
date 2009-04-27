@@ -264,6 +264,8 @@ private Q_SLOTS:
 
     void slotKillGdb();
 
+    void handleVersion(const QStringList& s);
+
 public Q_SLOTS:
     void slotRun();
     void slotKill();
