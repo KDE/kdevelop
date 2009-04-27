@@ -73,7 +73,6 @@ private:
     friend struct DeletedHandler;
     
     QMap<KDevelop::Breakpoint*, int> m_ids;
-
 };
 
 }

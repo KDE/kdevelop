@@ -46,13 +46,14 @@
 namespace GDBDebugger {
 
 DebugSession::DebugSession(GDBController* controller)
-    : m_controller(controller)
+    : KDevelop::IDebugSession()
+    , m_controller(controller)
     , m_gdbState(s_dbgNotStarted|s_appNotStarted)
     , m_sessionState(NotStartedState)
     , justRestarted_(false)
     , m_config(KGlobal::config(), "GDB Debugger")
 {
-    new BreakpointController(this);
+    m_breakpointController = new BreakpointController(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -336,8 +337,6 @@ bool DebugSession::restartAvaliable() const
         return true;
     }
 }
-
-
 }
 
 #include "debugsession.moc"

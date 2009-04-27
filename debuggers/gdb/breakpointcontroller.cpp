@@ -57,6 +57,8 @@ struct EnabledOrDisabledHandler : public Handler
         Q_UNUSED(r);
         // FIXME: handle error. Enable error most likely means the
         // breakpoint itself cannot be inserted in the target.
+        controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::EnableColumn);
+        controller->breakpointStateChanged(breakpoint);
         controller->sendMaybe(breakpoint);
         delete this;
     }
@@ -88,6 +90,8 @@ struct InsertedHandler : public Handler
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
                 controller->m_dontSendChanges = false;
             }
+            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+            controller->breakpointStateChanged(breakpoint);
             controller->sendMaybe(breakpoint);
         }
         delete this;
@@ -114,6 +118,7 @@ struct DeletedHandler : public Handler
 BreakpointController::BreakpointController(DebugSession* parent)
     : KDevelop::IBreakpointController(parent)
 {
+    Q_ASSERT(parent);
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
     connect(controller(),     SIGNAL(event(event_t)),
@@ -123,11 +128,13 @@ BreakpointController::BreakpointController(DebugSession* parent)
 
 DebugSession *BreakpointController::debugSession() const
 {
+    Q_ASSERT(QObject::parent());
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
 
 GDBController * BreakpointController::controller() const
 {
+    Q_ASSERT(debugSession());
     return debugSession()->controller();
 }
 
@@ -182,6 +189,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
         if (!breakpoint->enabled()) {
             m_dirty[breakpoint].clear();
+            breakpointStateChanged(breakpoint);
         } else {
             if (m_ids.contains(breakpoint)) {
                 /* We already have GDB breakpoint for this, so we need to remove
@@ -209,7 +217,6 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                             &Breakpoint::handleAddressComputed, true));
                     #endif
                 }
-                m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
@@ -220,19 +227,18 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString::number(m_ids[breakpoint]),
                            handler, &EnabledOrDisabledHandler::handle,
                            true));
-        m_dirty[breakpoint].remove(KDevelop::Breakpoint::EnableColumn);
-    }
-    #if 0
-    TODO NIKO
-    else if (dirty_.contains(ConditionColumn))
-    {
+    } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
+        #if 0
+        TODO NIKO
         controller_->addCommand(
             new GDBCommand(BreakCondition,
                            QString::number(id_) + ' ' +
                            itemData[ConditionColumn].toString(),
                            this, &Breakpoint::handleConditionChanged, true));
+        #endif
+        m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
+        breakpointStateChanged(breakpoint);
     }
-    #endif
 }
 
 void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
@@ -313,10 +319,11 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         }
     }
 
-    if (b.hasField("addr") && b["addr"].literal() == "<PENDING>")
-        breakpoint->setPending(true);
-    else
-        breakpoint->setPending(false);
+    if (b.hasField("addr") && b["addr"].literal() == "<PENDING>") {
+        m_pending.insert(breakpoint);
+    } else {
+        m_pending.remove(breakpoint);
+    }
 
     breakpoint->setHitCount(b["times"].toInt());
 

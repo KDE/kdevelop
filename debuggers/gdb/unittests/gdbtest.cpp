@@ -39,6 +39,7 @@
 #include "gdbcontroller.h"
 #include "debugsession.h"
 #include <debugger/breakpoint/breakpoints.h>
+#include <debugger/interfaces/ibreakpointcontroller.h>
 
 using namespace GDBDebugger;
 
@@ -110,9 +111,12 @@ void GdbTest::testBreakpoint()
 
     KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel()->breakpointsItem();
-    breakpoints->addCodeBreakpoint(fileName, 25);
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
+
     session.startProgram(run, 0);
     waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::CleanState);
     session.stepInto();
     waitForState(session, DebugSession::PausedState);
     session.stepInto();
@@ -213,6 +217,29 @@ void GdbTest::testDeleteBreakpoint()
     QTest::qWait(100);
     session.run();
 
+    waitForState(session, DebugSession::StoppedState);
+}
+
+void GdbTest::testPendingBreakpoint()
+{
+    GDBController controller;
+    DebugSession session(&controller);
+
+    KDevelop::IRun run;
+    run.setExecutable("unittests/debugee");
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel()->breakpointsItem();
+    breakpoints->addCodeBreakpoint(fileName, 25);
+
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(QFileInfo(__FILE__).dir().path()+"/gdbtest.cpp", 10);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
+
+    session.startProgram(run, 0);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::PendingState);
+    session.run();
     waitForState(session, DebugSession::StoppedState);
 }
 

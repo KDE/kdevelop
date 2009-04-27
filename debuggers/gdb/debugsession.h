@@ -60,8 +60,6 @@ public:
 
     virtual bool restartAvaliable() const;
 
-    
-
     GDBController* controller() { return m_controller; }
 
 Q_SIGNALS:
