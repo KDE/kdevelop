@@ -177,7 +177,7 @@ void GdbTest::testChangeLocationBreakpoint()
     waitForState(session, DebugSession::PausedState);
 
     QTest::qWait(100);
-    b->setLine(29);
+    b->setLine(28);
     QTest::qWait(100);
     session.run();
 
