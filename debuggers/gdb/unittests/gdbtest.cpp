@@ -40,6 +40,7 @@
 #include "debugsession.h"
 #include <debugger/breakpoint/breakpoints.h>
 #include <debugger/interfaces/ibreakpointcontroller.h>
+#include <gdbcommand.h>
 
 using namespace GDBDebugger;
 
@@ -239,6 +240,42 @@ void GdbTest::testPendingBreakpoint()
     session.startProgram(run, 0);
     waitForState(session, DebugSession::PausedState);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::PendingState);
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
+void GdbTest::testUpdateBreakpoint()
+{
+    GDBController controller;
+    DebugSession session(&controller);
+
+    KDevelop::IRun run;
+    run.setExecutable("unittests/debugee");
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel()->breakpointsItem();
+
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
+    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
+
+    session.startProgram(run, 0);
+
+    //insert custom command as user might do it using GDB console
+    session.controller()->addCommand(new UserCommand(GDBMI::NonMI, "break "+fileName+":28"));
+
+    waitForState(session, DebugSession::PausedState);
+    QTest::qWait(100);
+    session.stepInto();
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 3);
+    b = breakpoints->breakpoint(1);
+    QCOMPARE(b->url(), KUrl(fileName));
+    QCOMPARE(b->line(), 27);
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+
+
     session.run();
     waitForState(session, DebugSession::StoppedState);
 }
