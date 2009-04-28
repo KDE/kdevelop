@@ -253,15 +253,18 @@ void CodeHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, 
     while( declarationsForColors[colorNum] ) {
       colorNum = (colorNum+1) % ColorCache::self()->validColorCount();
       if( colorNum == oldColorNum ) {
-        //Could not allocate a unique color, what now? Just pick the black color.
         colorNum = ColorCache::self()->validColorCount();
         break;
       }
     }
-    colorsForDeclarations[dec] = colorNum;
-    declarationsForColors[colorNum] = dec;
-
-    highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
+    if(colorNum != ColorCache::self()->validColorCount()) {
+      //If no color could be found, use default color,, not black
+      colorsForDeclarations[dec] = colorNum;
+      declarationsForColors[colorNum] = dec;
+      highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
+    }else{
+      highlightDeclaration(dec, QColor(QColor::Invalid));
+    }
   }
 
   for(int a = 0; a < context->usesCount(); ++a) {
