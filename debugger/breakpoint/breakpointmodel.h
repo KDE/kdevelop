@@ -22,7 +22,7 @@
 #ifndef KDEV_BREAKPOINTMODEL_H
 #define KDEV_BREAKPOINTMODEL_H
 
-#include <KTextEditor/MarkInterface>
+#include <KDE/KTextEditor/MarkInterface>
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"

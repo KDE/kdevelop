@@ -23,9 +23,9 @@
 #ifndef KDEVELOP_IBREAKPOINTCONTROLLER_H
 #define KDEVELOP_IBREAKPOINTCONTROLLER_H
 
-#include <QObject>
-#include <QMap>
-#include <QSet>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QSet>
 #include "../debuggerexport.h"
 #include "idebugsession.h"
 

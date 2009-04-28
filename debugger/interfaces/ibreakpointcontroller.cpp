@@ -21,9 +21,11 @@
    Boston, MA 02111-1307, USA.
 */
 
-#include <KDebug>
 
 #include "ibreakpointcontroller.h"
+
+#include <KDE/KDebug>          // remove later
+
 #include "idebugsession.h"
 #include "../../interfaces/icore.h"
 #include "../breakpoint/breakpointmodel.h"

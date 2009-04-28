@@ -39,7 +39,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramesModel : public KDevelop::TreeModel
         void moreItems();
         int framesCount() const;
         void removeAll() const;
-    private slots:
+    private Q_SLOTS:
         void initialize(); 
     private:
         DumbItem* mRoot;
@@ -62,4 +62,4 @@ class KDEVPLATFORMDEBUGGER_EXPORT StackModel : public TreeModel
 
 }
 
-#endif // KDEVELOP_STACKMODEL_H
+#endif

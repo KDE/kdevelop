@@ -21,10 +21,10 @@
 
 #include "breakpoint.h"
 
-#include <KLocale>
-#include <KIcon>
-#include <KConfigGroup>
-#include <KDebug>
+#include <KDE/KLocale>
+#include <KDE/KIcon>
+#include <KDE/KConfigGroup>
+#include <KDE/KDebug>
 
 #include "breakpointmodel.h"
 #include "breakpoints.h"
@@ -199,7 +199,7 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         QString ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
-        ret += ":" + QString::number(m_line+1);
+        ret += ':' + QString::number(m_line+1);
         if (!address_.isEmpty() && role == Qt::DisplayRole) {
             ret = QString("%1 (%2)").arg(ret).arg(address_);
         }
