@@ -192,7 +192,6 @@ void SourceFormatterPlugin::activeDocumentChanged(KDevelop::IDocument *doc)
 	bool enabled = false;
 
 	if (doc) {
-		kDebug() << "doc is not null" << endl;
 		KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 		kDebug() << "doc is not null " << mime->name()  << endl;
 		if (KDevelop::ICore::self()->sourceFormatterController()->isMimeTypeSupported(mime))
