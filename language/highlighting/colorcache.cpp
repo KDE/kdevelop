@@ -22,9 +22,9 @@
 #include "colorcache.h"
 #include "configurablecolors.h"
 
-#include <KColorScheme>
-#include <KColorUtils>
-#include <KGlobalSettings>
+#include <KDE/KColorScheme>
+#include <KDE/KColorUtils>
+#include <KDE/KGlobalSettings>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
