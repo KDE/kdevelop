@@ -227,14 +227,6 @@ KUrl DumbProject::relativeUrl( const KUrl& absolute ) const
     return KUrl::relativeUrl( folder(), absolute );
 }
 
-KUrl DumbProject::urlRelativeToProject( const KUrl & relativeUrl ) const
-{
-    if ( KUrl::isRelativeUrl( relativeUrl.toLocalFile() ) )
-        return KUrl( folder(), relativeUrl.toLocalFile() );
-
-    return relativeUrl;
-}
-
 IProjectFileManager* DumbProject::projectFileManager() const
 {
     return d->manager->extension<IProjectFileManager>();

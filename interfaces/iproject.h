@@ -169,16 +169,6 @@ public Q_SLOTS:
     virtual KUrl relativeUrl(const KUrl& absoluteUrl) const = 0;
 
     /**
-     * Returns the absolute url corresponding to the given \a relativeUrl and
-     * the project directory.
-     *
-     * @param relativeUrl Relative url to convert
-     *
-     * @returns the absolute URL relative to projectDirectory()
-     **/
-    virtual KUrl urlRelativeToProject(const KUrl& relativeUrl) const = 0;
-
-    /**
      * Check if the url specified by @a url is part of the project.
      * @a url can be either a relative url (to the project directory) or
      * an absolute url.

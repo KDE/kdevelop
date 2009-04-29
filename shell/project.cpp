@@ -203,7 +203,6 @@ public:
             return false;
         }
 
-
         developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) );
         developerFileUrl.addPath(".kdev4");
         developerFileUrl.addPath( projectFileUrl.fileName() );
@@ -532,14 +531,6 @@ KUrl Project::relativeUrl( const KUrl& absolute ) const
 {
     kDebug() << "Creating relative url between: " << folder() << absolute;
     return KUrl::relativeUrl( folder(), absolute );
-}
-
-KUrl Project::urlRelativeToProject( const KUrl & relativeUrl ) const
-{
-    if ( KUrl::isRelativeUrl( relativeUrl.toLocalFile() ) )
-        return KUrl( folder(), relativeUrl.toLocalFile() );
-
-    return relativeUrl;
 }
 
 IProjectFileManager* Project::projectFileManager() const
