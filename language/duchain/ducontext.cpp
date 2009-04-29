@@ -1681,8 +1681,11 @@ void DUContext::cleanIfNotEncountered(const QSet<DUChainBase*>& encountered)
   foreach (Declaration* dec, localDeclarations())
     if (!encountered.contains(dec))
       delete dec;
-
-  FOREACH_FUNCTION(LocalIndexedDUContext childContext, d_func()->m_childContexts)
+    
+  //Copy since the array may change during the iteration
+  KDevVarLengthArray<LocalIndexedDUContext, 10> childrenCopy = d_func_dynamic()->m_childContextsList();
+  
+  FOREACH_ARRAY(LocalIndexedDUContext childContext, childrenCopy)
     if (!encountered.contains(childContext.data(topContext())))
       delete childContext.data(topContext());
 }
