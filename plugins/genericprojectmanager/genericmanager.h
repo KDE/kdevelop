@@ -28,6 +28,14 @@ class QStringList;
 class KUrl;
 class KDirWatch;
 template <typename T> class QList;
+
+namespace KIO
+{
+class Job;
+class UDSEntry;
+typedef QList<UDSEntry> UDSEntryList;
+}
+
 namespace KDevelop
 {
 class ProjectBaseItem;
@@ -78,9 +86,18 @@ Q_SIGNALS:
     void fileRenamed(const KUrl& oldFile,
                      KDevelop::ProjectFileItem* newFile);
 
+private Q_SLOTS:
+    void eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
+    ///NOTE: make sure the project for the job's URL is already registered at the controller
+    void addJobItems(KIO::Job* j, KIO::UDSEntryList entries);
+    void waitForProjectOpen( KDevelop::IProject* project );
+
 private:
-    bool isValid( const QFileInfo &fileName, const QStringList &includes, const QStringList &excludes ) const;
+    bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
+                  const QStringList& includes, const QStringList& excludes ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    QMap<KIO::Job*, KDevelop::IProject*> m_jobProjects;
+
 private Q_SLOTS:
     void dirty( const QString &fileName );
 

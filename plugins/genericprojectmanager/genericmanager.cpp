@@ -25,6 +25,9 @@
 #include <interfaces/iruncontroller.h>
 #include <language/duchain/indexedstring.h>
 #include <project/importprojectjob.h>
+#include <interfaces/iuicontroller.h>
+
+#include <kparts/mainwindow.h>
 
 #include <kdebug.h>
 #include <kpluginloader.h>
@@ -35,11 +38,11 @@
 #include <kaboutdata.h>
 #include <kdirwatch.h>
 
-#include <QtCore/QDir>
 #include <QtDesigner/QExtensionFactory>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
 #include <QtCore/QRegExp>
+
+#include <KIO/Job>
+#include <KIO/NetAccess>
 
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericprojectmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
@@ -53,6 +56,9 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
+    
+    connect( KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+             this, SLOT(waitForProjectOpen(KDevelop::IProject*)) );
 }
 
 GenericProjectManager::~GenericProjectManager()
@@ -60,29 +66,33 @@ GenericProjectManager::~GenericProjectManager()
     delete d;
 }
 
-bool GenericProjectManager::isValid( const QFileInfo &fileInfo,
-    const QStringList &includes, const QStringList &excludes ) const
+bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDevelop::IProject* project,
+                                     const QStringList &includes, const QStringList &excludes ) const
 {
-    QString fileName = fileInfo.fileName();
+    if ( isFolder && ( url.fileName() == "." || url.fileName() == ".."
+            || ( url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) ) ) {
+        return false;
+    } else if ( url == project->projectFileUrl() ) {
+        return false;
+    }
 
-    bool ok = fileInfo.isDir();
-    for ( QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it )
-    {
+    bool ok = isFolder;
+
+    for ( QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( fileName ) )
-        {
+        if ( rx.exactMatch( url.fileName() ) ) {
             ok = true;
+            break;
         }
     }
 
-    if ( !ok )
+    if ( !ok ) {
         return false;
+    }
 
-    for ( QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it )
-    {
+    for ( QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( fileName ) )
-        {
+        if ( rx.exactMatch( url.fileName() ) ) {
             return false;
         }
     }
@@ -92,96 +102,152 @@ bool GenericProjectManager::isValid( const QFileInfo &fileInfo,
 
 QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::ProjectFolderItem *item )
 {
-    QDir dir( item->url().toLocalFile() );
+    // we are async, can't return anything here
+    kDebug() << "note: parse will always return an empty list";
+    Q_UNUSED(item);
+    return QList<KDevelop::ProjectFolderItem*>();
+}
 
-    QList<KDevelop::ProjectFolderItem*> folder_list;
-    QFileInfoList entries = dir.entryInfoList();
+void GenericProjectManager::waitForProjectOpen(KDevelop::IProject* project)
+{
+    if ( project->managerPlugin() == this ) {
+        kDebug() << "generic project got opened:" << project->folder();
+        eventuallyReadFolder( project->projectItem() );
+    }
+}
 
-    KConfigGroup filtersConfig = item->project()->projectConfiguration()->group("Filters");
+void GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item )
+{
+    ///TODO: listRecursive does not follow directory links!
+    KIO::ListJob* job = KIO::listRecursive( item->url() );
+    kDebug() << "adding job" << job << job->url() << "for project" << item->project();
+
+    KDevelop::ICore::self()->runController()->registerJob( job );
+
+    connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
+                this, SLOT(addJobItems(KIO::Job*, KIO::UDSEntryList)) );
+}
+
+void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
+{
+    if ( entries.empty() ) {
+        return;
+    }
+
+    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(j));
+    Q_ASSERT(job);
+
+    // the folder we are currently adding items to
+    // the UDS_NAME is essentially a path relative to the job->url()
+    KUrl curUrl = job->url();
+    curUrl.addPath( entries.first().stringValue( KIO::UDSEntry::UDS_NAME ) );
+    curUrl.setFileName( "" );
+
+    kDebug() << "reading contents of " << curUrl << "total entries:" << entries.count();
+
+    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( job->url() );
+    Q_ASSERT(project);
+
+    QList<KDevelop::ProjectFolderItem*> fitems = project->foldersForUrl( curUrl );
+    if ( fitems.isEmpty() ) {
+        kDebug() << "parent was filtered";
+        return;
+    }
+    KDevelop::ProjectFolderItem* item = fitems.first();
+
+    KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
     QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
+    ///TODO: filter hidden files by default
     QStringList excludes = filtersConfig.readEntry("Excludes", QStringList());
 
+    // build lists of valid files and folders with relative urls to the project folder
+    KUrl::List files;
+    KUrl::List folders;
+    foreach ( KIO::UDSEntry entry, entries ) {
+        KUrl url = job->url();
+        url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
+
+        if ( !isValid( url, entry.isDir(), project, includes, excludes ) ) {
+            continue;
+        } else {
+            if ( entry.isDir() ) {
+                folders << url;
+            } else {
+                files << url;
+            }
+        }
+    }
+
+    kDebug() << "valid folders:" << folders;
+    kDebug() << "valid files:" << files;
+
+    // remove obsolete rows
     for ( int j = 0; j < item->rowCount(); ++j ) {
         if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
             KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
-            QFileInfo fileInfo(f->url().toLocalFile());
-            if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
-                item->removeRow(j);
-                j--;
+            // check if this is still a valid folder
+            int index = folders.indexOf( f->folderName() );
+            if ( index == -1 ) {
+                // folder got removed or is now invalid
+                item->removeRow( j );
+                --j;
+            } else {
+                // this folder already exists in the view
+                folders.removeAt( index );
             }
         } else if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
             KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
-            QFileInfo fileInfo(f->url().toLocalFile());
-            if (!fileInfo.exists() || !isValid( fileInfo, includes, excludes)) {
-                item->removeRow(j);
-                j--;
-            }
-        }
-    }
-    for ( int i = 0; i < entries.count(); ++i )
-    {
-        QFileInfo fileInfo = entries.at( i );
-
-        if ( !isValid( fileInfo, includes, excludes ) )
-        {
-            //kDebug(9000) << "skip:" << fileInfo.absoluteFilePath();
-        }
-        else if ( fileInfo.isDir() && fileInfo.fileName() != QLatin1String( "." )
-                  && fileInfo.fileName() != QLatin1String( ".." ) )
-        {
-            KDevelop::ProjectFolderItem *folder = 0;
-            for ( int j = 0; j < item->rowCount(); ++j ) {
-                if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
-                    KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
-                    if ( f->url() == fileInfo.absoluteFilePath() ) {
-                        folder = f;
-                        break;
-                    }
-                }
-            }
-            if ( ! folder ) {
-                folder = new KDevelop::ProjectFolderItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
-            }
-            folder_list.append( folder );
-        }
-        else if ( fileInfo.isFile() )
-        {
-            bool found = false;
-            for ( int j = 0; j < item->rowCount(); ++j ) {
-                if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
-                    KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
-                    if ( f->url() == fileInfo.absoluteFilePath() ) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if ( ! found ) {
-                new KDevelop::ProjectFileItem( item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
-                item->project()->addToFileSet( KDevelop::IndexedString( fileInfo.absoluteFilePath() ) );
+            // check if this is still a valid file
+            int index = files.indexOf( f->fileName() );
+            if ( index == -1 ) {
+                // file got removed or is now invalid
+                project->removeFromFileSet( KDevelop::IndexedString( f->url() ) );
+                item->removeRow( j );
+                --j;
+            } else {
+                // this file already exists in the view
+                files.removeAt( index );
             }
         }
     }
 
-    m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchDirOnly);
-
-    return folder_list;
+    // add new rows
+    ///TODO: why do the fileitems look like remote folders, and why is the sorting fubar?
+    foreach ( const KUrl& url, files ) {
+        new KDevelop::ProjectFileItem( project, url, item );
+        project->addToFileSet( KDevelop::IndexedString( url ) );
+    }
+    foreach ( const KUrl& url, folders ) {
+        new KDevelop::ProjectFolderItem( project, url, item );
+    }
 }
-
 
 KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
     KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
+    kDebug() << "imported new project" << project->name() << "at" << projectRoot->url();
     projectRoot->setProjectRoot(true);
-    m_watchers[project] = new KDirWatch( project );
-    connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
+
+    ///TODO: check if this works for remote files when something gets changed through another KDE app
+    if ( project->folder().isLocalFile() ) {
+        m_watchers[project] = new KDirWatch( project );
+
+        connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
+
+        ///TODO: check if this works for remote files when something gets changed through another KDE app
+        if ( project->folder().isLocalFile() ) {
+            m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs );
+        }
+    }
+
     return projectRoot;
 }
 
 bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )
 {
-    KDevelop::ImportProjectJob* importJob = new KDevelop::ImportProjectJob( item, this );
-    KDevelop::ICore::self()->runController()->registerJob( importJob );
+    kDebug() << "reloading project" << item->project()->name() << item->project()->folder();
+
+    eventuallyReadFolder( item->project()->projectItem() );
     return true;
 }
 
@@ -189,8 +255,9 @@ void GenericProjectManager::dirty( const QString &fileName )
 {
     foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects() ) {
         foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl( KUrl(fileName) ) ) {
-            kDebug() << "reloading item" << item->url().toLocalFile();
-            parse(item);
+            kDebug() << "reloading item" << item->url();
+
+            eventuallyReadFolder( item );
         }
     }
 }
@@ -199,22 +266,31 @@ void GenericProjectManager::dirty( const QString &fileName )
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )
 {
-    Q_UNUSED( url )
-    Q_UNUSED( folder )
-    return 0;
+    // dirwatcher cares about local folders, yet remote ones have to be added by hand
+    KDevelop::ProjectFolderItem* newFolder = 0;
+    if ( !url.isLocalFile() ) {
+        kDebug() << "adding remote folder" << url << "to" << folder->url();
+        newFolder = new KDevelop::ProjectFolderItem( folder->project(), url, folder );
+    }
+    return newFolder;
 }
 
 
 KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )
 {
-    Q_UNUSED( url )
-    Q_UNUSED( folder )
-    return 0;
+    // dirwatcher cares about local files, yet remote ones have to be added by hand
+    KDevelop::ProjectFileItem* file = 0;
+    if ( !url.isLocalFile() ) {
+        kDebug() << "adding remote file" << url << "to" << folder->url();
+        file = new KDevelop::ProjectFileItem( folder->project(), url, folder );
+    }
+    return file;
 }
 
 bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
 {
+    kDebug() << "trying to rename a folder:" << folder->url() << url;
     Q_UNUSED( folder )
     Q_UNUSED( url )
     return false;
@@ -222,6 +298,7 @@ bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, 
 
 bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
 {
+    kDebug() << "trying to rename a file:" << file->url() << url;
     Q_UNUSED(file)
     Q_UNUSED(url)
     return false;
@@ -229,14 +306,22 @@ bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const 
 
 bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
 {
-    Q_UNUSED( folder )
-    return false;
+    // dirwatcher cares about local folders, yet remote ones have to be removed by hand
+    if ( !folder->url().isLocalFile() ) {
+        kDebug() << "removing folder" << folder->url();
+        folder->parent()->removeRow( folder->row() );
+    }
+    return true;
 }
 
 bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
 {
-    Q_UNUSED( file )
-    return false;
+    // dirwatcher cares about local files, yet remote ones have to be removed by hand
+    if ( !file->url().isLocalFile() ) {
+        kDebug() << "removing file" << file->url();
+        file->parent()->removeRow( file->row() );
+    }
+    return true;
 }
 
 
