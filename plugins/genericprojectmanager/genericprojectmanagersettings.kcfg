@@ -3,10 +3,11 @@
 <kcfg>
   <kcfgfile arg="true"/>
   <group name="Filters">
-    <entry name="includes" key="Includes" type="String">
+    <entry name="includes" key="Includes" type="StringList">
       <default>*</default>
     </entry>
-    <entry name="excludes" key="Excludes" type="String">
+    <entry name="excludes" key="Excludes" type="StringList">
+      <default>.*</default>
     </entry>
   </group>
 </kcfg>
