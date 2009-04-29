@@ -35,8 +35,6 @@
 #include "../interfaces/ilanguagesupport.h"
 #include "../duchain/duchain.h"
 
-#include "configurablecolors.h"
-
 // ######### start interpolation
 
 uint totalColorInterpolationStepCount = 6;

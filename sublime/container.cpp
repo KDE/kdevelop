@@ -18,12 +18,13 @@
  ***************************************************************************/
 #include "container.h"
 
-#include <QMap>
-#include <QBoxLayout>
-#include <QLabel>
-#include <QStylePainter>
-#include <QStackedWidget>
-#include <QStyleOptionTabBarBase>
+#include <QtCore/QMap>
+#include <QtGui/QBoxLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QStylePainter>
+#include <QtGui/QStackedWidget>
+#include <QtGui/QStyleOptionTabBarBase>
+#include <QtGui/qstyle.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -37,8 +38,6 @@
 
 #include "view.h"
 #include "document.h"
-#include <QStackedWidget>
-#include <qstyle.h>
 
 namespace Sublime {
 

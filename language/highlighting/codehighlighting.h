@@ -133,7 +133,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     mutable bool m_useClassCache;
 
-  private slots:
+  private Q_SLOTS:
     /// when the colors change we must invalidate our local caches
     void adaptToColorChanges();
 };
