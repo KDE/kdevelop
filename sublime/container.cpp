@@ -162,7 +162,7 @@ Container::~Container()
 void Container::wheelScroll(int delta)
 {
     int nextIndex = -1;
-    if( delta < 0 )
+    if( delta > 0 )
     {
         if( d->tabBar->currentIndex() == 0 )
         {
