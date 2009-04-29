@@ -203,14 +203,16 @@ public:
             return false;
         }
 
-        developerFileUrl = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) );
-        developerFileUrl.addPath(".kdev4");
-        developerFileUrl.addPath( projectFileUrl.fileName() );
+        // developerfile == dirname(projectFileUrl) ."/.kdev4/". basename(projectfileUrl)
+        developerFileUrl = projectFileUrl.upUrl();
+        developerFileUrl.addPath( ".kdev4/" + projectFileUrl.fileName() );
 
         statJob = KIO::stat( developerFileUrl, KIO::HideProgressInfo );
         if( !statJob->exec() )
         {
-            KUrl dir = KUrl( projectFileUrl.directory( KUrl::AppendTrailingSlash ) + ".kdev4");
+            // the developerfile does not exist yet, check if its folder exists
+            // the developerfile itself will get created below
+            KUrl dir = developerFileUrl.upUrl();
             statJob = KIO::stat( dir, KIO::HideProgressInfo );
             if( !statJob->exec() )
             {
@@ -432,7 +434,8 @@ bool Project::open( const KUrl& projectFileUrl_ )
     KConfigGroup projectGroup = d->initKConfigObject();
     if (d->projectNameUsed(projectGroup))
         return false;
-    d->folder = d->projectFileUrl.directory( KUrl::AppendTrailingSlash );
+
+    d->folder = d->projectFileUrl.upUrl();
 
     IProjectFileManager* iface = d->fetchFileManager(projectGroup);
     if (!iface)
