@@ -29,8 +29,8 @@
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
 #include <kparts/mainwindow.h>
-#include <ksavefile.h>
 #include <kparts/componentfactory.h>
+#include <KTemporaryFile>
 
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
@@ -514,13 +514,17 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
         return 0;
     }
 
-    KSaveFile file(url.toLocalFile());
-    if ( ! file.open() ) {
-        KMessageBox::error( window, i18n( "Cannot create file." ) );
-        return 0;
+    {
+        KTemporaryFile temp;
+        if ( !temp.open() || temp.write("\n") == -1 ) {
+            KMessageBox::error( window, i18n( "Cannot create temporary file." ) );
+            return 0;
+        }
+        if ( !KIO::NetAccess::upload( temp.fileName(), url, window ) ) {
+            KMessageBox::error( window, i18n( "Cannot create file." ) );
+            return 0;
+        }
     }
-    file.finalize();
-    file.close();
 
     ProjectFileItem* ret=item->project()->projectFileManager()->addFile( url, item->folder() );
     ICore::self()->documentController()->openDocument( url );
