@@ -1048,7 +1048,9 @@ class Bucket {
         while(currentIndex) {
           Q_ASSERT(currentIndex != index);
           
+#ifndef QT_NO_DEBUG
           unsigned short currentFreeSize = freeSize(currentIndex);
+#endif
           
           ///@todo Achieve this without iterating through all items in the bucket(This is very slow)
           //Merge behind index
