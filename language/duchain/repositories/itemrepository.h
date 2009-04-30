@@ -497,8 +497,14 @@ class Bucket {
         setFollowerIndex(insertedAt, 0);
         Q_ASSERT(m_objectMap[localHash] == 0);
         m_objectMap[localHash] = insertedAt;
-
+        
+        if(markForReferenceCounting)
+          enableDUChainReferenceCounting(m_data, dataSize());
+        
         request.createItem((Item*)(m_data + insertedAt));
+      
+        if(markForReferenceCounting)
+          disableDUChainReferenceCounting(m_data);
         
         return insertedAt;
       }
