@@ -29,11 +29,11 @@
 
 namespace KDevelop {
   KDEVPLATFORMLANGUAGE_EXPORT bool shouldDoDUChainReferenceCountingInternal(void* item);
-  KDEVPLATFORMLANGUAGE_EXPORT extern bool noReferenceCounting;
+  KDEVPLATFORMLANGUAGE_EXPORT extern bool doReferenceCounting;
   ///This is used by indexed items to decide whether they should do reference-counting
   inline bool shouldDoDUChainReferenceCounting(void* item) 
   {
-    if(noReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
+    if(!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
       return false;
     return shouldDoDUChainReferenceCountingInternal(item);
   }

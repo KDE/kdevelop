@@ -27,7 +27,7 @@
 #include "repositories/itemrepository.h"
 
 namespace KDevelop {
-  bool noReferenceCounting = true;
+  bool doReferenceCounting = false;
 }
 
 struct RefCountDecider {
@@ -86,7 +86,7 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
     refcounting().ranges.erase(it);
   
   if(refcounting().ranges.isEmpty())
-    noReferenceCounting = true;
+    doReferenceCounting = false;
   
   refcounting().mutex.unlock();
 }
@@ -95,7 +95,7 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
   refcounting().mutex.lock();
   
-  noReferenceCounting = false;
+  doReferenceCounting = true;
   
   QMap< void*, QPair<uint, uint> >::iterator it = refcounting().ranges.upperBound(start);
   if(it != refcounting().ranges.begin()) {
