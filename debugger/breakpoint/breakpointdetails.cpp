@@ -62,6 +62,8 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     status_ = new QLabel(this);
     status_->setText(i18n("Breakpoint is active"));
     status_->hide();
+    connect(status_, SIGNAL(linkActivated(const QString&)),
+            this, SLOT(showExplanation(const QString&)));
     layout->addWidget(status_);
 
     QGridLayout* hitsLayout = new QGridLayout();
@@ -127,9 +129,6 @@ void BreakpointDetails::setItem(Breakpoint *b)
         hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
     else
         hits_->setText(i18n("Not hit yet"));
-
-    connect(status_, SIGNAL(linkActivated(const QString&)),
-            this, SLOT(showExplanation(const QString&)));
 }
 
 void BreakpointDetails::showExplanation(const QString& link)
