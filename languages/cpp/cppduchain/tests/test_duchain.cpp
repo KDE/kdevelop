@@ -2454,6 +2454,27 @@ int value( const AbstractType::Ptr& type ) {
     return 0;
 }
 
+void TestDUChain::testTemplateRecursiveInstantiation()
+{
+  {
+    QByteArray text("template<bool b> class A { public: bool member; enum { SizeWithFalse = sizeof(A<false>) }; };");
+    TopDUContext* top = parse(text, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    Declaration* aTrueDecl = findDeclaration(top, Identifier("A<true>"));
+    Declaration* aFalseDecl = findDeclaration(top, Identifier("A<false>"));
+    QVERIFY(aTrueDecl);
+    QVERIFY(aFalseDecl);
+    QVERIFY(aTrueDecl->internalContext());
+    QVERIFY(aFalseDecl->internalContext());
+
+    QCOMPARE(aFalseDecl->internalContext()->localDeclarations(top).count(), 2);
+    QCOMPARE(aTrueDecl->internalContext()->localDeclarations(top).count(), 2);
+
+    release(top);
+  }
+}
+
 void TestDUChain::testTemplateEnums()
 {
   {

@@ -741,12 +741,20 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     }
     if(TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration())) {
       //The context etc. may have been filled with new items, and the declaration may have been searched unsuccessfully, or wrong instantiations created.
+      TemplateDeclaration* deleteInstantiationsOf = 0;
       if(templateDecl->instantiatedFrom())
-        templateDecl->instantiatedFrom()->deleteAllInstantiations();
+        deleteInstantiationsOf = templateDecl->instantiatedFrom();
       else if(templateDecl->specializedFrom().data())
-        dynamic_cast<TemplateDeclaration*>(templateDecl->specializedFrom().data())->deleteAllInstantiations();
+        deleteInstantiationsOf = dynamic_cast<TemplateDeclaration*>(templateDecl->specializedFrom().data());
       else
-        templateDecl->deleteAllInstantiations();
+        deleteInstantiationsOf = templateDecl;
+      
+      if(deleteInstantiationsOf) {
+        CppDUContext<DUContext>* ctx = dynamic_cast<CppDUContext<DUContext>*>(dynamic_cast<Declaration*>(deleteInstantiationsOf)->internalContext());
+        deleteInstantiationsOf->deleteAllInstantiations();
+        if(ctx)
+          ctx->deleteAllInstantiations();
+      }
     }
   }
 
@@ -885,7 +893,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   }
 }
 
-void DeclarationBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* context) {
+void DeclarationBuilder::classContextOpened(ClassSpecifierAST */*node*/, DUContext* context) {
   
   //We need to set this early, so we can do correct search while building
   DUChainWriteLocker lock(DUChain::lock());
