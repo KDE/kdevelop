@@ -148,6 +148,7 @@ Container::Container(QWidget *parent)
 #else
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
+    d->tabBar->setExpanding(false);
 #endif
 
     setOpenAfterCurrent(group.readEntry("TabBarOpenAfterCurrent", 1) == 1);
