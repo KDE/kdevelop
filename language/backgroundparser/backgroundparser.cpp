@@ -187,6 +187,14 @@ public:
     {
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
+            if(!language) {
+                kWarning(9504) << "got zero language for" << url;
+                continue;
+            }
+            if(!language->languageSupport()) {
+                kWarning(9504) << "language has no language support assigned:" << language->name();
+                continue;
+            }
             ParseJob* job = language->languageSupport()->createParseJob(url);
             if (!job) {
                 continue; // Language part did not produce a valid ParseJob.
