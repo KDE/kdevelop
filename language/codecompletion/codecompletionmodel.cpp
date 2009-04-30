@@ -404,6 +404,12 @@ int CodeCompletionModel::rowCount ( const QModelIndex & parent ) const
   }
 }
 
+QString CodeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position)
+{
+  m_filterString = KTextEditor::CodeCompletionModelControllerInterface::filterString(view, range, position);
+  return m_filterString;
+}
+
 }
 
 #include "codecompletionmodel.moc"

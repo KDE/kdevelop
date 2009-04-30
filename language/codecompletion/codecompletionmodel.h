@@ -34,6 +34,8 @@
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
 #include <interfaces/icompletionsettings.h>
+#include <ktexteditor/codecompletionmodelcontrollerinterface.h>
+#include <kdeversion.h>
 
 class QIcon;
 class QString;
@@ -47,8 +49,17 @@ class CodeCompletionWorker;
 class CompletionWorkerThread;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
+#if KDE_IS_VERSION(4,2,62)
+, public KTextEditor::CodeCompletionModelControllerInterface2
+#else
+, public KTextEditor::CodeCompletionModelControllerInterface
+#endif
 {
   Q_OBJECT
+  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
+#if KDE_IS_VERSION(4,2,62)
+  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
+#endif
 
   public:
     CodeCompletionModel(QObject* parent);
@@ -81,6 +92,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///Whether the completion should be fully detailed. If false, it should be simplifed, so no argument-hints,
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
+    
+    virtual QString filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position);
     
     void clear();
     
@@ -119,6 +132,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     bool m_fullCompletion;
     QMutex* m_mutex;
     CompletionWorkerThread* m_thread;
+    QString m_filterString;
     KDevelop::TopDUContextPointer m_currentTopContext;
 };
 
