@@ -730,6 +730,7 @@ void TemplateDeclaration::deleteAllInstantiations()
   }
   
   foreach( TemplateDeclaration* decl, instantiations ) {
+    Q_ASSERT(decl);
     decl->m_instantiatedFrom = 0;
     Declaration* realDecl = dynamic_cast<Declaration*>(decl);
     //Only delete real insantiations, not specializations

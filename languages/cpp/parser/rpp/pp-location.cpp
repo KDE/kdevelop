@@ -50,7 +50,7 @@ QPair<rpp::Anchor, uint> LocationTable::positionAt(std::size_t offset, const Pre
 
   if(!ret.anchor.collapsed)
     for(std::size_t a = ret.position; a < offset; ++a)
-      ret.anchor.column += KDevelop::IndexedString(contents[a]).length();
+      ret.anchor.column += KDevelop::IndexedString::fromIndex(contents[a]).length();
   
   uint room = 0;
   if(ret.nextPosition)

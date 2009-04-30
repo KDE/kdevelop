@@ -199,10 +199,10 @@ void Environment::clearMacro(const KDevelop::IndexedString& name)
 //   setMacro(undef); //Before, m_environment.remove(..) was called
 
  if(!m_replaying) {
-    pp_dynamic_macro undef;
-    undef.name = name;
-    undef.defined = false;
-    m_blocks.top()->macros.append(makeConstant(&undef));
+    pp_macro* undef = new pp_macro;
+    undef->name = name;
+    undef->defined = false;
+    m_blocks.top()->macros.append(undef);
   }
 
   ///@todo Think about how this plays together with environment-management
@@ -248,7 +248,7 @@ MacroBlock::MacroBlock(int _sourceLine)
 MacroBlock::~MacroBlock()
 {
   foreach (pp_macro* macro, macros)
-    delete[] macro;
+    delete macro;
   
   qDeleteAll(childBlocks);
   delete elseBlock;

@@ -50,6 +50,14 @@ struct TestItemRequest {
     memcpy(item, &m_item, m_item.itemSize());
   }
   
+  static void destroy(TestItem* /*item*/, KDevelop::AbstractItemRepository&) {
+    //Nothing to do
+  }
+  
+  static bool persistent(const TestItem* /*item*/) {
+    return true;
+  }
+  
   //Should return whether the here requested item equals the given item
   bool equals(const TestItem* item) const {
     return hash() == item->hash();

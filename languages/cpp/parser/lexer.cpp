@@ -99,7 +99,7 @@ void Lexer::skipComment()
 
 KDevelop::IndexedString Token::symbol() const {
   if(size == 1)
-    return KDevelop::IndexedString(session->contents()[position]);
+    return KDevelop::IndexedString::fromIndex(session->contents()[position]);
   else
     return KDevelop::IndexedString();
 }
@@ -115,7 +115,7 @@ QString Token::symbolString() const {
 uint Token::symbolLength() const {
   uint ret = 0;
   for(uint a = position; a < position+size; ++a) {
-    ret += KDevelop::IndexedString(session->contents()[a]).length();
+    ret += KDevelop::IndexedString::fromIndex(session->contents()[a]).length();
   }
   return ret;
 }
@@ -477,7 +477,7 @@ void Lexer::scan_identifier_or_keyword()
   
   while(nextCursor < endCursor && (!isCharacter(*(nextCursor.current)) || isLetterOrNumber(*nextCursor.current) || characterFromIndex(*nextCursor.current) == '_')) {
     //Fortunately this shouldn't happen too often, only when ## is used within the preprocessor
-    KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString(*(cursor.current)).byteArray() + KDevelop::IndexedString(*(nextCursor.current)).byteArray());
+    KDevelop::IndexedString mergedSymbol(KDevelop::IndexedString::fromIndex(*(cursor.current)).byteArray() + KDevelop::IndexedString::fromIndex(*(nextCursor.current)).byteArray());
     
     (*cursor.current) = mergedSymbol.index();
     (*nextCursor.current) = 0;
@@ -942,7 +942,7 @@ void Lexer::scan_EOF()
 void Lexer::scan_invalid_input()
 {
   KDevelop::ProblemPointer p = createProblem();
-  p->setDescription(i18n("invalid input: %1", KDevelop::IndexedString(*cursor.current).str()));
+  p->setDescription(i18n("invalid input: %1", KDevelop::IndexedString::fromIndex(*cursor.current).str()));
   control->reportProblem(p);
 
   ++cursor;

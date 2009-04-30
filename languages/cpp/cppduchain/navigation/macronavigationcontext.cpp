@@ -33,7 +33,7 @@ using namespace rpp;
 
 MacroNavigationContext::MacroNavigationContext(const pp_macro& macro, QString preprocessedBody)
   : AbstractNavigationContext(TopDUContextPointer(0)),
-    m_macro(copyConstantMacro(&macro)), m_body(preprocessedBody)
+    m_macro(new rpp::pp_macro(macro)), m_body(preprocessedBody)
 {}
 
 MacroNavigationContext::~MacroNavigationContext()
@@ -58,11 +58,11 @@ QString MacroNavigationContext::html(bool shorten)
     args = "(";
 
     bool first = true;
-    FOREACH_CUSTOM(uint b, m_macro->formals(), m_macro->formalsSize()) {
+    FOREACH_CUSTOM(IndexedString b, m_macro->formals(), m_macro->formalsSize()) {
       if(!first)
         args += ", ";
       first = false;
-      args += IndexedString(b).str();
+      args += b.str();
     }
 
     args += ')';
@@ -86,7 +86,7 @@ QString MacroNavigationContext::html(bool shorten)
 
     modifyHtml() += labelHighlight(i18n("Body:")) + "<br />";
 
-    modifyHtml() += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents(m_macro->definition(), m_macro->definitionSize()))));
+    modifyHtml() += codeHighlight(Qt::escape(QString::fromUtf8(stringFromContents((uint*)m_macro->definition(), m_macro->definitionSize()))));
     modifyHtml() += "<br />";
   }
 

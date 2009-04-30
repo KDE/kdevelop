@@ -26,6 +26,7 @@
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/referencecounting.h>
 
 using namespace KDevelop;
 
@@ -41,14 +42,15 @@ struct IncludePathListItem {
   
     IncludePathListItem() {
       initializeAppendedLists(true);
+      m_refCount = 0;
+    }
+    IncludePathListItem(const IncludePathListItem& rhs, bool dynamic) {
+      initializeAppendedLists(dynamic);
+      m_refCount = rhs.m_refCount;
+      copyListsFrom(rhs);
     }
     ~IncludePathListItem() {
       freeAppendedLists();
-    }
-    
-    void operator=(const IncludePathListItem& rhs) {
-      m_refCount = 0; //We can use this as a kind of initialization, since it's only called by createItem(..)
-      copyListsFrom(rhs);
     }
     
     bool operator==(const IncludePathListItem& rhs) const {
@@ -73,19 +75,22 @@ struct IncludePathListItem {
   
     uint m_refCount;
     START_APPENDED_LISTS(IncludePathListItem);
-    APPENDED_LIST_FIRST(IncludePathListItem, KDevelop::IndexedString, m_includePaths);
+    
+    APPENDED_LIST_FIRST(IncludePathListItem, IndexedString, m_includePaths);
     END_APPENDED_LISTS(IncludePathListItem, m_includePaths);
+  private:
+    IncludePathListItem& operator=(const IncludePathListItem&);
 };
 
 typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 
-typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest, KDevelop::NoDynamicData> IncludePathsRepository;
+typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest> IncludePathsRepository;
 IncludePathsRepository includePathsRepository("include path repository");
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::m_matchingLevel = Cpp::EnvironmentManager::Full;
 //  #define LEXERCACHE_DEBUG
-//  #define ifDebug(X) X
+//   #define ifDebug(X) X
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
 //by calling setIsDebugging(true) from within the debugger
 // #define DYNAMIC_DEBUGGING
@@ -117,9 +122,9 @@ REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 //Repository that contains the actual macros, and maps them to indices
 MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository");
 //Set-repository that contains the string-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets");
+Utils::StringSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets");
 //Set-repository that contains the macro-sets
-Utils::BasicSetRepository Cpp::EnvironmentManager::macroSetRepository("macro sets");
+MacroSetRepository Cpp::EnvironmentManager::macroSetRepository;
 
 namespace Cpp {
   Utils::BasicSetRepository* StaticStringSetRepository::repository() {
@@ -127,6 +132,9 @@ namespace Cpp {
   }
   Utils::BasicSetRepository* StaticMacroSetRepository::repository() {
     return &Cpp::EnvironmentManager::macroSetRepository;
+  }
+  void MacroSetRepository::itemRemovedFromSets(uint index) {
+    Cpp::EnvironmentManager::macroDataRepository.deleteItem(index);
   }
 }
 
@@ -405,7 +413,7 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   QMutexLocker lock(includePathsRepository.mutex());
   
   if(d_func()->m_includePaths) {
-    IncludePathListItem* item = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    KDevelop::DynamicItem<IncludePathListItem, true> item = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
     --item->m_refCount;
     if(!item->m_refCount)
       includePathsRepository.deleteItem(d_func()->m_includePaths);
@@ -416,7 +424,7 @@ void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
     foreach(const IndexedString &include, paths)
       item.m_includePathsList().append(include);
     d_func_dynamic()->m_includePaths = includePathsRepository.index(item);
-    IncludePathListItem* gotItem = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    KDevelop::DynamicItem<IncludePathListItem, true> gotItem = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
     ++gotItem->m_refCount;
   }
 }

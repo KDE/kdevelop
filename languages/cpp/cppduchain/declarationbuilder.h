@@ -61,7 +61,7 @@ public:
    *
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    */
-  KDevelop::ReferencedTopDUContext buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const ReferencedTopDUContext& updateContext = ReferencedTopDUContext(), bool removeOldImports = true);
+  KDevelop::ReferencedTopDUContext buildDeclarations(Cpp::EnvironmentFilePointer file, AST *node, IncludeFileList* includes = 0, const ReferencedTopDUContext& updateContext = ReferencedTopDUContext(), bool removeOldImports = true);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

@@ -304,48 +304,48 @@ HeaderGenerator::HeaderGenerator()
   topBlock = new FileBlock;
   topBlock->file = "<internal pp>";
 
-  rpp::pp_dynamic_macro* exportMacro = new rpp::pp_dynamic_macro;
+  rpp::pp_macro* exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("__cplusplus");
   exportMacro->definition = tokenizeFromByteArray("1");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("__GNUC__");
   exportMacro->definition = tokenizeFromByteArray("4");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("__GNUC_MINOR__");
   exportMacro->definition = tokenizeFromByteArray("1");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("__linux__");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("KDE_EXPORT");
   exportMacro->definition = tokenizeFromByteArray("__declspec(dllexport)");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("KJS_EXPORT");
   exportMacro->definition = tokenizeFromByteArray("__declspec(dllexport)");
   exportMacro->function_like = false;
   exportMacro->variadics = false;
   topBlock->setMacro(makeConstant(exportMacro));
 
-  exportMacro = new rpp::pp_dynamic_macro;
+  exportMacro = new rpp::pp_macro;
   exportMacro->name = IndexedString("Q_WS_X11");
   exportMacro->function_like = false;
   exportMacro->variadics = false;

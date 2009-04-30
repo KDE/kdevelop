@@ -22,65 +22,40 @@
 #include "pp-macro.h"
 #include "chartools.h"
 #include "macrorepository.h"
+#include <util/kdevvarlengtharray.h>
 
 using namespace rpp;
 
-unsigned int pp_macro::itemSize() const {
-  return constantSize(this);
+namespace rpp {
+using namespace KDevelop;
+DEFINE_LIST_MEMBER_HASH(pp_macro, definition, KDevelop::IndexedString)
+DEFINE_LIST_MEMBER_HASH(pp_macro, formals, KDevelop::IndexedString)
 }
 
-uint pp_macro::definitionSize() const {
-  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
-  return *((uint*)currentAddress);
+pp_macro::~pp_macro() {
+  freeAppendedLists();
 }
 
-const uint* pp_macro::definition() const {
-  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
-  currentAddress += sizeof(uint);
-  return (uint*)currentAddress;
+bool pp_macro::operator==(const pp_macro& rhs) const {
+  if(completeHash() != rhs.completeHash())
+    return false;
+  
+  return name == rhs.name && file == rhs.file &&
+         file == rhs.file &&
+         sourceLine == rhs.sourceLine &&
+         defined == rhs.defined &&
+         hidden == rhs.hidden &&
+         function_like == rhs.function_like &&
+         variadics == rhs.variadics &&
+         fixed == rhs.fixed &&
+         listsEqual(rhs);
 }
 
-uint pp_macro::formalsSize() const {
-  char* currentAddress = ((char*)this) + sizeof(rpp::pp_macro_direct_data);
-
-  currentAddress += (1 + *((uint*)currentAddress)) * sizeof(uint);
-  return *((uint*)currentAddress);
-}
-
-const uint* pp_macro::formals() const {
-  char* currentAddress = ((char*)this)+ sizeof(rpp::pp_macro_direct_data);
-
-  currentAddress += (2 + *((uint*)currentAddress)) * sizeof(uint);
-  
-  return (uint*)(currentAddress);
-}
-
-bool pp_macro::operator==(const pp_macro& macro) const {
-  if(completeHash() != macro.completeHash())
-    return false;
-  
-  if(formalsSize() != macro.formalsSize())
-    return false;
-  
-  if(definitionSize() != macro.definitionSize())
-    return false;
-  
-  if(!pp_macro_direct_data::operator==(macro))
-    return false;
-  
-  if(memcmp(formals(), macro.formals(), sizeof(uint) * formalsSize()) != 0)
-    return false;
-  
-  if(memcmp(definition(), macro.definition(), sizeof(uint) * definitionSize()) != 0)
-    return false;
-  return true;
-}
-
-void pp_dynamic_macro::invalidateHash() {
+void pp_macro::invalidateHash() {
   m_valueHashValid = false;
 }
 
-pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : name(nm)
+pp_macro::pp_macro(const KDevelop::IndexedString& nm) : name(nm)
   , sourceLine(-1)
   , defined(true)
   , hidden(false)
@@ -88,36 +63,38 @@ pp_macro_direct_data::pp_macro_direct_data(const KDevelop::IndexedString& nm) : 
   , variadics(false)
   , fixed(false)
   , m_valueHash(0)
+  , m_valueHashValid(false)
 {
-}
-pp_dynamic_macro::pp_dynamic_macro(const KDevelop::IndexedString& nm) : pp_macro_direct_data(nm), m_valueHashValid(false)
-
-{
+  initializeAppendedLists();
 }
 
-pp_dynamic_macro::pp_dynamic_macro(const char* nm) : pp_macro_direct_data(KDevelop::IndexedString(nm, strlen(nm))), m_valueHashValid(false)
-
+pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) : 
+   name(rhs.name),
+   file(rhs.file),
+   sourceLine(rhs.sourceLine),
+   defined(rhs.defined),
+   hidden(rhs.hidden),
+   function_like(rhs.function_like),
+   variadics(rhs.variadics),
+   fixed(rhs.fixed),
+   m_valueHash(rhs.valueHash()),
+   m_valueHashValid(true)
 {
+  initializeAppendedLists(dynamic);
+  copyListsFrom(rhs);
 }
 
-pp_dynamic_macro::pp_dynamic_macro( ) : m_valueHashValid(false)
+pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm, strlen(nm)))
+  , sourceLine(-1)
+  , defined(true)
+  , hidden(false)
+  , function_like(false)
+  , variadics(false)
+  , fixed(false)
+  , m_valueHash(0)
+  , m_valueHashValid(false)
 {
-}
-
-
-size_t hashContents( const QVector<unsigned int>& str ) {
-  size_t hash = 0;
-  if( !str.isEmpty() ) {
-    const uint* curr = str.constData();
-    const uint* end = curr + str.size();
-    char c;
-    for(; curr < end ;) {
-      c = *curr;
-      hash = c + ( hash * 17 );
-      ++curr;
-    }
-  }
-  return hash;
+  initializeAppendedLists();
 }
 
 QString pp_macro::toString() const {
@@ -132,46 +109,39 @@ QString pp_macro::toString() const {
         ret += ", ";
       first = false;
       
-      ret += KDevelop::IndexedString(formals()[a]).str();
+      ret += formals()[a].str();
     }
     ret += ')';
   }
-  ret += ' ' + QString::fromUtf8(stringFromContents(definition(), definitionSize()));
+  ret += ' ' + QString::fromUtf8(stringFromContents((uint*)definition(), definitionSize()));
   
   return ret;
 }
 
-QString pp_dynamic_macro::toString() const {
-  QString ret = name.str();
-  if(!defined)
-    ret = "undef " + ret;
-  if(function_like) {
-    ret += '(';
-    bool first = true;
-    foreach(uint str, formals) {
-      if(!first)
-        ret += ", ";
-      first = false;
-      
-      ret += KDevelop::IndexedString(str).str();
-    }
-    ret += ')';
-  }
-  ret += QString::fromUtf8(stringFromContents(definition));
-  
-  return ret;
+void pp_macro::setDefinitionText(QString definition) {
+  setDefinitionText(definition.toUtf8());
 }
 
-void pp_dynamic_macro::computeHash() const {
+void pp_macro::setDefinitionText(QByteArray definition) {
+  foreach(uint i, convertFromByteArray(definition))
+    definitionList().append(KDevelop::IndexedString::fromIndex(i));
+}
+
+void pp_macro::computeHash() const {
     if( m_valueHashValid )
       return;
+
+    m_valueHash = 27 * ( 137 + (defined ? 1 : 0 ) );
+
+    m_valueHash += 1741 * file.hash() + 238 * sourceLine + (hidden ? 19 : 0) + (function_like ? 811241 : 0) + (variadics ? 129119 : 0) + (fixed ? 1807 : 0);
+  
+    FOREACH_FUNCTION(const IndexedString& definitionComponent, definition)
+      m_valueHash = definitionComponent.hash() + 17 * m_valueHash;
+
     int a = 1;
-
-    m_valueHash = 27 * ( 137 + hashContents( definition ) +  (defined ? 1 : 0 ) );
-
-    for( QVector<uint>::const_iterator it = formals.begin(); it != formals.end(); ++it ) {
+    FOREACH_FUNCTION(const IndexedString& formal, formals) {
         a *= 19;
-        m_valueHash += a * (*it);
+        m_valueHash += a * formal.hash();
     }
     m_valueHashValid = true;
 }

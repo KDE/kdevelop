@@ -309,7 +309,7 @@ void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
   --m_templateDeclarationDepth;
 }
 
-KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
+KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::EnvironmentFilePointer file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext)
 {
   Cpp::EnvironmentFile* filePtr = const_cast<Cpp::EnvironmentFile*>(file.data() );
   
@@ -362,7 +362,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(const Cpp::
   return topLevelContext;
 }
 
-ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
+ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
 {
   Q_ASSERT(file);
   setCompilingContexts(true);
@@ -446,6 +446,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(const Cpp::EnvironmentFileP
       
       topLevelContext->updateImportsCache();
     }
+    
   }
 
   {

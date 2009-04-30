@@ -283,27 +283,26 @@ void pp::createProblem(Stream& input, const QString& description) {
 
 void pp::handle_define (Stream& input)
 {
-  pp_dynamic_macro macro;
-  macro.file = currentFileName();
-  macro.sourceLine = input.originalInputPosition().line;
-  PreprocessedContents definition;
+  pp_macro* macro = new pp_macro;
+  macro->file = currentFileName();
+  macro->sourceLine = input.originalInputPosition().line;
 
   skip_blanks (input, devnull());
-  macro.name = KDevelop::IndexedString(skip_identifier(input)); //@todo make macros utf8 too
+  macro->name = KDevelop::IndexedString::fromIndex(skip_identifier(input)); //@todo make macros utf8 too
 
   if (!input.atEnd() && input == '(')
   {
-    macro.function_like = true;
+    macro->function_like = true;
 
     skip_blanks (++input, devnull()); // skip '('
     uint formal = skip_identifier(input);
     if (formal)
-      macro.formals.append( formal );
+      macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
 
     skip_blanks(input, devnull());
 
     if (input == '.') {
-      macro.variadics = true;
+      macro->variadics = true;
 
       do {
         ++input;
@@ -317,12 +316,12 @@ void pp::handle_define (Stream& input)
 
       uint formal = skip_identifier(input);
       if (formal)
-        macro.formals.append(formal);
+        macro->formalsList().append( KDevelop::IndexedString::fromIndex(formal) );
 
       skip_blanks (input, devnull());
 
       if (input == '.') {
-        macro.variadics = true;
+        macro->variadics = true;
 
         do {
           ++input;
@@ -353,7 +352,7 @@ void pp::handle_define (Stream& input)
       if (!input.atEnd() && input == '\n')
       {
         skip_blanks(++input, devnull());
-        definition += indexFromCharacter(' ');
+        macro->definitionList().append(KDevelop::IndexedString::fromIndex(indexFromCharacter(' ')));
         continue;
 
       } else {
@@ -362,13 +361,11 @@ void pp::handle_define (Stream& input)
       }
     }
 
-    definition.append(input.current());
+    macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
     ++input;
   }
 
-  macro.definition = definition;
-
-  m_environment->setMacro(makeConstant(&macro));
+  m_environment->setMacro(macro);
 }
 
 
@@ -957,7 +954,7 @@ uint pp::branchingHash() const
 
 void pp::handle_ifdef (bool check_undefined, Stream& input)
 {
-  KDevelop::IndexedString macro_name(skip_identifier(input));
+  KDevelop::IndexedString macro_name = KDevelop::IndexedString::fromIndex(skip_identifier(input));
 ///@todo eventually fix the block description
   if(check_undefined && expand.in_header_section() && guardCandidate.isEmpty() && !hadGuardCandidate && iflevel == 0) {
     //It's the first #ifndef and the header-section hasn't ended yet, assume it to be the header-guard
@@ -988,19 +985,17 @@ void pp::handle_undef(Stream& input)
 {
   skip_blanks (input, devnull());
 
-  KDevelop::IndexedString macro_name (skip_identifier(input));
+  KDevelop::IndexedString macro_name = KDevelop::IndexedString::fromIndex(skip_identifier(input));
   RETURN_ON_FAIL(!macro_name.isEmpty());
 
-  pp_dynamic_macro macro;
-  macro.file = currentFileName();
-  macro.name = macro_name;
-  macro.sourceLine = input.originalInputPosition().line;
+  pp_macro* macro = new pp_macro;
+  macro->file = currentFileName();
+  macro->name = macro_name;
+  macro->sourceLine = input.originalInputPosition().line;
 
-  macro.defined = false;
+  macro->defined = false;
 
-  m_environment->setMacro(makeConstant(&macro));
-
-  //m_environment->clearMacro(macro_name);
+  m_environment->setMacro(macro);
 }
 
 KDevelop::IndexedString definedText("defined");
@@ -1120,7 +1115,7 @@ int pp::next_token (Stream& input)
     default:
       if (isLetter(ch) || ch == '_' || !isCharacter(input.current()))
       {
-        token_text = KDevelop::IndexedString( skip_identifier (input) );
+        token_text = KDevelop::IndexedString::fromIndex( skip_identifier (input) );
         if (token_text == definedText)
           nextToken = TOKEN_DEFINED;
         else

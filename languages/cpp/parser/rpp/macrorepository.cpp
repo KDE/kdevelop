@@ -21,82 +21,24 @@
 //The text is supposed to be utf8 encoded
 using namespace rpp;
 
-size_t constantSize(const rpp::pp_dynamic_macro* macro) {
-  return sizeof(rpp::pp_macro_direct_data) + sizeof(uint) * (2 + macro->definition.size() + macro->formals.size());
-}
-
-size_t constantSize(const rpp::pp_macro* macro) {
-  return sizeof(rpp::pp_macro_direct_data) + sizeof(uint) * (2 + macro->definitionSize() + macro->formalsSize());
-}
-
 size_t MacroRepositoryItemRequest::itemSize() const {
-  return sizeof(rpp::pp_macro_direct_data) + sizeof(uint) * (2 + macro.definitionSize() + macro.formalsSize());
-}
-
-rpp::pp_macro* makeConstant(const rpp::pp_dynamic_macro* macro) {
-  pp_macro* item = (pp_macro*)new char[constantSize(macro)];
-  macro->completeHash();
-  *((rpp::pp_macro_direct_data*)item) = *(const rpp::pp_macro_direct_data*)macro;
-  
-  char* currentAddress = (char*)item;
-  currentAddress += sizeof(rpp::pp_macro_direct_data);
-  
-  uint definitionSize = macro->definition.size() * sizeof(uint);
-  *((uint*)currentAddress) = macro->definition.size();
-  currentAddress += sizeof(uint);
-
-  memcpy(currentAddress, macro->definition.constData(), definitionSize);
-  currentAddress += definitionSize;
-
-  *((uint*)currentAddress) = macro->formals.size();
-  currentAddress += sizeof(uint);
-  
-  memcpy(currentAddress, macro->formals.constData(), macro->formals.size() * sizeof(uint));
-  
-  Q_ASSERT((uint)item->definitionSize() == (uint)macro->definition.size());
-  Q_ASSERT((uint)item->formalsSize() == (uint)macro->formals.size());
-  Q_ASSERT(memcmp(item->formals(), macro->formals.data(), item->formalsSize() * sizeof(uint)) == 0);
-  return item;
-}
-
-rpp::pp_macro* copyConstantMacro(const rpp::pp_macro* macro) {
-  uint size = constantSize(macro);
-  rpp::pp_macro* item = (pp_macro*)new char[size];
-  memcpy(item, macro, size);
-  return item;
+  return macro.dynamicSize();
 }
 
 MacroRepositoryItemRequest::MacroRepositoryItemRequest(const rpp::pp_macro& _macro) : macro(_macro) {
-  //Q_ASSERT(_macro.m_valueHash); Can also be zero randomly. Only enable this for debugging.
+  _macro.completeHash(); //Make sure the hash is valid
+}
+
+void MacroRepositoryItemRequest::destroy(rpp::pp_macro* item, KDevelop::AbstractItemRepository&) {
+  item->~pp_macro();
 }
 
 void MacroRepositoryItemRequest::createItem(rpp::pp_macro* item) const {
-  memcpy(item, &macro, itemSize());
+  new (item) pp_macro(macro, false);
+  Q_ASSERT(*item == macro);
 }
 
 //Should return whether the here requested item equals the given item
 bool MacroRepositoryItemRequest::equals(const rpp::pp_macro* item) const {
   return macro == *item;
 }
-
-// rpp::pp_dynamic_macro macroFromItem(const rpp::pp_macro* item) {
-//   rpp::pp_dynamic_macro ret;
-//   static_cast<rpp::pp_macro_direct_data&>(ret) = *item;
-//   
-//   char* currentAddress = (char*)item;
-//   currentAddress += sizeof(rpp::pp_macro_direct_data);
-// 
-//   ret.definition.resize( *((uint*)currentAddress) );
-//   currentAddress += sizeof(uint);
-//   
-//   uint definitionSize = ret.definition.size() * sizeof(uint);
-// 
-//   memcpy(ret.definition.data(), currentAddress, definitionSize);
-//   currentAddress += definitionSize;
-//   
-//   ret.formals.resize(*((uint*)currentAddress));
-//   currentAddress += sizeof(uint);
-//   
-//   memcpy(ret.formals.data(), currentAddress, ret.formals.size() * sizeof(uint));
-//   return ret;
-// }

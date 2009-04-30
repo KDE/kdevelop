@@ -104,6 +104,8 @@ The good things:
 - The general code-completion should be exactly as good as without simplified matching.
 * */
 
+
+
 namespace rpp {
   class pp_macro;
   class pp_macro;
@@ -112,9 +114,16 @@ namespace rpp {
 
 namespace Cpp {
 
+struct MacroSetRepository : public Utils::BasicSetRepository {
+  MacroSetRepository() : Utils::BasicSetRepository("macro sets") {
+  }
+  virtual void itemRemovedFromSets(uint index);
+};
+
+///@todo Make string-sets work correctly with IndexedString reference-counting
 struct KDEVCPPDUCHAIN_EXPORT IndexedStringConversion {
   KDevelop::IndexedString toItem(uint index) const {
-    return KDevelop::IndexedString(index);
+    return KDevelop::IndexedString::fromIndex(index);
   }
   uint toIndex(const KDevelop::IndexedString& str) const {
     return str.index();
@@ -302,9 +311,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
     
     static MacroDataRepository macroDataRepository;
     //Set-repository that contains the string-sets
-    static Utils::BasicSetRepository stringSetRepository;
+    static Utils::StringSetRepository stringSetRepository;
     //Set-repository that contains the macro-sets
-    static Utils::BasicSetRepository macroSetRepository;
+    static MacroSetRepository macroSetRepository;
         
     ///See the comment about simplified matching at the top
     static void setSimplifiedMatching(bool simplified);

@@ -42,6 +42,12 @@ struct KDEVCPPRPP_EXPORT MacroRepositoryItemRequest {
   
   void createItem(rpp::pp_macro* item) const;
   
+  static void destroy(rpp::pp_macro* item, KDevelop::AbstractItemRepository&);
+  
+  static bool persistent(const rpp::pp_macro* item) {
+    return true; //Macros are reference-counted through the macro sets
+  }
+  
   //Should return whether the here requested item equals the given item
   bool equals(const rpp::pp_macro* item) const;
   
@@ -50,12 +56,4 @@ struct KDEVCPPRPP_EXPORT MacroRepositoryItemRequest {
 
 typedef KDevelop::ItemRepository<rpp::pp_macro, MacroRepositoryItemRequest> MacroDataRepository;
 
-//Returns the size of the object
-KDEVCPPRPP_EXPORT size_t constantSize(const rpp::pp_macro* macro);
-//Size of the pp_macro object for the given macro
-KDEVCPPRPP_EXPORT size_t constantSize(const rpp::pp_dynamic_macro* macro);
-//Constructs a constant macro object
-KDEVCPPRPP_EXPORT rpp::pp_macro* makeConstant(const rpp::pp_dynamic_macro* macro);
-//Creates an exact copy
-KDEVCPPRPP_EXPORT rpp::pp_macro* copyConstantMacro(const rpp::pp_macro* macro);
 #endif

@@ -603,8 +603,6 @@ void CPPInternalParseJob::run()
         
         contentContext = declarationBuilder.buildDeclarations(contentEnvironmentFile, ast, &importedContentChains, contentContext, false);
 
-        contentEnvironmentFile->setTopContext(contentContext.data());
-      
         //If publically visible declarations were added/removed, all following parsed files need to be updated
         if(declarationBuilder.changeWasSignificant()) {
           ///@todo The right solution to the whole problem: Do not put any imports into the content-contexts. Instead, Represent the complete import-structure in the proxy-contexts.
@@ -746,8 +744,6 @@ void CPPInternalParseJob::run()
 
         DUChainWriteLocker lock(DUChain::lock());
 
-        proxyEnvironmentFile->setTopContext(proxyContext.data());
-        
         Q_ASSERT(!updatingProxyContext || updatingProxyContext == proxyContext);
 
         if(proxyContext->importedParentContexts().isEmpty()) {

@@ -146,9 +146,9 @@ uint pp_skip_identifier::operator()(Stream& input)
           break;
         
         if(ret.isEmpty())
-          ret = KDevelop::IndexedString(current); //The most common fast path
+          ret = KDevelop::IndexedString::fromIndex(current); //The most common fast path
         else ///@todo Be better to build up a complete buffer and then append it all, so we don't get he intermediate strings into the repository
-          ret = KDevelop::IndexedString(ret.byteArray() + KDevelop::IndexedString(input.current()).byteArray());
+          ret = KDevelop::IndexedString(ret.byteArray() + KDevelop::IndexedString::fromIndex(input.current()).byteArray());
         
         ++input;
       }
@@ -292,7 +292,7 @@ void pp_skip_argument::operator()(Stream& input, Stream& output)
 
     } else if (isLetter(input.current()) || input == '_') {
       Anchor inputPosition = input.inputPosition();
-      output.appendString(inputPosition, KDevelop::IndexedString(skip_identifier(input)));
+      output.appendString(inputPosition, KDevelop::IndexedString::fromIndex(skip_identifier(input)));
       continue;
 
     } else if (isNumber(input.current())) {

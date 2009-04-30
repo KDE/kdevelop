@@ -42,10 +42,10 @@ void CppPreprocessEnvironment::finishEnvironment(bool leaveEnvironmentFile) {
 
 void CppPreprocessEnvironment::removeMacro(KDevelop::IndexedString macroName) {
   m_macroNameSet.remove(macroName);
-  rpp::pp_dynamic_macro m;
-  m.name = macroName;
-  m.defined = false;
-  rpp::Environment::setMacro(makeConstant(&m));
+  rpp::pp_macro* m = new rpp::pp_macro;
+  m->name = macroName;
+  m->defined = false;
+  rpp::Environment::setMacro(m);
 }
 
 void CppPreprocessEnvironment::removeString(KDevelop::IndexedString str) {
@@ -95,7 +95,7 @@ void CppPreprocessEnvironment::swapMacros( rpp::Environment* parentEnvironment )
   * */
 void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macros ) {
     for( Cpp::ReferenceCountedMacroSet::Iterator it(macros.iterator()); it; ++it ) {
-        rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        rpp::Environment::setMacro(new rpp::pp_macro(it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
         if( !it.ref().isUndef() )
           m_macroNameSet.insert(it.ref().name);
@@ -109,13 +109,13 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
     Cpp::ReferenceCountedMacroSet addedMacros = file->definedMacros() - m_environmentFile->definedMacros();
     
     for( Cpp::ReferenceCountedMacroSet::Iterator it(addedMacros.iterator()); it; ++it )
-      rpp::Environment::setMacro(copyConstantMacro(&it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+      rpp::Environment::setMacro(new rpp::pp_macro(it.ref())); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
 
     //We don't have to care about efficiency too much here, unDefinedMacros should be a rather small set
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
-        rpp::pp_dynamic_macro m(*it);
-        m.defined = false;
-        rpp::Environment::setMacro(makeConstant(&m)); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
+        rpp::pp_macro* m = new rpp::pp_macro(*it);
+        m->defined = false;
+        rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
     }
 
     m_macroNameSet += file->definedMacroNames();
@@ -127,7 +127,7 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
 
     //If a macro of the same name has been fixed, the new macro has no effect
     if(hadMacro && hadMacro->fixed) {
-      delete[] macro;
+      delete macro;
       return;
     }
 

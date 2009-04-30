@@ -99,40 +99,34 @@ bool setupStandardIncludePaths(QStringList& includePaths)
     }
 }
 
-PreprocessedContents asBody(const char* lhs) {
-  return convertFromByteArray(QByteArray(lhs));
-}
-
-void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_dynamic_macro& macro)
+void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_macro& macro)
 {
-  rpp::pp_macro* m = makeConstant(&macro);
-  macros.insert(*m);
-  delete[] m;
+  macros.insert(macro);
 }
 
 bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
     //Used in several headers like sys/time.h
-    insertMacro( macros, rpp::pp_dynamic_macro("__restrict") );
-    insertMacro( macros, rpp::pp_dynamic_macro("__extension__") );
+    insertMacro( macros, rpp::pp_macro("__restrict") );
+    insertMacro( macros, rpp::pp_macro("__extension__") );
     
     {
       //Used in several headers like sys/time.h
-      rpp::pp_dynamic_macro m("__const");
-      m.definition = asBody( "const" );
+      rpp::pp_macro m("__const");
+      m.setDefinitionText( "const" );
       insertMacro( macros, m );
     }
     {
-      rpp::pp_dynamic_macro m("__null");
-      m.definition = asBody( "0" );
+      rpp::pp_macro m("__null");
+      m.setDefinitionText( "0" );
       insertMacro( macros, m );
     }
 
     {
       //Used in several gcc headers
-      rpp::pp_dynamic_macro m("__inline");
-      m.definition = asBody( "inline" );
+      rpp::pp_macro m("__inline");
+      m.setDefinitionText( "inline" );
       insertMacro( macros, m );
       m.name = IndexedString("__always_inline");
       insertMacro( macros, m );
@@ -141,23 +135,23 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
     {
       //It would be better if the parser could deal with it, for example in class declarations. However it cannot.
       //If we wouldn't need this, macros could be more transparent.
-      rpp::pp_dynamic_macro m("__attribute__");
+      rpp::pp_macro m("__attribute__");
       m.function_like = true;
-      m.formals << IndexedString("param").index();
+      m.formalsList().append(IndexedString("param"));
       insertMacro( macros, m );
     }
     
     ///@todo The following macros are only required for Qt, so only set them on projects that use Qt.
     {
       //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_dynamic_macro m("Q_SLOTS");
-      m.definition = asBody( "slots" );
+      rpp::pp_macro m("Q_SLOTS");
+      m.setDefinitionText( "slots" );
       m.fixed = true;
       insertMacro( macros, m );
     }
     {
       //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_dynamic_macro m("slots");
+      rpp::pp_macro m("slots");
       m.defined = false;
       m.fixed = true;
       insertMacro( macros, m );
@@ -165,22 +159,22 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
 
     {
       //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_dynamic_macro m("Q_SIGNALS");
-      m.definition = asBody( "signals" );
+      rpp::pp_macro m("Q_SIGNALS");
+      m.setDefinitionText( "signals" );
       m.fixed = true;
       insertMacro( macros, m );
     }
     {
       //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_dynamic_macro m("signals");
+      rpp::pp_macro m("signals");
       m.defined = false;
       m.fixed = true;
       insertMacro( macros, m );
     }
     
     {
-      rpp::pp_dynamic_macro m("SIGNAL");
-      m.definition = asBody("__qt_sig_slot__");
+      rpp::pp_macro m("SIGNAL");
+      m.setDefinitionText("__qt_sig_slot__");
       m.defined = true;
       m.fixed = true;
       insertMacro( macros, m );
@@ -208,10 +202,10 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
                 if (line.startsWith("#define ")) {
                     line = line.right(line.length() - 8).trimmed();
                     int pos = line.indexOf(' ');
-                    rpp::pp_dynamic_macro macro;
+                    rpp::pp_macro macro;
                     if (pos != -1) {
                         macro.name = IndexedString( line.left(pos) );
-                        macro.definition = asBody( line.right(line.length() - pos - 1).toUtf8() );
+                        macro.setDefinitionText( line.right(line.length() - pos - 1).toUtf8() );
                     } else {
                         macro.name = IndexedString( line );
                     }

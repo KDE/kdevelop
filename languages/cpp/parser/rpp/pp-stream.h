@@ -122,7 +122,7 @@ class KDEVCPPRPP_EXPORT Stream
         m_inputLineStartedAt = m_pos + 1;
       }else if(!isCharacter(*c)) {
         //We have to do some special hacking here to keep the column-number correct.
-        m_inputLineStartedAt += 1-KDevelop::IndexedString(*c).length();
+        m_inputLineStartedAt += 1-KDevelop::IndexedString::fromIndex(*c).length();
       }
 
       ++c;

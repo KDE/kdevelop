@@ -47,7 +47,17 @@ QString joinIndexVector(const uint* arrays, uint size, QString between) {
   FOREACH_CUSTOM(uint item, arrays, size) {
     if(!ret.isEmpty())
       ret += between;
-    ret += IndexedString(item).str();
+    ret += IndexedString::fromIndex(item).str();
+  }
+  return ret;
+}
+
+QString joinIndexVector(const IndexedString* arrays, uint size, QString between) {
+  QString ret;
+  FOREACH_CUSTOM(const IndexedString& item, arrays, size) {
+    if(!ret.isEmpty())
+      ret += between;
+    ret += item.str();
   }
   return ret;
 }
@@ -83,7 +93,7 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
 
   Q_ASSERT(m_frame->expandingMacro != 0);
 
-  const uint* formals = m_frame->expandingMacro->formals();
+  const IndexedString* formals = m_frame->expandingMacro->formals();
   uint formalsSize = m_frame->expandingMacro->formalsSize();
 
   if(name.isEmpty()) {
@@ -95,14 +105,14 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
   }
   
   for (uint index = 0; index < formalsSize; ++index) {
-    if (name.index() == formals[index]) {
+    if (name.index() == formals[index].index()) {
       if (index < (uint)m_frame->actuals.size()) {
         return m_frame->actuals[index];
       }
       else {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
         problem->setFinalLocation(KDevelop::DocumentRange(m_engine->currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
-        problem->setDescription(i18n("Call to macro %1 missing argument number %2", IndexedString(name).str(), index));
+        problem->setDescription(i18n("Call to macro %1 missing argument number %2", name.str(), index));
         problem->setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
         m_engine->problemEncountered(problem);
       }
@@ -180,7 +190,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
       else if (input == '#')
       {
         Q_ASSERT(isCharacter(input.current()));
-        Q_ASSERT(IndexedString(input.current()).str() == "#");
+        Q_ASSERT(IndexedString::fromIndex(input.current()).str() == "#");
         
         ++input;
         
@@ -189,11 +199,11 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input;
           skip_blanks (input, devnull());
           
-          IndexedString previous(output.popLastOutput()); //Previous already has been expanded
+          IndexedString previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
           while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
-            previous = IndexedString(output.popLastOutput());   
+            previous = IndexedString::fromIndex(output.popLastOutput());   
           
-          IndexedString add(skip_identifier (input));
+          IndexedString add = IndexedString::fromIndex(skip_identifier (input));
           
           PreprocessedContents newExpanded;
           
@@ -211,7 +221,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           }
           
           if(!newExpanded.isEmpty()) {
-            IndexedString first(newExpanded.first());
+            IndexedString first = IndexedString::fromIndex(newExpanded.first());
             if(!isCharacter(first.index()) || QChar(characterFromIndex(first.index())).isLetterOrNumber() || characterFromIndex(first.index()) == '_') {
               //Merge the tokens
               newExpanded.first() = IndexedString(previous.byteArray() + first.byteArray()).index();
@@ -232,7 +242,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         skip_blanks(input, output);
 
-        IndexedString identifier( skip_identifier(input) );
+        IndexedString identifier = IndexedString::fromIndex( skip_identifier(input) );
 
         Anchor inputPosition = input.inputPosition();
         KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
@@ -299,7 +309,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         check_header_section
         
         Anchor inputPosition = input.inputPosition();
-        IndexedString name(skip_identifier (input));
+        IndexedString name = IndexedString::fromIndex(skip_identifier (input));
         
         Anchor inputPosition2 = input.inputPosition();
         pp_actual actual = resolve_formal(name, input);
@@ -358,7 +368,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             macro->hidden = true;
 
             pp_macro_expander expand_macro(m_engine);
-            Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
+            ///@todo UGLY conversion
+            Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
             ms.setOriginalInputPosition(input.originalInputPosition());
             PreprocessedContents expanded;
             {
@@ -371,7 +382,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               Stream es(&expanded, Anchor(input.inputPosition(), true));
               es.setOriginalInputPosition(input.originalInputPosition());
               skip_whitespaces(es, devnull());
-              IndexedString identifier( skip_identifier(es) );
+              IndexedString identifier = IndexedString::fromIndex( skip_identifier(es) );
 
               output.appendString(Anchor(input.inputPosition(), true), expanded);
             }
@@ -382,10 +393,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         //Eventually execute a function-macro
           
-        IndexedString previous(indexFromCharacter(' ')); //Previous already has been expanded
+        IndexedString previous = IndexedString::fromIndex(indexFromCharacter(' ')); //Previous already has been expanded
         uint stepsBack = 0;
         while(isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ' && output.peekLastOutput(stepsBack)) {
-          previous = IndexedString(output.peekLastOutput(stepsBack));
+          previous = IndexedString::fromIndex(output.peekLastOutput(stepsBack));
           ++stepsBack;
         }
         
@@ -508,7 +519,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         }else{
           pp_macro_expander expand_macro(m_engine, &frame);
           macro->hidden = true;
-          Stream ms(macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
+          ///@todo UGLY conversion
+          Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
           ms.setOriginalInputPosition(input.originalInputPosition());
           expand_macro(ms, output);
           macro->hidden = false;

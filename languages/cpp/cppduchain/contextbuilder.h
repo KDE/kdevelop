@@ -36,6 +36,7 @@
 #include "cppduchainexport.h"
 #include "cppeditorintegrator.h"
 #include <language/duchain/classdeclaration.h>
+#include "environmentmanager.h"
 
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
@@ -101,7 +102,7 @@ public:
    * The top-context is guaranteed to import "content" as first import, eventually all imports are cleared.
    * */
 
-  KDevelop::TopDUContext* buildProxyContextFromContent(const Cpp::EnvironmentFilePointer& file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
+  KDevelop::TopDUContext* buildProxyContextFromContent(Cpp::EnvironmentFilePointer file, const TopDUContextPointer& content, const TopDUContextPointer& updateContext);
 
   /**
    * Compile either a context-definition chain, or add uses to an existing
@@ -110,7 +111,7 @@ public:
    * \param includes contexts to reference from the top context.  The list may be changed by this function.
    * \param removeOldImports Should old imports that are not in the includes-list be removed?
    */
-  KDevelop::ReferencedTopDUContext buildContexts(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes = 0, const ReferencedTopDUContext& updateContext = ReferencedTopDUContext(), bool removeOldImports = true);
+  KDevelop::ReferencedTopDUContext buildContexts(Cpp::EnvironmentFilePointer file, AST *node, IncludeFileList* includes = 0, const ReferencedTopDUContext& updateContext = ReferencedTopDUContext(), bool removeOldImports = true);
 
   /**
    * Build.an independent du-context based on a given parent-context. Such a context may be used for expression-parsing,

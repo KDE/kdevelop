@@ -31,7 +31,7 @@ QByteArray stringFromContents(const PreprocessedContents& contents, int offset, 
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
   }
   return ret;
 }
@@ -42,7 +42,7 @@ QByteArray stringFromContents(const uint* contents, int count) {
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
   }
   return ret;
 }
@@ -53,7 +53,7 @@ QByteArray stringFromContentsWithGaps(const PreprocessedContents& contents, int 
     if(isCharacter(contents[a]))
       ret.append(characterFromIndex(contents[a]));
     else
-      ret += KDevelop::IndexedString(contents[a]).byteArray();
+      ret += KDevelop::IndexedString::fromIndex(contents[a]).byteArray();
     ret.append(" ");
   }
   return ret;

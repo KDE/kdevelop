@@ -133,11 +133,13 @@ KDevelop::QualifiedIdentifier namespaceScopeComponentFromContext(QualifiedIdenti
     Declaration* classDeclaration = Cpp::localClassFromCodeContext(const_cast<DUContext*>(context));
     if(classDeclaration)
       classContext = classDeclaration->logicalInternalContext(source);
-    prefix.pop();
+    if(!prefix.isEmpty())
+      prefix.pop();
   }
   
   if(classContext) {
     while(!prefix.isEmpty() && classContext && classContext->type() == DUContext::Class) {
+      Q_ASSERT(!prefix.isEmpty());
       prefix.pop();
       
       //This way we can correctly resolve the namespace-component for multiple externally defined classes,
@@ -332,13 +334,13 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->definedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         if(!disableMacros.contains( it.ref().name ))
-          pp.environment()->setMacro( copyConstantMacro( &it.ref() ) );
+          pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
       }
     }
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->usedMacros().iterator() ); it; ++it ) {
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         if(!disableMacros.contains( it.ref().name ))
-          pp.environment()->setMacro( copyConstantMacro(&it.ref()) );
+          pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
       }
     }
   }

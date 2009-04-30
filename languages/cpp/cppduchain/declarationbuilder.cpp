@@ -115,7 +115,7 @@ DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
   setEditor(editor, false);
 }
 
-ReferencedTopDUContext DeclarationBuilder::buildDeclarations(const Cpp::EnvironmentFilePointer& file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
+ReferencedTopDUContext DeclarationBuilder::buildDeclarations(Cpp::EnvironmentFilePointer file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
 {
   ReferencedTopDUContext top = buildContexts(file, node, includes, updateContext, removeOldImports);
 

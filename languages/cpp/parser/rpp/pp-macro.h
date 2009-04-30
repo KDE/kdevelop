@@ -28,17 +28,31 @@
 #include <cppparserexport.h>
 #include <language/duchain/indexedstring.h>
 #include <language/editor/hashedstring.h>
+#include <language/duchain/appendedlist.h>
 
-//Foreach macro that also works with KDevVarLengthArray
 #define FOREACH_CUSTOM(item, container, size) for(int a = 0, mustDo = 1; a < (int)size; ++a) if((mustDo = 1)) for(item(container[a]); mustDo; mustDo = 0)
-
 
 namespace rpp {
 
+KDEVCPPRPP_EXPORT DECLARE_LIST_MEMBER_HASH(pp_macro, definition, KDevelop::IndexedString)
+KDEVCPPRPP_EXPORT DECLARE_LIST_MEMBER_HASH(pp_macro, formals, KDevelop::IndexedString)
+
   //This contains the data of a macro that can be marshalled by directly copying the memory
-struct KDEVCPPRPP_EXPORT pp_macro_direct_data
-{
-  pp_macro_direct_data(const KDevelop::IndexedString& nm = KDevelop::IndexedString());
+struct KDEVCPPRPP_EXPORT pp_macro
+{ ///@todo enable structure packing
+  pp_macro(const KDevelop::IndexedString& name = KDevelop::IndexedString());
+  pp_macro(const char* name);
+  pp_macro(const pp_macro& rhs, bool dynamic = true);
+  ~pp_macro();
+  
+  uint classSize() const {
+    return sizeof(pp_macro);
+  }
+  
+  uint itemSize() const {
+    return dynamicSize();
+  }
+  
   typedef uint HashType;
 
   KDevelop::IndexedString name;
@@ -51,110 +65,54 @@ struct KDEVCPPRPP_EXPORT pp_macro_direct_data
   bool function_like: 1; // hasArguments
   bool variadics: 1;
   bool fixed : 1; //If this is set, the macro can not be overridden or undefined.
+  mutable bool m_valueHashValid : 1;
   
   //The valueHash is not necessarily valid
   mutable HashType m_valueHash; //Hash that represents the values of all macros
   
-  bool operator==(const pp_macro_direct_data& rhs) const {
-    return name == rhs.name && file == rhs.file && sourceLine == rhs.sourceLine && defined == rhs.defined && hidden == rhs.hidden && function_like == rhs.function_like && variadics == rhs.variadics;
-  }
+  bool operator==(const pp_macro& rhs) const;
   
   bool isUndef() const  {
     return !defined;
-  }
-  
-  HashType completeHash() const {
-    return m_valueHash + name.hash() * 3777;
-  }
-
-  HashType idHash() const {
-    return name.hash();
-  }
-}; ///@todo enable structure packing
-
-///Never construct his directly. It represents a macro that is stored in a repository,
-///and that is stored in a memory-unit together with its definition- and formal-list
-///@see macrorepository.h and macrorepository.cpp
-struct KDEVCPPRPP_EXPORT pp_macro : public pp_macro_direct_data {
-  //Count of items in the tokenized definition vector
-  uint definitionSize() const;
-  const uint* definition() const;
-  
-  //Count of items in the list of formals
-  uint formalsSize() const;
-  const uint* formals() const;
-
-  QString toString() const;
-  
-  //Does a complete comparison
-  bool operator==(const pp_macro& rhs) const;
-  
-  ///Hash that identifies all of this macro, the value and the identity
-  HashType completeHash() const {
-    return m_valueHash + name.hash() * 3777;
   }
   
   unsigned int hash() const {
     return completeHash();
   }
   
-  unsigned int itemSize() const;
+  HashType idHash() const {
+    return name.hash();
+  }
   
-  private:
-    Q_DISABLE_COPY(pp_macro)
-};
-
-class KDEVCPPRPP_EXPORT pp_dynamic_macro : public pp_macro_direct_data
-{
-public:
-  pp_dynamic_macro();
-  pp_dynamic_macro(const KDevelop::IndexedString& name);
-  pp_dynamic_macro(const char* name);
-
-  QVector<uint> definition; //Indices in the string index(essentially the same thing as IndexedString)
-  QVector<uint> formals; // argumentList, also indices in the string repository(IndexedString)
-
   QString toString() const;
   
-  HashType valueHash() const {
-    if( !m_valueHashValid ) computeHash();
-    return m_valueHash;
-  }
-
-  ///Hash that identifies all of this macro, the value and the identity
-  HashType completeHash() const {
-    return valueHash() + idHash() * 3777;
-  }
-
-  void invalidateHash();
-
   struct NameCompare {
-    bool operator () ( const pp_dynamic_macro& lhs, const pp_dynamic_macro& rhs ) const {
+    bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
       return lhs.name.index() < rhs.name.index();
     }
     #ifdef Q_CC_MSVC
     
-    HashType operator () ( const pp_dynamic_macro& macro ) const
+    HashType operator () ( const pp_macro& macro ) const
     {
         return macro.idHash();
     }
     
     enum
-		{	// parameters for hash table
-		bucket_size = 4,	// 0 < bucket_size
-		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
+    { // parameters for hash table
+    bucket_size = 4,  // 0 < bucket_size
+    min_buckets = 8}; // min_buckets = 2 ^^ N, 0 < N
     #endif
   };
 
   //Hash over id and value
   struct CompleteHash {
-    HashType operator () ( const pp_dynamic_macro& lhs ) const {
+    HashType operator () ( const pp_macro& lhs ) const {
         return lhs.completeHash();
     }
     
     #ifdef Q_CC_MSVC
     
-    bool operator () ( const pp_dynamic_macro& lhs, const pp_dynamic_macro& rhs ) const {
+    bool operator () ( const pp_macro& lhs, const pp_macro& rhs ) const {
         HashType lhash = lhs.valueHash()+lhs.idHash();
         HashType rhash = rhs.valueHash()+rhs.idHash();
         if( lhash < rhash ) return true;
@@ -165,20 +123,50 @@ public:
     }
     
     enum
-		{	// parameters for hash table
-		bucket_size = 4,	// 0 < bucket_size
-		min_buckets = 8};	// min_buckets = 2 ^^ N, 0 < N
+    { // parameters for hash table
+    bucket_size = 4,  // 0 < bucket_size
+    min_buckets = 8}; // min_buckets = 2 ^^ N, 0 < N
     #endif
   };
   
+  HashType valueHash() const {
+    if( !m_valueHashValid ) computeHash();
+    return m_valueHash;
+  }
+
+  ///Hash that identifies all of this macro, the value and the identity
+  HashType completeHash() const {
+    return valueHash() + idHash() * 3777;
+  }
+  
+  void invalidateHash();
+  
+  typedef KDevelop::IndexedString IndexedString;
+  
+  ///Convenient way of setting the definition, it is tokenized automatically
+  ///@param definition utf-8 representation of the definition text
+  void setDefinitionText(QByteArray definition);
+  
+  ///More convenient overload
+  void setDefinitionText(QString definition);
+  
+  void setDefinitionText(const char* definition) {
+    setDefinitionText(QByteArray(definition));
+  }
+  
+  START_APPENDED_LISTS(pp_macro)
+  APPENDED_LIST_FIRST(pp_macro, IndexedString, definition)
+  APPENDED_LIST(pp_macro, IndexedString, formals, definition)
+  END_APPENDED_LISTS(pp_macro, formals)
+
   private:
+    pp_macro& operator=(const pp_macro& rhs);
     void computeHash() const;
-    mutable bool m_valueHashValid;
 };
 
 }
 
-inline uint qHash( const rpp::pp_dynamic_macro& m ) {
+inline uint qHash( const rpp::pp_macro& m ) {
   return (uint)m.idHash();
 }
 
