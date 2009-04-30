@@ -71,7 +71,8 @@ DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 REGISTER_DUCHAIN_ITEM(DUContext);
 
-const Identifier globalImportIdentifier("{...import...}");
+//This is ugly, but it prevents a possible crash during destruction. We don't need ~Identifier to be called.
+const Identifier& globalImportIdentifier(*new Identifier("{...import...}"));
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
 

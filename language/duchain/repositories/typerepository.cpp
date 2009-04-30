@@ -48,9 +48,6 @@ class AbstractTypeDataRequest {
 
   void createItem(AbstractTypeData* item) const {
     TypeSystem::self().copy(*m_item.d_ptr, *item, true);
-    if(item->m_dynamic) {
-    TypeSystem::self().copy(*m_item.d_ptr, *item, true);
-    }
     Q_ASSERT(!item->m_dynamic);
 #ifdef DEBUG_TYPE_REPOSITORY
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
@@ -66,6 +63,14 @@ class AbstractTypeDataRequest {
 #endif
     item->inRepository = true;
   }
+  
+  static void destroy(AbstractTypeData* item, KDevelop::AbstractItemRepository&) {
+    TypeSystem::self().callDestructor(item);
+  }
+  
+  static bool persistent(const AbstractTypeData* item) {
+    return (bool)item->refCount;
+  }
 
   bool equals(const AbstractTypeData* item) const {
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
@@ -77,7 +82,7 @@ class AbstractTypeDataRequest {
   const AbstractType& m_item;
 };
 
-RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest, NoDynamicData>, false> typeRepository("Type Repository");
+RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> typeRepository("Type Repository");
 
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
@@ -104,5 +109,31 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
 
   return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(typeRepository->itemFromIndex(index))) );
 }
+
+void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* manager) {
+  if(!index)
+    return;
+  QMutexLocker lock(typeRepository->mutex());
+  AbstractTypeData* data = typeRepository->dynamicItemFromIndexSimple(index);
+  Q_ASSERT(data);
+  if(manager)
+    manager->increase(data->refCount, index);
+  else
+    ++data->refCount;
+}
+
+void TypeRepository::decreaseReferenceCount(uint index, ReferenceCountManager* manager) {
+  if(!index)
+    return;
+  QMutexLocker lock(typeRepository->mutex());
+  AbstractTypeData* data = typeRepository->dynamicItemFromIndexSimple(index);
+  Q_ASSERT(data);
+  Q_ASSERT(data->refCount > 0);
+  if(manager)
+    manager->decrease(data->refCount, index);
+  else
+  --data->refCount;
+}
+
 
 }

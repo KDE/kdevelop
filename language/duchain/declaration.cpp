@@ -53,6 +53,7 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+///@todo Use reference counting
 Repositories::StringRepository commentRepository("Comment Repository");
 
 REGISTER_DUCHAIN_ITEM(Declaration);
@@ -64,19 +65,19 @@ DeclarationData::DeclarationData()
   m_kind = Declaration::Instance;
 }
 
-DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs)
+DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs),
+m_identifier(rhs.m_identifier),
+m_declaration(rhs.m_declaration),
+m_type(rhs.m_type),
+m_kind(rhs.m_kind),
+m_isDefinition(rhs.m_isDefinition),
+m_isTypeAlias(rhs.m_isTypeAlias),
+m_inSymbolTable(rhs.m_inSymbolTable),
+m_comment(rhs.m_comment),
+m_anonymousInContext(rhs.m_anonymousInContext),
+m_internalContext(rhs.m_internalContext),
+m_isFinal(rhs.m_isFinal)
 {
-  m_identifier = rhs.m_identifier;
-  m_declaration = rhs.m_declaration;
-  m_type = rhs.m_type;
-  m_kind = rhs.m_kind;
-  m_isDefinition = rhs.m_isDefinition;
-  m_isTypeAlias = rhs.m_isTypeAlias;
-  m_inSymbolTable = rhs.m_inSymbolTable;
-  m_comment = rhs.m_comment;
-  m_anonymousInContext = rhs.m_anonymousInContext;
-  m_internalContext = rhs.m_internalContext;
-  m_isFinal = rhs.m_isFinal;
 }
 
 Declaration::Kind Declaration::kind() const {

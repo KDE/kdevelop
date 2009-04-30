@@ -29,7 +29,6 @@ Boston, MA 02110-1301, USA.
 #include "../editor/documentrange.h"
 #include "../languageexport.h"
 #include "../duchain/duchainbase.h"
-#include "../duchain/referencecountedindexedstring.h"
 #include <language/duchain/indexedstring.h>
 
 namespace KDevelop
@@ -57,8 +56,8 @@ public:
     Source source;
     KDevelop::IndexedString url;
 //     QStack<DocumentCursor> locationStack;
-    ReferenceCountedIndexedString description;
-    ReferenceCountedIndexedString explanation;
+    IndexedString description;
+    IndexedString explanation;
 };
 
 /**

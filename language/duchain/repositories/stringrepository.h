@@ -74,6 +74,14 @@ struct StringRepositoryItemRequest {
     memcpy(item, m_text, m_length);
   }
   
+  static void destroy(StringData*, KDevelop::AbstractItemRepository&) {
+  }
+  
+  static bool persistent(const StringData*) {
+    //Reference-counting not supported in the normal string repository
+    return true;
+  }
+  
   //Should return whether the here requested item equals the given item
   bool equals(const StringData* item) const {
     return item->length == m_length && (memcmp(++item, m_text, m_length) == 0);
@@ -83,7 +91,7 @@ struct StringRepositoryItemRequest {
   const char* m_text;
 };
 
-typedef ItemRepository<StringData, StringRepositoryItemRequest, ReferenceCounting, true> StringRepository;
+typedef ItemRepository<StringData, StringRepositoryItemRequest, false, true> StringRepository;
 
 ///@param item must be valid(nonzero)
 inline QString stringFromItem(const StringData* item) {

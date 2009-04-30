@@ -19,13 +19,18 @@
 #ifndef TYPEREPOSITORY_H
 #define TYPEREPOSITORY_H
 
-#include "../types/abstracttype.h"
+#include <language/duchain/types/abstracttype.h>
+#include <language/duchain/referencecounting.h>
 
 namespace KDevelop {
   class TypeRepository {
     public:
       static uint indexForType(AbstractType::Ptr input);
       static AbstractType::Ptr typeForIndex(uint index);
+      static void increaseReferenceCount(uint index);
+      static void decreaseReferenceCount(uint index);
+      static void increaseReferenceCount(uint index, ReferenceCountManager* manager);
+      static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
   };
 }
 

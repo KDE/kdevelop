@@ -183,7 +183,7 @@ void ClassNode::populateNode()
 
 template <> inline bool qMapLessThanKey(const IndexedIdentifier &key1, const IndexedIdentifier &key2)
 {
-  return key1.index < key2.index;
+  return key1.getIndex() < key2.getIndex();
 }
 
 bool ClassNode::updateClassDeclarations()

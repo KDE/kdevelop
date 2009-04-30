@@ -1,7 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
-    Copyright 2006 Hamish Rodda <rodda@kde.org>
-    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,6 +20,7 @@
 #define INDEXEDTYPE_H
 
 #include "abstracttype.h"
+#include <language/duchain/referencecounting.h>
 
 namespace KDevelop
 {
@@ -31,12 +30,19 @@ namespace KDevelop
  *
  * IndexedType is a class which references a type by an index.
  * This way the type can be stored to disk.
+ *
+ * This class does "disk reference counting"
+ * @warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedType : public ReferenceCountManager {
   public:
     /// Constructor.
-    explicit IndexedType(uint index = 0) : m_index(index) {
-    }
+    IndexedType(const IndexedType& rhs);
+    explicit IndexedType(uint index = 0);
+    
+    ~IndexedType();
+    
+    IndexedType& operator=(const IndexedType& rhs);
 
     /**
      * Access the type.
@@ -84,6 +90,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedType {
     }
 
   private:
+    ///This class must _never_ hold more than one unsigned integer
     uint m_index;
 };
 

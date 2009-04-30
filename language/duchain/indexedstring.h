@@ -18,6 +18,7 @@
 
 #include <QtCore/QString>
 #include "../languageexport.h"
+#include <language/duchain/referencecounting.h>
 
 class QDataStream;
 class KUrl;
@@ -28,9 +29,17 @@ class IndexedString;
 
 namespace KDevelop {
 
-//Empty strings have an index of zero.
-//Strings of length one are not put into the repository, but are encoded directly within the index:
-//They are encoded like 0xffff00bb where bb is the byte of the character.
+///This string does "disk reference-counting", which means that reference-counts are maintainted, but
+///only when the string is in a disk-stored location. The file referencecounting.h is used to manage this condition.
+///Whenever reference-counting is enabled for a range that contains the IndexedString, it will manipulate the reference-counts.
+///The duchain storage mechanisms automatically are about correctly managing that condition, so you don't need to care, and can
+///just use this class in every duchain data type without restrictions.
+///
+///@warning Do not use IndexedString after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
+///
+///Empty strings have an index of zero.
+///Strings of length one are not put into the repository, but are encoded directly within the index:
+///They are encoded like 0xffff00bb where bb is the byte of the character.
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
  public:
   IndexedString();
@@ -43,15 +52,25 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   explicit IndexedString( const char* str );
 
   explicit IndexedString( char c );
-
+  
   ///When the information is already available, try using the other constructor. This is expensive.
   explicit IndexedString( const QString& str );
 
   ///When the information is already available, try using the other constructor. This is expensive.
   explicit IndexedString( const QByteArray& str );
 
-  explicit IndexedString( unsigned int index ) : m_index(index) {
+  ///Returns a not reference-counted IndexedString that represents the given index
+  ///@warning It is dangerous dealing with indices directly, because it may break the reference counting logic
+  ///         never stay pure indices to disk
+  static IndexedString fromIndex( unsigned int index ) {
+    IndexedString ret;
+    ret.m_index = index;
+    return ret;
   }
+
+  IndexedString( const IndexedString& );
+
+  ~IndexedString();
 
   ///Creates an indexed string from a KUrl, this is expensive.
   explicit IndexedString( const KUrl& url );
@@ -64,7 +83,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
     return m_index;
   }
 
-  //The string is uniquely identified by this index. You can use it for comparison.
+  ///The string is uniquely identified by this index. You can use it for comparison.
+  ///@warning It is dangerous dealing with indices directly, because it may break the reference counting logic
+  ///         never stay pure indices to disk
   inline unsigned int index() const {
     return m_index;
   }
@@ -82,6 +103,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   ///Convenience function, avoid using it, it's relatively expensive(les expensive then str() though)
   QByteArray byteArray() const;
 
+  IndexedString& operator=(const IndexedString&);
+  
   bool operator == ( const IndexedString& rhs ) const {
     return m_index == rhs.m_index;
   }
@@ -117,6 +140,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   static unsigned int hashString(const char* str, unsigned short length);
 
  private:
+   explicit IndexedString(bool);
    uint m_index;
 };
 

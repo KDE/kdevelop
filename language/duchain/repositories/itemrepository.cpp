@@ -35,7 +35,7 @@ namespace KDevelop {
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 53;
+  return 54;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
@@ -310,6 +310,28 @@ void ItemRepositoryRegistry::store() {
     kWarning() << "Could not open counter file for writing";
   }
 }
+
+void ItemRepositoryRegistry::printAllStatistics() const {
+  QMutexLocker lock(&m_mutex);
+  int changed = false;
+  foreach(AbstractItemRepository* repository, m_repositories.keys()) {
+    kDebug() << "statistics in" << repository->repositoryName() << ":";
+    kDebug() << repository->printStatistics();
+  }
+}
+
+int ItemRepositoryRegistry::finalCleanup() {
+  QMutexLocker lock(&m_mutex);
+  int changed = false;
+  foreach(AbstractItemRepository* repository, m_repositories.keys()) {
+    int added = repository->finalCleanup();
+    changed += added;
+    kDebug() << "cleaned in" << repository->repositoryName() << ":" << added;
+  }
+  
+  return changed;
+}
+
 
 void ItemRepositoryRegistry::close() {
 

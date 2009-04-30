@@ -83,7 +83,7 @@ QString Problem::description() const
 
 void Problem::setDescription(const QString & description)
 {
-    d_func_dynamic()->description = ReferenceCountedIndexedString(description);
+    d_func_dynamic()->description = IndexedString(description);
 }
 
 QString Problem::explanation() const
@@ -93,7 +93,7 @@ QString Problem::explanation() const
 
 void Problem::setExplanation(const QString & explanation)
 {
-    d_func_dynamic()->explanation = ReferenceCountedIndexedString(explanation);
+    d_func_dynamic()->explanation = IndexedString(explanation);
 }
 
 ProblemData::Source Problem::source() const

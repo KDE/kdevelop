@@ -33,8 +33,8 @@ class DefinitionsItem {
   DefinitionsItem() {
     initializeAppendedLists();
   }
-  DefinitionsItem(const DefinitionsItem& rhs) : declaration(rhs.declaration) {
-    initializeAppendedLists();
+  DefinitionsItem(const DefinitionsItem& rhs, bool dynamic = true) : declaration(rhs.declaration) {
+    initializeAppendedLists(dynamic);
     copyListsFrom(rhs);
   }
   
@@ -81,9 +81,15 @@ class DefinitionsRequestItem {
   }
 
   void createItem(DefinitionsItem* item) const {
-    item->initializeAppendedLists(false);
-    item->declaration = m_item.declaration;
-    item->copyListsFrom(m_item);
+    new (item) DefinitionsItem(m_item, false);
+  }
+  
+  static void destroy(DefinitionsItem* item, KDevelop::AbstractItemRepository&) {
+    item->~DefinitionsItem();
+  }
+  
+  static bool persistent(const DefinitionsItem*) {
+    return true;
   }
   
   bool equals(const DefinitionsItem* item) const {

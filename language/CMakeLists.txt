@@ -18,6 +18,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/documentchangetracker.cpp
     backgroundparser/parseprojectjob.cpp
 
+    duchain/referencecounting.cpp
     duchain/specializationstore.cpp
     duchain/codemodel.cpp
     duchain/duchain.cpp
@@ -51,7 +52,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/uses.cpp
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
-    duchain/referencecountedindexedstring.cpp
     duchain/duchainregister.cpp
     duchain/persistentsymboltable.cpp
     duchain/instantiationinformation.cpp
@@ -188,6 +188,7 @@ install(FILES
 )
 
 install(FILES
+    duchain/referencecounting.h
     duchain/parsingenvironment.h
     duchain/duchain.h
     duchain/codemodel.h
@@ -222,7 +223,6 @@ install(FILES
     duchain/duchainutils.h
     duchain/dumpchain.h
     duchain/indexedstring.h
-    duchain/referencecountedindexedstring.h
     duchain/declarationid.h
     duchain/appendedlist.h
     duchain/duchainregister.h

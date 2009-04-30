@@ -1,6 +1,6 @@
 /* This  is part of KDevelop
     Copyright 2006 Hamish Rodda <rodda@kde.org>
-    Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ namespace std {
 namespace KDevelop
 {
 
-Utils::BasicSetRepository recursiveImportRepository("Recursive Imports");
+Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", &KDevelop::globalItemRepositoryRegistry());
 
 ReferencedTopDUContext::ReferencedTopDUContext(TopDUContext* context) : m_topContext(context) {
   if(m_topContext)
@@ -267,14 +267,16 @@ public:
 
     FOREACH_FUNCTION(const DUContext::Import& import, m_ctxt->d_func()->m_importedContexts) {
       if(DUChain::self()->isInMemory(import.topContextIndex())) {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(0));
+        Q_ASSERT(import.context(0));
+        TopDUContext* top = import.context(0)->topContext();
         Q_ASSERT(top);
         addImportedContextRecursively(top, false, true);
       }
     }
     FOREACH_FUNCTION(IndexedDUContext importer, m_ctxt->d_func()->m_importers) {
       if(DUChain::self()->isInMemory(importer.topContextIndex())) {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(importer.context());
+        Q_ASSERT(importer.context());
+        TopDUContext* top = importer.context()->topContext();
         Q_ASSERT(top);
         top->m_local->addImportedContextRecursively(m_ctxt, false, true);
       }
@@ -834,7 +836,7 @@ TopDUContext::TopDUContext(const IndexedString& url, const SimpleRange& range, P
   DUCHAIN_D_DYNAMIC(TopDUContext);
   d->m_features = VisibleDeclarationsAndContexts;
   d->m_ownIndex = m_local->m_ownIndex;
-  m_local->m_file = ParsingEnvironmentFilePointer(file);
+  setParsingEnvironmentFile(file);
   setInSymbolTable(true);
 }
 
@@ -896,8 +898,10 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 
   //Replicate features to ParsingEnvironmentFile
-  if(file)
+  if(file) {
+    file->setTopContext(IndexedTopDUContext(ownIndex()));
     file->setFeatures(d_func()->m_features);
+  }
 }
 
 ///Decides whether the cache contains a valid list of visible declarations for the given hash.

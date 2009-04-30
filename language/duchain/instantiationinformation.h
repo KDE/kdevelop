@@ -33,7 +33,7 @@ namespace KDevelop {
   struct KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
     InstantiationInformation();
     ///@todo include some information for instantiation only with default parameters
-    InstantiationInformation(const InstantiationInformation& rhs);
+    InstantiationInformation(const InstantiationInformation& rhs, bool dynamic = true);
     
     ~InstantiationInformation();
     

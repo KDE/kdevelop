@@ -20,8 +20,11 @@
 #include <language/duchain/repositories/itemrepository.h>
 #include <QtCore/QMutex>
 #include <QtCore/QStack>
+#include <algorithm>
 
 //#define DEBUG
+
+#include "somehash.cpp"
 
 #ifdef DEBUG
 #define ifDebug(X) X
@@ -55,37 +58,6 @@ namespace Utils {
 
 typedef BasicSetRepository::Index Index;
 
-//Constructs a m_hash that is only dependent on the items in the range.
-//The sum of the hashes of multiple separate ranges equal the m_hash of the complete range. Example:
-//hashFromRange(3, 5) + hashFromRange(5, 7) == hashFromRange(3, 7)
-const uint primes[] = {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103};
-const uint primeCount = 26;
-
-uint hashFromRange(uint start, uint end) {
-  uint ret = 0;
-  
-  for(uint a = start, inverted = 0xffffffff - start; a < end;) {
-    ret += a * primes[a % primeCount];
-    
-    //If the numbers are very small, we will get clashes. So also use the inverted value.
-    ret += inverted * primes[inverted % (primeCount-1)]; //use primeCount-1 to prevent symmetry
-    
-    ++a;
-    --inverted;
-  }
-  return ret;
-}
-
-///@param count should be the count of entries, not the count of actual "ranges"
-uint hashFromRanges(const uint* ranges, uint count) {
-  Q_ASSERT(count % 2 == 0);
-  uint ret = 0;
-  for(uint a = 0; a < count; a += 2) {
-    ret += hashFromRange(ranges[a], ranges[a+1]);
-  }
-  return ret;
-}
-
 ///The returned split position shall be the end of the first sub-range, and the start of the second
 ///@param splitBit should be initialized with 31, unless you know better. The value can then be used on while computing child split positions.
 ///In the end, it will contain the bit used to split the range. It will also contain zero if no split-position exists(length 1)
@@ -107,117 +79,15 @@ uint splitPositionForRange(uint start, uint end, uchar& splitBit) {
   return 0;
 }
 
+uint SetNodeData::hash() const {
+  //A hash to reduce the amount of clashes
+  return hashlittle(this, sizeof(uint)*4, 1748231);
+}
+
+
 uint splitPositionForRange(uint start, uint end) {
   uchar splitBit = 31;
   return splitPositionForRange(start, end, splitBit);
-}
-
-//Node used for computing the temporary split-tree
-struct SplitTreeNode {
-  uint start, end;
-  uint m_hash;
-  bool hasSlaves; //If this is true, the next item in the array is the first child node.
-  uint rightChildOffset; //If hasSlaves is true, this contains the offset in the array to the right child node(from this node)
-};
-
-//Returns the m_hash-value for all children
-uint splitTreeForRanges(QVector<SplitTreeNode>& target, uint** ranges, uint* rangesSizes, uint rangeListCounts, uchar splitBit = 31) {
-  
-  uint start = ranges[0][0];
-  uint end = ranges[rangeListCounts-1][rangesSizes[rangeListCounts-1]-1];
-  uint split = splitPositionForRange(start, end, splitBit);
-  
-  uint position = target.size();
-
-  target.append(SplitTreeNode());
-  
-  SplitTreeNode* n(&target.back());
-  n->start = start;
-  n->end = end;
-  n->hasSlaves = false;
-  n->m_hash = 0;
-  
-  if(!split) {
-    Q_ASSERT(rangeListCounts == 1);
-    Q_ASSERT(rangesSizes[0] == 2);
-    Q_ASSERT(end - start == 1); //We have ended up like this
-    n->m_hash = hashFromRange(n->start, n->end);
-    Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
-    return n->m_hash;
-  }else{
-    //Find the position where split splits all the ranges, 
-    for(uint rangeList = 0; rangeList < rangeListCounts; ++rangeList) {
-      for(uint range = 0; range < rangesSizes[rangeList]; range+= 2) {
-        uint thisRangeStart = ranges[rangeList][range];
-        uint thisRangeEnd = ranges[rangeList][range+1];
-        
-        if(split < thisRangeStart || (split >= thisRangeStart && split < thisRangeEnd)) {
-          //Either split directly before [rangeList, range], or within this range
-          n->hasSlaves = true;
-          if(split <= thisRangeStart) {
-            Q_ASSERT(rangeList != 0 || range != 0);
-            //Split before the range-list
-            
-            uint currentNodeNumber = target.size()-1;
-            
-            //Manipulate the parameters a bit, so they represent the left part of the split
-            uint oldRangeSize = rangesSizes[rangeList];
-            rangesSizes[rangeList] = range;
-            
-            uint m_hash = splitTreeForRanges(target, ranges, rangesSizes, rangeList+1, splitBit);
-            
-            n = &target[position]; // The address may have changed
-            
-            //Now compute the right part of the split
-            
-            n->rightChildOffset = target.size() - currentNodeNumber;
-            
-            uint* oldRanges = ranges[rangeList];
-            ranges[rangeList] += range;
-            rangesSizes[rangeList] = oldRangeSize - range;
-            m_hash += splitTreeForRanges(target, ranges+rangeList, rangesSizes+rangeList, rangeListCounts - rangeList, splitBit);
-            
-            n = &target[position]; // The address may have changed
-            
-            n->m_hash = m_hash;
-            
-            ranges[rangeList] = oldRanges;
-            rangesSizes[rangeList] = oldRangeSize;
-            Q_ASSERT(n->rightChildOffset);
-            return n->m_hash;
-          }else{
-            //Split in the middle of the range list
-            Q_ASSERT(0); ///@todo eventually support real ranges
-          }
-        }
-      }
-    }
-  }
-  
-  Q_ASSERT(0);
-  Q_ASSERT(!n->hasSlaves || n->rightChildOffset);
-  Q_ASSERT(n->m_hash);
-  Q_ASSERT(n->hasSlaves);
-  Q_ASSERT(n->rightChildOffset);
-  return n->m_hash;
-}
-
-QString printSplitTree(SplitTreeNode* tree, QString prefix = "") {
-    QString ret = prefix + QString("%1 -> %2\n").arg(tree->start).arg(tree->end);
-    if(tree->hasSlaves) {
-        Q_ASSERT(tree->rightChildOffset);
-        ret += printSplitTree(tree+1, prefix+' ');
-        ret += printSplitTree(tree+tree->rightChildOffset, prefix+' ');
-    }
-    return ret;
-}
-
-void SetNodeData::updateHash(const SetNodeData* left, const SetNodeData* right) {
-    m_hash = 0;
-    if(left && right) {
-    m_hash = left->m_hash + right->m_hash;
-    } else
-    m_hash = hashFromRange(start, end);
 }
 
 class SetNodeDataRequest;
@@ -226,7 +96,7 @@ class SetNodeDataRequest;
     #define getRightNode(node) repository.itemFromIndex(node->rightNode)
     #define nodeFromIndex(index) repository.itemFromIndex(index)
 struct SetRepositoryAlgorithms {
-  SetRepositoryAlgorithms(SetDataRepository& _repository) : repository(_repository) {
+  SetRepositoryAlgorithms(SetDataRepository& _repository, BasicSetRepository* _setRepository) : repository(_repository), setRepository(_setRepository) {
   }
   
   ///Expensive
@@ -249,32 +119,65 @@ struct SetRepositoryAlgorithms {
   
   //Required both nodes to be split correctly
   bool set_equals(const SetNodeData* lhs, const SetNodeData* rhs);
-  bool set_equals(const SplitTreeNode* lhs, const SetNodeData* rhs);
   
   QString dumpDotGraph(uint node) const;
+
+    ///Finds or inserts the given ranges into the repository, and returns the set-index that represents them
+    uint setForIndices(std::vector<uint>::const_iterator begin, std::vector<uint>::const_iterator end, uchar splitBit = 31) {
+        Q_ASSERT(begin != end);
+        
+        uint startIndex = *begin;
+        uint endIndex = *(end-1)+1;
+        
+        if(endIndex == startIndex+1) {
+            SetNodeData data;
+            data.start = startIndex;
+            data.end = endIndex;
+            
+            return repository.index( SetNodeDataRequest(&data, repository, setRepository) );
+        }
+        
+        uint split = splitPositionForRange(startIndex, endIndex, splitBit);
+        Q_ASSERT(split);
+        
+        std::vector<uint>::const_iterator splitIterator = std::lower_bound(begin, end, split);
+        Q_ASSERT(*splitIterator >= split);
+        Q_ASSERT(splitIterator > begin);
+        Q_ASSERT(*(splitIterator-1) < split);
+        
+        return createSetFromNodes(setForIndices(begin, splitIterator, splitBit), setForIndices(splitIterator, end, splitBit));
+    }
+
+  
 private:
   QString dumpDotGraphInternal(uint node, bool master=false) const;
   
   SetDataRepository& repository;
+  BasicSetRepository* setRepository;
 };
 
-SetNodeDataRequest::SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository) : data(*_data), splitNode(0), m_hash(_data->m_hash), repository(_repository), m_created(false) {
-    ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
+void SetNodeDataRequest::destroy(SetNodeData* data, KDevelop::AbstractItemRepository& _repository) {
+    SetDataRepository& repository(static_cast<SetDataRepository&>(_repository));
+
+    if(repository.setRepository->delayedDeletion()) {
+
+        if(data->leftNode){
+            SetDataRepositoryBase::MyDynamicItem left = repository.dynamicItemFromIndex(data->leftNode);
+            SetDataRepositoryBase::MyDynamicItem right = repository.dynamicItemFromIndex(data->rightNode);
+            Q_ASSERT(left->m_refCount > 0);
+            --left->m_refCount;
+            Q_ASSERT(right->m_refCount > 0);
+            --right->m_refCount;
+        }else {
+            //Deleting a leaf
+            Q_ASSERT(data->end - data->start == 1);
+            repository.setRepository->itemRemovedFromSets(data->start);
+        }
+    }
 }
 
-SetNodeDataRequest::SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository) : splitNode(_splitNode), m_hash(_splitNode->m_hash), repository(_repository), m_created(false) {
-    data.start = splitNode->start;
-    data.end = splitNode->end;
-    data.m_hash = m_hash;
-    if(splitNode->hasSlaves) {
-        data.leftNode = repository.index( SetNodeDataRequest( splitNode+1, repository) );
-        data.rightNode = repository.index( SetNodeDataRequest( splitNode+splitNode->rightChildOffset, repository) );
-        Q_ASSERT(data.leftNode);
-        Q_ASSERT(data.rightNode);
-    }else{
-        data.leftNode = 0;
-        data.rightNode = 0;
-    }
+SetNodeDataRequest::SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository, BasicSetRepository* _setRepository) : data(*_data), m_hash(_data->hash()), repository(_repository), setRepository(_setRepository), m_created(false) {
+    ifDebug( SetRepositoryAlgorithms alg(repository); alg.check(_data) );
 }
 
 SetNodeDataRequest::~SetNodeDataRequest() {
@@ -304,10 +207,13 @@ void SetNodeDataRequest::createItem(SetNodeData* item) const {
         uint split = splitPositionForRange(data.start, data.end);
         const SetNodeData* left = repository.itemFromIndex(item->leftNode);
         const SetNodeData* right = repository.itemFromIndex(item->rightNode);
-        Q_ASSERT(item->m_hash == left->m_hash + right->m_hash);
         Q_ASSERT(split >= left->end && split <= right->start);
     }
     #endif
+    if(!data.leftNode && setRepository) {
+        for(uint a = item->start; a < item->end; ++a)
+            setRepository->itemAddedToSets(a);
+    }
 }
   
 bool SetNodeDataRequest::equals(const SetNodeData* item) const {
@@ -338,7 +244,7 @@ unsigned int Set::count() const {
     return 0;
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.count(m_repository->dataRepository.itemFromIndex(m_tree));
 }
 
@@ -363,7 +269,7 @@ QString Set::dumpDotGraph() const {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.dumpDotGraph(m_tree);
 }
 
@@ -591,12 +497,10 @@ uint SetRepositoryAlgorithms::createSetFromNodes(uint leftNode, uint rightNode, 
 
     Q_ASSERT(set.start < set.end);
     
-    set.updateHash(left, right);
-    
-    uint ret = repository.index(SetNodeDataRequest(&set, repository));
+    uint ret = repository.index(SetNodeDataRequest(&set, repository, setRepository));
     Q_ASSERT(set.leftNode >= 0x10000);
     Q_ASSERT(set.rightNode >= 0x10000);
-    Q_ASSERT(ret == repository.findIndex(SetNodeDataRequest(&set, repository)));
+    Q_ASSERT(ret == repository.findIndex(SetNodeDataRequest(&set, repository, setRepository)));
     ifDebug( check(ret) );
     return ret;
 }
@@ -727,7 +631,7 @@ uint SetRepositoryAlgorithms::set_union(uint firstNode, uint secondNode, const S
     
   }else{
     //We would have stopped earlier of first and second don't intersect
-    ifDebug( uint test = repository.findIndex(SetNodeDataRequest(first, repository)); kDebug() << "found index:" << test; )
+    ifDebug( uint test = repository.findIndex(SetNodeDataRequest(first, repository, setRepository)); kDebug() << "found index:" << test; )
     Q_ASSERT(0);
     return 0;
   }
@@ -739,58 +643,6 @@ bool SetRepositoryAlgorithms::set_equals(const SetNodeData* lhs, const SetNodeDa
     return false;
   else
     return true;
-}
-
-bool SetRepositoryAlgorithms::set_equals(const SplitTreeNode* lhs, const SetNodeData* rhs)
-{
-  QStack<const SplitTreeNode*> leftNextStack;
-  QStack<const SetNodeData*> rightNextStack;
-
-  if(lhs->start != rhs->start || lhs->end != rhs->end)
-    return false;
-  
-  while(true) {
-    if(!lhs->hasSlaves && rhs->contiguous()) {
-      //Here it must match, because the basic sets have size 1
-      Q_ASSERT(lhs->end - lhs->start == 1 && rhs->end - rhs->start == 1); //We do this assumption in the algorithm
-      
-      if(lhs->start != rhs->start || lhs->end != rhs->end || lhs->m_hash != rhs->m_hash)
-        return false;
-      
-      if(leftNextStack.isEmpty() && rightNextStack.isEmpty())
-        return true; //Ideally we end here at some point
-      
-      if(leftNextStack.isEmpty() || rightNextStack.isEmpty())
-        return false;
-      
-      lhs = leftNextStack.top();
-      rhs = rightNextStack.top();
-      leftNextStack.pop();
-      rightNextStack.pop();
-    }
-    
-    if(lhs->start == rhs->start && lhs->end == rhs->end && lhs->m_hash != rhs->m_hash)
-      return false;
-    
-    if(lhs->hasSlaves || !rhs->contiguous()) {
-        //We assume that on the bottom level there is exactly one set for each item
-        if(lhs->end - lhs->start > rhs->end - rhs->start) {
-        if(!lhs->hasSlaves)
-            return false;
-        
-        leftNextStack.push(lhs+lhs->rightChildOffset);
-        lhs = lhs+1;
-        }else{
-        rightNextStack.push(getRightNode(rhs));
-        Q_ASSERT(rightNextStack.top());
-        rhs = getLeftNode(rhs);
-        if(!rhs)
-            return false;
-        }
-    }
-  }
-  
-  return true;
 }
 
 uint SetRepositoryAlgorithms::set_intersect(uint firstNode, uint secondNode, const SetNodeData* first, const SetNodeData* second, uchar splitBit)
@@ -1011,44 +863,26 @@ uint SetRepositoryAlgorithms::set_subtract(uint firstNode, uint secondNode, cons
   Q_ASSERT(0);
 }
 
-Set BasicSetRepository::createSetFromRanges(const std::vector<Index>& indices) {
+Set BasicSetRepository::createSetFromIndices(const std::vector<Index>& indices) {
 
   QMutexLocker lock(m_mutex);
-  
-  std::vector<Index> shortRanges; //Currently we only support ranges of length 1, so we actually do not support them
-  
-  for(uint a = 0; a < indices.size(); a += 2) {
-    for(uint b = indices[a]; b < indices[a+1]; ++b) {
-      shortRanges.push_back(b);
-      shortRanges.push_back(b+1);
-    }
-  }
-  
-  if(shortRanges.empty())
-      return Set();
-  
-  uint rangeCount = shortRanges.size();
-  uint* ranges = &shortRanges[0];
-  
-  QVector<SplitTreeNode> splitTree;
-  
-  splitTreeForRanges(splitTree, &ranges, &rangeCount, 1);
 
-  //kDebug() << printSplitTree(splitTree.data());
+  if(indices.empty())
+    return Set();
   
-  return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
+  SetRepositoryAlgorithms alg(dataRepository, this);
+  
+  return Set(alg.setForIndices(indices.begin(), indices.end()), this);
 }
 
 Set BasicSetRepository::createSet(Index i) {
     
     QMutexLocker lock(m_mutex);
-  
-    SetNodeData data;
-    data.start = i;
-    data.end = i+1;
-    data.updateHash(0, 0);
-    
-    return Set(dataRepository.index( SetNodeDataRequest(&data, dataRepository) ), this);
+    SetNodeData data;                                                                                                                                                              
+    data.start = i;                                                                                                                                                                
+    data.end = i+1;                                                                                                                                                                
+                                                                                                                                                                                   
+    return Set(dataRepository.index( SetNodeDataRequest(&data, dataRepository, this) ), this);
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
@@ -1057,28 +891,17 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
       return Set();
   
   QMutexLocker lock(m_mutex);
-  
-  std::vector<Index> shortRanges(indices.size()*2);
 
-  uint size = 0;
+  std::vector<Index> indicesVector;
+  indicesVector.reserve(indices.size());
+
   for( std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it )
-  {
-    shortRanges[size] = *it;
-    ++size;
-    shortRanges[size] = *it+1;
-    ++size;
-  }
+    indicesVector.push_back(*it);
   
-  uint* ranges = &shortRanges[0];
-  
-  QVector<SplitTreeNode> splitTree;
-  
-  splitTreeForRanges(splitTree, &ranges, &size, 1);
-
-  return Set(dataRepository.index( SetNodeDataRequest(&splitTree[0], dataRepository) ), this);
+  return createSetFromIndices(indicesVector);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry) : d(new Private(name)), dataRepository(name, registry), m_mutex(0) {
+BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion) : d(new Private(name)), dataRepository(this, name, registry), m_mutex(0), m_delayedDeletion(delayedDeletion) {
     m_mutex = dataRepository.mutex();
 }
 
@@ -1116,6 +939,9 @@ BasicSetRepository::~BasicSetRepository() {
 void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
 }
 
+void BasicSetRepository::itemAddedToSets(uint /*index*/) {
+}
+
 ////////////Set convenience functions//////////////////
 
 bool Set::contains(Index index) const
@@ -1125,7 +951,7 @@ bool Set::contains(Index index) const
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   return alg.set_contains(m_repository->dataRepository.itemFromIndex(m_tree), index);
 }
 
@@ -1140,7 +966,7 @@ Set Set::operator +(const Set& first) const
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   
@@ -1160,7 +986,7 @@ Set& Set::operator +=(const Set& first) {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   m_tree = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   
@@ -1176,7 +1002,7 @@ Set Set::operator &(const Set& first) const {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree)), m_repository );
   
@@ -1195,7 +1021,7 @@ Set& Set::operator &=(const Set& first) {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
   ifDebug(alg.check(m_tree));
@@ -1210,7 +1036,7 @@ Set Set::operator -(const Set& rhs) const {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
   ifDebug( alg.check(ret.m_tree) );
@@ -1225,7 +1051,7 @@ Set& Set::operator -=(const Set& rhs) {
   
   QMutexLocker lock(m_repository->m_mutex);
   
-  SetRepositoryAlgorithms alg(m_repository->dataRepository);
+  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
   
   m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree));
 
@@ -1241,30 +1067,31 @@ void Set::staticRef() {
   if(!m_tree)
     return;
     m_repository->m_mutex->lock();
-    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(m_tree);
+    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(m_tree);
     ++data->m_refCount;
     m_repository->m_mutex->unlock();
 }
 
 ///Mutex must be locked
 void Set::unrefNode(uint current) {
-    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndex(current);
+    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(current);
     Q_ASSERT(data->m_refCount);
     --data->m_refCount;
+    if(!m_repository->delayedDeletion()) {
+        if(data->m_refCount == 0) {
 
-    if(data->m_refCount == 0) {
+            if(data->leftNode){
+                Q_ASSERT(data->rightNode);
+                unrefNode(data->rightNode);
+                unrefNode(data->leftNode);
+            }else {
+                //Deleting a leaf
+                Q_ASSERT(data->end - data->start == 1);
+                m_repository->itemRemovedFromSets(data->start);
+            }
 
-        if(data->leftNode){
-            Q_ASSERT(data->rightNode);
-            unrefNode(data->rightNode);
-            unrefNode(data->leftNode);
-        }else {
-            //Deleting a leaf
-            Q_ASSERT(data->end - data->start == 1);
-            m_repository->itemRemovedFromSets(data->start);
+        m_repository->dataRepository.deleteItem(current);
         }
-
-    m_repository->dataRepository.deleteItem(current);
     }
 }
 
@@ -1280,6 +1107,30 @@ void Set::staticUnref() {
     unrefNode(m_tree);
     
     m_repository->m_mutex->unlock();
+}
+
+StringSetRepository::StringSetRepository(QString name) : Utils::BasicSetRepository(name) {
+}
+
+void StringSetRepository::itemRemovedFromSets(uint index) {
+    ///Call the IndexedString destructor with enabled reference-counting
+    KDevelop::IndexedString string = KDevelop::IndexedString::fromIndex(index);
+
+    KDevelop::enableDUChainReferenceCounting(&string, sizeof(KDevelop::IndexedString));
+    string.~IndexedString(); //Call destructor with enabled reference-counting
+    KDevelop::disableDUChainReferenceCounting(&string);
+}
+
+void StringSetRepository::itemAddedToSets(uint index) {
+    ///Call the IndexedString constructor with enabled reference-counting
+
+    KDevelop::IndexedString string = KDevelop::IndexedString::fromIndex(index);
+
+    char data[sizeof(KDevelop::IndexedString)];
+
+    KDevelop::enableDUChainReferenceCounting(data, sizeof(KDevelop::IndexedString));
+    new (data) KDevelop::IndexedString(string); //Call constructor with enabled reference-counting
+    KDevelop::disableDUChainReferenceCounting(data);
 }
 
 }

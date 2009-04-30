@@ -29,7 +29,7 @@
 #include <time.h>
 
 namespace KDevelop {
-
+class AbstractItemRepository;
 /**
  * This file contains macros and classes that can be used to conveniently implement classes that store the data of an arbitrary count
  * of additional lists within the same memory block directly behind the class data, in a way that one the whole data can be stored by one copy-operation
@@ -53,7 +53,9 @@ namespace KDevelop {
 enum {
   DynamicAppendedListMask = 1 << 31
 };
-
+enum {
+  DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
+};
 /**
  * Manages a repository of items for temporary usage. The items will be allocated with an index on alloc(),
  * and freed on free(index). When freed, the same index will be re-used for a later allocation, thus no real allocations
@@ -63,13 +65,12 @@ enum {
  */
 template<class T, bool threadSafe = true>
 class TemporaryDataManager {
-  enum {
-    DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
-  };
   public:
     TemporaryDataManager(QString id = QString()) : m_itemsUsed(0), m_itemsSize(0), m_items(0), m_id(id) {
+      Q_ASSERT((uint)alloc() == (uint)DynamicAppendedListMask); //Allocate the zero item, just to reserve that index
     }
     ~TemporaryDataManager() {
+      free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
       uint cnt = usedItemCount();
       if(cnt) //Don't use kDebug, because that may not work during destruction
         std::cout << m_id.toLocal8Bit().data() << " There were items left on destruction: " << usedItemCount() << "\n";
@@ -83,7 +84,7 @@ class TemporaryDataManager {
       //extremely fast. There is special measures in alloc() to make this safe.
       Q_ASSERT(index & DynamicAppendedListMask);
 
-      return *m_items[index & DynamicAppendedListRevertMask];
+      return *m_items[index & KDevelop::DynamicAppendedListRevertMask];
     }
 
     ///Allocates an item index, which from now on you can get using getItem, until you call free(..) on the index.
@@ -147,7 +148,7 @@ class TemporaryDataManager {
 
     void free(uint index) {
       Q_ASSERT(index & DynamicAppendedListMask);
-      index &= DynamicAppendedListRevertMask;
+      index &= KDevelop::DynamicAppendedListRevertMask;
 
       if(threadSafe)
         m_mutex.lock();
@@ -244,27 +245,37 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
 
 #define APPENDED_LIST_COMMON(container, type, name) \
       uint name ## Data; \
-      unsigned int name ## Size() const { if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().getItem(name ## Data).size(); } \
-      KDevVarLengthArray<type, 10>& name ## List() { return temporaryHash ## container ## name().getItem(name ## Data); }\
-      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); return size == rhs.name ## Size() && memcmp( name(), rhs.name(), size * sizeof(type) ) == 0; } \
+      unsigned int name ## Size() const { if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().getItem(name ## Data).size(); } \
+      KDevVarLengthArray<type, 10>& name ## List() { name ## NeedDynamicList(); return temporaryHash ## container ## name().getItem(name ## Data); }\
+      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); if(size != rhs.name ## Size()) return false; for(uint a = 0; a < size; ++a) {if(!(name()[a] == rhs.name()[a])) return false;} return true;  } \
       template<class T> void name ## CopyFrom( const T& rhs ) { \
+        if(rhs.name ## Size() == 0 && (name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return; \
         if(appendedListsDynamic()) {  \
+          name ## NeedDynamicList(); \
           KDevVarLengthArray<type, 10>& item( temporaryHash ## container ## name().getItem(name ## Data) ); \
-          item.resize(rhs.name ## Size()); \
+          item.clear();                    \
+          const type* otherCurr = rhs.name(); \
+          const type* otherEnd = otherCurr + rhs.name ## Size(); \
+          for(; otherCurr < otherEnd; ++otherCurr) \
+            item.append(*otherCurr); \
         }else{ \
-          Q_ASSERT(name ## Data == 0); /*If this triggers, then the list wasn't initialized properly with initializeAppendedLists(..)*/ \
+          Q_ASSERT(name ## Data == 0); /* It is dangerous to overwrite the contents of non-dynamic lists(Most probably a mistake) */ \
           name ## Data = rhs.name ## Size(); \
+          type* curr = const_cast<type*>(name());  type* end = curr + name ## Size(); \
+          const type* otherCurr = rhs.name(); \
+          for(; curr < end; ++curr, ++otherCurr) \
+            new (curr) type(*otherCurr); /* Call the copy constructors */ \
         }\
-        memcpy(const_cast<type*>(name()), rhs.name(), name ## Size() * sizeof(type)); \
       } \
-      void name ## Initialize(bool dynamic) { if(dynamic) {name ## Data = temporaryHash ## container ## name().alloc(); temporaryHash ## container ## name().getItem(name ## Data).clear(); } else {name ## Data = 0;} }  \
-      void name ## Free() { if(appendedListsDynamic()) { temporaryHash ## container ## name().free(name ## Data); } }  \
+      void name ## NeedDynamicList() { Q_ASSERT(appendedListsDynamic()); if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) { name ## Data = temporaryHash ## container ## name().alloc(); Q_ASSERT(temporaryHash ## container ## name().getItem(name ## Data).isEmpty());  } } \
+      void name ## Initialize(bool dynamic) { name ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); }  \
+      void name ## Free() { if(appendedListsDynamic()) { if(name ## Data & KDevelop::DynamicAppendedListRevertMask) temporaryHash ## container ## name().free(name ## Data); } else { type* curr = const_cast<type*>(name());  type* end = curr + name ## Size(); for(; curr < end; ++curr) curr->~type(); /*call destructors*/ } }  \
 
 
 ///@todo Make these things a bit faster(less recursion)
 
 #define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
+                                               const type* name() const { if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
@@ -272,7 +283,7 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
                                                void name ## FreeChain() { name ## Free(); }
 
 #define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
+                                               const type* name() const {if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
                                                unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
                                                template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
                                                template<class T> void name ## CopyAllFrom( const T& rhs ) { predecessor ## CopyAllFrom(rhs); name ## CopyFrom(rhs); } \
@@ -286,7 +297,7 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
                                      /* Copies all the local appended lists(not from base classes) from the given item.*/   \
                                       template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
                                       void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
-                                      void freeAppendedLists() { if(appendedListsDynamic()) predecessor ## FreeChain(); } \
+                                      void freeAppendedLists() { predecessor ## FreeChain(); } \
                                       bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
                                       size_t dynamicSize() const { return offsetBehindLastList() + classSize(); }
@@ -294,9 +305,9 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.
  * All your class needs to do is:
  * - Be implemented using the APPENDED_LIST macros.
+  * - Have a real copy-constructor that additionally takes a "bool dynamic = true" parameter, which should be given to initializeAppendedLists
  * - Except for these appended lists, only contain directly copyable data like indices(no pointers, no virtual functions)
  * - Implement operator==(..) which should compare everything, including the lists. @warning The default operator will not work!
- * - Implement an operator=(..) function that also copies the lists using copyListsFrom(..)
  * - Implement a hash() function. The hash should equal for two instances when operator==(..) returns true.
  * - Should be completely functional without a constructor called, only the data copied
  * If those conditions are fulfilled, the data can easily be put into a repository using this request class.
@@ -321,8 +332,15 @@ class AppendedListItemRequest {
   }
 
   void createItem(Type* item) const {
-    item->initializeAppendedLists(false);
-    *item = m_item;
+    new (item) Type(m_item, false);
+  }
+  
+  static void destroy(Type* item, KDevelop::AbstractItemRepository&) {
+    item->~Type();
+  }
+  
+  static bool persistent(const Type* item) {
+    return true;
   }
 
   bool equals(const Type* item) const {

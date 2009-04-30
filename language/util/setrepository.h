@@ -17,6 +17,7 @@
 #include "basicsetrepository.h"
 #include <QtCore/QMutex>
 #include <list>
+#include <language/duchain/indexedstring.h>
 
 /**
  * This header defines convenience-class that allow handling set-repositories using the represented higher-level objects instead
@@ -467,6 +468,14 @@ class LazySet : public Conversion {
     mutable IndexList m_temporaryIndices;
     mutable IndexList m_temporaryRemoveIndices;
   };
+  
+  ///Persistent repository that manages string-sets, also correctly increasing the string reference-counts as needed
+  struct KDEVPLATFORMLANGUAGE_EXPORT StringSetRepository : public Utils::BasicSetRepository {
+    StringSetRepository(QString name);
+    virtual void itemRemovedFromSets(uint index);
+    virtual void itemAddedToSets(uint index);
+  };
+  
 }
 
 #endif

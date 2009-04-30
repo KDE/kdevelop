@@ -46,6 +46,7 @@
 
 //#include <QtCore/qcontainerfwd.h>
 #include <QtCore/QtGlobal>
+#include <QtCore/QVector>
 #include <new>
 
 ///Foreach macro that also works with QVarLengthArray or KDevVarLengthArray
@@ -57,6 +58,45 @@ QT_BEGIN_HEADER
 QT_BEGIN_NAMESPACE
 
 QT_MODULE(Core)
+
+//When this is uncommented, a QVector will be used instead of a variable-length array. This is useful for debugging, to find problems in KDevVarLengthArray
+#define FAKE_KDEVVARLENGTH_ARRAY
+
+#ifdef FAKE_KDEVVARLENGTH_ARRAY
+template<class T, int Prealloc = 256>
+class KDevVarLengthArray : public QVector<T> {
+    public:
+    ///Inserts the given item at the given position, moving all items behind the position back
+    void insert(const T& item, int position) {
+    QVector<T>::insert(position, item);
+    }
+
+    // Removes exactly one occurrence of the given value from the array. Returns false if none was found.
+    bool removeOne(const T& value) {
+    int i = this->indexOf(value);
+    if(i == -1)
+    return false;
+    erase(i);
+    return true;
+    }
+    void erase(int pos) {
+    this->remove(pos);
+    }
+    void append(const T& item) {
+        QVector<T>::append(item);
+    }
+    
+    void pop_back() {
+        Q_ASSERT(!this->isEmpty());
+        QVector<T>::pop_back();
+    }
+    
+    void append(const T *buf, int size) {
+    for(int a = 0; a < size; ++a)
+        append(buf[a]);
+    }
+};
+#else
 
 template<class T, int Prealloc = 256>
 class KDevVarLengthArray
@@ -73,7 +113,7 @@ public:
     inline ~KDevVarLengthArray() {
         if (QTypeInfo<T>::isComplex) {
             T *i = ptr + s;
-            while (i-- != ptr)
+            while (i-- > ptr)
                 i->~T();
         }
         if (ptr != reinterpret_cast<T *>(array))
@@ -184,6 +224,7 @@ public:
     }
 
     void pop_back() {
+        Q_ASSERT(s > 0);
         resize(s-1);
     }
 
@@ -220,7 +261,7 @@ Q_INLINE_TEMPLATE KDevVarLengthArray<T, Prealloc>::KDevVarLengthArray(int asize)
 
 template <class T, int Prealloc>
 Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::resize(int asize)
-{ realloc(asize, qMax(asize, a)); }
+{ Q_ASSERT(asize >= 0 && asize < 100000); realloc(asize, qMax(asize, a)); }
 
 template <class T, int Prealloc>
 Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::reserve(int asize)
@@ -297,7 +338,7 @@ Q_OUTOFLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::realloc(int asize, in
     if (oldPtr != reinterpret_cast<T *>(array) && oldPtr != ptr)
         qFree(oldPtr);
 }
-
+#endif
 QT_END_NAMESPACE
 
 QT_END_HEADER

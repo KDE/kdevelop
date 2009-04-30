@@ -846,7 +846,7 @@ private:
  *
  * @see NamespaceAliasDeclaration.
  * */
-KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier globalImportIdentifier;
+KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalImportIdentifier;
 
 /**
   * Collects all uses of the given @param declarationIndex

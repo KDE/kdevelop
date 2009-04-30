@@ -36,7 +36,6 @@
 
 //This might be problematic on some systems, because really many mmaps are created
 #define USE_MMAP
-
 using namespace KDevelop;
 
 QMutex KDevelop::TopDUContextDynamicData::m_temporaryDataMutex(QMutex::Recursive);
@@ -64,9 +63,11 @@ void saveDUChainItem(QList<ArrayWithPosition>& data, DUChainBase& item, uint& to
   if(item.d_func()->isDynamic()) {
     //Change from dynamic data to constant data
 
+    enableDUChainReferenceCounting(data.back().first.data(), data.back().first.size());
     DUChainItemSystem::self().copy(*item.d_func(), target, true);
     Q_ASSERT(!target.isDynamic());
     item.setData(&target);
+    disableDUChainReferenceCounting(data.back().first.data());
   }else{
     //Just copy the data into another place, expensive copy constructors are not needed
     memcpy(&target, item.d_func(), size);

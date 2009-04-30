@@ -484,7 +484,7 @@ namespace KDevelop {
                      return false;
                  }
                }else{
-                ItemHandler::copyTo(m_add, m_items[currentItem]);
+                 ItemHandler::copyTo(m_add, m_items[currentItem]);
                }
 
                m_applied = true;
@@ -683,6 +683,10 @@ namespace KDevelop {
                //bound cannot be pos, because pos is invalid
                Q_ASSERT(bound != pos);
 
+                //Shuffle around the item at the free pos, so reference counting in constructors/destructors is not screwed up
+                char backup[sizeof(Data)];
+                memcpy(backup, m_items+pos, sizeof(Data));
+                
                if(bound < pos) {
                    if(!force && pos-bound > maxMoveAround()) {
 //                         kDebug() << "increasing because" << pos-bound << ">" << maxMoveAround() << "left free items:" << countFreeItems(*m_centralFreeItem) << "target free items:" << (m_itemCount-countFreeItems(*m_centralFreeItem))/increaseFraction;
@@ -701,6 +705,8 @@ namespace KDevelop {
                     memmove(m_items+pos, m_items+pos+1, sizeof(Data)*(bound-pos-1));
                     target = bound-1;
                }
+               memcpy(m_items+target, backup, sizeof(Data));
+               
                ItemHandler::copyTo(data, m_items[target]);
                return true;
            }

@@ -217,6 +217,24 @@ public:
   ///Call this from within tests.
   void disablePersistentStorage();
   
+  ///Stores the whole duchain and all its repositories in the current state to disk
+  ///The duchain must not be locked in any way
+  void storeToDisk();
+  
+  ///Compares the whole duchain and all its repositories in the current state to disk
+  ///When the comparison fails, debug-output will show why
+  ///The duchain must not be locked when calling this
+  ///@return true If the current memory state equals the disk state, else false
+  bool compareToDisk();
+  
+  ///Does a big cleanup of the repositories, removing all items that are not needed any more for disk-persistency
+  ///The duchain must not be locked when calling this
+  ///@warning Only do this right after startup, or after shutdown, in a moment where indexed
+  ///         repository items are not needed any more, since the reference-counting mechanisms only respect disk persistency.
+  ///         All items that are not disk-referenced are invalidated during this step, which will lead to inconsistency, crashes,
+  ///         etc. when done in the wrong moment.
+  void finalCleanup();
+  
 Q_SIGNALS:
   ///Is emitted when the declaration has been selected somewhere in the user-interface, for example in the completion-list
   void declarationSelected(DeclarationPointer decl);

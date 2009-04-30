@@ -29,6 +29,7 @@
 #include <kdebug.h>
 
 #include "../languageexport.h"
+#include "referencecounting.h"
 
 //We use shared d-pointers, which is even better than a d-pointer, but krazy probably won't get it, so exclude the test.
 //krazy:excludeall=dpointer
@@ -45,32 +46,48 @@ template<bool>
 class IdentifierPrivate;
 class IndexedString;
 
-//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
-//The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-//abilities or access to the contained data.
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier {
+///A helper-class to store an identifier by index in a type-safe way. 
+///The difference to Identifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+///abilities or access to the contained data.
+///This class does "disk reference counting"
+///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountManager {
   IndexedIdentifier();
   IndexedIdentifier(const Identifier& id);
+  IndexedIdentifier(const IndexedIdentifier& rhs);
   IndexedIdentifier& operator=(const Identifier& id);
+  IndexedIdentifier& operator=(const IndexedIdentifier& rhs);
+  ~IndexedIdentifier();
   bool operator==(const IndexedIdentifier& rhs) const;
   bool operator!=(const IndexedIdentifier& rhs) const;
   bool operator==(const Identifier& id) const;
 
+  
   bool isEmpty() const;
 
   Identifier identifier() const;
   operator Identifier() const;
 
+  uint getIndex() const {
+    return index;
+  }
+  
+  private:
   unsigned int index;
 };
 
-//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
-//The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-//abilities or access to the contained data.
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
+///A helper-class to store an identifier by index in a type-safe way.
+///The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+///abilities or access to the contained data.
+///This class does "disk reference counting"
+///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public ReferenceCountManager {
   IndexedQualifiedIdentifier();
   IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
+  IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs);
   IndexedQualifiedIdentifier& operator=(const QualifiedIdentifier& id);
+  IndexedQualifiedIdentifier& operator=(const IndexedQualifiedIdentifier& id);
+  ~IndexedQualifiedIdentifier();
   bool operator==(const IndexedQualifiedIdentifier& rhs) const;
   bool operator==(const QualifiedIdentifier& id) const;
 
@@ -83,16 +100,26 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier {
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;
 
+  uint getIndex() const {
+    return index;
+  }
+  
+  private:
   uint index;
 };
 
-//A helper-class to store an identifier by index in a type-safe way. Will be extended to do reference-counting at some point.
-//The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-//abilities or access to the contained data.
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier {
+///A helper-class to store an identifier by index in a type-safe way.
+///The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
+///abilities or access to the contained data.
+///This class does "disk reference counting"
+///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
+struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier : public ReferenceCountManager {
   IndexedTypeIdentifier();
   IndexedTypeIdentifier(const TypeIdentifier& id);
+  IndexedTypeIdentifier(const IndexedTypeIdentifier& rhs);
+  ~IndexedTypeIdentifier();
   IndexedTypeIdentifier& operator=(const TypeIdentifier& id);
+  IndexedTypeIdentifier& operator=(const IndexedTypeIdentifier& id);
   bool operator==(const IndexedTypeIdentifier& rhs) const;
   bool operator==(const TypeIdentifier& id) const;
 
@@ -101,6 +128,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier {
   TypeIdentifier identifier() const;
   operator TypeIdentifier() const;
 
+  uint getIndex() const {
+    return index;
+  }
+  
+  private:
   uint index;
 };
 

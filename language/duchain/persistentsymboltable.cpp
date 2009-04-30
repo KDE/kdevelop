@@ -36,7 +36,7 @@ const uint MinimumCountForCache = 1;
 
 namespace KDevelop {
 
-Utils::BasicSetRepository recursiveImportCacheRepository("Recursive Imports Cache", 0);
+Utils::BasicSetRepository recursiveImportCacheRepository("Recursive Imports Cache", 0, false);
 
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 
@@ -45,8 +45,8 @@ class PersistentSymbolTableItem {
   PersistentSymbolTableItem() : centralFreeItem(-1) {
     initializeAppendedLists();
   }
-  PersistentSymbolTableItem(const PersistentSymbolTableItem& rhs) : id(rhs.id), centralFreeItem(rhs.centralFreeItem) {
-    initializeAppendedLists();
+  PersistentSymbolTableItem(const PersistentSymbolTableItem& rhs, bool dynamic = true) : id(rhs.id), centralFreeItem(rhs.centralFreeItem) {
+    initializeAppendedLists(dynamic);
     copyListsFrom(rhs);
   }
   
@@ -54,10 +54,10 @@ class PersistentSymbolTableItem {
     freeAppendedLists();
   }
   
-  unsigned int hash() const {
+  inline unsigned int hash() const {
     //We only compare the declaration. This allows us implementing a map, although the item-repository
     //originally represents a set.
-    return id.index;
+    return id.getIndex();
   }
   
   unsigned int itemSize() const {
@@ -94,10 +94,15 @@ class PersistentSymbolTableRequestItem {
   }
 
   void createItem(PersistentSymbolTableItem* item) const {
-    item->initializeAppendedLists(false);
-    item->id = m_item.id;
-    item->centralFreeItem = m_item.centralFreeItem;
-    item->copyListsFrom(m_item);
+    new (item) PersistentSymbolTableItem(m_item, false);
+  }
+  
+  static void destroy(PersistentSymbolTableItem* item, KDevelop::AbstractItemRepository&) {
+    item->~PersistentSymbolTableItem();
+  }
+
+  static bool persistent(const PersistentSymbolTableItem*) {
+    return true; //Nothing to do
   }
   
   bool equals(const PersistentSymbolTableItem* item) const {
@@ -114,8 +119,8 @@ class PersistentContextTableItem {
   PersistentContextTableItem() : centralFreeItem(-1) {
     initializeAppendedLists();
   }
-  PersistentContextTableItem(const PersistentContextTableItem& rhs) : id(rhs.id), centralFreeItem(rhs.centralFreeItem) {
-    initializeAppendedLists();
+  PersistentContextTableItem(const PersistentContextTableItem& rhs, bool dynamic = true) : id(rhs.id), centralFreeItem(rhs.centralFreeItem) {
+    initializeAppendedLists(dynamic);
     copyListsFrom(rhs);
   }
   
@@ -123,10 +128,10 @@ class PersistentContextTableItem {
     freeAppendedLists();
   }
   
-  unsigned int hash() const {
+  inline unsigned int hash() const {
     //We only compare the context. This allows us implementing a map, although the item-repository
     //originally represents a set.
-    return id.index;
+    return id.getIndex();
   }
   
   size_t itemSize() const {
@@ -163,10 +168,15 @@ class PersistentContextTableRequestItem {
   }
 
   void createItem(PersistentContextTableItem* item) const {
-    item->initializeAppendedLists(false);
-    item->id = m_item.id;
-    item->centralFreeItem = m_item.centralFreeItem;
-    item->copyListsFrom(m_item);
+    new (item) PersistentContextTableItem(m_item, false);
+  }
+  
+  static void destroy(PersistentContextTableItem* item, KDevelop::AbstractItemRepository&) {
+    item->~PersistentContextTableItem();
+  }
+  
+  static bool persistent(const PersistentContextTableItem*) {
+    return true; //Nothing to do
   }
   
   bool equals(const PersistentContextTableItem* item) const {
@@ -190,8 +200,8 @@ struct PersistentSymbolTablePrivate {
     m_contexts.setMutex(m_declarations.mutex());
   }
   //Maps declaration-ids to declarations
-  ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, KDevelop::NoDynamicData, false> m_declarations;
-  ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem, KDevelop::NoDynamicData, false> m_contexts;
+  ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, false> m_declarations;
+  ItemRepository<PersistentContextTableItem, PersistentContextTableRequestItem, true, false> m_contexts;
   
   
   QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration> > m_declarationsCache;
@@ -244,7 +254,7 @@ void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id,
     if(alg.indexOf(declaration) != -1)
       return;
     
-    PersistentSymbolTableItem* editableItem = d->m_declarations.dynamicItemFromIndex(index);
+    DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
     
     EmbeddedTreeAddItem<IndexedDeclaration, IndexedDeclarationHandler> add(const_cast<IndexedDeclaration*>(editableItem->declarations()), editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
     
@@ -291,7 +301,7 @@ void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& 
     if(alg.indexOf(declaration) == -1)
       return;
     
-    PersistentSymbolTableItem* editableItem = d->m_declarations.dynamicItemFromIndex(index);
+    DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
     
     EmbeddedTreeRemoveItem<IndexedDeclaration, IndexedDeclarationHandler> remove(const_cast<IndexedDeclaration*>(editableItem->declarations()), editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
     
@@ -486,7 +496,7 @@ void PersistentSymbolTable::addContext(const IndexedQualifiedIdentifier& id, con
     
     QMutexLocker lock(d->m_contexts.mutex());
     
-    PersistentContextTableItem* editableItem = d->m_contexts.dynamicItemFromIndex(index);
+    DynamicItem<PersistentContextTableItem, true> editableItem = d->m_contexts.dynamicItemFromIndex(index);
     
     EmbeddedTreeAddItem<IndexedDUContext, IndexedDUContextHandler> add(const_cast<IndexedDUContext*>(editableItem->contexts()), editableItem->contextsSize(), editableItem->centralFreeItem, context);
     
@@ -534,7 +544,7 @@ void PersistentSymbolTable::removeContext(const IndexedQualifiedIdentifier& id, 
     
     QMutexLocker lock(d->m_contexts.mutex());
     
-    PersistentContextTableItem* editableItem = d->m_contexts.dynamicItemFromIndex(index);
+    DynamicItem<PersistentContextTableItem, true> editableItem = d->m_contexts.dynamicItemFromIndex(index);
     
     EmbeddedTreeRemoveItem<IndexedDUContext, IndexedDUContextHandler> remove(const_cast<IndexedDUContext*>(editableItem->contexts()), editableItem->contextsSize(), editableItem->centralFreeItem, context);
     

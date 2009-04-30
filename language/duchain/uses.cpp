@@ -35,8 +35,8 @@ class UsesItem {
   UsesItem() {
     initializeAppendedLists();
   }
-  UsesItem(const UsesItem& rhs) : declaration(rhs.declaration) {
-    initializeAppendedLists();
+  UsesItem(const UsesItem& rhs, bool dynamic = true) : declaration(rhs.declaration) {
+    initializeAppendedLists(dynamic);
     copyListsFrom(rhs);
   }
   
@@ -83,9 +83,15 @@ class UsesRequestItem {
   }
 
   void createItem(UsesItem* item) const {
-    item->initializeAppendedLists(false);
-    item->declaration = m_item.declaration;
-    item->copyListsFrom(m_item);
+    new (item) UsesItem(m_item, false);
+  }
+  
+  static void destroy(UsesItem* item, KDevelop::AbstractItemRepository&) {
+    item->~UsesItem();
+  }
+  
+  static bool persistent(const UsesItem* item) {
+    return true;
   }
   
   bool equals(const UsesItem* item) const {

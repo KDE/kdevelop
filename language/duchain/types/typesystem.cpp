@@ -33,7 +33,7 @@ namespace KDevelop
 
 AbstractTypeData::AbstractTypeData()
   : m_modifiers(AbstractType::NoModifiers)
-  , inRepository(false)
+  , inRepository(false), refCount(0)
 {
   initializeAppendedLists(true);
 }
@@ -53,7 +53,7 @@ unsigned int AbstractTypeData::hash() const {
 
 AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs )
   : m_modifiers(rhs.m_modifiers)
-  , inRepository(false)
+  , inRepository(false), refCount(0)
 {
   initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
   typeClassId = rhs.typeClassId;

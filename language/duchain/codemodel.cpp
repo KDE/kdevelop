@@ -26,6 +26,7 @@
 #include "identifier.h"
 #include "indexedstring.h"
 #include <util/embeddedfreetree.h>
+#include "referencecounting.h"
 
 #define ifDebug(x)
 
@@ -47,7 +48,7 @@ class CodeModelItemHandler {
     }
     //Copies this item into the given one
     static void copyTo(const CodeModelItem& m_data, CodeModelItem& data) {
-        data = m_data;
+      data = m_data;
     }
     
     static void createFreeItem(CodeModelItem& data) {
@@ -77,8 +78,8 @@ class CodeModelRepositoryItem {
   CodeModelRepositoryItem() : centralFreeItem(-1) {
     initializeAppendedLists();
   }
-  CodeModelRepositoryItem(const CodeModelRepositoryItem& rhs) : file(rhs.file), centralFreeItem(rhs.centralFreeItem) {
-    initializeAppendedLists();
+  CodeModelRepositoryItem(const CodeModelRepositoryItem& rhs, bool dynamic = true) : file(rhs.file), centralFreeItem(rhs.centralFreeItem) {
+    initializeAppendedLists(dynamic);
     copyListsFrom(rhs);
   }
   
@@ -126,10 +127,19 @@ class CodeModelRequestItem {
   }
 
   void createItem(CodeModelRepositoryItem* item) const {
-    item->initializeAppendedLists(false);
-    item->file = m_item.file;
-    item->centralFreeItem = m_item.centralFreeItem;
-    item->copyListsFrom(m_item);
+    Q_ASSERT(shouldDoDUChainReferenceCounting(item));
+    Q_ASSERT(shouldDoDUChainReferenceCounting(((char*)item) + (itemSize()-1)));
+    new (item) CodeModelRepositoryItem(m_item, false);
+  }
+  
+  static void destroy(CodeModelRepositoryItem* item, KDevelop::AbstractItemRepository&) {
+    Q_ASSERT(shouldDoDUChainReferenceCounting(item));
+//     Q_ASSERT(shouldDoDUChainReferenceCounting(((char*)item) + (itemSize()-1)));
+    item->~CodeModelRepositoryItem();
+  }
+  
+  static bool persistent(const CodeModelRepositoryItem* item) {
+    return true;
   }
   
   bool equals(const CodeModelRepositoryItem* item) const {
@@ -158,7 +168,7 @@ CodeModel::~CodeModel()
 
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {
-  ifDebug( kDebug() << "addItem" << file.str() << id.identifier().toString(); )
+  ifDebug( kDebug() << "addItem" << file.str() << id.identifier().toString() << id.index; )
     
   if(!id.isValid())
     return;
@@ -173,6 +183,16 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
   newItem.kind = kind;
   newItem.referenceCount = 1;
   
+  #ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+  #endif
+  
   if(index) {
     const CodeModelRepositoryItem* oldItem = d->m_repository.itemFromIndex(index);
     EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
@@ -181,7 +201,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     
     QMutexLocker lock(d->m_repository.mutex());
     
-    CodeModelRepositoryItem* editableItem = d->m_repository.dynamicItemFromIndex(index);
+    DynamicItem<CodeModelRepositoryItem, true> editableItem = d->m_repository.dynamicItemFromIndex(index);
     CodeModelItem* items = const_cast<CodeModelItem*>(editableItem->items());
     
     if(listIndex != -1) {
@@ -202,6 +222,15 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
         d->m_repository.deleteItem(index);
       }else{
         //We're fine: The item fits into the existing list.
+#ifdef TEST_REFERENCE_COUNTING_2
+        {
+        uint count = 0;
+        const CodeModelItem* i;
+        this->items(file, count, i);
+        for(int a = 0; a < count; ++a)
+          Q_ASSERT(i[a].id.hasReferenceCount());
+        }
+#endif
         return;
       }
     }
@@ -209,12 +238,33 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     //We're creating a new index
     item.itemsList().append(newItem);
   }
+
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
+
   Q_ASSERT(!d->m_repository.findIndex(request));
 
   //This inserts the changed item
-  uint newIndex = d->m_repository.index(request);
+  volatile uint newIndex = d->m_repository.index(request);
   Q_UNUSED(newIndex);
   ifDebug( kDebug() << "new index" << newIndex; )
+  
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
   
   Q_ASSERT(d->m_repository.findIndex(request));
 }
@@ -225,6 +275,17 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     
   if(!id.isValid())
     return;
+
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
+  
   CodeModelRepositoryItem item;
   item.file = file;
   CodeModelRequestItem request(item);
@@ -239,7 +300,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
   if(index) {
     //Check whether the item is already in the mapped list, else copy the list into the new created item
     QMutexLocker lock(d->m_repository.mutex());
-    CodeModelRepositoryItem* oldItem = d->m_repository.dynamicItemFromIndex(index);
+    DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
     
     EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
     int listIndex = alg.indexOf(newItem);
@@ -249,6 +310,17 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
     
     Q_ASSERT(items[listIndex].id == id);
     items[listIndex].kind = kind;
+    
+#ifdef TEST_REFERENCE_COUNTING_2
+    {
+    uint count = 0;
+    const CodeModelItem* i;
+    this->items(file, count, i);
+    for(int a = 0; a < count; ++a)
+      Q_ASSERT(i[a].id.hasReferenceCount());
+    }
+#endif
+    
     return;
   }
   
@@ -260,6 +332,15 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
 {
   if(!id.isValid())
     return;
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif  
   ifDebug( kDebug() << "removeItem" << file.str() << id.identifier().toString(); )
   CodeModelRepositoryItem item;
   item.file = file;
@@ -273,7 +354,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
     searchItem.id = id;
     
     QMutexLocker lock(d->m_repository.mutex());
-    CodeModelRepositoryItem* oldItem = d->m_repository.dynamicItemFromIndex(index);
+    DynamicItem<CodeModelRepositoryItem, true> oldItem = d->m_repository.dynamicItemFromIndex(index);
     
     EmbeddedTreeAlgorithms<CodeModelItem, CodeModelItemHandler> alg(oldItem->items(), oldItem->itemsSize(), oldItem->centralFreeItem);
     
@@ -297,6 +378,16 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
       if(newItemCount == 0) {
         //Has become empty, delete the item
         d->m_repository.deleteItem(index);
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
+        
         return;
       }else{
         //Make smaller
@@ -307,10 +398,28 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
         d->m_repository.deleteItem(index);
         //Add the new list
         d->m_repository.index(request);
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
         return;
       }
     }
   }
+#ifdef TEST_REFERENCE_COUNTING_2
+  {
+  uint count = 0;
+  const CodeModelItem* i;
+  this->items(file, count, i);
+  for(int a = 0; a < count; ++a)
+    Q_ASSERT(i[a].id.hasReferenceCount());
+  }
+#endif
 }
 
 void CodeModel::items(const IndexedString& file, uint& count, const CodeModelItem*& items) const

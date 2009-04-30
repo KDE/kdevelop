@@ -115,7 +115,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
       if(m_direct)
         return direct.hash() + m_specialization * 101;
       else
-        return indirect.m_identifier.index * 13 + indirect.m_additionalIdentity + m_specialization * 101;
+        return indirect.m_identifier.getIndex() * 13 + indirect.m_additionalIdentity + m_specialization * 101;
     }
 
     /**

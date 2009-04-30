@@ -78,6 +78,9 @@ public:
 
   /// Remember whether this type is in a TypeRepository. Not used for comparison or hashes.
   bool inRepository : 1;
+  
+  /// Reference-count for this type within the repository. Not used for comparison or hashes.
+  uint refCount;
 
   APPENDED_LISTS_STUB(AbstractTypeData)
   

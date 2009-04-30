@@ -69,15 +69,23 @@ struct FileModificationPairRequest {
   }
 
   void createItem(FileModificationPair* item) const {
-    *item = m_data;
+    new (item)  FileModificationPair(m_data);
   }
   
   bool equals(const FileModificationPair* item) const {
     return *item == m_data;
   }
+  
+  static void destroy(FileModificationPair* item, KDevelop::AbstractItemRepository&) {
+    item->~FileModificationPair();
+  }
+  
+  static bool persistent(const FileModificationPair* /*item*/) {
+    return true; //Reference-counting is done implicitly using the set-repository
+  }
 };
 
-typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, KDevelop::NoDynamicData, false> FileModificationPairRepository;
+typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, true, false> FileModificationPairRepository;
 
 static FileModificationPairRepository& fileModificationPairRepository() {
   static FileModificationPairRepository rep("file modification repository");

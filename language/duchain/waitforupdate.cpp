@@ -24,7 +24,7 @@ WaitForUpdate::WaitForUpdate() : m_dataMutex(QMutex::Recursive), m_ready(false)
 {
 }
 
-void WaitForUpdate::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+void WaitForUpdate::updateReady(KDevelop::IndexedString /*url*/, KDevelop::ReferencedTopDUContext topContext) {
   QMutexLocker lock(&m_dataMutex);
   QMutexLocker lock2(&m_waitMutex);
   m_ready = true;

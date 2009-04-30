@@ -84,8 +84,8 @@ InstantiationInformation::InstantiationInformation() : previousInstantiationInfo
   initializeAppendedLists();
 }
 
-InstantiationInformation::InstantiationInformation(const InstantiationInformation& rhs) : previousInstantiationInformation(rhs.previousInstantiationInformation) {
-  initializeAppendedLists();
+InstantiationInformation::InstantiationInformation(const InstantiationInformation& rhs, bool dynamic) : previousInstantiationInformation(rhs.previousInstantiationInformation) {
+  initializeAppendedLists(dynamic);
   copyListsFrom(rhs);
 }
 

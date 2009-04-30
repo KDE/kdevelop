@@ -48,9 +48,12 @@ class QString;
 
 namespace Utils {
 
+enum {
+delayedDeletionByDefault = 0
+};
+
 class SetNode;
 class BasicSetRepository;
-class SplitTreeNode;
 class SetNodeDataRequest;
 
 ///Internal node representation, exported here for performance reason.
@@ -62,15 +65,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
   //Rule: left->start == start, right->end == end
   //Rule: (left != 0 && right != 0) || (left == 0 && right == 0)
   uint leftNode, rightNode;
-  uint m_hash;
   uint m_refCount;
   
-  inline SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_hash(0), m_refCount(0) {
+  inline SetNodeData() : start(1), end(1), leftNode(0), rightNode(0), m_refCount(0) {
   }
   
-  inline uint hash() const {
-    return m_hash;
-  }
+  uint hash() const;
   
   inline short unsigned int itemSize() const {
     return sizeof(SetNodeData);
@@ -83,12 +83,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SetNodeData {
   inline bool hasSlaves() const {
     return (bool)leftNode;
   }
-  
-  //Must always be called when an attribute was changed!
-  void updateHash(const SetNodeData* left, const SetNodeData* right);
 };
 
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, KDevelop::NoDynamicData, false, sizeof(SetNodeData)> SetDataRepository;
+typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, false, sizeof(SetNodeData)> SetDataRepositoryBase;
+
+struct SetDataRepository;
 
 struct SetNodeDataRequest {
 
@@ -98,9 +97,7 @@ struct SetNodeDataRequest {
   
   //This constructor creates a request that finds or creates a node that equals the given node
   //The m_hash must be up to date, and the node must be split correctly around its splitPosition
-  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository);
-  
-  SetNodeDataRequest(const SplitTreeNode* _splitNode, SetDataRepository& _repository);
+  inline SetNodeDataRequest(const SetNodeData* _data, SetDataRepository& _repository, BasicSetRepository* _setRepository);
   
   ~SetNodeDataRequest();
 
@@ -119,15 +116,28 @@ struct SetNodeDataRequest {
   //@param item equals an allocated range with the size of itemSize().
   void createItem(SetNodeData* item) const;
   
+  static void destroy(SetNodeData* data, KDevelop::AbstractItemRepository& _repository);
+
+  static bool persistent(const SetNodeData* item) {
+      return (bool)item->m_refCount;
+  }
+
   //Should return whether the here requested item equals the given item
   inline bool equals(const SetNodeData* item) const;
   
   SetNodeData data;
   
-  const SplitTreeNode* splitNode;
   uint m_hash;
   mutable SetDataRepository& repository;
+  mutable BasicSetRepository* setRepository; //May be zero when no notifications are wanted
   mutable bool m_created;
+};
+
+struct KDEVPLATFORMLANGUAGE_EXPORT SetDataRepository : public SetDataRepositoryBase {
+  SetDataRepository(BasicSetRepository* _setRepository, QString name, KDevelop::ItemRepositoryRegistry* registry) : SetDataRepositoryBase(name, registry), setRepository(_setRepository) {
+  }
+  
+  BasicSetRepository* setRepository;
 };
 
 /**
@@ -209,18 +219,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT BasicSetRepository {
 public:
   ///@param name The name must be unique, and is used for loading and storing the data
   ///@param registry Where the repository should be registered. If you give zero, it won't be registered, and thus won't be saved to disk.
-  BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry  = &KDevelop::globalItemRepositoryRegistry());
+  BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry  = &KDevelop::globalItemRepositoryRegistry(), bool delayedDeletion = delayedDeletionByDefault);
   virtual ~BasicSetRepository();
   typedef unsigned int Index;
 
   /**
-   * Takes a sorted list of index-ranges, and creates a set from them.
-   * The ranges must be sorted. Each range consists of 2 items in the vector, [start, end)
+   * Takes a sorted list indices, returns a set representing them
    * */
-  Set createSetFromRanges(const std::vector<Index>& indices);
+  Set createSetFromIndices(const std::vector<Index>& indices);
 
   /**
-   * Takes a simple set of indices, not ranges.
+   * Takes a simple set of indices
    * */
   Set createSet(const std::set<Index>& indices);
 
@@ -234,6 +243,9 @@ public:
   
   ///Is called when this index is not part of any set any more
   virtual void itemRemovedFromSets(uint index);
+  
+  ///Is called when this index is added to one of the contained sets for the first time
+  virtual void itemAddedToSets(uint index);
   
   inline const SetNodeData* nodeFromIndex(uint index) const {
       if(index)
@@ -251,6 +263,18 @@ public:
       return dataRepository;
   }
   
+  ///Set whether set-nodes with reference-count zero should be deleted only after a delay
+  ///The default is true.
+  ///This may be faster when the structure is large anyway and many temporary sets
+  ///are created, but leads to a sparse structure in memory, which is bad for cache.
+  void setDelayedDeletion(bool delayed) {
+    m_delayedDeletion = delayed;
+  }
+  
+  inline bool delayedDeletion() const {
+    return m_delayedDeletion;
+  }
+  
 private:
   friend class Set;
   friend class Set::Iterator;
@@ -258,6 +282,7 @@ private:
   Private* d;
   SetDataRepository dataRepository;
   QMutex* m_mutex;
+  bool m_delayedDeletion;
   
 //   SetNode
 };

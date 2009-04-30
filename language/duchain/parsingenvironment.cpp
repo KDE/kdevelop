@@ -155,7 +155,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
     if(item) {
       ret << item;
     }else{
-      kDebug() << "missing environment-file for import";
+      kDebug() << url().str() << indexedTopContext().index() << ": invalid import" << ctx.topContextIndex();
     }
   }
   return ret;
@@ -175,8 +175,13 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
   }
   
   QList< KSharedPtr<ParsingEnvironmentFile> > ret;
-  foreach(const IndexedDUContext &ctx, imp)
-    ret << DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+  foreach(const IndexedDUContext &ctx, imp) {
+    KSharedPtr<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(ctx.topContextIndex());
+    if(f)
+      ret << f;
+    else
+      kDebug() << url().str() << indexedTopContext().index() << ": invalid importer context" << ctx.topContextIndex();
+  }
   return ret;
 }
 

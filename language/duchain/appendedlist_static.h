@@ -20,6 +20,7 @@
 #define APPENDEDLIST_H
 
 #include <util/kdevvarlengtharray.h>
+#include "referencecounting.h"
 
 namespace KDevelop {
 
@@ -49,7 +50,7 @@ namespace KDevelop {
 #define APPENDED_LIST_COMMON(type, name) \
       KDevelop::AppendedList<dynamic, type> name ## List; \
       unsigned int name ## Size() const { return name ## List.size(); } \
-      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); return size == rhs.name ## Size() && memcmp( name(), rhs.name(), size * sizeof(type) ) == 0; }
+      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); if(size != rhs.name ## Size()) return false; for(uint a = 0; a < size; ++a) {if(!(name()[a] == rhs.name()[a])) return false;} return true; }
 
 ///@todo Make these things a bit faster(less recursion)
 
@@ -82,30 +83,49 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
       return KDevVarLengthArray<T, 10>::data();
     }
     void copy(T* /*target*/, const T* data, uint size) {
-      this->resize(size);
-      memcpy(KDevVarLengthArray<T, 10>::data(), data, size * sizeof(T));
+      Q_ASSERT(!shouldDoDUChainReferenceCountingInternal(KDevVarLengthArray<T, 10>::data()));
+      bool empty = KDevVarLengthArray<T, 10>::isEmpty();
+      Q_ASSERT(empty);
+      for(uint a = 0; a < size; ++a)
+        append(data[a]);
+    }
+    
+    void free(T*) {
+      Q_ASSERT(!shouldDoDUChainReferenceCountingInternal(KDevVarLengthArray<T, 10>::data()));
     }
 };
 
 template<class T> 
 class AppendedList<false, T> {
   public:
+    AppendedList() : listSize(0) {
+    }
     unsigned int listSize;
     unsigned int size() const {
       return listSize;
     }
+    
+    void free(T* position) {
+      if(listSize)
+        Q_ASSERT(shouldDoDUChainReferenceCountingInternal(position)); //Since it's constant, it must be in the repository
+      for(int a = 0; a < listSize; ++a)
+        (position+a)->~T();
+    }
 
     //currentOffset should point to the position where the data of this item should be saved
     const T* data(char* position) const {
-      return (unsigned int*)position;
+      return (T*)position;
     }
     //Count of bytes that were appeendd
     unsigned int dynamicDataSize() const {
-      return listSize * sizeof(unsigned int);
+      return listSize * sizeof(T);
     }
     void copy(T* target, const T* data, uint size) {
+      if(size)
+        Q_ASSERT(shouldDoDUChainReferenceCountingInternal(target)); //Since it's constant, it must be in the repository
+      for(uint a = 0; a < size; ++a)
+        new (target+a) T(data[a]); //Properly call all the copy constructors
       listSize = size;
-      memcpy(target, data, size * sizeof(T));
     }
 };
 }
