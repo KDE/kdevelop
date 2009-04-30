@@ -26,18 +26,23 @@
 #include <QVariant>
 
 #include <interfaces/iplugin.h>
-#include <interfaces/irunprovider.h>
 #include <interfaces/istatus.h>
 
+class KJob;
+class KUrl;
 class QTreeView;
 class ValgrindModel;
 class ValgrindControl;
 class ValgrindModel;
 
-class ValgrindPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider//, public KDevelop::IStatus
+namespace KDevelop
+{
+class ILaunchConfiguration;
+}
+
+class ValgrindPlugin : public KDevelop::IPlugin //, public KDevelop::IStatus
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IRunProvider)
     //Q_INTERFACES(KDevelop::IStatus)
 
     friend class ValgrindControl;
@@ -51,15 +56,12 @@ public:
     QList<ValgrindModel*> models() const;
 
     // BEGIN IRunProvider
-    virtual QStringList instrumentorsProvided() const;
-    virtual QString translatedInstrumentor(const QString& instrumentor) const;
-
-    virtual bool execute(const KDevelop::IRun& run, KJob* job);
+    virtual bool execute(KDevelop::ILaunchConfiguration* run, KJob* job);
     virtual void abort(KJob* job);
 
 signals:
     void finished(KJob* job);
-    void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
+    //void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
 
     void newModel(ValgrindModel* model);
 

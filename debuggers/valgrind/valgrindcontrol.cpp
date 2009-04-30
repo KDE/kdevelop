@@ -57,7 +57,7 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 }
 
-bool ValgrindControl::run(const KDevelop::IRun& run, KJob* job)
+bool ValgrindControl::run(KDevelop::ILaunchConfiguration* run, KJob* job)
 {
     m_job = job;
 
@@ -76,18 +76,19 @@ bool ValgrindControl::run(const KDevelop::IRun& run, KJob* job)
     }
 
     QStringList arguments;
-    arguments << QString("--tool=%1").arg(run.instrumentor());
-    arguments << run.instrumentorArguments();
-    arguments << "--xml=yes";
-    if (m_server && m_server->serverPort() != 0)
-        arguments << QString("--log-socket=127.0.0.1:%1").arg(m_server->serverPort());
-    arguments << run.executable().toLocalFile();
-    arguments << run.arguments();
-
-    m_process->setReadChannel(QProcess::StandardError);
-    m_process->setProgram(plugin()->valgrindExecutable().toLocalFile(), arguments);
-
-    m_process->start();
+//TODO: Port to launch framework
+//     arguments << QString("--tool=%1").arg(run.instrumentor());
+//     arguments << run.instrumentorArguments();
+//     arguments << "--xml=yes";
+//     if (m_server && m_server->serverPort() != 0)
+//         arguments << QString("--log-socket=127.0.0.1:%1").arg(m_server->serverPort());
+//     arguments << run.executable().toLocalFile();
+//     arguments << run.arguments();
+// 
+//     m_process->setReadChannel(QProcess::StandardError);
+//     m_process->setProgram(plugin()->valgrindExecutable().toLocalFile(), arguments);
+// 
+//     m_process->start();
 
     return true;
 }
@@ -198,8 +199,9 @@ void ValgrindControl::readyReadStandardOutput()
 
 void ValgrindControl::applicationOutput(const QStringList & lines)
 {
-    foreach (const QString& line, lines)
-        emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardOutput);
+//TODO: Port to launch framework
+//     foreach (const QString& line, lines)
+//         emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardOutput);
 }
 
 void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
@@ -207,8 +209,9 @@ void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
     if (!m_connection)
         return;
 
-    foreach (const QString &line, lines)
-        emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardError);
+//TODO: Port to launch framework
+//     foreach (const QString &line, lines)
+//         emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardError);
 }
 
 ValgrindModel * ValgrindControl::model() const

@@ -238,7 +238,7 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
 }
 
 
-bool DebugSession::startProgram(const KDevelop::IRun& run, KJob* job)
+bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* run, KJob* job)
 {
     m_job = job;
     return m_controller->startProgram(run, job);

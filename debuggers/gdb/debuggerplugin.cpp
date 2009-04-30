@@ -1,26 +1,26 @@
-/*
- * GDB Debugger Support
- *
- * Copyright 1999-2001 John Birch <jbb@kdevelop.org>
- * Copyright 2001 by Bernd Gehrmann <bernd@kdevelop.org>
- * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
- * Copyright 2007 Hamish Rodda <rodda@kde.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// /*
+//  * GDB Debugger Support
+//  *
+//  * Copyright 1999-2001 John Birch <jbb@kdevelop.org>
+//  * Copyright 2001 by Bernd Gehrmann <bernd@kdevelop.org>
+//  * Copyright 2006 Vladimir Prus <ghost@cs.msu.su>
+//  * Copyright 2007 Hamish Rodda <rodda@kde.org>
+//  *
+//  * This program is free software; you can redistribute it and/or modify
+//  * it under the terms of the GNU General Public License as
+//  * published by the Free Software Foundation; either version 2 of the
+//  * License, or (at your option) any later version.
+//  *
+//  * This program is distributed in the hope that it will be useful,
+//  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  * GNU General Public License for more details.
+//  *
+//  * You should have received a copy of the GNU General Public
+//  * License along with this program; if not, write to the
+//  * Free Software Foundation, Inc.,
+//  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+//  */
 
 #include "debuggerplugin.h"
 
@@ -66,6 +66,8 @@
 #include <language/interfaces/editorcontext.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <execute/executepluginconstants.h>
+#include <interfaces/launchconfigurationtype.h>
 
 #include "variablewidget.h"
 #include "disassemblewidget.h"
@@ -80,6 +82,7 @@
 #include "debugsession.h"
 
 #include <iostream>
+#include "gdblaunchconfig.h"
 
 
 namespace GDBDebugger
@@ -137,7 +140,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
     KDevelop::IPlugin( CppDebuggerFactory::componentData(), parent ),
     m_config(KGlobal::config(), "GDB Debugger"), m_session(0)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IRunProvider )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IStatus )
 
     setXMLFile("kdevgdbui.rc");
@@ -173,6 +175,10 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setupDBus();
 
+    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( ExecutePlugin::nativeAppConfigTypeId );
+    Q_ASSERT(type);
+    type->addLauncher( new GdbLauncher( this ) );
+    
     // The output from tracepoints goes to "application" window, because
     // we don't have any better alternative, and using yet another window
     // is undesirable. Besides, this makes tracepoint look even more similar
@@ -345,12 +351,6 @@ void CppDebuggerPlugin::contextEvaluate()
     emit evaluateExpression(m_contextIdent);
 }
 
-bool CppDebuggerPlugin::execute(const KDevelop::IRun & run, KJob* job)
-{
-    Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
-    return createSession()->startProgram(run, job);
-}
-
 DebugSession* CppDebuggerPlugin::createSession()
 {
     if (m_session) {
@@ -414,25 +414,9 @@ void CppDebuggerPlugin::attachProcess(int pid)
 
 // save/restore partial project session
 
-QStringList CppDebuggerPlugin::instrumentorsProvided() const
-{
-    return QStringList() << "gdb";
-}
-
-QString CppDebuggerPlugin::translatedInstrumentor(const QString&) const
-{
-    return i18n("GDB");
-}
-
 KConfigGroup CppDebuggerPlugin::config() const
 {
     return m_config;
-}
-
-void CppDebuggerPlugin::abort(KJob* job)
-{
-    Q_ASSERT(job == m_session->job());
-    m_session->stopDebugger();
 }
 
 QString CppDebuggerPlugin::statusName() const
@@ -446,9 +430,10 @@ void CppDebuggerPlugin::slotStartDebugger()
     // TODO: remove restriction if supporting multiple debug sessions
     m_startDebugger->setEnabled(false);
 
-    KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-    run.setInstrumentor("gdb");
-    KDevelop::ICore::self()->runController()->execute(run);
+    //TODO: port to launch framework
+    //KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
+    //run.setInstrumentor("gdb");
+    //KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void CppDebuggerPlugin::demandAttention() const
@@ -459,29 +444,10 @@ void CppDebuggerPlugin::demandAttention() const
     }
 }
 
-void CppDebuggerPlugin::applicationStandardOutputLines(const QStringList& lines)
-{
-    Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
-    DebugSession* session = static_cast<DebugSession*>(sender());
-    foreach (const QString& line, lines)
-        emit output(session->job(), line, KDevelop::IRunProvider::StandardOutput);
-}
-
-void CppDebuggerPlugin::applicationStandardErrorLines(const QStringList& lines)
-{
-    Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
-    DebugSession* session = static_cast<DebugSession*>(sender());
-    foreach (const QString& line, lines)
-        emit output(session->job(), line, KDevelop::IRunProvider::StandardError);
-}
-
 void CppDebuggerPlugin::slotFinished()
 {
     Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
     DebugSession* session = static_cast<DebugSession*>(sender());
-    if (session->job()) {
-        emit finished(session->job());
-    }
     m_startDebugger->setDisabled(false);
 }
 

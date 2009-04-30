@@ -33,6 +33,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/icore.h>
 
 #include "grepviewplugin.h"

@@ -33,7 +33,6 @@
 #include <KTextEditor/Cursor>
 
 #include <interfaces/iplugin.h>
-#include <interfaces/irunprovider.h>
 #include <interfaces/istatus.h>
 
 #include "gdbcontroller.h"
@@ -65,10 +64,9 @@ class GDBOutputWidget;
 class ViewerWidget;
 class DebugSession;
 
-class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider, public KDevelop::IStatus
+class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IStatus
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IRunProvider)
     Q_INTERFACES(KDevelop::IStatus)
 
 public:
@@ -86,17 +84,8 @@ public:
     void demandAttention() const;
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
-
-    //BEGIN IRunProvider
-    virtual QStringList instrumentorsProvided() const;
-    virtual QString translatedInstrumentor(const QString& instrumentor) const;
-    virtual bool execute(const KDevelop::IRun& run, KJob* job);
-    virtual void abort(KJob* job);
-
-Q_SIGNALS:
-    void finished(KJob* job);
-    void output(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
-    //END IRunProvider
+    
+    DebugSession *createSession();
 
 public:
     //BEGIN IStatus
@@ -121,7 +110,6 @@ Q_SIGNALS:
 
     void addMemoryView();
 
-
 private Q_SLOTS:
     void setupDBus();
     void slotDebugExternalProcess(QObject* interface);
@@ -137,14 +125,13 @@ private Q_SLOTS:
     void slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner);
     void slotCloseDrKonqi();
 
-    void applicationStandardOutputLines(const QStringList& lines);
-    void applicationStandardErrorLines(const QStringList& lines);
     void slotFinished();
 
     void controllerMessage(const QString&, int);
 
 Q_SIGNALS:
-    void startDebugger(const KDevelop::IRun & run, KJob* job);
+    //TODO: port to launch framework
+    //void startDebugger(const KDevelop::IRun & run, KJob* job);
     void stopDebugger();
     void attachTo(int pid);
     void coreFile(const QString& core);
@@ -159,8 +146,6 @@ private:
 
     void attachProcess(int pid);
     void setupActions();
-
-    DebugSession *createSession();
 
     QPointer<KToolBar> floatingToolBar;
 

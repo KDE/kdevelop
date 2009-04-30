@@ -133,9 +133,10 @@ void ValgrindPlugin::loadOutput()
 
 void ValgrindPlugin::slotExecValgrind()
 {
-    KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-    run.setInstrumentor("memcheck");
-    KDevelop::ICore::self()->runController()->execute(run);
+    //TODO: Port to launch framework
+    //KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
+    //run.setInstrumentor("memcheck");
+    //KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void ValgrindPlugin::slotExecCalltree()
@@ -163,28 +164,14 @@ void ValgrindPlugin::slotExecCalltree()
     */
 }
 
-QStringList ValgrindPlugin::instrumentorsProvided() const
+bool ValgrindPlugin::execute(KDevelop::ILaunchConfiguration* run, KJob* job)
 {
-    return QStringList() << "memcheck" << "callgrind" << "cachegrind" << "helgrind" << "massif" << "drd" << "omega" << "lackey";
-}
-
-QString ValgrindPlugin::translatedInstrumentor(const QString& instrumentor) const
-{
-    QStringList instrumentors;
-    instrumentors << i18n("Valgrind (Memcheck)") << i18n("Valgrind (Callgrind)") << i18n("Valgrind (Cachegrind)") << i18n("Valgrind (Helgrind)") << i18n("Valgrind (Massif)") << i18n("Valgrind (DRD)") << i18n("Valgrind (Omega)") << i18n("Valgrind (Lackey)");
-    int index = instrumentorsProvided().indexOf(instrumentor);
-    if (index != -1)
-        return instrumentors.at(index);
-    return QString();
-}
-
-bool ValgrindPlugin::execute(const KDevelop::IRun & run, KJob* job)
-{
-    ValgrindControl* control = new ValgrindControl(this);
-    m_controls.insert(job, control);
-    bool ret = control->run(run, job);
-    emit newModel(control->model());
-    return ret;
+//TODO: port to launch framework
+//     ValgrindControl* control = new ValgrindControl(this);
+//     m_controls.insert(job, control);
+//     bool ret = control->run(run, job);
+//     emit newModel(control->model());
+    return false;
 }
 
 void ValgrindPlugin::abort(KJob* job)

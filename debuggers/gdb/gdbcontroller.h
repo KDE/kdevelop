@@ -29,8 +29,7 @@
 #include <QPointer>
 
 #include <kprocess.h>
-
-#include <interfaces/irun.h>
+#include <kurl.h>
 
 #include "mi/gdbmi.h"
 #include "mi/miparser.h"
@@ -38,6 +37,10 @@
 #include "gdbglobal.h"
 
 class KJob;
+
+namespace KDevelop {
+class ILaunchConfiguration;
+}
 
 namespace GDBDebugger
 {
@@ -51,6 +54,19 @@ class CommandQueue;
 class VariableCollection;
 class StackManager;
 class GDB;
+
+static QString gdbPathEntry = "GDB Path";
+static QString debuggerShellEntry = "Debugger Shell";
+static QString remoteGdbConfigEntry = "Remote GDB Config Script";
+static QString remoteGdbShellEntry = "Remote GDB Shell Script";
+static QString remoteGdbRunEntry = "Remote GDB Run Script";
+static QString staticMembersEntry = "Display Static Members";
+static QString demangleNamesEntry = "Display Demangle Names";
+static QString breakOnLibLoadEntry = "Try Setting Breakpoints On Loading Libraries";
+static QString separateTerminalEntry = "Separate Terminal For Application IO";
+static QString floatingToolbarEntry = "Floating Toolbar";
+static QString startGdbOutputEntry = "Start with GDB Output";
+static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
 
 /**
  * A front end implementation to the gdb command line debugger
@@ -69,7 +85,7 @@ public:
      * Start the debugger, and execute the program specified by \a run,
      * and remember the provided \a job.
      */
-    bool startProgram(const KDevelop::IRun& run, KJob* job);
+    bool startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
 
     /**
      * Run currently executing program to the given \a url and \a line.
@@ -324,17 +340,6 @@ private:
     DBGStateFlags     state_;
     bool              programHasExited_;
 
-    // Configuration values
-    bool    config_breakOnLoadingLibrary_;
-    bool    config_forceBPSet_;
-    bool    config_displayStaticMembers_;
-    bool    config_asmDemangle_;
-    bool    config_dbgTerminal_;
-    KUrl config_dbgShell_;
-    KUrl config_configGdbScript_;
-    KUrl config_runShellScript_;
-    KUrl config_runGdbScript_;
-    int config_outputRadix_;
 
     bool state_reload_needed;
 

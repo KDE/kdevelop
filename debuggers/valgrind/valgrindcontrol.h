@@ -25,8 +25,6 @@
 #include <QProcess>
 #include <QTcpSocket>
 
-#include <interfaces/irun.h>
-
 class KJob;
 class KProcess;
 class QXmlInputSource;
@@ -37,7 +35,11 @@ class QTcpSocket;
 class ValgrindPlugin;
 class QBuffer;
 
-namespace KDevelop { class ProcessLineMaker; }
+namespace KDevelop 
+{
+class ProcessLineMaker; 
+class ILaunchConfiguration;
+}
 
 class ValgrindControl : public QObject
 {
@@ -50,7 +52,7 @@ public:
 
     ValgrindPlugin* plugin() const;
 
-    bool run(const KDevelop::IRun& run, KJob* job);
+    bool run(KDevelop::ILaunchConfiguration* run, KJob* job);
     void stop();
 
 private slots:

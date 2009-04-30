@@ -84,4 +84,5 @@ X-KDE-PluginInfo-Name=kdevgdb
 X-KDE-PluginInfo-License=GPL
 ServiceTypes=KDevelop/Plugin
 X-KDevelop-Interfaces=org.kdevelop.IRunProvider,org.kdevelop.IStatus
+X-KDevelop-IRequired=org.kdevelop.ExecuteNativeApplication
 X-KDevelop-Mode=GUI

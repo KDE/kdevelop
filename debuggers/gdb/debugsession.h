@@ -31,7 +31,6 @@
 #include <KConfigGroup>
 
 #include <debugger/interfaces/idebugsession.h>
-#include <interfaces/irun.h>
 
 #include "gdbglobal.h"
 
@@ -42,6 +41,7 @@ class Cursor;
 }
 namespace KDevelop {
 class ProcessLineMaker;
+class ILaunchConfiguration;
 }
 namespace GDBDebugger {
 class BreakpointController;
@@ -72,7 +72,7 @@ Q_SIGNALS:
     void raiseVariableViews();
 
 public Q_SLOTS:
-    bool startProgram(const KDevelop::IRun & run, KJob* job);
+    bool startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
     virtual void startDebugger();
     virtual void restartDebugger();
     virtual void stopDebugger();

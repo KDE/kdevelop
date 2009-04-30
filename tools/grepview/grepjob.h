@@ -14,8 +14,11 @@
 #ifndef GREPJOB_H
 #define GREPJOB_H
 
-#include <outputview/outputjob.h>
 #include <QProcess>
+
+#include <kurl.h>
+
+#include <outputview/outputjob.h>
 
 namespace KDevelop
 {

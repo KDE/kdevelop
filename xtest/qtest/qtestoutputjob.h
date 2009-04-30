@@ -22,6 +22,7 @@
 #ifndef QTEST_QTESTOUTPUTJOB_H
 #define QTEST_QTESTOUTPUTJOB_H
 
+#include <kurl.h>
 #include <outputview/outputjob.h>
 #include "qxqtestexport.h"
 

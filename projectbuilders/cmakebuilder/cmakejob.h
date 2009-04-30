@@ -32,6 +32,7 @@ class ProjectBaseItem;
 class CommandExecutor;
 }
 
+class KUrl;
 
 class CMakeJob: public KDevelop::OutputJob
 {

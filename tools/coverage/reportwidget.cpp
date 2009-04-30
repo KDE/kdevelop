@@ -40,6 +40,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iruncontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
 using KDevelop::ICore;

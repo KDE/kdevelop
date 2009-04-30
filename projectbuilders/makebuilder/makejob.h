@@ -33,6 +33,7 @@ class ProjectBaseItem;
 class ProcessLineMaker;
 }
 
+class KUrl;
 class KProcess;
 class MakeBuilder;
 class MakeOutputModel;

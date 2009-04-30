@@ -55,13 +55,16 @@
 #include "stackmanager.h"
 #include "breakpointcontroller.h"
 #include "gdb.h"
+#include <execute/executepluginconstants.h>
+#include "gdblaunchconfig.h"
+#include <interfaces/ilaunchconfiguration.h>
 
 using namespace std;
 using namespace GDBMI;
 
 namespace GDBDebugger
 {
-
+    
 // This is here so we can check for startup /shutdown problems
 int debug_controllerExists = false;
 
@@ -73,12 +76,6 @@ GDBController::GDBController(QObject* parent)
         tty_(0),
         state_(s_dbgNotStarted|s_appNotStarted),
         programHasExited_(false),
-        config_breakOnLoadingLibrary_(true),
-        config_forceBPSet_(true),
-        config_displayStaticMembers_(false),
-        config_asmDemangle_(true),
-        config_dbgTerminal_(false),
-        config_outputRadix_(10),
         state_reload_needed(false),
         stateReloadInProgress_(false),
         gdb_(0),
@@ -87,7 +84,6 @@ GDBController::GDBController(QObject* parent)
         gdbExecuteJob_(0)
 {
     configure();
-    kDebug(9012) << "GDB script" << config_configGdbScript_ << "\n";
 
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
@@ -120,82 +116,82 @@ GDBController::~GDBController()
 
 void GDBController::configure()
 {
-    KConfigGroup config(KGlobal::config(), "GDB Debugger");
-
-    // A a configure.gdb script will prevent these from uncontrolled growth...
-    config_configGdbScript_       = config.readEntry("Remote GDB Configure Script", "");
-    config_runShellScript_        = config.readEntry("Remote GDB Shell Script", "");
-    config_runGdbScript_          = config.readEntry("Remote GDB Run Script", "");
-
-    // PORTING TODO: where is this in the ui?
-    config_forceBPSet_            = config.readEntry("Allow Forced Breakpoint Set", true);
-
-    config_dbgTerminal_           = config.readEntry("Separate Terminal For Application IO", false);
-
-    bool old_displayStatic        = config_displayStaticMembers_;
-    config_displayStaticMembers_  = config.readEntry("Display Static Members",false);
-
-    bool old_asmDemangle  = config_asmDemangle_;
-    config_asmDemangle_   = config.readEntry("Display Demangle Names",true);
-
-    bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
-    config_breakOnLoadingLibrary_ = config.readEntry("Try Setting Breakpoints On Loading Libraries",true);
-
-    // FIXME: should move this into debugger part or variable widget.
-    int old_outputRadix  = config_outputRadix_;
-#if 0
-    config_outputRadix_   = DomUtil::readIntEntry("Output Radix", 10);
-    varTree_->setRadix(config_outputRadix_);
-#endif
-
-
-    if (( old_displayStatic             != config_displayStaticMembers_   ||
-            old_asmDemangle             != config_asmDemangle_            ||
-            old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_  ||
-            old_outputRadix             != config_outputRadix_)           &&
-            gdb_)
-    {
-        bool restart = false;
-        if (stateIsOn(s_dbgBusy))
-        {
-            slotPauseApp();
-            restart = true;
-        }
-
-        if (old_displayStatic != config_displayStaticMembers_)
-        {
-            if (config_displayStaticMembers_)
-                queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members on"));
-            else
-                queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members off"));
-        }
-        if (old_asmDemangle != config_asmDemangle_)
-        {
-            if (config_asmDemangle_)
-                queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle on"));
-            else
-                queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle off"));
-        }
-
-        // Disabled for MI port.
-        if (old_outputRadix != config_outputRadix_)
-        {
-            queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",
-                                config_outputRadix_)));
-
-            // FIXME: should do this in variable widget anyway.
-            // After changing output radix, need to refresh variables view.
-            raiseEvent(program_state_changed);
-
-        }
-
-        if (config_configGdbScript_.isValid())
-          queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
-
-
-        if (restart)
-            queueCmd(new GDBCommand(GDBMI::ExecContinue));
-    }
+//     KConfigGroup config(KGlobal::config(), "GDB Debugger");
+// 
+//     // A a configure.gdb script will prevent these from uncontrolled growth...
+//     config_configGdbScript_       = config.readEntry("Remote GDB Configure Script", "");
+//     config_runShellScript_        = config.readEntry("Remote GDB Shell Script", "");
+//     config_runGdbScript_          = config.readEntry("Remote GDB Run Script", "");
+// 
+//     // PORTING TODO: where is this in the ui?
+//     config_forceBPSet_            = config.readEntry("Allow Forced Breakpoint Set", true);
+// 
+//     config_dbgTerminal_           = config.readEntry("Separate Terminal For Application IO", false);
+// 
+//     bool old_displayStatic        = config_displayStaticMembers_;
+//     config_displayStaticMembers_  = config.readEntry("Display Static Members",false);
+// 
+//     bool old_asmDemangle  = config_asmDemangle_;
+//     config_asmDemangle_   = config.readEntry("Display Demangle Names",true);
+// 
+//     bool old_breakOnLoadingLibrary_ = config_breakOnLoadingLibrary_;
+//     config_breakOnLoadingLibrary_ = config.readEntry("Try Setting Breakpoints On Loading Libraries",true);
+// 
+//     // FIXME: should move this into debugger part or variable widget.
+//     int old_outputRadix  = config_outputRadix_;
+// #if 0
+//     config_outputRadix_   = DomUtil::readIntEntry("Output Radix", 10);
+//     varTree_->setRadix(config_outputRadix_);
+// #endif
+// 
+// 
+//     if (( old_displayStatic             != config_displayStaticMembers_   ||
+//             old_asmDemangle             != config_asmDemangle_            ||
+//             old_breakOnLoadingLibrary_  != config_breakOnLoadingLibrary_  ||
+//             old_outputRadix             != config_outputRadix_)           &&
+//             gdb_)
+//     {
+//         bool restart = false;
+//         if (stateIsOn(s_dbgBusy))
+//         {
+//             slotPauseApp();
+//             restart = true;
+//         }
+// 
+//         if (old_displayStatic != config_displayStaticMembers_)
+//         {
+//             if (config_displayStaticMembers_)
+//                 queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members on"));
+//             else
+//                 queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members off"));
+//         }
+//         if (old_asmDemangle != config_asmDemangle_)
+//         {
+//             if (config_asmDemangle_)
+//                 queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle on"));
+//             else
+//                 queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle off"));
+//         }
+// 
+//         // Disabled for MI port.
+//         if (old_outputRadix != config_outputRadix_)
+//         {
+//             queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",
+//                                 config_outputRadix_)));
+// 
+//             // FIXME: should do this in variable widget anyway.
+//             // After changing output radix, need to refresh variables view.
+//             raiseEvent(program_state_changed);
+// 
+//         }
+// 
+//         if (config_configGdbScript_.isValid())
+//           queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
+// 
+// 
+//         if (restart)
+//             queueCmd(new GDBCommand(GDBMI::ExecContinue));
+//     }
 }
 
 // **************************************************************************
@@ -648,11 +644,6 @@ bool GDBController::startDebugger()
 
     queueCmd(new CliCommand(GDBMI::GdbShow, "version", this, &GDBController::handleVersion));
 
-    if (config_displayStaticMembers_)
-        queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members on"));
-    else
-        queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members off"));
-
     // This makes gdb pump a variable out on one line.
     queueCmd(new GDBCommand(GDBMI::GdbSet, "width 0"));
     queueCmd(new GDBCommand(GDBMI::GdbSet, "height 0"));
@@ -662,23 +653,10 @@ bool GDBController::startDebugger()
     queueCmd(new GDBCommand(SignalHandle, "SIG42 pass nostop noprint"));
     queueCmd(new GDBCommand(SignalHandle, "SIG43 pass nostop noprint"));
 
-    // Print some nicer names in disassembly output. Although for an assembler
-    // person this may actually be wrong and the mangled name could be better.
-    if (config_asmDemangle_)
-        queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle on"));
-    else
-        queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle off"));
-
-    // make sure output radix is always set to users view.
-    queueCmd(new GDBCommand(GDBMI::GdbSet, QString().sprintf("output-radix %d",  config_outputRadix_)));
-
-    if (config_configGdbScript_.isValid())
-        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
-
     return true;
 }
 
-bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
+bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 {
     if (stateIsOn( s_appNotStarted ) )
     {
@@ -694,6 +672,22 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         return false;
     }
 
+
+
+    KConfigGroup grp = cfg->config();
+    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    
+    // Configuration values
+    bool    config_breakOnLoadingLibrary_ = grp.readEntry( GDBDebugger::breakOnLibLoadEntry, false );
+    bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
+    bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
+    bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
+    bool    config_dbgTerminal_ = grp.readEntry( GDBDebugger::separateTerminalEntry, false );
+    KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
+    KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
+    KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
+    KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
+    int config_outputRadix_ = 10;
     gdbExecuteJob_ = job;
 
     // Need to set up a new TTY for each run...
@@ -722,16 +716,21 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
     }
 
     queueCmd(new GDBCommand(InferiorTtySet, tty));
-
+    
+    //TODO: Support project targets
+    QString executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") ).toLocalFile();
+    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
+    
+    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::Options( KShell::TildeExpand | KShell::AbortOnMeta ) );
     // Change the "Working directory" to the correct one
-    QString dir = QString::fromLatin1(QFile::encodeName( run.workingDirectory().toLocalFile() ));
+    QString dir = grp.readEntry( ExecutePlugin::workingDirEntry, KUrl() ).toLocalFile();
     if (!dir.isEmpty())
         queueCmd(new GDBCommand(EnvironmentCd, dir));
 
     // Set the run arguments
-    if (!run.arguments().isEmpty())
+    if (!arguments.isEmpty())
         queueCmd(
-            new GDBCommand(GDBMI::ExecArguments, KShell::joinArgs( run.arguments() )));
+            new GDBCommand(GDBMI::ExecArguments, KShell::joinArgs( arguments )));
 
     // Get the run environment variables pairs into the environstr string
     // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
@@ -741,20 +740,29 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
     QString environstr;
     typedef QPair<QString, QString> QStringPair;
 
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
-
-// FIXME: not what it does, and how to get access to GDB's KProcess
-#if 0
-    foreach (const QString& envvar, l.createEnvironment(run.environmentKey(),
-                                                        m_process->systemEnvironment()))
+    foreach (const QString& envvar, l.createEnvironment(envgrp,
+                                                        QProcess::systemEnvironment()))
         queueCmd(new GDBCommand(GDBMI::GdbSet, "environment " + envvar));
-#endif
 
     // Needed so that breakpoint widget has a chance to insert breakpoints.
     // FIXME: a bit hacky, as we're really not ready for new commands.
     setStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
 
+    
+    if (config_displayStaticMembers_)
+        queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members on"));
+    else
+        queueCmd(new GDBCommand(GDBMI::GdbSet, "print static-members off"));
+    if (config_asmDemangle_)
+        queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle on"));
+    else
+        queueCmd(new GDBCommand(GDBMI::GdbSet, "print asm-demangle off"));
+        
+    if (config_configGdbScript_.isValid())
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + config_configGdbScript_.toLocalFile()));
+    
+    
     if (!config_runShellScript_.isEmpty()) {
         // Special for remote debug...
         QByteArray tty(tty_->getSlave().toLatin1());
@@ -763,7 +771,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         QProcess *proc = new QProcess;
         QStringList arguments;
         arguments << "-c" << config_runShellScript_.toLocalFile() +
-            ' ' + run.executable().toLocalFile() + QString::fromAscii( options );
+            ' ' + executable + QString::fromAscii( options );
 
         proc->start("sh", arguments);
         //PORTING TODO QProcess::DontCare);
@@ -784,7 +792,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
     }
     else
     {
-        QFileInfo app(run.executable().toLocalFile());
+        QFileInfo app(executable);
 
         if (!app.exists())
         {
@@ -820,7 +828,7 @@ bool GDBController::startProgram(const KDevelop::IRun& run, KJob* job)
         }
         else
         {
-            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, run.executable().toLocalFile()));
+            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, executable));
             raiseEvent(connected_to_program);
             queueCmd(new GDBCommand(ExecRun));
         }
