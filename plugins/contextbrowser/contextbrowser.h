@@ -30,7 +30,6 @@
 #include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
 #include <interfaces/iplugin.h>
-#include <interfaces/irunprovider.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
 #include <language/editor/simplerange.h>

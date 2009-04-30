@@ -14,9 +14,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     ilanguage.cpp
     idocumentcontroller.cpp
     istatus.cpp
-    irun.cpp
     iruncontroller.cpp
-    irunprovider.cpp
     isession.cpp
     isourceformatter.cpp
     isourceformattercontroller.cpp
@@ -27,6 +25,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     idocumentation.cpp
     idocumentationcontroller.cpp
     idebugcontroller.cpp
+    launchconfigurationpage.cpp
+    launchconfigurationtype.cpp
 )
 
 
@@ -66,16 +66,19 @@ install(FILES
     iextension.h
     interfacesexport.h
     istatus.h
-    irun.h
     isession.h
     iruncontroller.h
-    irunprovider.h
+    ilaunchconfiguration.h
+    ilauncher.h
+    launchconfigurationpage.h
+    launchconfigurationtype.h
     icompletionsettings.h
     iselectioncontroller.h
     idocumentation.h
     idocumentationprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
+    ilaunchmode.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

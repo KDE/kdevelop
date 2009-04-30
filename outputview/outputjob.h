@@ -22,9 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QPointer>
 
-#include <interfaces/irun.h>
-#include <interfaces/irunprovider.h>
-#include <interfaces/iruncontroller.h>
+#include <kjob.h>
 
 #include <outputview/ioutputview.h>
 #include <outputview/outputviewexport.h>

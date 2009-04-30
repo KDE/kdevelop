@@ -54,7 +54,6 @@ if(KDEVCPPDUCHAIN)
     kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/project/interfaces/ibuildsystemmanager.h project/interfaces/ibuildsystemmanager.h)
     kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/project/interfaces/iprojectfilemanager.h project/interfaces/iprojectfilemanager.h)
     kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/project/interfaces/iprojectbuilder.h project/interfaces/iprojectbuilder.h)
-    kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/interfaces/irun.h interfaces/irun.h)
     kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/interfaces/editorcontext.h language/interfaces/editorcontext.h)
     kdev_create_kross_iface(FALSE ${QT_QTGUI_INCLUDE_DIR}/qtoolbar.h QToolBar)
         

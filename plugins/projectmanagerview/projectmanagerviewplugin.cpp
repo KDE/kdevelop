@@ -42,7 +42,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <interfaces/iprojectcontroller.h>
-#include <interfaces/irun.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
@@ -275,13 +274,14 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
-        if(!hasTargets && item->executable())
-        {
-            KAction* action = new KAction( i18n("Run"), this );
-            action->setIcon(KIcon("system-run"));
-            connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-        }
+        //TODO: Port to launch framework
+//         if(!hasTargets && item->executable())
+//         {
+//             KAction* action = new KAction( i18n("Run"), this );
+//             action->setIcon(KIcon("system-run"));
+//             connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
+//             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
+//         }
 
     }
     
@@ -412,11 +412,6 @@ void ProjectManagerViewPlugin::runTargetsFromContextMenu( )
         if(t)
         {
             kDebug() << "Running target: " << t->text() << t->builtUrl();
-            IRun r;
-            r.setExecutable(t->builtUrl().toLocalFile());
-            r.setInstrumentor("default");
-            
-            ICore::self()->runController()->execute(r);
         }
     }
 }

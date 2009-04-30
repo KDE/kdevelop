@@ -35,6 +35,8 @@ set(kdevplatformshell_LIB_SRCS
     documentationcontroller.cpp
     documentationview.cpp
     debugcontroller.cpp
+    launchconfiguration.cpp
+    launchconfigurationdialog.cpp
 
     kross/krossplugin.cpp
     kross/krossbuildsystemmanager.cpp
@@ -59,7 +61,6 @@ set(kdevplatformshell_LIB_SRCS
     kross/wrappers/krossibuildsystemmanager.cpp
     kross/wrappers/krossiprojectfilemanager.cpp
     kross/wrappers/krossiprojectbuilder.cpp
-    kross/wrappers/krossirun.cpp
     kross/wrappers/krosseditorcontext.cpp
     kross/wrappers/krossqtoolbar.cpp
 
@@ -69,6 +70,7 @@ set(kdevplatformshell_LIB_SRCS
 set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui
+    launchconfigtypepage.ui
 )
 
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )

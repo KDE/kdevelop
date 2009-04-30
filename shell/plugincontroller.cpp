@@ -139,14 +139,9 @@ PluginController::PluginController(Core *core)
 {
     setObjectName("PluginController");
     d->core = core;
-    kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
+    //kDebug() << "Fetching plugin info which matches:" << QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION);
     d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
         QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
-    foreach( KPluginInfo p, d->plugins )
-    {
-        if( p.pluginName().contains("nongui") )
-                kDebug() << "FOUND test plugin" << p.pluginName();
-    }
     d->cleanupMode = PluginControllerPrivate::Running;
     d->m_manager = new QExtensionManager();
     // Register the KDevelop::IPlugin* metatype so we can properly unload it
@@ -178,7 +173,7 @@ void PluginController::cleanup()
 {
     if(d->cleanupMode != PluginControllerPrivate::Running)
     {
-        kDebug() << "called when not running. state =" << d->cleanupMode;
+        //kDebug() << "called when not running. state =" << d->cleanupMode;
         return;
     }
 
@@ -203,7 +198,7 @@ bool PluginController::isEnabled( const KPluginInfo& info )
 {
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
-    kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
+    //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
     return !isGlobalPlugin( info ) || isEnabled;
 }
 
@@ -520,7 +515,7 @@ bool PluginController::loadDependencies( const KPluginInfo& info, QString& faile
 
 IPlugin* PluginController::pluginForExtension( const QString& extension, const QString& pluginname)
 {
-    kDebug() << "Loading Plugin ("<< pluginname << ") for Extension:" << extension;
+    //kDebug() << "Loading Plugin ("<< pluginname << ") for Extension:" << extension;
     QStringList constraints;
     if (!pluginname.isEmpty())
         constraints << QString("[X-KDE-PluginInfo-Name]=='%1'").arg( pluginname );
@@ -530,7 +525,7 @@ IPlugin* PluginController::pluginForExtension( const QString& extension, const Q
 
 IPlugin *PluginController::pluginForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug() << "Finding Plugin for Extension:" << extension << "|" << constraints;
+    //kDebug() << "Finding Plugin for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
 
     if( infos.isEmpty() )
@@ -543,7 +538,7 @@ IPlugin *PluginController::pluginForExtension(const QString &extension, const QS
 
 QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extension, const QStringList &constraints)
 {
-    kDebug() << "Finding all Plugins for Extension:" << extension << "|" << constraints;
+    //kDebug() << "Finding all Plugins for Extension:" << extension << "|" << constraints;
     KPluginInfo::List infos = queryExtensionPlugins(extension, constraints);
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)

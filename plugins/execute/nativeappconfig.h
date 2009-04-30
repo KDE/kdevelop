@@ -1,0 +1,80 @@
+/*  This file is part of KDevelop
+    Copyright 2009 Andreas Pakulat <apaku@gmx.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#ifndef NATIVEAPPCONFIGTYPE_H
+#define NATIVEAPPCONFIGTYPE_H
+
+#include <interfaces/launchconfigurationtype.h>
+#include <interfaces/launchconfigurationpage.h>
+#include <interfaces/ilauncher.h>
+#include <interfaces/ilaunchmode.h>
+
+#include "ui_nativeappconfig.h"
+
+//TODO: Split the page into two, one concerning executable/arguments/behaviour the other for dependencies
+
+class NativeAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::NativeAppPage
+{
+Q_OBJECT
+public:
+    NativeAppConfigPage( QWidget* parent );
+    void loadFromConfiguration( const KConfigGroup& cfg );
+    void saveToConfiguration( KConfigGroup cfg ) const;
+    QString title() const;
+    KIcon icon() const;
+};
+
+class NativeAppLauncher : public KDevelop::ILauncher
+{
+public:
+    NativeAppLauncher();
+    virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
+    virtual QString description() const;
+    virtual QString id();
+    virtual QString name() const;
+    virtual KJob* start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg);
+    virtual QStringList supportedModes() const;
+};
+
+class NativeAppPageFactory : public KDevelop::LaunchConfigurationPageFactory
+{
+public:
+    NativeAppPageFactory();
+    virtual KDevelop::LaunchConfigurationPage* createWidget(QWidget* parent);
+};
+
+/**
+ * A specific configuration to start a launchable, this could be a native
+ * compiled application, or some script file or byte-compiled file or something else
+ * Provides access to the various configured informations, as well as its type and a name
+ */
+class NativeAppConfigType : public KDevelop::LaunchConfigurationType
+{
+public:
+    NativeAppConfigType();
+
+    QString id() const;
+    QString name() const;
+    QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
+    KIcon icon() const;
+private:
+    QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
+};
+#endif
+

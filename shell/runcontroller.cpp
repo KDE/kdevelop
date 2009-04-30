@@ -36,6 +36,8 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/iproject.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilauncher.h>
+#include <interfaces/ilaunchmode.h>
 #include <outputview/ioutputview.h>
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectbuilder.h>
@@ -46,11 +48,48 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "projectcontroller.h"
 #include "mainwindow.h"
+#include "launchconfiguration.h"
+#include "launchconfigurationdialog.h"
+#include <interfaces/isession.h>
 
 using namespace KDevelop;
 
+QString RunController::LaunchConfigurationsGroup = "Launch";
+QString RunController::LaunchConfigurationsListEntry = "Launch Configurations";
+
 typedef QPair<QString, IProject*> Target;
 Q_DECLARE_METATYPE(Target)
+
+
+//TODO: Doesn't handle add/remove of launch configs in the dialog or renaming of configs
+//TODO: Doesn't auto-select launch configs opened from projects
+
+class DebugMode : public ILaunchMode
+{
+public:
+    DebugMode() {}
+    virtual KIcon icon() const { return KIcon(); }
+    virtual QString id() const { return "debug"; }
+    virtual QString name() const { return i18n("Debug"); }
+};
+
+class ProfileMode : public ILaunchMode
+{
+public:
+    ProfileMode() {}
+    virtual KIcon icon() const { return KIcon(); }
+    virtual QString id() const { return "profile"; }
+    virtual QString name() const { return i18n("Profile"); }
+};
+
+class ExecuteMode : public ILaunchMode
+{
+public:
+    ExecuteMode() {}
+    virtual KIcon icon() const { return KIcon("system-run"); }
+    virtual QString id() const { return "execute"; }
+    virtual QString name() const { return i18n("Execute"); }
+};
 
 class RunController::RunControllerPrivate
 {
@@ -62,6 +101,67 @@ public:
     QHash<KJob*, KAction*> jobs;
     KActionMenu* stopAction;
     KSelectAction* currentTargetAction;
+    QMap<QString,LaunchConfigurationType*> launchConfigurationTypes;
+    QList<LaunchConfiguration*> launchConfigurations;
+    QMap<QString,ILaunchMode*> launchModes;
+    bool hasLaunchConfigType( const QString& typeId ) 
+    {
+        return launchConfigurationTypes.contains( typeId );
+    }
+    void configureLaunches()
+    {
+        LaunchConfigurationDialog dlg;
+        dlg.exec();
+    }
+    
+    QString launchActionText( LaunchConfiguration* l )
+    {
+        QString label;
+        if( l->project() ) 
+        {
+            label = QString("%1 : %2").arg( l->project()->name()).arg(l->name());
+        } else
+        {
+            label = QString("%1" ).arg(l->name());
+        }
+        return label;
+    }
+    
+    void addLaunchAction( LaunchConfiguration* l )
+    {
+        KAction* action = currentTargetAction->addAction(launchActionText( l ));
+        action->setData(qVariantFromValue<void*>(l));
+    }
+    void readLaunchConfigs( KSharedConfigPtr cfg, IProject* prj )
+    {
+        KConfigGroup group(cfg, RunController::LaunchConfigurationsGroup);
+        QStringList configs = group.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+
+        foreach( const QString& cfg, configs )
+        {
+            KConfigGroup grp = group.group( cfg );
+            if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry, "" ) ) )
+            {
+                LaunchConfiguration* l = new LaunchConfiguration( grp, prj );
+                launchConfigurations << l;
+                addLaunchAction(l);
+            }
+        }
+    }
+    LaunchConfigurationType* launchConfigurationTypeForId( const QString& id )
+    {
+        QMap<QString, LaunchConfigurationType*>::iterator it = launchConfigurationTypes.find( id );
+        if( it != launchConfigurationTypes.end() ) 
+        {
+            return it.value();
+        } else
+        {
+            kWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
+        }
+        return 0;
+        
+    }
+
 };
 
 RunController::RunController(QObject *parent)
@@ -75,11 +175,52 @@ RunController::RunController(QObject *parent)
     d->state = Idle;
     d->delegate = new RunDelegate(this);
 
-    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+    //if(!(Core::self()->setupFlags() & Core::NoUi))
+    // Note that things like registerJob() do not work without the actions, it'll simply crash.
+    setupActions();
 }
 
 void RunController::initialize()
 {
+    addLaunchMode( new ExecuteMode() );
+    addLaunchMode( new ProfileMode() );
+    addLaunchMode( new DebugMode() );
+    d->readLaunchConfigs( Core::self()->activeSession()->config(), 0 );
+
+    foreach (IProject* project, Core::self()->projectController()->projects()) {
+        slotProjectOpened(project);
+    }
+
+    KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+    QString currentLaunchProject = launchGrp.readEntry( "Current Launch Project", "" );
+    QString currentLaunchName = launchGrp.readEntry( "Current Launch Name", "" );
+    foreach( QAction* a, d->currentTargetAction->actions() )
+    {
+        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
+        if( currentLaunchName == l->name() 
+            && ( ( currentLaunchProject.isEmpty() && !l->project() ) 
+                 || ( l->project() && l->project()->name() == currentLaunchProject ) ) )
+        {
+            a->setChecked( true );
+            break;
+        }
+    }
+    
+    if( !d->currentTargetAction->currentAction() )
+    {
+        kDebug() << "oops no current action, using first if list is non-empty";
+        if( !d->currentTargetAction->actions().isEmpty() )
+        {
+            d->currentTargetAction->actions().first()->setChecked( true );
+        }
+    }
+    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
+            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
+            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
+             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
+
 }
 
 class ExecuteCompositeJob : public KCompositeJob
@@ -141,18 +282,35 @@ class ExecuteCompositeJob : public KCompositeJob
         bool m_killing;
 };
 
-KJob* RunController::execute(const IRun & run)
+KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
 {
-    if(!run.dependencies().isEmpty())
-        ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
+    if( !run )
+    {
+        kDebug() << "execute called without launch config!";
+        return 0;
+    }
+    //TODO: Port to launch framework, probably needs to be part of the launcher
+    //if(!run.dependencies().isEmpty())
+    //    ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
 
     QList<KJob*> jobs;
-    foreach(KJob* job, run.dependencies())
-    {
-        jobs.append(job);
+    //foreach(KJob* job, run.dependencies())
+    //{
+    //    jobs.append(job);
+    //}
+
+    kDebug() << "mode:" << runMode;
+    QString launcherId = run->launcherForMode( runMode );
+    kDebug() << "launcher id:" << launcherId;
+    
+    ILauncher* launcher = run->type()->launcherForId( launcherId );
+    
+    if( !launcher ) {
+        kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration", launcherId );
+        return 0;
     }
 
-    jobs.append(new RunJob(this, run));
+    jobs.append(launcher->start(runMode, run));
     ExecuteCompositeJob* ecj=new ExecuteCompositeJob(this, jobs);
     ecj->setObjectName(jobs.last()->objectName());
     registerJob(ecj);
@@ -173,13 +331,26 @@ void RunController::setupActions()
 
     action = new KAction (i18n("Configure Launches"), this);
     ac->addAction("configure_launches", action);
+    action->setStatusTip(i18n("Open Launch Configuration Dialog"));
+    action->setToolTip(i18n("Open Launch Configuration Dialog"));
+    action->setWhatsThis(i18n("<p>Opens a dialog to setup new launch configurations or change the existing ones</p>"));
+    connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
-    action = new KAction( KIcon("system-run"), i18n("Execute Program"), this);
+    action = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
     action->setShortcut(Qt::SHIFT + Qt::Key_F9);
-    action->setToolTip(i18n("Execute program"));
-    action->setWhatsThis(i18n("<b>Execute program</b><p>Executes the currently active target or the main program specified in project settings, <b>Run Options</b> tab.</p>"));
+    action->setToolTip(i18n("Execute current Launch"));
+    action->setStatusTip(i18n("Execute current Launch"));
+    action->setWhatsThis(i18n("<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
     ac->addAction("run_execute", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
+    
+    action = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
+    action->setShortcut(Qt::Key_F9);
+    action->setToolTip(i18n("Debug current Launch"));
+    action->setStatusTip(i18n("Debug current Launch"));
+    action->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
+    ac->addAction("run_debug", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
 
     action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
     action->setShortcut(Qt::Key_Escape);
@@ -189,71 +360,35 @@ void RunController::setupActions()
     ac->addAction("run_stop", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopAllProcesses()));
 
-    d->currentTargetAction = new KSelectAction( i18n("Current Run Target"), this);
-    d->currentTargetAction->setToolTip(i18n("Current Run Target"));
-    d->currentTargetAction->setWhatsThis(i18n("<b>Run Target</b><p>Select which target to run when run is invoked.</p>"));
+    d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
+    d->currentTargetAction->setToolTip(i18n("Current Launch Configuration"));
+    d->currentTargetAction->setStatusTip(i18n("Current Launch Configuration"));
+    d->currentTargetAction->setWhatsThis(i18n("<p>Select which launch configuration to run when run is invoked.</p>"));
     ac->addAction("run_default_target", d->currentTargetAction);
-
-    foreach (IProject* project, Core::self()->projectController()->projects()) {
-        slotProjectOpened(project);
-    }
-
-    if(!d->currentTargetAction->actions().isEmpty())
-        d->currentTargetAction->actions().first()->setChecked(true);
-    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
-            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
-            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
-             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 }
 
-QAction* KDevelop::RunController::addTarget(KDevelop::IProject * project, const QString& targetName)
+LaunchConfigurationType* RunController::launchConfigurationTypeForId( const QString& id )
 {
-    // First check weather we already have the action, if there's a large number
-    // we might need to use a map/hash for storing the data instead of
-    // QAction::data()
-    bool found = false;
-    foreach( const QAction* a, d->currentTargetAction->actions() ) {
-        Target t = qVariantValue<Target>( a->data() );
-        if( t.first == targetName && t.second == project )
-        {
-            found = true;
-            break;
-        }
-    }
-    QAction* action = 0;
-    if( !found )
-    {
-        action = d->currentTargetAction->addAction(i18n("%1 : %2", project->name(), targetName));
-        action->setData(qVariantFromValue<Target>(Target(targetName, project)));
-    }
-    return action;
+    return d->launchConfigurationTypeForId( id );
 }
 
 void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
-    KConfigGroup group(project->projectConfiguration(), "Run Options");
-    QStringList runTargets = group.readEntry("Run Targets", QStringList());
-
-    QAction* a=0;
-    foreach(const QString& target, runTargets) {
-        a=addTarget(project, target);
-    }
-
-    if(a)
-        a->setChecked(true);
+    d->readLaunchConfigs( project->projectConfiguration(), project );
 }
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
     foreach (QAction* action, d->currentTargetAction->actions()) {
-        if (project == qvariant_cast<Target>(action->data()).second) {
+        LaunchConfiguration* l = static_cast<LaunchConfiguration*>(qvariant_cast<void*>(action->data()));
+        if ( project == l->project() ) {
+            l->save();
+            d->launchConfigurations.removeAll(l);
+            delete l;
             bool wasSelected = action->isChecked();
             delete action;
-            if (wasSelected)
-                if (!d->currentTargetAction->actions().isEmpty())
-                    d->currentTargetAction->actions().first()->setChecked(true);
+            if (wasSelected && !d->currentTargetAction->actions().isEmpty())
+                d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
 }
@@ -264,166 +399,21 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
     slotProjectOpened(project);
 }
 
+void RunController::slotDebug()
+{
+    executeDefaultLaunch( "debug" );
+}
+
 void RunController::slotExecute()
 {
-    execute(defaultRun());
+    executeDefaultLaunch( "execute" );
 }
 
-QStringList splitArguments(const QString& args)
+LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
 {
-    QStringList ret;
-    bool inQuotes=false, scaping=false;
-    for(int i=0; i<args.size(); i++)
-    {
-        if(i==0) ret += QString();
-
-        if(scaping)
-        {
-            ret.last() += args[i];
-            scaping=false;
-        }
-        else switch(args[i].toAscii())
-        {
-            case '\\':
-                scaping=true;
-                break;
-            case '\"':
-                inQuotes=!inQuotes;
-                break;
-            case ' ':
-                if(inQuotes)
-                    ret.last() += args[i];
-                else
-                    ret += QString();
-
-                break;
-            default:
-                ret.last() += args[i];
-                break;
-        }
-
-    }
-    return ret;
-}
-
-IRun KDevelop::RunController::defaultRun() const
-{
-    IProject* project = 0;
-    IRun run;
-
     QAction* projectAction = d->currentTargetAction->currentAction();
-
-    Target data;
-    if (projectAction) {
-        data=qvariant_cast<Target>(projectAction->data());
-        project = data.second;
-    }
-
-    if (!project)
-        return run;
-
-    QString targetName=data.first;
-
-    KConfigGroup group(project->projectConfiguration(), targetName+"-Run Options" );
-
-    QString exec=group.readEntry("Executable", QString());
-    ProjectModel *model=ICore::self()->projectController()->projectModel();
-    if(exec.isEmpty())
-    {
-        QString target=group.readEntry("Run Item", QString());
-        QModelIndex idx=ProjectModel::pathToIndex(model, target.split('/'));
-        if( idx.isValid() )
-        {
-            ProjectBaseItem *it=model->item(idx);
-            // This should never happen, pathToIndex asks
-            // the model for indexes that match a target
-            // so the indexes should always be convertable to an item
-            Q_ASSERT(it);
-            if(it->executable())
-            {
-                exec=it->executable()->builtUrl().toLocalFile();
-            } else
-            {
-                KMessageBox::error(0, i18n("Target '%1' is not executable.", target));
-            }
-        } else
-        {
-            KMessageBox::error(0, i18n("Target '%1' could not be found.", target));
-        }
-    }
-    //FIXME: throw error
-    run.setExecutable(exec);
-    run.setWorkingDirectory(group.readEntry("Working Directory", QString()));
-    run.setArguments(splitArguments(group.readEntry("Arguments", QString())));
-    if (group.readEntry("Start In Terminal", false))
-        run.setInstrumentor("konsole");
-    else
-        run.setInstrumentor("default");
-    run.setRunAsUser(group.readEntry("Run As User", QString()));
-
-    QStringList compileItems=group.readEntry("Compile Items", QStringList());
-    int actionDeps=group.readEntry("BeforeExecute", 1);
-
-    QList<KJob*> comp;
-    if(actionDeps!=0)
-    {
-        foreach(const QString& it, compileItems)
-        {
-            QModelIndex idx=ProjectModel::pathToIndex(model, it.split('/'));
-            ProjectBaseItem *pit=model->item(idx);
-
-            if(!pit)
-            {
-                KMessageBox::error(0, i18n("Could not find %1", it));
-                continue;
-            }
-
-            IProject* project = pit->project();
-            if (!project)
-                continue;
-
-            IPlugin* fmgr = project->managerPlugin();
-            IBuildSystemManager* mgr = fmgr->extension<IBuildSystemManager>();
-            IProjectBuilder* builder;
-            if( mgr )
-            {
-                builder=mgr->builder( project->projectItem() );
-                KJob* buildJob;
-                switch(actionDeps)
-                {
-                    case 1:
-                        buildJob=builder->build(pit);
-                        break;
-                    case 2:
-                        buildJob=builder->install(pit);
-                        break;
-                    case 3:
-#ifdef __GNUC__
-                        #warning make it install as superuser.
-#endif
-                        break;
-                }
-                comp+=buildJob;
-            }
-            else
-            {
-                kDebug() << "Failed to compile";
-            }
-        }
-        run.setDependencies(comp);
-    }
-
-    return run;
-}
-
-IRunProvider * KDevelop::RunController::findProvider(const QString & instrumentor)
-{
-    foreach (IPlugin* i, Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IRunProvider", QStringList())) {
-        KDevelop::IRunProvider* provider = i->extension<KDevelop::IRunProvider>();
-        if (provider && provider->instrumentorsProvided().contains(instrumentor))
-                return provider;
-    }
-
+    if( projectAction )
+        return static_cast<LaunchConfiguration*>(qvariant_cast<void*>(projectAction->data()));
     return 0;
 }
 
@@ -436,6 +426,9 @@ void KDevelop::RunController::registerJob(KJob * job)
         KAction* stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
         stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
         d->stopAction->addAction(stopJobAction);
+        //TODO: This produces nasty messageboxes atm, so re-activate only after
+        //moving to a nicer job delegate
+        // connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
         connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
 
         job->setUiDelegate( new KDialogJobUiDelegate() );
@@ -531,96 +524,131 @@ void KDevelop::RunController::resumed(KJob * job)
     checkState();
 }
 
-KDevelop::RunJob::RunJob(RunController* controller, const IRun & run)
-    : m_controller(controller)
-    , m_provider(0)
-    , m_run(run)
-{
-    setCapabilities(Killable);
-
-    QString instrumentorName = i18n("Run");
-    if (!m_run.instrumentor().isEmpty()) {
-        m_provider = m_controller->findProvider(m_run.instrumentor());
-        if (m_provider) {
-            instrumentorName = m_provider->translatedInstrumentor(run.instrumentor());
-        }
-    }
-    setObjectName(i18n("%1: %2", instrumentorName, run.executable().toLocalFile()));
-}
-
-void KDevelop::RunJob::start()
-{
-    if (m_run.instrumentor().isEmpty()) {
-        setErrorText(i18n("No run target was selected. Please select a run target in the Run menu."));
-        setError(ErrorInvalidTarget);
-        emitResult();
-        return;
-    }
-
-    if (!m_provider) {
-        setErrorText(i18n("Execution failed: no plugin found for requested instrumentor \"%1\"", m_run.instrumentor()));
-        setError(ErrorNoProvider);
-        emitResult();
-        return;
-    }
-
-    QObject* m_providerObject = dynamic_cast<QObject*>(m_provider);
-    Q_ASSERT(m_providerObject);
-
-    connect(m_providerObject, SIGNAL(finished(KJob*)), this, SLOT(slotFinished(KJob*)));
-    connect(m_providerObject, SIGNAL(output(KJob*, const QString&, KDevelop::IRunProvider::OutputTypes)), this, SLOT(slotOutput(KJob*, const QString&, KDevelop::IRunProvider::OutputTypes)));
-
-    m_provider->execute(m_run, this);
-
-    // TODO should this really be hard-coded? or should the provider get a say...
-    // Don't show the run output if the process is being run in konsole
-    if (m_run.instrumentor() != "konsole") {
-        setStandardToolView(IOutputView::RunView);
-        setDelegate(m_controller->delegate());
-        setTitle(m_run.executable().toLocalFile());
-        setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-        startOutput();
-    }
-}
-
 QList< KJob * > KDevelop::RunController::currentJobs() const
 {
     return d->jobs.keys();
 }
 
-void RunJob::slotOutput(KJob * job, const QString & line, KDevelop::IRunProvider::OutputTypes type)
+QList<LaunchConfiguration*> RunController::launchConfigurations() const
 {
-    if (job != this)
-        return;
+    return d->launchConfigurations;
+}
 
-    if (!model())
-        return;
+QList<LaunchConfigurationType*> RunController::launchConfigurationTypes() const
+{
+    return d->launchConfigurationTypes.values();
+}
 
-    if( model()->columnCount() == 0 )
+void RunController::addConfigurationType( LaunchConfigurationType* type )
+{
+    if( !d->launchConfigurationTypes.contains( type->id() ) )
     {
-        model()->insertColumns( 0, 1 );
+        d->launchConfigurationTypes.insert( type->id(), type );
+    }
+}
+
+void RunController::removeConfigurationType( LaunchConfigurationType* type )
+{
+    foreach( LaunchConfiguration* l, d->launchConfigurations )
+    {
+        if( l->type() == type ) 
+        {
+            d->launchConfigurations.removeAll( l );
+            delete l;
+        }
+    }
+    d->launchConfigurationTypes.remove( type->id() );
+}
+
+void KDevelop::RunController::addLaunchMode(KDevelop::ILaunchMode* mode) 
+{
+    if( !d->launchModes.contains( mode->id() ) )
+    {
+        d->launchModes.insert( mode->id(), mode );
+    }
+}
+
+QList< KDevelop::ILaunchMode* > KDevelop::RunController::launchModes() const
+{
+    return d->launchModes.values();
+}
+
+void KDevelop::RunController::removeLaunchMode(KDevelop::ILaunchMode* mode)
+{
+    d->launchModes.remove( mode->id() );
+}
+
+KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& id) const 
+{
+    QMap<QString,ILaunchMode*>::iterator it = d->launchModes.find( id );
+    if( it != d->launchModes.end() ) 
+    {
+        return it.value();
+    }
+    return 0;
+}
+
+void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfiguration* l)
+{
+    if( !d->launchConfigurations.contains( l ) ) 
+    {
+        d->addLaunchAction( l );
+        d->launchConfigurations << l;
+        if( !d->currentTargetAction->currentAction() )
+        {
+            if( !d->currentTargetAction->actions().isEmpty() )
+            {
+                d->currentTargetAction->actions().first()->setChecked( true );
+            }
+        }
+    }    
+}
+
+void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfiguration* l)
+{
+    KConfigGroup launcherGroup;
+    if( l->project() ) {
+        launcherGroup = l->project()->projectConfiguration()->group( LaunchConfigurationsGroup );
+    } else {
+        launcherGroup = Core::self()->activeSession()->config()->group( LaunchConfigurationsGroup );
+    }
+    QStringList configs = launcherGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+    configs.removeAll( l->configGroupName() );
+    launcherGroup.deleteGroup( l->configGroupName() );
+    launcherGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
+    launcherGroup.sync();
+
+    foreach( QAction* a, d->currentTargetAction->actions() )
+    {
+        QString txt = d->launchActionText( l );
+        kDebug() << "comparing" << txt << a->text();
+        if( a->text() == txt )
+        {
+            bool wasSelected = a->isChecked();
+            d->currentTargetAction->removeAction( a );
+            if( wasSelected && !d->currentTargetAction->actions().isEmpty() )
+            {
+                d->currentTargetAction->actions().first()->setChecked( true );
+            }
+            break;
+        }
     }
 
-    int rowCount = model()->rowCount();
-    model()->insertRows( rowCount, 1 );
-    QModelIndex row_idx = model()->index( rowCount, 0 );
-    model()->setData( row_idx, QVariant( line ) );
-    model()->setData( row_idx, QVariant::fromValue(type), Qt::UserRole+1 );
+    d->launchConfigurations.removeAll( l );
+    
+    delete l;
 }
 
-void KDevelop::RunJob::slotFinished(KJob * job)
+void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 {
-    if (job == this)
-        emitResult();
+    if( !defaultLaunch() )
+    {
+        kWarning() << "no default launch!";
+        return;
+    }
+    execute( runMode, defaultLaunch() );
 }
 
-bool KDevelop::RunJob::doKill()
-{
-    setError(KJob::KilledJobError);
-    m_provider->abort(this);
-
-    return true;
-}
 
 QItemDelegate * KDevelop::RunController::delegate() const
 {
@@ -637,17 +665,17 @@ void RunDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 {
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.canConvert<KDevelop::IRunProvider::OutputTypes>() )
-    {
-        IRunProvider::OutputTypes type = status.value<KDevelop::IRunProvider::OutputTypes>();
-        if( type == IRunProvider::RunProvider )
-        {
-            opt.palette.setBrush( QPalette::Text, runProviderBrush.brush( option.palette ) );
-        } else if( type == IRunProvider::StandardError )
-        {
-            opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
-        }
-    }
+//     if( status.isValid() && status.canConvert<KDevelop::IRunProvider::OutputTypes>() )
+//     {
+//         IRunProvider::OutputTypes type = status.value<KDevelop::IRunProvider::OutputTypes>();
+//         if( type == IRunProvider::RunProvider )
+//         {
+//             opt.palette.setBrush( QPalette::Text, runProviderBrush.brush( option.palette ) );
+//         } else if( type == IRunProvider::StandardError )
+//         {
+//             opt.palette.setBrush( QPalette::Text, errorBrush.brush( option.palette ) );
+//         }
+//     }
     QItemDelegate::paint(painter, opt, index);
 }
 

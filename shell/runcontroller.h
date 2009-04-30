@@ -25,9 +25,11 @@ Boston, MA 02110-1301, USA.
 
 #include <kcolorscheme.h>
 
-#include <interfaces/irun.h>
-#include <interfaces/irunprovider.h>
 #include <interfaces/iruncontroller.h>
+
+#include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/launchconfigurationtype.h>
+
 #include <outputview/outputjob.h>
 
 class QStyleOptionViewItem;
@@ -40,6 +42,7 @@ namespace KDevelop
 
 class IPlugin;
 class IProject;
+class LaunchConfiguration;
 
 class RunController : public IRunController
 {
@@ -48,23 +51,69 @@ class RunController : public IRunController
 public:
     RunController(QObject *parent);
     ~RunController();
+    
+    static QString LaunchConfigurationsGroup;
+    static QString LaunchConfigurationsListEntry;
 
     virtual void registerJob(KJob *job);
     virtual void unregisterJob(KJob *job);
     virtual QList<KJob*> currentJobs() const;
 
-    virtual KJob* execute(const IRun& run);
-    virtual IRun defaultRun() const;
+    KJob* execute(const QString& launchMode, LaunchConfiguration* run);
+    LaunchConfiguration* defaultLaunch() const;
+    QList<ILaunchMode*> launchModes() const;
+    
+    /**
+     * @copydoc IRunController::addLaunchMode
+     */
+    virtual void addLaunchMode( ILaunchMode* mode );
+    
+    /**
+     * @copydoc IRunController::removeLaunchMode
+     */
+    virtual void removeLaunchMode( ILaunchMode* mode );
 
-    IRunProvider* findProvider(const QString& instrumentor);
+    /**
+     * @copydoc IRunController::launchModeForId()
+     */
+    virtual KDevelop::ILaunchMode* launchModeForId(const QString& id) const;
 
     void initialize();
 
     QItemDelegate* delegate() const;
+    
+    void addLaunchConfiguration( LaunchConfiguration* l );
+    void removeLaunchConfiguration( LaunchConfiguration* l );
+    
+    QList<LaunchConfiguration*> launchConfigurations() const;
+    /**
+     * @copydoc IRunController::launchConfigurationTypes()
+     */
+    virtual QList<LaunchConfigurationType*> launchConfigurationTypes() const;
+
+    /**
+     * @copydoc IRunController::addConfigurationType()
+     */
+    virtual void addConfigurationType( LaunchConfigurationType* type );
+
+    /**
+     * @copydoc IRunController::removeConfigurationType()
+     */
+    virtual void removeConfigurationType( LaunchConfigurationType* type );
+
+    /**
+     * Find the launch configuration type for the given @p id.
+     * @returns the launch configuration type having the id, or 0 if no such type is known
+     */
+    LaunchConfigurationType* launchConfigurationTypeForId( const QString& );
+
+    virtual void executeDefaultLaunch(const QString& runMode);
 
 public Q_SLOTS:
     virtual void stopAllProcesses();
+    
 
+    
 protected Q_SLOTS:
     virtual void finished(KJob *job);
     virtual void suspended(KJob *job);
@@ -73,14 +122,16 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void slotRefreshProject(KDevelop::IProject* project);
     void slotExecute();
+    void slotDebug();
     void slotProjectOpened(KDevelop::IProject* project);
     void slotProjectClosing(KDevelop::IProject* project);
     void slotKillJob();
 
 private:
-    QAction* addTarget(KDevelop::IProject * project, const QString& targetName);
     void setupActions();
     void checkState();
+
+    Q_PRIVATE_SLOT(d, void configureLaunches())
 
     class RunControllerPrivate;
     RunControllerPrivate* const d;
@@ -95,33 +146,6 @@ public:
 private:
     KStatefulBrush runProviderBrush;
     KStatefulBrush errorBrush;
-};
-
-class RunJob : public OutputJob
-{
-    Q_OBJECT
-
-public:
-    RunJob(RunController* controller, const IRun& run);
-
-    virtual void start();
-
-    enum ErrorTypes {
-        ErrorNoProvider = UserDefinedError,
-        ErrorInvalidTarget
-    };
-
-protected:
-    virtual bool doKill();
-
-private Q_SLOTS:
-    void slotOutput(KJob* job, const QString& line, KDevelop::IRunProvider::OutputTypes type);
-    void slotFinished(KJob* job);
-
-private:
-    RunController* m_controller;
-    IRunProvider* m_provider;
-    IRun m_run;
 };
 
 }

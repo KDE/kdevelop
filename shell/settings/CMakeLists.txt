@@ -72,20 +72,20 @@ target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI
 
 ########### Run Options
 
-set( runsettings_cfg_SRCS
-    runpreferences/projectitemlineedit.cpp
-    runpreferences/runpreferences.cpp
-    runpreferences/runconfig.cpp
-)
-
-set( runsettings_cfg_UI
-    runpreferences/runsettings.ui
-    runpreferences/runconfig.ui
-)
-
-kde4_add_ui_files( runsettings_cfg_SRCS ${runsettings_cfg_UI} )
-kde4_add_plugin( kcm_kdev_runsettings ${runsettings_cfg_SRCS} )
-target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatformutil kdevplatformproject kdevplatforminterfaces)
+#set( runsettings_cfg_SRCS
+#    runpreferences/projectitemlineedit.cpp
+#    runpreferences/runpreferences.cpp
+#    runpreferences/runconfig.cpp
+#)
+#
+#set( runsettings_cfg_UI
+#    runpreferences/runsettings.ui
+#    runpreferences/runconfig.ui
+#)
+#
+#kde4_add_ui_files( runsettings_cfg_SRCS ${runsettings_cfg_UI} )
+#kde4_add_plugin( kcm_kdev_runsettings ${runsettings_cfg_SRCS} )
+#target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatformutil kdevplatformproject kdevplatforminterfaces)
 
 ########### Environment widget
 
@@ -105,7 +105,6 @@ target_link_libraries( kcm_kdev_envsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIB
 
 install( TARGETS 
         kcm_kdev_projectsettings 
-        kcm_kdev_runsettings 
         kcm_kdev_ccsettings
         kcm_kdev_bgsettings
         kcm_kdev_pluginsettings
@@ -115,7 +114,6 @@ install( TARGETS
 
 install( FILES 
         kcm_kdev_uisettings.desktop 
-        kcm_kdev_runsettings.desktop
         kcm_kdev_envsettings.desktop
         kcm_kdev_pluginsettings.desktop
         kcm_kdev_projectsettings.desktop

@@ -29,7 +29,9 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-class IRun;
+class ILaunchMode;
+class ILaunchConfiguration;
+class LaunchConfigurationType;
 
 /**
  * The main controller for running processes.
@@ -43,18 +45,6 @@ public:
     IRunController(QObject *parent);
 
     /**
-     * Request the provided \a run object to be executed.
-     *
-     * \return the serial number for the run job, or -1 if \a run could not be executed.
-     */
-    Q_SCRIPTABLE virtual KJob* execute(const IRun& run) = 0;
-
-    /**
-     * Provide the default run object.
-     */
-    virtual IRun defaultRun() const = 0;
-
-    /**
      * Interrogate the current managed jobs
      */
     Q_SCRIPTABLE virtual QList<KJob*> currentJobs() const = 0;
@@ -66,6 +56,63 @@ public:
         Idle     /**< No processes are currently running */,
         Running  /**< processes are currently running */
     };
+
+    /**
+     * Get a list of all launch modes that the app knows
+     * @returns a list of registered launch modes
+     */
+    virtual QList<ILaunchMode*> launchModes() const = 0;
+    
+    /**
+     * Get a specific launch mode based using its \a id
+     * @param id the identifier of the launchmode to get
+     * @returns launch mode for the given id or 0 if no such mode is known
+     */
+    virtual ILaunchMode* launchModeForId( const QString& id ) const = 0;
+    
+    /**
+     * add @p mode to the list of registered launch modes
+     * @param mode the mode to be registered
+     */
+    virtual void addLaunchMode( ILaunchMode* mode ) = 0;
+    
+    /**
+     * remove @p mode from the list of registered launch modes
+     * @param mode the mode to be unregistered
+     */
+    virtual void removeLaunchMode( ILaunchMode* mode ) = 0;
+
+    /**
+     * Get a list of all configuration types that are registered
+     * @returns a list of run configuration types
+     */
+    virtual QList<LaunchConfigurationType*> launchConfigurationTypes() const = 0;
+
+    
+    /**
+     * Adds @p type to the list of known run config types
+     * @param type the new run configuration type
+     */
+    virtual void addConfigurationType( LaunchConfigurationType* type ) = 0;
+
+    /**
+     * Removes @p type from the list of known run config types
+     * @param type run configuration type that should be removed
+     */
+    virtual void removeConfigurationType( LaunchConfigurationType* type ) = 0;
+    
+    /**
+     * Executes the default launch in the given mode
+     * @param runMode the launch mode to start with
+     */
+    virtual void executeDefaultLaunch( const QString& runMode ) = 0;
+    
+    /**
+     * tries to find a launch config type for the given @p id
+     * @param id the id of the launch configuration type to search
+     * @returns the launch configuration type if found, or 0 otherwise
+     */
+    virtual LaunchConfigurationType* launchConfigurationTypeForId( const QString& id ) = 0;
 
 public Q_SLOTS:
     /**

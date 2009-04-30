@@ -3,16 +3,29 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
 
 ########### next target ###############
 
-set(kdevexecute_PART_SRCS
-    executeplugin.cpp
+set(kdevexecute_PART_UIS
+    nativeappconfig.ui
 )
 
-kde4_add_plugin(kdevexecute ${kdevexecute_PART_SRCS})
-target_link_libraries(kdevexecute ${KDE4_KDEUI_LIBS} kdevplatforminterfaces kdevplatformutil)
+set(kdevexecute_PART_SRCS
+    executeplugin.cpp
+    nativeappconfig.cpp
+    projectitemlineedit.cpp
+    nativeappjob.cpp
+)
+
+kde4_add_ui_files( kdevexecute_PART_SRCS ${kdevexecute_PART_UIS} )
+kde4_add_plugin(kdevexecute ${kdevexecute_PART_SRCS}  )
+target_link_libraries(kdevexecute 
+    ${KDE4_KDEUI_LIBS} 
+    kdevplatforminterfaces 
+    kdevplatformutil 
+    kdevplatformproject 
+    kdevplatformoutputview)
 
 install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-
+install(FILES executepluginconstants.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
 install(FILES kdevexecute.desktop DESTINATION ${SERVICES_INSTALL_DIR})

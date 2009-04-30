@@ -26,14 +26,12 @@
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
 
-#include <interfaces/irunprovider.h>
 namespace KDevelop
 {
 
-class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
+class ExecutePlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::IRunProvider)
 
   public:
     ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
@@ -41,35 +39,6 @@ class ExecutePlugin : public KDevelop::IPlugin, public KDevelop::IRunProvider
 
     virtual void unload();
 
-    virtual QStringList instrumentorsProvided() const;
-
-    virtual QString translatedInstrumentor(const QString& instrumentor) const;
-
-    /**
-     * Request the execution of \a run.
-     */
-    virtual bool execute(const IRun& run, KJob* serial);
-
-    /**
-     * Request the aborting of a run with the given \a serial number.
-     */
-    virtual void abort(KJob* serial);
-
-  Q_SIGNALS:
-    // implementations from IRunProvider
-    void finished(KJob* serial);
-    void output(KJob* serial, const QString& line, KDevelop::IRunProvider::OutputTypes type);
-
-  private Q_SLOTS:
-    void readyReadStandardOutput();
-    void readyReadStandardError();
-    void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-    void error(QProcess::ProcessError error);
-
-  private:
-    void readFrom(QProcess* process, QProcess::ProcessChannel channel);
-
-    QMap<KJob*, QProcess*> m_runners;
 };
 
 }
