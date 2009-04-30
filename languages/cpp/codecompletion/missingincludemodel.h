@@ -20,7 +20,6 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/codecompletionworker.h>
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
-#include <kdeversion.h>
 #include <qwaitcondition.h>
 #include <qmutex.h>
 #include <language/duchain/ducontext.h>
@@ -33,18 +32,9 @@ namespace Cpp {
 class MissingIncludeCompletionWorker;
 
 class MissingIncludeCompletionModel : public KDevelop::CodeCompletionModel
-#if KDE_IS_VERSION(4,2,62)
-, KTextEditor::CodeCompletionModelControllerInterface2
-#else
-, KTextEditor::CodeCompletionModelControllerInterface
-#endif
 {
   Q_OBJECT
 public:
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-#if KDE_IS_VERSION(4,2,62)
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
-#endif
   
   void stop();
   

@@ -94,7 +94,7 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
   if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
     return true;
   
-  return CodeCompletionModelControllerInterface::shouldStartCompletion(view, inserted, userInsertion, position);
+  return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
 void CodeCompletionModel::aborted(KTextEditor::View* view) {
@@ -106,7 +106,7 @@ void CodeCompletionModel::aborted(KTextEditor::View* view) {
 }
 
 bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
-  bool ret = CodeCompletionModelControllerInterface::shouldAbortCompletion(view, range, currentCompletion);
+  bool ret = KDevelop::CodeCompletionModel::shouldAbortCompletion(view, range, currentCompletion);
   
   return ret;
 }
@@ -161,7 +161,7 @@ void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEd
 //       dataChanged(index(rowCount() - completionContext()->ungroupedElements().size(), 0), index(rowCount()-1, columnCount()-1 ));
     }
   }
-  KTextEditor::CodeCompletionModelControllerInterface::updateCompletionRange(view, range);
+  KDevelop::CodeCompletionModel::updateCompletionRange(view, range);
 }
 
 void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {

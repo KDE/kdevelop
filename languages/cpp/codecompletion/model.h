@@ -51,16 +51,10 @@ namespace Cpp {
   class CodeCompletionWorker;
 
 class CodeCompletionModel : public KDevelop::CodeCompletionModel
-#if KDE_IS_VERSION(4,2,62)
-, KTextEditor::CodeCompletionModelControllerInterface2
-#else
-, KTextEditor::CodeCompletionModelControllerInterface
-#endif
 {
   Q_OBJECT
 
   public:
-    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
     CodeCompletionModel(QObject* parent);
     virtual ~CodeCompletionModel();
 
