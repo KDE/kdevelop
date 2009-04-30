@@ -92,7 +92,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
 
 void BreakpointDetails::setItem(Breakpoint *b)
 {
-    if (!b)
+    if (!b || b->pleaseEnterLocation())
     {
         status_->hide();
         hits_->setEnabled(false);
