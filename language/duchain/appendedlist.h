@@ -67,7 +67,8 @@ template<class T, bool threadSafe = true>
 class TemporaryDataManager {
   public:
     TemporaryDataManager(QString id = QString()) : m_itemsUsed(0), m_itemsSize(0), m_items(0), m_id(id) {
-      Q_ASSERT((uint)alloc() == (uint)DynamicAppendedListMask); //Allocate the zero item, just to reserve that index
+      uint first = alloc();  //Allocate the zero item, just to reserve that index
+      Q_ASSERT(first == (uint)DynamicAppendedListMask);
     }
     ~TemporaryDataManager() {
       free(DynamicAppendedListMask); //Free the zero index, so we don't get wrong warnings
