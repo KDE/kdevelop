@@ -25,11 +25,15 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
+#include <QWhatsThis>
 
 #include <KLocalizedString>
 
 #include "../breakpoint/breakpoint.h"
-#include <QWhatsThis>
+#include "../interfaces/idebugsession.h"
+#include "../../interfaces/icore.h"
+#include "../interfaces/ibreakpointcontroller.h"
+#include "../../interfaces/idebugcontroller.h"
 
 using namespace KDevelop;
 
@@ -100,14 +104,24 @@ void BreakpointDetails::setItem(Breakpoint *b)
     hits_->setEnabled(true);
     ignore_->setEnabled(true);
 
-    /* TODO NIKO
-    if (b->pending())
-        status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
-    else if (b->dirty())
-        status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
-    else
-        status_->setText("Breakpoint is active");
-     */
+    IDebugSession* session = ICore::self()->debugController()->currentSession();
+    IBreakpointController::BreakpointState state;
+    if (session) {
+        state = session->breakpointController()->breakpointState(b);
+    } else {
+        state = IBreakpointController::DirtyState;
+    }
+    switch (state) {
+        case IBreakpointController::PendingState:
+            status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
+            break;
+        case IBreakpointController::DirtyState:
+            status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
+            break;
+        case IBreakpointController::CleanState:
+            status_->setText("Breakpoint is active");
+            break;
+    }
 
     if (b->hitCount())
         hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
