@@ -28,6 +28,7 @@
 #include <QWhatsThis>
 
 #include <KLocalizedString>
+#include <KDebug>
 
 #include "../breakpoint/breakpoint.h"
 #include "../interfaces/idebugsession.h"
@@ -93,6 +94,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
 
 void BreakpointDetails::setItem(Breakpoint *b)
 {
+    kDebug() << b;
     if (!b || b->pleaseEnterLocation())
     {
         status_->hide();

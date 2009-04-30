@@ -58,9 +58,8 @@ private Q_SLOTS:
     void slotAddBlankWatchpoint();
     void slotAddBlankReadWatchpoint();
     void slotRemoveBreakpoint();
-    void slotSelectionChanged(const QItemSelection& selected, const QItemSelection&);
+    void slotUpdateBreakpointDetail();
     void slotBreakpointHit(int id);
-    void slotDataChanged(const QModelIndex& index, const QModelIndex&);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
 
 private:

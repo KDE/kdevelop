@@ -70,16 +70,12 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 
     table_->setModel(m_debugController->breakpointModel());
 
-    connect(table_->selectionModel(),
-            SIGNAL(selectionChanged(const QItemSelection&,
-                                    const QItemSelection&)),
-            this, SLOT(slotSelectionChanged(const QItemSelection &,
-                                            const QItemSelection&)));
+    connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(modelReset()), SLOT(slotUpdateBreakpointDetail()));
+    connect(m_debugController->breakpointModel(), SIGNAL(dataChanged(QModelIndex, QModelIndex)), SLOT(slotUpdateBreakpointDetail()));
 
-    connect(m_debugController->breakpointModel(),
-            SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this,
-            SLOT(slotDataChanged(const QModelIndex&, const QModelIndex&)));
 
 // TODO NIKO
 //     connect(controller, SIGNAL(breakpointHit(int)),
@@ -279,14 +275,16 @@ void BreakpointWidget::slotRemoveBreakpoint()
     }
 }
 
-void BreakpointWidget::slotSelectionChanged(const QItemSelection& selected,
-                            const QItemSelection&)
+void BreakpointWidget::slotUpdateBreakpointDetail()
 {
-    if (!selected.empty())
-    {
-    details_->setItem(
+    QModelIndexList selected = table_->selectionModel()->selectedIndexes();
+    kDebug() << selected;
+    if (selected.isEmpty()) {
+        details_->setItem(0);
+    } else {
+        details_->setItem(
                 static_cast<Breakpoint*>(
-                    m_debugController->breakpointModel()->itemForIndex(selected.indexes().first())));
+                    m_debugController->breakpointModel()->itemForIndex(selected.first())));
     }
 }
 
@@ -309,16 +307,6 @@ TODO NIKO
             | QItemSelectionModel::ClearAndSelect);
     }
 #endif
-}
-
-void BreakpointWidget::slotDataChanged(const QModelIndex& index, const QModelIndex&)
-{
-    /* This method works around another problem with highliting
-        the current breakpoint -- we select it before the new
-        hit count is read, so it remains stale.  For that reason,
-        we get to notice when breakpoint changes.  */
-    details_->setItem(
-        static_cast<Breakpoint*>(m_debugController->breakpointModel()->itemForIndex(index)));
 }
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
