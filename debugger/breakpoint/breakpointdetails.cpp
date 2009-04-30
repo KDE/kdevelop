@@ -60,8 +60,6 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     layout->setContentsMargins(11, 0, 0, 11);
 
     status_ = new QLabel(this);
-    status_->setText(i18n("Breakpoint is active"));
-    status_->hide();
     connect(status_, SIGNAL(linkActivated(const QString&)),
             this, SLOT(showExplanation(const QString&)));
     layout->addWidget(status_);
@@ -87,8 +85,9 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     QLabel *l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);
 
-
     layout->addStretch();
+
+    setItem(0); //initialize with no breakpoint active
 }
 
 
