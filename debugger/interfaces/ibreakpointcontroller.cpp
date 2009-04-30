@@ -108,13 +108,30 @@ IBreakpointController::BreakpointState IBreakpointController::breakpointState(co
     return DirtyState;
 }
 
+int IBreakpointController::breakpointHitCount(const KDevelop::Breakpoint* breakpoint) const
+{
+    if (m_hitCount.contains(breakpoint)) {
+        return m_hitCount[breakpoint];
+    }
+    return 0;
+}
+
 void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 {
     if (breakpoint->pleaseEnterLocation()) return;
     if (breakpoint->deleted()) return;
+    m_dontSendChanges = true;
     breakpoint->reportChange(Breakpoint::StateColumn);
+    m_dontSendChanges = false;
 }
 
+void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
+{
+    m_hitCount[breakpoint] = count;
+    m_dontSendChanges = true;
+    breakpoint->reportChange();
+    m_dontSendChanges = false;
+}
 
 }
 

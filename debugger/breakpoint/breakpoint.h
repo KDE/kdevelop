@@ -81,8 +81,7 @@ public:
     void setAddress(const QString& address);
     QString address() const;
 
-    void setHitCount(int hitCount);
-    bool hitCount() const;
+    int hitCount() const;
 
     bool pleaseEnterLocation() const;
 
@@ -103,7 +102,6 @@ protected:
     bool enabled_;
     QSet<int> errors_;
     bool deleted_;
-    int hitCount_;
     BreakpointKind kind_;
     /* For watchpoints, the address it is set at.  */
     QString address_;

@@ -37,7 +37,7 @@ using namespace KDevelop;
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
 : TreeItem(model, parent), enabled_(true), 
-  deleted_(false), hitCount_(0), kind_(kind),
+  deleted_(false), kind_(kind),
   pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
 {
@@ -47,7 +47,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
                              const KConfigGroup& config)
 : TreeItem(model, parent), enabled_(true),
-  deleted_(false), hitCount_(0),
+  deleted_(false),
   pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0)
 {
@@ -71,7 +71,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
 
 Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
 : TreeItem(model, parent), enabled_(true), 
-  deleted_(false), hitCount_(0), 
+  deleted_(false),
   kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
   m_smartCursor(0)
 {   
@@ -162,7 +162,7 @@ QVariant Breakpoint::data(int column, int role) const
                 case IBreakpointController::DirtyState:
                     return KIcon("system-switch-user");
                 case IBreakpointController::PendingState:
-                    return KIcon("help-contents");            
+                    return KIcon("help-contents");
                 case IBreakpointController::CleanState:
                     return KIcon("dialog-apply");
             }
@@ -268,15 +268,14 @@ QString Breakpoint::address() const
     return address_;
 }
 
-void Breakpoint::setHitCount(int hitCount)
+int Breakpoint::hitCount() const
 {
-    hitCount_ = hitCount;
-    reportChange();
-}
-
-bool Breakpoint::hitCount() const
-{
-    return hitCount_;
+    IDebugSession* session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        return session->breakpointController()->breakpointHitCount(this);
+    } else {
+        return 0;
+    }
 }
 
 bool Breakpoint::pleaseEnterLocation() const

@@ -48,18 +48,21 @@ public:
     IBreakpointController(IDebugSession* parent);
     
     BreakpointState breakpointState(const Breakpoint *breakpoint) const;
+    int breakpointHitCount(const Breakpoint *breakpoint) const;
 
 protected:
     IDebugSession *debugSession() const;
     BreakpointModel *breakpointModel() const;
 
     void breakpointStateChanged(Breakpoint* breakpoint);
+    void setHitCount(Breakpoint* breakpoint, int count);
 
     void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;
 
     QMap<const Breakpoint*, QSet<int> > m_dirty;
     QSet<const Breakpoint*> m_pending;
+    QMap<const Breakpoint*, int> m_hitCount;
     bool m_dontSendChanges;
 
 private Q_SLOTS:
