@@ -1418,6 +1418,7 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
       addInclude("deep1.h", "#define WANT_DEEP\n#include \"deep2.h\"\n");
       TopDUContext* test1 = parse(QByteArray("#include \"deep1.h\""), DumpNone);
       Cpp::EnvironmentFile* envFile1 = dynamic_cast<Cpp::EnvironmentFile*>(test1->parsingEnvironmentFile().data());
+      DUChainWriteLocker lock(DUChain::lock());
       QVERIFY(envFile1);
       QCOMPARE(envFile1->definedMacroNames().set().count(), 0u);
       QCOMPARE(envFile1->definedMacros().set().count(), 0u);
