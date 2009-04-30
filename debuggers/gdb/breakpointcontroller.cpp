@@ -325,7 +325,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         m_pending.remove(breakpoint);
     }
 
-    breakpoint->setHitCount(b["times"].toInt());
+    setHitCount(breakpoint, b["times"].toInt());
 
 #if 0
     {bp_watchpoint, "watchpoint"},
