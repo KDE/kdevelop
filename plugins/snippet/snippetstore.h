@@ -11,10 +11,9 @@
 #ifndef __SNIPPETSTORE_H__
 #define __SNIPPETSTORE_H__
 
-#include <QObject>
-
 #include <QList>
 #include <QStandardItemModel>
+#include <kconfiggroup.h>
 
 class SnippetRepository;
 
@@ -49,6 +48,9 @@ public:
      *
      */
     void remove(SnippetRepository* repo);
+
+    void load(KConfigGroup config);
+    void save(KConfigGroup config);
 
 private:
     SnippetStore();

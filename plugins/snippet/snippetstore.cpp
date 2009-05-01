@@ -77,4 +77,26 @@ void SnippetStore::remove(SnippetRepository* repo)
     }
 }
 
+void SnippetStore::load(KConfigGroup config)
+{
+    if (config.hasGroup("repos")) {
+        KConfigGroup repoGroup = config.group("repos");
+        QStringList keys = repoGroup.keyList();
+        foreach(QString key, keys) {
+            createNewRepository(0, key, repoGroup.readEntry(key));
+        }
+    }
+}
+
+void SnippetStore::save(KConfigGroup config)
+{
+    // remove all old repos that might have changed
+    config.group("repos").deleteGroup();
+    config.sync();
+
+    foreach(SnippetRepository* repo, repos_) {
+        config.group("repos").writeEntry(repo->text(), repo->getLocation());
+    }
+}
+
 #include "snippetstore.moc"

@@ -25,6 +25,8 @@
 
 #include "snippetview.h"
 #include "snippetcompletionmodel.h"
+#include <interfaces/isession.h>
+#include "snippetstore.h"
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
 K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
@@ -60,15 +62,20 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
     connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
+
+    // load the repositories from the last run
+    SnippetStore::instance()->load(core()->activeSession()->config()->group("Snippets"));
 }
 
 SnippetPlugin::~SnippetPlugin()
 {
-    kDebug(9500) ;
 }
 
 void SnippetPlugin::unload()
 {
+    // Save the currently configured repositories
+    SnippetStore::instance()->save(core()->activeSession()->config()->group("Snippets"));
+
     core()->uiController()->removeToolView(m_factory);
 }
 
