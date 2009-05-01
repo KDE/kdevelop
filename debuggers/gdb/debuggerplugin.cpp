@@ -76,7 +76,6 @@
 #include "memviewdlg.h"
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
-#include "debuggerconfigwidget.h"
 #include "gdbglobal.h"
 #include "variablecollection.h"
 #include "debugsession.h"
@@ -192,19 +191,7 @@ void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = m_startDebugger = new KAction(KIcon("dbgrun"), i18n("&Start with GDB"), this);
-    action->setShortcut(Qt::Key_F9);
-    action->setToolTip( i18n("Start in debugger") );
-    action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
-                               "Starts the debugger with the project's main "
-                               "executable. You may set some breakpoints "
-                               "before this, or you can interrupt the program "
-                               "while it is running, in order to get information "
-                               "about variables, frame stack, and so on.") );
-    ac->addAction("debug_run", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotStartDebugger()));
-
-    action = new KAction(KIcon("dbgmemview"), i18n("Viewers"), this);
+    KAction* action = new KAction(KIcon("dbgmemview"), i18n("Viewers"), this);
     action->setToolTip( i18n("Debugger viewers") );
     action->setWhatsThis(i18n("<b>Debugger viewers</b><p>Various information about application being executed. There are 4 views available:<br>"
         "<b>Memory</b><br>"
@@ -359,8 +346,6 @@ DebugSession* CppDebuggerPlugin::createSession()
     m_session = new DebugSession(m_controller);
     KDevelop::ICore::self()->debugController()->addSession(m_session);
     connect(m_session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
-    connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(applicationStandardOutputLines(QStringList)));
-    connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(applicationStandardErrorLines(QStringList)));
     connect(m_session, SIGNAL(reset()), SIGNAL(reset()));
     connect(m_session, SIGNAL(finished()), SLOT(slotFinished()));
     connect(m_session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
@@ -422,18 +407,6 @@ KConfigGroup CppDebuggerPlugin::config() const
 QString CppDebuggerPlugin::statusName() const
 {
     return i18n("Debugger");
-}
-
-void CppDebuggerPlugin::slotStartDebugger()
-{
-    // Prevent multiple runs while setting up
-    // TODO: remove restriction if supporting multiple debug sessions
-    m_startDebugger->setEnabled(false);
-
-    //TODO: port to launch framework
-    //KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-    //run.setInstrumentor("gdb");
-    //KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void CppDebuggerPlugin::demandAttention() const

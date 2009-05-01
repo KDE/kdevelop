@@ -118,7 +118,6 @@ private Q_SLOTS:
 //    void projectOpened();
     void projectClosed();
 
-    void slotStartDebugger();
     void slotExamineCore();
     void slotAttachProcess();
 
