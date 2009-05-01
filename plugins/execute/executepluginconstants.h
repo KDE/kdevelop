@@ -23,7 +23,7 @@
 #include <QtCore/QString>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
-#include <kdevplatform/project/projectmodel.h>
+#include <project/projectmodel.h>
 
 class KConfigGroup;
 
