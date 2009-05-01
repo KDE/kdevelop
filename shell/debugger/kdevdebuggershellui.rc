@@ -1,12 +1,11 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="3">
+<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="4">
     <MenuBar>
         <Menu name="run">
             <text context="@title:menu">Run</text>
             
-            <Action name="debug_run" group="run_operations"/>
-            
             <Separator group="debug"/>
+            <Action name="debug_continue" group="debug"/>
             <Action name="debug_stop" group="debug"/>
             <Action name="debug_pause" group="debug"/>
             <Action name="debug_restart" group="debug"/>
@@ -28,7 +27,7 @@
     
     <ToolBar name="debugToolBar">
         <text>Debugger Toolbar</text>
-        <Action name="debug_run"/>
+        <Action name="debug_continue"/>
         <Action name="debug_restart"/>
         <Action name="debug_stepover"/>
         <Action name="debug_stepinto"/>
@@ -37,10 +36,8 @@
     </ToolBar>
     
     <State name="stopped">
-        <enable>
-            <Action name="debug_run"/>
-        </enable>
         <disable>
+            <Action name="debug_continue"/>
             <Action name="debug_stop"/>
             <Action name="debug_pause"/>
             <Action name="debug_runtocursor"/>
@@ -53,7 +50,7 @@
     </State>
     <State name="paused">
         <enable>
-            <Action name="debug_run"/>
+            <Action name="debug_continue"/>
             <Action name="debug_stop"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
@@ -69,7 +66,7 @@
             <Action name="debug_stop"/>
         </enable>
         <disable>
-            <Action name="debug_run"/>
+            <Action name="debug_continue"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
             <Action name="debug_stepoverinst"/>

@@ -53,7 +53,6 @@ public:
     virtual BreakpointModel* breakpointModel();
 
 private Q_SLOTS:
-    void startDebugger();
     void restartDebugger();
     void stopDebugger();
     void interruptDebugger();
@@ -92,7 +91,7 @@ private:
     static const QPixmap* disabledBreakpointPixmap();
     static const QPixmap* executionPointPixmap();
 
-    KAction* m_startDebugger;
+    KAction* m_continueDebugger;
     KAction* m_restartDebugger;
     KAction* m_stopDebugger;
     KAction* m_interruptDebugger;

@@ -159,17 +159,15 @@ void DebugController::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = m_startDebugger = new KAction(KIcon("dbgrun"), i18n("&Start (not yet working)"), this);
-    action->setShortcut(Qt::Key_F9);
-    action->setToolTip( i18n("Start in debugger") );
-    action->setWhatsThis( i18n("<b>Start in debugger</b><p>"
-                               "Starts the debugger with the project's main "
-                               "executable. You may set some breakpoints "
-                               "before this, or you can interrupt the program "
-                               "while it is running, in order to get information "
-                               "about variables, frame stack, and so on.</p>") );
-    ac->addAction("debug_run", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(startDebugger()));
+    KAction* action = m_continueDebugger = new KAction(KIcon("dbgrun"), i18n("&Continue"), this);
+    action->setToolTip( i18n("Continues the application execution") );
+    action->setWhatsThis( i18n("<b>Continue application execution</b><p>"
+        "Continues the execution of your application in the "
+        "debugger. This only takes effect when the application "
+        "has been halted by the debugger (i.e. a breakpoint has "
+        "been activated or the interrupt was pressed).</p>") );
+    ac->addAction("debug_continue", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(run()));
 
     m_restartDebugger = action = new KAction(KIcon("dbgrestart"), i18n("&Restart"), this);
     action->setToolTip( i18n("Restart program") );
@@ -360,26 +358,9 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
     }
 
     if (state == IDebugSession::StoppedState || state == IDebugSession::NotStartedState || state == IDebugSession::StoppingState) {
-        m_startDebugger->setText( i18n("&Start") );
-        m_startDebugger->setToolTip( i18n("Runs the program in the debugger") );
-        m_startDebugger->setWhatsThis( i18n("<b>Start in debugger</b><p>"
-                                                "Starts the debugger with the project's main "
-                                                "executable. You may set some breakpoints "
-                                                "before this, or you can interrupt the program "
-                                                "while it is running, in order to get information "
-                                                "about variables, frame stack, and so on.</p>") );
-        m_startDebugger->disconnect(this);
-        connect(m_startDebugger, SIGNAL(triggered(bool)), this, SLOT(startDebugger()));
+        m_continueDebugger->setEnabled(false);
     } else {
-        m_startDebugger->setText( i18n("&Continue") );
-        m_startDebugger->setToolTip( i18n("Continues the application execution") );
-        m_startDebugger->setWhatsThis( i18n("<b>Continue application execution</b><p>"
-            "Continues the execution of your application in the "
-            "debugger. This only takes effect when the application "
-            "has been halted by the debugger (i.e. a breakpoint has "
-            "been activated or the interrupt was pressed).</p>") );
-        m_startDebugger->disconnect(this);
-        connect(m_startDebugger, SIGNAL(triggered(bool)), this, SLOT(run()));
+        m_continueDebugger->setEnabled(true);
     }
 }
 
@@ -404,12 +385,6 @@ ContextMenuExtension DebugController::contextMenuExtension( Context* context )
     return menuExt;
 }
 
-
-void DebugController::startDebugger() {
-    if (m_currentSession) {
-        m_currentSession->startDebugger();
-    }
-}
 void DebugController::restartDebugger() {
     if (m_currentSession) {
         m_currentSession->restartDebugger();
