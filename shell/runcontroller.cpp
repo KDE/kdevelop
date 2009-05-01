@@ -175,9 +175,10 @@ RunController::RunController(QObject *parent)
     d->state = Idle;
     d->delegate = new RunDelegate(this);
 
-    //if(!(Core::self()->setupFlags() & Core::NoUi))
-    // Note that things like registerJob() do not work without the actions, it'll simply crash.
-    setupActions();
+    if(!(Core::self()->setupFlags() & Core::NoUi)) {
+        // Note that things like registerJob() do not work without the actions, it'll simply crash.
+        setupActions();
+    }
 }
 
 void RunController::initialize()
@@ -190,6 +191,14 @@ void RunController::initialize()
     foreach (IProject* project, Core::self()->projectController()->projects()) {
         slotProjectOpened(project);
     }
+    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
+            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
+            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
+             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
+
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
     QString currentLaunchProject = launchGrp.readEntry( "Current Launch Project", "" );
@@ -214,13 +223,6 @@ void RunController::initialize()
             d->currentTargetAction->actions().first()->setChecked( true );
         }
     }
-    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
-            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
-            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
-             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
-
 }
 
 class ExecuteCompositeJob : public KCompositeJob
