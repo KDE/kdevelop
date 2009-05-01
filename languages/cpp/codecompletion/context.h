@@ -44,10 +44,9 @@ namespace KDevelop {
   typedef KSharedPtr<CompletionTreeItem> CompletionTreeItemPointer;
 }
 
-class ImplementationHelperItem;
-
 namespace Cpp {
   class OverloadResolutionFunction;
+  class ImplementationHelperItem;
 
   /**
    * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
