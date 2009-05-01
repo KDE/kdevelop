@@ -717,8 +717,7 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 
     queueCmd(new GDBCommand(InferiorTtySet, tty));
     
-    //TODO: Support project targets
-    QString executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") ).toLocalFile();
+    QString executable = ExecutePlugin::executableFromConfig( grp );
     QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
     
     QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::Options( KShell::TildeExpand | KShell::AbortOnMeta ) );
