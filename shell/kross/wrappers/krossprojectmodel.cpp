@@ -142,7 +142,7 @@ class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void resetModel() { wrapped->resetModel(); }
 		Q_SCRIPTABLE void fetchMore(const QModelIndex& x0) { wrapped->fetchMore(x0); }
 		Q_SCRIPTABLE bool canFetchMore(const QModelIndex& x0) const { return wrapped->canFetchMore(x0); }
-		Q_SCRIPTABLE QModelIndex pathToIndex(const QAbstractItemModel* x0, const QStringList& x1) { return wrapped->pathToIndex(x0, x1); }
+		Q_SCRIPTABLE QModelIndex pathToIndex(const QStringList& x1) { return wrapped->pathToIndex(x1); }
 	private:
 		KDevelop::ProjectModel* wrapped;
 };

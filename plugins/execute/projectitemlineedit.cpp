@@ -35,8 +35,8 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
 void ProjectItemLineEdit::updated(const QString& newText)
 {
     QStringList tofetch=completer()->splitPath(newText);
-    const QAbstractItemModel* model=completer()->model();
-    QModelIndex idx=KDevelop::ProjectModel::pathToIndex(model, tofetch);
+    const KDevelop::ProjectModel* model=static_cast<const KDevelop::ProjectModel* >(completer()->model());
+    QModelIndex idx=model->pathToIndex(tofetch);
     emit correctnessChanged(idx.isValid());
 }
 
