@@ -20,7 +20,7 @@
 #ifndef NATIVEAPPJOB_H
 #define NATIVEAPPJOB_H
 
-#include <QProcess>
+#include <QtCore/QProcess>
 #include <outputview/outputjob.h>
 
 namespace KDevelop

@@ -35,7 +35,6 @@
 
 #include "executepluginconstants.h"
 #include <kshell.h>
-#include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iprojectcontroller.h>
