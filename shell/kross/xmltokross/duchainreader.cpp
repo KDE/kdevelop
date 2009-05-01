@@ -28,7 +28,6 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/classdeclaration.h>
-#include <templatedeclaration.h>
 #include <KDE/KDebug>
 #include <QtCore/QQueue>
 
@@ -43,7 +42,7 @@ QList<const Declaration*> extractTypes(const DUContext* ctx, int ind=1)
 //         qDebug() << qPrintable(QString(ind*3, '-')) << "decl" << decl->toString()
 //                  << (decl->kind()==Declaration::Type);
         
-        if(dynamic_cast<const Cpp::ClassDeclaration*>(decl) && !decl->identifier().toString().isEmpty())
+        if(dynamic_cast<const ClassDeclaration*>(decl) && !decl->identifier().toString().isEmpty())
         {
             ret += decl;
         }
@@ -68,10 +67,25 @@ QString DUChainReader::printType(const TypePtr<AbstractType>& type)
     return ret;
 }
 
+
+bool isTemplateDeclaration(const KDevelop::Declaration* decl)
+{
+    KDevelop::DUContext* current = decl->internalContext();
+    while(current)
+    {
+        if(current->type() == KDevelop::DUContext::Template)
+            return true;
+        if(current->importedParentContexts().isEmpty())
+            return false;
+        current = current->importedParentContexts()[0].context(decl->topContext());
+    }
+    return false;
+}
+
 void DUChainReader::foundClass(const Declaration* decl)
 {
     QString baseClass;
-    const Cpp::ClassDeclaration *cdecl=dynamic_cast<const Cpp::ClassDeclaration*>(decl);
+    const ClassDeclaration *cdecl=dynamic_cast<const ClassDeclaration*>(decl);
 //     qDebug() << "lalalalalalalala" << cdecl->baseClassesSize()
 //              << cdecl->baseClasses()[0].access << cdecl->baseClasses()[0].baseClass.type()->toString()
 //              << definedClasses;
@@ -163,7 +177,7 @@ void DUChainReader::foundClass(const Declaration* decl)
             bool isConstructor=ftype->returnType().isNull();
             
             QString rettype= isConstructor ? QString() : printType(ftype->returnType());
-            if(dynamic_cast<const Cpp::TemplateDeclaration*>(func)) //we disable templated functions
+            if(isTemplateDeclaration(func)) //we disable templated functions
                 continue;
             
             bool isConst=ftype->modifiers() & AbstractType::ConstModifier;
