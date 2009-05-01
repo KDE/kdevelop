@@ -21,6 +21,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include "snippetview.h"
 #include "snippetcompletionmodel.h"
@@ -75,10 +76,12 @@ void SnippetPlugin::insertText(const QString& snippet)
 {
     kDebug(9500) << "Insert Snippet:" << snippet ;
 
-	KTextEditor::View* view = dynamic_cast<KTextEditor::View*>( core()->partController()->activeWidget() );
-	if (view) {
-		view->insertText( snippet );
-	}
+    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+    if (!doc) return;
+    if (doc->isTextDocument()) {
+        KTextEditor::Cursor pos = doc->cursorPosition();
+        doc->textDocument()->insertText(pos, snippet);
+    }
 }
 
 void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view )
