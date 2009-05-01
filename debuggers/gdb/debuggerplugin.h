@@ -161,7 +161,6 @@ private:
 
     KConfigGroup m_config;
 
-    KAction* m_startDebugger;
     DebugSession* m_session;
 
     GDBController* m_controller;

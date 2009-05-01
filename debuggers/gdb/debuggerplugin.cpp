@@ -421,7 +421,6 @@ void CppDebuggerPlugin::slotFinished()
 {
     Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
     DebugSession* session = static_cast<DebugSession*>(sender());
-    m_startDebugger->setDisabled(false);
 }
 
 void CppDebuggerPlugin::controllerMessage( const QString& msg, int timeout )
