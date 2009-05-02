@@ -28,11 +28,18 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kshell.h>
+#include <kmessagebox.h>
+#include <kparts/mainwindow.h>
 
 #include <outputview/outputmodel.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentgrouplist.h>
 #include <execute/executepluginconstants.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <interfaces/iuicontroller.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <util/executecompositejob.h>
 
 #include "debugsession.h"
 #include "debuggerplugin.h"
@@ -111,7 +118,56 @@ QString GdbLauncher::name() const
 
 KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
 {
-    return new GdbJob( m_plugin, cfg );
+    Q_ASSERT(cfg);
+    if( !cfg )
+    {
+        return 0;
+    }
+    if( launchMode == "debug" )
+    {
+        QStringList deps = cfg->config().readEntry( ExecutePlugin::dependencyEntry, QStringList() );
+        QString depAction = cfg->config().readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" );
+        if( depAction != "Nothing" && !deps.isEmpty() )
+        {
+            QList<KJob*> l;
+            KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+            foreach( const QString& dep, deps )
+            {
+                KDevelop::ProjectBaseItem* item = model->item( KDevelop::ProjectModel::pathToIndex( model, dep.split('/') ) );
+                if( item )
+                {
+                    KDevelop::ProjectBaseItem* folder = item;
+                    while( folder && !folder->folder() )
+                    {
+                        folder = dynamic_cast<KDevelop::ProjectBaseItem*>( folder->parent() );
+                    }
+                    if( folder && item->project()->buildSystemManager()->builder( folder->folder() ) )
+                    {
+                        KDevelop::IProjectBuilder* builder = item->project()->buildSystemManager()->builder( folder->folder() );
+                        if( depAction == "Build" )
+                        {
+                            l << builder->build( item );
+                        } else if( depAction == "Install" )
+                        {
+                            l << builder->install( item );
+                        } else if( depAction == "SudoInstall" )
+                        {
+                            KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                                                    i18n("Installing via sudo is not yet implemented"),
+                                                    i18n("Not implemented") );
+                        }
+                    }
+                }
+            }
+            l << new GdbJob( m_plugin, cfg );
+            return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
+        }else
+        {
+            return new GdbJob( m_plugin, cfg );
+        }
+    }
+    kWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
+    return 0;
 }
 
 QStringList GdbLauncher::supportedModes() const
