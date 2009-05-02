@@ -57,6 +57,8 @@ using namespace KDevelop;
 
 QString RunController::LaunchConfigurationsGroup = "Launch";
 QString RunController::LaunchConfigurationsListEntry = "Launch Configurations";
+static QString CurrentLaunchConfigProjectEntry = "Current Launch Config Project";
+static QString CurrentLaunchConfigNameEntry = "Current Launch Config GroupName";
 
 typedef QPair<QString, IProject*> Target;
 Q_DECLARE_METATYPE(Target)
@@ -199,6 +201,15 @@ void KDevelop::RunController::launchChanged( int i )
     }
 }
 
+void RunController::cleanup()
+{
+    KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+    LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( d->currentTargetAction->currentAction()->data() ) );
+    grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
+    grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
+    grp.sync();
+}
+
 void RunController::initialize()
 {
     addLaunchMode( new ExecuteMode() );
@@ -219,12 +230,12 @@ void RunController::initialize()
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-    QString currentLaunchProject = launchGrp.readEntry( "Current Launch Project", "" );
-    QString currentLaunchName = launchGrp.readEntry( "Current Launch Name", "" );
+    QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
+    QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
         LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
-        if( currentLaunchName == l->name() 
+        if( currentLaunchName == l->configGroupName() 
             && ( ( currentLaunchProject.isEmpty() && !l->project() ) 
                  || ( l->project() && l->project()->name() == currentLaunchProject ) ) )
         {

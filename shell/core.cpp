@@ -242,6 +242,7 @@ void Core::cleanup()
         /* Must be called before projectController->cleanup(). */
         // Closes all documents (discards, as already saved if the user wished earlier)
         d->documentController->cleanup();
+        d->runController->cleanup();
 
         d->projectController->cleanup();
         d->sourceFormatterController->cleanup();

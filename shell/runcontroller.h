@@ -79,6 +79,7 @@ public:
     virtual KDevelop::ILaunchMode* launchModeForId(const QString& id) const;
 
     void initialize();
+    void cleanup();
 
     QItemDelegate* delegate() const;
     
