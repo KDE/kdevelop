@@ -66,7 +66,7 @@ public:
     static const int TypeColumn = 2;
     static const int LocationColumn = 3;
     static const int ConditionColumn = 4;
-    
+
     void setUrl(const KUrl &url);
     KUrl url() const;
     
@@ -91,6 +91,9 @@ public:
     
     void setSmartCursor(KTextEditor::SmartCursor *cursor);
     KTextEditor::SmartCursor *smartCursor() const;
+
+    void setIgnoreCount(int c);
+    int ignoreCount() const;
     
     using TreeItem::removeSelf;
 protected:
@@ -109,6 +112,7 @@ protected:
     KUrl m_url;
     int m_line;
     KTextEditor::SmartCursor *m_smartCursor;
+    int m_ignoreCount;
 
     static const char *string_kinds[LastBreakpointKind];
 };

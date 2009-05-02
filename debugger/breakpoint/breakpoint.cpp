@@ -39,7 +39,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind 
 : TreeItem(model, parent), enabled_(true), 
   deleted_(false), kind_(kind),
   pleaseEnterLocation_(false), m_line(-1),
-  m_smartCursor(0)
+  m_smartCursor(0), m_ignoreCount(0)
 {
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
@@ -49,7 +49,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
 : TreeItem(model, parent), enabled_(true),
   deleted_(false),
   pleaseEnterLocation_(false), m_line(-1),
-  m_smartCursor(0)
+  m_smartCursor(0), m_ignoreCount(0)
 {
     QString kindString = config.readEntry("kind", "");
     int i;
@@ -73,7 +73,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
 : TreeItem(model, parent), enabled_(true), 
   deleted_(false),
   kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
-  m_smartCursor(0)
+  m_smartCursor(0), m_ignoreCount(0)
 {   
     setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
@@ -300,6 +300,15 @@ KTextEditor::SmartCursor* KDevelop::Breakpoint::smartCursor() const {
     return m_smartCursor;
 }
 
+void Breakpoint::setIgnoreCount(int c)
+{
+    m_ignoreCount = c;
+}
+
+int Breakpoint::ignoreCount() const
+{
+    return m_ignoreCount;
+}
 
 
 const int Breakpoint::EnableColumn;
