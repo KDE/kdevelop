@@ -46,6 +46,7 @@ install( FILES
     pushvalue.h
     kdevvarlengtharray.h
     embeddedfreetree.h
+    executecompositejob.h
     convenientfreelist.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
