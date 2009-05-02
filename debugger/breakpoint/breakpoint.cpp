@@ -210,13 +210,11 @@ QVariant Breakpoint::data(int column, int role) const
 
 void Breakpoint::setDeleted()
 {
-    kDebug();
     deleted_ = true;
     BreakpointModel* m = breakpointModel();
     if (m->breakpointIndex(this, 0).isValid()) {
         m->removeRow(m->breakpointIndex(this, 0).row());
     }
-    //TODO actually delete the breakpoint after all debug engines have processed it
 }
 
 int Breakpoint::line() const {
