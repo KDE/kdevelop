@@ -12,7 +12,6 @@ set( kdevplatformdebugger_LIB_SRCS
     util/treemodel.cpp
     util/treeview.cpp
     breakpoint/breakpoint.cpp
-    breakpoint/breakpoints.cpp
     breakpoint/breakpointmodel.cpp
     breakpoint/breakpointwidget.cpp
     breakpoint/breakpointdetails.cpp
@@ -50,7 +49,6 @@ install(FILES
     breakpoint/breakpointwidget.h
     breakpoint/breakpointdetails.h
     breakpoint/breakpoint.h
-    breakpoint/breakpoints.h
     breakpoint/breakpointmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
 )

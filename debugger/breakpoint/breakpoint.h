@@ -33,9 +33,8 @@ namespace KDevelop
 {
 class BreakpointModel;
 
-class KDEVPLATFORMDEBUGGER_EXPORT Breakpoint : public TreeItem
+class KDEVPLATFORMDEBUGGER_EXPORT Breakpoint
 {
-    Q_OBJECT
 public:
     enum BreakpointKind {
         CodeBreakpoint = 0,
@@ -45,14 +44,12 @@ public:
         LastBreakpointKind
     };
 
-    Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind);
-    Breakpoint(BreakpointModel *model, TreeItem *parent, const KConfigGroup& config);
+    Breakpoint(BreakpointModel *model, BreakpointKind kind);
+    Breakpoint(BreakpointModel *model, const KConfigGroup& config);
 
     /** This constructor creates a "please enter location" item, that will
        turn into real breakpoint when user types something.  */
-    Breakpoint(BreakpointModel *model, TreeItem *parent);
-
-    void fetchMoreChildren() {}
+    Breakpoint(BreakpointModel *model);
 
     void setColumn(int index, const QVariant& value);
     void setDeleted();
@@ -61,11 +58,15 @@ public:
 
     void save(KConfigGroup& config);
 
-    static const int EnableColumn = 0;
-    static const int StateColumn = 1;
-    static const int TypeColumn = 2;
-    static const int LocationColumn = 3;
-    static const int ConditionColumn = 4;
+    enum Column {
+        EnableColumn,
+        StateColumn,
+        TypeColumn,
+        LocationColumn,
+        ConditionColumn,
+        HitCountColumn,
+        IgnoreHitsColumn
+    };
 
     void setUrl(const KUrl &url);
     KUrl url() const;
@@ -94,14 +95,13 @@ public:
 
     void setIgnoreCount(int c);
     int ignoreCount() const;
-    
-    using TreeItem::removeSelf;
+
 protected:
-    friend class Breakpoints;
     friend class IBreakpointController;
     
     BreakpointModel *breakpointModel();
 
+    BreakpointModel *m_model;
     bool enabled_;
     QSet<int> errors_;
     bool deleted_;
@@ -111,10 +111,13 @@ protected:
     bool pleaseEnterLocation_;
     KUrl m_url;
     int m_line;
+    QString m_condition;
     KTextEditor::SmartCursor *m_smartCursor;
     int m_ignoreCount;
 
     static const char *string_kinds[LastBreakpointKind];
+
+    void reportChange(Column c);
 };
 
 }

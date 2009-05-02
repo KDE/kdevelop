@@ -81,7 +81,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 //     connect(controller, SIGNAL(breakpointHit(int)),
 //             this, SLOT(slotBreakpointHit(int)));
 
-    connect(m_debugController->breakpointModel()->breakpointsItem(),
+    connect(m_debugController->breakpointModel(),
             SIGNAL(error(KDevelop::Breakpoint *, const QString&, int)),
             this,
             SLOT(breakpointError(KDevelop::Breakpoint *, const QString&, int)));
@@ -244,7 +244,7 @@ void BreakpointWidget::showEvent(QShowEvent * event)
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
-    QModelIndex index = m_debugController->breakpointModel()->indexForItem(n, Breakpoint::LocationColumn);
+    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn);
     table_->setCurrentIndex(index);
     table_->edit(index);
 }
@@ -252,17 +252,17 @@ void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 
 void BreakpointWidget::slotAddBlankBreakpoint()
 {
-    edit(m_debugController->breakpointModel()->breakpointsItem()->addCodeBreakpoint());
+    edit(m_debugController->breakpointModel()->addCodeBreakpoint());
 }
 
 void BreakpointWidget::slotAddBlankWatchpoint()
 {
-    edit(m_debugController->breakpointModel()->breakpointsItem()->addWatchpoint());
+    edit(m_debugController->breakpointModel()->addWatchpoint());
 }
 
 void BreakpointWidget::slotAddBlankReadWatchpoint()
 {
-    edit(m_debugController->breakpointModel()->breakpointsItem()->addReadWatchpoint());
+    edit(m_debugController->breakpointModel()->addReadWatchpoint());
 }
 
 void BreakpointWidget::slotRemoveBreakpoint()
@@ -271,7 +271,7 @@ void BreakpointWidget::slotRemoveBreakpoint()
     QModelIndexList selected = sel->selectedIndexes();
     kDebug() << selected;
     if (!selected.isEmpty()) {
-        m_debugController->breakpointModel()->breakpointsItem()->remove(selected.first());
+        m_debugController->breakpointModel()->removeRow(selected.first().row());
     }
 }
 
@@ -282,9 +282,7 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
     if (selected.isEmpty()) {
         details_->setItem(0);
     } else {
-        details_->setItem(
-                static_cast<Breakpoint*>(
-                    m_debugController->breakpointModel()->itemForIndex(selected.first())));
+        details_->setItem(m_debugController->breakpointModel()->breakpoint(selected.first().row()));
     }
 }
 
@@ -316,7 +314,7 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     if (!table_->isVisible())
         return;
 
-    QModelIndex index = m_debugController->breakpointModel()->indexForItem(b, column);
+    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, column);
     QPoint p = table_->visualRect(index).topLeft();
     p = table_->mapToGlobal(p);
 

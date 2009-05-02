@@ -28,6 +28,7 @@
 #include <QtCore/QSet>
 #include "../debuggerexport.h"
 #include "idebugsession.h"
+#include "../breakpoint/breakpoint.h"
 
 class QModelIndex;
 namespace KDevelop {
@@ -66,7 +67,7 @@ protected:
     bool m_dontSendChanges;
 
 private Q_SLOTS:
-    void dataChanged(const QModelIndex &topRight, const QModelIndex &bottomLeft);
+    void breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column);
     void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
 };
 

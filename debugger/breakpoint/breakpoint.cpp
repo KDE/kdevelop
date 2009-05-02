@@ -27,7 +27,6 @@
 #include <KDE/KDebug>
 
 #include "breakpointmodel.h"
-#include "breakpoints.h"
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../interfaces/idebugsession.h"
@@ -35,22 +34,22 @@
 
 using namespace KDevelop;
 
-Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent, BreakpointKind kind)
-: TreeItem(model, parent), enabled_(true), 
+Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
+: m_model(model), enabled_(true),
   deleted_(false), kind_(kind),
   pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0), m_ignoreCount(0)
 {
-    setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
-Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
-                             const KConfigGroup& config)
-: TreeItem(model, parent), enabled_(true),
+Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
+: m_model(model), enabled_(true),
   deleted_(false),
   pleaseEnterLocation_(false), m_line(-1),
   m_smartCursor(0), m_ignoreCount(0)
 {
+    Q_ASSERT(0);
+    /* TODO NIKO
     QString kindString = config.readEntry("kind", "");
     int i;
     for (i = 0; i < LastBreakpointKind; ++i)
@@ -59,7 +58,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
             kind_ = (BreakpointKind)i;
             break;
         }
-    /* FIXME: maybe, should silently ignore this breakpoint.  */
+    //FIXME: maybe, should silently ignore this breakpoint.
     Q_ASSERT(i < LastBreakpointKind);
     enabled_ = config.readEntry("enabled", false);
 
@@ -67,20 +66,20 @@ Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent,
     QString condition = config.readEntry("condition", "");
 
     setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
+    */
 }
 
-Breakpoint::Breakpoint(BreakpointModel *model, TreeItem *parent)
-: TreeItem(model, parent), enabled_(true), 
+Breakpoint::Breakpoint(BreakpointModel *model)
+: m_model(model), enabled_(true), 
   deleted_(false),
   kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
   m_smartCursor(0), m_ignoreCount(0)
 {   
-    setData(QVector<QVariant>() << QString() << QString() << QString() << QString() << QString());
 }
 
 BreakpointModel *Breakpoint::breakpointModel()
 {
-    return static_cast<BreakpointModel*>(model_);
+    return m_model;
 }
 
 void Breakpoint::setColumn(int index, const QVariant& value)
@@ -102,17 +101,17 @@ void Breakpoint::setColumn(int index, const QVariant& value)
             m_url = KUrl(s.left(s.lastIndexOf(':')));
             m_line = s.right(s.length() - s.lastIndexOf(':') - 1).toInt() - 1;
         } else {
-            itemData[index] = value;
+            m_condition = value.toString();
         }
         if (pleaseEnterLocation_) {
             pleaseEnterLocation_ = false;
-            static_cast<Breakpoints*>(parentItem)->createHelperBreakpoint();
+            breakpointModel()->createHelperBreakpoint();
         }
     }
     
     errors_.remove(index);
 
-    reportChange(index);
+    reportChange(static_cast<Column>(index));
 }
 
 QVariant Breakpoint::data(int column, int role) const
@@ -206,15 +205,17 @@ QVariant Breakpoint::data(int column, int role) const
         return ret;
     }
 
-    return TreeItem::data(column, role);
+    return QVariant();
 }
 
 void Breakpoint::setDeleted()
 {
     kDebug();
     deleted_ = true;
-    breakpointModel()->_breakpointDeleted(this);
-    removeSelf();
+    BreakpointModel* m = breakpointModel();
+    if (m->breakpointIndex(this, 0).isValid()) {
+        m->removeRow(m->breakpointIndex(this, 0).row());
+    }
     //TODO actually delete the breakpoint after all debug engines have processed it
 }
 
@@ -248,8 +249,9 @@ void Breakpoint::save(KConfigGroup& config)
 {
     config.writeEntry("kind", string_kinds[kind_]);
     config.writeEntry("enabled", enabled_);
-    config.writeEntry("location", itemData[LocationColumn]);
-    config.writeEntry("condition", itemData[ConditionColumn]);
+    config.writeEntry("url", m_url);
+    config.writeEntry("line", m_line);
+    config.writeEntry("condition", m_condition);
 }
 
 Breakpoint::BreakpointKind Breakpoint::kind() const
@@ -260,7 +262,7 @@ Breakpoint::BreakpointKind Breakpoint::kind() const
 void Breakpoint::setAddress(const QString& address)
 {
     address_ = address;
-    reportChange();
+    //reportChange();
 }
 
 QString Breakpoint::address() const
@@ -310,12 +312,10 @@ int Breakpoint::ignoreCount() const
     return m_ignoreCount;
 }
 
-
-const int Breakpoint::EnableColumn;
-const int Breakpoint::StateColumn;
-const int Breakpoint::TypeColumn;
-const int Breakpoint::LocationColumn;
-const int Breakpoint::ConditionColumn;
+void KDevelop::Breakpoint::reportChange(Column c)
+{
+    breakpointModel()->reportChange(this, c);
+}
 
 const char *Breakpoint::string_kinds[LastBreakpointKind] = {
     "Code",

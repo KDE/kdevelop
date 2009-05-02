@@ -38,12 +38,12 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     : QObject(parent), m_dontSendChanges(false)
 {
     connect(breakpointModel(),
-            SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(dataChanged(QModelIndex,QModelIndex)));
-    connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)), SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
+            SIGNAL(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)),
+            SLOT(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)));
+    connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)),
+            SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
     
-    Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
-    for (int i=0; i < breakpoints->breakpointCount(); ++i) {
-        Breakpoint *breakpoint = breakpoints->breakpoint(i);
+    foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
         m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
         m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
         breakpointStateChanged(breakpoint);
@@ -62,33 +62,27 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 
 void IBreakpointController::sendMaybeAll()
 {
-    Breakpoints *breakpoints = breakpointModel()->breakpointsItem();
-    kDebug() << breakpoints->breakpointCount();
-    for (int i=0; i < breakpoints->breakpointCount(); ++i) {
-        Breakpoint *breakpoint = breakpoints->breakpoint(i);
+    foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
         if (breakpoint->pleaseEnterLocation()) continue;
         sendMaybe(breakpoint);
     }
 }
 
-void IBreakpointController::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+void IBreakpointController::breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column)
 {
     if (m_dontSendChanges) return;
 
     kDebug() << debugSession()->state();
 
-    Q_ASSERT(topLeft.parent() == bottomRight.parent());
-    Q_ASSERT(topLeft.row() == bottomRight.row());
-    Q_ASSERT(topLeft.column() == bottomRight.column());
-    KDevelop::Breakpoint *b = breakpointModel()->breakpointsItem()->breakpoint(topLeft.row());
-    if (topLeft.column() != Breakpoint::StateColumn) {
-        m_dirty[b].insert(topLeft.column());
-        breakpointStateChanged(b);
+    if (column != Breakpoint::StateColumn) {
+        m_dirty[breakpoint].insert(column);
+        breakpointStateChanged(breakpoint);
         if (debugSession()->isRunning()) {
-            sendMaybe(b);
+            sendMaybe(breakpoint);
         }
     }
-    kDebug() << topLeft.column() << m_dirty;
+
+    kDebug() << column << m_dirty;
 }
 
 void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
@@ -129,7 +123,7 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 {
     m_hitCount[breakpoint] = count;
     m_dontSendChanges = true;
-    breakpoint->reportChange();
+    breakpoint->reportChange(Breakpoint::HitCountColumn);
     m_dontSendChanges = false;
 }
 

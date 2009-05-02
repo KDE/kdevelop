@@ -34,7 +34,6 @@
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
 #include "breakpoint.h"
-#include "breakpoints.h"
 #include <KTextEditor/SmartCursorNotifier>
 
 
@@ -42,22 +41,16 @@ using namespace KDevelop;
 using namespace KTextEditor;
 
 BreakpointModel::BreakpointModel(QObject* parent)
-    : TreeModel(QVector<QString>() << "" << "" << "Type" << "Location" << "Condition", parent),
-      universe_(new Breakpoints(this)), m_dontUpdateMarks(false)
+    : QAbstractTableModel(parent),
+      m_dontUpdateMarks(false)
 {
-    setRootItem(universe_);
-    universe_->load();
-    universe_->createHelperBreakpoint();
 
-    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
-            universe_, SLOT(save()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
-            universe_, SLOT(save()));
-    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
-            universe_, SLOT(save()));
+    createHelperBreakpoint();
+
+    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), SLOT(save()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), SLOT(save()));
+    connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), SLOT(save()));
     connect(this, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(updateMarks()));
-
-    //new ModelTest(this, this);
 
     if (KDevelop::ICore::self()->partController()) { //TODO remove if
         foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
@@ -76,6 +69,10 @@ BreakpointModel::BreakpointModel(QObject* parent)
     connect (KDevelop::ICore::self()->documentController(),
                 SIGNAL(documentSaved(KDevelop::IDocument*)),
                 SLOT(documentSaved(KDevelop::IDocument*)));
+}
+
+BreakpointModel::~BreakpointModel() {
+    qDeleteAll(m_breakpoints);
 }
 
 void BreakpointModel::slotPartAdded(KParts::Part* part)
@@ -126,7 +123,13 @@ BreakpointModel::headerData(int section, Qt::Orientation orientation,
              && section == 1)
         return KIcon("system-switch-user");
 
-    return TreeModel::headerData(section, orientation, role);
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if (section == 0 || section == 1) return "";
+        if (section == 2) return i18n("Type");
+        if (section == 3) return i18n("Location");
+        if (section == 4) return i18n("Condition");
+    }
+    return QVariant();
 }
 
 Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
@@ -148,6 +151,48 @@ Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
     return static_cast<Qt::ItemFlags>(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 }
 
+QModelIndex BreakpointModel::breakpointIndex(KDevelop::Breakpoint* b, int column)
+{
+    int row = m_breakpoints.indexOf(b);
+    if (row == -1) return QModelIndex();
+    return index(row, column);
+}
+
+bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex& parent)
+{
+    beginRemoveRows(parent, row, row+count-1);
+    for (int i=0; i < count; ++i) {
+        Breakpoint *b = m_breakpoints.at(row);
+        m_breakpoints.removeAt(row);
+        kDebug() << m_breakpoints;
+        if (!b->deleted()) b->setDeleted();
+        emit breakpointDeleted(b);
+    }
+    endRemoveRows();
+    updateMarks();
+}
+
+int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
+{
+    if (!parent.isValid()) {
+        return m_breakpoints.count();
+    }
+    return 0;
+}
+
+int KDevelop::BreakpointModel::columnCount(const QModelIndex& parent) const
+{
+    return 5;
+}
+
+QVariant BreakpointModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.parent().isValid() && index.row() < rowCount()) {
+        return m_breakpoints.at(index.row())->data(index.column(), role);
+    }
+    return QVariant();
+}
+
 void BreakpointModel::markChanged(
     KTextEditor::Document *document, 
     KTextEditor::Mark mark, 
@@ -163,15 +208,14 @@ void BreakpointModel::markChanged(
 
     if (action == KTextEditor::MarkInterface::MarkAdded) {
         bool alreadyExists = false;
-        for(int i=0; i<universe_->breakpointCount(); ++i) {
-            Breakpoint *b = universe_->breakpoint(i);
+        foreach (Breakpoint *b, m_breakpoints) {
             if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
                 alreadyExists = true;
                 break;
             }
         }
         if (!alreadyExists) {
-            Breakpoint *breakpoint = universe_->addCodeBreakpoint(document->url(), mark.line);
+            Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
             KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(document);
             if (smart) {
                 KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(mark.line, 0));
@@ -183,8 +227,7 @@ void BreakpointModel::markChanged(
         }
     } else {
         // Find this breakpoint and delete it
-        for(int i=0; i<universe_->breakpointCount(); ++i) {
-            Breakpoint *b = universe_->breakpoint(i);
+        foreach (Breakpoint *b, m_breakpoints) {
             if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
                 b->setDeleted();
             }
@@ -230,25 +273,22 @@ const QPixmap* BreakpointModel::executionPointPixmap()
   return &pixmap;
 }
 
-Breakpoints* BreakpointModel::breakpointsItem() { return universe_; }
-
 void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-    for(int i=0; i<universe_->breakpointCount(); ++i) {
-        Breakpoint *b = universe_->breakpoint(i);
+    foreach (Breakpoint *b, m_breakpoints) {
         if (b->url() == url && b->line() == cursor.line() && !b->deleted()) {
             b->setDeleted();
             return;
         }
     }
-    universe_->addCodeBreakpoint(url, cursor.line());
+    addCodeBreakpoint(url, cursor.line());
 }
 
-void KDevelop::BreakpointModel::_breakpointDeleted(KDevelop::Breakpoint* breakpoint)
+void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column column)
 {
-    kDebug() << breakpoint;
-    updateMarks();
-    emit breakpointDeleted(breakpoint);
+    QModelIndex idx = breakpointIndex(breakpoint, column);
+    emit dataChanged(idx, idx);
+    emit breakpointChanged(breakpoint, column);
 }
 
 
@@ -257,8 +297,7 @@ void KDevelop::BreakpointModel::updateMarks()
     if (m_dontUpdateMarks) return;
 
     QMap<KUrl, QSet<int> > breakpoints;
-    for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
-        Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
+    foreach (Breakpoint *breakpoint, m_breakpoints) {
         if (breakpoint->pleaseEnterLocation()) continue;
         if (breakpoint->deleted()) continue;
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
@@ -294,8 +333,7 @@ void KDevelop::BreakpointModel::updateMarks()
             kDebug() << "addMark" << line;
             KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(doc->textDocument());
             if (!smart) continue;
-            for (int j=0; j<breakpointsItem()->breakpointCount(); ++j) {
-                Breakpoint *breakpoint = breakpointsItem()->breakpoint(j);
+            foreach (Breakpoint *breakpoint, m_breakpoints) {
                 if (breakpoint->pleaseEnterLocation()) continue;
                 if (breakpoint->deleted()) continue;
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
@@ -313,9 +351,8 @@ void KDevelop::BreakpointModel::updateMarks()
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     kDebug();
-    for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
-        Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
-        if (breakpoint->smartCursor()) {
+    foreach (Breakpoint *breakpoint, m_breakpoints) {
+            if (breakpoint->smartCursor()) {
             if (breakpoint->smartCursor()->document() != doc->textDocument()) continue;
             if (breakpoint->smartCursor()->line() == breakpoint->line()) continue;
             m_dontUpdateMarks = true;
@@ -326,12 +363,86 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 }
 void BreakpointModel::cursorDeleted(KTextEditor::SmartCursor* cursor)
 {
-    for (int i=0; i<breakpointsItem()->breakpointCount(); ++i) {
-        Breakpoint *breakpoint = breakpointsItem()->breakpoint(i);
+    foreach (Breakpoint *breakpoint, m_breakpoints) {
         if (breakpoint->smartCursor() == cursor) {
             breakpoint->setSmartCursor(0);
         }
     }
 }
+
+
+void BreakpointModel::save()
+{
+    /* TODO NIKO
+    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    // Note that the last item is always "click to create" item, which
+    // we don't want to save.
+    breakpoints.writeEntry("number", childItems.size()-1);
+    for (int i = 0; i < childItems.size()-1; ++i)
+    {
+        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
+        KConfigGroup g = breakpoints.group(QString::number(i));
+        b->save(g);
+    }
+    */
+}
+
+QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
+{
+    return m_breakpoints;
+}
+
+Breakpoint* BreakpointModel::breakpoint(int row)
+{
+    return m_breakpoints.at(row);
+}
+
+void BreakpointModel::createHelperBreakpoint()
+{
+    Breakpoint* n = new Breakpoint(this);
+    m_breakpoints << n;
+}
+
+Breakpoint* BreakpointModel::addCodeBreakpoint()
+{
+    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    Breakpoint* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
+    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    endInsertRows();
+    return n;
+}
+
+Breakpoint* BreakpointModel::addCodeBreakpoint(const KUrl& url, int line)
+{
+    Breakpoint* n = addCodeBreakpoint();
+    n->setLocation(url, line);
+    return n;
+}
+
+Breakpoint* BreakpointModel::addWatchpoint()
+{
+    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    Breakpoint* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
+    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    endInsertRows();
+    return n;
+}
+
+Breakpoint* BreakpointModel::addWatchpoint(const QString& expression)
+{
+    Breakpoint* n = addWatchpoint();
+    //TODO NIKO n->setLocation(expression);
+    return n;
+}
+
+Breakpoint* BreakpointModel::addReadWatchpoint()
+{
+    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    Breakpoint* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
+    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    endInsertRows();
+    return n;
+}
+
 
 #include "breakpointmodel.moc"

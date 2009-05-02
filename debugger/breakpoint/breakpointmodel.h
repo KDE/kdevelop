@@ -22,11 +22,10 @@
 #ifndef KDEV_BREAKPOINTMODEL_H
 #define KDEV_BREAKPOINTMODEL_H
 
-#include <KDE/KTextEditor/MarkInterface>
+#include <QAbstractTableModel>
 
-#include "../util/treemodel.h"
-#include "../util/treeitem.h"
-#include "breakpoints.h"
+#include <KTextEditor/MarkInterface>
+#include "breakpoint.h"
 
 class KUrl;
 
@@ -36,30 +35,58 @@ class Cursor;
 class SmartCursor;
 }
 
-
 namespace KDevelop
 {
 class IDocument;
-class Breakpoints;
 class Breakpoint;
 
-class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public TreeModel
+class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
     BreakpointModel(QObject* parent);
-    virtual ~BreakpointModel() {}
-
-    Breakpoints* breakpointsItem();
+    virtual ~BreakpointModel();
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    QModelIndex breakpointIndex(Breakpoint *b, int column);
+    virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
  
     void toggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
 
-protected:
+
+    KDevelop::Breakpoint* addCodeBreakpoint();
+    KDevelop::Breakpoint* addCodeBreakpoint(const KUrl& location, int line);
+    KDevelop::Breakpoint* addWatchpoint();
+    KDevelop::Breakpoint* addWatchpoint(const QString& expression);
+    KDevelop::Breakpoint* addReadWatchpoint();
+
+    /**
+     * Must create a "please enter location" item, that will
+     * turn into real breakpoint when user types something.
+     */
+    virtual void createHelperBreakpoint();
+
+    Breakpoint *breakpoint(int row);
+    QList<Breakpoint*> breakpoints() const;
+
+    void errorEmit(Breakpoint *b, const QString& message, int column) { emit error(b, message, column); }
+
+Q_SIGNALS:
+    void error(KDevelop::Breakpoint *b, const QString& message, int column);
+
+public Q_SLOTS:
+    void save();
+    virtual void load() {
+        //TODO NIKO
+    }
+
+
+private:
     enum MarkType {
         BookmarkMark           = KTextEditor::MarkInterface::markType01,
         BreakpointMark         = KTextEditor::MarkInterface::markType02,
@@ -75,6 +102,7 @@ Q_SIGNALS:
      * still exists as is has eventualle be deleted from the debugger engine.
      */
     void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
+    void breakpointChanged(KDevelop::Breakpoint *breakpoint, KDevelop::Breakpoint::Column column);
 
 private Q_SLOTS:
 
@@ -93,8 +121,6 @@ private Q_SLOTS:
     void documentSaved(KDevelop::IDocument*);
     void cursorDeleted(KTextEditor::SmartCursor* cursor);    
 protected:
-    Breakpoints* universe_;
-
 
     static const QPixmap* inactiveBreakpointPixmap();
     static const QPixmap* activeBreakpointPixmap();
@@ -104,9 +130,10 @@ protected:
 
 private:
     friend class Breakpoint;
-    void _breakpointDeleted(Breakpoint *breakpoint);
+    void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
     
     bool m_dontUpdateMarks;
+    QList<Breakpoint*> m_breakpoints;
 };
 
 
