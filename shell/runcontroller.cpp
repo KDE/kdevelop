@@ -133,6 +133,38 @@ public:
         return label;
     }
     
+    void updateCurrentLaunchAction()
+    {
+        KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+        QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
+        QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
+
+        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
+
+        if( ( !currentLaunchProject.isEmpty() && ( !l->project() || l->project()->name() != currentLaunchProject ) ) || l->configGroupName() != currentLaunchName )
+        {
+            foreach( QAction* a, currentTargetAction->actions() )
+            {
+                LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
+                if( currentLaunchName == l->configGroupName() 
+                    && ( ( currentLaunchProject.isEmpty() && !l->project() ) 
+                         || ( l->project() && l->project()->name() == currentLaunchProject ) ) )
+                {
+                    a->setChecked( true );
+                    break;
+                }
+            }
+        }
+        if( !currentTargetAction->currentAction() )
+        {
+            kDebug() << "oops no current action, using first if list is non-empty";
+            if( !currentTargetAction->actions().isEmpty() )
+            {
+                currentTargetAction->actions().first()->setChecked( true );
+            }
+        }
+    }
+
     void addLaunchAction( LaunchConfiguration* l )
     {
         KAction* action = currentTargetAction->addAction(launchActionText( l ));
@@ -229,29 +261,14 @@ void RunController::initialize()
 
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
-    KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-    QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
-    QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
-    foreach( QAction* a, d->currentTargetAction->actions() )
-    {
-        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
-        if( currentLaunchName == l->configGroupName() 
-            && ( ( currentLaunchProject.isEmpty() && !l->project() ) 
-                 || ( l->project() && l->project()->name() == currentLaunchProject ) ) )
-        {
-            a->setChecked( true );
-            break;
-        }
-    }
+    d->updateCurrentLaunchAction();
     
-    if( !d->currentTargetAction->currentAction() )
-    {
-        kDebug() << "oops no current action, using first if list is non-empty";
-        if( !d->currentTargetAction->actions().isEmpty() )
-        {
-            d->currentTargetAction->actions().first()->setChecked( true );
-        }
-    }
+    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
+            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
+            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
+    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
+             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 }
 
 KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
@@ -344,6 +361,7 @@ LaunchConfigurationType* RunController::launchConfigurationTypeForId( const QStr
 void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
     d->readLaunchConfigs( project->projectConfiguration(), project );
+    d->updateCurrentLaunchAction();
 }
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
