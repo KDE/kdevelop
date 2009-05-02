@@ -57,18 +57,6 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
  
-    enum Columns {
-        Enable,
-        Type,
-        Status,
-        Location,
-        Condition,
-        IgnoreCount,
-        Hits,
-        Tracing,
-        Last = Tracing
-    };
-    
     void toggleBreakpoint(const KUrl &url, const KTextEditor::Cursor& cursor);
 
 protected:
