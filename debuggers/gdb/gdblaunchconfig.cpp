@@ -133,7 +133,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
             KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
             foreach( const QString& dep, deps )
             {
-                KDevelop::ProjectBaseItem* item = model->item( KDevelop::ProjectModel::pathToIndex( model, dep.split('/') ) );
+                KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
                 if( item )
                 {
                     KDevelop::ProjectBaseItem* folder = item;
