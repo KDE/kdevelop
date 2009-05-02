@@ -36,6 +36,7 @@
 #include <kmessagebox.h>
 #include <interfaces/iuicontroller.h>
 #include <util/executecompositejob.h>
+#include <kparts/mainwindow.h>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -89,12 +90,106 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( workingDirectory, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
+    connect( addDependency, SIGNAL(clicked(bool)), SLOT(addDep()) );
     connect( addDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( removeDependency, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( removeDependency, SIGNAL(clicked(bool)), SLOT(removeDep()) );
     connect( moveDepDown, SIGNAL(clicked(bool)), SIGNAL(changed()) );
     connect( moveDepUp, SIGNAL(clicked(bool)), SIGNAL(changed()) );
+    connect( moveDepDown, SIGNAL(clicked(bool)), SLOT(moveDependencyDown()) );
+    connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
+    connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
+    connect( targetDependency, SIGNAL(textEdited(QString)), SLOT(depEdited(QString)));
+}
+
+
+void NativeAppConfigPage::depEdited( const QString& str )
+{
+    int pos;
+    QString tmp = str;
+    kDebug() << str << targetDependency->validator();
+    addDependency->setEnabled( !str.isEmpty() 
+                               && ( !targetDependency->validator() 
+                               || targetDependency->validator()->validate( tmp, pos ) == QValidator::Acceptable ) );
+}
+
+void NativeAppConfigPage::activateDeps( int idx )
+{
+    dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
+    targetDependency->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
+}
+
+void NativeAppConfigPage::checkActions( const QItemSelection& selected, const QItemSelection& unselected )
+{
+    kDebug() << "checkActions";
+    if( !selected.indexes().isEmpty() )
+    {
+        kDebug() << "have selection";
+        Q_ASSERT( selected.indexes().count() == 1 );
+        QModelIndex idx = selected.indexes().at( 0 );
+        kDebug() << "index" << idx;
+        moveDepUp->setEnabled( idx.row() > 0 );
+        moveDepDown->setEnabled( idx.row() < dependencies->count() - 1 );
+        removeDependency->setEnabled( true );
+    } else 
+    {
+        removeDependency->setEnabled( false );
+        moveDepUp->setEnabled( false );
+        moveDepDown->setEnabled( false );
+    }
+}
+
+void NativeAppConfigPage::moveDependencyDown()
+{
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        QListWidgetItem* item = list.at( 0 );
+        int row = dependencies->row( item );
+        dependencies->takeItem( row );
+        dependencies->insertItem( row+1, item );
+        dependencies->selectionModel()->select( dependencies->model()->index( row+1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
+}
+
+void NativeAppConfigPage::moveDependencyUp()
+{
+    
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        QListWidgetItem* item = list.at( 0 );
+        int row = dependencies->row( item );
+        dependencies->takeItem( row );
+        dependencies->insertItem( row-1, item );
+        dependencies->selectionModel()->select( dependencies->model()->index( row-1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
+}
+
+void NativeAppConfigPage::addDep()
+{
+    dependencies->addItem( targetDependency->text() );
+    targetDependency->setText("");
+    addDependency->setEnabled( false );
+    dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+}
+
+void NativeAppConfigPage::removeDep()
+{
+    QList<QListWidgetItem*> list = dependencies->selectedItems();
+    if( !list.isEmpty() )
+    {
+        Q_ASSERT( list.count() == 1 );
+        int row = dependencies->row( list.at(0) );
+        delete dependencies->takeItem( row );
+        
+        dependencies->selectionModel()->select( dependencies->model()->index( row - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    }
 }
 
 void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
@@ -169,20 +264,29 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
             foreach( const QString& dep, deps )
             {
                 KDevelop::ProjectBaseItem* item = model->item( KDevelop::ProjectModel::pathToIndex( model, dep.split('/') ) );
-                if( item && item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item ) )
+                if( item )
                 {
-                    KDevelop::IProjectBuilder* builder = item->project()->buildSystemManager()->builder( item );
-                    if( depAction == "Build" )
+                    KDevelop::ProjectBaseItem* folder = item;
+                    while( folder && !folder->folder() )
                     {
-                        l << builder->build( item );
-                    } else if( depAction == "Install" )
+                        folder = dynamic_cast<KDevelop::ProjectBaseItem*>( folder->parent() );
+                    }
+                    if( folder && item->project()->buildSystemManager()->builder( folder->folder() ) )
                     {
-                        l << builder->install( item );
-                    } else if( depAction == "SudoInstall" )
-                    {
-                        KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
-                                                  i18n("Installing via sudo is not yet implemented"), 
-                                                  i18n("Not implemented") );
+                        KDevelop::IProjectBuilder* builder = item->project()->buildSystemManager()->builder( folder->folder() );
+                        if( depAction == "Build" )
+                        {
+                            l << builder->build( item );
+                        } else if( depAction == "Install" )
+                        {
+                            l << builder->install( item );
+                        } else if( depAction == "SudoInstall" )
+                        {
+                            KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
+                                                    i18n("Installing via sudo is not yet implemented"), 
+                                                    i18n("Not implemented") );
+                        }
+
                     }
                 }
             }

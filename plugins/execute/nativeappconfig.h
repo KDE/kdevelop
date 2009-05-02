@@ -38,6 +38,14 @@ public:
     void saveToConfiguration( KConfigGroup cfg ) const;
     QString title() const;
     KIcon icon() const;
+private slots:
+    void addDep();
+    void removeDep();
+    void moveDependencyUp();
+    void moveDependencyDown();
+    void activateDeps( int );
+    void checkActions( const QItemSelection& , const QItemSelection& );
+    void depEdited( const QString& );
 };
 
 class NativeAppLauncher : public KDevelop::ILauncher
