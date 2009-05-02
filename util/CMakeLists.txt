@@ -9,6 +9,7 @@ set(kdevplatformutil_LIB_SRCS
     environmentselectionwidget.cpp
     environmentgrouplist.cpp
     activetooltip.cpp
+    executecompositejob.cpp
 )
 
 set (kdevplatformutil_LIB_UI

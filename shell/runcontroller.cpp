@@ -225,65 +225,6 @@ void RunController::initialize()
     }
 }
 
-class ExecuteCompositeJob : public KCompositeJob
-{
-    public:
-        ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
-            : KCompositeJob(parent)
-            , m_killing(false)
-        {
-            setCapabilities(Killable);
-
-            qDebug() << "execute composite" << jobs;
-            foreach(KJob* job, jobs) {
-                addSubjob(job);
-            }
-        }
-
-    public slots:
-        virtual void start()
-        {
-            if(hasSubjobs())
-                subjobs().first()->start();
-            else
-                emitResult();
-        }
-
-        void slotResult(KJob* job)
-        {
-            kDebug() << "finished: "<< job << job->error() << error();
-            KCompositeJob::slotResult(job);
-
-            if(hasSubjobs() && !error() && !m_killing)
-            {
-                kDebug() << "remaining: " << subjobs().count() << subjobs();
-                KJob* nextJob=subjobs().first();
-                nextJob->start();
-            } else {
-                emitResult();
-            }
-        }
-
-    protected:
-        virtual bool doKill()
-        {
-            m_killing = true;
-            if(hasSubjobs()) {
-                KJob* j = subjobs().first();
-                if (j->kill()) {
-                    removeSubjob(j);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-    private:
-        bool m_killing;
-};
-
 KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
 {
     if( !run )
@@ -295,7 +236,6 @@ KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
     //if(!run.dependencies().isEmpty())
     //    ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
 
-    QList<KJob*> jobs;
     //foreach(KJob* job, run.dependencies())
     //{
     //    jobs.append(job);
@@ -312,11 +252,9 @@ KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
         return 0;
     }
 
-    jobs.append(launcher->start(runMode, run));
-    ExecuteCompositeJob* ecj=new ExecuteCompositeJob(this, jobs);
-    ecj->setObjectName(jobs.last()->objectName());
-    registerJob(ecj);
-    return ecj;
+    KJob* launch = launcher->start(runMode, run);
+    registerJob(launch);
+    return launch;
 }
 
 RunController::~ RunController()
