@@ -325,7 +325,11 @@ KActionCollection * MainWindowPrivate::actionCollection()
    and not from anywhere else.  Presently, when new XMLGUI client is added,
    it's actions are always merged, and there's no clear way to stop this.
    So, we execute the below code whenever a new client is added.  */
-void MainWindowPrivate::fixToolbar()
+/*
+ * Only re-enable if you manage to also remove the relevant actions from the 
+ * configure toolbar dialog. If not, we stay with the actions, as anything else
+ * confuses users.
+ * void MainWindowPrivate::fixToolbar()
 {
     QWidget* w = m_mainWindow->guiFactory()->container(
         "mainToolBar", m_mainWindow);
@@ -335,7 +339,7 @@ void MainWindowPrivate::fixToolbar()
             if ( !a->isSeparator() && (a != m_mainWindow->actionCollection()->action(a->objectName())) )
                 w->removeAction(a);
         }
-}
+}*/
 
 bool MainWindowPrivate::applicationQuitRequested() const
 {

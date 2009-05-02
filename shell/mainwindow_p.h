@@ -94,7 +94,7 @@ public Q_SLOTS:
 
     void quitAll();
 
-    void fixToolbar();
+//    void fixToolbar();
 
     bool applicationQuitRequested() const;
 
