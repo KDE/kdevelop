@@ -297,7 +297,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
             return new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
         }
     }
-    kWarning() << "Unknown launch mode for config:" << cfg->name();
+    kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 
