@@ -30,6 +30,12 @@
 
 #include "nativeappjob.h"
 #include "executepluginconstants.h"
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <kmessagebox.h>
+#include <interfaces/iuicontroller.h>
+#include <util/executecompositejob.h>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -154,7 +160,38 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == "execute" )
     {
-        return new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
+        QStringList deps = cfg->config().readEntry( ExecutePlugin::dependencyEntry, QStringList() );
+        QString depAction = cfg->config().readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" );
+        if( depAction != "Nothing" && !deps.isEmpty() ) 
+        {
+            QList<KJob*> l;
+            KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+            foreach( const QString& dep, deps )
+            {
+                KDevelop::ProjectBaseItem* item = model->item( KDevelop::ProjectModel::pathToIndex( model, dep.split('/') ) );
+                if( item && item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item ) )
+                {
+                    KDevelop::IProjectBuilder* builder = item->project()->buildSystemManager()->builder( item );
+                    if( depAction == "Build" )
+                    {
+                        l << builder->build( item );
+                    } else if( depAction == "Install" )
+                    {
+                        l << builder->install( item );
+                    } else if( depAction == "SudoInstall" )
+                    {
+                        KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
+                                                  i18n("Installing via sudo is not yet implemented"), 
+                                                  i18n("Not implemented") );
+                    }
+                }
+            }
+            l << new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
+            return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
+        }else
+        {
+            return new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
+        }
     }
     kWarning() << "Unknown launch mode for config:" << cfg->name();
     return 0;
