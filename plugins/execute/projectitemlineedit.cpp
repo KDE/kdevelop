@@ -24,7 +24,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
-
+//TODO: use a proper QValidator for the validation instead of doing it manually.
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : KLineEdit(parent)
 {
