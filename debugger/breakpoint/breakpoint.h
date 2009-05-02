@@ -93,8 +93,8 @@ public:
     void setSmartCursor(KTextEditor::SmartCursor *cursor);
     KTextEditor::SmartCursor *smartCursor() const;
 
-    void setIgnoreCount(int c);
-    int ignoreCount() const;
+    void setIgnoreHits(int c);
+    int ignoreHits() const;
 
 protected:
     friend class IBreakpointController;
@@ -113,7 +113,7 @@ protected:
     int m_line;
     QString m_condition;
     KTextEditor::SmartCursor *m_smartCursor;
-    int m_ignoreCount;
+    int m_ignoreHits;
 
     static const char *string_kinds[LastBreakpointKind];
 

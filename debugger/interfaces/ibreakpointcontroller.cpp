@@ -72,8 +72,6 @@ void IBreakpointController::breakpointChanged(KDevelop::Breakpoint* breakpoint, 
 {
     if (m_dontSendChanges) return;
 
-    kDebug() << debugSession()->state();
-
     if (column != Breakpoint::StateColumn) {
         m_dirty[breakpoint].insert(column);
         breakpointStateChanged(breakpoint);

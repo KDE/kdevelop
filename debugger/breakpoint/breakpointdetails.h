@@ -41,11 +41,13 @@ public:
 
 private Q_SLOTS:
     void showExplanation(const QString& link);
+    void textEdited(const QString& text);
 
 private:
     QLabel* status_;
     QLabel* hits_;
     QLineEdit* ignore_;
+    Breakpoint* m_currentBreakpoint;
 };
 
 

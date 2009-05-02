@@ -38,7 +38,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 : m_model(model), enabled_(true),
   deleted_(false), kind_(kind),
   pleaseEnterLocation_(false), m_line(-1),
-  m_smartCursor(0), m_ignoreCount(0)
+  m_smartCursor(0), m_ignoreHits(0)
 {
 }
 
@@ -46,7 +46,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
 : m_model(model), enabled_(true),
   deleted_(false),
   pleaseEnterLocation_(false), m_line(-1),
-  m_smartCursor(0), m_ignoreCount(0)
+  m_smartCursor(0), m_ignoreHits(0)
 {
     Q_ASSERT(0);
     /* TODO NIKO
@@ -73,7 +73,7 @@ Breakpoint::Breakpoint(BreakpointModel *model)
 : m_model(model), enabled_(true), 
   deleted_(false),
   kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
-  m_smartCursor(0), m_ignoreCount(0)
+  m_smartCursor(0), m_ignoreHits(0)
 {   
 }
 
@@ -300,14 +300,17 @@ KTextEditor::SmartCursor* KDevelop::Breakpoint::smartCursor() const {
     return m_smartCursor;
 }
 
-void Breakpoint::setIgnoreCount(int c)
+void Breakpoint::setIgnoreHits(int c)
 {
-    m_ignoreCount = c;
+    if (m_ignoreHits != c) {
+        m_ignoreHits = c;
+        reportChange(IgnoreHitsColumn);
+    }
 }
 
-int Breakpoint::ignoreCount() const
+int Breakpoint::ignoreHits() const
 {
-    return m_ignoreCount;
+    return m_ignoreHits;
 }
 
 void KDevelop::Breakpoint::reportChange(Column c)
