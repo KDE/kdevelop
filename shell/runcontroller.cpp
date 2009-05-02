@@ -580,9 +580,7 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
-        QString txt = d->launchActionText( l );
-        kDebug() << "comparing" << txt << a->text();
-        if( a->text() == txt )
+        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
         {
             bool wasSelected = a->isChecked();
             d->currentTargetAction->removeAction( a );
