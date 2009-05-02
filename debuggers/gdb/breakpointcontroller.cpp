@@ -327,6 +327,12 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
     setHitCount(breakpoint, b["times"].toInt());
 
+    if (b.hasField("ignore")) {
+        breakpoint->setIgnoreCount(b["ignore"].toInt());
+    } else {
+        breakpoint->setIgnoreCount(0);
+    }
+
 #if 0
     {bp_watchpoint, "watchpoint"},
     {bp_hardware_watchpoint, "hw watchpoint"},
@@ -336,11 +342,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
 #if 0
     {
-        bp->setHits(b["times"].toInt());
-        if (b.hasField("ignore"))
-            bp->setIgnoreCount(b["ignore"].toInt());
-        else
-            bp->setIgnoreCount(0);
         if (b.hasField("cond"))
             bp->setConditional(b["cond"].literal());
         else
