@@ -106,9 +106,11 @@ struct DeletedHandler : public Handler
     void handle(const GDBMI::ResultRecord &r)
     {
         Q_UNUSED(r);
+        controller->m_ids.remove(breakpoint);
         if (!breakpoint->deleted()) {
-            controller->m_ids.remove(breakpoint);
             controller->sendMaybe(breakpoint);
+        } else {
+            delete breakpoint;
         }
         delete this;
     }
@@ -184,6 +186,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             controller()->addCommand(
                 new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                handler, &DeletedHandler::handle));
+        } else {
+            delete breakpoint;
         }
     }
     else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::LocationColumn)) {
