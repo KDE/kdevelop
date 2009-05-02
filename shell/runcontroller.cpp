@@ -51,6 +51,7 @@ Boston, MA 02110-1301, USA.
 #include "launchconfiguration.h"
 #include "launchconfigurationdialog.h"
 #include <interfaces/isession.h>
+#include <QSignalMapper>
 
 using namespace KDevelop;
 
@@ -98,12 +99,15 @@ public:
 
     IRunController::State state;
 
+    RunController* q;
+
     QHash<KJob*, KAction*> jobs;
     KActionMenu* stopAction;
     KSelectAction* currentTargetAction;
     QMap<QString,LaunchConfigurationType*> launchConfigurationTypes;
     QList<LaunchConfiguration*> launchConfigurations;
     QMap<QString,ILaunchMode*> launchModes;
+    QSignalMapper* launchChangeMapper;
     bool hasLaunchConfigType( const QString& typeId ) 
     {
         return launchConfigurationTypes.contains( typeId );
@@ -142,9 +146,7 @@ public:
             KConfigGroup grp = group.group( cfg );
             if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry, "" ) ) )
             {
-                LaunchConfiguration* l = new LaunchConfiguration( grp, prj );
-                launchConfigurations << l;
-                addLaunchAction(l);
+                q->addLaunchConfiguration( new LaunchConfiguration( grp, prj ) );
             }
         }
     }
@@ -173,11 +175,27 @@ RunController::RunController(QObject *parent)
     // TODO: need to implement abort all running programs when project closed
 
     d->state = Idle;
+    d->q = this;
     d->delegate = new RunDelegate(this);
+    d->launchChangeMapper = new QSignalMapper( this );
+    connect(d->launchChangeMapper, SIGNAL(mapped(int)), SLOT(launchChanged(int)) );
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
         setupActions();
+    }
+}
+
+void KDevelop::RunController::launchChanged( int i )
+{
+    LaunchConfiguration* l = d->launchConfigurations.at( i );
+    foreach( QAction* a, d->currentTargetAction->actions() )
+    {
+        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        {
+            a->setText( d->launchActionText( l ) );
+            break;
+        }
     }
 }
 
@@ -541,6 +559,8 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
                 d->currentTargetAction->actions().first()->setChecked( true );
             }
         }
+        d->launchChangeMapper->setMapping( l, d->launchConfigurations.count() -1 );
+        connect( l, SIGNAL(nameChanged(QString)), d->launchChangeMapper, SLOT(map()) );
     }    
 }
 
