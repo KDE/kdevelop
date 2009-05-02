@@ -243,6 +243,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
 
 void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 {
+    m_dontSendChanges = true;
+
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
 
     /* Remove breakpoints that are gone in GDB.  In future, we might
@@ -253,12 +255,9 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
         present_in_gdb.insert(blist[i]["number"].toInt());
     }
 
-    KDevelop::Breakpoints* breakpoints = breakpointModel()->breakpointsItem();
-
-    for (int i = 0; i < breakpoints->breakpointCount(); ++i) {
-        KDevelop::Breakpoint *b = breakpoints->breakpoint(i);
+    foreach (KDevelop::Breakpoint *b, breakpointModel()->breakpoints()) {
         if (m_ids.contains(b) && !present_in_gdb.contains(m_ids[b])) {
-            breakpoints->removeBreakpoint(i);
+            breakpointModel()->removeRow(breakpointModel()->breakpointIndex(b, 0).row());
         }
     }
 
@@ -271,18 +270,20 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
         if (!b) {
             QString type = mi_b["type"].literal();
             if (type == "watchpoint" || type == "hw watchpoint") {
-                b = breakpoints->addWatchpoint();
+                b = breakpointModel()->addWatchpoint();
             } else if (type == "read watchpoint") {
-                b = breakpoints->addReadWatchpoint();
+                b = breakpointModel()->addReadWatchpoint();
             } else if (type == "acc watchpoint") {
                 //TODO KDevelop::Breakpoint::AccessBreakpoint;
             } else {
-                b = breakpoints->addCodeBreakpoint();
+                b = breakpointModel()->addCodeBreakpoint();
             }
         }
 
         update(b, mi_b);
     }
+
+    m_dontSendChanges = false;
 }
 
 void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)

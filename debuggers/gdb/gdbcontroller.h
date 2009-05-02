@@ -45,7 +45,6 @@ class ILaunchConfiguration;
 namespace GDBDebugger
 {
 
-class Breakpoint;
 class DbgCommand;
 class GDBCommand;
 class VarItem;
@@ -331,10 +330,6 @@ private:
 
     STTY*             tty_;
     QString           badCore_;
-
-    // Gdb command that should be issued when we stop on breakpoint
-    // with the given gdb breakpoint id.
-    QMap<int, const Breakpoint*> tracedBreakpoints_;
 
     // Some state variables
     DBGStateFlags     state_;

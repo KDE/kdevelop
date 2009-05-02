@@ -118,8 +118,7 @@ void VariableToolTip::addWatchpoint(const GDBMI::ResultRecord& r)
     // FIXME: handle error.
     if (r.reason == "done")
     {
-        KDevelop::ICore::self()->debugController()->breakpointModel()->breakpointsItem()
-            ->addWatchpoint(r["path_expr"].literal());
+        KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());
     }
     close();
 }

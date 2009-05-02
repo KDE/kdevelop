@@ -88,6 +88,7 @@ public:
     TestLaunchConfiguration(KUrl executable = KUrl(QDir::currentPath()+"/unittests/debugee") ) {
         c = new KConfig();
         cfg = c->group("launch");
+        cfg.writeEntry(ExecutePlugin::isExecutableEntry, true);
         cfg.writeEntry(ExecutePlugin::executableEntry, executable);
     }
     ~TestLaunchConfiguration() {
@@ -129,8 +130,8 @@ void GdbTest::testBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
 
@@ -153,8 +154,8 @@ void GdbTest::testDisableBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints *breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel *breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
     KDevelop::Breakpoint *b;
 
     //add disabled breakpoint before startProgram
@@ -187,8 +188,8 @@ void GdbTest::testChangeLocationBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints *breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel *breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
 
     KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 25);
 
@@ -212,23 +213,22 @@ void GdbTest::testDeleteBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints *breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel *breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
 
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1); //one for the "insert here" entry
     //add breakpoint before startProgram
     KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 21);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
-    breakpoints->remove(KDevelop::ICore::self()->debugController()->breakpointModel()->index(0, 0));
+    breakpoints->removeRow(0);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 1);
 
     b = breakpoints->addCodeBreakpoint(fileName, 22);
 
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
-
-    breakpoints->remove(KDevelop::ICore::self()->debugController()->breakpointModel()->index(0, 0));
-
+    QTest::qWait(100);
+    breakpoints->removeRow(0);
     QTest::qWait(100);
     session.run();
 
@@ -243,8 +243,8 @@ void GdbTest::testPendingBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
     breakpoints->addCodeBreakpoint(fileName, 25);
 
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(QFileInfo(__FILE__).dir().path()+"/gdbtest.cpp", 10);
@@ -265,8 +265,8 @@ void GdbTest::testUpdateBreakpoint()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
 
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
@@ -304,8 +304,8 @@ void GdbTest::testShowStepInSource()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
     breakpoints->addCodeBreakpoint(fileName, 26);
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
@@ -340,8 +340,8 @@ void GdbTest::testStack()
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
-    KDevelop::Breakpoints* breakpoints = KDevelop::ICore::self()->debugController()
-                                            ->breakpointModel()->breakpointsItem();
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
     breakpoints->addCodeBreakpoint(fileName, 21);
     QVERIFY(session.startProgram(&cfg, 0));
     waitForState(session, DebugSession::PausedState);
