@@ -1,6 +1,0 @@
-File=debuggerconfig.kcfg
-ClassName=DebuggerConfig
-Singleton=true
-UseEnumTypes=true
-SetUserTexts=true
-ItemAccessors=true
