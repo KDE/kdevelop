@@ -292,6 +292,33 @@ void GdbTest::testUpdateBreakpoint()
     waitForState(session, DebugSession::StoppedState);
 }
 
+void GdbTest::testIgnoreHitsBreakpoint()
+{
+    GDBController controller;
+    DebugSession session(&controller);
+
+    TestLaunchConfiguration cfg;
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 21);
+    b->setIgnoreHits(1);
+
+    b = breakpoints->addCodeBreakpoint(fileName, 22);
+
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::PausedState);
+    QTest::qWait(100);
+    b->setIgnoreHits(1);
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
 
 void GdbTest::testShowStepInSource()
 {

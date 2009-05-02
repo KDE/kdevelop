@@ -47,21 +47,23 @@ struct Handler : public QObject
     KDevelop::Breakpoint *breakpoint;
 };
 
-struct EnabledOrDisabledHandler : public Handler
+struct UpdateHandler : public Handler
 {
-    EnabledOrDisabledHandler(BreakpointController *c, KDevelop::Breakpoint *b)
-        : Handler(c, b) {}
+    UpdateHandler(BreakpointController *c, KDevelop::Breakpoint *b, KDevelop::Breakpoint::Column col)
+        : Handler(c, b), m_column(col) {}
 
     void handle(const GDBMI::ResultRecord &r)
     {
         Q_UNUSED(r);
         // FIXME: handle error. Enable error most likely means the
         // breakpoint itself cannot be inserted in the target.
-        controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::EnableColumn);
+        controller->m_dirty[breakpoint].remove(m_column);
         controller->breakpointStateChanged(breakpoint);
         controller->sendMaybe(breakpoint);
         delete this;
     }
+private:
+    KDevelop::Breakpoint::Column m_column;
 };
 
 struct InsertedHandler : public Handler
@@ -91,6 +93,7 @@ struct InsertedHandler : public Handler
                 controller->m_dontSendChanges = false;
             }
             controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::IgnoreHitsColumn);
             controller->breakpointStateChanged(breakpoint);
             controller->sendMaybe(breakpoint);
         }
@@ -205,9 +208,14 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                     InsertedHandler *handler = new InsertedHandler(this, breakpoint);
+                    QString cmd;
+                    if (breakpoint->ignoreHits()) {
+                        cmd += QString("-i %0 ").arg(breakpoint->ignoreHits());
+                    }
+                    cmd += breakpoint->location();
                     controller()->addCommand(
                         new GDBCommand(BreakInsert,
-                                    breakpoint->location(),
+                                    cmd,
                                     handler, &InsertedHandler::handle, true));
                 } else {
                     #if 0
@@ -225,11 +233,11 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
-        EnabledOrDisabledHandler *handler = new EnabledOrDisabledHandler(this, breakpoint);
+        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn);
         controller()->addCommand(
             new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
                            QString::number(m_ids[breakpoint]),
-                           handler, &EnabledOrDisabledHandler::handle,
+                           handler, &UpdateHandler::handle,
                            true));
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
         #if 0
@@ -242,6 +250,14 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         #endif
         m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
         breakpointStateChanged(breakpoint);
+    } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
+        Q_ASSERT(m_ids.contains(breakpoint));
+        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn);
+        controller()->addCommand(
+            new GDBCommand(BreakAfter,
+                           QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
+                           handler, &UpdateHandler::handle,
+                           true));
     }
 }
 
@@ -333,9 +349,9 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
     setHitCount(breakpoint, b["times"].toInt());
 
     if (b.hasField("ignore")) {
-        breakpoint->setIgnoreCount(b["ignore"].toInt());
+        breakpoint->setIgnoreHits(b["ignore"].toInt());
     } else {
-        breakpoint->setIgnoreCount(0);
+        breakpoint->setIgnoreHits(0);
     }
 
 #if 0

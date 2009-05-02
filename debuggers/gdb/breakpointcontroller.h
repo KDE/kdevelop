@@ -40,7 +40,7 @@ namespace GDBDebugger
 class DebugSession;
 class GDBController;
 struct InsertedHandler;
-struct EnabledOrDisabledHandler;
+struct UpdateHandler;
 struct DeletedHandler;
 /**
 * Handles signals from the editor that relate to breakpoints and the execution
@@ -69,7 +69,7 @@ private:
     void update(KDevelop::Breakpoint *b, const GDBMI::Value& v);
 
     friend struct InsertedHandler;
-    friend struct EnabledOrDisabledHandler;
+    friend struct UpdateHandler;
     friend struct DeletedHandler;
     
     QMap<KDevelop::Breakpoint*, int> m_ids;
