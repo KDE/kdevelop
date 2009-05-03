@@ -114,6 +114,17 @@ public:
     {
         return launchConfigurationTypes.contains( typeId );
     }
+    void saveCurrentLaunchAction()
+    {
+        if( currentTargetAction->currentAction() )
+        {
+            KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+            LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
+            grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
+            grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
+            grp.sync();
+        }
+    }
     void configureLaunches()
     {
         LaunchConfigurationDialog dlg;
@@ -242,14 +253,7 @@ void KDevelop::RunController::launchChanged( int i )
 
 void RunController::cleanup()
 {
-    if( d->currentTargetAction->currentAction() )
-    {
-        KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( d->currentTargetAction->currentAction()->data() ) );
-        grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
-        grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
-        grp.sync();
-    }
+    
 }
 
 void RunController::initialize()
@@ -272,13 +276,6 @@ void RunController::initialize()
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     d->updateCurrentLaunchAction();
-    
-    connect(Core::self()->projectController(), SIGNAL(projectOpened( KDevelop::IProject* )),
-            this, SLOT(slotProjectOpened(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectClosing( KDevelop::IProject* )),
-            this, SLOT(slotProjectClosing(KDevelop::IProject*)));
-    connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
-             this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 }
 
 KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
