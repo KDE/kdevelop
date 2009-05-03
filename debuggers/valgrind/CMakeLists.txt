@@ -13,7 +13,7 @@ set(kdevvalgrind_PART_SRCS
 #modeltest.cpp
 )
 
-set(kdevvalgrind_PART_UI valgrindsettings.ui)
+set(kdevvalgrind_PART_UI valgrindconfig.ui)
 
 kde4_add_ui_files(kdevvalgrind_PART_SRCS ${kdevvalgrind_PART_UI})
 
