@@ -170,6 +170,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     }
     endRemoveRows();
     updateMarks();
+    return true;
 }
 
 int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
