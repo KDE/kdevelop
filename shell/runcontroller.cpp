@@ -301,7 +301,7 @@ KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
     ILauncher* launcher = run->type()->launcherForId( launcherId );
     
     if( !launcher ) {
-        kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration", launcherId );
+        kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration.", launcherId );
         return 0;
     }
 
@@ -326,7 +326,7 @@ void RunController::setupActions()
     ac->addAction("configure_launches", action);
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18n("Open Launch Configuration Dialog"));
-    action->setWhatsThis(i18n("<p>Opens a dialog to setup new launch configurations or change the existing ones</p>"));
+    action->setWhatsThis(i18n("<p>Opens a dialog to setup new launch configurations, or to change the existing ones.</p>"));
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
     action = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);

@@ -164,7 +164,7 @@
       <item row="3" column="1">
        <widget class="QCheckBox" name="runInTerminal">
         <property name="toolTip">
-         <string>When enabled runs the application in an external terminal</string>
+         <string>When enabled, runs the application in an external terminal.</string>
         </property>
         <property name="text">
          <string/>
@@ -196,7 +196,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>enter a dependency to add to the list</string>
+         <string>Enter a dependency to add to the list</string>
         </property>
         <property name="clickMessage">
          <string>Enter a dependency to add to the list</string>
@@ -209,7 +209,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>removes the selected dependencies from the list</string>
+         <string>Removes the selected dependencies from the list.</string>
         </property>
         <property name="text">
          <string>-</string>
@@ -222,7 +222,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>move a dependency up in the list</string>
+         <string>Move a dependency up in the list.</string>
         </property>
         <property name="text">
          <string>Up</string>
@@ -235,7 +235,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>moves the selected dependency down in the list</string>
+         <string>Moves the selected dependency down in the list.</string>
         </property>
         <property name="text">
          <string>Down</string>
@@ -261,7 +261,7 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>adds the listed target to the dependency list</string>
+         <string>Adds the listed target to the dependency list.</string>
         </property>
         <property name="text">
          <string>+</string>
@@ -274,7 +274,7 @@
          <string>Specifies the action to take for the dependencies before starting the executable.</string>
         </property>
         <property name="whatsThis">
-         <string>The selected action will be run before the executable is started, this allows to have certain parts of a project that the executable does not directly depend on to be build and/or installed before running the application.</string>
+         <string>The selected action will be run before the executable is started.  This allows there to be parts of a project, upon which the executable does not directly depend, to be built and/or installed before running the application.</string>
         </property>
         <property name="frame">
          <bool>true</bool>
@@ -317,10 +317,10 @@
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>list of indirect dependent targets</string>
+         <string>List of indirect dependent targets.</string>
         </property>
         <property name="whatsThis">
-         <string>This list should contain targets that the application doesn't directly depend on, but need to have an action to be taken before running the application</string>
+         <string>This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
         </property>
         <property name="alternatingRowColors">
          <bool>true</bool>
