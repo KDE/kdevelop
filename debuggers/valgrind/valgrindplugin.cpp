@@ -99,7 +99,10 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     
     KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( ExecutePlugin::nativeAppConfigTypeId );
     Q_ASSERT(type);
-    type->addLauncher( new ValgrindLauncher() );
+    type->addLauncher( new ValgrindLauncher("memcheck") );
+    type->addLauncher( new ValgrindLauncher("hellgrind") );
+    type->addLauncher( new ValgrindLauncher("callgrind") );
+    type->addLauncher( new ValgrindLauncher("cachegrind") );
 
     KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), this);
     actionCollection()->addAction("tools_valgrind", action);

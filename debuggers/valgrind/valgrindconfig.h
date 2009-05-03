@@ -40,7 +40,7 @@ class ValgrindConfig;
 class ValgrindLauncher : public KDevelop::ILauncher
 {
 public:
-    ValgrindLauncher();
+    ValgrindLauncher( const QString& tool );
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
     virtual QString description() const;
     virtual QString id();
@@ -49,6 +49,7 @@ public:
     virtual QStringList supportedModes() const;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factories;
+    QString m_tool;
 };
 
 class ValgrindConfigPage : public KDevelop::LaunchConfigurationPage

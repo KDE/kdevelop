@@ -38,7 +38,7 @@
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
 
-ValgrindJob::ValgrindJob( KDevelop::ILaunchConfiguration* cfg, QObject* parent )
+ValgrindJob::ValgrindJob( const QString& tool, KDevelop::ILaunchConfiguration* cfg, QObject* parent )
     : KDevelop::OutputJob(parent)
     , m_process(new KProcess(this))
     , m_job(0)
@@ -84,6 +84,21 @@ void ValgrindJob::start()
 
     QStringList arguments;
 //TODO: Port to launch framework
+/*
+ui->valgrindExecutable->setUrl( cfg.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ) );
+ui->valgrindParameters->setText( cfg.readEntry( "Valgrind Arguments", "" ) );
+ui->numCallers->setValue( cfg.readEntry( "Framestack Depth", 12 ) );
+ui->maxStackFrame->setValue( cfg.readEntry( "Maximum Framestack Size", 2000000 ) );
+ui->limitErrors->setChecked( cfg.readEntry( "Limit Errors", false ) );
+ui->leakSummary->setCurrentIndex( cfg.readEntry( "Leak Summary", 1 ) );
+ui->leakResolution->setCurrentIndex( cfg.readEntry( "Leak Resolution Matching", 0 ) );
+ui->showReachable->setChecked( cfg.readEntry("Show Reachable Blocks", false ) );
+ui->freeBlockList->setValue( cfg.readEntry( "Free Block List Size", 5000000 ) );
+ui->separateThreads->setChecked( cfg.readEntry( "Separate Thread Reporting", false ) );
+ui->simulateCache->setChecked( cfg.readEntry( "Full Cache Simulation", false ) );
+ui->simulateHWPref->setChecked( cfg.readEntry( "Simulate Hardware Prefetcher", false ) );
+ui->happensBefore->setCurrentIndex( cfg.readEntry("Extra Synchronization Events", 0 ) );
+*/
 //     arguments << QString("--tool=%1").arg(run.instrumentor());
 //     arguments << run.instrumentorArguments();
 //     arguments << "--xml=yes";

@@ -87,18 +87,19 @@ KJob* ValgrindLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
                     }
                 }
             }
-            l << new ValgrindJob( cfg, KDevelop::ICore::self()->runController() );
+            l << new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
             return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
         }else
         {
-            return new ValgrindJob( cfg, KDevelop::ICore::self()->runController() );
+            return new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
         }
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 
-ValgrindLauncher::ValgrindLauncher()
+ValgrindLauncher::ValgrindLauncher( const QString& tool )
+    : m_tool( tool )
 {
     factories << new ValgrindConfigPageFactory();
 }
