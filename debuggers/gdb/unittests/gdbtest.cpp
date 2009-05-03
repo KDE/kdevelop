@@ -38,7 +38,6 @@
 
 #include "gdbcontroller.h"
 #include "debugsession.h"
-#include <debugger/breakpoint/breakpoints.h>
 #include <debugger/interfaces/ibreakpointcontroller.h>
 #include <gdbcommand.h>
 #include <interfaces/ilaunchconfiguration.h>
