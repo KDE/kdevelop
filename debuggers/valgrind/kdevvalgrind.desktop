@@ -87,5 +87,5 @@ X-KDE-PluginInfo-Name=kdevvalgrind
 X-KDE-PluginInfo-Author=Harald Fernengel, Hamish Rodda
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Category=Global
-X-KDevelop-Interfaces=org.kdevelop.IRunProvider
+X-KDevelop-IRequired=org.kdevelop.ExecuteNativeApplication
 X-KDevelop-Mode=GUI

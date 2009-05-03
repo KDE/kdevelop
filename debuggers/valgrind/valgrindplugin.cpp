@@ -50,9 +50,12 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/launchconfigurationtype.h>
+#include <execute/executepluginconstants.h>
 
 #include "valgrindmodel.h"
 #include "valgrindjob.h"
+#include "valgrindconfig.h"
 #include "valgrindwidget.h"
 
 using namespace KDevelop;
@@ -93,6 +96,10 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     setXMLFile( "kdevvalgrind.rc" );
 
     core()->uiController()->addToolView(i18n("Valgrind"), new ValgrindWidgetFactory(this));
+    
+    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( ExecutePlugin::nativeAppConfigTypeId );
+    Q_ASSERT(type);
+    type->addLauncher( new ValgrindLauncher() );
 
     KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), this);
     actionCollection()->addAction("tools_valgrind", action);

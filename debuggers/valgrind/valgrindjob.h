@@ -48,7 +48,7 @@ class ValgrindJob : public KDevelop::OutputJob
   Q_OBJECT
 
 public:
-    ValgrindJob(ValgrindPlugin* parent);
+    ValgrindJob(KDevelop::ILaunchConfiguration* cfg, QObject* parent = 0);
 
     ValgrindPlugin* plugin() const;
 

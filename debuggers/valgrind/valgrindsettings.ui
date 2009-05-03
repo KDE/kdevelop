@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ValgrindSettings</class>
- <widget class="QWidget" name="ValgrindSettings">
+ <class>ValgrindConfig</class>
+ <widget class="QWidget" name="ValgrindConfig">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,12 +23,12 @@
          <string>Extra &amp;Parameters:</string>
         </property>
         <property name="buddy">
-         <cstring>kcfg_valgrindParameters</cstring>
+         <cstring>valgrindParameters</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="kcfg_valgrindParameters"/>
+       <widget class="KLineEdit" name="valgrindParameters"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label">
@@ -36,12 +36,12 @@
          <string>Display stack to &amp;depth:</string>
         </property>
         <property name="buddy">
-         <cstring>kcfg_numCallers</cstring>
+         <cstring>numCallers</cstring>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KIntSpinBox" name="kcfg_numCallers">
+       <widget class="KIntSpinBox" name="numCallers">
         <property name="maximum">
          <number>1000</number>
         </property>
@@ -56,12 +56,12 @@
          <string>Maximum &amp;frame stack size:</string>
         </property>
         <property name="buddy">
-         <cstring>kcfg_maxStackFrame</cstring>
+         <cstring>maxStackFrame</cstring>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="KIntNumInput" name="kcfg_maxStackFrame">
+       <widget class="KIntNumInput" name="maxStackFrame">
         <property name="value">
          <number>2000000</number>
         </property>
@@ -77,7 +77,7 @@
        </widget>
       </item>
       <item row="4" column="0" colspan="2">
-       <widget class="QCheckBox" name="kcfg_limitErrors">
+       <widget class="QCheckBox" name="limitErrors">
         <property name="text">
          <string>Limit &amp;identical error display</string>
         </property>
@@ -89,12 +89,12 @@
          <string>Valgrind Executable:</string>
         </property>
         <property name="buddy">
-         <cstring>kcfg_valgrindExecutable</cstring>
+         <cstring>valgrindExecutable</cstring>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KUrlRequester" name="kcfg_valgrindExecutable">
+       <widget class="KUrlRequester" name="valgrindExecutable">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
@@ -106,7 +106,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -121,7 +121,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KComboBox" name="kcfg_leakSummary">
+        <widget class="KComboBox" name="leakSummary">
          <property name="currentIndex">
           <number>1</number>
          </property>
@@ -150,7 +150,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="KComboBox" name="kcfg_leakResolution">
+        <widget class="KComboBox" name="leakResolution">
          <item>
           <property name="text">
            <string>Low</string>
@@ -169,7 +169,7 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QCheckBox" name="kcfg_showReachable">
+        <widget class="QCheckBox" name="showReachable">
          <property name="text">
           <string>Show Reachable Blocks</string>
          </property>
@@ -183,7 +183,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="KIntSpinBox" name="kcfg_freeBlockList">
+        <widget class="KIntSpinBox" name="freeBlockList">
          <property name="suffix">
           <string> bytes</string>
          </property>
@@ -224,21 +224,21 @@
       </attribute>
       <layout class="QVBoxLayout">
        <item>
-        <widget class="QCheckBox" name="kcfg_separateThreads">
+        <widget class="QCheckBox" name="separateThreads">
          <property name="text">
           <string>Separate Thread Reporting</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="kcfg_simulateCache">
+        <widget class="QCheckBox" name="simulateCache">
          <property name="text">
           <string>Full Cache Simulation</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="kcfg_simulateHWPref">
+        <widget class="QCheckBox" name="simulateHWPref">
          <property name="text">
           <string>Simulate Hardware Prefetcher</string>
          </property>
@@ -277,7 +277,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="KComboBox" name="kcfg_happensBefore">
+        <widget class="KComboBox" name="happensBefore">
          <property name="currentIndex">
           <number>2</number>
          </property>

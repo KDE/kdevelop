@@ -38,7 +38,7 @@
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
 
-ValgrindJob::ValgrindJob(ValgrindPlugin* parent)
+ValgrindJob::ValgrindJob( KDevelop::ILaunchConfiguration* cfg, QObject* parent )
     : KDevelop::OutputJob(parent)
     , m_process(new KProcess(this))
     , m_job(0)
