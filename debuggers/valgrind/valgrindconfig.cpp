@@ -43,6 +43,8 @@
 #include "valgrindjob.h"
 #include "ui_valgrindsettings.h"
 
+//TODO: Share the dependency code somehow via ExecutePluginConstants
+//TODO: Extract separate launch modes for memcheck vs. callgrind vs. hellgrind etc
 KJob* ValgrindLauncher::start(const QString& launchMode, KDevelop::ILaunchConfiguration* cfg)
 {
     Q_ASSERT(cfg);
