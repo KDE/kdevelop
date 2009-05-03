@@ -52,7 +52,7 @@
 #include <interfaces/iruncontroller.h>
 
 #include "valgrindmodel.h"
-#include "valgrindcontrol.h"
+#include "valgrindjob.h"
 #include "valgrindwidget.h"
 
 using namespace KDevelop;

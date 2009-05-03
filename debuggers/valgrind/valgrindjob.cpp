@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "valgrindcontrol.h"
+#include "valgrindjob.h"
 
 #include <QXmlInputSource>
 #include <QXmlSimpleReader>
@@ -33,12 +33,12 @@
 #include <KProcess>
 
 #include <util/processlinemaker.h>
+#include <outputview/outputmodel.h>
 
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
-#include <outputview/outputmodel.h>
 
-ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
+ValgrindJob::ValgrindJob(ValgrindPlugin* parent)
     : KDevelop::OutputJob(parent)
     , m_process(new KProcess(this))
     , m_job(0)
@@ -57,7 +57,7 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 }
 
-void ValgrindControl::start()
+void ValgrindJob::start()
 {
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
@@ -98,16 +98,16 @@ void ValgrindControl::start()
 //     m_process->start();
 }
 
-bool ValgrindControl::doKill()
+bool ValgrindJob::doKill()
 {
     m_process->kill();
     return true;
 }
 
-void ValgrindControl::readFromValgrind( )
+void ValgrindJob::readFromValgrind( )
 {}
 
-void ValgrindControl::newValgrindConnection()
+void ValgrindJob::newValgrindConnection()
 {
     Q_ASSERT(m_server);
 
@@ -127,7 +127,7 @@ void ValgrindControl::newValgrindConnection()
     }
 }
 
-void ValgrindControl::socketError(QAbstractSocket::SocketError)
+void ValgrindJob::socketError(QAbstractSocket::SocketError)
 {
     Q_ASSERT(m_connection);
     
@@ -137,12 +137,12 @@ void ValgrindControl::socketError(QAbstractSocket::SocketError)
                           i18n("Valgrind communication error");
 }
 
-ValgrindPlugin * ValgrindControl::plugin() const
+ValgrindPlugin * ValgrindJob::plugin() const
 {
     return static_cast<ValgrindPlugin*>(const_cast<QObject*>(parent()));
 }
 
-void ValgrindControl::processErrored(QProcess::ProcessError e)
+void ValgrindJob::processErrored(QProcess::ProcessError e)
 {
     switch (e) {
         case QProcess::FailedToStart:
@@ -166,7 +166,7 @@ void ValgrindControl::processErrored(QProcess::ProcessError e)
     }
 }
 
-void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+void ValgrindJob::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
     kDebug() << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
@@ -188,7 +188,7 @@ void ValgrindControl::processFinished(int exitCode, QProcess::ExitStatus exitSta
     }*/
 }
 
-void ValgrindControl::readyReadStandardError()
+void ValgrindJob::readyReadStandardError()
 {
     if (m_connection) {
         m_applicationOutput->slotReceivedStderr(m_process->readAllStandardError());
@@ -198,14 +198,14 @@ void ValgrindControl::readyReadStandardError()
     m_model->parse();
 }
 
-void ValgrindControl::readyReadStandardOutput()
+void ValgrindJob::readyReadStandardOutput()
 {
     m_applicationOutput->slotReceivedStdout(m_process->readAllStandardOutput());
 }
 
-KDevelop::OutputModel* ValgrindControl::model()
+KDevelop::OutputModel* ValgrindJob::model()
 {
     return dynamic_cast<KDevelop::OutputModel*>( KDevelop::OutputJob::model() );
 }
 
-#include "valgrindcontrol.moc"
+#include "valgrindjob.moc"

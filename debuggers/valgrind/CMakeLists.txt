@@ -6,7 +6,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9002 )
 set(kdevvalgrind_PART_SRCS
     valgrindplugin.cpp
     valgrindmodel.cpp
-    valgrindcontrol.cpp
+    valgrindjob.cpp
     valgrindwidget.cpp
     valgrindtree.cpp
     valgrindconfig.cpp

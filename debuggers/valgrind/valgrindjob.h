@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEV_VALGRIND_CONTROL_H
-#define KDEV_VALGRIND_CONTROL_H
+#ifndef VALGRINDJOB_H
+#define VALGRINDJOB_H
 
 #include <QProcess>
 #include <QTcpSocket>
@@ -43,12 +43,12 @@ class ILaunchConfiguration;
 class OutputModel;
 }
 
-class ValgrindControl : public KDevelop::OutputJob
+class ValgrindJob : public KDevelop::OutputJob
 {
   Q_OBJECT
 
 public:
-    ValgrindControl(ValgrindPlugin* parent);
+    ValgrindJob(ValgrindPlugin* parent);
 
     ValgrindPlugin* plugin() const;
 
