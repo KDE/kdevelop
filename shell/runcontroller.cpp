@@ -138,10 +138,17 @@ public:
         KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
         QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
         QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
+        
+        LaunchConfiguration* l = 0;
+        if( currentTargetAction->currentAction() )
+        {
+            l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
+        } else if( !launchConfigurations.isEmpty() )
+        {
+            l = launchConfigurations.at( 0 );
+        }
 
-        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( currentTargetAction->currentAction()->data() ) );
-
-        if( ( !currentLaunchProject.isEmpty() && ( !l->project() || l->project()->name() != currentLaunchProject ) ) || l->configGroupName() != currentLaunchName )
+        if( l && ( ( !currentLaunchProject.isEmpty() && ( !l->project() || l->project()->name() != currentLaunchProject ) ) || l->configGroupName() != currentLaunchName ) )
         {
             foreach( QAction* a, currentTargetAction->actions() )
             {
