@@ -573,6 +573,20 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
+    {
+        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
+        KConfigGroup group = config->group( "General Options" );
+    
+        KUrl::List openProjects;
+    
+        foreach( IProject* project, d->m_projects ) {
+            openProjects.append(project->projectFileUrl());
+        }
+    
+        group.writeEntry( "Open Projects", openProjects.toStringList() );
+        group.sync();
+    }
+
 //     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
 //     QAction * action;
 
