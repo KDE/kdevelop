@@ -37,7 +37,7 @@ public:
   }
   
   template<bool rhsDynamic>
-  IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs) : m_hash(rhs.m_hash), m_unique(rhs.m_unique), m_identifier(rhs.m_identifier) {
+  IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs) : m_hash(rhs.m_hash), m_unique(rhs.m_unique), m_identifier(rhs.m_identifier), m_refCount(0) {
     copyListsFrom(rhs);
   }
   
@@ -57,9 +57,9 @@ public:
     return m_hash;
   }
 
-  uint m_refCount;
   int m_unique;
   IndexedString m_identifier;
+  uint m_refCount;
 
   START_APPENDED_LISTS(IdentifierPrivate)
 
