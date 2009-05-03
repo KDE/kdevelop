@@ -242,11 +242,14 @@ void KDevelop::RunController::launchChanged( int i )
 
 void RunController::cleanup()
 {
-    KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-    LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( d->currentTargetAction->currentAction()->data() ) );
-    grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
-    grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
-    grp.sync();
+    if( d->currentTargetAction->currentAction() )
+    {
+        KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+        LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qVariantValue<void*>( d->currentTargetAction->currentAction()->data() ) );
+        grp.writeEntry( CurrentLaunchConfigProjectEntry, l->project() ? l->project()->name() : "" );
+        grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
+        grp.sync();
+    }
 }
 
 void RunController::initialize()
