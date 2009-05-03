@@ -276,12 +276,14 @@ bool ProjectTreeView::event(QEvent* event)
             if(top)
             {
                 QWidget* navigationWidget = top->createNavigationWidget();
-                
-                m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
-                m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
-                kDebug() << "tooltip size" << m_tooltip->size();
-                ActiveToolTip::showToolTip(m_tooltip);
-                return true;
+                if( navigationWidget )
+                {
+                    m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
+                    m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
+                    kDebug() << "tooltip size" << m_tooltip->size();
+                    ActiveToolTip::showToolTip(m_tooltip);
+                    return true;
+                }
             }
         }
     }
