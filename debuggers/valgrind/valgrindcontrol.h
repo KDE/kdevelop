@@ -21,9 +21,10 @@
 #ifndef KDEV_VALGRIND_CONTROL_H
 #define KDEV_VALGRIND_CONTROL_H
 
-#include <QObject>
 #include <QProcess>
 #include <QTcpSocket>
+
+#include <outputview/outputjob.h>
 
 class KJob;
 class KProcess;
@@ -39,22 +40,22 @@ namespace KDevelop
 {
 class ProcessLineMaker; 
 class ILaunchConfiguration;
+class OutputModel;
 }
 
-class ValgrindControl : public QObject
+class ValgrindControl : public KDevelop::OutputJob
 {
   Q_OBJECT
 
 public:
     ValgrindControl(ValgrindPlugin* parent);
 
-    ValgrindModel* model() const;
-
     ValgrindPlugin* plugin() const;
 
-    bool run(KDevelop::ILaunchConfiguration* run, KJob* job);
-    void stop();
-
+    virtual void start();
+protected:
+    virtual bool doKill();
+    
 private slots:
     void newValgrindConnection();
     void socketError(QAbstractSocket::SocketError err);
@@ -65,10 +66,8 @@ private slots:
     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void processErrored(QProcess::ProcessError);
 
-    void applicationOutput(const QStringList& lines);
-    void applicationOutputStdErr(const QStringList &lines);
-
 private:
+    KDevelop::OutputModel* model();
     KProcess* m_process;
     int m_currentPid;
     KJob* m_job;

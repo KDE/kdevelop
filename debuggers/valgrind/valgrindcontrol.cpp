@@ -36,9 +36,10 @@
 
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
+#include <outputview/outputmodel.h>
 
 ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
-    : QObject(parent)
+    : KDevelop::OutputJob(parent)
     , m_process(new KProcess(this))
     , m_job(0)
     , m_server(0)
@@ -46,21 +47,27 @@ ValgrindControl::ValgrindControl(ValgrindPlugin* parent)
     , m_model(new ValgrindModel(this))
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
 {
+    setCapabilities( KJob::Killable );
     m_process->setOutputChannelMode(KProcess::SeparateChannels);
     m_model->setDevice(m_process);
 
-    connect(m_applicationOutput, SIGNAL(receivedStdoutLines(QStringList)), SLOT(applicationOutput(QStringList)));
-    connect(m_applicationOutput, SIGNAL(receivedStderrLines(QStringList)), SLOT(applicationOutputStdErr(QStringList)));
     connect(m_process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
     connect(m_process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
     connect(m_process, SIGNAL(error(QProcess::ProcessError)), SLOT(processErrored(QProcess::ProcessError)));
 }
 
-bool ValgrindControl::run(KDevelop::ILaunchConfiguration* run, KJob* job)
+void ValgrindControl::start()
 {
-    m_job = job;
-
+    setStandardToolView(KDevelop::IOutputView::DebugView);
+    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
+    setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
+    
+    startOutput();
+    
+    connect(m_applicationOutput, SIGNAL(receivedStdoutLines(QStringList)), model(), SLOT(appendLines(QStringList)));
+    connect(m_applicationOutput, SIGNAL(receivedStderrLines(QStringList)), model(), SLOT(appendLines(QStringList)));
+    
     Q_ASSERT(m_process->state() != QProcess::Running);
 
     if (!m_server) {
@@ -89,13 +96,12 @@ bool ValgrindControl::run(KDevelop::ILaunchConfiguration* run, KJob* job)
 //     m_process->setProgram(plugin()->valgrindExecutable().toLocalFile(), arguments);
 // 
 //     m_process->start();
-
-    return true;
 }
 
-void ValgrindControl::stop()
+bool ValgrindControl::doKill()
 {
     m_process->kill();
+    return true;
 }
 
 void ValgrindControl::readFromValgrind( )
@@ -140,7 +146,7 @@ void ValgrindControl::processErrored(QProcess::ProcessError e)
 {
     switch (e) {
         case QProcess::FailedToStart:
-            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from \"%1.\"", plugin()->valgrindExecutable().toLocalFile()), i18n("Failed to start Valgrind"));
+            KMessageBox::error(qApp->activeWindow(), i18n("Failed to start valgrind from \"%1.\"", m_process->property("executable").toString()), i18n("Failed to start Valgrind"));
             break;
         case QProcess::Crashed:
             KMessageBox::error(qApp->activeWindow(), i18n("Valgrind crashed."), i18n("Valgrind Error"));
@@ -197,26 +203,9 @@ void ValgrindControl::readyReadStandardOutput()
     m_applicationOutput->slotReceivedStdout(m_process->readAllStandardOutput());
 }
 
-void ValgrindControl::applicationOutput(const QStringList & lines)
+KDevelop::OutputModel* ValgrindControl::model()
 {
-//TODO: Port to launch framework
-//     foreach (const QString& line, lines)
-//         emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardOutput);
-}
-
-void ValgrindControl::applicationOutputStdErr(const QStringList &lines)
-{
-    if (!m_connection)
-        return;
-
-//TODO: Port to launch framework
-//     foreach (const QString &line, lines)
-//         emit plugin()->output(m_job, line, KDevelop::IRunProvider::StandardError);
-}
-
-ValgrindModel * ValgrindControl::model() const
-{
-    return m_model;
+    return dynamic_cast<KDevelop::OutputModel*>( KDevelop::OutputJob::model() );
 }
 
 #include "valgrindcontrol.moc"

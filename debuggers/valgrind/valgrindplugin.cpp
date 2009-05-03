@@ -164,36 +164,6 @@ void ValgrindPlugin::slotExecCalltree()
     */
 }
 
-bool ValgrindPlugin::execute(KDevelop::ILaunchConfiguration* run, KJob* job)
-{
-//TODO: port to launch framework
-//     ValgrindControl* control = new ValgrindControl(this);
-//     m_controls.insert(job, control);
-//     bool ret = control->run(run, job);
-//     emit newModel(control->model());
-    return false;
-}
-
-void ValgrindPlugin::abort(KJob* job)
-{
-    ValgrindControl* control = m_controls[job];
-    control->stop();
-}
-
-KUrl ValgrindPlugin::valgrindExecutable() const
-{
-    KConfigGroup group(KGlobal::config(), "Valgrind Options");
-    return group.readEntry("Valgrind Executable", "valgrind");
-}
-
-QList<ValgrindModel*> ValgrindPlugin::models() const
-{
-    QList<ValgrindModel*> ret;
-    foreach (ValgrindControl* control, m_controls)
-        ret.append(control->model());
-    return ret;
-}
-
 #if 0
 void ValgrindPlugin::restorePartialProjectSession( const QDomElement* el )
 {
