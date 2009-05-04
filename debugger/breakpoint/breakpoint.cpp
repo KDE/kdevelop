@@ -82,7 +82,7 @@ BreakpointModel *Breakpoint::breakpointModel()
     return m_model;
 }
 
-void Breakpoint::setColumn(int index, const QVariant& value)
+bool Breakpoint::setData(int index, const QVariant& value)
 {
     if (index == EnableColumn)
     {
@@ -92,7 +92,7 @@ void Breakpoint::setColumn(int index, const QVariant& value)
     /* Helper breakpoint becomes a real breakpoint only if user types
        some real location.  */
     if (pleaseEnterLocation_ && value.toString().isEmpty())
-        return;
+        return true;
 
     if (index == LocationColumn || index == ConditionColumn)
     {
@@ -112,6 +112,8 @@ void Breakpoint::setColumn(int index, const QVariant& value)
     errors_.remove(index);
 
     reportChange(static_cast<Column>(index));
+
+    return true;
 }
 
 QVariant Breakpoint::data(int column, int role) const
@@ -324,5 +326,3 @@ const char *Breakpoint::string_kinds[LastBreakpointKind] = {
     "Read",
     "Access"
 };
-
-#include "breakpoint.moc"

@@ -51,7 +51,7 @@ public:
        turn into real breakpoint when user types something.  */
     Breakpoint(BreakpointModel *model);
 
-    void setColumn(int index, const QVariant& value);
+    bool setData(int index, const QVariant& value);
     void setDeleted();
 
     QVariant data(int column, int role) const;

@@ -194,6 +194,15 @@ QVariant BreakpointModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
+bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (!index.parent().isValid() && index.row() < rowCount() && (role == Qt::EditRole || role == Qt::CheckStateRole)) {
+        return m_breakpoints.at(index.row())->setData(index.column(), value);
+    }
+    return false;
+
+}
+
 void BreakpointModel::markChanged(
     KTextEditor::Document *document, 
     KTextEditor::Mark mark, 
@@ -400,8 +409,10 @@ Breakpoint* BreakpointModel::breakpoint(int row)
 
 void BreakpointModel::createHelperBreakpoint()
 {
+    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this);
     m_breakpoints << n;
+    endInsertRows();
 }
 
 Breakpoint* BreakpointModel::addCodeBreakpoint()
