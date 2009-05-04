@@ -45,7 +45,7 @@ kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/duchain/ducontext.h
     language/duchain/ducontext.h:language/duchain/topducontext.h)
 kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/duchain/declaration.h
     language/duchain/declaration.h:language/duchain/declarationid.h:language/duchain/types/indexedtype.h:language/duchain/topducontext.h)
-kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/interfaces/iproblem.h language/interfaces/iproblem.h)
+kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/interfaces/iproblem.h language/interfaces/iproblem.h:interfaces/iassistant.h)
 kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/duchain/use.h language/duchain/use.h)
 kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/duchain/identifier.h language/duchain/identifier.h:language/duchain/indexedstring.h)
 kdev_create_kross_iface(FALSE ${CMAKE_SOURCE_DIR}/language/duchain/duchainlock.h language/duchain/duchainlock.h)

@@ -5,6 +5,7 @@
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
 #include <language/interfaces/iproblem.h>
+#include <interfaces/iassistant.h>
 
 class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 {
