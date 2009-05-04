@@ -416,7 +416,7 @@ class Bucket {
         file->read((char*)h, sizeof(short unsigned int) * NextBucketHashSize);
         file->read((char*)&largestFree, sizeof(short unsigned int));
         file->read((char*)&freeItemCount, sizeof(unsigned int));
-        file->read((bool*)&dirty, sizeof(bool));
+        file->read((char*)&dirty, sizeof(bool));
         file->read(d, ItemRepositoryBucketSize);
 
         Q_ASSERT(monsterBucketExtent == m_monsterBucketExtent);
