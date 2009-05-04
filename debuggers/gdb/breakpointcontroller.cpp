@@ -325,10 +325,10 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
                just fine, but after KDevelop restart, we'll try to add the
                breakpoint using basically "watch *&(foo)".  I'm not sure if
                that's a problem or not.  */
-            breakpoint->setColumn(KDevelop::Breakpoint::LocationColumn, b["original-location"].literal());
+            breakpoint->setData(KDevelop::Breakpoint::LocationColumn, b["original-location"].literal());
         }
     } else {
-        breakpoint->setColumn(KDevelop::Breakpoint::LocationColumn, "Your GDB is too old");
+        breakpoint->setData(KDevelop::Breakpoint::LocationColumn, "Your GDB is too old");
     }
 
 
@@ -336,7 +336,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         /*TODO NIKO && !errors_.contains(ConditionColumn)*/)
     {
         if (b.hasField("cond")) {
-            breakpoint->setColumn(KDevelop::Breakpoint::ConditionColumn, b["cond"].literal());
+            breakpoint->setData(KDevelop::Breakpoint::ConditionColumn, b["cond"].literal());
         }
     }
 

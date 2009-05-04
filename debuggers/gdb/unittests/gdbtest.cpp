@@ -102,10 +102,37 @@ private:
     KConfig *c;
 };
 
+class TestDebugSession : public DebugSession
+{
+    Q_OBJECT
+public:
+    TestDebugSession() : DebugSession(new GDBController), m_line(0)
+    {
+        qRegisterMetaType<KUrl>("KUrl");
+        connect(this, SIGNAL(showStepInSource(KUrl, int)), SLOT(slotShowStepInSource(KUrl, int)));
+    }
+    ~TestDebugSession()
+    {
+        delete controller();
+    }
+    KUrl url() { return m_url; }
+    int line() { return m_line; }
+
+private slots:
+    void slotShowStepInSource(const KUrl &url, int line)
+    {
+        m_url = url;
+        m_line = line;
+    }
+private:
+    KUrl m_url;
+    int m_line;
+
+};
+
 void GdbTest::testStdOut()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     QSignalSpy outputSpy(&session, SIGNAL(applicationStandardOutputLines(QStringList)));
 
@@ -123,8 +150,7 @@ void GdbTest::testStdOut()
 
 void GdbTest::testBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -147,8 +173,7 @@ void GdbTest::testBreakpoint()
 
 void GdbTest::testDisableBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -159,19 +184,19 @@ void GdbTest::testDisableBreakpoint()
 
     //add disabled breakpoint before startProgram
     b = breakpoints->addCodeBreakpoint(fileName, 26);
-    b->setColumn(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     b = breakpoints->addCodeBreakpoint(fileName, 21);
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
 
     //disable existing breakpoint
-    b->setColumn(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     //add another disabled breakpoint
     b = breakpoints->addCodeBreakpoint(fileName, 28);
     QTest::qWait(300);
-    b->setColumn(KDevelop::Breakpoint::EnableColumn, false);
+    b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     QTest::qWait(300);
     session.run();
@@ -181,8 +206,7 @@ void GdbTest::testDisableBreakpoint()
 
 void GdbTest::testChangeLocationBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -194,20 +218,32 @@ void GdbTest::testChangeLocationBreakpoint()
 
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 25);
 
     QTest::qWait(100);
-    b->setLine(28);
+    b->setLine(26);
     QTest::qWait(100);
     session.run();
 
     QTest::qWait(100);
     waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 26);
+    QTest::qWait(100);
+    breakpoints->setData(breakpoints->index(0, KDevelop::Breakpoint::LocationColumn), fileName+":28");
+    QCOMPARE(b->line(), 27);
+    QTest::qWait(100);
+    session.run();
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 27);
+    session.run();
+
+    waitForState(session, DebugSession::StoppedState);
 }
 
 void GdbTest::testDeleteBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -236,8 +272,7 @@ void GdbTest::testDeleteBreakpoint()
 
 void GdbTest::testPendingBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -258,8 +293,7 @@ void GdbTest::testPendingBreakpoint()
 
 void GdbTest::testUpdateBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -293,8 +327,7 @@ void GdbTest::testUpdateBreakpoint()
 
 void GdbTest::testIgnoreHitsBreakpoint()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -321,8 +354,7 @@ void GdbTest::testIgnoreHitsBreakpoint()
 
 void GdbTest::testShowStepInSource()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     qRegisterMetaType<KUrl>("KUrl");
     QSignalSpy showStepInSourceSpy(&session, SIGNAL(showStepInSource(KUrl, int)));
@@ -360,8 +392,7 @@ void GdbTest::testShowStepInSource()
 
 void GdbTest::testStack()
 {
-    GDBController controller;
-    DebugSession session(&controller);
+    TestDebugSession session;
 
     TestLaunchConfiguration cfg;
     QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
@@ -414,3 +445,4 @@ void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSessio
 QTEST_MAIN( GdbTest )
 
 #include "gdbtest.moc"
+#include "moc_gdbtest.cpp"
