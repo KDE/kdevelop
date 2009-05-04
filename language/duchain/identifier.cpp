@@ -166,6 +166,7 @@ public:
     , m_pointerDepth(rhs.m_pointerDepth)
     , m_pointerConstantMask(rhs.m_pointerConstantMask)
     , m_hash(rhs.m_hash)
+    , m_refCount(0)
   {
     copyListsFrom(rhs);
   }
