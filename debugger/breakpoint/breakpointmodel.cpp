@@ -44,9 +44,6 @@ BreakpointModel::BreakpointModel(QObject* parent)
     : QAbstractTableModel(parent),
       m_dontUpdateMarks(false)
 {
-
-    createHelperBreakpoint();
-
     connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)), SLOT(save()));
     connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), SLOT(save()));
     connect(this, SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)), SLOT(save()));
@@ -176,7 +173,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
 int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return m_breakpoints.count();
+        return m_breakpoints.count() + 1;
     }
     return 0;
 }
@@ -188,7 +185,26 @@ int KDevelop::BreakpointModel::columnCount(const QModelIndex& parent) const
 
 QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.parent().isValid() && index.row() < rowCount()) {
+    if (!index.parent().isValid() && index.row() == m_breakpoints.count()) {
+        if (index.column() != Breakpoint::LocationColumn) {
+            if (role == Qt::DisplayRole) {
+                return QString();
+            } else {
+                return QVariant();
+            }
+        }
+
+        if (role == Qt::DisplayRole)
+            return i18n("Double-click to create new code breakpoint");
+        if (role == Qt::ForegroundRole)
+            // FIXME: returning hardcoded gray is bad,
+            // but we don't have access to any widget, or pallette
+            // thereof, at this point.
+            return QColor(128, 128, 128);
+        if (role == Qt::EditRole)
+            return QString();
+    }
+    if (!index.parent().isValid() && index.row() < m_breakpoints.count()) {
         return m_breakpoints.at(index.row())->data(index.column(), role);
     }
     return QVariant();
@@ -196,7 +212,17 @@ QVariant BreakpointModel::data(const QModelIndex& index, int role) const
 
 bool KDevelop::BreakpointModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (!index.parent().isValid() && index.row() < rowCount() && (role == Qt::EditRole || role == Qt::CheckStateRole)) {
+    if (!index.parent().isValid() && index.row() == m_breakpoints.count()
+        && role == Qt::EditRole
+        && (index.column() == Breakpoint::LocationColumn || index.column() == Breakpoint::ConditionColumn)
+        && !value.toString().isEmpty())
+    {
+        /* Helper breakpoint becomes a real breakpoint only if user types
+        some real location.  */
+        addCodeBreakpoint(); //setData below is called
+    }
+
+    if (!index.parent().isValid() && index.row() < m_breakpoints.count() && (role == Qt::EditRole || role == Qt::CheckStateRole)) {
         return m_breakpoints.at(index.row())->setData(index.column(), value);
     }
     return false;
@@ -308,7 +334,6 @@ void KDevelop::BreakpointModel::updateMarks()
 
     QMap<KUrl, QSet<int> > breakpoints;
     foreach (Breakpoint *breakpoint, m_breakpoints) {
-        if (breakpoint->pleaseEnterLocation()) continue;
         if (breakpoint->deleted()) continue;
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
         breakpoints[breakpoint->url()] << breakpoint->line();
@@ -344,7 +369,6 @@ void KDevelop::BreakpointModel::updateMarks()
             KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(doc->textDocument());
             if (!smart) continue;
             foreach (Breakpoint *breakpoint, m_breakpoints) {
-                if (breakpoint->pleaseEnterLocation()) continue;
                 if (breakpoint->deleted()) continue;
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                 if (i.key() == breakpoint->url() && line == breakpoint->line()) {
@@ -404,22 +428,15 @@ QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
 
 Breakpoint* BreakpointModel::breakpoint(int row)
 {
+    if (row >= m_breakpoints.count()) return 0;
     return m_breakpoints.at(row);
-}
-
-void BreakpointModel::createHelperBreakpoint()
-{
-    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
-    Breakpoint* n = new Breakpoint(this);
-    m_breakpoints << n;
-    endInsertRows();
 }
 
 Breakpoint* BreakpointModel::addCodeBreakpoint()
 {
-    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
-    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -433,9 +450,9 @@ Breakpoint* BreakpointModel::addCodeBreakpoint(const KUrl& url, int line)
 
 Breakpoint* BreakpointModel::addWatchpoint()
 {
-    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
-    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    m_breakpoints << n;
     endInsertRows();
     return n;
 }
@@ -449,9 +466,9 @@ Breakpoint* BreakpointModel::addWatchpoint(const QString& expression)
 
 Breakpoint* BreakpointModel::addReadWatchpoint()
 {
-    beginInsertRows(QModelIndex(), m_breakpoints.count()-1, m_breakpoints.count()-1);
+    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
     Breakpoint* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
-    m_breakpoints.insert(m_breakpoints.count()-1, n);
+    m_breakpoints << n;
     endInsertRows();
     return n;
 }

@@ -37,7 +37,7 @@ using namespace KDevelop;
 Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 : m_model(model), enabled_(true),
   deleted_(false), kind_(kind),
-  pleaseEnterLocation_(false), m_line(-1),
+  m_line(-1),
   m_smartCursor(0), m_ignoreHits(0)
 {
 }
@@ -45,7 +45,7 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
 : m_model(model), enabled_(true),
   deleted_(false),
-  pleaseEnterLocation_(false), m_line(-1),
+  m_line(-1),
   m_smartCursor(0), m_ignoreHits(0)
 {
     Q_ASSERT(0);
@@ -69,14 +69,6 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     */
 }
 
-Breakpoint::Breakpoint(BreakpointModel *model)
-: m_model(model), enabled_(true), 
-  deleted_(false),
-  kind_(CodeBreakpoint), pleaseEnterLocation_(true), m_line(-1),
-  m_smartCursor(0), m_ignoreHits(0)
-{   
-}
-
 BreakpointModel *Breakpoint::breakpointModel()
 {
     return m_model;
@@ -89,11 +81,6 @@ bool Breakpoint::setData(int index, const QVariant& value)
         enabled_ = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
     }
 
-    /* Helper breakpoint becomes a real breakpoint only if user types
-       some real location.  */
-    if (pleaseEnterLocation_ && value.toString().isEmpty())
-        return true;
-
     if (index == LocationColumn || index == ConditionColumn)
     {
         if (index == LocationColumn) {
@@ -103,12 +90,8 @@ bool Breakpoint::setData(int index, const QVariant& value)
         } else {
             m_condition = value.toString();
         }
-        if (pleaseEnterLocation_) {
-            pleaseEnterLocation_ = false;
-            breakpointModel()->createHelperBreakpoint();
-        }
     }
-    
+
     errors_.remove(index);
 
     reportChange(static_cast<Column>(index));
@@ -118,27 +101,6 @@ bool Breakpoint::setData(int index, const QVariant& value)
 
 QVariant Breakpoint::data(int column, int role) const
 {
-    if (pleaseEnterLocation_)
-    {
-        if (column != LocationColumn)
-        {
-            if (role == Qt::DisplayRole)
-                return QString();
-            else
-                return QVariant();
-        }
-        
-        if (role == Qt::DisplayRole)
-            return i18n("Double-click to create new code breakpoint");
-        if (role == Qt::ForegroundRole)
-            // FIXME: returning hardcoded gray is bad,
-            // but we don't have access to any widget, or pallette
-            // thereof, at this point.
-            return QColor(128, 128, 128);
-        if (role == Qt::EditRole)
-            return QString();
-    }
-
     if (column == EnableColumn)
     {
         if (role == Qt::CheckStateRole)
@@ -278,11 +240,6 @@ int Breakpoint::hitCount() const
     } else {
         return 0;
     }
-}
-
-bool Breakpoint::pleaseEnterLocation() const
-{
-    return pleaseEnterLocation_;
 }
 
 bool Breakpoint::deleted() const

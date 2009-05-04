@@ -105,7 +105,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
 {
     kDebug() << b;
     m_currentBreakpoint = b;
-    if (!b || b->pleaseEnterLocation())
+    if (!b)
     {
         status_->hide();
         hits_->setEnabled(false);

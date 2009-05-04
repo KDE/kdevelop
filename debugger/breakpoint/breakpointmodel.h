@@ -66,12 +66,6 @@ public:
     KDevelop::Breakpoint* addWatchpoint(const QString& expression);
     KDevelop::Breakpoint* addReadWatchpoint();
 
-    /**
-     * Must create a "please enter location" item, that will
-     * turn into real breakpoint when user types something.
-     */
-    virtual void createHelperBreakpoint();
-
     Breakpoint *breakpoint(int row);
     QList<Breakpoint*> breakpoints() const;
 

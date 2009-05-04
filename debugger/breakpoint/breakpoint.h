@@ -47,10 +47,6 @@ public:
     Breakpoint(BreakpointModel *model, BreakpointKind kind);
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
 
-    /** This constructor creates a "please enter location" item, that will
-       turn into real breakpoint when user types something.  */
-    Breakpoint(BreakpointModel *model);
-
     bool setData(int index, const QVariant& value);
     void setDeleted();
 
@@ -84,8 +80,6 @@ public:
 
     int hitCount() const;
 
-    bool pleaseEnterLocation() const;
-
     bool deleted() const;
     
     bool enabled() const;
@@ -108,7 +102,6 @@ protected:
     BreakpointKind kind_;
     /* For watchpoints, the address it is set at.  */
     QString address_;
-    bool pleaseEnterLocation_;
     KUrl m_url;
     int m_line;
     QString m_condition;

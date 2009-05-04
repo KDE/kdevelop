@@ -63,7 +63,6 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 void IBreakpointController::sendMaybeAll()
 {
     foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
-        if (breakpoint->pleaseEnterLocation()) continue;
         sendMaybe(breakpoint);
     }
 }
@@ -110,7 +109,6 @@ int IBreakpointController::breakpointHitCount(const KDevelop::Breakpoint* breakp
 
 void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 {
-    if (breakpoint->pleaseEnterLocation()) return;
     if (breakpoint->deleted()) return;
     m_dontSendChanges = true;
     breakpoint->reportChange(Breakpoint::StateColumn);
