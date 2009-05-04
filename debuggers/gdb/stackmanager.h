@@ -57,7 +57,7 @@ public:
     GDBController* controller_;
     int id_;
 
-    static const int step = 25;
+    static const int step = 20;
 };
 
 class Frame : public KDevelop::FrameItem

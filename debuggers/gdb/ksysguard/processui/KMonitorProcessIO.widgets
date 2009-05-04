@@ -1,0 +1,7 @@
+
+[KMonitorProcessIO]
+ToolTip=Monitors the input and output of a running process.
+WhatsThis=A widget for showing the input and output of a running process, including stdin, stdout, stderr and any file descriptors.  Be careful as this can make the watched process quite slow.
+Group=KSysGuard (KDE)
+ConstructorArgs=(parent)
+IncludeFile=KMonitorProcessIO.h
