@@ -53,6 +53,7 @@
 #define ENSURE_REACHABLE(bucket)
 #endif
 
+///Do not enable this #define, the issue it catches is non-critical and happens on a regular basis
 // #define DEBUG_HASH_SEQUENCES
 
 #define ITEMREPOSITORY_USE_MMAP_LOADING
