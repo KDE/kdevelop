@@ -116,6 +116,8 @@ public:
     }
     void saveCurrentLaunchAction()
     {
+        if (!currentTargetAction) return;
+
         if( currentTargetAction->currentAction() )
         {
             KConfigGroup grp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
@@ -146,6 +148,8 @@ public:
     
     void updateCurrentLaunchAction()
     {
+        if (!currentTargetAction) return;
+
         KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
         QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
         QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
@@ -185,6 +189,8 @@ public:
 
     void addLaunchAction( LaunchConfiguration* l )
     {
+        if (!currentTargetAction) return;
+
         KAction* action = currentTargetAction->addAction(launchActionText( l ));
         action->setData(qVariantFromValue<void*>(l));
     }
@@ -235,6 +241,8 @@ RunController::RunController(QObject *parent)
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
         setupActions();
+    } else {
+        d->currentTargetAction = 0;
     }
 }
 
@@ -272,8 +280,6 @@ void RunController::initialize()
             this, SLOT(slotProjectClosing(KDevelop::IProject*)));
     connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
              this, SLOT(slotRefreshProject(KDevelop::IProject*)));
-
-    if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     d->updateCurrentLaunchAction();
 }
