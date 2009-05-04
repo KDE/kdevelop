@@ -17,7 +17,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 		KrossKDevelopIProjectFileManager(KDevelop::IProjectFileManager* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IProjectFileManager"); }
 		void* wrappedObject() const { return wrapped; }
 
-		Q_SCRIPTABLE QFlags< KDevelop::IProjectFileManager::Feature > features() const { return wrapped->features(); }
+		Q_SCRIPTABLE KDevelop::IProjectFileManager::Features features() const { return wrapped->features(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectFolderItem* > parse(KDevelop::ProjectFolderItem* x0) { return wrapped->parse(x0); }
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* import(KDevelop::IProject* x0) { return wrapped->import(x0); }
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* addFolder(const KUrl& x0, KDevelop::ProjectFolderItem* x1) { return wrapped->addFolder(x0, x1); }

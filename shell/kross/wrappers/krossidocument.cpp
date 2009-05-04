@@ -22,7 +22,7 @@ class KrossKDevelopIDocument : public QObject, public Kross::WrapperInterface
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
-		Q_SCRIPTABLE KSharedPtr< KMimeType > mimeType() const { return wrapped->mimeType(); }
+		Q_SCRIPTABLE KMimeType::Ptr mimeType() const { return wrapped->mimeType(); }
 		Q_SCRIPTABLE KParts::Part* partForView(QWidget* x0) const { return wrapped->partForView(x0); }
 		Q_SCRIPTABLE bool isTextDocument() const { return wrapped->isTextDocument(); }
 		Q_SCRIPTABLE KTextEditor::Document* textDocument() const { return wrapped->textDocument(); }

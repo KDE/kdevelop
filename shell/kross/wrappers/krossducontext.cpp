@@ -17,16 +17,16 @@ class KrossKDevelopIndexedDUContext : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE KDevelop::DUContext* context() const { return wrapped->context(); }
 		Q_SCRIPTABLE KDevelop::DUContext* data() const { return wrapped->data(); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedDUContext& x0) const { return wrapped->operator==(x0); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE uint hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedDUContext& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
-		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE uint localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE uint topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexedTopContext() const { return wrapped->indexedTopContext(); }
 		Q_SCRIPTABLE void setIsDummy(bool x0) { wrapped->setIsDummy(x0); }
 		Q_SCRIPTABLE bool isDummy() const { return wrapped->isDummy(); }
-		Q_SCRIPTABLE QPair< unsigned int, unsigned int > dummyData() const { return wrapped->dummyData(); }
-		Q_SCRIPTABLE void setDummyData(QPair< unsigned int, unsigned int > x0) { wrapped->setDummyData(x0); }
+		Q_SCRIPTABLE QPair< uint, uint > dummyData() const { return wrapped->dummyData(); }
+		Q_SCRIPTABLE void setDummyData(QPair< uint, uint > x0) { wrapped->setDummyData(x0); }
 	private:
 		KDevelop::IndexedDUContext* wrapped;
 };
@@ -41,9 +41,9 @@ class KrossKDevelopLocalIndexedDUContext : public QObject, public Kross::Wrapper
 		Q_SCRIPTABLE KDevelop::DUContext* data(KDevelop::TopDUContext* x0) const { return wrapped->data(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::LocalIndexedDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE uint hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::LocalIndexedDUContext& x0) const { return wrapped->operator<(x0); }
-		Q_SCRIPTABLE unsigned int localIndex() const { return wrapped->localIndex(); }
+		Q_SCRIPTABLE uint localIndex() const { return wrapped->localIndex(); }
 		Q_SCRIPTABLE bool isLoaded(KDevelop::TopDUContext* x0) const { return wrapped->isLoaded(x0); }
 	private:
 		KDevelop::LocalIndexedDUContext* wrapped;
@@ -99,7 +99,7 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setOwner(KDevelop::Declaration* x0) { wrapped->setOwner(x0); }
 		Q_SCRIPTABLE int depth() const { return wrapped->depth(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
-		Q_SCRIPTABLE KDevelop::DUContext* findContextAt(const KDevelop::SimpleCursor& x0) const { return wrapped->findContextAt(x0); }
+		Q_SCRIPTABLE KDevelop::DUContext* findContextAt(const KDevelop::SimpleCursor& x0, bool x1=false) const { return wrapped->findContextAt(x0, x1); }
 		Q_SCRIPTABLE KDevelop::Declaration* findDeclarationAt(const KDevelop::SimpleCursor& x0) const { return wrapped->findDeclarationAt(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* findContextIncluding(const KDevelop::SimpleRange& x0) const { return wrapped->findContextIncluding(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier scopeIdentifier(bool x0=false) const { return wrapped->scopeIdentifier(x0); }
@@ -114,25 +114,26 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::SimpleCursor importPosition(const KDevelop::DUContext* x0) const { return wrapped->importPosition(x0); }
 		Q_SCRIPTABLE bool imports(const KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid()) const { return wrapped->imports(x0, x1); }
 		Q_SCRIPTABLE void addImportedParentContext(KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), bool x2=false, bool x3=false) { wrapped->addImportedParentContext(x0, x1, x2, x3); }
+		Q_SCRIPTABLE bool addIndirectImport(const KDevelop::DUContext::Import& x0) { return wrapped->addIndirectImport(x0); }
 		Q_SCRIPTABLE void removeImportedParentContext(KDevelop::DUContext* x0) { wrapped->removeImportedParentContext(x0); }
 		Q_SCRIPTABLE void clearImportedParentContexts() { wrapped->clearImportedParentContexts(); }
 		Q_SCRIPTABLE void setPropagateDeclarations(bool x0) { wrapped->setPropagateDeclarations(x0); }
 		Q_SCRIPTABLE bool isPropagateDeclarations() const { return wrapped->isPropagateDeclarations(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
 		Q_SCRIPTABLE const KDevelop::IndexedDUContext* indexedImporters() const { return wrapped->indexedImporters(); }
-		Q_SCRIPTABLE unsigned int indexedImportersSize() const { return wrapped->indexedImportersSize(); }
+		Q_SCRIPTABLE uint indexedImportersSize() const { return wrapped->indexedImportersSize(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > childContexts() const { return wrapped->childContexts(); }
 		Q_SCRIPTABLE void deleteChildContextsRecursively() { wrapped->deleteChildContextsRecursively(); }
 		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }
-		Q_SCRIPTABLE KDevelop::DUContext* specialize(unsigned int x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
-		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::QualifiedIdentifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const TypePtr< KDevelop::AbstractType >& x2=KDevelop::AbstractType::Ptr(), const KDevelop::TopDUContext* x3=0, QFlags< KDevelop::DUContext::SearchFlag > x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3, x4); }
-		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, QFlags< KDevelop::DUContext::SearchFlag > x3=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3); }
-		Q_SCRIPTABLE QList< KDevelop::Declaration* > findLocalDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, const TypePtr< KDevelop::AbstractType >& x3=KDevelop::AbstractType::Ptr(), QFlags< KDevelop::DUContext::SearchFlag > x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findLocalDeclarations(x0, x1, x2, x3, x4); }
+		Q_SCRIPTABLE KDevelop::DUContext* specialize(uint x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
+		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::QualifiedIdentifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::AbstractType::Ptr& x2=KDevelop::AbstractType::Ptr(), const KDevelop::TopDUContext* x3=0, KDevelop::DUContext::SearchFlags x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3, x4); }
+		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, KDevelop::DUContext::SearchFlags x3=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3); }
+		Q_SCRIPTABLE QList< KDevelop::Declaration* > findLocalDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, const KDevelop::AbstractType::Ptr& x3=KDevelop::AbstractType::Ptr(), KDevelop::DUContext::SearchFlags x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findLocalDeclarations(x0, x1, x2, x3, x4); }
 		Q_SCRIPTABLE QVector< KDevelop::Declaration* > clearLocalDeclarations() { return wrapped->clearLocalDeclarations(); }
 		Q_SCRIPTABLE void deleteLocalDeclarations() { wrapped->deleteLocalDeclarations(); }
 		Q_SCRIPTABLE QVector< KDevelop::Declaration* > localDeclarations(const KDevelop::TopDUContext* x0=0) const { return wrapped->localDeclarations(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* findContext(const KDevelop::SimpleCursor& x0, KDevelop::DUContext* x1=0) const { return wrapped->findContext(x0, x1); }
-		Q_SCRIPTABLE QList< KDevelop::DUContext* > findContexts(KDevelop::DUContext::ContextType x0, const KDevelop::QualifiedIdentifier& x1, const KDevelop::SimpleCursor& x2=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x3=0, QFlags< KDevelop::DUContext::SearchFlag > x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findContexts(x0, x1, x2, x3, x4); }
+		Q_SCRIPTABLE QList< KDevelop::DUContext* > findContexts(KDevelop::DUContext::ContextType x0, const KDevelop::QualifiedIdentifier& x1, const KDevelop::SimpleCursor& x2=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x3=0, KDevelop::DUContext::SearchFlags x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findContexts(x0, x1, x2, x3, x4); }
 		Q_SCRIPTABLE bool parentContextOf(KDevelop::DUContext* x0) const { return wrapped->parentContextOf(x0); }
 		Q_SCRIPTABLE QList< QPair< KDevelop::Declaration*, int > > allDeclarations(const KDevelop::SimpleCursor& x0, const KDevelop::TopDUContext* x1, bool x2=true) const { return wrapped->allDeclarations(x0, x1, x2); }
 		Q_SCRIPTABLE QList< KDevelop::Declaration* > allLocalDeclarations(const KDevelop::Identifier& x0) const { return wrapped->allLocalDeclarations(x0); }
@@ -151,7 +152,7 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QVector< KTextEditor::SmartRange* > useRanges() { return wrapped->useRanges(); }
 		Q_SCRIPTABLE QVector< KTextEditor::SmartRange* > takeUseRanges() { return wrapped->takeUseRanges(); }
 		Q_SCRIPTABLE QWidget* createNavigationWidget(KDevelop::Declaration* x0=0, KDevelop::TopDUContext* x1=0, const QString& x2=QString(), const QString& x3=QString()) const { return wrapped->createNavigationWidget(x0, x1, x2, x3); }
-		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 >& x0, const KDevelop::SimpleCursor& x1, const TypePtr< KDevelop::AbstractType >& x2, KDevVarLengthArray< KDevelop::Declaration*, 40 >& x3, const KDevelop::TopDUContext* x4, QFlags< KDevelop::DUContext::SearchFlag > x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
+		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevelop::DUContext::SearchItem::PtrList& x0, const KDevelop::SimpleCursor& x1, const KDevelop::AbstractType::Ptr& x2, KDevelop::DUContext::DeclarationList& x3, const KDevelop::TopDUContext* x4, KDevelop::DUContext::SearchFlags x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
 		Q_SCRIPTABLE void squeeze() { wrapped->squeeze(); }
 	private:
 		KDevelop::DUContext* wrapped;
@@ -166,7 +167,7 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 
 		Q_SCRIPTABLE bool operator==(const KDevelop::DUContext::Import& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* context(const KDevelop::TopDUContext* x0) const { return wrapped->context(x0); }
-		Q_SCRIPTABLE unsigned int topContextIndex() const { return wrapped->topContextIndex(); }
+		Q_SCRIPTABLE uint topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedDUContext indexedContext() const { return wrapped->indexedContext(); }
 		Q_SCRIPTABLE bool isBackwardMapped() const { return wrapped->isBackwardMapped(); }
 		typedef KDevelop::SimpleCursor KDevelopSimpleCursor;
@@ -186,11 +187,11 @@ class KrossKDevelopDUContextSearchItem : public QObject, public Kross::WrapperIn
 
 		Q_SCRIPTABLE bool isEmpty() const { return wrapped->isEmpty(); }
 		Q_SCRIPTABLE bool hasNext() const { return wrapped->hasNext(); }
-		Q_SCRIPTABLE void addToEachNode(KSharedPtr< KDevelop::DUContext::SearchItem > x0) { wrapped->addToEachNode(x0); }
-		Q_SCRIPTABLE void addToEachNode(KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 > x0) { wrapped->addToEachNode(x0); }
+		Q_SCRIPTABLE void addToEachNode(KDevelop::DUContext::SearchItem::Ptr x0) { wrapped->addToEachNode(x0); }
+		Q_SCRIPTABLE void addToEachNode(KDevelop::DUContext::SearchItem::PtrList x0) { wrapped->addToEachNode(x0); }
 		Q_SCRIPTABLE bool match(const KDevelop::QualifiedIdentifier& x0, int x1=0) const { return wrapped->match(x0, x1); }
 		Q_SCRIPTABLE QList< KDevelop::QualifiedIdentifier > toList(const KDevelop::QualifiedIdentifier& x0=KDevelop::QualifiedIdentifier()) const { return wrapped->toList(x0); }
-		Q_SCRIPTABLE void addNext(KSharedPtr< KDevelop::DUContext::SearchItem > x0) { wrapped->addNext(x0); }
+		Q_SCRIPTABLE void addNext(KDevelop::DUContext::SearchItem::Ptr x0) { wrapped->addNext(x0); }
 		Q_PROPERTY(bool  isExplicitlyGlobal READ getisExplicitlyGlobal WRITE setisExplicitlyGlobal SCRIPTABLE true)
 		Q_SCRIPTABLE void setisExplicitlyGlobal(const bool  val) { wrapped->isExplicitlyGlobal=val; }
 		Q_SCRIPTABLE bool  getisExplicitlyGlobal() const { return wrapped->isExplicitlyGlobal; }
@@ -198,6 +199,10 @@ class KrossKDevelopDUContextSearchItem : public QObject, public Kross::WrapperIn
 		Q_PROPERTY(KDevelopIdentifier  identifier READ getidentifier WRITE setidentifier SCRIPTABLE true)
 		Q_SCRIPTABLE void setidentifier(const KDevelopIdentifier  val) { wrapped->identifier=val; }
 		Q_SCRIPTABLE KDevelopIdentifier  getidentifier() const { return wrapped->identifier; }
+		typedef KDevelop::DUContext::SearchItem::PtrList KDevelopDUContextSearchItemPtrList;
+		Q_PROPERTY(KDevelopDUContextSearchItemPtrList  next READ getnext WRITE setnext SCRIPTABLE true)
+		Q_SCRIPTABLE void setnext(const KDevelopDUContextSearchItemPtrList  val) { wrapped->next=val; }
+		Q_SCRIPTABLE KDevelopDUContextSearchItemPtrList  getnext() const { return wrapped->next; }
 	private:
 		KDevelop::DUContext::SearchItem* wrapped;
 };

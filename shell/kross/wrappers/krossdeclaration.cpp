@@ -13,13 +13,13 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	Q_ENUMS(AccessPolicy)
-	Q_FLAGS(AccessPolicy Public Protected Private)
+	Q_FLAGS(AccessPolicy Public Protected Private DefaultAccess)
 
 	Q_ENUMS(Kind)
 	Q_FLAGS(Kind Type Instance NamespaceAlias Alias Namespace)
 
 	public:
-		enum KrossAccessPolicy { Public=KDevelop::Declaration::Public, Protected=KDevelop::Declaration::Protected, Private=KDevelop::Declaration::Private };
+		enum KrossAccessPolicy { Public=KDevelop::Declaration::Public, Protected=KDevelop::Declaration::Protected, Private=KDevelop::Declaration::Private, DefaultAccess=KDevelop::Declaration::DefaultAccess };
 		enum KrossKind { Type=KDevelop::Declaration::Type, Instance=KDevelop::Declaration::Instance, NamespaceAlias=KDevelop::Declaration::NamespaceAlias, Alias=KDevelop::Declaration::Alias, Namespace=KDevelop::Declaration::Namespace };
 		KrossKDevelopDeclaration(KDevelop::Declaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Declaration"); }
 		void* wrappedObject() const { return wrapped; }
@@ -34,7 +34,9 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDeclarationIsDefinition(bool x0) { wrapped->setDeclarationIsDefinition(x0); }
 		Q_SCRIPTABLE bool isTypeAlias() const { return wrapped->isTypeAlias(); }
 		Q_SCRIPTABLE void setIsTypeAlias(bool x0) { wrapped->setIsTypeAlias(x0); }
-		Q_SCRIPTABLE KDevelop::Declaration* specialize(unsigned int x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
+		Q_SCRIPTABLE bool isFinal() const { return wrapped->isFinal(); }
+		Q_SCRIPTABLE void setFinal(bool x0) { wrapped->setFinal(x0); }
+		Q_SCRIPTABLE KDevelop::Declaration* specialize(uint x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
 		Q_SCRIPTABLE KDevelop::DUContext* internalContext() const { return wrapped->internalContext(); }
 		Q_SCRIPTABLE void setInternalContext(KDevelop::DUContext* x0) { wrapped->setInternalContext(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* logicalInternalContext(const KDevelop::TopDUContext* x0) const { return wrapped->logicalInternalContext(x0); }
@@ -42,8 +44,8 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::Declaration* logicalDeclaration(const KDevelop::TopDUContext* x0) { return wrapped->logicalDeclaration(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* context() const { return wrapped->context(); }
 		Q_SCRIPTABLE void setContext(KDevelop::DUContext* x0, bool x1=false) { wrapped->setContext(x0, x1); }
-		Q_SCRIPTABLE TypePtr< KDevelop::AbstractType > abstractType() const { return wrapped->abstractType(); }
-		Q_SCRIPTABLE void setAbstractType(TypePtr< KDevelop::AbstractType > x0) { wrapped->setAbstractType(x0); }
+		Q_SCRIPTABLE KDevelop::AbstractType::Ptr abstractType() const { return wrapped->abstractType(); }
+		Q_SCRIPTABLE void setAbstractType(KDevelop::AbstractType::Ptr x0) { wrapped->setAbstractType(x0); }
 		Q_SCRIPTABLE KDevelop::IndexedType indexedType() const { return wrapped->indexedType(); }
 		Q_SCRIPTABLE void setIdentifier(const KDevelop::Identifier& x0) { wrapped->setIdentifier(x0); }
 		Q_SCRIPTABLE KDevelop::Identifier identifier() const { return wrapped->identifier(); }
@@ -61,10 +63,10 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QString toString() const { return wrapped->toString(); }
 		Q_SCRIPTABLE QMap< KDevelop::IndexedString, QList< KDevelop::SimpleRange > > uses() const { return wrapped->uses(); }
 		Q_SCRIPTABLE QList< KTextEditor::SmartRange* > smartUses() const { return wrapped->smartUses(); }
-		Q_SCRIPTABLE unsigned int additionalIdentity() const { return wrapped->additionalIdentity(); }
-		Q_SCRIPTABLE unsigned int specialization() const { return wrapped->specialization(); }
+		Q_SCRIPTABLE uint additionalIdentity() const { return wrapped->additionalIdentity(); }
+		Q_SCRIPTABLE uint specialization() const { return wrapped->specialization(); }
 		Q_SCRIPTABLE KDevelop::DeclarationId id(bool x0=false) const { return wrapped->id(x0); }
-		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
+		Q_SCRIPTABLE uint ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE bool isAnonymous() const { return wrapped->isAnonymous(); }
 		Q_SCRIPTABLE void clearOwnIndex() { wrapped->clearOwnIndex(); }
 		Q_SCRIPTABLE void allocateOwnIndex() { wrapped->allocateOwnIndex(); }

@@ -17,8 +17,8 @@ class KrossQToolBar : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE const QMetaObject  getstaticMetaObject() const { return wrapped->staticMetaObject; }
 		Q_SCRIPTABLE void setMovable(bool x0) { wrapped->setMovable(x0); }
 		Q_SCRIPTABLE bool isMovable() const { return wrapped->isMovable(); }
-		Q_SCRIPTABLE void setAllowedAreas(QFlags< Qt::ToolBarArea > x0) { wrapped->setAllowedAreas(x0); }
-		Q_SCRIPTABLE QFlags< Qt::ToolBarArea > allowedAreas() const { return wrapped->allowedAreas(); }
+		Q_SCRIPTABLE void setAllowedAreas(Qt::ToolBarAreas x0) { wrapped->setAllowedAreas(x0); }
+		Q_SCRIPTABLE Qt::ToolBarAreas allowedAreas() const { return wrapped->allowedAreas(); }
 		Q_SCRIPTABLE bool isAreaAllowed(Qt::ToolBarArea x0) const { return wrapped->isAreaAllowed(x0); }
 		Q_SCRIPTABLE void setOrientation(Qt::Orientation x0) { wrapped->setOrientation(x0); }
 		Q_SCRIPTABLE Qt::Orientation orientation() const { return wrapped->orientation(); }

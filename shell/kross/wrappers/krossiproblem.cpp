@@ -10,10 +10,10 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
 	Q_ENUMS(Source)
-	Q_FLAGS(Source Unknown Disk Preprocessor Lexer Parser DUChainBuilder)
+	Q_FLAGS(Source Unknown Disk Preprocessor Lexer Parser DUChainBuilder SemanticAnalysis)
 
 	public:
-		enum KrossSource { Unknown=KDevelop::ProblemData::Unknown, Disk=KDevelop::ProblemData::Disk, Preprocessor=KDevelop::ProblemData::Preprocessor, Lexer=KDevelop::ProblemData::Lexer, Parser=KDevelop::ProblemData::Parser, DUChainBuilder=KDevelop::ProblemData::DUChainBuilder };
+		enum KrossSource { Unknown=KDevelop::ProblemData::Unknown, Disk=KDevelop::ProblemData::Disk, Preprocessor=KDevelop::ProblemData::Preprocessor, Lexer=KDevelop::ProblemData::Lexer, Parser=KDevelop::ProblemData::Parser, DUChainBuilder=KDevelop::ProblemData::DUChainBuilder, SemanticAnalysis=KDevelop::ProblemData::SemanticAnalysis };
 		KrossKDevelopProblemData(KDevelop::ProblemData* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProblemData"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -25,13 +25,12 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 		Q_PROPERTY(KDevelopIndexedString  url READ geturl WRITE seturl SCRIPTABLE true)
 		Q_SCRIPTABLE void seturl(const KDevelopIndexedString  val) { wrapped->url=val; }
 		Q_SCRIPTABLE KDevelopIndexedString  geturl() const { return wrapped->url; }
-		typedef KDevelop::ReferenceCountedIndexedString KDevelopReferenceCountedIndexedString;
-		Q_PROPERTY(KDevelopReferenceCountedIndexedString  description READ getdescription WRITE setdescription SCRIPTABLE true)
-		Q_SCRIPTABLE void setdescription(const KDevelopReferenceCountedIndexedString  val) { wrapped->description=val; }
-		Q_SCRIPTABLE KDevelopReferenceCountedIndexedString  getdescription() const { return wrapped->description; }
-		Q_PROPERTY(KDevelopReferenceCountedIndexedString  explanation READ getexplanation WRITE setexplanation SCRIPTABLE true)
-		Q_SCRIPTABLE void setexplanation(const KDevelopReferenceCountedIndexedString  val) { wrapped->explanation=val; }
-		Q_SCRIPTABLE KDevelopReferenceCountedIndexedString  getexplanation() const { return wrapped->explanation; }
+		Q_PROPERTY(KDevelopIndexedString  description READ getdescription WRITE setdescription SCRIPTABLE true)
+		Q_SCRIPTABLE void setdescription(const KDevelopIndexedString  val) { wrapped->description=val; }
+		Q_SCRIPTABLE KDevelopIndexedString  getdescription() const { return wrapped->description; }
+		Q_PROPERTY(KDevelopIndexedString  explanation READ getexplanation WRITE setexplanation SCRIPTABLE true)
+		Q_SCRIPTABLE void setexplanation(const KDevelopIndexedString  val) { wrapped->explanation=val; }
+		Q_SCRIPTABLE KDevelopIndexedString  getexplanation() const { return wrapped->explanation; }
 	private:
 		KDevelop::ProblemData* wrapped;
 };
@@ -39,7 +38,11 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
+	Q_ENUMS(Severity)
+	Q_FLAGS(Severity Error Warning Hint)
+
 	public:
+		enum KrossSeverity { Error=KDevelop::Problem::Error, Warning=KDevelop::Problem::Warning, Hint=KDevelop::Problem::Hint };
 		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Problem"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -56,6 +59,9 @@ class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDescription(const QString& x0) { wrapped->setDescription(x0); }
 		Q_SCRIPTABLE QString explanation() const { return wrapped->explanation(); }
 		Q_SCRIPTABLE void setExplanation(const QString& x0) { wrapped->setExplanation(x0); }
+		Q_SCRIPTABLE KDevelop::Problem::Severity severity() const { return wrapped->severity(); }
+		Q_SCRIPTABLE KSharedPtr< KDevelop::IAssistant > solutionAssistant() const { return wrapped->solutionAssistant(); }
+		Q_SCRIPTABLE void setSolutionAssistant(KSharedPtr< KDevelop::IAssistant > x0) { wrapped->setSolutionAssistant(x0); }
 	private:
 		KDevelop::Problem* wrapped;
 };

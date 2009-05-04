@@ -17,7 +17,7 @@ class KrossKDevelopDUChainLock : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE bool lockForRead() { return wrapped->lockForRead(); }
 		Q_SCRIPTABLE void releaseReadLock() { wrapped->releaseReadLock(); }
 		Q_SCRIPTABLE bool currentThreadHasReadLock() { return wrapped->currentThreadHasReadLock(); }
-		Q_SCRIPTABLE bool lockForWrite(unsigned int x0=0) { return wrapped->lockForWrite(x0); }
+		Q_SCRIPTABLE bool lockForWrite(uint x0=0) { return wrapped->lockForWrite(x0); }
 		Q_SCRIPTABLE void releaseWriteLock() { wrapped->releaseWriteLock(); }
 		Q_SCRIPTABLE bool currentThreadHasWriteLock() { return wrapped->currentThreadHasWriteLock(); }
 	private:

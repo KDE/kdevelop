@@ -33,7 +33,7 @@ class KrossKDevelopReferencedTopDUContext : public QObject, public Kross::Wrappe
 		Q_SCRIPTABLE bool operator==(const KDevelop::ReferencedTopDUContext& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::ReferencedTopDUContext& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* operator->() const { return wrapped->operator->(); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE uint hash() const { return wrapped->hash(); }
 	private:
 		KDevelop::ReferencedTopDUContext* wrapped;
 };
@@ -57,15 +57,15 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::TopDUContext* sharedDataOwner() const { return wrapped->sharedDataOwner(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext* topContext() const { return wrapped->topContext(); }
 		Q_SCRIPTABLE KDevelop::IndexedTopDUContext indexed() const { return wrapped->indexed(); }
-		Q_SCRIPTABLE unsigned int ownIndex() const { return wrapped->ownIndex(); }
+		Q_SCRIPTABLE uint ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::ParsingEnvironmentFile > parsingEnvironmentFile() const { return wrapped->parsingEnvironmentFile(); }
 		Q_SCRIPTABLE bool deleting() const { return wrapped->deleting(); }
 		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }
 		Q_SCRIPTABLE void setInDuChain(bool x0) { wrapped->setInDuChain(x0); }
 		Q_SCRIPTABLE bool isOnDisk() const { return wrapped->isOnDisk(); }
-		Q_SCRIPTABLE QList< KSharedPtr< KDevelop::Problem > > problems() const { return wrapped->problems(); }
-		Q_SCRIPTABLE void addProblem(const KSharedPtr< KDevelop::Problem >& x0) { wrapped->addProblem(x0); }
+		Q_SCRIPTABLE QList< KDevelop::ProblemPointer > problems() const { return wrapped->problems(); }
+		Q_SCRIPTABLE void addProblem(const KDevelop::ProblemPointer& x0) { wrapped->addProblem(x0); }
 		Q_SCRIPTABLE void clearProblems() { wrapped->clearProblems(); }
 		Q_SCRIPTABLE bool imports(const KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1) const { return wrapped->imports(x0, x1); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Features features() const { return wrapped->features(); }
@@ -86,10 +86,10 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
 		Q_SCRIPTABLE QList< KDevelop::DUContext* > loadedImporters() const { return wrapped->loadedImporters(); }
 		Q_SCRIPTABLE KDevelop::SimpleCursor importPosition(const KDevelop::DUContext* x0) const { return wrapped->importPosition(x0); }
-		Q_SCRIPTABLE Utils::StorableSet< KDevelop::IndexedTopDUContext, KDevelop::IndexedTopDUContextIndexConversion, KDevelop::RecursiveImportRepository, true, Utils::DummyLocker > recursiveImportIndices() const { return wrapped->recursiveImportIndices(); }
+		Q_SCRIPTABLE KDevelop::TopDUContext::IndexedRecursiveImports recursiveImportIndices() const { return wrapped->recursiveImportIndices(); }
 		Q_SCRIPTABLE void updateImportsCache() { wrapped->updateImportsCache(); }
 		Q_SCRIPTABLE bool usingImportsCache() const { return wrapped->usingImportsCache(); }
-		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevVarLengthArray< KSharedPtr< KDevelop::DUContext::SearchItem >, 256 >& x0, const KDevelop::SimpleCursor& x1, const TypePtr< KDevelop::AbstractType >& x2, KDevVarLengthArray< KDevelop::Declaration*, 40 >& x3, const KDevelop::TopDUContext* x4, QFlags< KDevelop::DUContext::SearchFlag > x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
+		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevelop::DUContext::SearchItem::PtrList& x0, const KDevelop::SimpleCursor& x1, const KDevelop::AbstractType::Ptr& x2, KDevelop::DUContext::DeclarationList& x3, const KDevelop::TopDUContext* x4, KDevelop::DUContext::SearchFlags x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
 	private:
 		KDevelop::TopDUContext* wrapped;
 };

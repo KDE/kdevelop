@@ -15,14 +15,13 @@ class KrossKDevelopIndexedIdentifier : public QObject, public Kross::WrapperInte
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedIdentifier operator=(const KDevelop::Identifier& x0) { return wrapped->operator=(x0); }
+		Q_SCRIPTABLE KDevelop::IndexedIdentifier operator=(const KDevelop::IndexedIdentifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::IndexedIdentifier& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::Identifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool isEmpty() const { return wrapped->isEmpty(); }
 		Q_SCRIPTABLE KDevelop::Identifier identifier() const { return wrapped->identifier(); }
-		Q_PROPERTY(unsigned int  index READ getindex WRITE setindex SCRIPTABLE true)
-		Q_SCRIPTABLE void setindex(const unsigned int  val) { wrapped->index=val; }
-		Q_SCRIPTABLE unsigned int  getindex() const { return wrapped->index; }
+		Q_SCRIPTABLE uint getIndex() const { return wrapped->getIndex(); }
 	private:
 		KDevelop::IndexedIdentifier* wrapped;
 };
@@ -35,14 +34,13 @@ class KrossKDevelopIndexedQualifiedIdentifier : public QObject, public Kross::Wr
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedQualifiedIdentifier operator=(const KDevelop::QualifiedIdentifier& x0) { return wrapped->operator=(x0); }
+		Q_SCRIPTABLE KDevelop::IndexedQualifiedIdentifier operator=(const KDevelop::IndexedQualifiedIdentifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedQualifiedIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator<(const KDevelop::IndexedQualifiedIdentifier& x0) const { return wrapped->operator<(x0); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier identifier() const { return wrapped->identifier(); }
-		Q_PROPERTY(unsigned int  index READ getindex WRITE setindex SCRIPTABLE true)
-		Q_SCRIPTABLE void setindex(const unsigned int  val) { wrapped->index=val; }
-		Q_SCRIPTABLE unsigned int  getindex() const { return wrapped->index; }
+		Q_SCRIPTABLE uint getIndex() const { return wrapped->getIndex(); }
 	private:
 		KDevelop::IndexedQualifiedIdentifier* wrapped;
 };
@@ -55,13 +53,12 @@ class KrossKDevelopIndexedTypeIdentifier : public QObject, public Kross::Wrapper
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE KDevelop::IndexedTypeIdentifier operator=(const KDevelop::TypeIdentifier& x0) { return wrapped->operator=(x0); }
+		Q_SCRIPTABLE KDevelop::IndexedTypeIdentifier operator=(const KDevelop::IndexedTypeIdentifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::IndexedTypeIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::TypeIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool isValid() const { return wrapped->isValid(); }
 		Q_SCRIPTABLE KDevelop::TypeIdentifier identifier() const { return wrapped->identifier(); }
-		Q_PROPERTY(unsigned int  index READ getindex WRITE setindex SCRIPTABLE true)
-		Q_SCRIPTABLE void setindex(const unsigned int  val) { wrapped->index=val; }
-		Q_SCRIPTABLE unsigned int  getindex() const { return wrapped->index; }
+		Q_SCRIPTABLE uint getIndex() const { return wrapped->getIndex(); }
 	private:
 		KDevelop::IndexedTypeIdentifier* wrapped;
 };
@@ -80,10 +77,10 @@ class KrossKDevelopIdentifier : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::IndexedString identifier() const { return wrapped->identifier(); }
 		Q_SCRIPTABLE void setIdentifier(const QString& x0) { wrapped->setIdentifier(x0); }
 		Q_SCRIPTABLE void setIdentifier(const KDevelop::IndexedString& x0) { wrapped->setIdentifier(x0); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE uint hash() const { return wrapped->hash(); }
 		Q_SCRIPTABLE bool nameEquals(const KDevelop::Identifier& x0) const { return wrapped->nameEquals(x0); }
 		Q_SCRIPTABLE KDevelop::TypeIdentifier templateIdentifier(int x0) const { return wrapped->templateIdentifier(x0); }
-		Q_SCRIPTABLE unsigned int templateIdentifiersCount() const { return wrapped->templateIdentifiersCount(); }
+		Q_SCRIPTABLE uint templateIdentifiersCount() const { return wrapped->templateIdentifiersCount(); }
 		Q_SCRIPTABLE void appendTemplateIdentifier(const KDevelop::TypeIdentifier& x0) { wrapped->appendTemplateIdentifier(x0); }
 		Q_SCRIPTABLE void clearTemplateIdentifiers() { wrapped->clearTemplateIdentifiers(); }
 		Q_SCRIPTABLE void setTemplateIdentifiers(const QList< KDevelop::TypeIdentifier >& x0) { wrapped->setTemplateIdentifiers(x0); }
@@ -92,7 +89,7 @@ class KrossKDevelopIdentifier : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE bool operator!=(const KDevelop::Identifier& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE KDevelop::Identifier operator=(const KDevelop::Identifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool isEmpty() const { return wrapped->isEmpty(); }
-		Q_SCRIPTABLE unsigned int index() const { return wrapped->index(); }
+		Q_SCRIPTABLE uint index() const { return wrapped->index(); }
 	private:
 		KDevelop::Identifier* wrapped;
 };
@@ -129,14 +126,14 @@ class KrossKDevelopQualifiedIdentifier : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier operator+=(const KDevelop::Identifier& x0) { return wrapped->operator+=(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier merge(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->merge(x0); }
 		Q_SCRIPTABLE bool isSame(const KDevelop::QualifiedIdentifier& x0, bool x1=true) const { return wrapped->isSame(x0, x1); }
-		Q_SCRIPTABLE unsigned int combineHash(unsigned int x0, unsigned int x1, KDevelop::Identifier x2) { return wrapped->combineHash(x0, x1, x2); }
+		Q_SCRIPTABLE uint combineHash(uint x0, uint x1, KDevelop::Identifier x2) { return wrapped->combineHash(x0, x1, x2); }
 		Q_SCRIPTABLE bool operator==(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->operator==(x0); }
 		Q_SCRIPTABLE bool operator!=(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->operator!=(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier operator=(const KDevelop::QualifiedIdentifier& x0) { return wrapped->operator=(x0); }
 		Q_SCRIPTABLE bool beginsWith(const KDevelop::QualifiedIdentifier& x0) const { return wrapped->beginsWith(x0); }
-		Q_SCRIPTABLE unsigned int index() const { return wrapped->index(); }
-		Q_SCRIPTABLE unsigned int hash() const { return wrapped->hash(); }
-		Q_SCRIPTABLE void findByHash(unsigned int x0, KDevVarLengthArray< KDevelop::QualifiedIdentifier, 256 >& x1) { wrapped->findByHash(x0, x1); }
+		Q_SCRIPTABLE uint index() const { return wrapped->index(); }
+		Q_SCRIPTABLE KDevelop::QualifiedIdentifier::HashType hash() const { return wrapped->hash(); }
+		Q_SCRIPTABLE void findByHash(KDevelop::QualifiedIdentifier::HashType x0, KDevVarLengthArray< KDevelop::QualifiedIdentifier, 256 >& x1) { wrapped->findByHash(x0, x1); }
 	private:
 		KDevelop::QualifiedIdentifier* wrapped;
 };

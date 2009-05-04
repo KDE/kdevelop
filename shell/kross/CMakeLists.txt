@@ -12,7 +12,7 @@ add_custom_target(krossWrappers)
 macro(kdev_create_kross_iface wantImpl interface includes)
     get_filename_component(weFile ${interface} NAME_WE)
     set(weFile kross${weFile})
-    set(outPath ${CMAKE_SOURCE_DIR}/kross/wrappers/)
+    set(outPath ${CMAKE_SOURCE_DIR}/shell/kross/wrappers/)
     get_filename_component(ifacePath interface PATH)
     
     if(${wantImpl} STREQUAL "TRUE")
@@ -23,9 +23,9 @@ macro(kdev_create_kross_iface wantImpl interface includes)
     endif(${wantImpl} STREQUAL "TRUE")
     
     add_custom_target(${weFile}
-                        rm -rf ~/.kdevduchain && ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${theImpl} ${interface}
+	    		    rm -rf ~/.kdevduchain && ${CMAKE_CURRENT_BINARY_DIR}/xmltokross/duchaintokross ${theImpl} ${interface}
                             -I${ifacePath}:${incs} -F${weFile} -i${includes} -D${outPath}
-                            -o${CMAKE_SOURCE_DIR}/kross/wrappers/${weFile}.cpp
+                            -o${outPath}/${weFile}.cpp
                     #    DEPENDS ${interface} xmltokross/duchaintokross
                         )
     add_dependencies(krossWrappers ${weFile})
