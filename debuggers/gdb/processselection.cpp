@@ -1,161 +1,64 @@
-/***************************************************************************
-    begin                : Mon Sep 20 1999
-    copyright            : (C) 1999 by John Birch
-    email                : jbb@kdevelop.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+/* KDevelop CMake Support
+ *
+ * Copyright 2009 Aleix Pol <aleixpol@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #include "processselection.h"
-
-#include <kglobalsettings.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <klistwidgetsearchline.h>
-
+#include "ksysguard/ksysguardprocesslist.h"
+#include "ksysguard/process.h"
+#include <KPushButton>
+#include <QAbstractItemView>
+#include <QVBoxLayout>
 #include <QLabel>
-#include <QLayout>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-
-#include <QRegExp>
-#include <QFocusEvent>
-
-#include <kprocess.h>
-#include <kshell.h>
-
-#include <util/commandexecutor.h>
-
-#include <unistd.h>
-#include <sys/types.h>
-
-#include "ui_processselection.h"
+#include <QTimer>
+#include <QTreeView>
 
 namespace GDBDebugger
 {
 
-/***************************************************************************/
-
-// Display a list of processes for the user to select one
-// only display processes that they can do something with so if the user
-// is root then display all processes
-// For use with the internal debugger, but this dialog doesn't know anything
-// about why it's doing it.
-
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
-    : KDialog(parent),      // modal
-      psProc(0)
+    : KDialog(parent)
 {
-    m_ui = new Ui::ProcessSelection();
-    m_ui->setupUi(mainWidget());
-    m_ui->search->searchLine()->setTreeWidget( m_ui->pids );
-    // Maybe allow to search for other things than command?
-    m_ui->search->searchLine()->setSearchColumns( QList<int>() << 4 );
-    setCaption(i18n("Attach to Process"));
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setCaption(i18n("Attatch to a process"));
+    m_processList = new KSysGuardProcessList(this);
+    setMainWidget(m_processList);
+    connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
+    m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_processList->setState(ProcessFilter::UserProcesses);
+    m_processList->setKillButtonVisible(false);
+    //m_processList->setPidFilter(qApp->pid());
+    button(Ok)->setEnabled(false);
+}
 
-    resize(700, 440);
+long int ProcessSelectionDialog::pidSelected()
+{
+    QList<KSysGuard::Process*> ps=m_processList->selectedProcesses();
+    Q_ASSERT(ps.count()==1);
     
-    QStringList cmd;
-    psProc = new KDevelop::CommandExecutor("ps");
-#ifdef USE_SOLARIS
-    cmt << "-opid";
-    cmd << "-otty";
-    cmd << "-os";
-    cmd << "-otime";
-    cmd << "-oargs";
-    pidCmd = "ps -opid -otty -os -otime -oargs";
-
-    if (getuid() == 0) {
-        cmd << "-e";
-        pidCmd += " -e";
-    }
-#else
-    cmd << "x";
-    pidCmd = "ps x";
-
-    if (getuid() == 0) {
-        cmd << "a";
-        pidCmd += " a";
-    }
-#endif
-
-    psProc->setArguments(cmd);
-    connect( psProc, SIGNAL(completed()),
-             SLOT(slotProcessExited()) );
-    connect( psProc, SIGNAL(failed()),
-             SLOT(slotProcessExited()) );
-    connect( psProc, SIGNAL(receivedStandardOutput(const QStringList&)),
-             SLOT(slotReceivedOutput(const QStringList&)) );
-
-    psProc->start();
-
-}
-
-/***************************************************************************/
-
-ProcessSelectionDialog::~ProcessSelectionDialog()
-{
-    delete psProc;
-}
-
-/***************************************************************************/
-
-int ProcessSelectionDialog::pidSelected()
-{
+    KSysGuard::Process* process=ps.first();
     
-	return m_ui->pids->currentItem()->text(0).toInt();
+    return process->pid;
 }
 
-
-/***************************************************************************/
-
-void ProcessSelectionDialog::slotReceivedOutput(const QStringList& lines)
+void ProcessSelectionDialog::selectionChanged()
 {
-    static QRegExp ps_output_line("^\\s*(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.+)");
-    const QStringList tmp = lines.filter(ps_output_line);
-    foreach( const QString& line, lines )
-    {
-        ps_output_line.exactMatch( line );
-        QStringList items;
-        items                << ps_output_line.cap(1)
-                                << ps_output_line.cap(2)
-                                << ps_output_line.cap(3)
-                                << ps_output_line.cap(4)
-                                << ps_output_line.cap(5);
-         if(items[0].toInt() == getpid())
-             continue; //Don't show the current process in the list
-        new QTreeWidgetItem(m_ui->pids, items);
-
-    }
-    // Need to set focus here too, as K3ListView will
-    // 'steal' it otherwise.
-    m_ui->search->searchLine()->setFocus();
-    for(int a = 0; a < m_ui->pids->columnCount(); ++a)
-        m_ui->pids->resizeColumnToContents(a);
-}
-
-/***************************************************************************/
-
-void ProcessSelectionDialog::slotProcessExited()
-{
-    delete psProc;
-    psProc = 0;
-}
-
-void ProcessSelectionDialog::focusIn(QFocusEvent*)
-{
-    m_ui->search->searchLine()->setFocus();
+    button(Ok)->setEnabled(true);
 }
 
 }
-
-/***************************************************************************/
 #include "processselection.moc"

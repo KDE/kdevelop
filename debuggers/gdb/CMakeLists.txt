@@ -122,6 +122,7 @@ target_link_libraries(gdbtest
     ${KDE4_KIO_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBRARY}
+    ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
 
