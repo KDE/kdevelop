@@ -151,6 +151,7 @@ void NativeAppJob::start()
         proc->start();
     } else
     {
+        kWarning() << "No process, something went wrong when creating the job";
         // No process means we've returned early on from the constructor, some bad error happened
         emitResult();
     }
