@@ -261,8 +261,9 @@ void VcsPluginHelper::history()
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
     KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, job, dlg);
     dlg->setMainWidget(logWidget);
-    connect(dlg, SIGNAL(closeClicked()), job, SLOT(deleteLater()));
     dlg->show();
+    connect( dlg, SIGNAL(closeClicked()), job, SLOT(kill()) );
+    connect( dlg, SIGNAL(closeClicked()), dlg, SLOT(deleteLater()) );
 }
 
 void VcsPluginHelper::annotation()

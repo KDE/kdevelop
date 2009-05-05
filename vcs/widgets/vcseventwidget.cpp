@@ -215,7 +215,6 @@ VcsEventWidget::~VcsEventWidget()
     delete d->m_logModel;
     delete d->m_detailModel;
     delete d->m_ui;
-    d->m_job->deleteLater();
     delete d;
 }
 
