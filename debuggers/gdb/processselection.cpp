@@ -1,4 +1,4 @@
-/* KDevelop CMake Support
+/* KDevelop GDB Support
  *
  * Copyright 2009 Aleix Pol <aleixpol@kde.org>
  *
