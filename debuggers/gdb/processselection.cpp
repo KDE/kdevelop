@@ -40,7 +40,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
     m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     m_processList->setState(ProcessFilter::UserProcesses);
-#if KDE_IS_VERSION( 4, 2, 0 )
+#if KDE_IS_VERSION( 4, 2, 70 )
     m_processList->setKillButtonVisible(false);
 #endif
     //m_processList->setPidFilter(qApp->pid());
