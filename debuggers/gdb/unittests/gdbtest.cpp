@@ -157,7 +157,7 @@ void GdbTest::testBreakpoint()
 
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
-    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 28);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
 
     session.startProgram(&cfg, 0);
@@ -183,7 +183,7 @@ void GdbTest::testDisableBreakpoint()
     KDevelop::Breakpoint *b;
 
     //add disabled breakpoint before startProgram
-    b = breakpoints->addCodeBreakpoint(fileName, 26);
+    b = breakpoints->addCodeBreakpoint(fileName, 29);
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     b = breakpoints->addCodeBreakpoint(fileName, 21);
@@ -194,7 +194,7 @@ void GdbTest::testDisableBreakpoint()
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
     //add another disabled breakpoint
-    b = breakpoints->addCodeBreakpoint(fileName, 28);
+    b = breakpoints->addCodeBreakpoint(fileName, 31);
     QTest::qWait(300);
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
 
@@ -214,28 +214,28 @@ void GdbTest::testChangeLocationBreakpoint()
     KDevelop::BreakpointModel *breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
 
-    KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 25);
+    KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 27);
 
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
-    QCOMPARE(session.line(), 25);
-
-    QTest::qWait(100);
-    b->setLine(26);
-    QTest::qWait(100);
-    session.run();
-
-    QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
-    QCOMPARE(session.line(), 26);
-    QTest::qWait(100);
-    breakpoints->setData(breakpoints->index(0, KDevelop::Breakpoint::LocationColumn), fileName+":28");
-    QCOMPARE(b->line(), 27);
-    QTest::qWait(100);
-    session.run();
-    QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
+
+    QTest::qWait(100);
+    b->setLine(28);
+    QTest::qWait(100);
+    session.run();
+
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 28);
+    QTest::qWait(100);
+    breakpoints->setData(breakpoints->index(0, KDevelop::Breakpoint::LocationColumn), fileName+":30");
+    QCOMPARE(b->line(), 29);
+    QTest::qWait(100);
+    session.run();
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 29);
     session.run();
 
     waitForState(session, DebugSession::StoppedState);
@@ -279,7 +279,7 @@ void GdbTest::testPendingBreakpoint()
 
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
-    breakpoints->addCodeBreakpoint(fileName, 25);
+    breakpoints->addCodeBreakpoint(fileName, 28);
 
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(QFileInfo(__FILE__).dir().path()+"/gdbtest.cpp", 10);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
@@ -301,7 +301,7 @@ void GdbTest::testUpdateBreakpoint()
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
 
-    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 25);
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 28);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 2);
 
     session.startProgram(&cfg, 0);
@@ -351,6 +351,33 @@ void GdbTest::testIgnoreHitsBreakpoint()
     waitForState(session, DebugSession::StoppedState);
 }
 
+void GdbTest::testConditionBreakpoint()
+{
+    TestDebugSession session;
+
+    TestLaunchConfiguration cfg;
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+
+    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 23);
+    b->setCondition("i==2");
+
+    b = breakpoints->addCodeBreakpoint(fileName, 24);
+
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::PausedState);
+    QTest::qWait(100);
+    b->setCondition("i==0");
+    QTest::qWait(100);
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+
+}
 
 void GdbTest::testShowStepInSource()
 {
@@ -364,7 +391,7 @@ void GdbTest::testShowStepInSource()
 
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
-    breakpoints->addCodeBreakpoint(fileName, 26);
+    breakpoints->addCodeBreakpoint(fileName, 29);
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
     session.stepInto();
@@ -378,15 +405,15 @@ void GdbTest::testShowStepInSource()
         QCOMPARE(showStepInSourceSpy.count(), 3);
         QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
         QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(fileName));
-        QCOMPARE(arguments.at(1).toInt(), 26);
-
-        arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(fileName));
-        QCOMPARE(arguments.at(1).toInt(), 21);
+        QCOMPARE(arguments.at(1).toInt(), 29);
 
         arguments = showStepInSourceSpy.takeFirst();
         QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(fileName));
         QCOMPARE(arguments.at(1).toInt(), 22);
+
+        arguments = showStepInSourceSpy.takeFirst();
+        QCOMPARE(arguments.first().value<KUrl>(), KUrl::fromPath(fileName));
+        QCOMPARE(arguments.at(1).toInt(), 23);
     }
 }
 
@@ -419,10 +446,10 @@ void GdbTest::testStack()
     QCOMPARE(fmodel->framesCount(), 2);
     QCOMPARE(fmodel->data(fmodel->index(0,0), Qt::DisplayRole).toString(), QString("0"));
     QCOMPARE(fmodel->data(fmodel->index(0,1), Qt::DisplayRole).toString(), QString("foo"));
-    QCOMPARE(fmodel->data(fmodel->index(0,2), Qt::DisplayRole).toString(), fileName+QString(":22"));
+    QCOMPARE(fmodel->data(fmodel->index(0,2), Qt::DisplayRole).toString(), fileName+QString(":23"));
     QCOMPARE(fmodel->data(fmodel->index(1,0), Qt::DisplayRole).toString(), QString("1"));
     QCOMPARE(fmodel->data(fmodel->index(1,1), Qt::DisplayRole).toString(), QString("main"));
-    QCOMPARE(fmodel->data(fmodel->index(1,2), Qt::DisplayRole).toString(), fileName+QString(":27"));
+    QCOMPARE(fmodel->data(fmodel->index(1,2), Qt::DisplayRole).toString(), fileName+QString(":29"));
 
 
     session.run();

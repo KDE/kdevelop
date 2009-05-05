@@ -88,12 +88,11 @@ struct InsertedHandler : public Handler
             } else {
                 // For watchpoint creation, GDB basically does not say
                 // anything.  Just record id.
-                controller->m_dontSendChanges = true;
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
-                controller->m_dontSendChanges = false;
             }
             controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
             controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::IgnoreHitsColumn);
+            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
             controller->breakpointStateChanged(breakpoint);
             controller->sendMaybe(breakpoint);
         }
@@ -210,6 +209,9 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                     if (breakpoint->ignoreHits()) {
                         cmd += QString("-i %0 ").arg(breakpoint->ignoreHits());
                     }
+                    if (!breakpoint->condition().isEmpty()) {
+                        cmd += QString("-c %0 ").arg(breakpoint->condition());
+                    }
                     cmd += breakpoint->location();
                     controller()->addCommand(
                         new GDBCommand(BreakInsert,
@@ -237,17 +239,6 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString::number(m_ids[breakpoint]),
                            handler, &UpdateHandler::handle,
                            true));
-    } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
-        #if 0
-        TODO NIKO
-        controller_->addCommand(
-            new GDBCommand(BreakCondition,
-                           QString::number(id_) + ' ' +
-                           itemData[ConditionColumn].toString(),
-                           this, &Breakpoint::handleConditionChanged, true));
-        #endif
-        m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
-        breakpointStateChanged(breakpoint);
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn);
@@ -256,12 +247,20 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
                            handler, &UpdateHandler::handle,
                            true));
+    } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
+        Q_ASSERT(m_ids.contains(breakpoint));
+        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn);
+        controller()->addCommand(
+            new GDBCommand(BreakCondition,
+                           QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
+                           handler, &UpdateHandler::handle,
+                           true));
     }
 }
 
 void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
 {
-    m_dontSendChanges = true;
+    m_dontSendChanges++;
 
     const GDBMI::Value& blist = r["BreakpointTable"]["body"];
 
@@ -301,12 +300,12 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
         update(b, mi_b);
     }
 
-    m_dontSendChanges = false;
+    m_dontSendChanges--;
 }
 
 void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI::Value &b)
 {
-    m_dontSendChanges = true;
+    m_dontSendChanges++;
     
     if (breakpoint->deleted()) return;
 
@@ -352,6 +351,12 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         breakpoint->setIgnoreHits(0);
     }
 
+    if (b.hasField("cond")) {
+        breakpoint->setCondition(b["cond"].literal());
+    } else {
+        breakpoint->setCondition(QString());
+    }
+
 #if 0
     {bp_watchpoint, "watchpoint"},
     {bp_hardware_watchpoint, "hw watchpoint"},
@@ -361,11 +366,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
 #if 0
     {
-        if (b.hasField("cond"))
-            bp->setConditional(b["cond"].literal());
-        else
-            bp->setConditional(QString::null);
-
         // TODO: make the above functions do this instead
         bp->notifyModified();
     }
@@ -394,7 +394,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
     }
 #endif
 
-    m_dontSendChanges = false;
+    m_dontSendChanges--;
 }
 
 }

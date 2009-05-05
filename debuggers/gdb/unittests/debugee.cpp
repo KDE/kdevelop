@@ -17,10 +17,12 @@
 */
 
 #include <iostream>
-
+void noop() {}
 void foo() {
-    int i=0;
+    static int i=0;
     ++i;
+    noop();
+    noop();
 }
 int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;
