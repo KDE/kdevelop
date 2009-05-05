@@ -56,7 +56,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     {
         setError(-1);
         setErrorText( i18n("No executable specified") );
-        kWarning() << "no executable set";
+        kWarning() << "Launch Configuration:" << cfg->name() << "no executable set";
     } else
     {
         KShell::Errors err;
@@ -75,13 +75,13 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
                                    "executable for the launch configuration '%1', "
                                    "this is not supported currently. Aborting start.", cfg->name() ) );
             }
-            kWarning() << "executable has meta characters";
+            kWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
         }
     }
     
     if( envgrp.isEmpty() )
     {
-        kWarning() << i18n("No environment group specified, looks like a broken "
+        kWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
                        "Using default environment group.", cfg->name() );
         envgrp = l.defaultGroup();
@@ -103,12 +103,12 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
                                "arguments for the launch configuration '%1', "
                                "this is not supported currently. Aborting start.", cfg->name() ) );
         }
-        kDebug() << "arguments have meta characters";
+        kWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     
     if( error() != 0 )
     {
-        kDebug() << "oops, problem" << errorText();
+        kWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
     
