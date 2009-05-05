@@ -72,6 +72,10 @@ public:
                                        bool& maySave );
 
     void initBeforeRun();
+    
+    void kill();
+    
+    bool wasKilled();
 
     QString errorMessage() const;
 
@@ -101,6 +105,7 @@ protected:
     void setErrorMessage( const QString& );
 private:
     bool sendFirstDelta;
+    bool killed;
     QString m_errorMessage;
 };
 

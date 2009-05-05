@@ -56,6 +56,7 @@ protected slots:
     void internalJobFailed( ThreadWeaver::Job* job );
 
 protected:
+    virtual bool doKill();
     KDevSvnPlugin* m_part;
 
 private:

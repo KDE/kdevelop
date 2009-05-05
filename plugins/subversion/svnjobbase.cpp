@@ -26,11 +26,20 @@ SvnJobBase::SvnJobBase( KDevSvnPlugin* parent )
     : VcsJob( parent ), m_part( parent ),
       m_status( KDevelop::VcsJob::JobNotStarted )
 {
+    setCapabilities( KJob::Killable );
 }
 
 SvnJobBase::~SvnJobBase()
 {
 }
+
+bool SvnJobBase::doKill()
+{
+    internalJob()->kill();
+    m_status = VcsJob::JobCanceled;
+    return true;
+}
+
 
 KDevelop::VcsJob::JobStatus SvnJobBase::status() const
 {
@@ -116,9 +125,16 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
     {
         kDebug(9510) << "Job is done";
         outputMessage(i18n("Completed"));
-        m_status = KDevelop::VcsJob::JobSucceeded;
+        if( m_status != VcsJob::JobCanceled )
+        {
+            m_status = KDevelop::VcsJob::JobSucceeded;
+        }
     }
     emitResult();
+    if( m_status == VcsJob::JobCanceled )
+    {
+        deleteLater();
+    }
 }
 
 void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
@@ -131,9 +147,16 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
             setErrorText( i18n( "Error executing Job:\n%1", msg ) );
         outputMessage(errorText());
         kDebug(9510) << "Job failed";
-        m_status = KDevelop::VcsJob::JobFailed;
+        if( m_status != VcsJob::JobCanceled )
+        {
+            m_status = KDevelop::VcsJob::JobFailed;
+        }
     }
     emitResult();
+    if( m_status == VcsJob::JobCanceled )
+    {
+        deleteLater();
+    }
 }
 
 KDevelop::IPlugin* SvnJobBase::vcsPlugin() const

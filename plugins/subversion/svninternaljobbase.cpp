@@ -45,7 +45,7 @@ extern "C" {
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
       m_guiSemaphore( 0 ), m_mutex( new QMutex() ),
-      m_success( true ), sendFirstDelta( false )
+      m_success( true ), sendFirstDelta( false ), killed( false )
 {
     m_ctxt->setListener(this);
     connect( this, SIGNAL( failed( ThreadWeaver::Job* ) ),
@@ -58,6 +58,9 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
 
 SvnInternalJobBase::~SvnInternalJobBase()
 {
+    m_ctxt->setListener(0);
+    delete m_ctxt;
+    m_ctxt = 0;
 }
 
 bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
@@ -191,8 +194,8 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
 
 bool SvnInternalJobBase::contextCancel()
 {
-    //Not used by svn, thus not yet implemented
-    return false;
+    QMutexLocker lock( m_mutex );
+    return killed;
 }
 
 bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
@@ -365,6 +368,13 @@ QString SvnInternalJobBase::errorMessage() const
     QMutexLocker lock( m_mutex );
     return m_errorMessage;
 }
+
+void SvnInternalJobBase::kill()
+{
+    QMutexLocker lock( m_mutex );
+    killed = true;
+}
+
 
 
 #include "svninternaljobbase.moc"
