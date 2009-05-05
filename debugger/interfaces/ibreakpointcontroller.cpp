@@ -35,7 +35,7 @@
 namespace KDevelop {
 
 IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
-    : QObject(parent), m_dontSendChanges(false)
+    : QObject(parent), m_dontSendChanges(0)
 {
     connect(breakpointModel(),
             SIGNAL(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)),
@@ -110,17 +110,17 @@ int IBreakpointController::breakpointHitCount(const KDevelop::Breakpoint* breakp
 void IBreakpointController::breakpointStateChanged(Breakpoint* breakpoint)
 {
     if (breakpoint->deleted()) return;
-    m_dontSendChanges = true;
+    m_dontSendChanges++;
     breakpoint->reportChange(Breakpoint::StateColumn);
-    m_dontSendChanges = false;
+    m_dontSendChanges--;
 }
 
 void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
 {
     m_hitCount[breakpoint] = count;
-    m_dontSendChanges = true;
+    m_dontSendChanges++;
     breakpoint->reportChange(Breakpoint::HitCountColumn);
-    m_dontSendChanges = false;
+    m_dontSendChanges--;
 }
 
 }

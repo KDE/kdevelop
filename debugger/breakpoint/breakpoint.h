@@ -90,6 +90,9 @@ public:
     void setIgnoreHits(int c);
     int ignoreHits() const;
 
+    void setCondition(const QString &c);
+    QString condition();
+
 protected:
     friend class IBreakpointController;
     

@@ -64,7 +64,7 @@ protected:
     QMap<const Breakpoint*, QSet<int> > m_dirty;
     QSet<const Breakpoint*> m_pending;
     QMap<const Breakpoint*, int> m_hitCount;
-    bool m_dontSendChanges;
+    int m_dontSendChanges;
 
 private Q_SLOTS:
     void breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column);

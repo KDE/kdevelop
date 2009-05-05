@@ -167,6 +167,8 @@ QVariant Breakpoint::data(int column, int role) const
             ret = QString("%1 (%2)").arg(ret).arg(address_);
         }
         return ret;
+    } else if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
+        return m_condition;
     }
 
     return QVariant();
@@ -271,6 +273,19 @@ int Breakpoint::ignoreHits() const
 {
     return m_ignoreHits;
 }
+
+
+void KDevelop::Breakpoint::setCondition(const QString& c)
+{
+    m_condition = c;
+    reportChange(ConditionColumn);
+}
+
+QString KDevelop::Breakpoint::condition()
+{
+    return m_condition;
+}
+
 
 void KDevelop::Breakpoint::reportChange(Column c)
 {
