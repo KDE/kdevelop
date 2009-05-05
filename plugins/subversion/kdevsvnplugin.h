@@ -135,15 +135,6 @@ public:
 public Q_SLOTS:
 
     // invoked by context-menu
-    void ctxHistory();
-    void ctxCommit();
-    void ctxUpdate();
-    void ctxAdd();
-    void ctxRemove();
-    void ctxRevert();
-    void ctxDiff();
-    void ctxDiffHead();
-    void ctxDiffBase();
     void ctxInfo();
     void ctxStatus();
     void ctxCopy();
@@ -151,9 +142,6 @@ public Q_SLOTS:
     void ctxCat();
     void ctxImport();
     void ctxCheckout();
-private slots:
-    void doCommit(KDevelop::VcsCommitDialog*);
-    void cancelCommit(KDevelop::VcsCommitDialog*);
 private:
     std::auto_ptr<KDevelop::VcsPluginHelper> m_common;
 };
