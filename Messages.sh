@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-subdirs="interfaces kross language outputview project shell sublime util vcs veritas"
+subdirs="debugger interfaces kross language outputview project shell sublime util vcs veritas"
 rcfiles="`find $subdirs -name \*.rc`"
 uifiles="`find $subdirs -name \*.ui`"
 kcfgfiles="`find $subdirs -name \*.kcfg`"
