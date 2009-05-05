@@ -1,0 +1,6 @@
+# KDE Config File
+[General]
+Name=Qt4 CMake Gui application
+Category=C++/Qt (cmake)
+Comment=Generate a CMake/Qt4 based GUI application (crossplatform compatible)
+ShowFilesAfterGeneration=%{dest}/src/%{APPNAMELC}.cpp

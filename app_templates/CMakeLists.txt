@@ -1,5 +1,6 @@
 set(apptemplate_DIRS
     cpp/CMake/cmake_qt4core
+    cpp/CMake/cmake_qt4gui
     cpp/CMake/cmake_qt4core_qtest
     cpp/QMake/qmake_qt4guiapp
     cpp/CMake/cmake_plaincpp
