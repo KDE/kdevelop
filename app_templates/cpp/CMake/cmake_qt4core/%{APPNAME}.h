@@ -9,6 +9,8 @@ Q_OBJECT
 public:
     %{APPNAME}();
     virtual ~%{APPNAME}();
+private slots:
+    void output();
 };
 
 #endif // %{PROJECTDIRNAME}_%{APPNAME}_H
