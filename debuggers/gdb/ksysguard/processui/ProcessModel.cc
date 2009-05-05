@@ -237,13 +237,13 @@ QString ProcessModelPrivate::getStatusDescription(KSysGuard::Process::ProcessSta
 {
 	switch( status) {
 		case KSysGuard::Process::Running:
-			return i18n("- Process is doing some work");
+			return i18n("- Process is doing some work.");
 		case KSysGuard::Process::Sleeping:
-			return i18n("- Process is waiting for something to happen");
+			return i18n("- Process is waiting for something to happen.");
 		case KSysGuard::Process::Stopped:
-			return i18n("- Process has been stopped. It will not respond to user input at the moment");
+			return i18n("- Process has been stopped. It will not respond to user input at the moment.");
 		case KSysGuard::Process::Zombie:
-			return i18n("- Process has finished and is now dead, but the parent process has not cleaned up");
+			return i18n("- Process has finished and is now dead, but the parent process has not cleaned up.");
 		default:
 			return QString();
 	}
@@ -541,13 +541,13 @@ QVariant ProcessModel::headerData(int section, Qt::Orientation orientation,
 		    return QVariant();
 		switch(section) {
 		    case HeadingName:
-			return i18n("The process name");
+			return i18n("The process name.");
 		    case HeadingUser:
-			return i18n("The user that owns this process");
+			return i18n("The user who owns this process.");
 		    case HeadingTty:
-			return i18n("The controlling terminal that this process is running on.");
+			return i18n("The controlling terminal on which this process is running.");
 		    case HeadingNiceness:
-			return i18n("The priority that this process is being run with. Ranges from 19 (very nice, least priority) to -19 (top priority)");
+			return i18n("The priority with which this process is being run. Ranges from 19 (very nice, least priority) to -19 (top priority).");
 		    case HeadingCPUUsage:
 			if(d->mNumProcessorCores == 1)
 			    return i18n("The current CPU usage of the process.");
@@ -564,13 +564,13 @@ QVariant ProcessModel::headerData(int section, Qt::Orientation orientation,
 		    case HeadingMemory:
 			return i18n("<qt>This is the amount of real physical memory that this process is using by itself.<br>It does not include any swapped out memory, nor the code size of its shared libraries.<br>This is often the most useful figure to judge the memory use of a program.</qt>");
 		    case HeadingSharedMemory:
-			return i18n("<qt>This is the amount of real physical memory that this process's shared libraries are using.<br>This memory is shared among all processes that use this library</qt>");
+			return i18n("<qt>This is the amount of real physical memory that this process's shared libraries are using.<br>This memory is shared among all processes that use this library.</qt>");
 		    case HeadingCommand:
-			return i18n("<qt>The command with which this process was launched</qt>");
+			return i18n("<qt>The command with which this process was launched.</qt>");
 		    case HeadingXTitle:
-			return i18n("<qt>The title of any windows that this process is showing</qt>");
+			return i18n("<qt>The title of any windows that this process is showing.</qt>");
 		    case HeadingPid:
-			return i18n("The unique Process ID that identifies this process");
+			return i18n("The unique Process ID that identifies this process.");
 		    default:
 			return QVariant();
 		}
@@ -1237,7 +1237,7 @@ bool ProcessModel::isLocalhost() const
 void ProcessModel::setupHeader() {
 	QStringList headings;
 	headings << i18nc("process heading", "Name");
-	headings << i18nc("process heading", "User Name");
+	headings << i18nc("process heading", "Username");
 	headings << i18nc("process heading", "PID");
 	headings << i18nc("process heading", "TTY");
 	headings << i18nc("process heading", "Niceness");

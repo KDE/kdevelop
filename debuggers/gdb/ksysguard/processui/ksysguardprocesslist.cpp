@@ -890,13 +890,13 @@ void KSysGuardProcessList::reniceSelectedProcesses()
 	if(!renicePids.isEmpty()) {
 		Q_ASSERT(reniceDlg.newCPUPriority <= 20 && reniceDlg.newCPUPriority >= -20);
 		if(!reniceProcesses(renicePids, reniceDlg.newCPUPriority)) {
-			KMessageBox::sorry(this, i18n("You do not have sufficient privileges to change the CPU priority. Aborting"));
+			KMessageBox::sorry(this, i18n("You do not have sufficient privileges to change the CPU priority. Aborting."));
 			return;
 		}
 	}
 	if(!changeIOSchedulerPids.isEmpty()) {
 		if(!changeIoScheduler(changeIOSchedulerPids, (KSysGuard::Process::IoPriorityClass) reniceDlg.newIOSched, reniceDlg.newIOPriority)) {
-			KMessageBox::sorry(this, i18n("You do not have sufficient privileges to change the IO scheduler and priority. Aborting"));
+			KMessageBox::sorry(this, i18n("You do not have sufficient privileges to change the IO scheduler and priority. Aborting."));
 			return;
 		}
 	}
@@ -994,7 +994,7 @@ bool KSysGuardProcessList::changeCpuScheduler(const QList< long long> &pids, KSy
 
 	QString su = KStandardDirs::findExe("kdesu");
 	if(su.isEmpty()) {
-		KMessageBox::sorry(this, i18n("Could not find kdesu executable"));
+		KMessageBox::sorry(this, i18n("Could not find kdesu executable."));
 		return false;  //Cannot find kdesu
 	}
 	QString setscheduler = KStandardDirs::findExe("setscheduler");
@@ -1112,17 +1112,17 @@ void KSysGuardProcessList::killSelectedProcesses()
 void KSysGuardProcessList::reniceFailed()
 {
 	KMessageBox::sorry(this, i18n("You do not have the permission to renice the process and there "
-					"was a problem trying to run as root"));
+					"was a problem trying to run as root."));
 }
 void KSysGuardProcessList::killFailed()
 {
 	KMessageBox::sorry(this, i18n("You do not have the permission to kill the process and there "
-					"was a problem trying to run as root"));
+					"was a problem trying to run as root."));
 }
 void KSysGuardProcessList::ioniceFailed()
 {
 	KMessageBox::sorry(this, i18n("You do not have the permission to set the I/O priority and there "
-					"was a problem trying to run as root"));
+					"was a problem trying to run as root."));
 }
 bool KSysGuardProcessList::showTotals() const {
 	return d->mModel.showTotals();

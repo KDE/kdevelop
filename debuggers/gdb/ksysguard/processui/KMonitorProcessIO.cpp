@@ -191,7 +191,7 @@ bool KMonitorProcessIO::attach(int pid) {
 		kDebug() << "Failed to attach to process " << pid;
 		if(attached_pids.isEmpty()) {
 			mTimer.stop();
-			insertHtml(i18n("<br/><i><font color=\"gray\">Failed to attach to process %1</font></i><br/>", pid));
+			insertHtml(i18n("<br/><i><font color=\"gray\">Failed to attach to process %1.</font></i><br/>", pid));
 			return false;
 		}
 	} else {
