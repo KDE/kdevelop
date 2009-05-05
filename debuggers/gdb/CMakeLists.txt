@@ -1,11 +1,14 @@
 project(gdb)
 
+find_package(KDE4Workspace 4.2.0 REQUIRED)
+
 add_subdirectory(unittests)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${KDE4WORKSPACE_INCLUDE_DIR}
     )
 #add_subdirectory(tests)
 
@@ -63,6 +66,7 @@ target_link_libraries(kdevgdb sublime
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4WORKSPACE_PROCESSUI_LIBS}
 )
 
 install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
