@@ -232,6 +232,7 @@ RunController::RunController(QObject *parent)
     // TODO: need to implement compile only if needed before execute
     // TODO: need to implement abort all running programs when project closed
 
+    d->currentTargetAction = 0;
     d->state = Idle;
     d->q = this;
     d->delegate = new RunDelegate(this);
@@ -241,8 +242,6 @@ RunController::RunController(QObject *parent)
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
         setupActions();
-    } else {
-        d->currentTargetAction = 0;
     }
 }
 
