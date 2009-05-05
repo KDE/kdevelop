@@ -9,11 +9,6 @@ include_directories(
     )
 #add_subdirectory(tests)
 
-#FIXME: remove me when in kdelibs
-add_subdirectory(ksysguard)
-include_directories(ksysguard/processcore)
-#EoFIXME
-
 ########### next target ###############
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
@@ -68,7 +63,6 @@ target_link_libraries(kdevgdb sublime
     ${KDE4_KDEUI_LIBS}
     ${KDEVPLATFORM_UTIL_LIBRARY}
     ${KDE4_KTEXTEDITOR_LIBS}
-    kdev_processui #should change the name again when moved to kdelibs
 )
 
 install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -124,7 +118,6 @@ target_link_libraries(gdbtest
     ${KDE4_KIO_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBRARY}
-    kdev_processui #to be removed when in kdelibs
 )
 
 

@@ -1,44 +1,61 @@
-/* KDevelop CMake Support
- *
- * Copyright 2009 Aleix Pol <aleixpol@kde.org>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
- */
+/***************************************************************************
+    begin                : Mon Sep 20 1999
+    copyright            : (C) 1999 by John Birch
+    email                : jbb@kdevelop.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
 
 #ifndef PROCESSSELECTION_H
 #define PROCESSSELECTION_H
 
-#include <KDialog>
+#include <kdialog.h>
 
-class KSysGuardProcessList;
+namespace Ui
+{
+class ProcessSelection;
+}
+
+namespace KDevelop
+{
+class CommandExecutor;
+}
+
+class QFocusEvent;
 
 namespace GDBDebugger
 {
+
+/***************************************************************************/
+
 class ProcessSelectionDialog : public KDialog
 {
     Q_OBJECT
-    public:
-        ProcessSelectionDialog( QWidget *parent=0 );
-        long int pidSelected();
-        
-    private slots:
-        void selectionChanged();
-        
-    private:
-        KSysGuardProcessList* m_processList;
+
+public:
+    ProcessSelectionDialog( QWidget *parent=0 );
+    ~ProcessSelectionDialog();
+
+    int pidSelected();
+
+private Q_SLOTS:
+    void slotReceivedOutput(const QStringList&);
+    void slotProcessExited();
+
+protected:
+    void focusIn(QFocusEvent*);
+
+private:
+    KDevelop::CommandExecutor* psProc;
+    QString   pidCmd;
+    Ui::ProcessSelection* m_ui;
 };
 
 }

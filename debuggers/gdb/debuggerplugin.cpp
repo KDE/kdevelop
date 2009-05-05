@@ -42,7 +42,6 @@
 #include <kmainwindow.h>
 #include <kstatusbar.h>
 #include <kparts/part.h>
-#include <kparts/mainwindow.h>
 #include <kmessagebox.h>
 #include <kapplication.h>
 #include <kpluginfactory.h>
@@ -386,11 +385,7 @@ void CppDebuggerPlugin::slotAttachProcess()
         return;
 
     int pid = dlg.pidSelected();
-    if(QApplication::applicationPid()==pid)
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                            i18n("You were about to attach me! This will not proceed because KDevelop would die otherwise."));
-    else
-        attachProcess(pid);
+    attachProcess(pid);
 }
 
 void CppDebuggerPlugin::attachProcess(int pid)

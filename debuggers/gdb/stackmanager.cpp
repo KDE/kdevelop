@@ -4,7 +4,6 @@
  * Copyright 1999 John Birch <jbb@kdevelop.org>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
  * Copyright 2008 Vladimir Prus <ghost@cs.msu.su>
- * Copyright 2009 Aleix Pol <aleixpol@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -214,14 +213,15 @@ private:
                 removeChild(i);
         }
 
+        int gidx, kidx;
         // Traverse GDB threads in backward order -- since GDB
         // reports them in backward order. We want UI to
         // show thread IDs in the natural order.
         // FIXME: make the code independent of whatever craziness
         // gdb might have tomorrow.
 
-        int gidx = threads.size()-1;
-        int kidx = 0;
+        gidx = threads.size()-1;
+        kidx = 0;
 
         for (; gidx >= 0; --gidx)
         {
