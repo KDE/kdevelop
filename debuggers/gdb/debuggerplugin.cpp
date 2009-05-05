@@ -251,7 +251,7 @@ void CppDebuggerPlugin::slotDBusServiceOwnerChanged(const QString & name, const 
             connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
             m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
 
-            drkonqiInterface->call("registerDebuggingApplication", i18n("Debug in &KDevelop"));
+            drkonqiInterface->call("registerDebuggingApplication", i18n("KDevelop"));
         }
     }
 }
