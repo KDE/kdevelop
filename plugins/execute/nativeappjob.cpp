@@ -158,8 +158,10 @@ void NativeAppJob::start()
 
 bool NativeAppJob::doKill()
 {
-    if( proc )
+    if( proc ) {
         proc->kill();
+        model()->appendLine( i18n( "*** Killed Application ***" ) );
+    }
     return true;
 }
 
