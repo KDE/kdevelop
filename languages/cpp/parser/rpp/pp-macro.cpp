@@ -62,8 +62,8 @@ pp_macro::pp_macro(const KDevelop::IndexedString& nm) : name(nm)
   , function_like(false)
   , variadics(false)
   , fixed(false)
-  , m_valueHash(0)
   , m_valueHashValid(false)
+  , m_valueHash(0)
 {
   initializeAppendedLists();
 }
@@ -77,8 +77,8 @@ pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) :
    function_like(rhs.function_like),
    variadics(rhs.variadics),
    fixed(rhs.fixed),
-   m_valueHash(rhs.valueHash()),
-   m_valueHashValid(true)
+   m_valueHashValid(true),
+   m_valueHash(rhs.valueHash())
 {
   initializeAppendedLists(dynamic);
   copyListsFrom(rhs);
@@ -91,8 +91,8 @@ pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm, strlen(nm)
   , function_like(false)
   , variadics(false)
   , fixed(false)
-  , m_valueHash(0)
   , m_valueHashValid(false)
+  , m_valueHash(0)
 {
   initializeAppendedLists();
 }
