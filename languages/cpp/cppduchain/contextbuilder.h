@@ -194,7 +194,7 @@ protected:
 
   void queueImportedContext(DUContext* context) {
     DUChainReadLocker lock(DUChain::lock());
-    m_importedParentContexts << DUContext::Import(context);
+    m_importedParentContexts << DUContext::Import(context, currentContext());
   }
   
   virtual void setInSymbolTable(DUContext* context);

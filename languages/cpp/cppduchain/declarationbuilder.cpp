@@ -376,13 +376,12 @@ Type hasTemplateContext( const QList<Type>& contexts ) {
   return Type(0);
 }
 
-template<class Type>
-Type hasTemplateContext( const QVector<Type>& contexts, TopDUContext* top ) {
-  foreach( const Type& context, contexts )
+DUContext::Import hasTemplateContext( const QVector<DUContext::Import>& contexts, TopDUContext* top ) {
+  foreach( const DUContext::Import& context, contexts )
     if( context.context(top) && context.context(top)->type() == KDevelop::DUContext::Template )
       return context;
 
-  return Type(0);
+  return DUContext::Import();
 }
 
 //Check whether the given context is a template-context by checking whether it imports a template-parameter context

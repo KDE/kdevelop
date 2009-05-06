@@ -1111,7 +1111,7 @@ void ContextBuilder::visitCatchStatement(CatchStatementAST *node)
     
     {
       DUChainReadLocker lock(DUChain::lock());
-      contextsToImport.append(DUContext::Import(secondParentContext));
+      contextsToImport.append(DUContext::Import(secondParentContext, 0));
     }
 
     visit(node->condition);
@@ -1136,7 +1136,7 @@ bool ContextBuilder::createContextIfNeeded(AST* node, DUContext* importedParentC
   QVector<DUContext::Import> imports;
   {
     DUChainReadLocker lock(DUChain::lock());
-    imports << DUContext::Import(importedParentContext);
+    imports << DUContext::Import(importedParentContext, 0);
   }
   
   return createContextIfNeeded(node, imports);
