@@ -667,7 +667,7 @@ void LaunchConfigTypePage::changeMode( int idx )
     int lidx = 0;
     if( launchers.contains( config->launcherForMode( id ) ) )
     {
-        int lidx = ui->launcher->findData( config->launcherForMode( id ) );
+        lidx = ui->launcher->findData( config->launcherForMode( id ) );
     } 
     ui->launcher->setCurrentIndex( lidx );
     changeLauncher( lidx );
