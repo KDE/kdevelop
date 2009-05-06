@@ -9,8 +9,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _GREPVIEWPART_H_
-#define _GREPVIEWPART_H_
+#ifndef GREPVIEWPART_H_
+#define GREPVIEWPART_H_
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -23,8 +23,13 @@ public:
     GrepViewPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~GrepViewPlugin();
 
+    void rememberSearchDirectory(QString const & directory);
+    
 private Q_SLOTS:
     void showDialog();
+
+private:
+    QString m_directory;
 };
 
 #endif

@@ -104,26 +104,35 @@ void GrepViewPlugin::showDialog()
     dlg->setPattern( pattern );
 
     dlg->enableButtonOk( !pattern.isEmpty() );
-
-    KUrl currentUrl;
-    KDevelop::IDocument *document = core()->documentController()->activeDocument();
-    dlg->setEnableProjectBox(false);
-    if( document )
-    {
-        currentUrl = document->url();
-    }
-    if( currentUrl.isValid() )
-    {
-        KDevelop::IProject *proj =
-                core()->projectController()->findProjectForUrl( currentUrl );
-        if( proj && proj->folder().isLocalFile() )
+    
+    if (m_directory.isEmpty() or not QFileInfo(m_directory).isDir()) {
+        KUrl currentUrl;
+        KDevelop::IDocument *document = core()->documentController()->activeDocument();
+        dlg->setEnableProjectBox(false);
+        if( document )
         {
-            dlg->setEnableProjectBox(! proj->files().isEmpty() );
-            dlg->setDirectory( proj->folder().toLocalFile() );
+            currentUrl = document->url();
         }
+        if( currentUrl.isValid() )
+        {
+            KDevelop::IProject *proj =
+                    core()->projectController()->findProjectForUrl( currentUrl );
+            if( proj && proj->folder().isLocalFile() )
+            {
+                dlg->setEnableProjectBox(! proj->files().isEmpty() );
+                dlg->setDirectory( proj->folder().toLocalFile() );
+            }
+        }
+    } else {
+        dlg->setDirectory(m_directory);
     }
 
     dlg->show();
+}
+
+void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
+{
+    m_directory = directory;
 }
 
 #include "grepviewplugin.moc"

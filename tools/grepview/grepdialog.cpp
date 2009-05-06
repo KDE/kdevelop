@@ -12,6 +12,8 @@
 
 #include "grepdialog.h"
 
+#include <algorithm>
+
 #include <QDir>
 #include <QLabel>
 #include <QRegExp>
@@ -39,21 +41,25 @@
 #include "grepviewplugin.h"
 #include "grepjob.h"
 
-QStringList __template_desc = QStringList()
+namespace {
+
+static int const MAX_LAST_SEARCH_ITEMS_COUNT = 15;
+
+QStringList template_desc = QStringList()
     << "verbatim"
     << "assignment"
     << "->MEMBER("
     << "class::MEMBER("
     << "OBJECT->member(";
 
-QStringList __template_str = QStringList()
+QStringList template_str = QStringList()
     << "%s"
     << "\\<%s\\>[\\t ]*=[^=]"
     << "\\->[\\t ]*\\<%s\\>[\\t ]*\\("
     << "[a-z0-9_$]+[\\t ]*::[\\t ]*\\<%s\\>[\\t ]*\\("
     << "\\<%s\\>[\\t ]*\\->[\\t ]*[a-z0-9_$]+[\\t ]*\\(";
 
-QStringList __filepatterns = QStringList()
+QStringList filepatterns = QStringList()
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
     << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
@@ -71,6 +77,8 @@ QStringList __filepatterns = QStringList()
     << "*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder"
     << "CMakeLists.txt,*.cmake"
     << "*";
+    
+}
 
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
@@ -85,18 +93,19 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
 
+    patternCombo->addItem( "" );
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
+    
+    templateEdit->setText(template_str[0]);
 
-    templateEdit->setText(__template_str[0]);
-
-    templateTypeCombo->addItems(__template_desc);
+    templateTypeCombo->addItems(template_desc);
 
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    directoryRequester->setPath( QDir::homePath() );
+    directoryRequester->setUrl( KUrl( QDir::homePath() ) );
     directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
@@ -105,7 +114,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     recursiveCheck->setChecked(cg.readEntry("recursive", true));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
-    filesCombo->addItems(__filepatterns);
+    filesCombo->addItems(filepatterns);
     excludeCombo->addItems(cg.readEntry("exclude_patterns", QStringList() << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/" << "") );
 
     suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
@@ -124,10 +133,18 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 static QStringList qCombo2StringList( QComboBox* combo )
 {
     QStringList list;
-    if (!combo)
-    return list;
-    for (int i = 0; i < 15; ++i ) {
-        list << combo->itemText(i);
+    if (!combo) {
+        return list;
+    }
+    int skippedItem = -1;
+    if (combo->currentIndex() != -1 and not combo->itemText(combo->currentIndex()).isEmpty()) {
+        list << combo->itemText(combo->currentIndex());
+        skippedItem = combo->currentIndex();
+    }
+    for (int i = 0; i < std::min(MAX_LAST_SEARCH_ITEMS_COUNT, combo->count()); ++i) {
+        if (i != skippedItem and not combo->itemText(i).isEmpty()) {
+            list << combo->itemText(i);
+        }
     }
     return list;
 }
@@ -137,7 +154,6 @@ GrepDialog::~GrepDialog()
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
-    //cg.writePathEntry("LastSearchPaths", qCombo2StringList(directoryRequester->comboBox()));
     cg.writeEntry("regexp", regexCheck->isChecked());
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
@@ -149,7 +165,7 @@ GrepDialog::~GrepDialog()
 
 void GrepDialog::templateTypeComboActivated(int index)
 {
-    templateEdit->setText(__template_str[index]);
+    templateEdit->setText(template_str[index]);
 }
 
 void GrepDialog::syncButtonClicked( )
@@ -182,7 +198,6 @@ void GrepDialog::setDirectory(const QString &dir)
     directoryRequester->lineEdit()->setText(dir);
     directoryRequester->fileDialog()->setUrl( KUrl( dir ) );
     directoryRequester->completionObject()->setDir( dir );
-
 }
 
 QString GrepDialog::patternString() const
@@ -242,7 +257,6 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
 
 void GrepDialog::search()
 {
-
     GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
@@ -259,6 +273,9 @@ void GrepDialog::search()
 
     kDebug() << "registering job";
     KDevelop::ICore::self()->runController()->registerJob(job);
+    
+    m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
+    
     deleteLater();
 }
 
