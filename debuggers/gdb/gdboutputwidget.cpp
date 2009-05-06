@@ -63,7 +63,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     setWindowTitle(i18n("GDB Output"));
     setToolTip(i18n("<b>GDB output</b><p>"
                     "Shows all gdb commands being executed. "
-                    "You can also issue any other gdb command while debugging."));
+                    "You can also issue any other gdb command while debugging.</p>"));
 
     m_gdbView = new OutputTextEdit(this);
     m_gdbView->setReadOnly(true);

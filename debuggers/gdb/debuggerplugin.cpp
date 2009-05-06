@@ -210,14 +210,14 @@ void CppDebuggerPlugin::setupActions()
                                "after the application has crashed, e.g. with a "
                                "segmentation fault. The core file contains an "
                                "image of the program memory at the time it crashed, "
-                               "allowing you to do a post-mortem analysis.") );
+                               "allowing you to do a post-mortem analysis.</p>") );
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExamineCore()));
     ac->addAction("debug_core", action);
 
 
     action = new KAction(KIcon("connect_creating"), i18n("Attach to Process"), this);
     action->setToolTip( i18n("Attach to process") );
-    action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process."));
+    action->setWhatsThis(i18n("<b>Attach to process</b><p>Attaches the debugger to a running process.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotAttachProcess()));
     ac->addAction("debug_attach", action);
 }
@@ -317,12 +317,12 @@ KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop
         //QString squeezed = KStringHandler::csqueeze(m_contextIdent, 30);
         QAction* action = new QAction( i18n("Evaluate: %1", m_contextIdent), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(contextEvaluate()));
-        action->setWhatsThis(i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor."));
+        action->setWhatsThis(i18n("<b>Evaluate expression</b><p>Shows the value of the expression under the cursor.</p>"));
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
 
         action = new QAction( i18n("Watch: %1", m_contextIdent), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(contextWatch()));
-        action->setWhatsThis(i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list."));
+        action->setWhatsThis(i18n("<b>Watch expression</b><p>Adds an expression under the cursor to the Variables/Watch list.</p>"));
         menuExt.addAction( KDevelop::ContextMenuExtension::DebugGroup, action);
     }
 
