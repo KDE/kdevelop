@@ -41,6 +41,8 @@ TopDUContext::Features ParsingEnvironmentFile::features() const {
 }
 
 void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
+  if(d_func()->m_features == features)
+    return;
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_features = features;
 }
@@ -67,6 +69,8 @@ bool ParsingEnvironmentFile::matchEnvironment(const ParsingEnvironment* /*enviro
 }
 
 void ParsingEnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context) {
+  if(d_func()->m_topContext == context)
+    return;
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_topContext = context;
 }

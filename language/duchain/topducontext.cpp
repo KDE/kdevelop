@@ -895,6 +895,7 @@ void TopDUContext::setFeatures(Features features)
 }
 
 void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
+  //We do not enforce a duchain lock here, since this is also used while loading a top-context
   m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 
   //Replicate features to ParsingEnvironmentFile
