@@ -70,6 +70,7 @@ namespace Cpp {
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : KDevelop::CodeCompletionModel(parent)
 {
+  setForceWaitForModel(true);
 }
 
 #if KDE_IS_VERSION(4,2,62)
