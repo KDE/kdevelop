@@ -44,7 +44,7 @@ struct KDEVCPPRPP_EXPORT MacroRepositoryItemRequest {
   
   static void destroy(rpp::pp_macro* item, KDevelop::AbstractItemRepository&);
   
-  static bool persistent(const rpp::pp_macro* item) {
+  static bool persistent(const rpp::pp_macro* /*item*/) {
     return true; //Macros are reference-counted through the macro sets
   }
   
