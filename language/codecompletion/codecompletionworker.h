@@ -64,10 +64,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
 
     KDevelop::CodeCompletionModel* model() const;
 
-  Q_SIGNALS:
-    ///Connection into the foreground thread. When this is emitted, the result is shown in the completion-list.
+    ///When this is called, the result is shown in the completion-list.
+    ///Call this from within your code
     void foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
+    
+  Q_SIGNALS:
 
+    ///Internal connections into the foreground completion model
+    void foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext> completionContext);
+    
   protected:
     
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
@@ -79,6 +84,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     ///Is always reset from within computeCompletions
     bool& aborting();
     
+    ///Emits foundDeclarations() with an empty list. Always call this when you abort the process of computing completions
     void failed();
     
   public Q_SLOTS:
@@ -89,6 +95,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     virtual void doSpecialProcessing(uint data);
 
   private:
+    bool m_hasFoundDeclarations;
     QMutex* m_mutex;
     bool m_abort;
     bool m_fullCompletion;

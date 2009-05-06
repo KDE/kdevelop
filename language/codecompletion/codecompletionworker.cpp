@@ -41,6 +41,7 @@ using namespace KDevelop;
 
 CodeCompletionWorker::CodeCompletionWorker(QObject* parent) :
     QObject(parent)
+  , m_hasFoundDeclarations(false)
   , m_mutex(new QMutex())
   , m_abort(false)
   , m_fullCompletion(true)
@@ -61,7 +62,13 @@ bool CodeCompletionWorker::fullCompletion() const {
 }
 
 void CodeCompletionWorker::failed() {
-    emit foundDeclarations( QList<KSharedPtr<CompletionTreeElement> >(), KSharedPtr<KDevelop::CodeCompletionContext>() );
+    foundDeclarations( QList<KSharedPtr<CompletionTreeElement> >(), KSharedPtr<KDevelop::CodeCompletionContext>() );
+}
+
+void KDevelop::CodeCompletionWorker::foundDeclarations(QList< KSharedPtr< KDevelop::CompletionTreeElement > >  items, KSharedPtr< KDevelop::CodeCompletionContext > completionContext)
+{
+    m_hasFoundDeclarations = true;
+    emit foundDeclarationsReal(items, completionContext);
 }
 
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
@@ -97,11 +104,14 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
   if (aborting()) {
     failed();
-
     return;
   }
-
+  m_hasFoundDeclarations = false;
+  
   computeCompletions(context, position, view, range, text);
+  
+  if(!m_hasFoundDeclarations)
+    failed();
 }
 
 void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
@@ -149,7 +159,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
     
     tree += completionContext->ungroupedElements();
 
-    emit foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
+    foundDeclarations( tree, KSharedPtr<KDevelop::CodeCompletionContext>::staticCast(completionContext) );
 
   } else {
     kDebug() << "setContext: Invalid code-completion context";

@@ -78,6 +78,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual int rowCount ( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex parent ( const QModelIndex & index ) const;
   
+    ///Use this to set whether the code-completion widget should wait for this model until it's shown
+    ///This makes sense when the model takes some time but not too much time, to make the UI less flickering and
+    ///annoying.
+    ///The default is false
+    void setForceWaitForModel(bool wait);
+    
+    bool forceWaitForModel();
+    
     ///Convenience-storage for use by the inherited completion model
     void setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext);
     KSharedPtr<CodeCompletionContext> completionContext() const;
@@ -129,6 +137,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     
     CodeCompletionWorker* worker() const;
   private:
+    bool m_forceWaitForModel;
     bool m_fullCompletion;
     QMutex* m_mutex;
     CompletionWorkerThread* m_thread;

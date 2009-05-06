@@ -72,7 +72,7 @@ struct CompletionWorkerThread : public QThread {
       m_worker = m_model->createCompletionWorker();
      
      //We connect directly, so we can do the pre-grouping within the background thread
-     connect(m_worker, SIGNAL(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
+     connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
 
      connect(m_model, SIGNAL(completionsNeeded(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), m_worker, SLOT(computeCompletions(KDevelop::DUContextPointer, const KTextEditor::Cursor&, KTextEditor::View*)), Qt::QueuedConnection);
      connect(m_model, SIGNAL(doSpecialProcessingInBackground(uint)), m_worker, SLOT(doSpecialProcessing(uint)));
@@ -83,8 +83,20 @@ struct CompletionWorkerThread : public QThread {
    CodeCompletionWorker* m_worker;
 };
 
+bool CodeCompletionModel::forceWaitForModel()
+{
+  return m_forceWaitForModel;
+}
+
+void CodeCompletionModel::setForceWaitForModel(bool wait)
+{
+  m_forceWaitForModel = wait;
+}
+
+
 CodeCompletionModel::CodeCompletionModel( QObject * parent )
   : CodeCompletionModel2(parent)
+  , m_forceWaitForModel(false)
   , m_fullCompletion(true)
   , m_mutex(new QMutex)
   , m_thread(0)
@@ -183,11 +195,16 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
     lock.unlock();
 
+    if(m_forceWaitForModel)
+      emit waitForReset();
+    
     emit completionsNeeded(thisContext, range.start(), view);
   } else {
     kDebug() << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
   }
 }
+
+
 void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType)
 {
   //If this triggers, initialize() has not been called after creation.
@@ -224,8 +241,11 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
 {
   m_completionContext = completionContext;
   
-  if(m_completionItems.isEmpty() && items.isEmpty())
+  if(m_completionItems.isEmpty() && items.isEmpty()) {
+    if(m_forceWaitForModel)
+      reset(); //If we need to reset the model, reset it
     return; //We don't need to reset, which is bad for target model
+  }
   
   m_completionItems = items;
   
