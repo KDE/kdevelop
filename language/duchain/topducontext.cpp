@@ -343,7 +343,7 @@ public:
     context->m_local->m_directImporters.insert(m_ctxt);
 
     if(local)
-      m_importedContexts << DUContext::Import(context);
+      m_importedContexts << DUContext::Import(context, m_ctxt);
 
     foreach(TopDUContext* user, m_dataUsers)
       user->m_local->addImportedContextRecursively(context, temporary, false);
@@ -366,7 +366,7 @@ public:
     context->m_local->m_directImporters.remove(m_ctxt);
 
     if(local)
-      removeFromVector(m_importedContexts, DUContext::Import(context));
+      removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
 
     foreach(TopDUContext* user, m_dataUsers)
       user->m_local->removeImportedContextRecursively(context, false);
@@ -399,7 +399,7 @@ public:
       context->m_local->m_directImporters.remove(m_ctxt);
 
       if(local)
-        removeFromVector(m_importedContexts, DUContext::Import(context));
+        removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
 
       if(!m_ctxt->usingImportsCache()) {
         
@@ -760,7 +760,7 @@ SimpleCursor TopDUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  Import import(const_cast<DUContext*>(target), SimpleCursor::invalid());
+  Import import(const_cast<DUContext*>(target), const_cast<TopDUContext*>(this), SimpleCursor::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;

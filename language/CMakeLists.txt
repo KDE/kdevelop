@@ -50,6 +50,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/declarationid.cpp
     duchain/definitions.cpp
     duchain/uses.cpp
+    duchain/importers.cpp
     duchain/dumpchain.cpp
     duchain/indexedstring.cpp
     duchain/duchainregister.cpp

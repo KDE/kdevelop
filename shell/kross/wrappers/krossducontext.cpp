@@ -120,8 +120,6 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setPropagateDeclarations(bool x0) { wrapped->setPropagateDeclarations(x0); }
 		Q_SCRIPTABLE bool isPropagateDeclarations() const { return wrapped->isPropagateDeclarations(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
-		Q_SCRIPTABLE const KDevelop::IndexedDUContext* indexedImporters() const { return wrapped->indexedImporters(); }
-		Q_SCRIPTABLE uint indexedImportersSize() const { return wrapped->indexedImportersSize(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > childContexts() const { return wrapped->childContexts(); }
 		Q_SCRIPTABLE void deleteChildContextsRecursively() { wrapped->deleteChildContextsRecursively(); }
 		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }

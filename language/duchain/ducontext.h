@@ -347,7 +347,9 @@ public:
   /// Represents an imported parent context.
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     ///DUChain must be read-locked when this is called
-    Import(DUContext* context = 0, const SimpleCursor& position = SimpleCursor::invalid());
+    Import(DUContext* context, const DUContext* importer, const SimpleCursor& position = SimpleCursor::invalid());
+    Import() : position(SimpleCursor::invalid()) {
+    }
     Import(const DeclarationId& id, const SimpleCursor& position = SimpleCursor::invalid());
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
@@ -366,8 +368,13 @@ public:
       return m_context;
     }
 
-    ///Returns true if this import can be followed back from the imported context
-    bool isBackwardMapped() const;
+    ///returns true if this import is direct (Not referring to the import by its identifier, but rather directly by its index)
+    bool isDirect() const;
+    
+    ///If this import is indirect, returns the imported declaration-id
+    DeclarationId indirectDeclarationId() const {
+      return m_declaration;
+    }
 
     SimpleCursor position;
     private:
@@ -379,7 +386,7 @@ public:
 
   /**
    * Returns the list of imported parent contexts for this context.
-   * @warning The list may contain objects that are not valid any more(data() returns zero, but that can only happen when using anonymous imports, @see addImportedParentContext)
+   * @warning The list may contain objects that are not valid any more(data() returns zero), @see addImportedParentContext)
    * @warning The import structure may contain loops if this is a TopDUContext, so be careful when traversing the tree.
    * Expensive.
    */
@@ -414,6 +421,7 @@ public:
    * Adds an imported context, which may be indirect.
    * @warning This is only allowed if this context is _NOT_ a top-context
    * @warning When using this mechanism, this context will not be registered as importer to the other one.
+   * @warning The given import _must_ be indirect
    * @return true if the import was already imported before, else false.
    */
   bool addIndirectImport(const DUContext::Import& import);
@@ -444,10 +452,8 @@ public:
 
   /**
    * Cheap, because nothing needs to be loaded.
-   * Returns an array of IndexedDUContext, with the size indexedImportersSize()
    */
-  const IndexedDUContext* indexedImporters() const;
-  uint indexedImportersSize() const;
+  KDevVarLengthArray<IndexedDUContext> indexedImporters() const;
 
   /**
    * Returns the list of immediate child contexts for this context.

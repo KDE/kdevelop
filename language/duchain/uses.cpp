@@ -90,7 +90,7 @@ class UsesRequestItem {
     item->~UsesItem();
   }
   
-  static bool persistent(const UsesItem* item) {
+  static bool persistent(const UsesItem* /*item*/) {
     return true;
   }
   

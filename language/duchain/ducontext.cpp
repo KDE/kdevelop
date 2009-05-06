@@ -44,6 +44,7 @@
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
 #include "arrayhelpers.h"
+#include "importers.h"
 
 ///It is fine to use one global static mutex here
 
@@ -480,12 +481,20 @@ bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 void DUContextDynamicData::addImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
-  if(arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context))) {
-    kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
-    return;
-  }
+  DUContext::Import import(m_context, context);
+  
+  if(import.isDirect()) {
+    //Direct importers are registered directly within the data
+    if(arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context))) {
+      kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
+      return;
+    }
 
-  m_context->d_func_dynamic()->m_importersList().append(context);
+    m_context->d_func_dynamic()->m_importersList().append(context);
+  }else{
+    //Indirect importers are registered separately
+    Importers::self().addImporter(import.indirectDeclarationId(), IndexedDUContext(context));
+  }
 
   //DUChain::contextChanged(m_context, DUChainObserver::Addition, DUChainObserver::ImportedChildContexts, context);
 }
@@ -494,9 +503,14 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
 void DUContextDynamicData::removeImportedChildContext( DUContext * context )
 {
 //   ENSURE_CAN_WRITE
-  removeOne(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context));
-  //if( != 0 )
-    //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::ImportedChildContexts, context);
+  DUContext::Import import(m_context, context);
+  
+  if(import.isDirect()) {
+    removeOne(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context));
+  }else{
+    //Indirect importers are registered separately
+    Importers::self().removeImporter(import.indirectDeclarationId(), IndexedDUContext(context));
+  }
 }
 
 int DUContext::depth() const
@@ -912,11 +926,11 @@ void DUContext::addImportedParentContext( DUContext * context, const SimpleCurso
     return;
   }
 
-  Import import(context, position);
+  Import import(context, this, position);
   if(addIndirectImport(import))
     return;
 
-  if( !anonymous && import.isBackwardMapped() ) {
+  if( !anonymous ) {
     ENSURE_CAN_WRITE_(context)
     context->m_dynamicData->addImportedChildContext(this);
   }
@@ -928,7 +942,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  Import import(context, SimpleCursor::invalid());
+  Import import(context, this, SimpleCursor::invalid());
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a] == import) {
@@ -945,14 +959,16 @@ void DUContext::removeImportedParentContext( DUContext * context )
   //DUChain::contextChanged(this, DUChainObserver::Removal, DUChainObserver::ImportedParentContexts, context);
 }
 
-const IndexedDUContext* DUContext::indexedImporters() const
+KDevVarLengthArray<IndexedDUContext> DUContext::indexedImporters() const
 {
-  return d_func()->m_importers();
-}
-
-uint DUContext::indexedImportersSize() const
-{
-  return d_func()->m_importersSize();
+  KDevVarLengthArray<IndexedDUContext> ret;
+  if(owner())
+    ret = Importers::self().importers(owner()->id()); //Add indirect importers to the list
+  
+  FOREACH_FUNCTION(IndexedDUContext ctx, d_func()->m_importers)
+    ret.append(ctx);
+   
+  return ret;
 }
 
 QVector<DUContext*> DUContext::importers() const
@@ -962,6 +978,14 @@ QVector<DUContext*> DUContext::importers() const
   QVector<DUContext*> ret;
   FOREACH_FUNCTION(IndexedDUContext ctx, d_func()->m_importers)
     ret << ctx.context();
+  
+  if(owner()) {
+    //Add indirect importers to the list
+    KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
+    FOREACH_ARRAY(IndexedDUContext ctx, indirect) {
+      ret << ctx.context();
+    }
+  }
 
   return ret;
 }
@@ -1300,7 +1324,7 @@ SimpleCursor DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  Import import(const_cast<DUContext*>(target), SimpleCursor::invalid());
+  Import import(const_cast<DUContext*>(target), this, SimpleCursor::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
@@ -1665,11 +1689,9 @@ void DUContext::clearImportedParentContexts()
   DUCHAIN_D_DYNAMIC(DUContext);
 
   while( d->m_importedContextsSize() != 0 ) {
-    if( d->m_importedContexts()[0].isBackwardMapped() ) {
-      DUContext* ctx = d->m_importedContexts()[0].context(0);
-      if(ctx)
-        ctx->m_dynamicData->removeImportedChildContext(this);
-    }
+    DUContext* ctx = d->m_importedContexts()[0].context(0);
+    if(ctx)
+      ctx->m_dynamicData->removeImportedChildContext(this);
 
     d->m_importedContextsList().removeOne(d->m_importedContexts()[0]);
   }
@@ -1855,8 +1877,8 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
     next[a]->addToEachNode(other);
 }
 
-DUContext::Import::Import(DUContext* _context, const SimpleCursor& _position) : position(_position) {
-  if(_context && _context->owner() && _context->owner()->specialization()) {
+DUContext::Import::Import(DUContext* _context, const DUContext* importer, const SimpleCursor& _position) : position(_position) {
+  if(_context && _context->owner() && (_context->owner()->specialization() || (importer && importer->topContext() != _context->topContext()))) {
     m_declaration = _context->owner()->id(true);
   }else{
     m_context = _context;
@@ -1879,12 +1901,8 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
   }
 }
 
-bool DUContext::Import::isBackwardMapped() const {
-  return true; //Always do backward-mapping. We just have to find a solution for temporary imports.
-/*  if(m_declaration.isValid())
-    return !m_declaration.specialization();
-  else
-    return true;*/
+bool DUContext::Import::isDirect() const {
+  return m_context.isValid();
 }
 
 }
