@@ -460,11 +460,7 @@ Breakpoint* BreakpointModel::addReadWatchpoint()
     return n;
 }
 
-
-#include "breakpointmodel.moc"
-
-namespace KDevelop {
-KDevelop::Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
+Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     foreach (Breakpoint *b, m_breakpoints) {
         if (b->url() == url && b->line() == line) {
             return b;
@@ -472,4 +468,5 @@ KDevelop::Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     }
     return 0;
 }
-}
+
+#include "breakpointmodel.moc"
