@@ -117,21 +117,14 @@ void BreakpointDetails::setItem(Breakpoint *b)
     hits_->setEnabled(true);
     ignore_->setEnabled(true);
 
-    IDebugSession* session = ICore::self()->debugController()->currentSession();
-    IBreakpointController::BreakpointState state;
-    if (session) {
-        state = session->breakpointController()->breakpointState(b);
-    } else {
-        state = IBreakpointController::DirtyState;
-    }
-    switch (state) {
-        case IBreakpointController::PendingState:
+    switch (b->state()) {
+        case Breakpoint::PendingState:
             status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
             break;
-        case IBreakpointController::DirtyState:
+        case Breakpoint::DirtyState:
             status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
             break;
-        case IBreakpointController::CleanState:
+        case Breakpoint::CleanState:
             status_->setText("Breakpoint is active");
             break;
     }

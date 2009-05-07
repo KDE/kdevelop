@@ -88,15 +88,15 @@ void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
     sendMaybe(breakpoint);
 }
 
-IBreakpointController::BreakpointState IBreakpointController::breakpointState(const Breakpoint* breakpoint) const
+Breakpoint::BreakpointState IBreakpointController::breakpointState(const Breakpoint* breakpoint) const
 {
     if (!m_dirty.contains(breakpoint) || m_dirty[breakpoint].isEmpty()) {
         if (m_pending.contains(breakpoint)) {
-            return PendingState;
+            return Breakpoint::PendingState;
         }
-        return CleanState;
+        return Breakpoint::CleanState;
     }
-    return DirtyState;
+    return Breakpoint::DirtyState;
 }
 
 int IBreakpointController::breakpointHitCount(const KDevelop::Breakpoint* breakpoint) const

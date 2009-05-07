@@ -43,6 +43,11 @@ public:
         AccessBreakpoint,
         LastBreakpointKind
     };
+    enum BreakpointState {
+        DirtyState,
+        PendingState,
+        CleanState
+    };
 
     Breakpoint(BreakpointModel *model, BreakpointKind kind);
     Breakpoint(BreakpointModel *model, const KConfigGroup& config);
@@ -92,6 +97,8 @@ public:
 
     void setCondition(const QString &c);
     QString condition();
+
+    BreakpointState state() const;
 
 protected:
     friend class IBreakpointController;

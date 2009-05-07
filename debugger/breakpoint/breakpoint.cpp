@@ -113,29 +113,22 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == StateColumn)
     {
-        IDebugSession* session = ICore::self()->debugController()->currentSession();
-        IBreakpointController::BreakpointState state;
-        if (session) {
-            state = session->breakpointController()->breakpointState(this);
-        } else {
-            state = IBreakpointController::DirtyState;
-        }
         if (role == Qt::DecorationRole) {
-            switch (state) {
-                case IBreakpointController::DirtyState:
+            switch (state()) {
+                case DirtyState:
                     return KIcon("system-switch-user");
-                case IBreakpointController::PendingState:
+                case PendingState:
                     return KIcon("help-contents");
-                case IBreakpointController::CleanState:
+                case CleanState:
                     return KIcon("dialog-apply");
             }
         } else if (role == Qt::ToolTipRole) {
-            switch (state) {
-                case IBreakpointController::DirtyState:
+            switch (state()) {
+                case DirtyState:
                     return i18n("dirty");
-                case IBreakpointController::PendingState:
+                case PendingState:
                     return i18n("pending");
-                case IBreakpointController::CleanState:
+                case CleanState:
                     return i18n("clean");
             }
         } else if (role == Qt::DisplayRole) {
@@ -284,6 +277,16 @@ void KDevelop::Breakpoint::setCondition(const QString& c)
 QString KDevelop::Breakpoint::condition()
 {
     return m_condition;
+}
+
+Breakpoint::BreakpointState Breakpoint::state() const
+{
+    IDebugSession* session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        return session->breakpointController()->breakpointState(this);
+    } else {
+        return DirtyState;
+    }
 }
 
 

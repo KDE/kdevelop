@@ -40,15 +40,9 @@ class KDEVPLATFORMDEBUGGER_EXPORT IBreakpointController : public QObject
 {
     Q_OBJECT
 public:
-    enum BreakpointState {
-        DirtyState,
-        PendingState,
-        CleanState
-    };
-
     IBreakpointController(IDebugSession* parent);
     
-    BreakpointState breakpointState(const Breakpoint *breakpoint) const;
+    Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
 
 protected:
