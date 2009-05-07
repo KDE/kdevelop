@@ -33,11 +33,11 @@ template<bool dynamic = false>
 class IdentifierPrivate
 {
 public:
-  IdentifierPrivate() : m_unique(0), m_hash(0), m_refCount(0) {
+  IdentifierPrivate() : m_unique(0), m_refCount(0), m_hash(0) {
   }
   
   template<bool rhsDynamic>
-  IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs) : m_hash(rhs.m_hash), m_unique(rhs.m_unique), m_identifier(rhs.m_identifier), m_refCount(0) {
+  IdentifierPrivate(const IdentifierPrivate<rhsDynamic>& rhs) : m_unique(rhs.m_unique), m_identifier(rhs.m_identifier), m_refCount(0), m_hash(rhs.m_hash) {
     copyListsFrom(rhs);
   }
   

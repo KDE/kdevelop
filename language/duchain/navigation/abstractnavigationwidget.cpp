@@ -48,7 +48,7 @@
 namespace KDevelop {
 
 AbstractNavigationWidget::AbstractNavigationWidget()
-  : m_currentWidget(0), m_browser(0)
+  : m_browser(0), m_currentWidget(0)
 {
   setPalette( QApplication::palette() );
   resize(100, 100);
