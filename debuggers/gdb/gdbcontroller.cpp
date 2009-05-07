@@ -1332,7 +1332,7 @@ void GDBController::handleVersion(const QStringList& s)
     const int minVersion3 = 50;
 
     kDebug() << s.first();
-    QRegExp rx("^GNU gdb \\(GDB\\).* ([0-9]+)\\.([0-9]+)\\.([0-9]+)");
+    QRegExp rx("([0-9]+)\\.([0-9]+)\\.([0-9]+)");
     rx.indexIn(s.first());
     if (rx.cap(1).toInt() < minVersion1
         || (rx.cap(1).toInt() == minVersion1 && (rx.cap(2).toInt() < minVersion2
