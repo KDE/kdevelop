@@ -158,11 +158,11 @@ void GdbTest::testBreakpoint()
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(fileName, 28);
-    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::DirtyState);
 
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
-    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::CleanState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
     session.stepInto();
     waitForState(session, DebugSession::PausedState);
     session.stepInto();
@@ -282,11 +282,11 @@ void GdbTest::testPendingBreakpoint()
     breakpoints->addCodeBreakpoint(fileName, 28);
 
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint(QFileInfo(__FILE__).dir().path()+"/gdbtest.cpp", 10);
-    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::DirtyState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::DirtyState);
 
     session.startProgram(&cfg, 0);
     waitForState(session, DebugSession::PausedState);
-    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::IBreakpointController::PendingState);
+    QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::PendingState);
     session.run();
     waitForState(session, DebugSession::StoppedState);
 }
