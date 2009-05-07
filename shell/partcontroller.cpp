@@ -44,8 +44,6 @@
 #include <ktexteditor/smartinterface.h>
 
 #include "core.h"
-// #include "kdevmainwindow.h"
-// #include "kdevconfig.h"
 
 namespace KDevelop
 {
