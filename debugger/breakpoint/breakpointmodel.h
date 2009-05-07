@@ -83,10 +83,12 @@ public Q_SLOTS:
 
 private:
     enum MarkType {
-        BreakpointMark = KTextEditor::MarkInterface::markType08,
-        ActiveBreakpointMark   = KTextEditor::MarkInterface::BreakpointActive,
+        BreakpointMark = KTextEditor::MarkInterface::BreakpointActive,
         ReachedBreakpointMark  = KTextEditor::MarkInterface::BreakpointReached,
         DisabledBreakpointMark = KTextEditor::MarkInterface::BreakpointDisabled,
+        PendingBreakpointMark   = KTextEditor::MarkInterface::markType08,
+
+        AllBreakpointMarks = BreakpointMark | ReachedBreakpointMark | DisabledBreakpointMark | PendingBreakpointMark
     };
 
 Q_SIGNALS:
@@ -113,17 +115,18 @@ private Q_SLOTS:
     void textDocumentCreated(KDevelop::IDocument*);
     void documentSaved(KDevelop::IDocument*);
     void cursorDeleted(KTextEditor::SmartCursor* cursor);    
-protected:
-
-    static const QPixmap* inactiveBreakpointPixmap();
-    static const QPixmap* activeBreakpointPixmap();
+private:
+    static const QPixmap* breakpointPixmap();
+    static const QPixmap* pendingBreakpointPixmap();
     static const QPixmap* reachedBreakpointPixmap();
     static const QPixmap* disabledBreakpointPixmap();
 
 private:
     friend class Breakpoint;
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
-    
+    uint breakpointType(Breakpoint *breakpoint);
+    Breakpoint *breakpoint(const KUrl& url, int line);
+
     bool m_dontUpdateMarks;
     QList<Breakpoint*> m_breakpoints;
 };

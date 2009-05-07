@@ -81,8 +81,8 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
             return;
         
         iface->setMarkDescription((MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
-        iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *inactiveBreakpointPixmap());
-        iface->setMarkPixmap((MarkInterface::MarkTypes)ActiveBreakpointMark, *activeBreakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)BreakpointMark, *breakpointPixmap());
+        iface->setMarkPixmap((MarkInterface::MarkTypes)PendingBreakpointMark, *pendingBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
         iface->setEditableMarks( MarkInterface::Bookmark | BreakpointMark );
@@ -233,41 +233,34 @@ void BreakpointModel::markChanged(
     KTextEditor::Mark mark, 
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
+
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
-    if (type != (MarkInterface::MarkTypes)BreakpointMark
-        && type != (MarkInterface::MarkTypes)ActiveBreakpointMark
-        && type != (MarkInterface::MarkTypes)ReachedBreakpointMark
-        && type != (MarkInterface::MarkTypes)DisabledBreakpointMark)
-        return;
+    if (!(type & AllBreakpointMarks)) return;
 
     if (action == KTextEditor::MarkInterface::MarkAdded) {
-        bool alreadyExists = false;
-        foreach (Breakpoint *b, m_breakpoints) {
-            if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
-                alreadyExists = true;
-                break;
-            }
+        Breakpoint *b = breakpoint(document->url(), mark.line);
+        if (b) {
+            //there was already a breakpoint, so delete instead of adding
+            b->setDeleted();
+            return;
         }
-        if (!alreadyExists) {
-            Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
-            KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(document);
-            if (smart) {
-                KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(mark.line, 0));
-                connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
-                            SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
-                breakpoint->setSmartCursor(cursor);
-            }
-            
+        Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
+        KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(document);
+        if (smart) {
+            KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(mark.line, 0));
+            connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
+                        SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
+            breakpoint->setSmartCursor(cursor);
         }
     } else {
         // Find this breakpoint and delete it
-        foreach (Breakpoint *b, m_breakpoints) {
-            if (b->url() == document->url() && b->line() == mark.line && !b->deleted()) {
-                b->setDeleted();
-            }
+        Breakpoint *b = breakpoint(document->url(), mark.line);
+        if (b) {
+            b->setDeleted();
         }
     }
+
 #if 0
     if ( KDevelop::ICore::self()->documentController()->activeDocument() && KDevelop::ICore::self()->documentController()->activeDocument()->textDocument() == document )
     {
@@ -278,15 +271,15 @@ void BreakpointModel::markChanged(
 #endif
 }
 
-const QPixmap* BreakpointModel::inactiveBreakpointPixmap()
+const QPixmap* BreakpointModel::breakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
+  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
   return &pixmap;
 }
 
-const QPixmap* BreakpointModel::activeBreakpointPixmap()
+const QPixmap* BreakpointModel::pendingBreakpointPixmap()
 {
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
+  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
@@ -320,57 +313,61 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
     emit breakpointChanged(breakpoint, column);
 }
 
+uint BreakpointModel::breakpointType(Breakpoint *breakpoint)
+{
+    uint type = BreakpointMark;
+    if (!breakpoint->enabled()) {
+        type = DisabledBreakpointMark;
+    } else if (breakpoint->hitCount()) {
+        type = ReachedBreakpointMark;
+    } else if (breakpoint->state() == Breakpoint::PendingState) {
+        type = PendingBreakpointMark;
+    }
+    return type;
+}
 
 void KDevelop::BreakpointModel::updateMarks()
 {
     if (m_dontUpdateMarks) return;
 
-    QMap<KUrl, QSet<int> > breakpoints;
     foreach (Breakpoint *breakpoint, m_breakpoints) {
-        if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-        breakpoints[breakpoint->url()] << breakpoint->line();
+        IDocument *doc = ICore::self()->documentController()->documentForUrl(breakpoint->url());
+        if (!doc) continue;
+        KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+        if (!mark) continue;
+        uint type = breakpointType(breakpoint);
+        kDebug() << type << mark->mark(breakpoint->line());
+
+        doc->textDocument()->blockSignals(true);
+        if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
+            if (!(mark->mark(breakpoint->line()) & type)) {
+                mark->removeMark(breakpoint->line(), AllBreakpointMarks);
+                mark->addMark(breakpoint->line(), type);
+            }
+        } else {
+            mark->addMark(breakpoint->line(), type);
+        }
+        doc->textDocument()->blockSignals(false);
     }
-    kDebug() << breakpoints;
     foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
+
+        doc->textDocument()->blockSignals(true);
         foreach (KTextEditor::Mark *m, mark->marks()) {
+            if (!(m->type & AllBreakpointMarks)) continue;
             kDebug() << m->line << m->type;
-            if (m->type & BreakpointMark) {
-                if (!breakpoints.contains(doc->url()) || !breakpoints[doc->url()].contains(m->line)) {
-                    kDebug() << "removeMark";
-                    mark->removeMark(m->line, BreakpointMark);
-                } else {
-                    breakpoints[doc->url()].remove(m->line);
-                }
-            }
-        }
-    }
-    kDebug() << breakpoints;
-    
-    QMapIterator<KUrl, QSet<int> > i(breakpoints);
-    while (i.hasNext()) {
-        i.next();
-        foreach (int line, i.value()) {
-            IDocument *doc = ICore::self()->documentController()->documentForUrl(i.key());
-            if (!doc) continue;
-            KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-            if (!mark) continue;
-            mark->addMark(line, BreakpointMark);
-            kDebug() << "addMark" << line;
-            KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(doc->textDocument());
-            if (!smart) continue;
             foreach (Breakpoint *breakpoint, m_breakpoints) {
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
-                if (i.key() == breakpoint->url() && line == breakpoint->line()) {
-                    KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(line, 0));
-                    connect(cursor->notifier(), SIGNAL(deleted(KTextEditor::SmartCursor*)),
-                                SLOT(cursorDeleted(KTextEditor::SmartCursor*)));
-                    breakpoint->setSmartCursor(cursor);
+                if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
+                    goto continueNextMark;
                 }
             }
+            mark->removeMark(m->line, AllBreakpointMarks);
+            continueNextMark:;
         }
-    }    
+        doc->textDocument()->blockSignals(false);
+    }
 }
 
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
@@ -466,3 +463,14 @@ Breakpoint* BreakpointModel::addReadWatchpoint()
 
 
 #include "breakpointmodel.moc"
+
+namespace KDevelop {
+KDevelop::Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
+    foreach (Breakpoint *b, m_breakpoints) {
+        if (b->url() == url && b->line() == line) {
+            return b;
+        }
+    }
+    return 0;
+}
+}
