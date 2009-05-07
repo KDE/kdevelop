@@ -33,8 +33,8 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
   if(id.count() > 1) {
     ret = id;
     ret.pop();
-    if(previousInstantiationInformation)
-      ret = IndexedInstantiationInformation(previousInstantiationInformation).information().applyToIdentifier(ret);
+    if(previousInstantiationInformation.index())
+      ret = previousInstantiationInformation.information().applyToIdentifier(ret);
   }
 
   Identifier lastId(id.last());
@@ -67,8 +67,8 @@ void InstantiationInformation::addTemplateParameter(KDevelop::AbstractType::Ptr 
 
 QString InstantiationInformation::toString(bool local) const {
     QString ret;
-    if(previousInstantiationInformation && !local)
-        ret = IndexedInstantiationInformation(previousInstantiationInformation).information().toString() + "::";
+    if(previousInstantiationInformation.index() && !local)
+        ret = previousInstantiationInformation.information().toString() + "::";
     ret += '<';
     for(uint a = 0; a < templateParametersSize(); ++a) {
         if(a)
@@ -80,11 +80,11 @@ QString InstantiationInformation::toString(bool local) const {
     return ret;
 }
 
-InstantiationInformation::InstantiationInformation() : previousInstantiationInformation(0) {
+InstantiationInformation::InstantiationInformation() : m_refCount(0) {
   initializeAppendedLists();
 }
 
-InstantiationInformation::InstantiationInformation(const InstantiationInformation& rhs, bool dynamic) : previousInstantiationInformation(rhs.previousInstantiationInformation) {
+InstantiationInformation::InstantiationInformation(const InstantiationInformation& rhs, bool dynamic) : previousInstantiationInformation(rhs.previousInstantiationInformation), m_refCount(0) {
   initializeAppendedLists(dynamic);
   copyListsFrom(rhs);
 }
@@ -100,7 +100,7 @@ InstantiationInformation& InstantiationInformation::operator=(const Instantiatio
 }
 
 bool InstantiationInformation::operator==(const InstantiationInformation& rhs) const {
-  if(previousInstantiationInformation != rhs.previousInstantiationInformation)
+  if(!(previousInstantiationInformation == rhs.previousInstantiationInformation))
     return false;
   return listsEqual(rhs);
 }
@@ -111,10 +111,10 @@ uint InstantiationInformation::hash() const {
     ret = (ret + param.hash()) * 117;
   }
 
-  return (ret + previousInstantiationInformation) * 31;
+  return (ret + previousInstantiationInformation.index()) * 31;
 }
 
-KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > instantiationInformationRepository("C++ Instantiation Information Repository");
+KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > instantiationInformationRepository("Instantiation Information Repository");
 
 
 const uint standardInstantiationInformationIndex = instantiationInformationRepository.index( InstantiationInformation() );
@@ -125,6 +125,46 @@ IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0) 
 IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m_index(index) {
   if(m_index == standardInstantiationInformationIndex)
     m_index = 0;
+  
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+  {
+    QMutexLocker lock(instantiationInformationRepository.mutex());
+    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+  }
+}
+
+IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) : m_index(rhs.m_index) {
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+  {
+    QMutexLocker lock(instantiationInformationRepository.mutex());
+    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+  }
+}
+
+IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(const IndexedInstantiationInformation& rhs) {
+
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+  {
+    QMutexLocker lock(instantiationInformationRepository.mutex());
+    decrease(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+  }
+  
+  m_index = rhs.m_index;
+  
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+  {
+    QMutexLocker lock(instantiationInformationRepository.mutex());
+    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+  }
+  return *this;
+}
+
+IndexedInstantiationInformation::~IndexedInstantiationInformation() {
+  if(m_index && shouldDoDUChainReferenceCounting(this))
+  {
+    QMutexLocker lock(instantiationInformationRepository.mutex());
+    decrease(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+  }
 }
 
 bool IndexedInstantiationInformation::isValid() const {

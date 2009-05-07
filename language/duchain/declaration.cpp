@@ -318,7 +318,7 @@ void Declaration::setAbstractType(AbstractType::Ptr type)
     //DUChain::declarationChanged(this, DUChainObserver::Addition, DUChainObserver::DataType);
 }
 
-Declaration* Declaration::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/)
+Declaration* Declaration::specialize(IndexedInstantiationInformation /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/)
 {
   return this;
 }
@@ -361,7 +361,7 @@ void Declaration::setContext(DUContext* context, bool anonymous)
 {
   Q_ASSERT(!context || context->topContext());
   ///@todo re-enable. In C++ support we need a short window to put visible declarations into template contexts
-  if(!specialization()) {
+  if(!specialization().index()) {
     //problem: specialization() doesn't work during destructor
 //     ENSURE_CAN_WRITE
   }
@@ -578,15 +578,15 @@ void Declaration::setIsTypeAlias(bool isTypeAlias) {
   d->m_isTypeAlias = isTypeAlias;
 }
 
-uint Declaration::specialization() const {
-  return 0;
+IndexedInstantiationInformation Declaration::specialization() const {
+  return IndexedInstantiationInformation();
 }
 
 void Declaration::activateSpecialization()
 {
-  if(specialization()) {
+  if(specialization().index()) {
     DeclarationId baseId(id());
-    baseId.setSpecialization(0);
+    baseId.setSpecialization(IndexedInstantiationInformation());
     SpecializationStore::self().set(baseId, specialization());
   }
 }

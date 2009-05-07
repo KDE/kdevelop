@@ -311,6 +311,7 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
  * - Implement operator==(..) which should compare everything, including the lists. @warning The default operator will not work!
  * - Implement a hash() function. The hash should equal for two instances when operator==(..) returns true.
  * - Should be completely functional without a constructor called, only the data copied
+ * - Implement a "bool persistent() const" function, that should check the reference-count or other information to decide whether the item should stay in the repository
  * If those conditions are fulfilled, the data can easily be put into a repository using this request class.
  * */
 
@@ -341,7 +342,7 @@ class AppendedListItemRequest {
   }
   
   static bool persistent(const Type* item) {
-    return true;
+    return item->persistent();
   }
 
   bool equals(const Type* item) const {

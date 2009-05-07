@@ -1316,7 +1316,7 @@ bool DUContext::inDUChain() const {
   return top && top->inDUChain();
 }
 
-DUContext* DUContext::specialize(uint /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/) {
+DUContext* DUContext::specialize(IndexedInstantiationInformation /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/) {
   return this;
 }
 
@@ -1878,7 +1878,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
 }
 
 DUContext::Import::Import(DUContext* _context, const DUContext* importer, const SimpleCursor& _position) : position(_position) {
-  if(_context && _context->owner() && (_context->owner()->specialization() || (importer && importer->topContext() != _context->topContext()))) {
+  if(_context && _context->owner() && (_context->owner()->specialization().index() || (importer && importer->topContext() != _context->topContext()))) {
     m_declaration = _context->owner()->id(true);
   }else{
     m_context = _context;

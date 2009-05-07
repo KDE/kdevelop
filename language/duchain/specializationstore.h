@@ -20,7 +20,9 @@
 #define SPECIALIZATIONSTORE_H
 
 #include <QtCore/QHash>
+#include "instantiationinformation.h"
 #include "../languageexport.h"
+
 
 namespace KDevelop {
   class DeclarationId;
@@ -41,11 +43,11 @@ namespace KDevelop {
       /**
        * Adds/updates the current specialization for the given declaration-id
        * */
-      void set(DeclarationId declaration, uint specialization);
+      void set(DeclarationId declaration, IndexedInstantiationInformation specialization);
       /**
        * Gets the registered specialization for the given declaration-id, or zero.
        */
-      uint get(DeclarationId declaration);
+      IndexedInstantiationInformation get(DeclarationId declaration);
       /**
        * Clears the specialization registered for the given declaration-id
        */
@@ -77,7 +79,7 @@ namespace KDevelop {
     private:
       SpecializationStore();
       ~SpecializationStore();
-      QHash<DeclarationId, uint> m_specializations;
+      QHash<DeclarationId, IndexedInstantiationInformation> m_specializations;
   };
 }
 

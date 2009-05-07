@@ -478,7 +478,7 @@ public:
    * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
    * */
-  virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance = 0);
+  virtual DUContext* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance = 0);
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which

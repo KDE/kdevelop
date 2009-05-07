@@ -29,7 +29,7 @@
 
 namespace KDevelop {
 
-DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, uint specialization)
+DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint additionalId, IndexedInstantiationInformation specialization)
   : m_direct(false), m_specialization(specialization)
 {
   indirect.m_identifier = id;
@@ -37,7 +37,7 @@ DeclarationId::DeclarationId(const IndexedQualifiedIdentifier& id, uint addition
   
 }
 
-DeclarationId::DeclarationId(const IndexedDeclaration& decl, uint specialization)
+DeclarationId::DeclarationId(const IndexedDeclaration& decl, IndexedInstantiationInformation specialization)
   : direct(decl), m_direct(true), m_specialization(specialization)
 {
   
@@ -58,11 +58,11 @@ bool DeclarationId::isDirect() const
   return m_direct;
 }
 
-void DeclarationId::setSpecialization(uint spec) {
+void DeclarationId::setSpecialization(IndexedInstantiationInformation spec) {
   m_specialization = spec;
 }
 
-uint DeclarationId::specialization() const {
+IndexedInstantiationInformation DeclarationId::specialization() const {
   return m_specialization;
 }
 
@@ -109,7 +109,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     ret.append(direct.declaration());
   }
   
-  if(!ret.isEmpty() && m_specialization) {
+  if(!ret.isEmpty() && m_specialization.index()) {
     KDevVarLengthArray<Declaration*> newRet;
     FOREACH_ARRAY(Declaration* decl, ret) {
         Declaration* specialized = decl->specialize(m_specialization, top ? top : decl->topContext());
@@ -179,7 +179,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
   
   if(!m_direct) {
     QualifiedIdentifier baseIdentifier = indirect.m_identifier.identifier();
-    if(!m_specialization)
+    if(!m_specialization.index())
       return baseIdentifier;
     ///@todo Fix m_specialization to IndexedInstantiationInformation for security
     return IndexedInstantiationInformation(m_specialization).information().applyToIdentifier(baseIdentifier);

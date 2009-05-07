@@ -34,21 +34,21 @@ SpecializationStore& SpecializationStore::self() {
   return store;
 }
 
-void SpecializationStore::set(DeclarationId declaration, uint specialization) {
-  Q_ASSERT(specialization >> 16);
+void SpecializationStore::set(DeclarationId declaration, IndexedInstantiationInformation specialization) {
+  Q_ASSERT(specialization.index() >> 16);
   m_specializations[declaration] = specialization;
 }
 
-uint SpecializationStore::get(DeclarationId declaration) {
-  QHash<DeclarationId, uint>::const_iterator it = m_specializations.constFind(declaration);
+IndexedInstantiationInformation SpecializationStore::get(DeclarationId declaration) {
+  QHash<DeclarationId, IndexedInstantiationInformation>::const_iterator it = m_specializations.constFind(declaration);
   if(it != m_specializations.constEnd())
     return *it;
   else
-    return 0;
+    return IndexedInstantiationInformation();
 }
 
 void SpecializationStore::clear(DeclarationId declaration) {
-  QHash<DeclarationId, uint>::iterator it = m_specializations.find(declaration);
+  QHash<DeclarationId, IndexedInstantiationInformation>::iterator it = m_specializations.find(declaration);
   if(it != m_specializations.end())
     m_specializations.erase(it);
 }
@@ -61,8 +61,8 @@ Declaration* SpecializationStore::applySpecialization(KDevelop::Declaration* dec
   if(!declaration)
     return 0;
   
-  uint specialization = get(declaration->id());
-  if(specialization)
+  IndexedInstantiationInformation specialization = get(declaration->id());
+  if(specialization.index())
     return declaration->specialize(specialization, source);
 
   if(declaration->context() && recursive) {
@@ -70,15 +70,15 @@ Declaration* SpecializationStore::applySpecialization(KDevelop::Declaration* dec
     //Find a parent that has a specialization, and specialize this with the info and required depth
     int depth = 0;
     DUContext* ctx = declaration->context();
-    uint specialization = 0;
-    while(ctx && !specialization) {
+    IndexedInstantiationInformation specialization;
+    while(ctx && !specialization.index()) {
       if(ctx->owner())
         specialization = get(ctx->owner()->id());
       ++depth;
       ctx = ctx->parentContext();
     }
     
-    if(specialization)
+    if(specialization.index())
       return declaration->specialize(specialization, source, depth);
   }
   
@@ -96,15 +96,15 @@ DUContext* SpecializationStore::applySpecialization(KDevelop::DUContext* context
     //Find a parent that has a specialization, and specialize this with the info and required depth
     int depth = 0;
     DUContext* ctx = context->parentContext();
-    uint specialization = 0;
-    while(ctx && !specialization) {
+    IndexedInstantiationInformation specialization;
+    while(ctx && !specialization.index()) {
       if(ctx->owner())
         specialization = get(ctx->owner()->id());
       ++depth;
       ctx = ctx->parentContext();
     }
     
-    if(specialization)
+    if(specialization.index())
       return context->specialize(specialization, source, depth);
   }
   

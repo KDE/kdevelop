@@ -24,6 +24,7 @@
 
 #include "identifier.h"
 #include "indexeditems.h"
+#include "instantiationinformation.h"
 
 //krazy:excludeall=dpointer
 
@@ -61,7 +62,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param additionalId Additional index to disambiguate
      * \param specialization Specialization index (see class documentation).
      */
-    explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0, uint specialization = 0);
+    explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(), uint additionalId = 0, IndexedInstantiationInformation specialization = IndexedInstantiationInformation());
 
     /**
      * Constructor for direct access to a declaration.  The resulting DeclarationId will
@@ -70,7 +71,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param decl Declaration to reference.
      * \param specialization Specialization index (see class documentation).
      */
-    explicit DeclarationId(const IndexedDeclaration& decl, uint specialization = 0);
+    explicit DeclarationId(const IndexedDeclaration& decl, IndexedInstantiationInformation specialization = IndexedInstantiationInformation());
 
     /**
      * Equality operator.
@@ -113,9 +114,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      */
     uint hash() const {
       if(m_direct)
-        return direct.hash() + m_specialization * 101;
+        return direct.hash() + m_specialization.index() * 101;
       else
-        return indirect.m_identifier.getIndex() * 13 + indirect.m_additionalIdentity + m_specialization * 101;
+        return indirect.m_identifier.getIndex() * 13 + indirect.m_additionalIdentity + m_specialization.index() * 101;
     }
 
     /**
@@ -135,14 +136,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      *
      * \param specializationIndex the new specialization index.
      */
-    void setSpecialization(uint specializationIndex);
+    void setSpecialization(IndexedInstantiationInformation specialization);
 
     /**
      * Retrieve the specialization index (see class documentation).
      *
      * \returns the specialization index.
      */
-    uint specialization() const;
+    IndexedInstantiationInformation specialization() const;
 
     /**
      * Determine whether this DeclarationId directly references a Declaration by indices,
@@ -173,7 +174,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
       IndexedDeclaration direct;
     //};
     bool m_direct;
-    uint m_specialization; //Can be used in a language-specific way to pick other versions of the declaration.
+    IndexedInstantiationInformation m_specialization; //Can be used in a language-specific way to pick other versions of the declaration.
                            //When the declaration is found, pickSpecialization is called on the found declaration with this value, and
                            //the returned value is the actually found declaration.
 };

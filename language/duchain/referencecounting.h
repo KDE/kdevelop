@@ -37,6 +37,7 @@ namespace KDevelop {
       return false;
     return shouldDoDUChainReferenceCountingInternal(item);
   }
+  
   ///Enable reference-counting for the given range
   ///You should only enable the reference-counting for the time it's really needed,
   ///and it always has to be enabled too when the items are deleted again, else

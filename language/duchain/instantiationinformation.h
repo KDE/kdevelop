@@ -23,67 +23,22 @@
 #include "types/abstracttype.h"
 #include "types/indexedtype.h"
 #include "appendedlist.h"
+#include "referencecounting.h"
 
 namespace KDevelop {
   class IndexedInstantiationInformation;
+  class InstantiationInformation;
   class QualifiedIdentifier;
   
   KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
   
-  struct KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
-    InstantiationInformation();
-    ///@todo include some information for instantiation only with default parameters
-    InstantiationInformation(const InstantiationInformation& rhs, bool dynamic = true);
-    
-    ~InstantiationInformation();
-    
-    InstantiationInformation& operator=(const InstantiationInformation& rhs);
-
-    bool operator==(const InstantiationInformation& rhs) const;
-    
-    uint hash() const;
-    
-    bool isValid() const {
-      return previousInstantiationInformation || templateParametersSize();
-    }
-    
-    ///Applies this instantiation information to the given QualifiedIdentifier.
-    ///The template parameters of the qualified identifier will be marked as expressions, thus the qualified identifier is not "clean".
-    ///Should only be used for displaying.
-    ///This only adds template-parameters in places where none are known yet.
-    QualifiedIdentifier applyToIdentifier(const QualifiedIdentifier& id) const;
-    
-    ///@param local If this is true, only the template-parameters of this scope are printed, but not the parent ones
-    QString toString(bool local = false) const;
-    
-    ///This must always be used to add new parameters. Never use templateParametersList() directly.
-    void addTemplateParameter(AbstractType::Ptr type);
-    
-    ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation), or zero.
-    uint previousInstantiationInformation;
-    
-    START_APPENDED_LISTS(InstantiationInformation)
-    
-    static size_t classSize() {
-      return sizeof(InstantiationInformation);
-    }
-    
-    short unsigned int itemSize() const {
-      return dynamicSize();
-    }
-    
-    ///templateParameters contains the template-parameters used for the instantiation
-    APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
-    
-    END_APPENDED_LISTS(InstantiationInformation, templateParameters);
-    
-    IndexedInstantiationInformation indexed() const;
-  };
-  
-  class KDEVPLATFORMLANGUAGE_EXPORT IndexedInstantiationInformation {
+  class KDEVPLATFORMLANGUAGE_EXPORT IndexedInstantiationInformation : public ReferenceCountManager {
     public:
       IndexedInstantiationInformation();
-      IndexedInstantiationInformation(uint index);
+      explicit IndexedInstantiationInformation(uint index);
+      IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs);
+      IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs);
+      ~IndexedInstantiationInformation();
       
       const InstantiationInformation& information() const;
       
@@ -106,6 +61,63 @@ namespace KDevelop {
     private:
       uint m_index;
   };  
+  
+  struct KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
+    InstantiationInformation();
+    ///@todo include some information for instantiation only with default parameters
+    InstantiationInformation(const InstantiationInformation& rhs, bool dynamic = true);
+    
+    ~InstantiationInformation();
+    
+    InstantiationInformation& operator=(const InstantiationInformation& rhs);
+
+    bool operator==(const InstantiationInformation& rhs) const;
+    
+    uint hash() const;
+    
+    bool isValid() const {
+      return previousInstantiationInformation.index() || templateParametersSize();
+    }
+    
+    bool persistent() const {
+      return (bool)m_refCount;
+    }
+    
+    ///Applies this instantiation information to the given QualifiedIdentifier.
+    ///The template parameters of the qualified identifier will be marked as expressions, thus the qualified identifier is not "clean".
+    ///Should only be used for displaying.
+    ///This only adds template-parameters in places where none are known yet.
+    QualifiedIdentifier applyToIdentifier(const QualifiedIdentifier& id) const;
+    
+    ///@param local If this is true, only the template-parameters of this scope are printed, but not the parent ones
+    QString toString(bool local = false) const;
+    
+    ///This must always be used to add new parameters. Never use templateParametersList() directly.
+    void addTemplateParameter(AbstractType::Ptr type);
+    
+    ///Instantiation-information for the surrounding context(see IndexedInstantiationInformation).
+    IndexedInstantiationInformation previousInstantiationInformation;
+    
+    START_APPENDED_LISTS(InstantiationInformation)
+    
+    static size_t classSize() {
+      return sizeof(InstantiationInformation);
+    }
+    
+    short unsigned int itemSize() const {
+      return dynamicSize();
+    }
+    
+    ///templateParameters contains the template-parameters used for the instantiation
+    APPENDED_LIST_FIRST(InstantiationInformation, IndexedType, templateParameters);
+    
+    END_APPENDED_LISTS(InstantiationInformation, templateParameters);
+    
+    IndexedInstantiationInformation indexed() const;
+    private:
+      friend class IndexedInstantiationInformation;
+      uint m_refCount;
+  };
   
   inline uint qHash(const IndexedInstantiationInformation& info) {
     return info.hash();
