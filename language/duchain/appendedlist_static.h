@@ -108,7 +108,7 @@ class AppendedList<false, T> {
     void free(T* position) {
       if(listSize)
         Q_ASSERT(shouldDoDUChainReferenceCountingInternal(position)); //Since it's constant, it must be in the repository
-      for(int a = 0; a < listSize; ++a)
+      for(unsigned int a = 0; a < listSize; ++a)
         (position+a)->~T();
     }
 
