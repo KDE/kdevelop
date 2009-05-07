@@ -140,13 +140,7 @@ void DebugController::partAdded(KParts::Part* part)
         if( !iface )
             return;
         
-        iface->setMarkDescription((KTextEditor::MarkInterface::MarkTypes)BreakpointMark, i18n("Breakpoint"));
-        iface->setMarkPixmap((KTextEditor::MarkInterface::MarkTypes)BreakpointMark, *inactiveBreakpointPixmap());
-        iface->setMarkPixmap((KTextEditor::MarkInterface::MarkTypes)ActiveBreakpointMark, *activeBreakpointPixmap());
-        iface->setMarkPixmap((KTextEditor::MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
-        iface->setMarkPixmap((KTextEditor::MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
-        iface->setMarkPixmap((KTextEditor::MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
-        iface->setEditableMarks( BookmarkMark | BreakpointMark );
+        iface->setMarkPixmap(KTextEditor::MarkInterface::Execution, *executionPointPixmap());
     }
 }
 
@@ -290,8 +284,8 @@ void DebugController::clearExecutionPoint()
         while (it.hasNext())
         {
             KTextEditor::Mark* mark = it.next().value();
-            if( mark->type & ExecutionPointMark )
-                iface->removeMark( mark->line, ExecutionPointMark );
+            if( mark->type & KTextEditor::MarkInterface::Execution )
+                iface->removeMark( mark->line, KTextEditor::MarkInterface::Execution );
         }
     }
 }
@@ -312,7 +306,7 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
         return;
 
     document->textDocument()->blockSignals(true);
-    iface->addMark( lineNum, ExecutionPointMark );
+    iface->addMark( lineNum, KTextEditor::MarkInterface::Execution );
     document->textDocument()->blockSignals(false);
 }
 
@@ -450,30 +444,6 @@ void DebugController::toggleBreakpoint()
         if (!cursor.isValid()) return;
         breakpointModel()->toggleBreakpoint(document->url(), cursor);
     }
-}
-
-const QPixmap* DebugController::inactiveBreakpointPixmap()
-{
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
-  return &pixmap;
-}
-
-const QPixmap* DebugController::activeBreakpointPixmap()
-{
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Active, QIcon::Off);
-  return &pixmap;
-}
-
-const QPixmap* DebugController::reachedBreakpointPixmap()
-{
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Selected, QIcon::Off);
-  return &pixmap;
-}
-
-const QPixmap* DebugController::disabledBreakpointPixmap()
-{
-  static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
-  return &pixmap;
 }
 
 const QPixmap* DebugController::executionPointPixmap()

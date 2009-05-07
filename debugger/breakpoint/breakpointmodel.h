@@ -83,12 +83,10 @@ public Q_SLOTS:
 
 private:
     enum MarkType {
-        BookmarkMark           = KTextEditor::MarkInterface::markType01,
-        BreakpointMark         = KTextEditor::MarkInterface::markType02,
-        ActiveBreakpointMark   = KTextEditor::MarkInterface::markType03,
-        ReachedBreakpointMark  = KTextEditor::MarkInterface::markType04,
-        DisabledBreakpointMark = KTextEditor::MarkInterface::markType05,
-        ExecutionPointMark     = KTextEditor::MarkInterface::markType06
+        BreakpointMark = KTextEditor::MarkInterface::markType08,
+        ActiveBreakpointMark   = KTextEditor::MarkInterface::BreakpointActive,
+        ReachedBreakpointMark  = KTextEditor::MarkInterface::BreakpointReached,
+        DisabledBreakpointMark = KTextEditor::MarkInterface::BreakpointDisabled,
     };
 
 Q_SIGNALS:
@@ -121,7 +119,6 @@ protected:
     static const QPixmap* activeBreakpointPixmap();
     static const QPixmap* reachedBreakpointPixmap();
     static const QPixmap* disabledBreakpointPixmap();
-    static const QPixmap* executionPointPixmap();
 
 private:
     friend class Breakpoint;

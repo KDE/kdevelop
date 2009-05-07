@@ -77,18 +77,6 @@ private:
     void setupActions();
     void updateDebuggerState(KDevelop::IDebugSession::DebuggerState state, KDevelop::IDebugSession* session);
 
-    enum MarkType {
-        BookmarkMark           = KTextEditor::MarkInterface::markType01,
-        BreakpointMark         = KTextEditor::MarkInterface::markType02,
-        ActiveBreakpointMark   = KTextEditor::MarkInterface::markType03,
-        ReachedBreakpointMark  = KTextEditor::MarkInterface::markType04,
-        DisabledBreakpointMark = KTextEditor::MarkInterface::markType05,
-        ExecutionPointMark     = KTextEditor::MarkInterface::markType06
-    };
-    static const QPixmap* inactiveBreakpointPixmap();
-    static const QPixmap* activeBreakpointPixmap();
-    static const QPixmap* reachedBreakpointPixmap();
-    static const QPixmap* disabledBreakpointPixmap();
     static const QPixmap* executionPointPixmap();
 
     KAction* m_continueDebugger;

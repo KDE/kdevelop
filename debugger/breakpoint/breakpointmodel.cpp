@@ -85,8 +85,7 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
         iface->setMarkPixmap((MarkInterface::MarkTypes)ActiveBreakpointMark, *activeBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)ReachedBreakpointMark, *reachedBreakpointPixmap());
         iface->setMarkPixmap((MarkInterface::MarkTypes)DisabledBreakpointMark, *disabledBreakpointPixmap());
-        iface->setMarkPixmap((MarkInterface::MarkTypes)ExecutionPointMark, *executionPointPixmap());
-        iface->setEditableMarks( BookmarkMark | BreakpointMark );
+        iface->setEditableMarks( MarkInterface::Bookmark | BreakpointMark );
         
         updateMarks();
     }
@@ -300,12 +299,6 @@ const QPixmap* BreakpointModel::reachedBreakpointPixmap()
 const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 {
   static QPixmap pixmap=KIcon("script-error").pixmap(QSize(22,22), QIcon::Disabled, QIcon::Off);
-  return &pixmap;
-}
-
-const QPixmap* BreakpointModel::executionPointPixmap()
-{
-  static QPixmap pixmap=KIcon("go-next").pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
   return &pixmap;
 }
 
