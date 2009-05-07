@@ -53,6 +53,10 @@ struct IncludePathListItem {
       freeAppendedLists();
     }
     
+    bool persistent() const {
+      return (bool)m_refCount;
+    }
+    
     bool operator==(const IncludePathListItem& rhs) const {
       return listsEqual(rhs);
     }

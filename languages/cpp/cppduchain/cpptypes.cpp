@@ -51,7 +51,7 @@ QString CppClassType::toString() const
 {
   QualifiedIdentifier id = qualifiedIdentifier();
   if (!id.isEmpty()) {
-    if(declarationId().specialization())
+    if(declarationId().specialization().index())
       return AbstractType::toString() + Cpp::IndexedInstantiationInformation(declarationId().specialization()).information().applyToIdentifier(id).toString();
     else
     return AbstractType::toString() + id.toString();

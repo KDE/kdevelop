@@ -815,7 +815,7 @@ Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformatio
     {
       //Append a scope part
       InstantiationInformation newCurrent;
-      newCurrent.previousInstantiationInformation = base.indexed().index();
+      newCurrent.previousInstantiationInformation = base.indexed();
       if(!name->template_arguments)
         return newCurrent;
       //Process the template arguments if they exist

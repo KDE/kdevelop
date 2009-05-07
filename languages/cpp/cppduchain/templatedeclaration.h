@@ -104,11 +104,11 @@ namespace Cpp {
       ///@warning Some instantiations may have the value zero when an instantiation is currently happening.
        InstantiationsHash instantiations() const;
       
-      uint specialization() const;
+      IndexedInstantiationInformation specialization() const;
       
       DeclarationId id(bool forceDirect) const;
       
-      Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance);
+      Declaration* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance);
     
       //Duchain must be write-locked
       void deleteAllInstantiations();
@@ -259,11 +259,11 @@ namespace Cpp {
     virtual uint additionalIdentity() const {
       return BaseDeclaration::additionalIdentity() + 101;
     }
-    virtual Declaration* specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
+    virtual Declaration* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
       return TemplateDeclaration::specialize(specialization, topContext, upDistance);
     }
     
-    virtual uint specialization() const {
+    virtual IndexedInstantiationInformation specialization() const {
       return TemplateDeclaration::specialization();
     }
     
@@ -309,10 +309,10 @@ namespace Cpp {
     {
       BaseDeclaration::activateSpecialization();
       
-      if(specialization()) {
+      if(specialization().index()) {
         //Also register parents
         DUContext* context = this->context();
-        if(context->owner() && context->owner()->specialization()) {
+        if(context->owner() && context->owner()->specialization().index()) {
           context->owner()->activateSpecialization(); //will also add to the background-parser
         }else{
 //           context->topContext()->setHasUses(false); //Force re-building of the uses

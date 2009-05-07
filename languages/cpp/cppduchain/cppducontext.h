@@ -378,7 +378,7 @@ class CppDUContext : public BaseContext {
           ifDebug( kDebug(9007) << "found" << decls.count() << "in base"; )
           
           InstantiationInformation memberInstantiationInformation;
-          memberInstantiationInformation.previousInstantiationInformation = m_instantiatedWith.index();
+          memberInstantiationInformation.previousInstantiationInformation = m_instantiatedWith;
           
           FOREACH_ARRAY( Declaration* decl, decls ) {
             TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(decl);
@@ -389,7 +389,7 @@ class CppDUContext : public BaseContext {
               if(decl->context() != m_instantiatedFrom) {
                 // The declaration has been propagated up from a sub-context like an enumerator, add more empty instantiation information
                 InstantiationInformation i;
-                i.previousInstantiationInformation = memberInstantiationInformation.indexed().index(); //Currently we don't propagate higher than 1 level
+                i.previousInstantiationInformation = memberInstantiationInformation.indexed(); //Currently we don't propagate higher than 1 level
                 copy = templateDecl->instantiate(i, source);
               }else{
                 copy = templateDecl->instantiate(memberInstantiationInformation, source);
@@ -528,16 +528,16 @@ class CppDUContext : public BaseContext {
       return (BaseContext::parentContext() && BaseContext::parentContext()->type() == DUContext::Class) || BaseContext::shouldSearchInParent(flags);
     }
 
-    virtual DUContext* specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
-      if(specialization == 0)
+    virtual DUContext* specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+      if(specialization.index() == 0)
         return this;
       else {
-        InstantiationInformation information = IndexedInstantiationInformation( specialization ).information();
+        InstantiationInformation information = specialization.information();
         
         //Add empty elements until the specified depth
         for(int a = 0; a < upDistance; ++a) {
           InstantiationInformation nextInformation;
-          nextInformation.previousInstantiationInformation = information.indexed().index();
+          nextInformation.previousInstantiationInformation = information.indexed();
           information = nextInformation;
         }
         
@@ -576,7 +576,7 @@ class CppDUContext : public BaseContext {
         //This context does not have an attached declaration, but it needs to be instantiated.
         CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>* >(this->parentContext());
         if(parent)
-          surroundingContext = parent->instantiate(IndexedInstantiationInformation(info.previousInstantiationInformation).information(), source);
+          surroundingContext = parent->instantiate(info.previousInstantiationInformation.information(), source);
       }
       
       return instantiateDeclarationAndContext( surroundingContext, source, this, info, 0, 0 );
@@ -624,7 +624,7 @@ class CppDUContext : public BaseContext {
 //         DUContext::DeclarationList temp;
 
         InstantiationInformation inf;
-        inf.previousInstantiationInformation = m_instantiatedWith.index();
+        inf.previousInstantiationInformation = m_instantiatedWith;
 
         foreach( Declaration* baseDecl, decls ) {
           TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(baseDecl);
@@ -668,7 +668,7 @@ class CppDUContext : public BaseContext {
         //Instantiate up-propagating child-contexts with the correct same instantiation-information
         //This for examples makes unnamed enums accessible
         InstantiationInformation inf;
-        inf.previousInstantiationInformation = m_instantiatedWith.index();
+        inf.previousInstantiationInformation = m_instantiatedWith;
         
         foreach(DUContext* child, m_instantiatedFrom->childContexts()) {
 //           kDebug() << "checking child-context" << child->isPropagateDeclarations();

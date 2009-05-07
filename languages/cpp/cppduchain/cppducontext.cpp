@@ -77,7 +77,7 @@ Declaration* FindDeclaration::instantiateDeclaration( Declaration* decl, const I
   CppDUContext<DUContext>* context = dynamic_cast<CppDUContext<DUContext>*>(decl->context());
   
   if(context && context->instantiatedWith().isValid())
-    info.previousInstantiationInformation = context->instantiatedWith().index();
+    info.previousInstantiationInformation = context->instantiatedWith();
 
 
   return templateDecl->instantiate( info, m_source );

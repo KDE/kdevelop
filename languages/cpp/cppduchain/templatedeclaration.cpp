@@ -266,8 +266,8 @@ TemplateDeclaration::TemplateDeclaration(const TemplateDeclaration& /*rhs*/) : m
 TemplateDeclaration::TemplateDeclaration() : m_instantiatedFrom(0) {
 }
 
-Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUContext* topContext, int upDistance) {
-  if(specialization == 0)
+Declaration* TemplateDeclaration::specialize(IndexedInstantiationInformation specialization, const TopDUContext* topContext, int upDistance) {
+  if(!specialization.isValid())
     return dynamic_cast<Declaration*>(this);
   else {
     InstantiationInformation information = IndexedInstantiationInformation( specialization ).information();
@@ -275,7 +275,7 @@ Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUCon
     //Add empty elements until the specified depth
     for(int a = 0; a < upDistance; ++a) {
       InstantiationInformation nextInformation;
-      nextInformation.previousInstantiationInformation = information.indexed().index();
+      nextInformation.previousInstantiationInformation = information.indexed();
       information = nextInformation;
     }
     
@@ -283,11 +283,11 @@ Declaration* TemplateDeclaration::specialize(uint specialization, const TopDUCon
   }
 }
 
-uint TemplateDeclaration::specialization() const {
+IndexedInstantiationInformation TemplateDeclaration::specialization() const {
   if(m_instantiatedWith.isValid())
-    return m_instantiatedWith.index();
+    return m_instantiatedWith;
   else
-    return 0;
+    return IndexedInstantiationInformation();
 }
 
 // DeclarationId TemplateDeclaration::id() const {
@@ -503,7 +503,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       uint currentArgument = 0;
 
     InstantiationInformation parameterInstantiationInformation;
-    parameterInstantiationInformation.previousInstantiationInformation = templateArguments.indexed().index();
+    parameterInstantiationInformation.previousInstantiationInformation = templateArguments.indexed();
 
       foreach(Declaration* decl, context->localDeclarations())
       {
@@ -670,7 +670,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               if(instantiatedFromTemplate && instantiatedFromTemplate->specializedFrom().data())
                 base = instantiatedFromTemplate->specializedFrom().data()->id();
               
-              base.setSpecialization(globalTemplateArguments.indexed().index());
+              base.setSpecialization(globalTemplateArguments.indexed());
               changedIdType->setDeclarationId(base);
             }
           }
@@ -998,7 +998,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   {
     //Check whether the instantiation also instantiates the parent context, and if it does, replace surroundingContext with the instantiated version
     CppDUContext<DUContext>* parent = dynamic_cast<CppDUContext<DUContext>*>(surroundingContext);
-    if(parent && templateArguments.previousInstantiationInformation && templateArguments.previousInstantiationInformation != parent->instantiatedWith().index()) {
+    if(parent && templateArguments.previousInstantiationInformation.index() && templateArguments.previousInstantiationInformation.index() != parent->instantiatedWith().index()) {
       DUContext* surroundingCandidate = parent->instantiate(IndexedInstantiationInformation(templateArguments.previousInstantiationInformation).information(), source);
       if(surroundingCandidate)
         surroundingContext = surroundingCandidate;

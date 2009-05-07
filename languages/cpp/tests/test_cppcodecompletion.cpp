@@ -529,7 +529,6 @@ void TestCppCodeCompletion::testTemplateMemberAccess() {
     QVERIFY(identified);
     QVERIFY(!identified->declarationId().isDirect());
     QString specializationString = IndexedInstantiationInformation(identified->declarationId().specialization()).information().toString();
-    kDebug() << "specialization:" << identified->declarationId().specialization() << specializationString;
     QCOMPARE(specializationString, QString("<int>"));
     QCOMPARE(top->localDeclarations()[3]->abstractType()->toString().remove(' '), QString("Test<int>::It"));
     QCOMPARE(TypeUtils::unAliasedType(top->localDeclarations()[3]->abstractType())->toString().remove(' '), QString("I<int>"));
