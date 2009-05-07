@@ -139,7 +139,8 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
 }
 
 QString ItemRepositoryRegistry::path() const {
-  QMutexLocker lock(&m_mutex);
+  //We cannot lock the mutex here, since this may be called with one of the repositories locked,
+  //and that may lead to a deadlock when at the same time a storing is requested
   return m_path;
 }
 
