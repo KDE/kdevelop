@@ -297,13 +297,12 @@ const QPixmap* BreakpointModel::disabledBreakpointPixmap()
 
 void BreakpointModel::toggleBreakpoint(const KUrl& url, const KTextEditor::Cursor& cursor)
 {
-    foreach (Breakpoint *b, m_breakpoints) {
-        if (b->url() == url && b->line() == cursor.line() && !b->deleted()) {
-            b->setDeleted();
-            return;
-        }
+    Breakpoint *b = breakpoint(url, cursor.line());
+    if (b) {
+        b->setDeleted();
+    } else {
+        addCodeBreakpoint(url, cursor.line());
     }
-    addCodeBreakpoint(url, cursor.line());
 }
 
 void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column column)
