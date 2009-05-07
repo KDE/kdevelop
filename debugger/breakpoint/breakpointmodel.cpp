@@ -327,7 +327,6 @@ void KDevelop::BreakpointModel::updateMarks()
 
     QMap<KUrl, QSet<int> > breakpoints;
     foreach (Breakpoint *breakpoint, m_breakpoints) {
-        if (breakpoint->deleted()) continue;
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
         breakpoints[breakpoint->url()] << breakpoint->line();
     }
@@ -362,7 +361,6 @@ void KDevelop::BreakpointModel::updateMarks()
             KTextEditor::SmartInterface *smart = qobject_cast<KTextEditor::SmartInterface*>(doc->textDocument());
             if (!smart) continue;
             foreach (Breakpoint *breakpoint, m_breakpoints) {
-                if (breakpoint->deleted()) continue;
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                 if (i.key() == breakpoint->url() && line == breakpoint->line()) {
                     KTextEditor::SmartCursor* cursor = smart->newSmartCursor(KTextEditor::Cursor(line, 0));
