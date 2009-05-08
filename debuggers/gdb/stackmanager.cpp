@@ -86,7 +86,7 @@ Thread::Thread(KDevelop::StackModel* model, GDBDebugger::GDBController* controll
 void Thread::updateSelf(const GDBMI::Value& thread, bool initial)
 {
     const GDBMI::Value& frame = thread["frame"];
-    setInformation(frame["level"].toInt(), get_function_or_address(frame));
+    setInformation(id_, get_function_or_address(frame));
     if (!initial)
         reportChange();
 
