@@ -168,12 +168,13 @@ UiController::UiController(Core *core)
 {
     setObjectName("UiController");
     d->core = core;
-    connect( QApplication::instance(),
-             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
-            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
 
     if (!defaultMainWindow())
         return;
+
+    connect( QApplication::instance(),
+             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
+            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
 
     KActionCollection * actions = defaultMainWindow()->actionCollection();
 
