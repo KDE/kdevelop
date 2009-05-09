@@ -45,4 +45,4 @@ X-KDE-PluginInfo-License=LGPL
 X-KDevelop-Version=6
 X-KDevelop-Category=Global
 X-KDevelop-IRequired=org.kdevelop.IOutputView
-X-KDevelop-Mode=NoGUI
+X-KDevelop-Mode=GUI
