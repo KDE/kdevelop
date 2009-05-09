@@ -388,7 +388,7 @@ void CppDebuggerPlugin::slotAttachProcess()
     int pid = dlg.pidSelected();
     if(QApplication::applicationPid()==pid)
         KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                            i18n("You were about to attach me! This will not proceed because KDevelop would die otherwise."));
+                            i18n("Not attaching to process %1: cannot attach the debugger to itself.", pid));
     else
         attachProcess(pid);
 }
