@@ -345,7 +345,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if( info.property("X-KDevelop-Mode") == "GUI"
         && Core::self()->setupFlags() == Core::NoUi )
     {
-        kWarning() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
+        kDebug() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
     }
     
