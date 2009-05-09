@@ -82,6 +82,7 @@ struct InsertedHandler : public Handler
             static_cast<Breakpoints*>(parentItem)
                 ->errorEmit(this, r["msg"].literal(), LocationColumn);
             */
+            kWarning() << r["msg"].literal();
         } else {
             if (r.hasField("bkpt")) {
                 controller->update(breakpoint, r["bkpt"]);
@@ -210,7 +211,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                         cmd += QString("-i %0 ").arg(breakpoint->ignoreHits());
                     }
                     if (!breakpoint->condition().isEmpty()) {
-                        cmd += QString("-c %0 ").arg(breakpoint->condition());
+                        cmd += QString("-c \"%0\" ").arg(breakpoint->condition().replace('\\', "\\\\").replace('"', "\\\""));
                     }
                     cmd += breakpoint->location();
                     controller()->addCommand(

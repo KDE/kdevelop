@@ -28,5 +28,8 @@ int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;
     foo();
     foo();
+
+    char *x = "Hello";
+    std::cout << x << std::endl;
     return 0;
 }
