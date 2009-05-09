@@ -96,7 +96,10 @@ public:
     int ignoreHits() const;
 
     void setCondition(const QString &c);
-    QString condition();
+    QString condition() const;
+
+    void setExpression(const QString &c);
+    QString expression() const;
 
     BreakpointState state() const;
 
@@ -117,6 +120,7 @@ protected:
     QString m_condition;
     KTextEditor::SmartCursor *m_smartCursor;
     int m_ignoreHits;
+    QString m_expression;
 
     static const char *string_kinds[LastBreakpointKind];
 

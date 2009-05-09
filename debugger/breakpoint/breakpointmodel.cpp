@@ -447,7 +447,7 @@ Breakpoint* BreakpointModel::addWatchpoint()
 Breakpoint* BreakpointModel::addWatchpoint(const QString& expression)
 {
     Breakpoint* n = addWatchpoint();
-    //TODO NIKO n->setLocation(expression);
+    n->setExpression(expression);
     return n;
 }
 

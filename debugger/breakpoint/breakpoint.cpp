@@ -83,12 +83,16 @@ bool Breakpoint::setData(int index, const QVariant& value)
 
     if (index == LocationColumn || index == ConditionColumn)
     {
+        QString s = value.toString();
         if (index == LocationColumn) {
-            QString s = value.toString();
-            m_url = KUrl(s.left(s.lastIndexOf(':')));
-            m_line = s.right(s.length() - s.lastIndexOf(':') - 1).toInt() - 1;
+            if (kind_ == CodeBreakpoint) {
+                m_url = KUrl(s.left(s.lastIndexOf(':')));
+                m_line = s.right(s.length() - s.lastIndexOf(':') - 1).toInt() - 1;
+            } else {
+                m_expression = s;
+            }
         } else {
-            m_condition = value.toString();
+            m_condition = s;
         }
     }
 
@@ -154,8 +158,13 @@ QVariant Breakpoint::data(int column, int role) const
     }
 
     if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
-        QString ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
-        ret += ':' + QString::number(m_line+1);
+        QString ret;
+        if (kind_ == CodeBreakpoint) {
+            ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
+            ret += ':' + QString::number(m_line+1);
+        } else {
+            ret = m_expression;
+        }
         if (!address_.isEmpty() && role == Qt::DisplayRole) {
             ret = QString("%1 (%2)").arg(ret).arg(address_);
         }
@@ -180,10 +189,12 @@ int Breakpoint::line() const {
     return m_line;
 }
 void Breakpoint::setLine(int line) {
+    Q_ASSERT(kind_ == CodeBreakpoint);
     m_line = line;
     reportChange(LocationColumn);
 }
 void Breakpoint::setUrl(const KUrl& url) {
+    Q_ASSERT(kind_ == CodeBreakpoint);
     m_url = url;
     reportChange(LocationColumn);
 }
@@ -192,6 +203,7 @@ KUrl Breakpoint::url() const {
 }
 void Breakpoint::setLocation(const KUrl& url, int line)
 {
+    Q_ASSERT(kind_ == CodeBreakpoint);
     m_url = url;
     m_line = line;
     reportChange(LocationColumn);
@@ -268,16 +280,30 @@ int Breakpoint::ignoreHits() const
 }
 
 
-void KDevelop::Breakpoint::setCondition(const QString& c)
+void Breakpoint::setCondition(const QString& c)
 {
+    Q_ASSERT(kind_ == CodeBreakpoint);
     m_condition = c;
     reportChange(ConditionColumn);
 }
 
-QString KDevelop::Breakpoint::condition()
+QString Breakpoint::condition() const
 {
     return m_condition;
 }
+
+void Breakpoint::setExpression(const QString& e)
+{
+    Q_ASSERT(kind_ != CodeBreakpoint);
+    m_expression = e;
+    reportChange(LocationColumn);
+}
+
+QString Breakpoint::expression() const
+{
+    return m_expression;
+}
+
 
 Breakpoint::BreakpointState Breakpoint::state() const
 {
