@@ -282,7 +282,6 @@ int Breakpoint::ignoreHits() const
 
 void Breakpoint::setCondition(const QString& c)
 {
-    Q_ASSERT(kind_ == CodeBreakpoint);
     m_condition = c;
     reportChange(ConditionColumn);
 }
