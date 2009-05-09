@@ -86,14 +86,14 @@ struct InsertedHandler : public Handler
         } else {
             if (r.hasField("bkpt")) {
                 controller->update(breakpoint, r["bkpt"]);
+                controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::IgnoreHitsColumn);
+                controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
             } else {
                 // For watchpoint creation, GDB basically does not say
                 // anything.  Just record id.
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
             }
             controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
-            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::IgnoreHitsColumn);
-            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
             controller->breakpointStateChanged(breakpoint);
             controller->sendMaybe(breakpoint);
         }
@@ -237,7 +237,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn);
-        controller()->addCommand(
+        controller()->addCommandToFront(
             new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
                            QString::number(m_ids[breakpoint]),
                            handler, &UpdateHandler::handle,
@@ -245,7 +245,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn);
-        controller()->addCommand(
+        controller()->addCommandToFront(
             new GDBCommand(BreakAfter,
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
                            handler, &UpdateHandler::handle,
@@ -253,7 +253,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn);
-        controller()->addCommand(
+        controller()->addCommandToFront(
             new GDBCommand(BreakCondition,
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
                            handler, &UpdateHandler::handle,

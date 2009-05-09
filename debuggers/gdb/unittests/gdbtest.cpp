@@ -407,6 +407,28 @@ void GdbTest::testBreakOnWriteBreakpoint()
     waitForState(session, DebugSession::StoppedState);
 }
 
+void GdbTest::testBreakOnWriteWithConditionBreakpoint()
+{
+    TestDebugSession session;
+
+    TestLaunchConfiguration cfg;
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+
+    KDevelop::Breakpoint *b = breakpoints->addWatchpoint("foo::i");
+    b->setCondition("foo::i==2");
+
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 23);
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
+
 void GdbTest::testShowStepInSource()
 {
     TestDebugSession session;
