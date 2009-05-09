@@ -219,16 +219,18 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                                     cmd,
                                     handler, &InsertedHandler::handle, true));
                 } else {
-                    #if 0
-                    TODO NIKO
+                    InsertedHandler *handler = new InsertedHandler(this, breakpoint);
+                    QString opt;
+                    if (breakpoint->kind() == KDevelop::Breakpoint::ReadBreakpoint)
+                        opt = "-r ";
+                    else if (breakpoint->kind() == KDevelop::Breakpoint::AccessBreakpoint)
+                        opt = "-a ";
+
                     controller()->addCommand(
                         new GDBCommand(
-                            DataEvaluateExpression,
-                            QString("&(%1)").arg(
-                                itemData[LocationColumn].toString()),
-                            this,
-                            &Breakpoint::handleAddressComputed, true));
-                    #endif
+                            BreakWatch,
+                            opt + breakpoint->location(),
+                            handler, &InsertedHandler::handle, true));
                 }
             }
         }
@@ -352,10 +354,12 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         breakpoint->setIgnoreHits(0);
     }
 
-    if (b.hasField("cond")) {
-        breakpoint->setCondition(b["cond"].literal());
-    } else {
-        breakpoint->setCondition(QString());
+    if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
+        if (b.hasField("cond")) {
+            breakpoint->setCondition(b["cond"].literal());
+        } else {
+            breakpoint->setCondition(QString());
+        }
     }
 
 #if 0

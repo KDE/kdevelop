@@ -42,6 +42,7 @@ private Q_SLOTS:
     void testUpdateBreakpoint();
     void testIgnoreHitsBreakpoint();
     void testConditionBreakpoint();
+    void testBreakOnWriteBreakpoint();
     void testShowStepInSource();
     void testStack();
 private:
