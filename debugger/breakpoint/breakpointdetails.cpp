@@ -148,7 +148,7 @@ void BreakpointDetails::showExplanation(const QString& link)
                                 "find the function or the file the breakpoint "
                                 "refers to. The most common case is a breakpoint "
                                 "in a shared library: GDB will insert this "
-                                "breakpoint only when the library is loaded."),
+                                "breakpoint only when the library is loaded.</p>"),
                                 status_);
     }
     else if (link == "dirty")
@@ -156,7 +156,7 @@ void BreakpointDetails::showExplanation(const QString& link)
         QWhatsThis::showText(pos,
                                 i18n("<b>Breakpoint is dirty</b>"
                                 "<p>The breakpoint is not yet communicated "
-                                "to GDB."),
+                                "to the debugger.</p>"),
                                 status_);
     }
 }
