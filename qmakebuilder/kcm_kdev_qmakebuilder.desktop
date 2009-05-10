@@ -16,6 +16,7 @@ Name[hne]=क्यू-मेक
 Name[ne]=क्यूमेक
 Name[x-test]=xxQMakexx
 Comment=Configure QMake settings
+Comment[ca]=Configura els arranjaments de QMake
 Comment[cs]=Nastavit možnosti QMake
 Comment[de]=QMake-Einstellungen
 Comment[el]=Ρύθμιση επιλογών του QMake

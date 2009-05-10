@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Builder
+Name[ca]=Constructor de projecte QMake
 Name[de]=Ersteller für QMake-Projekte
 Name[es]=Constructor de proyecto QMake
 Name[fr]=Constructeur de projet QMake
@@ -17,6 +18,7 @@ Name[x-test]=xxQMake Project Builderxx
 Name[zh_CN]=QMake 工程构建器
 Name[zh_TW]=QMake 專案建立器
 Comment=Builds QMake Projects
+Comment[ca]=Construeix projectes QMake
 Comment[de]=Erstellt QMake-Projekte
 Comment[el]=Κατασκευή έργων QMake
 Comment[es]=Construye proyectos QMake
