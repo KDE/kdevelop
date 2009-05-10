@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Project Builder
+Name[ca]=Constructor de projecte CMake
 Name[de]=Ersteller für CMake-Projekte
 Name[es]=Constructor de proyecto CMake
 Name[fr]=Constructeur de projets CMake
@@ -18,6 +19,7 @@ Name[x-test]=xxCMake Project Builderxx
 Name[zh_CN]=CMake 工程构建器
 Name[zh_TW]=CMake 專案建立器
 Comment=Builds CMake Projects
+Comment[ca]=Construeix projectes CMake
 Comment[de]=Erstellt CMake-Projekte
 Comment[el]=Κατασκευή έργων CMake
 Comment[es]=Construye proyectos CMake

@@ -7,6 +7,7 @@ Comment[x-test]=xxKDevelopxx
 
 [Event/ProcessSuccess]
 Name=Process successful
+Name[ca]=Procés exitós
 Name[cs]=Proces úspěšný
 Name[da]=Processen lykkedes
 Name[de]=Prozess erfolgreich
@@ -42,6 +43,7 @@ Name[x-test]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Name[zh_TW]=行程成功
 Comment=Process finished successfully
+Comment[ca]=El procés ha finalitzat amb èxit
 Comment[cs]=Proces úspěšně dokončen
 Comment[da]=Processen afsluttede med succes
 Comment[de]=Prozess erfolgreich beendet
@@ -80,6 +82,7 @@ Action=None
 
 [Event/ProcessError]
 Name=Process error
+Name[ca]=Error de procés
 Name[cs]=Chyba procesu
 Name[da]=Procesfejl
 Name[de]=Prozess-Fehler
@@ -116,6 +119,7 @@ Name[x-test]=xxProcess errorxx
 Name[zh_CN]=处理出错
 Name[zh_TW]=行程錯誤
 Comment=Process finished with errors
+Comment[ca]=El procés ha finalitzat amb errors
 Comment[cs]=Proces dokončen s chybami
 Comment[da]=Processen afsluttede med fejl
 Comment[de]=Prozess mit Fehlern beendet
@@ -155,6 +159,7 @@ Action=None
 
 [Event/LoadingProject]
 Name=Loading Project
+Name[ca]=S'està carregant el projecte
 Name[de]=Projekt wird geladen
 Name[es]=Cargando proyecto
 Name[et]=Projekti laadimine
@@ -173,6 +178,7 @@ Name[x-test]=xxLoading Projectxx
 Name[zh_CN]=正在装入工程
 Name[zh_TW]=載入專案中
 Comment=A project loading process has just started
+Comment[ca]=Tot just s'acaba de començar a carregar el projecte
 Comment[de]=Es ist ein Projekt-Ladeprozess gestartet
 Comment[es]=Acaba de comenzar un proceso de carga de proyecto
 Comment[et]=Projekti laadimine just käivitati
@@ -192,6 +198,7 @@ Action=Popup
 
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
+Name[ca]=El projecte s'ha carregat amb èxit
 Name[de]=Projekt erfolgreich geladen
 Name[es]=Proyecto cargado con éxito
 Name[et]=Projekt on edukalt laaditud
@@ -210,6 +217,7 @@ Name[x-test]=xxProject Loaded Successfullyxx
 Name[zh_CN]=工程成功装入
 Name[zh_TW]=專案已成功載入
 Comment=A project has been loaded successfully
+Comment[ca]=S'ha carregat amb èxit un projecte
 Comment[de]=Ein Projekt wurde erfolgreich geladen
 Comment[es]=Un proyecto ha sido cargado con éxito
 Comment[et]=Projekt on edukalt laaditud

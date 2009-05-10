@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Qt4 CMake Core application
+Name[ca]=Aplicació principal Qt4 CMake
 Name[de]=Qt-4/CMake-Anwendung
 Name[el]=Βασική εφαμοργή Qt4 CMake
 Name[es]=Aplicación de núcleo CMake de Qt4
@@ -24,6 +25,7 @@ Name[zh_CN]=Qt4 CMake 核心应用程序
 Name[zh_TW]=Qt4 CMake 核心應用程式
 Category=C++/Qt (cmake)
 Comment=Generate a CMake/Qt4 based application (crossplatform compatible)
+Comment[ca]=Genera una aplicació basada en CMake/Qt4 (multi plataforma)
 Comment[de]=Erstellt eine auf CMake und Qt 4 basierende Anwendung (Plattformunabhängig)
 Comment[el]=Δημιουργία μιας εφαρμογής με βάση τα CMake/Qt4 (συμβατή με πολλαπλές πλατφόρμες)
 Comment[es]=Genera una aplicación basada en CMake/Qt4 (compatible multiplataforma)

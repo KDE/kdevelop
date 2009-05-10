@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Make Project Builder
+Name[ca]=Constructor de projecte Make
 Name[de]=Ersteller für Make-Projekte
 Name[es]=Constructor de proyecto Make
 Name[fr]=Constructeur de projets Make
@@ -18,6 +19,7 @@ Name[x-test]=xxMake Project Builderxx
 Name[zh_CN]=Make 工程构建器
 Name[zh_TW]=Make 專案建立器
 Comment=KDevelop Make Builder
+Comment[ca]=Constructor KDevelop Make
 Comment[de]=Make-Builder von KDevelop
 Comment[el]=Κατασκευαστής Make του KDevelop
 Comment[es]=Constructor make de KDevelop

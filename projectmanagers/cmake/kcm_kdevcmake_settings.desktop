@@ -16,6 +16,7 @@ Name[hne]=सी-मेक
 Name[ne]=सीमेक
 Name[x-test]=xxCMakexx
 Comment=Configure CMake settings
+Comment[ca]=Configura els arranjaments de CMake
 Comment[de]=CMake-Einstellungen
 Comment[el]=Ρύθμιση επιλογών CMake
 Comment[es]=Configurar las preferencias de CMake

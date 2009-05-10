@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple CMake-based C++ application
+Name[ca]=Senzilla aplicació C++ basada en CMake
 Name[de]=Einfache auf CMake basierende C++-Anwendung
 Name[es]=Aplicación C++ sencilla basada en CMake
 Name[fr]=Application C++ simple utilisant CMake

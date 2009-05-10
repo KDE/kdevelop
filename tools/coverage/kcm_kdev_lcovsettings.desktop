@@ -10,6 +10,7 @@ X-KDE-ParentApp=kdevelop
 X-KDE-ParentComponents=kdevelop
 
 Name=lcov settings
+Name[ca]=Arranjaments de lcov
 Name[de]=Icov-Einstellungen
 Name[es]=Preferencias de lcov
 Name[fr]=Paramètres d'lcov
@@ -26,6 +27,7 @@ Name[x-test]=xxlcov settingsxx
 Name[zh_CN]=lcov 设置
 Name[zh_TW]=Icov 設定
 Comment=Configure lcov settings
+Comment[ca]=Configura els arranjaments de Icov
 Comment[de]=Icov-Einstellungen
 Comment[es]=Configurar las preferencias de lcov
 Comment[fr]=Configurer les réglages d'lcov
