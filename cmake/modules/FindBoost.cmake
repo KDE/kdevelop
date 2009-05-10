@@ -1,3 +1,8 @@
+########################################################################
+## TODO: Remove when KDevelop depends on KDE 4.2 as then we're using the
+## cmake-version and not the half-broken kdelibs version
+########################################################################
+
 # - Try to find Boost include dirs and libraries
 # Usage of this module as follows:
 #
