@@ -33,7 +33,7 @@ Q_OBJECT
 public:
     ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs);
     virtual void start();
-public slots:
+public Q_SLOTS:
     virtual void slotResult(KJob* job);
 protected:
     virtual bool doKill();

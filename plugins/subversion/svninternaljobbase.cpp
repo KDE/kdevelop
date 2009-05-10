@@ -170,7 +170,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
                 sendFirstDelta = false;
                 notifyString=i18n("Transmitting file data ");
             } else {
-                notifyString=".";
+                notifyString='.';
             }
             break;
         case svn_wc_notify_blame_revision:
