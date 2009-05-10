@@ -531,6 +531,13 @@ void Identifier::prepareWrite() {
   dd->clearHash();
 }
 
+bool QualifiedIdentifier::inRepository() const {
+  if(m_index)
+    return true;
+  else
+    return (bool)qualifiedidentifierRepository->findIndex( QualifiedIdentifierItemRequest(*dd) );
+}
+
 QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedidentifierRepository->itemFromIndex(index) ) {
 }
 
@@ -921,6 +928,9 @@ bool QualifiedIdentifier::isQualified() const
 
 void QualifiedIdentifier::push(const Identifier& id)
 {
+  if(id.isEmpty())
+    return;
+  
   prepareWrite();
 
   dd->identifiersList.append(IndexedIdentifier(id));
@@ -928,6 +938,9 @@ void QualifiedIdentifier::push(const Identifier& id)
 
 void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 {
+  if(id.isEmpty())
+    return;
+  
   prepareWrite();
   id.makeConstant();
 
@@ -937,6 +950,8 @@ void QualifiedIdentifier::push(const QualifiedIdentifier& id)
 void QualifiedIdentifier::pop()
 {
   prepareWrite();
+  if(!dd->identifiersSize())
+    return;
   dd->identifiersList.resize(dd->identifiersList.size()-1);
 }
 

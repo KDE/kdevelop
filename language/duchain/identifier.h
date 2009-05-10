@@ -318,6 +318,11 @@ public:
   bool beginsWith(const QualifiedIdentifier& other) const;
 
   uint index() const;
+  
+  /**
+   * Returns true if this qualified identifier is already in the persistent identifier repository
+   */
+  bool inRepository() const;
 
   /**
     * kDebug(9505) stream operator.  Writes this identifier to the debug output in a nicely formatted way.

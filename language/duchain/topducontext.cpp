@@ -44,7 +44,7 @@
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
-//  #define DEBUG_SEARCH
+// #define DEBUG_SEARCH
 using namespace KTextEditor;
 
 const uint maxApplyAliasesRecursion = 100;
@@ -144,35 +144,11 @@ struct TopDUContext::AliasChainElement {
   }
 
   //Computes the identifier represented by this chain element(generally the identifiers across the "previous" chain reversed
-  //Returns an invalid identifier if the to be constructed identifier doesn't exist in the identifier repository
-  QualifiedIdentifier qualifiedIdentifier() const {
-    KDevVarLengthArray<QualifiedIdentifier> identifiers;
-    ///@todo find faster ways of doing this
-    //Use the known hash to find a matching QualifiedIdentifier from the repository, without
-    //having to construct it. This should be efficient, since in most cases there should only be one
-    //identifier with this hash
-    QualifiedIdentifier::findByHash(hash, identifiers);
-    for(int a = 0; a < identifiers.size(); ++a) {
-      //Check whether there is an identifier that is equal
-      const QualifiedIdentifier& current(identifiers[a]);
-      if(current.explicitlyGlobal())
-        continue; //Skip explicitly global identifiers, since those will not be matched correctly
-      const AliasChainElement* checkElement = this;
-      bool mismatch = false;
-      for(int scope = current.count()-1; scope >= 0; --scope) {
-        if(!checkElement || current.at(scope) != checkElement->identifier) {
-          mismatch = true;
-          break;
-        }
-        checkElement = checkElement->previous;
-      }
-      if(!mismatch)
-        return current;
-    }
-
-    //We do this so we don't create crap items in the qualified-identifier repository while searching.
-    //When the qualified identifier doesn't exist, we don't need to search it.
-    return QualifiedIdentifier();
+  void buildQualifiedIdentifier(QualifiedIdentifier& target) const {
+    if(previous)
+      previous->buildQualifiedIdentifier(target);
+    
+    target.push(identifier);
   }
 
   const AliasChainElement* previous;
@@ -923,16 +899,17 @@ struct TopDUContext::FindDeclarationsAcceptor {
   }
 
   bool operator() (const AliasChainElement& element) {
+    QualifiedIdentifier id;
+    element.buildQualifiedIdentifier(id);
+    
 #ifdef DEBUG_SEARCH
-    kDebug() << "accepting" << element.qualifiedIdentifier().toString();
+    kDebug() << "accepting" << id.toString();
 #endif
 
     PersistentSymbolTable::Declarations allDecls;
 
-    QualifiedIdentifier id = element.qualifiedIdentifier();
-
     //If the identifier wasn't found in the identifier repository, the item cannot exist.
-    if(id.isEmpty() && !element.identifier.isEmpty())
+    if(!id.inRepository())
       return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
@@ -997,7 +974,7 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 #ifdef DEBUG_SEARCH
   FOREACH_ARRAY(SearchItem::Ptr idTree, identifiers)
       foreach(const QualifiedIdentifier &id, idTree->toList())
-        kDebug() << "findDeclarationsInternal" << id.toString();
+        kDebug() << "searching item" << id.toString();
 #endif
 
   DeclarationChecker check(this, position, dataType, flags);
@@ -1051,15 +1028,16 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
   AliasChainElement newElement(backPointer, identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
 
-#ifdef DEBUG_SEARCH
-  kDebug() << "checking" << newElement.qualifiedIdentifier().toString();
-#endif
-
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
-    QualifiedIdentifier id = newElement.qualifiedIdentifier();
+    QualifiedIdentifier id;
+    newElement.buildQualifiedIdentifier(id);
 
-    if(!id.isEmpty()) {
+#ifdef DEBUG_SEARCH
+  kDebug() << "checking" << id.toString();
+#endif
+    
+    if(id.inRepository() && !id.isEmpty()) {
     //This iterator efficiently filters the visible declarations out of all declarations
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
 
@@ -1147,16 +1125,18 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   ///@todo this is bad for a very big repository(the chains should be walked for the top-context instead)
 
   //Find all namespace-imports at given scope
-#ifdef DEBUG_SEARCH
-  kDebug() << "checking imports in" << (backPointer ? backPointer->qualifiedIdentifier().toString() : QString("global"));
-#endif
 
   {
     AliasChainElement importChainItem(backPointer, globalImportIdentifier);
 
-    QualifiedIdentifier id = importChainItem.qualifiedIdentifier();
+    QualifiedIdentifier id;
+    importChainItem.buildQualifiedIdentifier(id);
 
-    if(!id.isEmpty()) {
+#ifdef DEBUG_SEARCH
+  kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));
+#endif
+
+    if(!id.isEmpty() && id.inRepository()) {
       //This iterator efficiently filters the visible declarations out of all declarations
       PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
 
@@ -1203,11 +1183,24 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
           AliasChainElement* newAliasedElement = &newChain[count-1];
 
-  #ifdef DEBUG_SEARCH
-          kDebug() << "imported" << newAliasedElement->qualifiedIdentifier().toString();
-  #endif
+          bool recurse = !backPointer || newAliasedElement->hash != backPointer->hash;
+          
+          if(!recurse) {
+            //Check if qualified identifiers are changed
+            QualifiedIdentifier newId;
+            newAliasedElement->buildQualifiedIdentifier(newId);
+
+            QualifiedIdentifier backId;
+            backPointer->buildQualifiedIdentifier(backId);
+            
+            recurse |= newId != backId;
+          }
+          
+//   #ifdef DEBUG_SEARCH
+//           kDebug() << "imported" << newId.toString();
+//   #endif
           //Prevent endless recursion by checking whether we're actually doing a change
-          if(!backPointer || newAliasedElement->hash != backPointer->hash || newAliasedElement->qualifiedIdentifier() != backPointer->qualifiedIdentifier())
+          if(recurse)
             if(!applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1))
               return false;
         }
@@ -1230,15 +1223,18 @@ struct TopDUContext::FindContextsAcceptor {
   }
 
   bool operator() (const AliasChainElement& element) {
-#ifdef DEBUG_SEARCH
-    kDebug() << "accepting" << element.qualifiedIdentifier().toString();
-#endif
     PersistentSymbolTable::Contexts allDecls;
 
-    QualifiedIdentifier id = element.qualifiedIdentifier();
+    QualifiedIdentifier id;
+    element.buildQualifiedIdentifier(id);
 
-    //If the identifier wasn't found in the identifier repository, the item cannot exist.
-    if(id.isEmpty() && !element.identifier.isEmpty())
+#ifdef DEBUG_SEARCH
+    kDebug() << "accepting" << id.toString();
+#endif
+    kDebug() << "accepting" << id.toString() << id.inRepository();
+
+    //If the identifier is not in the repository, there also can be no declaration in the repository.
+    if(!id.inRepository())
       return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
