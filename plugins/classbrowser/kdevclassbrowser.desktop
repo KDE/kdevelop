@@ -36,6 +36,7 @@ GenericName[sv]=Klassbläddrare
 GenericName[tr]=Sınıf Tarayıcı
 GenericName[uk]=Переглядач класів
 GenericName[x-test]=xxClass Browserxx
+GenericName[zh_CN]=类浏览器
 GenericName[zh_TW]=類別瀏覽器
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevclassbrowser
