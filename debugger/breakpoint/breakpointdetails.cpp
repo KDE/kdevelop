@@ -142,11 +142,11 @@ void BreakpointDetails::showExplanation(const QString& link)
     {
         QWhatsThis::showText(pos,
                                 i18n("<b>Breakpoint is pending</b>"
-                                "<p>Pending breakpoints are those that are "
-                                "communucated to GDB, but which are not yet "
+                                "<p>Pending breakpoints are those that have "
+                                "been passed to GDB, but which are not yet "
                                 "installed in the target, because GDB cannot "
-                                "find the function or the file the breakpoint "
-                                "refers to. The most common case is a breakpoint "
+                                "find the function or file to which the breakpoint "
+                                "refers. The most common case is a breakpoint "
                                 "in a shared library: GDB will insert this "
                                 "breakpoint only when the library is loaded.</p>"),
                                 status_);
@@ -155,7 +155,7 @@ void BreakpointDetails::showExplanation(const QString& link)
     {
         QWhatsThis::showText(pos,
                                 i18n("<b>Breakpoint is dirty</b>"
-                                "<p>The breakpoint is not yet communicated "
+                                "<p>The breakpoint has not yet been passed "
                                 "to the debugger.</p>"),
                                 status_);
     }
