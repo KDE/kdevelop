@@ -1042,7 +1042,7 @@ void DUChain::removeDocumentChain( TopDUContext* context )
 {
   ENSURE_CHAIN_WRITE_LOCKED;
   IndexedTopDUContext indexed(context->indexed());
-  Q_ASSERT(indexed.data() == context);
+  Q_ASSERT(indexed.data() == context); ///This assertion fails if you call removeDocumentChain(..) on a document that has not been added to the du-chain
   branchRemoved(context);
   context->m_dynamicData->deleteOnDisk();
   Q_ASSERT(indexed.data() == context);
