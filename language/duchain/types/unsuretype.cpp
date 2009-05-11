@@ -99,7 +99,9 @@ void UnsureType::exchangeTypes(KDevelop::TypeExchanger* exchanger) {
 }
 
 void UnsureType::addType(KDevelop::IndexedType type) {
-  d_func_dynamic()->m_typesList().append(type);
+  if ( !d_func_dynamic()->m_typesList().contains(type) ) {
+    d_func_dynamic()->m_typesList().append(type);
+  }
 }
 
 void UnsureType::removeType(KDevelop::IndexedType type) {
