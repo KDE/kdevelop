@@ -7,7 +7,7 @@ Comment[x-test]=xxKDevelopxx
 
 [Event/ProcessSuccess]
 Name=Process successful
-Name[ca]=Procés exitós
+Name[ca]=Procés correcte
 Name[cs]=Proces úspěšný
 Name[da]=Processen lykkedes
 Name[de]=Prozess erfolgreich
