@@ -296,10 +296,10 @@ bool CppTools::CustomIncludePathsSettings::write() {
       f.write(" BUILD=");
       f.write(buildDir.toLocal8Bit());
       f.write("\n");
-      foreach(QString customPath, paths) {
-        f.write(customPath.toLocal8Bit());
-        f.write("\n");
-      }
+    }
+    foreach(QString customPath, paths) {
+      f.write(customPath.toLocal8Bit());
+      f.write("\n");
     }
     return true;
   }else{
