@@ -33,9 +33,9 @@ class AbstractFunctionDeclarationData
 public:
   AbstractFunctionDeclarationData() : m_isVirtual(false), m_isInline(false), m_isExplicit(false) {
   }
-  bool m_isVirtual: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-funcions)
+  bool m_isVirtual: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
   bool m_isInline: 1;
-  bool m_isExplicit: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-funcions)
+  bool m_isExplicit: 1; ///@todo move into ClassFunctionDeclaration(Only valid for class-functions)
 };
 
 /**

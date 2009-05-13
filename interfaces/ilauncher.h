@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef ILAUNCHCONFIGURATIONSTARTER_H
-#define ILAUNCHCONFIGURATIONSTARTER_H
+#ifndef ILAUNCHER_H
+#define ILAUNCHER_H
 
 #include "interfacesexport.h"
 
