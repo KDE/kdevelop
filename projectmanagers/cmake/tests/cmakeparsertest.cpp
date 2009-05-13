@@ -32,7 +32,6 @@ CMakeParserTest::CMakeParserTest()
     fakeRoot = new CMakeAst;
 }
 
-
 CMakeParserTest::~CMakeParserTest()
 {
     delete fakeRoot;

@@ -35,6 +35,8 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars->insert("ONE", QStringList("1"));
     m_vars->insert("EXP", QStringList("-llala -lexpression"));
     
+    m_vars->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
+    
     m_macros=new MacroMap();
     Macro m;
     m.name = "testmacro";
