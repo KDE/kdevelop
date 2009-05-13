@@ -567,6 +567,11 @@ void ProjectController::openProject( const KUrl &projectFile )
 
 void ProjectController::projectImportingFinished( IProject* project )
 {
+    if( !project )
+    {
+        kWarning() << "OOOPS: 0-pointer project";
+        return;
+    }
     IPlugin *managerPlugin = project->managerPlugin();
     QList<IPlugin*> pluglist;
     pluglist.append( managerPlugin );
