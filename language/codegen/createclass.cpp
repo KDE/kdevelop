@@ -26,6 +26,7 @@
 #include "ui_outputlocation.h"
 
 #include "overridespage.h"
+#include <kfiledialog.h>
 
 using namespace KDevelop;
 
@@ -292,6 +293,10 @@ OutputPage::OutputPage(CreateClass* parent)
 
     d->output = new Ui::OutputLocationDialog;
     d->output->setupUi(this);
+    d->output->headerUrl->setMode( KFile::File | KFile::LocalOnly );
+    d->output->headerUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
+    d->output->implementationUrl->setMode( KFile::File | KFile::LocalOnly );
+    d->output->implementationUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
 
     registerField("headerUrl*", d->output->headerUrl);
     registerField("implementationUrl*", d->output->implementationUrl);
