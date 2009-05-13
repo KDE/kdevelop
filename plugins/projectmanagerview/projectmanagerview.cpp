@@ -155,6 +155,10 @@ void ProjectManagerView::locateCurrentDocument()
 {
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
+    // We should _never_ get a null pointer for the document, as
+    // the action is only enabled when there is an active document.
+    Q_ASSERT(doc); 
+   
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
             QModelIndex index = m_modelFilter->proxyIndexFromItem(item);
