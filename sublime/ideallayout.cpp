@@ -194,11 +194,12 @@ QSize IdealButtonBarLayout::sizeHint() const
 
 void IdealButtonBarLayout::setGeometry(const QRect &rect)
 {
-    if (m_layoutDirty || rect != geometry())
+    if (m_layoutDirty || rect != geometry()) {
         if (orientation() == Qt::Vertical)
             doVerticalLayout(rect);
         else
             doHorizontalLayout(rect);
+    }
 }
 
 void IdealButtonBarLayout::addItem(QLayoutItem *item)
@@ -772,11 +773,12 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
 {
     int offset = 0;
 
-    if (QWidgetItem* bar = m_items[role]->buttonBar())
+    if (QWidgetItem* bar = m_items[role]->buttonBar()) {
         if (role == Left || role == Right)
             offset = bar->geometry().width();
         else
             offset = bar->geometry().height();
+    }
 
     m_items[role]->width = thickness - offset;
 
@@ -982,17 +984,19 @@ int Sublime::IdealMainLayout::DockArea::count() const
 
 QLayoutItem * Sublime::IdealMainLayout::DockArea::itemAt(int index, int& at) const
 {
-    if (m_buttonBarItem)
+    if (m_buttonBarItem) {
         if (index == at)
             return m_buttonBarItem;
         else
             ++at;
+    }
 
-    if (m_mainSplitter)
+    if (m_mainSplitter) {
         if (index == at)
             return m_mainSplitter;
         else
             ++at;
+    }
 
     if (index < m_items.count() + at)
         return m_items.at(index - at);
