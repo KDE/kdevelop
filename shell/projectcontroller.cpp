@@ -683,6 +683,7 @@ void ProjectController::closeProject(IProject* proj)
     {
         return;
     }
+    d->m_projects.removeAll(proj);
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
                                         // Now we can save settings for all of the Core
@@ -691,7 +692,6 @@ void ProjectController::closeProject(IProject* proj)
     closeAllOpenedFiles(proj);
     proj->close();
     proj->deleteLater();                //be safe when deleting
-    d->m_projects.removeAll(proj);
     if (d->m_projects.isEmpty())
     {
         initializePluginCleanup(proj);
