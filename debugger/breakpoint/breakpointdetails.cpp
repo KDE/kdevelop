@@ -56,7 +56,7 @@ public:
 
 
 BreakpointDetails::BreakpointDetails(QWidget *parent)
-    : m_currentBreakpoint(0), QWidget(parent)
+    : QWidget(parent), m_currentBreakpoint(0)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setContentsMargins(11, 0, 0, 11);

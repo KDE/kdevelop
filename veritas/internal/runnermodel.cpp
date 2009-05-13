@@ -135,7 +135,7 @@ namespace
 class ParentStateResolver
 {
 public:
-    ParentStateResolver() : done(false), isRunning(false) {
+    ParentStateResolver() : isRunning(false), done(false) {
         icon = g_successIcon;
     }
     void operator()(Test* current) {

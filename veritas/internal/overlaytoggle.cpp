@@ -77,9 +77,11 @@ void OverlayButton::setVisible(bool visible)
 
 }
 
-OverlayButton::OverlayButton(QWidget* parent) : QAbstractButton(parent), m_fadingValue(0), m_fadingTimeLine(0),
+OverlayButton::OverlayButton(QWidget* parent) : QAbstractButton(parent),
+    m_icon(),
     m_isHovered(false),
-    m_icon()
+    m_fadingValue(0),
+    m_fadingTimeLine(0)
 {}
 
 
