@@ -154,6 +154,11 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 void ProjectManagerView::locateCurrentDocument()
 {
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
+    if(!doc)
+    {
+        kDebug() << "No active document";
+        return;
+    }
 
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
