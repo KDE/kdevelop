@@ -124,7 +124,7 @@ QVariant Breakpoint::data(int column, int role) const
                 case PendingState:
                     return KIcon("help-contents");
                 case CleanState:
-                    return KIcon("dialog-apply");
+                    return KIcon("dialog-ok-apply");
             }
         } else if (role == Qt::ToolTipRole) {
             switch (state()) {
