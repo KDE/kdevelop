@@ -72,6 +72,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     hitsLayout->setContentsMargins(0, 0, 0, 0);
 
     hits_ = new QLabel(i18n("Not hit yet"), this);
+    hits_->setWordWrap(true);
     hitsLayout->addWidget(hits_, 0, 0, 1, 3);
 
     QFrame* frame = new QFrame(this);
@@ -108,31 +109,36 @@ void BreakpointDetails::setItem(Breakpoint *b)
     if (!b)
     {
         status_->hide();
-        hits_->setEnabled(false);
+        hits_->hide();
         ignore_->setEnabled(false);
         return;
     }
 
     status_->show();
-    hits_->setEnabled(true);
+    hits_->show();
     ignore_->setEnabled(true);
 
-    switch (b->state()) {
-        case Breakpoint::PendingState:
-            status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
-            break;
-        case Breakpoint::DirtyState:
-            status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
-            break;
-        case Breakpoint::CleanState:
-            status_->setText("Breakpoint is active");
-            break;
-    }
+    if (b->errors().isEmpty()) {
+        switch (b->state()) {
+            case Breakpoint::PendingState:
+                status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
+                break;
+            case Breakpoint::DirtyState:
+                status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
+                break;
+            case Breakpoint::CleanState:
+                status_->setText("Breakpoint is active");
+                break;
+        }
 
-    if (b->hitCount())
-        hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
-    else
-        hits_->setText(i18n("Not hit yet"));
+        if (b->hitCount())
+            hits_->setText(i18np("Hit %1 time", "Hit %1 times", b->hitCount()));
+        else
+            hits_->setText(i18n("Not hit yet"));
+    } else {
+        status_->setText(i18n("Breakpoint has errors"));
+        hits_->setText(b->errorText());
+    }
 }
 
 void BreakpointDetails::showExplanation(const QString& link)

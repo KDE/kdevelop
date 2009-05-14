@@ -309,6 +309,8 @@ TODO NIKO
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
 {
+    kDebug() << b << msg << column;
+
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
     if (!table_->isVisible())

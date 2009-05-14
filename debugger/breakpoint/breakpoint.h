@@ -102,6 +102,8 @@ public:
     QString expression() const;
 
     BreakpointState state() const;
+    QString errorText() const;
+    QSet<Column> errors() const;
 
 protected:
     friend class IBreakpointController;
@@ -110,7 +112,6 @@ protected:
 
     BreakpointModel *m_model;
     bool enabled_;
-    QSet<int> errors_;
     bool deleted_;
     BreakpointKind kind_;
     /* For watchpoints, the address it is set at.  */

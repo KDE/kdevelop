@@ -44,6 +44,8 @@ public:
     
     Breakpoint::BreakpointState breakpointState(const Breakpoint *breakpoint) const;
     int breakpointHitCount(const Breakpoint *breakpoint) const;
+    QSet<Breakpoint::Column> breakpointErrors(const Breakpoint *breakpoint) const;
+    QString breakpointErrorText(const Breakpoint *breakpoint) const;
 
 protected:
     IDebugSession *debugSession() const;
@@ -52,12 +54,16 @@ protected:
     void breakpointStateChanged(Breakpoint* breakpoint);
     void setHitCount(Breakpoint* breakpoint, int count);
 
+    void error(KDevelop::Breakpoint* breakpoint, const QString& msg, Breakpoint::Column column);
+
     void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;
 
-    QMap<const Breakpoint*, QSet<int> > m_dirty;
+    QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_dirty;
     QSet<const Breakpoint*> m_pending;
     QMap<const Breakpoint*, int> m_hitCount;
+    QMap<const Breakpoint*, QSet<Breakpoint::Column> > m_errors;
+    QMap<const Breakpoint*, QString > m_errorText; ///< message of the last error
     int m_dontSendChanges;
 
 private Q_SLOTS:

@@ -179,6 +179,7 @@ int KDevelop::BreakpointModel::rowCount(const QModelIndex& parent) const
 
 int KDevelop::BreakpointModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return 5;
 }
 

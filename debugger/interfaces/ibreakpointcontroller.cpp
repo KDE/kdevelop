@@ -45,7 +45,9 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
     
     foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
         m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
-        m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+        if (!breakpoint->condition().isEmpty()) {
+            m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+        }
         breakpointStateChanged(breakpoint);
     }
 }
@@ -73,6 +75,7 @@ void IBreakpointController::breakpointChanged(KDevelop::Breakpoint* breakpoint, 
 
     if (column != Breakpoint::StateColumn) {
         m_dirty[breakpoint].insert(column);
+        if (m_errors.contains(breakpoint)) m_errors[breakpoint].remove(column);
         breakpointStateChanged(breakpoint);
         if (debugSession()->isRunning()) {
             sendMaybe(breakpoint);
@@ -122,6 +125,30 @@ void IBreakpointController::setHitCount(Breakpoint* breakpoint, int count)
     breakpoint->reportChange(Breakpoint::HitCountColumn);
     m_dontSendChanges--;
 }
+
+void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Breakpoint::Column column)
+{
+    m_dontSendChanges++;
+    m_errorText.insert(breakpoint, msg);
+    m_errors[breakpoint].insert(column);
+    breakpoint->reportChange(column);
+    breakpointModel()->errorEmit(breakpoint, msg, Breakpoint::LocationColumn);
+    m_dontSendChanges--;
+}
+
+QSet<Breakpoint::Column> IBreakpointController::breakpointErrors(const Breakpoint* breakpoint) const
+{
+    if (!m_errors.contains(breakpoint)) return QSet<Breakpoint::Column>();
+    return m_errors[breakpoint];
+}
+
+QString IBreakpointController::breakpointErrorText(const KDevelop::Breakpoint* breakpoint) const
+{
+    if (!m_errorText.contains(breakpoint)) return QString();
+    return m_errorText[breakpoint];
+}
+
+
 
 }
 

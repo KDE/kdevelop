@@ -96,8 +96,6 @@ bool Breakpoint::setData(int index, const QVariant& value)
         }
     }
 
-    errors_.remove(index);
-
     reportChange(static_cast<Column>(index));
 
     return true;
@@ -148,8 +146,8 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (role == Qt::DecorationRole)
     {
-        if ((column == LocationColumn && errors_.contains(LocationColumn))
-            || (column == ConditionColumn && errors_.contains(ConditionColumn)))
+        if ((column == LocationColumn && errors().contains(LocationColumn))
+            || (column == ConditionColumn && errors().contains(ConditionColumn)))
         {
             /* FIXME: does this leak? Is this efficient? */
             return KIcon("dialog-warning");
@@ -303,7 +301,6 @@ QString Breakpoint::expression() const
     return m_expression;
 }
 
-
 Breakpoint::BreakpointState Breakpoint::state() const
 {
     IDebugSession* session = ICore::self()->debugController()->currentSession();
@@ -314,6 +311,26 @@ Breakpoint::BreakpointState Breakpoint::state() const
     }
 }
 
+QSet<Breakpoint::Column> Breakpoint::errors() const
+{
+    IDebugSession* session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        return session->breakpointController()->breakpointErrors(this);
+    } else {
+        return QSet<Breakpoint::Column>();
+    }
+
+}
+
+QString Breakpoint::errorText() const
+{
+    IDebugSession* session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        return session->breakpointController()->breakpointErrorText(this);
+    } else {
+        return QString();
+    }
+}
 
 void KDevelop::Breakpoint::reportChange(Column c)
 {
