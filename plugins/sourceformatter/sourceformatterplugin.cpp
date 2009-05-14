@@ -123,7 +123,7 @@ void SourceFormatterPlugin::beautifySource()
 	// put the selection back to the same indent level.
 	// taking note of the config options.
 	if (has_selection) {
-		unsigned int indentCount = 0;
+		int indentCount = 0;
 		QString indentWith("");
 		QString original = view->selectionText();
 

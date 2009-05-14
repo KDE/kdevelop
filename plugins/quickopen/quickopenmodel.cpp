@@ -303,7 +303,7 @@ QVariant QuickOpenModel::data( const QModelIndex& index, int role ) const
 void QuickOpenModel::resetTimer() {
 
     //Remove all cached data behind row m_resetBehindRow
-    for(QHash<uint, KDevelop::QuickOpenDataPointer>::iterator it = m_cachedData.begin(); it != m_cachedData.end(); ) {
+    for(DataList::iterator it = m_cachedData.begin(); it != m_cachedData.end(); ) {
         if(it.key() > m_resetBehindRow)
             it = m_cachedData.erase(it);
         else
