@@ -54,9 +54,12 @@ struct UpdateHandler : public Handler
 
     void handle(const GDBMI::ResultRecord &r)
     {
-        Q_UNUSED(r);
-        // FIXME: handle error. Enable error most likely means the
-        // breakpoint itself cannot be inserted in the target.
+        if (r.reason == "error") {
+            controller->error(breakpoint, r["msg"].literal(), m_column);
+            kWarning() << r["msg"].literal();
+        } else {
+            controller->m_errors[breakpoint].remove(m_column);
+        }
         controller->m_dirty[breakpoint].remove(m_column);
         controller->breakpointStateChanged(breakpoint);
         controller->sendMaybe(breakpoint);
@@ -76,27 +79,21 @@ struct InsertedHandler : public Handler
         kDebug() << controller->m_dirty[breakpoint];
 
         if (r.reason == "error") {
-            /* TODO NIKO
-            errors_.insert(LocationColumn);
-            reportChange();
-            static_cast<Breakpoints*>(parentItem)
-                ->errorEmit(this, r["msg"].literal(), LocationColumn);
-            */
+            controller->error(breakpoint, r["msg"].literal(), KDevelop::Breakpoint::LocationColumn);
             kWarning() << r["msg"].literal();
         } else {
+            controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
             if (r.hasField("bkpt")) {
                 controller->update(breakpoint, r["bkpt"]);
-                controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::IgnoreHitsColumn);
-                controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::ConditionColumn);
             } else {
                 // For watchpoint creation, GDB basically does not say
                 // anything.  Just record id.
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
             }
-            controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
-            controller->breakpointStateChanged(breakpoint);
-            controller->sendMaybe(breakpoint);
         }
+        controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
+        controller->breakpointStateChanged(breakpoint);
+        controller->sendMaybe(breakpoint);
         delete this;
     }
 };
@@ -182,6 +179,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     */
     if (breakpoint->deleted())
     {
+        m_dirty.remove(breakpoint);
+        m_errors.remove(breakpoint);
         if (m_ids.contains(breakpoint)) {
             DeletedHandler *handler = new DeletedHandler(this, breakpoint);
             controller()->addCommand(
@@ -206,17 +205,9 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                     InsertedHandler *handler = new InsertedHandler(this, breakpoint);
-                    QString cmd;
-                    if (breakpoint->ignoreHits()) {
-                        cmd += QString("-i %0 ").arg(breakpoint->ignoreHits());
-                    }
-                    if (!breakpoint->condition().isEmpty()) {
-                        cmd += QString("-c \"%0\" ").arg(breakpoint->condition().replace('\\', "\\\\").replace('"', "\\\""));
-                    }
-                    cmd += breakpoint->location();
                     controller()->addCommand(
                         new GDBCommand(BreakInsert,
-                                    cmd,
+                                    breakpoint->location(),
                                     handler, &InsertedHandler::handle, true));
                 } else {
                     InsertedHandler *handler = new InsertedHandler(this, breakpoint);
@@ -333,7 +324,7 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
 
     if (!m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)
-        /*TODO NIKO && !errors_.contains(ConditionColumn)*/)
+        && !m_errors[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn))
     {
         if (b.hasField("cond")) {
             breakpoint->setData(KDevelop::Breakpoint::ConditionColumn, b["cond"].literal());
@@ -352,14 +343,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         breakpoint->setIgnoreHits(b["ignore"].toInt());
     } else {
         breakpoint->setIgnoreHits(0);
-    }
-
-    if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-        if (b.hasField("cond")) {
-            breakpoint->setCondition(b["cond"].literal());
-        } else {
-            breakpoint->setCondition(QString());
-        }
     }
 
 #if 0
