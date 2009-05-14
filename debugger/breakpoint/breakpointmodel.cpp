@@ -460,6 +460,13 @@ Breakpoint* BreakpointModel::addReadWatchpoint()
     return n;
 }
 
+Breakpoint* BreakpointModel::addReadWatchpoint(const QString& expression)
+{
+    Breakpoint* n = addReadWatchpoint();
+    n->setExpression(expression);
+    return n;
+}
+
 Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     foreach (Breakpoint *b, m_breakpoints) {
         if (b->url() == url && b->line() == line) {

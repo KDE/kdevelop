@@ -65,6 +65,7 @@ public:
     KDevelop::Breakpoint* addWatchpoint();
     KDevelop::Breakpoint* addWatchpoint(const QString& expression);
     KDevelop::Breakpoint* addReadWatchpoint();
+    KDevelop::Breakpoint* addReadWatchpoint(const QString& expression);
 
     Breakpoint *breakpoint(int row);
     QList<Breakpoint*> breakpoints() const;
