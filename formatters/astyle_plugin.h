@@ -44,7 +44,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** Formats using the current style.
         */
-        virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime);
+        virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
 
         /** \return A map of predefined styles (a key and a caption for each type)
         */

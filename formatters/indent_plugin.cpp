@@ -77,7 +77,7 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 	return "C++";
 }
 
-QString IndentPlugin::formatSource(const QString &text, const KMimeType::Ptr &)
+QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, const QString& leftContext, const QString& rightContext)
 {
 	KProcess proc;
 	QTextStream ios(&proc);
@@ -90,15 +90,32 @@ QString IndentPlugin::formatSource(const QString &text, const KMimeType::Ptr &)
 		return text;
 	}
 
-	proc.write(text.toLocal8Bit());
+	QString useText = text;
+	//We can only respect the context if it is in a separate line
+	if(leftContext.endsWith("\n"))
+		useText = leftContext + useText;
+	
+	if(rightContext.startsWith("\n"))
+		useText = useText + rightContext;
+
+	proc.write(useText.toLocal8Bit());
 	proc.closeWriteChannel();
 	if(!proc.waitForFinished()) {
 		kDebug() << "Process doesn't finish" << endl;
 		return text;
 	}
 
-	QString output = ios.readAll();
-	return output;
+	QStringList output = ios.readAll().split("\n");
+	
+	//Remove right context
+	if(rightContext.startsWith("\n"))
+		output = output.mid(0, (leftContext + text).split("\n").length());
+	
+	//Remove left context
+	if(leftContext.endsWith("\n"))
+		output = output.mid(leftContext.split("\n").length());
+	
+	return output.join("\n");
 }
 
 QMap<QString, QString> IndentPlugin::predefinedStyles(const KMimeType::Ptr &)

@@ -70,16 +70,16 @@ QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
     return "C++";
 }
 
-QString AStylePlugin::formatSource(const QString &text, const KMimeType::Ptr &mime)
+QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
     if(mime->is("text/x-java-source"))
-        m_formatter->setSharpStyle();
-    else if(mime->is("text/x-csharp"))
         m_formatter->setJavaStyle();
+    else if(mime->is("text/x-csharp"))
+        m_formatter->setSharpStyle();
     else
         m_formatter->setCStyle();
     
-    return m_formatter->formatSource(text);
+    return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
 QMap<QString, QString> AStylePlugin::predefinedStyles(const KMimeType::Ptr &)

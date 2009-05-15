@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 #include <KDebug>
 
 #include <interfaces/isourceformatter.h>
-#include "astyle_stringiterator.h" 
+#include "astyle_stringiterator.h"
 
 AStyleFormatter::AStyleFormatter()
 {
@@ -38,12 +38,93 @@ AStyleFormatter::AStyleFormatter()
 //     setOptions(options);
 // }
 
-QString AStyleFormatter::formatSource(const QString &text)
+///Matches the given prefix to the given text, ignoring all whitespace, but not ignoring newlines
+///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
+int matchPrefixIgnoringWhitespace(QString text, QString prefix)
 {
-    AStyleStringIterator is(text);
+    int prefixPos = 0;
+    int textPos = 0;
+
+    while (prefixPos < prefix.length() && textPos < text.length()) {
+
+        while (prefixPos < prefix.length() && prefix[prefixPos].isSpace())
+            ++prefixPos;
+        while (textPos < text.length() && text[textPos].isSpace())
+            ++textPos;
+
+        if(prefixPos == prefix.length() || textPos == text.length())
+            return textPos;
+        
+        if(prefix[prefixPos] != text[textPos])
+            return -1;
+        ++prefixPos;
+        ++textPos;
+    }
+
+    return textPos;
+}
+
+//Returns the closest newline position before the actual text, or -1
+int leadingNewLine(QString str) {
+    int ret = -1;
+    for(int a = 0; a < str.length(); ++a) {
+        if(!str[a].isSpace())
+            return ret;
+        if(str[a] == '\n')
+            ret = a;
+    }
+    return ret;
+}
+
+int firstNonWhiteSpace(QString str) {
+    for(int a = 0; a < str.length(); ++a)
+        if(!str[a].isSpace())
+            return a;
+    return -1;
+}
+
+static QString reverse( const QString& str ) {
+  QString ret;
+  for(int a = str.length()-1; a >= 0; --a)
+      ret.append(str[a]);
+  
+  return ret;
+}
+
+///Removes parts of the white-space at the start that are in @p output but not in @p text
+QString equalizeWhiteSpaceAtStart(QString original, QString output) {
+    if(leadingNewLine(output) != -1) {
+        if(leadingNewLine(original) != -1)
+            return output.mid(leadingNewLine(output)); //Exactly include the leading newline as in the original text
+        else
+            output = output.mid(leadingNewLine(output)+1); //Skip the leading newline, the orginal had none as well
+    }
+
+    if(output[0].isSpace() && !original[0].isSpace()) {
+        //The original text has no leading white space, remove all leading white space
+        int nonWhite = firstNonWhiteSpace(output);
+        if(nonWhite != -1)
+            output = output.mid(nonWhite);
+        else
+            output.clear();
+    }
+    return output;
+}
+
+QString AStyleFormatter::formatSource(const QString &text, const QString& leftContext, const QString& rightContext)
+{
+    QString useText = leftContext + text + rightContext;
+    int startLine = 0;
+
+//     kDebug() << "left context:" << leftContext;
+//     kDebug() << "right context:" << rightContext;
+
+    QStringList textLines = text.split("\n");
+
+    AStyleStringIterator is(useText);
     QString output;
     QTextStream os(&output, QIODevice::WriteOnly);
-    
+
     init(&is);
 
     while(hasMoreLines()) {
@@ -52,6 +133,32 @@ QString AStyleFormatter::formatSource(const QString &text)
     }
 
     init(0);
+
+    //Now remove "leftContext" and "rightContext" from the sides
+
+    if(!leftContext.isEmpty()) {
+        //By trimming the context, we include all the preceding whitespace behind the "physical" left context
+        //If we do not want o include the preceding whitespace, we match against the whole context
+        int endOfLeftContext = matchPrefixIgnoringWhitespace(output, leftContext.trimmed());
+        if(endOfLeftContext == -1) {
+            kWarning() << "problem matching the left context";
+            return formatSource(text); //Re-format without context
+        }
+        output = output.mid(endOfLeftContext);
+        output = equalizeWhiteSpaceAtStart(text, output);
+    }
+
+    if(!rightContext.isEmpty()) {
+        //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
+        int endOfText = matchPrefixIgnoringWhitespace(output, text+" ");
+        if(endOfText == -1) {
+            kWarning() << "problem matching the text while formatting";
+            return formatSource(text); //Re-format without context
+        }
+
+        output = output.left(endOfText);
+        output = reverse(equalizeWhiteSpaceAtStart(reverse(text), reverse(output)));
+    }
 
     return output;
 }
@@ -127,7 +234,7 @@ void AStyleFormatter::updateFormatter()
 
     // oneliner
     AStyleFormatter::setBreakOneLineBlocksMode(!m_options["KeepBlocks"].toBool());
-    AStyleFormatter::setSingleStatementsMode(!m_options["KeepStatements"].toBool());  
+    AStyleFormatter::setSingleStatementsMode(!m_options["KeepStatements"].toBool());
 }
 
 void AStyleFormatter::resetStyle()
@@ -163,7 +270,7 @@ void AStyleFormatter::resetStyle()
 
 bool AStyleFormatter::predefinedStyle( const QString & style )
 {
-    if (style == "ANSI") {
+    if(style == "ANSI") {
         resetStyle();
         setBracketIndent(false);
         setSpaceIndentation(4);
@@ -172,7 +279,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
-    } else if (style == "K&R") {
+    } else if(style == "K&R") {
         resetStyle();
         setBracketIndent(false);
         setSpaceIndentation(4);
@@ -181,7 +288,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
-    } else if (style == "Linux") {
+    } else if(style == "Linux") {
         resetStyle();
         setBracketIndent(false);
         setSpaceIndentation(8);
@@ -190,7 +297,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
-    } else if (style == "GNU") {
+    } else if(style == "GNU") {
         resetStyle();
         setBlockIndent(true);
         setSpaceIndentation(2);
@@ -199,7 +306,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setSwitchIndent(false);
         setNamespaceIndent(false);
         return true;
-    } else if (style == "Java") {
+    } else if(style == "Java") {
         resetStyle();
         setJavaStyle();
         setBracketIndent(false);
@@ -346,11 +453,19 @@ void AStyleFormatter::setMinConditionalIndentLength(int min)
 
 void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
 {
-    switch(mode) {
-        case astyle::NONE_MODE: m_options["Brackets"] = ""; break; 
-        case astyle::ATTACH_MODE: m_options["Brackets"] = "Attach"; break;
-        case astyle::BREAK_MODE: m_options["Brackets"] = "Break"; break;
-        case astyle::BDAC_MODE: m_options["Brackets"] = "Linux"; break;
+    switch (mode) {
+    case astyle::NONE_MODE:
+        m_options["Brackets"] = "";
+        break;
+    case astyle::ATTACH_MODE:
+        m_options["Brackets"] = "Attach";
+        break;
+    case astyle::BREAK_MODE:
+        m_options["Brackets"] = "Break";
+        break;
+    case astyle::BDAC_MODE:
+        m_options["Brackets"] = "Linux";
+        break;
     }
     ASFormatter::setBracketFormatMode(mode);
 }
