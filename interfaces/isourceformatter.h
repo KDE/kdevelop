@@ -101,8 +101,13 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		virtual QString highlightModeForMime(const KMimeType::Ptr &mime) = 0;
 
 		/** Formats using the current style.
+		 * @param text The text to format
+		 * @param leftContext The context at the left side of the text. If it is in another line, it must end with a newline.
+		 * @param rightContext The context at the right side of the text. If it is in the next line, it must start with a newline.
+		 *
+		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
 		*/
-		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime) = 0;
+		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
 
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
