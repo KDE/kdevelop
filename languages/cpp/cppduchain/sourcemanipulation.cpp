@@ -274,7 +274,7 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
-  decl = applyIndentation(applySubScope(insertion.prefix + decl));
+  decl = "\n" + applyIndentation(applySubScope(insertion.prefix + decl));
   
   return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(insertion.line, 0, insertion.line, 0), QString(), decl));
 }
@@ -415,7 +415,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       position.setColumn(0);
     }
     
-    forwardDeclaration = applySubScope(forwardDeclaration);
+    forwardDeclaration = "\n" + applySubScope(forwardDeclaration);
     
     kDebug() << "inserting at" << position << forwardDeclaration;
     
