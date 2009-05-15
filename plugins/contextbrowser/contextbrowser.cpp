@@ -260,11 +260,6 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
           return;
         m_currentToolTipDeclaration = IndexedDeclaration(decl);
         navigationWidget = decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
-        
-        if(decl->internalContext()) {
-          KDevelop::DumpChain dump;
-          dump.dump(decl->internalContext(), 3);
-        }
       }
     }
   }
