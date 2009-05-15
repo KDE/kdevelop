@@ -178,9 +178,30 @@ namespace KDevelop {
         uint countFreeItems() const {
             return countFreeItemsInternal(*m_centralFreeItem);
         }
+        uint countFreeItemsNaive() const {
+            uint ret = 0;
+            for(uint a = 0; a < m_itemCount; ++a) {
+                if(ItemHandler::isFree(m_items[a]))
+                    ++ret;
+            }
+            return ret;
+        }
+        
+        void verifyOrder() {
+            Data last;
+            
+            for(uint a = 0; a < m_itemCount; ++a) {
+                if(!ItemHandler::isFree(m_items[a])) {
+                    if(!ItemHandler::isFree(last))
+                        Q_ASSERT(last < m_items[a]);
+                    last = m_items[a];
+                }
+            }
+        }
 
         void verifyTreeConsistent() {
             verifyTreeConsistentInternal(*m_centralFreeItem, 0, m_itemCount);
+            Q_ASSERT(countFreeItems() == countFreeItemsNaive());
         }
         
         private:
