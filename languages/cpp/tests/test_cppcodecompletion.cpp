@@ -1050,18 +1050,22 @@ void TestCppCodeCompletion::testInclude() {
 void TestCppCodeCompletion::testUpdateChain() {
   TEST_FILE_PARSE_ONLY
 
-  DUContext* context = parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
-  parse( testFile3.toUtf8(), DumpNone, 0, KUrl("testIdentity") );
+{
+    QByteArray text("#define Q_FOREACH(variable, container) for (QForeachContainer<__typeof__(container)> _container_(container); !_container_.brk && _container_.i != _container_.e; __extension__ ({ ++_container_.brk; ++_container_.i; })) for (variable = *_container_.i;; __extension__ ({--_container_.brk; break;})) \nvoid test() { Q_FOREACH(int a, b) { int i; } }");
+    TopDUContext* top = parse( text, DumpAll );
 
-
-  DUChainWriteLocker lock(DUChain::lock());
-  //lock.lock();
-  release(context);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[1]->childContexts()[2]->localDeclarations().count(), 1);
+    IndexedDeclaration decl(top->childContexts()[1]->childContexts()[2]->localDeclarations()[0]);
+    QVERIFY(decl.data());
+    
+    parse(text, DumpNone, 0, KUrl(), top);
+    QVERIFY(decl.data()); //Make sure the declaration has been updated, and not deleted
+    
+    release(top);
+}
 }
 
 void TestCppCodeCompletion::testHeaderSections() {
