@@ -35,6 +35,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
     uint index() const {
       return m_index;
     }
+    
+    ///Returns the count of file dependencies in this set
+    uint size() const;
+    
     void addModificationRevision(const IndexedString& url, const ModificationRevision& revision);
 
     ///Returns true if the modification-revision was contained before.
@@ -43,6 +47,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
 //     const QMap<KDevelop::IndexedString, KDevelop::ModificationRevision> allModificationTimes() const;
     
     bool needsUpdate() const;
+    
+    bool operator!=(const ModificationRevisionSet& rhs) const {
+      return m_index != rhs.m_index;
+    }
+
+    bool operator==(const ModificationRevisionSet& rhs) const {
+      return m_index != rhs.m_index;
+    }
     
     ModificationRevisionSet& operator+=(const ModificationRevisionSet& rhs);
     ModificationRevisionSet& operator-=(const ModificationRevisionSet& rhs);

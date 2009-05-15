@@ -118,7 +118,13 @@ struct FileModificationSetRepositoryRepresenter {
   }
 };
 
+
 ModificationRevisionSet::ModificationRevisionSet(unsigned int index) : m_index(index) {
+}
+
+uint ModificationRevisionSet::size() const {
+  Utils::Set set = Utils::Set(m_index, &fileModificationSetRepository);
+  return set.count();
 }
 
 void ModificationRevisionSet::clear() {
