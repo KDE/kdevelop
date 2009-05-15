@@ -59,6 +59,17 @@ namespace KDevelop {
                 return m_dataSize;
             }
             
+            uint countFreeItems() {
+                EmbeddedTreeAlgorithms<Data, Handler> alg(m_data, m_dataSize, m_centralFreeItem);
+                return alg.countFreeItems();
+            }
+            
+            void verify() {
+                EmbeddedTreeAlgorithms<Data, Handler> alg(m_data, m_dataSize, m_centralFreeItem);
+                alg.verifyTreeConsistent();
+                alg.verifyOrder();
+            }
+            
             ///Returns the underlying array. That array may contain invalid/free items.
             const Data* data() const {
                 return m_data;
