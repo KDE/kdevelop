@@ -35,7 +35,7 @@ namespace KDevelop {
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 56;
+  return 57;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
@@ -314,7 +314,6 @@ void ItemRepositoryRegistry::store() {
 
 void ItemRepositoryRegistry::printAllStatistics() const {
   QMutexLocker lock(&m_mutex);
-  int changed = false;
   foreach(AbstractItemRepository* repository, m_repositories.keys()) {
     kDebug() << "statistics in" << repository->repositoryName() << ":";
     kDebug() << repository->printStatistics();
