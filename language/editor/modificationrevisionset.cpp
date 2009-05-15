@@ -103,7 +103,7 @@ void ModificationRevisionSet::clearCache() {
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
-  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets") {
+  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &KDevelop::globalItemRepositoryRegistry(), true) {
   }
   virtual void itemRemovedFromSets(uint index) {
     fileModificationPairRepository().deleteItem(index);
