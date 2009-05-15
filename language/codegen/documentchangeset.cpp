@@ -20,6 +20,16 @@
 #include "coderepresentation.h"
 #include <qstringlist.h>
 #include <editor/modificationrevisionset.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
+#include <interfaces/idocumentcontroller.h>
+#include <language/duchain/duchain.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/parsingenvironment.h>
+#include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 
 namespace KDevelop {
 
@@ -36,7 +46,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     return ChangeResult(true);
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPolicy policy) {
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::DocumentChangeSet::ReplacementPolicy policy, KDevelop::DocumentChangeSet::FormatPolicy format, KDevelop::DocumentChangeSet::DUChainUpdateHandling scheduleUpdate) {
     QMap<IndexedString, CodeRepresentation*> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
@@ -46,6 +56,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
         CodeRepresentation* repr = createCodeRepresentation(file);
         if(!repr)
             return ChangeResult(QString("Could not code for %1").arg(file.str()));
+        
+        ISourceFormatter* formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
         
         codeRepresentations[file] = repr;
         
@@ -95,6 +107,18 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
                 change.m_range.start.line == change.m_range.end.line  && //We demand this, although it shoult be fixed
                 ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
             {
+                ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
+                QString leftContext = QStringList(textLines.mid(0, change.m_range.start.line+1)).join("\n");
+                leftContext.chop(textLines[change.m_range.start.line].length() - change.m_range.start.column);
+
+                QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
+
+                if(formatter && format == AutoFormatChanges) {
+                    kDebug() << "formatting" << change.m_newText;
+                    change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
+                    kDebug() << "result" << change.m_newText;
+                }
+                
                 textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
             }else{
                 QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = \"%6\"(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
@@ -116,6 +140,65 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
     
     QMap<IndexedString, QString> oldTexts;
     
+#if 0
+    if(format == AutoFormatChanges) {
+        foreach(const IndexedString &file, m_changes.keys())
+        {
+            ISourceFormatter* formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
+            if(!formatter)
+                continue;
+            
+            filteredSortedChanges[file].clear(); //We create a new list of changes
+            
+            QStringList fileNewText = newTexts[file].split("\n");
+            
+            QList< SimpleRange > changes = changedRanges[file].keys();
+            for(QList< SimpleRange >::const_iterator it = changes.end(); it != changes.begin(); ) {
+                --it;
+                
+                QString leftContext = QStringList(fileNewText.mid(0, (*it).start.line+1)).join("\n");
+                leftContext.chop((*it).start.column);
+
+                QString text = fileNewText[(*it).start.line].mid((*it).start.column);
+                
+                if((*it).start.line == (*it).end.line)
+                    text = text.left((*it).end.column - (*it).start.column);
+                
+                QString rightContext = QStringList(fileNewText.mid((*it).end.line)).join("\n").mid((*it).end.column);
+                
+                
+                /*
+                --it;
+                int end = *it+1;
+                int start = *it;
+                
+                while(it != changes.begin() && *(it-1) == start-1) {
+                    --start;
+                    --it;
+                }
+                
+                QString leftContext = QStringList(fileNewText.mid(0, start)).join("\n");
+                QString sourceToFormat = QStringList(fileNewText.mid(start, end-start)).join("\n");
+                QString rightContext = QStringList(fileNewText.mid(end)).join("\n");
+                QString formattedSource = formatter->formatSource(sourceToFormat, KMimeType::findByUrl(file.toUrl()), leftContext + "\n", "\n" + rightContext);
+                
+                fileNewText.erase(fileNewText.begin()+start, fileNewText.begin()+end);
+                
+                int insertAt = start;
+                foreach(QString insertString, formattedSource.split("\n")) {
+                    fileNewText.insert(insertAt, insertString);
+                    ++insertAt;
+                }
+                
+                //Create new changes that replace the whole lines at the same time
+                filteredSortedChanges[file].prepend(DocumentChangePointer(new DocumentChange(file, SimpleRange(start, 0, end, 0), sourceToFormat+"\n", formattedSource+"\n")));
+            */}
+            
+            newTexts[file] = fileNewText.join("\n");
+        }
+    }
+#endif
+    
     foreach(const IndexedString &file, m_changes.keys())
     {
         oldTexts[file] = codeRepresentations[file]->text();
@@ -131,7 +214,6 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
                 DocumentChange& change(*sortedChangesList[pos]);
                 if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
                     QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
-                    
                     
                     if(policy == IgnoreFailedChange) {
                         //Just don't do the replacement
@@ -162,6 +244,22 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(ReplacementPo
     
     qDeleteAll(codeRepresentations);
     ModificationRevisionSet::clearCache();
+    
+    foreach(const IndexedString &file, m_changes.keys())
+    {
+        if(scheduleUpdate != NoUpdate) {
+            ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
+            foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+                DUChainReadLocker lock(DUChain::lock());
+                TopDUContext* top = DUChainUtils::standardContextForUrl(doc);
+                if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
+                    lock.unlock();
+                    ICore::self()->languageController()->backgroundParser()->addDocument(doc);
+                }
+            }
+        }
+    }
+
     return DocumentChangeSet::ChangeResult(true);
 }
 

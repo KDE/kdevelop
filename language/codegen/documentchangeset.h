@@ -68,9 +68,21 @@ namespace KDevelop {
             StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems
         };
         
-        ///@param policy What should be done when a change could not be applied?
-        ChangeResult applyAllChanges(ReplacementPolicy policy = StopOnFailedChange);
+        enum FormatPolicy {
+            NoAutoFormat, ///If this option is given, no automatic formatting is applied
+            AutoFormatChanges      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type
+        };
         
+        enum DUChainUpdateHandling {
+            NoUpdate,       ///No updates will be scheduled
+            SimpleUpdate ///The changed documents will be added to the background parser, plus all documents that are currently open and recursively import those documetns
+            //FullUpdate       ///All documents in all open projects that recursively import any of the changed documents will be updated
+        };
+        
+        ///@param policy What should be done when a change could not be applied?
+        ///@param format How the changed text should be formatted
+        ///@param scheduleUpdate Whether a duchain update should be triggered for all affected documents
+        ChangeResult applyAllChanges(ReplacementPolicy policy = StopOnFailedChange, FormatPolicy format = AutoFormatChanges, DUChainUpdateHandling scheduleUpdate = SimpleUpdate);        
         private:
             QMap< IndexedString, QList<DocumentChangePointer> > m_changes;
     };
