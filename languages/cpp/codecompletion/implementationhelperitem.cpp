@@ -334,7 +334,9 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     QString localText = "SLOT(" + name + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
     document->replaceText(word, localText);
   }else{
-    document->replaceText(word, insertionText(document->url(), SimpleCursor(word.end())));
+    DocumentChangeSet changes;
+    changes.addChange(DocumentChange(IndexedString(document->url()), SimpleRange(word), document->text(word), "\n"+insertionText(document->url(), SimpleCursor(word.end()))));
+    changes.applyAllChanges();
   }
 }
 
