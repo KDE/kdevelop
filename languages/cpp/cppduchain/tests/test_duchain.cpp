@@ -240,6 +240,9 @@ kDebug() << aj.toString() << aj2.toString();
 kDebug() << aj.index() << aj2.index();
   QCOMPARE(aj == aj2, true);
 
+  QVERIFY(QualifiedIdentifier("") == QualifiedIdentifier());
+  QVERIFY(QualifiedIdentifier("").index() == QualifiedIdentifier().index());
+  
 //   QCOMPARE(aj.match(aj2), QualifiedIdentifier::ExactMatch);
 
   QualifiedIdentifier ajt("Area::jump::test");
@@ -540,25 +543,45 @@ void TestDUChain::testBaseUses()
 
 void TestDUChain::testTypedefUses()
 {
-  TEST_FILE_PARSE_ONLY
+  {
 
-  //                 0         1         2         3         4         5
-  //                 012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A{}; typedef A B; A c; B d;");
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("namespace Search { typedef int StateHypothesisIndex; StateHypothesisIndex i; }");
 
-  TopDUContext* top = parse(method, DumpNone);
+    TopDUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->localDeclarations().count(), 4);
-  QCOMPARE(top->usesCount(), 3);
-  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1); //1 File
-  QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //1 File
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->usesCount(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+    QVERIFY(top->childContexts()[0]->localDeclarations()[0]->inSymbolTable());
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(unAliasedType(top->childContexts()[0]->localDeclarations()[1]->abstractType())->toString(), QString("int"));
+    
+    release(top);
+  }
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("class A{}; typedef A B; A c; B d;");
 
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2); //Typedef and "A c;"
-  QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1); //"B d;"
+    TopDUContext* top = parse(method, DumpNone);
 
-  release(top);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 4);
+    QCOMPARE(top->usesCount(), 3);
+    QCOMPARE(top->localDeclarations()[0]->uses().count(), 1); //1 File
+    QCOMPARE(top->localDeclarations()[1]->uses().count(), 1); //1 File
+
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 2); //Typedef and "A c;"
+    QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1); //"B d;"
+
+    release(top);
+  }
 }
 
 void TestDUChain::testConstructorOperatorUses()
