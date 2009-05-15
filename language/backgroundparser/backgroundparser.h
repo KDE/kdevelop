@@ -109,6 +109,12 @@ public:
     Q_SCRIPTABLE void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
 
     /**
+     * Returns all documents that were added through addManagedTopRange. This is typically the currently
+     * open documents.
+     */
+    Q_SCRIPTABLE QList<KUrl> managedDocuments();
+    
+    /**
      * Remove an associated top \a range from modification watching.
      */
     Q_SCRIPTABLE void removeManagedTopRange(KTextEditor::SmartRange* range);

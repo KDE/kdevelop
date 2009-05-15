@@ -608,16 +608,24 @@ void BackgroundParser::setDelay(int miliseconds)
     }
 }
 
+QList< KUrl > BackgroundParser::managedDocuments()
+{
+    QMutexLocker l(&d->m_mutex);
+    return d->m_managedRanges.values();
+}
+
 void BackgroundParser::addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range)
 {
     range->addWatcher(this);
+    QMutexLocker l(&d->m_mutex);
     d->m_managedRanges.insert(range, document);
 }
 
 void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
 {
-    range->removeWatcher(this);
-    d->m_managedRanges.remove(range);
+   range->removeWatcher(this);
+   QMutexLocker l(&d->m_mutex);
+   d->m_managedRanges.remove(range);
 }
 
 void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild)
