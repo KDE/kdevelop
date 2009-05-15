@@ -60,7 +60,7 @@ QT_BEGIN_NAMESPACE
 QT_MODULE(Core)
 
 //When this is uncommented, a QVector will be used instead of a variable-length array. This is useful for debugging, to find problems in KDevVarLengthArray
-#define FAKE_KDEVVARLENGTH_ARRAY
+// #define FAKE_KDEVVARLENGTH_ARRAY
 
 #ifdef FAKE_KDEVVARLENGTH_ARRAY
 template<class T, int Prealloc = 256>
