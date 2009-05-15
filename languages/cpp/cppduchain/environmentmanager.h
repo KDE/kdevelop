@@ -182,6 +182,7 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
       m_identityOffset = rhs.m_identityOffset;
       m_includePaths = rhs.m_includePaths;
       m_guard = rhs.m_guard;
+      m_includePathDependencies = rhs.m_includePathDependencies;
     }
     
     ~EnvironmentFileData() {
@@ -196,11 +197,14 @@ struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
     ReferenceCountedMacroSet m_definedMacros;
     ReferenceCountedStringSet m_definedMacroNames;
     ReferenceCountedStringSet m_unDefinedMacroNames;
+    
     uint m_includePaths; //Index in the internal include-paths repository
     int m_contentStartLine;
     
     //Name of the header-guard macro that protects this file
     KDevelop::IndexedString m_guard;
+    
+    KDevelop::ModificationRevisionSet m_includePathDependencies;
 };
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmentFile {
@@ -281,6 +285,9 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentFile : public KDevelop::ParsingEnvironmen
     virtual bool matchEnvironment(const KDevelop::ParsingEnvironment* environment) const;
     
     virtual bool needsUpdate(const KDevelop::ParsingEnvironment* environment = 0) const;
+    
+    const KDevelop::ModificationRevisionSet& includePathDependencies() const;
+    void  setIncludePathDependencies(const KDevelop::ModificationRevisionSet&);
     
     enum {
       Identity = 73

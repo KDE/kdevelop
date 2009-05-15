@@ -59,12 +59,8 @@ void IncludePathComputer::computeForeground() {
         }
     }
     kDebug() << "cannot compute include-paths without source-file";
-    m_ready = true;
     return;
   }
-
-    
-    
 
     foreach (KDevelop::IProject *project, KDevelop::ICore::self()->projectController()->projects()) {
         QList<KDevelop::ProjectFileItem*> files = project->filesForUrl(m_source);
@@ -115,9 +111,19 @@ void IncludePathComputer::computeBackground() {
     if(m_ready)
       return;
     
+    if(!m_effectiveBuildDirectory.isEmpty())
+        m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
+    
     QList<QString> standardPaths = CppLanguageSupport::self()->standardIncludePaths();
     
+    m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
+    kDebug() << "current include path dependency:" << m_includePathDependency.size() << m_includePathDependency.index();
+    
     if(m_ret.isEmpty()) {
+    ///@todo Make modification-revisions dependent also on Makefiles, and on custom include paths files, so when those are changed, the files
+    ///           are marked for update.
+    ///           If there is no valid include-path dependency while custom include-paths are set no, do not do this.
+      
       //Try taking the include-paths from another file in the directory
       kDebug(9007) << "Did not get any include-paths for" << m_source;
       QFileInfo fileInfo(m_source.toLocalFile());
@@ -129,10 +135,10 @@ void IncludePathComputer::computeBackground() {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {
               TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)));
-              if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile()) {
+              if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile() && !context->parsingEnvironmentFile()->needsUpdate()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
                 Q_ASSERT(envFile);
-                if(!envFile->missingIncludeFiles().isEmpty())
+                if(!envFile->missingIncludeFiles().isEmpty() || envFile->includePathDependencies() != m_includePathDependency)
                   continue;
                 if(envFile->includePaths().size() <= standardPaths.size() )
                   continue;
@@ -160,7 +166,6 @@ void IncludePathComputer::computeBackground() {
         //Fallback-search using include-path resolver
 
         if(!m_effectiveBuildDirectory.isEmpty()) {
-            ///@todo remote directories?
             m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
         } else {
             if(!m_projectDirectory.isEmpty() && m_problems) {
@@ -175,59 +180,63 @@ void IncludePathComputer::computeBackground() {
             m_includeResolver.resetOutOfSourceBuild();
         }
         CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
-        if (result) {
-            bool hadMissingPath = false;
-            if( !m_gotPathsFromManager ) {
-                foreach( const QString &res, result.paths ) {
-                    KUrl r(res);
-                    r.adjustPath(KUrl::AddTrailingSlash);
-                    if(!m_hasPath.contains(r))
-                      m_ret << r;
-                    m_hasPath.insert(r);
-                }
-            } else {
-                //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
-                foreach( const QString& res, result.paths ) {
+        m_includePathDependency = result.includePathDependency;
+        kDebug() << "new include path dependency:" << m_includePathDependency.size() << m_includePathDependency.index();
+        
+//         if (result) {
+          bool hadMissingPath = false;
+          if( !m_gotPathsFromManager ) {
+              foreach( const QString &res, result.paths ) {
+                  KUrl r(res);
+                  r.adjustPath(KUrl::AddTrailingSlash);
+                  if(!m_hasPath.contains(r))
+                    m_ret << r;
+                  m_hasPath.insert(r);
+              }
+          } else {
+              //Compare the includes found by the includepathresolver to the ones returned by the project-manager, and complain eaach missing path.
+              foreach( const QString& res, result.paths ) {
 
-                    KUrl r(res);
-                    r.adjustPath(KUrl::AddTrailingSlash);
+                  KUrl r(res);
+                  r.adjustPath(KUrl::AddTrailingSlash);
 
-                    KUrl r2(res);
-                    r2.adjustPath(KUrl::RemoveTrailingSlash);
+                  KUrl r2(res);
+                  r2.adjustPath(KUrl::RemoveTrailingSlash);
 
-                    if( !m_hasPath.contains(r) && !m_hasPath.contains(r2) ) {
-                        hadMissingPath = true;
-                        if(!m_hasPath.contains(r))
-                          m_ret << r;
-                        m_hasPath.insert(r);
+                  if( !m_hasPath.contains(r) && !m_hasPath.contains(r2) ) {
+                      hadMissingPath = true;
+                      if(!m_hasPath.contains(r))
+                        m_ret << r;
+                      m_hasPath.insert(r);
 
-                        kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.pathOrUrl();
+                      kDebug(9007) << "Include-path was missing in list returned by build-manager, adding it: " << r.pathOrUrl();
 
-                        if( m_problems ) {
-                          KDevelop::ProblemPointer p(new KDevelop::Problem);
-                          p->setSource(KDevelop::ProblemData::Preprocessor);
-                          p->setDescription(i18n("Build manager did not return an include path" ));
-                          p->setExplanation(i18n("The build manager did not return the include path %1, which could be resolved by the include path resolver", r.pathOrUrl()));
-                          p->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
-                          *m_problems << p;
-                        }
-                    }
-                }
+                      if( m_problems ) {
+                        KDevelop::ProblemPointer p(new KDevelop::Problem);
+                        p->setSource(KDevelop::ProblemData::Preprocessor);
+                        p->setDescription(i18n("Build manager did not return an include path" ));
+                        p->setExplanation(i18n("The build manager did not return the include path %1, which could be resolved by the include path resolver", r.pathOrUrl()));
+                        p->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Cursor(0,0), KTextEditor::Cursor(0,0)));
+                        *m_problems << p;
+                      }
+                  }
+              }
 
-                if( hadMissingPath ) {
-                    QString paths;
-                    foreach( const KUrl& u, m_ret )
-                        paths += u.pathOrUrl() + "\n";
+              if( hadMissingPath ) {
+                  QString paths;
+                  foreach( const KUrl& u, m_ret )
+                      paths += u.pathOrUrl() + "\n";
 
-                    kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
-                }
-            }
-        }else{
+                  kDebug(9007) << "Total list of include-paths:\n" << paths << "\nEnd of list";
+              }
+          }
+        if(!result) {
             kDebug(9007) << "Failed to resolve include-path for \"" << m_source << "\":" << result.errorMessage << "\n" << result.longErrorMessage << "\n";
             problem->setSource(KDevelop::ProblemData::Preprocessor);
             problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
             problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2", m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
             problem->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
+            
         }
     }
 

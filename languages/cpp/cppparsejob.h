@@ -34,6 +34,7 @@
 #include <contextbuilder.h>
 #include <language/duchain/indexedstring.h>
 #include <qwaitcondition.h>
+#include "includepathcomputer.h"
 
 class PreprocessJob;
 class CppLanguageSupport;
@@ -172,6 +173,8 @@ public:
     
     //Called when the internal parse-job is complete, to apply the delayed imports/importers
     void processDelayedImports();
+    
+    KDevelop::ModificationRevisionSet includePathDependencies() const ;
     
 private:
 

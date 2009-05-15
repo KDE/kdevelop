@@ -32,6 +32,8 @@ class IncludePathComputer {
       return m_ret;
     }
     
+    KDevelop::ModificationRevisionSet m_includePathDependency;
+    
   private:
     KUrl m_source;
     QList<KDevelop::ProblemPointer>* m_problems;

@@ -57,6 +57,7 @@
 using namespace std;
 #endif
 #include <iostream>
+#include <language/duchain/indexedstring.h>
 
 //#define VERBOSE
 
@@ -233,6 +234,81 @@ bool CppTools::CustomIncludePathsSettings::delete_() {
   return QFile::remove(file);
 }
 
+KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency(QString file)
+{
+  KDevelop::ModificationRevisionSet rev;
+  CppTools::CustomIncludePathsSettings settings = CustomIncludePathsSettings::findAndRead(file);
+  KDevelop::IndexedString storageFile(settings.storageFile());
+  if(!storageFile.isEmpty())
+    rev.addModificationRevision(storageFile, KDevelop::ModificationRevision::revisionForFile(storageFile));
+  
+  QString oldSourceDir = m_source;
+  QString oldBuildDir = m_build;
+  
+  if(!settings.buildDir.isEmpty() && !settings.sourceDir.isEmpty())
+    setOutOfSourceBuildSystem(settings.sourceDir, settings.buildDir);
+  
+  KUrl currentWd = mapToBuild(KUrl(file)).upUrl();
+  
+  while(!currentWd.path().isEmpty())
+  {
+    if(currentWd == currentWd.upUrl())
+      break;
+    
+    currentWd = currentWd.upUrl();
+    QString path = currentWd.toLocalFile();
+    QFileInfo makeFile( QDir(path), "Makefile" );
+    if(makeFile.exists()) {
+      KDevelop::IndexedString makeFileStr(makeFile.filePath());
+      rev.addModificationRevision(makeFileStr, KDevelop::ModificationRevision::revisionForFile(makeFileStr));
+      break;
+    }
+  }
+  
+  setOutOfSourceBuildSystem(oldSourceDir, oldBuildDir);
+  
+  return rev;
+}
+
+QString CppTools::CustomIncludePathsSettings::find(QString startPath)
+{
+  KUrl current(startPath);
+  //Find old settings
+  CppTools::CustomIncludePathsSettings settings;
+  
+  while(!current.path().isEmpty() && !settings.isValid())
+  {
+    if(current == current.upUrl())
+      return QString();
+    
+    current = current.upUrl();
+    QString path = current.toLocalFile();
+    QFileInfo customIncludePaths( QDir(path), ".kdev_include_paths" );
+    if(customIncludePaths.exists())
+      return customIncludePaths.filePath();
+  }
+  return QString();
+}
+
+CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findAndRead(QString current)
+{
+  QString file = find(current);
+  if(file.isEmpty())
+    return CppTools::CustomIncludePathsSettings();
+  
+  KUrl fileUrl(file);
+  fileUrl.setFileName(QString());
+  
+  return read(fileUrl.toLocalFile());
+}
+
+QString CppTools::CustomIncludePathsSettings::storageFile() const
+{
+  QDir dir(storagePath);
+  QString ret = dir.filePath(".kdev_include_paths");
+  return ret;
+}
+
 CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath) {
   QDir sourceDir( storagePath );
   CustomIncludePathsSettings ret;
@@ -368,7 +444,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     }
   };
   
-  //Prefer this result when returning a "fail"
+  //Prefer this result when returning a "fail". The include-paths of this result will always be added.
   PathResolutionResult resultOnFail;
 
   if( m_isResolving )
@@ -393,7 +469,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ifTest( cout << "working-directory: " <<  workingDirectory.toLocal8Bit().data() << "  file: " << file.toLocal8Bit().data() << std::endl; )
   
-  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::read(workingDirectory);
+  CppTools::CustomIncludePathsSettings customPaths = CustomIncludePathsSettings::findAndRead(workingDirectory);
   
   if(customPaths.isValid()) {
     PathResolutionResult result(true);
@@ -402,6 +478,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       QString buildDir = customPaths.buildDir;
       
       if(sourceDir != buildDir) {
+        QString oldSourceDir = m_source;
+        QString oldBuildDir = m_build;
         setOutOfSourceBuildSystem(sourceDir, buildDir);
         
         QStringList fileParts = file.split("/");
@@ -424,20 +502,18 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
           ifTest( std::cout << "problem in sub-resolver: " << subResult.errorMessage.toLocal8Bit().data() << std::endl; )
         }
         
-        resetOutOfSourceBuild();
+        setOutOfSourceBuildSystem(oldSourceDir, oldBuildDir);
       }
       
     }
     result.paths += customPaths.paths;
     
-    if(!result.paths.isEmpty())
-      return result;
+    KDevelop::ModificationRevisionSet rev;
+    KDevelop::IndexedString storageFile = KDevelop::IndexedString(customPaths.storageFile());
+    rev.addModificationRevision(storageFile, KDevelop::ModificationRevision::revisionForFile(storageFile));
+    result.includePathDependency = rev;
     
-    else if(!result && !result.errorMessage.isEmpty()) {
-      //Remember the failed result behind the mapping, and return it if
-      //we cannot resolve correct without mapping
-      resultOnFail = result;
-    }
+    resultOnFail = result;
   }
   
   QDir sourceDir( workingDirectory );
@@ -458,12 +534,14 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
         QString checkFor = localName + "/" + file;
 //         std::cout << "checking in " << sourceDir.toLocalFile().toUtf8().data() << " for " << checkFor.toUtf8().data() << std::endl;;
         PathResolutionResult oneUp = resolveIncludePath(checkFor, sourceDir.path(), maxStepsUp-1);
-        if(oneUp.success)
+        if(oneUp.success) {
+          oneUp.addPathsUnique(resultOnFail);
           return oneUp;
+        }
       }
     }
     
-    if(!resultOnFail.errorMessage.isEmpty())
+    if(!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty())
       return resultOnFail;
     else
       return PathResolutionResult(false, i18n("Makefile is missing in folder \"%1\"", dir.absolutePath()), i18n("Problem while trying to resolve include paths for %1", file ) );
@@ -472,18 +550,21 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   Enabler e( m_isResolving );
 
   QStringList cachedPaths; //If the call doesn't succeed, use the cached not up-to-date version
-  QDateTime makeFileModification = makeFile.lastModified();
+  KDevelop::ModificationRevisionSet dependency;
+  dependency.addModificationRevision(KDevelop::IndexedString(makeFile.filePath()), KDevelop::ModificationRevision::revisionForFile(KDevelop::IndexedString(makeFile.filePath())));
+  dependency += resultOnFail.includePathDependency;
   Cache::iterator it;
   {
     QMutexLocker l( &m_cacheMutex );
     it = m_cache.find( dir.path() );
     if( it != m_cache.end() ) {
       cachedPaths = (*it).paths;
-      if( makeFileModification == (*it).modificationTime ) {
+      if( dependency == (*it).modificationTime ) {
         if( !(*it).failed ) {
           //We have a valid cached result
           PathResolutionResult ret(true);
           ret.paths = (*it).paths;
+          ret.addPathsUnique(resultOnFail);
           return ret;
         } else {
           //We have a cached failed result. We should use that for some time but then try again. Return the failed result if: ( there were too many tries within this folder OR this file was already tried ) AND The last tries have not expired yet
@@ -492,6 +573,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
             ret.errorMessage = i18n("Cached: %1", (*it).errorMessage );
             ret.longErrorMessage = (*it).longErrorMessage;
             ret.paths = (*it).paths;
+            ret.addPathsUnique(resultOnFail);
             return ret;
           } else {
             //Try getting a correct result again
@@ -515,7 +597,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   int dot;
   if( (dot = file.lastIndexOf( '.' )) == -1 )
   {
-    if(!resultOnFail.errorMessage.isEmpty())
+    if(!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty())
       return resultOnFail;
     else
       return PathResolutionResult( false, i18n( "Filename %1 seems to be malformed", file ) );
@@ -551,12 +633,16 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
       ifTest( cout << "Try for possible target " << (*it).toLocal8Bit().data() << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl; )
     }
   }
+  
+  res.includePathDependency = dependency;
+  
   if( res ) {
+    res.addPathsUnique(resultOnFail);
     QMutexLocker l( &m_cacheMutex );
     CacheEntry ce;
     ce.errorMessage = res.errorMessage;
     ce.longErrorMessage = res.longErrorMessage;
-    ce.modificationTime = makeFileModification;
+    ce.modificationTime = dependency;
     ce.paths = res.paths;
     m_cache[dir.path()] = ce;
     return res;
@@ -568,6 +654,10 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
     res = resolveIncludePathInternal( relativeFile, wd, *it, source );
     if( res ) break;
   }
+  
+  res.includePathDependency = dependency;
+
+  res.addPathsUnique(resultOnFail);
 
   if( res.paths.isEmpty() )
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
@@ -579,8 +669,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
     CacheEntry& ce(*it);
     ce.paths = res.paths;
-    if( ce.modificationTime < makeFileModification )
-      ce.modificationTime = makeFileModification;
+    ce.modificationTime = dependency;
+    
     if( !res ) {
       ce.failed = true;
       ce.errorMessage = res.errorMessage;
@@ -594,7 +684,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   }
 
 
-  if(!res && !resultOnFail.errorMessage.isEmpty())
+  if(!res && (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty()))
     return resultOnFail;
 
   return res;

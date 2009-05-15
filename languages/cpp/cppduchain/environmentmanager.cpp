@@ -271,16 +271,28 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   return true;
 }
 
+const KDevelop::ModificationRevisionSet& Cpp::EnvironmentFile::includePathDependencies() const
+{
+  ENSURE_READ_LOCKED
+  return d_func()->m_includePathDependencies;
+}
+
+void Cpp::EnvironmentFile::setIncludePathDependencies(const KDevelop::ModificationRevisionSet& set)
+{
+  ENSURE_WRITE_LOCKED
+  d_func_dynamic()->m_includePathDependencies = set;
+}
+
 bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
   ENSURE_READ_LOCKED
   const CppPreprocessEnvironment* cppEnvironment = dynamic_cast<const CppPreprocessEnvironment*>(environment);
   
   //When in naive matching mode, we even use the non-guarded version when inappropriate. We must make sure not to update it in such
-  //a situation.
+  //a situation, else it will end up empty
   if(cppEnvironment && EnvironmentManager::matchingLevel() <= EnvironmentManager::Naive && !headerGuard().isEmpty() && cppEnvironment->macroNameSet().contains(headerGuard()))
     return false;
   
-  return ParsingEnvironmentFile::needsUpdate(environment);
+  return ParsingEnvironmentFile::needsUpdate(environment) || d_func()->m_includePathDependencies.needsUpdate();
 }
 
 EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {

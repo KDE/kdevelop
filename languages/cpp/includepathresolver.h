@@ -18,6 +18,7 @@
 #include <QDateTime>
 #include <QMap>
 #include <QMutex>
+#include <language/editor/modificationrevisionset.h>
 
 class KUrl;
 class QDir;
@@ -32,8 +33,18 @@ namespace CppTools {
     bool success;
     QString errorMessage;
     QString longErrorMessage;
+    
+    KDevelop::ModificationRevisionSet includePathDependency;
 
     QStringList paths;
+
+    void addPathsUnique(const PathResolutionResult& rhs) {
+      foreach(QString path, rhs.paths) {
+        if(!paths.contains(path))
+          paths.append(path);
+      }
+      includePathDependency += rhs.includePathDependency;
+    }
 
     operator bool() const {
       return success;
@@ -45,9 +56,17 @@ namespace CppTools {
     QString sourceDir;
     QString buildDir;
     QStringList paths;
+
+    QString storageFile() const;
     bool isValid() const ;
     
     static CustomIncludePathsSettings read(QString storagePath);
+    ///Finds a valid storage file above the given start path that contains custom include paht settings
+    ///If no valid storage file is found, returns an empty string
+    static QString find(QString startPath);
+    ///Finds a storage-path for the given start path, and reads the custom include path settings
+    ///If none were found, returns an invalid item
+    static CustomIncludePathsSettings findAndRead(QString startPath);
     
     //Stores these settings exclusively, overwriting any old ones for the storage path
     bool write();
@@ -71,12 +90,15 @@ namespace CppTools {
       void resetOutOfSourceBuild();
       
       static void clearCache();
+      
+      KDevelop::ModificationRevisionSet findIncludePathDependency(QString file);
+      
     private:
       bool m_isResolving;
       struct CacheEntry {
         CacheEntry() : failed(false) {
         }
-        QDateTime modificationTime;
+        KDevelop::ModificationRevisionSet modificationTime;
         QStringList paths;
         QString errorMessage, longErrorMessage;
         bool failed;

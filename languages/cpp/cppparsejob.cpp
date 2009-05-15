@@ -258,6 +258,13 @@ CPPParseJob::~CPPParseJob()
   delete m_session;
 }
 
+KDevelop::ModificationRevisionSet CPPParseJob::includePathDependencies() const {
+  if(m_includePathsComputed)
+    return m_includePathsComputed->m_includePathDependency;
+  
+  return KDevelop::ModificationRevisionSet();
+}
+
 CPPParseJob* CPPParseJob::masterJob() {
     if( parentPreprocessor() )
         return static_cast<CPPParseJob*>(parentPreprocessor()->parent())->masterJob();
@@ -774,6 +781,16 @@ void CPPInternalParseJob::run()
     if(proxyContext) {
       DUChainReadLocker lock(DUChain::lock());
       Q_ASSERT(!proxyContext->importedParentContexts().isEmpty());
+    }
+    
+    {
+      //Update include-path dependencies
+      DUChainWriteLocker lock(DUChain::lock());
+      if(proxyEnvironmentFile)
+        proxyEnvironmentFile->setIncludePathDependencies(parentJob()->includePathDependencies());
+    
+      if(contentEnvironmentFile)
+        contentEnvironmentFile->setIncludePathDependencies(parentJob()->includePathDependencies());
     }
     
     ///In the end, mark the contexts as updated.
