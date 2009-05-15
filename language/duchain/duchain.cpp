@@ -381,7 +381,8 @@ public:
     //DUChain is write-locked, so we can do whatever we want on the top-context, including deleting it
     context->deleteSelf();
     l.relock();
-
+    it = m_chainsByIndex.find(index); //May have been changed due to loading
+    Q_ASSERT(it != m_chainsByIndex.end());
     m_chainsByIndex.erase(it);
     
     Q_ASSERT(m_chainsByIndex.find(index) == m_chainsByIndex.end());
