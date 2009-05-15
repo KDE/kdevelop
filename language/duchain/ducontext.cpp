@@ -446,7 +446,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
     DUContext* child = m_context->d_func()->m_childContexts()[i].data(m_topContext);
     if (context == child)
       return;
-    if (context->range().start > child->range().start) {
+    if (context->range().start >= child->range().start) {
       insertToArray(m_context->d_func_dynamic()->m_childContextsList(), indexed, i+1);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
