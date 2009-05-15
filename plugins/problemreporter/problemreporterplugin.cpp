@@ -105,6 +105,8 @@ void ProblemReporterPlugin::unload()
 
 void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
 {
+  if(!doc)
+      return;
   QMutableHashIterator<IndexedString, ProblemHighlighter*> it = m_highlighters;
 
   IndexedString url(doc->url().pathOrUrl());
