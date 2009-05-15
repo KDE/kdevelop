@@ -230,6 +230,14 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     QList<SignatureItem> m_newSignature;
 };
 
+static QString typeToString(KDevelop::IndexedType type) {
+  KDevelop::AbstractType::Ptr t = type.abstractType();
+  if(t)
+    return t->toString();
+  else
+    return QString();
+}
+
 void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job) {
   if(job->document() == m_document) {
     kDebug() << "parse job finshed for current document";
@@ -266,7 +274,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
           changed = true;
         }else{
           for(int a = 0; a < newSignature.size(); ++a)
-            if(newSignature[a].first != m_oldSignature[a].first)
+            if(typeToString(newSignature[a].first) != typeToString(m_oldSignature[a].first))
               changed = true;
         }
 
