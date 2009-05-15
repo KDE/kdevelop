@@ -536,7 +536,7 @@ void BackgroundParser::enableProcessing()
 
 bool BackgroundParser::isQueued(KUrl url) const {
     QMutexLocker lock(&d->m_mutex);
-    return d->m_parseJobs.contains(url) || d->m_delayedParseJobs.contains(url);
+    return d->m_documents.contains(url) || d->m_delayedParseJobs.contains(url);
 }
 
 void BackgroundParser::setNeededPriority(int priority)
