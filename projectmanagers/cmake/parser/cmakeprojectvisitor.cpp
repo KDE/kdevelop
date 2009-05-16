@@ -890,7 +890,7 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
         foreach(const QString& arg, args)
         {
             DelayedType *delayed=new DelayedType;
-            delayed->setIdentifier( arg );
+            delayed->setIdentifier( IndexedTypeIdentifier(arg) );
             func->addArgument(AbstractType::Ptr(delayed));
         }
         d->setAbstractType( AbstractType::Ptr(func) );
