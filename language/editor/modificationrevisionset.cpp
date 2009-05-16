@@ -234,6 +234,28 @@ static bool nodeNeedsUpdate(uint index) {
   return result;
 }
 
+
+QString ModificationRevisionSet::toString() const
+{
+  QMutexLocker lock(&modificationRevisionSetMutex);
+  QString ret = "[]";
+  Utils::Set set(m_index, &fileModificationSetRepository);
+  Utils::Set::Iterator it = set.iterator();
+  bool first = true;
+  while(it) {
+    if(!first)
+      ret += ", ";
+    first = false;
+    
+    const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
+    ret += data->file.str() + ":" + data->revision.toString();
+    ++it;
+  }
+
+  ret += "]";
+  return ret;
+}
+
 bool ModificationRevisionSet::needsUpdate() const {
   QMutexLocker lock(&modificationRevisionSetMutex);
   

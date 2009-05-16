@@ -48,6 +48,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
     
     bool needsUpdate() const;
     
+    QString toString() const;
+    
     bool operator!=(const ModificationRevisionSet& rhs) const {
       return m_index != rhs.m_index;
     }
