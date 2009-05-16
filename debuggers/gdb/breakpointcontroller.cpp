@@ -33,6 +33,7 @@
 #include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "debugsession.h"
+#include <KLocalizedString>
 
 using namespace GDBMI;
 
@@ -359,28 +360,21 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
         update the breakpoint table and notice the new one.  */
 
     int id = 0;
+    QString msg;
     if (reason == "breakpoint-hit") {
         id = r["bkptno"].literal().toInt();
     } else if (reason == "watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
-        
-        /* todo niko
-        emit watchpointHit(r["wpt"]["number"]
-                            .literal().toInt(),
-                            r["value"]["old"].literal(),
-                            r["value"]["new"].literal());
-        */
+        msg = i18n("<br>Old value: %1<br>New value: %2", r["value"]["old"].literal(), r["value"]["new"].literal());
     } else if (reason == "read-watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
-        //todo niko emit showMessage("Read watchpoint triggered", 3000);
     } else if (reason == "access-watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
-        //todo niko emit showMessage("Access watchpoint triggered", 3000);
     }
     if (id) {
         KDevelop::Breakpoint* b = m_ids.key(id);
         if (b) {
-            hit(b);
+            hit(b, msg);
         }
     }
 }
