@@ -25,12 +25,17 @@
 #include "ibreakpointcontroller.h"
 
 #include <KDE/KDebug>          // remove later
+#include <KNotification>
+#include <KLocalizedString>
+#include <KGlobal>
+#include <KParts/MainWindow>
 
 #include "idebugsession.h"
 #include "../../interfaces/icore.h"
 #include "../breakpoint/breakpointmodel.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../breakpoint/breakpoint.h"
+#include "../../interfaces/iuicontroller.h"
 
 namespace KDevelop {
 
@@ -140,7 +145,25 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint)
 {
     kDebug() << breakpoint;
     breakpointModel()->hitEmit(breakpoint);
-    debugSession()->demandAttention();
+
+    KNotification* ev = 0;
+    switch(breakpoint->kind()) {
+        case Breakpoint::CodeBreakpoint:
+            ev = new KNotification("BreakpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()));
+            break;
+        case Breakpoint::WriteBreakpoint:
+        case Breakpoint::ReadBreakpoint:
+        case Breakpoint::AccessBreakpoint:
+            ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
+            ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()));
+            break;
+    }
+    if (ev) {
+        ev->setPixmap(KIcon("script-error").pixmap(QSize(22,22)));
+        ev->setComponentData(KGlobal::mainComponent());
+        ev->sendEvent();
+    }
 }
 
 QSet<Breakpoint::Column> IBreakpointController::breakpointErrors(const Breakpoint* breakpoint) const

@@ -53,14 +53,6 @@ KDevelop::IBreakpointController* IDebugSession::breakpointController()
     return m_breakpointController;
 }
 
-void IDebugSession::demandAttention() const
-{
-    if (QWidget *w = qApp->activeWindow()) {
-        KWindowSystem::demandAttention( w->winId(), true );
-    }
-}
-
-
 }
 
 #include "idebugsession.moc"
