@@ -69,7 +69,7 @@ void Cpp::AddCustomIncludePathAction::execute() {
   int result = dialog->exec();
   if(result == QDialog::Accepted) {
     kDebug() << "storing settings";
-    if(o.storageDirectory->text().isEmpty() && oldSettings.isValid()) {
+    if((o.storageDirectory->text().isEmpty() || (o.customIncludePaths->document()->toPlainText().trimmed().isEmpty() && (o.sourceDirectory->text().trimmed().isEmpty() ||o.buildDirectory->text().trimmed().isEmpty())))   && oldSettings.isValid()) {
       kDebug() << "deleting settings";
       oldSettings.delete_();
     }else{
