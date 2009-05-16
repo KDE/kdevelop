@@ -452,6 +452,34 @@ void GdbTest::testBreakOnReadBreakpoint()
     */
 }
 
+void GdbTest::testBreakOnReadBreakpoint2()
+{
+    TestDebugSession session;
+
+    TestLaunchConfiguration cfg;
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+    breakpoints->addCodeBreakpoint(fileName, 27);
+
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 27);
+
+    KDevelop::Breakpoint *b = breakpoints->addReadWatchpoint("foo::i");
+
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 22);
+
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 22);
+
+    waitForState(session, DebugSession::StoppedState);
+}
 
 void GdbTest::testShowStepInSource()
 {
