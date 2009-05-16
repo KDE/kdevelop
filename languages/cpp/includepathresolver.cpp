@@ -278,14 +278,15 @@ QString CppTools::CustomIncludePathsSettings::find(QString startPath)
   
   while(!current.path().isEmpty() && !settings.isValid())
   {
-    if(current == current.upUrl())
-      return QString();
-    
-    current = current.upUrl();
     QString path = current.toLocalFile();
     QFileInfo customIncludePaths( QDir(path), ".kdev_include_paths" );
     if(customIncludePaths.exists())
       return customIncludePaths.filePath();
+    
+    if(current == current.upUrl())
+      return QString();
+    
+    current = current.upUrl();
   }
   return QString();
 }
