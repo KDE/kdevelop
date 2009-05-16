@@ -56,6 +56,7 @@ public:
 
 private slots:
     void slotEvent(event_t);
+    void programStopped(const GDBMI::ResultRecord &r);
 
 private:
     GDBController* controller() const;
@@ -63,7 +64,6 @@ private:
 
     virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);
 
-    void handleInserted(const GDBMI::ResultRecord &r);
     void handleBreakpointList(const GDBMI::ResultRecord &r);
 
     void update(KDevelop::Breakpoint *b, const GDBMI::Value& v);

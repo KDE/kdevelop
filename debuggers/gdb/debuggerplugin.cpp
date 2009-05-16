@@ -49,7 +49,6 @@
 #include <kaboutdata.h>
 #include <KToolBar>
 #include <KDialog>
-#include <kwindowsystem.h>
 #include <KXmlGuiWindow>
 #include <KXMLGUIFactory>
 
@@ -412,14 +411,6 @@ KConfigGroup CppDebuggerPlugin::config() const
 QString CppDebuggerPlugin::statusName() const
 {
     return i18n("Debugger");
-}
-
-void CppDebuggerPlugin::demandAttention() const
-{
-    if ( QWidget * w = qApp->activeWindow() )
-    {
-        KWindowSystem::demandAttention( w->winId(), true );
-    }
 }
 
 void CppDebuggerPlugin::slotFinished()

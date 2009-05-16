@@ -460,31 +460,6 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
         }
     }
 
-    if (reason == "breakpoint-hit")
-    {
-        int id = r["bkptno"].literal().toInt();
-        emit breakpointHit(id);
-    }
-
-    if (reason.contains("watchpoint-trigger"))
-    {
-        if (reason == "watchpoint-trigger")
-        {
-            emit watchpointHit(r["wpt"]["number"]
-                               .literal().toInt(),
-                               r["value"]["old"].literal(),
-                               r["value"]["new"].literal());
-        }
-        else if (reason == "read-watchpoint-trigger")
-        {
-            emit showMessage("Read watchpoint triggered", 3000);
-        }
-        else if (reason == "access-watchpoint-trigger")
-        {
-            emit showMessage("Access watchpoint triggered", 3000);
-        }
-    }
-
     if (reason == "function-finished" && r.hasField("gdb-result-var"))
     {
         variables()->watches()->addFinishResult(r["gdb-result-var"].literal());
@@ -656,7 +631,7 @@ bool GDBController::startDebugger()
     return true;
 }
 
-bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
+QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 {
     if (stateIsOn( s_appNotStarted ) )
     {
@@ -665,11 +640,11 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 
     if (stateIsOn(s_dbgNotStarted))
         if (!startDebugger())
-            return false;
+            return 0;
 
     if (stateIsOn(s_shuttingDown)) {
         kDebug() << "Tried to run when debugger shutting down";
-        return false;
+        return 0;
     }
 
 
@@ -712,7 +687,7 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 
         delete tty_;
         tty_ = 0;
-        return false;
+        return 0;
     }
 
     queueCmd(new GDBCommand(InferiorTtySet, tty));
@@ -809,7 +784,7 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
             // is running, because DebuggerPart::slotStopDebugger won't be
             // called, and core()->running(this, false) won't be called too.
             stopDebugger();
-            return false;
+            return 0;
         }
 
         if (!app.isExecutable())
@@ -823,7 +798,7 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
                       app.fileName()),
                 i18n("Could not run application"));
             stopDebugger();
-            return false;
+            return 0;
         }
         else
         {
@@ -835,7 +810,7 @@ bool GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
 
     setStateOff(s_appNotStarted|s_programExited);
 
-    return true;
+    return gdb_;
 }
 
 // **************************************************************************

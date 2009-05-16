@@ -42,6 +42,7 @@
 #include "gdbcontroller.h"
 #include "stackmanager.h"
 #include "breakpointcontroller.h"
+#include "gdb.h"
 
 namespace GDBDebugger {
 
@@ -241,7 +242,10 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
 bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* run, KJob* job)
 {
     m_job = job;
-    return m_controller->startProgram(run, job);
+    m_gdb = m_controller->startProgram(run, job);
+    if (!m_gdb) return false;
+    connect(m_gdb.data(), SIGNAL(programStopped(GDBMI::ResultRecord)), this, SIGNAL(programStopped(GDBMI::ResultRecord)));
+    return true;
 }
 
 void DebugSession::examineCoreFile(const KUrl& coreFile)

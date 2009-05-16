@@ -75,14 +75,6 @@ public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
 
-    /**
-     * Call this when something very interesting happens that the user
-     * might be unaware of. It will make KDevelop's taskbar entry flash
-     * if the application doesn't already have focus.
-     * Typical use case: The debugger has stopped on a breakpoint.
-     */
-    void demandAttention() const;
-
     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
     
     DebugSession *createSession();

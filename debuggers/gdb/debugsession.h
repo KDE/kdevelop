@@ -43,7 +43,11 @@ namespace KDevelop {
 class ProcessLineMaker;
 class ILaunchConfiguration;
 }
+namespace GDBMI {
+class ResultRecord;
+}
 namespace GDBDebugger {
+class GDB;
 class BreakpointController;
 class GDBController;
 
@@ -70,6 +74,7 @@ Q_SIGNALS:
     void raiseOutputViews();
     void raiseFramestackViews();
     void raiseVariableViews();
+    void programStopped(const GDBMI::ResultRecord& mi_record);
 
 public Q_SLOTS:
     bool startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
@@ -106,6 +111,7 @@ private:
     bool justRestarted_;
     QPointer<KToolBar> floatingToolBar;
     KConfigGroup m_config;
+    QPointer<GDB> m_gdb;
 };
 
 }

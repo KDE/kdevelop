@@ -84,7 +84,7 @@ public:
      * Start the debugger, and execute the program specified by \a run,
      * and remember the provided \a job.
      */
-    bool startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
+    QPointer<GDB> startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
 
     /**
      * Run currently executing program to the given \a url and \a line.

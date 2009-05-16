@@ -125,7 +125,7 @@ BreakpointController::BreakpointController(DebugSession* parent)
     // a base class that does this connect.
     connect(controller(),     SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
-
+    connect(parent, SIGNAL(programStopped(GDBMI::ResultRecord)), SLOT(programStopped(GDBMI::ResultRecord)));
 }
 
 DebugSession *BreakpointController::debugSession() const
@@ -384,6 +384,43 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
     m_dontSendChanges--;
 }
+
+void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
+{
+    QString reason = r["reason"].literal();
+    kDebug() << reason;
+
+    /* This method will not do the right thing if we hit a breakpoint
+        that is added in GDB outside kdevelop.  In this case we'll
+        first try to find the breakpoint, and fail, and only then
+        update the breakpoint table and notice the new one.  */
+
+    int id = 0;
+    if (reason == "breakpoint-hit") {
+        id = r["bkptno"].literal().toInt();
+    } else if (reason == "watchpoint-trigger") {
+        id = r["wpt"]["number"].literal().toInt();
+        /* todo niko
+        emit watchpointHit(r["wpt"]["number"]
+                            .literal().toInt(),
+                            r["value"]["old"].literal(),
+                            r["value"]["new"].literal());
+        */
+    } else if (reason == "read-watchpoint-trigger") {
+        id = r["wpt"]["number"].literal().toInt();
+        //todo niko emit showMessage("Read watchpoint triggered", 3000);
+    } else if (reason == "access-watchpoint-trigger") {
+        id = r["wpt"]["number"].literal().toInt();
+        //todo niko emit showMessage("Access watchpoint triggered", 3000);
+    }
+    if (id) {
+        KDevelop::Breakpoint* b = m_ids.key(id);
+        if (b) {
+            hit(b);
+        }
+    }
+}
+
 
 }
 
