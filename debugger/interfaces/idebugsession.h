@@ -90,6 +90,14 @@ public Q_SLOTS:
     virtual void stepOverInstruction() = 0;
     virtual void stepOut() = 0;
 
+    /**
+     * Call this when something very interesting happens that the user
+     * might be unaware of. It will make KDevelop's taskbar entry flash
+     * if the application doesn't already have focus.
+     * Typical use case: The debugger has stopped on a breakpoint.
+     */
+    void demandAttention() const;
+
 Q_SIGNALS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
     void showStepInSource(const KUrl& file, int line);
@@ -97,6 +105,7 @@ Q_SIGNALS:
     void finished();
 
 protected:
+
     KJob *m_job;
     IBreakpointController *m_breakpointController;
 };

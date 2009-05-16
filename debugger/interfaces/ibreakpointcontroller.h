@@ -54,7 +54,8 @@ protected:
     void breakpointStateChanged(Breakpoint* breakpoint);
     void setHitCount(Breakpoint* breakpoint, int count);
 
-    void error(KDevelop::Breakpoint* breakpoint, const QString& msg, Breakpoint::Column column);
+    void error(Breakpoint* breakpoint, const QString& msg, Breakpoint::Column column);
+    void hit(Breakpoint* breakpoint);
 
     void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;

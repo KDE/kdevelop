@@ -136,6 +136,13 @@ void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Br
     m_dontSendChanges--;
 }
 
+void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint)
+{
+    kDebug() << breakpoint;
+    breakpointModel()->hitEmit(breakpoint);
+    debugSession()->demandAttention();
+}
+
 QSet<Breakpoint::Column> IBreakpointController::breakpointErrors(const Breakpoint* breakpoint) const
 {
     if (!m_errors.contains(breakpoint)) return QSet<Breakpoint::Column>();

@@ -59,8 +59,8 @@ private Q_SLOTS:
     void slotAddBlankReadWatchpoint();
     void slotRemoveBreakpoint();
     void slotUpdateBreakpointDetail();
-    void slotBreakpointHit(int id);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
+    void breakpointHit(KDevelop::Breakpoint *b);
 
 private:
     QTableView* table_;

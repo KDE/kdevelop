@@ -77,13 +77,12 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
     connect(m_debugController->breakpointModel(), SIGNAL(dataChanged(QModelIndex, QModelIndex)), SLOT(slotUpdateBreakpointDetail()));
 
 
-// TODO NIKO
-//     connect(controller, SIGNAL(breakpointHit(int)),
-//             this, SLOT(slotBreakpointHit(int)));
+    connect(m_debugController->breakpointModel(),
+            SIGNAL(hit(KDevelop::Breakpoint*)),
+            SLOT(breakpointHit(KDevelop::Breakpoint*)));
 
     connect(m_debugController->breakpointModel(),
             SIGNAL(error(KDevelop::Breakpoint *, const QString&, int)),
-            this,
             SLOT(breakpointError(KDevelop::Breakpoint *, const QString&, int)));
 
     setupPopupMenu();
@@ -286,25 +285,14 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
     }
 }
 
-void BreakpointWidget::slotBreakpointHit(int id)
+void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
-#if 0
-TODO NIKO
-    /* This method will not do the right thing if we hit a breakpoint
-        that is added in GDB outside kdevelop.  In this case we'll
-        first try to find the breakpoint, and fail, and only then
-        update the breakpoint table and notice the new one.  */
-    KDevelop::Breakpoint *b = m_debugController->breakpointModel()->breakpointsItem()
-        ->breakpointById(id);
-    if (b)
-    {
-        QModelIndex index = m_debugController->breakpointModel()->indexForItem(b, 0);
-        table_->selectionModel()->select(
-            index,
-            QItemSelectionModel::Rows
-            | QItemSelectionModel::ClearAndSelect);
-    }
-#endif
+    kDebug() << b;
+    QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, 0);
+    table_->selectionModel()->select(
+        index,
+        QItemSelectionModel::Rows
+        | QItemSelectionModel::ClearAndSelect);
 }
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)

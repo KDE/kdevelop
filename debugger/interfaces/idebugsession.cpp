@@ -20,6 +20,11 @@
 
 #include "idebugsession.h"
 
+#include <QApplication>
+#include <QWidget>
+
+#include <KWindowSystem>
+
 namespace KDevelop {
 
 
@@ -46,6 +51,13 @@ bool IDebugSession::isRunning() const
 KDevelop::IBreakpointController* IDebugSession::breakpointController()
 {
     return m_breakpointController;
+}
+
+void IDebugSession::demandAttention() const
+{
+    if (QWidget *w = qApp->activeWindow()) {
+        KWindowSystem::demandAttention( w->winId(), true );
+    }
 }
 
 
