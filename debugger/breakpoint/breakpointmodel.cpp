@@ -392,6 +392,24 @@ void BreakpointModel::cursorDeleted(KTextEditor::SmartCursor* cursor)
     }
 }
 
+void BreakpointModel::load()
+{
+    /* TODO NIKO
+    KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
+    int count = breakpoints.readEntry("number", 0);
+    QVector<Breakpoint*> loaded;
+    for (int i = 0; i < count; ++i)
+    {
+        Breakpoint *b = new Breakpoint(
+            model(), this, controller_,
+            breakpoints.group(QString::number(i)));
+        loaded.push_back(b);
+    }
+
+    foreach (Breakpoint *b, loaded)
+        appendChild(b, true);
+    */
+}
 
 void BreakpointModel::save()
 {

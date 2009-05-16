@@ -77,10 +77,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void save();
-    virtual void load() {
-        //TODO NIKO
-    }
-
+    void load();
 
 private:
     enum MarkType {
