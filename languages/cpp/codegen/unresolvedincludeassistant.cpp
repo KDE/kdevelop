@@ -45,8 +45,8 @@ void Cpp::AddCustomIncludePathAction::execute() {
   KUrl current = m_url.toUrl().upUrl();
   
   o.storageDirectory->setUrl(current);
-  o.sourceDirectory->setUrl(current);
-  o.buildDirectory->setUrl(current);
+//   o.sourceDirectory->setUrl(current);
+//   o.buildDirectory->setUrl(current);
 
   //Find old settings
   CppTools::CustomIncludePathsSettings oldSettings = CppTools::CustomIncludePathsSettings::findAndRead(current.toLocalFile());
@@ -69,7 +69,9 @@ void Cpp::AddCustomIncludePathAction::execute() {
   int result = dialog->exec();
   if(result == QDialog::Accepted) {
     kDebug() << "storing settings";
-    if((o.storageDirectory->text().isEmpty() || (o.customIncludePaths->document()->toPlainText().trimmed().isEmpty() && (o.sourceDirectory->text().trimmed().isEmpty() ||o.buildDirectory->text().trimmed().isEmpty())))   && oldSettings.isValid()) {
+    if((o.storageDirectory->text().isEmpty() || 
+       (o.customIncludePaths->document()->toPlainText().trimmed().isEmpty() && (o.sourceDirectory->text().trimmed().isEmpty() ||o.buildDirectory->text().trimmed().isEmpty() || o.sourceDirectory->text().trimmed() == o.buildDirectory->text().trimmed())))  
+      && oldSettings.isValid()) {
       kDebug() << "deleting settings";
       oldSettings.delete_();
     }else{
