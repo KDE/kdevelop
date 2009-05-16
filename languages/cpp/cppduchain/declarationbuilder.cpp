@@ -793,7 +793,7 @@ struct TemplateTypeExchanger : public KDevelop::TypeExchanger {
       if(decl) {
         DelayedType::Ptr newType(new DelayedType());
         
-        TypeIdentifier id(QualifiedIdentifier(decl->identifier()));
+        IndexedTypeIdentifier id(QualifiedIdentifier(decl->identifier()));
         
         if(type->modifiers() & AbstractType::ConstModifier)
             id.setIsConstant(true);

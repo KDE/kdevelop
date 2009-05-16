@@ -292,9 +292,10 @@ class CppDUContext : public BaseContext {
           for( int a = 0; a < tempCount; a++ ) {
             //Use the already available mechanism for resolving delayed types
             Cpp::ExpressionEvaluationResult res;
-            TypeIdentifier i = currentIdentifier.templateIdentifier(a);
+            IndexedTypeIdentifier i = currentIdentifier.templateIdentifier(a);
             //If the identifier is empty, it is probably just a mark that a template should be instantiated, but without explicit paremeters.
-            if( !i.isEmpty() ) {
+            QualifiedIdentifier qid(i.identifier().identifier());
+            if( !qid.isEmpty() ) {
               DelayedType::Ptr delayed( new DelayedType() );
               delayed->setIdentifier( i );
               
@@ -457,11 +458,11 @@ class CppDUContext : public BaseContext {
           AbstractType::Ptr type(arg.abstractType());
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified)
-            id.appendTemplateIdentifier( identified->qualifiedIdentifier() );
+            id.appendTemplateIdentifier( IndexedTypeIdentifier(identified->qualifiedIdentifier()) );
           else if(type)
-            id.appendTemplateIdentifier( type->toString() );
+            id.appendTemplateIdentifier( IndexedTypeIdentifier(type->toString(), true) );
           else
-            id.appendTemplateIdentifier(QualifiedIdentifier("no type"));
+            id.appendTemplateIdentifier( IndexedTypeIdentifier("no type") );
         }
 
         totalId.push(id);

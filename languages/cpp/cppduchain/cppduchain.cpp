@@ -378,21 +378,24 @@ KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevel
   return ret;
 }
 
-KDevelop::TypeIdentifier exchangeQualifiedIdentifier(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
-  KDevelop::TypeIdentifier ret(id);
-  while(ret.count())
-    ret.pop();
-  if(QualifiedIdentifier(id) == replace) {
+KDevelop::IndexedTypeIdentifier exchangeQualifiedIdentifier(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith) {
+  KDevelop::IndexedTypeIdentifier ret(id);
+  QualifiedIdentifier oldId(id.identifier().identifier());
+  
+  QualifiedIdentifier qid;
+
+  if(oldId == replace) {
     for(int a = 0; a < replaceWith.count(); ++a)
-      ret.push(replaceWith.at(a));
+      qid.push(replaceWith.at(a));
   }else{
-    for(int a = 0; a < id.count(); ++a)
-      ret.push(exchangeQualifiedIdentifier(id.at(a), replace, replaceWith));
+    for(int a = 0; a < oldId.count(); ++a)
+      qid.push(exchangeQualifiedIdentifier(oldId.at(a), replace, replaceWith));
   }
+  ret.setIdentifier(IndexedQualifiedIdentifier(qid));
   return ret;
 }
 
-KDevelop::TypeIdentifier unTypedefType(Declaration* decl, KDevelop::TypeIdentifier type) {
+KDevelop::IndexedTypeIdentifier unTypedefType(Declaration* decl, KDevelop::IndexedTypeIdentifier type) {
   for(int a = 0; a < decl->context()->usesCount(); ++a) {
     Use use = decl->context()->uses()[a];
     if(use.m_range.end > decl->range().start)
@@ -408,35 +411,39 @@ KDevelop::TypeIdentifier unTypedefType(Declaration* decl, KDevelop::TypeIdentifi
   return type;
 }
 
-TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPosition);
+IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier, int behindPosition);
 
 Identifier removeTemplateParameters(Identifier id, int behindPosition) {
   Identifier ret(id);
+  
   ret.clearTemplateIdentifiers();
   for(unsigned int a = 0; a < id.templateIdentifiersCount(); ++a) {
-    TypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
+    IndexedTypeIdentifier replacement = removeTemplateParameters(id.templateIdentifier(a), behindPosition);
     if((int) a < behindPosition)
       ret.appendTemplateIdentifier(replacement);
     else {
-      ret.appendTemplateIdentifier(TypeIdentifier("..."));
+      ret.appendTemplateIdentifier(IndexedTypeIdentifier(QualifiedIdentifier("...")));
       break;
     }
   }
   return ret;
 }
 
-TypeIdentifier removeTemplateParameters(TypeIdentifier identifier, int behindPosition) {
-  TypeIdentifier ret(identifier);
-  while(ret.count())
-    ret.pop();
+IndexedTypeIdentifier removeTemplateParameters(IndexedTypeIdentifier identifier, int behindPosition) {
+  IndexedTypeIdentifier ret(identifier);
   
-  for(int a = 0; a < identifier.count(); ++a)
-    ret.push(removeTemplateParameters(identifier.at(a), behindPosition));
+  QualifiedIdentifier oldId(identifier.identifier().identifier());
+  QualifiedIdentifier qid;
+  
+  for(int a = 0; a < oldId.count(); ++a)
+    qid.push(removeTemplateParameters(oldId.at(a), behindPosition));
+
+  ret.setIdentifier(qid);
 
   return ret;
 }
 
-KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier strip);
+KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier strip);
 
 KDevelop::Identifier stripPrefixIdentifiers(KDevelop::Identifier id, KDevelop::QualifiedIdentifier strip) {
   KDevelop::Identifier ret(id);
@@ -447,20 +454,21 @@ KDevelop::Identifier stripPrefixIdentifiers(KDevelop::Identifier id, KDevelop::Q
   return ret;
 }
 
-KDevelop::TypeIdentifier stripPrefixIdentifiers(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier strip) {
-  
-  KDevelop::TypeIdentifier ret(id);
-  while(ret.count())
-    ret.pop();
+KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier strip) {
+
+  QualifiedIdentifier oldId(id.identifier().identifier());
+  QualifiedIdentifier qid;
   
   int commonPrefix = 0;
-  for(;commonPrefix < id.count()-1 && commonPrefix < strip.count(); ++commonPrefix)
-    if(strip.at(commonPrefix).toString() != id.at(commonPrefix).toString())
+  for(;commonPrefix < oldId.count()-1 && commonPrefix < strip.count(); ++commonPrefix)
+    if(strip.at(commonPrefix).toString() != oldId.at(commonPrefix).toString())
       break;
   
-  for(int a = commonPrefix; a < id.count(); ++a)
-    ret.push( stripPrefixIdentifiers(id.at(a), strip) );
+  for(int a = commonPrefix; a < oldId.count(); ++a)
+    qid.push( stripPrefixIdentifiers(oldId.at(a), strip) );
 
+  KDevelop::IndexedTypeIdentifier ret(id);
+  ret.setIdentifier(qid);
   return ret;
 }
 
@@ -526,12 +534,14 @@ AbstractType::Ptr stripTemplateDefaultParameters(KDevelop::AbstractType::Ptr typ
         KDevelop::Declaration* decl = idType->declaration(top);
         if(TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(decl)) 
         {
-          TypeIdentifier newTypeName;
+          QualifiedIdentifier newTypeName;
           if(decl->context()->type() == DUContext::Class && decl->context()->owner()) {
             //Strip template default-parameters from the parent class
             AbstractType::Ptr parentType = stripTemplateDefaultParameters(decl->context()->owner()->abstractType(), top);
-            if(parentType)
-              newTypeName = TypeIdentifier(parentType->toString());
+            if(parentType) {
+              newTypeName = QualifiedIdentifier(parentType->toString());
+              newTypeName.setIsExpression(true);
+            }
           }
           if(newTypeName.isEmpty())
             newTypeName = decl->context()->scopeIdentifier(true);
@@ -549,7 +559,7 @@ AbstractType::Ptr stripTemplateDefaultParameters(KDevelop::AbstractType::Ptr typ
             newInformation.templateParametersList().append(instantiationInfo.templateParameters()[neededParameters]);
             AbstractType::Ptr niceParam = stripTemplateDefaultParameters(instantiationInfo.templateParameters()[neededParameters].abstractType(), top);
             if(niceParam) {
-              currentId.appendTemplateIdentifier(niceParam->toString());
+              currentId.appendTemplateIdentifier(IndexedTypeIdentifier(niceParam->toString()));
 //               kDebug() << "testing param" << niceParam->toString();
             }
             
@@ -562,7 +572,7 @@ AbstractType::Ptr stripTemplateDefaultParameters(KDevelop::AbstractType::Ptr typ
           newTypeName.push(currentId);
           
           DelayedType::Ptr ret(new KDevelop::DelayedType);
-          ret->setIdentifier(newTypeName);
+          ret->setIdentifier(IndexedTypeIdentifier(newTypeName));
 //           kDebug() << "created delayed type" << ret->toString();
           return ret.cast<AbstractType>();
         }else{
@@ -618,7 +628,7 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, TopDUContext* top,
   if(!type)
     return QString();
   
-  TypeIdentifier identifier = TypeIdentifier(type->toString());
+  IndexedTypeIdentifier identifier = IndexedTypeIdentifier(type->toString(), true);
   
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();

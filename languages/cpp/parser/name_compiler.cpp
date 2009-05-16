@@ -68,17 +68,16 @@ uint parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
   return ret;
 }
 
-TypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node)
+IndexedTypeIdentifier typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node)
 {
-  TypeIdentifier id;
+  IndexedTypeIdentifier id;
   if(node->expression) {
-    id = TypeIdentifier(decode(session, node));
-    id.setIsExpression(true);
+    id = IndexedTypeIdentifier(decode(session, node), true);
   }else if(node->type_id) {
     //Parse the pointer operators
     TypeCompiler tc(session);
     tc.run(node->type_id->type_specifier);
-    id = TypeIdentifier(tc.identifier());
+    id = IndexedTypeIdentifier(tc.identifier());
     //node->type_id->type_specifier->cv
     
     if(node->type_id->type_specifier)
@@ -158,7 +157,7 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
     }else if(node->end_token == node->start_token + 3 && node->id == node->start_token && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<')) {
       ///@todo Represent this nicer in the AST
       ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
-      m_currentIdentifier.appendTemplateIdentifier( TypeIdentifier() );
+      m_currentIdentifier.appendTemplateIdentifier( IndexedTypeIdentifier() );
     }
 
   _M_name->push(m_currentIdentifier);

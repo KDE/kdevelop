@@ -174,10 +174,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
       str += stringFromSessionTokens( editor()->parseSession(), node->expression->start_token, node->expression->end_token );
 
-      QualifiedIdentifier id( str.trimmed() );
-      id.setIsExpression( true );
-
-      openDelayedType(id, node, DelayedType::Delayed);
+      openDelayedType(IndexedTypeIdentifier(str.trimmed(), true), node, DelayedType::Delayed);
       openedType = true;
     }
   }
@@ -391,10 +388,9 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
       ///Only record the strings, because these expressions may depend on template-parameters and thus must be evaluated later
       str += stringFromSessionTokens( editor()->parseSession(), node->initializer_clause->expression->start_token, node->initializer_clause->expression->end_token );
 
-      QualifiedIdentifier id( str.trimmed() );
-      id.setIsExpression( true );
+      QualifiedIdentifier id( str.trimmed(), true );
 
-      openDelayedType(id, node, DelayedType::Delayed);
+      openDelayedType(IndexedTypeIdentifier(id), node, DelayedType::Delayed);
       openedType = true;
     }
     
@@ -468,7 +464,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
   if(delay) {
     //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
    openedType = true;
-   TypeIdentifier typeId(id);
+   IndexedTypeIdentifier typeId(id);
    typeId.setIsConstant(modifiers & AbstractType::ConstModifier);
    
    openDelayedType(typeId, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
@@ -666,7 +662,7 @@ uint TypeBuilder::parseConstVolatile(ParseSession* session, const ListNode<std::
 }
 
 
-void TypeBuilder::openDelayedType(const TypeIdentifier& identifier, AST* /*node*/, DelayedType::Kind kind) {
+void TypeBuilder::openDelayedType(const IndexedTypeIdentifier& identifier, AST* /*node*/, DelayedType::Kind kind) {
   DelayedType::Ptr type(new DelayedType());
   type->setIdentifier(identifier);
   type->setKind(kind);

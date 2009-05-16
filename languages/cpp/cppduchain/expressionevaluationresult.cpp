@@ -27,21 +27,21 @@
 
 namespace Cpp {
 
-TypeIdentifier ExpressionEvaluationResult::identifier() const {
-  static TypeIdentifier noIdentifier("(no type)");
+IndexedTypeIdentifier ExpressionEvaluationResult::identifier() const {
+  static IndexedTypeIdentifier noIdentifier("(no type)");
 
   AbstractType::Ptr t(type.abstractType());
   IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
   if( idType )
-    return idType->qualifiedIdentifier();
+    return IndexedTypeIdentifier(idType->qualifiedIdentifier());
 
   DelayedType* delayedType = dynamic_cast<DelayedType*>(t.unsafeData());
   if( delayedType )
     return delayedType->identifier();
 
-  if( t )
-    return TypeIdentifier( t->toString() );
-  else
+  if( t ) {
+    return IndexedTypeIdentifier( t->toString(), true );
+  }else
     return noIdentifier;
 }
 

@@ -200,7 +200,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       
       m_type = integral.cast<AbstractType>();
       
-      m_typeId = TypeIdentifier(integral->toString());
+      m_typeId = QualifiedIdentifier(integral->toString());
     }
   else if (node->type_of)
     {

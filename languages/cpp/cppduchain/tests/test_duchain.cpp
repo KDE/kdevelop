@@ -186,7 +186,7 @@ void TestDUChain::testFinalCleanup() {
   QualifiedIdentifier id("test_bla12310915205342");
   IndexedQualifiedIdentifier indexedId(id);
   DelayedType::Ptr delayed(new DelayedType);
-  delayed->setIdentifier(TypeIdentifier("frokkoflasdasotest_bla12310915205342"));
+  delayed->setIdentifier(IndexedTypeIdentifier("frokkoflasdasotest_bla12310915205342"));
   IndexedType indexed = delayed->indexed();
   DUChain::self()->finalCleanup();
 }
@@ -2950,14 +2950,14 @@ void TestDUChain::testTemplates() {
     QVERIFY(unAliasedType(typedefDecl->abstractType()));
     DelayedType::Ptr delayed = unAliasedType(typedefDecl->abstractType()).cast<DelayedType>();
     QVERIFY(delayed);
-    QCOMPARE(delayed->identifier(), TypeIdentifier("T"));
+    QCOMPARE(delayed->identifier(), IndexedTypeIdentifier("T"));
   }
 
   ///Test creating a template instance of class A<B,C>
   {
     Identifier ident("A");
-    ident.appendTemplateIdentifier(QualifiedIdentifier("B"));
-    ident.appendTemplateIdentifier(QualifiedIdentifier("C"));
+    ident.appendTemplateIdentifier(IndexedTypeIdentifier("B"));
+    ident.appendTemplateIdentifier(IndexedTypeIdentifier("C"));
     Declaration* instanceDefClassA = findDeclaration(top, ident);
     Declaration* instanceTypedefD = findDeclaration(top, Identifier("D"));
     QVERIFY(instanceTypedefD);

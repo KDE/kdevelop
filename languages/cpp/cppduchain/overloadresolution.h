@@ -159,7 +159,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     ///Returns zero if applying failed. Returns the given declaration if it isn't a template function.
     Declaration* applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const;
 
-    uint matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const;
+    uint matchParameterTypes(AbstractType::Ptr argumentType, const IndexedTypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const;
     uint matchParameterTypes(AbstractType::Ptr argumentType, const Identifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const;
 
     DUContextPointer m_context;

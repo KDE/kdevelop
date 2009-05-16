@@ -84,7 +84,7 @@ protected:
   
   private:
   void eventuallyCreateAliasType();
-  void openDelayedType(const KDevelop::TypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
+  void openDelayedType(const KDevelop::IndexedTypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 
   KDevelop::FunctionType* openFunction(DeclaratorAST *node);

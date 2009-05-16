@@ -63,7 +63,7 @@ private:
 };
 
 //Extracts a type-identifier from a template argument
-KDevelop::TypeIdentifier KDEVCPPPARSER_EXPORT typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node);
+KDevelop::IndexedTypeIdentifier KDEVCPPPARSER_EXPORT typeIdentifierFromTemplateArgument(ParseSession* session, TemplateArgumentAST *node);
 uint KDEVCPPPARSER_EXPORT parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv);
 
 #endif // NAME_COMPILER_H

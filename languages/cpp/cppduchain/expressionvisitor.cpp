@@ -511,7 +511,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
         MissingDeclarationType::Ptr missing(new MissingDeclarationType);
         
-        missing->setIdentifier(nameV.identifier());
+        missing->setIdentifier(IndexedTypeIdentifier(nameV.identifier()));
         if(m_memberAccess)
           missing->containerContext = searchInContext;
         
@@ -851,7 +851,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   ident.push(idd);
   
   ident.setIsExpression( expression );
-  type->setIdentifier( ident );
+  type->setIdentifier( IndexedTypeIdentifier(ident) );
   m_lastType = type.cast<AbstractType>();
 }
 

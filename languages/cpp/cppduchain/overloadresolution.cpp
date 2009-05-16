@@ -387,14 +387,17 @@ AbstractType::Ptr getContainerType(AbstractType::Ptr type, int depth, TopDUConte
   return type;
 }
 
-uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const TypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const
+uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const IndexedTypeIdentifier& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue) const
 {
   ifDebugOverloadResolution( kDebug() << "1 matching" << argumentType->toString() << "to" << parameterType.toString() << parameterType.pointerDepth(); )
   if(!argumentType)
     return 1;
   if(instantiatedTypes.isEmpty())
     return 1;
-  if(parameterType.isEmpty())
+  
+  QualifiedIdentifier parameterQid(parameterType.identifier().identifier());
+  
+  if(parameterQid.isEmpty())
     return 1;
 
   {
@@ -424,10 +427,10 @@ uint OverloadResolver::matchParameterTypes(AbstractType::Ptr argumentType, const
   if((argumentType->modifiers() & AbstractType::ConstModifier) && parameterType.isConstant())
     ++matchDepth;
   
-  for( int a = 0; a < parameterType.count(); ++a ) {
+  for( int a = 0; a < parameterQid.count(); ++a ) {
     ///@todo Think about this
-    AbstractType::Ptr pType = getContainerType(argumentType, parameterType.count() - a - 1, m_topContext.data());
-    uint localDepth = matchParameterTypes(pType, parameterType.at(a), instantiatedTypes, keepValue);
+    AbstractType::Ptr pType = getContainerType(argumentType, parameterQid.count() - a - 1, m_topContext.data());
+    uint localDepth = matchParameterTypes(pType, parameterQid.at(a), instantiatedTypes, keepValue);
 //     if(!localDepth)
 //       return 0;
     matchDepth += localDepth;

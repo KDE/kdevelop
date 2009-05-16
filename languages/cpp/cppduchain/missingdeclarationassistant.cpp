@@ -97,9 +97,9 @@ class CreateMemberDeclarationAction : public IAssistantAction {
                 signature << item;
                 ++num;
               }
-              ins.insertFunctionDeclaration(problem->type->identifier().last(), returnType(), signature);
+              ins.insertFunctionDeclaration(problem->type->identifier().identifier().identifier().last(), returnType(), signature);
             }else{
-              ins.insertVariableDeclaration(problem->type->identifier().last(), returnType());
+              ins.insertVariableDeclaration(problem->type->identifier().identifier().identifier().last(), returnType());
             }
             lock.unlock();
             ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
@@ -211,7 +211,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
 
 MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::MissingDeclarationProblem > p) : problem(p), type(p->type) {
   DUChainReadLocker lock(DUChain::lock());
-  if(p->type->identifier().isEmpty())
+  if(p->type->identifier().identifier().identifier().isEmpty())
     return;
   kDebug() << "creating assistant for" << type->toString() << "assigned:" << type->assigned.toString();;
   

@@ -105,7 +105,7 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* top)
   return 0;
 }
 
-AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::TypeIdentifier& id ) {
+AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::IndexedTypeIdentifier& id ) {
   AbstractType::Ptr ret = ptr;
 
   if(ret && static_cast<bool>(ret->modifiers() & AbstractType::ConstModifier) != id.isConstant())
@@ -195,9 +195,10 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
     DelayedType::Ptr delayedType = type.cast<DelayedType>();
 
     if( delayedType && delayedType->kind() == DelayedType::Delayed ) {
-      if( !delayedType->identifier().isExpression() ) {
+      QualifiedIdentifier qid = delayedType->identifier().identifier().identifier();
+      if( !qid.isExpression() ) {
         DUContext::SearchItem::PtrList identifiers;
-        identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(delayedType->identifier()) );
+        identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(qid) );
         DUContext::DeclarationList decls;
         if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags ) )
           return type;
@@ -211,7 +212,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
       ///Resolve delayed expression, for example static numeric expressions
       ExpressionParser p;
       ExpressionEvaluationResult res;
-      if( delayedType->identifier().isExpression() )
+      if( qid.isExpression() )
         res = p.evaluateExpression( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), source );
       else
         res = p.evaluateType( delayedType->identifier().toString().toUtf8(), DUContextPointer(const_cast<DUContext*>(searchContext)), source );
@@ -376,9 +377,9 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
       FOREACH_FUNCTION(IndexedType indexedType, specializedWith.templateParameters) {
         AbstractType::Ptr type = indexedType.abstractType();
         if(type)
-          identifier.appendTemplateIdentifier( type->toString() );
+          identifier.appendTemplateIdentifier( IndexedTypeIdentifier(type->toString()) );
         else
-          identifier.appendTemplateIdentifier( QualifiedIdentifier("(missing template type)") );
+          identifier.appendTemplateIdentifier( IndexedTypeIdentifier("(missing template type)") );
       }
       return;
     }
@@ -391,9 +392,9 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
   for( int a = 0; a < templateCtx->localDeclarations().count(); a++ ) {
     AbstractType::Ptr type = templateCtx->localDeclarations()[a]->abstractType();
     if(type)
-        identifier.appendTemplateIdentifier( type->toString() );
+        identifier.appendTemplateIdentifier( IndexedTypeIdentifier(type->toString()) );
     else
-        identifier.appendTemplateIdentifier( QualifiedIdentifier("(missing template type)") );
+        identifier.appendTemplateIdentifier( IndexedTypeIdentifier("(missing template type)") );
   }
 }
 
@@ -528,7 +529,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
           //Use the already available delayed-type resolution to resolve the value/type
           if( !templateDecl->defaultParameter().isEmpty() ) {
             DelayedType::Ptr delayed( new DelayedType() );
-            delayed->setIdentifier( templateDecl->defaultParameter() );
+            delayed->setIdentifier( IndexedTypeIdentifier(templateDecl->defaultParameter()) );
             declCopy->setAbstractType( resolveDelayedTypes( delayed.cast<AbstractType>(), contextCopy, source) );
           }else{
             //Parameter missing
@@ -628,7 +629,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
             ///For this reason, template alias-declarations have a DelayedType assigned
             DelayedType::Ptr delayed = alias->type<DelayedType>();
             if(delayed) {
-              QList<Declaration*> declarations = parentContext->findDeclarations(delayed->identifier());
+              QList<Declaration*> declarations = parentContext->findDeclarations(delayed->identifier().identifier().identifier());
               if(!declarations.isEmpty())
                 alias->setAliasedDeclaration(declarations.first());
             }

@@ -44,7 +44,6 @@ namespace KDevelop {
   class QualifiedIdentifier;
   class SimpleCursor;
   class IndexedString;
-  class TypeIdentifier;
 }
 
 namespace Cpp {
@@ -120,10 +119,10 @@ KDEVCPPDUCHAIN_EXPORT QPair<KDevelop::Identifier, QByteArray> qtFunctionSignatur
 KDEVCPPDUCHAIN_EXPORT KDevelop::Identifier exchangeQualifiedIdentifier(KDevelop::Identifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith);
 
 ///Exchanges all occurences of @param replace in @param id with @param replaceWith
-KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier exchangeQualifiedIdentifier(KDevelop::TypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith);
+KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier exchangeQualifiedIdentifier(KDevelop::IndexedTypeIdentifier id, KDevelop::QualifiedIdentifier replace, KDevelop::QualifiedIdentifier replaceWith);
 
 ///Tries to un-typedef the given type using the uses directly before the given declaration.
-KDEVCPPDUCHAIN_EXPORT KDevelop::TypeIdentifier unTypedefType(KDevelop::Declaration* decl, KDevelop::TypeIdentifier type);
+KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier unTypedefType(KDevelop::Declaration* decl, KDevelop::IndexedTypeIdentifier type);
 
 ///Returns a shortened string version of the type attached to the given declaration.
 ///@param desiredLength the desired length. No guarantee that the resulting string will be this short. With the default-value, no shortening will happen in most cases.

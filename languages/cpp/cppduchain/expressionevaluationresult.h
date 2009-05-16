@@ -26,7 +26,6 @@
 
 namespace KDevelop {
   class IndexedType;
-  class TypeIdentifier;
 }
 
 class QString;
@@ -76,7 +75,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionEvaluationResult {
     unsigned int hash() const;
 
     ///Duchain must be read-locked
-    TypeIdentifier identifier() const;
+    IndexedTypeIdentifier identifier() const;
 
     ///@return A short version, that only contains the name or value, without instance-information etc. Should be language-processable.
     QString toShortString() const;
