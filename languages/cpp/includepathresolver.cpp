@@ -248,7 +248,7 @@ KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency
   if(!settings.buildDir.isEmpty() && !settings.sourceDir.isEmpty())
     setOutOfSourceBuildSystem(settings.sourceDir, settings.buildDir);
   
-  KUrl currentWd = mapToBuild(KUrl(file)).upUrl();
+  KUrl currentWd = mapToBuild(KUrl(file));
   
   while(!currentWd.path().isEmpty())
   {
@@ -259,7 +259,7 @@ KDevelop::ModificationRevisionSet IncludePathResolver::findIncludePathDependency
     QString path = currentWd.toLocalFile();
     QFileInfo makeFile( QDir(path), "Makefile" );
     if(makeFile.exists()) {
-      KDevelop::IndexedString makeFileStr(makeFile.filePath());
+      KDevelop::IndexedString makeFileStr(makeFile.filePath()); 
       rev.addModificationRevision(makeFileStr, KDevelop::ModificationRevision::revisionForFile(makeFileStr));
       break;
     }

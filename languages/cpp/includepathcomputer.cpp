@@ -117,7 +117,7 @@ void IncludePathComputer::computeBackground() {
     QList<QString> standardPaths = CppLanguageSupport::self()->standardIncludePaths();
     
     m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
-    kDebug() << "current include path dependency:" << m_includePathDependency.size() << m_includePathDependency.index();
+    kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
     
     if(m_ret.isEmpty()) {
     ///@todo Make modification-revisions dependent also on Makefiles, and on custom include paths files, so when those are changed, the files
@@ -181,7 +181,7 @@ void IncludePathComputer::computeBackground() {
         }
         CppTools::PathResolutionResult result = m_includeResolver.resolveIncludePath(m_source.toLocalFile());
         m_includePathDependency = result.includePathDependency;
-        kDebug() << "new include path dependency:" << m_includePathDependency.size() << m_includePathDependency.index();
+        kDebug() << "new include path dependency:" << m_includePathDependency.toString();
         
 //         if (result) {
           bool hadMissingPath = false;
