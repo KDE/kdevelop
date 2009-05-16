@@ -55,7 +55,7 @@ protected:
     void setHitCount(Breakpoint* breakpoint, int count);
 
     void error(Breakpoint* breakpoint, const QString& msg, Breakpoint::Column column);
-    void hit(Breakpoint* breakpoint);
+    void hit(Breakpoint* breakpoint, const QString& msg = QString());
 
     void sendMaybeAll();
     virtual void sendMaybe(Breakpoint *breakpoint) = 0;

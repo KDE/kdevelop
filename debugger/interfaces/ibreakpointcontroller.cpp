@@ -141,7 +141,7 @@ void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Br
     m_dontSendChanges--;
 }
 
-void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint)
+void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString &msg)
 {
     kDebug() << breakpoint;
     breakpointModel()->hitEmit(breakpoint);
@@ -150,13 +150,13 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint)
     switch(breakpoint->kind()) {
         case Breakpoint::CodeBreakpoint:
             ev = new KNotification("BreakpointHit", ICore::self()->uiController()->activeMainWindow());
-            ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()));
+            ev->setText(i18n("Breakpoint hit: %1", breakpoint->location()) + msg);
             break;
         case Breakpoint::WriteBreakpoint:
         case Breakpoint::ReadBreakpoint:
         case Breakpoint::AccessBreakpoint:
             ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
-            ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()));
+            ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
             break;
     }
     if (ev) {
