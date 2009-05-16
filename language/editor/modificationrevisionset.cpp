@@ -238,7 +238,7 @@ static bool nodeNeedsUpdate(uint index) {
 QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  QString ret = "[]";
+  QString ret = "[";
   Utils::Set set(m_index, &fileModificationSetRepository);
   Utils::Set::Iterator it = set.iterator();
   bool first = true;
