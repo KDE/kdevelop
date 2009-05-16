@@ -345,43 +345,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
         breakpoint->setIgnoreHits(0);
     }
 
-#if 0
-    {bp_watchpoint, "watchpoint"},
-    {bp_hardware_watchpoint, "hw watchpoint"},
-    {bp_read_watchpoint, "read watchpoint"},
-    {bp_access_watchpoint, "acc watchpoint"},
-#endif
-
-#if 0
-    {
-        // TODO: make the above functions do this instead
-        bp->notifyModified();
-    }
-    else
-    {
-        // It's a breakpoint added outside, most probably
-        // via gdb console. Add it now.
-        QString type = b["type"].literal();
-
-        if (type == "breakpoint" || type == "hw breakpoint")
-        {
-            if (b.hasField("fullname") && b.hasField("line"))
-            {
-                Breakpoint* bp = new FilePosBreakpoint(this,
-                                                       b["fullname"].literal(),
-                                                       b["line"].literal().toInt());
-
-                bp->setActive(m_activeFlag, id);
-                bp->setActionAdd(false);
-                bp->setPending(false);
-
-                addBreakpoint(bp);
-            }
-        }
-
-    }
-#endif
-
     m_dontSendChanges--;
 }
 
