@@ -61,14 +61,14 @@ public:
    *
    * \returns the type identifier.
    */
-  KDevelop::TypeIdentifier identifier() const;
+  KDevelop::IndexedTypeIdentifier identifier() const;
 
   /**
    * Set the type identifier which this type represents.
    *
    * \param identifier the type identifier.
    */
-  void setIdentifier(const KDevelop::TypeIdentifier& identifier);
+  void setIdentifier(const KDevelop::IndexedTypeIdentifier& identifier);
 
   virtual QString toString() const;
 

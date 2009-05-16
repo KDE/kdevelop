@@ -113,8 +113,6 @@ class KrossKDevelopQualifiedIdentifier : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE KDevelop::Identifier at(int x0) const { return wrapped->at(x0); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier mid(int x0, int x1=-1) const { return wrapped->mid(x0, x1); }
 		Q_SCRIPTABLE KDevelop::QualifiedIdentifier left(int x0) const { return wrapped->left(x0); }
-		Q_SCRIPTABLE bool explicitlyGlobal() const { return wrapped->explicitlyGlobal(); }
-		Q_SCRIPTABLE void setExplicitlyGlobal(bool x0) { wrapped->setExplicitlyGlobal(x0); }
 		Q_SCRIPTABLE bool isQualified() const { return wrapped->isQualified(); }
 		Q_SCRIPTABLE bool isExpression() const { return wrapped->isExpression(); }
 		Q_SCRIPTABLE void setIsExpression(bool x0) { wrapped->setIsExpression(x0); }

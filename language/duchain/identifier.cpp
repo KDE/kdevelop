@@ -77,7 +77,7 @@ public:
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
       FOREACH_FUNCTION(IndexedTypeIdentifier templateIdentifier, templateIdentifiers)
-        hash = hash * 13 + TypeIdentifier(templateIdentifier).hash();
+        hash = hash * 13 + IndexedTypeIdentifier(templateIdentifier).hash();
       hash += m_unique;
       m_hash = hash;
     }
@@ -154,17 +154,13 @@ template<bool dynamic>
 class QualifiedIdentifierPrivate
 {
 public:
-  QualifiedIdentifierPrivate() : m_explicitlyGlobal(false), m_isExpression(false), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstantMask(0), m_hash(0), m_refCount(0) {
+  QualifiedIdentifierPrivate() : m_explicitlyGlobal(false), m_isExpression(false), m_hash(0), m_refCount(0) {
   }
   
   template<bool rhsDynamic>
   QualifiedIdentifierPrivate(const QualifiedIdentifierPrivate<rhsDynamic>& rhs)
     : m_explicitlyGlobal(rhs.m_explicitlyGlobal)
     , m_isExpression(rhs.m_isExpression)
-    , m_isConstant(rhs.m_isConstant)
-    , m_isReference(rhs.m_isReference)
-    , m_pointerDepth(rhs.m_pointerDepth)
-    , m_pointerConstantMask(rhs.m_pointerConstantMask)
     , m_hash(rhs.m_hash)
     , m_refCount(0)
   {
@@ -177,10 +173,6 @@ public:
   
   bool m_explicitlyGlobal:1;
   bool m_isExpression:1;
-  bool m_isConstant:1; //Data for TypeIdentifier, stored here.
-  bool m_isReference:1; //Data for TypeIdentifier, stored here.
-  uchar m_pointerDepth;
-  uint m_pointerConstantMask; //Stores in a mask for each pointer-depth whether it is constant. Supports only max. 32 levels.
   mutable uint m_hash;
   uint m_refCount;
 
@@ -219,8 +211,6 @@ public:
       uint mhash = 0;
       FOREACH_FUNCTION( IndexedIdentifier identifier, identifiers )
         mhash = 11*mhash + Identifier(identifier).hash();
-
-      mhash += 17 * m_isConstant + 19 * m_isReference + 23 * m_pointerDepth + 31 * m_pointerConstantMask;
 
       if(mhash != m_hash)
         m_hash = mhash;//The local class may be in read-only memory, so only  change m_hash if it's actually a change
@@ -271,10 +261,6 @@ struct QualifiedIdentifierItemRequest {
   bool equals(const ConstantQualifiedIdentifierPrivate* item) const {
     return item->m_explicitlyGlobal == m_identifier.m_explicitlyGlobal &&
     item->m_isExpression == m_identifier.m_isExpression &&
-    item->m_isConstant == m_identifier.m_isConstant &&
-    item->m_isReference == m_identifier.m_isReference &&
-    item->m_pointerDepth == m_identifier.m_pointerDepth &&
-    item->m_pointerConstantMask == m_identifier.m_pointerConstantMask &&
     item->m_hash == m_identifier.m_hash &&
     m_identifier.listsEqual(*item);
   }
@@ -295,9 +281,9 @@ const ConstantQualifiedIdentifierPrivate* emptyConstantQualifiedIdentifierPrivat
   return qualifiedidentifierRepository->itemFromIndex(emptyConstantQualifiedIdentifierPrivateIndex());
 }
 
-uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
-  return 11*leftHash + appendIdentifier.hash();
-}
+// uint QualifiedIdentifier::combineHash(uint leftHash, uint /*leftSize*/, Identifier appendIdentifier) {
+//   return 11*leftHash + appendIdentifier.hash();
+// }
 
 Identifier::Identifier(const Identifier& rhs) {
   rhs.makeConstant();
@@ -347,7 +333,7 @@ Identifier::Identifier(const QString& id, uint start, uint* takenRange)
   ParamIterator paramIt("<>:", id, start);
   dd->m_identifier = IndexedString(paramIt.prefix().trimmed());
   while( paramIt ) {
-    appendTemplateIdentifier( TypeIdentifier(*paramIt) );
+    appendTemplateIdentifier( IndexedTypeIdentifier(IndexedQualifiedIdentifier(QualifiedIdentifier(*paramIt))) );
     ++paramIt;
   }
 
@@ -409,12 +395,12 @@ void Identifier::setIdentifier(const IndexedString& identifier)
   dd->m_identifier = identifier;
 }
 
-TypeIdentifier Identifier::templateIdentifier(int num) const
+IndexedTypeIdentifier Identifier::templateIdentifier(int num) const
 {
   if(!m_index)
-    return dd->templateIdentifiers()[num].identifier();
+    return dd->templateIdentifiers()[num];
   else
-    return cd->templateIdentifiers()[num].identifier();
+    return cd->templateIdentifiers()[num];
 }
 
 uint Identifier::templateIdentifiersCount() const
@@ -425,10 +411,10 @@ uint Identifier::templateIdentifiersCount() const
     return cd->templateIdentifiersSize();
 }
 
-void Identifier::appendTemplateIdentifier(const TypeIdentifier& identifier)
+void Identifier::appendTemplateIdentifier(const IndexedTypeIdentifier& identifier)
 {
   prepareWrite();
-  dd->templateIdentifiersList.append(IndexedTypeIdentifier(identifier));
+  dd->templateIdentifiersList.append(identifier);
 }
 
 void Identifier::clearTemplateIdentifiers()
@@ -444,12 +430,12 @@ uint Identifier::index() const
   return m_index;
 }
 
-void Identifier::setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers)
+void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& templateIdentifiers)
 {
   prepareWrite();
   dd->templateIdentifiersList.clear();
-  foreach(const TypeIdentifier& id, templateIdentifiers)
-    dd->templateIdentifiersList.append(IndexedTypeIdentifier(id));
+  foreach(const IndexedTypeIdentifier& id, templateIdentifiers)
+    dd->templateIdentifiersList.append(id);
 }
 
 QString Identifier::toString() const
@@ -541,7 +527,7 @@ bool QualifiedIdentifier::inRepository() const {
 QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( qualifiedidentifierRepository->itemFromIndex(index) ) {
 }
 
-QualifiedIdentifier::QualifiedIdentifier(const QString& id)
+QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
   : m_index(0), dd(new DynamicQualifiedIdentifierPrivate)
 {
   if (id.startsWith("::")) {
@@ -551,6 +537,9 @@ QualifiedIdentifier::QualifiedIdentifier(const QString& id)
     dd->m_explicitlyGlobal = false;
     dd->splitIdentifiers(id, 0);
   }
+  
+  if(isExpression)
+    setIsExpression(true);
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
@@ -583,16 +572,8 @@ QualifiedIdentifier::QualifiedIdentifier(const QualifiedIdentifier& id)
     m_index = 0;
     dd = new QualifiedIdentifierPrivate<true>(*id.dd);
   }
-
-  if( cd->m_pointerConstantMask || cd->m_isReference || cd->m_pointerDepth || cd->m_isConstant ) {
-    //When copying from a type-identifier, do not share the d-pointer, because it contains invalid information.
-    prepareWrite();
-    dd->m_pointerConstantMask = 0;
-    dd->m_isReference = 0;
-    dd->m_pointerDepth = 0;
-    dd->m_isConstant = 0;
-  }
 }
+
 QStringList QualifiedIdentifier::toStringList() const
 {
   QStringList ret;
@@ -742,22 +723,22 @@ bool QualifiedIdentifier::sameIdentifiers(const QualifiedIdentifier& rhs) const
     return dd->listsEqual(*rhs.cd);
 }
 
-bool QualifiedIdentifier::isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal) const
-{
-  if( cd == rhs.cd )
-    return true;
-
-  if (!ignoreExplicitlyGlobal && (explicitlyGlobal() != rhs.explicitlyGlobal()))
-    return false;
-
-  if( isExpression() != rhs.isExpression() )
-    return false;
-
-  if( hash() != rhs.hash() )
-    return false;
-
-  return sameIdentifiers(rhs);
-}
+// bool QualifiedIdentifier::isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal) const
+// {
+//   if( cd == rhs.cd )
+//     return true;
+// 
+//   if (!ignoreExplicitlyGlobal && (explicitlyGlobal() != rhs.explicitlyGlobal()))
+//     return false;
+// 
+//   if( isExpression() != rhs.isExpression() )
+//     return false;
+// 
+//   if( hash() != rhs.hash() )
+//     return false;
+// 
+//   return sameIdentifiers(rhs);
+// }
 
 bool QualifiedIdentifier::operator==(const QualifiedIdentifier& rhs) const
 {
@@ -780,57 +761,6 @@ QualifiedIdentifier& QualifiedIdentifier::operator=(const QualifiedIdentifier& r
   m_index = rhs.m_index;
   return *this;
 }
-
-#if 0
-
-QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const Identifier& rhs) const
-{
-  if( d->m_identifiers.isEmpty() )
-    return NoMatch;
-
-  if( d->m_identifiers[d->m_identifiers.size()-1] == rhs ) {
-    if( d->m_identifiers.size() == 1 )
-      return ExactMatch;
-    else
-      return EndsWith;
-  }
-
-  return NoMatch;
-}
-
-QualifiedIdentifier::MatchTypes QualifiedIdentifier::match(const QualifiedIdentifier& rhs) const
-{
-  const int difference = count() - rhs.count();
-  if (difference == 0) {
-    if (hash() == rhs.hash())
-      return ExactMatch;
-    else
-      return NoMatch;
-
-  } else if (difference > 0) {
-    // eg 6 vs 4... we need at(2)
-    if (rhs.explicitlyGlobal())
-      return NoMatch;
-
-    for( int a = difference; a < count(); a++ )
-      if( rhs.d->m_identifiers[a-difference] != d->m_identifiers[a] )
-        return NoMatch;
-
-    return EndsWith;
-  } else {
-    if (explicitlyGlobal())
-      return NoMatch;
-
-    for( int a = -difference; a < rhs.count(); a++ )
-        if( rhs.d->m_identifiers[a] != d->m_identifiers[a+difference] )
-          return NoMatch;
-
-    return TargetEndsWith;
-  }
-
-  return NoMatch;
-}
-#endif
 
 bool QualifiedIdentifier::beginsWith(const QualifiedIdentifier& other) const
 {
@@ -873,7 +803,7 @@ uint QualifiedIdentifier::hash() const {
     return dd->hash();
 }
 
-uint qHash(const TypeIdentifier& id)
+uint qHash(const IndexedTypeIdentifier& id)
 {
   return id.hash();
 }
@@ -892,39 +822,6 @@ bool QualifiedIdentifier::isQualified() const
 {
   return count() > 1 || explicitlyGlobal();
 }
-
-// QString Identifier::mangled() const
-// { ///@todo work this over
-//   static QRegExp simpleIdentifier("[a-zA-Z0-9_]*");
-//   if (simpleIdentifier.exactMatch(d->m_identifier.str()))
-//     return QString("%1%2").arg(d->m_identifier.str().length()).arg(d->m_identifier.str());
-//
-//   // Get the encoded utf form
-//   QString utf = QString::fromLatin1(d->m_identifier.str().toUtf8());
-//
-//   return QString("U%1%2").arg(utf.length()).arg(utf);
-// }
-
-// QString QualifiedIdentifier::mangled() const
-// {
-//   if (isEmpty())
-//     return QString();
-//
-//   if (count() == 1)
-//     return first().mangled();
-//
-//   QString ret('Q');
-//
-//   if (count() > 9)
-//     ret += QString(",%1,").arg(count());
-//   else
-//     ret += count();
-//
-//   for (int i = 0; i < count(); ++i)
-//     ret += at(i).mangled();
-//
-//   return ret;
-// }
 
 void QualifiedIdentifier::push(const Identifier& id)
 {
@@ -1047,10 +944,6 @@ void QualifiedIdentifier::prepareWrite() {
     dd = new QualifiedIdentifierPrivate<true>;
     dd->m_explicitlyGlobal = oldCc->m_explicitlyGlobal;
     dd->m_isExpression = oldCc->m_isExpression;
-    dd->m_isConstant = oldCc->m_isConstant;
-    dd->m_isReference = oldCc->m_isReference;
-    dd->m_pointerDepth = oldCc->m_pointerDepth;
-    dd->m_pointerConstantMask = oldCc->m_pointerConstantMask;
     dd->m_hash = oldCc->m_hash;
 
     dd->copyListsFrom(*oldCc);
@@ -1060,87 +953,65 @@ void QualifiedIdentifier::prepareWrite() {
   dd->clearHash();
 }
 
-bool TypeIdentifier::isSame(const TypeIdentifier& rhs, bool ignoreExplicitlyGlobal) const {
-  if(m_index)
-    return QualifiedIdentifier::isSame(rhs, ignoreExplicitlyGlobal) && cd->m_isConstant == rhs.cd->m_isConstant && cd->m_isReference == rhs.cd->m_isReference && cd->m_pointerConstantMask == rhs.cd->m_pointerConstantMask;
-  else
-    return QualifiedIdentifier::isSame(rhs, ignoreExplicitlyGlobal) && dd->m_isConstant == rhs.dd->m_isConstant && dd->m_isReference == rhs.dd->m_isReference && dd->m_pointerConstantMask == rhs.dd->m_pointerConstantMask;
+uint IndexedTypeIdentifier::hash() const {
+    return m_identifier.getIndex() * 13 + (m_isConstant ? 17 : 0) + (m_isReference ? 12371 : 0) + m_pointerConstMask * 89321 + m_pointerDepth * 1023;
 }
 
-bool TypeIdentifier::operator==(const TypeIdentifier& rhs) const {
-  if(m_index)
-    return QualifiedIdentifier::operator==(rhs) && cd->m_isConstant == rhs.cd->m_isConstant && cd->m_isReference == rhs.cd->m_isReference && cd->m_pointerConstantMask == rhs.cd->m_pointerConstantMask && cd->m_pointerDepth == rhs.cd->m_pointerDepth;
-  else
-    return QualifiedIdentifier::operator==(rhs) && dd->m_isConstant == rhs.dd->m_isConstant && dd->m_isReference == rhs.dd->m_isReference && dd->m_pointerConstantMask == rhs.dd->m_pointerConstantMask && dd->m_pointerDepth == rhs.dd->m_pointerDepth;
+bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {
+    return m_identifier == rhs.m_identifier && m_isConstant == rhs.m_isConstant && m_isReference == rhs.m_isReference && m_pointerConstMask == rhs.m_pointerConstMask && m_pointerDepth == rhs.m_pointerDepth;
 }
 
-bool TypeIdentifier::operator!=(const TypeIdentifier& rhs) const {
+bool IndexedTypeIdentifier::operator!=(const IndexedTypeIdentifier& rhs) const {
   return !operator==(rhs);
 }
 
-bool TypeIdentifier::isReference() const {
-  if(m_index)
-    return cd->m_isReference;
-  else
-    return dd->m_isReference;
+bool IndexedTypeIdentifier::isReference() const {
+  return m_isReference;
 }
 
-void TypeIdentifier::setIsReference(bool isRef) {
-  prepareWrite();
-  dd->m_isReference = isRef;
+void IndexedTypeIdentifier::setIsReference(bool isRef) {
+  m_isReference = isRef;
 }
 
-bool TypeIdentifier::isConstant() const {
-  if(m_index)
-    return cd->m_isConstant;
-  else
-    return dd->m_isConstant;
+bool IndexedTypeIdentifier::isConstant() const {
+  return m_isConstant;
 }
 
-void TypeIdentifier::setIsConstant(bool isConst) {
-  prepareWrite();
-  dd->m_isConstant = isConst;
+void IndexedTypeIdentifier::setIsConstant(bool isConst) {
+  m_isConstant = isConst;
 }
 
 ///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
-int TypeIdentifier::pointerDepth() const {
-  if(m_index)
-    return cd->m_pointerDepth;
-  else
-    return dd->m_pointerDepth;
+int IndexedTypeIdentifier::pointerDepth() const {
+  return m_pointerDepth;
 }
 
 /**Sets the pointer-depth to the specified count
   * For efficiency-reasons the maximum currently is 32. */
-void TypeIdentifier::setPointerDepth(int depth) {
-  prepareWrite();
+void IndexedTypeIdentifier::setPointerDepth(int depth) {
   ///Clear the mask in removed fields
-  for(int s = depth; s < (int)dd->m_pointerDepth; ++s)
+  for(int s = depth; s < (int)m_pointerDepth; ++s)
     setIsConstPointer(s, false);
 
-  dd->m_pointerDepth = depth;
+  m_pointerDepth = depth;
 }
 
-bool TypeIdentifier::isConstPointer(int depthNumber) const {
-  if(m_index)
-    return cd->m_pointerConstantMask & (1 << depthNumber);
-  else
-    return dd->m_pointerConstantMask & (1 << depthNumber);
+bool IndexedTypeIdentifier::isConstPointer(int depthNumber) const {
+  return m_pointerConstMask & (1 << depthNumber);
 }
 
-void TypeIdentifier::setIsConstPointer(int depthNumber, bool constant) {
-  prepareWrite();
+void IndexedTypeIdentifier::setIsConstPointer(int depthNumber, bool constant) {
   if(constant)
-    dd->m_pointerConstantMask |= (1 << depthNumber);
+    m_pointerConstMask |= (1 << depthNumber);
   else
-    dd->m_pointerConstantMask &= (~(1 << depthNumber));
+    m_pointerConstMask &= (~(1 << depthNumber));
 }
 
-QString TypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
+QString IndexedTypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
   QString ret;
   if(isConstant())
     ret += "const ";
-  ret += QualifiedIdentifier::toString(ignoreExplicitlyGlobal);
+  ret += m_identifier.identifier().toString(ignoreExplicitlyGlobal);
   for(int a = 0; a < pointerDepth(); ++a) {
     ret += '*';
     if( isConstPointer(a) )
@@ -1152,22 +1023,10 @@ QString TypeIdentifier::toString(bool ignoreExplicitlyGlobal) const {
   return ret;
 }
 
-TypeIdentifier::TypeIdentifier(uint index) : QualifiedIdentifier(index) {
+IndexedTypeIdentifier::IndexedTypeIdentifier(KDevelop::IndexedQualifiedIdentifier identifier) : m_identifier(identifier), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstMask(0) {
 }
 
-TypeIdentifier::TypeIdentifier() : QualifiedIdentifier() {
-}
-
-TypeIdentifier::TypeIdentifier(const QString& str) : QualifiedIdentifier(str) {
-}
-
-TypeIdentifier::TypeIdentifier(const TypeIdentifier& id) : QualifiedIdentifier() {
-  id.makeConstant();
-  m_index = id.m_index;
-  cd = id.cd;
-}
-
-TypeIdentifier::TypeIdentifier(const QualifiedIdentifier& id) : QualifiedIdentifier(id) {
+IndexedTypeIdentifier::IndexedTypeIdentifier(const QString& identifier, bool isExpression) : m_identifier(QualifiedIdentifier(identifier, isExpression)), m_isConstant(false), m_isReference(false), m_pointerDepth(0), m_pointerConstMask(0) {
 }
 
 IndexedIdentifier::IndexedIdentifier() : index(emptyConstantIdentifierPrivateIndex()) {
@@ -1253,6 +1112,17 @@ bool IndexedQualifiedIdentifier::isValid() const {
 }
 
 int cnt = 0;
+
+IndexedQualifiedIdentifier IndexedTypeIdentifier::identifier() const
+{
+  return m_identifier;
+}
+
+
+void IndexedTypeIdentifier::setIdentifier(KDevelop::IndexedQualifiedIdentifier id)
+{
+  m_identifier = id;
+}
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex()) {
   ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
@@ -1354,81 +1224,6 @@ QualifiedIdentifier IndexedQualifiedIdentifier::identifier() const {
 
 IndexedQualifiedIdentifier::operator QualifiedIdentifier() const {
   return QualifiedIdentifier(index);
-}
-
-IndexedTypeIdentifier::IndexedTypeIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex()) {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-}
-
-bool IndexedTypeIdentifier::isValid() const {
-  return index != emptyConstantQualifiedIdentifierPrivateIndex();
-}
-
-IndexedTypeIdentifier::IndexedTypeIdentifier(const TypeIdentifier& id) : index(id.index()) {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-}
-
-IndexedTypeIdentifier::IndexedTypeIdentifier(const IndexedTypeIdentifier& id) : index(id.index) {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-}
-
-IndexedTypeIdentifier& IndexedTypeIdentifier::operator=(const TypeIdentifier& id) {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    decrease(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  
-  index = id.index();
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  return *this;
-}
-
-IndexedTypeIdentifier& IndexedTypeIdentifier::operator=(const IndexedTypeIdentifier& id) {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    decrease(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  
-  index = id.index;
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  return *this;
-}
-
-IndexedTypeIdentifier::~IndexedTypeIdentifier() {
-  if(shouldDoDUChainReferenceCounting(this)) {
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
-    decrease(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-}
-
-bool IndexedTypeIdentifier::operator==(const IndexedTypeIdentifier& rhs) const {
-  return index == rhs.index;
-}
-bool IndexedTypeIdentifier::operator==(const TypeIdentifier& id) const {
-  return index == id.index();
-}
-
-TypeIdentifier IndexedTypeIdentifier::identifier() const {
-  return TypeIdentifier(index);
-}
-
-IndexedTypeIdentifier::operator TypeIdentifier() const {
-  return TypeIdentifier(index);
 }
 
 }

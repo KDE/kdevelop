@@ -37,7 +37,7 @@
 namespace KDevelop
 {
 
-class TypeIdentifier;
+class IndexedTypeIdentifier;
 class Identifier;
 class QualifiedIdentifier;
 template<bool>
@@ -108,34 +108,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public Reference
   uint index;
 };
 
-///A helper-class to store an identifier by index in a type-safe way.
-///The difference to QualifiedIdentifier is that this class only stores the index of an identifier that is in the repository, without any dynamic
-///abilities or access to the contained data.
-///This class does "disk reference counting"
-///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier : public ReferenceCountManager {
-  IndexedTypeIdentifier();
-  IndexedTypeIdentifier(const TypeIdentifier& id);
-  IndexedTypeIdentifier(const IndexedTypeIdentifier& rhs);
-  ~IndexedTypeIdentifier();
-  IndexedTypeIdentifier& operator=(const TypeIdentifier& id);
-  IndexedTypeIdentifier& operator=(const IndexedTypeIdentifier& id);
-  bool operator==(const IndexedTypeIdentifier& rhs) const;
-  bool operator==(const TypeIdentifier& id) const;
-
-  bool isValid() const;
-
-  TypeIdentifier identifier() const;
-  operator TypeIdentifier() const;
-
-  uint getIndex() const {
-    return index;
-  }
-  
-  private:
-  uint index;
-};
-
 /// Represents a single unqualified identifier
 class KDEVPLATFORMLANGUAGE_EXPORT Identifier
 {
@@ -179,11 +151,11 @@ public:
   bool nameEquals(const Identifier& rhs) const;
 
   //Expensive
-  TypeIdentifier templateIdentifier(int num) const;
+  IndexedTypeIdentifier templateIdentifier(int num) const;
   uint templateIdentifiersCount() const;
-  void appendTemplateIdentifier(const TypeIdentifier& identifier);
+  void appendTemplateIdentifier(const IndexedTypeIdentifier& identifier);
   void clearTemplateIdentifiers();
-  void setTemplateIdentifiers(const QList<TypeIdentifier>& templateIdentifiers);
+  void setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& templateIdentifiers);
 
   QString toString() const;
 
@@ -225,7 +197,7 @@ private:
 class KDEVPLATFORMLANGUAGE_EXPORT QualifiedIdentifier
 {
 public:
-  explicit QualifiedIdentifier(const QString& id);
+  explicit QualifiedIdentifier(const QString& id, bool isExpression = false);
   explicit QualifiedIdentifier(const Identifier& id);
   QualifiedIdentifier(const QualifiedIdentifier& id);
   QualifiedIdentifier(uint index);
@@ -256,6 +228,7 @@ public:
    * */
   inline QualifiedIdentifier left(int len) const { return mid(0, len > 0 ? len : count() + len); }
 
+  ///@todo Remove this flag
   bool explicitlyGlobal() const;
   void setExplicitlyGlobal(bool eg);
   bool isQualified() const;
@@ -283,20 +256,12 @@ public:
 
   //Returns a QualifiedIdentifier with this one appended to the other. It is explicitly global if either this or base is.
   QualifiedIdentifier merge(const QualifiedIdentifier& base) const;
-//   //The returned identifier will have explicitlyGlobal() set to false
-//   QualifiedIdentifier strip(const QualifiedIdentifier& unwantedBase) const;
-
-  /**
-   * A more complex comparison than operator==(..).
-   * It does respect the isExpression() flag, and optionally the explicitlyGlobal flag.
-   * */
-  bool isSame(const QualifiedIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
 
   /**
    * Computes the hash-value that would be created with a qualified identifier with hash-value @param leftHash of size @param leftSize
    * with @param appendIdentifier appended as an identifier
    * */
-  static uint combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier);
+//   static uint combineHash(uint leftHash, uint leftSize, Identifier appendIdentifier);
 
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
@@ -304,17 +269,7 @@ public:
   bool operator==(const QualifiedIdentifier& rhs) const;
   bool operator!=(const QualifiedIdentifier& rhs) const;
   QualifiedIdentifier& operator=(const QualifiedIdentifier& rhs);
-#if 0
-  enum MatchTypes {
-    NoMatch        /**< matches no identifier */,
-    EndsWith       /**< The current identifier ends with the one given to the match function */,
-    TargetEndsWith /**< The identifier given to the match function ends with the current identifier */,
-    ExactMatch     /**< matches if the identifiers match exactly */
-  };
 
-  MatchTypes match(const Identifier& other) const;
-  MatchTypes match(const QualifiedIdentifier& other) const;
-#endif
   bool beginsWith(const QualifiedIdentifier& other) const;
 
   uint index() const;
@@ -354,25 +309,28 @@ protected:
 };
 
 /**
- * Extends QualifiedIdentifier by:
+ * Extends IndexedQualifiedIdentifier by:
  * - Arbitrary count of pointer-poperators with cv-qualifiers
  * - Reference operator
  * All the properties set here are respected in the hash value.
+ *
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT TypeIdentifier : public QualifiedIdentifier
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedTypeIdentifier
 {
 public:
   ///Variables like pointerDepth, isReference, etc. are not parsed from the string, so this parsing is quite limited.
-  TypeIdentifier();
-  TypeIdentifier(const QString& str);
-  TypeIdentifier(const QualifiedIdentifier& id);
-  TypeIdentifier(const TypeIdentifier& id);
-  TypeIdentifier(uint index);
+  explicit IndexedTypeIdentifier(IndexedQualifiedIdentifier identifier = IndexedQualifiedIdentifier());
+  explicit IndexedTypeIdentifier(const QString& identifer, bool isExpression = false);
+  
   bool isReference() const;
   void setIsReference(bool);
 
   bool isConstant() const;
   void setIsConstant(bool);
+  
+  IndexedQualifiedIdentifier identifier() const ;
+  
+  void setIdentifier(IndexedQualifiedIdentifier id);
 
   ///Returns the pointer depth. Example for C++: "char*" has pointer-depth 1, "char***" has pointer-depth 3
   int pointerDepth() const;
@@ -385,18 +343,24 @@ public:
   bool isConstPointer(int depthNumber) const;
   void setIsConstPointer(int depthNumber, bool constant);
 
-  bool isSame(const TypeIdentifier& rhs, bool ignoreExplicitlyGlobal=true) const;
-
   QString toString(bool ignoreExplicitlyGlobal = false) const;
 
+  uint hash() const;
+  
   /**The comparison-operators do not respect explicitlyGlobal and isExpression, they only respect the real scope.
    * This is for convenient use in hash-tables etc.
    * */
-  bool operator==(const TypeIdentifier& rhs) const;
-  bool operator!=(const TypeIdentifier& rhs) const;
+  bool operator==(const IndexedTypeIdentifier& rhs) const;
+  bool operator!=(const IndexedTypeIdentifier& rhs) const;
+  private:
+    IndexedQualifiedIdentifier m_identifier;
+    bool m_isConstant : 1;
+    bool m_isReference : 1;
+    uint m_pointerDepth : 5;
+    uint m_pointerConstMask : 25;
 };
 
-KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const TypeIdentifier& id);
+KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const IndexedTypeIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const QualifiedIdentifier& id);
 KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 

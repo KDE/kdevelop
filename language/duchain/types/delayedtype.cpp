@@ -82,12 +82,12 @@ DelayedType::~DelayedType()
 {
 }
 
-void DelayedType::setIdentifier(const TypeIdentifier& identifier)
+void DelayedType::setIdentifier(const IndexedTypeIdentifier& identifier)
 {
   d_func_dynamic()->m_identifier = identifier;
 }
 
-TypeIdentifier DelayedType::identifier() const
+IndexedTypeIdentifier DelayedType::identifier() const
 {
   return d_func()->m_identifier;
 }
@@ -100,7 +100,7 @@ void DelayedType::accept0 (KDevelop::TypeVisitor *v) const
 
 uint DelayedType::hash() const
 {
-  return AbstractType::hash() + 37*((d_func()->m_identifier.getIndex()>>1) + (uint)d_func()->m_kind);
+  return AbstractType::hash() + 37*((d_func()->m_identifier.hash()>>1) + (uint)d_func()->m_kind);
 }
 
 }
