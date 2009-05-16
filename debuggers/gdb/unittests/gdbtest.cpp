@@ -572,7 +572,12 @@ void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSessio
     QTest::qWait(100);
 }
 
-QTEST_MAIN( GdbTest )
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    GdbTest tc;
+    return QTest::qExec(&tc, argc, argv);
+}
 
 #include "gdbtest.moc"
 #include "moc_gdbtest.cpp"
