@@ -363,6 +363,7 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
         id = r["bkptno"].literal().toInt();
     } else if (reason == "watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
+        
         /* todo niko
         emit watchpointHit(r["wpt"]["number"]
                             .literal().toInt(),

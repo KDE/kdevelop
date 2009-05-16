@@ -237,3 +237,19 @@ Comment[x-test]=xxA project has been loaded successfullyxx
 Comment[zh_CN]=成功装入了一个工程
 Comment[zh_TW]=專案已成功載入
 Action=Popup
+
+[Context/debugger]
+Name=Debugger
+
+[Event/BreakpointHit]
+Contexts=debugger
+Action=Taskbar
+IconName=script-error
+Name=Breakpoint Hit
+Comment=A Breakpoint has been hit by the debugger
+
+[Event/WatchpointHit]
+Contexts=debugger
+Action=Popup
+Name=Watchpoint Hit
+Comment=A Watchpoint has been hit by the debugger
