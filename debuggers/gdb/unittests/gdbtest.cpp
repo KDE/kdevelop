@@ -430,6 +430,9 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
 
 void GdbTest::testBreakOnReadBreakpoint()
 {
+    /*
+    test disabled because of gdb bug: http://sourceware.org/bugzilla/show_bug.cgi?id=10136
+
     TestDebugSession session;
 
     TestLaunchConfiguration cfg;
@@ -446,6 +449,7 @@ void GdbTest::testBreakOnReadBreakpoint()
     QCOMPARE(session.line(), 23);
     session.run();
     waitForState(session, DebugSession::StoppedState);
+    */
 }
 
 
