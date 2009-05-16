@@ -38,6 +38,8 @@
 #include <sys/types.h>
 #include <signal.h>
 
+#define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
+
 using namespace GDBDebugger;
 
 GDB::GDB()
@@ -225,8 +227,10 @@ void GDB::processLine(const QByteArray& line)
    {
        bool ready_for_next_command = false;
 
+       #ifndef DEBUG_NO_TRY
        try
        {
+       #endif
            switch(r->kind)
            {
            case GDBMI::Record::Result: {
@@ -300,6 +304,7 @@ void GDB::processLine(const QByteArray& line)
            case GDBMI::Record::Prompt:
                break;
            }
+       #ifndef DEBUG_NO_TRY
        }
        catch(const std::exception& e)
        {
@@ -317,6 +322,7 @@ void GDB::processLine(const QByteArray& line)
            currentCmd_ = 0;
            ready_for_next_command = true;
        }
+       #endif
 
        if (ready_for_next_command)
        {

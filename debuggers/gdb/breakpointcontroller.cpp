@@ -86,10 +86,14 @@ struct InsertedHandler : public Handler
             controller->m_errors[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
             if (r.hasField("bkpt")) {
                 controller->update(breakpoint, r["bkpt"]);
-            } else {
+            } else if (r.hasField("wpt")) {
                 // For watchpoint creation, GDB basically does not say
                 // anything.  Just record id.
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
+            } else if (r.hasField("hw-rwpt")) {
+                // For watchpoint creation, GDB basically does not say
+                // anything.  Just record id.
+                controller->m_ids[breakpoint] = r["hw-rwpt"]["number"].toInt();
             }
         }
         controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
@@ -367,7 +371,7 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
         id = r["wpt"]["number"].literal().toInt();
         msg = i18n("<br>Old value: %1<br>New value: %2", r["value"]["old"].literal(), r["value"]["new"].literal());
     } else if (reason == "read-watchpoint-trigger") {
-        id = r["wpt"]["number"].literal().toInt();
+        id = r["hw-rwpt"]["number"].literal().toInt();
     } else if (reason == "access-watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
     }

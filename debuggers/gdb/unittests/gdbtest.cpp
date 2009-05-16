@@ -478,6 +478,7 @@ void GdbTest::testBreakOnReadBreakpoint2()
     waitForState(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 22);
 
+    session.run();
     waitForState(session, DebugSession::StoppedState);
 }
 
