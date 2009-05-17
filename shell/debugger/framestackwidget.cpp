@@ -45,6 +45,8 @@ FramestackWidget::FramestackWidget(DebugController* controller, QWidget* parent)
     : QSplitter(Qt::Horizontal, parent), m_controller(controller)
 {
     connect(controller, SIGNAL(sessionAdded(IDebugSession*)), SLOT(sessionAdded(IDebugSession*)));
+    connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
+    
 
     setWhatsThis(i18n("<b>Frame stack</b><p>"
                     "Often referred to as the \"call stack\", "

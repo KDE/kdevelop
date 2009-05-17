@@ -72,6 +72,8 @@ private Q_SLOTS:
     
     void partAdded(KParts::Part* part);
 
+Q_SIGNALS:
+    void raiseFramestackViews();
 
 private:
     void setupActions();

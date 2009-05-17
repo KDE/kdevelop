@@ -96,6 +96,8 @@ Q_SIGNALS:
     void clearExecutionPoint();
     void finished();
 
+    void raiseFramestackViews();
+
 protected:
 
     KJob *m_job;

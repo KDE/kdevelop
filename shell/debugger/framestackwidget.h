@@ -41,6 +41,8 @@ class FramestackWidget : public QSplitter
     public:
         FramestackWidget( DebugController* controller, QWidget *parent=0 );
         virtual ~FramestackWidget();
+    Q_SIGNALS:
+        void requestRaise();
     protected:
         virtual void showEvent(QShowEvent* );
         virtual void hideEvent(QHideEvent* );
