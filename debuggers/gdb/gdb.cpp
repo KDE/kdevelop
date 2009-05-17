@@ -261,6 +261,11 @@ void GDB::processLine(const QByteArray& line)
 
                ready_for_next_command = (result.reason != "running");
 
+               if (currentCmd_ && currentCmd_->type() == GDBMI::TargetAttach && result.reason == "stopped") {
+                   //when attaching don't send next command when we get *stopped response, as ^done will follow
+                   ready_for_next_command = false;
+               }
+
                if (result.reason == "done")
                {
                    currentCmd_->invokeHandler(result);
