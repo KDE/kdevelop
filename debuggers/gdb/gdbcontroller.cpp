@@ -878,6 +878,9 @@ void GDBController::attachToProcess(int pid)
     setStateOff(s_appNotStarted|s_programExited);
     setStateOn(s_attached);
 
+    //set current state to running, after attaching we will get *stopped response
+    setStateOn(s_appRunning);
+
     if (stateIsOn(s_dbgNotStarted))
       startDebugger();
 
@@ -889,14 +892,9 @@ void GDBController::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(NonMI, QString("attach %1").arg(pid)));
-    //queueCmd(new GDBCommand(TargetAttach, pid));
+    queueCmd(new GDBCommand(TargetAttach, pid));
 
     raiseEvent(connected_to_program);
-
-    // ...emit a separate MI command to step one instruction more. We'll
-    // notice the '*stopped' response from it and proceed as usual.
-    queueCmd(new GDBCommand(ExecStepInstruction));
 }
 
 // **************************************************************************
