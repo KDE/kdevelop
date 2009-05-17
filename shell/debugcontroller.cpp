@@ -75,7 +75,7 @@ public:
 
   virtual void viewCreated(Sublime::View* view)
   {
-      if (view->widget()->metaObject()->indexOfSignal(SIGNAL(requestRaise())) != -1)
+      if (view->widget()->metaObject()->indexOfSignal("requestRaise()") != -1)
           QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
   }
 
