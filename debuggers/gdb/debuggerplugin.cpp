@@ -349,7 +349,6 @@ DebugSession* CppDebuggerPlugin::createSession()
     connect(m_session, SIGNAL(reset()), SIGNAL(reset()));
     connect(m_session, SIGNAL(finished()), SLOT(slotFinished()));
     connect(m_session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
-    connect(m_session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
     connect(m_session, SIGNAL(raiseVariableViews()), SIGNAL(raiseVariableViews()));
     return m_session;
 }

@@ -255,7 +255,9 @@ void DebugSession::examineCoreFile(const KUrl& coreFile)
 
 void DebugSession::attachToProcess(int pid)
 {
+    kDebug() << pid;
     m_controller->attachToProcess(pid);
+    emit raiseFramestackViews();
 }
 
 void DebugSession::startDebugger()

@@ -92,7 +92,6 @@ Q_SIGNALS:
     //END IStatus
 
     void raiseOutputViews();
-    void raiseFramestackViews();
     void raiseVariableViews();
 
     void addWatchVariable(const QString& variable);

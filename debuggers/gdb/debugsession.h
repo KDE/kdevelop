@@ -72,7 +72,6 @@ Q_SIGNALS:
     void showMessage(const QString&, int);
     void reset();
     void raiseOutputViews();
-    void raiseFramestackViews();
     void raiseVariableViews();
     void programStopped(const GDBMI::ResultRecord& mi_record);
 
