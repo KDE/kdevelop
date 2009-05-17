@@ -28,6 +28,7 @@
 #include <KGlobal>
 #include <KSharedConfig>
 #include <KDebug>
+#include <qtest_kde.h>
 
 #include <shell/testcore.h>
 #include <shell/shellextension.h>
@@ -573,12 +574,8 @@ void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSessio
     QTest::qWait(100);
 }
 
-int main(int argc, char *argv[])
-{
-    QApplication app(argc, argv);
-    GdbTest tc;
-    return QTest::qExec(&tc, argc, argv);
-}
+QTEST_KDEMAIN(GdbTest, KDEMainFlag::GUI)
+
 
 #include "gdbtest.moc"
 #include "moc_gdbtest.cpp"
