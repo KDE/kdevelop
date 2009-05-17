@@ -355,21 +355,8 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
     state_reload_needed = true;
     setStateOff(s_appRunning);
 
-    if (!r.hasField("reason"))
-    {
-        // FIXME: throw an exception, and add the gdb reply in the
-        // caller. Show message box in the caller, not here.
-        // FIXME: remove this 'bla-bla-bla'.
-        KMessageBox::detailedSorry(
-            qApp->activeWindow(),
-            i18n("<b>Invalid gdb reply</b>"
-                 "<p>The 'stopped' packet does not include the 'reason' field."),
-            i18n("The gdb reply is: invalid"),
-            i18n("Invalid gdb reply"));
-        return;
-    }
-
-    QString reason = r["reason"].literal();
+    QString reason;
+    if (r.hasField("reason")) reason = r["reason"].literal();
 
     if (reason == "exited-normally" || reason == "exited")
     {
