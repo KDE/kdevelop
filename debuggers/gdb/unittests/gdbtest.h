@@ -48,6 +48,7 @@ private Q_SLOTS:
     void testBreakOnReadBreakpoint2();
     void testShowStepInSource();
     void testStack();
+    void testAttach();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(const GDBDebugger::DebugSession& session, KDevelop::IDebugSession::DebuggerState state);

@@ -472,8 +472,6 @@ void GdbTest::testBreakOnReadBreakpoint2()
     KDevelop::Breakpoint *b = breakpoints->addReadWatchpoint("foo::i");
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
-    QCOMPARE(session.line(), 22);
 
     session.run();
     waitForState(session, DebugSession::PausedState);
@@ -562,19 +560,48 @@ void GdbTest::testStack()
     waitForState(session, DebugSession::StoppedState);
 }
 
+
+void GdbTest::testAttach()
+{
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeattach.cpp";
+
+    KProcess debugeeProcess;
+    debugeeProcess << "nice" << QDir::currentPath()+"/unittests/debugeeattach";
+    debugeeProcess.start();
+    Q_ASSERT(debugeeProcess.waitForStarted());
+    QTest::qWait(100);
+
+    TestDebugSession session;
+    session.attachToProcess(debugeeProcess.pid());
+    waitForState(session, DebugSession::PausedState);
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+    breakpoints->addCodeBreakpoint(fileName, 32);
+    QTest::qWait(100);
+    session.run();
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 32);
+
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
+
 void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSession::DebuggerState state)
 {
+    kDebug() << "waiting for state" << state;
     QTime stopWatch;
     stopWatch.start();
     while (session.state() != state) {
         if (stopWatch.elapsed() > 5000) qFatal("Didn't reach state");
         QTest::qWait(20);
-        kDebug() << session.state() << state;
     }
     QTest::qWait(100);
 }
 
-QTEST_KDEMAIN(GdbTest, KDEMainFlag::GUI)
+QTEST_KDEMAIN(GdbTest, GUI)
 
 
 #include "gdbtest.moc"
