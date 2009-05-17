@@ -261,17 +261,21 @@ void CppDebuggerPlugin::slotDebugExternalProcess(QObject* interface)
 
     if (reply.isValid()) {
         attachProcess(reply.value());
-        QTimer::singleShot(15000, this, SLOT(slotCloseDrKonqi()));
-        //mainWindow()->raiseView(framestackWidget);
+        QTimer::singleShot(500, this, SLOT(slotCloseDrKonqi()));
+
+        m_drkonqi = m_drkonqis.key(static_cast<QDBusInterface*>(interface));
     }
 
-    //mainWindow()->main()->raise();
+    KDevelop::ICore::self()->uiController()->activeMainWindow()->raise();
 }
 
 void CppDebuggerPlugin::slotCloseDrKonqi()
 {
-    /*kapp->dcopClient()->send(m_drkonqi, "MainApplication-Interface", "quit()", QByteArray());
-    m_drkonqi = "";*/
+    if (!m_drkonqi.isEmpty()) {
+        QDBusInterface drkonqiInterface(m_drkonqi, "/MainApplication", "org.kde.KApplication");
+        drkonqiInterface.call("quit");
+        m_drkonqi.clear();
+    }
 }
 
 CppDebuggerPlugin::~CppDebuggerPlugin()

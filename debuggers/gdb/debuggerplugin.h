@@ -141,9 +141,9 @@ private:
 
     QHash<QString, QDBusInterface*> m_drkonqis;
     QSignalMapper* m_drkonqiMap;
+    QString m_drkonqi;
 
     QString m_contextIdent;
-    QByteArray m_drkonqi;
 
     // Set to true after each debugger restart
     // Currently used to auto-show variables view
