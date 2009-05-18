@@ -327,7 +327,7 @@ void RunController::setupActions()
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    action = new KAction (i18n("Configure Launches"), this);
+    action = new KAction (i18n("Configure Launches..."), this);
     ac->addAction("configure_launches", action);
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18n("Open Launch Configuration Dialog"));
