@@ -240,16 +240,36 @@ Action=Popup
 
 [Context/debugger]
 Name=Debugger
+Name[pt]=Depurador
+Name[pt_BR]=Depurador
+Name[sv]=Avlusare
+Name[uk]=Зневадник
 
 [Event/BreakpointHit]
 Contexts=debugger
 Action=Taskbar
 IconName=script-error
 Name=Breakpoint Hit
+Name[pt]=Ponto de Paragem Atingido
+Name[pt_BR]=Ponto de Paragem Atingido
+Name[sv]=Brytpunkt påträffad
+Name[uk]=Проходження точки зупину
 Comment=A Breakpoint has been hit by the debugger
+Comment[pt]=Foi atingido um ponto de paragem pelo depurador
+Comment[pt_BR]=Foi atingido um ponto de paragem pelo depurador
+Comment[sv]=En brytpunkt har påträffats av avlusaren
+Comment[uk]=Інструмент зневаджування пройшов позицію точки зупину
 
 [Event/WatchpointHit]
 Contexts=debugger
 Action=Popup
 Name=Watchpoint Hit
+Name[pt]=Ponto de Vigia Atingido
+Name[pt_BR]=Ponto de Vigia Atingido
+Name[sv]=Bevakningspunkt påträffad
+Name[uk]=Проходження точки спостереження
 Comment=A Watchpoint has been hit by the debugger
+Comment[pt]=Foi atingido um ponto de vigia pelo depurador
+Comment[pt_BR]=Foi atingido um ponto de vigia pelo depurador
+Comment[sv]=En bevakningspunkt har påträffats av avlusaren
+Comment[uk]=Інструмент зневаджування пройшов позицію точки спостерження
