@@ -43,30 +43,28 @@ Breakpoint::Breakpoint(BreakpointModel *model, BreakpointKind kind)
 }
 
 Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
-: m_model(model), enabled_(true),
-  deleted_(false),
-  m_line(-1),
-  m_smartCursor(0), m_ignoreHits(0)
+: m_model(model), deleted_(false), m_line(-1), m_smartCursor(0)
 {
-    Q_ASSERT(0);
-    /* TODO NIKO
     QString kindString = config.readEntry("kind", "");
     int i;
-    for (i = 0; i < LastBreakpointKind; ++i)
+    for (i = 0; i < LastBreakpointKind; ++i) {
         if (string_kinds[i] == kindString)
         {
             kind_ = (BreakpointKind)i;
             break;
         }
+    }
     //FIXME: maybe, should silently ignore this breakpoint.
     Q_ASSERT(i < LastBreakpointKind);
     enabled_ = config.readEntry("enabled", false);
-
-    QString location = config.readEntry("location", "");
-    QString condition = config.readEntry("condition", "");
-
-    setData(QVector<QVariant>() << QString() << QString() << QString() << location << condition);
-    */
+    if (kind_ == CodeBreakpoint) {
+        setLocation(config.readEntry("url", KUrl()), config.readEntry("line", -1));
+    } else {
+        setExpression(config.readEntry("expression", ""));
+    }
+    setCondition(config.readEntry("condition", ""));
+    setIgnoreHits(config.readEntry("ignoreHits", 0));
+    
 }
 
 BreakpointModel *Breakpoint::breakpointModel()
@@ -218,7 +216,9 @@ void Breakpoint::save(KConfigGroup& config)
     config.writeEntry("enabled", enabled_);
     config.writeEntry("url", m_url);
     config.writeEntry("line", m_line);
+    config.writeEntry("expression", m_expression);
     config.writeEntry("condition", m_condition);
+    config.writeEntry("ignoreHits", m_ignoreHits);
 }
 
 Breakpoint::BreakpointKind Breakpoint::kind() const

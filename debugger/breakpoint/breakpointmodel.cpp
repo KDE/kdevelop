@@ -35,6 +35,7 @@
 #include "../interfaces/idocument.h"
 #include "breakpoint.h"
 #include <KTextEditor/SmartCursorNotifier>
+#include <KConfigGroup>
 
 
 using namespace KDevelop;
@@ -66,6 +67,7 @@ BreakpointModel::BreakpointModel(QObject* parent)
     connect (KDevelop::ICore::self()->documentController(),
                 SIGNAL(documentSaved(KDevelop::IDocument*)),
                 SLOT(documentSaved(KDevelop::IDocument*)));
+    load();
 }
 
 BreakpointModel::~BreakpointModel() {
@@ -394,37 +396,25 @@ void BreakpointModel::cursorDeleted(KTextEditor::SmartCursor* cursor)
 
 void BreakpointModel::load()
 {
-    /* TODO NIKO
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
-    QVector<Breakpoint*> loaded;
-    for (int i = 0; i < count; ++i)
-    {
-        Breakpoint *b = new Breakpoint(
-            model(), this, controller_,
-            breakpoints.group(QString::number(i)));
-        loaded.push_back(b);
+    for (int i = 0; i < count; ++i) {
+        Breakpoint *b = new Breakpoint(this, breakpoints.group(QString::number(i)));
+        m_breakpoints << b;
     }
-
-    foreach (Breakpoint *b, loaded)
-        appendChild(b, true);
-    */
+    reset();
 }
 
 void BreakpointModel::save()
 {
-    /* TODO NIKO
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
-    // Note that the last item is always "click to create" item, which
-    // we don't want to save.
-    breakpoints.writeEntry("number", childItems.size()-1);
-    for (int i = 0; i < childItems.size()-1; ++i)
-    {
-        Breakpoint *b = dynamic_cast<Breakpoint *>(child(i));
+    breakpoints.writeEntry("number", m_breakpoints.count());
+    int i = 0;
+    foreach (Breakpoint *b, m_breakpoints) {
         KConfigGroup g = breakpoints.group(QString::number(i));
         b->save(g);
+        ++i;
     }
-    */
 }
 
 QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
