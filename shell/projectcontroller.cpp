@@ -151,6 +151,21 @@ public:
         m_cfgDlgs[proj]->exec();
         m_configuringProject = 0;
     }
+    void saveListOfOpenedProjects()
+    {
+        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
+        KConfigGroup group = config->group( "General Options" );
+    
+        KUrl::List openProjects;
+    
+        foreach( IProject* project, m_projects ) {
+            openProjects.append(project->projectFileUrl());
+        }
+    
+        group.writeEntry( "Open Projects", openProjects.toStringList() );
+        group.sync();
+    }
+
     QStringList findPluginsForProject( IProject* project )
     {
         QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
@@ -578,20 +593,8 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
-    {
-        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
-        KConfigGroup group = config->group( "General Options" );
+    d->saveListOfOpenedProjects();
     
-        KUrl::List openProjects;
-    
-        foreach( IProject* project, d->m_projects ) {
-            openProjects.append(project->projectFileUrl());
-        }
-    
-        group.writeEntry( "Open Projects", openProjects.toStringList() );
-        group.sync();
-    }
-
 //     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
 //     QAction * action;
 
@@ -701,6 +704,7 @@ void ProjectController::closeProject(IProject* proj)
     {
         initializePluginCleanup(proj);
     }
+    d->saveListOfOpenedProjects();
     emit projectClosed(proj);
     return;
 }
