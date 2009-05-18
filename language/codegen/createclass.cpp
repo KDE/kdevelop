@@ -26,6 +26,7 @@
 #include <KListWidget>
 #include <KLineEdit>
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 #include "ui_newclass.h"
 #include "ui_licensechooser.h"
@@ -34,6 +35,7 @@
 #include "overridespage.h"
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
+#include <kcomponentdata.h>
 
 using namespace KDevelop;
 
@@ -268,7 +270,7 @@ LicensePage::LicensePage(QWizard* parent)
     d->license->setupUi(this);
 
     connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
-    connect(d->license->saveLicense, SIGNAL(stateChanged(int)), d->license->licenseName, SLOT(setEnabled(bool)));
+    connect(d->license->saveLicense, SIGNAL(clicked(bool)), d->license->licenseName, SLOT(setEnabled(bool)));
 
     // Initialize the licences the first time a class is created
     if(!d->initialized)
@@ -294,10 +296,9 @@ LicensePage::LicensePage(QWizard* parent)
 
 LicensePage::~LicensePage(void)
 {
-    unsigned int licenseNumber = d->availableLicenses.size() + 1;
-    
-    if(d->license->saveLicense->isChecked())
-        saveLicense();
+    //If the previous selection was saved, then the available license size changed
+    unsigned int licenseNumber = d->availableLicenses.size() + 
+        d->license->saveLicense->isChecked() ? 0 : 1;
     
     //free all loaded licences
     for(unsigned int i = 0; i < licenseNumber; ++i )
@@ -396,7 +397,32 @@ void LicensePage::licenseComboChanged(int selectedLicense)
 bool LicensePage::saveLicense(void)
 {
     kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
-    return false;
+    
+    LicensePagePrivate::LicenseInfo newLicense;
+    newLicense.name = d->license->licenseName->text();
+    
+    QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/", KGlobal::activeComponent());
+    newLicense.path = localDataDir + newLicense.name;
+    QFile newFile(newLicense.path);
+    
+    if(newFile.exists())
+    {
+        KMessageBox::sorry(this, i18n("The specified file already exists, please provide a different name."));
+        return false;
+    }
+    
+    newFile.open(QIODevice::WriteOnly);
+    qint64 result = newFile.write(d->license->licenseTextEdit->toPlainText().toUtf8());
+    newFile.close();
+    
+    if(result == -1)
+    {
+        KMessageBox::sorry(this, i18n("There was an error writing the file."));
+        return false;
+    }
+    
+    d->availableLicenses.push_back(newLicense);
+    return true;
 }
 
 class KDevelop::OutputPagePrivate
