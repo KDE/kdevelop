@@ -36,7 +36,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT ThreadItem : public TreeItem
         StackModel* stackModel();
         FramesModel* framesModel();
         
-        void setInformation(int id, const QString& name);
+        void setInformation(int threadNumber, const QString& functionName);
     private:
         int mId;
         FramesModel* mFramesModel;
