@@ -505,18 +505,21 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
         emit parseJobFinished(parseJob);
 
         {
-            QMutexLocker lock(&d->m_mutex);
-
-            d->m_parseJobs.remove(parseJob->document().str());
-
-            d->m_jobProgress.remove(parseJob);
-
-            parseJob->setBackgroundParser(0);
-
+            {
+                QMutexLocker lock(&d->m_mutex);
+    
+                d->m_parseJobs.remove(parseJob->document().str());
+    
+                d->m_jobProgress.remove(parseJob);
+    
+                parseJob->setBackgroundParser(0);
+    
+                ++d->m_doneParseJobs;
+                updateProgressBar();
+            }
+            //Unlock the mutex before deleting the parse-job, because the parse-job
+            //has a virtual destructor that may lock the duchain, leading to deadlocks
             delete parseJob;
-
-            ++d->m_doneParseJobs;
-            updateProgressBar();
         }
 
         //Continue creating more parse-jobs
