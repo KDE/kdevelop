@@ -34,7 +34,7 @@ namespace GDBDebugger
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : KDialog(parent)
 {
-    setCaption(i18n("Attatch to a process"));
+    setCaption(i18n("Attach to a process"));
     m_processList = new KSysGuardProcessList(this);
     setMainWidget(m_processList);
     connect(m_processList->treeView()->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
