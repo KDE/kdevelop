@@ -91,9 +91,9 @@ struct InsertedHandler : public Handler
                 // anything.  Just record id.
                 controller->m_ids[breakpoint] = r["wpt"]["number"].toInt();
             } else if (r.hasField("hw-rwpt")) {
-                // For watchpoint creation, GDB basically does not say
-                // anything.  Just record id.
                 controller->m_ids[breakpoint] = r["hw-rwpt"]["number"].toInt();
+            } else if (r.hasField("hw-awpt")) {
+                controller->m_ids[breakpoint] = r["hw-awpt"]["number"].toInt();
             }
         }
         controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
@@ -290,7 +290,7 @@ void BreakpointController::handleBreakpointList(const GDBMI::ResultRecord &r)
             } else if (type == "read watchpoint") {
                 b = breakpointModel()->addReadWatchpoint();
             } else if (type == "acc watchpoint") {
-                //TODO KDevelop::Breakpoint::AccessBreakpoint;
+                b = breakpointModel()->addAccessWatchpoint();
             } else {
                 b = breakpointModel()->addCodeBreakpoint();
             }
@@ -364,18 +364,25 @@ void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
         update the breakpoint table and notice the new one.  */
 
     int id = 0;
-    QString msg;
     if (reason == "breakpoint-hit") {
         id = r["bkptno"].literal().toInt();
     } else if (reason == "watchpoint-trigger") {
         id = r["wpt"]["number"].literal().toInt();
-        msg = i18n("<br>Old value: %1<br>New value: %2", r["value"]["old"].literal(), r["value"]["new"].literal());
     } else if (reason == "read-watchpoint-trigger") {
         id = r["hw-rwpt"]["number"].literal().toInt();
     } else if (reason == "access-watchpoint-trigger") {
-        id = r["wpt"]["number"].literal().toInt();
+        id = r["hw-awpt"]["number"].literal().toInt();
     }
     if (id) {
+        QString msg;
+        if (r.hasField("value")) {
+            if (r["value"].hasField("old")) {
+                msg += i18n("<br>Old value: %1", r["value"]["old"].literal());
+            }
+            if (r["value"].hasField("new")) {
+                msg += i18n("<br>New value: %1", r["value"]["new"].literal());
+            }
+        }
         KDevelop::Breakpoint* b = m_ids.key(id);
         if (b) {
             hit(b, msg);
