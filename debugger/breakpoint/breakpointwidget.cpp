@@ -109,6 +109,9 @@ void BreakpointWidget::setupPopupMenu()
     newBreakpoint->addAction(
         i18nc("Data read breakpoint", "Data read"),
         this, SLOT(slotAddBlankReadWatchpoint()));
+    newBreakpoint->addAction(
+        i18nc("Data access breakpoint", "Data access"),
+        this, SLOT(slotAddBlankAccessWatchpoint()));
 
     #if 0
     m_breakpointShow = m_ctxMenu->addAction( i18n( "Show text" ) );
@@ -263,6 +266,13 @@ void BreakpointWidget::slotAddBlankReadWatchpoint()
 {
     edit(m_debugController->breakpointModel()->addReadWatchpoint());
 }
+
+
+void KDevelop::BreakpointWidget::slotAddBlankAccessWatchpoint()
+{
+    edit(m_debugController->breakpointModel()->addAccessWatchpoint());
+}
+
 
 void BreakpointWidget::slotRemoveBreakpoint()
 {

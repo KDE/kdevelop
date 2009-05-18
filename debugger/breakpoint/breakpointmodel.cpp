@@ -476,6 +476,23 @@ Breakpoint* BreakpointModel::addReadWatchpoint(const QString& expression)
     return n;
 }
 
+Breakpoint* BreakpointModel::addAccessWatchpoint()
+{
+    beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());
+    Breakpoint* n = new Breakpoint(this, Breakpoint::AccessBreakpoint);
+    m_breakpoints << n;
+    endInsertRows();
+    return n;
+}
+
+
+Breakpoint* BreakpointModel::addAccessWatchpoint(const QString& expression)
+{
+    Breakpoint* n = addAccessWatchpoint();
+    n->setExpression(expression);
+    return n;
+}
+
 Breakpoint* BreakpointModel::breakpoint(const KUrl& url, int line) {
     foreach (Breakpoint *b, m_breakpoints) {
         if (b->url() == url && b->line() == line) {
