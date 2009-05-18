@@ -121,10 +121,10 @@ void BreakpointDetails::setItem(Breakpoint *b)
     if (b->errors().isEmpty()) {
         switch (b->state()) {
             case Breakpoint::PendingState:
-                status_->setText(i18n("Breakpoint is %1",QString("<a href=\"pending\">pending</a>")));
+                status_->setText(i18n("Breakpoint is <a href=\"pending\">pending</a>"));
                 break;
             case Breakpoint::DirtyState:
-                status_->setText(i18n("Breakpoint is %1",QString("<a href=\"dirty\">dirty</a>")));
+                status_->setText(i18n("Breakpoint is <a href=\"dirty\">dirty</a>"));
                 break;
             case Breakpoint::CleanState:
                 status_->setText("Breakpoint is active");
