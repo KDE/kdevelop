@@ -305,6 +305,8 @@ CppTools::CustomIncludePathsSettings CppTools::CustomIncludePathsSettings::findA
 
 QString CppTools::CustomIncludePathsSettings::storageFile() const
 {
+  if(storagePath.isEmpty())
+    return QString();
   QDir dir(storagePath);
   QString ret = dir.filePath(".kdev_include_paths");
   return ret;
