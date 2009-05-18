@@ -31,7 +31,7 @@ if( NOT KDEVELOP_INCLUDE_DIR )
 	${KDE4_INCLUDE_DIR}
     )
     if(_kdevIncDir)
-        set(KDEVELOP_INCLUDE_DIR ${_platformIncDir}/kdevelop)
+        set(KDEVELOP_INCLUDE_DIR ${_kdevIncDir}/kdevelop)
         set(KDEVELOP_INCLUDE_DIR ${KDEVELOP_INCLUDE_DIR} CACHE PATH "kdevelop include directory containing the various platform modules")
     endif(_kdevIncDir)
 else( NOT KDEVELOP_INCLUDE_DIR )
