@@ -18,8 +18,14 @@
 
 #include "createclass.h"
 
+#include <cstring>      //memset
+
+#include <QDirIterator>
+#include <QFile>
+
 #include <KListWidget>
 #include <KLineEdit>
+#include <kdebug.h>
 
 #include "ui_newclass.h"
 #include "ui_licensechooser.h"
@@ -27,6 +33,7 @@
 
 #include "overridespage.h"
 #include <kfiledialog.h>
+#include <kstandarddirs.h>
 
 using namespace KDevelop;
 
@@ -219,29 +226,36 @@ QStringList ClassIdentifierPage::inheritanceList() const
     return ret;
 }
 
-class KDevelop::LicensePagePrivate
+struct KDevelop::LicensePagePrivate
 {
-public:
+    struct LicenseInfo
+    {
+        QString name;
+        QString path;
+    };
+    typedef QVector<LicenseInfo> LicenseList;
+
+
     LicensePagePrivate()
         : license(0)
     {
     }
 
     Ui::LicenseChooserDialog* license;
+    //Array of pointers to the strings conaining the actual licenses loaded on demand
+    QString ** licenseContents;
+    
+    // Static Members
+    static int previousSelection;
+    static LicenseList availableLicenses;
+    static bool initialized;
 };
 
-static const char* s_lgpl =
-"   This library is free software; you can redistribute it and/or\n"
-"   modify it under the terms of the GNU Library General Public\n"
-"   License version 2 as published by the Free Software Foundation.\n\n"
-"   This library is distributed in the hope that it will be useful,\n"
-"   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-"   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-"   Library General Public License for more details.\n\n"
-"   You should have received a copy of the GNU Library General Public License\n"
-"   along with this library; see the file COPYING.LIB.  If not, write to\n"
-"   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,\n"
-"   Boston, MA 02110-1301, USA.\n";
+// Static members 
+
+int LicensePagePrivate::previousSelection = 0;
+bool LicensePagePrivate::initialized = false;
+LicensePagePrivate::LicenseList LicensePagePrivate::availableLicenses;
 
 LicensePage::LicensePage(QWizard* parent)
     : QWizardPage(parent)
@@ -254,21 +268,135 @@ LicensePage::LicensePage(QWizard* parent)
     d->license->setupUi(this);
 
     connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
+    connect(d->license->saveLicense, SIGNAL(stateChanged(int)), d->license->licenseName, SLOT(setEnabled(bool)));
 
-    d->license->licenseTextEdit->setText(s_lgpl);
+    // Initialize the licences the first time a class is created
+    if(!d->initialized)
+        initializeLicences();
+    
+    // Initialize the read license array
+    d->licenseContents = new QString*[d->availableLicenses.size() + 1];
+    std::memset(d->licenseContents, 0, sizeof(QString*) * (d->availableLicenses.size() + 1) );
+    
+    //Populate combobox with all license names
+    foreach(LicensePagePrivate::LicenseInfo newLicense, d->availableLicenses)
+    {
+        d->license->licenseComboBox->addItem(newLicense.name);
+    }
+    //Finally add the option other for user specified licenses
+    d->license->licenseComboBox->addItem("Other");
+    
+    
+    licenseComboChanged(d->previousSelection);
 
     registerField("license", d->license->licenseTextEdit);
 }
 
-LicensePage::~LicensePage()
+LicensePage::~LicensePage(void)
 {
+    unsigned int licenseNumber = d->availableLicenses.size() + 1;
+    
+    if(d->license->saveLicense->isChecked())
+        saveLicense();
+    
+    //free all loaded licences
+    for(unsigned int i = 0; i < licenseNumber; ++i )
+    {
+        delete d->licenseContents[i];
+    }
+    delete[] d->licenseContents;
+    
     delete d;
 }
 
-void LicensePage::licenseComboChanged(int license)
+// If the user entered a custom license that they want to save, save it
+bool LicensePage::validatePage(void)
 {
-    //TODO
-    Q_UNUSED(license);
+    if(d->previousSelection == d->availableLicenses.size() && 
+        d->license->saveLicense->isChecked())
+        return saveLicense();
+    else
+        return true;
+}
+
+//! Read all the license files in the global and local config dirs
+void LicensePage::initializeLicences(void)
+{
+    kDebug() << "Reading in licenses for the first time.";
+    d->initialized = true;
+    KStandardDirs * dirs = KGlobal::dirs();
+    QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
+    
+    //Iterate through the possible directories that contain licences, and load their names
+    foreach(QString currentDir, licenseDirs)
+    {
+        QDirIterator it(currentDir, QDir::Files | QDir::Readable);
+        while(it.hasNext())
+        {
+            LicensePagePrivate::LicenseInfo newLicense;
+            newLicense.path = it.next();
+            newLicense.name = it.fileName();
+            
+            kDebug() << "Found License: " << it.fileName();
+            
+            d->availableLicenses.push_back(newLicense);
+        }
+    }
+}
+
+// Read a license index, if it is not loaded, open it from the file
+QString & LicensePage::readLicense(int licenseIndex)
+{
+    //If the license is not loaded into memory, read it in
+    if(!d->licenseContents[licenseIndex])
+    {
+        QString licenseText;
+        //If we are dealing with the last option "other" just return a new empty string
+        if(licenseIndex != d->availableLicenses.size())
+        {
+            kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
+            QFile newLicense(d->availableLicenses[licenseIndex].path);
+            
+            if(newLicense.open(QIODevice::ReadOnly))
+            {
+                licenseText = newLicense.readAll();
+                newLicense.close();
+            }
+            else
+                licenseText = "Error, could not open license file.\n Was it deleted since the program started?";
+        }
+        
+        d->licenseContents[licenseIndex] = new QString(licenseText);
+    }
+    
+    return *d->licenseContents[licenseIndex];
+}
+
+// ---Slots---
+
+void LicensePage::licenseComboChanged(int selectedLicense)
+{
+    //If the last slot is selected enable the save license combobox
+    if(selectedLicense == d->availableLicenses.size())
+    {
+        d->license->licenseTextEdit->clear();
+        d->license->licenseTextEdit->setReadOnly(false);
+        d->license->saveLicense->setEnabled(true);
+    }
+    else
+    {
+        d->license->saveLicense->setEnabled(false);
+        d->license->licenseTextEdit->setReadOnly(true);
+    }
+    
+    d->license->licenseTextEdit->setText(readLicense(selectedLicense));    
+    d->previousSelection = selectedLicense;
+}
+
+bool LicensePage::saveLicense(void)
+{
+    kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
+    return false;
 }
 
 class KDevelop::OutputPagePrivate

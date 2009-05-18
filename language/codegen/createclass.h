@@ -92,13 +92,21 @@ class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWizardPage
 
 public:
     LicensePage(QWizard* parent);
-    virtual ~LicensePage();
+    virtual ~LicensePage(void);
+    
+    bool validatePage(void);
 
 public Q_SLOTS:
     virtual void licenseComboChanged(int license);
 
 private:
+    // data
     class LicensePagePrivate* const d;
+    
+    // methods
+    void        initializeLicences(void);
+    QString &   readLicense(int licenseIndex);
+    bool        saveLicense(void);
 };
 
 /**

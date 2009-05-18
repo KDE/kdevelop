@@ -315,3 +315,8 @@ install(FILES
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
 )
 
+install(FILES
+    codegen/licenses/GPL\ v2
+    DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
+)
+

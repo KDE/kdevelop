@@ -24,7 +24,7 @@
 #include <ksharedptr.h>
 
 namespace KDevelop {
-    struct KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public KShared {
+    struct KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public QSharedData {
         DocumentChange(const IndexedString& document, const SimpleRange& range, const QString& oldText, const QString& newText) : m_document(document), m_range(range), m_oldText(oldText), m_newText(newText), m_ignoreOldText(false) {
         }
         
