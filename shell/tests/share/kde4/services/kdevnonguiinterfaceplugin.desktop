@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin is purely for unit-test
+Comment[de]=Dieses Modul dient nur Unit-Tests.
 Comment[el]=Αυτό το πρόσθετο προορίζεται για τον έλεγχο μονάδας
 Comment[es]=Este complemento es sólo para unidades de prueba
 Comment[fr]=Ce module externe est purement pour unit-test

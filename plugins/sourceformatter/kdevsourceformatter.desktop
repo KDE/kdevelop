@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Icon=kdevelop
 Comment=This plugin allows to format files using different backends for each file type.
+Comment[de]=Mit diesem Modul können Dateien anhand ihres Dateityps formatiert werden.
 Comment[el]=Το πρόσθετο αυτό επιτρέπει τη διαμόρφωση αρχείων με χρήση διαφορετικών συστημάτων υποστήριξης για κάθε τύπο αρχείου.
 Comment[es]=Este complemento permite formatear archivos usando diferentes motores para cada tipo de archivo.
 Comment[fr]=Ce module extenre permet de formater des fichiers à l'aide de différents moteurs pour chaque type de fichier.
