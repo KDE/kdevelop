@@ -49,6 +49,7 @@
 #include <language/duchain/functiondeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
+#include <interfaces/iprojectcontroller.h>
 
 K_PLUGIN_FACTORY(KDevClassBrowserFactory, registerPlugin<ClassBrowserPlugin>(); )
 K_EXPORT_PLUGIN(KDevClassBrowserFactory(KAboutData("kdevclassbrowser","kdevclassbrowser",ki18n("Class Browser"), "0.1", ki18n("Browser for all known classes"), KAboutData::License_GPL)))
@@ -116,10 +117,12 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   if (decl)
   {
     if(decl->inSymbolTable()) {
-      QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
-      connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
-      findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
+      if(ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl())) {
+        QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
+        connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
+        findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
+      }
   
       QAction* openDec = new QAction(i18n("Show &Declaration"), this);
       connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
