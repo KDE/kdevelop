@@ -51,9 +51,6 @@
      <property name="enabled">
       <bool>false</bool>
      </property>
-     <property name="contextMenuEnabled">
-      <bool>false</bool>
-     </property>
      <property name="urlDropsEnabled">
       <bool>false</bool>
      </property>

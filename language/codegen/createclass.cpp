@@ -18,8 +18,6 @@
 
 #include "createclass.h"
 
-#include <cstring>      //memset
-
 #include <QDirIterator>
 #include <QFile>
 
@@ -234,8 +232,9 @@ struct KDevelop::LicensePagePrivate
     {
         QString name;
         QString path;
+        QString contents;
     };
-    typedef QVector<LicenseInfo> LicenseList;
+    typedef QList<LicenseInfo> LicenseList;
 
 
     LicensePagePrivate()
@@ -244,20 +243,8 @@ struct KDevelop::LicensePagePrivate
     }
 
     Ui::LicenseChooserDialog* license;
-    //Array of pointers to the strings conaining the actual licenses loaded on demand
-    QString ** licenseContents;
-    
-    // Static Members
-    static int previousSelection;
-    static LicenseList availableLicenses;
-    static bool initialized;
+    LicenseList availableLicenses;
 };
-
-// Static members 
-
-int LicensePagePrivate::previousSelection = 0;
-bool LicensePagePrivate::initialized = false;
-LicensePagePrivate::LicenseList LicensePagePrivate::availableLicenses;
 
 LicensePage::LicensePage(QWizard* parent)
     : QWizardPage(parent)
@@ -272,48 +259,23 @@ LicensePage::LicensePage(QWizard* parent)
     connect(d->license->licenseComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(licenseComboChanged(int)));
     connect(d->license->saveLicense, SIGNAL(clicked(bool)), d->license->licenseName, SLOT(setEnabled(bool)));
 
-    // Initialize the licences the first time a class is created
-    if(!d->initialized)
-        initializeLicences();
+    // Read all the available licenses from the standard dirs
+    initializeLicences();
     
-    // Initialize the read license array
-    d->licenseContents = new QString*[d->availableLicenses.size() + 1];
-    std::memset(d->licenseContents, 0, sizeof(QString*) * (d->availableLicenses.size() + 1) );
-    
-    //Populate combobox with all license names
-    foreach(LicensePagePrivate::LicenseInfo newLicense, d->availableLicenses)
-    {
-        d->license->licenseComboBox->addItem(newLicense.name);
-    }
-    //Finally add the option other for user specified licenses
-    d->license->licenseComboBox->addItem("Other");
-    
-    
-    licenseComboChanged(d->previousSelection);
+    //licenseComboChanged(d->previousSelection);
 
     registerField("license", d->license->licenseTextEdit);
 }
 
 LicensePage::~LicensePage(void)
 {
-    //If the previous selection was saved, then the available license size changed
-    unsigned int licenseNumber = d->availableLicenses.size() + 
-        d->license->saveLicense->isChecked() ? 0 : 1;
-    
-    //free all loaded licences
-    for(unsigned int i = 0; i < licenseNumber; ++i )
-    {
-        delete d->licenseContents[i];
-    }
-    delete[] d->licenseContents;
-    
     delete d;
 }
 
 // If the user entered a custom license that they want to save, save it
 bool LicensePage::validatePage(void)
 {
-    if(d->previousSelection == d->availableLicenses.size() && 
+    if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) && 
         d->license->saveLicense->isChecked())
         return saveLicense();
     else
@@ -323,8 +285,7 @@ bool LicensePage::validatePage(void)
 //! Read all the license files in the global and local config dirs
 void LicensePage::initializeLicences(void)
 {
-    kDebug() << "Reading in licenses for the first time.";
-    d->initialized = true;
+    kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
     QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
     
@@ -338,22 +299,28 @@ void LicensePage::initializeLicences(void)
             newLicense.path = it.next();
             newLicense.name = it.fileName();
             
-            kDebug() << "Found License: " << it.fileName();
+            kDebug() << "Found License: " << newLicense.name;
             
             d->availableLicenses.push_back(newLicense);
+            d->license->licenseComboBox->addItem(newLicense.name);
         }
     }
+    
+    //Finally add the option other for user specified licenses
+    LicensePagePrivate::LicenseInfo license;
+    d->availableLicenses.push_back(license);
+    d->license->licenseComboBox->addItem("Other");
 }
 
 // Read a license index, if it is not loaded, open it from the file
 QString & LicensePage::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
-    if(!d->licenseContents[licenseIndex])
+    if(d->availableLicenses[licenseIndex].contents.isNull())
     {
-        QString licenseText;
+        QString licenseText("");
         //If we are dealing with the last option "other" just return a new empty string
-        if(licenseIndex != d->availableLicenses.size())
+        if(licenseIndex != (d->availableLicenses.size() - 1))
         {
             kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
             QFile newLicense(d->availableLicenses[licenseIndex].path);
@@ -364,13 +331,13 @@ QString & LicensePage::readLicense(int licenseIndex)
                 newLicense.close();
             }
             else
-                licenseText = "Error, could not open license file.\n Was it deleted since the program started?";
+                licenseText = "Error, could not open license file.\n Was it deleted?";
         }
         
-        d->licenseContents[licenseIndex] = new QString(licenseText);
+        d->availableLicenses[licenseIndex].contents = licenseText;
     }
     
-    return *d->licenseContents[licenseIndex];
+    return d->availableLicenses[licenseIndex].contents;
 }
 
 // ---Slots---
@@ -378,7 +345,7 @@ QString & LicensePage::readLicense(int licenseIndex)
 void LicensePage::licenseComboChanged(int selectedLicense)
 {
     //If the last slot is selected enable the save license combobox
-    if(selectedLicense == d->availableLicenses.size())
+    if(selectedLicense == (d->availableLicenses.size() - 1))
     {
         d->license->licenseTextEdit->clear();
         d->license->licenseTextEdit->setReadOnly(false);
@@ -390,24 +357,19 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->setReadOnly(true);
     }
     
-    d->license->licenseTextEdit->setText(readLicense(selectedLicense));    
-    d->previousSelection = selectedLicense;
+    d->license->licenseTextEdit->setText(readLicense(selectedLicense));
 }
 
 bool LicensePage::saveLicense(void)
 {
     kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
     
-    LicensePagePrivate::LicenseInfo newLicense;
-    newLicense.name = d->license->licenseName->text();
-    
     QString localDataDir = KStandardDirs::locateLocal("data", "kdevcodegen/licenses/", KGlobal::activeComponent());
-    newLicense.path = localDataDir + newLicense.name;
-    QFile newFile(newLicense.path);
+    QFile newFile(localDataDir + d->license->licenseName->text());
     
     if(newFile.exists())
     {
-        KMessageBox::sorry(this, i18n("The specified file already exists, please provide a different name."));
+        KMessageBox::sorry(this, i18n("The specified license already exists. Please provide a different name."));
         return false;
     }
     
@@ -420,8 +382,7 @@ bool LicensePage::saveLicense(void)
         KMessageBox::sorry(this, i18n("There was an error writing the file."));
         return false;
     }
-    
-    d->availableLicenses.push_back(newLicense);
+
     return true;
 }
 
