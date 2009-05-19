@@ -61,6 +61,8 @@
 #include <dumptree.h>
 #include <KDialog>
 #include <QListWidget>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iselectioncontroller.h>
 
 Q_DECLARE_METATYPE(ProjectBaseItem*)
 
@@ -156,6 +158,20 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
     
     if(ff)
       u=ff->url();
+  }else{
+    ///@todo Put this folder-picking logic into some shared place
+    KDevelop::Context* sel = ICore::self()->selectionController()->currentSelection();
+    KDevelop::FileContext* fc = dynamic_cast<FileContext*>(sel);
+    KDevelop::ProjectItemContext* pc = dynamic_cast<ProjectItemContext*>(sel);
+    if(fc && !fc->urls().isEmpty())
+      u = fc->urls()[0].upUrl();
+    else if(pc && !pc->items().isEmpty() && pc->items()[0]->folder())
+      u = pc->items()[0]->folder()->url();
+    else if(ICore::self()->documentController()->activeDocument())
+      u = ICore::self()->documentController()->activeDocument()->url().upUrl();
+    else if(!ICore::self()->projectController()->projects().isEmpty())
+      u = ICore::self()->projectController()->projects()[0]->folder();
+      
   }
   
   CppNewClass newClassWizard(qApp->activeWindow(), u);
