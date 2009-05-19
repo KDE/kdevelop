@@ -2,6 +2,7 @@
 [General]
 Name=Qt4 CMake Gui application
 Name[ca]=Aplicació IGU Qt4 CMake
+Name[de]=Qt-4/CMake-GUI-Anwendung
 Name[es]=Aplicación de interfaz gráfica CMake para Qt4
 Name[fr]=Application avec interface graphique CMake pour Qt4
 Name[pt]=Aplicação gráfica com CMake para Qt4
@@ -13,6 +14,7 @@ Name[zh_TW]=Qt4 CMake 使用者介面應用程式
 Category=C++/Qt (cmake)
 Comment=Generate a CMake/Qt4 based GUI application (crossplatform compatible)
 Comment[ca]=Genera una aplicació basada en CMake/Qt4 (multi plataforma)
+Comment[de]=Erstellt eine auf CMake und der Qt-4-GUI basierende Anwendung (Plattformunabhängig)
 Comment[es]=Genera una aplicación con interfaz gráfica basada en CMake/Qt4 (compatible multiplataforma)
 Comment[fr]=Générer une application avec interface graphique utilisant CMake/Qt4 (compatible multi-plateforme)
 Comment[pt]=Gera uma aplicação gráfica baseada no QMake/Qt4 (compatível com várias plataformas)

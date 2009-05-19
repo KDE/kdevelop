@@ -56,6 +56,7 @@ Name[zh_CN]=文档视图
 Name[zh_TW]=文件檢視
 GenericName=Document Tool
 GenericName[ca]=Eina de document
+GenericName[de]=Dokument-Werkzeug
 GenericName[es]=Herramienta de documentación
 GenericName[fr]=Outil document
 GenericName[ga]=Uirlis Cháipéise
