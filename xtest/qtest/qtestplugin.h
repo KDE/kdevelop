@@ -68,7 +68,6 @@ private:
     QTestOutputDelegate* m_delegate;
     KDevelop::IProject* m_proj; // scratch variable
     Veritas::TestToolViewFactory* m_toolFactory;
-    KAction* m_newQTestAction;
 };
 
 #endif // QTEST_QTESTPLUGIN_H

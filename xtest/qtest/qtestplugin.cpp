@@ -78,9 +78,6 @@ QTestPlugin::QTestPlugin(QObject* parent, const QVariantList&)
     m_toolFactory = new TestToolViewFactory(this);
     core()->uiController()->addToolView(name(), m_toolFactory);
     setXMLFile("kdevqtest.rc");
-    m_newQTestAction = actionCollection()->addAction("create_qtest");
-    m_newQTestAction->setText(i18n("Create &QTest"));
-    connect(m_newQTestAction, SIGNAL(triggered()), this, SLOT(showNewTestWizard()));
 }
 
 void QTestPlugin::unload()
@@ -272,7 +269,6 @@ ContextMenuExtension QTestPlugin::contextMenuExtension(Context* context)
     m_proj = bl[0]->project();
     m_dir = bl[0]->folder();
 
-    cm.addAction(ContextMenuExtension::FileGroup, m_newQTestAction);
     return cm;
 }
 
