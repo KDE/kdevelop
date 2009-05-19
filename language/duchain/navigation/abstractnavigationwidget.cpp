@@ -193,6 +193,13 @@ void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
   QWidget::keyPressEvent(event);
 }
 
+void AbstractNavigationWidget::executeContextAction(QString action) {
+  DUChainReadLocker lock( DUChain::lock() );
+  setContext(m_context->executeLink(action));
+  Q_ASSERT(m_context);
+  update();
+}
+
 void AbstractNavigationWidget::next() {
   DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );

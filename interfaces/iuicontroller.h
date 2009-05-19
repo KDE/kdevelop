@@ -79,6 +79,17 @@ public:
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory) = 0;
     virtual void removeToolView(IToolViewFactory *factory) = 0;
+    
+    enum FindFlags {
+        None = 0,
+        Create = 1, ///The tool-view is created if it doesn't exist in the current area yet
+        Raise = 2,  ///The tool-view is raised if it was found/created
+        CreateAndRaise = Create | Raise ///The tool view is created and raised
+    };
+    
+    /**  Makes sure that this tool-view exists in the current area, raises it, and returns the contained widget
+       * Returns zero on failure */
+    virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags = CreateAndRaise) = 0;
 
     /** @return active mainwindow or 0 if no such mainwindow is active.*/
     virtual KParts::MainWindow *activeMainWindow() = 0;

@@ -62,7 +62,9 @@ public:
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory);
     virtual void removeToolView(IToolViewFactory *factory);
-
+    
+    virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags);
+    
     void addNewToolView(MainWindow *mw);
 
     void initialize();

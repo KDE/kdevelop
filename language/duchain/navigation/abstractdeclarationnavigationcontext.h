@@ -35,6 +35,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     virtual QString html(bool shorten = false);
 
     DeclarationPointer declaration() const;
+    
+    ///Execute an action. For example "show_uses" shows the uses of the declaration.
+    ///Returns the context pointer for the new state.
+    virtual NavigationContextPointer executeKeyAction(QString key);
 
   protected:
     DeclarationPointer m_declaration;
@@ -60,8 +64,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
     virtual void eventuallyMakeTypeLinks( KDevelop::AbstractType::Ptr type );
-
-    virtual NavigationContextPointer executeKeyAction(QString key);
 
     ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
     void createFullBackwardSearchLink(QString string);

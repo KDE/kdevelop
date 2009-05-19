@@ -120,6 +120,15 @@ void AbstractNavigationContext::clear() {
     m_linkLines.clear();
 }
 
+
+NavigationContextPointer AbstractNavigationContext::executeLink (QString link)
+{
+  if(!m_links.contains(link))
+    return NavigationContextPointer(this);
+
+  return execute(m_links[link]);
+}
+
 NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key) {
   Q_UNUSED(key);
   return NavigationContextPointer(this);

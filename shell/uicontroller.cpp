@@ -252,6 +252,35 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 }
 
 
+QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
+{
+    if(!d->areasRestored)
+        return 0;
+
+    QList< Sublime::View* > views = activeArea()->toolViews();
+    foreach(Sublime::View* view, views) {
+        Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
+        if(doc && doc->title() == name && view->widget()) {
+            if(flags & Raise)
+                view->requestRaise();
+            return view->widget();
+        }
+    }
+    
+    if(flags & Create)
+    {
+        if(!d->factoryDocuments.contains(factory))
+            d->factoryDocuments[factory] = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
+        
+        Sublime::ToolDocument *doc = d->factoryDocuments[factory];
+
+        addToolViewToArea(factory, doc, activeArea());
+        
+        if(flags & Raise)
+            findToolView(name, factory, Raise);
+    }
+}
+
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
     kDebug() ;

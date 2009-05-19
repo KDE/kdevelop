@@ -143,6 +143,8 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
 
 void ClassBrowserPlugin::findInClassBrowser()
 {
+  ICore::self()->uiController()->findToolView(i18n("Classes"), m_factory, KDevelop::IUiController::CreateAndRaise);
+  
   Q_ASSERT(qobject_cast<QAction*>(sender()));
 
   if ( m_activeClassTree == 0 )

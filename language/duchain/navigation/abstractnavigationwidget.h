@@ -71,6 +71,10 @@ namespace KDevelop {
       void embeddedWidgetDown();
       
       NavigationContextPointer context();
+
+      ///Execute an action within the current navigation context
+      ///"show_uses" shows the uses for a declaration context.
+      void executeContextAction(QString action);
       
     Q_SIGNALS:
       void sizeHintChanged();

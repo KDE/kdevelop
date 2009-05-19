@@ -93,6 +93,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     void setTopContext(TopDUContextPointer context);
 
     TopDUContextPointer topContext() const;
+
+    NavigationContextPointer executeLink(QString link);
     
   protected:
     
@@ -107,7 +109,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
       AbstractNavigationContext* context;
     };
     
-    
+    ///Override this to execute own key-actions using NavigationAction
+    virtual NavigationContextPointer executeKeyAction(QString key);
 
     ///Adds given the text to currentHtml()
     void addHtml(QString html);
@@ -120,9 +123,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 
     //Clears the computed html and links
     void clear();
-    
-    ///Override this to execute own key-actions using NavigationAction
-    virtual NavigationContextPointer executeKeyAction(QString key);
     
     NavigationContextPointer execute(NavigationAction& action);
 

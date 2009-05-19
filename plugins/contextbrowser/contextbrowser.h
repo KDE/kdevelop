@@ -64,6 +64,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
 
     void registerToolView(ContextBrowserView* view);
     void unRegisterToolView(ContextBrowserView* view);
+    
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
   Q_SIGNALS:
     void previousContextShortcut();
@@ -90,6 +92,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void textHintRequested(const KTextEditor::Cursor&, QString&);
 
     void hideTooTip();
+    void findUses();
     
   private:
     void switchUse(bool forward);

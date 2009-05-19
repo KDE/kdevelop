@@ -246,7 +246,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       }
     }
     
-    modifyHtml() += " ";
+    modifyHtml() += " "; //The action name _must_ stay "show_uses", since that is also used from outside
     makeLink(i18n("Show uses"), "show_uses", NavigationAction(m_declaration, NavigationAction::NavigateUses));
   }
   

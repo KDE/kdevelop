@@ -68,6 +68,10 @@ class ContextBrowserView : public QWidget {
 
         void setNavigationWidget(QWidget* widget);
         
+        QWidget* navigationWidget() {
+            return m_navigationWidget;
+        }
+        
     Q_SIGNALS:
         void startDelayedBrowsing(KTextEditor::View*);
         void stopDelayedBrowsing();

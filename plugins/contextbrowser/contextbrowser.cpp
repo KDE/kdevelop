@@ -40,6 +40,8 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/ducontext.h>
@@ -201,6 +203,51 @@ void ContextBrowserPlugin::mouseExitedRange( KTextEditor::SmartRange* /*range*/,
   clearMouseHover();
   m_updateViews << view;
   m_updateTimer->start(1); // triggers updateViews()
+}
+
+KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevelop::Context* context)
+{
+  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
+
+  KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+
+  if (!codeContext)
+      return menuExt;
+
+  DUChainReadLocker lock(DUChain::lock());
+  
+  if(!codeContext->declaration().data())
+    return menuExt;
+  
+  qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
+  
+  QAction* findUses = new QAction(i18n("Find Uses"), this);
+  connect(findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
+  findUses->setData(QVariant::fromValue(codeContext->declaration()));
+  menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, findUses);
+
+  return menuExt;
+}
+
+void ContextBrowserPlugin::findUses()
+{
+  QAction* action = qobject_cast<QAction*>(sender());
+  Q_ASSERT(action);
+  DUChainReadLocker lock(DUChain::lock());
+  
+  KDevelop::IndexedDeclaration decl = action->data().value<KDevelop::IndexedDeclaration>();
+  if(!decl.data())
+    return;
+  QWidget* widget = ICore::self()->uiController()->findToolView(i18n("Code Browser"), m_viewFactory, KDevelop::IUiController::CreateAndRaise);
+  if(!widget)
+    return;
+  ContextBrowserView* view = dynamic_cast<ContextBrowserView*>(widget);
+  Q_ASSERT(view);
+  view->allowLockedUpdate();
+  view->setDeclaration(decl.data(), decl.data()->topContext(), true);
+  KDevelop::AbstractNavigationWidget* navigationWidget = dynamic_cast<KDevelop::AbstractNavigationWidget*>(view->navigationWidget());
+  if(navigationWidget)
+    navigationWidget->executeContextAction("show_uses");
 }
 
 void ContextBrowserPlugin::textHintRequested(const KTextEditor::Cursor& cursor, QString&) {
