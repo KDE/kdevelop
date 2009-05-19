@@ -109,11 +109,11 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 	
 	//Remove right context
 	if(rightContext.startsWith("\n"))
-		output = output.mid(0, (leftContext + text).split("\n").length());
+		output = output.mid(0, (leftContext + text).split("\n").count());
 	
 	//Remove left context
 	if(leftContext.endsWith("\n"))
-		output = output.mid(leftContext.split("\n").length());
+		output = output.mid(leftContext.split("\n").count());
 	
 	return output.join("\n");
 }
