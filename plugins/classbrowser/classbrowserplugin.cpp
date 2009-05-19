@@ -111,24 +111,28 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
       return menuExt;
 
   DUChainReadLocker readLock(DUChain::lock());
-  DUChainBasePointer base(codeContext->declaration().data());
+  Declaration* decl(codeContext->declaration().data());
 
-  if (base)
+  if (decl)
   {
-    QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
-    connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
-    findInBrowser->setData(QVariant::fromValue(base));
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
+    if(decl->inSymbolTable()) {
+      QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
+      connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
+      findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
   
-    QAction* openDec = new QAction(i18n("Open &Declaration"), this);
-    connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
-    openDec->setData(QVariant::fromValue(base));
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDec);
+      QAction* openDec = new QAction(i18n("Show &Declaration"), this);
+      connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
+      openDec->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDec);
 
-    QAction* openDef = new QAction(i18n("Open De&finition"), this);
-    connect(openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
-    openDef->setData(QVariant::fromValue(base));
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDef);
+      if(FunctionDefinition::definition(decl)) {
+        QAction* openDef = new QAction(i18n("Show De&finition"), this);
+        connect(openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
+        openDef->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDef);
+      }
+    }
   }
 
   return menuExt;
