@@ -92,10 +92,11 @@ void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
 QString ReferenceType::toString() const
 {
   AbstractType::Ptr base = baseType();
+  QString baseString = (base ? base->toString() : "<notype>");
   if(base.cast<IntegralType>() || base.cast<StructureType>())
-    return AbstractType::toString(false) + (baseType() ? QString("%1&").arg(baseType()->toString()) : QString("<notype>"));
+    return AbstractType::toString(false) + QString("%1&").arg(baseString);
   else
-    return (baseType() ? QString("%1&").arg(baseType()->toString() + AbstractType::toString(true)) : QString("<notype>"));
+    return QString("%1&").arg(baseString + AbstractType::toString(true));
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
