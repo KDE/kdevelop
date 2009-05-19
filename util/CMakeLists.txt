@@ -36,6 +36,7 @@ install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DE
 ########### install files ###############
 
 install( FILES
+    ksharedobject.h
     focusedtreeview.h
     activetooltip.h
     processlinemaker.h

@@ -24,6 +24,7 @@
 #include <KDE/KSharedPtr>
 #include <ktexteditor/cursor.h>
 #include "interfacesexport.h"
+#include <util/ksharedobject.h>
 
 class KAction;
 
@@ -35,9 +36,11 @@ namespace KDevelop {
 
 ///Represents a single assistant action.
 ///Subclass it to create own actions
-class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KShared {
+class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KSharedObject {
     Q_OBJECT
     public:
+        IAssistantAction();
+        
         typedef KSharedPtr<IAssistantAction> Ptr;
 
         virtual ~IAssistantAction();
@@ -82,10 +85,11 @@ class KDEVPLATFORMINTERFACES_EXPORT DummyAssistantAction : public IAssistantActi
 };
 ///Represents a single assistant popup
 ///Subclass it to create own assistants
-class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KShared
+class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KSharedObject
 {
     Q_OBJECT
     public:
+        IAssistant();
         virtual ~IAssistant();
         
         typedef KSharedPtr<IAssistant> Ptr;

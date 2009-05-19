@@ -38,11 +38,12 @@ KAction* KDevelop::IAssistantAction::toKAction() const {
 }
 
 KDevelop::IAssistant::~IAssistant() {
-    Q_ASSERT(ref == 0);
+}
+
+KDevelop::IAssistantAction::IAssistantAction() : KSharedObject(*(QObject*)this) {
 }
 
 KDevelop::IAssistantAction::~IAssistantAction() {
-
 }
 
 QIcon KDevelop::IAssistantAction::icon() const {
@@ -56,6 +57,10 @@ QString KDevelop::IAssistantAction::toolTip() const {
 unsigned int KDevelop::IAssistantAction::flags() const {
     return NoFlag;
 }
+
+KDevelop::IAssistant::IAssistant() : KSharedObject(*(QObject*)this) {
+}
+
 
 QIcon KDevelop::IAssistant::icon() const {
     return QIcon();
