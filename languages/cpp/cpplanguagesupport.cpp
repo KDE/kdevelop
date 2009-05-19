@@ -131,7 +131,7 @@ CppLanguageSupport* CppLanguageSupport::m_self = 0;
 KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
 {
     ContextMenuExtension cm;
-    m_stubAction->appendTo(cm, context);
+//     m_stubAction->appendTo(cm, context);
     m_uutAction->appendTo(cm, context);
     SimpleRefactoring::self().doContextMenu(cm, context);
     return cm;
