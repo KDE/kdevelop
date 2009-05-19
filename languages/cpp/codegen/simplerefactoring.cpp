@@ -109,7 +109,7 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
       if(declContext->use().isEmpty() && declaration->isFunctionDeclaration() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
         !dynamic_cast<Cpp::TemplateDeclaration*>(declaration)) {
         AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
-        if(funDecl && !funDecl->isInline()) {
+        if(funDecl && !funDecl->isInline() && !dynamic_cast<FunctionDefinition*>(funDecl)) {
           //Is a candidate for moving into source
           QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
           action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
