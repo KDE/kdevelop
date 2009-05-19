@@ -34,6 +34,7 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
+#include <kconfig.h>
 
 using namespace KDevelop;
 
@@ -262,13 +263,19 @@ LicensePage::LicensePage(QWizard* parent)
     // Read all the available licenses from the standard dirs
     initializeLicences();
     
-    //licenseComboChanged(d->previousSelection);
+    //Set the license selection to the previous one
+    KConfigGroup config(KSharedConfig::openConfig(), "CodeGeneration");
+    d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
 
     registerField("license", d->license->licenseTextEdit);
 }
 
 LicensePage::~LicensePage(void)
 {
+    KConfigGroup config(KSharedConfig::openConfig(), "CodeGeneration");
+    config.writeEntry("LastSelectedLicense", d->license->licenseComboBox->currentIndex());
+    config.config()->sync();
+    
     delete d;
 }
 
