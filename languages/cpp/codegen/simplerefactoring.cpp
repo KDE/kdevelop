@@ -177,6 +177,8 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   CppNewClass newClassWizard(qApp->activeWindow(), u);
   int result=newClassWizard.exec();
   if(result==QDialog::Accepted) {
+    if(!item)
+      return;
     IProject* p=item->project();
     QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
     if(folderList.isEmpty())
