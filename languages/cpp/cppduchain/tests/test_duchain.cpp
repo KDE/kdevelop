@@ -65,6 +65,8 @@
 #include <typeinfo>
 #include <language/duchain/duchainutils.h>
 #include <qtfunctiondeclaration.h>
+#include <qwidget.h>
+#include <language/duchain/navigation/abstractnavigationwidget.h>
 
 //Uncomment the following line to get additional output from the string-repository test
 //#define DEBUG_STRINGREPOSITORY
@@ -454,6 +456,10 @@ void TestDUChain::testIntegralTypes()
   QCOMPARE(base->dataType(), (uint)IntegralType::TypeInt);
   QCOMPARE(base->modifiers(), (unsigned long long)AbstractType::ConstModifier);
 
+  //Even if reference/pointer types have an invalid target, they should still preserve the pointer
+  QVERIFY(AbstractType::Ptr(new ReferenceType)->toString().endsWith("&"));
+  QVERIFY(AbstractType::Ptr(new PointerType)->toString().endsWith("*"));
+  
   release(top);
 }
 
@@ -2886,6 +2892,15 @@ void TestDUChain::testTemplateReference() {
   AbstractType::Ptr argType = top->childContexts()[1]->localDeclarations()[0]->abstractType();
   QVERIFY(argType.cast<ReferenceType>());
   QCOMPARE(argType->toString().remove(' '), QString("CC<constA*>&"));
+  {
+/*    QWidget* navigationWidget = top->childContexts()[1]->createNavigationWidget(top->childContexts()[1]->localDeclarations()[0]);
+    QVERIFY(navigationWidget);
+    KDevelop::AbstractNavigationWidget* nWidget = dynamic_cast<KDevelop::AbstractNavigationWidget*>(navigationWidget);
+    QVERIFY(nWidget);
+    QVERIFY(nWidget->context());
+    QString html = nWidget->context()->html();
+    kDebug() << "html:" << html;*/
+  }
   QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], top, 10000).remove(' '), QString("CC<constA*>&"));
   QVERIFY(top->localDeclarations()[3]->abstractType());
   QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], top, 10000).remove(' '), QString("constA&"));
