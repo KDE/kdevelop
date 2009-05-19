@@ -129,6 +129,13 @@ ClassTree::~ClassTree()
 {
 }
 
+static bool _populatingClassBrowserContextMenu = false;
+
+bool ClassTree::populatingClassBrowserContextMenu()
+{
+  return _populatingClassBrowserContextMenu;
+}
+
 void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 {
   QMenu *menu = new QMenu(this);
@@ -146,9 +153,12 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
         return;
       }
     }
+    _populatingClassBrowserContextMenu = true;
     
     QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
     ContextMenuExtension::populateMenu(menu, extensions);
+    
+    _populatingClassBrowserContextMenu = false;
   }
 
   if (!menu->actions().isEmpty())

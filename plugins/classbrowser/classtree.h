@@ -68,6 +68,8 @@ public:
   /// Find the given a_id in the tree and highlight it.
   void highlightIdentifier(KDevelop::IndexedQualifiedIdentifier a_id);
 
+  static bool populatingClassBrowserContextMenu();
+  
 protected:
   virtual void contextMenuEvent(QContextMenuEvent* e);
   ClassModel* model();

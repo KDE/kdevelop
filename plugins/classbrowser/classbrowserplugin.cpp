@@ -117,7 +117,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   if (decl)
   {
     if(decl->inSymbolTable()) {
-      if(ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl())) {
+      if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl())) {
         QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
         connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
         findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
