@@ -183,7 +183,7 @@ class EnvironmentInformationListItem {
     m_file = rhs.m_file;
     copyListsFrom(rhs);
   }
-
+  
   ~EnvironmentInformationListItem() {
     freeAppendedLists();
   }
@@ -441,6 +441,21 @@ public:
     
     m_chainsMutex.unlock();
     
+    {
+      //Remove it from the environment information lists if it was there
+      QMutexLocker lock(m_environmentListInfo.mutex());
+      uint index = m_environmentListInfo.findIndex(info->url());
+      
+      if(index) {
+        EnvironmentInformationListItem item(*m_environmentListInfo.itemFromIndex(index));
+        if(item.itemsList().removeOne(info->indexedTopContext().index())) {
+          m_environmentListInfo.deleteItem(index);
+          if(!item.itemsList().isEmpty())
+            m_environmentListInfo.index(EnvironmentInformationListRequest(info->url(), item));
+        }
+      }
+    }
+    
     QMutexLocker lock(m_environmentInfo.mutex());
     uint index = m_environmentInfo.findIndex(info->indexedTopContext().index());
     if(index) {
@@ -534,19 +549,26 @@ kDebug() << index << removed << removed2;
 
     uint cnt = 0;
 
-    QList<IndexedString> urls = m_fileEnvironmentInformations.keys();
+    QList<IndexedString> urls;
+    {
+      QMutexLocker lock(&m_chainsMutex);
+      urls += m_fileEnvironmentInformations.keys();
+    }
 
     foreach(const IndexedString &url, urls) {
+      QList<ParsingEnvironmentFilePointer> check;
+      {
+        QMutexLocker lock(&m_chainsMutex);
+        check = m_fileEnvironmentInformations.values(url);
+      }
 
-      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
-      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
+      foreach(ParsingEnvironmentFilePointer file, check) {
 
-      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it  != end; ++it) {
-
-        EnvironmentInformationRequest req(it->data());
+        EnvironmentInformationRequest req(file.data());
+        QMutexLocker lock(m_environmentInfo.mutex());
         uint index = m_environmentInfo.findIndex(req);
 
-        if((*it)->d_func()->isDynamic()) {
+        if(file->d_func()->isDynamic()) {
           //This item has been changed, or isn't in the repository yet
 
           //Eventually remove an old entry
@@ -562,11 +584,11 @@ kDebug() << index << removed << removed2;
           static DUChainBaseData* dataCopy;
           dataCopy = theData;
 
-          Q_ASSERT(theData->m_range == (*it)->d_func()->m_range);
+          Q_ASSERT(theData->m_range == file->d_func()->m_range);
           Q_ASSERT(theData->m_dynamic == false);
-          Q_ASSERT(theData->classId == (*it)->d_func()->classId);
+          Q_ASSERT(theData->classId == file->d_func()->classId);
 
-          (*it)->setData( theData );
+          file->setData( theData );
 
           ++cnt;
         }else{
@@ -589,6 +611,7 @@ kDebug() << index << removed << removed2;
       if(index) {
         m_environmentListInfo.itemFromIndex(index);
       }else{
+        QMutexLocker lock(&m_chainsMutex);
         kDebug(9505) << "Did not find stored item for" << url.str() << "count:" << m_fileEnvironmentInformations.values(url);
       }
       if(!atomic) {
@@ -747,6 +770,7 @@ kDebug() << index << removed << removed2;
 
 
       if(retries == 0) {
+        QMutexLocker lock(&m_chainsMutex);
         //Do this atomically, since we must be sure that _everything_ is already saved
         for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = m_fileEnvironmentInformations.begin(); it != m_fileEnvironmentInformations.end(); ) {
           ParsingEnvironmentFile* f = (*it).data();
@@ -928,51 +952,57 @@ private:
   ///Stores the environment-information for the given url
   void storeInformationList(IndexedString url) {
 
-    QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
-    QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
+    QMutexLocker lock(m_environmentListInfo.mutex());
 
-    if(start == end)
-        return;
+    EnvironmentInformationListItem newItem;
+    newItem.m_file = url;
+    
+    QSet<uint> newItems;
 
-    uint index = m_environmentListInfo.findIndex(url);
-    bool listChanged = true;
-    if(index) {
-      listChanged = false;
-      const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(index);
-      ///@todo Make the list sorted, so the "contains" function is efficient
+    {
+      QMutexLocker lock(&m_chainsMutex);
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator start = m_fileEnvironmentInformations.lowerBound(url);
+      QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator end = m_fileEnvironmentInformations.upperBound(url);
+      
       for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it) {
-        if(!listContains((*it)->indexedTopContext().index(), item->items(), item->itemsSize())) {
-          listChanged = true;
-          break;
+        uint topContextIndex = (*it)->indexedTopContext().index();
+        newItems.insert(topContextIndex);
+        newItem.itemsList().append(topContextIndex);
+      }
+    }
+    
+    uint index = m_environmentListInfo.findIndex(url);
+    
+    if(index) {
+      //We only handle adding items here, since we can never be sure whether everything is loaded
+      //Removal is handled directly in removeEnvironmentInformation
+      
+      const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(index);
+      QSet<uint> oldItems;
+      FOREACH_FUNCTION(uint topContextIndex, item->items) {
+        oldItems.insert(topContextIndex);
+        if(!newItems.contains(topContextIndex)) {
+          newItems.insert(topContextIndex);
+          newItem.itemsList().append(topContextIndex);
         }
       }
-    }
 
-    if(listChanged) {
+      if(oldItems == newItems)
+        return;
+
       ///Update/insert a new list
-      uint index = m_environmentListInfo.findIndex(url);
-      EnvironmentInformationListItem item;
-      item.m_file = url;
-
-      if(index) {
-        item.copyListsFrom(*m_environmentListInfo.itemFromIndex(index));
-        m_environmentListInfo.deleteItem(index); //Remove the previous item
-      }
-
-      Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)) == 0);
-
-      for(QMultiMap<IndexedString, ParsingEnvironmentFilePointer>::iterator it = start; it != end; ++it)
-        if(!listContains((*it)->indexedTopContext().index(), item.items(), item.itemsSize()))
-          item.itemsList().append( (*it)->indexedTopContext().index() );
-
-      //Insert the new item
-      m_environmentListInfo.index(EnvironmentInformationListRequest(url, item));
+      m_environmentListInfo.deleteItem(index); //Remove the previous item
     }
+
+    Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)) == 0);
+
+    //Insert the new item
+    m_environmentListInfo.index(EnvironmentInformationListRequest(url, newItem));
 
     Q_ASSERT(m_environmentListInfo.findIndex(EnvironmentInformationListRequest(url)));
   }
 
-  //Loaded environment-informations
+  //Loaded environment-informations. Protected by m_chainsMutex
   QMultiMap<IndexedString, ParsingEnvironmentFilePointer> m_fileEnvironmentInformations;
   QHash<uint, ParsingEnvironmentFilePointer> m_indexEnvironmentInformations;
   
