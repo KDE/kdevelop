@@ -124,7 +124,10 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   if (decl)
   {
     if(decl->inSymbolTable()) {
-      if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl())) {
+      if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl()) &&
+        decl->kind() == Declaration::Type && decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
+        //Currently "Find in Class Browser" seems to only work for classes, so only show it in that case
+        
         m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
       }
