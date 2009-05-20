@@ -135,6 +135,7 @@ public:
     virtual void switchToArea(const QString &areaName, SwitchMode switchMode) {}
     virtual void addToolView(const QString &name, KDevelop::IToolViewFactory *factory) {}
     virtual void removeToolView(KDevelop::IToolViewFactory *factory) {}
+    virtual QWidget* findToolView(const QString& name, KDevelop::IToolViewFactory *factory, KDevelop::IUiController::FindFlags flags = CreateAndRaise) { return m_activeMainWindow;}
     virtual KParts::MainWindow *activeMainWindow() { return m_activeMainWindow; }
     virtual Sublime::Controller* controller() { return m_controller; }
     virtual void registerStatus(QObject*) {}
