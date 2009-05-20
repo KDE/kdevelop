@@ -85,7 +85,7 @@ KDevelop::ThreadItem::ThreadItem(KDevelop::StackModel* model)
 void KDevelop::ThreadItem::setInformation(int threadNumber, const QString& functionName)
 {
     mId=threadNumber;
-    setData(QVector<QVariant>() << i18nc("#thread-id at function-name or adress", "#%1 at %2", threadNumber, functionName));
+    setData(QVector<QVariant>() << i18nc("#thread-id at function-name or address", "#%1 at %2", threadNumber, functionName));
 }
 
 #include "moc_stackitem.cpp"
