@@ -87,6 +87,13 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
 {
   core()->uiController()->addToolView(i18n("Classes"), m_factory);
   setXMLFile( "kdevclassbrowser.rc" );
+  
+  m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
+  connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
+  m_openDec = new QAction(i18n("Show &Declaration"), this);
+  connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
+  m_openDef = new QAction(i18n("Show De&finition"), this);
+  connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
@@ -118,22 +125,16 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
   {
     if(decl->inSymbolTable()) {
       if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl())) {
-        QAction* findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
-        connect(findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
-        findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, findInBrowser);
+        m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
       }
   
-      QAction* openDec = new QAction(i18n("Show &Declaration"), this);
-      connect(openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
-      openDec->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDec);
+      m_openDec->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDec);
 
       if(FunctionDefinition::definition(decl)) {
-        QAction* openDef = new QAction(i18n("Show De&finition"), this);
-        connect(openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
-        openDef->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, openDef);
+        m_openDef->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDef);
       }
     }
   }

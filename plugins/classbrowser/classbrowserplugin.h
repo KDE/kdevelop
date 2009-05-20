@@ -56,6 +56,9 @@ private Q_SLOTS:
 private:
   class ClassBrowserFactory* m_factory;
   ClassTree* m_activeClassTree;
+  QAction* m_openDef;
+  QAction* m_openDec;
+  QAction* m_findInBrowser;
 };
 
 #endif // CLASSBROWSERPLUGIN_H

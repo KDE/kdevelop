@@ -145,6 +145,9 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   nextUse->setText( i18n("&Next Use") );
   nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
   connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
+  
+  m_findUses = new QAction(i18n("Find Uses"), this);
+  connect(m_findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
 }
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
@@ -221,10 +224,8 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
   
   qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
   
-  QAction* findUses = new QAction(i18n("Find Uses"), this);
-  connect(findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
-  findUses->setData(QVariant::fromValue(codeContext->declaration()));
-  menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, findUses);
+  m_findUses->setData(QVariant::fromValue(codeContext->declaration()));
+  menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_findUses);
 
   return menuExt;
 }

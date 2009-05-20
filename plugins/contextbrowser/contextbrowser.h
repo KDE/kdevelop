@@ -143,6 +143,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     ContextBrowserViewFactory* m_viewFactory;
     QPointer<QWidget> m_currentToolTip;
     IndexedDeclaration m_currentToolTipDeclaration;
+    QAction* m_findUses;
 };
 
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);
