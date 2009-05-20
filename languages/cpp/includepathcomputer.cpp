@@ -119,7 +119,7 @@ void IncludePathComputer::computeBackground() {
     m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
     kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
     
-    if(m_ret.isEmpty()) {
+    if(!m_ready) {
     ///@todo Make modification-revisions dependent also on Makefiles, and on custom include paths files, so when those are changed, the files
     ///           are marked for update.
     ///           If there is no valid include-path dependency while custom include-paths are set no, do not do this.
@@ -134,6 +134,7 @@ void IncludePathComputer::computeBackground() {
           if(file != fileInfo.fileName() && file.endsWith(ext)) {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {
+              
               TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)));
               if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile() && !context->parsingEnvironmentFile()->needsUpdate()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
