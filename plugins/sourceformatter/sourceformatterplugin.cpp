@@ -86,6 +86,8 @@ SourceFormatterPlugin::SourceFormatterPlugin(QObject *parent, const QVariantList
 
 	connect(core()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
 	        this, SLOT(activeDocumentChanged(KDevelop::IDocument*)));
+			
+	activeDocumentChanged(core()->documentController()->activeDocument());
 }
 
 SourceFormatterPlugin::~SourceFormatterPlugin()
@@ -120,30 +122,15 @@ void SourceFormatterPlugin::beautifySource()
 	if (view && view->selection())
 		has_selection = true;
 
-	// put the selection back to the same indent level.
-	// taking note of the config options.
 	if (has_selection) {
-		int indentCount = 0;
-		QString indentWith("");
 		QString original = view->selectionText();
 
-		for (; indentCount < original.length(); indentCount++) {
-			QChar ch = original[indentCount];
-			if (!ch.isSpace())
-				break;
-
-			if (ch == QChar('\n') || ch == QChar('\r'))
-				indentWith = "";
-			else
-				indentWith += original[indentCount];
-		}
-		indentWith = replaceSpacesWithTab(indentWith, formatter);
-
-		QString output = formatter->formatSource(view->selectionText(), mime);
-		output = addIndentation(output, indentWith);
+		QString output = formatter->formatSource(view->selectionText(), mime,
+												  view->document()->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
+												  view->document()->text(KTextEditor::Range(view->selectionRange().end(), view->document()->documentRange().end())));
 
 		//remove the final newline character, unless it should be there
-		if (!original.endsWith('\n'))
+		if (!original.endsWith('\n')  && output.endsWith('\n'))
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
 		doc->textDocument()->replaceText(view->selectionRange(), output);
