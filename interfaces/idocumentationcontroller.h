@@ -22,7 +22,8 @@
 #include <interfaces/idocumentation.h>
 
 namespace KDevelop {
-
+class Context;
+class ContextMenuExtension;
 class Declaration;
 
 /**
@@ -41,6 +42,8 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController
         
         /** Show the documentation specified by @p doc. */
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)=0;
+        
+        virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
 };
 
 }

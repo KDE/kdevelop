@@ -23,6 +23,7 @@
 #include <QObject>
 
 class DocumentationViewFactory;
+class QAction;
 
 namespace KDevelop
 {
@@ -30,7 +31,7 @@ class Core;
 
 class DocumentationController : public QObject, public KDevelop::IDocumentationController
 {
-    Q_OBJECT
+        Q_OBJECT
     public:
         DocumentationController(Core* core);
         
@@ -38,9 +39,14 @@ class DocumentationController : public QObject, public KDevelop::IDocumentationC
         
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+        virtual ContextMenuExtension contextMenuExtension( Context* context );
         
+    private slots:
+        void doShowDocumentation();
     private:
         DocumentationViewFactory* m_factory;
+
+        QAction* m_showDocumentation;
 };
 
 }

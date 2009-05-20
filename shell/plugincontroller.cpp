@@ -55,6 +55,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
+#include <interfaces/idocumentationcontroller.h>
 
 namespace KDevelop
 {
@@ -581,6 +582,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
         exts << plug->contextMenuExtension( context );
     }
     exts << ICore::self()->debugController()->contextMenuExtension( context );
+    exts << ICore::self()->documentationController()->contextMenuExtension( context );
     return exts;
 }
 
