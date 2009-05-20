@@ -52,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler {
     inline static void createFreeItem(IndexedDeclaration& data) {
         data = IndexedDeclaration();
         data.setIsDummy(true);
-        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
+        data.setDummyData(qMakePair(0u, 0u)); //Since we subtract 1, this equals children -1, -1
     }
     //Copies this item into the given one
     inline static void copyTo(const IndexedDeclaration& m_data, IndexedDeclaration& data) {
@@ -85,7 +85,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContextHandler {
     inline static void createFreeItem(IndexedDUContext& data) {
         data = IndexedDUContext();
         data.setIsDummy(true);
-        data.setDummyData(qMakePair(0u, 0u)); //Since we substract 1, this equals children -1, -1
+        data.setDummyData(qMakePair(0u, 0u)); //Since we subtract 1, this equals children -1, -1
     }
     //Copies this item into the given one
     inline static void copyTo(const IndexedDUContext& m_data, IndexedDUContext& data) {

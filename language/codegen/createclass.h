@@ -104,7 +104,7 @@ private:
     class LicensePagePrivate* const d;
     
     // methods
-    void        initializeLicences(void);
+    void        initializeLicenses(void);
     QString &   readLicense(int licenseIndex);
     bool        saveLicense(void);
 };

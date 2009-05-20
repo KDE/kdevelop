@@ -125,7 +125,7 @@ class IndexedTopDUContextEmbeddedTreeHandler {
     static void createFreeItem(IndexedTopDUContext& data) {
         data = IndexedTopDUContext();
         data.setIsDummy(true);
-        data.setDummyData(0u, 0u); //Since we substract 1, this equals children -1, -1
+        data.setDummyData(0u, 0u); //Since we subtract 1, this equals children -1, -1
     }
     //Copies this item into the given one
     static void copyTo(const IndexedTopDUContext& m_data, IndexedTopDUContext& data) {

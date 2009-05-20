@@ -261,7 +261,7 @@ LicensePage::LicensePage(QWizard* parent)
     connect(d->license->saveLicense, SIGNAL(clicked(bool)), d->license->licenseName, SLOT(setEnabled(bool)));
 
     // Read all the available licenses from the standard dirs
-    initializeLicences();
+    initializeLicenses();
     
     //Set the license selection to the previous one
     KConfigGroup config(KSharedConfig::openConfig(), "CodeGeneration");
@@ -292,13 +292,13 @@ bool LicensePage::validatePage(void)
 }
 
 //! Read all the license files in the global and local config dirs
-void LicensePage::initializeLicences(void)
+void LicensePage::initializeLicenses(void)
 {
     kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
     QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
     
-    //Iterate through the possible directories that contain licences, and load their names
+    //Iterate through the possible directories that contain licenses, and load their names
     foreach(QString currentDir, licenseDirs)
     {
         QDirIterator it(currentDir, QDir::Files | QDir::Readable);

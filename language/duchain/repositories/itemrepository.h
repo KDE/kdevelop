@@ -1190,7 +1190,7 @@ class Bucket {
     unsigned int m_available;
     char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
     char* m_mappedData; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
-    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so substract 1 to get the pointer to the next item with same local hash.
+    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % m_objectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
     uint m_objectMapSize;
     short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
     unsigned int m_freeItemCount;

@@ -92,7 +92,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   KTextEditor::CodeCompletionModel::ExtraItemDataRoles role;
   QVariant roleValue;
   
-  ///Will append the child, and initialize it correctly to create a working tree-stucture
+  ///Will append the child, and initialize it correctly to create a working tree-structure
   void appendChild(KSharedPtr<CompletionTreeElement>);
   void appendChildren(QList<KSharedPtr<CompletionTreeElement> >);
   void appendChildren(QList<KSharedPtr<CompletionTreeItem> >);
