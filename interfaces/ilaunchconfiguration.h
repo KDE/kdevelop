@@ -34,7 +34,7 @@ class IProject;
 /**
  * A specific configuration to start a launchable, this could be a native
  * compiled application, or some script file or byte-compiled file or something else
- * Provides access to the various configured informations, as well as its type and a name
+ * Provides access to the various configurations, as well as their type and name
  */
 class KDEVPLATFORMINTERFACES_EXPORT ILaunchConfiguration
 {
