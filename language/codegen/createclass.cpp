@@ -266,6 +266,8 @@ LicensePage::LicensePage(QWizard* parent)
     //Set the license selection to the previous one
     KConfigGroup config(KSharedConfig::openConfig(), "CodeGeneration");
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
+    //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
+    licenseComboChanged(d->license->licenseComboBox->currentIndex());
 
     registerField("license", d->license->licenseTextEdit);
 }
