@@ -139,30 +139,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         }
       }
     }
-
-    QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
-    if( identifier.count() > 1 ) {
-      if( m_declaration->context() && m_declaration->context()->owner() )
-      {
-        Declaration* decl = m_declaration->context()->owner();
-
-        FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(decl);
-        if(definition && definition->declaration())
-          decl = definition->declaration();
-
-        if(decl->abstractType().cast<EnumerationType>())
-          modifyHtml() += labelHighlight(i18n("Enum: "));
-        else
-          modifyHtml() += labelHighlight(i18n("Container: "));
-
-        makeLink( declarationName(DeclarationPointer(decl)), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
-        modifyHtml() += " ";
-      } else {
-        QualifiedIdentifier parent = identifier;
-        parent.pop();
-        modifyHtml() += labelHighlight(i18n("Scope: %1 ", Qt::escape(parent.toString())));
-      }
-    }
   }else{
     AbstractType::Ptr showType = m_declaration->abstractType();
     if(showType && showType.cast<FunctionType>()) {
@@ -174,6 +150,30 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     
     if(showType)
       modifyHtml() += Qt::escape(showType->toString()) + ' ';
+  }
+  
+  QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
+  if( identifier.count() > 1 ) {
+    if( m_declaration->context() && m_declaration->context()->owner() )
+    {
+      Declaration* decl = m_declaration->context()->owner();
+
+      FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(decl);
+      if(definition && definition->declaration())
+        decl = definition->declaration();
+
+      if(decl->abstractType().cast<EnumerationType>())
+        modifyHtml() += labelHighlight(i18n("Enum: "));
+      else
+        modifyHtml() += labelHighlight(i18n("Container: "));
+
+      makeLink( declarationName(DeclarationPointer(decl)), DeclarationPointer(decl), NavigationAction::NavigateDeclaration );
+      modifyHtml() += " ";
+    } else {
+      QualifiedIdentifier parent = identifier;
+      parent.pop();
+      modifyHtml() += labelHighlight(i18n("Scope: %1 ", Qt::escape(parent.toString())));
+    }
   }
   
   if( shorten && !m_declaration->comment().isEmpty() ) {
