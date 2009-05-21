@@ -43,6 +43,8 @@ public:
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
 };
 
+//!@todo  Add an option to enclose in namespace
+//!@todo  Tag the overrided methods with the name of the parent class
 class CppNewClass : public KDevelop::CreateClass
 {
   Q_OBJECT
