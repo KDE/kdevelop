@@ -76,7 +76,7 @@ void KDevelop::DocumentationController::doShowDocumentation()
 }
 
 
-Q_DECLARE_METATYPE(KSharedPtr<KDevelop::IDocumentation>);
+Q_DECLARE_METATYPE(KSharedPtr<KDevelop::IDocumentation>)
 
 KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExtension ( Context* context )
 {
