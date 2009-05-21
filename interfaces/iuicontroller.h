@@ -110,9 +110,6 @@ public:
     /**
      * This is meant to be used by IDocument subclasses to initialize the
      * Sublime::Document.
-     *
-     * This cannot be used for anything else, without linking to the sublime
-     * library, which is forbidden and may break your plugin
      */
     virtual Sublime::Controller* controller() = 0;
 protected:
