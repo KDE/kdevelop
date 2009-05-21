@@ -141,6 +141,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     NavigationContextPointer registerChild( AbstractNavigationContext* context );
     QList<NavigationContextPointer> m_children; //Useed to keep alive all children until this is deleted
 
+    bool m_shorten;
+
     int m_currentLine;
 
     //A counter used while building the html-code to count the used links.
@@ -156,6 +158,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 
     static QString declarationKind(DeclarationPointer decl);
 
+    static const Colorizer typeHighlight;
     static const Colorizer errorHighlight;
     static const Colorizer labelHighlight;
     static const Colorizer codeHighlight;

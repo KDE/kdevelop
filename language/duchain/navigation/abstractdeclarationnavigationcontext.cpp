@@ -62,6 +62,7 @@ QString AbstractDeclarationNavigationContext::name() const
 QString AbstractDeclarationNavigationContext::html(bool shorten)
 {
   clear();
+  m_shorten = shorten;
   modifyHtml()  += "<html><body><p><small><small>";
 
   addExternalHtml(m_prefix);
@@ -142,14 +143,17 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }else{
     AbstractType::Ptr showType = m_declaration->abstractType();
     if(showType && showType.cast<FunctionType>()) {
-      modifyHtml() += labelHighlight(i18n("Returns: "));
       showType = showType.cast<FunctionType>()->returnType();
-    }else{
+      if(showType)
+        modifyHtml() += labelHighlight(i18n("Returns: "));
+    }else  if(showType) {
       modifyHtml() += labelHighlight(i18n("Type: "));
     }
     
-    if(showType)
-      modifyHtml() += Qt::escape(showType->toString()) + ' ';
+    if(showType) {
+      eventuallyMakeTypeLinks(showType);
+      modifyHtml() += " ";
+    }
   }
   
   QualifiedIdentifier identifier = m_declaration->qualifiedIdentifier();
@@ -172,7 +176,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     } else {
       QualifiedIdentifier parent = identifier;
       parent.pop();
-      modifyHtml() += labelHighlight(i18n("Scope: %1 ", Qt::escape(parent.toString())));
+      modifyHtml() += labelHighlight(i18n("Scope: %1 ", typeHighlight(Qt::escape(parent.toString()))));
     }
   }
   
@@ -490,7 +494,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     makeLink(id.toString() , DeclarationPointer(idType->declaration(m_topContext.data())), NavigationAction::NavigateDeclaration );
   } else {
     kDebug() << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << m_topContext->url().str();
-    modifyHtml() += Qt::escape(type->toString());
+    modifyHtml() += typeHighlight(Qt::escape(type->toString()));
   }
 }
 
@@ -499,7 +503,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
   type = typeToShow(type);
   
   if( !type ) {
-    modifyHtml() += Qt::escape("<no type>");
+    modifyHtml() += typeHighlight(Qt::escape("<no type>"));
     return;
   }
 
@@ -512,7 +516,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
     ///@todo This is C++ specific, move into subclass
     
     if(target->modifiers() & AbstractType::ConstModifier)
-      modifyHtml() += "const ";
+      modifyHtml() += typeHighlight("const ");
     
     htmlIdentifiedType(target, idType);
 
@@ -526,13 +530,13 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
       QRegExp suffixExp("\\&|\\*");
       int suffixPos = typeSuffixString.indexOf(suffixExp);
       if(suffixPos != -1)
-        modifyHtml() += typeSuffixString.mid(suffixPos);
+        modifyHtml() += typeHighlight(typeSuffixString.mid(suffixPos));
     }
 
   } else {
     if(idType)
       kDebug() << "identified type could not be resolved:" << idType->qualifiedIdentifier() << idType->declarationId().isValid() << idType->declarationId().isDirect();
-    modifyHtml() += Qt::escape(type->toString());
+    modifyHtml() += typeHighlight(Qt::escape(type->toString()));
   }
 }
 

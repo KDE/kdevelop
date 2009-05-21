@@ -52,7 +52,7 @@ KDevelop::TopDUContextPointer AbstractNavigationContext::topContext() const {
 
 
 AbstractNavigationContext::AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext)
-  : m_selectedLink(0), m_linkCount(-1), m_currentPositionLine(0),
+  : m_shorten(false), m_selectedLink(0), m_linkCount(-1), m_currentPositionLine(0),
     m_previousContext(previousContext), m_topContext(topContext)
 {
 }
@@ -91,6 +91,12 @@ void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointe
 
 void AbstractNavigationContext::makeLink( const QString& name, QString targetId, const NavigationAction& action)
 {
+  if(m_shorten) {
+    //Do not create links in shortened mode, it's only for viewing
+    modifyHtml() += typeHighlight(Qt::escape(name));
+    return;
+  }
+  
   m_links[ targetId ] = action;
   m_intLinks[ m_linkCount ] = action;
   m_linkLines[ m_linkCount ] = m_currentLine;
@@ -384,7 +390,8 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
   return kind;
 }
 
-QString AbstractNavigationContext::html(bool /*shorten*/) {
+QString AbstractNavigationContext::html(bool shorten) {
+  m_shorten = shorten;
   return QString();
 }
 
@@ -427,6 +434,7 @@ QString AbstractNavigationContext::currentHtml() const {
 }
 
 
+const Colorizer AbstractNavigationContext::typeHighlight("006000");
 const Colorizer AbstractNavigationContext::errorHighlight("990000");
 const Colorizer AbstractNavigationContext::labelHighlight("000035");
 const Colorizer AbstractNavigationContext::codeHighlight("005000");
