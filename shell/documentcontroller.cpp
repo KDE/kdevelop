@@ -379,7 +379,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         Sublime::View *partView = 0;
         foreach (Sublime::View *view, sdoc->views())
         {
-            if (area->views().contains(view))
+            if (area->views().contains(view) && (activationParams.testFlag(DoNotForceCurrentView) || area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView())))
             {
                 partView = view;
                 break;
