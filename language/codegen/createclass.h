@@ -86,6 +86,7 @@ private:
     class ClassIdentifierPagePrivate* const d;
 };
 
+//!@todo Add the name of the Author at the top of the license
 class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWizardPage
 {
     Q_OBJECT
