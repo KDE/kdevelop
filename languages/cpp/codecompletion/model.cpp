@@ -60,6 +60,7 @@
 #include <language/editor/modificationrevision.h>
 #include <language/duchain/specializationstore.h>
 #include "implementationhelperitem.h"
+#include <ktexteditor/smartinterface.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -106,7 +107,24 @@ void CodeCompletionModel::aborted(KTextEditor::View* view) {
     KTextEditor::CodeCompletionModelControllerInterface::aborted(view);
 }
 
+bool isValidIncludeDirectiveCharacter(QChar character) {
+  return character.isLetterOrNumber() || character == '_' || character == '-' || character == '.';
+}
+
 bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
+  
+  QString line = view->document()->line(range.start().line()).trimmed();
+  if(line.startsWith("#include")) {
+    //Do custom check for include directives, since we allow more character then during usual completion
+    QString text = range.text().join("\n");
+    for(int a = 0; a < text.length(); ++a) {
+      if(!isValidIncludeDirectiveCharacter(text[a]))
+        return true;
+    }
+    return false;
+  }
+  
+  
   bool ret = KDevelop::CodeCompletionModel::shouldAbortCompletion(view, range, currentCompletion);
   
   return ret;
@@ -162,7 +180,30 @@ void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEd
 //       dataChanged(index(rowCount() - completionContext()->ungroupedElements().size(), 0), index(rowCount()-1, columnCount()-1 ));
     }
   }
+  
+  QString line = view->document()->line(range.start().line()).trimmed();
+  if(line.startsWith("#include")) {
+    //Skip over all characters that are allowed in a filename but usually not in code-completion
+    QMutexLocker lock(dynamic_cast<KTextEditor::SmartInterface*>(range.document())->smartMutex());
+    while(range.start().column() > 0) {
+      KTextEditor::Cursor newStart = range.start();
+      newStart.setColumn(newStart.column()-1);
+      QChar character = range.document()->character(newStart);
+      if(isValidIncludeDirectiveCharacter(character)) {
+        range.start() = newStart; //Skip
+      }else{
+        break;
+      }
+    }
+    kDebug() << "new range:" << range.text();
+    return;
+  }
+  
   KDevelop::CodeCompletionModel::updateCompletionRange(view, range);
+}
+
+QString CodeCompletionModel::filterString (KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position) {
+  return KDevelop::CodeCompletionModel::filterString(view, range, position);
 }
 
 void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
