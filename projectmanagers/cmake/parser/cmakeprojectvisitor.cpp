@@ -987,14 +987,14 @@ int CMakeProjectVisitor::visit(const MacroCallAst *call)
             QStringList::const_iterator cit = call->arguments().constBegin();
             QStringList argn;
             bool haveArgn=false;
-            int i=1;
+            int i=0;
             while(cit != call->arguments().constEnd())
             {
+                m_vars->insertMulti(QString("ARGV%1").arg(i), QStringList(*cit));
                 if(mit!=code.knownArgs.constEnd())
                 {
                     kDebug(9042) << "param:" << *mit << "=" << *cit;
                     m_vars->insertMulti(*mit, QStringList(*cit));
-                    m_vars->insertMulti(QString("ARGV%1").arg(i), QStringList(*cit));
                     mit++;
                 }
                 else
