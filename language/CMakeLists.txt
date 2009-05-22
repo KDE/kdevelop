@@ -107,6 +107,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/documentchangeset.cpp
     codegen/coderepresentation.cpp
     codegen/overridespage.cpp
+    codegen/utilities.cpp
 
     util/setrepository.cpp
     util/navigationtooltip.cpp
