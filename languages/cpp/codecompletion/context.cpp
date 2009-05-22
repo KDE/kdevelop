@@ -134,7 +134,7 @@ QString extractLastLine(const QString& str) {
 }
 
 bool isPrefixKeyword(QString str) {
-  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete" || str == "emit";
+  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete" || str == "emit" || str == "Q_EMIT";
 }
 
 int completionRecursionDepth = 0;
@@ -344,7 +344,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     m_expression = QString();
   }
   
-  if(m_expression == "emit")  {
+  if(m_expression == "emit" || m_expression == "Q_EMIT")  {
     m_onlyShowSignals = true;
     m_expression = QString();
   }
@@ -394,17 +394,17 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     LOCKDUCHAIN;
     if(!m_duContext)
       return;
-
-    if(parentContext()->m_expression == "SIGNAL" || parentContext()->m_expression == "SLOT") {
-      if(parentContext()->m_expression == "SIGNAL")
-        m_onlyShowSignals = true;
-      if(parentContext()->m_expression == "SLOT") {
-        m_onlyShowSlots = true;
-      }
+    
+    bool needSignal = parentContext()->m_expression == "SIGNAL" || parentContext()->m_expression == "Q_SIGNAL";
+    bool needSlot = parentContext()->m_expression == "SLOT" || parentContext()->m_expression == "Q_SLOT";
+    if(needSignal || needSlot) {
+      m_onlyShowSignals = needSignal;
+      m_onlyShowSlots = needSlot;
       
+      //Remove the SIGNAL / SLOT function context that was added
       setParentContext(KSharedPtr<KDevelop::CodeCompletionContext>(parentContext()->parentContext()));
     }
-
+    
     if(m_parentContext && parentContext()->memberAccessOperation() == FunctionCallAccess && m_expression.isEmpty()) {
       foreach(const Cpp::OverloadResolutionFunction &function, parentContext()->functions()) {
         if(function.function.declaration() && (function.function.declaration()->qualifiedIdentifier().toString() == "QObject::connect" || function.function.declaration()->qualifiedIdentifier().toString() == "QObject::disconnect")) {
@@ -418,8 +418,15 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
               if(parentContext()->m_knownArgumentExpressions.size() > 1) {
                 QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
-                if(connectedSignal.startsWith("SIGNAL") && connectedSignal.endsWith(")") && connectedSignal.length() > 8) {
-                  connectedSignal = connectedSignal.mid(7);
+                
+                uint skipSignal = 0;
+                if(connectedSignal.startsWith("SIGNAL"))
+                  skipSignal = 7;
+                if(connectedSignal.startsWith("Q_SIGNAL"))
+                  skipSignal = 9;
+                
+                if(skipSignal && connectedSignal.endsWith(")") && connectedSignal.length() > skipSignal+1) {
+                  connectedSignal = connectedSignal.mid(skipSignal);
                   connectedSignal = connectedSignal.left(connectedSignal.length()-1);
                   //Now connectedSignal is something like myFunction(...), and we want the "...".
                   QPair<Identifier, QByteArray> signature = Cpp::qtFunctionSignature(connectedSignal.toUtf8());
@@ -466,6 +473,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   QString expr = m_expression.trimmed();
 
   removePrefixWord(expr, "emit");
+  removePrefixWord(expr, "Q_EMIT");
   
   if( removePrefixWord(expr, "return") )  {
     if(!expr.isEmpty() || depth == 0) {
@@ -1010,6 +1018,9 @@ void CodeCompletionContext::preprocessText( int line ) {
   disableMacros.insert(IndexedString("SIGNAL"));
   disableMacros.insert(IndexedString("SLOT"));
   disableMacros.insert(IndexedString("emit"));
+  disableMacros.insert(IndexedString("Q_EMIT"));
+  disableMacros.insert(IndexedString("Q_SIGNAL"));
+  disableMacros.insert(IndexedString("Q_SLOT"));
   
   if( m_duContext ) {
   m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line, disableMacros );
