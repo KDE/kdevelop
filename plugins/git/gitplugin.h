@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2009 Hugo Parente Lima <hugo.pl@gmail.com>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -69,6 +70,7 @@ public:
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
                           const KDevelop::VcsRevision& limit);
+    KDevelop::VcsJob* annotate(const KUrl &localLocation, const KDevelop::VcsRevision &rev);
 
     // Begin:  KDevelop::IDistributedVersionControl
     KDevelop::VcsJob* init(const KUrl & directory);
@@ -113,6 +115,8 @@ protected:
     DVcsJob* gitRevParse(const QString &repository,
                          const QStringList &args);
 
+protected slots:
+    void parseGitBlameOutput(DVcsJob *job);
 private:
     //commit dialog "main" helper
     QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
