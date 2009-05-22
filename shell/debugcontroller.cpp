@@ -351,12 +351,6 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
        || state == IDebugSession::StoppingState || state == IDebugSession::ActiveState) {
         clearExecutionPoint();
     }
-
-    if (state == IDebugSession::StoppedState || state == IDebugSession::NotStartedState || state == IDebugSession::StoppingState) {
-        m_continueDebugger->setEnabled(false);
-    } else {
-        m_continueDebugger->setEnabled(true);
-    }
 }
 
 ContextMenuExtension DebugController::contextMenuExtension( Context* context )
