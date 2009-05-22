@@ -603,10 +603,10 @@ void GdbTest::testStack()
 
 void GdbTest::testAttach()
 {
-    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeattach.cpp";
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
 
     KProcess debugeeProcess;
-    debugeeProcess << "nice" << QDir::currentPath()+"/unittests/debugeeattach";
+    debugeeProcess << "nice" << QDir::currentPath()+"/unittests/debugeeslow";
     debugeeProcess.start();
     Q_ASSERT(debugeeProcess.waitForStarted());
     QTest::qWait(100);

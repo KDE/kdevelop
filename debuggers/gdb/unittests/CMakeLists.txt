@@ -1,2 +1,2 @@
 ADD_EXECUTABLE(debugee debugee.cpp)
-ADD_EXECUTABLE(debugeeattach debugeeattach.cpp)
+ADD_EXECUTABLE(debugeeslow debugeeslow.cpp)
