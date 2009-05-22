@@ -16,7 +16,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <languageexport.h>
+#include <language/languageexport.h>
 
 #include <QtGui/qvalidator.h>
 
