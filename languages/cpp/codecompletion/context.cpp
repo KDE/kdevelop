@@ -54,12 +54,12 @@
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
-QString last5Lines(QString str) {
+QString lastLines(QString str, int count = 40) {
   QStringList lines = str.split("\n");
-  if(lines.count() < 5)
+  if(lines.count() < count)
     return str;
   else
-    return QStringList(lines.mid(lines.count()-5, 5)).join("\n");
+    return QStringList(lines.mid(lines.count()-count, count)).join("\n");
 }
 
 ///If this is enabled, KDevelop corrects wrong member access operators like "." on a pointer automatically
@@ -212,7 +212,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   }
     
    m_text = stripFinalWhitespace( m_text );
-   m_text = last5Lines(m_text);
+   m_text = lastLines(m_text);
 
   ifDebug( log( QString("depth %1").arg(depth) + " end of processed text: " + m_text ); )
 
@@ -659,6 +659,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   QStringList hadItems;
   
   text = text.trimmed();
+  kDebug() << "text:" << text;
 
   //Jump over all initializers
   while(!text.isEmpty() && text.endsWith(',')) {
@@ -678,6 +679,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
 
   text = text.left(text.length()-1).trimmed();
   //Now we have the declaration in text
+  kDebug() << "should be decl.:" << text;
   if(!text.endsWith(')'))
     return false;
   
@@ -687,7 +689,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   if(argumentsStart <= 0)
     return false;
   
-  int identifierStart = Utils::expressionAt( m_text, argumentsStart-1 );
+  int identifierStart = Utils::expressionAt( text, argumentsStart-1 );
   if(identifierStart < 0 || identifierStart == argumentsStart)
     return false;
   
