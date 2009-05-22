@@ -2458,6 +2458,7 @@ class ItemRepository : public AbstractItemRepository {
       if(bucket && bucket->dirty()) { ///@todo Faster dirty check, without loading bucket
         changed += bucket->finalCleanup(*this);
       }
+      a += bucket->monsterBucketExtent(); //Skip buckets that are attached as tail to monster-buckets
     }
     
     return changed;
