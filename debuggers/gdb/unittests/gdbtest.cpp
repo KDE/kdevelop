@@ -145,7 +145,7 @@ void GdbTest::testStdOut()
         QCOMPARE(outputSpy.count(), 1);
         QList<QVariant> arguments = outputSpy.takeFirst();
         QCOMPARE(arguments.count(), 1);
-        QCOMPARE(arguments.first().toStringList(), QStringList() <<"Hello, world!");
+        QCOMPARE(arguments.first().toStringList(), QStringList() << "Hello, world!" << "Hello");
     }
 }
 
