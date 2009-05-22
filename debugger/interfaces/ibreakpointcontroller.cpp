@@ -137,6 +137,7 @@ void IBreakpointController::error(Breakpoint* breakpoint, const QString &msg, Br
     m_errorText.insert(breakpoint, msg);
     m_errors[breakpoint].insert(column);
     breakpoint->reportChange(column);
+    breakpoint->reportChange(Breakpoint::StateColumn);
     breakpointModel()->errorEmit(breakpoint, msg, Breakpoint::LocationColumn);
     m_dontSendChanges--;
 }

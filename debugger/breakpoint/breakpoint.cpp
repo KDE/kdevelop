@@ -114,6 +114,9 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == StateColumn)
     {
         if (role == Qt::DecorationRole) {
+            if (!errors().isEmpty()) {
+                return KIcon("dialog-warning");
+            }
             switch (state()) {
                 case DirtyState:
                     return KIcon("system-switch-user");
@@ -123,6 +126,9 @@ QVariant Breakpoint::data(int column, int role) const
                     return KIcon("dialog-ok-apply");
             }
         } else if (role == Qt::ToolTipRole) {
+            if (!errors().isEmpty()) {
+                return i18n("error");
+            }
             switch (state()) {
                 case DirtyState:
                     return i18n("dirty");
