@@ -22,7 +22,7 @@ void foo() {
     static int i=0;
     ++i;
     std::cout << i << std::endl;
-    sleep(1);
+    sleep(2);
 }
 int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;

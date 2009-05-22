@@ -521,6 +521,57 @@ void GdbTest::testBreakOnAccessBreakpoint()
     waitForState(session, DebugSession::StoppedState);
 }
 
+void GdbTest::testInsertBreakpointWhileRunning()
+{
+    TestDebugSession session;
+
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::ActiveState);
+    QTest::qWait(2000);
+    kDebug() << "adding breakpoint";
+    KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 23);
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 23);
+    b->setDeleted();
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
+void GdbTest::testInsertBreakpointWhileRunningMultiple()
+{
+    TestDebugSession session;
+
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+
+    KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
+                                            ->breakpointModel();
+    session.startProgram(&cfg, 0);
+
+    waitForState(session, DebugSession::ActiveState);
+    QTest::qWait(2000);
+    kDebug() << "adding breakpoint";
+    KDevelop::Breakpoint *b1 = breakpoints->addCodeBreakpoint(fileName, 22);
+    KDevelop::Breakpoint *b2 = breakpoints->addCodeBreakpoint(fileName, 23);
+    QTest::qWait(100);
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 22);
+    session.run();
+    waitForState(session, DebugSession::PausedState);
+    QCOMPARE(session.line(), 23);
+    b1->setDeleted();
+    b2->setDeleted();
+    session.run();
+    waitForState(session, DebugSession::StoppedState);
+}
+
 void GdbTest::testShowStepInSource()
 {
     TestDebugSession session;

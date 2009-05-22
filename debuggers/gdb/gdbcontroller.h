@@ -129,7 +129,7 @@ public:
 
     /** Same as above, but internally constructs new GDBCommand
        instance from the string. */
-    void addCommand(GDBMI::CommandType type, const QString& cmd);
+    void addCommand(GDBMI::CommandType type, const QString& cmd = QString());
 
     /** Adds command to the front of the commands queue. It will be executed
         next.

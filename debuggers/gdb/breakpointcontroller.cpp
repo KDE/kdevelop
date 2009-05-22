@@ -123,7 +123,7 @@ struct DeletedHandler : public Handler
 
 
 BreakpointController::BreakpointController(DebugSession* parent)
-    : KDevelop::IBreakpointController(parent)
+    : KDevelop::IBreakpointController(parent), m_interrupted(false)
 {
     Q_ASSERT(parent);
     // FIXME: maybe, all debugger components should derive from
@@ -149,11 +149,16 @@ void BreakpointController::slotEvent(event_t e)
 {
     switch(e) {
         case program_state_changed:
-            controller()->addCommand(
-                new GDBCommand(GDBMI::BreakList,
-                            "",
-                            this,
-                            &BreakpointController::handleBreakpointList));
+            if (m_interrupted) {
+                m_interrupted = false;
+                controller()->addCommand(ExecContinue);
+            } else {
+                controller()->addCommand(
+                    new GDBCommand(GDBMI::BreakList,
+                                "",
+                                this,
+                                &BreakpointController::handleBreakpointList));
+            }
             break;
 
         case connected_to_program:
@@ -177,6 +182,8 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         return;
     }
 
+    bool addedCommand = false;
+
     /** See what is dirty, and send the changes.  For simplicity, send
         changes one-by-one and call sendToGDB again in the completion
         handler.
@@ -191,6 +198,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             controller()->addCommand(
                 new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                handler, &DeletedHandler::handle));
+            addedCommand = true;
         } else {
             delete breakpoint;
         }
@@ -207,6 +215,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                 controller()->addCommand(
                     new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                 handler, &DeletedHandler::handle));
+                addedCommand = true;
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                     InsertedHandler *handler = new InsertedHandler(this, breakpoint);
@@ -214,6 +223,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                         new GDBCommand(BreakInsert,
                                     breakpoint->location(),
                                     handler, &InsertedHandler::handle, true));
+                    addedCommand = true;
                 } else {
                     InsertedHandler *handler = new InsertedHandler(this, breakpoint);
                     QString opt;
@@ -227,6 +237,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                             BreakWatch,
                             opt + breakpoint->location(),
                             handler, &InsertedHandler::handle, true));
+                    addedCommand = true;
                 }
             }
         }
@@ -238,6 +249,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString::number(m_ids[breakpoint]),
                            handler, &UpdateHandler::handle,
                            true));
+        addedCommand = true;
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn);
@@ -246,6 +258,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
                            handler, &UpdateHandler::handle,
                            true));
+        addedCommand = true;
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
         UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn);
@@ -254,6 +267,16 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
                            handler, &UpdateHandler::handle,
                            true));
+        addedCommand = true;
+    }
+    if (addedCommand && controller()->stateIsOn(s_appRunning)) {
+        if (m_interrupted) {
+            kDebug() << "dbg is busy, already interrupting";
+        } else {
+            kDebug() << "dbg is busy, interrupting";
+            m_interrupted = true;
+            controller()->slotPauseApp();
+        }
     }
 }
 

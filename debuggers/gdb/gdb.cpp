@@ -368,7 +368,7 @@ void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void GDB::processErrored(QProcess::ProcessError error)
 {
-    kDebug(9012) << "GDB ERRORED\n";
+    kDebug(9012) << "GDB ERRORED" << error;
     if( error == QProcess::FailedToStart )
     {
         KMessageBox::information(
