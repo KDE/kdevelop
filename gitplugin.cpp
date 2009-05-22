@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2009 Hugo Parente Lima <hugo.pl@gmail.com>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -36,6 +37,8 @@
 #include <vcs/vcsrevision.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <shell/core.h>
+#include <vcs/vcsannotation.h>
+#include <QDateTime>
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -261,6 +264,41 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     return log(localLocation, rev, 0);
 }
 
+KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&) {
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localLocation.toLocalFile()) ) {
+        *job << "git";
+        *job << "blame";
+        *job << "--root";
+        *job << "-t";
+        addFileList(job, localLocation);
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
+    } else {
+        delete job;
+        job = 0;
+    }
+    return job;
+}
+
+void GitPlugin::parseGitBlameOutput(DVcsJob *job) {
+    QList<QVariant> results;
+    int lineNumber = 0;
+    QRegExp regex("(\\w{8}) \\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
+    foreach(QString line, job->output().split("\n")) {
+        if (regex.indexIn(line) == 0) {
+            VcsAnnotationLine annotation;
+            annotation.setAuthor(regex.cap(2));
+            annotation.setDate(QDateTime::fromTime_t(regex.cap(3).toUInt()));
+            annotation.setLineNumber(lineNumber);
+            VcsRevision rev;
+            rev.setRevisionValue(regex.cap(1), KDevelop::VcsRevision::GlobalNumber);
+            annotation.setRevision(rev);
+            results << QVariant::fromValue(annotation);
+        }
+        lineNumber++;
+    }
+    job->setResults(results);
+}
 
 DVcsJob* GitPlugin::var(const QString & repository)
 {
