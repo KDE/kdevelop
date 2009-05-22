@@ -15,6 +15,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include <languageexport.h>
+
 #include <QtGui/qvalidator.h>
 
 #ifndef CODEGEN_UTILITIES_H
@@ -32,10 +35,11 @@ namespace CodeGenUtils
  * A validator object that  verifies if a string would be an acceptable identifier
  * If inserted into the given context, including if it conflicts with any other identifier
  */
-class IdentifierValidator : public QValidator
+class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
 {
   public:
-    IdentifierValidator( DUContext * context) : QValidator(0), m_context(context) {};
+    IdentifierValidator( DUContext * context);
+    ~IdentifierValidator(void);
     
     virtual State validate(QString & input, int &) const;
       

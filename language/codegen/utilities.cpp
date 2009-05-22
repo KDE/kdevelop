@@ -28,6 +28,14 @@ namespace KDevelop
 
 namespace CodeGenUtils
 {
+    
+IdentifierValidator::IdentifierValidator( DUContext * context) : QValidator(0), m_context(context)
+{
+}
+
+IdentifierValidator::~IdentifierValidator(void)
+{
+}
 
 QValidator::State IdentifierValidator::validate (QString & input, int &) const
 {
