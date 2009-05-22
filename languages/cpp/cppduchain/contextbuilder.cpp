@@ -103,6 +103,7 @@ ContextBuilder::ContextBuilder ()
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
 {
@@ -112,6 +113,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
 {
@@ -122,6 +124,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   : m_nameCompiler(0)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
+  , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
 {
@@ -583,7 +586,7 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
     nc.run(node->name);
     id = nc.identifier();
   }
-  
+
   openContext(node, editor()->findRangeForContext(node->name ? node->name->end_token : node->start_token, node->end_token), DUContext::Class, id.isEmpty() ? QualifiedIdentifier() : QualifiedIdentifier(id.last()) );
   addImportedContexts(); //eventually add template-context
 
@@ -594,12 +597,12 @@ void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)
     if ((kind == Token_union || id.isEmpty())) {
       //It's an unnamed union context, or an unnamed struct, propagate the declarations to the parent
       DUChainWriteLocker lock(DUChain::lock());
-      if(currentContext()->parentContext()->type() == DUContext::Class) 
-        currentContext()->setPropagateDeclarations(true);
-      
+        
+      if(kind == Token_enum || kind == Token_union || m_typeSpecifierWithoutInitDeclarators == node->start_token) {
         ///@todo Mark unions in the duchain in some way, instead of just representing them as a class
-      if(kind == Token_union)
         currentContext()->setInSymbolTable(currentContext()->parentContext()->inSymbolTable());
+        currentContext()->setPropagateDeclarations(true);
+      }
     }
   }
   
@@ -753,8 +756,15 @@ void ContextBuilder::visitCompoundStatement(CompoundStatementAST * node)
   closeContext();
 }
 
+void ContextBuilder::preVisitSimpleDeclaration(SimpleDeclarationAST * node) {
+  if(!node->init_declarators && node->type_specifier)
+    m_typeSpecifierWithoutInitDeclarators = node->type_specifier->start_token;
+}
+
 void ContextBuilder::visitSimpleDeclaration(SimpleDeclarationAST *node)
 {
+  preVisitSimpleDeclaration(node);
+  
   DefaultVisitor::visitSimpleDeclaration(node);
 
   // Didn't get claimed if it was still set
@@ -936,7 +946,6 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   QualifiedIdentifier id;
   if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
     //Build a prefix-context for external variable-definitions
-    DUChainWriteLocker lock(DUChain::lock());
     SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);
     

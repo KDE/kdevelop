@@ -205,6 +205,8 @@ protected:
     return currentContext()->topContext();
   }
 
+  virtual void preVisitSimpleDeclaration(SimpleDeclarationAST *);
+
   //DUChain must not be locked
   void createUserProblem(AST* node, QString problem);
 
@@ -228,6 +230,7 @@ protected:
   bool smart() const;
 
   int m_templateDeclarationDepth;
+  uint m_typeSpecifierWithoutInitDeclarators; //Start-token of the last opened type-specifier without init-declarators (Only filled in specific cases)
 
   QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
 

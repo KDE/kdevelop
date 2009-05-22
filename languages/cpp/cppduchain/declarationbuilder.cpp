@@ -1194,7 +1194,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
     bool forwardDeclarationGlobal = false;
 
-    if(m_declarationHasInitDeclarators || isFriendDeclaration) {
+    if(m_typeSpecifierWithoutInitDeclarators != node->start_token || isFriendDeclaration) {
       /**This is an elaborated type-specifier
        *
        * See iso c++ draft 3.3.4 for details.

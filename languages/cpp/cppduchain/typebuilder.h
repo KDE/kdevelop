@@ -68,8 +68,6 @@ protected:
   virtual void createTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForInitializer(InitializerAST *node);
 
-  bool m_declarationHasInitDeclarators; //Is set when processing the type-specifiers within SimpleDeclarationASTs, to change the behavior for elaborated type-specifiers.
-
   ///Returns whether a type was opened
   /// The implementation is quite different from the generic code, so leave this implementation here for now.
   ///@param modifiers If this is nonzero, the returned type will have those modifiers assigned(In AbstractType::modifiers())

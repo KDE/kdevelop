@@ -387,14 +387,19 @@ class CppDUContext : public BaseContext {
               kDebug() << "problem";
             } else {
               Declaration* copy;
-              if(decl->context() != m_instantiatedFrom) {
+              
+              DUContext* current = decl->context();
+              while(current != m_instantiatedFrom && current)
+              {
                 // The declaration has been propagated up from a sub-context like an enumerator, add more empty instantiation information
+                // so the depth is matched correctly by the information
                 InstantiationInformation i;
-                i.previousInstantiationInformation = memberInstantiationInformation.indexed(); //Currently we don't propagate higher than 1 level
-                copy = templateDecl->instantiate(i, source);
-              }else{
-                copy = templateDecl->instantiate(memberInstantiationInformation, source);
+                i.previousInstantiationInformation = memberInstantiationInformation.indexed();
+                memberInstantiationInformation = i;
+                current = current->parentContext();
               }
+              
+              copy = templateDecl->instantiate(memberInstantiationInformation, source);
               //This can happen in case of explicit specializations
 //               if(copy->context() != this)
 //                 kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";

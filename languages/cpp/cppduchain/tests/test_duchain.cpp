@@ -1036,6 +1036,33 @@ void TestDUChain::testDeclareStruct()
 // 
 //     release(top);
 //   }
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+  {
+    QByteArray method("class A { public: union { struct { int x; }; int p; }; struct { int b; }; struct { int c; } cc; }; A test; void test() { test.x = 1; test.b = 1; test.p = 1; test.cc.c = 1; }");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[0]->childContexts()[2]->localDeclarations().count(), 1);
+    QVERIFY(!top->childContexts()[0]->childContexts()[2]->localDeclarations()[0]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[0]->childContexts()[1]->localDeclarations().count(), 1);
+    QVERIFY(top->childContexts()[0]->childContexts()[1]->isPropagateDeclarations());
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->isPropagateDeclarations());
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->inSymbolTable());
+    QVERIFY(top->childContexts()[0]->childContexts()[1]->inSymbolTable());
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->localScopeIdentifier().isEmpty());
+    QVERIFY(top->childContexts()[0]->childContexts()[1]->localScopeIdentifier().isEmpty());
+    QVERIFY(!top->childContexts()[0]->childContexts()[1]->localDeclarations()[0]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 1);
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->isPropagateDeclarations());
+    QVERIFY(top->childContexts()[0]->childContexts()[0]->childContexts()[0]->isPropagateDeclarations());
+    QVERIFY(!top->childContexts()[0]->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[2]->usesCount(), 9);
+  }
 
   {
     //                 0         1         2         3         4         5         6         7

@@ -51,7 +51,7 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
 }
 
 TypeBuilder::TypeBuilder()
-  : TypeBuilderBase(), m_declarationHasInitDeclarators(false), m_inTypedef(false), m_lastTypeWasInstance(false)
+  : TypeBuilderBase(), m_inTypedef(false), m_lastTypeWasInstance(false)
 {
 }
 
@@ -508,21 +508,20 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
   clearLastType();
 
-  m_declarationHasInitDeclarators = (bool)node->init_declarator;
+  if(!node->init_declarator && node->type_specifier)
+    m_typeSpecifierWithoutInitDeclarators = node->type_specifier->start_token;
 
   TypeBuilderBase::visitFunctionDeclaration(node);
-
-  m_declarationHasInitDeclarators = false;
 }
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 {
   clearLastType();
+  
+  preVisitSimpleDeclaration(node);
 
   // Reimplement default visitor
-  m_declarationHasInitDeclarators = (bool)node->init_declarators;
   visit(node->type_specifier);
-  m_declarationHasInitDeclarators = false;
 
   AbstractType::Ptr baseType = lastType();
 
