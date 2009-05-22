@@ -679,7 +679,11 @@ void DUContext::setPropagateDeclarations(bool propagate)
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
+  
   QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+  
+  if(propagate == d->m_propagateDeclarations)
+    return;
 
   m_dynamicData->m_parentContext->m_dynamicData->disableLocalDeclarationsHash();
 
