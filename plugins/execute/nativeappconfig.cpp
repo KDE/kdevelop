@@ -80,6 +80,9 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(2, "Install" );
     dependencyAction->setItemData(3, "SudoInstall" );
     
+    //Set workingdirectory widget to ask for directories rather than files
+    workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+
     //connect signals to changed signal
     connect( projectTarget, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
