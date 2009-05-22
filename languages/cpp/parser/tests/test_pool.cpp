@@ -60,10 +60,10 @@ void TestPool::testNewBlockAllocation()
     int lastOne = alloc._S_block_size / sizeof(int) - 1;
     p[lastOne] = 10;
     //the first one in another block
-    alloc.allocate(1);
-    p[lastOne+1] = 11;
+    int *p2 = alloc.allocate(1);
+    p2[0] = 11;
     QCOMPARE(p[lastOne], 10);
-    QCOMPARE(p[lastOne+1], 11);
+    QCOMPARE(p2[0], 11);
 }
 
 void TestPool::testWastedMemoryDueToBlockAllocation()
