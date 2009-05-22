@@ -647,7 +647,7 @@ void GdbTest::testStack()
     QCOMPARE(model->rowCount(QModelIndex()), 1);
     QCOMPARE(model->columnCount(QModelIndex()), 1);
 
-    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#0 at foo"));
+    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#1 at foo"));
 
     QTest::qWait(200);
     KDevelop::FramesModel* fmodel=model->modelForThread(0);
