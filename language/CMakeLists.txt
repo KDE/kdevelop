@@ -297,6 +297,7 @@ install(FILES
     codegen/codegenerator.h
     codegen/documentchangeset.h
     codegen/coderepresentation.h
+    codegen/utilities.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codegen COMPONENT Devel
 )
 
