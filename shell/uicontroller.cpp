@@ -279,6 +279,8 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
         if(flags & Raise)
             findToolView(name, factory, Raise);
     }
+
+    return 0;
 }
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
