@@ -44,6 +44,7 @@ public:
         LastBreakpointKind
     };
     enum BreakpointState {
+        NotStartedState,
         DirtyState,
         PendingState,
         CleanState

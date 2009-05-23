@@ -118,6 +118,8 @@ QVariant Breakpoint::data(int column, int role) const
                 return KIcon("dialog-warning");
             }
             switch (state()) {
+                case NotStartedState:
+                    return QVariant();
                 case DirtyState:
                     return KIcon("system-switch-user");
                 case PendingState:
@@ -130,6 +132,8 @@ QVariant Breakpoint::data(int column, int role) const
                 return i18n("error");
             }
             switch (state()) {
+                case NotStartedState:
+                    return "";
                 case DirtyState:
                     return i18n("dirty");
                 case PendingState:
@@ -313,7 +317,7 @@ Breakpoint::BreakpointState Breakpoint::state() const
     if (session) {
         return session->breakpointController()->breakpointState(this);
     } else {
-        return DirtyState;
+        return NotStartedState;
     }
 }
 

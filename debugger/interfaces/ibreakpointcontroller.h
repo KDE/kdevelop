@@ -70,6 +70,7 @@ protected:
 private Q_SLOTS:
     void breakpointChanged(KDevelop::Breakpoint* breakpoint, KDevelop::Breakpoint::Column column);
     void breakpointDeleted(KDevelop::Breakpoint *breakpoint);
+    void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState);
 };
 
 }

@@ -106,11 +106,18 @@ void BreakpointDetails::setItem(Breakpoint *b)
 {
     kDebug() << b;
     m_currentBreakpoint = b;
-    if (!b)
-    {
+
+    if (!b) {
         status_->hide();
         hits_->hide();
         ignore_->setEnabled(false);
+        return;
+    }
+
+    if (b->state() == Breakpoint::NotStartedState) {
+        status_->hide();
+        hits_->hide();
+        ignore_->setEnabled(true);
         return;
     }
 
@@ -120,6 +127,9 @@ void BreakpointDetails::setItem(Breakpoint *b)
 
     if (b->errors().isEmpty()) {
         switch (b->state()) {
+            case Breakpoint::NotStartedState:
+                Q_ASSERT(0);
+                break;
             case Breakpoint::PendingState:
                 status_->setText(i18n("Breakpoint is <a href=\"pending\">pending</a>"));
                 break;

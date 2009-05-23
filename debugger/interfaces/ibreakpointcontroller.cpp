@@ -47,14 +47,9 @@ IBreakpointController::IBreakpointController(KDevelop::IDebugSession* parent)
             SLOT(breakpointChanged(KDevelop::Breakpoint*,KDevelop::Breakpoint::Column)));
     connect(breakpointModel(), SIGNAL(breakpointDeleted(KDevelop::Breakpoint*)),
             SLOT(breakpointDeleted(KDevelop::Breakpoint*)));
-    
-    foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
-        m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
-        if (!breakpoint->condition().isEmpty()) {
-            m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
-        }
-        breakpointStateChanged(breakpoint);
-    }
+
+    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+             SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 IDebugSession* IBreakpointController::debugSession() const
@@ -65,6 +60,23 @@ IDebugSession* IBreakpointController::debugSession() const
 BreakpointModel* IBreakpointController::breakpointModel() const
 {
     return ICore::self()->debugController()->breakpointModel();
+}
+
+void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::StartingState || state == IDebugSession::StoppedState) {
+        //breakpoint state changes when session started or stopped
+        foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
+            if (state == IDebugSession::StartingState) {
+                //when starting everything is dirty
+                m_dirty[breakpoint].insert(Breakpoint::LocationColumn);
+                if (!breakpoint->condition().isEmpty()) {
+                    m_dirty[breakpoint].insert(Breakpoint::ConditionColumn);
+                }
+            }
+            breakpointStateChanged(breakpoint);
+        }
+    }
 }
 
 void IBreakpointController::sendMaybeAll()
@@ -98,6 +110,11 @@ void IBreakpointController::breakpointDeleted(KDevelop::Breakpoint* breakpoint)
 
 Breakpoint::BreakpointState IBreakpointController::breakpointState(const Breakpoint* breakpoint) const
 {
+    if (debugSession()->state() != IDebugSession::ActiveState
+        && debugSession()->state() != IDebugSession::PausedState
+    ) {
+        return Breakpoint::NotStartedState;
+    }
     if (!m_dirty.contains(breakpoint) || m_dirty[breakpoint].isEmpty()) {
         if (m_pending.contains(breakpoint)) {
             return Breakpoint::PendingState;
