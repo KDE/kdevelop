@@ -96,8 +96,8 @@ void DebugSession::setSessionState(DebuggerState state)
 {
     kDebug() << "STATE CHANGED" << state << ENUM_NAME(IDebugSession, DebuggerState, state);
     if (state != m_sessionState) {
-        emit stateChanged(state);
         m_sessionState = state;
+        emit stateChanged(state);
     }
 }
 
@@ -143,6 +143,7 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
                 floatingToolBar->hide();
 
         } else {
+            setSessionState(StartingState);
             if (m_config.readEntry("Floating Toolbar", false))
             {
             #ifndef QT_MAC
