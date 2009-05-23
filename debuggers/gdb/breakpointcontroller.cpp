@@ -269,7 +269,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                            true));
         addedCommand = true;
     }
-    if (addedCommand && controller()->stateIsOn(s_appRunning)) {
+    if (addedCommand && debugSession()->state() == KDevelop::IDebugSession::ActiveState) {
         if (m_interrupted) {
             kDebug() << "dbg is busy, already interrupting";
         } else {
