@@ -22,19 +22,12 @@
 #include <QMap>
 #include <QObject>
 #include <QSet>
-#include <QTabBar>
 
 #include "area.h"
 #include "sublimedefs.h"
 
 #include "mainwindow.h"
 #include "ideallayout.h"
-#include <qmenubar.h>
-#include <qstylepainter.h>
-#include <qstyleoption.h>
-#include <qevent.h>
-#include <KColorScheme>
-#include "blur.h"
 
 class QMenu;
 class QAction;
@@ -49,34 +42,6 @@ class Container;
 class Controller;
 class AreaIndex;
 class IdealMainWidget;
-
-class AreaTabBar : public QTabBar {
-    public:
-    AreaTabBar(QWidget* parent) ;
-
-    //Non-vertual overload: Respected by mainwindow.cpp
-    void setCurrentIndex(int index) ;
-    
-    virtual QSize tabSizeHint ( int index ) const ;
-    
-    private:
-        int m_currentIndex;
-};
-
-class AreaTabWidget : public QWidget {
-    public:
-    AreaTabWidget(QMenuBar* parent) ;
-    
-    virtual QSize sizeHint() const ;
-    
-    virtual void paintEvent(QPaintEvent *ev);
-    
-    QMenuBar* bar() const {
-        return static_cast<QMenuBar*>(parent());
-    }
-
-    AreaTabBar* tabBar;
-};
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -120,7 +85,6 @@ public:
     View *activeToolView;
 
     QWidget *centralWidget;
-    AreaTabWidget* areaSwitcher;
 
     IdealMainWidget *idealMainWidget;
     int ignoreDockShown;
@@ -133,7 +97,6 @@ public slots:
     void toolViewAdded(Sublime::View *toolView, Sublime::Position position);
     void aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position position);
     void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
-    void toggleArea(int index);
 
 private slots:
     void switchToArea(QAction *action);

@@ -94,7 +94,6 @@ Q_SIGNALS:
 protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
-    void setupAreaSelector();
 
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
