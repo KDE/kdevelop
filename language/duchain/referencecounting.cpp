@@ -47,31 +47,32 @@ struct RefCountDecider {
  * 
  */
 
-RefCountDecider& refcounting() {
-  static RefCountDecider ref;
+RefCountDecider* refcounting() {
+  // the RefCountDecider is leaked, since it needs to stay valid during shutdown
+  static RefCountDecider *ref = new RefCountDecider();
   return ref;
 }
 
 bool KDevelop::shouldDoDUChainReferenceCountingInternal(void* item)
 {
-  refcounting().mutex.lock();
+  refcounting()->mutex.lock();
   bool ret = false;
   
-  QMap< void*, QPair<uint, uint> >::const_iterator it = refcounting().ranges.upperBound(item);
-  if(it != refcounting().ranges.begin()) {
+  QMap< void*, QPair<uint, uint> >::const_iterator it = refcounting()->ranges.upperBound(item);
+  if(it != refcounting()->ranges.begin()) {
     --it;
     ret = ((char*)it.key()) <= (char*)item && (char*)item < ((char*)it.key()) + it.value().first;
   }
   
-  refcounting().mutex.unlock();
+  refcounting()->mutex.unlock();
   return ret;
 }
 
 void KDevelop::disableDUChainReferenceCounting(void* start)
 {
-  refcounting().mutex.lock();
-  QMap< void*, QPair<uint, uint> >::iterator it = refcounting().ranges.upperBound(start);
-  if(it != refcounting().ranges.begin()) {
+  refcounting()->mutex.lock();
+  QMap< void*, QPair<uint, uint> >::iterator it = refcounting()->ranges.upperBound(start);
+  if(it != refcounting()->ranges.begin()) {
     --it;
     if(((char*)it.key()) <= (char*)start && (char*)start < ((char*)it.key()) + it.value().first)
     {
@@ -83,40 +84,40 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
   Q_ASSERT(it.value().second > 0);
   --it.value().second;
   if(it.value().second == 0)
-    refcounting().ranges.erase(it);
+    refcounting()->ranges.erase(it);
   
-  if(refcounting().ranges.isEmpty())
+  if(refcounting()->ranges.isEmpty())
     doReferenceCounting = false;
   
-  refcounting().mutex.unlock();
+  refcounting()->mutex.unlock();
 }
 
 void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
-  refcounting().mutex.lock();
+  refcounting()->mutex.lock();
   
   doReferenceCounting = true;
   
-  QMap< void*, QPair<uint, uint> >::iterator it = refcounting().ranges.upperBound(start);
-  if(it != refcounting().ranges.begin()) {
+  QMap< void*, QPair<uint, uint> >::iterator it = refcounting()->ranges.upperBound(start);
+  if(it != refcounting()->ranges.begin()) {
     --it;
     if(((char*)it.key()) <= (char*)start && (char*)start < ((char*)it.key()) + it.value().first)
     {
       //Contained, count up
     }else{
-      it = refcounting().ranges.end(); //Insert own item
+      it = refcounting()->ranges.end(); //Insert own item
     }
-  }else if(it != refcounting().ranges.end() && it.key() > start) {
+  }else if(it != refcounting()->ranges.end() && it.key() > start) {
     //The item is behind
-    it = refcounting().ranges.end();
+    it = refcounting()->ranges.end();
   }
   
-  if(it == refcounting().ranges.end()) {
-    QMap< void*, QPair<uint, uint> >::iterator inserted = refcounting().ranges.insert(start, qMakePair(size, 1u));
+  if(it == refcounting()->ranges.end()) {
+    QMap< void*, QPair<uint, uint> >::iterator inserted = refcounting()->ranges.insert(start, qMakePair(size, 1u));
     //Merge following ranges
     QMap< void*, QPair<uint, uint> >::iterator it = inserted;
     ++it;
-    while(it != refcounting().ranges.end() && it.key() < ((char*)start) + size) {
+    while(it != refcounting()->ranges.end() && it.key() < ((char*)start) + size) {
       
       inserted.value().second += it.value().second; //Accumulate count
       if(((char*)start) + size < ((char*)inserted.key()) + it.value().first) {
@@ -124,7 +125,7 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
         inserted.value().first = (((char*)inserted.key()) + it.value().first) - ((char*)start);
       }
       
-      it = refcounting().ranges.erase(it);
+      it = refcounting()->ranges.erase(it);
     }
   }else{
     ++it.value().second;
@@ -132,7 +133,7 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
       it.value().first = size;
   }
   
-  refcounting().mutex.unlock();
+  refcounting()->mutex.unlock();
   Q_ASSERT(shouldDoDUChainReferenceCounting(start));
   Q_ASSERT(shouldDoDUChainReferenceCounting(((char*)start + (size-1))));
 }
