@@ -575,6 +575,115 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
     }
 }
 
+void MainWindowPrivate::toggleArea ( int index ) {
+    QList<Area*> defaultAreas = m_mainWindow->controller()->defaultAreas();
+    if(index >= 0 && index < defaultAreas.size()) {
+        if(area != defaultAreas[index])
+            m_mainWindow->controller()->showArea(defaultAreas[index], m_mainWindow);
+    }
+}
+
+void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
+    QWidget::paintEvent ( ev );
+
+    if ( tabBar->isVisible() && tabBar->count() > 0 ) {
+        QStylePainter p ( this );
+
+        if ( tabBar->currentIndex() != -1 ) {
+            //Draw highlight behind current area
+            QRect activeRect = tabBar->tabRect ( tabBar->currentIndex() );
+            QRect tabArea = QRect ( activeRect.topLeft() + tabBar->pos(), activeRect.bottomRight() + tabBar->pos() ) & ev->rect();
+            QImage img ( tabArea.width(), tabArea.height(), QImage::Format_ARGB32 );
+            img.fill ( 0 );
+            QPainter paintImg ( &img );
+            QColor color ( palette().color ( QPalette::Active, QPalette::Highlight ) );
+            color.setAlpha ( 80 );
+            QRect paint = tabArea;
+            const int margin = 10;
+            paint.setLeft ( margin );
+            paint.setTop ( margin );
+            paint.setRight ( activeRect.width()-margin );
+            paint.setBottom ( activeRect.height()-margin );
+
+            paintImg.fillRect ( paint, color );
+            expblur<16,7> ( img, margin/2 );
+            p.drawImage ( tabArea, img );
+        }
+
+        QStyleOptionTabBarBase optTabBase;
+        optTabBase.init ( tabBar );
+        optTabBase.shape = tabBar->shape();
+
+        int sideWidth = width()-tabBar->width();
+
+        QStyleOptionTab tabOverlap;
+        tabOverlap.shape = tabBar->shape();
+        int overlap = style()->pixelMetric ( QStyle::PM_TabBarBaseOverlap, &tabOverlap, tabBar );
+        QRect rect;
+        rect.setRect ( 0, height()-overlap, sideWidth, overlap );
+        optTabBase.rect = rect;
+
+        QImage img ( sideWidth, height(), QImage::Format_ARGB32 );
+        img.fill ( 0 );
+        QStylePainter p2 ( &img, tabBar );
+        p2.drawPrimitive ( QStyle::PE_FrameTabBarBase, optTabBase );
+
+        {
+            //Blend the painted line out to the left
+            QLinearGradient blendOut ( 0, 0, sideWidth, 0 );
+            blendOut.setColorAt ( 0, QColor ( 255, 255, 255, 255 ) );
+            blendOut.setColorAt ( 1, QColor ( 0, 0, 0, 0 ) );
+            QBrush blendBrush ( blendOut );
+
+            p2.setCompositionMode ( QPainter::CompositionMode_DestinationOut );
+            p2.fillRect ( img.rect(), blendBrush );
+        }
+
+        p.setCompositionMode ( QPainter::CompositionMode_SourceOver );
+        p.drawImage ( img.rect(), img );
+    }
+}
+
+QSize AreaTabWidget::sizeHint() const {
+    //Resize to hold the whole length up to the menu
+    static bool zeroSizeHint = false;
+    if ( zeroSizeHint )
+        return QSize();
+    zeroSizeHint = true;
+    int wantWidth = bar()->parentWidget()->width() - bar()->sizeHint().width();
+    zeroSizeHint = false;
+    QSize orig = tabBar->sizeHint();
+    if ( wantWidth > orig.width() )
+        orig.setWidth ( wantWidth );
+    return orig;
+}
+
+AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ) {
+    QHBoxLayout* layout = new QHBoxLayout ( this );
+    layout->setAlignment ( Qt::AlignRight );
+    tabBar = new AreaTabBar ( this );
+    layout->addWidget ( tabBar );
+    layout->setContentsMargins ( 0,0,0,0 );
+}
+
+QSize AreaTabBar::tabSizeHint ( int index ) const {
+    QSize ret = QTabBar::tabSizeHint ( index );
+    return ret;
+}
+
+void AreaTabBar::setCurrentIndex ( int index ) {
+    m_currentIndex = index;
+    QTabBar::setCurrentIndex ( index );
+}
+
+AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex ( -1 ) {
+    setShape ( QTabBar::RoundedNorth );
+    setDocumentMode ( true );
+    setLayoutDirection ( Qt::RightToLeft );
+    setExpanding ( false );
+    setDrawBase ( false );
+    QPalette pal = palette();
+}
 }
 
 #include "mainwindow_p.moc"
