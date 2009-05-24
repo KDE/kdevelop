@@ -134,7 +134,6 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     proc->setOutputChannelMode(KProcess::MergedChannels);
     
-    proc->setProperty("executable", executable);
     proc->setProgram( executable, arguments );
     
     setTitle(cfg->name());

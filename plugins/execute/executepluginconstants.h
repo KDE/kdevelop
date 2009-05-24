@@ -21,11 +21,13 @@
 #define EXECUTEPLUGINCONSTANTS_H
 
 #include <QtCore/QString>
+
+#include <kconfiggroup.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 
-class KConfigGroup;
 
 /**
  * Provides access to the config entry names that are being used
