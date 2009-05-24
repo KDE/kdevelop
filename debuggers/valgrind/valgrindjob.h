@@ -41,6 +41,7 @@ namespace KDevelop
 class ProcessLineMaker; 
 class ILaunchConfiguration;
 class OutputModel;
+class ILaunchConfiguration;
 }
 
 class ValgrindJob : public KDevelop::OutputJob
@@ -78,6 +79,8 @@ private:
     ValgrindModel* m_model;
 
     KDevelop::ProcessLineMaker* m_applicationOutput;
+    KDevelop::ILaunchConfiguration* m_launchcfg;
+    QString m_tool;
 };
 
 #endif

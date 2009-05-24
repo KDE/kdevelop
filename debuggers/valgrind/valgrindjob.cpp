@@ -26,14 +26,20 @@
 #include <QTcpSocket>
 #include <QApplication>
 #include <QBuffer>
+#include <QFileInfo>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <KProcess>
+#include <kshell.h>
 
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
+#include <util/environmentgrouplist.h>
+#include <interfaces/ilaunchconfiguration.h>
+
+#include <execute/executepluginconstants.h>
 
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
@@ -46,6 +52,8 @@ ValgrindJob::ValgrindJob( const QString& tool, KDevelop::ILaunchConfiguration* c
     , m_connection(0)
     , m_model(new ValgrindModel(this))
     , m_applicationOutput(new KDevelop::ProcessLineMaker(this))
+    , m_launchcfg( cfg )
+    , m_tool( tool )
 {
     setCapabilities( KJob::Killable );
     m_process->setOutputChannelMode(KProcess::SeparateChannels);
@@ -59,6 +67,71 @@ ValgrindJob::ValgrindJob( const QString& tool, KDevelop::ILaunchConfiguration* c
 
 void ValgrindJob::start()
 {
+    KConfigGroup grp = m_launchcfg->config();
+    KDevelop::EnvironmentGroupList l(KGlobal::config());
+    
+    QString executable = ExecutePlugin::executableFromConfig( grp );
+    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
+    
+    if( executable.isEmpty() )
+    {
+        setError(-1);
+        setErrorText( i18n("No executable specified") );
+        kWarning() << "no executable set";
+    } else
+    {
+        KShell::Errors err;
+        if( KShell::splitArgs( executable, KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
+        {
+            
+            setError( -1 );
+            if( err == KShell::BadQuoting ) 
+            {
+                setErrorText( i18n("There is a quoting error in the executable "
+                "for the launch configuration '%1'. "
+                "Aborting start.", m_launchcfg->name() ) );
+            } else 
+            {   
+                setErrorText( i18n("A shell meta character was included in the "
+                "executable for the launch configuration '%1', "
+                "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
+            }
+            kWarning() << "executable has meta characters";
+        }
+    }
+    
+    if( envgrp.isEmpty() )
+    {
+        kWarning() << i18n("No environment group specified, looks like a broken "
+        "configuration, please check run configuration '%1'. "
+        "Using default environment group.", m_launchcfg->name() );
+        envgrp = l.defaultGroup();
+    }
+    
+    KShell::Errors err;
+    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
+    if( err != KShell::NoError )
+    {
+        
+        setError( -1 );
+        if( err == KShell::BadQuoting ) 
+        {
+            setErrorText( i18n("There is a quoting error in the arguments for "
+            "the launch configuration '%1'. Aborting start.", m_launchcfg->name() ) );
+        } else 
+        {   
+            setErrorText( i18n("A shell meta character was included in the "
+            "arguments for the launch configuration '%1', "
+            "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
+        }
+        kDebug() << "arguments have meta characters";
+    }
+    if( error() != 0 )
+    {
+        emitResult();
+        return;
+    }
+    
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
@@ -82,11 +155,15 @@ void ValgrindJob::start()
             connect(m_server, SIGNAL(newConnection()), SLOT(newValgrindConnection()));
     }
 
-    QStringList arguments;
-//TODO: Port to launch framework
+    m_process->setEnvironment( l.createEnvironment( envgrp, m_process->systemEnvironment()) );
+    m_process->setWorkingDirectory( grp.readEntry(ExecutePlugin::workingDirEntry, KUrl( QFileInfo( executable ).absolutePath() ) ).toLocalFile() );
+    m_process->setProperty( "executable", executable );
+
+    QStringList valgrindArgs;
+    valgrindArgs += KShell::splitArgs( grp.readEntry( "Valgrind Arguments", "" ) );
+    
+//TODO: Properly set following options for valgrind (no existing code for this)
 /*
-ui->valgrindExecutable->setUrl( cfg.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ) );
-ui->valgrindParameters->setText( cfg.readEntry( "Valgrind Arguments", "" ) );
 ui->numCallers->setValue( cfg.readEntry( "Framestack Depth", 12 ) );
 ui->maxStackFrame->setValue( cfg.readEntry( "Maximum Framestack Size", 2000000 ) );
 ui->limitErrors->setChecked( cfg.readEntry( "Limit Errors", false ) );
@@ -99,18 +176,16 @@ ui->simulateCache->setChecked( cfg.readEntry( "Full Cache Simulation", false ) )
 ui->simulateHWPref->setChecked( cfg.readEntry( "Simulate Hardware Prefetcher", false ) );
 ui->happensBefore->setCurrentIndex( cfg.readEntry("Extra Synchronization Events", 0 ) );
 */
-//     arguments << QString("--tool=%1").arg(run.instrumentor());
-//     arguments << run.instrumentorArguments();
-//     arguments << "--xml=yes";
-//     if (m_server && m_server->serverPort() != 0)
-//         arguments << QString("--log-socket=127.0.0.1:%1").arg(m_server->serverPort());
-//     arguments << run.executable().toLocalFile();
-//     arguments << run.arguments();
-// 
-//     m_process->setReadChannel(QProcess::StandardError);
-//     m_process->setProgram(plugin()->valgrindExecutable().toLocalFile(), arguments);
-// 
-//     m_process->start();
+
+    valgrindArgs << QString( "--tool=%1" ).arg( grp.readEntry( m_tool ) );
+    valgrindArgs << "--xml=yes";
+    if( m_server ) {
+        valgrindArgs << QString( "--log-socket=127.0.0.1:%1").arg( m_server->serverPort() );
+    }
+    valgrindArgs << executable;
+    valgrindArgs += arguments;
+    m_process->setProgram( grp.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ).toLocalFile() );
+    m_process->start();
 }
 
 bool ValgrindJob::doKill()
