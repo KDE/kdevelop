@@ -182,7 +182,6 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
                 emit raiseFramestackViews();
             }
 
-            setSessionState(ActiveState);
             justRestarted_ = true;
         }
     }
