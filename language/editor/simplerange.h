@@ -38,7 +38,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
     SimpleRange() {
     }
 
-    SimpleRange(const KTextEditor::Range& range) : start(range.start()), end(range.end()) {
+    SimpleRange(const KTextEditor::Range& range) : start(SimpleCursor(range.start())), end(SimpleCursor(range.end())) {
     }
 
     SimpleRange(int sLine, int sCol, int eLine, int eCol) : start(sLine, sCol), end(eLine, eCol) {
