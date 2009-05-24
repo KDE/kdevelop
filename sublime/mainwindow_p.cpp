@@ -650,9 +650,15 @@ QSize AreaTabWidget::sizeHint() const {
     if ( zeroSizeHint )
         return QSize();
     zeroSizeHint = true;
-    int wantWidth = bar()->parentWidget()->width() - bar()->sizeHint().width() - 10;
+    int available = bar()->parentWidget()->width() - bar()->sizeHint().width() - 10;
     zeroSizeHint = false;
     QSize orig = tabBar->sizeHint();
+    int addFade = available - orig.width();
+    if(addFade > 100)
+        addFade = 100; //Make the fade max. 100 pixels long
+    
+    int wantWidth = addFade + orig.width();
+    
     if ( wantWidth > orig.width() )
         orig.setWidth ( wantWidth );
     return orig;
