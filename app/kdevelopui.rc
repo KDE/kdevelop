@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="87" name="kdevelop" >
+<kpartgui version="88" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -152,7 +152,7 @@
 
 </MenuBar>
 
-<ToolBar name="mainToolBar" position="Top" noMerge="1">
+<ToolBar name="mainToolBar" position="Top">
   <text>Main Toolbar</text>
   <Action name="file_new" />
   <Separator/>
