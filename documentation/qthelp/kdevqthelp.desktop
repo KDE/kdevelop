@@ -41,7 +41,7 @@ GenericName[zh_TW]=Qt 說明
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevqthelp
-X-KDevelop-Version=6
+X-KDevelop-Version=7
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=KDevQtHelp
 X-KDE-PluginInfo-Author=Aleix Pol
