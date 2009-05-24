@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
-<kcfg>
-  <kcfgfile arg="true"/>
-  <group name="QMake Builder">
-	  <entry name="qmakebin" key="QMake Binary" type="Url" />
-  </group>
-</kcfg>
