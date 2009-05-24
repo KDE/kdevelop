@@ -83,9 +83,11 @@ bool Breakpoint::setData(int index, const QVariant& value)
     {
         QString s = value.toString();
         if (index == LocationColumn) {
-            if (kind_ == CodeBreakpoint) {
-                m_url = KUrl(s.left(s.lastIndexOf(':')));
-                m_line = s.right(s.length() - s.lastIndexOf(':') - 1).toInt() - 1;
+            QRegExp rx("^(.+):([0-9]+)$");
+            int idx = rx.indexIn(s);
+            if (kind_ == CodeBreakpoint && idx != -1) {
+                m_url = KUrl(rx.cap(1));
+                m_line = rx.cap(2).toInt() - 1;
             } else {
                 m_expression = s;
             }
@@ -165,7 +167,7 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         QString ret;
-        if (kind_ == CodeBreakpoint) {
+        if (kind_ == CodeBreakpoint && m_line != -1) {
             ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
             ret += ':' + QString::number(m_line+1);
         } else {
@@ -301,7 +303,6 @@ QString Breakpoint::condition() const
 
 void Breakpoint::setExpression(const QString& e)
 {
-    Q_ASSERT(kind_ != CodeBreakpoint);
     m_expression = e;
     reportChange(LocationColumn);
 }

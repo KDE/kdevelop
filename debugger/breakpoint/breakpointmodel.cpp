@@ -448,6 +448,13 @@ Breakpoint* BreakpointModel::addCodeBreakpoint(const KUrl& url, int line)
     return n;
 }
 
+Breakpoint* BreakpointModel::addCodeBreakpoint(const QString& expression)
+{
+    Breakpoint* n = addCodeBreakpoint();
+    n->setExpression(expression);
+    return n;
+}
+
 Breakpoint* BreakpointModel::addWatchpoint()
 {
     beginInsertRows(QModelIndex(), m_breakpoints.count(), m_breakpoints.count());

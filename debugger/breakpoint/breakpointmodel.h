@@ -62,6 +62,7 @@ public:
 
     KDevelop::Breakpoint* addCodeBreakpoint();
     KDevelop::Breakpoint* addCodeBreakpoint(const KUrl& location, int line);
+    KDevelop::Breakpoint* addCodeBreakpoint(const QString& expression);
     KDevelop::Breakpoint* addWatchpoint();
     KDevelop::Breakpoint* addWatchpoint(const QString& expression);
     KDevelop::Breakpoint* addReadWatchpoint();
