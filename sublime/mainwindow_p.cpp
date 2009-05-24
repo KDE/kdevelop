@@ -594,7 +594,7 @@ void AreaTabBar::paintEvent ( QPaintEvent* ev ) {
         img.fill ( 0 );
         QPainter paintImg ( &img );
         QColor color ( palette().color ( QPalette::Active, QPalette::Highlight ) );
-        color.setAlpha ( 100 );
+        color.setAlpha ( 70 );
         QRect paint = tabArea;
         const int margin = 8;
         paint.setLeft ( margin );
