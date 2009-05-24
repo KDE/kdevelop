@@ -1,6 +1,13 @@
 project(QMakeManager)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
+find_package(KDE4 4.2.0 REQUIRED)
+find_package(KDevPlatform 0.9.93 REQUIRED)
+find_package(KDevelop REQUIRED)
+
+include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INCLUDE_DIR} )
+
+add_subdirectory(qmakebuilder)
 
 find_package(KDevelop-PG-Qt QUIET)
 include_directories(

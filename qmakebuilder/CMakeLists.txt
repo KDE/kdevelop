@@ -1,9 +1,7 @@
 project(qmakebuilder)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9039 )
-include_directories(
-    ${makebuilder_SOURCE_DIR}
-    )
 
+include_directories( ${qmakebuilder_BINARY_DIR} )
 
 ########### next target ###############
 

@@ -19,9 +19,9 @@
  */
 
 #include "qmakebuilder.h"
-#include "imakebuilder.h"
+#include "make/imakebuilder.h"
 
-#include <config.h>
+//#include <config.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QSignalMapper>
