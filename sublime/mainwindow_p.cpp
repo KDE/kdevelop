@@ -650,7 +650,7 @@ QSize AreaTabWidget::sizeHint() const {
     if ( zeroSizeHint )
         return QSize();
     zeroSizeHint = true;
-    int wantWidth = bar()->parentWidget()->width() - bar()->sizeHint().width();
+    int wantWidth = bar()->parentWidget()->width() - bar()->sizeHint().width() - 10;
     zeroSizeHint = false;
     QSize orig = tabBar->sizeHint();
     if ( wantWidth > orig.width() )
