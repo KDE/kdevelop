@@ -78,9 +78,15 @@ class AreaTabBar : public QTabBar {
         while(count())
             removeTab(0);
         buttons.clear();
+        areaIds.clear();
     }
     
-    void addCustomTab(QString text, QIcon icon, bool isCurrent) {
+    QString areaId(int index) const {
+        return areaIds[index];
+    }
+    
+    void addCustomTab(QString text, QIcon icon, bool isCurrent, QString areaId) {
+        areaIds << areaId;
         buttons << new AreaTabButton(text, icon, 16, this, isCurrent);
         addTab(QString());
         setTabButton(count()-1, LeftSide, buttons.last());
@@ -89,6 +95,7 @@ class AreaTabBar : public QTabBar {
     virtual void paintEvent ( QPaintEvent* );
     
     private:
+    QList<QString> areaIds;
     QList<AreaTabButton*> buttons;
     int m_currentIndex;
 };

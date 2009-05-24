@@ -58,10 +58,17 @@ void MainWindow::setupAreaSelector() {
     
     d->areaSwitcher->tabBar->clearTabs();
     
-    foreach (Sublime::Area *area, controller()->defaultAreas())
-        d->areaSwitcher->tabBar->addCustomTab(area->title(), KIcon(area->iconName()), area == this->area());
+    int currentIndex = -1;
+    for(int a = 0; a < controller()->defaultAreas().size(); ++a) {
+        Area* theArea = controller()->defaultAreas()[a];
+        
+        if(theArea->objectName() == area()->objectName())
+            currentIndex = a;
+        
+        d->areaSwitcher->tabBar->addCustomTab(theArea->title(), KIcon(theArea->iconName()), currentIndex == a, theArea->objectName());
+    }
     
-    d->areaSwitcher->tabBar->setCurrentIndex(controller()->defaultAreas().indexOf(area()));
+    d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
 }
 

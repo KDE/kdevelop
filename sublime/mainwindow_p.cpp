@@ -576,11 +576,7 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
 }
 
 void MainWindowPrivate::toggleArea ( int index ) {
-    QList<Area*> defaultAreas = m_mainWindow->controller()->defaultAreas();
-    if(index >= 0 && index < defaultAreas.size()) {
-        if(area != defaultAreas[index])
-            m_mainWindow->controller()->showArea(defaultAreas[index], m_mainWindow);
-    }
+    m_mainWindow->controller()->showArea(areaSwitcher->tabBar->areaId(index), m_mainWindow);
 }
 
 void AreaTabBar::paintEvent ( QPaintEvent* ev ) {
