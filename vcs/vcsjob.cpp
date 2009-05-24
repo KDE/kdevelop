@@ -33,6 +33,7 @@ namespace KDevelop
         : OutputJob(parent), d(new VcsJobPrivate)
     {
         setStandardToolView(IOutputView::VcsView);
+        startOutput();
     }
 
     VcsJob::~VcsJob()

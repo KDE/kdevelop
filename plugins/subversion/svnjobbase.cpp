@@ -18,6 +18,11 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iplugin.h>
+#include <outputview/ioutputview.h>
+
 #include "svninternaljobbase.h"
 #include "svnssldialog.h"
 #include "kdevsvnplugin.h"
@@ -27,6 +32,7 @@ SvnJobBase::SvnJobBase( KDevSvnPlugin* parent )
       m_status( KDevelop::VcsJob::JobNotStarted )
 {
     setCapabilities( KJob::Killable );
+    setTitle( "Subversion" );
 }
 
 SvnJobBase::~SvnJobBase()
@@ -173,6 +179,15 @@ void SvnJobBase::outputMessage(const QString& message)
         previous->setText(previous->text() + message);
     else
         m->appendRow(new QStandardItem(message));
+    KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IOutputView");
+    if( i )
+    {
+        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        if( view )
+        {
+            view->raiseOutput( outputId() );
+        }
+    }
 }
 
 #include "svnjobbase.moc"
