@@ -136,7 +136,7 @@ void IncludePathComputer::computeBackground() {
             if(lock.locked()) {
               
               TopDUContext* context = KDevelop::DUChainUtils::standardContextForUrl(KUrl(fileInfo.dir().absoluteFilePath(file)));
-              if(context && context->language() == KDevelop::IndexedString("C++") && context->parsingEnvironmentFile() && !context->parsingEnvironmentFile()->needsUpdate()) {
+              if(context && context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->language() == KDevelop::IndexedString("C++") && !context->parsingEnvironmentFile()->needsUpdate()) {
                 Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(context->parsingEnvironmentFile().data());
                 Q_ASSERT(envFile);
                 if(!envFile->missingIncludeFiles().isEmpty() || envFile->includePathDependencies() != m_includePathDependency)

@@ -69,8 +69,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       topContext = TopDUContextPointer(context->topContext());
     if(!topContext)
       return;
-    if(!topContext->parsingEnvironmentFile() || topContext->language() != IndexedString("C++")) {
-      kDebug() << "top-context has wrong language:" << topContext->language().str();
+    if(!topContext->parsingEnvironmentFile() || topContext->parsingEnvironmentFile()->language() != IndexedString("C++")) {
+      kDebug() << "top-context has wrong language:";
       return;
     }
   }

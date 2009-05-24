@@ -340,7 +340,6 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
 
       topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), SimpleRange(), filePtr);
       topLevelContext->setType(DUContext::Global);
-      topLevelContext->setLanguage(IndexedString("C++"));
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
       cppContext = static_cast<CppDUContext<TopDUContext>* >(topLevelContext);
@@ -419,7 +418,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
       topLevelContext->setSmartRange(editor()->topRange(iface, CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
-      topLevelContext->setLanguage(IndexedString("C++"));
       DUChain::self()->addDocumentChain(topLevelContext);
     
       topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure

@@ -298,6 +298,7 @@ bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
 EnvironmentFile::EnvironmentFile( IndexedString url, TopDUContext* topContext ) : ParsingEnvironmentFile(*new EnvironmentFileData(), url) {
 
   d_func_dynamic()->setClassId(this);
+  setLanguage(IndexedString("C++"));
   
   d_func_dynamic()->m_topContext = IndexedTopDUContext(topContext);
   
