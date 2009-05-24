@@ -56,11 +56,10 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 void MainWindow::setupAreaSelector() {
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
-    while(d->areaSwitcher->tabBar->count())
-        d->areaSwitcher->tabBar->removeTab(0);
+    d->areaSwitcher->tabBar->clearTabs();
     
     foreach (Sublime::Area *area, controller()->defaultAreas())
-        d->areaSwitcher->tabBar->addTab(KIcon(area->iconName()), area->title());
+        d->areaSwitcher->tabBar->addCustomTab(area->title(), KIcon(area->iconName()), area == this->area());
     
     d->areaSwitcher->tabBar->setCurrentIndex(controller()->defaultAreas().indexOf(area()));
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));

@@ -583,32 +583,36 @@ void MainWindowPrivate::toggleArea ( int index ) {
     }
 }
 
+void AreaTabBar::paintEvent ( QPaintEvent* ev ) {
+    QTabBar::paintEvent(ev);
+    if ( currentIndex() != -1 ) {
+        QStylePainter p ( this );
+        //Draw highlight behind current area
+        QRect activeRect = tabRect ( currentIndex() );
+        QRect tabArea = activeRect;
+        QImage img ( tabArea.width(), tabArea.height(), QImage::Format_ARGB32 );
+        img.fill ( 0 );
+        QPainter paintImg ( &img );
+        QColor color ( palette().color ( QPalette::Active, QPalette::Highlight ) );
+        color.setAlpha ( 100 );
+        QRect paint = tabArea;
+        const int margin = 8;
+        paint.setLeft ( margin );
+        paint.setTop ( margin );
+        paint.setRight ( activeRect.width()-margin );
+        paint.setBottom ( activeRect.height()-margin );
+
+        paintImg.fillRect ( paint, color );
+        expblur<16,7> ( img, margin/2 );
+        p.drawImage ( tabArea, img );
+    }
+}
+
 void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
     QWidget::paintEvent ( ev );
 
     if ( tabBar->isVisible() && tabBar->count() > 0 ) {
         QStylePainter p ( this );
-
-        if ( tabBar->currentIndex() != -1 ) {
-            //Draw highlight behind current area
-            QRect activeRect = tabBar->tabRect ( tabBar->currentIndex() );
-            QRect tabArea = QRect ( activeRect.topLeft() + tabBar->pos(), activeRect.bottomRight() + tabBar->pos() ) & ev->rect();
-            QImage img ( tabArea.width(), tabArea.height(), QImage::Format_ARGB32 );
-            img.fill ( 0 );
-            QPainter paintImg ( &img );
-            QColor color ( palette().color ( QPalette::Active, QPalette::Highlight ) );
-            color.setAlpha ( 80 );
-            QRect paint = tabArea;
-            const int margin = 10;
-            paint.setLeft ( margin );
-            paint.setTop ( margin );
-            paint.setRight ( activeRect.width()-margin );
-            paint.setBottom ( activeRect.height()-margin );
-
-            paintImg.fillRect ( paint, color );
-            expblur<16,7> ( img, margin/2 );
-            p.drawImage ( tabArea, img );
-        }
 
         QStyleOptionTabBarBase optTabBase;
         optTabBase.init ( tabBar );
@@ -673,13 +677,30 @@ AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ) {
 }
 
 QSize AreaTabBar::tabSizeHint ( int index ) const {
-    QSize ret = QTabBar::tabSizeHint ( index );
+    //Since we move all contents into the button, we give approximately the button size as size-hint
+    //QTabBar seems to add useless space for the non-existing tab text
+    QSize ret = QTabBar::tabSizeHint(index);
+    
+    if(ret.width() > buttons[index]->sizeHint().width()+16)
+        ret.setWidth(buttons[index]->sizeHint().width() + 16); ///@todo Where does the offset come from?
     return ret;
+}
+
+
+void AreaTabButton::setIsCurrent ( bool arg1 ) {
+    m_isCurrent = arg1;
 }
 
 void AreaTabBar::setCurrentIndex ( int index ) {
     m_currentIndex = index;
+    foreach(AreaTabButton* button, buttons) {
+        button->setIsCurrent(buttons.indexOf(button) == index);
+    }
     QTabBar::setCurrentIndex ( index );
+    foreach(AreaTabButton* button, buttons) {
+        button->update();
+    }
+    update();
 }
 
 AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex ( -1 ) {
@@ -689,6 +710,19 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     setExpanding ( false );
     setDrawBase ( false );
     QPalette pal = palette();
+}
+
+AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent ) : QWidget ( parent ), m_isCurrent ( isCurrent ) {
+    QHBoxLayout* layout = new QHBoxLayout ( this );
+    iconLabel = new QLabel ( this );
+    iconLabel->setPixmap ( icon.pixmap ( QSize ( iconSize, iconSize ) ) );
+    iconLabel->setAutoFillBackground ( false );
+    textLabel = new QLabel ( this );
+    textLabel->setText ( text );
+    textLabel->setAutoFillBackground ( false );
+    layout->addWidget ( textLabel );
+    layout->addWidget ( iconLabel );
+    layout->setMargin ( 0 );
 }
 }
 

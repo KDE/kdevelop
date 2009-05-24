@@ -23,6 +23,8 @@
 #include <QObject>
 #include <QSet>
 #include <QTabBar>
+#include <QHBoxLayout>
+#include <QLabel>
 
 #include "area.h"
 #include "sublimedefs.h"
@@ -50,6 +52,19 @@ class Controller;
 class AreaIndex;
 class IdealMainWidget;
 
+class AreaTabButton : public QWidget {
+    public:
+    AreaTabButton(QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent) ;
+    
+    QLabel* iconLabel;
+    QLabel* textLabel;
+
+    void setIsCurrent ( bool arg1 );
+
+    private:
+    bool m_isCurrent;
+};
+
 class AreaTabBar : public QTabBar {
     public:
     AreaTabBar(QWidget* parent) ;
@@ -59,8 +74,23 @@ class AreaTabBar : public QTabBar {
     
     virtual QSize tabSizeHint ( int index ) const ;
     
+    void clearTabs() {
+        while(count())
+            removeTab(0);
+        buttons.clear();
+    }
+    
+    void addCustomTab(QString text, QIcon icon, bool isCurrent) {
+        buttons << new AreaTabButton(text, icon, 16, this, isCurrent);
+        addTab(QString());
+        setTabButton(count()-1, LeftSide, buttons.last());
+    }
+    
+    virtual void paintEvent ( QPaintEvent* );
+    
     private:
-        int m_currentIndex;
+    QList<AreaTabButton*> buttons;
+    int m_currentIndex;
 };
 
 class AreaTabWidget : public QWidget {
