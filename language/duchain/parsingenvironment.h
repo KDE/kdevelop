@@ -99,6 +99,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBas
   ModificationRevisionSet m_allModificationRevisions;
   KDevelop::IndexedString m_url;
   KDevelop::IndexedTopDUContext m_topContext;
+  IndexedString m_language;
 };
 
 /**
@@ -182,6 +183,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     const ModificationRevisionSet& allModificationRevisions() const;
     
     void addModificationRevisions(const ModificationRevisionSet&);
+    
+    /// Returns the language for this top-context. If the string is empty, the language is unknown.
+    IndexedString language() const;
+    
+    ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
+    ///in order to load the language using ILanguageController.
+    void setLanguage(IndexedString language);
     
     enum {
       Identity = 11

@@ -318,10 +318,10 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
     QByteArray topContextData = file.read(readValue);
 
     DUChainBaseData* topData = (DUChainBaseData*)topContextData.constData();
-    IndexedString language = static_cast<TopDUContextData*>(topData)->m_language;
-    if(!language.isEmpty()) {
+/*    IndexedString language = static_cast<TopDUContextData*>(topData)->m_language;
+    if(!language.isEmpty()) {*/
       ///@todo Load the language if it isn't loaded yet, problem: We're possibly not in the foreground thread!
-    }
+//     }
     TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
     if(!ret) {
       kWarning() << "Cannot load a top-context, the requered language-support is probably not loaded";
@@ -357,6 +357,7 @@ bool TopDUContextDynamicData::isOnDisk() const {
 void TopDUContextDynamicData::deleteOnDisk() {
   if(!isOnDisk())
     return;
+  kDebug() << "deleting" << m_topContext->ownIndex() << m_topContext->url().str();
 
   if(!m_dataLoaded)
     loadData();
@@ -375,6 +376,7 @@ void TopDUContextDynamicData::deleteOnDisk() {
 
   bool successfullyRemoved = QFile::remove(filePath());
   Q_ASSERT(successfullyRemoved);
+  kDebug() << "deletion ready";
 }
 
 QString KDevelop::TopDUContextDynamicData::filePath() const {

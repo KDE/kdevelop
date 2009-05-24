@@ -44,7 +44,6 @@ public:
     m_features = rhs.m_features;
     m_flags = rhs.m_flags;
     m_url = rhs.m_url;
-    m_language = rhs.m_language;
     m_currentUsedDeclarationIndex = rhs.m_currentUsedDeclarationIndex;
     m_ownIndex = rhs.m_ownIndex;
     m_importsCache = rhs.m_importsCache;
@@ -60,7 +59,6 @@ public:
   bool m_deleting : 1; ///@todo remove
 
   IndexedString m_url;
-  IndexedString m_language;
   uint m_ownIndex;
   
   ///If this is not empty, it means that the cache is used instead of the implicit structure.

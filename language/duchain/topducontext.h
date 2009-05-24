@@ -249,13 +249,6 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
-  /// Returns the language for this top-context. If the string is empty, the language is unknown.
-  IndexedString language() const;
-  
-  ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
-  ///in order to load the language using ILanguageController.
-  void setLanguage(IndexedString language);
-  
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */

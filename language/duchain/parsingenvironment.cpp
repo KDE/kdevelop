@@ -264,4 +264,13 @@ KDevelop::ModificationRevision ParsingEnvironmentFile::modificationRevision() co
   return d_func()->m_modificationTime;
 }
 
+IndexedString ParsingEnvironmentFile::language() const {
+  return d_func()->m_language;
+}
+
+void ParsingEnvironmentFile::setLanguage(IndexedString language) {
+  d_func_dynamic()->m_language = language;
+}
+
+
 } //KDevelop

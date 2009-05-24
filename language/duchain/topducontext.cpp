@@ -1450,14 +1450,6 @@ bool TopDUContext::isOnDisk() const {
   return m_dynamicData->isOnDisk();
 }
 
-IndexedString TopDUContext::language() const {
-  return d_func()->m_language;
-}
-
-void TopDUContext::setLanguage(IndexedString language) {
-  d_func_dynamic()->m_language = language;
-}
-
 void TopDUContext::clearUsedDeclarationIndices() {
   ENSURE_CAN_WRITE
   for(unsigned int a = 0; a < d_func()->m_usedDeclarationIdsSize(); ++a)
