@@ -43,6 +43,6 @@ X-KDE-Library=kdevprojectmanagerview
 X-KDE-PluginInfo-Name=KDevProjectManagerView
 X-KDE-PluginInfo-Author=Roberto Raggi
 X-KDE-PluginInfo-License=LGPL
-X-KDevelop-Version=6
+X-KDevelop-Version=7
 X-KDevelop-Category=Project
 X-KDevelop-Mode=GUI
