@@ -83,6 +83,7 @@ void CMakeDUChainTest::testDUChainWalk()
     {
         DUChainWriteLocker lock(DUChain::lock());
         m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+        DUChain::self()->addDocumentChain(m_fakeContext);
     }
     
     QFile file("cmake_duchain_test");
@@ -98,6 +99,7 @@ void CMakeDUChainTest::testDUChainWalk()
     MacroMap mm;
     VariableMap vm;
     CacheValues cv;
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("."));
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
@@ -135,6 +137,8 @@ void CMakeDUChainTest::testDUChainWalk()
             qDebug() << "doesn't exist " << sr.start.column << sr.end.column;
         QVERIFY(found);
     }
+    
+    DUChain::self()->removeDocumentChain(m_fakeContext);
 }
 
 void CMakeDUChainTest::testUses_data()
@@ -209,6 +213,7 @@ void CMakeDUChainTest::testUses()
         }
     }
     ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), SimpleRange(0,0, endl, endc));
+    DUChain::self()->addDocumentChain(m_fakeContext);
     
     QString inputIncluded=
         "set(avalue 33)\n"
@@ -227,6 +232,7 @@ void CMakeDUChainTest::testUses()
     MacroMap mm;
     VariableMap vm;
     CacheValues cv;
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("."));
 
     CMakeProjectVisitor v(file.fileName(), m_fakeContext);
     v.setVariableMap(&vm);
