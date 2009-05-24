@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="88" name="kdevelop" >
+<kpartgui version="90" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
