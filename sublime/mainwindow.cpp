@@ -47,6 +47,23 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
 
     loadGeometry(KGlobal::config()->group("Main Window"));
+    
+    d->areaSwitcher = new AreaTabWidget(menuBar());
+    menuBar()->setCornerWidget(d->areaSwitcher, Qt::TopRightCorner);
+}
+
+
+void MainWindow::setupAreaSelector() {
+    disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
+    
+    while(d->areaSwitcher->tabBar->count())
+        d->areaSwitcher->tabBar->removeTab(0);
+    
+    foreach (Sublime::Area *area, controller()->defaultAreas())
+        d->areaSwitcher->tabBar->addTab(KIcon(area->iconName()), area->title());
+    
+    d->areaSwitcher->tabBar->setCurrentIndex(controller()->defaultAreas().indexOf(area()));
+    connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
 }
 
 MainWindow::~MainWindow()
