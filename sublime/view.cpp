@@ -61,7 +61,7 @@ View::View(Document *doc)
 View::~View()
 {
     if (d->widget)
-        delete d->widget;
+        d->widget->deleteLater();
     delete d;
 }
 
