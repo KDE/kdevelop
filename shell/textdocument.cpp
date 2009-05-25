@@ -478,7 +478,7 @@ Sublime::View* TextDocument::newView(Sublime::Document* doc)
 }
 
 KDevelop::TextView::TextView(TextDocument * doc)
-    : View(doc), d( new TextViewPrivate )
+    : View(doc, View::TakeOwnership), d( new TextViewPrivate )
 {
 }
 

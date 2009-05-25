@@ -37,6 +37,7 @@ public:
     Document *doc;
     QWidget *widget;
     void unsetWidget();
+    View::WidgetOwnership ws;
 
 private:
     View *view;
@@ -52,15 +53,16 @@ void ViewPrivate::unsetWidget()
     widget = 0;
 }
 
-View::View(Document *doc)
+View::View(Document *doc, WidgetOwnership ws )
     :QObject(doc), d(new ViewPrivate(this))
 {
     d->doc = doc;
+    d->ws = ws;
 }
 
 View::~View()
 {
-    if (d->widget)
+    if (d->widget && d->ws == View::TakeOwnership )
         delete d->widget;
     delete d;
 }

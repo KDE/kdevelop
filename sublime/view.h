@@ -45,6 +45,10 @@ provide a custom widget for your view.
 class SUBLIME_EXPORT View: public QObject {
     Q_OBJECT
 public:
+    enum WidgetOwnership {
+        TakeOwnership,
+        DoNotTakeOwnerShip
+    };
     ~View();
 
     /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
@@ -77,7 +81,7 @@ public Q_SLOTS:
     void requestRaise();
 
 protected:
-    View(Document *doc);
+    View(Document *doc, WidgetOwnership ws = DoNotTakeOwnerShip );
     /**
      * override this function to create a custom widget in your View subclass
      * @param parent the parent widget
