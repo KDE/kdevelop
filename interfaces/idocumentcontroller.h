@@ -40,6 +40,9 @@ public:
 };
 
 /**
+ *
+ * Allows to access the open documents and also open new ones
+ *
  * @class IDocumentController
  */
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentController: public QObject {
