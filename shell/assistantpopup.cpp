@@ -69,7 +69,7 @@ void AssistantPopup::updateActions() {
 }
 
 AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QFrame(parent), m_assistant(assistant) {
-    
+    Q_ASSERT(assistant);
     m_normalPalette = palette();
     QPalette p;
     p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
@@ -121,40 +121,32 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
     return containerWidget;
 }
 
-void AssistantPopup::executeAction1() {
-    QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
-    if(actions.size() > 0)
-        actions[0]->execute();
-    
+void AssistantPopup::executeAction(int number) {
     Q_ASSERT(m_assistant);
-    m_assistant->doHide();
+    //Copy the assistant, we may get destroyed during the execute() call
+    KDevelop::IAssistant::Ptr assistant = m_assistant;
+    
+    QList<KDevelop::IAssistantAction::Ptr> actions = assistant->actions();
+    if(actions.size() > number)
+        actions[number]->execute();
+    
+    assistant->doHide();
+}
+
+void AssistantPopup::executeAction1() {
+    executeAction(0);
 }
 
 void AssistantPopup::executeAction2() {
-    QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
-    if(actions.size() > 1)
-        actions[1]->execute();
-
-    Q_ASSERT(m_assistant);
-    m_assistant->doHide();
+    executeAction(1);
 }
 
 void AssistantPopup::executeAction3() {
-    QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
-    if(actions.size() > 2)
-        actions[2]->execute();
-
-    Q_ASSERT(m_assistant);
-    m_assistant->doHide();
+    executeAction(2);
 }
 
 void AssistantPopup::executeAction4() {
-    QList<KDevelop::IAssistantAction::Ptr> actions = m_assistant->actions();
-    if(actions.size() > 3)
-        actions[3]->execute();
-
-    Q_ASSERT(m_assistant);
-    m_assistant->doHide();
+    executeAction(3);
 }
 
 KSharedPtr< KDevelop::IAssistant > AssistantPopup::assistant() const {

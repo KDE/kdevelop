@@ -38,6 +38,7 @@ public:
     void executeAction4();
     void assistantActionsChanged();
     private:
+        void executeAction(int number);
         void updateActions();
         QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
         KDevelop::IAssistant::Ptr m_assistant;

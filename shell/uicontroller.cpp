@@ -415,10 +415,10 @@ KParts::MainWindow *UiController::activeMainWindow()
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
-    saveArea(area->rootIndex(), group);
+    saveAreaViews(area->rootIndex(), group);
 }
 
-void UiController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
+void UiController::saveAreaViews(Sublime::AreaIndex * area, KConfigGroup & group)
 {
     if (area->isSplitted()) {
         group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
@@ -426,13 +426,13 @@ void UiController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
         if (area->first()) {
             KConfigGroup subgroup(&group, "0");
             subgroup.deleteGroup();
-            saveArea(area->first(), subgroup);
+            saveAreaViews(area->first(), subgroup);
         }
 
         if (area->second()) {
             KConfigGroup subgroup(&group, "1");
             subgroup.deleteGroup();
-            saveArea(area->second(), subgroup);
+            saveAreaViews(area->second(), subgroup);
         }
     } else {
         group.writeEntry("View Count", area->viewCount());
@@ -453,10 +453,10 @@ void UiController::saveArea(Sublime::AreaIndex * area, KConfigGroup & group)
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
     area->load(group);
-    loadArea(area, area->rootIndex(), group);
+    loadAreaViews(area, area->rootIndex(), group);
 }
 
-void UiController::loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup& group)
+void UiController::loadAreaViews(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup& group)
 {
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
@@ -466,12 +466,12 @@ void UiController::loadArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 areaIndex->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
 
             KConfigGroup subgroup(&group, "0");
-            loadArea(area, areaIndex->first(), subgroup);
+            loadAreaViews(area, areaIndex->first(), subgroup);
 
             if (subgroups.contains("1")) {
                 Q_ASSERT(areaIndex->isSplitted());
                 KConfigGroup subgroup(&group, "1");
-                loadArea(area, areaIndex->second(), subgroup);
+                loadAreaViews(area, areaIndex->second(), subgroup);
             }
         }
 
@@ -673,6 +673,8 @@ void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
 void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     assistantHide();
+    if(!assistant)
+        return;
     
     Sublime::View* view = d->activeSublimeWindow->activeView();
     TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
