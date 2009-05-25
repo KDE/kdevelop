@@ -701,9 +701,11 @@ void AreaTabBar::setCurrentIndex ( int index ) {
 
 AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex ( -1 ) {
     setShape ( QTabBar::RoundedNorth );
+#if QT_VERSION >= 0x040500
     setDocumentMode ( true );
-    setLayoutDirection ( Qt::RightToLeft );
     setExpanding ( false );
+#endif
+    setLayoutDirection ( Qt::RightToLeft );
     setDrawBase ( false );
     QPalette pal = palette();
 }

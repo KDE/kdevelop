@@ -89,7 +89,9 @@ class AreaTabBar : public QTabBar {
         areaIds << areaId;
         buttons << new AreaTabButton(text, icon, 16, this, isCurrent);
         addTab(QString());
+#if QT_VERSION >= 0x040500
         setTabButton(count()-1, LeftSide, buttons.last());
+#endif
     }
     
     virtual void paintEvent ( QPaintEvent* );
