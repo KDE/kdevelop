@@ -28,6 +28,7 @@ SnippetCompletionModel::SnippetCompletionModel()
     : KTextEditor::CodeCompletionModel(0)
 {
     initData();
+    setHasGroups(false);
 }
 
 SnippetCompletionModel::~SnippetCompletionModel()
