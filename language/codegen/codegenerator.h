@@ -19,15 +19,15 @@
 
 #include <kjob.h>
 
-#include "../editor/documentrange.h"
+#include "language/editor/documentrange.h"
 
 namespace KDevelop
 {
 
 class DUContext;
-class EditorChangeSet;
 class AstChangeSet;
 class DUChainChangeSet;
+class DocumentChangeSet;
 
 /**
  * \short Base class for code generators and refactorings
@@ -58,26 +58,34 @@ public:
      * Check whether the preconditions of this generation are met at the given \a context and
      * \a position.
      * \returns true if conditions are met and the generator can progress, otherwise false if
-     *          the conditions are not met.
+     *          the conditions are not met. Use setErrorText to specify the nature of the Error.
      */
     virtual bool checkPreconditions(DUContext* context, const DocumentRange& position) = 0;
 
     /**
      * Gather information required from the user for this generator.
      *
-     * \returns true if all of the information is retrieved, otherwise false.
+     * \returns true if all of the information is retrieved, otherwise false, Use setErrorText
+     * to specify the nature of the Error.
      */
     virtual bool gatherInformation() = 0;
 
     /**
      * Do final condition checking and perform the code generation.
+     *
+     * \returns true if code generation was successful, false otherwise. Use setErrorText to 
+     * specify the nature of the Error.
      */
     virtual bool process() = 0;
-
+    
     /**
      * Retrieve the text edits to be performed as a result of this code generation.
      */
-    EditorChangeSet* textEdits() const;
+    DocumentChangeSet* textEdits() const;
+    
+    // Implementation from kJob
+    virtual void start(void);
+
 
 protected:
     /**
@@ -93,9 +101,17 @@ protected:
      * You may call this method multiple times to edit different files.
      */
     void generateTextEdit(DUChainChangeSet* astChange);
+    
+    /**
+     * Accessor for KJob's KJob::setErrorText.
+     */
+    void setErrorText(const QString & error);
 
 private:
-    class CodeGeneratorPrivate* const d;
+    class CodeGeneratorPrivate * const d;
+    
+    void executeGenerator(void);
+    bool displayChanges(void);
 };
 
 }

@@ -16,10 +16,21 @@
 
 #include "codegenerator.h"
 
-using namespace KDevelop;
+#include "documentchangeset.h"
+#include "duchainchangeset.h"
 
-class KDevelop::CodeGeneratorPrivate
+#include <kdevplatform/interfaces/icore.h>
+#include <kdevplatform/interfaces/idocumentcontroller.h>
+
+#include <qtimer.h>
+
+namespace KDevelop
 {
+
+struct CodeGeneratorPrivate
+{
+    DUChainChangeSet * duchainChanges;
+    DocumentChangeSet documentChanges;
 };
 
 CodeGenerator::CodeGenerator()
@@ -32,9 +43,15 @@ CodeGenerator::~CodeGenerator()
     delete d;
 }
 
-EditorChangeSet* CodeGenerator::textEdits() const
+DocumentChangeSet* CodeGenerator::textEdits() const
 {
-    return 0;
+    return &d->documentChanges;
+}
+
+void CodeGenerator::start(void)
+{
+    kDebug() << "Starting Code Generation Job";
+    QTimer::singleShot(0, this, SLOT(executeGenerator()));
 }
 
 void CodeGenerator::generateTextEdit(AstChangeSet* astChange)
@@ -45,4 +62,47 @@ void CodeGenerator::generateTextEdit(DUChainChangeSet* astChange)
 {
 }
 
-#include "codegenerator.h"
+void CodeGenerator::setErrorText(const QString & errorText)
+{
+    KJob::setErrorText(errorText);
+}
+
+void CodeGenerator::executeGenerator(void)
+{
+    kDebug() << "Checking Preconditions for the codegenerator";
+    
+    //Shouldn't there be a method in iDocument to get a DocumentRange as well?
+    DocumentRange range( ICore::self()->documentController()->activeDocument()->url().url(),
+                         ICore::self()->documentController()->activeDocument()->textSelection());
+    if(!checkPreconditions(0,range))
+    {
+        setErrorText("Error checking conditions to generate code: " + errorText());
+        emitResult();
+    }
+    kDebug() << "Gathering user information for the codegenerator";
+    if(!gatherInformation())
+    {
+        setErrorText("Error Ggathering user information: " + errorText());
+        emitResult();
+    }
+    kDebug() << "Generating code";
+    if(!process())
+    {
+        setErrorText("Error generating code: " + errorText());
+        emitResult();
+    }
+    kDebug() << "Submitting to the user for review";
+    if(!displayChanges())
+        emitResult();
+    
+    d->documentChanges.applyAllChanges();
+    emitResult();
+}
+
+bool CodeGenerator::displayChanges(void)
+{
+    //Create a window that shows changes to be made
+    return true;
+}
+
+}
