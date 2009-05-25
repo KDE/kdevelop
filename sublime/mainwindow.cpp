@@ -47,13 +47,15 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     connect(this, SIGNAL(areaCleared(Sublime::Area*)), controller, SLOT(areaReleased(Sublime::Area*)));
 
     loadGeometry(KGlobal::config()->group("Main Window"));
-    
+#if QT_VERSION >= 0x040500   
     d->areaSwitcher = new AreaTabWidget(menuBar());
     menuBar()->setCornerWidget(d->areaSwitcher, Qt::TopRightCorner);
+#endif
 }
 
 
 void MainWindow::setupAreaSelector() {
+#if QT_VERSION >= 0x040500
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
     d->areaSwitcher->tabBar->clearTabs();
@@ -70,6 +72,7 @@ void MainWindow::setupAreaSelector() {
     
     d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
+#endif
 }
 
 MainWindow::~MainWindow()
