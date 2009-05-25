@@ -23,12 +23,15 @@
 
 #include "../duchain/identifier.h"
 #include "../duchain/topducontext.h"
+#include "../duchain/declaration.h"
 
 namespace KDevelop {
 
 class DUChainChangeSet;
 class DUChainChange;
 class DUChainBase;
+class DUContextRef;
+class AstNodeRef;
 
 /**
  * \short A reference to an existing read-only DUChain object.
@@ -118,8 +121,6 @@ typedef QList<DUChainRef*> DUChainBaseList;
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainChange
 {
 public:
-    DUChainChange(ChangeTypes t);
-
     enum ChangeTypes {
         Rename,
         ListInsert,
@@ -129,6 +130,8 @@ public:
         ItemMove,
         TypeChange
     } type;
+
+    DUChainChange(ChangeTypes t);
 
     enum ItemToChange {
         ContextChildren,
