@@ -323,6 +323,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           {
             output.appendString(*cursorIt, *textIt);
           }
+          output << ' '; //Insert a whitespace to omit implicit token merging
           output.mark(input.inputPosition());
           
           if(actual.text.isEmpty()) {
@@ -385,6 +386,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               IndexedString identifier = IndexedString::fromIndex( skip_identifier(es) );
 
               output.appendString(Anchor(input.inputPosition(), true), expanded);
+              output << ' '; //Prevent implicit token merging
             }
 
             macro->hidden = false;
@@ -523,6 +525,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
           ms.setOriginalInputPosition(input.originalInputPosition());
           expand_macro(ms, output);
+          output << ' '; //Prevent implicit token merging
           macro->hidden = false;
         }
       } else {

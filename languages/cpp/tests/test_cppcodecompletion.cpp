@@ -1565,7 +1565,17 @@ void TestCppCodeCompletion::testEnvironmentMatching() {
 void TestCppCodeCompletion::testPreprocessor() {
   TEST_FILE_PARSE_ONLY
   
-    IncludeFileList includes;
+  IncludeFileList includes;
+  
+  {
+    QString a = "#define MA(x) T<x> a\n #define MB(x) T<x>\n #define MC(X) int\n #define MD(X) c\n template <typename P1> struct A {}; template <typename P2> struct T {}; int main(int argc, char ** argv) { MA(A<int>); A<MB(int)> b; MC(a)MD(b); MC(a)d; }";
+    QString preprocessed = preprocess(HashedString(), a, includes);  
+    kDebug() << "preprocessed:" << preprocessed;
+    TopDUContext* top = parse(a.toUtf8(), DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 6);
+    QCOMPARE(top->childContexts()[5]->localDeclarations().count(), 4);
+  }
     #ifdef TEST_MACRO_EXPANSION_ORDER
     //Not working yet
   {//No macro-expansion should happen on the first layer of a macro-call
