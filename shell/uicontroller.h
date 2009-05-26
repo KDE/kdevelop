@@ -87,9 +87,6 @@ public:
 
     virtual void hideAssistant(const KDevelop::IAssistant::Ptr& assistant);
     
-    void saveAreaViews(Sublime::AreaIndex* area, KConfigGroup & group);
-    void loadAreaViews(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup & group);
-    
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,

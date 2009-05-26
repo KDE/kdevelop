@@ -49,6 +49,7 @@
 #include "assistantpopup.h"
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
+#include "workingsetcontroller.h"
 
 namespace KDevelop {
 
@@ -415,105 +416,13 @@ KParts::MainWindow *UiController::activeMainWindow()
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
-    saveAreaViews(area->rootIndex(), group);
-}
-
-void UiController::saveAreaViews(Sublime::AreaIndex * area, KConfigGroup & group)
-{
-    if (area->isSplitted()) {
-        group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
-
-        if (area->first()) {
-            KConfigGroup subgroup(&group, "0");
-            subgroup.deleteGroup();
-            saveAreaViews(area->first(), subgroup);
-        }
-
-        if (area->second()) {
-            KConfigGroup subgroup(&group, "1");
-            subgroup.deleteGroup();
-            saveAreaViews(area->second(), subgroup);
-        }
-    } else {
-        group.writeEntry("View Count", area->viewCount());
-
-        int index = 0;
-        foreach (Sublime::View* view, area->views()) {
-            group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-            group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-            QString state = view->viewState();
-            if (!state.isEmpty())
-                group.writeEntry(QString("View %1 State").arg(index), state);
-
-            ++index;
-        }
-    }
+    Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet())->saveFromArea(area, area->rootIndex());
 }
 
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
     area->load(group);
-    loadAreaViews(area, area->rootIndex(), group);
-}
-
-void UiController::loadAreaViews(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup& group)
-{
-    if (group.hasKey("Orientation")) {
-        QStringList subgroups = group.groupList();
-
-        if (subgroups.contains("0")) {
-            if (!areaIndex->isSplitted())
-                areaIndex->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
-
-            KConfigGroup subgroup(&group, "0");
-            loadAreaViews(area, areaIndex->first(), subgroup);
-
-            if (subgroups.contains("1")) {
-                Q_ASSERT(areaIndex->isSplitted());
-                KConfigGroup subgroup(&group, "1");
-                loadAreaViews(area, areaIndex->second(), subgroup);
-            }
-        }
-
-    } else {
-        while (areaIndex->isSplitted()) {
-            areaIndex = areaIndex->first();
-            Q_ASSERT(areaIndex);// Split area index did not contain a first child area index if this fails
-        }
-
-        int viewCount = group.readEntry("View Count", 0);
-        for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
-
-            bool viewExists = false;
-            foreach (Sublime::View* view, areaIndex->views()) {
-                if (view->document()->documentSpecifier() == specifier) {
-                    viewExists = true;
-                    break;
-                }
-            }
-
-            if (viewExists)
-                continue;
-
-
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
-                KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
-            Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
-            if (document) {
-                Sublime::View* view = document->createView();
-
-                QString state = group.readEntry(QString("View %1 State").arg(i), "");
-                if (!state.isEmpty())
-                    view->setState(state);
-
-                area->addView(view, areaIndex);
-            } else {
-                kWarning() << "Unable to create view of type " << type;
-            }
-        }
-    }
+    Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet())->loadToArea(area, area->rootIndex());
 }
 
 void UiController::saveAllAreas(KSharedConfig::Ptr config)

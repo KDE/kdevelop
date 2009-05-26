@@ -48,6 +48,7 @@ struct AreaPrivate {
         toolViewPositions.clear();
         desiredToolViews = p.desiredToolViews;
         shownToolView = p.shownToolView;
+        workingSet = p.workingSet;
 
         title = p.title;
     }
@@ -90,6 +91,7 @@ struct AreaPrivate {
     QMap<Sublime::Position, QString> shownToolView;
     QMap<Sublime::Position, int> thickness;
     QString iconName;
+    QString workingSet;
 };
 
 
@@ -105,6 +107,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->title = title;
     d->controller = controller;
     d->iconName = "kdevelop";
+    d->workingSet = QString("%1_%2").arg(name).arg(qrand() % 10000000);
     initialize();
 }
 
@@ -286,6 +289,7 @@ void Area::save(KConfigGroup& group) const
     group.writeEntry("thickness right", thickness(Sublime::Right));
     group.writeEntry("thickness bottom", thickness(Sublime::Bottom));
     group.writeEntry("thickness top", thickness(Sublime::Top));
+    group.writeEntry("working set", d->workingSet);
 }
 
 void Area::load(const KConfigGroup& group)
@@ -317,6 +321,7 @@ void Area::load(const KConfigGroup& group)
     setThickness(Sublime::Right, group.readEntry("thickness right", -1));
     setThickness(Sublime::Bottom, group.readEntry("thickness bottom", -1));
     setThickness(Sublime::Top, group.readEntry("thickness top", -1));
+    d->workingSet = group.readEntry("working set", d->workingSet);
 }
 
 bool Area::wantToolView(const QString& id)
@@ -367,6 +372,18 @@ void Area::positionChanged(View *view, int newPos)
 {
     AreaIndex *index = indexOf(view);
     index->views().move(index->views().indexOf(view), newPos);
+}
+
+
+QString Area::workingSet() const
+{
+    return d->workingSet;
+}
+
+
+void Area::setWorkingSet(QString name)
+{
+    d->workingSet = name;
 }
 
 }

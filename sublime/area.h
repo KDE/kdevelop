@@ -133,6 +133,14 @@ public:
     /**@return the controller for this area.*/
     Controller *controller() const;
 
+    ///Returns the currently set working-set for this area. The working-set is persistent
+    QString workingSet() const;
+    ///Sets the working-set for this area. The working-set is just a marker, and does nothing
+    ///within Area.
+    ///The actual view management has to be implemented in the entity that knows more
+    ///about possible views, documents, etc. (kdevplatform/shell)
+    void setWorkingSet(QString name);
+    
     /**Walker mode to determine the behavior of area walkers.*/
     enum WalkerMode {
         StopWalker,       /**< Stop after processing this area index or toolview */

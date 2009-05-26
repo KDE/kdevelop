@@ -50,6 +50,7 @@
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
+#include "workingsetcontroller.h"
 
 namespace KDevelop {
 
@@ -88,6 +89,10 @@ void CorePrivate::initialize(Core::Setup mode)
     if( !sessionController )
     {
         sessionController = new SessionController(m_core);
+    }
+    if( !workingSetController )
+    {
+        workingSetController = new WorkingSetController(m_core);
     }
     kDebug() << "Creating ui controller";
     if( !uiController )
@@ -163,6 +168,7 @@ void CorePrivate::initialize(Core::Setup mode)
 
     kDebug() << "loading session plugins";
     pluginController->initialize();
+    workingSetController->initialize();
 
     if(!(mode & Core::NoUi))
     {
@@ -192,6 +198,7 @@ CorePrivate::~CorePrivate()
     delete sourceFormatterController;
     delete documentationController;
     delete debugController;
+    delete workingSetController;
 }
 
 
@@ -248,6 +255,7 @@ void Core::cleanup()
         d->sourceFormatterController->cleanup();
         d->pluginController->cleanup();
         d->sessionController->cleanup();
+        d->workingSetController->cleanup();
     }
 
     d->m_cleanedUp = true;
@@ -361,6 +369,12 @@ IDebugController* Core::debugController()
 DebugController* Core::debugControllerInternal()
 {
     return d->debugController;
+}
+
+
+WorkingSetController* Core::workingSetControllerInternal()
+{
+    return d->workingSetController;
 }
 
 QString Core::version()

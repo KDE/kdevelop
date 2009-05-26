@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright 2007 Alexander Dymo <adymo@kdevelop.org>             *
  *   Copyright 2007 Kris Wong <kris.p.wong@gmail.com>               *
@@ -38,6 +39,7 @@ class SourceFormatterController;
 class SelectionController;
 class DocumentationController;
 class DebugController;
+class WorkingSetController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
@@ -119,6 +121,8 @@ public:
     /** @return debug controller */
     DebugController *debugControllerInternal();
 
+    /** @return working set controller */
+    WorkingSetController* workingSetControllerInternal();
     /**
      * @return session controller
      * @internal

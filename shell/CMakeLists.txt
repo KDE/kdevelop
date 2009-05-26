@@ -4,6 +4,7 @@ add_subdirectory(settings)
 add_subdirectory(tests)
 
 set(kdevplatformshell_LIB_SRCS
+    workingsetcontroller.cpp
     assistantpopup.cpp
     mainwindow.cpp
     mainwindow_p.cpp

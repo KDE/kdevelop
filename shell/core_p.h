@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
@@ -39,6 +40,7 @@ class SourceFormatterController;
 class SelectionController;
 class DocumentationController;
 class DebugController;
+class WorkingSetController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
@@ -57,6 +59,7 @@ public:
     QPointer<SelectionController> selectionController;
     QPointer<DocumentationController> documentationController;
     QPointer<DebugController> debugController;
+    QPointer<WorkingSetController> workingSetController;
 
     KComponentData m_componentData;
     Core *m_core;
