@@ -277,6 +277,14 @@ QString clearComments( QString str, QChar replacement ) {
   while( (pos = withoutStrings.indexOf( "/*", lastPos )) != -1 ) {
     if( !s ) return str;
     int i = withoutStrings.indexOf( "*/", pos );
+    int iNewline = withoutStrings.indexOf( '\n', pos );
+    
+    while(iNewline != -1 && iNewline < i && pos < len) {
+      //Preserve newlines
+      iNewline = withoutStrings.indexOf( '\n', pos );
+      fillString( str, pos, iNewline, replacement );
+      pos = iNewline+1;
+    }
     if( i != -1 && i <= len - 2 ) {
       fillString( str, pos, i+2, replacement );
       lastPos = i+2;

@@ -60,6 +60,7 @@ QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(QString str);
 
 /**
  * Fills all c++-style comments  within the given code with the given 'replacement' character
+ * Newlines are preserved.
  * */
 QString KDEVPLATFORMLANGUAGE_EXPORT clearComments( QString str, QChar replacement = ' ' );
 /**
