@@ -19,8 +19,8 @@
 #include "documentchangeset.h"
 #include "duchainchangeset.h"
 
-#include <kdevplatform/interfaces/icore.h>
-#include <kdevplatform/interfaces/idocumentcontroller.h>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 #include <qtimer.h>
 
