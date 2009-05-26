@@ -48,15 +48,19 @@ using namespace KDevelop;
 namespace Cpp {
 
 ///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
-int moveBehindComment(KTextEditor::Document* document, int line) {
-  
+int moveBehindComment(KTextEditor::Document* document, int line, int maxLine) {
+
   DUChainReadLocker lock(DUChain::lock());
   TopDUContext* top = DUChainUtils::standardContextForUrl(document->url());
   if(!top)
     return line;
   Cpp::SourceCodeInsertion insertion(top);
 
-  return insertion.firstValidCodeLineBefore(line);
+  int firstValid = insertion.firstValidCodeLineBefore(maxLine);
+  if(firstValid > line && firstValid <= maxLine)
+    return firstValid;
+
+  return line;
 }
 
 ///Decide whether the file is allowed to be included directly. If yes, this should return false.
@@ -413,7 +417,7 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
     }
   }
 
-  document->insertLine(moveBehindComment(document, lastLineWithInclude+1), insertLine);
+  document->insertLine(moveBehindComment(document, lastLineWithInclude+1, word.start().line()), insertLine);
   MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
 }
 

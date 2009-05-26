@@ -5,7 +5,7 @@ include_directories(
     ${cpp_SOURCE_DIR}
     ${cpp_BINARY_DIR})
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 ########### next target ###############
 

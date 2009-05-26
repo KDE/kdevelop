@@ -20,50 +20,52 @@
 #include "declarationbuilder.h"
 #include "environmentmanager.h"
 #include "templateparameterdeclaration.h"
+#include <language/duchain/stringhelpers.h>
 
 using namespace KDevelop;
 
 ///Makes sure the line is not in a comment, moving it behind if needed. Just does very simple matching, should be ok for header copyright-notices and such.
 int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) const {
+  if(lineNumber == -1)
+    lineNumber = 1000000;
   
-  if(lineNumber < 100) {
-    int checkLines = m_codeRepresentation->lines() < 100 ? m_codeRepresentation->lines() : 100;
+  if(lineNumber > 300)
+    lineNumber = 300; //Don't do too much processing
+  
+    int checkLines = m_codeRepresentation->lines() < lineNumber ? m_codeRepresentation->lines() : lineNumber;
+  
+    int chosen = -1;
+  
+    QString allText;
+    for(int a = 0; a < checkLines; ++a)
+      allText += m_codeRepresentation->line(a) + "         \n"; //Add some whitespace so we always have some comment clearing done, in every line
+    allText = KDevelop::clearComments(allText, '$');
     
-    bool inComment = false; //This is a bit stupid
-    bool unsure = false;
-//    int unsureStart = -1;
-    
-    for(int a = 0; a < checkLines; ++a) {
-      QString line = m_codeRepresentation->line(a).trimmed();
-///@todo Use the "unsure" logic to jump over #ifdefs      
-//       if(!inComment && !unsure && line.isEmpty()) {
-//         unsure = true;
-//         unsureStart = a;
-//       }
-//       
-//       if(!inComment && line.startsWith("#")) {
-//         unsure = true;
-//         unsureStart = a+1;
-//       }
-      
-      if(!inComment && !line.startsWith("//") && a >= lineNumber && !unsure)
-        return a;
-      
-      if(line.indexOf("/*") != -1) {
-        inComment = true;
-        unsure = false;
-      }
+    QStringList lines = allText.split('\n');
+    if(lines.count() < checkLines)
+      checkLines = lines.count();
 
-      if(line.indexOf("*/") != -1) {
-        inComment = false;
-        unsure = false;
+    for(int a = 0; a < checkLines; ++a) {
+      if(lines[a].startsWith('$')) {
+        chosen = -1;
+        continue;
       }
+      QString trimmedLine = lines[a].trimmed();
+      if(trimmedLine.startsWith('#')) {
+        chosen = -1;
+        continue;
+      }
+      
+      if(trimmedLine.isEmpty() && chosen == -1)
+        chosen = a;
+      if(!trimmedLine.isEmpty())
+        break;
     }
-//     if(line > unsureStart)
-//       return unsureStart;
-  }
-  
-  return lineNumber;
+
+  if(chosen != -1)
+    return chosen;
+  else
+    return lineNumber;
 }
 
 //Re-indents the code so the leftmost line starts at zero
@@ -256,7 +258,7 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   
   decl += "\n";
   
-  InsertionPoint insertion = findInsertionPoint(m_access, Variable);
+  InsertionPoint insertion = findInsertionPoint(m_access, Function);
   
   decl = "\n" + applyIndentation(applySubScope(insertion.prefix +decl));
   
@@ -284,19 +286,25 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
   ret.line = m_context->range().end.line;
   
     bool behindExistingItem = false;
-    foreach(Declaration* decl, m_context->localDeclarations()) {
-      ClassMemberDeclaration* classMem = dynamic_cast<ClassMemberDeclaration*>(decl);
-      if(m_context->type() != DUContext::Class || (classMem && classMem->accessPolicy() == m_access) || m_access == KDevelop::Declaration::Public) {
-        
-        Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
-        
-        if( (kind == Slot && qtFunction && qtFunction->isSlot()) ||
-            (kind == Function && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ||
-            (kind == Variable && decl->kind() == Declaration::Instance && !dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
-          behindExistingItem = true;
-          ret.line = decl->range().end.line+1;
-        if(decl->internalContext())
-          ret.line = decl->internalContext()->range().end.line+1;
+    
+    //Try twice, in the second run, only match the "access"
+    for(int anyMatch = 0; anyMatch <= 1 && !behindExistingItem; ++anyMatch) {
+    
+      foreach(Declaration* decl, m_context->localDeclarations()) {
+        ClassMemberDeclaration* classMem = dynamic_cast<ClassMemberDeclaration*>(decl);
+        if(m_context->type() != DUContext::Class || (classMem && classMem->accessPolicy() == m_access)) {
+          
+          Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
+          
+          if( anyMatch ||
+              (kind == Slot && qtFunction && qtFunction->isSlot()) ||
+              (kind == Function && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ||
+              (kind == Variable && decl->kind() == Declaration::Instance && !dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
+            behindExistingItem = true;
+            ret.line = decl->range().end.line+1;
+          if(decl->internalContext())
+            ret.line = decl->internalContext()->range().end.line+1;
+          }
         }
       }
     }
@@ -409,7 +417,7 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       //To the end
       position = m_context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
     }
-    int firstValidLine = firstValidCodeLineBefore(position.line());
+    int firstValidLine = firstValidCodeLineBefore(m_insertBefore.line);
     if(firstValidLine > position.line() && m_context == m_topContext && (!m_insertBefore.isValid() || firstValidLine < m_insertBefore.line)) {
       position.setLine(firstValidLine);
       position.setColumn(0);
