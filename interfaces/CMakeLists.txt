@@ -79,6 +79,7 @@ install(FILES
     idocumentationcontroller.h
     idebugcontroller.h
     ilaunchmode.h
+    iastparsesession.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 
