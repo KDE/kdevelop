@@ -32,6 +32,7 @@ ParseSession::ParseSession()
   : mempool(new pool)
   , token_stream(0)
   , macros(0)
+  , m_topAstNode(0)
   , m_locationTable(0)
 {
 }

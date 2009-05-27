@@ -574,6 +574,7 @@ bool Parser::parseTranslationUnit(TranslationUnitAST *&node)
 
   std::size_t start = session->token_stream->cursor();
   TranslationUnitAST *ast = CreateNode<TranslationUnitAST>(session->mempool);
+  session->m_topAstNode = ast;
 
   if( m_commentStore.hasComment() )
     addComment(ast, m_commentStore.takeFirstComment());

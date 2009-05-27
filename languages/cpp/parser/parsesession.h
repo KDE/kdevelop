@@ -32,6 +32,7 @@
 #include "rpp/anchor.h"
 
 #include <language/duchain/indexedstring.h>
+#include <language/interfaces/iastcontainer.h>
 
 namespace Cpp {
   class EnvironmentFile;
@@ -40,6 +41,7 @@ namespace Cpp {
 class pool;
 class TokenStream;
 class Token;
+class TranslationUnitAST;
 
 typedef QVector<unsigned int> PreprocessedContents;
 
@@ -47,7 +49,7 @@ namespace rpp { class MacroBlock; class LocationTable; }
 
 /// Contains everything needed to keep an AST useful once the rest of the parser
 /// has gone away.
-class KDEVCPPPARSER_EXPORT ParseSession
+class KDEVCPPPARSER_EXPORT ParseSession : public KDevelop::IAstContainer
 {
 public:
   ParseSession();
@@ -69,7 +71,7 @@ public:
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
   void setContentsAndGenerateLocationTable(const PreprocessedContents& contents);
 
-  void setUrl(const KDevelop::IndexedString& url); ///@todo change to IndexedString
+  void setUrl(const KDevelop::IndexedString& url);
   const KDevelop::IndexedString& url() const;
 
   uint *contents();
@@ -81,6 +83,7 @@ public:
 
   rpp::MacroBlock* macros;
   KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
+  TranslationUnitAST * m_topAstNode;
 
 private:
   PreprocessedContents m_contents;
