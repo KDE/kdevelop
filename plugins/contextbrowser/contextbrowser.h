@@ -121,6 +121,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void updateBrowserWidgetFor(KTextEditor::View* view);
 
   private:
+    //Unhighlights all currently highlighted declarations
+    void unHighlightAll();
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
     //Contains the range, the old attribute, and the attribute it was replaced with

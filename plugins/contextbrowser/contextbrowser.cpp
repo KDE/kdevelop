@@ -563,6 +563,15 @@ DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
       return ctx;
 }
 
+
+void ContextBrowserPlugin::unHighlightAll()
+{
+    foreach(KTextEditor::View* view, m_highlightedDeclarations.keys())
+      changeHighlight( view, m_highlightedDeclarations[view].data(), false, false );
+
+    m_highlightedDeclarations.clear();
+}
+
 void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
 {
     bool mouseHighlight =
@@ -587,8 +596,7 @@ void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
       return;
     }
 
-    if( m_highlightedDeclarations.contains(view) )     ///unhighlight the old uses
-      changeHighlight( view, m_highlightedDeclarations[view].data(), false, mouseHighlight );
+    unHighlightAll();
 
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     if (!topContext) return;
