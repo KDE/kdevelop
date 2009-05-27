@@ -48,9 +48,9 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
   Declaration* dec(item.declaration().data());
 
   Cpp::CodeCompletionContext::Function f;
-  TopDUContext* top = 0;
+  DUContext* ctx = 0;
   if(item.completionContext() && item.completionContext()->duContext()) {
-    top = item.completionContext()->duContext()->topContext();
+    ctx = item.completionContext()->duContext();
   }
 
   if( item.completionContext() && item.completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess && item.completionContext()->functions().count() > item.listOffset )
@@ -67,7 +67,7 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
 
     QVector<Declaration*> parameters;
     if( DUChainUtils::getArgumentContext(dec) )
-      parameters = DUChainUtils::getArgumentContext(dec)->localDeclarations(top);
+      parameters = DUChainUtils::getArgumentContext(dec)->localDeclarations(ctx ? ctx->topContext() : 0);
 
 //     QStringList defaultParams = decl->defaultParameters();
 
@@ -141,10 +141,13 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       }
 
       if( paramNameIt != parameters.constEnd() /*&& !(*paramNameIt)->identifier().isEmpty()*/ ) {
-        if(noShortening)
-          ret += argument->toString();
-        else
-          ret += Cpp::shortenedTypeString(*paramNameIt, top, desiredArgumentTypeLength, item.stripPrefix());
+        if(noShortening) {
+          if(ctx)
+            ret += Cpp::shortenedTypeString(*paramNameIt, ctx, 1000000);
+          else
+            ret += argument->toString();
+        }else
+          ret += Cpp::shortenedTypeString(*paramNameIt, ctx, desiredArgumentTypeLength, item.stripPrefix());
         ret += " " + (*paramNameIt)->identifier().toString();
       } else if (argument)
         ret += argument->toString();

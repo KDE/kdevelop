@@ -137,7 +137,6 @@ QString ImplementationHelperItem::signaturePart(bool includeDefaultParams) {
 
 QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor position, QualifiedIdentifier forceParentScope) {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-  
   QString newText;
   if(!m_declaration)
     return QString();
@@ -171,12 +170,9 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       newText = alternativeText;
     }
   }else if(m_type == CreateDefinition) {
-      QualifiedIdentifier localScope;
       TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
       if(topContext) {
-        DUContext* context = topContext->findContextAt(position);
-        if(context)
-          localScope = context->scopeIdentifier(true);
+        duContext = topContext->findContextAt(position);
       }
       
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();
@@ -184,12 +180,17 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       if(!forceParentScope.isEmpty() && !scope.isEmpty()) {
         scope = forceParentScope;
         scope.push(m_declaration->identifier());
+      }else{
+        //Shorten the scope considering the context
+        if(m_declaration->context()->type() == DUContext::Class && m_declaration->context()->owner() && !scope.isEmpty()) {
+          scope = QualifiedIdentifier(simplifiedTypeString(m_declaration->context()->owner()->abstractType(), duContext)) + scope.last();
+        }
       }
       
-      if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
+/*      if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
         return QString();
       
-      scope = scope.mid( localScope.count() );
+      scope = scope.mid( localScope.count() );*/
       
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
       
