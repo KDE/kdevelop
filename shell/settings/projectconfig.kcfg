@@ -23,5 +23,10 @@
         <default code="true">QDir::homePath()+"/projects"</default>
         <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
     </entry>
+    <entry name="saveDocuments" key="Save All Documents Before Building" type="Bool" default="true">
+        <default>true</default>
+        <label>Save all open documents before building anything</label>
+        <whatsthis>If this option is set all open documents will be automatically saved before any build is started.</whatsthis>
+    </entry>
   </group>
 </kcfg>

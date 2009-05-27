@@ -1,79 +1,80 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ProjectSettings</class>
- <widget class="QWidget" name="ProjectSettings" >
-  <property name="geometry" >
+ <widget class="QWidget" name="ProjectSettings">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>554</width>
+    <width>586</width>
     <height>247</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>Project Base Directory:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>kcfg_projectsBaseDirectory</cstring>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KUrlRequester" name="kcfg_projectsBaseDirectory" >
-     <property name="toolTip" >
+   <item row="0" column="1">
+    <widget class="KUrlRequester" name="kcfg_projectsBaseDirectory">
+     <property name="toolTip">
       <string>Select the base directory where new projects are to be created.</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Reopen projects on startup:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>kcfg_reopenProjectsOnStartup</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QCheckBox" name="kcfg_reopenProjectsOnStartup" >
-     <property name="toolTip" >
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="kcfg_reopenProjectsOnStartup">
+     <property name="toolTip">
       <string>Automatically re-open all projects that were open when KDevelop shutdown on the next startup.</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Schedule all project
 files for parsing:</string>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>kcfg_parseAllProjectSources</cstring>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QCheckBox" name="kcfg_parseAllProjectSources" >
-     <property name="toolTip" >
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="kcfg_parseAllProjectSources">
+     <property name="toolTip">
       <string>Parse all files in a project after the project has been opened.</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
+   <item row="4" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>403</width>
        <height>147</height>
@@ -81,9 +82,24 @@ files for parsing:</string>
      </property>
     </spacer>
    </item>
+   <item row="3" column="1">
+    <widget class="QCheckBox" name="kcfg_saveDocuments">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Save All Documents
+Before Building</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
-  <customwidgets>
+ <customwidgets>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
