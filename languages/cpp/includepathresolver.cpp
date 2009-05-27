@@ -91,7 +91,7 @@ namespace CppTools {
       {
         ifTest( cout << "touching " << it->toUtf8().constData() << endl );
 
-        QFileInfo fileinfo(QDir(workingDirectory), *it);
+        QFileInfo fileinfo = workingDirectory.isEmpty() ? QFileInfo(*it) : QFileInfo(QDir(workingDirectory), *it);
         if (!fileinfo.exists()) {
           cout << "File does not exist: " << it->toUtf8().constData()
                << "in working dir " << QDir::currentPath().toUtf8().constData() << "\n";
