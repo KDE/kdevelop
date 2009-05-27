@@ -856,7 +856,7 @@ void GDBController::slotKillGdb()
 
 // **************************************************************************
 
-void GDBController::examineCoreFile(const KUrl& coreFile)
+void GDBController::examineCoreFile(const KUrl& debugee, const KUrl& coreFile)
 {
     setStateOff(s_programExited|s_appNotStarted);
     setStateOn(s_core);
@@ -865,6 +865,7 @@ void GDBController::examineCoreFile(const KUrl& coreFile)
       startDebugger();
 
     // TODO support non-local URLs
+    queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
     queueCmd(new GDBCommand(NonMI, "core " + coreFile.toLocalFile()));
 
     raiseEvent(connected_to_program);

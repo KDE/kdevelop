@@ -99,7 +99,7 @@ public:
     /**
      * Start the debugger and examine the core file given by \a coreFile.
      */
-    void examineCoreFile(const KUrl& coreFile);
+    void examineCoreFile(const KUrl& debugee, const KUrl& coreFile);
 
     /**
      * Attach to currently running process with the given \a pid.

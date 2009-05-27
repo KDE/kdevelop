@@ -715,6 +715,25 @@ void GdbTest::testAttach()
     waitForState(session, DebugSession::StoppedState);
 }
 
+void GdbTest::testCoreFile()
+{
+    QFile f("core");
+    if (f.exists()) f.remove();
+
+    KProcess debugeeProcess;
+    debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
+    debugeeProcess << "bash" << "-c" << "ulimit -c unlimited; ./unittests/debugeecrash";
+    debugeeProcess.start();
+    debugeeProcess.waitForFinished();
+    kDebug() << debugeeProcess.readAll();
+    QFile f2("core");
+    if (!f2.exists()) {
+        QFAIL("no core dump found");
+    }
+
+    TestDebugSession session;
+    session.examineCoreFile(KUrl(QDir::currentPath()+"/unittests/debugeecrash"), KUrl(QDir::currentPath()+"/core"));
+}
 
 void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSession::DebuggerState state)
 {

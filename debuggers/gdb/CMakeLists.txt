@@ -47,12 +47,14 @@ set(kdevgdb_PART_SRCS
     stringhelpers.cpp
     debugsession.cpp
     gdblaunchconfig.cpp
+    selectcoredialog.cpp
 )
 
 set(kdevgdb_PART_UI
     debuggertracingdialog.ui
     processselection.ui
     debuggerconfigwidget.ui
+    selectcore.ui
 )
 
 kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})

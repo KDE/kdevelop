@@ -90,7 +90,7 @@ public Q_SLOTS:
     virtual void stepOverInstruction();
     virtual void stepOut();
 
-    void examineCoreFile(const KUrl& coreFile);
+    void examineCoreFile(const KUrl& debugee, const KUrl& coreFile);
     void attachToProcess(int pid);
 
 private Q_SLOTS:

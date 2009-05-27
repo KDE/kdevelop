@@ -248,9 +248,9 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* run, KJob* job)
     return true;
 }
 
-void DebugSession::examineCoreFile(const KUrl& coreFile)
+void DebugSession::examineCoreFile(const KUrl& debugee, const KUrl& coreFile)
 {
-    m_controller->examineCoreFile(coreFile);
+    m_controller->examineCoreFile(debugee, coreFile);
 }
 
 void DebugSession::attachToProcess(int pid)

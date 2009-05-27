@@ -79,6 +79,7 @@
 #include "gdbglobal.h"
 #include "variablecollection.h"
 #include "debugsession.h"
+#include "selectcoredialog.h"
 
 #include <iostream>
 #include "gdblaunchconfig.h"
@@ -369,13 +370,14 @@ void CppDebuggerPlugin::slotExamineCore()
 {
     emit showMessage(this, i18n("Choose a core file to examine..."), 1000);
 
-    KUrl coreFile = KFileDialog::getOpenUrl(QDir::homePath());
-    if (!coreFile.isValid())
+    SelectCoreDialog dlg(KDevelop::ICore::self()->uiController()->activeMainWindow());
+    if (dlg.exec() == KDialog::Rejected) {
         return;
+    }
 
-    emit showMessage(this, i18n("Examining core file %1", coreFile.url()), 1000);
+    emit showMessage(this, i18n("Examining core file %1", dlg.core().toLocalFile()), 1000);
 
-    createSession()->examineCoreFile(coreFile);
+    createSession()->examineCoreFile(dlg.binary(), dlg.core());
 }
 
 

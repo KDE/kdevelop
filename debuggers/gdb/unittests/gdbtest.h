@@ -53,6 +53,7 @@ private Q_SLOTS:
     void testShowStepInSource();
     void testStack();
     void testAttach();
+    void testCoreFile();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(const GDBDebugger::DebugSession& session, KDevelop::IDebugSession::DebuggerState state);
