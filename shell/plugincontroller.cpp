@@ -101,6 +101,9 @@ public:
     bool canUnload( const KPluginInfo& plugin )
     {
         QStringList interfaces=plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        if(interfaces.contains("ILanguageSupport"))
+            return false; //Language supports can not be unloaded currently, mainly due to LanguageController and associated languages/mimetypes
+        
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
             if( info.pluginName() != plugin.pluginName() ) 
