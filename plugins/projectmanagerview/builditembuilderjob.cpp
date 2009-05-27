@@ -18,37 +18,30 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef BUILDERJOB_H
-#define BUILDERJOB_H
+#include "builditembuilderjob.h"
 
-#include <QtCore/QList>
+#include <interfaces/iproject.h>
+#include <project/projectmodel.h>
 
-#include <kcompositejob.h>
+#include "projectbuildsetmodel.h"
 
-namespace KDevelop
+BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, const QList<BuildItem>& items )
 {
-class ProjectBaseItem;
-class IProject;
+    foreach( const BuildItem &item, items )
+    {
+        addItem( t, item.findItem() );
+    }
+
 }
 
-class BuildItem;
-
-class KConfigGroup;
-
-class BuilderJob : public KCompositeJob
+BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, const QList<KDevelop::ProjectBaseItem*>& items )
 {
-    Q_OBJECT
-public:
-    enum BuildType { Build, Prune, Configure, Install, Clean };
-    BuilderJob( BuildType, const QList<KDevelop::ProjectBaseItem*>& );
-    BuilderJob( BuildType, const QList<BuildItem>& );
-    BuilderJob( BuildType, const QList<KDevelop::IProject*>& );
-    void start();
-private:
-    void slotResult( KJob* );
-    void addJob( BuildType, KDevelop::ProjectBaseItem* );
-};
+    addItems( t, items );
+}
 
-#endif
+BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, const QList<KDevelop::IProject*>& projects )
+{
+    addProjects( t, projects );
+}
 
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;
+#include "builditembuilderjob.moc"

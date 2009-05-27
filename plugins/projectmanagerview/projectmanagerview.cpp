@@ -56,7 +56,6 @@
 #include "projectproxymodel.h"
 #include "projectmanagerviewplugin.h"
 #include "proxyselectionmodel.h"
-#include "builderjob.h"
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;

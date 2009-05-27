@@ -23,7 +23,7 @@
 #include <QtCore/QPointer>
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
-#include "builderjob.h"
+#include <project/builderjob.h>
 
 class KUrl;
 class ProjectBuildSetModel;
@@ -85,7 +85,7 @@ protected Q_SLOTS:
 private:
     static KDevelop::IProjectBuilder* getProjectBuilder( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
-    void runBuilderJob( BuilderJob::BuildType );
+    void runBuilderJob( KDevelop::BuilderJob::BuildType );
     class ProjectManagerViewPluginPrivate* const d;
 
 };

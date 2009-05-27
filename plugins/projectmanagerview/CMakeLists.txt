@@ -11,7 +11,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projectbuildsetmodel.cpp
     projectproxymodel.cpp
     proxyselectionmodel.cpp
-    builderjob.cpp
+    builditembuilderjob.cpp
 )
 
 kde4_add_ui_files( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
