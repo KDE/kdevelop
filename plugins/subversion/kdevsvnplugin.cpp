@@ -32,6 +32,7 @@
 #include <kfile.h>
 #include <ktemporaryfile.h>
 #include <kmessagebox.h>
+#include <kfiledialog.h>
 
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
@@ -427,6 +428,7 @@ void KDevSvnPlugin::ctxMove()
 
         KUrlRequesterDialog dlg(dir, i18n("Destination file/directory"), 0);
 
+        dlg.fileDialog()->setOperationMode( KFileDialog::Saving );
         if (isFile) {
             dlg.urlRequester()->setMode(KFile::File | KFile::Directory | KFile::LocalOnly);
         } else {
