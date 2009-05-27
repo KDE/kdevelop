@@ -451,7 +451,7 @@ void KDevelop::RunController::unregisterJob(KJob * job)
     Q_ASSERT(d->jobs.contains(job));
 
     // Delete the stop job action
-    delete d->jobs.take(job);
+    d->jobs.take(job)->deleteLater();
 
     checkState();
 
