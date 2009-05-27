@@ -219,7 +219,9 @@ protected:
     virtual bool canWriteData() const;
     
 private:
-    void syncFromSmart() const;
+    //Only really synchronized the smart-range if this object is writable eg. canWriteData() returns true.
+    //Always returns the correct current range
+    SimpleRange syncFromSmart() const;
     void syncToSmart() const;
 
     class DocumentRangeObjectDynamicPrivate* dd_ptr;
