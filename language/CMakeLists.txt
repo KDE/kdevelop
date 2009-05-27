@@ -157,6 +157,7 @@ install(FILES
     interfaces/iproblem.h
     interfaces/codecontext.h
     interfaces/editorcontext.h
+    interfaces/iastcontainer.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/interfaces COMPONENT Devel
 )
 
