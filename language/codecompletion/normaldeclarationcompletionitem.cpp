@@ -142,7 +142,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
             if(EnumeratorType::Ptr enumerator = m_declaration->type<EnumeratorType>()) {
               if(m_declaration->context()->owner() && m_declaration->context()->owner()->abstractType()) {
                 if(!m_declaration->context()->owner()->identifier().isEmpty())
-                  return m_declaration->context()->owner()->abstractType()->toString();
+                  return shortenedTypeString(DeclarationPointer(m_declaration->context()->owner()), desiredTypeLength);
                 else
                   return "enum";
               }
