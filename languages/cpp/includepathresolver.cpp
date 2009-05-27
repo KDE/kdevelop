@@ -37,26 +37,25 @@
 #include "includepathresolver.h"
 
 #include <memory>
-#include <stdio.h>
+#include <cstdio>
+#include <iostream>
+
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
 
+#ifdef TEST
+#include <QApplication>
+#endif
 #include <QDir>
+#include <QFileInfo>
 #include <QRegExp>
 
 #include <kurl.h>
 #include <kprocess.h>
 #include <klocale.h>
 
-#ifdef TEST
-#include <iostream>
-#include <QApplication>
-#include <iostream>
-using namespace std;
-#endif
-#include <iostream>
 #include <language/duchain/indexedstring.h>
 
 //#define VERBOSE
@@ -67,86 +66,106 @@ using namespace std;
 #define ifTest(x)
 #endif
 
-///After how many seconds should we retry?
-#define CACHE_FAIL_FOR_SECONDS 200
+using namespace std;
 
-const int processTimeoutSeconds = 40000;
+
+namespace {
+
+   ///After how many seconds should we retry?
+   static const int CACHE_FAIL_FOR_SECONDS = 200;
+   
+   static const int processTimeoutSeconds = 40000;
+
+}
 
 namespace CppTools {
+  
   ///Helper-class used to fake file-modification times
-  class FileModificationTimeWrapper {
-    public:
-      ///@param files list of files that should be fake-modified(modtime will be set to current time)
-      FileModificationTimeWrapper( const QStringList& files = QStringList(), const QString& workingDirectory = QString() ) : m_newTime( time(0) )
+  class FileModificationTimeWrapper 
+  {
+  public:
+    ///@param files list of files that should be fake-modified(modtime will be set to current time)
+    explicit FileModificationTimeWrapper( const QStringList& files = QStringList(), const QString& workingDirectory = QString() ) : m_newTime( time(0) )
+    {
+      for( QStringList::const_iterator it = files.constBegin(); it != files.constEnd(); ++it ) 
       {
-        QString oldCurrent = QDir::currentPath();
+        ifTest( cout << "touching " << it->toUtf8().constData() << endl );
 
-        if( !workingDirectory.isEmpty() )
-          QDir::setCurrent( workingDirectory );
+        QFileInfo fileinfo(QDir(workingDirectory), *it);
+        if (!fileinfo.exists()) {
+          cout << "File does not exist: " << it->toUtf8().constData()
+               << "in working dir " << QDir::currentPath().toUtf8().constData() << "\n";
+          continue;
+        }
+          
+        QString filename = fileinfo.canonicalFilePath();
+        if (m_stat.find(filename) != m_stat.end()) {
+          cout << "Duplicate file: " << filename.toUtf8().constData() << endl;
+          continue;
+        }
+
+        struct stat s;
+        if( stat( filename.toLocal8Bit().constData(), &s ) == 0 ) 
+        {
+          ///Success
+          m_stat[filename] = s.st_mtime;
+          ///change the modification-time to m_newTime
+          struct timeval times[2];
+          times[0].tv_sec = m_newTime;
+          times[0].tv_usec = 0;
+          times[1].tv_sec = m_newTime;
+          times[1].tv_usec = 0;
+
+          if( utimes( filename.toLocal8Bit().constData(), times ) != 0 )
+          {
+            ifTest( cout << "failed to touch " << it->toUtf8().constData() << endl );
+          }
+        }
+      }
+    }
+
+    //Not used yet, might be used to return LD_PRELOAD=.. FAKE_MODIFIED=.. etc. later
+    QString commandPrefix() const {
+      return QString();
+    }
+
+    ///Undo changed modification-times
+    void unModify() {
+      for( QHash<QString, time_t>::const_iterator it = m_stat.constBegin(); it != m_stat.constEnd(); ++it ) 
+      {
+        ifTest( cout << "untouching " << it.key().toUtf8().constData() << endl );
         
-        for( QStringList::const_iterator it = files.constBegin(); it != files.constEnd(); ++it ) {
-          ifTest( cout << "touching " << (*it).toUtf8().constData() << endl );
-          struct stat s;
-          if( stat( (*it).toLocal8Bit().constData(), &s ) == 0 ) {
-            ///Success
-            m_stat[*it] = s;
-            ///change the modification-time to m_newTime
+        struct stat s;
+        if( stat( it.key().toLocal8Bit().constData(), &s ) == 0 ) 
+        {
+          if( s.st_mtime == m_newTime ) {
+            ///Still the modtime that we've set, change it back
             struct timeval times[2];
-            times[0].tv_sec = m_newTime;
             times[0].tv_usec = 0;
-            times[1].tv_sec = m_newTime;
+            times[0].tv_sec = s.st_atime;
             times[1].tv_usec = 0;
-
-            if( utimes( (*it).toLocal8Bit().constData(), times ) != 0 )
-            {
-              ifTest( cout << "failed to touch " << (*it).toUtf8().constData() << endl );
+            times[1].tv_sec = *it;
+            if( utimes( it.key().toLocal8Bit().constData(), times ) != 0 ) {
+              perror("Resetting modification time");
+              ifTest( cout << "failed to untouch " << it.key().toUtf8().constData() << endl );
             }
+          } else {
+            ///The file was modified since we changed the modtime
+            ifTest( cout << "will not untouch " << it.key().toUtf8().constData() << " because the modification-time has changed" << endl );
           }
-        }
-        
-        if( !workingDirectory.isEmpty() )
-          QDir::setCurrent( oldCurrent );
-      }
-
-      //Not used yet, might be used to return LD_PRELOAD=.. FAKE_MODIFIED=.. etc. later
-      QString commandPrefix() const {
-        return QString();
-      }
-
-      ///Undo changed modification-times
-      void unModify() {
-        for( StatMap::const_iterator it = m_stat.constBegin(); it != m_stat.constEnd(); ++it ) {
-
-          ifTest( cout << "untouching " << it.key().toUtf8().constData() << endl );
-
-          struct stat s;
-          if( stat( it.key().toLocal8Bit().constData(), &s ) == 0 ) {
-            if( s.st_mtime == m_newTime ) {
-              ///Still the modtime that we've set, change it back
-              struct timeval times[2];
-              times[0].tv_usec = 0;
-              times[0].tv_sec = s.st_atime;
-              times[1].tv_usec = 0;
-              times[1].tv_sec = (*it).st_mtime;
-              if( utimes( it.key().toLocal8Bit().constData(), times ) != 0 ) {
-                ifTest( cout << "failed to untouch " << it.key().toUtf8().constData() << endl );
-              }
-            } else {
-              ///The file was modified since we changed the modtime
-              ifTest( cout << "will not untouch " << it.key().toUtf8().constData() << " because the modification-time has changed" << endl );
-            }
-          }
+        } else {
+          perror("File status");
         }
       }
+    }
 
-      ~FileModificationTimeWrapper() {
-        unModify();
-      }
+    ~FileModificationTimeWrapper() {
+      unModify();
+    }
 
   private:
-    typedef QMap<QString, struct stat> StatMap;
-    StatMap m_stat;
-    time_t m_newTime;
+    QHash<QString, time_t>  m_stat;
+    time_t                  m_newTime;
   };
 
   class SourcePathInformation {
