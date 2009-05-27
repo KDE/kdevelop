@@ -21,17 +21,6 @@
   </property>
   <layout class="QVBoxLayout">
    <item>
-    <widget class="QLabel" name="textLabel1">
-     <property name="text">
-      <string>Debug arguments can be set on the Run Options page
- or directly in the project manager</string>
-     </property>
-     <property name="wordWrap">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QLabel" name="gdbPath_label">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
