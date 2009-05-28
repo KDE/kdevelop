@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
 
 Name=User Interface
+Name[ca]=Interfície d'usuari
 Name[de]=Benutzeroberfläche
 Name[el]=Περιβάλλον χρήστη
 Name[es]=Interfaz de usuario
@@ -32,6 +33,7 @@ Name[x-test]=xxUser Interfacexx
 Name[zh_CN]=用户界面
 Name[zh_TW]=使用者介面
 Comment=Configure User Interface settings
+Comment[ca]=Configura els arranjaments de la interfície d'usuari
 Comment[de]=Benutzeroberfläche einrichten
 Comment[el]=Ρυθμίσεις περιβάλλοντος χρήστη
 Comment[es]=Configurar las preferencias de la interfaz de usuario

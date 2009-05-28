@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop Kross Support
+Name[ca]=Implementació de Kross per KDevelop
 Name[de]=KDevelop-Unterstützung für Kross
 Name[el]=Υποστήριξη Kross του KDevelop
 Name[es]=Implementación Kross de KDevelop
@@ -21,6 +22,7 @@ Name[x-test]=xxKDevelop Kross Supportxx
 Name[zh_CN]=KDevelop Kross 支持
 Name[zh_TW]=KDevelop Kross 支援
 Comment=KDevelop Kross Support
+Comment[ca]=Implementació de Kross per KDevelop
 Comment[cs]=Podpora Kdevelop Kross
 Comment[de]=KDevelop-Unterstützung für Kross
 Comment[el]=Υποστήριξη Kross του KDevelop

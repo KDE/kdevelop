@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Plugins
+Name[ca]=Connectors
 Name[cs]=Moduly
 Name[de]=Module
 Name[el]=Πρόσθετα
@@ -33,6 +34,7 @@ Name[x-test]=xxPluginsxx
 Name[zh_CN]=插件
 Name[zh_TW]=外掛程式
 Comment=Configure Plugins
+Comment[ca]=Configura els connectors
 Comment[de]=Module einrichten
 Comment[el]=Ρύθμιση προσθέτων
 Comment[es]=Configurar complementos

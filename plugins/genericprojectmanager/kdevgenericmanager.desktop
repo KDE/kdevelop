@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Generic Project Manager
+Name[ca]=Gestor de projectes genèric
 Name[de]=Allgemeine Projektverwaltung
 Name[el]=Γενικευμένος διαχειριστής έργου
 Name[es]=Gestor de proyectos genérico
@@ -18,6 +19,7 @@ Name[x-test]=xxGeneric Project Managerxx
 Name[zh_CN]=常规工程管理器
 Name[zh_TW]=一般專案管理員
 Comment=Allow KDevelop to manage generic projects
+Comment[ca]=Permet a KDevelop gestionar projectes genèrics
 Comment[de]=Zum Verwalten allgemeiner Projekte in KDevelop
 Comment[el]=Επιτρέπει στο KDevelop τη διαχείριση γενικευμένων έργων
 Comment[es]=Permite que KDevelop gestione proyectos genéricos

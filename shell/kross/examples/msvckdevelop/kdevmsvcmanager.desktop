@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KDevelop MSVC Manager
+Name[ca]=Gestor de MSVC de KDevelop
 Name[de]=KDevelop-MSVC-Verwaltung
 Name[el]=Διαχειριστής MSVC του KDevelop
 Name[es]=Gestor MSVC de KDeveloop
@@ -21,6 +22,7 @@ Name[x-test]=xxKDevelop MSVC Managerxx
 Name[zh_CN]=KDevelop MSVC 管理器
 Name[zh_TW]=KDevelop MSVC 管理員
 Comment=Imports MSVC projects
+Comment[ca]=Importa projectes de MSVC
 Comment[de]=Importiert MSVC-Projekte
 Comment[el]=Εισαγωγή έργων MSVC
 Comment[es]=Importa proyectos de MSVC

@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=This plugin provides a browsable model of the currently parsed classes and other items.
+Comment[ca]=Aquest connector proporciona un model navegable de les classes analitzades actualment i altres ítems.
 Comment[de]=Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.
 Comment[el]=Αυτό το πρόσθετο προσφέρει ένα μοντέλο περιήγησης των αναλυμένων κλάσεων και άλλων αντικειμένων.
 Comment[es]=Este complemento proporciona un modelo navegable de las clases analizadas actualmente y otros elementos.
@@ -20,6 +21,7 @@ Name[nds]=KDev-Klassenkieker
 Name[sv]=KDevelop-klassbläddrare
 Name[x-test]=xxKDevClassBrowserxx
 GenericName=Class Browser
+GenericName[ca]=Navegador de classes
 GenericName[de]=Klassen-Browser
 GenericName[el]=Περιηγητής κλάσεων
 GenericName[es]=Navegador de clases
