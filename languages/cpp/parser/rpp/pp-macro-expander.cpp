@@ -252,6 +252,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         for(int a = formal.count()-1; a >= 0; --a) {
           if(formal[a] == indexFromCharacter('\"') || formal[a] == indexFromCharacter('\\'))
             formal.insert(a, indexFromCharacter('\\'));
+            else if(formal[a] == indexFromCharacter('\n')) {
+              //Replace newlines with "\n"
+              formal[a] = indexFromCharacter('n');
+              formal.insert(a, indexFromCharacter('\\'));
+            }
+              
         }
 
         Stream is(&formal, inputPosition);

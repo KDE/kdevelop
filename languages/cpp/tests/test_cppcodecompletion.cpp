@@ -1568,6 +1568,19 @@ void TestCppCodeCompletion::testPreprocessor() {
   IncludeFileList includes;
   
   {
+    QString a = "#define Q(c) c; char* q = #c; \n Q(int i;\n int c;)\n";
+    QString preprocessed = preprocess(HashedString(), a, includes);  
+    kDebug() << "preprocessed:" << preprocessed;
+    QVERIFY(preprocessed.contains("\"int i;\\n int c;")); //The newline must have been escaped correctly
+    TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    kDebug() << top->localDeclarations()[0]->identifier().toString();
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QCOMPARE(top->localDeclarations()[0]->range().start.line, 1);
+    QCOMPARE(top->localDeclarations()[1]->range().start.line, 2);
+    QCOMPARE(top->localDeclarations()[2]->range().start.line, 2);
+  }
+  {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
     QString preprocessed = preprocess(HashedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;
