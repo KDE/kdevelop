@@ -52,7 +52,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseIt
 {
     Q_ASSERT(item);
     Q_ASSERT(item->project());
-    if( item && item->project() && item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item->project()->projectItem() ) )
+    if( item && item->project() && item->project()->projectItem() && item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item->project()->projectItem() ) )
     {
         KJob* j = 0;
         switch( t )
@@ -79,6 +79,8 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseIt
         {
             q->addSubjob( j );
         }
+    } else {
+        kWarning() << "Ooops, got a problem with the project item, buildsystem manager or builder. Couldn't add item to build" << item->text();
     }
 }
 BuilderJob::BuilderJob() 
