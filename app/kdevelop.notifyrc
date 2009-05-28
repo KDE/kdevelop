@@ -246,6 +246,7 @@ Name[pt_BR]=Depurador
 Name[sv]=Avlusare
 Name[tr]=Hata Ayıklayıcı
 Name[uk]=Зневадник
+Name[zh_CN]=调试器
 Name[zh_TW]=除錯器
 
 [Event/BreakpointHit]
@@ -259,6 +260,7 @@ Name[pt]=Ponto de Paragem Atingido
 Name[pt_BR]=Ponto de Paragem Atingido
 Name[sv]=Brytpunkt påträffad
 Name[uk]=Проходження точки зупину
+Name[zh_CN]=断点命中
 Name[zh_TW]=遇到中斷點
 Comment=A Breakpoint has been hit by the debugger
 Comment[de]=Der Debugger hat einen Beobachtungspunkt erreicht
@@ -267,6 +269,7 @@ Comment[pt]=Foi atingido um ponto de paragem pelo depurador
 Comment[pt_BR]=Foi atingido um ponto de paragem pelo depurador
 Comment[sv]=En brytpunkt har påträffats av avlusaren
 Comment[uk]=Інструмент зневаджування пройшов позицію точки зупину
+Comment[zh_CN]=调试器命中了一个断点
 Comment[zh_TW]=除錯器進行遇到中斷點
 
 [Event/WatchpointHit]
@@ -279,6 +282,7 @@ Name[pt]=Ponto de Vigia Atingido
 Name[pt_BR]=Ponto de Vigia Atingido
 Name[sv]=Bevakningspunkt påträffad
 Name[uk]=Проходження точки спостереження
+Name[zh_CN]=观察点命中
 Name[zh_TW]=遇到監看點
 Comment=A Watchpoint has been hit by the debugger
 Comment[de]=Der Debugger hat einen Beobachtungspunkt erreicht
@@ -287,4 +291,5 @@ Comment[pt]=Foi atingido um ponto de vigia pelo depurador
 Comment[pt_BR]=Foi atingido um ponto de vigia pelo depurador
 Comment[sv]=En bevakningspunkt har påträffats av avlusaren
 Comment[uk]=Інструмент зневаджування пройшов позицію точки спостерження
+Comment[zh_CN]=调试器命中了一个观察点
 Comment[zh_TW]=除錯器進行遇到監看點
