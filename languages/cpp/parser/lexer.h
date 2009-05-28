@@ -253,7 +253,7 @@ private:
       if(isChar())
         return (char)*current;
       else
-        return '_'; //Return a valid character, because the identifiers created by the preprocessor are alpha-numerical
+        return 'a'; //Return a valid character, because the identifiers created by the preprocessor are alpha-numerical
     }
     void operator++() {
       ++current;

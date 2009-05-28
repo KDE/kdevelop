@@ -1568,6 +1568,15 @@ void TestCppCodeCompletion::testPreprocessor() {
   IncludeFileList includes;
   
   {
+    QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
+    QString preprocessed = preprocess(HashedString(), a, includes);  
+    kDebug() << "preprocessed:" << preprocessed;
+    TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
+  }
+  {
     QString a = "#define MA(x) T<x> a\n #define MB(x) T<x>\n #define MC(X) int\n #define MD(X) c\n template <typename P1> struct A {}; template <typename P2> struct T {}; int main(int argc, char ** argv) { MA(A<int>); A<MB(int)> b; MC(a)MD(b); MC(a)d; }";
     QString preprocessed = preprocess(HashedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;
