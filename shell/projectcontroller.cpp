@@ -238,12 +238,17 @@ ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) 
 ProjectDialogProvider::~ProjectDialogProvider()
 {}
 
-void writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QString& manager )
+bool writeNewProjectFile( KSharedConfig::Ptr cfg, const QString& name, const QString& manager )
 {
+    if (!cfg->isConfigWritable(true)) {
+        kDebug() << "can't write to configfile";
+        return false;
+    }
     KConfigGroup grp = cfg->group( "Project" );
     grp.writeEntry( "Name", name );
     grp.writeEntry( "Manager", manager );
     cfg->sync();
+    return true;
 }
 
 bool projectFileExists( const KUrl& u )
@@ -270,18 +275,22 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(const KUrl& startUrl)
     {
         if( projectFileUrl.isLocalFile() )
         {
-            writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
+            bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
                             dlg.projectName(),
                             dlg.projectManager() );
+            if (!ok)
+                return KUrl();
         } else
         {
             KTemporaryFile tmp;
             ///TODO: do we really want to set setAutoRemove to false??
             tmp.setAutoRemove( false );
             tmp.open();
-            writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
+            bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
                             dlg.projectName(),
                             dlg.projectManager() );
+            if (!ok)
+                return KUrl();
             KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
         }
     }
