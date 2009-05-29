@@ -186,7 +186,14 @@ void AbstractNavigationWidget::navigateDeclaration(KDevelop::IndexedDeclaration 
 
 void AbstractNavigationWidget::anchorClicked(const QUrl& url) {
   DUChainReadLocker lock( DUChain::lock() );
-  setContext( m_context->acceptLink(url.toString()) );
+
+  //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
+  QPointer<AbstractNavigationWidget> thisPtr(this);
+  NavigationContextPointer oldContext = m_context;
+  NavigationContextPointer nextContext = m_context->acceptLink(url.toString());
+  
+  if(thisPtr)
+    setContext( nextContext );
 }
 
 void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
@@ -195,9 +202,13 @@ void AbstractNavigationWidget::keyPressEvent(QKeyEvent* event) {
 
 void AbstractNavigationWidget::executeContextAction(QString action) {
   DUChainReadLocker lock( DUChain::lock() );
-  setContext(m_context->executeLink(action));
-  Q_ASSERT(m_context);
-  update();
+  //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
+  QPointer<AbstractNavigationWidget> thisPtr(this);
+  NavigationContextPointer oldContext = m_context;
+  NavigationContextPointer nextContext = m_context->executeLink(action);
+  
+  if(thisPtr)
+    setContext( nextContext );
 }
 
 void AbstractNavigationWidget::next() {
@@ -217,11 +228,24 @@ void AbstractNavigationWidget::previous() {
 void AbstractNavigationWidget::accept() {
   DUChainReadLocker lock( DUChain::lock() );
   Q_ASSERT( m_context );
-  setContext( m_context->accept() );
+  
+  QPointer<AbstractNavigationWidget> thisPtr(this);
+  NavigationContextPointer oldContext = m_context;
+  NavigationContextPointer nextContext = m_context->accept();
+  
+  if(thisPtr)
+    setContext( nextContext );
 }
 
 void AbstractNavigationWidget::back() {
-  setContext( m_context->back() );
+  DUChainReadLocker lock( DUChain::lock() );
+
+  QPointer<AbstractNavigationWidget> thisPtr(this);
+  NavigationContextPointer oldContext = m_context;
+  NavigationContextPointer nextContext = m_context->back();
+  
+  if(thisPtr)
+    setContext( nextContext );
 }
 
 void AbstractNavigationWidget::up() {
