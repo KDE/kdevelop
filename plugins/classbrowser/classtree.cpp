@@ -185,6 +185,11 @@ void ClassTree::itemActivated(const QModelIndex& index)
 
     m_plugin->core()->documentController()->openDocument(url, range.start());
   }
+  
+  if(isExpanded(index))
+      collapse(index);
+  else
+      expand(index);
 }
 
 void ClassTree::highlightIdentifier(KDevelop::IndexedQualifiedIdentifier a_id)
