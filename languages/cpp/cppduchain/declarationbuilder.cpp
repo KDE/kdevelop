@@ -757,7 +757,8 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
     }
   }
 
-  eventuallyAssignInternalContext();
+  if(lastContext() && (lastContext()->type() != DUContext::Other || currentDeclaration()->isFunctionDeclaration()))
+    eventuallyAssignInternalContext();
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 

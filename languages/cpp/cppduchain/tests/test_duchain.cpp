@@ -984,6 +984,27 @@ void TestDUChain::assertNoMemberFunctionModifiers(ClassFunctionDeclaration* memb
     QVERIFY(!memberFun->isStatic());
 }
 
+
+void TestDUChain::testAssignedContexts()
+{
+  {
+    QByteArray method("void test() { int i; if(i) { int q; }  int c; while(c) { char q; } int w; { float q;  } }");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->type(), DUContext::Other);
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 3);
+    QVERIFY(!top->childContexts()[1]->childContexts()[0]->owner());
+    QVERIFY(!top->childContexts()[1]->childContexts()[1]->owner());
+    QVERIFY(!top->childContexts()[1]->childContexts()[2]->owner());
+    QVERIFY(!top->childContexts()[1]->childContexts()[3]->owner());
+    release(top);
+  }
+}
+
 void TestDUChain::testTryCatch() {
   TEST_FILE_PARSE_ONLY
   {

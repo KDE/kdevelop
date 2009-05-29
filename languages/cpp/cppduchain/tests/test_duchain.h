@@ -119,6 +119,7 @@ private slots:
   void testTemplateRecursiveInstantiation();
   void testTemplateInternalSearch();
   void testStringSets();
+  void testAssignedContexts();
   void testTryCatch();
   void testIndexedStrings();
   void testEnum();
