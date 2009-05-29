@@ -291,7 +291,13 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(const KUrl& startUrl)
                             dlg.projectManager() );
             if (!ok)
                 return KUrl();
-            KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+
+            ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+            if (!ok) {
+                KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
+                    i18n("Unable to create configuration file %1", projectFileUrl.url()));
+                return KUrl();
+            }
         }
     }
     return projectFileUrl;
