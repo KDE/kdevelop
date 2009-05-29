@@ -2,12 +2,14 @@
 Type=Service
 Name=QMake Project Builder
 Name[es]=Constructor de proyectos QMake
+Name[nds]=QMake-Projektbuumoduul
 Name[pt]=Construtor de Projectos do QMake
 Name[pt_BR]=Construtor de Projectos do QMake
 Name[sv]=Bygg QMake-projekt
 Name[uk]=Інструмент збирання проектів QMake
 Comment=Builds QMake Projects
 Comment[es]=Construye proyectos de QMake
+Comment[nds]=Buut QMake-Projekten
 Comment[pt]=Compila projectos do QMake
 Comment[pt_BR]=Compila projectos do QMake
 Comment[sv]=Bygger QMake-projekt

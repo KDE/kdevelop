@@ -2,12 +2,14 @@
 Type=Service
 Name=QMake Project Manager
 Name[es]=Gestor de proyectos QMake
+Name[nds]=QMake-Projektpleger
 Name[pt]=Gestor de Projectos do QMake
 Name[pt_BR]=Gestor de Projectos do QMake
 Name[sv]=QMake-projekthantering
 Name[uk]=Керування проектами QMake
 Comment=Imports and edits qmake projects
 Comment[es]=Importa y edita proyectos de QMake
+Comment[nds]=Qmake-Projekten importeren un bewerken
 Comment[pt]=Importa e edita os projectos do QMake
 Comment[pt_BR]=Importa e edita os projectos do QMake
 Comment[sv]=Importerar och redigerar QMake-projekt
