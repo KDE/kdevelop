@@ -71,6 +71,7 @@ private slots:
   void testCompletionContext();
   void testPrivateVariableCompletion();
   void testUnnamedNamespace();
+  void testIndirectImports();
   void testSameNamespace();
   void testUpdateChain();
   void testHeaderSections();

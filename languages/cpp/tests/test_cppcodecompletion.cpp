@@ -588,6 +588,40 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
   release(top);
 }
 
+
+void TestCppCodeCompletion::testIndirectImports()
+{
+  {
+    addInclude("testIndirectImportsHeader1.h", "class C {};");
+    addInclude("testIndirectImportsHeader2.h", "template<class T> class D : public T {};");
+    
+    QByteArray method("#include \"testIndirectImportsHeader2.h\"\n#include \"testIndirectImportsHeader1.h\"\n typedef D<C> Base; class MyClass : public C, public Base {}; ");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 2);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->importedParentContexts().count(), 2);
+    QVERIFY(!top->childContexts()[0]->importedParentContexts()[0].isDirect()); //Should not be direct, since it crosses a header
+    QVERIFY(!top->childContexts()[0]->importedParentContexts()[0].indirectDeclarationId().isDirect()); //Should not be direct, since it crosses a header
+    QVERIFY(!top->childContexts()[0]->importedParentContexts()[1].isDirect()); //Should not be direct, since it crosses a header
+    QVERIFY(!top->childContexts()[0]->importedParentContexts()[1].indirectDeclarationId().isDirect()); //Should not be direct, since it crosses a header
+    DUContext* import1 = top->childContexts()[0]->importedParentContexts()[1].context(top);
+    QVERIFY(import1);
+    QCOMPARE(import1->importedParentContexts().count(), 2); //The template-context is also imported
+    QVERIFY(!import1->importedParentContexts()[1].isDirect()); //Should not be direct, since it crosses a header
+    QVERIFY(!import1->importedParentContexts()[1].indirectDeclarationId().isDirect()); //Should not be direct, since it crosses a header
+
+    DUContext* import2 = import1->importedParentContexts()[0].context(top);
+    QVERIFY(import2);
+    QCOMPARE(import2->importedParentContexts().count(), 0);
+
+    release(top);
+  }
+}
+
 void TestCppCodeCompletion::testSameNamespace() {
   {
     addInclude("testSameNamespaceClassHeader.h", "namespace A {\n class B\n {\n \n};\n \n}");
