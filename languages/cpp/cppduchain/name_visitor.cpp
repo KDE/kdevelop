@@ -37,8 +37,8 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
-: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
+NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
+: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
 {
   m_flags = localSearchFlags;
   m_stopSearch = false;
@@ -165,7 +165,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
     if(!m_visitor) {
       m_visitor = new ExpressionVisitor(m_session, m_source);
       ownVisitor = true;
-      node->expression->ducontext = const_cast<DUContext*>(m_context);
+      node->expression->ducontext = const_cast<DUContext*>(m_localContext);
     }
     
     m_visitor->visit( node->expression );
@@ -196,8 +196,7 @@ ExpressionEvaluationResult NameASTVisitor::processTemplateArgument(TemplateArgum
     
   } else if( node->type_id )
   {
-    TypeASTVisitor v( m_session, m_visitor, m_context, m_source, m_debug );
-    v.setSearchFlags(m_flags);
+    TypeASTVisitor v( m_session, m_visitor, m_localContext, m_source, m_localContext, m_debug );
     v.run( node->type_id );
 
     if(v.stoppedSearch()) {

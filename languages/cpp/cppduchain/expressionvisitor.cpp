@@ -482,7 +482,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     clearLast();
 
-    NameASTVisitor nameV( m_session, this, searchInContext, topContext(), position.isValid() ? position : searchInContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
+    NameASTVisitor nameV( m_session, this, searchInContext, topContext(), m_currentContext, position.isValid() ? position : searchInContext->range().end, m_memberAccess ? DUContext::DontSearchInParent : DUContext::NoSearchFlags );
     nameV.run(node, m_skipLastNamePart);
 
     if( nameV.identifier().isEmpty() ) {
@@ -1040,7 +1040,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     clearLast();
 
-    TypeASTVisitor comp(m_session, this, m_currentContext, topContext());
+    TypeASTVisitor comp(m_session, this, m_currentContext, topContext(), m_currentContext);
     comp.run(ast);
 
     LOCKDUCHAIN;
@@ -1776,7 +1776,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       SimpleCursor position = container->range().end;
       lock.unlock();
       //This builds the uses
-      NameASTVisitor nameV( m_session, this, container, topContext(), position );
+      NameASTVisitor nameV( m_session, this, container, topContext(), m_currentContext, position );
       nameV.run(node->name, true);
       lock.lock();
     }

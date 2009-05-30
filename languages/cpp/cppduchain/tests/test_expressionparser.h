@@ -62,6 +62,7 @@ private slots:
   void testBaseClasses();
   void testTemplatesSimple();
   void testTemplates();
+  void testTemplates2();
   void cleanupTestCase();
   void testOperators();
   void testTemplateFunctions();

@@ -35,7 +35,7 @@ using namespace Cpp;
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
 
 
-TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_flags(KDevelop::DUContext::NoSearchFlags), m_debug(debug)
+TypeASTVisitor::TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, bool debug) : m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_flags(KDevelop::DUContext::NoSearchFlags), m_debug(debug)
 {
   m_position = m_context->range().end;
   m_stopSearch = false;
@@ -224,7 +224,7 @@ void TypeASTVisitor::visitName(NameAST *node)
   if(m_stopSearch)
     return;
   
-  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_position, m_flags, m_debug);
+  NameASTVisitor name_cc(m_session, m_visitor, m_context, m_source, m_localContext, m_position, m_flags, m_debug);
   name_cc.run(node);
   if(name_cc.stoppedSearch()) {
     m_stopSearch = true;

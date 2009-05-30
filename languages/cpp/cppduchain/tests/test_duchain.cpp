@@ -3182,27 +3182,43 @@ void TestDUChain::testTemplates3() {
 
 void TestDUChain::testTemplates4()
 {
-  QByteArray method("template<class T> struct Cnt { typedef T Val; }; struct Item; template<class Value> struct Freqto { struct Item { typedef Value Value2; }; struct Pattern : public Cnt<Item> { }; };");
+  {
+    QByteArray method("template<class A> class Temp { typedef A Mem; }; class B {class A { typedef int AMember; }; }; ");
 
-  TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->childContexts().count(), 4);
-  QCOMPARE(top->childContexts()[3]->childContexts().count(), 2);
-  
-  //The import should have been delayed, since it needs 'Item'
-  QVERIFY(top->childContexts()[3]->childContexts()[1]->owner());
-  ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(top->childContexts()[3]->childContexts()[1]->owner());
-  QVERIFY(classDecl);
-  QCOMPARE(classDecl->baseClassesSize(), 1u);
-  QVERIFY(top->childContexts()[3]->childContexts()[1]->importedParentContexts().isEmpty());
-  QVERIFY(classDecl->baseClasses()[0].baseClass.type<DelayedType>());
-  kDebug() << classDecl->baseClasses()[0].baseClass.abstractType()->toString();
-  Declaration* val2Decl = findDeclaration(top, QualifiedIdentifier("Freqto<int>::Pattern::Val::Value2"));
-  QVERIFY(val2Decl);
-  QCOMPARE(unAliasedType(val2Decl->abstractType())->toString(), QString("int"));
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 3);
+    Declaration* memDecl = findDeclaration(top->childContexts()[2], QualifiedIdentifier("Temp<A>::Mem"));;
+    QVERIFY(memDecl);
+    QCOMPARE(unAliasedType(memDecl->abstractType())->toString(), QString("B::A"));
+    QVERIFY(findDeclaration(top->childContexts()[2], QualifiedIdentifier("Temp<A>::Mem::AMember")));
 
-  release(top);
+    release(top);
+  }
+  {
+    QByteArray method("template<class T> struct Cnt { typedef T Val; }; struct Item; template<class Value> struct Freqto { struct Item { typedef Value Value2; }; struct Pattern : public Cnt<Item> { }; };");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[3]->childContexts().count(), 2);
+    
+    //The import should have been delayed, since it needs 'Item'
+    QVERIFY(top->childContexts()[3]->childContexts()[1]->owner());
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(top->childContexts()[3]->childContexts()[1]->owner());
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->baseClassesSize(), 1u);
+    QVERIFY(top->childContexts()[3]->childContexts()[1]->importedParentContexts().isEmpty());
+    QVERIFY(classDecl->baseClasses()[0].baseClass.type<DelayedType>());
+    kDebug() << classDecl->baseClasses()[0].baseClass.abstractType()->toString();
+    Declaration* val2Decl = findDeclaration(top, QualifiedIdentifier("Freqto<int>::Pattern::Val::Value2"));
+    QVERIFY(val2Decl);
+    QCOMPARE(unAliasedType(val2Decl->abstractType())->toString(), QString("int"));
+
+    release(top);
+  }
 }
 
 void TestDUChain::testTemplates2() {

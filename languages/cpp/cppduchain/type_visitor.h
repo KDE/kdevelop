@@ -42,7 +42,7 @@ class ExpressionVisitor;
 class KDEVCPPDUCHAIN_EXPORT TypeASTVisitor: protected DefaultVisitor
 {
 public:
-  TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, bool debug = false);
+  TypeASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, bool debug = false);
 
   KDevelop::QualifiedIdentifier identifier() const;
   inline QStringList qualifiedName() const { if(m_stopSearch) return QStringList(); return m_typeId.toStringList(); }
@@ -81,6 +81,7 @@ private:
   ParseSession* m_session;
   Cpp::ExpressionVisitor* m_visitor;
   const KDevelop::DUContext* m_context;
+  const KDevelop::DUContext* m_localContext;
   KDevelop::SimpleCursor m_position;
   QList<KDevelop::DeclarationPointer> m_declarations;
   const KDevelop::TopDUContext* m_source;

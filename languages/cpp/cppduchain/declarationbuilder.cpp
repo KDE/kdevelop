@@ -823,7 +823,7 @@ Cpp::InstantiationInformation DeclarationBuilder::createSpecializationInformatio
       const ListNode<TemplateArgumentAST*> * start = name->template_arguments->toFront();
       const ListNode<TemplateArgumentAST*> * current = start;
       do {
-        NameASTVisitor visitor(editor()->parseSession(), 0, templateContext, currentContext()->topContext(), templateContext->range().end/*, DUContext::NoUndefinedTemplateParams*/);
+        NameASTVisitor visitor(editor()->parseSession(), 0, templateContext, currentContext()->topContext(), templateContext, templateContext->range().end/*, DUContext::NoUndefinedTemplateParams*/);
         ExpressionEvaluationResult res = visitor.processTemplateArgument(current->element);
         AbstractType::Ptr type = res.type.abstractType();
         

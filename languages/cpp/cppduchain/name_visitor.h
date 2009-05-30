@@ -41,7 +41,10 @@ namespace Cpp {
 class KDEVCPPDUCHAIN_EXPORT NameASTVisitor: protected DefaultVisitor
 {
 public:
-  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
+  ///@param context Context in which to look up the name
+  ///@param source The source top-context from where the parsing was triggerd
+  ///@param localVisibilityContext Local context from where to look up template parameters
+  NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, const KDevelop::SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags = KDevelop::DUContext::NoSearchFlags, bool debug = false);
 
   void run(NameAST *node, bool skipLastNamePart = false);
   ///@param skipThisName if this is true, only the template-parameters of the given node are processed
@@ -77,6 +80,7 @@ private:
   Cpp::ExpressionVisitor* m_visitor;
   const KDevelop::DUContext* m_context;
   const KDevelop::TopDUContext* m_source;
+  const KDevelop::DUContext* m_localContext;
   TypeSpecifierAST* m_typeSpecifier;
   KDevelop::Identifier m_currentIdentifier;
   KDevelop::QualifiedIdentifier _M_name;

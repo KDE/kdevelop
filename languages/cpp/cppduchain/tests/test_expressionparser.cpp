@@ -322,6 +322,28 @@ void TestExpressionParser::testDynamicArray() {
   release(top);
 }
 
+void TestExpressionParser::testTemplates2()
+{
+  QByteArray method("class C { class A; template<class T> T test() {} }; class B { class A; void test() {C c; } }; ");
+
+  DUContext* top = parse(method, DumpAll);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->childContexts().size(), 2);
+  
+  {
+    Cpp::ExpressionParser parser(false, true);;
+    Cpp::ExpressionEvaluationResult result = parser.evaluateExpression("c.test<A>()", KDevelop::DUContextPointer(top->childContexts()[1]->childContexts()[1]));
+
+    QVERIFY(result.isValid());
+    QVERIFY(result.isInstance);
+    kDebug() << result.toString();
+    QCOMPARE(result.type.abstractType()->toString(), QString("B::A"));
+  }
+  release(top);
+}
+
 void TestExpressionParser::testSmartPointer() {
   QByteArray method("template<class T> struct SmartPointer { T* operator ->() const {}; template<class Target> SmartPointer<Target> cast() {}; T& operator*() {};  } ; class B{int i;}; class C{}; SmartPointer<B> bPointer;");
   //QByteArray method("template<class T> struct SmartPointer { template<class Target> void cast() {}; } ; ");
@@ -963,14 +985,11 @@ void TestExpressionParser::testTemplateFunctions() {
     result = parser.evaluateExpression( "A<C>()", KDevelop::DUContextPointer(top));
     QVERIFY(result.isValid());
 
-    ///@todo Look up template parameters from within the calling context, not from within the one containing the function.
-    ///          Then this test will pass again.
-//     result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
-//     QVERIFY(result.isValid());
-//     QCOMPARE(result.type.abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
+    result = parser.evaluateExpression( "aClass->a<A>(A())", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    QCOMPARE(result.type.abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
-    ///@todo Look up template parameters from within the calling context, not from within the one containing the function.
-    ///          Then this test will pass again.
+    ///@todo find out why this doesn't work
 //     result = parser.evaluateExpression( "aClass->a(A())", KDevelop::DUContextPointer(top));
 //     QVERIFY(result.isValid());
 //     QCOMPARE(result.type.abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
