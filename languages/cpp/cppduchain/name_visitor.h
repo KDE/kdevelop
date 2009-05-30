@@ -68,6 +68,9 @@ public:
     return m_stopSearch;
   }
   
+  ///Whether at least one part of the scope could be resolved
+  bool foundSomething() const;
+  
   ///This can be used from outside to only process the type of a template-argument.
   ///This NameASTVisitor will be in an invalid state after this is called, so don't continue using it!
   Cpp::ExpressionEvaluationResult processTemplateArgument(TemplateArgumentAST *node);
@@ -88,7 +91,7 @@ private:
   bool m_debug;
   UnqualifiedNameAST* m_finalName;
   KDevelop::DUContext::SearchFlags m_flags;
-  bool m_stopSearch;
+  bool m_stopSearch, m_foundSomething;
 };
 
 QString decode(ParseSession* session, AST* ast, bool without_spaces = false);

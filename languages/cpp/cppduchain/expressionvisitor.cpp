@@ -509,6 +509,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       m_lastDeclarations = nameV.declarations();
 
       if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
+        
+        if(Cpp::isTemplateDependent(m_currentContext) ) {
+          if(m_memberAccess || (node->qualified_names && nameV.foundSomething())) {
+          //Do nothing. Within a not instantiated template, we cannot be that sure
+          m_lastType.clear();
+          return;
+          }
+        }
+        
         MissingDeclarationType::Ptr missing(new MissingDeclarationType);
         
         missing->setIdentifier(IndexedTypeIdentifier(nameV.identifier()));

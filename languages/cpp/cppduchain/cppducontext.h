@@ -694,6 +694,10 @@ class CppDUContext : public BaseContext {
     IndexedInstantiationInformation m_instantiatedWith;
 };
 
+///Returns whether the given declaration depends on a missing template-parameter
+bool isTemplateDependent(Declaration* decl);
+bool isTemplateDependent(DUContext* context);
+
 }
 
 #endif

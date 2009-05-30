@@ -63,8 +63,20 @@ QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopD
   }
 }
 
+
+bool isTemplateDependent(DUContext* context)
+{
+  while(context && !context->owner())
+    context = context->parentContext();
+  if(context && context->owner())
+    return isTemplateDependent(context->owner());
+
+  return false;
+}
+
 ///@todo Make this faster
-bool isTemplateDependent(Declaration* decl) {
+bool isTemplateDependent(Declaration* decl)
+{
   if( !decl )
     return false;
   TemplateDeclaration* templDecl = dynamic_cast<TemplateDeclaration*>(decl);
