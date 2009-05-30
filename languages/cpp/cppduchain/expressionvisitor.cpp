@@ -511,7 +511,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
         
         if(Cpp::isTemplateDependent(m_currentContext) ) {
-          if(m_memberAccess || (node->qualified_names && nameV.foundSomething())) {
+          if(m_memberAccess || (node->qualified_names && nameV.foundSomething() && Cpp::isTemplateDependent(nameV.foundSomething().data()))) {
           //Do nothing. Within a not instantiated template, we cannot be that sure
           m_lastType.clear();
           return;

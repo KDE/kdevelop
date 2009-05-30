@@ -38,7 +38,7 @@ using namespace KDevelop;
 using namespace Cpp;
 
 NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
-: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0), m_foundSomething(false)
+: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
 {
   m_flags = localSearchFlags;
   m_stopSearch = false;
@@ -128,8 +128,8 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   } else {
     if(node == m_finalName) {
       if(m_visitor) { //Create a zero use, which will be highlighted as an error
-        m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
-        ///@todo Eventually report a problem, but then we don't need the zero use
+        if(!m_foundSomething || !Cpp::isTemplateDependent(m_foundSomething.data()))
+          m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
       }
       
       if( m_debug )
@@ -139,7 +139,9 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   _M_name.push(m_currentIdentifier);
   
-  m_foundSomething |= !m_find.lastDeclarations().isEmpty();
+  if(!m_find.lastDeclarations().isEmpty()) {
+    m_foundSomething = m_find.lastDeclarations().first();
+  }
 }
 
 TypeSpecifierAST* NameASTVisitor::lastTypeSpecifier() const {
@@ -299,7 +301,7 @@ void NameASTVisitor::run(NameAST *node, bool skipLastNamePart)
 }
 
 
-bool NameASTVisitor::foundSomething() const
+DeclarationPointer NameASTVisitor::foundSomething() const
 {
   return m_foundSomething;
 }

@@ -69,7 +69,7 @@ public:
   }
   
   ///Whether at least one part of the scope could be resolved
-  bool foundSomething() const;
+  DeclarationPointer foundSomething() const;
   
   ///This can be used from outside to only process the type of a template-argument.
   ///This NameASTVisitor will be in an invalid state after this is called, so don't continue using it!
@@ -91,7 +91,8 @@ private:
   bool m_debug;
   UnqualifiedNameAST* m_finalName;
   KDevelop::DUContext::SearchFlags m_flags;
-  bool m_stopSearch, m_foundSomething;
+  bool m_stopSearch;
+  DeclarationPointer m_foundSomething;
 };
 
 QString decode(ParseSession* session, AST* ast, bool without_spaces = false);
