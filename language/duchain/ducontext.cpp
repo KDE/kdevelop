@@ -1883,7 +1883,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
 
 DUContext::Import::Import(DUContext* _context, const DUContext* importer, const SimpleCursor& _position) : position(_position) {
   if(_context && _context->owner() && (_context->owner()->specialization().index() || (importer && importer->topContext() != _context->topContext()))) {
-    m_declaration = _context->owner()->id(true);
+    m_declaration = _context->owner()->id();
   }else{
     m_context = _context;
   }
