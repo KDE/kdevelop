@@ -63,6 +63,36 @@ QWidget* CppDUContext<DUContext>::createNavigationWidget(Declaration* decl, TopD
   }
 }
 
+///@todo Make this faster
+bool isTemplateDependent(Declaration* decl) {
+  if( !decl )
+    return false;
+  TemplateDeclaration* templDecl = dynamic_cast<TemplateDeclaration*>(decl);
+  if( !templDecl )
+    return false;
+  if( decl->abstractType().cast<CppTemplateParameterType>() )
+    return true;
+
+  DUContext* ctx = decl->context();
+
+  while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
+    //Check if there is an imported template-context, which has an unresolved template-parameter
+    foreach( const DUContext::Import &importedCtx, ctx->importedParentContexts() ) {
+      if( !importedCtx.context(decl->topContext()) )
+        continue;
+      if( importedCtx.context(decl->topContext())->type() == DUContext::Template ) {
+        foreach( Declaration* paramDecl, importedCtx.context(decl->topContext())->localDeclarations() ) {
+          CppTemplateParameterType::Ptr templateParamType = paramDecl->abstractType().cast<CppTemplateParameterType>();
+          if( templateParamType )
+            return true;
+        }
+      }
+    }
+    ctx = ctx->parentContext();
+  }
+  return false;
+}
+
 Declaration* FindDeclaration::instantiateDeclaration( Declaration* decl, const InstantiationInformation& templateArguments ) const
 {
   if( !templateArguments.isValid() )
@@ -215,6 +245,10 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       Declaration* resolution = dynamic_cast<ForwardDeclaration*>(decl)->resolve(m_source);
       if(resolution)
         decl = resolution;
+    }
+    
+    if(basicFlags & DUContext::NoUndefinedTemplateParams && isTemplateDependent(decl)) {
+      return false;
     }
     
     if( !s.templateParameters.isValid() ) {

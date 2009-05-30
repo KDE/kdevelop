@@ -43,6 +43,12 @@
 #include <util/pushvalue.h>
 
 using namespace KDevelop;
+using namespace Cpp;
+
+///@todo Make this unneeded in this place
+namespace Cpp {
+bool isTemplateDependent(Declaration* decl);
+}
 
 QString stringFromSessionTokens( ParseSession* session, int start_token, int end_token ) {
     int startPosition = session->token_stream->position(start_token);
@@ -53,34 +59,6 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
 TypeBuilder::TypeBuilder()
   : TypeBuilderBase(), m_inTypedef(false), m_lastTypeWasInstance(false)
 {
-}
-
-///DUChain must be locked
-bool isTemplateDependent(Declaration* decl) {
-  ///@todo Store this information somewhere, instead of recomputing it for each item
-  if( !decl )
-    return false;
-  if( decl->abstractType().cast<CppTemplateParameterType>() )
-    return true;
-
-  DUContext* ctx = decl->context();
-
-  while( ctx && ctx->type() != DUContext::Global && ctx->type() != DUContext::Namespace ) {
-    //Check if there is an imported template-context, which has an unresolved template-parameter
-    foreach( const DUContext::Import &importedCtx, ctx->importedParentContexts() ) {
-      if( !importedCtx.context(decl->topContext()) )
-        continue;
-      if( importedCtx.context(decl->topContext())->type() == DUContext::Template ) {
-        foreach( Declaration* paramDecl, importedCtx.context(decl->topContext())->localDeclarations() ) {
-          CppTemplateParameterType::Ptr templateParamType = paramDecl->abstractType().cast<CppTemplateParameterType>();
-          if( templateParamType )
-            return true;
-        }
-      }
-    }
-    ctx = ctx->parentContext();
-  }
-  return false;
 }
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
@@ -150,6 +128,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
       //Delay the type-resolution of template-parameters
       if( res.allDeclarations.size() ) {
         Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
+        ///@todo Do a proper check on all involved types, also template parameters, by giving correct parameters to evaluateType
         if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl)) {
           delay = true;
         }
@@ -374,6 +353,7 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
       //Delay the type-resolution of template-parameters
       if( res.allDeclarations.size() ) {
         Declaration* decl = res.allDeclarations[0].getDeclaration(currentContext()->topContext());
+        ///@todo Do a check on all involved types, also template parameters, by giving the parameter to evaluateType
         if( dynamic_cast<TemplateParameterDeclaration*>(decl) || isTemplateDependent(decl))
           delay = true;
       }
@@ -419,8 +399,8 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
     QList<Declaration*> dec = searchContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::NoUndefinedTemplateParams);
     ifDebug( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
     ifDebugCurrentFile( kDebug() << "found" << dec.count() <<  (dec.count() ? dec[0]->toString() : QString()); )
-    if ( dec.isEmpty() || (templateDeclarationDepth() && isTemplateDependent(dec.front())) ) {
-      ifDebug( kDebug(9007) << "opening delayed because of template-dependence"; )
+    if ( dec.isEmpty() ) {
+      ifDebug( kDebug(9007) << "opening delayed:"<< id.toString() ; )
       delay = true;
     }
 
