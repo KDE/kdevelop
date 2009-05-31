@@ -382,7 +382,7 @@ struct Set::Iterator::IteratorPrivate {
       
       if(node->contiguous())
         break; //We need no finer granularity, because the range is contiguous
-      node = repository->dataRepository.itemFromIndex(node->leftNode);
+      node = Set::Iterator::getDataRepository(repository).itemFromIndex(node->leftNode);
     } while(node);
     Q_ASSERT(currentIndex >= nodeStack[0]->start);
   }

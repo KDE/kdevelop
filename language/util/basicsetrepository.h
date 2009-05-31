@@ -304,6 +304,7 @@ private:
   friend class Set;
   friend class IteratorPrivate;
   static inline BasicSetRepository::Private *getPrivatePtr(BasicSetRepository *repo) { return repo->d; }
+  static inline SetDataRepository &getDataRepository(BasicSetRepository *repo) { return repo->dataRepository; }
   class IteratorPrivate;
   IteratorPrivate* d;
 };
