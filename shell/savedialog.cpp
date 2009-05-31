@@ -26,7 +26,6 @@
 #include <QVBoxLayout>
 
 #include <klocale.h>
-#include <kstdguiitem.h>
 
 #include <interfaces/idocument.h>
 
