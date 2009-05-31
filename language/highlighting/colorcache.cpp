@@ -139,7 +139,7 @@ void ColorCache::generateColors(uint count)
   m_colors.append(m_foregroundColor);
 }
 
-void ColorCache::ColorCache::adaptToColorChanges()
+void ColorCache::adaptToColorChanges()
 {
   setupColors();
 
