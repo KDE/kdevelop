@@ -602,13 +602,13 @@ void VcsBlackBoxTest::testInit()
 {
     for (int i = 0; i < m_primary.size(); ++i) {
         if (m_primary[i]->isDistributed) {
-            DRepo * a = static_cast<DRepo*>(m_primary[i].get());
-            DRepo * b = static_cast<DRepo*>(m_secondary[i].get());
+            DRepo * a = static_cast<DRepo*>(m_primary[i]);
+            DRepo * b = static_cast<DRepo*>(m_secondary[i]);
             repoInit(*a, *b);
         }
         else {
-            CRepo * a = static_cast<CRepo*>(m_primary[i].get());
-            CRepo * b = static_cast<CRepo*>(m_secondary[i].get());
+            CRepo * a = static_cast<CRepo*>(m_primary[i]);
+            CRepo * b = static_cast<CRepo*>(m_secondary[i]);
             repoInit(*a, *b);
         }
     }
@@ -631,8 +631,8 @@ void VcsBlackBoxTest::testCommitModifyRevert()
 void VcsBlackBoxTest::testSharedOps()
 {
     for (int i = 0; i < m_primary.size(); ++i) {
-        Repo * a = m_primary[i].get();
-        Repo * b = m_secondary[i].get();
+        Repo * a = m_primary[i];
+        Repo * b = m_secondary[i];
 
         if (m_primary[i]->isDistributed) {
             testSharedOps(*static_cast<DRepo*>(a), *static_cast<DRepo*>(b));

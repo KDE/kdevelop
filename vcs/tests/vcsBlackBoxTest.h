@@ -27,7 +27,6 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
-#include <tr1/memory>
 #include <vector>
 #include <vcs/vcsstatusinfo.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -65,7 +64,7 @@ class Repo
             : noncopyable
 {
 public:
-    typedef std::tr1::shared_ptr<KTempDir> WorkDirPtr;
+    typedef KTempDir* WorkDirPtr;
     Repo(KDevelop::IBasicVersionControl* _vcs, bool distributed);
 
     KDevelop::IBasicVersionControl* vcs;
@@ -120,7 +119,7 @@ private slots:
     void cleanupTestCase();
 
 private:
-    typedef std::tr1::shared_ptr<Repo> RepoPtr;
+    typedef Repo* RepoPtr;
     QList<RepoPtr> m_primary;
     QList<RepoPtr> m_secondary;
     void removeTempDirs();
