@@ -21,6 +21,7 @@
 
 using Veritas::GradientColorRange;
 using Veritas::StopPoints;
+using Veritas::StopPoint;
 
 GradientColorRange::GradientColorRange()
 {
