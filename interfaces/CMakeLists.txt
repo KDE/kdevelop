@@ -27,6 +27,9 @@ set(kdevplatforminterfaces_LIB_SRCS
     idebugcontroller.cpp
     launchconfigurationpage.cpp
     launchconfigurationtype.cpp
+	ilauncher.cpp
+	ilaunchconfiguration.cpp
+	ilaunchmode.cpp
 )
 
 

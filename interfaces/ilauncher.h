@@ -43,7 +43,7 @@ class LaunchConfigurationPageFactory;
 class KDEVPLATFORMINTERFACES_EXPORT ILauncher
 {
 public:
-    virtual ~ILauncher() {}
+    virtual ~ILauncher();
 
     /**
         * a unique identifier for the launcher, used for example for ILaunchConfigurationType::launcherForId()

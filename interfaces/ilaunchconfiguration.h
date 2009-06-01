@@ -39,7 +39,7 @@ class IProject;
 class KDEVPLATFORMINTERFACES_EXPORT ILaunchConfiguration
 {
 public:
-    virtual ~ILaunchConfiguration() {}
+    virtual ~ILaunchConfiguration();
 
     /**
      * Access to the configuration group for this launch configuration.

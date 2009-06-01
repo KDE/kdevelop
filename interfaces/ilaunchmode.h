@@ -23,6 +23,7 @@
 #include "interfacesexport.h"
 
 class QString;
+class KIcon;
 
 namespace KDevelop
 {
@@ -36,7 +37,7 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT ILaunchMode
 {
 public:
-    virtual ~ILaunchMode() {}
+    virtual ~ILaunchMode();
 
     /**
      * Provide an icon for this launch mode for the GUI
