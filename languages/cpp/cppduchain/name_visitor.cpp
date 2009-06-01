@@ -128,8 +128,12 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   } else {
     if(node == m_finalName) {
       if(m_visitor) { //Create a zero use, which will be highlighted as an error
-        LOCKDUCHAIN;
-        if(!m_foundSomething || !Cpp::isTemplateDependent(m_foundSomething.data()))
+        bool createUse = false;
+        {
+          LOCKDUCHAIN;
+          createUse = !m_foundSomething || !Cpp::isTemplateDependent(m_foundSomething.data());
+        }
+        if(createUse)
           m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
       }
       
