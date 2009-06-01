@@ -97,7 +97,8 @@ target_link_libraries(kdevplatformshell
 # need to add kdevplatform* once those are exported targets
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES 
         ${KDE4_KDEUI_LIBS}
-        ${KDE4_KDECORE_LIBS})
+        ${KDE4_KDECORE_LIBS}
+		kdevplatforminterfaces)
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 set(kdevplatformtestshell_LIB_SRCS
@@ -106,6 +107,7 @@ set(kdevplatformtestshell_LIB_SRCS
 
 kde4_add_library(kdevplatformtestshell SHARED ${kdevplatformtestshell_LIB_SRCS})
 target_link_libraries(kdevplatformtestshell kdevplatformshell ${KDE4_KIO_LIBS} ${KDE4_KUTILS_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} ${QT_QTDESIGNER_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformlanguage sublime kdevplatformutil kdevplatformoutputview)
+target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES kdevplatformshell)
 set_target_properties(kdevplatformtestshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 install(TARGETS kdevplatformtestshell kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
