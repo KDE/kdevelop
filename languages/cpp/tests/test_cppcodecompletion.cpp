@@ -126,6 +126,18 @@ void TestCppCodeCompletion::testArgumentMatching() {
 
 void TestCppCodeCompletion::testSubClassVisibility() {
   {
+    QByteArray test = "typedef struct { int am; } A; void test() { A b; } ";
+
+    TopDUContext* context = parse( test, DumpAll /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 3);
+    QCOMPARE(context->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(context->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
+    QCOMPARE(CompletionItemTester(context->childContexts()[2], "b.").names, QStringList() << "am");
+
+    release(context);
+  }
+  {
     QByteArray test = "struct A { int am; struct B { int bm; }; }; void test() { A::B b; } ";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
