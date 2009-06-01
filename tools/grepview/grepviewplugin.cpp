@@ -105,7 +105,7 @@ void GrepViewPlugin::showDialog()
 
     dlg->enableButtonOk( !pattern.isEmpty() );
     
-    if (m_directory.isEmpty() or not QFileInfo(m_directory).isDir()) {
+    if (m_directory.isEmpty() || !QFileInfo(m_directory).isDir()) {
         KUrl currentUrl;
         KDevelop::IDocument *document = core()->documentController()->activeDocument();
         dlg->setEnableProjectBox(false);
