@@ -17,7 +17,7 @@
 #include "codegenerator.h"
 
 #include "documentchangeset.h"
-#include "duchainchangeset.h"
+#include "../duchain/topducontext.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
