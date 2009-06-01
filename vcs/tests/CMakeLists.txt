@@ -9,5 +9,7 @@ target_link_libraries(vcsBlackBoxTest
                       kdevplatformtestshell
                       kdevplatformutil
                       kdevplatformvcs
+					  kdevplatformshell
+					  kdevplatforminterfaces
                       )
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
