@@ -46,9 +46,9 @@ class IndexedDeclaration;
  * A namespace which contains convenience utilities for navigating definition-use chains.
  */
 namespace DUChainUtils {
-  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(Declaration* dec);
+  KDEVPLATFORMLANGUAGE_EXPORT KTextEditor::CodeCompletionModel::CompletionProperties completionProperties(const Declaration* dec);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
-  KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(Declaration* dec);
+  KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(const Declaration* dec);
   /** Asks the language-plugins for standard-contexts for the given url, and returns one if available.
     * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain. */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);

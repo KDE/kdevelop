@@ -45,12 +45,12 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Declaration* dec)
+CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(const Declaration* dec)
 {
   CodeCompletionModel::CompletionProperties p;
 
   if(dec->context()->type() == DUContext::Class) {
-    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(dec)) {
+    if (const ClassMemberDeclaration* member = dynamic_cast<const ClassMemberDeclaration*>(dec)) {
       switch (member->accessPolicy()) {
         case Declaration::Public:
           p |= CodeCompletionModel::Public;
@@ -78,7 +78,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(Dec
     }
   }
 
-  if (AbstractFunctionDeclaration* function = dynamic_cast<AbstractFunctionDeclaration*>(dec)) {
+  if (const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(dec)) {
     p |= CodeCompletionModel::Function;
     if (function->isVirtual())
       p |= CodeCompletionModel::Virtual;
@@ -222,7 +222,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
   return KIcon();
 }
 
-QIcon DUChainUtils::iconForDeclaration(Declaration* dec)
+QIcon DUChainUtils::iconForDeclaration(const Declaration* dec)
 {
   return iconForProperties(completionProperties(dec));
 }
