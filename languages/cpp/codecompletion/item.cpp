@@ -216,10 +216,21 @@ bool declarationNeedsTemplateParameters(Declaration* decl) {
 
 QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const
 {
+  if(m_cachedTypeStringDecl == decl && m_cachedTypeStringLength == desiredTypeLength)
+    return m_cachedTypeString;
+  
+  QString ret;
+  
   if(completionContext() && completionContext()->duContext())
-    return Cpp::shortenedTypeString(decl.data(), completionContext()->duContext(), desiredTypeLength);
+    ret = Cpp::shortenedTypeString(decl.data(), completionContext()->duContext(), desiredTypeLength);
   else
-    return KDevelop::NormalDeclarationCompletionItem::shortenedTypeString(decl, desiredTypeLength);
+    ret = KDevelop::NormalDeclarationCompletionItem::shortenedTypeString(decl, desiredTypeLength);
+  
+  m_cachedTypeString = ret;
+  m_cachedTypeStringDecl = decl;
+  m_cachedTypeStringLength = desiredTypeLength;
+  
+  return ret;
 }
 
 KDevelop::QualifiedIdentifier NormalDeclarationCompletionItem::stripPrefix() const {

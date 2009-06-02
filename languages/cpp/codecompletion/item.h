@@ -85,6 +85,10 @@ protected:
   virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const;
   virtual bool createsExpandingWidget() const;
   virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const;
+private:
+  mutable DeclarationPointer m_cachedTypeStringDecl;
+  mutable QString m_cachedTypeString;
+  mutable uint m_cachedTypeStringLength;
 };
 
 //A completion item used for completing include-files
