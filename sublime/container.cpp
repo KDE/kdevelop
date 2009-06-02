@@ -72,6 +72,8 @@ protected:
             QStyleOptionTabBarBase optTabBase;
             optTabBase.init(m_tabBar);
             optTabBase.shape = m_tabBar->shape();
+            optTabBase.tabBarRect = m_tabBar->rect();
+            optTabBase.tabBarRect.moveRight(0);
 
             QStyleOptionTab tabOverlap;
             tabOverlap.shape = m_tabBar->shape();

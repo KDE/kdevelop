@@ -613,6 +613,8 @@ void AreaTabWidget::paintEvent ( QPaintEvent* ev ) {
         QStyleOptionTabBarBase optTabBase;
         optTabBase.init ( tabBar );
         optTabBase.shape = tabBar->shape();
+        optTabBase.tabBarRect = tabBar->rect();
+        optTabBase.tabBarRect.moveTopLeft(tabBar->pos());
 
         int sideWidth = width()-tabBar->width();
 
