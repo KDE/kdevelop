@@ -96,7 +96,7 @@ public:
     void setStopOnFail( bool stopOnFail );
     
     /**
-     * Find out wether this builderjob stops building items on the first failed
+     * Find out whether this builderjob stops building items on the first failed
      * item.
      * @returns true if this job stops and fails when the first subjob failed
      */
