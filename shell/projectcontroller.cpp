@@ -149,6 +149,7 @@ public:
         }
         m_configuringProject = proj;
         m_cfgDlgs[proj]->exec();
+        proj->projectConfiguration()->sync();
         m_configuringProject = 0;
     }
     void saveListOfOpenedProjects()
