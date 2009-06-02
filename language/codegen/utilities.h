@@ -18,7 +18,7 @@
 
 #include <language/languageexport.h>
 
-#include <QtGui/qvalidator.h>
+#include <QtGui/QValidator>
 
 #ifndef CODEGEN_UTILITIES_H
 #define CODEGEN_UTILITIES_H
