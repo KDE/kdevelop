@@ -358,7 +358,7 @@ QSize IdealMainLayout::minimumSize() const
             minWidth += qMax(softMinWidth, itemSizeHint.width() + splitterWidth());
         }
 
-        m_min = QSize(minHeight, minWidth);
+        m_min = QSize(minWidth, minHeight);
         m_minDirty = true;
     }
 
