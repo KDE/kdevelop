@@ -124,6 +124,10 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier exchangeQualifiedIdentifie
 ///Tries to un-typedef the given type using the uses directly before the given declaration.
 KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier unTypedefType(KDevelop::Declaration* decl, KDevelop::IndexedTypeIdentifier type);
 
+///Computes an identifier that represents the given type as well as possible. If the type can not be represented as IndexedTypeIdentifier cleanly,
+///the qualified identifier will be set to an expression.
+KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier identifierForType(KDevelop::AbstractType::Ptr type, KDevelop::TopDUContext* top);
+
 ///Returns a shortened string version of the type attached to the given declaration.
 ///@param desiredLength the desired length. No guarantee that the resulting string will be this short. With the default-value, no shortening will happen in most cases.
 ///@param ctx visibility context to consider. All prefixes of types are shortened to the minimum length while staying visible from here

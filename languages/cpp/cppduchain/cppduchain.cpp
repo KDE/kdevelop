@@ -67,6 +67,54 @@ void minimize(int& i, const int with) {
     i = with;
 }
 
+uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, uint pointerLevel, TopDUContext* top)
+{
+  if(!type)
+    return pointerLevel;
+  TypePtr< ReferenceType > refType = type.cast<ReferenceType>();
+  if(refType) {
+    id.setIsReference(true);
+    if(refType->modifiers() & AbstractType::ConstModifier)
+      id.setIsConstant(true);
+    
+    return buildIdentifierForType(refType->baseType(), id, pointerLevel, top);
+  }
+  TypePtr< PointerType > pointerType = type.cast<PointerType>();
+  
+  if(pointerType) {
+    ++pointerLevel;
+    uint maxPointerLevel = buildIdentifierForType(pointerType->baseType(), id, pointerLevel, top);
+    if(type->modifiers() & AbstractType::ConstModifier)
+      id.setIsConstPointer(maxPointerLevel - pointerLevel, true);
+    if(id.pointerDepth() < pointerLevel)
+      id.setPointerDepth(pointerLevel);
+    
+    return maxPointerLevel;
+  }
+  
+  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
+  if(idType) {
+    Declaration* decl = idType->declaration(top);
+    if(decl) {
+      id.setIdentifier(decl->qualifiedIdentifier());
+    }else
+      id.setIdentifier(idType->qualifiedIdentifier());
+  }else{
+    //Just create it as an expression
+    id.setIdentifier(QualifiedIdentifier(type->toString(), true));
+  }
+  if(type->modifiers() & AbstractType::ConstModifier)
+    id.setIsConstant(true);
+  return pointerLevel;
+}
+
+IndexedTypeIdentifier identifierForType(AbstractType::Ptr type, TopDUContext* top)
+{
+  IndexedTypeIdentifier ret;
+  buildIdentifierForType(type, ret, 0, top);
+  return ret;
+}
+
 QList< QPair<Declaration*, int> > hideOverloadedDeclarations( const QList< QPair<Declaration*, int> >& declarations ) {
   QHash<Identifier, Declaration*> nearestDeclaration;
   QHash<Declaration*, int> depthHash;
@@ -551,7 +599,8 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           
           Identifier currentId;
           if(!idType->qualifiedIdentifier().isEmpty())
-            currentId.setIdentifier(idType->qualifiedIdentifier().last().identifier().str());
+            currentId = idType->qualifiedIdentifier().last();
+          currentId.clearTemplateIdentifiers();
           
           KDevelop::InstantiationInformation instantiationInfo = tempDecl->instantiatedWith().information();
           int neededParameters = 0;
@@ -562,7 +611,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
             newInformation.templateParametersList().append(instantiationInfo.templateParameters()[neededParameters]);
             AbstractType::Ptr niceParam = stripType(instantiationInfo.templateParameters()[neededParameters].abstractType(), ctx);
             if(niceParam) {
-              currentId.appendTemplateIdentifier(IndexedTypeIdentifier(niceParam->toString()));
+              currentId.appendTemplateIdentifier(IndexedTypeIdentifier(niceParam->toString(), true));
 //               kDebug() << "testing param" << niceParam->toString();
             }
             
@@ -592,7 +641,9 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           return type;
         
         DelayedType::Ptr ret(new KDevelop::DelayedType);
-        ret->setIdentifier(IndexedTypeIdentifier(newTypeName));
+        IndexedTypeIdentifier ti(newTypeName);
+        ti.setIsConstant(type->modifiers() & AbstractType::ConstModifier);
+        ret->setIdentifier(ti);
         return ret.cast<AbstractType>();
       }      
       newType->exchangeTypes(this);
@@ -630,41 +681,39 @@ QString simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUConte
 QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
 
   bool isReference = false;
+  bool isConstReference = false;
   if(type.cast<ReferenceType>()) {
     isReference = true;
+    isConstReference = type.cast<ReferenceType>()->modifiers() & AbstractType::ConstModifier;
     type = type.cast<ReferenceType>()->baseType();
   }
 
   type = shortenTypeForViewing(type);
-  
   if(ctx)
     type = stripType(type, ctx);
-    
   if(!type)
     return QString();
   
-  IndexedTypeIdentifier identifier = IndexedTypeIdentifier(type->toString(), true);
+  IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
   
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
-  
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
-
-  if(isReference)
+  if(isReference) {
     identifier.setIsReference(true);
+    if(isConstReference)
+      identifier.setIsConstant(true);
+  }
   
 //   if(identifier.toString().length() > desiredLength)
 //     identifier = Cpp::unTypedefType(decl, identifier);
   
   int removeTemplateParametersFrom = 10;
   
-  ///@todo Remove namespace-prefixes
-  
   while(identifier.toString().length() > desiredLength * 3 && removeTemplateParametersFrom >= 0) {
     --removeTemplateParametersFrom;
     identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
   }
-  
   return identifier.toString();
 }
 

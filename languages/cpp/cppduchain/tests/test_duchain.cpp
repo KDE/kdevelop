@@ -2927,6 +2927,21 @@ void TestDUChain::testTemplateInternalSearch() {
   release(top);
 }
 
+
+void TestDUChain::testSimplifiedTypeString()
+{
+  ///@todo Add more tests for this
+  QByteArray method("template<typename T> struct F; template<class T> class Tc; Tc<const F<int*>*> t; const Tc<const F<int*>*>**const*& Test1;");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().count(), 4);
+  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[2]->abstractType(), top).remove(' '), QString("Tc<const F<int*>*>").remove(' '));
+  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[3]->abstractType(), top).remove(' '), QString("constTc<const F<int*>*>**const*&").remove(' '));
+  release(top);
+}
+
 void TestDUChain::testTemplateReference() {
   QByteArray method("class A; template<class T> class CC; void test(CC<const A*>& item); const A& a;const A*** b;CC<const A>  cca;");
 
@@ -2949,14 +2964,15 @@ void TestDUChain::testTemplateReference() {
     QString html = nWidget->context()->html();
     kDebug() << "html:" << html;*/
   }
-  QCOMPARE(Cpp::shortenedTypeString(top->childContexts()[1]->localDeclarations()[0], top, 10000).remove(' '), QString("CC<constA*>&"));
+  QCOMPARE(Cpp::simplifiedTypeString(top->childContexts()[1]->localDeclarations()[0]->abstractType(), top).remove(' '), QString("CC<constA*>&"));
   QVERIFY(top->localDeclarations()[3]->abstractType());
-  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[3], top, 10000).remove(' '), QString("constA&"));
-  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[4], top, 10000).remove(' '), QString("constA***"));
+  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[3]->abstractType(), top).remove(' '), QString("constA&"));
+  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[4]->abstractType(), top).remove(' '), QString("constA***"));
   AbstractType::Ptr type = top->localDeclarations()[5]->abstractType();
   QVERIFY(type);
   QCOMPARE(type->toString().remove(' '), QString("CC<constA>"));
-  QCOMPARE(Cpp::shortenedTypeString(top->localDeclarations()[5], top, 10000).remove(' '), QString("CC<constA>"));
+  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[5]->abstractType(), top).remove(' '), QString("CC<constA>"));
+  release(top);
 }
 
 void TestDUChain::testTemplates() {
