@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="4">
+<kpartgui name="kdevdebuggershellui" library="kdevdebugger" version="5">
     <MenuBar>
         <Menu name="run">
             <text context="@title:menu">Run</text>
@@ -35,7 +35,7 @@
         <WeakSeparator/>
     </ToolBar>
     
-    <State name="stopped">
+    <State name="ended">
         <disable>
             <Action name="debug_continue"/>
             <Action name="debug_stop"/>
@@ -66,6 +66,21 @@
             <Action name="debug_stop"/>
         </enable>
         <disable>
+            <Action name="debug_continue"/>
+            <Action name="debug_runtocursor"/>
+            <Action name="debug_stepover"/>
+            <Action name="debug_stepoverinst"/>
+            <Action name="debug_stepinto"/>
+            <Action name="debug_stepintoinst"/>
+            <Action name="debug_stepout"/>
+        </disable>
+    </State>
+    <State name="stopped">
+        <enable>
+            <Action name="debug_stop"/>
+        </enable>
+        <disable>
+            <Action name="debug_pause"/>
             <Action name="debug_continue"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>

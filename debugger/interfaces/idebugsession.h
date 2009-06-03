@@ -46,7 +46,8 @@ public:
         ActiveState,
         PausedState,
         StoppingState,
-        StoppedState
+        StoppedState,
+        EndedState
     };
 
 public:

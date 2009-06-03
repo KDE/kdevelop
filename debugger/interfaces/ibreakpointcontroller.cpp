@@ -64,7 +64,7 @@ BreakpointModel* IBreakpointController::breakpointModel() const
 
 void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState state)
 {
-    if (state == IDebugSession::StartingState || state == IDebugSession::StoppedState) {
+    if (state == IDebugSession::StartingState || state == IDebugSession::EndedState) {
         //breakpoint state changes when session started or stopped
         foreach (Breakpoint *breakpoint, breakpointModel()->breakpoints()) {
             if (state == IDebugSession::StartingState) {

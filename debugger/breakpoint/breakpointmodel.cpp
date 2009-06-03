@@ -240,7 +240,6 @@ void BreakpointModel::markChanged(
     KTextEditor::Mark mark, 
     KTextEditor::MarkInterface::MarkChangeAction action)
 {
-
     int type = mark.type;
     /* Is this a breakpoint mark, to begin with? */
     if (!(type & AllBreakpointMarks)) return;
@@ -336,13 +335,16 @@ void KDevelop::BreakpointModel::updateMarks()
 {
     if (m_dontUpdateMarks) return;
 
+    //add marks
     foreach (Breakpoint *breakpoint, m_breakpoints) {
+        if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
+        if (breakpoint->line() == -1) continue;
         IDocument *doc = ICore::self()->documentController()->documentForUrl(breakpoint->url());
         if (!doc) continue;
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
         uint type = breakpointType(breakpoint);
-        kDebug() << type << mark->mark(breakpoint->line());
+        kDebug() << type << breakpoint->url() << mark->mark(breakpoint->line());
 
         doc->textDocument()->blockSignals(true);
         if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
@@ -355,6 +357,8 @@ void KDevelop::BreakpointModel::updateMarks()
         }
         doc->textDocument()->blockSignals(false);
     }
+
+    //remove marks
     foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;

@@ -99,7 +99,7 @@ void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
     if (m_controller->currentSession()
-        && m_controller->currentSession()->state() != KDevelop::IDebugSession::StoppedState)
+        && m_controller->currentSession()->state() != KDevelop::IDebugSession::EndedState)
     {
         kDebug();
         StackModel* model = m_controller->currentSession()->stackModel();
@@ -148,7 +148,7 @@ void KDevelop::FramestackWidget::assignSomeThread()
 
 void FramestackWidget::stateChanged(KDevelop::IDebugSession::DebuggerState state)
 {
-    if (state == KDevelop::IDebugSession::StoppedState) {
+    if (state == KDevelop::IDebugSession::EndedState) {
         mThreads->setModel(0);
         mFrames->setModel(0);
     }

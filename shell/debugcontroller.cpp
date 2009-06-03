@@ -125,7 +125,7 @@ DebugController::DebugController(QObject *parent)
 
 void DebugController::initialize()
 {
-    stateChanged("stopped");
+    stateChanged("ended");
 }
 
 BreakpointModel* DebugController::breakpointModel()
@@ -331,8 +331,7 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
         case IDebugSession::StoppingState:
             kDebug() << "new state: stopped";
             stateChanged("stopped");
-            clearExecutionPoint();
-            m_restartDebugger->setEnabled(false);
+            m_restartDebugger->setEnabled(session->restartAvaliable());
             break;
         case IDebugSession::StartingState:
         case IDebugSession::PausedState:
@@ -344,12 +343,17 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
             kDebug() << "new state: active";
             stateChanged("active");
             m_restartDebugger->setEnabled(false);
+            clearExecutionPoint();
             break;
-    }
-
-    if (state == IDebugSession::StoppedState || state == IDebugSession::NotStartedState
-       || state == IDebugSession::StoppingState || state == IDebugSession::ActiveState) {
-        clearExecutionPoint();
+        case IDebugSession::EndedState:
+            kDebug() << "new state: ended";
+            stateChanged("ended");
+            clearExecutionPoint();
+            m_restartDebugger->setEnabled(false);
+            Q_ASSERT(session == m_currentSession);
+            delete session;
+            m_currentSession = 0;
+            break;
     }
 }
 
