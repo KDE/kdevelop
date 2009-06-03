@@ -400,7 +400,7 @@ void UiController::showSettingsDialog()
 // the show() call doesn't show the dialog
 //     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )
 //         d->cfgDlg->dialog()->setParent( activeMainWindow() );
-    d->cfgDlg->show();
+    d->cfgDlg->exec();
 }
 
 Sublime::Controller* UiController::controller()
