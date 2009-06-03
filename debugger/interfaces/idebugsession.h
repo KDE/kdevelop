@@ -25,7 +25,6 @@
 #include "../debuggerexport.h"
 
 class KUrl;
-class KJob;
 
 namespace KDevelop {
 class IBreakpointController;
@@ -64,13 +63,6 @@ public:
     virtual bool restartAvaliable() const = 0;
 
     /**
-     * Execution-Job that started the debug session.
-     *
-     * Can be 0 if it is eg a JIT debug session.
-     */
-    KJob* job() const;
-
-    /**
      * Returns if the debugee is currently running. This includes paused.
      */
     bool isRunning() const;
@@ -101,7 +93,6 @@ Q_SIGNALS:
 
 protected:
 
-    KJob *m_job;
     IBreakpointController *m_breakpointController;
 };
 

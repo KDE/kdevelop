@@ -29,17 +29,12 @@ namespace KDevelop {
 
 
 IDebugSession::IDebugSession()
-    : m_job(0), m_breakpointController(0)
+    : m_breakpointController(0)
 {
 }
 
 IDebugSession::~IDebugSession()
 {
-}
-
-KJob *IDebugSession::job() const
-{
-    return m_job;
 }
 
 bool IDebugSession::isRunning() const
