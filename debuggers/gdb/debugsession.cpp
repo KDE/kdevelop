@@ -225,16 +225,14 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
     if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
     {
         emit finished();
-        m_job = 0;
         setSessionState(EndedState); //this will delete the DebugSession, so do it last
     }
 }
 
 
-bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* run, KJob* job)
+bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* run)
 {
-    m_job = job;
-    m_gdb = m_controller->startProgram(run, job);
+    m_gdb = m_controller->startProgram(run);
     if (!m_gdb) return false;
     connect(m_gdb.data(), SIGNAL(programStopped(GDBMI::ResultRecord)), this, SIGNAL(programStopped(GDBMI::ResultRecord)));
     return true;

@@ -40,7 +40,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kjob.h>
 #include <kmessagebox.h>
 #include <kshell.h>
 #include <KConfigGroup>
@@ -80,8 +79,7 @@ GDBController::GDBController(QObject* parent)
         stateReloadInProgress_(false),
         gdb_(0),
         m_variableCollection(new VariableCollection(this)),
-        m_stackManager(new StackManager(this)),
-        gdbExecuteJob_(0)
+        m_stackManager(new StackManager(this))
 {
     configure();
 
@@ -627,7 +625,7 @@ bool GDBController::startDebugger()
     return true;
 }
 
-QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, KJob* job)
+QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg)
 {
     if (stateIsOn( s_appNotStarted ) )
     {
@@ -659,7 +657,6 @@ QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg, K
     KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
     int config_outputRadix_ = 10;
-    gdbExecuteJob_ = job;
 
     // Need to set up a new TTY for each run...
     if (tty_)
@@ -1273,11 +1270,6 @@ void GDBController::slotRestart()
     // would not work.
     slotKill();
     slotRun();
-}
-
-KJob* GDBController::job() const
-{
-    return gdbExecuteJob_;
 }
 
 VariableCollection * GDBController::variables() const

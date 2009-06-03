@@ -80,10 +80,9 @@ public:
     ~GDBController();
 
     /**
-     * Start the debugger, and execute the program specified by \a run,
-     * and remember the provided \a job.
+     * Start the debugger, and execute the program specified by \a run.
      */
-    QPointer<GDB> startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
+    QPointer<GDB> startProgram(KDevelop::ILaunchConfiguration* run);
 
     /**
      * Run currently executing program to the given \a url and \a line.
@@ -109,11 +108,6 @@ public:
      * Stop the currently running application.
      */
     void stopDebugger();
-
-    /**
-     * Return the job for the currently run program, if one was given, else return -1.
-     */
-    KJob* job() const;
 
     /** Adds a command to the end of queue of commands to be executed
         by gdb. The command will be actually sent to gdb only when
@@ -345,8 +339,6 @@ private:
 
     VariableCollection* m_variableCollection;
     StackManager* m_stackManager;
-
-    KJob* gdbExecuteJob_;
 };
 
 }

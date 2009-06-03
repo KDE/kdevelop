@@ -268,7 +268,7 @@ void GdbJob::start()
     
     startOutput();
     
-    m_session->startProgram( m_launchcfg, this );
+    m_session->startProgram( m_launchcfg );
 }
 
 bool GdbJob::doKill()

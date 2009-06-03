@@ -76,7 +76,7 @@ Q_SIGNALS:
     void programStopped(const GDBMI::ResultRecord& mi_record);
 
 public Q_SLOTS:
-    bool startProgram(KDevelop::ILaunchConfiguration* run, KJob* job);
+    bool startProgram(KDevelop::ILaunchConfiguration* run);
     virtual void startDebugger();
     virtual void restartDebugger();
     virtual void stopDebugger();
