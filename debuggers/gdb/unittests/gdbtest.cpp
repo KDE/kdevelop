@@ -131,6 +131,10 @@ private:
 
 };
 
+
+#define WAIT_FOR_STATE(session, state) \
+    waitForState((session), (state), __FILE__, __LINE__)
+
 void GdbTest::testStdOut()
 {
     TestDebugSession session;
@@ -139,7 +143,7 @@ void GdbTest::testStdOut()
 
     TestLaunchConfiguration cfg;
     session.startProgram(&cfg, 0);
-    waitForState(session, KDevelop::IDebugSession::StoppedState);
+    WAIT_FOR_STATE(session, KDevelop::IDebugSession::EndedState);
 
     {
         QCOMPARE(outputSpy.count(), 1);
@@ -162,14 +166,14 @@ void GdbTest::testBreakpoint()
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
 
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::CleanState);
     session.stepInto();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.stepInto();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testDisableBreakpoint()
@@ -190,7 +194,7 @@ void GdbTest::testDisableBreakpoint()
 
     b = breakpoints->addCodeBreakpoint(fileName, 21);
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     //disable existing breakpoint
     b->setData(KDevelop::Breakpoint::EnableColumn, false);
@@ -202,7 +206,7 @@ void GdbTest::testDisableBreakpoint()
 
     QTest::qWait(300);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 
 }
 
@@ -220,7 +224,7 @@ void GdbTest::testChangeLocationBreakpoint()
     KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 27);
 
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
 
     QTest::qWait(100);
@@ -229,7 +233,7 @@ void GdbTest::testChangeLocationBreakpoint()
     session.run();
 
     QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 28);
     QTest::qWait(500);
     breakpoints->setData(breakpoints->index(0, KDevelop::Breakpoint::LocationColumn), fileName+":30");
@@ -238,11 +242,11 @@ void GdbTest::testChangeLocationBreakpoint()
     QCOMPARE(b->line(), 29);
     session.run();
     QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 29);
     session.run();
 
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testDeleteBreakpoint()
@@ -266,12 +270,12 @@ void GdbTest::testDeleteBreakpoint()
     b = breakpoints->addCodeBreakpoint(fileName, 22);
 
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     breakpoints->removeRow(0);
     QTest::qWait(100);
     session.run();
 
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testPendingBreakpoint()
@@ -290,10 +294,10 @@ void GdbTest::testPendingBreakpoint()
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::NotStartedState);
 
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.breakpointController()->breakpointState(b), KDevelop::Breakpoint::PendingState);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testUpdateBreakpoint()
@@ -315,20 +319,20 @@ void GdbTest::testUpdateBreakpoint()
     //insert custom command as user might do it using GDB console
     session.controller()->addCommand(new UserCommand(GDBMI::NonMI, "break "+fileName+":28"));
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(100);
     session.stepInto();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(KDevelop::ICore::self()->debugController()->breakpointModel()->rowCount(), 3);
     b = breakpoints->breakpoint(1);
     QCOMPARE(b->url(), KUrl(fileName));
     QCOMPARE(b->line(), 27);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
 
 
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testIgnoreHitsBreakpoint()
@@ -349,13 +353,13 @@ void GdbTest::testIgnoreHitsBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(100);
     b->setIgnoreHits(1);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testConditionBreakpoint()
@@ -379,18 +383,18 @@ void GdbTest::testConditionBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 24);
     b->setCondition("i == 0");
     QTest::qWait(100);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 33);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testBreakOnWriteBreakpoint()
@@ -408,13 +412,13 @@ void GdbTest::testBreakOnWriteBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testBreakOnWriteWithConditionBreakpoint()
@@ -433,10 +437,10 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testBreakOnReadBreakpoint()
@@ -457,10 +461,10 @@ void GdbTest::testBreakOnReadBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
     */
 }
 
@@ -478,20 +482,20 @@ void GdbTest::testBreakOnReadBreakpoint2()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
 
     KDevelop::Breakpoint *b = breakpoints->addReadWatchpoint("foo::i");
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 22);
 
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testBreakOnAccessBreakpoint()
@@ -508,30 +512,30 @@ void GdbTest::testBreakOnAccessBreakpoint()
 
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
 
     KDevelop::Breakpoint *b = breakpoints->addAccessWatchpoint("foo::i");
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 22);
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
 
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 22);
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
 
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testInsertBreakpointWhileRunning()
@@ -546,16 +550,16 @@ void GdbTest::testInsertBreakpointWhileRunning()
     breakpoints->removeRows(0, breakpoints->rowCount());
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::ActiveState);
+    WAIT_FOR_STATE(session, DebugSession::ActiveState);
     QTest::qWait(2000);
     kDebug() << "adding breakpoint";
     KDevelop::Breakpoint *b = breakpoints->addCodeBreakpoint(fileName, 23);
     QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     b->setDeleted();
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testInsertBreakpointWhileRunningMultiple()
@@ -570,21 +574,21 @@ void GdbTest::testInsertBreakpointWhileRunningMultiple()
     breakpoints->removeRows(0, breakpoints->rowCount());
     session.startProgram(&cfg, 0);
 
-    waitForState(session, DebugSession::ActiveState);
+    WAIT_FOR_STATE(session, DebugSession::ActiveState);
     QTest::qWait(2000);
     kDebug() << "adding breakpoint";
     KDevelop::Breakpoint *b1 = breakpoints->addCodeBreakpoint(fileName, 22);
     KDevelop::Breakpoint *b2 = breakpoints->addCodeBreakpoint(fileName, 23);
     QTest::qWait(100);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 22);
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 23);
     b1->setDeleted();
     b2->setDeleted();
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testInsertBreakpointFunctionName()
@@ -599,10 +603,10 @@ void GdbTest::testInsertBreakpointFunctionName()
     KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint("main");
 
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testShowStepInSource()
@@ -620,13 +624,13 @@ void GdbTest::testShowStepInSource()
     breakpoints->removeRows(0, breakpoints->rowCount());
     breakpoints->addCodeBreakpoint(fileName, 29);
     session.startProgram(&cfg, 0);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.stepInto();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.stepInto();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 
     {
         QCOMPARE(showStepInSourceSpy.count(), 3);
@@ -656,7 +660,7 @@ void GdbTest::testStack()
     breakpoints->removeRows(0, breakpoints->rowCount());
     breakpoints->addCodeBreakpoint(fileName, 21);
     QVERIFY(session.startProgram(&cfg, 0));
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     KDevelop::StackModel *model = session.stackModel();
     model->setAutoUpdate(true);
@@ -681,9 +685,9 @@ void GdbTest::testStack()
 
 
     session.run();
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 
@@ -699,7 +703,7 @@ void GdbTest::testAttach()
 
     TestDebugSession session;
     session.attachToProcess(debugeeProcess.pid());
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
@@ -708,11 +712,11 @@ void GdbTest::testAttach()
     QTest::qWait(100);
     session.run();
     QTest::qWait(2000);
-    waitForState(session, DebugSession::PausedState);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 32);
 
     session.run();
-    waitForState(session, DebugSession::StoppedState);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 void GdbTest::testCoreFile()
@@ -747,13 +751,20 @@ void GdbTest::testCoreFile()
     QTest::qWait(100);
 }
 
-void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSession::DebuggerState state)
+void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSession::DebuggerState state,
+                            const char *file, int line)
 {
     kDebug() << "waiting for state" << state;
     QTime stopWatch;
     stopWatch.start();
     while (session.state() != state) {
-        if (stopWatch.elapsed() > 5000) qFatal("Didn't reach state");
+        if (stopWatch.elapsed() > 5000) {
+            if (file && line != -1) {
+                qFatal(QString("Didn't reach state in %0:%1").arg(file).arg(line).toLatin1());
+            } else {
+                qFatal("Didn't reach state");
+            }
+        }
         QTest::qWait(20);
     }
     QTest::qWait(100);

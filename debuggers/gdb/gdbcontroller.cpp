@@ -396,6 +396,10 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
         QString name = r["signal-name"].literal();
         QString user_name = r["signal-meaning"].literal();
 
+        if (name == "SIGSEGV") {
+            setStateOn(s_appNotStarted|s_programExited);
+        }
+
         // SIGINT is a "break into running program".
         // We do this when the user set/mod/clears a breakpoint but the
         // application is running.
@@ -527,7 +531,9 @@ void GDBController::parseStreamRecord(const GDBMI::StreamRecord& s)
     {
         QString line = s.message;
         if (line.startsWith("Program terminated")) {
+            //when examining core file
             setStateOff(s_appRunning);
+            setStateOn(s_appNotStarted|s_programExited);
         } else if (line.startsWith("The program no longer exists")
             || line.startsWith("Program exited"))
         {

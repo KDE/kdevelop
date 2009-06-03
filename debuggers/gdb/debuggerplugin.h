@@ -106,8 +106,6 @@ private Q_SLOTS:
     void slotDebugExternalProcess(QObject* interface);
     void contextEvaluate();
     void contextWatch();
-//    void projectOpened();
-    void projectClosed();
 
     void slotExamineCore();
     void slotAttachProcess();

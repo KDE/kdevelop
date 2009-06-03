@@ -68,6 +68,7 @@ DebugSession::DebugSession(GDBController* controller)
 
 DebugSession::~DebugSession()
 {
+    kDebug();
 }
 
 
@@ -214,18 +215,19 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
         }
     }
 
-    if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
-    {
-        emit finished();
-        m_job = 0;
-    }
-
     // And now? :-)
     kDebug(9012) << "Debugger state: " << newState << ": ";
     kDebug(9012) << "   " << message;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
+
+    if (!(oldState & s_dbgNotStarted) && (newState & s_dbgNotStarted))
+    {
+        emit finished();
+        m_job = 0;
+        setSessionState(EndedState); //this will delete the DebugSession, so do it last
+    }
 }
 
 

@@ -56,7 +56,7 @@ private Q_SLOTS:
     void testCoreFile();
 private:
     KDevelop::TestCore* m_core;
-    void waitForState(const GDBDebugger::DebugSession& session, KDevelop::IDebugSession::DebuggerState state);
+    void waitForState(const GDBDebugger::DebugSession& session, KDevelop::IDebugSession::DebuggerState state, const char *file = 0, int line = -1);
 };
 
 #endif // GDBTEST_H

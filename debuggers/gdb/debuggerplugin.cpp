@@ -345,25 +345,14 @@ void CppDebuggerPlugin::contextEvaluate()
 
 DebugSession* CppDebuggerPlugin::createSession()
 {
-    if (m_session) {
-        delete m_session;
-    }
-    m_session = new DebugSession(m_controller);
-    KDevelop::ICore::self()->debugController()->addSession(m_session);
-    connect(m_session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
-    connect(m_session, SIGNAL(reset()), SIGNAL(reset()));
-    connect(m_session, SIGNAL(finished()), SLOT(slotFinished()));
-    connect(m_session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
-    connect(m_session, SIGNAL(raiseVariableViews()), SIGNAL(raiseVariableViews()));
-    return m_session;
-}
-
-
-void CppDebuggerPlugin::projectClosed()
-{
-    if (m_session) {
-        m_session->stopDebugger();
-    }
+    DebugSession *session = new DebugSession(m_controller);
+    KDevelop::ICore::self()->debugController()->addSession(session);
+    connect(session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
+    connect(session, SIGNAL(reset()), SIGNAL(reset()));
+    connect(session, SIGNAL(finished()), SLOT(slotFinished()));
+    connect(session, SIGNAL(raiseOutputViews()), SIGNAL(raiseOutputViews()));
+    connect(session, SIGNAL(raiseVariableViews()), SIGNAL(raiseVariableViews()));
+    return session;
 }
 
 void CppDebuggerPlugin::slotExamineCore()
