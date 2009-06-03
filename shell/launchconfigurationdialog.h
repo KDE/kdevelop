@@ -98,7 +98,7 @@ private:
         LaunchConfiguration* launch;
         TreeItem* parent;
         int row;
-        QList<TreeItem*> children;
+        QList<TreeItem*> childs;
     };
     TreeItem* findItemForProject( IProject* );
     QList<TreeItem*> topItems;

@@ -263,8 +263,8 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
             parent = topItems.at(0);
         }
         t->parent = parent;
-        t->row = parent->children.count();
-        parent->children.append( t );
+        t->row = parent->childs.count();
+        parent->childs.append( t );
     }    
 }
 
@@ -356,7 +356,7 @@ QModelIndex LaunchConfigurationsModel::index(int row, int column, const QModelIn
     } else 
     {
         TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
-        tree = t->children.at( row );
+        tree = t->childs.at( row );
     }
     if( tree )
     {
@@ -385,7 +385,7 @@ int LaunchConfigurationsModel::rowCount(const QModelIndex& parent) const
     if( parent.isValid() )
     {
         TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
-        return t->children.count();
+        return t->childs.count();
     } else
     {
         return topItems.count();
@@ -476,7 +476,7 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l )
         
         if( tparent )
         {
-            foreach( TreeItem* c, tparent->children )
+            foreach( TreeItem* c, tparent->childs )
             {
                 if( c->launch && c->launch == l )
                 {
@@ -493,7 +493,7 @@ void LaunchConfigurationsModel::deleteConfiguration( const QModelIndex& index )
 {
     TreeItem* t = static_cast<TreeItem*>( index.internalPointer() );
     beginRemoveRows( parent( index ), index.row(), index.row() );
-    t->parent->children.removeAll( t );
+    t->parent->childs.removeAll( t );
     Core::self()->runControllerInternal()->removeLaunchConfiguration( t->launch );
     endRemoveRows();
 }
@@ -536,8 +536,8 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
         TreeItem* item = new TreeItem;
         item->launch = l;
         item->parent = t;
-        item->row = t->children.count();
-        t->children.append( item );
+        item->row = t->childs.count();
+        t->childs.append( item );
         endInsertRows();
     }
 }
