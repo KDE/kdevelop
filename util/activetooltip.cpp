@@ -44,7 +44,6 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
 {
     d->mouseOut_ = 0;
     d->previousDistance_ = std::numeric_limits<uint>::max();
-    setAttribute(Qt::WA_DeleteOnClose);
     setMouseTracking(true);
     d->rect_ = QRect(position, position);
     d->rect_.adjust(-10, -10, 10, 10);
@@ -201,6 +200,13 @@ void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority
     
     connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
     QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);
+}
+
+
+void ActiveToolTip::closeEvent(QCloseEvent* event)
+{
+    QWidget::closeEvent(event);
+    deleteLater();
 }
 
 }

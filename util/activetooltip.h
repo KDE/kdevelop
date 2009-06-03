@@ -77,6 +77,7 @@ public:
 Q_SIGNALS:
     void resized();    
 private:
+    virtual void closeEvent(QCloseEvent* );
     class ActiveToolTipPrivate* const d;
 };
 
