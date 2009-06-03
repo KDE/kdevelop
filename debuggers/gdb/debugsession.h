@@ -77,7 +77,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     bool startProgram(KDevelop::ILaunchConfiguration* run);
-    virtual void startDebugger();
     virtual void restartDebugger();
     virtual void stopDebugger();
     virtual void interruptDebugger();
@@ -105,7 +104,6 @@ private:
     GDBController *m_controller;
     KDevelop::ProcessLineMaker *m_procLineMaker;
     KDevelop::ProcessLineMaker *m_gdbLineMaker;
-    DBGStateFlags m_gdbState;
     DebuggerState m_sessionState;
     bool justRestarted_;
     QPointer<KToolBar> floatingToolBar;

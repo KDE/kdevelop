@@ -49,7 +49,6 @@ namespace GDBDebugger {
 DebugSession::DebugSession(GDBController* controller)
     : KDevelop::IDebugSession()
     , m_controller(controller)
-    , m_gdbState(s_dbgNotStarted|s_appNotStarted)
     , m_sessionState(NotStartedState)
     , justRestarted_(false)
     , m_config(KGlobal::config(), "GDB Debugger")
@@ -248,11 +247,6 @@ void DebugSession::attachToProcess(int pid)
     kDebug() << pid;
     m_controller->attachToProcess(pid);
     emit raiseFramestackViews();
-}
-
-void DebugSession::startDebugger()
-{
-    //TODO, for now use startProgram
 }
 
 void DebugSession::run()
