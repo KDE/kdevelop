@@ -181,8 +181,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const {
     QualifiedIdentifier baseIdentifier = indirect.m_identifier.identifier();
     if(!m_specialization.index())
       return baseIdentifier;
-    ///@todo Fix m_specialization to IndexedInstantiationInformation for security
-    return IndexedInstantiationInformation(m_specialization).information().applyToIdentifier(baseIdentifier);
+    return m_specialization.information().applyToIdentifier(baseIdentifier);
   } else {
     Declaration* decl = getDeclaration(0);
     if(decl)
