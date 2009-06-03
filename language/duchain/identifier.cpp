@@ -530,16 +530,23 @@ QualifiedIdentifier::QualifiedIdentifier(uint index) : m_index(index), cd( quali
 QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
   : m_index(0), dd(new DynamicQualifiedIdentifierPrivate)
 {
-  if (id.startsWith("::")) {
-    dd->m_explicitlyGlobal = true;
-    dd->splitIdentifiers(id, 2);
-  } else {
-    dd->m_explicitlyGlobal = false;
-    dd->splitIdentifiers(id, 0);
-  }
-  
-  if(isExpression)
+  if(isExpression) {
     setIsExpression(true);
+    if(!id.isEmpty()) {
+      //Prevent tokenization, since we may lose information there
+      Identifier finishedId;
+      finishedId.setIdentifier(id);
+      push(finishedId);
+    }
+  }else{
+    if (id.startsWith("::")) {
+      dd->m_explicitlyGlobal = true;
+      dd->splitIdentifiers(id, 2);
+    } else {
+      dd->m_explicitlyGlobal = false;
+      dd->splitIdentifiers(id, 0);
+    }
+  }
 }
 
 QualifiedIdentifier::QualifiedIdentifier(const Identifier& id)
