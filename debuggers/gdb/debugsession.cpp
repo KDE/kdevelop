@@ -172,16 +172,6 @@ void DebugSession::gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newStat
             justRestarted_ = false;
 
         } else {
-
-            if ( m_config.readEntry("Raise GDB On Start", false ) )
-            {
-                emit raiseOutputViews();
-            }
-            else
-            {
-                emit raiseFramestackViews();
-            }
-
             justRestarted_ = true;
         }
     }

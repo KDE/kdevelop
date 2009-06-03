@@ -179,42 +179,6 @@ Otherwise leave it unchecked.</string>
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="QGroupBox" name="groupBox_4">
-       <property name="title">
-        <string>Start Debugger With</string>
-       </property>
-       <layout class="QVBoxLayout">
-        <item>
-         <widget class="QRadioButton" name="startWithFramestack">
-          <property name="text">
-           <string>Framestack</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="kcfg_startWithGdb">
-          <property name="text">
-           <string>GDB Output</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>

@@ -72,7 +72,6 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg )
     ui->kcfg_breakOnLoadingLibrary->setChecked( cfg.readEntry( GDBDebugger::breakOnLibLoadEntry, true) );
     ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
     ui->kcfg_enableFloatingToolBar->setChecked( cfg.readEntry(GDBDebugger::floatingToolbarEntry, false) );
-    ui->kcfg_startWithGdb->setChecked( cfg.readEntry(GDBDebugger::startGdbOutputEntry, false) );
 }
 
 void GdbConfigPage::saveToConfiguration( KConfigGroup cfg ) const
@@ -87,7 +86,6 @@ void GdbConfigPage::saveToConfiguration( KConfigGroup cfg ) const
     cfg.writeEntry(GDBDebugger::breakOnLibLoadEntry, ui->kcfg_breakOnLoadingLibrary->isChecked() );
     cfg.writeEntry(GDBDebugger::separateTerminalEntry, ui->kcfg_dbgTerminal->isChecked() );
     cfg.writeEntry(GDBDebugger::floatingToolbarEntry, ui->kcfg_enableFloatingToolBar->isChecked() );
-    cfg.writeEntry(GDBDebugger::startGdbOutputEntry, ui->kcfg_startWithGdb->isChecked() );
 }
 
 QString GdbConfigPage::title() const
