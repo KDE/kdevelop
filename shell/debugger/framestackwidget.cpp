@@ -139,7 +139,7 @@ void KDevelop::FramestackWidget::assignSomeThread()
         QModelIndex idx=mThreads->model()->index(0,0);
         setThreadShown(idx);
     }
-    if (false && model->rowCount() <= 1) {
+    if (model->rowCount() <= 1) {
         mThreadsWidget->hide();
     } else {
         mThreadsWidget->show();
