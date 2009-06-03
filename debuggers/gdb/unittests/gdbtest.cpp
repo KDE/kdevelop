@@ -408,7 +408,7 @@ void GdbTest::testBreakOnWriteBreakpoint()
                                             ->breakpointModel();
     breakpoints->removeRows(0, breakpoints->rowCount());
 
-    KDevelop::Breakpoint * b = breakpoints->addWatchpoint("foo::i");
+    breakpoints->addWatchpoint("foo::i");
 
     session.startProgram(&cfg);
 
@@ -485,7 +485,7 @@ void GdbTest::testBreakOnReadBreakpoint2()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
 
-    KDevelop::Breakpoint *b = breakpoints->addReadWatchpoint("foo::i");
+    breakpoints->addReadWatchpoint("foo::i");
 
     session.run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -515,7 +515,7 @@ void GdbTest::testBreakOnAccessBreakpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session.line(), 27);
 
-    KDevelop::Breakpoint *b = breakpoints->addAccessWatchpoint("foo::i");
+    breakpoints->addAccessWatchpoint("foo::i");
 
     session.run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -600,7 +600,7 @@ void GdbTest::testInsertBreakpointFunctionName()
 
     KDevelop::BreakpointModel* breakpoints = KDevelop::ICore::self()->debugController()
                                             ->breakpointModel();
-    KDevelop::Breakpoint * b = breakpoints->addCodeBreakpoint("main");
+    breakpoints->addCodeBreakpoint("main");
 
     session.startProgram(&cfg);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -759,11 +759,7 @@ void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSessio
     stopWatch.start();
     while (session.state() != state) {
         if (stopWatch.elapsed() > 5000) {
-            if (file && line != -1) {
-                qFatal(QString("Didn't reach state in %0:%1").arg(file).arg(line).toLatin1());
-            } else {
-                qFatal("Didn't reach state");
-            }
+            kFatal() << QString("Didn't reach state in %0:%1").arg(file).arg(line);
         }
         QTest::qWait(20);
     }
