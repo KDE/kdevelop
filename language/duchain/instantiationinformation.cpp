@@ -41,15 +41,12 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
 
   KDevVarLengthArray<IndexedTypeIdentifier> oldTemplateIdentifiers;
   for(uint a = 0; a < lastId.templateIdentifiersCount(); ++a)
-    oldTemplateIdentifiers.append(lastId.templateIdentifier(a));
+    oldTemplateIdentifiers.append(lastId.templateIdentifier(a)); 
   lastId.clearTemplateIdentifiers();
 
   for(uint a = 0; a < templateParametersSize(); ++a) {
     if(templateParameters()[a].abstractType()) {
-      QualifiedIdentifier qualified(templateParameters()[a].abstractType()->toString());
-      qualified.setIsExpression(true);
-      IndexedTypeIdentifier id(qualified);
-      lastId.appendTemplateIdentifier(id);
+      lastId.appendTemplateIdentifier(IndexedTypeIdentifier(templateParameters()[a].abstractType()->toString(), true));
     }else{
       lastId.appendTemplateIdentifier((uint) oldTemplateIdentifiers.size() > a ? oldTemplateIdentifiers[a] : IndexedTypeIdentifier());
     }
