@@ -322,7 +322,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
     }
 
     if (state == IDebugSession::EndedState) {
-        delete session;
+        session->deleteLater();
         if (session == m_currentSession) {
             m_currentSession = 0;
         }
