@@ -1,10 +1,9 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevdgdb" library="kdevgdb" version="52">
+<kpartgui name="kdevdgdb" library="kdevgdb" version="53">
 <MenuBar>
  <Menu name="run">
   <text context="@title:menu">Run</text>
 
-  <Action name="debug_run" group="run_operations"/>
   <Action name="debug_attach" group="run_operations"/>
   <Action name="debug_core" group="run_operations"/>
 
@@ -15,7 +14,6 @@
 
 <ToolBar name="debugToolBar">
   <text>Debugger Toolbar</text>
-  <Action name="debug_run"/>
   <Separator/>
   <Action name="debug_memview"/>
   <WeakSeparator/>
@@ -23,7 +21,6 @@
 
 <State name="stopped">
   <enable>
-    <Action name="debug_run"/>
     <Action name="debug_core"/>
     <Action name="debug_attach"/>
   </enable>
@@ -42,7 +39,6 @@
 </State>
 <State name="active">
   <disable>
-    <Action name="debug_run"/>
     <Action name="debug_memview"/>
     <Action name="debug_core"/>
     <Action name="debug_attach"/>
