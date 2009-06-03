@@ -52,7 +52,6 @@ set(kdevgdb_PART_SRCS
 
 set(kdevgdb_PART_UI
     debuggertracingdialog.ui
-    processselection.ui
     debuggerconfigwidget.ui
     selectcore.ui
 )
@@ -110,7 +109,6 @@ set(gdbtest_PART_SRCS
 
 kde4_add_ui_files(gdbtest_PART_SRCS
     debuggertracingdialog.ui
-    processselection.ui
 )
 kde4_add_unit_test(gdbtest ${gdbtest_PART_SRCS})
 target_link_libraries(gdbtest

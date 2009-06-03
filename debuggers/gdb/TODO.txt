@@ -3,13 +3,6 @@ Near term:
 
       - Implemment handling of debugger exit in GDB class
 
-      - Implement markers:
-
-                  - Removing a breakpoint when a marker is removed
-                  - Adding/removing markers when breakpoint is added/removed
-                  in the breakpoints table
-                  - Adjust breakpoint when source is edited.
-
        - Implement locals.                  
 
        - Revive breakpoint tracing.
@@ -38,8 +31,6 @@ KDEV4 Debugger overall:
 
 TODO:
 
-   - Check gdb version at startup.
-   
    - P1:
 
       - Breakpoints duplicated on editing.
@@ -69,8 +60,6 @@ TODO:
 
    - Incoming bug reports:
 
-   - Check core files usage.
-
    - Fix remote target dialog, which is confusing and requires
      to specify tree scripts!
 
@@ -87,10 +76,6 @@ TODO:
        - Status display column is just ugly
      
        - Handle "out of breakpoints" message.
-
-       - Check that changing breakpoint when program is running works sanely.
-         Need to either disable breakpoints widget when debugger is busy, or
-         stop debugger when we add new breakpoint.
 
       - Implement gdb -> KDevelop breakpoint addition for all existing
         breakpoint types.
