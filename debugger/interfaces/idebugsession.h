@@ -70,7 +70,6 @@ public:
     IBreakpointController *breakpointController();
 
 public Q_SLOTS:
-    virtual void startDebugger() = 0;
     virtual void restartDebugger() = 0;
     virtual void stopDebugger() = 0;
     virtual void interruptDebugger() = 0;
