@@ -25,10 +25,6 @@ set(kdevgdb_PART_SRCS
     gdbparser.cpp
     stty.cpp
     variablewidget.cpp
-#    abstractvariableitem.cpp
-#    variableitem.cpp
-#    frameitem.cpp
-#    watchitem.cpp
     variablecollection.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
@@ -40,9 +36,6 @@ set(kdevgdb_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-#    qt4/qstringvariableitem.cpp
-#    qt4/qlistvariableitem.cpp
-#    modeltest.cpp
     tooltipwidget.cpp
     stringhelpers.cpp
     debugsession.cpp
@@ -84,10 +77,6 @@ set(gdbtest_PART_SRCS
     gdbparser.cpp
     stty.cpp
     variablewidget.cpp
-#    abstractvariableitem.cpp
-#    variableitem.cpp
-#    frameitem.cpp
-#    watchitem.cpp
     variablecollection.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
@@ -99,9 +88,6 @@ set(gdbtest_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-#    qt4/qstringvariableitem.cpp
-#    qt4/qlistvariableitem.cpp
-#    modeltest.cpp
     tooltipwidget.cpp
     stringhelpers.cpp
     debugsession.cpp

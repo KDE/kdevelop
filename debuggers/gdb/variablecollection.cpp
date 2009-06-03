@@ -24,12 +24,7 @@
 #include "tooltipwidget.h"
 
 #include "gdbcontroller.h"
-#include "variableitem.h"
-#include "watchitem.h"
 #include "tooltipwidget.h"
-
-#include "qt4/qstringvariableitem.h"
-#include "qt4/qlistvariableitem.h"
 
 #include "mi/gdbmi.h"
 #include "gdbcommand.h"

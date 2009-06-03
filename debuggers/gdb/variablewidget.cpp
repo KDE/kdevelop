@@ -42,9 +42,7 @@
 #include "gdbcommand.h"
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
-#include "variableitem.h"
 #include "variablecollection.h"
-#include "watchitem.h"
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main Q_SLOTS:
