@@ -136,9 +136,8 @@ QString CMakeJob::cmakeBinary( KDevelop::IProject* project )
 KUrl CMakeJob::buildDir( KDevelop::IProject* project )
 {
     KUrl url = CMake::currentBuildDir( project );
-    if( url.isEmpty() ) {
-        url = project->folder();
-    }
+    kDebug(9042) << "builddir: " << url;
+    Q_ASSERT(!url.isEmpty() && !url.isRelative()); //We cannot get the project folder as a build directory!
     return url;
 }
 
