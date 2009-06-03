@@ -186,6 +186,8 @@ KDevelop::LaunchConfigurationPage* GdbConfigPageFactory::createWidget( QWidget* 
 GdbJob::GdbJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, QObject* parent) 
     : KDevelop::OutputJob(parent), m_launchcfg( launchcfg )
 {
+    setCapabilities(Killable);
+
     m_session = p->createSession();
     connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(stderrReceived(QStringList)));
     connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(stdoutReceived(QStringList)));
@@ -267,6 +269,13 @@ void GdbJob::start()
     startOutput();
     
     m_session->startProgram( m_launchcfg, this );
+}
+
+bool GdbJob::doKill()
+{
+    kDebug();
+    m_session->stopDebugger();
+    return true;
 }
 
 void GdbJob::stderrReceived(const QStringList& l )

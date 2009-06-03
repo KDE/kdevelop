@@ -49,6 +49,8 @@ Q_OBJECT
 public:
     GdbJob( GDBDebugger::CppDebuggerPlugin*, KDevelop::ILaunchConfiguration*, QObject* parent = 0 );
     virtual void start();
+protected:
+    virtual bool doKill();
 private slots:
     void stdoutReceived(const QStringList&);
     void stderrReceived(const QStringList&);
