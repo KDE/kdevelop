@@ -473,6 +473,8 @@ void GDBController::reloadProgramState()
 // all other commands are disabled.
 void GDBController::programNoApp(const QString &msg, bool msgBox)
 {
+    kDebug() << msg;
+
     setState(s_appNotStarted|s_programExited|(state_&s_shuttingDown));
 
     destroyCmds();
@@ -524,9 +526,10 @@ void GDBController::parseStreamRecord(const GDBMI::StreamRecord& s)
     if (s.reason == '~')
     {
         QString line = s.message;
-        if (line.startsWith("The program no longer exists")
-            || line.startsWith("Program exited")
-            || line.startsWith("Program terminated"))
+        if (line.startsWith("Program terminated")) {
+            setStateOff(s_appRunning);
+        } else if (line.startsWith("The program no longer exists")
+            || line.startsWith("Program exited"))
         {
             programNoApp(line, false);
         }
@@ -1102,6 +1105,7 @@ void GDBController::gdbReady()
 
 void GDBController::gdbExited()
 {
+    kDebug();
     /* Technically speaking, GDB is likely not to kill the application, and
        we should have some backup mechanism to make sure the application is
        killed by KDevelop.  But even if application stays around, we no longer

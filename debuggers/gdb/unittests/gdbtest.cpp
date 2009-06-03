@@ -733,6 +733,18 @@ void GdbTest::testCoreFile()
 
     TestDebugSession session;
     session.examineCoreFile(KUrl(QDir::currentPath()+"/unittests/debugeecrash"), KUrl(QDir::currentPath()+"/core"));
+
+    KDevelop::StackModel *model = session.stackModel();
+    model->setAutoUpdate(true);
+    QTest::qWait(500);
+
+    QCOMPARE(model->rowCount(QModelIndex()), 1);
+    QCOMPARE(model->columnCount(QModelIndex()), 1);
+
+    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#1 at foo"));
+
+    session.stopDebugger();
+    QTest::qWait(100);
 }
 
 void GdbTest::waitForState(const GDBDebugger::DebugSession &session, DebugSession::DebuggerState state)
