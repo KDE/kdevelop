@@ -320,6 +320,13 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
     if (session == m_currentSession) {
         updateDebuggerState(state, session);
     }
+
+    if (state == IDebugSession::EndedState) {
+        delete session;
+        if (session == m_currentSession) {
+            m_currentSession = 0;
+        }
+    }
 }
 
 void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, IDebugSession *session)
@@ -350,9 +357,6 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
             stateChanged("ended");
             clearExecutionPoint();
             m_restartDebugger->setEnabled(false);
-            Q_ASSERT(session == m_currentSession);
-            delete session;
-            m_currentSession = 0;
             break;
     }
 }
