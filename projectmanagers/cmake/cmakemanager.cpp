@@ -59,7 +59,6 @@
 #include <language/codecompletion/codecompletion.h>
 
 #include "applychangeswidget.h"
-#include "cmakeconfig.h"
 #include "cmakedocumentation.h"
 #include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"
