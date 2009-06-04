@@ -420,6 +420,9 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
       
       DUContext* imp = importer.data();
       
+      if(!imp)
+        continue;
+      
       if(imp->type() == DUContext::Class && imp->owner())
         ret << imp->owner();
 
