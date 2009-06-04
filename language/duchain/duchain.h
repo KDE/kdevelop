@@ -68,14 +68,13 @@ public:
    * asyonchronously once the update is ready.
    * If the context is already up to date, the given QObject is notified directly.
    *
-   * @param topContext The context to update
+   * @param document Document to update
    * @param features The requested features. If you want to force a full update of the context, give TopDUContext::ForceUpdate.
    *                 If you want to force an update including all imports, use TopDUContext::ForceUpdateRecursive.
    * @param notifyReady An optional pointer to a QObject that should contain a slot
    *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
    *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
    *                    may be invalid if the update failed. A queued connection is used if a re-parse has to be done.
-   * @return Whether an update was scheduled. If false is returned, the top-context is already up-to-date, and has the needed features.
    */
    Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0) const;
   
