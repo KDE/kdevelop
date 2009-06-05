@@ -78,10 +78,16 @@ protected:
             QStyleOptionTab tabOverlap;
             tabOverlap.shape = m_tabBar->shape();
             int overlap = style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &tabOverlap, m_tabBar);
-            QRect rect;
-            rect.setRect(0, height()-overlap, width(), overlap);
-            optTabBase.rect = rect;
-            p.drawPrimitive(QStyle::PE_FrameTabBarBase, optTabBase);
+            if( overlap > 0 ) 
+            {
+                QRect rect;
+                rect.setRect(0, height()-overlap, width(), overlap);
+                optTabBase.rect = rect;
+            }
+            if( m_tabBar->drawBase() )
+            {
+                p.drawPrimitive(QStyle::PE_FrameTabBarBase, optTabBase);
+            }
         }
     }
 
