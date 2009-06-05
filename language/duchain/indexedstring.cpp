@@ -107,7 +107,12 @@ inline QByteArray arrayFromItem(const IndexedStringData* item) {
 }  
 }
 
-RepositoryManager< IndexedStringRepository > globalIndexedStringRepository("String Index");
+namespace {
+  RepositoryManager< IndexedStringRepository >& getGlobalIndexedStringRepository(){
+    static RepositoryManager< IndexedStringRepository > globalIndexedStringRepository("String Index");
+    return globalIndexedStringRepository;
+  }
+}
 
 IndexedString::IndexedString() : m_index(0) {
 }
@@ -120,12 +125,12 @@ IndexedString::IndexedString( const char* str, unsigned short length, unsigned i
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalIndexedStringRepository->mutex());
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
     
-    m_index = globalIndexedStringRepository->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
+    m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length));
     
     if(shouldDoDUChainReferenceCounting(this))
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
   }
 }
 
@@ -145,11 +150,11 @@ IndexedString::IndexedString( const KUrl& url ) {
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalIndexedStringRepository->mutex());
-    m_index = globalIndexedStringRepository->index(IndexedStringRepositoryItemRequest(str, hashString(str, size), size));
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+    m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hashString(str, size), size));
     
     if(shouldDoDUChainReferenceCounting(this))
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
   }
 }
 
@@ -165,11 +170,11 @@ IndexedString::IndexedString( const QString& string ) {
   else if(size == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalIndexedStringRepository->mutex());
-    m_index = globalIndexedStringRepository->index(IndexedStringRepositoryItemRequest(str, hashString(str, size), size));
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+    m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hashString(str, size), size));
 
     if(shouldDoDUChainReferenceCounting(this))
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
   }
 }
 
@@ -180,11 +185,11 @@ IndexedString::IndexedString( const char* str) {
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalIndexedStringRepository->mutex());
-    m_index = globalIndexedStringRepository->index(IndexedStringRepositoryItemRequest(str, hashString(str, length), length));
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+    m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hashString(str, length), length));
     
     if(shouldDoDUChainReferenceCounting(this))
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
   }
 }
 
@@ -195,20 +200,20 @@ IndexedString::IndexedString( const QByteArray& str) {
   else if(length == 1)
     m_index = 0xffff0000 | str[0];
   else {
-    QMutexLocker lock(globalIndexedStringRepository->mutex());
-    m_index = globalIndexedStringRepository->index(IndexedStringRepositoryItemRequest(str, hashString(str, length), length));
+    QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+    m_index = getGlobalIndexedStringRepository()->index(IndexedStringRepositoryItemRequest(str, hashString(str, length), length));
     
     if(shouldDoDUChainReferenceCounting(this))
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
   }
 }
 
 IndexedString::~IndexedString() {
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
     if(shouldDoDUChainReferenceCounting(this)) {
-      QMutexLocker lock(globalIndexedStringRepository->mutex());
+      QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
     
-      decrease(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
     }
   }
 }
@@ -216,8 +221,8 @@ IndexedString::~IndexedString() {
 IndexedString::IndexedString( const IndexedString& rhs ) : m_index(rhs.m_index) {
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
     if(shouldDoDUChainReferenceCounting(this)) {
-      QMutexLocker lock(globalIndexedStringRepository->mutex());
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
     }
   }
 }
@@ -228,8 +233,8 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) {
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
     
     if(shouldDoDUChainReferenceCounting(this)) {
-      QMutexLocker lock(globalIndexedStringRepository->mutex());
-      decrease(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+      decrease(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
     }
   }
   
@@ -237,8 +242,8 @@ IndexedString& IndexedString::operator=(const IndexedString& rhs) {
   
   if(m_index && (m_index & 0xffff0000) != 0xffff0000) {
     if(shouldDoDUChainReferenceCounting(this)) {
-      QMutexLocker lock(globalIndexedStringRepository->mutex());
-      increase(globalIndexedStringRepository->dynamicItemFromIndexSimple(m_index)->refCount);
+      QMutexLocker lock(getGlobalIndexedStringRepository()->mutex());
+      increase(getGlobalIndexedStringRepository()->dynamicItemFromIndexSimple(m_index)->refCount);
     }
   }
   
@@ -257,7 +262,7 @@ QString IndexedString::str() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff));
   else
-    return stringFromItem(globalIndexedStringRepository->itemFromIndex(m_index));
+    return stringFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
 }
 
 int IndexedString::length() const {
@@ -266,7 +271,7 @@ int IndexedString::length() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return 1;
   else
-    return globalIndexedStringRepository->itemFromIndex(m_index)->length;
+    return getGlobalIndexedStringRepository()->itemFromIndex(m_index)->length;
 }
 
 QByteArray IndexedString::byteArray() const {
@@ -275,7 +280,7 @@ QByteArray IndexedString::byteArray() const {
   else if((m_index & 0xffff0000) == 0xffff0000)
     return QString(QChar((char)m_index & 0xff)).toUtf8();
   else
-    return arrayFromItem(globalIndexedStringRepository->itemFromIndex(m_index));
+    return arrayFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
 }
 
 unsigned int IndexedString::hashString(const char* str, unsigned short length) {
