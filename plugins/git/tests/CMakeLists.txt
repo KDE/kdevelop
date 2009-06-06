@@ -20,13 +20,15 @@ if (GIT)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 	set(gitInitTest_SRCS initTest.cpp ../gitplugin.cpp)
     kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})
-	target_link_libraries(kdevgit-test
-		${QT_QTTEST_LIBRARY}
-		${KDE4_KDECORE_LIBS}
+    target_link_libraries(kdevgit-test
+        ${QT_QTTEST_LIBRARY}
+        ${KDE4_KDECORE_LIBS}
+        kdevplatformshell
+        kdevplatforminterfaces
         kdevplatformutil
         kdevplatformvcs
         kdevplatformtestshell
-	)
+    )
 endif (GIT)
 
 endif (UNIX)

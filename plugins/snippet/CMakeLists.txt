@@ -27,7 +27,7 @@ set(kdevsnippet_PART_UI
 
 kde4_add_ui_files(kdevsnippet_PART_SRCS ${kdevsnippet_PART_UI})
 kde4_add_plugin(kdevsnippet ${kdevsnippet_PART_SRCS})
-target_link_libraries(kdevsnippet ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kdevplatforminterfaces)
+target_link_libraries(kdevsnippet ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kdevplatforminterfaces)
 install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
