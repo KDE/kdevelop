@@ -227,6 +227,7 @@ void Controller::addDefaultArea(Area *area)
     d->areas.append(area);
     d->allAreas.append(area);
     d->namedAreas[area->objectName()] = area;
+    emit areaCreated(area);
 }
 
 void Controller::addMainWindow(MainWindow* mainWindow)
@@ -241,6 +242,7 @@ void Controller::addMainWindow(MainWindow* mainWindow)
         Area *na = new Area(*area);
         d->allAreas.append(na);
         d->mainWindowAreas[index].push_back(na);
+        emit areaCreated(na);
     }
     showAreaInternal(d->mainWindowAreas[index][0], mainWindow);
     emit mainWindowAdded( mainWindow );

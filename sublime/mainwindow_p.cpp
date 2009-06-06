@@ -656,8 +656,14 @@ QSize AreaTabWidget::sizeHint() const {
     zeroSizeHint = false;
     QSize orig = tabBar->sizeHint();
     int addFade = available - orig.width();
-    if(addFade > 100)
-        addFade = 100; //Make the fade max. 100 pixels long
+    
+    int perfectFade = 100;
+    
+    if(areaSideWidget && areaSideWidget->sizeHint().width() > perfectFade)
+        perfectFade = areaSideWidget->sizeHint().width();
+    
+    if(addFade > perfectFade)
+        addFade = perfectFade; //Make the fade max. 100 pixels long
     
     int wantWidth = addFade + orig.width();
     
@@ -666,12 +672,12 @@ QSize AreaTabWidget::sizeHint() const {
     return orig;
 }
 
-AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ) {
-    QHBoxLayout* layout = new QHBoxLayout ( this );
-    layout->setAlignment ( Qt::AlignRight );
+AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ), areaSideWidget(0) {
+    m_layout = new QHBoxLayout ( this );
+    m_layout->setAlignment ( Qt::AlignRight );
     tabBar = new AreaTabBar ( this );
-    layout->addWidget ( tabBar );
-    layout->setContentsMargins ( 0,0,0,0 );
+    m_layout->addWidget ( tabBar );
+    m_layout->setContentsMargins ( 0,0,0,0 );
 }
 
 QSize AreaTabBar::tabSizeHint ( int index ) const {

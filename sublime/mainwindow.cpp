@@ -315,6 +315,11 @@ QWidget *MainWindow::statusBarLocation()
     return d->idealMainWidget->statusBarLocation();
 }
 
+void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)
+{
+    d->areaSwitcher->setTabSideWidget(widget);
+}
+
 }
 
 #include "mainwindow.moc"

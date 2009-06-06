@@ -69,6 +69,9 @@ public:
        set, to prevent saving a half-broken state.  */
     void enableAreaSettingsSave();
 
+    /** Allows setting an additional widget that will be inserted next to the area-switcher tabs */
+    void setAreaSwitcherCornerWidget(QWidget* widget);
+    
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);

@@ -113,8 +113,20 @@ class AreaTabWidget : public QWidget {
     QMenuBar* bar() const {
         return static_cast<QMenuBar*>(parent());
     }
+    
+    void setTabSideWidget(QWidget* widget) {
+        if(areaSideWidget) {
+            areaSideWidget->hide();
+            m_layout->removeWidget(areaSideWidget);
+        }
+        areaSideWidget = widget;
+        m_layout->insertWidget(0, areaSideWidget);
+    }
 
     AreaTabBar* tabBar;
+    QWidget* areaSideWidget;
+
+    QHBoxLayout* m_layout;
 };
 
 class MainWindowPrivate: public QObject {

@@ -28,6 +28,7 @@
 #include "core.h"
 #include "documentcontroller.h"
 #include <sublime/area.h>
+#include "mainwindow.h"
 
 using namespace KDevelop;
 
@@ -152,6 +153,11 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             }
         }
     }
+}
+
+QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local) {
+    QLabel* ret = new QLabel("", parent); ///@todo Create working-set manager widget
+    return ret;
 }
 
 #include "workingsetcontroller.moc"

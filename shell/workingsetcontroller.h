@@ -22,6 +22,9 @@
 
 #include <QObject>
 #include <QMap>
+#include "uicontroller.h"
+#include <sublime/area.h>
+#include <qlabel.h>
 
 class KConfigGroup;
 
@@ -31,6 +34,8 @@ class AreaIndex;
 }
 
 namespace KDevelop {
+class UiController;
+class MainWindow;
 class Core;
 
 class WorkingSet : public QObject {
@@ -53,15 +58,61 @@ public:
     ///Loads this working-set directly from the configuration file, and stores it in the given area
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex);
 
+    void connectArea(Sublime::Area* area) {
+        if(m_areas.contains(area)) {
+            kDebug() << "tried to double-connect area";
+            return;
+        }
+        
+        loadToArea(area, area->rootIndex());
+        m_areas.push_back(area);
+        connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)));
+        connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
+    }
+    
+    void disconnectArea(Sublime::Area* area) {
+        if(!m_areas.contains(area)) {
+            kDebug() << "tried to disconnect not connected area";
+            return;
+        }
+        
+        disconnect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)));
+        disconnect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
+        m_areas.removeAll(area);
+    }
+
+private slots:
+    void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) {
+        Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+        Q_ASSERT(area);
+        changed(area);
+    }
+    
+    void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) {
+        Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+        Q_ASSERT(area);
+        changed(area);
+    }
 private:
+    
+    void changed(Sublime::Area* area) {
+        saveFromArea(area, area->rootIndex());
+        for(QList< QPointer< Sublime::Area > >::iterator it = m_areas.begin(); it != m_areas.end(); ++it) {
+            if((*it) != area) {
+                loadToArea((*it), (*it)->rootIndex());
+            }
+        }
+    }
+    
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex, KConfigGroup & group);
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group);
     
     WorkingSet(const WorkingSet& rhs) {
         m_id =  rhs.m_id + "_copy_";
     }
+
     QString m_id;
-//     QList<Sublime::Area*> m_areas;
+    QList<QPointer<Sublime::Area> > m_areas;
 };
 
 class WorkingSetController : public QObject
@@ -75,6 +126,18 @@ public:
     WorkingSet* getWorkingSet(QString id);
     void initialize() {}
     void cleanup();
+
+    //The returned widget is owned by the caller
+    QWidget* createSetManagerWidget(MainWindow* parent, bool local = false) ;
+
+    void initializeController(UiController* controller) {
+        connect(controller, SIGNAL(areaCreated(Sublime::Area*)), this, SLOT(areaCreated(Sublime::Area*)));
+    }
+private slots:
+    void areaCreated(Sublime::Area* area) {
+        WorkingSet* set = getWorkingSet(area->workingSet());
+        set->connectArea(area);
+    }
 private:
     QMap<QString, WorkingSet*> m_workingSets;
     KDevelop::Core* m_core;

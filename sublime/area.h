@@ -196,6 +196,8 @@ Q_SIGNALS:
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a view is going to be removed from the area.*/
     void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
+    /**Emitted when a view was removed from the area.*/
+    void viewRemoved(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a new toolview is added to the area.*/
     void toolViewAdded(Sublime::View*, Sublime::Position);
     /**Emitted when a toolview is requesting to be raised.*/
@@ -204,6 +206,8 @@ Q_SIGNALS:
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
     /**Emitted when a toolview is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
+    /**Emitted when the working-set is changed.*/
+    void changingWorkingSet(Sublime::Area* area, QString from, QString to);
 
 private Q_SLOTS:
     void positionChanged(Sublime::View*, int);

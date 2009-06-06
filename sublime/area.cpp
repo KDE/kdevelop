@@ -182,6 +182,8 @@ View* Area::removeView(View *view)
 
     emit aboutToRemoveView(index, view);
     index->remove(view);
+    emit viewRemoved(index, view);
+    
     return view;
 }
 
@@ -383,7 +385,10 @@ QString Area::workingSet() const
 
 void Area::setWorkingSet(QString name)
 {
-    d->workingSet = name;
+    if(name != d->workingSet) {
+        emit changingWorkingSet(this, d->workingSet, name);
+        d->workingSet = name;
+    }
 }
 
 }

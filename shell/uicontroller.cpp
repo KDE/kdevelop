@@ -58,6 +58,8 @@ public:
     UiControllerPrivate(UiController *controller)
     : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
+        Core::self()->workingSetControllerInternal()->initializeController(controller);
+        
         QMap<QString, Sublime::Position> desired;
 
         desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;

@@ -163,6 +163,7 @@ Q_SIGNALS:
     void viewAdded(Sublime::View*);
     void toolViewMoved(Sublime::View*);
     void mainWindowAdded(Sublime::MainWindow*);
+    void areaCreated(Sublime::Area* area);
 
 private:
     void init();

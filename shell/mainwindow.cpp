@@ -44,6 +44,7 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "documentcontroller.h"
 #include "debugcontroller.h"
+#include "workingsetcontroller.h"
 
 namespace KDevelop
 {
@@ -51,6 +52,8 @@ namespace KDevelop
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
+    setAreaSwitcherCornerWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(this));
+    
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
