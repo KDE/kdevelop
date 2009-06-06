@@ -64,7 +64,6 @@ public:
             return;
         }
         
-        loadToArea(area, area->rootIndex());
         m_areas.push_back(area);
         connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)));
         connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
