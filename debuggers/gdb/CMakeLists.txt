@@ -17,7 +17,7 @@ include_directories(
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 
 set(kdevgdb_PART_SRCS
-    gdb.cpp    
+    gdb.cpp
     debuggerplugin.cpp
     gdbcontroller.cpp
     gdbcommandqueue.cpp
@@ -99,12 +99,12 @@ kde4_add_ui_files(gdbtest_PART_SRCS
 kde4_add_unit_test(gdbtest ${gdbtest_PART_SRCS})
 target_link_libraries(gdbtest
     ${QT_QTTEST_LIBRARY}
+    ${KDEVPLATFORM_SHELL_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_DEBUGGER_LIBRARY}
     ${KDEVPLATFORM_TESTSHELL_LIBRARY}
     ${KDEVPLATFORM_UTIL_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBRARY}
