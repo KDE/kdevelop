@@ -36,6 +36,7 @@ public:
     void executeAction2();
     void executeAction3();
     void executeAction4();
+    void executeHideAction();
     void assistantActionsChanged();
     private:
         void executeAction(int number);

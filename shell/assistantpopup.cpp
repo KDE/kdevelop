@@ -104,8 +104,10 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
     QToolButton* button = new QToolButton;
     button->setText(QString("%1").arg(index+1));
 
-    if(index == -1)
-        connect(button, SIGNAL(clicked(bool)), m_assistant.data(), SLOT(doHide()));
+    if(index == -1) {
+        kDebug() << "connecting with doHide";
+        connect(button, SIGNAL(clicked(bool)), SLOT(executeHideAction()));
+    }
     if(index == 0)
         connect(button, SIGNAL(clicked(bool)), SLOT(executeAction1()));
     if(index == 1)
@@ -119,6 +121,11 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
     layout->addWidget(label);
     
     return containerWidget;
+}
+
+void AssistantPopup::executeHideAction() {
+    KDevelop::IAssistant::Ptr assistant = m_assistant;
+    assistant->doHide();
 }
 
 void AssistantPopup::executeAction(int number) {
