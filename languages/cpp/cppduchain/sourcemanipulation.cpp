@@ -296,7 +296,7 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
           
           Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
           
-          if( anyMatch ||
+          if( (kind != Slot && anyMatch) || //Only allow anyMatch if not searching a slot, since else it may end up in a wrong section, not being a slot at all
               (kind == Slot && qtFunction && qtFunction->isSlot()) ||
               (kind == Function && dynamic_cast<AbstractFunctionDeclaration*>(decl)) ||
               (kind == Variable && decl->kind() == Declaration::Instance && !dynamic_cast<AbstractFunctionDeclaration*>(decl)) ) {
