@@ -19,8 +19,8 @@
 #ifndef KSHAREDOBJECT_H
 #define KSHAREDOBJECT_H
 
-#include <ksharedptr.h>
-#include <QObject>
+#include <KDE/KSharedPtr>
+#include <QtCore/QObject>
 
 /**
  * Wrapper around KShared for use with KSharedPtr when the object is based on QObject as well.
