@@ -1442,6 +1442,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       SmartConverter sc(&editor);
       
       if(standardContext->smartRange()) {
+        Q_ASSERT(standardContext->smartRange()->document() == doc->textDocument());
         kWarning() << "Strange: context already has smart-range! Probably another document is already open for it. Deconverting";
         sc.deconvertDUChain(standardContext);
       }
