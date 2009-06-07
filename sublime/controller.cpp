@@ -139,21 +139,7 @@ void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
        main window if an area not visible now is modified.  Further,
        if showAreaInternal is called with the same area as is current
        now, we don't want to connect the same signals twice.  */
-    if (mainWindow->area())
-        disconnect(mainWindow->area(), 0, mainWindow, 0);
     MainWindowOperator::setArea(mainWindow, area);
-    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
-        mainWindow, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
-        mainWindow, SLOT(raiseToolView(Sublime::View*)));
-    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
-        mainWindow, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
-    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
-        mainWindow, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
-        mainWindow, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
-    connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
-        mainWindow, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
 }
 
 void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)

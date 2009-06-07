@@ -114,11 +114,10 @@ class AreaTabWidget : public QWidget {
         return static_cast<QMenuBar*>(parent());
     }
     
+    ///The widget is owned by this tab-widget
     void setTabSideWidget(QWidget* widget) {
-        if(areaSideWidget) {
-            areaSideWidget->hide();
-            m_layout->removeWidget(areaSideWidget);
-        }
+        if(areaSideWidget)
+            delete areaSideWidget;
         areaSideWidget = widget;
         m_layout->insertWidget(0, areaSideWidget);
     }

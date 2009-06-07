@@ -71,6 +71,7 @@ QString KDevelop::IAssistant::title() const {
 }
 
 void KDevelop::IAssistant::doHide() {
+    kDebug() << "hiding";
     emit hide();
 }
 

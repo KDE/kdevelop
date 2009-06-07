@@ -416,9 +416,11 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         else
             kWarning() << "View does not have a widget!";
 
+        Q_ASSERT(container->count() == 0);
         // We can be called from signal handler of container
         // (which is tab widget), so defer deleting it.
         container->deleteLater();
+        container->setParent(0);
 
         /* If we're not at the top level, we get to collapse split views.  */
         if (index->parent())
@@ -657,13 +659,12 @@ QSize AreaTabWidget::sizeHint() const {
     QSize orig = tabBar->sizeHint();
     int addFade = available - orig.width();
     
-    int perfectFade = 100;
-    
-    if(areaSideWidget && areaSideWidget->sizeHint().width() > perfectFade)
-        perfectFade = areaSideWidget->sizeHint().width();
+    int perfectFade = 500;
+    if(areaSideWidget)
+        perfectFade += areaSideWidget->sizeHint().width();
     
     if(addFade > perfectFade)
-        addFade = perfectFade; //Make the fade max. 100 pixels long
+        addFade = perfectFade;
     
     int wantWidth = addFade + orig.width();
     

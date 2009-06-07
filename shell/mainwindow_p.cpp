@@ -145,6 +145,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {
+        kDebug() << "setting new XMLGUI client" << viewWidget;
         lastXMLGUIClientView = viewWidget;
         m_mainWindow->guiFactory()->addClient(c);
         connect(viewWidget, SIGNAL(destroyed(QObject*)),
@@ -164,6 +165,7 @@ void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
        is undefined behaviour.  We hope to catch view deletion a bit
        later, but if we fail, we better report it now, rather than
        get a weird crash a bit later.  */
+       Q_ASSERT(obj == lastXMLGUIClientView);
        Q_ASSERT(false && "xmlgui clients management is messed up");
 }
 

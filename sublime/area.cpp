@@ -108,6 +108,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->controller = controller;
     d->iconName = "kdevelop";
     d->workingSet = QString("%1_%2").arg(name).arg(qrand() % 10000000);
+    kDebug() << "initial working-set:" << d->workingSet;
     initialize();
 }
 
@@ -323,7 +324,7 @@ void Area::load(const KConfigGroup& group)
     setThickness(Sublime::Right, group.readEntry("thickness right", -1));
     setThickness(Sublime::Bottom, group.readEntry("thickness bottom", -1));
     setThickness(Sublime::Top, group.readEntry("thickness top", -1));
-    d->workingSet = group.readEntry("working set", d->workingSet);
+    setWorkingSet(group.readEntry("working set", d->workingSet));
 }
 
 bool Area::wantToolView(const QString& id)
@@ -386,8 +387,19 @@ QString Area::workingSet() const
 void Area::setWorkingSet(QString name)
 {
     if(name != d->workingSet) {
-        emit changingWorkingSet(this, d->workingSet, name);
+        kDebug() << this << "setting new working-set" << name;
+        QString oldName = d->workingSet;
+        emit changingWorkingSet(this, oldName, name);
         d->workingSet = name;
+        emit changedWorkingSet(this, oldName, name);
+    }
+}
+
+void Area::clearViews()
+{
+    foreach(Sublime::View* view, views()) {
+        removeView(view);
+        delete view;
     }
 }
 

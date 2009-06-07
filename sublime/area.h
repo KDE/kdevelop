@@ -90,6 +90,9 @@ public:
     This method is added only for convenience.*/
     QList<View*> views();
 
+    /** Removes all views from this area and deletes them */
+    void clearViews();
+    
     /**@return the index of view or 0 if it can not be found.*/
     AreaIndex *indexOf(View *view);
     /**@return the root index of the area. Root index always exists so this
@@ -206,8 +209,10 @@ Q_SIGNALS:
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
     /**Emitted when a toolview is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
-    /**Emitted when the working-set is changed.*/
+    /**Emitted before the working-set is changed.*/
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);
+    /**Emitted after the working-set was changed.*/
+    void changedWorkingSet(Sublime::Area* area, QString from, QString to);
 
 private Q_SLOTS:
     void positionChanged(Sublime::View*, int);

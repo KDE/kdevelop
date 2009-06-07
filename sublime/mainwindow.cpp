@@ -83,6 +83,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setArea(Area *area)
 {
+    if (d->area)
+        disconnect(d->area, 0, this, 0);
+    
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
        not mean those are removed from area, so prevent slotDockShown
@@ -94,6 +97,7 @@ void MainWindow::setArea(Area *area)
 
     if (d->area)
         clearArea();
+
     d->area = area;
     d->reconstruct();
     d->activateFirstVisibleView();
@@ -102,6 +106,19 @@ void MainWindow::setArea(Area *area)
     d->ignoreDockShown = false;
     
     loadSettings();
+        
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
+        this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
+        this, SLOT(raiseToolView(Sublime::View*)));
+    connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),
+        this, SLOT(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(toolViewAdded(Sublime::View*, Sublime::Position)),
+        this, SLOT(toolViewAdded(Sublime::View*, Sublime::Position)));
+    connect(area, SIGNAL(aboutToRemoveToolView(Sublime::View*, Sublime::Position)),
+        this, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
+    connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
+        this, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
 }
 
 void MainWindow::initializeStatusBar()
