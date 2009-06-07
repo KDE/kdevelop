@@ -170,12 +170,52 @@ bool WorkingSet::isEmpty() const
         return true;
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
-    kDebug() << "group-list:" << group.groupList();
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
 
+struct DisconnectMainWindowsFromArea
+{
+    DisconnectMainWindowsFromArea(Sublime::Area* area) : m_area(area) {
+        if(area) {
+            
+            foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+                if(window->area() == area) {
+                    mainWindows << window;
+                    bool hadTempArea = false;
+                    foreach(Sublime::Area* tempArea, Core::self()->uiControllerInternal()->areas(window)) {
+                        if(tempArea != area) {
+                            ///@todo This is insanely ugly..
+                            window->setUpdatesEnabled(false);
+                            kDebug() << "changing temporarily to area" << tempArea->objectName();
+                            Core::self()->uiControllerInternal()->showArea(tempArea->objectName(), window); //Show another area temporarily
+                            hadTempArea = true;
+                            break;
+                        }
+                    }
+                    Q_ASSERT(hadTempArea);
+                }
+            }
+        }
+    }
+    
+    ~DisconnectMainWindowsFromArea() {
+        if(m_area) {
+            foreach(Sublime::MainWindow* window, mainWindows) {
+                kDebug() << "changing back";
+                Core::self()->uiControllerInternal()->showArea(m_area, window);
+                window->setUpdatesEnabled(true);
+            }
+        }
+    }
+
+    Sublime::Area* m_area;
+    QList<Sublime::MainWindow*> mainWindows;
+};
+
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
     PushValue<bool> enableLoading(m_loading, true);
+    
+    DisconnectMainWindowsFromArea disconnectArea(area);
     
     kDebug() << "loading working-set" << m_id << "into area" << area;
     
@@ -189,9 +229,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
-    loadToArea(area, areaIndex, group);
 
-    kDebug() << "ready";
+    loadToArea(area, areaIndex, group);
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
@@ -200,8 +239,9 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         QStringList subgroups = group.groupList();
 
         if (subgroups.contains("0")) {
-            if (!areaIndex->isSplitted())
+            if (!areaIndex->isSplitted()) {
                 areaIndex->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
+            }
 
             KConfigGroup subgroup(&group, "0");
             loadToArea(area, areaIndex->first(), subgroup);
@@ -316,14 +356,14 @@ void WorkingSetWidget::workingSetsChanged()
         connect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
         
         if(m_mini && set->id() != m_connectedArea->workingSet()) {
-            kDebug() << "skipping" << set->id() << ", searching" << m_connectedArea->workingSet();
+//             kDebug() << "skipping" << set->id() << ", searching" << m_connectedArea->workingSet();
             continue; //In "mini" mode, show only the current working set
         }
         if(set->isEmpty()) {
-            kDebug() << "skipping" << set->id() << "because empty";
+//             kDebug() << "skipping" << set->id() << "because empty";
             continue;
         }
-        kDebug() << "adding button for" << set->id();
+//         kDebug() << "adding button for" << set->id();
         QToolButton* butt = new QToolButton(this);
         butt->setToolTip(i18n("Working Set %1", set->id()));
         butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
@@ -355,12 +395,14 @@ void WorkingSetWidget::buttonTriggered()
     Q_ASSERT(button);
     Q_ASSERT(m_buttons.contains(button));
     
+    //Only close the working-set if the file was saved before
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(m_mainWindow, KDevelop::IDocument::Default))
+        return;
+    
     if(m_mainWindow->area()->workingSet() == m_buttons[button]->id()) {
         //Create a new working-set
         if(!m_mini) {
-            //IOnly close the working-set if the file was saved before
-            if(Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(m_mainWindow, KDevelop::IDocument::Default))
-                m_mainWindow->area()->setWorkingSet(QString());//QString("%1_%2").arg(m_mainWindow->area()->objectName()).arg(qrand() % 10000000));
+                m_mainWindow->area()->setWorkingSet(QString());
         }else{
             ///@todo Show some useful menu here
         }
