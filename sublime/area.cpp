@@ -401,8 +401,13 @@ void Area::setWorkingSet(QString name)
 void Area::clearViews()
 {
     foreach(Sublime::View* view, views()) {
-        removeView(view);
-        delete view;
+        if(view->document()->views().count() > 1) {
+            removeView(view);
+            delete view;
+        }else{
+            //Close the whole document if it is the last view
+            view->document()->closeDocument();
+        }
     }
 }
 
