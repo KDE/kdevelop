@@ -53,7 +53,7 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 #endif
 }
 
-QWidget* MainWindow::customButtonForAreaSwitcher ( Area* area )
+QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
 {
     return 0;
 }
@@ -292,11 +292,6 @@ bool MainWindow::queryClose()
     config.sync();
     
     return KParts::MainWindow::queryClose();
-}
-
-void Sublime::MainWindow::setStatusIcon(View * view, const QIcon & icon)
-{
-    d->setStatusIcon(view, icon);
 }
 
 void MainWindow::saveGeometry(KConfigGroup &config)

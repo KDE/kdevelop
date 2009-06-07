@@ -160,8 +160,6 @@ public:
 
     void activateFirstVisibleView();
 
-    void setStatusIcon(View* view, const QIcon& icon);
-
     Controller *controller;
     Area *area;
     QList<View*> docks;

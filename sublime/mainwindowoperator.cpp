@@ -42,9 +42,4 @@ void MainWindowOperator::setActiveToolView(MainWindow *w, View *view)
     w->setActiveToolView(view);
 }
 
-void MainWindowOperator::setStatusIcon(MainWindow * w, View * view, const QIcon & icon)
-{
-    w->setStatusIcon(view, icon);
-}
-
 }

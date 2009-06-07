@@ -54,7 +54,6 @@ public:
     void setCurrentWidget(QWidget *w);
     QWidget *widget(int i) const;
     int indexOf(QWidget *w) const;
-    void setTabIcon(int index, const QIcon &icon) const;
 
     View *viewForWidget(QWidget *w) const;
 
@@ -68,6 +67,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void widgetActivated(int idx);
     void documentTitleChanged(Sublime::Document* doc);
+    void statusIconChanged(Sublime::Document*);
     void statusChanged(Sublime::View *view);
     void closeRequest(int idx);
     void tabMoved(int from, int to);
@@ -75,7 +75,6 @@ private Q_SLOTS:
 private:
 
     struct ContainerPrivate * const d;
-
 };
 
 }

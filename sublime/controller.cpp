@@ -379,11 +379,7 @@ void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
 
 void Controller::setStatusIcon(Document * document, const QIcon & icon)
 {
-    foreach (MainWindow* mw, mainWindows())
-        if (mw->area())
-            foreach (View* view, mw->area()->views())
-                if (view->document() == document)
-                    MainWindowOperator::setStatusIcon(mw, view, icon);
+    document->setStatusIcon(icon);
 }
 
 }

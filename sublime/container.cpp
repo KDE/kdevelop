@@ -219,15 +219,31 @@ void Container::addWidget(View *view)
     }
     else
         d->stack->addWidget(w);
-    d->tabBar->insertTab(idx, view->document()->title());
+    d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     d->viewForWidget[w] = view;
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
+    connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
     connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
 }
 
 void Container::statusChanged(Sublime::View* view)
 {
     d->statusCorner->setText(view->viewStatus());
+}
+
+
+void Container::statusIconChanged(Document* doc)
+{
+    QMapIterator<QWidget*, View*> it = d->viewForWidget;
+    while (it.hasNext()) {
+        if (it.next().value()->document() == doc) {
+            int tabIndex = d->stack->indexOf(it.key());
+            if (tabIndex != -1) {
+                d->tabBar->setTabIcon(tabIndex, doc->statusIcon());
+            }
+            break;
+        }
+    }
 }
 
 void Container::documentTitleChanged(Sublime::Document* doc)
@@ -286,6 +302,7 @@ void Sublime::Container::removeWidget(QWidget *w)
         if (view)
         {
             disconnect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
+            disconnect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
             disconnect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
         }
     }
@@ -299,11 +316,6 @@ bool Container::hasWidget(QWidget *w)
 View *Container::viewForWidget(QWidget *w) const
 {
     return d->viewForWidget[w];
-}
-
-void Container::setTabIcon(int index, const QIcon& icon) const
-{
-    d->tabBar->setTabIcon(index, icon);
 }
 
 void Container::setTabBarHidden(bool hide)

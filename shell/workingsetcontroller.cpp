@@ -306,7 +306,7 @@ void WorkingSetWidget::workingSetsChanged()
         QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
         QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
         QColor useColor;
-        if(m_mainWindow && m_mainWindow->area()->workingSet() == set->id()) {
+        if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
             useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
             butt->setIcon(set->activeIcon());
         }else{
@@ -333,7 +333,9 @@ void WorkingSetWidget::buttonTriggered()
     if(m_mainWindow->area()->workingSet() == m_buttons[button]->id()) {
         //Create a new working-set
         if(!m_mini) {
-        m_mainWindow->area()->setWorkingSet(QString());//QString("%1_%2").arg(m_mainWindow->area()->objectName()).arg(qrand() % 10000000));
+            //IOnly close the working-set if the file was saved before
+            if(Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(m_mainWindow, KDevelop::IDocument::Default))
+                m_mainWindow->area()->setWorkingSet(QString());//QString("%1_%2").arg(m_mainWindow->area()->objectName()).arg(qrand() % 10000000));
         }else{
             ///@todo Show some useful menu here
         }

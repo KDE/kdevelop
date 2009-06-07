@@ -44,6 +44,7 @@ struct DocumentPrivate {
 
     Controller *controller;
     QList<View*> views;
+    QIcon statusIcon;
 
     Document *m_document;
 };
@@ -99,6 +100,19 @@ View *Document::newView(Document *doc)
 {
     emit viewNumberChanged(this);
     return new View(doc);
+}
+
+
+void Document::setStatusIcon(QIcon icon)
+{
+    d->statusIcon = icon;
+    emit statusIconChanged(this);
+}
+
+
+QIcon Document::statusIcon() const
+{
+    return d->statusIcon;
 }
 
 }

@@ -25,6 +25,8 @@
 
 #include "sublimeexport.h"
 
+class QIcon;
+
 class QWidget;
 
 namespace Sublime {
@@ -68,6 +70,10 @@ public:
     /**Should try closing the document, eventually asking the user for feedback.*/
     virtual void closeDocument() {
     }
+
+    void setStatusIcon(QIcon icon);
+    
+    QIcon statusIcon() const;
     
 Q_SIGNALS:
     /**Emitted when the view is added or deleted. Use Document::views to find out
@@ -77,6 +83,8 @@ Q_SIGNALS:
     void aboutToDelete(Sublime::Document *doc);
     /**Emitted when the document's title is changed.*/
     void titleChanged(Sublime::Document *doc);
+   /**Emitted when the document status-icon has changed */
+    void statusIconChanged(Sublime::Document *doc);
 
 protected:
     /**Creates and returns the new view. Reimplement in subclasses to instantiate
