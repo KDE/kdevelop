@@ -152,7 +152,7 @@ private:
     QString m_iconName;
     QIcon m_activeIcon, m_inactiveIcon;
     QList<QPointer<Sublime::Area> > m_areas;
-    bool m_loading;
+    static bool m_loading;
 };
 
 class WorkingSetController;

@@ -38,6 +38,8 @@
 
 using namespace KDevelop;
 
+bool WorkingSet::m_loading = false;
+
 //Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
 QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "accessories-calculator" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
@@ -90,22 +92,43 @@ WorkingSet* WorkingSetController::getWorkingSet(QString id)
     return m_workingSets[id];
 }
 
+void deleteGroupRecursive(KConfigGroup group) {
+//     kDebug() << "deleting" << group.name();
+    foreach(QString entry, group.entryMap().keys()) {
+//         kDebug() << "deleting entry" << entry;
+        group.deleteEntry(entry);
+    }
+    Q_ASSERT(group.entryMap().isEmpty());
+    
+    foreach(QString subGroup, group.groupList()) {
+        deleteGroupRecursive(group.group(subGroup));
+        group.deleteGroup(subGroup);
+    }
+    //Why doesn't this work?
+//     Q_ASSERT(group.groupList().isEmpty());
+    group.deleteGroup();
+}
+
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
 {
     if(m_id.isEmpty()) {
         Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
         return;
     }
+    kDebug() << "saving" << m_id << "from area";
     
     ///@todo Make the working-sets session-specific
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
+    deleteGroupRecursive(group);
     saveFromArea(area, areaIndex, group);
+    kDebug() << "empty:" << isEmpty();
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
     if (area->isSplitted()) {
+        kDebug() << "splitted";
         group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
         if (area->first()) {
@@ -120,6 +143,7 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
             saveFromArea(a, area->second(), subgroup);
         }
     } else {
+        kDebug() << "views:" << area->viewCount();
         group.writeEntry("View Count", area->viewCount());
 
         int index = 0;
@@ -146,7 +170,8 @@ bool WorkingSet::isEmpty() const
         return true;
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
-    return group.groupList().isEmpty() && group.readEntry("View Count", 0) == 0;
+    kDebug() << "group-list:" << group.groupList();
+    return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
@@ -401,7 +426,7 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
     }
 }
 
-WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon), m_loading(false) {
+WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     //Give the working-set icons one color, so they are less disruptive
     KIconEffect effect;
     QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
