@@ -44,6 +44,7 @@
 #include "../../../interfaces/icore.h"
 #include "../../../interfaces/idocumentcontroller.h"
 #include <qapplication.h>
+#include <qevent.h>
 
 namespace KDevelop {
 
@@ -277,6 +278,14 @@ void AbstractNavigationWidget::embeddedWidgetLeft() {
 
 void AbstractNavigationWidget::embeddedWidgetUp() {
   up();
+}
+
+
+void AbstractNavigationWidget::wheelEvent(QWheelEvent* event )
+{
+    QWidget::wheelEvent(event);
+    event->accept();
+    return;
 }
 
 

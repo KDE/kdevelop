@@ -83,6 +83,8 @@ namespace KDevelop {
     private slots:
       void anchorClicked(const QUrl&);
     protected:
+      
+      virtual void wheelEvent(QWheelEvent* );
       void updateIdealSize() const;
       virtual void keyPressEvent(QKeyEvent* event);
 
