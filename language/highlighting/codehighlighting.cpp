@@ -49,8 +49,9 @@ using namespace KTextEditor;
 
 namespace KDevelop {
 
+
 CodeHighlighting::CodeHighlighting( QObject * parent )
-  : QObject(parent), m_localColorization(true), m_globalColorization(true), m_useClassCache(false)
+  : QObject(parent), m_localColorization(true), m_globalColorization(true)
 {
   // make sure the singleton is setup
   ColorCache::initialize();
@@ -67,6 +68,7 @@ CodeHighlighting::~CodeHighlighting( )
 
 void CodeHighlighting::adaptToColorChanges()
 {
+  QMutexLocker lock(&m_dataMutex);
   // disable local highlighting if the ratio is set to 0
   m_localColorization = ICore::self()->languageController()->completionSettings()->localColorizationLevel() > 0;
   // disable global highlighting if the ratio is set to 0
@@ -80,6 +82,7 @@ void CodeHighlighting::adaptToColorChanges()
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Contexts context, const QColor &color ) const
 {
+  QMutexLocker lock(&m_dataMutex);
   ///@todo Clear cache when the highlighting has changed
   KTextEditor::Attribute::Ptr a;
   switch (context) {
@@ -128,7 +131,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
   return a;
 }
 
-void CodeHighlighting::outputRange( KTextEditor::SmartRange * range ) const
+void CodeHighlightingInstance::outputRange( KTextEditor::SmartRange * range ) const
 {
   kDebug() << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();
   Q_ASSERT(range->start() <= range->end());
@@ -139,6 +142,11 @@ void CodeHighlighting::outputRange( KTextEditor::SmartRange * range ) const
 ColorMap emptyColorMap() {
  ColorMap ret(ColorCache::self()->validColorCount()+1, 0);
  return ret;
+}
+
+CodeHighlightingInstance* CodeHighlighting::createInstance() const
+{
+  return new CodeHighlightingInstance(this);
 }
 
 void CodeHighlighting::highlightDUChain(TopDUContext* context) const
@@ -153,43 +161,11 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context) const
     return;
   }
 
-  m_contextClasses.clear();
-  m_useClassCache = true;
+  CodeHighlightingInstance* instance = createInstance();
 
-  //Highlight
-  highlightDUChainSimple(static_cast<DUContext*>(context));
+  instance->highlightDUChain(context);
 
-  m_functionColorsForDeclarations.clear();
-  m_functionDeclarationsForColors.clear();
-
-  m_useClassCache = false;
-  m_contextClasses.clear();
-}
-
-void CodeHighlighting::highlightDUChainSimple(DUContext* context) const
-{
-  if (!context->smartRange()) {
-    kDebug() << "not a smart range! highlighting aborted";
-    return;
-  }
-
-  bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
-
-  if( isInFunction && m_localColorization ) {
-    highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
-    return;
-  }
-
-
-  foreach (Declaration* dec, context->localDeclarations()) {
-    highlightDeclaration(dec, QColor(QColor::Invalid));
-  }
-
-  highlightUses(context);
-
-  foreach (DUContext* child, context->childContexts()) {
-    highlightDUChainSimple(child);
-  }
+  delete instance;
 }
 
 void CodeHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
@@ -212,7 +188,48 @@ void CodeHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
     deleteHighlighting(child);
 }
 
-void CodeHighlighting::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors) const
+void CodeHighlightingInstance::highlightDUChain(DUContext* context) const
+{
+  m_contextClasses.clear();
+  m_useClassCache = true;
+
+  //Highlight
+  highlightDUChainSimple(static_cast<DUContext*>(context));
+
+  m_functionColorsForDeclarations.clear();
+  m_functionDeclarationsForColors.clear();
+
+  m_useClassCache = false;
+  m_contextClasses.clear();
+}
+
+void CodeHighlightingInstance::highlightDUChainSimple(DUContext* context) const
+{
+  if (!context->smartRange()) {
+    kDebug() << "not a smart range! highlighting aborted";
+    return;
+  }
+
+  bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
+
+  if( isInFunction && m_highlighting->m_localColorization ) {
+    highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
+    return;
+  }
+
+
+  foreach (Declaration* dec, context->localDeclarations()) {
+    highlightDeclaration(dec, QColor(QColor::Invalid));
+  }
+
+  highlightUses(context);
+
+  foreach (DUContext* child, context->childContexts()) {
+    highlightDUChainSimple(child);
+  }
+}
+
+void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors) const
 {
   if (!context->smartRange())
     return;
@@ -298,7 +315,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const
   return m_depthAttributes[depth];
 }
 
-KDevelop::Declaration* CodeHighlighting::localClassFromCodeContext(KDevelop::DUContext* context) const
+KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDevelop::DUContext* context) const
 {
   if(!context)
     return 0;
@@ -341,7 +358,7 @@ KDevelop::Declaration* CodeHighlighting::localClassFromCodeContext(KDevelop::DUC
   return decl;
 }
 
-CodeHighlighting::Types CodeHighlighting::typeForDeclaration(Declaration * dec, DUContext* context) const
+CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Declaration * dec, DUContext* context) const
 {
   /**
    * We highlight in 3 steps by priority:
@@ -411,15 +428,15 @@ CodeHighlighting::Types CodeHighlighting::typeForDeclaration(Declaration * dec, 
   return type;
 }
 
-void CodeHighlighting::highlightDeclaration(Declaration * declaration, const QColor &color) const
+void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, const QColor &color) const
 {
   if (SmartRange* range = declaration->smartRange()) {
     LOCK_SMART(range);
-    range->setAttribute(attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
+    range->setAttribute(m_highlighting->attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
   }
 }
 
-void CodeHighlighting::highlightUse(DUContext* context, int index, const QColor &color) const
+void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor &color) const
 {
   if (SmartRange* range = context->useSmartRange(index)) {
     Types type = ErrorVariableType;
@@ -430,13 +447,13 @@ void CodeHighlighting::highlightUse(DUContext* context, int index, const QColor 
     LOCK_SMART(range);
 
     if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
-      range->setAttribute(attributeForType(type, ReferenceContext, color));
+      range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, color));
     else
       range->setAttribute(KTextEditor::Attribute::Ptr());
   }
 }
 
-void CodeHighlighting::highlightUses(DUContext* context) const
+void CodeHighlightingInstance::highlightUses(DUContext* context) const
 {
   for(int a = 0; a < context->usesCount(); ++a) {
     if (SmartRange* range = context->useSmartRange(a)) {
@@ -447,7 +464,7 @@ void CodeHighlighting::highlightUses(DUContext* context) const
 
     LOCK_SMART(range);
     if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
-        range->setAttribute(attributeForType(type, ReferenceContext, QColor(QColor::Invalid)));
+        range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, QColor(QColor::Invalid)));
     else
         range->setAttribute(KTextEditor::Attribute::Ptr());
     }

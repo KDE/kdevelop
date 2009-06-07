@@ -43,67 +43,60 @@ class Declaration;
 
 typedef QVector<KDevelop::Declaration*> ColorMap;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDevelop::ICodeHighlighting
-{
-  Q_OBJECT
-  Q_INTERFACES(KDevelop::ICodeHighlighting)
+class CodeHighlighting;
 
+struct HighlightingEnumContainer {
+
+enum Types {
+  UnknownType,
+  //Primary highlighting:
+  LocalClassMemberType,
+  InheritedClassMemberType,
+  LocalVariableType,
+
+  //Other highlighting:
+  ClassType,
+  FunctionType,
+  ForwardDeclarationType,
+  EnumType,
+  EnumeratorType,
+  TypeAliasType,
+
+  //If none of the above match:
+  MemberVariableType,
+  NamespaceVariableType,
+  GlobalVariableType,
+
+  //Most of these are currently not used:
+  ArgumentType,
+  CodeType,
+  FileType,
+  NamespaceType,
+  ScopeType,
+  TemplateType,
+  TemplateParameterType,
+  FunctionVariableType,
+  ErrorVariableType
+};
+
+enum Contexts {
+  DefinitionContext,
+  DeclarationContext,
+  ReferenceContext
+};
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public HighlightingEnumContainer {
   public:
-    enum Types {
-      UnknownType,
-      //Primary highlighting:
-      LocalClassMemberType,
-      InheritedClassMemberType,
-      LocalVariableType,
-
-      //Other highlighting:
-      ClassType,
-      FunctionType,
-      ForwardDeclarationType,
-      EnumType,
-      EnumeratorType,
-      TypeAliasType,
-
-      //If none of the above match:
-      MemberVariableType,
-      NamespaceVariableType,
-      GlobalVariableType,
-
-      //Most of these are currently not used:
-      ArgumentType,
-      CodeType,
-      FileType,
-      NamespaceType,
-      ScopeType,
-      TemplateType,
-      TemplateParameterType,
-      FunctionVariableType,
-      ErrorVariableType
-    };
-
-    enum Contexts {
-      DefinitionContext,
-      DeclarationContext,
-      ReferenceContext
-    };
-
-    CodeHighlighting(QObject* parent);
-    virtual ~CodeHighlighting();
-
-    void highlightDUChain(KDevelop::TopDUContext* context) const;
-
-    void deleteHighlighting(KDevelop::DUContext* context) const;
+    CodeHighlightingInstance(const CodeHighlighting* highlighting) : m_highlighting(highlighting), m_useClassCache(false) {
+    }
 
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor &color) const;
     virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color) const;
     virtual void highlightUses(KDevelop::DUContext* context) const;
 
-    //color should be zero when undecided
-    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
-    KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
-
-  private:
     void highlightDUChainSimple(KDevelop::DUContext* context) const;
+    void highlightDUChain(KDevelop::DUContext* context) const;
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
@@ -113,12 +106,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
      * */
     Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
 
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;
-
-    mutable QList<KTextEditor::Attribute::Ptr> m_depthAttributes;
-
     //A temporary hash for speedup
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
 
@@ -126,12 +113,44 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
     mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
 
+
+    mutable bool m_useClassCache;
+    const CodeHighlighting* m_highlighting;
+};
+
+class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDevelop::ICodeHighlighting, public HighlightingEnumContainer
+{
+  Q_OBJECT
+  Q_INTERFACES(KDevelop::ICodeHighlighting)
+
+  public:
+
+    CodeHighlighting(QObject* parent);
+    virtual ~CodeHighlighting();
+
+    void highlightDUChain(KDevelop::TopDUContext* context) const;
+
+    void deleteHighlighting(KDevelop::DUContext* context) const;
+
+    //color should be zero when undecided
+    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
+    KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
+
+  private:
+    //Can be overridden to create an own instance type
+    virtual CodeHighlightingInstance* createInstance() const;
+    friend class CodeHighlightingInstance;
+
+    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
+    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;
+    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;
+    mutable QList<KTextEditor::Attribute::Ptr> m_depthAttributes;
     // Should be used to enable/disable the colorization of local variables and their uses
     bool m_localColorization;
     // Should be used to enable/disable the colorization of global types and their uses
     bool m_globalColorization;
 
-    mutable bool m_useClassCache;
+    mutable QMutex m_dataMutex;
 
   private Q_SLOTS:
     /// when the colors change we must invalidate our local caches
