@@ -51,6 +51,7 @@ struct AreaPrivate {
         workingSet = p.workingSet;
 
         title = p.title;
+        iconName = p.iconName;
     }
     ~AreaPrivate()
     {
@@ -107,7 +108,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->title = title;
     d->controller = controller;
     d->iconName = "kdevelop";
-    d->workingSet = QString("%1_%2").arg(name).arg(qrand() % 10000000);
+    d->workingSet = QString();
     kDebug() << "initial working-set:" << d->workingSet;
     initialize();
 }
@@ -152,6 +153,7 @@ void Sublime::Area::addView(View *view, AreaIndex *index)
 {
     index->add(view);
     connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
+    kDebug() << "view added in" << this;
     emit viewAdded(index, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
@@ -172,6 +174,7 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 {
     AreaIndex *indexToSplit = indexOf(viewToSplit);
     indexToSplit->split(view, orientation);
+    kDebug() << "view added in" << this;
     emit viewAdded(indexToSplit, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }

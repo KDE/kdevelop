@@ -28,6 +28,7 @@
 #include <qtoolbutton.h>
 #include <kicon.h>
 #include "core.h"
+#include <util/pushvalue.h>
 
 class QHBoxLayout;
 
@@ -46,15 +47,21 @@ class Core;
 class WorkingSet : public QObject {
     Q_OBJECT
 public:
-    WorkingSet(QString id, QString icon) : m_id(id), m_icon(icon), m_loading(false) {
-    }
+    WorkingSet(QString id, QString icon) ;
     
     bool isConnected(Sublime::Area* area) {
         return m_areas.contains(area);
     }
     
-    QString icon() const {
-        return m_icon;
+    QString iconName() const {
+        return m_iconName;
+    }
+    
+    QIcon activeIcon() const {
+        return m_activeIcon;
+    }
+    QIcon inactiveIcon() const {
+        return m_inactiveIcon;
     }
     
     QString id() const {
@@ -80,6 +87,7 @@ public:
             kDebug() << "tried to double-connect area";
             return;
         }
+        kDebug() << "connecting" << m_id << "to area" << area;
 //         Q_ASSERT(area->workingSet() == m_id);
         
         m_areas.push_back(area);
@@ -95,6 +103,7 @@ public:
             kDebug() << "tried to disconnect not connected area";
             return;
         }
+        kDebug() << "disconnecting" << m_id << "from area" << area;
         
 //         Q_ASSERT(area->workingSet() == m_id);
         
@@ -106,21 +115,8 @@ public:
     }
 
 private slots:
-    void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) {
-        Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
-        Q_ASSERT(area);
-        Q_ASSERT(area->workingSet() == m_id);
-        changed(area);
-    }
-    
-    void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) {
-        kDebug() << "removed one";
-        Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
-        Q_ASSERT(area);
-        Q_ASSERT(area->workingSet() == m_id);
-        changed(area);
-    }
-    
+    void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) ;
+    void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) ;
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);
     void changedWorkingSet(Sublime::Area*, QString, QString);
     Q_SIGNALS:
@@ -130,16 +126,17 @@ private:
     void changed(Sublime::Area* area) {
         if(m_loading)
             return; //Do not capture changes done while loading
-        m_loading = true;
-        
-        kDebug() << "recording change done to" << m_id;
-        saveFromArea(area, area->rootIndex());
-        for(QList< QPointer< Sublime::Area > >::iterator it = m_areas.begin(); it != m_areas.end(); ++it) {
-            if((*it) != area) {
-                loadToArea((*it), (*it)->rootIndex());
+        {
+            PushValue<bool> enableLoading(m_loading, true);
+            
+            kDebug() << "recording change done to" << m_id;
+            saveFromArea(area, area->rootIndex());
+            for(QList< QPointer< Sublime::Area > >::iterator it = m_areas.begin(); it != m_areas.end(); ++it) {
+                if((*it) != area) {
+                    loadToArea((*it), (*it)->rootIndex());
+                }
             }
         }
-        m_loading = false;
         
         emit setChangedSignificantly();
     }
@@ -152,7 +149,8 @@ private:
     }
 
     QString m_id;
-    QString m_icon;
+    QString m_iconName;
+    QIcon m_activeIcon, m_inactiveIcon;
     QList<QPointer<Sublime::Area> > m_areas;
     bool m_loading;
 };
@@ -162,11 +160,12 @@ class WorkingSetController;
 class WorkingSetWidget : public QWidget {
 Q_OBJECT
 public:
-    WorkingSetWidget(KDevelop::MainWindow* parent, WorkingSetController* controller, bool mini) ;
+    WorkingSetWidget(KDevelop::MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea) ;
 
 private:
     QHBoxLayout* m_layout;
     QPointer<Sublime::Area> m_connectedArea;
+    QPointer<Sublime::Area> m_fixedArea;
     bool m_mini;
     QMap<QToolButton*, WorkingSet*> m_buttons;
     MainWindow* m_mainWindow;
@@ -195,7 +194,7 @@ public:
     }
 
     //The returned widget is owned by the caller
-    QWidget* createSetManagerWidget(MainWindow* parent, bool local = false) ;
+    QWidget* createSetManagerWidget(MainWindow* parent, bool local = false, Sublime::Area* fixedArea = 0) ;
 
     void initializeController(UiController* controller) {
         connect(controller, SIGNAL(areaCreated(Sublime::Area*)), this, SLOT(areaCreated(Sublime::Area*)));

@@ -54,10 +54,11 @@ class IdealMainWidget;
 
 class AreaTabButton : public QWidget {
     public:
-    AreaTabButton(QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent) ;
+    AreaTabButton(QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget) ;
     
     QLabel* iconLabel;
     QLabel* textLabel;
+    QWidget* customButtonWidget;
 
     void setIsCurrent ( bool arg1 );
 
@@ -85,9 +86,9 @@ class AreaTabBar : public QTabBar {
         return areaIds[index];
     }
     
-    void addCustomTab(QString text, QIcon icon, bool isCurrent, QString areaId) {
+    void addCustomTab(QString text, QIcon icon, bool isCurrent, QString areaId, QWidget* customButtonWidget) {
         areaIds << areaId;
-        buttons << new AreaTabButton(text, icon, 16, this, isCurrent);
+        buttons << new AreaTabButton(text, icon, 16, this, isCurrent, customButtonWidget);
         addTab(QString());
 #if QT_VERSION >= 0x040500
         setTabButton(count()-1, LeftSide, buttons.last());
@@ -119,13 +120,14 @@ class AreaTabWidget : public QWidget {
         if(areaSideWidget)
             delete areaSideWidget;
         areaSideWidget = widget;
-        m_layout->insertWidget(0, areaSideWidget);
+        m_leftLayout->insertWidget(0, areaSideWidget);
     }
 
     AreaTabBar* tabBar;
     QWidget* areaSideWidget;
 
     QHBoxLayout* m_layout;
+    QVBoxLayout* m_leftLayout;
 };
 
 class MainWindowPrivate: public QObject {

@@ -193,6 +193,14 @@ const QList<Area*> &Controller::defaultAreas() const
     return d->areas;
 }
 
+
+const QList< Area* >& Controller::areas(MainWindow* mainWindow) const
+{
+    int index = d->controlledWindows.indexOf(mainWindow);
+    Q_ASSERT(index != -1);
+    return areas(index);
+}
+
 const QList<Area*> &Controller::areas(int mainWindow) const
 {
     return d->mainWindowAreas[mainWindow];

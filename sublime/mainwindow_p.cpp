@@ -679,6 +679,10 @@ AreaTabWidget::AreaTabWidget ( QMenuBar* parent ) : QWidget ( parent ), areaSide
     tabBar = new AreaTabBar ( this );
     m_layout->addWidget ( tabBar );
     m_layout->setContentsMargins ( 0,0,0,0 );
+    m_leftLayout = new QVBoxLayout;
+    
+    m_leftLayout->setContentsMargins(11, 4, 11, 8); ///@todo These margins are a bit too hardcoded, should depend on style
+    m_layout->insertLayout(0, m_leftLayout);
 }
 
 QSize AreaTabBar::tabSizeHint ( int index ) const {
@@ -719,7 +723,7 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     QPalette pal = palette();
 }
 
-AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent ) : QWidget ( parent ), m_isCurrent ( isCurrent ) {
+AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget ) : QWidget ( parent ), m_isCurrent ( isCurrent ), customButtonWidget(_customButtonWidget) {
     QHBoxLayout* layout = new QHBoxLayout ( this );
     iconLabel = new QLabel ( this );
     iconLabel->setPixmap ( icon.pixmap ( QSize ( iconSize, iconSize ) ) );
@@ -727,6 +731,10 @@ AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget*
     textLabel = new QLabel ( this );
     textLabel->setText ( text );
     textLabel->setAutoFillBackground ( false );
+    if(customButtonWidget) {
+        customButtonWidget->setParent(this);
+        layout->addWidget(customButtonWidget);
+    }
     layout->addWidget ( textLabel );
     layout->addWidget ( iconLabel );
     layout->setMargin ( 0 );

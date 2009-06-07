@@ -53,6 +53,10 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 #endif
 }
 
+QWidget* MainWindow::customButtonForAreaSwitcher ( Area* area )
+{
+    return 0;
+}
 
 void MainWindow::setupAreaSelector() {
 #if QT_VERSION >= 0x040500
@@ -61,13 +65,19 @@ void MainWindow::setupAreaSelector() {
     d->areaSwitcher->tabBar->clearTabs();
     
     int currentIndex = -1;
-    for(int a = 0; a < controller()->defaultAreas().size(); ++a) {
-        Area* theArea = controller()->defaultAreas()[a];
+    
+    QList< Area* > areas = controller()->areas(this);
+    if(areas.isEmpty())
+        areas = controller()->defaultAreas();
+    
+    for(int a = 0; a < areas.size(); ++a) {
+        Area* theArea = areas[a];
         
-        if(theArea->objectName() == area()->objectName())
+        if(theArea->objectName() == area()->objectName()) {
             currentIndex = a;
+        }
         
-        d->areaSwitcher->tabBar->addCustomTab(theArea->title(), KIcon(theArea->iconName()), currentIndex == a, theArea->objectName());
+        d->areaSwitcher->tabBar->addCustomTab(theArea->title(), KIcon(theArea->iconName()), currentIndex == a, theArea->objectName(), customButtonForAreaSwitcher(theArea));
     }
     
     d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
@@ -119,6 +129,8 @@ void MainWindow::setArea(Area *area)
         this, SLOT(aboutToRemoveToolView(Sublime::View*, Sublime::Position)));
     connect(area, SIGNAL(toolViewMoved(Sublime::View*, Sublime::Position)),
         this, SLOT(toolViewMoved(Sublime::View*, Sublime::Position)));
+     connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
+        this, SLOT(setupAreaSelector()));
 }
 
 void MainWindow::initializeStatusBar()

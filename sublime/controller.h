@@ -115,6 +115,10 @@ public:
         index. */
    const QList<Area*> &areas(int mainWindow) const;
 
+   /** Return all areas associated with the main window with the specified
+        index. */
+   const QList<Area*> &areas(MainWindow* mainWindow) const;
+
     /** Return the area with the given in main window specified
         by its index, @p mainWindow.  */
     Area *area(int mainWindow, const QString& id);

@@ -245,6 +245,7 @@ void Core::cleanup()
         d->selectionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
+        d->workingSetController->cleanup();
 
         /* Must be called before projectController->cleanup(). */
         // Closes all documents (discards, as already saved if the user wished earlier)
@@ -255,7 +256,6 @@ void Core::cleanup()
         d->sourceFormatterController->cleanup();
         d->pluginController->cleanup();
         d->sessionController->cleanup();
-        d->workingSetController->cleanup();
     }
 
     d->m_cleanedUp = true;

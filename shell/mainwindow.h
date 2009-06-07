@@ -52,6 +52,8 @@ public:
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
 
+    virtual QWidget* customButtonForAreaSwitcher( Sublime::Area* area );
+    
 public Q_SLOTS:
     virtual void setVisible( bool visible );
 

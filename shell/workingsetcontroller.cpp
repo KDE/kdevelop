@@ -32,11 +32,14 @@
 #include "mainwindow.h"
 #include <qboxlayout.h>
 #include <klocalizedstring.h>
+#include <util/pushvalue.h>
+#include <kiconeffect.h>
+#include <qapplication.h>
 
 using namespace KDevelop;
 
 //Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
-QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kbugbuster" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_edutainment_music" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "accessories-calculator" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
+QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "accessories-calculator" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
 WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
@@ -46,13 +49,14 @@ void WorkingSetController::cleanup()
 {
     foreach(WorkingSet* set, m_workingSets)
         delete set;
+    m_workingSets.clear();
 }
 
 
 bool WorkingSetController::usingIcon(QString icon)
 {
     foreach(WorkingSet* set, m_workingSets)
-        if(set->icon() == icon)
+        if(set->iconName() == icon)
             return true;
     return false;
 }
@@ -88,6 +92,11 @@ WorkingSet* WorkingSetController::getWorkingSet(QString id)
 
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
 {
+    if(m_id.isEmpty()) {
+        Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
+        return;
+    }
+    
     ///@todo Make the working-sets session-specific
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -133,13 +142,16 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
 bool WorkingSet::isEmpty() const
 {
+    if(m_id.isEmpty())
+        return true;
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
     return group.groupList().isEmpty() && group.readEntry("View Count", 0) == 0;
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
-    m_loading = true;
+    PushValue<bool> enableLoading(m_loading, true);
+    
     kDebug() << "loading working-set" << m_id << "into area" << area;
     
     if(clear) {
@@ -147,12 +159,14 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         area->clearViews();
     }
     
+    if(m_id.isEmpty())
+        return;
+    
     KConfigGroup setConfig(KGlobal::config(), "Working Sets");
     KConfigGroup group = setConfig.group(m_id);
     loadToArea(area, areaIndex, group);
 
     kDebug() << "ready";
-    m_loading = false;
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
@@ -214,17 +228,25 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     }
 }
 
-QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local) {
-    return new WorkingSetWidget(parent, this, local);
+QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
+    return new WorkingSetWidget(parent, this, local, fixedArea);
 }
 
-WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini) : QWidget(parent), m_mini(mini), m_mainWindow(parent) {
+WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea) : QWidget(parent), m_mini(mini), m_mainWindow(parent), m_fixedArea(fixedArea) {
     m_layout = new QHBoxLayout(this);
-    connect(parent, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
+    m_layout->setMargin(0);
+    if(!m_fixedArea)
+        connect(parent, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
+    
     connect(controller, SIGNAL(workingSetAdded(QString)), this, SLOT(workingSetsChanged()));
     connect(controller, SIGNAL(workingSetRemoved(QString)), this, SLOT(workingSetsChanged()));
-    if(parent->area())
-        areaChanged(parent->area());
+    
+    Sublime::Area* area = parent->area();
+    if(m_fixedArea)
+        area = m_fixedArea;
+    if(area)
+        areaChanged(area);
+    
     workingSetsChanged();
 }
 
@@ -258,7 +280,7 @@ QString htmlColor(QColor color) {
 
 void WorkingSetWidget::workingSetsChanged()
 {
-    kDebug() << "re-creating widget";
+    kDebug() << "re-creating widget" << m_connectedArea << m_fixedArea << m_mini;
     foreach(QToolButton* button, m_buttons.keys())
         delete button;
     m_buttons.clear();
@@ -268,21 +290,29 @@ void WorkingSetWidget::workingSetsChanged()
         disconnect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
         connect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
         
-        if(m_mini && set->id() != m_connectedArea->workingSet())
+        if(m_mini && set->id() != m_connectedArea->workingSet()) {
+            kDebug() << "skipping" << set->id() << ", searching" << m_connectedArea->workingSet();
             continue; //In "mini" mode, show only the current working set
-        if(set->isEmpty())
+        }
+        if(set->isEmpty()) {
+            kDebug() << "skipping" << set->id() << "because empty";
             continue;
+        }
+        kDebug() << "adding button for" << set->id();
         QToolButton* butt = new QToolButton(this);
-        butt->setIcon(KIcon(set->icon()));
         butt->setToolTip(i18n("Working Set %1", set->id()));
+        butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
         
         QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
         QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
         QColor useColor;
-        if(m_connectedArea && set->id() == m_connectedArea->workingSet())
-            useColor = activeBgColor;
-        else
-            useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.3);
+        if(m_mainWindow && m_mainWindow->area()->workingSet() == set->id()) {
+            useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
+            butt->setIcon(set->activeIcon());
+        }else{
+            useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
+            butt->setIcon(set->inactiveIcon());
+        }
         
         QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
         butt->setStyleSheet(sheet);
@@ -291,7 +321,6 @@ void WorkingSetWidget::workingSetsChanged()
         connect(butt, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
         m_buttons[butt] = set;
     }
-    
     update();
 }
 
@@ -303,7 +332,11 @@ void WorkingSetWidget::buttonTriggered()
     
     if(m_mainWindow->area()->workingSet() == m_buttons[button]->id()) {
         //Create a new working-set
-        m_mainWindow->area()->setWorkingSet(QString("%1_%2").arg(m_mainWindow->area()->objectName()).arg(qrand() % 10000000));
+        if(!m_mini) {
+        m_mainWindow->area()->setWorkingSet(QString());//QString("%1_%2").arg(m_mainWindow->area()->objectName()).arg(qrand() % 10000000));
+        }else{
+            ///@todo Show some useful menu here
+        }
     }else{
         m_mainWindow->area()->setWorkingSet(m_buttons[button]->id());
     }
@@ -324,8 +357,63 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
 void WorkingSet::changedWorkingSet(Sublime::Area* area, QString from, QString to) {
     kDebug() << "changed working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
     Q_ASSERT(to == m_id);
-    loadToArea(area, area->rootIndex(), true);
+    loadToArea(area, area->rootIndex(), !from.isEmpty());
     kDebug() << "update ready";
+}
+
+void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
+    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+    Q_ASSERT(area);
+    Q_ASSERT(area->workingSet() == m_id);
+
+    kDebug() << "added view in" << area << ", id" << m_id;
+    if (m_loading) {
+        kDebug() << "doing nothing because loading";
+        return;
+    }
+    if (m_id.isEmpty()) {
+        //Spawn a new working-set
+        QString newId = QString("%1_%2").arg(area->objectName()).arg(qrand() % 10000000);
+        kDebug() << "spawning new working-set for area" << area->objectName() << ":" << newId;
+        Core::self()->workingSetControllerInternal()->getWorkingSet(newId)->saveFromArea(area, area->rootIndex());
+        area->setWorkingSet(newId);
+        return;
+    }
+    changed(area);
+}
+
+void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
+    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+    Q_ASSERT(area);
+    Q_ASSERT(area->workingSet() == m_id);
+    
+    kDebug() << "removed view in" << area << ", id" << m_id;
+    if (m_loading) {
+        kDebug() << "doing nothing because loading";
+        return;
+    }
+    changed(area);
+    if (isEmpty()) {
+        kDebug() << "setting zero working set, because area" << area->objectName() << "is empty";
+        area->setWorkingSet(QString()); //Set the empty working-set if the area has been emptied
+    }
+}
+
+WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon), m_loading(false) {
+    //Give the working-set icons one color, so they are less disruptive
+    KIconEffect effect;
+    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
+    QImage imgInactive = imgActive;
+    
+    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
+    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
+    
+    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
+    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
+    
+    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
+    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
+    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
 }
 
 #include "workingsetcontroller.moc"

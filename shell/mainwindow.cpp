@@ -49,6 +49,12 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+
+QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
+{
+    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, true, area);
+}
+
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {

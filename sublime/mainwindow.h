@@ -97,6 +97,7 @@ Q_SIGNALS:
 protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
+protected slots:
     void setupAreaSelector();
 
 public: // FIXME?
@@ -109,6 +110,10 @@ public: // FIXME?
 
     /**Reimplemented to save settings.*/
     virtual bool queryClose();
+
+    /**Reimplement this to add custom buttons into the area switchers. The default-implementation returns zero, which means that no button is added
+      *The returned button is owned by the caller, and deleted at will. */
+    virtual QWidget* customButtonForAreaSwitcher ( Area* area );
 
 private:
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
