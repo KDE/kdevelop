@@ -86,6 +86,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/navigation/useswidget.cpp
     duchain/navigation/usescollector.cpp
 
+    interfaces/iastcontainer.cpp
     interfaces/ilanguagesupport.cpp
     interfaces/quickopendataprovider.cpp
     interfaces/iproblem.cpp
