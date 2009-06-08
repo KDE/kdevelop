@@ -18,6 +18,8 @@
 #ifndef KDEVELOP_IASTCONTAINER_H
 #define KDEVELOP_IASTCONTAINER_H
 
+#include <ksharedptr.h>
+
 namespace KDevelop
 {
 
@@ -28,10 +30,14 @@ namespace KDevelop
  * in a KDevelop::TopDUContext, and passed over to Refactoring plugins so they can manipulate
  * their language-specific AstChangeSets.
  */
-class IAstContainer
+class IAstContainer : public KShared
 {
+    public:
+    virtual ~IAstContainer();
+    typedef KSharedPtr<IAstContainer> Ptr;
 };
 
 }
+
 
 #endif // KDEVELOP_IASTCONTAINER_H
