@@ -35,16 +35,13 @@ class KDEVPLATFORMUTIL_EXPORT ActiveToolTipManager : public QObject {
 /** This class implements a tooltip that can contain arbitrary
     widgets that the user can interact with.
 
-    There is a two-step activation scheme for the widget.  When
-    created, it records the parent widget and the position, and
-    arranges for the object to be closed and deleted if mouse
-    leaves the region around the original position, or if we click
-    in different widget.
-
-    The widget is not originally shown, so we can fetch whatever data
-    is necessary to be displayed.  When we are ready to show the
-    data, the 'show()' method must be called.  It will show the widget
-    and extend the area we can interact with to cover the widget.  */
+    Usage example:
+    KDevelop::ActiveToolTip* tooltip = new KDevelop::ActiveToolTip(mainWindow, QCursor::pos());
+    QVBoxLayout* layout = new QVBoxLayout(tooltip);
+    layout->addWidget(widget);
+    tooltip->resize( tooltip->sizeHint() );
+    ActiveToolTip::showToolTip(tooltip);
+ */
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
 Q_OBJECT
@@ -56,6 +53,7 @@ public:
     ///Shows and registers the given tool-tip.
     ///This should be used instead of just calling show() to make multiple different
     ///tooltips work together.
+    ///The tooltip is owned by the manager after this is called. It will delete itself.
     ///@param tooltip  The tooltip to show. It should not be visible yet, show() will eventually be called from here, with some delay.
     ///                The ownership stays with the caller.
     ///@param priority The priority of this tooltip. Lower is better. Multiple tooltips will be stacked down in the given order.

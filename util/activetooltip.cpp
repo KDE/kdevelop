@@ -159,6 +159,7 @@ namespace {
 void ActiveToolTipManager::doVisibility() {
     bool hideAll = false;
     int lastBottomPosition = -1;
+    int lastLeftPosition = -1;
     QRect fullGeometry; //Geometry of all visible tooltips together
     
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
@@ -166,13 +167,18 @@ void ActiveToolTipManager::doVisibility() {
             if(hideAll) {
                 (*it)->hide();
             }else{
+                QRect geom = (*it)->geometry();
                 if((*it)->geometry().top() < lastBottomPosition) {
-                    QRect geom = (*it)->geometry();
                     geom.moveTop(lastBottomPosition);
-                    (*it)->setGeometry(geom);
                 }
-                (*it)->show();
+                if(lastLeftPosition != -1)
+                    geom.moveLeft(lastLeftPosition);
+                
+                (*it)->setGeometry(geom);
+//                 (*it)->show();
+                    
                 lastBottomPosition = (*it)->geometry().bottom();
+                lastLeftPosition = (*it)->geometry().left();
                 
                 if(it == registeredToolTips.constBegin())
                     fullGeometry = (*it)->geometry();
@@ -194,7 +200,7 @@ void ActiveToolTipManager::doVisibility() {
                 fullGeometry.moveBottom(QCursor::pos().y() - 20);
         }
         if(fullGeometry.right() > screenGeometry.right()) {
-            //Move up, avoiding the mouse-cursor
+            //Move to left, avoiding the mouse-cursor
             fullGeometry.moveRight(fullGeometry.left()-10);
             if(fullGeometry.right() > QCursor::pos().x() - 20)
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
