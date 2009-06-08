@@ -20,6 +20,8 @@
 
 #include <ksharedptr.h>
 
+#include "languageexport.h"
+
 namespace KDevelop
 {
 
@@ -30,7 +32,7 @@ namespace KDevelop
  * in a KDevelop::TopDUContext, and passed over to Refactoring plugins so they can manipulate
  * their language-specific AstChangeSets.
  */
-class IAstContainer : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public KShared
 {
     public:
     virtual ~IAstContainer();
