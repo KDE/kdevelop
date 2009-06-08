@@ -340,7 +340,9 @@ QWidget *MainWindow::statusBarLocation()
 
 void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)
 {
+#if QT_VERSION >= 0x040500
     d->areaSwitcher->setTabSideWidget(widget);
+#endif
 }
 
 }
