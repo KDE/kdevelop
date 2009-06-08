@@ -45,6 +45,10 @@ QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" <<
 
 WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
+    //Load all working-sets
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    foreach(QString set, setConfig.groupList())
+        getWorkingSet(set);
 }
 
 void WorkingSetController::cleanup()
@@ -118,17 +122,17 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     kDebug() << "saving" << m_id << "from area";
     
     ///@todo Make the working-sets session-specific
-    KConfigGroup setConfig(KGlobal::config(), "Working Sets");
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     deleteGroupRecursive(group);
     saveFromArea(area, areaIndex, group);
-    kDebug() << "empty:" << isEmpty();
+    if(isEmpty())
+        deleteGroupRecursive(group);
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
     if (area->isSplitted()) {
-        kDebug() << "splitted";
         group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
         if (area->first()) {
@@ -143,7 +147,6 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
             saveFromArea(a, area->second(), subgroup);
         }
     } else {
-        kDebug() << "views:" << area->viewCount();
         group.writeEntry("View Count", area->viewCount());
 
         int index = 0;
@@ -156,10 +159,6 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
             ++index;
         }
-        
-        //Do not spam the configuration-file with empty working sets. Do not store them at all.
-//         if(area->viewCount() == 0)
-//             group.deleteGroup();
     }
 }
 
@@ -168,7 +167,7 @@ bool WorkingSet::isEmpty() const
 {
     if(m_id.isEmpty())
         return true;
-    KConfigGroup setConfig(KGlobal::config(), "Working Sets");
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
@@ -227,7 +226,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     if(m_id.isEmpty())
         return;
     
-    KConfigGroup setConfig(KGlobal::config(), "Working Sets");
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
 
     loadToArea(area, areaIndex, group);
