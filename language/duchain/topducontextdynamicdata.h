@@ -24,6 +24,7 @@ class QFile;
 #include <QtCore/QMutex>
 #include <QtCore/QByteArray>
 #include <QtCore/QPair>
+#include <interfaces/iastcontainer.h>
 
 namespace KDevelop {
 

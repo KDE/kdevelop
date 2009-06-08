@@ -31,6 +31,7 @@ class KSharedPtr;
 
 namespace KDevelop
 {
+  class IAstContainer;
   class QualifiedIdentifier;
   class DUChain;
   class ParsingEnvironmentFile;
@@ -217,8 +218,9 @@ public:
     ///This flag can not be set on a context, it is only used as a parameter to several updating functions. When you set it
     ///on a top-context, its flag will be AllDeclarationsContextsAndUses.
     AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses,
-    ForceUpdate = 16, //This flag can not be set on a context, but is only used during updating
-    ForceUpdateRecursive = ForceUpdate | 32  //This flag can not be set on a context, but is only used during updating
+    AST = 16,  //Use this flag if you want to signalize that the IAstContainer needs to be there
+    ForceUpdate = 32, //This flag can not be set on a context, but is only used during updating
+    ForceUpdateRecursive = ForceUpdate | 64 //This flag can not be set on a context, but is only used during updating
   };
   
   Features features() const;
@@ -254,6 +256,19 @@ public:
    * */
   Flags flags() const;
   void setFlags(Flags f);
+  
+  /**
+   * Returns the AST Container, that contains the AST created during parsing.
+   * This is only created if you request the AST feature for parsing.
+   * It may be discarded at any time. Every update without the AST feature will discard it.
+   * The actual contents is language-specific.
+   */
+  KSharedPtr<IAstContainer> ast() const;
+  
+  /**
+   * Sets the AST Container. Call it with an invalid pointer to reset it.
+  */
+  void setAst(KSharedPtr<IAstContainer> ast);
 
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.

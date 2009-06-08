@@ -272,6 +272,8 @@ public:
   ParsingEnvironmentFilePointer m_file;
   QList<ProblemPointer> m_problems;
 
+  KSharedPtr<IAstContainer> m_ast;
+  
   uint m_ownIndex;
 
   bool m_inDuChain;
@@ -1541,6 +1543,16 @@ TopDUContext::Cache::~Cache() {
     d->context->m_local->m_threadCaches.remove(QThread::currentThreadId());
 
   delete d;
+}
+
+void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
+{
+  m_local->m_ast = ast;
+}
+
+KSharedPtr<IAstContainer> TopDUContext::ast() const
+{
+  return m_local->m_ast;
 }
 
 IndexedString TopDUContext::url() const {
