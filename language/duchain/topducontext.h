@@ -224,6 +224,7 @@ public:
   };
   
   Features features() const;
+  ///Set the features of this top-context. These features are ignored: AST, ForceUpdate, and ForeceUpdateRecursive.
   void setFeatures(Features);
 
   /**

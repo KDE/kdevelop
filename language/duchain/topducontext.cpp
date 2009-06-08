@@ -865,6 +865,7 @@ void TopDUContext::setFeatures(Features features)
 {
   features = (TopDUContext::Features)(features & (~((uint)8))); //Remove the "Recursive" flag since that's only for searching
   features = (TopDUContext::Features)(features & (~ForceUpdateRecursive)); //Remove the update flags
+  features = (TopDUContext::Features)(features & (~AST)); //Remove the AST flag, it's only used while updating
   d_func_dynamic()->m_features = features;
 
   //Replicate features to ParsingEnvironmentFile
@@ -1547,6 +1548,7 @@ TopDUContext::Cache::~Cache() {
 
 void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
 {
+  ENSURE_CAN_WRITE
   m_local->m_ast = ast;
 }
 

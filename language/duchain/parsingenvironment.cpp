@@ -197,9 +197,15 @@ static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Feat
   
   checked.insert(file);
   
-  ///Locally we don't require the "recursive" condition, that only counts when we also have imports
-  TopDUContext::Features localRequired = (TopDUContext::Features)(minimumFeatures & TopDUContext::AllDeclarationsContextsAndUses);
-  localRequired = (TopDUContext::Features) (localRequired | ParseJob::staticMinimumFeatures(file->url()));
+  TopDUContext::Features localRequired = (TopDUContext::Features) (minimumFeatures | ParseJob::staticMinimumFeatures(file->url()));
+  
+  if(localRequired & TopDUContext::AST)
+    if(!file->indexedTopContext().isLoaded() || !file->topContext()->ast())
+      return false;
+  
+  ///Remove all features that are not attached to the AST
+  localRequired = (TopDUContext::Features)(localRequired & TopDUContext::AllDeclarationsContextsAndUses);
+  
   if(!((file->features() & localRequired) == localRequired ))
     return false;
   
