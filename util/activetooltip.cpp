@@ -27,6 +27,7 @@
 #include <limits>
 #include <kdebug.h>
 #include <QPointer>
+#include <qdesktopwidget.h>
 
 namespace KDevelop
 {
@@ -183,6 +184,30 @@ void ActiveToolTipManager::doVisibility() {
             }
         }
     }
+    if(!fullGeometry.isEmpty()) {
+        QRect oldFullGeometry = fullGeometry;
+        QRect screenGeometry = QApplication::desktop()->screenGeometry(fullGeometry.topLeft());
+        if(fullGeometry.bottom() > screenGeometry.bottom()) {
+            //Move up, avoiding the mouse-cursor
+            fullGeometry.moveBottom(fullGeometry.top()-10);
+            if(fullGeometry.bottom() > QCursor::pos().y() - 20)
+                fullGeometry.moveBottom(QCursor::pos().y() - 20);
+        }
+        if(fullGeometry.right() > screenGeometry.right()) {
+            //Move up, avoiding the mouse-cursor
+            fullGeometry.moveRight(fullGeometry.left()-10);
+            if(fullGeometry.right() > QCursor::pos().x() - 20)
+                fullGeometry.moveRight(QCursor::pos().x() - 20);
+        }
+        
+        QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
+        if(!offset.isNull()) {
+            for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
+                if(*it) {
+                    (*it)->move((*it)->pos() + offset);
+                }
+        }
+    }
 
     //Set bounding geometry, and remove old tooltips
     for(ToolTipPriorityMap::iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ) {
@@ -192,6 +217,13 @@ void ActiveToolTipManager::doVisibility() {
             (*it)->setBoundingGeometry(fullGeometry);
             ++it;
         }
+    }
+
+    //Final step: Show all tooltips
+    if(!hideAll) {
+        for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
+            if(*it)
+                (*it)->show();
     }
 }
 
