@@ -37,6 +37,7 @@ class ActiveToolTipPrivate
 public:
     uint previousDistance_;
     QRect rect_;
+    QRegion rectExtensions_;
     int mouseOut_;
 };
 
@@ -87,25 +88,28 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
         break;
 #endif
     case QEvent::MouseMove:
-        if (!d->rect_.isNull() 
-            && !d->rect_.contains(static_cast<QMouseEvent*>(e)->globalPos())) {
-            
-            int distance = (d->rect_.center() - static_cast<QMouseEvent*>(e)->globalPos()).manhattanLength();
-            
-            // On X, when the cursor leaves the tooltip and enters
-            // the parent, we sometimes get some wrong Y coordinate.
-            // Don't know why, so wait for two out-of-range mouse
-            // positions before closing.
-            
-            //Additional test: When the cursor has been moved towards the tooltip, don't close it.
-            if(distance > d->previousDistance_)
-                ++d->mouseOut_;
-            else
-                d->previousDistance_ = distance;
-        } else               
-            d->mouseOut_ = 0;
-        if (d->mouseOut_ == 2) {
-            close();
+        {
+            QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
+            if (!d->rect_.isNull() 
+                && !d->rect_.contains(globalPos) && !d->rectExtensions_.contains(globalPos)) {
+                
+                int distance = (d->rect_.center() - static_cast<QMouseEvent*>(e)->globalPos()).manhattanLength();
+                
+                // On X, when the cursor leaves the tooltip and enters
+                // the parent, we sometimes get some wrong Y coordinate.
+                // Don't know why, so wait for two out-of-range mouse
+                // positions before closing.
+                
+                //Additional test: When the cursor has been moved towards the tooltip, don't close it.
+                if(distance > d->previousDistance_)
+                    ++d->mouseOut_;
+                else
+                    d->previousDistance_ = distance;
+            } else               
+                d->mouseOut_ = 0;
+            if (d->mouseOut_ == 2) {
+                close();
+            }
         }
     default:
         break;
@@ -135,6 +139,11 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
     emit resized();
+}
+
+void ActiveToolTip::addExtendRect(QRect rect)
+{
+    d->rectExtensions_ += rect;
 }
 
 void ActiveToolTip::adjustRect()

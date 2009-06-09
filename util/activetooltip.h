@@ -70,6 +70,9 @@ public:
 
     void adjustRect();
     
+    ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
+    void addExtendRect(QRect rect);
+    
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
     void setBoundingGeometry(QRect geometry);
 Q_SIGNALS:
