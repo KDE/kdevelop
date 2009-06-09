@@ -1557,6 +1557,11 @@ KSharedPtr<IAstContainer> TopDUContext::ast() const
   return m_local->m_ast;
 }
 
+void TopDUContext::clearAst(void)
+{
+  setAst(KSharedPtr<IAstContainer>(0));
+}
+
 IndexedString TopDUContext::url() const {
   return d_func()->m_url;
 }

@@ -267,9 +267,14 @@ public:
   KSharedPtr<IAstContainer> ast() const;
   
   /**
-   * Sets the AST Container. Call it with an invalid pointer to reset it.
+   * Sets the AST Container.
   */
   void setAst(KSharedPtr<IAstContainer> ast);
+  
+  /**
+   * Utility function to clear the AST Container
+   */
+  void clearAst();
 
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
