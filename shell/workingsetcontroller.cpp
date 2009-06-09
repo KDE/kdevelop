@@ -398,7 +398,7 @@ class WorkingSetToolTipWidget : public QWidget {
         QVBoxLayout* layout2 = new QVBoxLayout(frame);
         layout2->setMargin(0);
         QStringList files = m_set->fileList();
-        QLabel* label = new QLabel(i18n("Working Set %1:\n%2", m_set->id(), files.join("\n")));
+        QLabel* label = new QLabel(i18n("Working Set:\n%1", files.join("\n")));
         layout2->addWidget(label);
     }
     
@@ -421,10 +421,15 @@ bool WorkingSetToolButton::event(QEvent* e)
     if(e->type() == QEvent::ToolTip) {
         e->accept();
         static QPointer<KDevelop::ActiveToolTip> tooltip;
-        if(tooltip)
+        static WorkingSetToolButton* oldTooltipButton;
+        if(tooltip && oldTooltipButton == this)
             return true;
         
+        delete tooltip;
+        oldTooltipButton = this;
+        
         tooltip = new KDevelop::ActiveToolTip(Core::self()->uiControllerInternal()->activeMainWindow(), QCursor::pos() + QPoint(10, 20));
+        tooltip->addExtendRect(QRect(parentWidget()->mapToGlobal(geometry().topLeft()), parentWidget()->mapToGlobal(geometry().bottomRight())));
         QVBoxLayout* layout = new QVBoxLayout(tooltip);
         layout->setMargin(0);
         layout->addWidget(new WorkingSetToolTipWidget(tooltip, m_set));
@@ -457,7 +462,6 @@ void WorkingSetWidget::workingSetsChanged()
         }
 //         kDebug() << "adding button for" << set->id();
         QToolButton* butt = new WorkingSetToolButton(this, set);
-        butt->setToolTip(i18n("Working Set %1", set->id()));
         butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
         
         QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
