@@ -32,7 +32,7 @@ namespace KDevelop
  * in a KDevelop::TopDUContext, and passed over to Refactoring plugins so they can manipulate
  * their language-specific AstChangeSets.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public KShared
+class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public QSharedData
 {
     public:
     virtual ~IAstContainer();
