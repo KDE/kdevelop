@@ -35,6 +35,7 @@
 #include <util/pushvalue.h>
 #include <kiconeffect.h>
 #include <qapplication.h>
+#include <util/activetooltip.h>
 
 using namespace KDevelop;
 
@@ -211,6 +212,45 @@ struct DisconnectMainWindowsFromArea
     QList<Sublime::MainWindow*> mainWindows;
 };
 
+void loadFileList(QStringList& ret, KConfigGroup group)
+{
+    if (group.hasKey("Orientation")) {
+        QStringList subgroups = group.groupList();
+
+        if (subgroups.contains("0")) {
+
+            {
+                KConfigGroup subgroup(&group, "0");
+                loadFileList(ret, subgroup);
+            }
+
+            if (subgroups.contains("1")) {
+                KConfigGroup subgroup(&group, "1");
+                loadFileList(ret, subgroup);
+            }
+        }
+
+    } else {
+
+        int viewCount = group.readEntry("View Count", 0);
+        for (int i = 0; i < viewCount; ++i) {
+            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
+            QString specifier = group.readEntry(QString("View %1").arg(i), "");
+
+            ret << specifier;
+        }
+    }
+}
+QStringList WorkingSet::fileList() const
+{
+    QStringList ret;
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup group = setConfig.group(m_id);
+
+    loadFileList(ret, group);
+    return ret;
+}
+
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
     PushValue<bool> enableLoading(m_loading, true);
     
@@ -346,6 +386,55 @@ QString htmlColor(QColor color) {
     return "#" + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
 }
 
+class WorkingSetToolTipWidget : public QWidget {
+    public:
+    WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set) : QWidget(parent), m_set(set) {
+        QFrame* frame = new QFrame(this);
+        frame->setFrameStyle(QFrame::Panel | QFrame::Plain);
+        frame->setLineWidth(1);
+        QVBoxLayout* layout = new QVBoxLayout(this);
+        layout->setMargin(0);
+        layout->addWidget(frame);
+        QVBoxLayout* layout2 = new QVBoxLayout(frame);
+        layout2->setMargin(0);
+        QStringList files = m_set->fileList();
+        QLabel* label = new QLabel(i18n("Working Set %1:\n%2", m_set->id(), files.join("\n")));
+        layout2->addWidget(label);
+    }
+    
+    private:
+        WorkingSet* m_set;
+};
+
+class WorkingSetToolButton : public QToolButton {
+    public:
+    WorkingSetToolButton(QWidget* parent, WorkingSet* set) : QToolButton(parent), m_set(set) {
+    }
+    private:
+        
+    virtual bool event(QEvent* e);
+    WorkingSet* m_set;
+};
+
+bool WorkingSetToolButton::event(QEvent* e)
+{
+    if(e->type() == QEvent::ToolTip) {
+        e->accept();
+        static QPointer<KDevelop::ActiveToolTip> tooltip;
+        if(tooltip)
+            return true;
+        
+        tooltip = new KDevelop::ActiveToolTip(Core::self()->uiControllerInternal()->activeMainWindow(), QCursor::pos() + QPoint(10, 20));
+        QVBoxLayout* layout = new QVBoxLayout(tooltip);
+        layout->setMargin(0);
+        layout->addWidget(new WorkingSetToolTipWidget(tooltip, m_set));
+        tooltip->resize( tooltip->sizeHint() );
+        ActiveToolTip::showToolTip(tooltip);
+        return true;
+    }
+    return QToolButton::event(e);
+}
+
 void WorkingSetWidget::workingSetsChanged()
 {
     kDebug() << "re-creating widget" << m_connectedArea << m_fixedArea << m_mini;
@@ -367,7 +456,7 @@ void WorkingSetWidget::workingSetsChanged()
             continue;
         }
 //         kDebug() << "adding button for" << set->id();
-        QToolButton* butt = new QToolButton(this);
+        QToolButton* butt = new WorkingSetToolButton(this, set);
         butt->setToolTip(i18n("Working Set %1", set->id()));
         butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
         

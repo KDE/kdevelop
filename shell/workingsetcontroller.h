@@ -73,6 +73,8 @@ public:
         return ret;
     }
     
+    QStringList fileList() const;
+    
     bool isEmpty() const;
 
     ///Updates this working-set from the given area and area-index
