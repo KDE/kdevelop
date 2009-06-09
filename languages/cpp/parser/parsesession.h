@@ -55,7 +55,12 @@ public:
   ParseSession();
   ~ParseSession();
   
+  //Redefinitions from IAstContainer
   typedef KSharedPtr<ParseSession> Ptr;
+  typedef TranslationUnitAST TopAstNode;
+  
+  TopAstNode * topAstNode(void);
+  void topAstNode(TopAstNode * node);
 
   /**
    * Return the position of the preprocessed source \a offset in the original source
@@ -85,11 +90,11 @@ public:
 
   rpp::MacroBlock* macros;
   KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
-  TranslationUnitAST * m_topAstNode;
 
 private:
   PreprocessedContents m_contents;
   rpp::LocationTable* m_locationTable;
+  TranslationUnitAST * m_topAstNode;
 };
 
 #endif

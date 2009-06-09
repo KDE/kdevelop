@@ -584,17 +584,7 @@ void CPPInternalParseJob::run()
       
       TopDUContext::Features newFeatures = parentJob()->minimumFeatures();
       if(contentContext)
-      {
         newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
-        
-        if(newFeatures & TopDUContext::AST)
-        {
-          kDebug() << "AST Is being kept for TopDUContext: ";
-          //!@todo Figure out a better way to convert to supperclass pointer
-          
-          contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
-        }
-      }
       
       if(newFeatures & TopDUContext::ForceUpdate)
         kDebug() << "update enforced";
@@ -710,11 +700,22 @@ void CPPInternalParseJob::run()
       
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
-          DUChainWriteLocker l(DUChain::lock());
-          contentContext->setFeatures(newFeatures);
-          if(proxyContext)
-            proxyContext->setFeatures(newFeatures);
-          contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
+        DUChainWriteLocker l(DUChain::lock());
+        contentContext->setFeatures(newFeatures);
+        if(proxyContext)
+          proxyContext->setFeatures(newFeatures);
+        contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
+        
+        //Now that the Ast is fully built, add it to the TopDUContext if requested
+        if(newFeatures & TopDUContext::AST)
+        {
+          kDebug() << "AST Is being kept for TopDUContext: ";
+          //!@todo Figure out a better way to convert to supperclass pointer
+          contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
+        }
+        
+        else
+          contentContext->clearAst();
       }
 
       if (parentJob()->abortRequested())

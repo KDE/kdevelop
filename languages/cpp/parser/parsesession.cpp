@@ -45,6 +45,18 @@ ParseSession::~ParseSession()
   delete macros;
 }
 
+TranslationUnitAST * ParseSession::topAstNode(void)
+{
+  return m_topAstNode;
+}
+
+void ParseSession::topAstNode(TranslationUnitAST * node)
+{
+  Q_ASSERT(!m_topAstNode);
+  
+  m_topAstNode = node;
+}
+
 rpp::Anchor ParseSession::positionAt(std::size_t offset, bool collapseIfMacroExpansion) const
 {
   Q_ASSERT(m_locationTable);
