@@ -55,6 +55,7 @@
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/codemodel.h>
+#include <language/codegen/coderepresentation.h>
 
 #include "tokens.h"
 #include "parsesession.h"
@@ -67,6 +68,7 @@
 #include <qtfunctiondeclaration.h>
 #include <qwidget.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <sourcemanipulation.h>
 
 //Uncomment the following line to get additional output from the string-repository test
 //#define DEBUG_STRINGREPOSITORY
@@ -167,6 +169,7 @@ void TestDUChain::initTestCase()
   noDef = 0;
 
   DUChain::self()->disablePersistentStorage();
+  KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
 
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
@@ -2927,19 +2930,69 @@ void TestDUChain::testTemplateInternalSearch() {
   release(top);
 }
 
+void TestDUChain::testSourceCodeInsertion()
+{
+}
 
 void TestDUChain::testSimplifiedTypeString()
 {
+  {
+    QByteArray method("template<class T> class Template { class Member; Member mem; }; Template< Template< int >* >::Member q;\n");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    
+    InsertArtificialCodeRepresentation repr(top->url(), QString::fromUtf8(method));
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[1]->abstractType(), top).remove(' '), QString("Template<Template<int>*>::Member").remove(' '));
+    release(top);
+  }
+  {
   ///@todo Add more tests for this
-  QByteArray method("template<typename T> struct F; template<class T> class Tc; Tc<const F<int*>*> t; const Tc<const F<int*>*>**const*& Test1;");
+    QByteArray method("template<typename T> struct F; template<class T> class Tc; Tc<const F<int*>*> t; const Tc<const F<int*>*>**const*& Test1; Tc<F<int*>*>* test();\n");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    
+    InsertArtificialCodeRepresentation repr(top->url(), QString::fromUtf8(method));
 
-  TopDUContext* top = parse(method, DumpNone);
-
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->localDeclarations().count(), 4);
-  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[2]->abstractType(), top).remove(' '), QString("Tc<const F<int*>*>").remove(' '));
-  QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[3]->abstractType(), top).remove(' '), QString("constTc<const F<int*>*>**const*&").remove(' '));
-  release(top);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 5);
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[2]->abstractType(), top).remove(' '), QString("Tc<const F<int*>*>").remove(' '));
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[3]->abstractType(), top).remove(' '), QString("constTc<const F<int*>*>**const*&").remove(' '));
+    FunctionType::Ptr funType = top->localDeclarations()[4]->abstractType().cast<FunctionType>();
+    QVERIFY(funType);
+    QVERIFY(funType->returnType());
+    
+    //For loop is needed to test the updating, as there was a problem with that
+    for(int a = 0; a < 3; ++a) {
+      kDebug() << "run" << a;
+      lock.unlock();
+      parse(method, DumpNone, top);
+      lock.lock();
+      repr.setText(QString::fromUtf8(method));
+      Cpp::SourceCodeInsertion ins(top);
+      ins.insertFunctionDeclaration(Identifier("test"), funType->returnType(), QList<Cpp::SourceCodeInsertion::SignatureItem>(), false, "{ this is the body; }");
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      kDebug() << result.m_failureReason;
+      QVERIFY(result);
+      kDebug() << repr.text();
+      QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("Tc< F< int* >* >* test() { this is the body; }").remove(' ')));
+      lock.unlock();
+      parse(repr.text().toUtf8(), DumpNone, top);
+      lock.lock();
+      QVERIFY(top->localDeclarations().count() == 6);
+      
+    FunctionType::Ptr funType2 = top->localDeclarations()[5]->abstractType().cast<FunctionType>();
+    QVERIFY(funType2);
+    QVERIFY(funType2->returnType());
+    QVERIFY(funType2->returnType()->equals(funType->returnType().unsafeData()));
+    QCOMPARE(Cpp::simplifiedTypeString(funType2->returnType(), top).remove(' '), QString("Tc< F< int* >* >*").remove(' '));
+    }
+    
+    release(top);
+  }
 }
 
 void TestDUChain::testTemplateReference() {

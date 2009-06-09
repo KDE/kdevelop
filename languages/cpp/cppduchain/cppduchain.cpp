@@ -590,8 +590,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
           //Strip template default-parameters from the parent class
             AbstractType::Ptr parentType = stripType(decl->context()->owner()->abstractType(), ctx);
             if(parentType) {
-              newTypeName = QualifiedIdentifier(parentType->toString());
-              newTypeName.setIsExpression(true);
+              newTypeName = QualifiedIdentifier(parentType->toString(), true);
             }
           }
           if(newTypeName.isEmpty())
@@ -689,6 +688,7 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContex
   }
 
   type = shortenTypeForViewing(type);
+
   if(ctx)
     type = stripType(type, ctx);
   if(!type)

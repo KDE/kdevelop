@@ -90,6 +90,7 @@ private slots:
   void testTypedefUses();
   void testTemplateReference();
   void testSimplifiedTypeString();
+  void testSourceCodeInsertion();
   void testTemplates();
   void testTemplates2();
   void testTemplates3();
