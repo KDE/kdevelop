@@ -4,6 +4,7 @@ Icon=kdevelop
 Exec=blubb
 Comment=Gcov C(++) coverage
 Comment[ca]=Cobertura Gcov C(++)
+Comment[de]=Gcov-C(++)-Coverage
 Comment[el]=Κάλυψη Gcov C(++)
 Comment[es]=Cobertura C(++) de Gcov
 Comment[et]=Gcov C(++) katvus
@@ -25,6 +26,7 @@ Comment[zh_TW]=Gcov C/C++ 範圍
 
 Name=Code Coverage Report
 Name[ca]=Informe de cobertura del codi
+Name[de]=Code-Coverage-Bericht
 Name[es]=Informe de cobertura del código
 Name[fr]=Rapport de couverture de code
 Name[it]=Resoconto Code Coverage
