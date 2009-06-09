@@ -20,31 +20,41 @@
 #include <kjob.h>
 
 #include "language/editor/documentrange.h"
+#include <duchain/indexedstring.h>
+#include <kdevplatform/language/duchain/topducontext.h>
+#include <duchain/duchain.h>
 
 namespace KDevelop
 {
+template<class AstNode >
+class AstChangeSet;
 
 class DUContext;
-class AstChangeSet;
 class DUChainChangeSet;
 class DocumentChangeSet;
 
 /**
- * \short Base class for code generators and refactorings
+ * \short Base class for generic code generators
  *
- * CodeGenerator provides an api for a step-by-step process to
+ * CodeGeneratorBase provides an api for a step-by-step process to
  * create and/or refactor code.
  *
+ * This class should be used as a superclass only when du-chain level
+ * changes are made, since this level knows nothing about the
+ * language-specific AST. For more complex changes that require knowledge
+ * about the language AST, use CodeGenerator
+ *
  * \see Refactoring
+ * \see CodeGenerator
  * \author Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeGenerator : public KJob
+class KDEVPLATFORMLANGUAGE_EXPORT CodeGeneratorBase : public KJob
 {
     Q_OBJECT
 
 public:
-    CodeGenerator();
-    virtual ~CodeGenerator();
+    CodeGeneratorBase();
+    virtual ~CodeGeneratorBase();
 
     enum State {
         Precondition,
@@ -88,19 +98,13 @@ public:
 
 
 protected:
-    /**
-     * Generate text edits from duchain / ast change set.
-     *
-     * You may call this method multiple times to edit different files.
-     */
-    void generateTextEdit(AstChangeSet* astChange);
 
     /**
      * Generate text edits from duchain / ast change set.
      *
      * You may call this method multiple times to edit different files.
      */
-    void generateTextEdit(DUChainChangeSet* astChange);
+    void addChangeSet(DUChainChangeSet* duChainChange);
     
     /**
      * Accessor for KJob's KJob::setErrorText.
@@ -112,6 +116,76 @@ private:
     
     void executeGenerator(void);
     bool displayChanges(void);
+};
+
+/**
+ * \brief Base class for Ast aware code generators
+ *
+ * This class provides convenience for adding AstChangeSet, storing
+ * the IAstContainer from the TopDUContext, and in general managing
+ * Code generators that manipulate the AST
+ *
+ * \see CodeGeneratorBase
+ * \author Ramón Zarazúa <killerfox512+kde@gmail.com>
+ */
+template <typename AstContainer>
+class CodeGenerator : public CodeGeneratorBase
+{
+public:
+    CodeGenerator() {}
+    
+protected:
+    
+    /// Convenience definition of the TopAstNode that is contained by this AstContainer
+    typedef typename AstContainer::TopAstNode TopAstNode;
+    typedef AstChangeSet<TopAstNode> LanguageChangeSet;
+    
+    /**
+     * Query an AST of a particular file
+     */
+    TopAstNode * ast(const IndexedString & file)
+    {
+        typename AstContainer::Ptr & container = m_AstContainers[file];
+        if(container.isNull)
+        {
+            kDebug() << "Ast requested for: " << file.str();
+            TopDUContext * context = DUChain::self()->chainForDocument(file);
+            
+            Q_ASSERT(context);
+            m_AstContainers[file] = AstContainer::Ptr( context->ast().data() );
+        }
+        
+        return container->topAstNode();
+    }
+    
+    /**
+     * Generate text edits from duchain / ast change set.
+     *
+     * You may call this method multiple times to edit different files.
+     */
+    void addChangeSet(DUChainChangeSet * duChainChange)
+    {
+        CodeGeneratorBase::addChangeSet(duChainChange);
+    }
+    
+    /**
+     * Generate text edits from duchain / ast change set.
+     *
+     * You may call this method multiple times to edit different files.
+     */
+    void addChangeSet(LanguageChangeSet * astChange);
+    
+    /**
+     * Accessor for KJob's KJob::setErrorText.
+     */
+    void setErrorText(const QString & error)
+    {
+        CodeGeneratorBase::setErrorText(error);
+    }
+    
+private:
+    typedef QMap<IndexedString, typename AstContainer::Ptr> AstContainerMap;
+    AstContainerMap m_AstContainers;
 };
 
 }

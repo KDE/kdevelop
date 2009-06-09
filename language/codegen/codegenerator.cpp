@@ -36,41 +36,37 @@ struct CodeGeneratorPrivate
     DocumentChangeSet documentChanges;
 };
 
-CodeGenerator::CodeGenerator()
+CodeGeneratorBase::CodeGeneratorBase()
     : d(new CodeGeneratorPrivate)
 {
 }
 
-CodeGenerator::~CodeGenerator()
+CodeGeneratorBase::~CodeGeneratorBase()
 {
     delete d;
 }
 
-DocumentChangeSet* CodeGenerator::textEdits() const
+DocumentChangeSet* CodeGeneratorBase::textEdits() const
 {
     return &d->documentChanges;
 }
 
-void CodeGenerator::start(void)
+void CodeGeneratorBase::start(void)
 {
     kDebug() << "Starting Code Generation Job";
     QTimer::singleShot(0, this, SLOT(executeGenerator()));
 }
 
-void CodeGenerator::generateTextEdit(AstChangeSet* astChange)
+void CodeGeneratorBase::addChangeSet(DUChainChangeSet* astChange)
 {
 }
 
-void CodeGenerator::generateTextEdit(DUChainChangeSet* astChange)
-{
-}
-
-void CodeGenerator::setErrorText(const QString & errorText)
+void CodeGeneratorBase::setErrorText(const QString & errorText)
 {
     KJob::setErrorText(errorText);
 }
 
-void CodeGenerator::executeGenerator(void)
+void CodeGeneratorBase::executeGenerator(void)
 {
     kDebug() << "Checking Preconditions for the codegenerator";
     
@@ -88,6 +84,15 @@ void CodeGenerator::executeGenerator(void)
         setErrorText("Error Ggathering user information: " + errorText());
         emitResult();
     }
+    
+    // Fetch the AST either from your cache, or recreate it
+    // To recreate:
+    //         Fetch text from the editor, with the same revision number as the duchain was 
+    // created off (we have to save the revision number with the duchain, and not 
+    // release it until the duchain is reparsed - I can help with this)
+    //         Run through the preprocessor and parser
+    //         Save the ast in the cache
+    
     kDebug() << "Generating code";
     if(!process())
     {
@@ -95,14 +100,27 @@ void CodeGenerator::executeGenerator(void)
         emitResult();
     }
     kDebug() << "Submitting to the user for review";
+    
     if(!displayChanges())
         emitResult();
+    
+    //Apply Changes
+    
+    // Merge DUChainChangeSets
+    // Apply DUChainChangeSets (to make the language independent modifications to the 
+    // AST)
+    // Present AST to language-specific refactoring code, if applicable
+    //         Apply AstChangeSets
+    // Create a DocumentChangeSet
+    // Merge changes into document
+    // If no errors were found, save
+    // Reparse DUChain
     
     d->documentChanges.applyAllChanges();
     emitResult();
 }
 
-bool CodeGenerator::displayChanges(void)
+bool CodeGeneratorBase::displayChanges(void)
 {
     //Create a window that shows changes to be made
     return true;

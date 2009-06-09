@@ -24,6 +24,7 @@
 
 namespace KDevelop
 {
+class COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined;
 
 /**
  * \brief Represents A single parse session that created a language-specific AST for a single translation unit
@@ -34,9 +35,13 @@ namespace KDevelop
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public QSharedData
 {
-    public:
+  public:
     virtual ~IAstContainer();
     typedef KSharedPtr<IAstContainer> Ptr;
+    
+    /// Derived classes must redifine this typedef for CodeGenerator to work
+    /// with this AST
+    typedef COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined TopAstNode;
 };
 
 }
