@@ -20,9 +20,9 @@
 #include <kjob.h>
 
 #include "language/editor/documentrange.h"
-#include <duchain/indexedstring.h>
+#include <kdevplatform/language/duchain/indexedstring.h>
 #include <kdevplatform/language/duchain/topducontext.h>
-#include <duchain/duchain.h>
+#include <kdevplatform/language/duchain/duchain.h>
 
 namespace KDevelop
 {
