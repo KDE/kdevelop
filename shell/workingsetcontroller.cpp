@@ -333,7 +333,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 }
 
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
-#ifdef QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x040500
     return new WorkingSetWidget(parent, this, local, fixedArea);
 #else
     return 0;
