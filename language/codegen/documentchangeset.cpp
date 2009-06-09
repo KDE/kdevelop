@@ -57,7 +57,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
         if(!repr)
             return ChangeResult(QString("Could not code for %1").arg(file.str()));
         
-        ISourceFormatter* formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
+        ISourceFormatter* formatter = 0;
+        if(ICore::self())
+            formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
         
         codeRepresentations[file] = repr;
         
@@ -247,7 +249,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
     
     foreach(const IndexedString &file, m_changes.keys())
     {
-        if(scheduleUpdate != NoUpdate) {
+        if(scheduleUpdate != NoUpdate && ICore::self()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
             foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
                 DUChainReadLocker lock(DUChain::lock());

@@ -20,6 +20,7 @@
 #define CODEREPRESENTATION_H
 
 #include "../languageexport.h"
+#include <language/duchain/indexedstring.h>
 
 class QString;
 
@@ -42,6 +43,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
     ///Overwrites the text in the file with the new given one
     ///@return true on success
     virtual bool setText(QString) = 0;
+    
+    ///Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
+    ///You should enable this within tests, unless you really want to work on the disk.
+    static void setDiskChangesForbidden(bool changesForbidden);
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
@@ -56,6 +61,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
 
 ///Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
 KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation* createCodeRepresentation(IndexedString url);
+
+///An artificial source-code representation that can be used for testing.
+///It inserts itself automatically into the code-representation framework,
+///logically representing the contents of a file. Thus, it can be used for testing
+///refactoring.
+class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation {
+    public:
+        InsertArtificialCodeRepresentation(IndexedString file, QString text);
+        ~InsertArtificialCodeRepresentation();
+        void setText(QString text);
+        QString text();
+    private:
+        IndexedString m_file;
+};
 
 }
 
