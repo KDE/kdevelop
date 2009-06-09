@@ -35,10 +35,10 @@
 #include <language/duchain/indexedstring.h>
 #include <qwaitcondition.h>
 #include "includepathcomputer.h"
+#include <parsesession.h>
 
 class PreprocessJob;
 class CppLanguageSupport;
-class ParseSession;
 class CPPInternalParseJob;
 
 namespace Cpp {
@@ -75,7 +75,7 @@ public:
 
     CppLanguageSupport* cpp() const;
 
-    ParseSession* parseSession() const;
+    ParseSession::Ptr parseSession() const;
 
     void setReadFromDisk(bool readFromDisk);
     bool wasReadFromDisk() const;
@@ -191,7 +191,7 @@ private:
     bool m_needUpdateEverything;
     KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
-    ParseSession* m_session;
+    ParseSession::Ptr m_session;
     bool m_readFromDisk;
     PreprocessJob* m_preprocessJob;
     CPPInternalParseJob* m_parseJob;

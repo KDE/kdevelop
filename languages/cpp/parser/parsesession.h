@@ -54,6 +54,8 @@ class KDEVCPPPARSER_EXPORT ParseSession : public KDevelop::IAstContainer
 public:
   ParseSession();
   ~ParseSession();
+  
+  typedef KSharedPtr<ParseSession> Ptr;
 
   /**
    * Return the position of the preprocessed source \a offset in the original source

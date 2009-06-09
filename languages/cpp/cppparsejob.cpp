@@ -34,6 +34,7 @@
 #include <threadweaver/Thread.h>
 
 #include <interfaces/ilanguage.h>
+#include <language/interfaces/iastcontainer.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
@@ -41,7 +42,6 @@
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
-#include "parser/parsesession.h"
 // #include "parser/binder.h"
 #include "parser/parser.h"
 #include "parser/control.h"
@@ -255,7 +255,6 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
 CPPParseJob::~CPPParseJob()
 {
   delete m_includePathsComputed;
-  delete m_session;
 }
 
 KDevelop::ModificationRevisionSet CPPParseJob::includePathDependencies() const {
@@ -509,7 +508,7 @@ void CPPInternalParseJob::run()
       Control control;
       Parser parser(&control);
 
-      ast = parser.parse( parentJob()->parseSession() );
+      ast = parser.parse( parentJob()->parseSession().data() );
 
       //This will be set to true if the duchain data should be left untouched
       if(ast->hadMissingCompoundTokens && updatingContentContext) {
@@ -518,7 +517,7 @@ void CPPInternalParseJob::run()
         
         if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
             updatingContentContext->smartRange() &&
-          updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
+            updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
           kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
           l.unlock();
           doNotChangeDUChain = true;
@@ -533,14 +532,14 @@ void CPPInternalParseJob::run()
           return /*parentJob()->abortJob()*/;
 
       if ( ast ) {
-          ast->session = parentJob()->parseSession();
+          ast->session = parentJob()->parseSession().data();
 #ifdef DUMP_AST
           DumpTree dump;
           dump.dump(ast, parentJob()->parseSession()->token_stream);
 #endif
       }
 
-      CppEditorIntegrator editor(parentJob()->parseSession());
+      CppEditorIntegrator editor(parentJob()->parseSession().data());
       bool isStandardContext = false;
       {
         DUChainWriteLocker l(DUChain::lock());
@@ -585,7 +584,17 @@ void CPPInternalParseJob::run()
       
       TopDUContext::Features newFeatures = parentJob()->minimumFeatures();
       if(contentContext)
+      {
         newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
+        
+        if(newFeatures & TopDUContext::AST)
+        {
+          kDebug() << "AST Is being kept for TopDUContext: ";
+          //!@todo Figure out a better way to convert to supperclass pointer
+          
+          contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
+        }
+      }
       
       if(newFeatures & TopDUContext::ForceUpdate)
         kDebug() << "update enforced";
@@ -740,7 +749,7 @@ void CPPInternalParseJob::run()
     ///Build/update the proxy-context
 
     if( proxyEnvironmentFile ) {
-        ContextBuilder builder(parentJob()->parseSession());
+        ContextBuilder builder(parentJob()->parseSession().data());
         if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
             DUChainWriteLocker lock(DUChain::lock());
             if(updatingProxyContext)
@@ -895,7 +904,7 @@ void CPPParseJob::requestDependancies()
 {
 }
 
-ParseSession * CPPParseJob::parseSession() const
+ParseSession::Ptr CPPParseJob::parseSession() const
 {
     return m_session;
 }
