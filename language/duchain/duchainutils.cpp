@@ -514,9 +514,12 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
   
   QList<Declaration*> decls;
 
-  foreach(const DUContext::Import &import, decl->context()->importedParentContexts())
-    decls += import.context(decl->topContext())->findDeclarations(QualifiedIdentifier(decl->identifier()), 
+  foreach(const DUContext::Import &import, decl->context()->importedParentContexts()) {
+    DUContext* ctx = import.context(decl->topContext());
+    if(ctx)
+      decls += ctx->findDeclarations(QualifiedIdentifier(decl->identifier()), 
                                             SimpleCursor::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
+  }
 
   foreach(Declaration* found, decls) {
     const ClassFunctionDeclaration* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
