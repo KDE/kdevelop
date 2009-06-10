@@ -106,6 +106,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/createclass.cpp
     codegen/codegenerator.cpp
     codegen/documentchangeset.cpp
+    codegen/duchainchangeset.cpp
     codegen/coderepresentation.cpp
     codegen/overridespage.cpp
     codegen/utilities.cpp

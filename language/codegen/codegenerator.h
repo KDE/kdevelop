@@ -20,9 +20,9 @@
 #include <kjob.h>
 
 #include "language/editor/documentrange.h"
-#include <kdevplatform/language/duchain/indexedstring.h>
-#include <kdevplatform/language/duchain/topducontext.h>
-#include <kdevplatform/language/duchain/duchain.h>
+#include "../duchain/indexedstring.h"
+#include "../duchain/topducontext.h"
+#include "../duchain/duchain.h"
 
 namespace KDevelop
 {
@@ -100,7 +100,8 @@ public:
 protected:
 
     /**
-     * Generate text edits from duchain / ast change set.
+     * Generate text edits from duchain change set.
+     * This generator now owns the changeset, and will delete it.
      *
      * You may call this method multiple times to edit different files.
      */

@@ -31,6 +31,8 @@ class DUChainChangeSet;
 class DUChainChange;
 class DUChainBase;
 class DUContextRef;
+
+template <typename AstNode>
 class AstNodeRef;
 
 /**
@@ -88,7 +90,8 @@ public:
      *          exists (after any existing duchain changes are applied).  Changes
      *          made to the AST will be applied along with the duchain change set.
      */
-    AstNodeRef* rewriteAst();
+    template <typename AstNode>
+    AstNodeRef<AstNode> * rewriteAst();
 
     /// Removes a change from this object reference, and deletes it.
     void deleteChange(DUChainChange* change);
@@ -131,7 +134,7 @@ public:
         TypeChange
     } type;
 
-    DUChainChange(ChangeTypes t);
+    DUChainChange(ChangeTypes t) : type(t) {}
 
     enum ItemToChange {
         ContextChildren,
@@ -141,13 +144,13 @@ public:
     /// New local identifier (eg. for contexts, the new DUContext::localScopeIdentifier() )
     QualifiedIdentifier newIdentifier;
 
-    // The new object to occupy this position, if relevant
+    /// The new object to occupy this position, if relevant
     DUChainRef* newObject;
-    // The list of objects to occupy this position, if relevant
+    /// The list of objects to occupy this position, if relevant
     DUChainBaseList newList;
-    // The position to apply the object(s) in the list, if relevant
+    /// The position to apply the object(s) in the list, if relevant
     int listOffset;
-    // The value of the position, if relevant
+    /// The value of the position, if relevant
     QVariant newValue;
 
     AbstractType::Ptr newType;
@@ -207,6 +210,15 @@ public:
      * \returns the new object reference
      */
     DUChainRef* copyRef(DUChainRef* ref);
+    
+    /**
+     * Merge another changeset with this one. This changeset
+     * takes ownership of all the objects in the other changeset.
+     * After the merge, the merged object becomes empty.
+     *
+     * Both changesets must reference the same TopDuContext.
+     */
+    DUChainChangeSet & operator<<(DUChainChangeSet & rhs);
 
     /**
     * Produce a reference to an existing object in this chain, and replace the
@@ -234,6 +246,8 @@ public:
      * Retrieve the list of object references and changes.
      */
     QList<DUChainRef*> objectRefs() const;
+    
+    const ReferencedTopDUContext & topDuContext() const;
 
 private:
     ReferencedTopDUContext m_topContext;

@@ -26,13 +26,14 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include <qtimer.h>
+#include "duchainchangeset.h"
 
 namespace KDevelop
 {
 
 struct CodeGeneratorPrivate
 {
-    DUChainChangeSet * duchainChanges;
+    QMap<IndexedString, DUChainChangeSet *> duchainChanges;
     DocumentChangeSet documentChanges;
 };
 
@@ -51,14 +52,26 @@ DocumentChangeSet* CodeGeneratorBase::textEdits() const
     return &d->documentChanges;
 }
 
-void CodeGeneratorBase::start(void)
+void CodeGeneratorBase::start()
 {
     kDebug() << "Starting Code Generation Job";
     QTimer::singleShot(0, this, SLOT(executeGenerator()));
 }
 
-void CodeGeneratorBase::addChangeSet(DUChainChangeSet* astChange)
+void CodeGeneratorBase::addChangeSet(DUChainChangeSet * duchainChange)
 {
+    IndexedString file = duchainChange->topDuContext().data()->url() ;
+    
+    QMap<IndexedString, DUChainChangeSet *>::iterator it = d->duchainChanges.find(file);
+    
+    //if we already have an entry for this file, merge it
+    if(it !=d->duchainChanges.end())
+    {
+        **it << *duchainChange;
+        delete duchainChange;
+    }
+    else
+        d->duchainChanges.insert(file, duchainChange);
 }
 
 void CodeGeneratorBase::setErrorText(const QString & errorText)
@@ -66,7 +79,7 @@ void CodeGeneratorBase::setErrorText(const QString & errorText)
     KJob::setErrorText(errorText);
 }
 
-void CodeGeneratorBase::executeGenerator(void)
+void CodeGeneratorBase::executeGenerator()
 {
     kDebug() << "Checking Preconditions for the codegenerator";
     
@@ -120,7 +133,7 @@ void CodeGeneratorBase::executeGenerator(void)
     emitResult();
 }
 
-bool CodeGeneratorBase::displayChanges(void)
+bool CodeGeneratorBase::displayChanges()
 {
     //Create a window that shows changes to be made
     return true;
