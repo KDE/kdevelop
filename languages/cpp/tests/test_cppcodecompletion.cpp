@@ -244,13 +244,11 @@ void TestCppCodeCompletion::testAssistant() {
     {
       KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
       QVERIFY(mdp);
-      ///@todo Make this work
       kDebug() << "problem:" << mdp->description();
-/*      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
-      QCOMPARE(mdp->type->identifier().toString(), QString("value"));
+      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("member"));
       QVERIFY(mdp->type->assigned.type.isValid());
       QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
-      QCOMPARE(context->childContexts().count(), 3);*/
     }
   }
   {

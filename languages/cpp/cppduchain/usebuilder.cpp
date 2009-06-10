@@ -187,15 +187,12 @@ void UseBuilder::visitBaseSpecifier(BaseSpecifierAST* node) {
 
 void UseBuilder::visitMemInitializer(MemInitializerAST * node)
 {
-  UseBuilderBase::visitMemInitializer(node);
-
-  if (node->initializer_id) {
-    UseExpressionVisitor visitor( editor()->parseSession(), this );
-    if( !node->initializer_id->ducontext )
-      node->initializer_id->ducontext = currentContext();
-      
-    visitor.parse( node->initializer_id );
-  }
+  if( !node->ducontext )
+    node->ducontext = currentContext();
+  
+  UseExpressionVisitor visitor( editor()->parseSession(), this );
+    
+  visitor.parse( node );
 }
 
 void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)

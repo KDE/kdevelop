@@ -41,12 +41,13 @@
 #include "qtfunctiondeclaration.h"
 #include "missingdeclarationtype.h"
 #include "missingdeclarationproblem.h"
+#include "dumpchain.h"
 
 //If this is enabled and a type is not found, it is searched again with verbose debug output.
 //#define DEBUG_RESOLUTION_PROBLEMS
 
 //If this is enabled, all encounterd problems will be dumped to kDebug
-//#define DUMP_PROBLEMS
+// #define DUMP_PROBLEMS
 
 //If this is enabled, problems will be created when no overloaded function was found for a function-call. This is expensive,
 //because the problem report contains a lot of information, and the problem currently appears very often.
@@ -252,7 +253,8 @@ void ExpressionVisitor::problem( AST* node, const QString& str ) {
   kDebug(9007) << "Cpp::ExpressionVisitor problem:" << str;
 
   kDebug(9007) << "Cpp::ExpressionVisitor dumping the node that created the problem";
-  DumpChain d;
+  Cpp::DumpChain d;
+  
   d.dump(node, m_session);
 #endif
 }
@@ -2020,6 +2022,28 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     ///@todo respect const etc.
   }
 
+  void ExpressionVisitor::visitMemInitializer(MemInitializerAST* node)  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    {
+      LOCKDUCHAIN;
+      Declaration* klass = localClassFromCodeContext(m_currentContext);
+      if(klass)
+        m_lastType = klass->abstractType();
+    }
+    m_memberAccess = true;
+    visit(node->initializer_id);
+    m_memberAccess = false;
+    
+    AbstractType::Ptr itemType = m_lastType;
+    visit(node->expression);
+    TypePtr< MissingDeclarationType > missingDeclType = itemType.cast<MissingDeclarationType>();
+    if(m_lastType && missingDeclType) {
+        Cpp::ExpressionEvaluationResult res;
+        res.type = m_lastType->indexed();
+        res.isInstance = m_lastInstance;
+        missingDeclType->assigned = res;
+    }
+  }
 
   ///Nodes that are invalid inside an expression:
   void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
@@ -2047,7 +2071,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitLabeledStatement(LabeledStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitLinkageBody(LinkageBodyAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitLinkageSpecification(LinkageSpecificationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitMemInitializer(MemInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
   void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
