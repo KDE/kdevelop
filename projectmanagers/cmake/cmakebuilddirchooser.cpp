@@ -32,6 +32,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi = new Ui::CMakeBuildDirChooser;
     m_chooserUi->setupUi( this );
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
+    m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
