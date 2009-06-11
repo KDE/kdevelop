@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=QMake Project Builder
+Name[ca]=Constructor de projecte QMake
 Name[es]=Constructor de proyectos QMake
 Name[nds]=QMake-Projektbuumoduul
 Name[pt]=Construtor de Projectos do QMake
@@ -9,6 +10,7 @@ Name[sv]=Bygg QMake-projekt
 Name[uk]=Інструмент збирання проектів QMake
 Name[x-test]=xxQMake Project Builderxx
 Comment=Builds QMake Projects
+Comment[ca]=Construeix projectes QMake
 Comment[es]=Construye proyectos de QMake
 Comment[nds]=Buut QMake-Projekten
 Comment[pt]=Compila projectos do QMake
