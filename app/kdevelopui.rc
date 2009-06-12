@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="90" name="kdevelop" >
+<kpartgui version="91" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -59,6 +59,7 @@
   <Menu name="project">
     <text context="@title:menu">&amp;Project</text>
     <DefineGroup name="project_new"/>
+    <Separator/>
     <Action name="project_open"/>
     <Action name="project_open_recent"/>
     <Action name="project_open_for_file"/>
