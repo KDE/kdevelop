@@ -61,11 +61,29 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
 
   if( const TemplateDeclaration* templ = dynamic_cast<const TemplateDeclaration*>(idType->declaration(m_topContext.data())) ) {
     if( templ->instantiatedFrom() ) {
-      modifyHtml() += Qt::escape("  <");
 
       const Cpp::InstantiationInformation& params = templ->instantiatedWith().information();
+      
+      if(params.templateParametersSize() == 0)
+        return;
+      
+      modifyHtml() += Qt::escape("  <");
       bool first = true;
-      FOREACH_FUNCTION( const IndexedType& type, params.templateParameters ) {
+      
+      uint showParameters = params.templateParametersSize();
+      
+      //Strip away default-parameters, as they can be overwhelmingly ugly, especially in STL
+      DelayedType::Ptr stripped = stripType(type, m_topContext.data()).cast<DelayedType>();
+      if(stripped) {
+          QualifiedIdentifier id = stripped->identifier().identifier().identifier();
+          if(!id.isEmpty() && id.last().templateIdentifiersCount() < showParameters)
+            showParameters = id.last().templateIdentifiersCount();
+      }
+      
+      
+      for( uint p = 0; p < showParameters; ++p ) {
+      const IndexedType& type(params.templateParameters()[p]);
+      
         if( first )
           first = false;
         else

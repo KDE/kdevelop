@@ -142,6 +142,11 @@ KDEVCPPDUCHAIN_EXPORT bool isFriend(KDevelop::Declaration* _class, KDevelop::Dec
 
 ///Shortens the type by resolving typedefs that are not useful
 KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr shortenTypeForViewing(KDevelop::AbstractType::Ptr type);
+
+///Returns a type that has all template types replaced with DelayedType's that have their template default parameters stripped away,
+///and all scope prefixes removed that are redundant within the given context
+///The returned type should not actively be used in the  type-system, but rather only for displaying.
+KDevelop::AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx);
 }
 
 #endif
