@@ -85,7 +85,7 @@ bool reopenProjectsOnStartup()
 bool parseAllProjectSources()
 {
     KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Parse All Project Sources", false );
+    return group.readEntry( "Parse All Project Sources", true );
 }
 
 class ProjectControllerPrivate
