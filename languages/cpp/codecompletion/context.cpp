@@ -177,7 +177,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
     Declaration* classDecl = Cpp::localClassFromCodeContext(m_duContext.data());
     if(classDecl) {
-      kDebug() << "local class:" << classDecl->qualifiedIdentifier().toString(  );
+      ifDebug( kDebug() << "local class:" << classDecl->qualifiedIdentifier().toString(  ); )
       m_localClass = DUContextPointer(classDecl->internalContext());
     }
   }
@@ -262,7 +262,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
         QString expr = m_text.mid(start_expr, m_text.length() - start_expr - 1).trimmed();
         
         Cpp::ExpressionEvaluationResult result = expressionParser.evaluateExpression(expr.toUtf8(), m_duContext);
-        if(!result.isValid() || (!result.isInstance || result.type.type<FunctionType>())) {
+        if(result.isValid() && (!result.isInstance || result.type.type<FunctionType>()) && !result.type.type<DelayedType>()) {
           m_memberAccessOperation = TemplateAccess;
           m_text = m_text.left( m_text.length()-1 );
         }
@@ -513,7 +513,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     }else{
       m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
       m_expressionResult.isInstance = true;
-      kDebug() << "is expression type prefix";
+      ifDebug( kDebug() << "is expression type prefix"; )
     }
     
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
@@ -659,7 +659,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   QStringList hadItems;
   
   text = text.trimmed();
-  kDebug() << "text:" << text;
+  ifDebug( kDebug() << "text:" << text; )
 
   //Jump over all initializers
   while(!text.isEmpty() && text.endsWith(',')) {
@@ -679,7 +679,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
 
   text = text.left(text.length()-1).trimmed();
   //Now we have the declaration in text
-  kDebug() << "should be decl.:" << text;
+  ifDebug( kDebug() << "should be decl.:" << text; )
   if(!text.endsWith(')'))
     return false;
   
@@ -706,7 +706,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
     //Find the class
     QList< KDevelop::Declaration* > decls = m_duContext->findDeclarations(id);
     if(decls.isEmpty()) {
-      kDebug() << "did not find class declaration for" << id.toString();
+      ifDebug( kDebug() << "did not find class declaration for" << id.toString(); )
       return false;
     }
     container = decls[0]->logicalInternalContext(m_duContext->topContext());
@@ -1103,7 +1103,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
 
                 if (shouldAbort)
                   return items;
-                kDebug() << "container:" << ctx->scopeIdentifier(true).toString();
+                ifDebug( kDebug() << "container:" << ctx->scopeIdentifier(true).toString(); )
 
                 foreach( const DeclarationDepthPair& decl, Cpp::hideOverloadedDeclarations( ctx->allDeclarations(ctx->range().end, m_duContext->topContext(), false ) ) ) {
                   //If we have StaticMemberChoose, which means A::Bla, show only static members, except if we're within a class that derives from the container
@@ -1138,7 +1138,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                 }
               }
             } else {
-              kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString();
+              ifDebug( kDebug() << "missing-include completion for" << m_expression << m_expressionResult.toString(); )
                 eventuallyAddGroup(i18n("Not Included Container"), 700, missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), 0, true ));
             }
           }
@@ -1178,7 +1178,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           break;
         case FunctionCallAccess:
           {
-            kDebug() << "functionCallAccess" << functions().count() << m_expression;
+            ifDebug( kDebug() << "functionCallAccess" << functions().count() << m_expression; )
             
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)

@@ -234,6 +234,7 @@ void TestCppCodeCompletion::testAssistant() {
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->problems().count(), 1);
+    release(context);
   }
   {
     QByteArray test = "int n; class C { C() : member(n) {} }; }";
@@ -250,6 +251,7 @@ void TestCppCodeCompletion::testAssistant() {
       QVERIFY(mdp->type->assigned.type.isValid());
       QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
     }
+    release(context);
   }
   {
     QByteArray test = "class C {}; void test() {C c; c.value = 5; int i = c.value2; i = c.value3(); }";
@@ -290,7 +292,28 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(TypeUtils::removeConstants(mdp->type->convertedTo.type.abstractType())->toString(), QString("int"));
       QCOMPARE(context->childContexts().count(), 3);
     }
+    release(context);
   }
+  {
+    QByteArray test = "class C {}; void test() {C c; int valueName; c.functionName(valueName); }";
+
+    TopDUContext* context = parse( test, DumpAll );
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->problems().count(), 1);
+    {
+      KSharedPtr<Cpp::MissingDeclarationProblem> mdp( dynamic_cast<Cpp::MissingDeclarationProblem*>(context->problems()[0].data()) );
+      QVERIFY(mdp);
+      kDebug() << "problem:" << mdp->description();
+      QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
+      QCOMPARE(mdp->type->identifier().toString(), QString("functionName"));
+      QVERIFY(!mdp->type->assigned.type.isValid());
+      QCOMPARE(mdp->type->arguments.count(), 1);
+      ///@todo Use the value-names of values given to the function
+//       QCOMPARE(mdp->type->arguments[0].second, QString("valueName"));
+      QCOMPARE(context->childContexts().count(), 3);
+    }
+    release(context);
+  }  
 }
 
 void TestCppCodeCompletion::testImportTypedef() {
@@ -372,6 +395,11 @@ void TestCppCodeCompletion::testCompletionPrefix() {
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().size(), 3);
+    //Make sure the completion behind "for <" does not only show types
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";for(int a = 0; a <  ").names.contains("t2"));
+    //Make sure that only types are shown as template parameters
+    QVERIFY(!CompletionItemTester(top->childContexts()[2], "Test<").names.contains("t2"));
+    
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "if((t).").names, QStringList() << "m");
     QCOMPARE(CompletionItemTester(top->childContexts()[2], "Test t(&t2->").names, QStringList() << "m");
 
@@ -386,6 +414,7 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort).size());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i = ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";int i ( ").completionContext->parentContext()->completionItems(abort)[0]->typeForArgumentMatching().size());
+    
     
     release(top);
   }
