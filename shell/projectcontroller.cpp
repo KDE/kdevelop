@@ -346,7 +346,7 @@ void ProjectController::setupActions()
     action->setText(i18n( "Open / Import Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open / Import Oroject" ) );
-    action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4.</p>" ) );
+    action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that doesn't yet have a KDevelop4 project file the file will be created.</p>" ) );
     action->setIcon(KIcon("project-open"));
 
 //    action = ac->addAction( "project_close" );
