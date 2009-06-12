@@ -577,7 +577,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
                     outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
 
-                KDevelop::ProjectTargetItem* targetItem;
+                KDevelop::ProjectTargetItem* targetItem = 0;
                 switch(t.type)
                 {
                     case Target::Library:
