@@ -343,10 +343,10 @@ void ProjectController::setupActions()
     KAction *action;
 
     action = ac->addAction( "project_open" );
-    action->setText(i18n( "&Open Project..." ) );
+    action->setText(i18n( "Open / Import Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
-    action->setToolTip( i18n( "Open project" ) );
-    action->setWhatsThis( i18n( "<b>Open project</b><p>Opens a KDevelop 4 project.</p>" ) );
+    action->setToolTip( i18n( "Open / Import Oroject" ) );
+    action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4.</p>" ) );
     action->setIcon(KIcon("project-open"));
 
 //    action = ac->addAction( "project_close" );
