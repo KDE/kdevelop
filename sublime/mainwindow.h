@@ -97,7 +97,7 @@ Q_SIGNALS:
 protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
-protected slots:
+protected Q_SLOTS:
     void setupAreaSelector();
 
 public: // FIXME?
