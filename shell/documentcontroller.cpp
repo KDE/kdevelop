@@ -31,7 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <QApplication>
 
 #include <kio/netaccess.h>
-#include <kfiledialog.h>
+#include <kencodingfiledialog.h>
 #include <kactioncollection.h>
 #include <klocale.h>
 #include <krecentfilesaction.h>
@@ -285,6 +285,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     Sublime::Area *area = uiController->activeArea();
 
     KUrl url = inputUrl;
+    QString encoding = "";
 
     if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
     {
@@ -297,9 +298,12 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        url = KFileDialog::getOpenUrl( dir, i18n( "*.*|Text File\n" ),
+        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*.*|Text File\n" ),
                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
                                        i18n( "Open File" ) );
+        if( !res.URLs.isEmpty() )
+            url = res.URLs.first();
+        encoding = res.encoding;
     }
     if ( url.isEmpty() )
         //still no url
@@ -356,7 +360,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             }
         }
         if ( !d->documents.contains(url) && Core::self()->partControllerInternal()->isTextType(mimeType))
-            d->documents[url] = new TextDocument(url, Core::self());
+            d->documents[url] = new TextDocument(url, Core::self(), encoding);
         else if( !d->documents.contains(url) )
             d->documents[url] = new PartDocument(url, Core::self());
         emitOpened = d->documents.contains(url);

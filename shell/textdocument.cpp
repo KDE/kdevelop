@@ -61,13 +61,14 @@ namespace KDevelop {
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
         : m_textDocument(textDocument)
-        , m_loaded(false)
+        , m_loaded(false), encoding("")
     {
         document = 0;
         state = IDocument::Clean;
     }
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
+    QString encoding;
 
 
     void newDocumentStatus(KTextEditor::Document *document)
@@ -194,11 +195,12 @@ public:
 
 };
 
-TextDocument::TextDocument(const KUrl &url, ICore* core)
+TextDocument::TextDocument(const KUrl &url, ICore* core, const QString& encoding)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
     if (url.url().endsWith("kdevtmp"))
         setTitle(i18n("Untitled"));
+    d->encoding = encoding;
 }
 
 TextDocument::~TextDocument()
@@ -228,6 +230,12 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         connect(d->document, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(slotDocumentLoaded()));
         // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
         connect(d->document, SIGNAL(completed()), this, SLOT(slotDocumentLoaded()));
+
+        // Set encoding passed via constructor
+        // Needs to be done before openUrl, else katepart won't use the encoding
+        // @see KTextEditor::Document::setEncoding
+        if (!d->encoding.isEmpty())
+            d->document->setEncoding(d->encoding);
 
         if (!url().isEmpty())
             d->document->openUrl( url() );
