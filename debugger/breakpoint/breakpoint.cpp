@@ -57,11 +57,9 @@ Breakpoint::Breakpoint(BreakpointModel *model, const KConfigGroup& config)
     //FIXME: maybe, should silently ignore this breakpoint.
     Q_ASSERT(i < LastBreakpointKind);
     enabled_ = config.readEntry("enabled", false);
-    if (kind_ == CodeBreakpoint) {
-        setLocation(config.readEntry("url", KUrl()), config.readEntry("line", -1));
-    } else {
-        setExpression(config.readEntry("expression", ""));
-    }
+    m_url = config.readEntry("url", KUrl());
+    m_line = config.readEntry("line", -1);
+    m_expression = config.readEntry("expression", QString());
     setCondition(config.readEntry("condition", ""));
     setIgnoreHits(config.readEntry("ignoreHits", 0));
     
