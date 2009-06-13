@@ -103,14 +103,22 @@ bool DeclarationBuilder::changeWasSignificant() const
   return m_changeWasSignificant;
 }
 
+///Set if mappings between AST & DUChain should be built
+void DeclarationBuilder::setMapAst ( bool mapAst )
+{
+  kDebug() << "Creating mappings between AST & DUChain";
+  m_mapAstDuChain = mapAst;
+}
+
+
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_mapAstDuChain(false), m_collectQtFunctionSignature(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_mapAstDuChain(false), m_collectQtFunctionSignature(false)
 {
   setEditor(editor, false);
 }
@@ -479,7 +487,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
         //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
       if (dec->range() == translated &&
           (localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
-          typeid(*dec) == typeid(T)
+          typeid(T) == typeid(*dec)
          )
       {
         // Match
@@ -591,6 +599,10 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   clearComment();
 
   setEncountered(declaration);
+  
+  ///Create mappings iff the AST feature is specified
+  if(m_mapAstDuChain)
+    editor()->parseSession()->mapAstDuChain(rangeNode, KDevelop::DeclarationPointer(declaration));
 
   openDeclarationInternal(declaration);
 

@@ -32,6 +32,7 @@
 #include "rpp/anchor.h"
 
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
 
 namespace Cpp {
@@ -42,6 +43,7 @@ class pool;
 class TokenStream;
 class Token;
 class TranslationUnitAST;
+class AST;
 
 typedef QVector<unsigned int> PreprocessedContents;
 
@@ -59,8 +61,23 @@ public:
   typedef KSharedPtr<ParseSession> Ptr;
   typedef TranslationUnitAST TopAstNode;
   
-  TopAstNode * topAstNode(void);
+  TopAstNode * topAstNode();
   void topAstNode(TopAstNode * node);
+  
+  ///Create a mapping between an AST node, and its DUChain Declaration
+  void mapAstDuChain(AST *, KDevelop::DeclarationPointer);
+  
+  /**
+   * \brief Request an AST node from a DeclarationPointer
+   * \return The Associated AST if available, NULL otherwise
+   */
+  AST * astNodeFromDeclaration(KDevelop::DeclarationPointer declaration);
+  
+  /**
+   * \brief Request a Declaration from an AST node
+   * \return The Associated Declaration if available, empty DeclarationPointer otherwise
+   */
+  KDevelop::DeclarationPointer declarationFromAstNode(AST * node);
 
   /**
    * Return the position of the preprocessed source \a offset in the original source
@@ -95,6 +112,10 @@ private:
   PreprocessedContents m_contents;
   rpp::LocationTable* m_locationTable;
   TranslationUnitAST * m_topAstNode;
+  
+  //AST-DUChain Mappings
+  QMap<AST *, KDevelop::DeclarationPointer> m_AstToDuchain;
+  QMap<KDevelop::DeclarationPointer, AST *> m_DuchainToAst;
 };
 
 #endif

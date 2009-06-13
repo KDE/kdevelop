@@ -74,8 +74,10 @@ public:
 //   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   bool changeWasSignificant() const;
+  
+  void setMapAst(bool mapAst);
 
-  protected:
+protected:
   virtual void visitDeclarator (DeclaratorAST*);
   virtual void visitNamespace(NamespaceAST* );
   virtual void visitClassSpecifier(ClassSpecifierAST*);
@@ -154,6 +156,8 @@ private:
   QStack<std::size_t> m_functionDefinedStack;
 
   bool m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
+  
+  bool m_mapAstDuChain;
 
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;

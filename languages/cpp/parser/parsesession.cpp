@@ -25,15 +25,18 @@
 #include "memorypool.h"
 #include <language/interfaces/iproblem.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/declaration.h>
 
 #include <cctype>
+#include "ast.h"
+#include "dumptree.h"
 
 ParseSession::ParseSession()
   : mempool(new pool)
   , token_stream(0)
   , macros(0)
-  , m_topAstNode(0)
   , m_locationTable(0)
+  , m_topAstNode(0)
 {
 }
 
@@ -55,6 +58,36 @@ void ParseSession::topAstNode(TranslationUnitAST * node)
   Q_ASSERT(!m_topAstNode);
   
   m_topAstNode = node;
+}
+
+void ParseSession::mapAstDuChain ( AST * node , KDevelop::DeclarationPointer declaration)
+{
+  //Duplicates shouldn't exist
+  Q_ASSERT(m_AstToDuchain.find(node) == m_AstToDuchain.end());
+  
+  kDebug() << "Mapping AST node: " << names[node->kind] <<
+              "With Declaration: " << declaration->toString();
+  
+  m_AstToDuchain[node] = declaration;
+  m_DuchainToAst[declaration] = node;
+}
+
+AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declaration)
+{
+  //declaration was not mapped
+  if(m_DuchainToAst.find(declaration) == m_DuchainToAst.end())
+    return 0;
+  else
+    return m_DuchainToAst[declaration];
+}
+
+KDevelop::DeclarationPointer ParseSession::declarationFromAstNode(AST * node)
+{
+  //declaration was not mapped
+  if(m_AstToDuchain.find(node) == m_AstToDuchain.end())
+    return KDevelop::DeclarationPointer();
+  else
+    return m_AstToDuchain[node];
 }
 
 rpp::Anchor ParseSession::positionAt(std::size_t offset, bool collapseIfMacroExpansion) const

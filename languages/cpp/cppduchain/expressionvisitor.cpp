@@ -578,7 +578,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       return; //We had a string-literal
     }
 
-    if( !node->literal && !node->sub_expression && !node->expression_statement && !node->name )
+    if( !node->sub_expression && !node->expression_statement && !node->name )
     {
       IndexedString startNumber = IndexedString::fromIndex(m_session->contents()[tokenFromIndex(node->start_token).position]); //Extracts the first digit
 

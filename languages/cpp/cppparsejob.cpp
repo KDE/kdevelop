@@ -599,6 +599,9 @@ void CPPInternalParseJob::run()
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
         
       
+      if(newFeatures & TopDUContext::AST)
+        declarationBuilder.setMapAst(true); //Set the property to map the AST & DUChain
+      
       if(!doNotChangeDUChain) {
         
         if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
