@@ -30,6 +30,15 @@ namespace GDBDebugger
 class VarItem;
 class ValueCallback;
 
+//base class for handlers
+class GDBCommandHandler
+{
+public:
+    virtual ~GDBCommandHandler() {}
+    virtual void handle(const GDBMI::ResultRecord&) = 0;
+    virtual bool handlesError() { return false; }
+};
+
 /**
  * @author John Birch
  */
@@ -51,6 +60,8 @@ public:
                Handler* handler_this,
                void (Handler::* handler_method)(const GDBMI::ResultRecord&),
                bool handlesError = false);
+
+    GDBCommand(GDBMI::CommandType type, const QString& arguments, GDBCommandHandler* handler);
 
     GDBMI::CommandType type() const;
     QString gdbCommand() const;
@@ -138,6 +149,7 @@ private:
     QPointer<QObject> handler_this;
     typedef void (QObject::* handler_t)(const GDBMI::ResultRecord&);
     handler_t handler_method;
+    GDBCommandHandler *commandHandler_;
     QStringList lines;
     bool run;
     bool stateReloading_;
@@ -268,6 +280,7 @@ GDBCommand::GDBCommand(
   command_(command),
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
+  commandHandler_(0),
   run(false),
   handlesError_(handlesError),
   m_thread(-1),
@@ -286,6 +299,7 @@ GDBCommand::GDBCommand(
   command_(QString::number(index)),
   handler_this(handler_this),
   handler_method(static_cast<handler_t>(handler_method)),
+  commandHandler_(0),
   run(false),
   handlesError_(handlesError),
   m_thread(-1),

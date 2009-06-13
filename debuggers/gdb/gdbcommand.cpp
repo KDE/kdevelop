@@ -22,15 +22,22 @@ namespace GDBDebugger
 {
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, const QString &command)
-: type_(type), command_(command), handler_this(0),
+: type_(type), command_(command), handler_this(0), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
 }
 
 GDBCommand::GDBCommand(GDBMI::CommandType type, int index)
-: type_(type), command_(QString::number(index)), handler_this(0),
+: type_(type), command_(QString::number(index)), handler_this(0), commandHandler_(0),
   run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
 {
+}
+
+GDBCommand::GDBCommand(CommandType type, const QString& arguments, GDBCommandHandler* handler)
+: type_(type), command_(arguments), handler_this(0), commandHandler_(handler),
+  run(false), stateReloading_(false), m_thread(-1), m_frame(-1)
+{
+    handlesError_ = handler->handlesError();
 }
 
 QString GDBCommand::cmdToSend()
@@ -54,8 +61,12 @@ GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
     if (handler_this) {
         (handler_this->*handler_method)(r);
         return true;
-    }
-    else {
+    } else if (commandHandler_) {
+        commandHandler_->handle(r);
+        delete commandHandler_;
+        commandHandler_ = 0;
+        return true;
+    } else {
         return false;
     }
 }

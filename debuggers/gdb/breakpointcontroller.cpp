@@ -39,7 +39,7 @@ using namespace GDBMI;
 
 namespace GDBDebugger {
 
-struct Handler : public QObject
+struct Handler : public GDBCommandHandler
 {
     Handler(BreakpointController *c, KDevelop::Breakpoint *b)
         : controller(c), breakpoint(b) {}
@@ -64,8 +64,8 @@ struct UpdateHandler : public Handler
         controller->m_dirty[breakpoint].remove(m_column);
         controller->breakpointStateChanged(breakpoint);
         controller->sendMaybe(breakpoint);
-        delete this;
     }
+    virtual bool handlesError() { return true; }
 private:
     KDevelop::Breakpoint::Column m_column;
 };
@@ -75,7 +75,7 @@ struct InsertedHandler : public Handler
     InsertedHandler(BreakpointController *c, KDevelop::Breakpoint *b)
         : Handler(c, b) {}
 
-    void handle(const GDBMI::ResultRecord &r)
+    virtual void handle(const GDBMI::ResultRecord &r)
     {
         kDebug() << controller->m_dirty[breakpoint];
 
@@ -99,8 +99,9 @@ struct InsertedHandler : public Handler
         controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
         controller->breakpointStateChanged(breakpoint);
         controller->sendMaybe(breakpoint);
-        delete this;
     }
+
+    virtual bool handlesError() { return true; }
 };
 
 struct DeletedHandler : public Handler
@@ -117,7 +118,6 @@ struct DeletedHandler : public Handler
         } else {
             delete breakpoint;
         }
-        delete this;
     }
 };
 
@@ -194,10 +194,9 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         m_dirty.remove(breakpoint);
         m_errors.remove(breakpoint);
         if (m_ids.contains(breakpoint)) {
-            DeletedHandler *handler = new DeletedHandler(this, breakpoint);
             controller()->addCommand(
                 new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
-                               handler, &DeletedHandler::handle));
+                               new DeletedHandler(this, breakpoint)));
             addedCommand = true;
         } else {
             delete breakpoint;
@@ -211,21 +210,18 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             if (m_ids.contains(breakpoint)) {
                 /* We already have GDB breakpoint for this, so we need to remove
                 this one.  */
-                DeletedHandler *handler = new DeletedHandler(this, breakpoint);
                 controller()->addCommand(
                     new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
-                                handler, &DeletedHandler::handle));
+                                new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-                    InsertedHandler *handler = new InsertedHandler(this, breakpoint);
                     controller()->addCommand(
                         new GDBCommand(BreakInsert,
                                     breakpoint->location(),
-                                    handler, &InsertedHandler::handle, true));
+                                    new InsertedHandler(this, breakpoint)));
                     addedCommand = true;
                 } else {
-                    InsertedHandler *handler = new InsertedHandler(this, breakpoint);
                     QString opt;
                     if (breakpoint->kind() == KDevelop::Breakpoint::ReadBreakpoint)
                         opt = "-r ";
@@ -236,37 +232,31 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                         new GDBCommand(
                             BreakWatch,
                             opt + breakpoint->location(),
-                            handler, &InsertedHandler::handle, true));
+                            new InsertedHandler(this, breakpoint)));
                     addedCommand = true;
                 }
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
-        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn);
         controller()->addCommandToFront(
             new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
                            QString::number(m_ids[breakpoint]),
-                           handler, &UpdateHandler::handle,
-                           true));
+                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn)));
         addedCommand = true;
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
-        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn);
         controller()->addCommandToFront(
             new GDBCommand(BreakAfter,
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
-                           handler, &UpdateHandler::handle,
-                           true));
+                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn)));
         addedCommand = true;
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
         Q_ASSERT(m_ids.contains(breakpoint));
-        UpdateHandler *handler = new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn);
         controller()->addCommandToFront(
             new GDBCommand(BreakCondition,
                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
-                           handler, &UpdateHandler::handle,
-                           true));
+                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn)));
         addedCommand = true;
     }
     if (addedCommand && debugSession()->state() == KDevelop::IDebugSession::ActiveState) {
