@@ -69,6 +69,11 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
     fileWidget->setFilter( filters.join("\n") );
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
+#if KDE_IS_VERSION(4,2,62)
+    //Use "short view". This does not have any effect when done in the constructor.
+    fileWidget->dirOperator()->setView(KFile::Simple);
+#endif
+
     layout->addWidget( fileWidget );
 
     QWidget* ops= fileWidget->findChild<QWidget*>( "KFileWidget::ops" );
@@ -81,17 +86,6 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, SIGNAL(fileHighlighted(const QString&)), SLOT(highlightFile(const QString&)) );
-}
-
-
-void OpenProjectPage::showEvent(QShowEvent* ev)
-{
-    QWidget::showEvent(ev);
-    
-#if KDE_IS_VERSION(4,2,62)
-    //Use "short view". This does not have any effect when done in the constructor.
-    fileWidget->dirOperator()->setView(KFile::Simple);
-#endif
 }
 
 KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
