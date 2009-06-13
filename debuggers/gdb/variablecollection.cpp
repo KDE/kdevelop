@@ -481,9 +481,11 @@ void VariableCollection::slotEvent(event_t event)
 
 void VariableCollection::update()
 {
+#if 0
     controller()->addCommand(
         new GDBCommand(GDBMI::StackListLocals, "1", this,
                        &VariableCollection::handleListLocalVars));
+#endif
     controller()->addCommand(
         new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableCollection::handleVarUpdate));
