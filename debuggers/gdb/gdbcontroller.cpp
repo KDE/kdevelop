@@ -356,6 +356,15 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
     QString reason;
     if (r.hasField("reason")) reason = r["reason"].literal();
 
+    if (reason == "function-finished" && r.hasField("gdb-result-var"))
+    {
+        variables()->watches()->addFinishResult(r["gdb-result-var"].literal());
+    }
+    else
+    {
+        variables()->watches()->removeFinishResult();
+    }
+
     if (reason == "exited-normally" || reason == "exited")
     {
         programNoApp("Exited normally", false);
@@ -447,15 +456,6 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
                 state_reload_needed = false;
             }
         }
-    }
-
-    if (reason == "function-finished" && r.hasField("gdb-result-var"))
-    {
-        variables()->watches()->addFinishResult(r["gdb-result-var"].literal());
-    }
-    else
-    {
-        variables()->watches()->removeFinishResult();
     }
 }
 

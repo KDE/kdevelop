@@ -59,6 +59,7 @@ public:
              const GDBMI::Value& value);
 
     QString varobj() const;
+    QString expression() const;
 
     void handleCreation(const GDBMI::Value& value);
 
@@ -137,6 +138,21 @@ private:
     Variable* finishResult_;
 };
 
+class Locals : public KDevelop::TreeItem
+{
+public:
+    Locals(KDevelop::TreeModel* model, KDevelop::TreeItem* parent);
+
+    GDBController* controller();
+
+    void update();
+
+    void handleListLocalVars(const GDBMI::ResultRecord& r);
+
+private:
+    void fetchMoreChildren() {}
+};
+
 class VariablesRoot : public KDevelop::TreeItem
 {
 public:
@@ -145,6 +161,7 @@ public:
     GDBController* controller();
 
     Watches *watches() const { return watches_; }
+    Locals *locals() const { return locals_; }
 
     void addVariable( const GDBMI::Value& );
 
@@ -152,6 +169,7 @@ public:
 
 private:
     Watches *watches_;
+    Locals *locals_;
 };
 
 class VariableCollection : public KDevelop::TreeModel
@@ -167,6 +185,7 @@ public:
 
     VariablesRoot* root() const { return universe_; }
     Watches* watches() const { return universe_->watches(); }
+    Locals* locals() const { return universe_->locals(); }
 
     GDBController* controller();
 

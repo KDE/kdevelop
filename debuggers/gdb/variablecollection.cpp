@@ -95,6 +95,11 @@ QString Variable::varobj() const
     return varobj_;
 }
 
+QString Variable::expression() const
+{
+    return expression_;
+}
+
 Variable::~Variable()
 {
     if (!varobj_.isEmpty())
@@ -117,6 +122,8 @@ void Variable::createVarobjMaybe()
 
     if (!controller_->stateIsOn(s_appNotStarted))
     {
+        // WARNING: Locals handling presently rely on the fact that
+        // we create @-varobj here. If changing, adjust callers accordingly.
         controller_->addCommand(
             new GDBCommand(
                 GDBMI::VarCreate, 
@@ -226,6 +233,8 @@ void Variable::handleChildren(const GDBMI::ResultRecord &r)
 
 Variable* Variable::findByName(const QString& name)
 {
+    if (allVariables_.count(name) == 0)
+        return 0;
     return allVariables_[name];
 }
 
@@ -277,7 +286,10 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
 void Watches::removeFinishResult()
 {
     if (finishResult_)
+    {
         finishResult_->die();
+        finishResult_ = 0;
+    }
 }
 
 
@@ -305,11 +317,73 @@ void Watches::reinstall()
     }
 }
 
+Locals::Locals(KDevelop::TreeModel* model, KDevelop::TreeItem* parent)
+: TreeItem(model, parent)
+{
+    setData(QVector<QVariant>() << "Locals" << QString());
+}
+
+GDBController* Locals::controller()
+{
+    return static_cast<VariablesRoot*>(parent())->controller();
+}
+
+
+void Locals::update()
+{
+    // FIXME: also get arguments.
+    controller()->addCommand(
+        new GDBCommand(GDBMI::StackListLocals, "1", this,
+                       &Locals::handleListLocalVars));    
+}
+
+void Locals::handleListLocalVars(const GDBMI::ResultRecord& r)
+{
+    const GDBMI::Value& locals = r["locals"];
+    QSet<QString> existing, current;
+    for (int i = 0; i < childCount(); i++)
+    {
+        existing << static_cast<Variable*>(child(i))->expression();
+    }
+
+    for (int i = 0; i < locals.size(); i++)
+    {
+        const GDBMI::Value& var = locals[i];
+        current << var["name"].literal();
+        // If we currently don't display this local var, add it.
+        if( !existing.contains( var["name"].literal() ) )
+        {
+            Variable* v = new Variable(
+                static_cast<VariableCollection*>(model()), 
+                this, controller(), var["name"].literal() );
+            appendChild( v, false );
+            v->createVarobjMaybe();
+        }
+    }
+
+    for (int i = 0; i < childItems.size(); ++i)
+    {
+        Variable* v = static_cast<Variable*>(child(i));
+        if (!current.contains(v->expression()))
+        {
+            removeChild(i);
+            --i;
+            // FIXME: check that -var-delete is sent.
+            delete v;
+        }
+    }
+
+    // Variables which changed just value are updated by a call to -var-update.
+    // Variables that changed type -- likewise.
+}
+
 VariablesRoot::VariablesRoot(TreeModel* model)
 : TreeItem(model)
 {
     watches_ = new Watches(model, this);
     appendChild(watches_, true);
+    locals_ = new Locals(model, this);
+    appendChild(locals_, true);
 }
 
 void VariablesRoot::addVariable( const GDBMI::Value& var )
@@ -463,6 +537,7 @@ void VariableCollection::slotEvent(event_t event)
             // FIXME: probably should do this only on the
             // first stop.
             watches()->reinstall();
+            locals()->update();
             update();
 
             #if 0
@@ -481,34 +556,9 @@ void VariableCollection::slotEvent(event_t event)
 
 void VariableCollection::update()
 {
-#if 0
-    controller()->addCommand(
-        new GDBCommand(GDBMI::StackListLocals, "1", this,
-                       &VariableCollection::handleListLocalVars));
-#endif
     controller()->addCommand(
         new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableCollection::handleVarUpdate));
-}
-
-void VariableCollection::handleListLocalVars(const GDBMI::ResultRecord& r)
-{
-    const GDBMI::Value& locals = r["locals"];
-    QSet<QString> existingVariables;
-    for (int j = 0; j < rowCount(); j++)
-    {
-        existingVariables << data( index( j, 0 ), Qt::DisplayRole ).toString();
-    }
-
-    for (int i = 0; i < locals.size(); i++)
-    {
-        const GDBMI::Value& var = locals[i];
-        // Only add the variable if we don't have them in the list yet.
-        if( !existingVariables.contains( var["name"].literal() ) )
-        {
-            universe_->addVariable( var );
-        }
-    }
 }
 
 void VariableCollection::handleVarUpdate(const GDBMI::ResultRecord& r)
@@ -518,7 +568,10 @@ void VariableCollection::handleVarUpdate(const GDBMI::ResultRecord& r)
     {
         const GDBMI::Value& var = changed[i];
         Variable* v = Variable::findByName(var["name"].literal());
-        v->update(var);        
+        // v can be NULL here if we've already removed locals after step,
+        // but the corresponding -var-delete command is still in the queue.
+        if (v)
+            v->update(var);        
     }
 }
 

@@ -38,6 +38,9 @@ int test_main(int ac, char* av[])
 {
     printf("Hello world\n");
     int i = 10;
+    ++i;
+    ++i;
+    ++i;    
     int* p1 = 0x00000000;
     int** p1_p = &p1;
     p1 = &g;    
@@ -46,6 +49,7 @@ int test_main(int ac, char* av[])
     g = 77;
     int (*p3)(int) = (fp)0x000000AE;
     B p4 = {1, 3};
+    p4.i = 3;
     p2 = &p4;
     int p5[] = {5, 6, 7};
     int* p6[] = {&g, &g2};
@@ -83,12 +87,12 @@ int test_main(int ac, char* av[])
     printf("hi\n");
     test = 0;
     printf("hi2\n");
-    printf("hi %d\n", test->b);
+    //printf("hi %d\n", test->b);
     
     
     
     p5[1] = 14;
-    return 0;
+    return 7;
 }
 
 int main(int ac, char* av[])
