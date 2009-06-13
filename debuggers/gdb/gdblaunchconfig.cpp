@@ -37,6 +37,7 @@
 #include <execute/executepluginconstants.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <project/builderjob.h>
 #include <interfaces/iuicontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <util/executecompositejob.h>
@@ -129,33 +130,31 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         {
             QList<KJob*> l;
             KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+            QList<KDevelop::ProjectBaseItem*> items;
             foreach( const QString& dep, deps )
             {
                 KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
                 if( item )
                 {
-                    KDevelop::ProjectBaseItem* folder = item;
-                    while( folder && !folder->folder() )
-                    {
-                        folder = dynamic_cast<KDevelop::ProjectBaseItem*>( folder->parent() );
-                    }
-                    if( folder && item->project()->buildSystemManager()->builder( folder->folder() ) )
-                    {
-                        KDevelop::IProjectBuilder* builder = item->project()->buildSystemManager()->builder( folder->folder() );
-                        if( depAction == "Build" )
-                        {
-                            l << builder->build( item );
-                        } else if( depAction == "Install" )
-                        {
-                            l << builder->install( item );
-                        } else if( depAction == "SudoInstall" )
-                        {
-                            KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(),
-                                                    i18n("Installing via sudo is not yet implemented"),
-                                                    i18n("Not implemented") );
-                        }
-                    }
+                    items << item;
                 }
+            }
+             if( depAction == "SudoInstall" )
+            {
+                KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
+                                        i18n("Installing via sudo is not yet implemented"), 
+                                        i18n("Not implemented") );
+            } else 
+            {
+                KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
+                if( depAction == "Build" )
+                {
+                    job->addItems( KDevelop::BuilderJob::Build, items );
+                } else if( depAction == "Install" )
+                {
+                    job->addItems( KDevelop::BuilderJob::Install, items );
+                }
+                l << job;
             }
             l << new GdbJob( m_plugin, cfg );
             return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
