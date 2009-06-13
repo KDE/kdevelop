@@ -93,6 +93,7 @@ private:
     QString varobj_;
     int activeCommands_;
     bool inScope_;
+    bool topLevel_;
 
     static QMap<QString, Variable*> allVariables_;
 };

@@ -57,7 +57,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    GDBController* controller, const QString& expression,
                    const QString& display)
   : TreeItem(model, parent), controller_(controller), activeCommands_(0), 
-    inScope_(true)
+    inScope_(true), topLevel_(true)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -72,7 +72,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    GDBController* controller,
                    const GDBMI::Value& r)
 : TreeItem(model, parent), controller_(controller), activeCommands_(0),
-  inScope_(true)
+  inScope_(true), topLevel_(false)
 {
     varobj_ = r["name"].literal();
     itemData.push_back(r["exp"].literal());
@@ -100,7 +100,7 @@ Variable::~Variable()
     if (!varobj_.isEmpty())
     {
         // Delete only top-level variable objects.
-        if (!dynamic_cast<Variable*>(parentItem)
+        if (topLevel_
             && !controller_->stateIsOn(s_dbgNotStarted))
         {
             controller_->addCommand(new GDBCommand(GDBMI::VarDelete, varobj_));
