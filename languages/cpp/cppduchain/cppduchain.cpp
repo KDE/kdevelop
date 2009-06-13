@@ -569,6 +569,7 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
   struct ShortenTemplateDefaultParameter : public KDevelop::TypeExchanger {
     DUContext* ctx;
     ShortenTemplateDefaultParameter(DUContext* _ctx) : ctx(_ctx) {
+      Q_ASSERT(ctx);
     }
     
     virtual KDevelop::AbstractType::Ptr exchange(const KDevelop::AbstractType::Ptr& type) {

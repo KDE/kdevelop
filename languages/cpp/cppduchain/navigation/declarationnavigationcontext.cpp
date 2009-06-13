@@ -72,12 +72,14 @@ void DeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, co
       
       uint showParameters = params.templateParametersSize();
       
-      //Strip away default-parameters, as they can be overwhelmingly ugly, especially in STL
-      DelayedType::Ptr stripped = stripType(type, m_topContext.data()).cast<DelayedType>();
-      if(stripped) {
-          QualifiedIdentifier id = stripped->identifier().identifier().identifier();
-          if(!id.isEmpty() && id.last().templateIdentifiersCount() < showParameters)
-            showParameters = id.last().templateIdentifiersCount();
+      if(m_topContext.data()) {
+        //Strip away default-parameters, as they can be overwhelmingly ugly, especially in STL
+        DelayedType::Ptr stripped = stripType(type, m_topContext.data()).cast<DelayedType>();
+        if(stripped) {
+            QualifiedIdentifier id = stripped->identifier().identifier().identifier();
+            if(!id.isEmpty() && id.last().templateIdentifiersCount() < showParameters)
+              showParameters = id.last().templateIdentifiersCount();
+        }
       }
       
       
