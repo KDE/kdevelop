@@ -26,6 +26,7 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
+#include <ktexteditor/smartinterface.h>
 #include <klocale.h>
 
 #include "../duchain/ducontext.h"
@@ -80,7 +81,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
-  if( !doc ) {
+  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
+  if( !doc || !smart ) {
     kDebug() << "No document for completion";
     failed();
     return;
@@ -96,6 +98,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       else
         range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
     }
+    //Lock the smart-mutex so we won't get multithreading crashes
+    QMutexLocker lock(smart->smartMutex());
     text = doc->text(range);
   }
 
