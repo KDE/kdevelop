@@ -229,7 +229,7 @@ private:
 
     void maybeAnnounceWatchpointHit();
 
-    bool startDebugger();
+    bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
 
 private Q_SLOTS:
 

@@ -74,6 +74,8 @@ int test_main(int ac, char* av[])
     i = 15;
     
     std::vector<int> v;
+    v.push_back(10);
+    v.push_back(11);
     
     Test* test = new Test;
     Test& test2 = *test;

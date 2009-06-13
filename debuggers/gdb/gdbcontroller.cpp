@@ -561,7 +561,7 @@ void GDBController::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
                      frame["addr"].literal());
 }
 
-bool GDBController::startDebugger()
+bool GDBController::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 {
     kDebug(9012) << "Starting debugger controller";
 
@@ -571,7 +571,7 @@ bool GDBController::startDebugger()
         gdb_ = 0;
     }
 
-    gdb_ = new GDB();
+    gdb_ = new GDB;
 
     // FIXME: here, we should wait until GDB is up and waiting for input.
     // Then, clear s_dbgNotStarted
@@ -603,8 +603,21 @@ bool GDBController::startDebugger()
 
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
-    gdb_->start();
 
+
+    if (cfg)
+    {
+        KConfigGroup config = cfg->config();
+        gdb_->start(config);
+    }
+    else
+    {
+        // FIXME: this is hack, I am not sure there's any way presently
+        // to edit this via GUI.
+        KConfigGroup config(KGlobal::config(), "GDB Debugger");
+        gdb_->start(config);
+    }
+    
     setStateOff(s_dbgNotStarted);
 
     // Initialise gdb. At this stage gdb is sitting wondering what to do,
@@ -633,7 +646,7 @@ QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg)
     }
 
     if (stateIsOn(s_dbgNotStarted))
-        if (!startDebugger())
+        if (!startDebugger(cfg))
             return 0;
 
     if (stateIsOn(s_shuttingDown)) {
@@ -868,7 +881,7 @@ void GDBController::examineCoreFile(const KUrl& debugee, const KUrl& coreFile)
     setStateOn(s_core);
 
     if (stateIsOn(s_dbgNotStarted))
-      startDebugger();
+      startDebugger(0);
 
     // TODO support non-local URLs
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, debugee.toLocalFile()));
@@ -889,7 +902,7 @@ void GDBController::attachToProcess(int pid)
     setStateOn(s_appRunning);
 
     if (stateIsOn(s_dbgNotStarted))
-      startDebugger();
+      startDebugger(0);
 
     // Currently, we always start debugger with a name of binary,
     // we might be connecting to a different binary completely,
@@ -903,7 +916,6 @@ void GDBController::attachToProcess(int pid)
 
     raiseEvent(connected_to_program);
 }
-
 // **************************************************************************
 
 void GDBController::slotRun()

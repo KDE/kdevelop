@@ -21,6 +21,7 @@
  */
 
 #include "gdb.h"
+#include "gdbcontroller.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -47,11 +48,10 @@ GDB::GDB()
 {
 }
 
-void GDB::start()
+void GDB::start(KConfigGroup& config)
 {
-   KConfigGroup config(KGlobal::config(), "GDB Debugger");
     // FIXME: verify that default value leads to something sensible
-    KUrl gdbUrl = config.readEntry("GDB Path", "");
+    KUrl gdbUrl = config.readEntry(GDBDebugger::gdbPathEntry, KUrl());
     if (gdbUrl.isEmpty()) {
         gdbBinary_ = "gdb";
     } else {
@@ -74,7 +74,7 @@ void GDB::start()
     QStringList arguments;
     arguments << "--interpreter=mi2" << "-quiet";
 
-    QString shell = config.readEntry("Debugger Shell");
+    QString shell = config.readEntry(GDBDebugger::debuggerShellEntry);
     if( !shell.isEmpty() )
     {
         kDebug(9012) << "have shell\n";
