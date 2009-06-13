@@ -551,18 +551,7 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
     if (widgetToView.contains(widget))
     {
         View *view = widgetToView[widget];
-        
-        if (view->document()->views().count() > 1)
-        {
-            //close only one active view
-            area->removeView(view);
-            delete view;
-        }
-        else
-        {
-            //close the document instead
-            view->document()->closeDocument();
-        }
+        area->closeView(view);
     }
 }
 

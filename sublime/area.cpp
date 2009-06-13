@@ -28,6 +28,7 @@
 #include "document.h"
 #include "areaindex.h"
 #include "controller.h"
+#include <qpointer.h>
 
 namespace Sublime {
 
@@ -398,17 +399,22 @@ void Area::setWorkingSet(QString name)
     }
 }
 
+void Area::closeView(View* view)
+{
+    QPointer<Document> doc = view->document();
+
+    //close only one active view
+    removeView(view);
+    delete view;
+
+    if(doc && doc->views().count() == 0)
+        doc->closeDocument(); //close the document instead
+}
+
 void Area::clearViews()
 {
-    foreach(Sublime::View* view, views()) {
-        if(view->document()->views().count() > 1) {
-            removeView(view);
-            delete view;
-        }else{
-            //Close the whole document if it is the last view
-            view->document()->closeDocument();
-        }
-    }
+    foreach(Sublime::View* view, views())
+        closeView(view);
 }
 
 }

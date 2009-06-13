@@ -456,17 +456,8 @@ void DocumentController::fileClose()
     {
         UiController *uiController = Core::self()->uiControllerInternal();
         Sublime::View *activeView = uiController->activeSublimeWindow()->activeView();
-        if (activeView->document()->views().count() > 1)
-        {
-            //close only one active view
-            Sublime::View *deletedView = uiController->activeArea()->removeView(activeView);
-            deletedView->deleteLater();
-        }
-        else
-        {
-            //close the document instead
-            activeDoc->close();
-        }
+        
+        uiController->activeArea()->closeView(activeView);
     }
 }
 
@@ -666,28 +657,8 @@ void DocumentController::closeAllOtherDocuments()
             return;
 
         foreach (Sublime::View* view, mw->area()->views()) {
-            if (view != activeView) {
-                if (view->document()->views().count() > 1)
-                {
-                    //close only the view in question
-                    mw->area()->removeView(view);
-                    view->deleteLater();
-                }
-                else
-                {
-                    //close the document instead as no views remain
-                    IDocument* doc = dynamic_cast<IDocument*>(view->document());
-                    if (doc) {
-                        doc->close(IDocument::Discard);
-
-                    } else {
-                        // Fallback, ick
-                        kWarning() << "Tried to close non-IDocument sublime document";
-                        mw->area()->removeView(view);
-                        view->deleteLater();
-                    }
-                }
-            }
+            if (view != activeView)
+                mw->area()->closeView(view);
         }
         activeView->widget()->setFocus();
     }

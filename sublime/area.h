@@ -83,7 +83,7 @@ public:
     /**Adds the @p view to the area splitting the @p viewToSplit using
     given @p orientation.*/
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
-    /**Removes the @p view from the area.*/
+    /**Removes the @p view from the area. Does not delete it. */
     View* removeView(View *view);
     /**@return the list of all views in this area in no particular order. To
     process the views in ordered manner (tree walk) use @ref walkViews method.
@@ -92,6 +92,11 @@ public:
 
     /** Removes all views from this area and deletes them */
     void clearViews();
+    
+    /** Closes and deletes the view, asking the user for feedback if needed.
+      * Closes the document if it is the last view.
+      * Does not allow breaking the closing process. */
+    void closeView(View* view);
     
     /**@return the index of view or 0 if it can not be found.*/
     AreaIndex *indexOf(View *view);
@@ -193,7 +198,7 @@ public:
     */
     template <typename Operator>
     void walkToolViews(Operator &op, Positions positions);
-
+    
 Q_SIGNALS:
     /**Emitted when a new view is added to the area.*/
     void viewAdded(Sublime::AreaIndex*, Sublime::View*);
