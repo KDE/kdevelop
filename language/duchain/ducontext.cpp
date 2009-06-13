@@ -631,6 +631,7 @@ DUContext::~DUContext( )
   top->m_dynamicData->clearContextIndex(this);
 
   Q_ASSERT(d_func()->isDynamic() == (!top->deleting() || !top->isOnDisk() || top->m_dynamicData->isTemporaryContextIndex(m_dynamicData->m_indexInTopContext)));
+  delete m_dynamicData;
 }
 
 QVector< DUContext * > DUContext::childContexts( ) const
