@@ -35,6 +35,7 @@
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/editor/simplecursor.h>
+#include <language/duchain/topducontext.h>
 
 namespace KDevelop
 {
@@ -175,7 +176,8 @@ public:
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType), KDevelop::TopDUContext* update = 0);
+  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
+                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
 
   // Parser
   Control control;

@@ -1086,6 +1086,26 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(top->childContexts()[0]->childContexts()[0]->childContexts()[0]->isPropagateDeclarations());
     QVERIFY(!top->childContexts()[0]->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().isEmpty());
     QCOMPARE(top->childContexts()[2]->usesCount(), 9);
+    
+    //Now test Ast mappings
+    parse(method, DumpNone, top, true);
+    //!@todo conversions through KSharedPtr
+    QVERIFY(top->ast().data());
+    QVERIFY(dynamic_cast<ParseSession *>(top->ast().data()));
+    ParseSession::Ptr session = ParseSession::Ptr( dynamic_cast<ParseSession *>(top->ast().data()) );
+    QVERIFY(session);
+    QVERIFY(session->topAstNode());
+    QCOMPARE(session->topAstNode()->declarations->count(), 3);
+    //! @todo Convenience functions to access nodes from AST root
+    const ListNode<DeclarationAST *> * declarations = session->topAstNode()->declarations->toFront();
+    kDebug() << "node in tree: " << reinterpret_cast<SimpleDeclarationAST *>(declarations->element)->type_specifier->kind;
+    kDebug() << "node in map: " << session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[1]))->kind;
+    QCOMPARE(reinterpret_cast<SimpleDeclarationAST *>(declarations->element)->type_specifier,
+             session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[0])));
+    QCOMPARE(reinterpret_cast<SimpleDeclarationAST *>(declarations->at(1)->element)->init_declarators->toFront()->element->declarator,
+             session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[1])));
+    QCOMPARE(reinterpret_cast<FunctionDefinitionAST *>(declarations->at(2)->element)->init_declarator->declarator,
+             session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[2])) );
   }
 
   {
@@ -1329,8 +1349,8 @@ void TestDUChain::testCStruct2()
   {
   QByteArray method("struct A {struct C c; }; struct C { int v; };");
 
-  /* Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
-  */
+  //Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
+  
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1343,15 +1363,16 @@ void TestDUChain::testCStruct2()
   kDebug() << "TYPE:" << top->childContexts()[0]->localDeclarations()[0]->abstractType()->toString() << typeid(*top->childContexts()[0]->localDeclarations()[0]->abstractType()).name();
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
 
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
-  QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);*/
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
+  //QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
+  //QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
   release(top);
   }
   {
   QByteArray method("struct A {inline struct C c() {}; }; struct C { int v; };");
 
-  /* Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
-  */
+  //Expected result: the elaborated type-specifier "struct C" within the declaration "struct A" should create a new global declaration.
+  
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1368,8 +1389,9 @@ void TestDUChain::testCStruct2()
   QCOMPARE(function->returnType()->indexed(), top->localDeclarations()[1]->indexedType());
   //QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->indexedType(), top->localDeclarations()[1]->indexedType());
 
-  //QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance); /*QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
-//   QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
+  //QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->kind(), Declaration::Instance);
+  //QVERIFY(top->localDeclarations()[0]->kind() == Declaration::Type);
+  //QVERIFY(top->localDeclarations()[1]->kind() == Declaration::Instance);
   release(top);
   }
 
@@ -1417,10 +1439,10 @@ void TestDUChain::testDeclareClass()
   DUChainWriteLocker lock(DUChain::lock());
 
   DumpDotGraph dump;
-/*  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
+//  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
 
-  kDebug() << "ENDE ENDE ENDE";
-  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);*/
+//  kDebug() << "ENDE ENDE ENDE";
+//  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 3);
@@ -1471,10 +1493,10 @@ void TestDUChain::testDeclareFriend()
   DUChainWriteLocker lock(DUChain::lock());
 
   DumpDotGraph dump;
-/*  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
+//  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
 
-  kDebug() << "ENDE ENDE ENDE";
-  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);*/
+//  kDebug() << "ENDE ENDE ENDE";
+//  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 1);
@@ -1745,7 +1767,7 @@ void TestDUChain::testDeclareUsingNamespace2()
   //QCOMPARE(top->namespaceAliases().count(), 1);
   //QCOMPARE(top->namespaceAliases().first()->nsIdentifier, QualifiedIdentifier("foo"));
 
-/*  QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);*/
+  //QCOMPARE(findDeclaration(top, QualifiedIdentifier("bar2")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("::bar")), noDef);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo::bar2")), bar2);
   QCOMPARE(findDeclaration(top, QualifiedIdentifier("foo2::bar2")), bar2);
@@ -1879,10 +1901,10 @@ void TestDUChain::testSignalSlotUse() {
     QtFunctionDeclaration* qtDecl = dynamic_cast<QtFunctionDeclaration*>(top->childContexts()[1]->localDeclarations()[0]);
     QVERIFY(qtDecl);
     QVERIFY(top->childContexts()[1]->localDeclarations()[0]->uses().count());
-/*    kDebug() << top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange();
-    kDebug() << top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange();
-    kDebug() << top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first().textRange();
-    kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();*/
+    //kDebug() << top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange();
+    //kDebug() << top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange();
+    //kDebug() << top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first().textRange();
+    //kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();
     QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 16, 3, 21).textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
     QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 81, 1, 86).textRange());
@@ -3003,13 +3025,13 @@ void TestDUChain::testTemplateReference() {
   QVERIFY(argType.cast<ReferenceType>());
   QCOMPARE(argType->toString().remove(' '), QString("CC<constA*>&"));
   {
-/*    QWidget* navigationWidget = top->childContexts()[1]->createNavigationWidget(top->childContexts()[1]->localDeclarations()[0]);
-    QVERIFY(navigationWidget);
-    KDevelop::AbstractNavigationWidget* nWidget = dynamic_cast<KDevelop::AbstractNavigationWidget*>(navigationWidget);
-    QVERIFY(nWidget);
-    QVERIFY(nWidget->context());
-    QString html = nWidget->context()->html();
-    kDebug() << "html:" << html;*/
+//     QWidget* navigationWidget = top->childContexts()[1]->createNavigationWidget(top->childContexts()[1]->localDeclarations()[0]);
+//     QVERIFY(navigationWidget);
+//     KDevelop::AbstractNavigationWidget* nWidget = dynamic_cast<KDevelop::AbstractNavigationWidget*>(navigationWidget);
+//     QVERIFY(nWidget);
+//     QVERIFY(nWidget->context());
+//     QString html = nWidget->context()->html();
+//     kDebug() << "html:" << html;
   }
   QCOMPARE(Cpp::simplifiedTypeString(top->childContexts()[1]->localDeclarations()[0]->abstractType(), top).remove(' '), QString("CC<constA*>&"));
   QVERIFY(top->localDeclarations()[3]->abstractType());
@@ -3316,10 +3338,10 @@ void TestDUChain::testTemplates2() {
   QVERIFY(memberDecl->abstractType());
   QCOMPARE(memberDecl->abstractType()->toString(), QString("Class< S*& >"));
 
-/*  memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::Alloc<S>::referenceType"));
-  QVERIFY(memberDecl);
-  QVERIFY(memberDecl->abstractType());
-  QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"));*/
+//   memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S>::Alloc<S>::referenceType"));
+//   QVERIFY(memberDecl);
+//   QVERIFY(memberDecl->abstractType());
+//   QCOMPARE(memberDecl->abstractType()->toString(), QString("S&"/*));
 
   memberDecl = findDeclaration(top, QualifiedIdentifier("Class<S*>::member"));
   QVERIFY(memberDecl);
@@ -4440,12 +4462,13 @@ void TestDUChain::testIndexedStrings() {
   kDebug() << a << "successful tests";
 }
 
-TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update)
+TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
-  ParseSession* session = new ParseSession();
+  //If the AST flag is set, then the parse session needs to be owned by a shared pointer
+  ParseSession::Ptr session(new ParseSession());
 
   rpp::Preprocessor preprocessor;
   rpp::pp pp(&preprocessor);
@@ -4453,25 +4476,33 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUCo
   session->setContentsAndGenerateLocationTable(pp.processFile("anonymous", unit));
 
   Parser parser(&control);
-  TranslationUnitAST* ast = parser.parse(session);
-  ast->session = session;
+  TranslationUnitAST* ast = parser.parse(session.data());
+  ast->session = session.data();
 
   if (dump & DumpAST) {
     kDebug(9007) << "===== AST:";
-    cppDumper.dump(ast, session);
+    cppDumper.dump(ast, session.data());
   }
 
   static int testNumber = 0;
   IndexedString url(QString("/internal/%1").arg(testNumber++));
 
-  DeclarationBuilder definitionBuilder(session);
+  DeclarationBuilder definitionBuilder(session.data());
   Cpp::EnvironmentFilePointer file( new Cpp::EnvironmentFile( url, 0 ) );
+  
+  //HACK Should actually use DUChain::updateContextForUrl
+  kDebug() << "update->features & TopDUContext::AST: " << (update ? update->features() & TopDUContext::AST : 0);
+  if(keepAst)
+  {
+    definitionBuilder.setMapAst(true);
+    update->setAst( IAstContainer::Ptr( session.data() ) );
+  }
   TopDUContext* top = definitionBuilder.buildDeclarations(file, ast, 0, ReferencedTopDUContext(update));
   if(update) {
     Q_ASSERT(top == update);
   }
 
-  UseBuilder useBuilder(session);
+  UseBuilder useBuilder(session.data());
   useBuilder.buildUses(ast);
 
   if (dump & DumpDUChain) {
@@ -4491,8 +4522,6 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUCo
 
   if (dump)
     kDebug(9007) << "===== Finished test case.";
-
-  delete session;
 
   return top;
 }
