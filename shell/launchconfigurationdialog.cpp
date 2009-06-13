@@ -641,6 +641,7 @@ void LaunchConfigTypePage::changeLauncher( int idx )
             connect( page, SIGNAL(changed()), SIGNAL(changed()) );
             ui->tab->addTab( page, page->icon(), page->title() );
             page->loadFromConfiguration( config->config() );
+            launcherPages << page;
         }
     }
     
