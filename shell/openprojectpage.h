@@ -34,6 +34,8 @@ private slots:
     void opsEntered(const KUrl& item );
     void comboTextChanged(const QString& );
 private:
+    
+    virtual void showEvent(QShowEvent* );
     KUrl getAbsoluteUrl( const QString& ) const;
     KFileWidget* fileWidget;
     QMap<QString,QStringList> m_projectFilters;
