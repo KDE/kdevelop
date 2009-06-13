@@ -36,6 +36,8 @@ namespace KDevelop
 OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
     : KAssistantDialog( parent )
 {
+    resize(QSize(700, 500));
+    
     QWidget* page = new OpenProjectPage( startUrl, this );
     connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
     openPage = addPage( page, "Select Directory/Project File" );
