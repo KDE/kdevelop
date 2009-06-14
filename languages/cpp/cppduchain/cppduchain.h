@@ -134,6 +134,7 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier identifierForType(KDevelop
 ///@param stripPrefix this prefix will be stripped from qualified identifiers. This is useful to remove parts of the current context.
 KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::Declaration* decl, KDevelop::DUContext* ctx, int desiredLength = 10000, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
 KDEVCPPDUCHAIN_EXPORT QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength = 10000, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
+KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier shortenedTypeIdentifier(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength = 10000, KDevelop::QualifiedIdentifier stripPrefix = KDevelop::QualifiedIdentifier());
 
 ///Returns a simplified string version of the given type: Template default-parameters are stripped away, qualified identifiers are simplified so they are as short as possible, while staying visible from the given context.
 KDEVCPPDUCHAIN_EXPORT QString simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* visibilityFrom);

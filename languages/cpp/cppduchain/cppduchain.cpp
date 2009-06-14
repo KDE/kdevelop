@@ -678,7 +678,13 @@ QString simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUConte
   return shortenedTypeString(type, visibilityFrom, 100000);
 }
 
-QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
+QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix)
+{
+  return shortenedTypeIdentifier(type, ctx, desiredLength, stripPrefix).toString();
+}
+
+IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext* ctx, int desiredLength, QualifiedIdentifier stripPrefix)
+{
 
   bool isReference = false;
   bool isConstReference = false;
@@ -693,7 +699,7 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContex
   if(ctx)
     type = stripType(type, ctx);
   if(!type)
-    return QString();
+    return IndexedTypeIdentifier();
   
   IndexedTypeIdentifier identifier = identifierForType(type, ctx ? ctx->topContext() : 0);
   
@@ -715,7 +721,7 @@ QString shortenedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContex
     --removeTemplateParametersFrom;
     identifier = removeTemplateParameters(identifier, removeTemplateParametersFrom);
   }
-  return identifier.toString();
+  return identifier;
 }
 
 bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend) {

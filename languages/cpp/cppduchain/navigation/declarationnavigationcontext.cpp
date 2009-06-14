@@ -41,6 +41,28 @@ DeclarationNavigationContext::DeclarationNavigationContext( DeclarationPointer d
 {
 }
 
+QualifiedIdentifier DeclarationNavigationContext::prettyQualifiedIdentifier(DeclarationPointer decl) const
+{
+  QualifiedIdentifier ret;
+  if(m_topContext.data() && decl) {
+      if(decl->kind() == Declaration::Type) {
+        AbstractType::Ptr type = decl->abstractType();
+        DelayedType::Ptr stripped = stripType(type, m_topContext.data()).cast<DelayedType>();
+        if(stripped)
+          return stripped->identifier().identifier().identifier();
+        else
+          return decl->qualifiedIdentifier();
+      }else{
+        if(decl->context()->owner()) {
+          return prettyQualifiedIdentifier(DeclarationPointer(decl->context()->owner())) + decl->identifier();
+        }else{
+          return decl->qualifiedIdentifier();
+        }
+      }
+  }
+  return ret;
+}
+
 KDevelop::AbstractType::Ptr DeclarationNavigationContext::typeToShow(KDevelop::AbstractType::Ptr type) {
   return shortenTypeForViewing(type);
 }
