@@ -70,7 +70,8 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
 #if KDE_IS_VERSION(4,2,62)
-    //Use "short view". This does not have any effect when done in the constructor.
+    // Enforce "short view" for now as KFileWidget has no API to read its config from a different
+    // but the global-default for KFileDialog. 
     fileWidget->dirOperator()->setView(KFile::Simple);
 #endif
 
