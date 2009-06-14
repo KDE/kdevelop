@@ -93,8 +93,9 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
   
   if(insertedTrimmed.endsWith('\"'))
     return false; //Never start completion behind a string literal
+  /*
   if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
-    return true;
+    return true;*/
   
   return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
